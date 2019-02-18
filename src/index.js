@@ -1,17 +1,18 @@
+/** React Plugin */
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import FormContainer from "./js/components/container/FormContainer.jsx";
-import SideBar from './js/sidebar';
-import Content from './js/content';
-import HeaderContainer from './js/headerContainer'; 
+
+
+/** Bootstrap Custom CSS */
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+
+/** Custom CSS */
 import './css/App.css';
 import './css/sidebar.css'
 
-/** Bootstrap custom css */
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import SearchTableContainer from './js/SearchTableContainer';
-import FormContainer from './js/components/container/FormContainer.jsx';
-import LoginPageContainer from './js/LoginPageContainer';
+/** Container Component */
+import ContentContainer from './js/components/container/ContentContainer';
+import NavBarContainer from './js/components/container/NavbarContainer';
 
 
 class App extends React.Component {
@@ -19,15 +20,8 @@ class App extends React.Component {
     render() {
         return (
             <div>
-                
-                <div><HeaderContainer/></div>
-                {/* <div><SideBar /></div> */}
-                <SearchTableContainer />
-                {/* <Content /> */}
-                <div className="container">
-                    <LoginPageContainer />
-                </div>
-                
+                <div id='navbar'><NavBarContainer /></div>
+                <div className='my-6' id='content'><ContentContainer /></div>
             </div>
         );
     }
