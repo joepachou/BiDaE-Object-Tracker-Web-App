@@ -126,7 +126,7 @@ export default class surveillance extends React.Component {
                         this.openPopup();
                     });
                     marker.on('mouseout', function () {
-                        this.closePopup();
+                        this.closePopup()
                     });
                     marker.on('click', function (e) {
                         console.log('gs')
