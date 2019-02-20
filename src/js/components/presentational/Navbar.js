@@ -61,7 +61,6 @@ export default class NavBar extends React.Component {
         
         return (
             <div id='NAVBAR'>
-            {console.log('render! : ' + this.state.isLogin)}
                 <nav className="navbar navbar-expand-lg navbar-light" style={NavsStyle}>
                     <a className="navbar-brand" href="#" style={SloganStyle}>
                         <img 

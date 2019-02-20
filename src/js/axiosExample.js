@@ -6,7 +6,7 @@ import Container from 'react-bootstrap/Container';
 // API url
 const API = 'https://jsonplaceholder.typicode.com/users';
 
-export default class Content extends React.Component {
+export default class AxiosExample extends React.Component {
 
     constructor(props){
         super(props);
