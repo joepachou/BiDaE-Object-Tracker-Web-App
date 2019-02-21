@@ -41,6 +41,7 @@ export default class surveillance extends React.Component {
 
     initMap(){
         let mapOptions={
+            color:'white',
             crs: L.CRS.Simple,
             minZoom: -5,
             zoomControl: false,
@@ -52,7 +53,7 @@ export default class surveillance extends React.Component {
         // this.map = L.map('mapid',mapOptions).setView([37.92388861359015,115.22048950195312], 16);
 
         let map = L.map('mapid', mapOptions)
-        let bounds = [[0,0], [600,600]]
+        let bounds = [[0,0], [900,900]]
         let image = L.imageOverlay(SMap, bounds).addTo(map)
         map.fitBounds(bounds)
         this.map = map
@@ -64,12 +65,18 @@ export default class surveillance extends React.Component {
             radius: 10
         }).addTo(map);
 
-        var lbeacon_2 = L.circleMarker([500,500],{
+        lbeacon_1.on('click', function(){
+            console.log('sdd')
+        })
+
+        var lbeacon_2 = L.circleMarker([700,700],{
             color: 'red',
             fillColor: '#f03',
             fillOpacity: 1,
             radius: 10
         }).addTo(map);
+
+        
 
         // var sol7 = L.latLng([500,520 ]);
         // var sol8 = L.marker([500,500]).addTo(map);
@@ -109,18 +116,21 @@ export default class surveillance extends React.Component {
             object.map(items =>{
                 var objCounter_1 = this.state.objCounter_1;
                 var objCounter_2 = this.state.objCounter_2;
+                let popupContent = `
+                    <b>${items.object_mac_address}</b>     <i class="fas fa-user-alt mr-2"></i>
+                `
+                let customOptions = {
+                    'minWidth': '300',
+                    'maxHeight': '300',
+                    'className' : 'custom'
+                }
                 var marker;
                 if (items.lbeacon_uuid === '00000015-0000-0a22-2222-00006e222222'){
-                    // marker = L.marker([200 + objCounter_2 * 5, 100 + objCounter_2 * 5]).addTo(this.map)
                     var num = this.randomNumber();
                     var num2 = this.randomNumber()
-                    let popupContent = `<b>${items.object_mac_address}</b>     <i class="fas fa-horse-head"></i>`
-                    // var popupOptions = { 
-                    //     maxWidth: 500,
-                    // }
                     
                     marker = L.marker([200 + num, 100 + num2]).addTo(this.map)
-                    marker.bindPopup(popupContent);
+                    marker.bindPopup(popupContent, customOptions);
 
                     marker.on('mouseover', function () {
                         this.openPopup();
@@ -142,9 +152,9 @@ export default class surveillance extends React.Component {
                     var num = this.randomNumber();
                     var num2 = this.randomNumber()
 
-                    marker = L.marker([500 + num, 500 + num2]).addTo(this.map)
+                    marker = L.marker([700 + num, 700 + num2]).addTo(this.map)
 
-                    marker.bindPopup(`<b>${items.object_mac_address}</b>     <i class="fas fa-horse-head"></i>`);
+                    marker.bindPopup(popupContent, customOptions);
                     marker.on('mouseover', function () {
                         this.openPopup();
                     });
@@ -165,7 +175,7 @@ export default class surveillance extends React.Component {
     }
 
     randomNumber(){
-        var num = Math.floor(Math.random() * 50) + 1; // this will get a number between 1 and 99;
+        var num = Math.floor(Math.random() * 70) + 1; // this will get a number between 1 and 99;
         num *= Math.floor(Math.random() * 2) == 1 ? 1 : -1; // this will add minus sign in 50% of cases
         return num;
     }
@@ -187,10 +197,10 @@ export default class surveillance extends React.Component {
                         {this.state.data.map(items => {
                             return (
                                 <tr>
-                                    <td>{items.fimal_timestamp}</td>
+                                    <td>{items.thirty_seconds}</td>
                                     <td>{items.object_mac_address}</td>
                                     <td>{items.lbeacon_uuid}</td>
-                                    <td>{items.rssi}</td>
+                                    <td>{items.avg}</td>
                                 </tr>
                             )
                         })}
