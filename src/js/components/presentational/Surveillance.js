@@ -12,7 +12,7 @@ import axios from 'axios';
 /** Import leaflet.js */
 import L from 'leaflet';
 
-import SideBar from '../../sideBar'
+import SideBar from '../../Sidebar'
 
 
 const PAGENAME = 'Surveillance';
@@ -22,28 +22,33 @@ const API = 'http://localhost:3000/users';
 
 export default class surveillance extends React.Component {
 
-    constructor(){
-        super()
+    constructor(props){
+        super(props)
         this.state = {
             data:[],
             isUpdate: false,
             objCounter_1: 0,
             objCounter_2: 0,
             isPopup : false,
+            lbeaconIfo :[],
         }
         this.map = null;
 
+        this.handlemenu = this.handlemenu.bind(this)
         this.getObjData = this.getObjData.bind(this)
         this.randomNumber = this.randomNumber.bind(this)
-        
         // this.initMap = this.initMap.bind(this)
     }
 
+    handlemenu(){
+        this.props.handleSidebarStyle(true)
+    }
+
     initMap(){
-        let mapOptions={
-            color:'white',
+        let mapOptions = {
             crs: L.CRS.Simple,
-            minZoom: -5,
+            minZoom: 0,
+            maxZoom: 1,
             zoomControl: false,
             attributionControl: false,
             dragging: false,
@@ -51,6 +56,9 @@ export default class surveillance extends React.Component {
             scrollWheelZoom: false
         }
         // this.map = L.map('mapid',mapOptions).setView([37.92388861359015,115.22048950195312], 16);
+        let pos_1 = [200,100];
+        let pos_2 = [700,700];
+
 
         let map = L.map('mapid', mapOptions)
         let bounds = [[0,0], [900,900]]
@@ -58,18 +66,16 @@ export default class surveillance extends React.Component {
         map.fitBounds(bounds)
         this.map = map
 
-        var lbeacon_1 = L.circleMarker([200,100],{
+        var lbeacon_1 = L.circleMarker(pos_1,{
             color: 'red',
             fillColor: '#f03',
             fillOpacity: 1,
             radius: 10
         }).addTo(map);
 
-        lbeacon_1.on('click', function(){
-            console.log('sdd')
-        })
+        lbeacon_1.on('click', this.handlemenu)
 
-        var lbeacon_2 = L.circleMarker([700,700],{
+        var lbeacon_2 = L.circleMarker(pos_2,{
             color: 'red',
             fillColor: '#f03',
             fillOpacity: 1,
@@ -139,10 +145,8 @@ export default class surveillance extends React.Component {
                         this.closePopup()
                     });
                     marker.on('click', function (e) {
-                        console.log('gs')
-                        this.setState({
-                            isPopup:true,
-                        })
+                        this.props.handleSidebarStyle(true)
+                        console.log('ge')
                     });
                     this.setState({
                         objCounter_2: this.state.objCounter_2 + 1,
@@ -183,10 +187,9 @@ export default class surveillance extends React.Component {
     render(){
         return(
             <div>
-                {this.state.isPopup && <h1>gello</h1>}
                 <h2>{PAGENAME}</h2>
                 {console.log('render!')}
-                <table>
+                {/* <table>
                     <tbody>
                         <tr>
                             <th>time</th>
@@ -205,7 +208,7 @@ export default class surveillance extends React.Component {
                             )
                         })}
                     </tbody>
-                </table>
+                </table> */}
                 <div id='mapid'></div>
              </div>
         )

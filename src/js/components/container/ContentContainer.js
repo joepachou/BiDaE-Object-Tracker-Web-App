@@ -12,16 +12,18 @@ import AxiosExample from '../../axiosExample';
 
 
 export default class ContentContainer extends React.Component{
-    render(){
 
+    constructor(props){
+        super(props)
+    }
+    render(){
         return(
-            <div className='mx-lg-4 my-md-4'>
+            <div className='px-lg-4 py-md-4'>
                 <div className='row'>
                     <div className='col'><SeachableObject /></div>
                     <div className='col'><RecentSearches /></div>
-                    {/* <div className='col'><AxiosExample /></div> */}
                     <div className='col'><ObjectManagementContainer /></div>
-                    <div className='col'><Surveillance /></div>
+                    <div className='col'><Surveillance handleSidebarStyle={this.props.handleSidebarStyle} get={this.props.get}/></div>
                 </div>
             </div>
         )
