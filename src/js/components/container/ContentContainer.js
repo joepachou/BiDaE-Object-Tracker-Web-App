@@ -23,7 +23,7 @@ export default class ContentContainer extends React.Component{
                     <div className='col'><SeachableObject /></div>
                     <div className='col'><RecentSearches /></div>
                     <div className='col'><ObjectManagementContainer /></div>
-                    <div className='col'><Surveillance handleSidebarStyle={this.props.handleSidebarStyle} get={this.props.get}/></div>
+                    <div className='col'><Surveillance /></div>
                 </div>
             </div>
         )

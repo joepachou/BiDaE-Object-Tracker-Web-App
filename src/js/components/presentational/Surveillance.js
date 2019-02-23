@@ -12,13 +12,14 @@ import axios from 'axios';
 /** Import leaflet.js */
 import L from 'leaflet';
 
-import SideBar from '../../Sidebar'
-
 
 const PAGENAME = 'Surveillance';
 
 // API url
 const API = 'http://localhost:3000/users';
+
+import { dispatch } from "../../../globalState"
+import { updateMenuOption } from '../../../action';
 
 export default class surveillance extends React.Component {
 
@@ -41,7 +42,9 @@ export default class surveillance extends React.Component {
     }
 
     handlemenu(){
-        this.props.handleSidebarStyle(true)
+        dispatch(updateMenuOption({
+            isOpen: true,
+        }))
     }
 
     initMap(){
@@ -143,10 +146,6 @@ export default class surveillance extends React.Component {
                     });
                     marker.on('mouseout', function () {
                         this.closePopup()
-                    });
-                    marker.on('click', function (e) {
-                        this.props.handleSidebarStyle(true)
-                        console.log('ge')
                     });
                     this.setState({
                         objCounter_2: this.state.objCounter_2 + 1,
