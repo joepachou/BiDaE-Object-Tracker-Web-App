@@ -1,3 +1,0 @@
-
-
-export const UPDATE_MENU_OPTION = 'UPDATE_MENU_OPTION';

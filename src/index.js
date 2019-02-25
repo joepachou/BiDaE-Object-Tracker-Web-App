@@ -1,41 +1,38 @@
-/** React Plugin */
+/** React Library */
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+/** Redux related Library  */
+import { Provider } from 'react-redux'
+import { createStore, combineReducers } from 'redux';
 
 /** Bootstrap Custom CSS */
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 /** Import Custom CSS */
-import './customCSS';
+import './js/customCSS';
 
 /** Container Component */
-import ContentContainer from './js/components/container/ContentContainer';
-import NavbarContainer from './js/components/container/NavbarContainer';
-import Sidebar from './js/Sidebar';
+import App from './App'
+import sidebarReducer from './js/SidebarReducer';
 
 
-class App extends React.Component {
+const reducers = combineReducers({
+    sidebarOption: sidebarReducer,
+})
+const store = createStore(reducers)
 
-    render() {
-        return (
-            <div>
-                <div id='navbar'>
-                    <NavbarContainer />
-                </div>
-                <div className='my-6' id='content'>
-                    <Sidebar />
-                    <ContentContainer />
-                </div>
-            </div>
-        );
-    }
-}
+store.subscribe(() => console.log(store.getState()))
+
+
 
 const rootElement = document.getElementById('root');
 ReactDOM.render(
-    <App />, rootElement
+    <Provider store={store}>
+        <App />
+    </Provider>, rootElement
 );
+
 
 
 

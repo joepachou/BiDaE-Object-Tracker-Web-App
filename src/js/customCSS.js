@@ -1,9 +1,10 @@
 /** General Custom CSS */
-import '../src/css/App.css'
+import '../css/App.css'
 
 /** SideBar Component Custom CSS */
-import '../src/css/Sidebar.css'
+import '../css/Sidebar.css'
 
 /** Surveillance Component Custom CSS */
-import '../src/css/Surveillance.css'
+import '../css/Surveillance.css'
+
 
