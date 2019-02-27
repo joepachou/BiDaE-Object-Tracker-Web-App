@@ -4,8 +4,18 @@
     background-color: white;
 }
 
-.custom .leaflet-popup-tip,
-.custom .leaflet-popup-content-wrapper {
+.customPopup .leaflet-popup-tip,
+.customPopup .leaflet-popup-content-wrapper {
     font-size: 30px;   
 }
-  
+
+.customPopup .contentBox {
+    display: flex;
+    flex-direction:row;
+    justify-content:space-between;
+}
+
+.customPopup .contentBox .textBox{
+    display: flex;
+    align-items: center
+}

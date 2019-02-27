@@ -4,6 +4,7 @@ import React from 'react';
 /** Import survelliance general map  */
 import SMap from '../../../img/surveillanceMap.png'
 import pin from '../../../img/pin.png'
+import BOTLogo from '../../../img/BOTLOGO.png'
 
 /** Import Axios */
 import axios from 'axios';
@@ -18,6 +19,7 @@ import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import '../../../css/CustomMarkerCluster.css'
 
+import { mapOptions, customIconOptions } from '../../customOption';
 
 
 const PAGENAME = 'Surveillance';
@@ -53,16 +55,6 @@ class Surveillance extends React.Component {
     }
 
     initMap(){
-        let mapOptions = {
-            crs: L.CRS.Simple,
-            minZoom: 0,
-            maxZoom: 1,
-            zoomControl: true,
-            attributionControl: false,
-            dragging: true,
-            doubleClickZoom: false,
-            scrollWheelZoom: false
-        }
         // this.map = L.map('mapid',mapOptions).setView([37.92388861359015,115.22048950195312], 16);
         // let pos_1 = [200,100];
         // let pos_2 = [700,700];
@@ -100,14 +92,11 @@ class Surveillance extends React.Component {
 
     getObjData(){
         axios.get(API).then(res => {
-            console.log('Get data successfully: ')
+            console.log('Get data successfully ')
             // console.log(res.data.rows)
             let objectRows = res.data.rows;
             const hash = {}
-            var customIcon = L.icon({
-                iconUrl: pin,
-                iconSize:[30, 30],
-            })
+            var customIcon = L.icon(customIconOptions)
 
             /** MarkerClusterGroup Syntax */
             // var markerClusters = L.markerClusterGroup({
@@ -139,22 +128,36 @@ class Surveillance extends React.Component {
                     rssi: items.avg
                 }
 
-
                 let popupContent = `
-                    <h3>${items.name}</h3>
+                    <a href='#'>
+                        <div class='contentBox'>
+                            <div class='textBox'>
+                                <div>
+                                    <h2 className="mb-1">${items.name}</h2>
+                                    <small>詳細資料</small>
+                                </div>
+                                <small></small>
+                            </div> 
+                            <div class='imgBox'>
+                                <span className="pull-left ">
+                                    <img src=${BOTLogo} width=${100} className="img-reponsive img-rounded" />
+                                </span>
+                            </div>
+                        </div>
+                    </a>
                 `
-
+                /** More Style sheet include in Surveillance.css */
                 let customOptions = {
                     minWidth: '300',
                     maxHeight: '300',
-                    className : 'custom'
+                    className : 'customPopup',
                 }
                 
                 if (!(lbeaconCoordinate in hash)){
                     hash[lbeaconCoordinate] = [obj]
                     let lbeacon = L.circleMarker(lbeaconCoordinate,{
-                        color: 'rgba(4, 33, 96, 0.995)',
-                        fillColor: 'rgba(0, 76, 238, 0.995)',
+                        color: 'rgba(0, 0, 0, 0)',
+                        fillColor: 'rgba(235, 154, 79, 0.6)',
                         fillOpacity: 1,
                         radius: 15,
                     }).addTo(this.map);
@@ -175,9 +178,9 @@ class Surveillance extends React.Component {
                 marker.on('mouseover', function () {
                     this.openPopup();
                 });
-                marker.on('mouseout', function () {
-                    this.closePopup()
-                });
+                // marker.on('mouseout', function () {
+                //     this.closePopup()
+                // });
 
 
                 
@@ -213,22 +216,12 @@ class Surveillance extends React.Component {
        return [yyy, xxx];
     }
 
-    // macAddressSlice(section, number){
-    //     if (section > 6 || section < 0 || number > 2 || number < 0){
-    //         console.log('macAddressSlice is going wrong')
-    //         return false;
-    //     }
-
-    // }
-
-
-
     render(){
         return(
             <div>
                 <h2>{PAGENAME}</h2>
                 {console.log('reader!')}
-                {console.log(this.state.lbeaconInfo)}
+                {/* {console.log(this.state.lbeaconInfo)} */}
 
                 {/* <table>
                     <tbody>
