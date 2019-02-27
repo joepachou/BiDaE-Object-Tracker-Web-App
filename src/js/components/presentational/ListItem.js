@@ -14,7 +14,7 @@ const ListItem = (props) => {
                         <h4 className="mb-1">{itemName}</h4>
                         <small></small>
                     </div>
-                    <p className="mb-1"></p>
+                    <p className="mb-1"> </p>
                     <small></small>
                 </div> 
                 <div>
