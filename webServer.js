@@ -1,7 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
-const port = 80
+const port = 3000;
 const db = require('./query')
 const path = require('path');
 
@@ -24,7 +24,6 @@ app.use(function(req, res, next) {
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
-    // res.json({ info: 'Node.js, Express, and Postgres API' })
 })
 
 app.get('/users', db.getUsers);

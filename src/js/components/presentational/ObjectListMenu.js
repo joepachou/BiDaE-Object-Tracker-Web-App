@@ -1,10 +1,9 @@
 import React from 'react';
 import { slide as Menu } from 'react-burger-menu';
 import ListItem from './ListItem';
-import BOTLogo from '../../../img/BOTLOGO.png'
 
 
-export default class Sidebar extends React.Component {
+export default class ObjectListMenu extends React.Component {
     constructor(){
         super()
         this.state = {
@@ -21,7 +20,7 @@ export default class Sidebar extends React.Component {
         const customListStyle = {
             paddingRight: '0.5em',
         }
-        return (            
+        return (             
             <Menu {...this.state} {...menuOption}>
                 {/* <div id='TopBox' style={TopBoxStyle}>
                     <h3>lbeacon number : </h3>

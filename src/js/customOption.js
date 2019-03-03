@@ -3,7 +3,7 @@ import pin from '../img/pin.png'
 
 /** Surveillance Component Custom Option */
 
-export const mapOptions = {
+const mapOptions = {
     crs: L.CRS.Simple,
     minZoom: 0,
     maxZoom: 1,
@@ -14,12 +14,12 @@ export const mapOptions = {
     scrollWheelZoom: false
 }
 
-export const customIconOptions = {
+const customIconOptions = {
     iconUrl: pin,
     iconSize:[30, 30],
 } 
 
-export function popupContent (objectName, objectImg, imgWidth){
+function popupContent (objectName, objectImg, imgWidth){
     
     const content = 
         `
@@ -44,3 +44,10 @@ export function popupContent (objectName, objectImg, imgWidth){
     return content
 }
 
+
+export { 
+    mapOptions,
+    customIconOptions,
+    popupContent,
+    popupCustomStyle 
+}

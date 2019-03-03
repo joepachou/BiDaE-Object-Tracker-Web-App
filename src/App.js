@@ -3,7 +3,7 @@ import React from 'react';
 /** Container Component */
 import ContentContainer from './js/components/container/ContentContainer';
 import NavbarContainer from './js/components/container/NavbarContainer';
-import SidebarContainer from './js/components/container/SidebarContainer';
+import ObjectListContainer from './js/components/container/ObjectListContainer';
 
 
 const App = (props) =>{
@@ -14,7 +14,7 @@ const App = (props) =>{
                 <NavbarContainer />
             </div>
             <div className='my-6' id='content'>
-                <SidebarContainer />
+                <ObjectListContainer />
                 <ContentContainer />
             </div>
         </div>

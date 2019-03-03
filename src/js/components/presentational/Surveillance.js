@@ -3,7 +3,6 @@ import React from 'react';
 
 /** Import survelliance general map  */
 import SMap from '../../../img/surveillanceMap.png'
-import pin from '../../../img/pin.png'
 import BOTLogo from '../../../img/BOTLOGO.png'
 
 /** Import Axios */
@@ -19,17 +18,17 @@ import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import '../../../css/CustomMarkerCluster.css'
 
-import { mapOptions, customIconOptions } from '../../customOption';
-
-
-const PAGENAME = 'Surveillance';
+import { mapOptions, customIconOptions, popupContent } from '../../customOption';
 
 /** API url */
 const API = 'http://localhost:3000/users';
 
 /** Redux related Library  */
-import { updateMenuOption } from '../../action';
-import { showObjectList } from '../../action';
+import { 
+    isObjectListShown,
+    selectObjectList,
+} from '../../action/action';
+
 import { connect } from 'react-redux';
 
 class Surveillance extends React.Component {
@@ -38,65 +37,65 @@ class Surveillance extends React.Component {
         super(props)
         this.state = {
             data: [],
+            lbeaconsPosition: [],
             lbeaconInfo: {},
+            objectInfo: {},
+            hasErrorCircle: false,
         }
         this.map = null;
+        this.popupContent = popupContent;
+        this.customIcon = L.icon(customIconOptions);
+
         this.handlemenu = this.handlemenu.bind(this);
         this.getObjData = this.getObjData.bind(this);
-        
-    }
+        this.handleObjectMakers = this.handleObjectMakers.bind(this)
+        this.markersLayer = L.layerGroup();
 
-    handlemenu(e){
-        const { lbeaconInfo } = this.state
-        console.log(e.latlng)
-        const lbeacon_coorinate = Object.values(e.target._latlng)
-        this.props.updateMenu(true);
-        this.props.showObjectList(lbeaconInfo[lbeacon_coorinate]);
-    }
-
-    initMap(){
-        // this.map = L.map('mapid',mapOptions).setView([37.92388861359015,115.22048950195312], 16);
-        // let pos_1 = [200,100];
-        // let pos_2 = [700,700];
-
-        let map = L.map('mapid', mapOptions)
-        let bounds = [[0,0], [900,900]]
-        let image = L.imageOverlay(SMap, bounds).addTo(map)
-        map.fitBounds(bounds)
-        this.map = map
-
-        // var lbeacon_1 = L.circleMarker(pos_1,{
-        //     color: 'red',
-        //     fillColor: '#f03',
-        //     fillOpacity: 1,
-        //     radius: 10
-        // }).addTo(map);
-
-        // var lbeacon_2 = L.circleMarker(pos_2,{
-        //     color: 'red',
-        //     fillColor: '#f03',
-        //     fillOpacity: 1,
-        //     radius: 10
-        // }).addTo(map);
-
-        // console.log(lbeacon_2.getLatLng())
-
-        // lbeacon_1.on('click', this.handlemenu)
 
     }
 
     componentDidMount(){
         this.initMap();   
-        this.getObjData(); 
+        this.getObjData();
+        this.interval = setInterval(this.getObjData, 3000);
+    }
+
+    componentDidUpdate(){
+        this.handleObjectMakers();
+    }
+    
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+
+    initMap(){
+        let map = L.map('mapid', mapOptions);
+        let bounds = [[0,0], [900,900]];
+        let image = L.imageOverlay(SMap, bounds).addTo(map);
+        map.fitBounds(bounds);
+        this.map = map;
+    }
+
+    handlemenu(e){
+        const { objectInfo } = this.state
+        const lbeacon_coorinate = Object.values(e.target._latlng).toString();
+        let objectList = [], key;
+        for (key in objectInfo) {
+            if (objectInfo[key].currentPosition.toString() == lbeacon_coorinate) {
+                objectList.push(objectInfo[key])
+            }
+        }
+        this.props.isObjectListShownProp(true);
+        this.props.selectObjectListProp(objectList);
     }
 
     getObjData(){
         axios.get(API).then(res => {
-            console.log('Get data successfully ')
+            // console.log('Get data successfully ')
             // console.log(res.data.rows)
             let objectRows = res.data.rows;
-            const hash = {}
-            var customIcon = L.icon(customIconOptions)
+            let lbsPosition = [],
+                objectInfoHash = {}
 
             /** MarkerClusterGroup Syntax */
             // var markerClusters = L.markerClusterGroup({
@@ -120,70 +119,44 @@ class Surveillance extends React.Component {
 
             objectRows.map(items =>{
                 const lbeaconCoordinate = this.createCoordinate(items.lbeacon_uuid);
-                const objCoordinate = this.macAddressToCoordinate(items.object_mac_address, lbeaconCoordinate);
 
-                let obj = {
-                    name: items.name,
-                    mac_address: items.object_mac_address,
-                    rssi: items.avg
+                if (lbsPosition.indexOf(lbeaconCoordinate.toString()) < 0){
+                    lbsPosition.push(lbeaconCoordinate.toString());
                 }
 
-                let popupContent = `
-                    <a href='#'>
-                        <div class='contentBox'>
-                            <div class='textBox'>
-                                <div>
-                                    <h2 className="mb-1">${items.name}</h2>
-                                    <small>詳細資料</small>
-                                </div>
-                                <small></small>
-                            </div> 
-                            <div class='imgBox'>
-                                <span className="pull-left ">
-                                    <img src=${BOTLogo} width=${100} className="img-reponsive img-rounded" />
-                                </span>
-                            </div>
-                        </div>
-                    </a>
-                `
-                /** More Style sheet include in Surveillance.css */
-                let customOptions = {
-                    minWidth: '300',
-                    maxHeight: '300',
-                    className : 'customPopup',
+                let object = {
+                    lbeaconCoordinate: lbeaconCoordinate,
+                    rssi: items.avg,
                 }
-                
-                if (!(lbeaconCoordinate in hash)){
-                    hash[lbeaconCoordinate] = [obj]
-                    let lbeacon = L.circleMarker(lbeaconCoordinate,{
-                        color: 'rgba(0, 0, 0, 0)',
-                        fillColor: 'rgba(235, 154, 79, 0.6)',
-                        fillOpacity: 1,
-                        radius: 15,
-                    }).addTo(this.map);
-                    let invisibleCircle = L.circleMarker(lbeaconCoordinate,{
-                        color: 'rgba(0, 0, 0, 0)',
-                        fillColor: 'rgba(0, 76, 238, 0.995)',
-                        fillOpacity: 0,
-                        radius: 100,
-                    }).addTo(this.map);
 
-                    invisibleCircle.on('click', this.handlemenu);
-                }else{
-                    hash[lbeaconCoordinate].push(obj)
-                };
+                if (!(items.object_mac_address in objectInfoHash)) {
+                    objectInfoHash[items.object_mac_address] = {
+                        lbeaconDetectedNum: 1,
+                        maxRSSI: items.avg,
+                        currentPosition: lbeaconCoordinate,
+                        overlapLbeacon: [object], 
+                        name: items.name,
+                    }
+                } else {
+                    let maxRSSI = objectInfoHash[items.object_mac_address].maxRSSI;
 
-                const marker = L.marker(objCoordinate, {icon: customIcon}).bindPopup(popupContent, customOptions).addTo(this.map);
+                    /** if the RSSI scanned by the second lbeacon or more larger than previous one:
+                     * current position = new lbeacon location
+                     * max rssi = new lbeacon rssi
+                     */
 
-                marker.on('mouseover', function () {
-                    this.openPopup();
-                });
-                // marker.on('mouseout', function () {
-                //     this.closePopup()
-                // });
+                    // compare two lbeacon's RSSI
+                    // Mark the object on the lbeacon that has bigger RSSI
+                    
+                    if (items.avg < maxRSSI) {
+                        objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
+                        objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
+                    }
+                    objectInfoHash[items.object_mac_address].lbeaconDetectedNum += 1;
+                    objectInfoHash[items.object_mac_address].overlapLbeacon.push(object);
 
+                }
 
-                
                 // markerClusters.addLayer(L.marker(lbeaconCoordinate));
 
             })
@@ -191,11 +164,83 @@ class Surveillance extends React.Component {
             // markerClusters.on('clusterclick', this.handlemenu)
             this.setState({
                 data: res.data.rows,
-                lbeaconInfo: hash,
+                lbeaconsPosition: lbsPosition,
+                objectInfo: objectInfoHash,
+                hasErrorCircle: false,
             })
         }).catch(function (error) {
             console.log(error);
         })
+    }
+
+
+    handleObjectMakers(){
+        let objects = this.state.objectInfo
+
+        /** Clear the old markerslayers */
+        this.markersLayer.clearLayers();
+
+        /** Mark the objects onto the map */
+        for (var key in objects){
+
+            let detectedNum = objects[key].lbeaconDetectedNum;
+            let position = this.macAddressToCoordinate(key.toString(), objects[key].currentPosition);
+
+
+            /** popupContetn (objectName, objectImg, objectImgWidth) */
+            let popupContent = this.popupContent(objects[key].name, BOTLogo, 100)
+            /** More Style sheet include in Surveillance.css */
+            let popupCustomStyle = {
+                minWidth: '300',
+                maxHeight: '300',
+                className : 'customPopup',
+            }
+            let marker = L.marker(position, {icon: this.customIcon}).bindPopup(popupContent, popupCustomStyle).addTo(this.markersLayer);
+
+            /** Marker Event */
+            marker.on('mouseover', function () {
+                this.openPopup();
+            }).on('mouseout', function () {
+                this.closePopup()
+            });
+
+            if (detectedNum > 1) {
+                let errorCircle = L.circleMarker(position,{
+                    color: 'rgba(0, 0, 0, 0)',
+                    fillColor: 'blue',
+                    fillOpacity: 1,
+                    radius: 6,
+                }).addTo(this.markersLayer);
+            }
+        }
+
+        /** Mark the lbeacons onto the map */
+        this.state.lbeaconsPosition.map(items => {
+            let lbLngLat = items.split(",")
+            let lbeacon = L.circleMarker(lbLngLat,{
+                color: 'rgba(0, 0, 0, 0)',
+                fillColor: 'rgba(235, 154, 79, 0.6)',
+                fillOpacity: 1,
+                radius: 15,
+            }).addTo(this.markersLayer);
+            let invisibleCircle = L.circleMarker(lbLngLat,{
+                color: 'rgba(0, 0, 0, 0)',
+                fillColor: 'rgba(0, 76, 238, 0.995)',
+                fillOpacity: 0,
+                radius: 100,
+            }).addTo(this.markersLayer);
+
+            invisibleCircle.on('click', this.handlemenu);
+        })
+
+        /** Add the new markerslayer to the map */
+        this.markersLayer.addTo(this.map);
+
+        if (!this.state.hasErrorCircle) {
+            this.setState({
+                hasErrorCircle:true,
+            })
+        }
     }
 
     createCoordinate(lbeacon_uuid){
@@ -219,9 +264,8 @@ class Surveillance extends React.Component {
     render(){
         return(
             <div>
-                <h2>{PAGENAME}</h2>
-                {console.log('reader!')}
-                {/* {console.log(this.state.lbeaconInfo)} */}
+                {/* {console.log(this.state.lbeaconsPosition)} */}
+                {/* {console.log('render!')} */}
 
                 {/* <table>
                     <tbody>
@@ -251,8 +295,8 @@ class Surveillance extends React.Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        updateMenu: value => dispatch(updateMenuOption(value)),
-        showObjectList: array => dispatch(showObjectList(array)),
+        isObjectListShownProp: value => dispatch(isObjectListShown(value)),
+        selectObjectListProp: array => dispatch(selectObjectList(array)),
     }
 }
 

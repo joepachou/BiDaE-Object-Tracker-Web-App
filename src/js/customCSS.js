@@ -2,7 +2,7 @@
 import '../css/App.css'
 
 /** SideBar Component Custom CSS */
-import '../css/Sidebar.css'
+import '../css/ObjectListMenu.css'
 
 /** Surveillance Component Custom CSS */
 import '../css/Surveillance.css'

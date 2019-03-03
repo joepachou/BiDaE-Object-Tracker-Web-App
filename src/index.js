@@ -14,11 +14,11 @@ import './js/customCSS';
 
 /** Container Component */
 import App from './App'
-import sidebarReducer from './js/SidebarReducer';
+import objectListReducer from './js/reducer/ObjectListReducer';
 
 
 const reducers = combineReducers({
-    sidebarOption: sidebarReducer,
+    objectListOption: objectListReducer,
 })
 const store = createStore(reducers)
 

@@ -1,5 +1,7 @@
-import{ UPDATE_MENU_OPTION } from './actionType';
-import{ SHOW_OBJECT_LIST } from './actionType'
+import{ 
+    IS_OBJECT_LIST_SHOWN, 
+    SELECT_OBJECT_LIST,
+} from '../action/actionType';
 
 
 const initialState = {
@@ -12,7 +14,7 @@ const initialState = {
 
 function reducer (state = initialState, action) {
     switch (action.type) {
-        case UPDATE_MENU_OPTION:
+        case IS_OBJECT_LIST_SHOWN:
             return {
                 ...state,
                 menuOption : {
@@ -21,7 +23,7 @@ function reducer (state = initialState, action) {
                 }
                 
             }
-        case SHOW_OBJECT_LIST:
+        case SELECT_OBJECT_LIST:
             return {
                 ...state,
                 objectList: action.array    
