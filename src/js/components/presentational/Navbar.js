@@ -70,7 +70,7 @@ export default class NavBar extends React.Component {
                             className="d-inline-block align-top"
                             alt="bot"
                         />
-                        {'\u00A0'}BeDIT
+                        {'\u00A0'}BOT
                     </a>
                     
                     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

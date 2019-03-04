@@ -16,7 +16,7 @@ const mapOptions = {
 
 const customIconOptions = {
     iconUrl: pin,
-    iconSize:[30, 30],
+    iconSize:[50, 50],
 } 
 
 function popupContent (objectName, objectImg, imgWidth){

@@ -3,6 +3,7 @@ import React from 'react';
 
 /** Import survelliance general map  */
 import SMap from '../../../img/surveillanceMap.png'
+import R402 from '../../../img/R402.jpg';
 import BOTLogo from '../../../img/BOTLOGO.png'
 
 /** Import Axios */
@@ -72,7 +73,7 @@ class Surveillance extends React.Component {
     initMap(){
         let map = L.map('mapid', mapOptions);
         let bounds = [[0,0], [900,900]];
-        let image = L.imageOverlay(SMap, bounds).addTo(map);
+        let image = L.imageOverlay(R402, bounds).addTo(map);
         map.fitBounds(bounds);
         this.map = map;
     }
@@ -97,7 +98,7 @@ class Surveillance extends React.Component {
             let objectRows = res.data.rows;
             let lbsPosition = [],
                 objectInfoHash = {}
-
+            console.log(res.data.rows)
             objectRows.map(items =>{
                 const lbeaconCoordinate = this.createCoordinate(items.lbeacon_uuid);
 
@@ -164,7 +165,7 @@ class Surveillance extends React.Component {
         /** Mark the objects onto the map */
         for (var key in objects){
 
-            if (true || key == '0f:0c:6a:d3:cf:e2'){
+            if (key == 'df:ff:ff:ff:ff:ff'){
                 
                 let detectedNum = objects[key].lbeaconDetectedNum;
                 let position = this.macAddressToCoordinate(key.toString(), objects[key].currentPosition);
@@ -191,11 +192,11 @@ class Surveillance extends React.Component {
 
                 /** Set the error circles */
                 if (detectedNum > 1) {
-                    let errorCircle = L.circleMarker([position[0] - 10, position[1]],{
+                    let errorCircle = L.circleMarker([position[0] - 20, position[1]],{
                         color: 'rgba(0, 0, 0, 0)',
                         fillColor: 'orange',
-                        fillOpacity: 0.6,
-                        radius: 15,
+                        fillOpacity: 0.5,
+                        radius: 30,
                     }).addTo(this.markersLayer);
                 }
             }
