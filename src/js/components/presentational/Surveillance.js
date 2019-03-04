@@ -22,7 +22,7 @@ import '../../../css/CustomMarkerCluster.css'
 import { mapOptions, customIconOptions, popupContent } from '../../customOption';
 
 /** API url */
-const API = 'http://localhost:3000/users';
+const API = 'http://bot.iis.sinica.edu.tw/users';
 
 /** Redux related Library  */
 import { 
