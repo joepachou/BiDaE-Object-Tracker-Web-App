@@ -13,7 +13,7 @@ const App = (props) =>{
             <div id='navbar'>
                 <NavbarContainer />
             </div>
-            <div className='my-6' id='content'>
+            <div className='my-6' id='contentContainer'>
                 <ObjectListContainer />
                 <ContentContainer />
             </div>

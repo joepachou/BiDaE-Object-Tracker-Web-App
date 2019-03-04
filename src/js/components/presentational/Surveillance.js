@@ -52,6 +52,7 @@ class Surveillance extends React.Component {
         this.markersLayer = L.layerGroup();
 
 
+
     }
 
     componentDidMount(){
@@ -96,26 +97,6 @@ class Surveillance extends React.Component {
             let objectRows = res.data.rows;
             let lbsPosition = [],
                 objectInfoHash = {}
-
-            /** MarkerClusterGroup Syntax */
-            // var markerClusters = L.markerClusterGroup({
-            //     maxClusterRadius: 120,
-            //     spiderfyOnMaxZoom: false,
-            //     zoomToBoundsOnClick: false,
-            //     showCoverageOnHover: true,
-            //     singleMarkerMode: true,
-            //     iconCreateFunction: function(cluster) {
-            //         var clusterSize = "small";
-            //         if (cluster.getChildCount() >= 10) {
-            //             clusterSize = "medium";
-            //         }
-            //         return new L.DivIcon({
-            //             html: '<div><span>' + cluster.getChildCount() + '</span></div>',
-            //             className: 'custom-marker-cluster custom-marker-cluster' + clusterSize,
-            //             iconSize: new L.Point(40, 40)
-            //         });
-            //     }
-            // });
 
             objectRows.map(items =>{
                 const lbeaconCoordinate = this.createCoordinate(items.lbeacon_uuid);
@@ -183,44 +164,50 @@ class Surveillance extends React.Component {
         /** Mark the objects onto the map */
         for (var key in objects){
 
-            let detectedNum = objects[key].lbeaconDetectedNum;
-            let position = this.macAddressToCoordinate(key.toString(), objects[key].currentPosition);
+            if (true || key == '0f:0c:6a:d3:cf:e2'){
+                
+                let detectedNum = objects[key].lbeaconDetectedNum;
+                let position = this.macAddressToCoordinate(key.toString(), objects[key].currentPosition);
 
 
-            /** popupContetn (objectName, objectImg, objectImgWidth) */
-            let popupContent = this.popupContent(objects[key].name, BOTLogo, 100)
-            /** More Style sheet include in Surveillance.css */
-            let popupCustomStyle = {
-                minWidth: '300',
-                maxHeight: '300',
-                className : 'customPopup',
-            }
-            let marker = L.marker(position, {icon: this.customIcon}).bindPopup(popupContent, popupCustomStyle).addTo(this.markersLayer);
+                /** Set the Marker's popup 
+                 * popupContent (objectName, objectImg, objectImgWidth)
+                 * More Style sheet include in Surveillance.css
+                */
+                let popupContent = this.popupContent(objects[key].name, BOTLogo, 100)
+                let popupCustomStyle = {
+                    minWidth: '300',
+                    maxHeight: '300',
+                    className : 'customPopup',
+                }
+                let marker = L.marker(position, {icon: this.customIcon}).bindPopup(popupContent, popupCustomStyle).addTo(this.markersLayer);
 
-            /** Marker Event */
-            marker.on('mouseover', function () {
-                this.openPopup();
-            }).on('mouseout', function () {
-                this.closePopup()
-            });
+                /** Set Marker Event */
+                marker.on('mouseover', function () {
+                    this.openPopup();
+                }).on('mouseout', function () {
+                    this.closePopup()
+                });
 
-            if (detectedNum > 1) {
-                let errorCircle = L.circleMarker(position,{
-                    color: 'rgba(0, 0, 0, 0)',
-                    fillColor: 'blue',
-                    fillOpacity: 1,
-                    radius: 6,
-                }).addTo(this.markersLayer);
+                /** Set the error circles */
+                if (detectedNum > 1) {
+                    let errorCircle = L.circleMarker([position[0] - 10, position[1]],{
+                        color: 'rgba(0, 0, 0, 0)',
+                        fillColor: 'orange',
+                        fillOpacity: 0.6,
+                        radius: 15,
+                    }).addTo(this.markersLayer);
+                }
             }
         }
 
-        /** Mark the lbeacons onto the map */
+        /** Add the lbeacons onto the map */
         this.state.lbeaconsPosition.map(items => {
             let lbLngLat = items.split(",")
             let lbeacon = L.circleMarker(lbLngLat,{
                 color: 'rgba(0, 0, 0, 0)',
-                fillColor: 'rgba(235, 154, 79, 0.6)',
-                fillOpacity: 1,
+                fillColor: 'yellow',
+                fillOpacity: 0.5,
                 radius: 15,
             }).addTo(this.markersLayer);
             let invisibleCircle = L.circleMarker(lbLngLat,{
@@ -264,7 +251,7 @@ class Surveillance extends React.Component {
     render(){
         return(
             <div>
-                {/* {console.log(this.state.lbeaconsPosition)} */}
+                {console.log(this.state.objectInfo)}
                 {/* {console.log('render!')} */}
 
                 {/* <table>
@@ -301,3 +288,4 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 export default connect(null, mapDispatchToProps)(Surveillance)
+

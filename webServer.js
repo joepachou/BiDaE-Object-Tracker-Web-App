@@ -31,5 +31,6 @@ app.get('/users', db.getUsers);
 
 app.listen(port, () => {
     console.log(`App running on port ${port}.`)
+    console.log(process.env)
 })
 

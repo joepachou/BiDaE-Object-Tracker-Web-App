@@ -1,8 +1,7 @@
-import React, { Component } from "react";
-import ReactDOM from "react-dom";
-import Input from "../presentational/Input.jsx";
+import React from "react";
+import Input from "../presentational/Input.js";
 
-export default class FormContainer extends Component {
+export default class FormContainer extends React.Component {
   constructor() {
     super();
     this.state = {
