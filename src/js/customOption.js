@@ -5,8 +5,9 @@ import pin from '../img/pin.png'
 
 const mapOptions = {
     crs: L.CRS.Simple,
+    zoom: -4,
     minZoom: -5,
-    maxZoom: 5,
+    maxZoom: 0,
     zoomControl: true,
     attributionControl: false,
     dragging: true,

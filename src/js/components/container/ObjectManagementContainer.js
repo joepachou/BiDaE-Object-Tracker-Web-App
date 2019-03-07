@@ -103,7 +103,7 @@ export default class ObjectManagement extends React.Component{
                 {/* <Navs navsItem={this.state.navsItem}/> */}
                 {/* <div className="d-flex w-100 justify-content-around"> */}
                 <div className='row'>
-                    {console.log(this.state.data)}
+                    {/* {console.log(this.state.data)} */}
                     <div className='col-2'>
                         <h2>Objects </h2>
                         <ListGroup variant="flush">

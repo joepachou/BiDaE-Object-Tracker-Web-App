@@ -39,7 +39,7 @@ class Surveillance extends React.Component {
         super(props)
         this.state = {
             data: [],
-            lbeaconsPosition: [],
+            lbeaconsPosition: ["7200,2460", "4610,7310"],
             lbeaconInfo: {},
             objectInfo: {},
             hasErrorCircle: false,
@@ -74,6 +74,26 @@ class Surveillance extends React.Component {
         let image = L.imageOverlay(IIS_Newbuilding_4F, bounds).addTo(map);
         map.fitBounds(bounds);
         this.map = map;
+
+        /** Add the lbeacons onto the map */
+        this.state.lbeaconsPosition.map(items => {
+            let lbLatLng = items.split(",")
+            let lbeacon = L.circleMarker(lbLatLng,{
+                color: 'rgba(0, 0, 0, 0)',
+                fillColor: 'yellow',
+                fillOpacity: 0.5,
+                radius: 15,
+            }).addTo(this.map);
+
+            let invisibleCircle = L.circleMarker(lbLatLng,{
+                color: 'rgba(0, 0, 0, 0)',
+                fillColor: 'rgba(0, 76, 238, 0.995)',
+                fillOpacity: 0,
+                radius: 80,
+            }).addTo(this.map);
+
+            invisibleCircle.on('click', this.handlemenu);
+        })
     }
 
     handlemenu(e){
@@ -102,6 +122,7 @@ class Surveillance extends React.Component {
                 if (lbsPosition.indexOf(lbeaconCoordinate.toString()) < 0){
                     lbsPosition.push(lbeaconCoordinate.toString());
                 }
+                console.log(lbsPosition)
                 
 
                 let object = {
@@ -197,25 +218,7 @@ class Surveillance extends React.Component {
         
         }
 
-        /** Add the lbeacons onto the map */
-        this.state.lbeaconsPosition.map(items => {
-            let lbLatLng = items.split(",")
-            let lbeacon = L.circleMarker(lbLatLng,{
-                color: 'rgba(0, 0, 0, 0)',
-                fillColor: 'yellow',
-                fillOpacity: 0.5,
-                radius: 15,
-            }).addTo(this.markersLayer);
 
-            let invisibleCircle = L.circleMarker(lbLatLng,{
-                color: 'rgba(0, 0, 0, 0)',
-                fillColor: 'rgba(0, 76, 238, 0.995)',
-                fillOpacity: 0,
-                radius: 80,
-            }).addTo(this.markersLayer);
-
-            invisibleCircle.on('click', this.handlemenu);
-        })
 
         /** Add the new markerslayer to the map */
         this.markersLayer.addTo(this.map);
@@ -250,7 +253,7 @@ class Surveillance extends React.Component {
     render(){
         return(
             <div id='mapid' className='cmp-block'>
-                {/* {console.log(this.state.objectInfo)} */}
+                {console.log(this.state.objectInfo)}
                 {/* {console.log('render!')} */}
 
                 {/* <table>
