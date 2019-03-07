@@ -1,44 +1,30 @@
 import React from "react";
-import Input from "../presentational/Input.js";
+import axios from 'axios';
+
 import ReactTable from "react-table";
-import 'react-table/react-table.css'
+import 'react-table/react-table.css';
+import dataAPI from "../../../../dataAPI";
 
 
 export default class ReactTableContainer extends React.Component {
 
-    render() {
-        const data = [{
-          name: 'Tanner Linsley',
-          age: 26,
-          friend: {
-            name: 'Jason Maurer',
-            age: 23,
-          }
-        }]
-      
-        const columns = [{
-          Header: 'Name',
-          accessor: 'name' // String-based value accessors!
-        }, {
-          Header: 'Age',
-          accessor: 'age',
-          Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
-        }, {
-          id: 'friendName', // Required because our accessor is not a string
-          Header: 'Friend Name',
-          accessor: d => d.friend.name // Custom value accessors!
-        }, {
-          Header: props => <span>Friend Age</span>, // Custom header components!
-          accessor: 'friend.age'
-        }]
-      
-        return (<ReactTable
-          data={data}
-          columns={columns}
-        />)
+    constructor() {
+        super();
+        this.state = {
+            data:[],
+            column:[],
+        }
+    }
+
+    render() {      
+        return (
+            <div>
+                <ReactTable
+                  data={this.props.data}
+                  columns={this.props.column}
+                />
+            </div>
+        )
       }
   
 }
-
-// const wrapper = document.getElementById("create-article-form");
-// wrapper ? ReactDOM.render(<FormContainer />, wrapper) : false;

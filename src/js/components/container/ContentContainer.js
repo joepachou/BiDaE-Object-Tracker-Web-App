@@ -23,8 +23,8 @@ export default class ContentContainer extends React.Component{
             /** "page-wrap" is to use react-burget-menu */
             <div id="page-wrap" className='px-lg-4 py-md-4'>
                 <div className='row'>
-                    <div className='col'><Surveillance /></div>
-                    {/* <div className='col'><ObjectManagementContainer /></div> */}
+                    <div className='col-6'><Surveillance /></div>
+                    <div className='col-6'><ObjectManagementContainer /></div>
                     {/* <div className='col'><TabelContainer /></div> */}
                     {/* <div className='col'><ReactTableContainer /></div> */}
 {/* 

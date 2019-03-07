@@ -1,5 +1,14 @@
 html,body {
-  margin: 0;
-  font-family: 'Arial';
+    margin: 0;
+    font-family: 'Comic Sans MS'; 
+    font-size: 20px;
 }
 
+.cmp-block{
+    border: solid 2px rgb(227, 222, 222);
+    padding: 30px;
+}
+
+.active a{
+    color: red;
+}

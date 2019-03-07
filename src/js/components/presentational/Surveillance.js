@@ -2,9 +2,10 @@
 import React from 'react';
 
 /** Import survelliance general map  */
-import SMap from '../../../img/surveillanceMap.png'
 import R402 from '../../../img/R402.jpg';
-import BOTLogo from '../../../img/BOTLOGO.png'
+import BOTLogo from '../../../img/BOTLogo.png'
+import IIS4F from '../../../img/IIS4F.png'
+import IIS_Newbuilding_4F from '../../../img/IIS_Newbuilding_4F.png'
 
 /** Import Axios */
 import axios from 'axios';
@@ -22,7 +23,7 @@ import '../../../css/CustomMarkerCluster.css'
 import { mapOptions, customIconOptions, popupContent } from '../../customOption';
 
 /** API url */
-const API = 'http://bot.iis.sinica.edu.tw/users';
+import dataAPI from '../../../../dataAPI';
 
 /** Redux related Library  */
 import { 
@@ -51,9 +52,6 @@ class Surveillance extends React.Component {
         this.getObjData = this.getObjData.bind(this);
         this.handleObjectMakers = this.handleObjectMakers.bind(this)
         this.markersLayer = L.layerGroup();
-
-
-
     }
 
     componentDidMount(){
@@ -72,8 +70,8 @@ class Surveillance extends React.Component {
 
     initMap(){
         let map = L.map('mapid', mapOptions);
-        let bounds = [[0,0], [900,900]];
-        let image = L.imageOverlay(R402, bounds).addTo(map);
+        let bounds = [[0,0], [21130,35710]];
+        let image = L.imageOverlay(IIS_Newbuilding_4F, bounds).addTo(map);
         map.fitBounds(bounds);
         this.map = map;
     }
@@ -92,19 +90,19 @@ class Surveillance extends React.Component {
     }
 
     getObjData(){
-        axios.get(API).then(res => {
+        axios.get(dataAPI.trackingData).then(res => {
             // console.log('Get data successfully ')
             // console.log(res.data.rows)
             let objectRows = res.data.rows;
             let lbsPosition = [],
                 objectInfoHash = {}
-            console.log(res.data.rows)
-            objectRows.map(items =>{
-                const lbeaconCoordinate = this.createCoordinate(items.lbeacon_uuid);
 
+            objectRows.map(items =>{
+                const lbeaconCoordinate = this.createLbeaconCoordinate(items.lbeacon_uuid);
                 if (lbsPosition.indexOf(lbeaconCoordinate.toString()) < 0){
                     lbsPosition.push(lbeaconCoordinate.toString());
                 }
+                
 
                 let object = {
                     lbeaconCoordinate: lbeaconCoordinate,
@@ -164,58 +162,56 @@ class Surveillance extends React.Component {
 
         /** Mark the objects onto the map */
         for (var key in objects){
-
-            if (key == 'df:ff:ff:ff:ff:ff'){
                 
-                let detectedNum = objects[key].lbeaconDetectedNum;
-                let position = this.macAddressToCoordinate(key.toString(), objects[key].currentPosition);
+            let detectedNum = objects[key].lbeaconDetectedNum;
+            let position = this.macAddressToCoordinate(key.toString(), objects[key].currentPosition);
 
-
-                /** Set the Marker's popup 
-                 * popupContent (objectName, objectImg, objectImgWidth)
-                 * More Style sheet include in Surveillance.css
-                */
-                let popupContent = this.popupContent(objects[key].name, BOTLogo, 100)
-                let popupCustomStyle = {
-                    minWidth: '300',
-                    maxHeight: '300',
-                    className : 'customPopup',
-                }
-                let marker = L.marker(position, {icon: this.customIcon}).bindPopup(popupContent, popupCustomStyle).addTo(this.markersLayer);
-
-                /** Set Marker Event */
-                marker.on('mouseover', function () {
-                    this.openPopup();
-                }).on('mouseout', function () {
-                    this.closePopup()
-                });
-
-                /** Set the error circles */
-                if (detectedNum > 1) {
-                    let errorCircle = L.circleMarker([position[0] - 20, position[1]],{
-                        color: 'rgba(0, 0, 0, 0)',
-                        fillColor: 'orange',
-                        fillOpacity: 0.5,
-                        radius: 30,
-                    }).addTo(this.markersLayer);
-                }
+            /** Set the Marker's popup 
+             * popupContent (objectName, objectImg, objectImgWidth)
+             * More Style sheet include in Surveillance.css
+            */
+            let popupContent = this.popupContent(objects[key].name, BOTLogo, 100)
+            let popupCustomStyle = {
+                minWidth: '300',
+                maxHeight: '300',
+                className : 'customPopup',
             }
+            let marker = L.marker(position, {icon: this.customIcon}).bindPopup(popupContent, popupCustomStyle).addTo(this.markersLayer);
+            
+            /** Set Marker Event */
+            marker.on('mouseover', function () {
+                this.openPopup();
+            }).on('mouseout', function () {
+                this.closePopup()
+            });
+
+            /** Set the error circles */
+            if (detectedNum > 1) {
+                let errorCircle = L.circleMarker([position[0], position[1]],{
+                    color: 'rgba(0, 0, 0, 0)',
+                    fillColor: 'orange',
+                    fillOpacity: 0.5,
+                    radius: 40,
+                }).addTo(this.markersLayer);
+            }
+        
         }
 
         /** Add the lbeacons onto the map */
         this.state.lbeaconsPosition.map(items => {
-            let lbLngLat = items.split(",")
-            let lbeacon = L.circleMarker(lbLngLat,{
+            let lbLatLng = items.split(",")
+            let lbeacon = L.circleMarker(lbLatLng,{
                 color: 'rgba(0, 0, 0, 0)',
                 fillColor: 'yellow',
                 fillOpacity: 0.5,
                 radius: 15,
             }).addTo(this.markersLayer);
-            let invisibleCircle = L.circleMarker(lbLngLat,{
+
+            let invisibleCircle = L.circleMarker(lbLatLng,{
                 color: 'rgba(0, 0, 0, 0)',
                 fillColor: 'rgba(0, 76, 238, 0.995)',
                 fillOpacity: 0,
-                radius: 100,
+                radius: 80,
             }).addTo(this.markersLayer);
 
             invisibleCircle.on('click', this.handlemenu);
@@ -231,28 +227,30 @@ class Surveillance extends React.Component {
         }
     }
 
-    createCoordinate(lbeacon_uuid){
+    createLbeaconCoordinate(lbeacon_uuid){
+        /** Example of lbeacon_uuid: 00000018-0000-0000-7310-000000004610 */
         const zz = lbeacon_uuid.slice(6,8);
-        const xx = parseInt(lbeacon_uuid.slice(16,18) + 0) * 2;
-        const yy = parseInt(lbeacon_uuid.slice(-3, -1) + 0) * 2;
+        const xx = parseInt(lbeacon_uuid.slice(14,18) + lbeacon_uuid.slice(19,23));
+        const yy = parseInt(lbeacon_uuid.slice(-8));
         return [yy, xx];
     }
 
     macAddressToCoordinate(mac_address, lbeacon_coordinate){
+        /** Example of lbeacon_uuid: 01:1f:2d:13:5e:33 */
         const xx = mac_address.slice(15,16);
         const yy = mac_address.slice(16,17);
         const xSign = parseInt(mac_address.slice(12,13), 16) % 2 == 1 ? 1 : -1 ;
         const ySign = parseInt(mac_address.slice(13,14), 16) % 2 == 1 ? 1 : -1 ;
 
-        const xxx = lbeacon_coordinate[0] + xSign * parseInt(xx, 16) * 5;
-        const yyy = lbeacon_coordinate[1] + ySign * parseInt(yy, 16) * 5;
-       return [yyy, xxx];
+        const xxx = lbeacon_coordinate[1] + xSign * parseInt(xx, 16) * 5;
+        const yyy = lbeacon_coordinate[0] + ySign * parseInt(yy, 16) * 5;
+        return [yyy, xxx];
     }
 
     render(){
         return(
-            <div>
-                {console.log(this.state.objectInfo)}
+            <div id='mapid' className='cmp-block'>
+                {/* {console.log(this.state.objectInfo)} */}
                 {/* {console.log('render!')} */}
 
                 {/* <table>
@@ -275,8 +273,8 @@ class Surveillance extends React.Component {
                         })}
                     </tbody>
                 </table> */}
-                <div id='mapid'></div>
-             </div>
+            </div>
+             
         )
     }
 }

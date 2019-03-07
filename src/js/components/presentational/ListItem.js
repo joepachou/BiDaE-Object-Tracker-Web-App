@@ -1,5 +1,5 @@
 import React from 'react';
-import BOTLogo from '../../../img/BOTLOGO.png'
+import BOTLogo from '../../../img/BOTLogo.png'
 
 
 
