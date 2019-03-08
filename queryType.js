@@ -4,7 +4,7 @@ const query_getTrackingData = `
     as thirty_seconds, object_mac_address, name, lbeacon_uuid, avg(rssi) 
     from tracking_table 
     INNER JOIN object_table ON tracking_table.object_mac_address = object_table.mac_address 
-    where final_timestamp > NOW() - interval '30 seconds' AND rssi > -100 AND object_mac_address='df:ff:ff:ff:ff:ff'
+    where final_timestamp > NOW() - interval '30 seconds' AND rssi > -55 AND object_mac_address='df:ff:ff:ff:ff:ff'
     GROUP BY thirty_seconds, name, object_mac_address, lbeacon_uuid 
     ORDER BY thirty_seconds DESC` ;
 
