@@ -18,15 +18,16 @@ Install all the dependency in package.
 $ npm i
 ```
 
-Copy the `.env.example` and rename the to `.env`. Reset your local environment variable in `.env`.
+Copy the `.env.example` and rename the to `.env`. Set your local environment variable in `.env`.
 ```
 $ cp .env.example .env
 ```
 
-Buidling is almost done. Run the following to use webpack bundling:
+Run the following to execute webpack bundling:
 ```
 $ npm run build
 ```
+
 To initiate the web server, execute below:
 ```
 $ npm run server
