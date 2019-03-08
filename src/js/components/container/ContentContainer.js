@@ -24,7 +24,7 @@ export default class ContentContainer extends React.Component{
             <div id="page-wrap" className='px-lg-4 py-md-4'>
                 <div className='row'>
                     <div className='col-6'><Surveillance /></div>
-                    <div className='col-6'><ObjectManagementContainer /></div>
+                    {/* <div className='col-6'><ObjectManagementContainer /></div> */}
                     {/* <div className='col'><TabelContainer /></div> */}
                     {/* <div className='col'><ReactTableContainer /></div> */}
 {/* 

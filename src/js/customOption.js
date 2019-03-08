@@ -2,7 +2,6 @@ import pin from '../img/pin.png'
 
 
 /** Surveillance Component Custom Option */
-
 const mapOptions = {
     crs: L.CRS.Simple,
     zoom: -4,

@@ -52,12 +52,13 @@ class Surveillance extends React.Component {
         this.getObjData = this.getObjData.bind(this);
         this.handleObjectMakers = this.handleObjectMakers.bind(this)
         this.markersLayer = L.layerGroup();
+        this.InitInterval = false;
     }
 
     componentDidMount(){
         this.initMap();   
         this.getObjData();
-        this.interval = setInterval(this.getObjData, 3000);
+        this.interval = this.InitInterval == true ? setInterval(this.getObjData, 3000) : null;
     }
 
     componentDidUpdate(){
@@ -200,16 +201,14 @@ class Surveillance extends React.Component {
             let marker = L.marker(position, {icon: this.customIcon}).bindPopup(popupContent, popupCustomStyle).addTo(this.markersLayer);
             
             /** Set Marker Event */
-            marker.on('mouseover', function () {
-                this.openPopup();
-            }).on('mouseout', function () {
-                this.closePopup()
-            });
+            marker.on('mouseover', function () { this.openPopup(); })
+            marker.on('mouseout', function () { this.closePopup(); })
+
 
             /** Set the error circles */
             if (detectedNum > 1) {
                 let errorCircle = L.circleMarker([position[0], position[1]],{
-                    color: 'rgba(0, 0, 0, 0)',
+                    color: 'rgb(0,0,0,0)',
                     fillColor: 'orange',
                     fillOpacity: 0.5,
                     radius: 40,
@@ -217,8 +216,6 @@ class Surveillance extends React.Component {
             }
         
         }
-
-
 
         /** Add the new markerslayer to the map */
         this.markersLayer.addTo(this.map);
@@ -245,37 +242,14 @@ class Surveillance extends React.Component {
         const xSign = parseInt(mac_address.slice(12,13), 16) % 2 == 1 ? 1 : -1 ;
         const ySign = parseInt(mac_address.slice(13,14), 16) % 2 == 1 ? 1 : -1 ;
 
-        const xxx = lbeacon_coordinate[1] + xSign * parseInt(xx, 16) * 5;
-        const yyy = lbeacon_coordinate[0] + ySign * parseInt(yy, 16) * 5;
+        const xxx = lbeacon_coordinate[1] + xSign * parseInt(xx, 16) * 10;
+        const yyy = lbeacon_coordinate[0] + ySign * parseInt(yy, 16) * 10;
         return [yyy, xxx];
     }
 
     render(){
         return(
             <div id='mapid' className='cmp-block'>
-                {console.log(this.state.objectInfo)}
-                {/* {console.log('render!')} */}
-
-                {/* <table>
-                    <tbody>
-                        <tr>
-                            <th>time</th>
-                            <th>object_mac_address</th>
-                            <th>lbeacon_uuid</th> 
-                            <th>rssi</th>
-                        </tr>
-                        {this.state.data.map(items => {
-                            return (
-                                <tr>
-                                    <td>{items.thirty_seconds}</td>
-                                    <td>{items.object_mac_address}</td>
-                                    <td>{items.lbeacon_uuid}</td>
-                                    <td>{items.avg}</td>
-                                </tr>
-                            )
-                        })}
-                    </tbody>
-                </table> */}
             </div>
              
         )

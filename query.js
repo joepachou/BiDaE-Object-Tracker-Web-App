@@ -1,5 +1,4 @@
 require('dotenv').config();
-
 const Pool = require('pg').Pool
 const pool = new Pool({
     user: process.env.DB_USER,
@@ -12,7 +11,6 @@ const pool = new Pool({
 const queryType = require ('./queryType')
 
 
-
 const getTrackingData = (request, response) => {
     pool.query(queryType.query_getTrackingData, (error, results) => {        
         if (error) {
@@ -23,8 +21,6 @@ const getTrackingData = (request, response) => {
         response.status(200).json(results)
     })
 }
-
-
 
 const getObjectTable = (request, response) => {
     pool.query(queryType.query_getObjectTable, (error, results) => {        

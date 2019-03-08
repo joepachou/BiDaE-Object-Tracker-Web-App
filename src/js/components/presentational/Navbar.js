@@ -98,8 +98,6 @@ export default class NavBar extends React.Component {
                                 <li className="nav-item">
                                     <a className="nav-link" href="#">Advanced search</a>
                                 </li>
-
-
                             </ul>
                         }{
                             !this.state.isLogin &&        
