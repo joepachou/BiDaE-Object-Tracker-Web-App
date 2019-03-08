@@ -6,9 +6,9 @@ This repository includes both the UI interface and the web server.
 
 ### Installing
 
-Follow the below command to build the environment.
+Please follow the below steps to build the environment.
 
-First, clone this repository to your local environment and change directoy to the file:
+Clone this repository to your local environment and change directoy to the file:
 ```
 $ git clone https://github.com/OpenISDM/BOT-user-interface.git && cd BOT-user-interface
 ```
@@ -18,16 +18,16 @@ Install all the dependency in package.
 $ npm i
 ```
 
-copy the `.env.example` and reset the name `.env`. Reset the environment variable in `.env`.
+Copy the `.env.example` and rename the to `.env`. Reset your local environment variable in `.env`.
 ```
 $ cp .env.example .env
 ```
 
-Buidling is almost done. Run the following to initiate the web server:
+Buidling is almost done. Run the following to use webpack bundling:
+```
+$ npm run build
+```
+To initiate the web server, execute below:
 ```
 $ npm run server
-```
-If these are any revise, please run below before initation.
-```
-$ npm build
 ```
