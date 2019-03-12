@@ -32,6 +32,12 @@ app.get('/trackingData', db.getTrackingData);
 
 app.get('/objectTable', db.getObjectTable);
 
+app.get('/lbeaconTable', db.getLbeaconTable);
+
+app.get('/gatewayTable', db.getGatewayTable);
+
+
+
 
 app.listen(PORT, () => {
     console.log(`App running on PORT ${PORT}.`)

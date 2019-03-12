@@ -6,19 +6,22 @@ import NavbarContainer from './js/components/container/NavbarContainer';
 import ObjectListContainer from './js/components/container/ObjectListContainer';
 
 
-const App = (props) =>{
-    
-    return (
-        <div>
-            <div id='navbar'>
-                <NavbarContainer />
+class App extends React.Component {
+    render() {
+
+        
+        return (
+            <div>
+                <div id='navbar'>
+                    <NavbarContainer />
+                </div>
+                <div className='my-6' id='contentContainer'>
+                    <ObjectListContainer />
+                    <ContentContainer />
+                </div>
             </div>
-            <div className='my-6' id='contentContainer'>
-                <ObjectListContainer />
-                <ContentContainer />
-            </div>
-        </div>
-    );
+        );
+    }
     
 };
 

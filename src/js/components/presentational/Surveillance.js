@@ -122,9 +122,7 @@ class Surveillance extends React.Component {
                 const lbeaconCoordinate = this.createLbeaconCoordinate(items.lbeacon_uuid);
                 if (lbsPosition.indexOf(lbeaconCoordinate.toString()) < 0){
                     lbsPosition.push(lbeaconCoordinate.toString());
-                }
-                console.log(lbsPosition)
-                
+                }                
 
                 let object = {
                     lbeaconCoordinate: lbeaconCoordinate,
@@ -138,6 +136,7 @@ class Surveillance extends React.Component {
                         currentPosition: lbeaconCoordinate,
                         overlapLbeacon: [object], 
                         name: items.name,
+                        mac_address: items.object_mac_address
                     }
                 } else {
                     let maxRSSI = objectInfoHash[items.object_mac_address].maxRSSI;
@@ -250,6 +249,7 @@ class Surveillance extends React.Component {
     render(){
         return(
             <div id='mapid' className='cmp-block'>
+            {console.log(this.state.objectInfo)}
             </div>
              
         )

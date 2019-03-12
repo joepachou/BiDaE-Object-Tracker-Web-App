@@ -4,7 +4,8 @@ import React from 'react';
 /** Import Image */
 import BOTLogo from '../../../img/BOTLogo.png';
 
-const Slogan = 'BOT Real-Time Object Tracker';
+import axios from 'axios'
+import dataAPI from '../../../../dataAPI'
 
 export default class NavBar extends React.Component {
     constructor(props) {
@@ -13,7 +14,9 @@ export default class NavBar extends React.Component {
         this.state = {
             username: "",
             password: "",
-            isLogin : true,
+            isLogin : false,
+            lbeaconData: [],
+            gatewayData: [],
         };
         this.handleLogIn = this.handleLogIn.bind(this);
         this.handleLogOut = this.handleLogOut.bind(this);
@@ -21,16 +24,28 @@ export default class NavBar extends React.Component {
 
 
     componentDidUpdate(){
-        if (this.state.username == 'admin' && this.state.password == 'admin' && !this.state.isLogin == true) {
+        if (this.state.username === 'admin' && this.state.password == 'admin' && !this.state.isLogin == true) {
             this.setState({
                 isLogin: true,
             })
+        }
+        if (this.state.username === 'gary' && this.state.password === 'gary' && !this.state.isLogin == true) {
+            axios.get(dataAPI.lbeaconTable).then(res => {
+                console.log(res.data.rows)
+                this.setState({
+                    lbeaconData: res.data.rows,
+
+                })
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+        
         }
     }
 
     handleLogIn(e){
         e.preventDefault()
-        console.log(e)
         const LoginForm = document.querySelector('#LoginForm')
         const LoginusernameValue = document.querySelector('#username')
         const LoginPWDValue = document.querySelector('#pwd')
@@ -132,3 +147,12 @@ export default class NavBar extends React.Component {
         );
     }
 }
+
+// const mapDispatchToProps = (dispatch) => {
+//     return {
+//         isObjectListShownProp: value => dispatch(isObjectListShown(value)),
+//         selectObjectListProp: array => dispatch(selectObjectList(array)),
+//     }
+// }
+
+// export default connect(null, mapDispatchToProps)(Surveillance)

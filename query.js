@@ -32,8 +32,32 @@ const getObjectTable = (request, response) => {
         response.status(200).json(results)
     })
 }
+
+const getLbeaconTable = (request, response) => {
+    pool.query(queryType.query_getLbeaconTable, (error, results) => {        
+        if (error) {
+            console.log("Get data fails : " + error)
+        }
+        console.log('Get lbeaconTable data!')
+    
+        response.status(200).json(results)
+    })
+}
+
+const getGatewayTable = (request, response) => {
+    pool.query(queryType.query_getGatewayTable, (error, results) => {        
+        if (error) {
+            console.log("Get data fails : " + error)
+        }
+        console.log('Get lbeaconTable data!')
+    
+        response.status(200).json(results)
+    })
+}
     
 module.exports = {
     getTrackingData,
     getObjectTable,
+    getLbeaconTable,
+    getGatewayTable,
 }
