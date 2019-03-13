@@ -49,7 +49,7 @@ const getGatewayTable = (request, response) => {
         if (error) {
             console.log("Get data fails : " + error)
         }
-        console.log('Get lbeaconTable data!')
+        console.log('Get gatewayTable data!')
     
         response.status(200).json(results)
     })

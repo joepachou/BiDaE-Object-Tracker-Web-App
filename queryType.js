@@ -1,21 +1,21 @@
 
 const query_getTrackingData =
-    //  `
-    // select time_bucket('30 seconds', final_timestamp) 
-    // as thirty_seconds, object_mac_address, lbeacon_uuid, avg(rssi) 
-    // from tracking_table 
-    // where final_timestamp > NOW() - interval '30 seconds' AND rssi > -55 
-    // GROUP BY thirty_seconds, object_mac_address, lbeacon_uuid 
-    // ORDER BY thirty_seconds DESC` ;
-
-`
+     `
     select time_bucket('30 seconds', final_timestamp) 
-    as thirty_seconds, object_mac_address, name, lbeacon_uuid, avg(rssi) 
+    as thirty_seconds, object_mac_address, lbeacon_uuid, avg(rssi) 
     from tracking_table 
-    INNER JOIN object_table ON tracking_table.object_mac_address = object_table.mac_address 
     where final_timestamp > NOW() - interval '30 seconds' AND rssi > -55 
-    GROUP BY thirty_seconds, name, object_mac_address, lbeacon_uuid 
+    GROUP BY thirty_seconds, object_mac_address, lbeacon_uuid 
     ORDER BY thirty_seconds DESC` ;
+
+    // `
+    // select time_bucket('30 seconds', final_timestamp) 
+    // as thirty_seconds, object_mac_address, name, lbeacon_uuid, avg(rssi) 
+    // from tracking_table 
+    // INNER JOIN object_table ON tracking_table.object_mac_address = object_table.mac_address 
+    // where final_timestamp > NOW() - interval '30 seconds' AND rssi > -55 
+    // GROUP BY thirty_seconds, name, object_mac_address, lbeacon_uuid 
+    // ORDER BY thirty_seconds DESC` ;
 
 
 const query_getObjectTable = `

@@ -2,9 +2,7 @@
 import React from 'react';
 
 /** Import survelliance general map  */
-import R402 from '../../../img/R402.jpg';
 import BOTLogo from '../../../img/BOTLogo.png'
-import IIS4F from '../../../img/IIS4F.png'
 import IIS_Newbuilding_4F from '../../../img/IIS_Newbuilding_4F.png'
 
 /** Import Axios */
@@ -23,7 +21,7 @@ import '../../../css/CustomMarkerCluster.css'
 import { mapOptions, customIconOptions, popupContent } from '../../customOption';
 
 /** API url */
-import dataAPI from '../../../../dataAPI';
+import dataAPI from '../../../js/dataAPI';
 
 /** Redux related Library  */
 import { 
@@ -52,7 +50,7 @@ class Surveillance extends React.Component {
         this.getObjData = this.getObjData.bind(this);
         this.handleObjectMakers = this.handleObjectMakers.bind(this)
         this.markersLayer = L.layerGroup();
-        this.InitInterval = false;
+        this.InitInterval = true;
     }
 
     componentDidMount(){

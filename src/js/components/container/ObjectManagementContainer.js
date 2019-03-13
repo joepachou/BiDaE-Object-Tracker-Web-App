@@ -8,7 +8,7 @@ import ReactTableContainer from './ReactTableContainer';
 import Navs from '../presentational/Navs'
 import ModalContainer from './ModalContainer';
 import ListGroup from 'react-bootstrap/ListGroup';
-import dataAPI from "../../../../dataAPI";
+import dataAPI from "../../../js/dataAPI";
 import axios from 'axios';
 
 

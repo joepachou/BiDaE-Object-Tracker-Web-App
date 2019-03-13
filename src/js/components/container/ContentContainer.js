@@ -11,7 +11,7 @@ import Surveillance from '../presentational/Surveillance';
 import AxiosExample from '../../axiosExample';
 import TabelContainer from './TableContainer';
 import ReactTableContainer from './ReactTableContainer';
-import dataAPI from '../../../../dataAPI'
+import dataAPI from '../../../js/dataAPI'
 import axios from 'axios'
 
 export default class ContentContainer extends React.Component{
@@ -82,7 +82,7 @@ export default class ContentContainer extends React.Component{
     render(){
         return(
 
-            /** "page-wrap" is to use react-burget-menu */
+            /** "page-wrap" the default id named by react-burget-menu */
             <div id="page-wrap" className='px-lg-4 py-md-4'>
                 <div className='row'>
                     <div className='col-4'><Surveillance /></div>

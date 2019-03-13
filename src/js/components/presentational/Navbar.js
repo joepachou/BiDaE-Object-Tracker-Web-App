@@ -4,9 +4,6 @@ import React from 'react';
 /** Import Image */
 import BOTLogo from '../../../img/BOTLogo.png';
 
-import axios from 'axios'
-import dataAPI from '../../../../dataAPI'
-
 export default class NavBar extends React.Component {
     constructor(props) {
         super(props);
@@ -23,26 +20,6 @@ export default class NavBar extends React.Component {
     }
 
 
-    componentDidUpdate(){
-        if (this.state.username === 'admin' && this.state.password == 'admin' && !this.state.isLogin == true) {
-            this.setState({
-                isLogin: true,
-            })
-        }
-        if (this.state.username === 'gary' && this.state.password === 'gary' && !this.state.isLogin == true) {
-            axios.get(dataAPI.lbeaconTable).then(res => {
-                console.log(res.data.rows)
-                this.setState({
-                    lbeaconData: res.data.rows,
-
-                })
-            })
-            .catch(function (error) {
-                console.log(error);
-            })
-        
-        }
-    }
 
     handleLogIn(e){
         e.preventDefault()
