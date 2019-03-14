@@ -1,12 +1,14 @@
 
 const query_getTrackingData =
-     `
+    `
     select time_bucket('30 seconds', final_timestamp) 
     as thirty_seconds, object_mac_address, lbeacon_uuid, avg(rssi) 
     from tracking_table 
-    where final_timestamp > NOW() - interval '30 seconds' AND rssi > -55 
+    where final_timestamp > NOW() - interval '1 minutes' 
+    AND rssi > -50 
+    AND object_mac_address::TEXT LIKE '%:ff:ff:ff:ff'
     GROUP BY thirty_seconds, object_mac_address, lbeacon_uuid 
-    ORDER BY thirty_seconds DESC` ;
+    ORDER BY thirty_seconds DESC`; 
 
     // `
     // select time_bucket('30 seconds', final_timestamp) 
@@ -23,10 +25,10 @@ const query_getObjectTable = `
     from object_table`;
 
 const query_getLbeaconTable = `
-    select uuid, last_report_timestamp from lbeacon_table`;
+    select uuid, last_report_timestamp from lbeacon_table ORDER BY last_report_timestamp DESC`;
 
 const query_getGatewayTable = `
-    select id, last_report_timestamp, ip_address from gateway_table`;
+    select id, last_report_timestamp, ip_address from gateway_table ORDER BY last_report_timestamp DESC`;
 
 module.exports = {
     query_getTrackingData,

@@ -11,7 +11,7 @@ export default class NavBar extends React.Component {
         this.state = {
             username: "",
             password: "",
-            isLogin : false,
+            isLogin : true,
             lbeaconData: [],
             gatewayData: [],
         };
@@ -83,12 +83,18 @@ export default class NavBar extends React.Component {
                         {
                             this.state.isLogin &&        
                             <ul className="navbar-nav mr-auto">
-                                <li className="nav-item active">
+                                <li className="nav-item">
                                     <a className="nav-link" href="#">Frequent search<span className="sr-only">(current)</span></a>
                                 </li>
                             
                                 <li className="nav-item">
                                     <a className="nav-link" href="#">Advanced search</a>
+                                </li>
+                                <li className="nav-item">
+                                    <a className="nav-link" href="#">Object management</a>
+                                </li>
+                                <li className="nav-item">
+                                    <a className="nav-link" href="#">Surveillance</a>
                                 </li>
                             </ul>
                         }{

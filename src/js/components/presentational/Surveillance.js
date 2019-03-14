@@ -37,30 +37,32 @@ class Surveillance extends React.Component {
         super(props)
         this.state = {
             data: [],
-            lbeaconsPosition: ["7200,2460", "4610,7310"],
-            lbeaconInfo: {},
+            lbeaconsPosition: null,
             objectInfo: {},
             hasErrorCircle: false,
+            hasInvisibleCircle: false,
         }
         this.map = null;
         this.popupContent = popupContent;
         this.customIcon = L.icon(customIconOptions);
 
         this.handlemenu = this.handlemenu.bind(this);
-        this.getObjData = this.getObjData.bind(this);
+        this.getTrackingData = this.getTrackingData.bind(this);
         this.handleObjectMakers = this.handleObjectMakers.bind(this)
+        this.createLbeaconMarkers = this.createLbeaconMarkers.bind(this)
         this.markersLayer = L.layerGroup();
-        this.InitInterval = true;
+        this.StartInterval = true;
     }
 
     componentDidMount(){
         this.initMap();   
-        this.getObjData();
-        this.interval = this.InitInterval == true ? setInterval(this.getObjData, 3000) : null;
+        this.getTrackingData();
+        this.interval = this.StartInterval == true ? setInterval(this.getTrackingData, 3000) : null;
     }
 
     componentDidUpdate(){
         this.handleObjectMakers();
+        this.createLbeaconMarkers();
     }
     
     componentWillUnmount() {
@@ -73,17 +75,25 @@ class Surveillance extends React.Component {
         let image = L.imageOverlay(IIS_Newbuilding_4F, bounds).addTo(map);
         map.fitBounds(bounds);
         this.map = map;
+    }
 
-        /** Add the lbeacons onto the map */
-        this.state.lbeaconsPosition.map(items => {
+    createLbeaconMarkers(){
+        /** 
+         * Creat the marker of all lbeacons onto the map 
+         */
+        let lbeaconsPosition = Array.from(this.state.lbeaconsPosition)
+        lbeaconsPosition.map(items => {
             let lbLatLng = items.split(",")
-            let lbeacon = L.circleMarker(lbLatLng,{
-                color: 'rgba(0, 0, 0, 0)',
-                fillColor: 'yellow',
-                fillOpacity: 0.5,
-                radius: 15,
-            }).addTo(this.map);
+            // let lbeacon = L.circleMarker(lbLatLng,{
+            //     color: 'rgba(0, 0, 0, 0)',
+            //     fillColor: 'yellow',
+            //     fillOpacity: 0.5,
+            //     radius: 15,
+            // }).addTo(this.map);
 
+        /** 
+         * Creat the invisible Circle marker of all lbeacons onto the map 
+         */
             let invisibleCircle = L.circleMarker(lbLatLng,{
                 color: 'rgba(0, 0, 0, 0)',
                 fillColor: 'rgba(0, 76, 238, 0.995)',
@@ -93,6 +103,11 @@ class Surveillance extends React.Component {
 
             invisibleCircle.on('click', this.handlemenu);
         })
+        if (!this.state.hasInvisibleCircle){
+            this.setState({
+                hasInvisibleCircle: true,
+            })
+        }
     }
 
     handlemenu(e){
@@ -108,38 +123,52 @@ class Surveillance extends React.Component {
         this.props.selectObjectListProp(objectList);
     }
 
-    getObjData(){
+    getTrackingData(){
         axios.get(dataAPI.trackingData).then(res => {
             // console.log('Get data successfully ')
             // console.log(res.data.rows)
             let objectRows = res.data.rows;
-            let lbsPosition = [],
+            let lbsPosition = new Set(),
                 objectInfoHash = {}
 
             objectRows.map(items =>{
+                /**
+                 * Every lbeacons coordinate sended by response will store in lbsPosition
+                 * Update(3/14): use Set instead.
+                 */
                 const lbeaconCoordinate = this.createLbeaconCoordinate(items.lbeacon_uuid);
-                if (lbsPosition.indexOf(lbeaconCoordinate.toString()) < 0){
-                    lbsPosition.push(lbeaconCoordinate.toString());
-                }                
-
+                lbsPosition.add(lbeaconCoordinate.toString());
+                
                 let object = {
                     lbeaconCoordinate: lbeaconCoordinate,
                     rssi: items.avg,
                 }
 
+                /**
+                 * If the object's mac_address has not scanned by one lbeacon yet{
+                 *     the object is going to store in objectInfoHash
+                 * } else the object's mac_address is already in objectInfoHash {
+                 *     if (maxRSSI < newRSSI) {
+                 *         maxRSSI = newRSSI
+                 *         currentPosition = newCoordinate
+                 *     }
+                 * }
+                 * 
+                 */
+
                 if (!(items.object_mac_address in objectInfoHash)) {
-                    objectInfoHash[items.object_mac_address] = {
-                        lbeaconDetectedNum: 1,
-                        maxRSSI: items.avg,
-                        currentPosition: lbeaconCoordinate,
-                        overlapLbeacon: [object], 
-                        name: items.name,
-                        mac_address: items.object_mac_address
-                    }
+                    objectInfoHash[items.object_mac_address] = {};
+                    objectInfoHash[items.object_mac_address].lbeaconDetectedNum = 1
+                    objectInfoHash[items.object_mac_address].maxRSSI = items.avg
+                    objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate
+                    objectInfoHash[items.object_mac_address].overlapLbeacon = {}
+                    objectInfoHash[items.object_mac_address].name = items.name
+                    objectInfoHash[items.object_mac_address].mac_address = items.object_mac_address
+                    objectInfoHash[items.object_mac_address].overlapLbeacon[lbeaconCoordinate] = object
                 } else {
                     let maxRSSI = objectInfoHash[items.object_mac_address].maxRSSI;
 
-                    /** if the RSSI scanned by the second lbeacon or more larger than previous one:
+                    /** if the RSSI scanned by the second lbeacon is larger than previous one:
                      * current position = new lbeacon location
                      * max rssi = new lbeacon rssi
                      */
@@ -148,11 +177,12 @@ class Surveillance extends React.Component {
                     // Mark the object on the lbeacon that has bigger RSSI
                     
                     if (items.avg < maxRSSI) {
-                        objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
                         objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
+                        objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
+                        objectInfoHash[items.object_mac_address].overlapLbeacon[lbeaconCoordinate] = object;
                     }
-                    objectInfoHash[items.object_mac_address].lbeaconDetectedNum += 1;
-                    objectInfoHash[items.object_mac_address].overlapLbeacon.push(object);
+                    objectInfoHash[items.object_mac_address].lbeaconDetectedNum = Object.keys(objectInfoHash[items.object_mac_address].overlapLbeacon).length;
+                    // objectInfoHash[items.object_mac_address].overlapLbeacon.push(object);
 
                 }
 
@@ -249,7 +279,6 @@ class Surveillance extends React.Component {
             <div id='mapid' className='cmp-block'>
             {console.log(this.state.objectInfo)}
             </div>
-             
         )
     }
 }
