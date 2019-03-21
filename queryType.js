@@ -24,11 +24,17 @@ const query_getObjectTable = `
     select id, type, name, mac_address, available_status, asset_owner_id, user_id, registered_timestamp
     from object_table`;
 
-const query_getLbeaconTable = `
+const query_getLbeaconTable = 
+    `
     select uuid, last_report_timestamp from lbeacon_table ORDER BY last_report_timestamp DESC`;
+    // `
+    // select * from lbeacon_table ORDER BY last_report_timestamp DESC`;
 
-const query_getGatewayTable = `
+const query_getGatewayTable = 
+    `
     select id, last_report_timestamp, ip_address from gateway_table ORDER BY last_report_timestamp DESC`;
+    // `
+    // select * from gateway_table ORDER BY last_report_timestamp DESC`;
 
 module.exports = {
     query_getTrackingData,
@@ -37,4 +43,3 @@ module.exports = {
     query_getGatewayTable,
 }
 
-//AND object_mac_address='df:ff:ff:ff:ff:ff'

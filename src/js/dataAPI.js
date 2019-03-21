@@ -7,8 +7,6 @@ const lbeaconTable = 'http://' + LocalIP + '/lbeaconTable';
 const gatewayTable = 'http://' + LocalIP + '/gatewayTable';
 
 
-
-
 module.exports = {
     trackingData,
     objectTable,

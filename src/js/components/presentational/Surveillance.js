@@ -263,21 +263,25 @@ class Surveillance extends React.Component {
     }
 
     macAddressToCoordinate(mac_address, lbeacon_coordinate){
-        /** Example of lbeacon_uuid: 01:1f:2d:13:5e:33 */
+        /** Example of lbeacon_uuid: 01:1f:2d:13:5e:33 
+         *                           0123456789       16
+         *                                                                
+         */
         const xx = mac_address.slice(15,16);
         const yy = mac_address.slice(16,17);
-        const xSign = parseInt(mac_address.slice(12,13), 16) % 2 == 1 ? 1 : -1 ;
-        const ySign = parseInt(mac_address.slice(13,14), 16) % 2 == 1 ? 1 : -1 ;
+        const xSign = parseInt(mac_address.slice(9,10), 16) % 2 == 1 ? 1 : -1 ;
+        const ySign = parseInt(mac_address.slice(10,11), 16) % 2 == 1 ? 1 : -1 ;
 
-        const xxx = lbeacon_coordinate[1] + xSign * parseInt(xx, 16) * 10;
-        const yyy = lbeacon_coordinate[0] + ySign * parseInt(yy, 16) * 10;
+        const xxx = lbeacon_coordinate[1] + xSign * parseInt(xx, 16) * 12;
+        const yyy = lbeacon_coordinate[0] + ySign * parseInt(yy, 16) * 12;
         return [yyy, xxx];
+        
     }
 
     render(){
         return(
             <div id='mapid' className='cmp-block'>
-            {console.log(this.state.objectInfo)}
+            {/* {console.log(this.state.objectInfo)} */}
             </div>
         )
     }

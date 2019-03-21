@@ -12,7 +12,8 @@ import AxiosExample from '../../axiosExample';
 import TabelContainer from './TableContainer';
 import ReactTableContainer from './ReactTableContainer';
 import dataAPI from '../../../js/dataAPI'
-import axios from 'axios'
+import axios from 'axios';
+import moment from 'moment-timezone';
 
 export default class ContentContainer extends React.Component{
 
@@ -55,6 +56,10 @@ export default class ContentContainer extends React.Component{
                 field.accessor = item.name,
                 column.push(field);
             })
+            res.data.rows.map(item => {
+                const localLastReportTimestamp = moment(item.last_report_timestamp);
+                item.last_report_timestamp = localLastReportTimestamp.format();
+            })
             this.setState({
                 gatewayData: res.data.rows,
                 gatewayColunm: column,
@@ -74,12 +79,19 @@ export default class ContentContainer extends React.Component{
                 field.Header = item.name,
                 field.accessor = item.name,
                 column.push(field);
+                
+            })
+            res.data.rows.map(item => {
+                const localLastReportTimestamp = moment(item.last_report_timestamp);
+                item.last_report_timestamp = localLastReportTimestamp.format();
             })
             this.setState({
                 lbeaconData: res.data.rows,
                 lbeaconColumn: column,
 
             })
+
+
         })
         .catch(function (error) {
             console.log(error);
@@ -96,6 +108,8 @@ export default class ContentContainer extends React.Component{
                 column.push(field);
             })
             res.data.rows.map(item => {
+                const localLastReportTimestamp = moment(item.last_report_timestamp);
+                item.last_report_timestamp = localLastReportTimestamp.format();
                 item.avg = item.avg.slice(0,6)
             })
             this.setState({
@@ -118,7 +132,7 @@ export default class ContentContainer extends React.Component{
                 <div className=''>
                     <div className='d-flex w-100 justify-content-around'><Surveillance /></div>
                     <div className='row'>
-                        <div className='col-3'>
+                        <div className='col-4'>
                             <h1>lbeacon table</h1>
                             <ReactTableContainer data={this.state.lbeaconData} column={this.state.lbeaconColumn}/>
                         </div>
@@ -126,7 +140,7 @@ export default class ContentContainer extends React.Component{
                             <h1>gateway table</h1>
                             <ReactTableContainer data={this.state.gatewayData} column={this.state.gatewayColunm}/>
                         </div>
-                        <div className='col-6'> 
+                        <div className='col-5'> 
                             <h1>tracking table</h1>
                             <ReactTableContainer data={this.state.trackingData} column={this.state.trackingColunm}/>
                         </div>
