@@ -13,7 +13,6 @@ import TabelContainer from './TableContainer';
 import ReactTableContainer from './ReactTableContainer';
 import dataAPI from '../../../js/dataAPI'
 import axios from 'axios';
-import moment from 'moment-timezone';
 
 export default class ContentContainer extends React.Component{
 
@@ -36,7 +35,7 @@ export default class ContentContainer extends React.Component{
         this.getGatewayData();
         this.getLbeaconData();
         this.getTrackingData()
-        this.getGatewayDataInterval = setInterval(this.getGatewayData,60000)
+        this.getGatewayDataInterval = setInterval(this.getGatewayData,30000)
         this.getLbeaconDataInterval = setInterval(this.getLbeaconData,60000)
         this.getTrackingDataInterval = setInterval(this.getTrackingData,3000)
     }
@@ -56,10 +55,7 @@ export default class ContentContainer extends React.Component{
                 field.accessor = item.name,
                 column.push(field);
             })
-            res.data.rows.map(item => {
-                const localLastReportTimestamp = moment(item.last_report_timestamp);
-                item.last_report_timestamp = localLastReportTimestamp.format();
-            })
+
             this.setState({
                 gatewayData: res.data.rows,
                 gatewayColunm: column,
@@ -81,10 +77,7 @@ export default class ContentContainer extends React.Component{
                 column.push(field);
                 
             })
-            res.data.rows.map(item => {
-                const localLastReportTimestamp = moment(item.last_report_timestamp);
-                item.last_report_timestamp = localLastReportTimestamp.format();
-            })
+
             this.setState({
                 lbeaconData: res.data.rows,
                 lbeaconColumn: column,
@@ -108,8 +101,6 @@ export default class ContentContainer extends React.Component{
                 column.push(field);
             })
             res.data.rows.map(item => {
-                const localLastReportTimestamp = moment(item.last_report_timestamp);
-                item.last_report_timestamp = localLastReportTimestamp.format();
                 item.avg = item.avg.slice(0,6)
             })
             this.setState({
