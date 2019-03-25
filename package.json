@@ -37,6 +37,7 @@
     "dotenv": "^6.2.0",
     "leaflet.markercluster": "^1.4.1",
     "moment-timezone": "^0.5.23",
+    "nodemon": "^1.18.10",
     "pg": "^7.8.1",
     "react-bootstrap": "^1.0.0-beta.5",
     "react-burger-menu": "^2.6.4",

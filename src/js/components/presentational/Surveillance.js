@@ -40,24 +40,24 @@ class Surveillance extends React.Component {
             lbeaconsPosition: null,
             objectInfo: {},
             hasErrorCircle: false,
-            hasInvisibleCircle: false,
+            hasInvisibleCircle: false,            
         }
         this.map = null;
         this.popupContent = popupContent;
         this.customIcon = L.icon(customIconOptions);
 
         this.handlemenu = this.handlemenu.bind(this);
-        this.getTrackingData = this.getTrackingData.bind(this);
+        this.handleTrackingData = this.handleTrackingData.bind(this);
         this.handleObjectMakers = this.handleObjectMakers.bind(this)
         this.createLbeaconMarkers = this.createLbeaconMarkers.bind(this)
         this.markersLayer = L.layerGroup();
-        this.StartInterval = true;
+        this.StartSetInterval = true;
     }
 
     componentDidMount(){
-        this.initMap();   
-        this.getTrackingData();
-        this.interval = this.StartInterval == true ? setInterval(this.getTrackingData, 3000) : null;
+        this.initMap();  
+        this.handleTrackingData(); 
+        this.interval = this.StartSetInterval == true ? setInterval(this.handleTrackingData, 3000) : null;
     }
 
     componentDidUpdate(){
@@ -123,14 +123,18 @@ class Surveillance extends React.Component {
         this.props.selectObjectListProp(objectList);
     }
 
-    getTrackingData(){
+    /**
+     * Retrieve tracking data from database, then reconstruct the data to desired form.
+     */
+
+    handleTrackingData(){
         axios.get(dataAPI.trackingData).then(res => {
             // console.log('Get data successfully ')
             // console.log(res.data.rows)
             let objectRows = res.data.rows;
             let lbsPosition = new Set(),
                 objectInfoHash = {}
-
+            
             objectRows.map(items =>{
                 /**
                  * Every lbeacons coordinate sended by response will store in lbsPosition
@@ -153,7 +157,6 @@ class Surveillance extends React.Component {
                  *         currentPosition = newCoordinate
                  *     }
                  * }
-                 * 
                  */
 
                 if (!(items.object_mac_address in objectInfoHash)) {
@@ -187,16 +190,22 @@ class Surveillance extends React.Component {
                 }
 
                 // markerClusters.addLayer(L.marker(lbeaconCoordinate));
-
             })
             // this.map.addLayer(markerClusters);
             // markerClusters.on('clusterclick', this.handlemenu)
+
+            /**
+             * Return Tracking data to caller
+             */
+            this.props.retrieveTrackingData(res.data)
+
             this.setState({
                 data: res.data.rows,
                 lbeaconsPosition: lbsPosition,
                 objectInfo: objectInfoHash,
                 hasErrorCircle: false,
             })
+
         }).catch(function (error) {
             console.log(error);
         })
@@ -204,6 +213,7 @@ class Surveillance extends React.Component {
 
 
     handleObjectMakers(){
+
         let objects = this.state.objectInfo
 
         /** Clear the old markerslayers */
@@ -249,7 +259,7 @@ class Surveillance extends React.Component {
 
         if (!this.state.hasErrorCircle) {
             this.setState({
-                hasErrorCircle:true,
+                hasErrorCircle: true,
             })
         }
     }
@@ -265,15 +275,24 @@ class Surveillance extends React.Component {
     macAddressToCoordinate(mac_address, lbeacon_coordinate){
         /** Example of lbeacon_uuid: 01:1f:2d:13:5e:33 
          *                           0123456789       16
-         *                                                                
          */
-        const xx = mac_address.slice(15,16);
-        const yy = mac_address.slice(16,17);
-        const xSign = parseInt(mac_address.slice(9,10), 16) % 2 == 1 ? 1 : -1 ;
-        const ySign = parseInt(mac_address.slice(10,11), 16) % 2 == 1 ? 1 : -1 ;
+ 
+        // const xx = mac_address.slice(15,16);
+        // const yy = mac_address.slice(16,17);
+        // const xSign = parseInt(mac_address.slice(9,10), 16) % 2 == 1 ? 1 : -1 ;
+        // const ySign = parseInt(mac_address.slice(10,11), 16) % 2 == 1 ? 1 : -1 ;
 
-        const xxx = lbeacon_coordinate[1] + xSign * parseInt(xx, 16) * 12;
-        const yyy = lbeacon_coordinate[0] + ySign * parseInt(yy, 16) * 12;
+        // const xxx = lbeacon_coordinate[1] + xSign * parseInt(xx, 16) * 12;
+        // const yyy = lbeacon_coordinate[0] + ySign * parseInt(yy, 16) * 12;
+
+        const xx = mac_address.slice(12,14);
+        const yy = mac_address.slice(15,17);
+		
+		const multiplier = 3; // 1m = 100cm = 1000mm, multipler = 1000/16*16 = 3
+		const origin_x = lbeacon_coordinate[1] - parseInt(80, 16) * multiplier ; 
+		const origin_y = lbeacon_coordinate[0] - parseInt(80, 16) * multiplier ;
+		const xxx = origin_x + parseInt(xx, 16) * multiplier;
+		const yyy = origin_y + parseInt(yy, 16) * multiplier;
         return [yyy, xxx];
         
     }
@@ -281,7 +300,6 @@ class Surveillance extends React.Component {
     render(){
         return(
             <div id='mapid' className='cmp-block'>
-            {/* {console.log(this.state.objectInfo)} */}
             </div>
         )
     }

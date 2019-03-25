@@ -1,4 +1,7 @@
 import pin from '../img/pin.png'
+import black_pin from '../img/black_pin.png'
+import white_pin from '../img/white_pin.png'
+
 
 
 /** Surveillance Component Custom Option */
@@ -15,7 +18,7 @@ const mapOptions = {
 
 const customIconOptions = {
     iconUrl: pin,
-    iconSize:[50, 50],
+    iconSize:[40, 40],
 } 
 
 function popupContent (objectName, objectImg, imgWidth){
