@@ -114,6 +114,7 @@ export default class ContentContainer extends React.Component{
             /** "page-wrap" the default id named by react-burget-menu */
             <div id="page-wrap" className='px-lg-4 py-md-4'>
                 <div className=''>
+
                     <div className='d-flex w-100 justify-content-around'><Surveillance retrieveTrackingData={this.retrieveTrackingData}/></div>
                     <div className='row'>
                         <div className='col-12'> 
@@ -121,6 +122,7 @@ export default class ContentContainer extends React.Component{
                                 <ReactTableContainer data={this.state.trackingData} column={this.state.trackingColunm}/>
                         </div>
                     </div>
+                    
                     <div className='row'>
                         <div className='col-6'>
                             <h1>lbeacon table</h1>

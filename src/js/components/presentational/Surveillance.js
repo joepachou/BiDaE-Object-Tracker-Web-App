@@ -43,15 +43,18 @@ class Surveillance extends React.Component {
             hasInvisibleCircle: false,            
         }
         this.map = null;
+        this.markersLayer = L.layerGroup();
+        this.errorCircle = L.layerGroup();
         this.popupContent = popupContent;
         this.customIcon = L.icon(customIconOptions);
 
         this.handlemenu = this.handlemenu.bind(this);
         this.handleTrackingData = this.handleTrackingData.bind(this);
-        this.handleObjectMakers = this.handleObjectMakers.bind(this)
-        this.createLbeaconMarkers = this.createLbeaconMarkers.bind(this)
-        this.markersLayer = L.layerGroup();
-        this.StartSetInterval = true;
+        this.handleObjectMakers = this.handleObjectMakers.bind(this);
+        this.createLbeaconMarkers = this.createLbeaconMarkers.bind(this);
+        this.resizeMarkers = this.resizeMarkers.bind(this);
+
+        this.StartSetInterval = true;        
     }
 
     componentDidMount(){
@@ -75,6 +78,34 @@ class Surveillance extends React.Component {
         let image = L.imageOverlay(IIS_Newbuilding_4F, bounds).addTo(map);
         map.fitBounds(bounds);
         this.map = map;
+
+        /**
+         * Set the map's events
+         */
+        this.map.on('zoomend', this.resizeMarkers)
+    }
+
+    /**
+     * Resize the markers, error circle when the view is zoomend.
+     */
+    resizeMarkers(){
+        var oriIconSize = customIconOptions.iconSize;
+        const currentZoom = this.map.getZoom();
+        const minZoom = this.map.getMinZoom();
+        const zoomDiff = currentZoom - minZoom;
+        const resizeFactor = Math.pow(2, (currentZoom - minZoom));
+        const resizeConst = zoomDiff * 30;
+
+        this.markersLayer.eachLayer( marker => {
+            let icon = marker.options.icon;
+            let zoomIconsize = oriIconSize.map( item => item + resizeConst);
+            icon.options.iconSize = zoomIconsize;
+            marker.setIcon(icon);
+        })
+
+        this.errorCircle.eachLayer( circle => {
+            circle.setRadius(200 * resizeFactor)
+        })
     }
 
     createLbeaconMarkers(){
@@ -110,6 +141,12 @@ class Surveillance extends React.Component {
         }
     }
 
+    /**
+     * When user click the coverage of one lbeacon, it will retrieve the object data from this.state.pbjectInfo.
+     * It will use redux's dispatch to transfer datas, including isObjectListShown and selectObjectList
+     * @param e the object content of the mouse clicking. 
+     */
+
     handlemenu(e){
         const { objectInfo } = this.state
         const lbeacon_coorinate = Object.values(e.target._latlng).toString();
@@ -126,7 +163,6 @@ class Surveillance extends React.Component {
     /**
      * Retrieve tracking data from database, then reconstruct the data to desired form.
      */
-
     handleTrackingData(){
         axios.get(dataAPI.trackingData).then(res => {
             // console.log('Get data successfully ')
@@ -185,7 +221,6 @@ class Surveillance extends React.Component {
                         objectInfoHash[items.object_mac_address].overlapLbeacon[lbeaconCoordinate] = object;
                     }
                     objectInfoHash[items.object_mac_address].lbeaconDetectedNum = Object.keys(objectInfoHash[items.object_mac_address].overlapLbeacon).length;
-                    // objectInfoHash[items.object_mac_address].overlapLbeacon.push(object);
 
                 }
 
@@ -195,7 +230,7 @@ class Surveillance extends React.Component {
             // markerClusters.on('clusterclick', this.handlemenu)
 
             /**
-             * Return Tracking data to caller
+             * Return Tracking data to caller(ContentContainer.js)
              */
             this.props.retrieveTrackingData(res.data)
 
@@ -211,15 +246,26 @@ class Surveillance extends React.Component {
         })
     }
 
-
+    /**
+     * When handleTrackingData() is executed, handleObjectMarkes() will be called. That is, 
+     * once the component is updated, handleObjectMarkers() will be executed.
+     * Clear the old markersLayer.
+     * Add the markers into this.markersLayer.
+     * Create the markers' popup, and add into this.markersLayer.
+     * Create the popup's event.
+     * Create the error circle of markers, and add into this.markersLayer.
+     */
     handleObjectMakers(){
-
         let objects = this.state.objectInfo
-
-        /** Clear the old markerslayers */
+        /** 
+         * Clear the old markerslayers.
+        */
         this.markersLayer.clearLayers();
+        this.errorCircle .clearLayers();
 
-        /** Mark the objects onto the map */
+        /** 
+         * Mark the objects onto the map 
+        */
         for (var key in objects){
                 
             let detectedNum = objects[key].lbeaconDetectedNum;
@@ -237,25 +283,37 @@ class Surveillance extends React.Component {
             }
             let marker = L.marker(position, {icon: this.customIcon}).bindPopup(popupContent, popupCustomStyle).addTo(this.markersLayer);
             
-            /** Set Marker Event */
+            /** 
+             * Set the marker's event. 
+            */
             marker.on('mouseover', function () { this.openPopup(); })
             marker.on('mouseout', function () { this.closePopup(); })
 
 
-            /** Set the error circles */
+            /** 
+             * Set the error circles of the markers.
+             */
             if (detectedNum > 1) {
-                let errorCircle = L.circleMarker([position[0], position[1]],{
+                const currentZoom = this.map.getZoom();
+                const minZoom = this.map.getMinZoom();
+                const zoomDiff = currentZoom - minZoom;
+                const resizeFactor = Math.pow(2, (zoomDiff));
+                const scalableRadius = 200 * resizeFactor;
+
+                let errorCircle = L.circleMarker(position ,{
                     color: 'rgb(0,0,0,0)',
                     fillColor: 'orange',
                     fillOpacity: 0.5,
-                    radius: 40,
-                }).addTo(this.markersLayer);
+                    radius: scalableRadius,
+                }).addTo(this.errorCircle);
             }
-        
         }
 
-        /** Add the new markerslayer to the map */
+        /** 
+         * Add the new markerslayers to the map 
+        */
         this.markersLayer.addTo(this.map);
+        this.errorCircle .addTo(this.map);
 
         if (!this.state.hasErrorCircle) {
             this.setState({
@@ -264,6 +322,10 @@ class Surveillance extends React.Component {
         }
     }
 
+    /**
+     * Retrieve the lbeacon's location coordinate from lbeacon_uuid.
+     * @param {*} lbeacon_uuid The uuid of lbeacon retrieved from DB.
+     */
     createLbeaconCoordinate(lbeacon_uuid){
         /** Example of lbeacon_uuid: 00000018-0000-0000-7310-000000004610 */
         const zz = lbeacon_uuid.slice(6,8);
@@ -272,6 +334,11 @@ class Surveillance extends React.Component {
         return [yy, xx];
     }
 
+    /**
+     * Retrieve the object's offset from object's mac_address.
+     * @param {*} mac_address The mac_address of the object retrieved from DB. 
+     * @param {*} lbeacon_coordinate The lbeacon's coordinate processed by createLbeaconCoordinate().
+     */
     macAddressToCoordinate(mac_address, lbeacon_coordinate){
         /** Example of lbeacon_uuid: 01:1f:2d:13:5e:33 
          *                           0123456789       16
@@ -300,6 +367,7 @@ class Surveillance extends React.Component {
     render(){
         return(
             <div id='mapid' className='cmp-block'>
+            {/* {console.log(this.state.objectInfo)} */}
             </div>
         )
     }

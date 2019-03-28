@@ -32,7 +32,6 @@ SELECT table1.name, table1.object_mac_address, table1.lbeacon_uuid, table1.rssi 
     // from tracking_table 
     // where final_timestamp > NOW() - interval '1 minutes' 
     // AND rssi > -50 
-    // AND object_mac_address::TEXT LIKE '%:ff:ff:ff:ff'
     // GROUP BY thirty_seconds, object_mac_address, lbeacon_uuid 
     // ORDER BY thirty_seconds DESC`; 
 

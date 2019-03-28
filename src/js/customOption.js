@@ -1,6 +1,6 @@
 import pin from '../img/pin.png'
-import black_pin from '../img/black_pin.png'
-import white_pin from '../img/white_pin.png'
+import black_pin from '../img/black_pin.svg'
+import white_pin from '../img/white_pin.svg'
 
 
 
@@ -17,8 +17,8 @@ const mapOptions = {
 }
 
 const customIconOptions = {
-    iconUrl: pin,
-    iconSize:[40, 40],
+    iconUrl: black_pin,
+    iconSize:[50, 50],
 } 
 
 function popupContent (objectName, objectImg, imgWidth){
