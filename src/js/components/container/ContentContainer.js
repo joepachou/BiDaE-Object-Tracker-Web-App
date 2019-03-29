@@ -52,11 +52,9 @@ export default class ContentContainer extends React.Component{
                 field.accessor = item.name,
                 column.push(field);
             })
-
             this.setState({
                 gatewayData: res.data.rows,
                 gatewayColunm: column,
-
             })
         })
         .catch(function (error) {
@@ -74,14 +72,11 @@ export default class ContentContainer extends React.Component{
                 column.push(field);
                 
             })
-
             this.setState({
                 lbeaconData: res.data.rows,
                 lbeaconColumn: column,
 
             })
-
-
         })
         .catch(function (error) {
             console.log(error);

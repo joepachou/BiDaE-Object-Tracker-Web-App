@@ -18,7 +18,12 @@ import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import '../../../css/CustomMarkerCluster.css'
 
-import { mapOptions, customIconOptions, popupContent } from '../../customOption';
+import {
+    mapOptions, 
+    stationaryIconOptions, 
+    popupContent, 
+    movingIconOptions 
+} from '../../customOption';
 
 /** API url */
 import dataAPI from '../../../js/dataAPI';
@@ -46,7 +51,8 @@ class Surveillance extends React.Component {
         this.markersLayer = L.layerGroup();
         this.errorCircle = L.layerGroup();
         this.popupContent = popupContent;
-        this.customIcon = L.icon(customIconOptions);
+        this.stationaryIcon = L.icon(stationaryIconOptions);
+        this.movingIcon = L.icon(movingIconOptions);
 
         this.handlemenu = this.handlemenu.bind(this);
         this.handleTrackingData = this.handleTrackingData.bind(this);
@@ -86,20 +92,19 @@ class Surveillance extends React.Component {
     }
 
     /**
-     * Resize the markers, error circle when the view is zoomend.
+     * Resize the markers, errorCircles when the view is zoomend.
      */
     resizeMarkers(){
-        var oriIconSize = customIconOptions.iconSize;
+        var oriIconSize = stationaryIconOptions.iconSize;
         const currentZoom = this.map.getZoom();
         const minZoom = this.map.getMinZoom();
         const zoomDiff = currentZoom - minZoom;
-        const resizeFactor = Math.pow(2, (currentZoom - minZoom));
+        const resizeFactor = Math.pow(2, zoomDiff);
         const resizeConst = zoomDiff * 30;
 
         this.markersLayer.eachLayer( marker => {
             let icon = marker.options.icon;
-            let zoomIconsize = oriIconSize.map( item => item + resizeConst);
-            icon.options.iconSize = zoomIconsize;
+            icon.options.iconSize = oriIconSize.map( item => item + resizeConst);
             marker.setIcon(icon);
         })
 
@@ -165,8 +170,8 @@ class Surveillance extends React.Component {
      */
     handleTrackingData(){
         axios.get(dataAPI.trackingData).then(res => {
-            // console.log('Get data successfully ')
             // console.log(res.data.rows)
+            
             let objectRows = res.data.rows;
             let lbsPosition = new Set(),
                 objectInfoHash = {}
@@ -182,8 +187,8 @@ class Surveillance extends React.Component {
                 let object = {
                     lbeaconCoordinate: lbeaconCoordinate,
                     rssi: items.avg,
+                    rssi_avg : items.avg_stable,
                 }
-
                 /**
                  * If the object's mac_address has not scanned by one lbeacon yet{
                  *     the object is going to store in objectInfoHash
@@ -194,8 +199,10 @@ class Surveillance extends React.Component {
                  *     }
                  * }
                  */
-
+                var dt = new Date();
                 if (!(items.object_mac_address in objectInfoHash)) {
+                    
+                    console.log(dt.getSeconds() + ' ' + items.object_mac_address + ' Scanned by one lbeacon')
                     objectInfoHash[items.object_mac_address] = {};
                     objectInfoHash[items.object_mac_address].lbeaconDetectedNum = 1
                     objectInfoHash[items.object_mac_address].maxRSSI = items.avg
@@ -204,34 +211,37 @@ class Surveillance extends React.Component {
                     objectInfoHash[items.object_mac_address].name = items.name
                     objectInfoHash[items.object_mac_address].mac_address = items.object_mac_address
                     objectInfoHash[items.object_mac_address].overlapLbeacon[lbeaconCoordinate] = object
+                    objectInfoHash[items.object_mac_address].status = items.avg_stable !== null ? 'stationary' : 'moving';
                 } else {
-                    let maxRSSI = objectInfoHash[items.object_mac_address].maxRSSI;
+                    console.log(dt.getSeconds() + ' ' + items.object_mac_address + ' Scanned by other lbeacon')
+                    if (items.avg_stable === null) {
+                        objectInfoHash[items.object_mac_address].status = 'moving';
+                    } else {
 
-                    /** if the RSSI scanned by the second lbeacon is larger than previous one:
+                    /** 
+                     * If the RSSI of one object scanned by the the other lbeacon is larger than the previous one, then
                      * current position = new lbeacon location
                      * max rssi = new lbeacon rssi
                      */
+                        let maxRSSI = objectInfoHash[items.object_mac_address].maxRSSI;
 
-                    // compare two lbeacon's RSSI
-                    // Mark the object on the lbeacon that has bigger RSSI
-                    
-                    if (items.avg < maxRSSI) {
-                        objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
-                        objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
-                        objectInfoHash[items.object_mac_address].overlapLbeacon[lbeaconCoordinate] = object;
+                        if (items.avg < maxRSSI) {
+                            objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
+                            objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
+                            objectInfoHash[items.object_mac_address].overlapLbeacon[lbeaconCoordinate] = object;
+                        }
+                        objectInfoHash[items.object_mac_address].lbeaconDetectedNum = Object.keys(objectInfoHash[items.object_mac_address].overlapLbeacon).length;
                     }
-                    objectInfoHash[items.object_mac_address].lbeaconDetectedNum = Object.keys(objectInfoHash[items.object_mac_address].overlapLbeacon).length;
-
                 }
+
 
                 // markerClusters.addLayer(L.marker(lbeaconCoordinate));
             })
             // this.map.addLayer(markerClusters);
             // markerClusters.on('clusterclick', this.handlemenu)
 
-            /**
-             * Return Tracking data to caller(ContentContainer.js)
-             */
+            
+            /** Return Tracking data to caller(ContentContainer.js) */
             this.props.retrieveTrackingData(res.data)
 
             this.setState({
@@ -257,9 +267,8 @@ class Surveillance extends React.Component {
      */
     handleObjectMakers(){
         let objects = this.state.objectInfo
-        /** 
-         * Clear the old markerslayers.
-        */
+        
+        /** Clear the old markerslayers. */
         this.markersLayer.clearLayers();
         this.errorCircle .clearLayers();
 
@@ -281,7 +290,13 @@ class Surveillance extends React.Component {
                 maxHeight: '300',
                 className : 'customPopup',
             }
-            let marker = L.marker(position, {icon: this.customIcon}).bindPopup(popupContent, popupCustomStyle).addTo(this.markersLayer);
+            
+            /**
+             * Create the marker, if the 'status' of the object is 'stationary', then the color will be black, rather grey.
+             */
+            let marker = objects[key].status == 'stationary' 
+                    ? L.marker(position, {icon: this.stationaryIcon}).bindPopup(popupContent, popupCustomStyle).addTo(this.markersLayer)
+                    : L.marker(position, {icon: this.movingIcon}).bindPopup(popupContent, popupCustomStyle).addTo(this.markersLayer)
             
             /** 
              * Set the marker's event. 

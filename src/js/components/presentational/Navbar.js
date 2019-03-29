@@ -63,7 +63,7 @@ export default class NavBar extends React.Component {
         
         return (
             <div id='NAVBAR'>
-                <nav className="navbar navbar-expand-lg navbar-light fixed" style={NavsbarStyle}>
+                <nav className="navbar sticky-top navbar-expand-lg navbar-light fixed" style={NavsbarStyle}>
                     <a className="navbar-brand" href="#" style={SloganStyle}>
                         <img 
                             src={BOTLogo}
