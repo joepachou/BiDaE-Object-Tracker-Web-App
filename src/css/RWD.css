@@ -1,0 +1,10 @@
+@media screen and (max-width: 2200px) { 
+    #surveillance {
+        display: none;
+    }
+
+    .rwd {
+        display: none;
+    }
+
+}

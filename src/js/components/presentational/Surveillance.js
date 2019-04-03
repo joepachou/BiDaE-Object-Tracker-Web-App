@@ -20,10 +20,9 @@ import '../../../css/CustomMarkerCluster.css'
 
 import {
     mapOptions, 
-    stationaryIconOptions, 
     popupContent, 
-    movingIconOptions 
-} from '../../customOption';
+    iconOptions
+} from '../../customizedOption';
 
 /** API url */
 import dataAPI from '../../../js/dataAPI';
@@ -51,14 +50,13 @@ class Surveillance extends React.Component {
         this.markersLayer = L.layerGroup();
         this.errorCircle = L.layerGroup();
         this.popupContent = popupContent;
-        this.stationaryIcon = L.icon(stationaryIconOptions);
-        this.movingIcon = L.icon(movingIconOptions);
 
         this.handlemenu = this.handlemenu.bind(this);
         this.handleTrackingData = this.handleTrackingData.bind(this);
         this.handleObjectMakers = this.handleObjectMakers.bind(this);
         this.createLbeaconMarkers = this.createLbeaconMarkers.bind(this);
         this.resizeMarkers = this.resizeMarkers.bind(this);
+        this.calculateScale = this.calculateScale.bind(this);
 
         this.StartSetInterval = true;        
     }
@@ -92,27 +90,37 @@ class Surveillance extends React.Component {
     }
 
     /**
-     * Resize the markers, errorCircles when the view is zoomend.
+     * Resize the markers and errorCircles when the view is zoomend.
      */
     resizeMarkers(){
-        var oriIconSize = stationaryIconOptions.iconSize;
-        const currentZoom = this.map.getZoom();
-        const minZoom = this.map.getMinZoom();
-        const zoomDiff = currentZoom - minZoom;
-        const resizeFactor = Math.pow(2, zoomDiff);
-        const resizeConst = zoomDiff * 30;
-
+        this.calculateScale();
         this.markersLayer.eachLayer( marker => {
             let icon = marker.options.icon;
-            icon.options.iconSize = oriIconSize.map( item => item + resizeConst);
+            icon.options.iconSize = [this.scalableIconSize, this.scalableIconSize]
             marker.setIcon(icon);
         })
 
         this.errorCircle.eachLayer( circle => {
-            circle.setRadius(200 * resizeFactor)
+            circle.setRadius(this.scalableErrorCircleRadius)
         })
     }
 
+    /**
+     * Calculate the current scale for creating markers and resizing.
+     */
+    calculateScale() {
+        this.currentZoom = this.map.getZoom();
+        this.minZoom = this.map.getMinZoom();
+        this.zoomDiff = this.currentZoom - this.minZoom;
+        this.resizeFactor = Math.pow(2, (this.zoomDiff));
+        this.resizeConst = this.zoomDiff * 30;
+        this.scalableErrorCircleRadius = 200 * this.resizeFactor;
+        this.scalableIconSize = iconOptions.iconSize + this.resizeConst
+    }
+
+    /**
+     * Create the lbeacon and invisibleCircle markers
+     */
     createLbeaconMarkers(){
         /** 
          * Creat the marker of all lbeacons onto the map 
@@ -190,19 +198,16 @@ class Surveillance extends React.Component {
                     rssi_avg : items.avg_stable,
                 }
                 /**
-                 * If the object's mac_address has not scanned by one lbeacon yet{
-                 *     the object is going to store in objectInfoHash
-                 * } else the object's mac_address is already in objectInfoHash {
-                 *     if (maxRSSI < newRSSI) {
-                 *         maxRSSI = newRSSI
-                 *         currentPosition = newCoordinate
-                 *     }
-                 * }
+                 * If the object has not scanned by one lbeacon yet, 
+                 *  then the object is going to be append in objectInfoHash
+                 * Else, the object is already in objectInfoHash, 
+                 *  we will check if the object is stationary or moving first,
+                 *  then check if the current RSSI is the largest.
                  */
-                var dt = new Date();
+                // var dt = new Date();
                 if (!(items.object_mac_address in objectInfoHash)) {
                     
-                    console.log(dt.getSeconds() + ' ' + items.object_mac_address + ' Scanned by one lbeacon')
+                    // console.log(dt.getSeconds() + ' ' + items.object_mac_address + ' Scanned by one lbeacon')
                     objectInfoHash[items.object_mac_address] = {};
                     objectInfoHash[items.object_mac_address].lbeaconDetectedNum = 1
                     objectInfoHash[items.object_mac_address].maxRSSI = items.avg
@@ -213,7 +218,7 @@ class Surveillance extends React.Component {
                     objectInfoHash[items.object_mac_address].overlapLbeacon[lbeaconCoordinate] = object
                     objectInfoHash[items.object_mac_address].status = items.avg_stable !== null ? 'stationary' : 'moving';
                 } else {
-                    console.log(dt.getSeconds() + ' ' + items.object_mac_address + ' Scanned by other lbeacon')
+                    // console.log(dt.getSeconds() + ' ' + items.object_mac_address + ' Scanned by other lbeacon')
                     if (items.avg_stable === null) {
                         objectInfoHash[items.object_mac_address].status = 'moving';
                     } else {
@@ -267,20 +272,38 @@ class Surveillance extends React.Component {
      */
     handleObjectMakers(){
         let objects = this.state.objectInfo
-        
+
         /** Clear the old markerslayers. */
         this.markersLayer.clearLayers();
         this.errorCircle .clearLayers();
 
-        /** 
-         * Mark the objects onto the map 
-        */
+        /** Mark the objects onto the map  */
+        this.calculateScale();
+
+        const errorCircleOptions = {
+            color: 'rgb(0,0,0,0)',
+            fillColor: 'orange',
+            fillOpacity: 0.5,
+            radius: this.scalableErrorCircleRadius,
+        }
+
+        const stationaryIconOptions = {
+            iconSize:[this.scalableIconSize, this.scalableIconSize],
+            iconUrl: iconOptions.stationaryIconUrl,
+        }
+
+        const movingIconOptions = {
+            iconSize:[this.scalableIconSize, this.scalableIconSize],
+            iconUrl: iconOptions.movinfIconUrl,
+        }
+
         for (var key in objects){
                 
             let detectedNum = objects[key].lbeaconDetectedNum;
             let position = this.macAddressToCoordinate(key.toString(), objects[key].currentPosition);
 
-            /** Set the Marker's popup 
+            /** 
+             * Set the Marker's popup 
              * popupContent (objectName, objectImg, objectImgWidth)
              * More Style sheet include in Surveillance.css
             */
@@ -290,43 +313,26 @@ class Surveillance extends React.Component {
                 maxHeight: '300',
                 className : 'customPopup',
             }
-            
             /**
-             * Create the marker, if the 'status' of the object is 'stationary', then the color will be black, rather grey.
+             * Create the marker, if the 'status' of the object is 'stationary', 
+             * then the color will be black, or grey.
              */
             let marker = objects[key].status == 'stationary' 
-                    ? L.marker(position, {icon: this.stationaryIcon}).bindPopup(popupContent, popupCustomStyle).addTo(this.markersLayer)
-                    : L.marker(position, {icon: this.movingIcon}).bindPopup(popupContent, popupCustomStyle).addTo(this.markersLayer)
+                    ? L.marker(position, {icon: L.icon(stationaryIconOptions)}).bindPopup(popupContent, popupCustomStyle).addTo(this.markersLayer)
+                    : L.marker(position, {icon: L.icon(movingIconOptions)}).bindPopup(popupContent, popupCustomStyle).addTo(this.markersLayer)
             
-            /** 
-             * Set the marker's event. 
-            */
+            /** Set the marker's event. */
             marker.on('mouseover', function () { this.openPopup(); })
             marker.on('mouseout', function () { this.closePopup(); })
 
 
-            /** 
-             * Set the error circles of the markers.
-             */
+            /** Set the error circles of the markers. */
             if (detectedNum > 1) {
-                const currentZoom = this.map.getZoom();
-                const minZoom = this.map.getMinZoom();
-                const zoomDiff = currentZoom - minZoom;
-                const resizeFactor = Math.pow(2, (zoomDiff));
-                const scalableRadius = 200 * resizeFactor;
-
-                let errorCircle = L.circleMarker(position ,{
-                    color: 'rgb(0,0,0,0)',
-                    fillColor: 'orange',
-                    fillOpacity: 0.5,
-                    radius: scalableRadius,
-                }).addTo(this.errorCircle);
+                let errorCircle = L.circleMarker(position ,errorCircleOptions).addTo(this.errorCircle);
             }
         }
 
-        /** 
-         * Add the new markerslayers to the map 
-        */
+        /** Add the new markerslayers to the map */
         this.markersLayer.addTo(this.map);
         this.errorCircle .addTo(this.map);
 

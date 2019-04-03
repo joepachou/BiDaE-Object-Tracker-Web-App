@@ -10,7 +10,7 @@ import { createStore, combineReducers } from 'redux';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 /** Import Custom CSS */
-import './js/customCSS';
+import './js/customizedCSS';
 
 /** Container Component */
 import App from './App'

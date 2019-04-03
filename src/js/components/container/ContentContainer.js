@@ -3,6 +3,7 @@ import React from 'react';
 
 /** Import Container Component */
 import ObjectManagementContainer from './ObjectManagementContainer';
+import SearchContainer from './SearchContainer';
 
 /** Import Presentational Component */
 import RecentSearches from '../presentational/RecentSearches';
@@ -108,17 +109,23 @@ export default class ContentContainer extends React.Component{
 
             /** "page-wrap" the default id named by react-burget-menu */
             <div id="page-wrap" className='px-lg-4 py-md-4'>
-                <div className=''>
+                    <div className='d-flex w-100 justify-content-around'>
+                        <div id='surveillance' className='col-8'>
+                            <Surveillance retrieveTrackingData={this.retrieveTrackingData}/>
+                        </div>
+                        <div id='searchContainer' className='w-100'>
+                            <SearchContainer />
+                        </div>
+                    </div>
 
-                    <div className='d-flex w-100 justify-content-around'><Surveillance retrieveTrackingData={this.retrieveTrackingData}/></div>
-                    <div className='row'>
+                    <div className='row rwd '>
                         <div className='col-12'> 
-                                <h1>tracking table</h1>
-                                <ReactTableContainer data={this.state.trackingData} column={this.state.trackingColunm}/>
+                            <h1>tracking table</h1>
+                            <ReactTableContainer data={this.state.trackingData} column={this.state.trackingColunm}/>
                         </div>
                     </div>
                     
-                    <div className='row'>
+                    <div className='row rwd'>
                         <div className='col-6'>
                             <h1>lbeacon table</h1>
                             <ReactTableContainer data={this.state.lbeaconData} column={this.state.lbeaconColumn}/>
@@ -128,13 +135,7 @@ export default class ContentContainer extends React.Component{
                             <ReactTableContainer data={this.state.gatewayData} column={this.state.gatewayColunm}/>
                         </div>
                     </div>                  
-                    {/* <div className='col'><TabelContainer /></div> */}
-                    {/* <div className='col'><ReactTableContainer /></div> */}
-{/* 
-                    <div className='col'><SeachableObject /></div>
-                    <div className='col'><RecentSearches /></div> */}
                 </div>
-            </div>
         )
     }
 }

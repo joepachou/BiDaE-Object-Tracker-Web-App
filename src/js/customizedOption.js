@@ -5,8 +5,6 @@ import grey_pin from '../img/grey_pin.svg';
 import darkGrey_pin from '../img/darkGrey_pin.svg';
 
 
-
-
 /** Custom Option of surveillance component  */
 const mapOptions = {
     crs: L.CRS.Simple,
@@ -19,15 +17,11 @@ const mapOptions = {
     scrollWheelZoom: false
 }
 
-const stationaryIconOptions = {
-    iconUrl: black_pin,
-    iconSize:[50, 50],
-} 
-
-const movingIconOptions = {
-    iconUrl: darkGrey_pin,
-    iconSize:[50, 50],
-} 
+const iconOptions = {
+    iconSize: 50,
+    stationaryIconUrl: black_pin,
+    movinfIconUrl: darkGrey_pin,
+}
 
 /**
  * The html content of popup of markers.
@@ -62,8 +56,6 @@ function popupContent (objectName, objectImg, imgWidth){
 
 export { 
     mapOptions,
-    stationaryIconOptions,
-    movingIconOptions,
     popupContent,
-    popupCustomStyle 
+    iconOptions
 }

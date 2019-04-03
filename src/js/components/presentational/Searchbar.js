@@ -1,23 +1,19 @@
 import React from 'react';
-import Container from 'react-bootstrap/Container';
 
-export default class SearchBar extends React.Component {
+export default class Searchbar extends React.Component {
+
+
     render() {
         return (
-            <Container>
-                <form className="my-lg-4">
-                    <div class="form-row">
-                        <div class="col-7">
-                            <input type="text" class="form-control" placeholder="search" />
-                        </div>
-                        <div class="col">
-                            <button type="submit" className="btn btn-primary">Search</button>
-                        </div>
-                
+            <div id='searchBar'>
+                <form class="form-inline">
+                    <div class="form-group mx-sm-3 mb-2">
+                        <label for="inputPassword2" class="sr-only">Search</label>
+                        <input type="text" class="form-control-lg"  placeholder={this.props.placeholder|| "Search"}/>
                     </div>
+                    <button type="submit" class="btn btn-primary mb-2 btn-lg">Search</button>
                 </form>
-                
-            </Container>
+            </div>
         );
     }
 }
