@@ -7,7 +7,7 @@ SELECT  table1.object_mac_address, table1.lbeacon_uuid, table1.rssi as avg, tabl
     WHERE final_timestamp > NOW() - INTERVAL '60 seconds'  
     AND object_mac_address::TEXT LIKE 'c1:%' 
     GROUP BY object_mac_address, lbeacon_uuid
-    HAVING avg(rssi) > -60
+    HAVING avg(rssi) > -52
     ) as table1 
     LEFT JOIN
     (
@@ -17,11 +17,11 @@ SELECT  table1.object_mac_address, table1.lbeacon_uuid, table1.rssi as avg, tabl
     AND final_timestamp < NOW() - INTERVAL '60 seconds' 
     AND object_mac_address::TEXT LIKE 'c1:%' 
     GROUP BY object_mac_address, lbeacon_uuid
-    HAVING avg(rssi) > -60
+    HAVING avg(rssi) > -52
     ) as table2 
     ON table1.object_mac_address = table2.object_mac_address 
     AND table1.lbeacon_uuid = table2.lbeacon_uuid 
-    ORDER BY table1.lbeacon_uuid ASC, table1.object_mac_address DESC;
+    ORDER BY table1.lbeacon_uuid DESC, table1.object_mac_address DESC;
     `;
 
 

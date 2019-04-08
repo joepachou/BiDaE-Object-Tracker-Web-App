@@ -2,8 +2,8 @@ html,body {
     margin: 0;
     font-family: 'Arial'; 
     font-size: 20px;
-    overflow: scroll !important;
-
+    position: fixed;
+    width: 100%;    
 }
 
 .cmp-block{
@@ -19,5 +19,4 @@ html,body {
 .list-group {
     max-height: 700px;
     border: solid 2px rgb(227, 222, 222);
-    overflow-y: scroll;
 }

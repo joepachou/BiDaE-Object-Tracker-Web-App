@@ -3,6 +3,7 @@ import Searchbar from '../presentational/Searchbar';
 import Nav from 'react-bootstrap/Nav';
 import ListGroup from 'react-bootstrap/ListGroup';
 import axios from 'axios';
+import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
 /** API url */
 import dataAPI from '../../../js/dataAPI';
@@ -96,7 +97,6 @@ export default class SearchContainer extends React.Component {
         this.handleIndex = this.handleIndex.bind(this);
         this.handleTitle = this.handleTitle.bind(this);
         this.handleTouchStart = this.handleTouchStart.bind(this);
-        this.handleTouchEnd = this.handleTouchEnd.bind(this);
         this.handleTouchMove = this.handleTouchMove.bind(this);
         this.handleMouseOver = this.handleMouseOver.bind(this);
         this.getSearchableObjectData = this.getSearchableObjectData.bind(this);
@@ -104,10 +104,15 @@ export default class SearchContainer extends React.Component {
 
     componentDidMount() {
         this.getSearchableObjectData();
+        const targetElement = document.body;
+        // disableBodyScroll(targetElement);
     }
 
     shouldComponentUpdate(){
         return true
+    }
+    componentWillUnmount() {
+        clearAllBodyScrollLocks();
     }
 
     getSearchableObjectData() {
@@ -177,18 +182,12 @@ export default class SearchContainer extends React.Component {
     }
     handleTouchStart(e) { 
         if (e.target.classList.contains("sectionIndexList")) {
-            const sectionIndex = e.target.innerText
             location.href = '#' + sectionIndex;
         }
         this.setState({
             isShowSectionTitle: true,
-            sectionIndex: sectionIndex,
+            sectionIndex: 'sectionIndex',
         })
-    }
-
-    handleTouchEnd(e) { 
-        console.log('touch end');
-        console.log(e.target)
     }
 
     handleTouchMove(e) { 
@@ -199,7 +198,7 @@ export default class SearchContainer extends React.Component {
             location.href = '#' + element.innerText;
             this.setState({
                 isShowSectionTitle: true,
-                sectionIndex: element.innerText,
+                sectionIndex: 'element.innerText',
             })
         }
 
@@ -232,7 +231,7 @@ export default class SearchContainer extends React.Component {
         
         
         return (
-            <div>
+            <div >
                 <div id='searchBar' className='d-flex w-100 justify-content-center'>
                     <Searchbar placeholder={this.state.searchKey}/>
                 </div>
@@ -260,8 +259,8 @@ export default class SearchContainer extends React.Component {
                         <div className='col-6'>
                             <h4>SEARCHABLE OBJECT TYPES</h4>
                             <div className='d-flex'>
-                                <div className='p-2 flex-grow-1 bd-highlight'>
-                                    <ListGroup id='sectionTitle' style={sectionTitleStyle} className='list-group'>
+                                <div id='sectionTitle' className='p-2 flex-grow-1 bd-highlight' data-spy="scroll" data-target="#sectionIndex" data-offset="0">
+                                    <ListGroup style={sectionTitleStyle} className='list-group'>
                                         {/* {this.state.data.map(item => {
                                             let currentLetter = item.name.toUpperCase().slice(0,1);
                                             let toReturn = '';
@@ -278,11 +277,12 @@ export default class SearchContainer extends React.Component {
                                         })}
                                     </ListGroup>
                                 </div>
-                                <div id='sectionIndex' className='p-2 bd-highlight'>
+                                
+                                <div className='p-2 bd-highlight sectionIndex'>
                                     <Nav defaultActiveKey="/" className="flex-column">
-                                    {this.state.sectionIndexList.map( (letter, index) => {
-                                        return <Nav.Link className="sectionIndexList" style={sectionIndexStyle} onMouseOver={this.handleMouseOver} onTouchStart={this.handleTouchStart} onTouchMove={this.handleTouchMove}>{letter}</Nav.Link>
-                                    })} 
+                                        {this.state.sectionIndexList.map( (letter, index) => {
+                                            return <Nav.Link href={'#' + letter} className="sectionIndexList" style={sectionIndexStyle} onMouseOver={this.handleMouseOver} onTouchStart={this.handleTouchStart} onTouchMove={this.handleTouchMove}>{letter}</Nav.Link>
+                                        })} 
                                     </Nav>
                                 </div>
                             </div>
