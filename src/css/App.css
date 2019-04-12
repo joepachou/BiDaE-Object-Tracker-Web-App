@@ -1,9 +1,12 @@
 html,body {
+    -webkit-overflow-scrolling: touch;
     margin: 0;
-    font-family: 'Arial'; 
+    font-family: 'Open Sans', sans-serif;
     font-size: 20px;
     position: fixed;
-    width: 100%;    
+    width: 100%;
+    overscroll-behavior: none    
+    
 }
 
 .cmp-block{
@@ -12,11 +15,58 @@ html,body {
     margin: 5px;
 }
 
-.active a{
-    color: red;
+.list-group .active {
+    color: black;
+    background-color: rgba(227, 222, 222, 0.447);
+    /* border-color: rgba(227, 222, 222, 0.447); */
+    border-color:transparent;
 }
 
 .list-group {
     max-height: 700px;
-    border: solid 2px rgb(227, 222, 222);
+    /* border-left: solid 2px rgb(227, 222, 222);
+    border-right: solid 2px rgb(227, 222, 222); */
+    border-color:transparent;
 }
+
+.table th {
+    border: hidden;
+    padding: .3rem;
+    width: 15%;
+    font-size: 15px;
+}
+
+.table td {
+    border: hidden;
+    border-spacing: 1px;
+    padding: .3rem;
+    color: grey;
+    width: 25%;
+    font-size: 15px;
+
+}
+:focus {
+    outline: 0;
+}
+
+.list-group-item.active {
+    border-color:transparent;
+}
+
+.list-group-item.action {
+    border-color:transparent;
+}
+
+/* .list-group-item {
+    padding-left: 20px;
+    padding-top: 5px;
+} */
+
+input {
+    border-color: rgba(227, 222, 222, 0.447);
+}
+
+.overflow-auto {
+    overflow: scroll;
+}
+

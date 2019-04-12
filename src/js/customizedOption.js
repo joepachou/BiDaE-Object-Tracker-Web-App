@@ -1,8 +1,9 @@
 import pin from '../img/pin.png'
-import black_pin from '../img/black_pin.svg'
+import black_pin from '../img/black_pin_v2.svg'
+import black_drip from '../img/black_drip.svg'
 import white_pin from '../img/white_pin.svg'
 import grey_pin from '../img/grey_pin.svg';
-import darkGrey_pin from '../img/darkGrey_pin.svg';
+import darkGrey_pin from '../img/darkGrey_pin_v2.svg';
 
 
 /** Custom Option of surveillance component  */

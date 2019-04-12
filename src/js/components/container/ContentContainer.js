@@ -6,7 +6,6 @@ import ObjectManagementContainer from './ObjectManagementContainer';
 import SearchContainer from './SearchContainer';
 
 /** Import Presentational Component */
-import RecentSearches from '../presentational/RecentSearches';
 import SeachableObject from '../presentational/SearchableObject';
 import Surveillance from '../presentational/Surveillance';
 import AxiosExample from '../../axiosExample';
@@ -108,34 +107,35 @@ export default class ContentContainer extends React.Component{
         return(
 
             /** "page-wrap" the default id named by react-burget-menu */
-            <div id="page-wrap" className='px-lg-4 py-md-4'>
-                    <div className='d-flex w-100 justify-content-around'>
-                        <div id='surveillance' className='col-8'>
-                            <Surveillance retrieveTrackingData={this.retrieveTrackingData}/>
-                        </div>
-                        <div id='searchContainer' className='w-100'>
-                            <SearchContainer />
-                        </div>
+            <div id="page-wrap" className='py-md-4'>
+                <div className='d-flex w-100 justify-content-around'>
+                    <div id='surveillance' className='col-8'>
+                        <Surveillance retrieveTrackingData={this.retrieveTrackingData}/>
                     </div>
-
-                    <div className='row rwd '>
-                        <div className='col-12'> 
-                            <h1>tracking table</h1>
-                            <ReactTableContainer data={this.state.trackingData} column={this.state.trackingColunm}/>
-                        </div>
+                    <div id='searchContainer' className='w-100'>
+                        <SearchContainer />
                     </div>
-                    
-                    <div className='row rwd'>
-                        <div className='col-6'>
-                            <h1>lbeacon table</h1>
-                            <ReactTableContainer data={this.state.lbeaconData} column={this.state.lbeaconColumn}/>
-                        </div>
-                        <div className='col-6'> 
-                            <h1>gateway table</h1>
-                            <ReactTableContainer data={this.state.gatewayData} column={this.state.gatewayColunm}/>
-                        </div>
-                    </div>                  
                 </div>
+
+                <div className='row rwd '>
+                    <div className='col-12'> 
+                        <h1>tracking table</h1>
+                        <ReactTableContainer data={this.state.trackingData} column={this.state.trackingColunm}/>
+                    </div>
+                </div>
+                
+                <div className='row rwd'>
+                    <div className='col-6'>
+                        <h1>lbeacon table</h1>
+                        <ReactTableContainer data={this.state.lbeaconData} column={this.state.lbeaconColumn}/>
+                    </div>
+                    <div className='col-6'> 
+                        <h1>gateway table</h1>
+                        <ReactTableContainer data={this.state.gatewayData} column={this.state.gatewayColunm}/>
+                    </div>
+                </div>                   
+            </div>
+            
         )
     }
 }

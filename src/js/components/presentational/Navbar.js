@@ -44,19 +44,19 @@ export default class NavBar extends React.Component {
 
     render() {
         const SloganStyle = {
-            fontSize : 40,
+            fontSize : 30,
             fontFamily : 'Comic Sans MS',
         }
         const LogoStyle = {
             alt : "",
             src : {BOTLogo},
-            width : "30",
-            height : "30",
+            width : "20",
+            height : "20",
             className : "d-inline-block align-top",
         }
         const NavsbarStyle = {
-            fontSize : 30,
-            height: 100,
+            fontSize : 25,
+            height: 60,
             backgroundColor : '#867ce09e',
         }
 
@@ -64,11 +64,11 @@ export default class NavBar extends React.Component {
         return (
             <div id='NAVBAR'>
                 <nav className="navbar sticky-top navbar-expand-lg navbar-light fixed" style={NavsbarStyle}>
-                    <a className="navbar-brand" href="#" style={SloganStyle}>
+                    <a className="navbar-brand" href="/" style={SloganStyle}>
                         <img 
                             src={BOTLogo}
-                            width="60"
-                            height="60"
+                            width="40"
+                            height="40"
                             className="d-inline-block align-top"
                             alt="bot"
                         />

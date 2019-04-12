@@ -1,9 +1,38 @@
-@media screen and (max-width: 2200px) { 
+/* @media screen and (max-width: 2200px) { 
     #surveillance {
         display: none;
     }
-
     .rwd {
         display: none;
+    }
+} */
+
+@media screen and (min-width: 501px) and (max-width: 2200px){ 
+    #surveillance {
+        display: none;
+    }
+    .rwd {
+        display: none;
+    }
+    .sectionIndexItem {
+        font-size: 19px;
+    }
+
+}
+
+
+@media screen and (min-width: 300px) and (max-width: 500px){ 
+
+    html,body {
+        font-size: 10px;
+    }
+    #surveillance {
+        display: none;
+    }
+    .rwd {
+        display: none;
+    }
+    .sectionIndexItem {
+        font-size: 19px;
     }
 }

@@ -4,6 +4,7 @@ import React from 'react';
 /** Import survelliance general map  */
 import BOTLogo from '../../../img/BOTLogo.png'
 import IIS_Newbuilding_4F from '../../../img/IIS_Newbuilding_4F.png'
+import IIS4F from '../../../img/IIS4F.png'
 
 /** Import Axios */
 import axios from 'axios';
@@ -58,7 +59,7 @@ class Surveillance extends React.Component {
         this.resizeMarkers = this.resizeMarkers.bind(this);
         this.calculateScale = this.calculateScale.bind(this);
 
-        this.StartSetInterval = true;        
+        this.StartSetInterval = !true;        
     }
 
     componentDidMount(){
@@ -75,6 +76,7 @@ class Surveillance extends React.Component {
     componentWillUnmount() {
         clearInterval(this.interval);
     }
+    
 
     initMap(){
         let map = L.map('mapid', mapOptions);
@@ -183,7 +185,8 @@ class Surveillance extends React.Component {
             let objectRows = res.data.rows;
             let lbsPosition = new Set(),
                 objectInfoHash = {}
-            
+            let counter = 0;
+
             objectRows.map(items =>{
                 /**
                  * Every lbeacons coordinate sended by response will store in lbsPosition
@@ -212,40 +215,40 @@ class Surveillance extends React.Component {
                     objectInfoHash[items.object_mac_address].lbeaconDetectedNum = 1
                     objectInfoHash[items.object_mac_address].maxRSSI = items.avg
                     objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate
-                    objectInfoHash[items.object_mac_address].overlapLbeacon = {}
+                    objectInfoHash[items.object_mac_address].coverLbeaconInfo = {}
                     objectInfoHash[items.object_mac_address].name = items.name
                     objectInfoHash[items.object_mac_address].mac_address = items.object_mac_address
-                    objectInfoHash[items.object_mac_address].overlapLbeacon[lbeaconCoordinate] = object
+                    objectInfoHash[items.object_mac_address].coverLbeaconInfo[lbeaconCoordinate] = object
                     objectInfoHash[items.object_mac_address].status = items.avg_stable !== null ? 'stationary' : 'moving';
+
                 } else {
                     // console.log(dt.getSeconds() + ' ' + items.object_mac_address + ' Scanned by other lbeacon')
-                    if (items.avg_stable === null) {
-                        objectInfoHash[items.object_mac_address].status = 'moving';
-                    } else {
+                    let maxRSSI = objectInfoHash[items.object_mac_address].maxRSSI;
+                    let status = objectInfoHash[items.object_mac_address].status;
 
-                    /** 
-                     * If the RSSI of one object scanned by the the other lbeacon is larger than the previous one, then
-                     * current position = new lbeacon location
-                     * max rssi = new lbeacon rssi
-                     */
-                        let maxRSSI = objectInfoHash[items.object_mac_address].maxRSSI;
-
-                        if (items.avg < maxRSSI) {
-                            objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
+                    if (items.avg_stable !== null) {
+                        /** 
+                         * If the RSSI of one object scanned by the the other lbeacon is larger than the previous one, then
+                         * current position = new lbeacon location
+                         * max rssi = new lbeacon rssi
+                         */
+                        if ((status === 'stationary' && parseFloat(items.avg) > parseFloat(maxRSSI))|| status === 'moving' ){
                             objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
-                            objectInfoHash[items.object_mac_address].overlapLbeacon[lbeaconCoordinate] = object;
-                        }
-                        objectInfoHash[items.object_mac_address].lbeaconDetectedNum = Object.keys(objectInfoHash[items.object_mac_address].overlapLbeacon).length;
+                            objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
+                            objectInfoHash[items.object_mac_address].status = 'stationary'
+                        } 
                     }
+                    objectInfoHash[items.object_mac_address].coverLbeaconInfo[lbeaconCoordinate] = object;
+
                 }
 
-
+                objectInfoHash[items.object_mac_address].lbeaconDetectedNum = Object.keys(objectInfoHash[items.object_mac_address].coverLbeaconInfo).length;
                 // markerClusters.addLayer(L.marker(lbeaconCoordinate));
             })
+            console.log(objectInfoHash)
             // this.map.addLayer(markerClusters);
             // markerClusters.on('clusterclick', this.handlemenu)
 
-            
             /** Return Tracking data to caller(ContentContainer.js) */
             this.props.retrieveTrackingData(res.data)
 
@@ -317,9 +320,8 @@ class Surveillance extends React.Component {
              * Create the marker, if the 'status' of the object is 'stationary', 
              * then the color will be black, or grey.
              */
-            let marker = objects[key].status == 'stationary' 
-                    ? L.marker(position, {icon: L.icon(stationaryIconOptions)}).bindPopup(popupContent, popupCustomStyle).addTo(this.markersLayer)
-                    : L.marker(position, {icon: L.icon(movingIconOptions)}).bindPopup(popupContent, popupCustomStyle).addTo(this.markersLayer)
+            let iconOption = objects[key].status === 'stationary' ? stationaryIconOptions : movingIconOptions;
+            let marker =  L.marker(position, {icon: L.icon(iconOption)}).bindPopup(popupContent, popupCustomStyle).addTo(this.markersLayer)
             
             /** Set the marker's event. */
             marker.on('mouseover', function () { this.openPopup(); })
@@ -327,7 +329,7 @@ class Surveillance extends React.Component {
 
 
             /** Set the error circles of the markers. */
-            if (detectedNum > 1) {
+            if (detectedNum > 1 && objects[key].status === 'stationary') {
                 let errorCircle = L.circleMarker(position ,errorCircleOptions).addTo(this.errorCircle);
             }
         }
@@ -345,7 +347,7 @@ class Surveillance extends React.Component {
 
     /**
      * Retrieve the lbeacon's location coordinate from lbeacon_uuid.
-     * @param {*} lbeacon_uuid The uuid of lbeacon retrieved from DB.
+     * @param   lbeacon_uuid The uuid of lbeacon retrieved from DB.
      */
     createLbeaconCoordinate(lbeacon_uuid){
         /** Example of lbeacon_uuid: 00000018-0000-0000-7310-000000004610 */
@@ -357,8 +359,8 @@ class Surveillance extends React.Component {
 
     /**
      * Retrieve the object's offset from object's mac_address.
-     * @param {*} mac_address The mac_address of the object retrieved from DB. 
-     * @param {*} lbeacon_coordinate The lbeacon's coordinate processed by createLbeaconCoordinate().
+     * @param   mac_address The mac_address of the object retrieved from DB. 
+     * @param   lbeacon_coordinate The lbeacon's coordinate processed by createLbeaconCoordinate().
      */
     macAddressToCoordinate(mac_address, lbeacon_coordinate){
         /** Example of lbeacon_uuid: 01:1f:2d:13:5e:33 
@@ -376,7 +378,7 @@ class Surveillance extends React.Component {
         const xx = mac_address.slice(12,14);
         const yy = mac_address.slice(15,17);
 		
-		const multiplier = 3; // 1m = 100cm = 1000mm, multipler = 1000/16*16 = 3
+		const multiplier = 6; // 1m = 100cm = 1000mm, multipler = 1000/16*16 = 3
 		const origin_x = lbeacon_coordinate[1] - parseInt(80, 16) * multiplier ; 
 		const origin_y = lbeacon_coordinate[0] - parseInt(80, 16) * multiplier ;
 		const xxx = origin_x + parseInt(xx, 16) * multiplier;
