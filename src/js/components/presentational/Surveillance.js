@@ -59,7 +59,8 @@ class Surveillance extends React.Component {
         this.resizeMarkers = this.resizeMarkers.bind(this);
         this.calculateScale = this.calculateScale.bind(this);
 
-        this.StartSetInterval = !true;        
+        this.StartSetInterval = true; 
+        this.isShownTrackingData = !true;
     }
 
     componentDidMount(){
@@ -245,7 +246,7 @@ class Surveillance extends React.Component {
                 objectInfoHash[items.object_mac_address].lbeaconDetectedNum = Object.keys(objectInfoHash[items.object_mac_address].coverLbeaconInfo).length;
                 // markerClusters.addLayer(L.marker(lbeaconCoordinate));
             })
-            console.log(objectInfoHash)
+            if (this.state.isShownTrackingData === true ) (console.log(objectInfoHash)); 
             // this.map.addLayer(markerClusters);
             // markerClusters.on('clusterclick', this.handlemenu)
 

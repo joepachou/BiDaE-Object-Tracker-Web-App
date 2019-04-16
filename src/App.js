@@ -2,24 +2,31 @@ import React from 'react';
 
 /** Container Component */
 import ContentContainer from './js/components/container/ContentContainer';
-import NavbarContainer from './js/components/container/NavbarContainer';
 import ObjectListContainer from './js/components/container/ObjectListContainer';
+import { BrowserRouter as Router,Switch, Route,  } from "react-router-dom";
+import NavbarContainer from './js/components/presentational/NavbarContainer'
+import SearchContainer from './js/components/container/SearchContainer';
+
 
 
 class App extends React.Component {
-    render() {
-
-        
+    render() {        
         return (
+            // <Router>
             <div>
-                <div id='navbar'>
-                    <NavbarContainer />
+                <div>
+                    <NavbarContainer/>
                 </div>
                 <div className='my-6' id='contentContainer'>
-                    <ObjectListContainer />
+                    {/* <Switch>
+                        <Route exact path="/" component={ContentContainer} />
+                        <Route path="/surveillance" component={ContentContainer} />
+                        <Route path="/search" component={SearchContainer} />
+                    </Switch> */}
                     <ContentContainer />
                 </div>
             </div>
+            // </Router>
         );
     }
     

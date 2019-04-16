@@ -2,8 +2,8 @@ html,body {
     -webkit-overflow-scrolling: touch;
     margin: 0;
     font-family: 'Open Sans', sans-serif;
-    font-size: 20px;
-    position: fixed;
+    font-size: 1.8vh;
+    /* position: fixed; */
     width: 100%;
     overscroll-behavior: none    
     
@@ -29,22 +29,6 @@ html,body {
     border-color:transparent;
 }
 
-.table th {
-    border: hidden;
-    padding: .3rem;
-    width: 15%;
-    font-size: 15px;
-}
-
-.table td {
-    border: hidden;
-    border-spacing: 1px;
-    padding: .3rem;
-    color: grey;
-    width: 25%;
-    font-size: 15px;
-
-}
 :focus {
     outline: 0;
 }

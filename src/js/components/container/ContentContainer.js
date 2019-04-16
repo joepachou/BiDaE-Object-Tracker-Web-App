@@ -9,10 +9,11 @@ import SearchContainer from './SearchContainer';
 import SeachableObject from '../presentational/SearchableObject';
 import Surveillance from '../presentational/Surveillance';
 import AxiosExample from '../../axiosExample';
-import TabelContainer from './TableContainer';
 import ReactTableContainer from './ReactTableContainer';
 import dataAPI from '../../../js/dataAPI'
 import axios from 'axios';
+
+import { Row, Col, Hidden, Visible } from 'react-grid-system';
 
 export default class ContentContainer extends React.Component{
 
@@ -105,35 +106,35 @@ export default class ContentContainer extends React.Component{
     
     render(){
         return(
-
             /** "page-wrap" the default id named by react-burget-menu */
-            <div id="page-wrap" className='py-md-4'>
-                <div className='d-flex w-100 justify-content-around'>
-                    <div id='surveillance' className='col-8'>
-                        <Surveillance retrieveTrackingData={this.retrieveTrackingData}/>
-                    </div>
-                    <div id='searchContainer' className='w-100'>
-                        <SearchContainer />
-                    </div>
-                </div>
+            <div id="page-wrap" className='py-3'>
+                <Row className='d-flex w-100 justify-content-around mx-0'>
+                    <Col xl={8}>
+                        <Hidden xs sm md lg><Surveillance retrieveTrackingData={this.retrieveTrackingData}/></Hidden>
+                    </Col>
+                    <Col xs={12} sm={12} md={12} xl={4} className="w-100">
+                        <SearchContainer/>
 
-                <div className='row rwd '>
-                    <div className='col-12'> 
+                    </Col>
+                </Row>
+                {/* <Row>
+                    <Col>
                         <h1>tracking table</h1>
                         <ReactTableContainer data={this.state.trackingData} column={this.state.trackingColunm}/>
-                    </div>
-                </div>
-                
-                <div className='row rwd'>
-                    <div className='col-6'>
+                    </Col>
+                </Row>
+
+                <Row>
+                    <Col>
                         <h1>lbeacon table</h1>
                         <ReactTableContainer data={this.state.lbeaconData} column={this.state.lbeaconColumn}/>
-                    </div>
-                    <div className='col-6'> 
+                    </Col>
+                    <Col>
                         <h1>gateway table</h1>
                         <ReactTableContainer data={this.state.gatewayData} column={this.state.gatewayColunm}/>
-                    </div>
-                </div>                   
+                    </Col>
+
+                </Row>                 */}
             </div>
             
         )

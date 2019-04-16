@@ -1,26 +1,3 @@
-#searchResult.searchResultContent {
-    border: 1px;
-}
-
-#sectionTitle {
-    overflow: auto;
-    max-height: 700px;
-    position: relative; 
-    font-size: 2em;
-    border: solid 2px rgba(227, 222, 222, 0.619);
-    padding: 0;
-
-}
-
-#searchResult {
-    padding-top: 30px;
-}
-
-.searchResultListItem {
-    padding-left: 20px;
-    padding-top: 5px;
-}
-
 /* CSS of searchIndexItem 
 /* For touch device, 'hover' will stick to the element that user last touches.
  * To solve this, specify the css style of the element has both .activeIndex and :hover
@@ -29,19 +6,13 @@ a:hover {
     color: #007bff;
 }
 
-.activeIndex {
+/* .activeIndex {
     font-size: 30px;
     font-weight: bolder;
     color: #0056b3;
-}
+} */
 
-.activeIndex:hover {
+/* .activeIndex:hover {
     color: #0056b3;
-}
+} */
 
-.titleElementStyle {
-    background: 'rgba(227, 222, 222, 0.619)';
-    font-weight: 'bold';
-    font-size: 20;
-    padding: 5;
-}

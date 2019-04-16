@@ -12,6 +12,7 @@ import TabPane from 'react-bootstrap/TabPane'
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import BootstrapTable from 'react-bootstrap-table-next';
 import Alert from 'react-bootstrap/Alert';
+import VerticalTable from '../presentational/VerticalTable';
 
 
 import Table from 'react-bootstrap/Table';
@@ -392,7 +393,6 @@ export default class SearchContainer extends React.Component {
             sectionTitleList: [],
             sectionIndex:'',
             searchResult: [],
-            clientHeight: '',
         }
     
         this.handleSectionTitleClick = this.handleSectionTitleClick.bind(this);
@@ -408,15 +408,15 @@ export default class SearchContainer extends React.Component {
     componentDidMount() {
         this.getSearchableObjectData();
         const targetElement = document.body;
-        this.setState({
-            clientHeight: document.body.clientHeight,
-        })
+        // document.body.style.position = "fixed";
+
         // disableBodyScroll(targetElement);
     }
 
-    shouldComponentUpdate(){
-        return true
+    shouldComponentUpdate(nextProps, nextState){
+        return this.state !== nextState;
     }
+
     componentWillUnmount() {
         clearAllBodyScrollLocks();
     }
@@ -439,12 +439,12 @@ export default class SearchContainer extends React.Component {
         const titleElementStyle = {
             background: 'rgba(227, 222, 222, 0.619)',
             fontWeight: 'bold',
-            fontSize: this.clientHeight,
+            fontSize: 10,
             padding: 5,
         }
 
         const itemElementStyle = {
-            fontSize: 25,
+            fontSize: this.state.clientHeight,
             padding: 5
         }
 
@@ -526,16 +526,9 @@ export default class SearchContainer extends React.Component {
         /** Customized CSS of searchResult */
         const searchResultStyle = {
             display: this.state.hasSearchResult ? null : 'none',
+            paddingTop: 30,
         }
 
-        const searchResultContentStyle = {
-            // border: '1px solid rgb(227, 222, 222)',
-            // paddingLeft: 30,
-            // paddingRight: 30,
-            // padding: 0,
-            // marginBottom: 40,
-            minHeight: 300,
-        }
 
         const SearchContainerStyle = {
             // position: 'fixed',
@@ -545,34 +538,32 @@ export default class SearchContainer extends React.Component {
         const searchOptionStyle = {
             display: this.state.hasSearchResult ? 'none' : null,
         }
+
         
         
         return (
-            <div style={SearchContainerStyle} className="ml-3" style={{height:'100%'}} onTouchMove={this.handleTouchMove}>
+            <div id='searchContainer' style={SearchContainerStyle} className="mx-2" style={{height:'100%'}} onTouchMove={this.handleTouchMove}>
                 <div id='searchBar' className='d-flex w-100 justify-content-center align-items-center'>
                     <Searchbar placeholder={this.state.searchKey}/>
                 </div>
 
-                <div id='searchResult' style={searchResultStyle}>
-                    <Alert variant={"secondary"} className='text-left py-2'>
+                <div id='searchResult' style={searchResultStyle} className='py-3'>
+
+                    <Alert variant={"secondary"} className='text-left py-0'>
                         <h6 className='d-inline font-weight-bold'>SEARCH RESULT</h6> 
                             <h6 className="d-inline pl-3">{this.state.searchResult.length}</h6>
                                 <h6 className="d-inline pl-3">{this.state.searchKey}</h6>
                                     <h6 className="d-inline pl-2">on</h6>
                                         <h6 className="d-inline pl-2">F4</h6>
                     </Alert>
+
                     <Tab.Container id="left-tabs-example" defaultActiveKey="#0">
                         <Row className=''style={{height:'100%'}} >
-                            <Col sm={5} className='border px-0 overflow-auto'>
+                            <Col className='border px-0 overflow-auto'>
                                 <ListGroup variant="flush">
                                     {this.state.searchResult.map((item,index) => {
                                         let element = 
                                             <ListGroup.Item href={'#' + index} className='searchResultList' >
-                                                {/* <Row>
-                                                    <Col className="font-weight-bold" sm={4}>{item.name}</Col>
-                                                    <Col sm={4}>{item.ACN}</Col>
-                                                    <Col sm={4}>{item.location}</Col>
-                                                </Row> */}
                                                 <div className="d-flex flex-column text-left">
                                                     <div className="font-weight-bold py-1">{item.name}</div>
                                                     <small>last 4 ACN: {item.ACN.slice(10,14)}</small>
@@ -583,40 +574,13 @@ export default class SearchContainer extends React.Component {
                                     })}
                                 </ListGroup>
                             </Col>
-                            <Col sm={7} className=' border px-0' >
+                            <Col className=' border px-0' >
                                 <Tab.Content >
                                     {this.state.searchResult.map((item,index) => {
                                         let element = 
                                             <Tab.Pane eventKey={'#' + index} className=''>
-                                                <img src={item.img} width='200' className='py-4' />
-                                                <Table>
-                                                    <tbody className="text-uppercase">
-                                                        <tr className="table-tr" >
-                                                            <th className="text-right font-weight-bold">Name</th>
-                                                            <td className="text-left ">{item.name}</td>
-                                                        </tr>
-                                                        <tr className="table-tr">
-                                                            <th className="text-right font-weight-bold">Object Type</th>
-                                                            <td className="text-left">{item.type}</td>
-                                                        </tr>
-                                                        <tr className="table-tr">
-                                                            <th className="text-right table_th">Latest known location</th>
-                                                            <td className="text-left">{item.location}</td>
-                                                        </tr>
-                                                        <tr className="table-tr">
-                                                            <th className="text-right table_th">Status</th>
-                                                            <td className="text-left">{item.status}</td>
-                                                        </tr>
-                                                        <tr className="table-tr">
-                                                            <th className="text-right table_th">Access control number</th>
-                                                            <td className="text-left">{item.ACN}</td>
-                                                        </tr>
-                                                        <tr className="table-tr">
-                                                            <th className="text-right table_th">Manufacturer ID</th>
-                                                            <td className="text-left">{Math.floor(Math.random() * 1000)}</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </Table>
+                                                <img src={item.img} width='100' className='py-4' />
+                                                <VerticalTable item={item}/>
                                             </Tab.Pane>
                                         return element
                                     })}
@@ -628,20 +592,24 @@ export default class SearchContainer extends React.Component {
 
                 <div id='searchOption' style={searchOptionStyle} className='pt-2'>
                                     
-                    <div className='row'>
-                        <div id='frequentSearch' className='col-6'>
+                    <Row>
+                        <Col id='frequentSearch' md={6} sm={6} xs={6} className=''>
                             <h6 className="font-weight-bold">FREQUENT SEARCHES</h6>
                             <ListGroup variant="flush">
                                 <ListGroup.Item onClick={this.handleSectionTitleClick}>Bladder Scanner</ListGroup.Item>
                                 <ListGroup.Item onClick={this.handleSectionTitleClick}>Alarm</ListGroup.Item>
                             </ListGroup>
-                        </div>
-                        <SearchableObjectType sectionTitleList={this.state.sectionTitleList} 
-                            sectionIndexList={this.state.sectionIndexList} sectionIndex={this.state.sectionIndex} 
-                                handleMouseOver={this.handleMouseOver} handleTouchStart={this.handleTouchStart} 
-                                    handleTouchMove={this.handleTouchMove} isShowSectionTitle={this.state.isShowSectionTitle}
-                                        clientHeight={this.state.clientHeight}/>
-                    </div>
+                    
+                        </Col>
+                        <Col id='searchableObjectType' md={6} sm={6} xs={6} className='px-0'>
+                            <h6 className="font-weight-bold">SEARCHABLE OBJECT TYPES</h6>
+                            <SearchableObjectType sectionTitleList={this.state.sectionTitleList} 
+                                sectionIndexList={this.state.sectionIndexList} sectionIndex={this.state.sectionIndex} 
+                                    handleMouseOver={this.handleMouseOver} handleTouchStart={this.handleTouchStart} 
+                                        handleTouchMove={this.handleTouchMove} isShowSectionTitle={this.state.isShowSectionTitle}
+                                            clientHeight={this.state.clientHeight}/>
+                        </Col>
+                    </Row>
                 </div>
             </div>
         );

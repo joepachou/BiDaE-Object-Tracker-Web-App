@@ -17,6 +17,7 @@ import App from './App'
 import objectListReducer from './js/reducer/ObjectListReducer';
 
 
+
 const reducers = combineReducers({
     objectListOption: objectListReducer,
 })
