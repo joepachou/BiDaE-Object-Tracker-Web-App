@@ -17,7 +17,6 @@ const SearchableObjectType = (props) => {
     }
 
     /** Customized CSS of sectionTitle */
-
     const sectionTitleStyle = {
         display: props.isShowSectionTitle ? null : 'none',
         overflow: 'auto',
@@ -28,8 +27,6 @@ const SearchableObjectType = (props) => {
         padding: 0,
     
     }
-
-
 
     return (        
         <div className='d-flex'>
@@ -56,7 +53,7 @@ const SearchableObjectType = (props) => {
                 <Nav className="flex-column">
                     {props.sectionIndexList.map( (letter, index) => {
                         const toggleClassName = props.sectionIndex === letter ? 'activeIndex' : '';
-                        return <Nav.Link active={false} href={'#' + letter} className={ toggleClassName + ' sectionIndexItem' + ' px-4'}  
+                        return <Nav.Link key={index} active={false} href={'#' + letter} className={ toggleClassName + ' sectionIndexItem' + ' px-4'}  
                                     style={sectionIndexItemStyle} onMouseOver={props.handleMouseOver} onTouchStart={props.handleTouchStart} 
                                         onTouchMove={props.handleTouchMove}>{letter}</Nav.Link>
                     })} 

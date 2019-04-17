@@ -408,7 +408,7 @@ export default class SearchContainer extends React.Component {
     componentDidMount() {
         this.getSearchableObjectData();
         const targetElement = document.body;
-        // document.body.style.position = "fixed";
+        document.body.style.position = "fixed";
 
         // disableBodyScroll(targetElement);
     }
@@ -456,7 +456,7 @@ export default class SearchContainer extends React.Component {
         let sectionTitleList = [];
         let groupLetter = '';
 
-        Array.from(objectTypeSet).map( item => {
+        Array.from(objectTypeSet).map( (item,index) => {
             // let currentLetter = item.toUpperCase().slice(0,1);
             let currentLetter = item.toUpperCase().charAt(0);
             if(!(groupLetter === currentLetter)) {
@@ -464,7 +464,7 @@ export default class SearchContainer extends React.Component {
                 let titleElement = <a id={groupLetter} className='titleElementStyle'><ListGroup.Item style={titleElementStyle}>{groupLetter}</ListGroup.Item></a>;
                 sectionTitleList.push(titleElement)
             }
-            let itemElement = <a onClick={this.handleSectionTitleClick}><ListGroup.Item action style={itemElementStyle}>{item}</ListGroup.Item></a>;
+            let itemElement = <a onClick={this.handleSectionTitleClick} key={index}><ListGroup.Item action style={itemElementStyle} >{item}</ListGroup.Item></a>;
             sectionTitleList.push(itemElement);
         })
         this.setState({
@@ -542,7 +542,7 @@ export default class SearchContainer extends React.Component {
         
         
         return (
-            <div id='searchContainer' style={SearchContainerStyle} className="mx-2" style={{height:'100%'}} onTouchMove={this.handleTouchMove}>
+            <div id='searchContainer' style={SearchContainerStyle} className="mx-2" onTouchMove={this.handleTouchMove}>
                 <div id='searchBar' className='d-flex w-100 justify-content-center align-items-center'>
                     <Searchbar placeholder={this.state.searchKey}/>
                 </div>
@@ -566,7 +566,7 @@ export default class SearchContainer extends React.Component {
                                             <ListGroup.Item href={'#' + index} className='searchResultList' >
                                                 <div className="d-flex flex-column text-left">
                                                     <div className="font-weight-bold py-1">{item.name}</div>
-                                                    <small>last 4 ACN: {item.ACN.slice(10,14)}</small>
+                                                    <small>ACN: xxxx-xxxx-{item.ACN.slice(10,14)}</small>
                                                     <small>location: {item.location}</small>
                                                 </div>
                                             </ListGroup.Item>

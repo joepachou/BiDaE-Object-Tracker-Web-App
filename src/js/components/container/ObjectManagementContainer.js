@@ -4,12 +4,13 @@ import React from 'react';
 import ObjectOperation from '../presentational/ObjectOperation.js';
 import FormContainer from './FormContainer.js';
 import TableContainer from './ObjectListContainer';
-import ReactTableContainer from './ReactTableContainer';
+import ReactTable from 'react-table';
 import Navs from '../presentational/Navs'
-import ModalContainer from './ModalContainer';
 import ListGroup from 'react-bootstrap/ListGroup';
 import dataAPI from "../../../js/dataAPI";
 import axios from 'axios';
+import 'react-table/react-table.css';
+
 
 
 
@@ -113,7 +114,7 @@ export default class ObjectManagement extends React.Component{
                         </ListGroup>
                     </div>
                     <div className='col-10'>
-                        <ReactTableContainer data={this.state.filterData} column={this.state.column} />
+                        <ReactTable data={this.state.filterData} columns={this.state.column} />
                     </div>
                 </div>
                 {/* <ModalContainer /> */}

@@ -6,27 +6,28 @@ import ObjectListContainer from './js/components/container/ObjectListContainer';
 import { BrowserRouter as Router,Switch, Route,  } from "react-router-dom";
 import NavbarContainer from './js/components/presentational/NavbarContainer'
 import SearchContainer from './js/components/container/SearchContainer';
+import HealthReport from './js/components/container/HealthReport';
 
 
 
 class App extends React.Component {
     render() {        
         return (
-            // <Router>
-            <div>
+            <Router>
+            
                 <div>
                     <NavbarContainer/>
                 </div>
                 <div className='my-6' id='contentContainer'>
-                    {/* <Switch>
+                    <Switch>
                         <Route exact path="/" component={ContentContainer} />
                         <Route path="/surveillance" component={ContentContainer} />
-                        <Route path="/search" component={SearchContainer} />
-                    </Switch> */}
-                    <ContentContainer />
+                        {/* <Route path="/search" component={SearchContainer} /> */}
+                        <Route path="/healthReport" component={HealthReport} />
+                    </Switch>
                 </div>
-            </div>
-            // </Router>
+            
+            </Router>
         );
     }
     
