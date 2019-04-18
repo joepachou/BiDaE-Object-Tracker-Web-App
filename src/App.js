@@ -7,11 +7,15 @@ import { BrowserRouter as Router,Switch, Route,  } from "react-router-dom";
 import NavbarContainer from './js/components/presentational/NavbarContainer'
 import SearchContainer from './js/components/container/SearchContainer';
 import HealthReport from './js/components/container/HealthReport';
+import { matchRoutes,renderRoutes } from 'react-router-config';
+import routes from './js/routes';
 
 
 
 class App extends React.Component {
+
     render() {        
+
         return (
             <Router>
             
@@ -20,11 +24,14 @@ class App extends React.Component {
                 </div>
                 <div className='my-6' id='contentContainer'>
                     <Switch>
-                        <Route exact path="/" component={ContentContainer} />
+                        {/* <Route exact path="/" component={ContentContainer} />
                         <Route path="/page/surveillance" component={ContentContainer} />
-                        {/* <Route path="/search" component={SearchContainer} /> */}
-                        <Route path="/page/healthReport" component={HealthReport} />
+                        <Route path="/search" component={SearchContainer} />
+                        <Route path="/page/healthReport" component={HealthReport} /> */}
+                        {/* {console.log(renderRoutes(routes))} */}
+                        {renderRoutes(routes)}
                     </Switch>
+                    
                 </div>
             
             </Router>
