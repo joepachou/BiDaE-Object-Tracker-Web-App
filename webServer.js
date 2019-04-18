@@ -13,7 +13,7 @@ app.use(
   bodyParser.urlencoded({
     extended: true,
   })
-)
+);
 
 app.use(express.static(path.join(__dirname,'dist')));
 
@@ -24,17 +24,17 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+app.get(/^\/page\/(.*)/, (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist','index.html'));
 })
 
-app.get('/trackingData', db.getTrackingData);
+app.get('/data/trackingData', db.getTrackingData);
 
-app.get('/objectTable', db.getObjectTable);
+app.get('/data/objectTable', db.getObjectTable);
 
-app.get('/lbeaconTable', db.getLbeaconTable);
+app.get('/data/lbeaconTable', db.getLbeaconTable);
 
-app.get('/gatewayTable', db.getGatewayTable);
+app.get('/data/gatewayTable', db.getGatewayTable);
 
 app.listen(PORT, () => {
     console.log(`App running on PORT ${PORT}.`)

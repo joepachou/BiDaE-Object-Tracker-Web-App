@@ -64,7 +64,8 @@ export default class NavbarContainer extends React.Component {
         const NavsbarStyle = {
             // fontSize : 25,
             height: '5vh',
-            backgroundColor : '#867ce09e',
+            backgroundColor : '#867ce09e',//'#14477A',
+            color: 'white',
         }
 
         
@@ -86,9 +87,9 @@ export default class NavbarContainer extends React.Component {
                     </button>
 
                     <Nav className="mr-auto">
-                        <Nav.Item><Link to="/surveillance" className="nav-link" >Surveillance</Link></Nav.Item>
+                        <Nav.Item><Link to="/page/surveillance" className="nav-link" >Surveillance</Link></Nav.Item>
                         {/* <Nav.Item><Link to="/search" className="nav-link">Search</Link></Nav.Item> */}
-                        <Nav.Item><Link to="/healthReport" className="nav-link" >HealthReport</Link></Nav.Item>
+                        <Nav.Item><Link to="/page/healthReport" className="nav-link" >HealthReport</Link></Nav.Item>
                     </Nav>
                     <Nav className="mr-2">
                         <Nav.Link ><i className="fas fa-user-alt"></i>LogOut</Nav.Link>

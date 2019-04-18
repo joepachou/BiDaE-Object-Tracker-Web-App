@@ -5,7 +5,9 @@ html,body {
     font-size: 1.8vh;
     /* position: fixed; */
     width: 100%;
-    overscroll-behavior: none    
+    overscroll-behavior: none;
+    background:rgba(240, 240, 240, 0.187);
+    height: 100%;
     
 }
 
@@ -40,11 +42,6 @@ html,body {
 .list-group-item.action {
     border-color:transparent;
 }
-
-/* .list-group-item {
-    padding-left: 20px;
-    padding-top: 5px;
-} */
 
 input {
     border-color: rgba(227, 222, 222, 0.447);

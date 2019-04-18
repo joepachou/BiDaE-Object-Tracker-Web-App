@@ -21,9 +21,9 @@ class App extends React.Component {
                 <div className='my-6' id='contentContainer'>
                     <Switch>
                         <Route exact path="/" component={ContentContainer} />
-                        <Route path="/surveillance" component={ContentContainer} />
+                        <Route path="/page/surveillance" component={ContentContainer} />
                         {/* <Route path="/search" component={SearchContainer} /> */}
-                        <Route path="/healthReport" component={HealthReport} />
+                        <Route path="/page/healthReport" component={HealthReport} />
                     </Switch>
                 </div>
             

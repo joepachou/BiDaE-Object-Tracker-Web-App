@@ -238,6 +238,13 @@ class Surveillance extends React.Component {
                             objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
                             objectInfoHash[items.object_mac_address].status = 'stationary'
                         } 
+                        
+                    } else {
+
+                        if(status === 'moving' && parseFloat(items.avg) > parseFloat(maxRSSI)) {
+                            objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
+                            objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
+                        }
                     }
                     objectInfoHash[items.object_mac_address].coverLbeaconInfo[lbeaconCoordinate] = object;
 
