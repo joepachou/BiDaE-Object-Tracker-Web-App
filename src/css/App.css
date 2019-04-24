@@ -2,13 +2,12 @@ html,body {
     -webkit-overflow-scrolling: touch;
     margin: 0;
     font-family: "Lucida Grande", Tahoma, Verdana, sans-serif;/*'Open Sans', sans-serif;*/
-    font-size: 1.8vh;
+    /* font-size: 1.8vh; */
+    font-size: 25px;
     /* position: fixed; */
     width: 100%;
     overscroll-behavior: none;
-    background:rgba(240, 240, 240, 0.187);
-    height: 100%;
-    
+    background: rgba(240, 240, 240, 0.187);
 }
 
 .cmp-block{
@@ -52,19 +51,18 @@ input {
     color :rgb(16, 58, 113)
 }
 
+/* NavbarContainer customized CSS */
 .lang-select.dropdown-item:active,
 .lang-select.dropdown-item.active {
     background-color:  rgba(179, 177, 177, 0.317);
     color: black;
 }
 
-
-
-.navbar-light.navbar-nav.nav-link {
-    color: white;
+.nav-link.nav-brand:hover {
+    color: black;
 }
 
-
+/* ToggleSwitch customized CSS */
 /* 
 .switch-field {
     font-family: "Lucida Grande", Tahoma, Verdana, sans-serif;

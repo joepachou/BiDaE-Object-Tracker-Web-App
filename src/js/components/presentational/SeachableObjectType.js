@@ -8,8 +8,6 @@ import styled from 'styled-components';
 const SearchableObjectType = (props) => {
 
 
-
-
     /** Customized CSS of sectionIndexItem */
     const sectionIndexItemStyle = {
         paddingTop: 0,
@@ -24,8 +22,7 @@ const SearchableObjectType = (props) => {
         position: 'relative',
         /* font-size: 2em; */
         border: 'solid 2px rgba(227, 222, 222, 0.619)',
-        padding: 0,
-    
+        padding: 0,    
     }
 
     return (        
@@ -50,10 +47,10 @@ const SearchableObjectType = (props) => {
             </div>
             
             <div id="sectionIndex" className='bd-highlight'>
-                <Nav className="flex-column">
+                <Nav className="flex-column" >
                     {props.sectionIndexList.map( (letter, index) => {
                         const toggleClassName = props.sectionIndex === letter ? 'activeIndex' : '';
-                        return <Nav.Link key={index} active={false} href={'#' + letter} className={ toggleClassName + ' sectionIndexItem' + ' px-4'}  
+                        return <Nav.Link key={index} active={false} href={'#' + letter} className={ toggleClassName + ' sectionIndexItem' + ' px-3'}  
                                     style={sectionIndexItemStyle} onMouseOver={props.handleMouseOver} onTouchStart={props.handleTouchStart} 
                                         onTouchMove={props.handleTouchMove}>{letter}</Nav.Link>
                     })} 

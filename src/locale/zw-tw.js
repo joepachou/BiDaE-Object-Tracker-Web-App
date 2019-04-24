@@ -7,6 +7,7 @@ const tw = {
     searchable_object_types: '可搜尋物件',
     search: '搜尋',
     language: '語言',
+    search_result: '搜尋結果'
 
 }
 

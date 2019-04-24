@@ -66,8 +66,8 @@ export default class ContentContainer extends React.Component{
                             <br></br>
                             <Surveillance retrieveTrackingData={this.retrieveTrackingData}/>
                             
-                            {/* <h5 className='mt-2'>Tracking Table</h5>
-                            <ReactTable style={reactTableStyle} minRows={9} defaultPageSize={10} data={this.state.trackingData} columns={this.state.trackingColunm} pageSizeOptions={[10]}/> */}
+                            <h5 className='mt-2'>Tracking Table</h5>
+                            <ReactTable style={reactTableStyle} minRows={6} defaultPageSize={10} data={this.state.trackingData} columns={this.state.trackingColunm} pageSizeOptions={[5, 10]}/>
                         </Hidden>
                     </Col>
                     <Col xs={12} sm={12} md={12} xl={4} className="w-100">

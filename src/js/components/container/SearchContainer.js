@@ -1,16 +1,8 @@
 import React from 'react';
 import Searchbar from '../presentational/Searchbar';
-import Nav from 'react-bootstrap/Nav';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
-import Tab from 'react-bootstrap/Tab'
-import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
-import Alert from 'react-bootstrap/Alert';
-import VerticalTable from '../presentational/VerticalTable';
-
-
-import Table from 'react-bootstrap/Table';
 
 import axios from 'axios';
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
@@ -24,12 +16,13 @@ import doppler from '../../../img/doppler.jpg';
 import blankerWarmer from '../../../img/blanket_warmer.jpg';
 
 
-
-
 /** API url */
 import dataAPI from '../../../js/dataAPI';
+
 import SearchableObjectType from '../presentational/SeachableObjectType';
+import SearchResult from '../presentational/SearchResult'
 import LocaleContext from '../../../LocaleContext';
+
 
 
 class SearchContainer extends React.Component {
@@ -529,66 +522,21 @@ class SearchContainer extends React.Component {
             paddingTop: 30,
         }
 
-
-        const SearchContainerStyle = {
-            // position: 'fixed',
-            // width: 'auto',   
-        }
-
         const searchOptionStyle = {
             display: this.state.hasSearchResult ? 'none' : null,
         }
 
         const locale = this.context;
-        
+        const { searchResult, searchKey } = this.state;
         
         return (
-            <div id='searchContainer' style={SearchContainerStyle} className="mx-2" onTouchMove={this.handleTouchMove}>
+            <div id='searchContainer' className="mx-2" onTouchMove={this.handleTouchMove}>
                 <div id='searchBar' className='d-flex w-100 justify-content-center align-items-center'>
                     <Searchbar placeholder={this.state.searchKey}/>
                 </div>
 
                 <div id='searchResult' style={searchResultStyle} className='py-3'>
-
-                    <Alert variant={"secondary"} className='text-left py-0'>
-                        <h6 className='d-inline font-weight-bold'>SEARCH RESULT</h6> 
-                            <h6 className="d-inline pl-3">{this.state.searchResult.length}</h6>
-                                <h6 className="d-inline pl-3">{this.state.searchKey}</h6>
-                                    <h6 className="d-inline pl-2">on</h6>
-                                        <h6 className="d-inline pl-2">F4</h6>
-                    </Alert>
-
-                    <Tab.Container id="left-tabs-example" defaultActiveKey="#0">
-                        <Row className=''style={{height:'100%'}} >
-                            <Col className='border px-0 overflow-auto'>
-                                <ListGroup variant="flush">
-                                    {this.state.searchResult.map((item,index) => {
-                                        let element = 
-                                            <ListGroup.Item href={'#' + index} className='searchResultList' >
-                                                <div className="d-flex flex-column text-left">
-                                                    <div className="font-weight-bold py-1">{item.name}</div>
-                                                    <small>ACN: xxxx-xxxx-{item.ACN.slice(10,14)}</small>
-                                                    <small>location: {item.location}</small>
-                                                </div>
-                                            </ListGroup.Item>
-                                        return element
-                                    })}
-                                </ListGroup>
-                            </Col>
-                            <Col className=' border px-0' >
-                                <Tab.Content >
-                                    {this.state.searchResult.map((item,index) => {
-                                        let element = 
-                                            <Tab.Pane eventKey={'#' + index} className=''>
-                                                <img src={item.img} width='100' className='py-4' />
-                                                <VerticalTable item={item}/>
-                                            </Tab.Pane>
-                                        return element
-                                    })}
-                                </Tab.Content>
-                            </Col>
-                        </Row>
-                    </Tab.Container>
+                    <SearchResult result={searchResult} searchKey={searchKey} />
                 </div>
 
                 <div id='searchOption' style={searchOptionStyle} className='pt-2'>

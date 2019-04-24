@@ -7,6 +7,7 @@ const en =  {
     searchable_object_types: 'searchable object types',
     search: 'search',
     language: 'language',
+    search_result: 'search result'
     
 }
 
