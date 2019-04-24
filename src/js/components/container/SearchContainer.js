@@ -4,13 +4,8 @@ import Nav from 'react-bootstrap/Nav';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
-import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
-import TabContainer from 'react-bootstrap/TabContainer'
-import TabContent from 'react-bootstrap/TabContent'
-import TabPane from 'react-bootstrap/TabPane'
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
-import BootstrapTable from 'react-bootstrap-table-next';
 import Alert from 'react-bootstrap/Alert';
 import VerticalTable from '../presentational/VerticalTable';
 
@@ -34,9 +29,10 @@ import blankerWarmer from '../../../img/blanket_warmer.jpg';
 /** API url */
 import dataAPI from '../../../js/dataAPI';
 import SearchableObjectType from '../presentational/SeachableObjectType';
+import LocaleContext from '../../../LocaleContext';
 
 
-export default class SearchContainer extends React.Component {
+class SearchContainer extends React.Component {
 
     constructor(){
         super()
@@ -475,6 +471,8 @@ export default class SearchContainer extends React.Component {
 
 
     handleMouseOver(e) {
+        // document.getElementById('sectionTitle').display = null;
+        // document.getElementById(e.target.innerText).scrollIntoView({behavior: "instant", block: "start", inline: "nearest"})
         location.href = '#' + e.target.innerText;
         this.setState({
             isShowSectionTitle: true,
@@ -511,7 +509,10 @@ export default class SearchContainer extends React.Component {
         const pageX = e.changedTouches[0].pageX;
         const pageY = e.changedTouches[0].pageY;
         const element = document.elementFromPoint(pageX, pageY);
+
         if (element.classList.contains("sectionIndexItem")) {
+            // document.getElementById('sectionTitle').display = null;
+            // document.getElementById(element.innerText).scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"})
             location.href = '#' + element.innerText;
             this.setState({
                 isShowSectionTitle: true,
@@ -519,7 +520,6 @@ export default class SearchContainer extends React.Component {
             })
         }
     }
-
 
     render() {
 
@@ -539,6 +539,7 @@ export default class SearchContainer extends React.Component {
             display: this.state.hasSearchResult ? 'none' : null,
         }
 
+        const locale = this.context;
         
         
         return (
@@ -591,10 +592,9 @@ export default class SearchContainer extends React.Component {
                 </div>
 
                 <div id='searchOption' style={searchOptionStyle} className='pt-2'>
-                                    
                     <Row>
                         <Col id='frequentSearch' md={6} sm={6} xs={6} className=''>
-                            <h6 className="font-weight-bold">FREQUENT SEARCHES</h6>
+                            <h6 className="font-weight-bold">{locale.frequent_searches.toUpperCase()}</h6>
                             <ListGroup variant="flush">
                                 <ListGroup.Item onClick={this.handleSectionTitleClick}>Bladder Scanner</ListGroup.Item>
                                 <ListGroup.Item onClick={this.handleSectionTitleClick}>Alarm</ListGroup.Item>
@@ -602,7 +602,7 @@ export default class SearchContainer extends React.Component {
                     
                         </Col>
                         <Col id='searchableObjectType' md={6} sm={6} xs={6} className='px-0'>
-                            <h6 className="font-weight-bold">SEARCHABLE OBJECT TYPES</h6>
+                            <h6 className="font-weight-bold">{locale.searchable_object_types.toUpperCase()}</h6>
                             <SearchableObjectType sectionTitleList={this.state.sectionTitleList} 
                                 sectionIndexList={this.state.sectionIndexList} sectionIndex={this.state.sectionIndex} 
                                     handleMouseOver={this.handleMouseOver} handleTouchStart={this.handleTouchStart} 
@@ -615,3 +615,7 @@ export default class SearchContainer extends React.Component {
         );
     }
 }
+
+SearchContainer.contextType = LocaleContext;
+
+export default SearchContainer;

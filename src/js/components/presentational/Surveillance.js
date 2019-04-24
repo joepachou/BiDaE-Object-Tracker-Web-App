@@ -45,7 +45,7 @@ class Surveillance extends React.Component {
             lbeaconsPosition: null,
             objectInfo: {},
             hasErrorCircle: false,
-            hasInvisibleCircle: false,            
+            hasInvisibleCircle: false,       
         }
         this.map = null;
         this.markersLayer = L.layerGroup();
@@ -396,10 +396,30 @@ class Surveillance extends React.Component {
     }
 
     render(){
+        const toggleSwitchOptions = [
+            { 
+                label: "Low",
+            },
+            {
+                label: "Med",
+            },
+            {
+                label: "High"
+            },
+        ]
+
         return(
-            <div id='mapid' className='cmp-block'>
-            {/* {console.log(this.state.objectInfo)} */}
+            <div>            
+                <div id='mapid' className='cmp-block'>
+                {/* {console.log(this.state.objectInfo)} */}
+                </div>
+                {/* <div>
+                    <ToggleSwitch title="Location Accuracy" options={toggleSwitchOptions}/>
+                </div> */}
+
+
             </div>
+
         )
     }
 }

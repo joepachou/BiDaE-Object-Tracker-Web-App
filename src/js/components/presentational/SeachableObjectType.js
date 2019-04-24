@@ -30,8 +30,8 @@ const SearchableObjectType = (props) => {
 
     return (        
         <div className='d-flex'>
-            <div id='sectionTitle' className='flex-grow-1 bd-highlight border-0' data-spy="scroll" data-target="#sectionIndex" data-offset="0">
-                <ListGroup className='list-group' variant="flush" style={sectionTitleStyle}>
+            <div  className='flex-grow-1 bd-highlight border-0' data-spy="scroll" data-target="#sectionIndex" data-offset="0">
+                <ListGroup className='list-group' variant="flush" style={sectionTitleStyle} id='sectionTitle'>
                     {/* {this.state.data.map(item => {
                         let currentLetter = item.name.toUpperCase().slice(0,1);
                         let toReturn = '';
