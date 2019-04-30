@@ -1,8 +1,8 @@
-import tw from './zw-tw';
-import en from './en';
+import tw from '../locale/zw-tw';
+import en from '../locale/en';
 
 const locale = {
-    changeLang: function(lang) {
+    changeLocale: function(lang) {
         return supportedLocale[lang].textPackage;
     }
     

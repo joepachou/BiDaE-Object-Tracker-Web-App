@@ -1,28 +1,31 @@
 
-const query_getTrackingData =
-`
-SELECT  table1.object_mac_address, table1.lbeacon_uuid, table1.rssi as avg, table2.rssi as avg_stable FROM 
-	(
-	SELECT object_mac_address, lbeacon_uuid, round(avg(rssi),2) as rssi FROM tracking_table 
-	WHERE final_timestamp > NOW() - INTERVAL '5 seconds'  
-	AND object_mac_address::TEXT LIKE 'c1:%' 
-	GROUP BY object_mac_address, lbeacon_uuid
-	HAVING avg(rssi) > -55
-	) as table1 
-	LEFT JOIN
-	(
-	SELECT object_mac_address, lbeacon_uuid, round(avg(rssi),2) as rssi 
-	FROM tracking_table 
-	WHERE final_timestamp > NOW() - INTERVAL '120 seconds' 
-	AND final_timestamp < NOW() - INTERVAL '5 seconds' 
-	AND object_mac_address::TEXT LIKE 'c1:%' 
-	GROUP BY object_mac_address, lbeacon_uuid
-	HAVING avg(rssi) > -55
-	) as table2 
-	ON table1.object_mac_address = table2.object_mac_address 
-	AND table1.lbeacon_uuid = table2.lbeacon_uuid 
-	ORDER BY table1.object_mac_address DESC, table1.lbeacon_uuid ASC;
-	`;
+function query_getTrackingData (rssi = -55) {
+
+return `
+	SELECT  table1.object_mac_address, table1.lbeacon_uuid, table1.rssi as avg, table2.rssi as avg_stable FROM 
+	    (
+	    SELECT object_mac_address, lbeacon_uuid, round(avg(rssi),2) as rssi FROM tracking_table 
+		WHERE final_timestamp > NOW() - INTERVAL '10 seconds'  
+		AND object_mac_address::TEXT LIKE 'c1:%' 
+		GROUP BY object_mac_address, lbeacon_uuid
+		HAVING avg(rssi) > ${rssi}
+		) as table1 
+		LEFT JOIN
+		(
+		SELECT object_mac_address, lbeacon_uuid, round(avg(rssi),2) as rssi 
+		FROM tracking_table 
+		WHERE final_timestamp > NOW() - INTERVAL '120 seconds' 
+		AND final_timestamp < NOW() - INTERVAL '10 seconds' 
+		AND object_mac_address::TEXT LIKE 'c1:%' 
+		GROUP BY object_mac_address, lbeacon_uuid
+		HAVING avg(rssi) > ${rssi}
+		) as table2 
+		ON table1.object_mac_address = table2.object_mac_address 
+		AND table1.lbeacon_uuid = table2.lbeacon_uuid 
+		ORDER BY table1.object_mac_address DESC, table1.lbeacon_uuid ASC;
+		`
+
+}
     // `
 	// SELECT  table1.object_mac_address, table1.lbeacon_uuid, table1.rssi as avg, table2.rssi as avg_stable FROM 
 	//     (
@@ -88,7 +91,7 @@ SELECT  table1.object_mac_address, table1.lbeacon_uuid, table1.rssi as avg, tabl
 
 
 const query_getObjectTable = `
-    select id, type, name, mac_address, available_status, asset_owner_id, user_id, registered_timestamp
+    select *
     from object_table ORDER BY name ASC`;
 
 const query_getLbeaconTable = 

@@ -1,7 +1,7 @@
 /** React Plugin */
 import React from 'react';
 import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom";
-import { supportedLocale } from '../../../locale/locale';
+import { supportedLocale } from '../../../js/locale';
 import styled from 'styled-components';
 
 

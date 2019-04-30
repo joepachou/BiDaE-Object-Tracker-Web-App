@@ -450,7 +450,7 @@ class SearchContainer extends React.Component {
             let currentLetter = item.toUpperCase().charAt(0);
             if(!(groupLetter === currentLetter)) {
                 groupLetter = currentLetter;
-                let titleElement = <a id={groupLetter} className='titleElementStyle'><ListGroup.Item style={titleElementStyle}>{groupLetter}</ListGroup.Item></a>;
+                let titleElement = <a id={groupLetter} key={groupLetter} className='titleElementStyle'><ListGroup.Item style={titleElementStyle}>{groupLetter}</ListGroup.Item></a>;
                 sectionTitleList.push(titleElement)
             }
             let itemElement = <a onClick={this.handleSectionTitleClick} key={index}><ListGroup.Item action style={itemElementStyle} >{item}</ListGroup.Item></a>;

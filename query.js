@@ -13,9 +13,11 @@ const queryType = require ('./queryType')
 
 
 const getTrackingData = (request, response) => {
-    pool.query(queryType.query_getTrackingData, (error, results) => {        
+    const modifiedRssi = request.body.rssi || undefined;
+    console.log(modifiedRssi)
+    pool.query(queryType.query_getTrackingData(modifiedRssi), (error, results) => {        
         if (error) {
-            console.log("Get data fails : " + error)
+            console.log("Get trackingData fails : " + error)
         }
         console.log('Get tracking data!')
 

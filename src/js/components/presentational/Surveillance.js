@@ -179,8 +179,13 @@ class Surveillance extends React.Component {
     /**
      * Retrieve tracking data from database, then reconstruct the data to desired form.
      */
+
     handleTrackingData(){
-        axios.get(dataAPI.trackingData).then(res => {
+
+        const { rssi } = this.props;
+        axios.post(dataAPI.trackingData, {
+            rssi: rssi
+        }).then(res => {
             // console.log(res.data.rows)
             
             let objectRows = res.data.rows;
@@ -396,18 +401,6 @@ class Surveillance extends React.Component {
     }
 
     render(){
-        const toggleSwitchOptions = [
-            { 
-                label: "Low",
-            },
-            {
-                label: "Med",
-            },
-            {
-                label: "High"
-            },
-        ]
-
         return(
             <div>            
                 <div id='mapid' className='cmp-block'>

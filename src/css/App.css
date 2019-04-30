@@ -8,6 +8,7 @@ html,body {
     width: 100%;
     overscroll-behavior: none;
     background: rgba(240, 240, 240, 0.187);
+    height: 100%;
 }
 
 .cmp-block{
@@ -62,8 +63,11 @@ input {
     color: black;
 }
 
+#searchOption {
+    height: 100%;
+}
 /* ToggleSwitch customized CSS */
-/* 
+ 
 .switch-field {
     font-family: "Lucida Grande", Tahoma, Verdana, sans-serif;
     padding: 40px;
@@ -115,4 +119,4 @@ input {
   
   .switch-field label:last-of-type {
     border-radius: 0 4px 4px 0;
-  } */
+  } 
