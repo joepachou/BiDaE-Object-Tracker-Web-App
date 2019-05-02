@@ -7,8 +7,12 @@ const en =  {
     searchable_object_types: 'searchable object types',
     search: 'search',
     language: 'language',
-    search_result: 'search result'
-    
+    search_result: 'search result',
+    /* for location accuracy */
+    location_accuracy: 'location accuracy',
+    low: 'low',
+    med: 'med',
+    high: 'high'    
 }
 
 export default en;

@@ -6,7 +6,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import VerticalTable from '../presentational/VerticalTable';
-import LocaleContext from '../../../LocaleContext';
+import LocaleContext from '../../context/LocaleContext';
 
 
 

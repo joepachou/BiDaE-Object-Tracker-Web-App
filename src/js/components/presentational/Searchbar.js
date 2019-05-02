@@ -1,5 +1,5 @@
 import React from 'react';
-import LocaleContext from '../../../LocaleContext';
+import LocaleContext from '../../context/LocaleContext';
 
 class Searchbar extends React.Component {
 

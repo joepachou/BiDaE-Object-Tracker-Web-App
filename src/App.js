@@ -6,7 +6,7 @@ import NavbarContainer from './js/components/presentational/NavbarContainer'
 import { matchRoutes,renderRoutes } from 'react-router-config';
 import routes from './js/routes';
 import locale from './js/locale';
-import LocaleContext from './LocaleContext';
+import LocaleContext from './js/context/LocaleContext';
 
 class App extends React.Component {
 

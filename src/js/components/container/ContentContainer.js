@@ -6,8 +6,6 @@ import ObjectManagementContainer from './ObjectManagementContainer';
 import SearchContainer from './SearchContainer';
 
 /** Import Presentational Component */
-import Surveillance from '../presentational/Surveillance';
-import AxiosExample from '../../axiosExample';
 import dataAPI from '../../../js/dataAPI'
 import axios from 'axios';
 import ReactTable from 'react-table';
@@ -17,9 +15,6 @@ import Navs from '../presentational/Navs'
 
 
 import { Row, Col, Hidden, Visible } from 'react-grid-system';
-import ToggleButton from 'react-bootstrap/ToggleButton';
-import ToggleSwitchGroup from './ToggleSwitchGroup';
-import ToggleSwitch from './ToggleSwitch';
 import SurveillanceContainer from './SurveillanceContainer';
 
 export default class ContentContainer extends React.Component{

@@ -21,7 +21,7 @@ import dataAPI from '../../../js/dataAPI';
 
 import SearchableObjectType from '../presentational/SeachableObjectType';
 import SearchResult from '../presentational/SearchResult'
-import LocaleContext from '../../../LocaleContext';
+import LocaleContext from '../../context/LocaleContext';
 
 
 

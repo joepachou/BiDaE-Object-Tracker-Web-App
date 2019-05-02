@@ -1,39 +1,28 @@
 import React from 'react';
 
-export default class ToggleSwitch extends React.Component {
-	constructor(props) {
-		super(props);
+import config from '../../config';
+import LocaleContext from '../../context/LocaleContext';
+
+class ToggleSwitch extends React.Component {
+	constructor(props, context) {
+		super(props, context);
 		this.state = {
-			toggle: 'Med'
-		};
+			toggle: config.locationAccuracySetting.defaultVal,
+	};
 		
-	  this.toggleState = this.toggleState.bind(this);
+	this.toggleState = this.toggleState.bind(this);
 
 	}
 
 	toggleState(e) {
 		const value = e.target.value;
-		let modifiedRssi = '';
-		const { changeRssi, leftLabel, middleLabel, rightLabel } = this.props 
+		const name = e.target.name;
+		const { adjustRssi } = this.props 
 
-		switch(value) {
-			case leftLabel:
-				modifiedRssi = -60;
-				break;
-			case middleLabel:
-				modifiedRssi = -55;
-				break;
-			case rightLabel:
-				modifiedRssi = -35;
-				break;
-			default:
-				modifiedRssi = -50;
-		}
-
-		changeRssi(modifiedRssi);
+		adjustRssi(value);
 
 		this.setState({
-			toggle: value
+			toggle: value,
 		});
 	}
 
@@ -42,34 +31,33 @@ export default class ToggleSwitch extends React.Component {
 	render() {
 		return (
 			<form className="switch-field">
-				<div className="switch-title">{this.props.title}</div>
 				<input
 					type="radio"
 					id="switch_left"
-					name="switchToggle"
-					value={this.props.leftLabel}
+					name={this.props.leftLabel}
+					value={config.locationAccuracySetting.lowVal}
 					onChange={this.toggleState}
-					checked={this.state.toggle == this.props.leftLabel}
+					checked={this.state.toggle == config.locationAccuracySetting.lowVal}
 				/>
 				<label htmlFor="switch_left">{this.props.leftLabel}</label>
 
 				<input
 					type="radio"
 					id="switch_middle"
-					name="switchToggle"
-					value={this.props.middleLabel}
+					name={this.props.defaultLabel}
+					value={config.locationAccuracySetting.defaultVal}
 					onChange={this.toggleState}
-					checked={this.state.toggle == this.props.middleLabel}
+					checked={this.state.toggle == config.locationAccuracySetting.defaultVal}
 				/>
-				<label htmlFor="switch_middle">{this.props.middleLabel}</label>
+				<label htmlFor="switch_middle">{this.props.defaultLabel}</label>
 
 				<input
 					type="radio"
 					id="switch_right"
-					name="switchToggle"
-					value={this.props.rightLabel}
+					name={this.props.rightLabel}
+					value={config.locationAccuracySetting.highVal}
 					onChange={this.toggleState}
-					checked={this.state.toggle == this.props.rightLabel}
+					checked={this.state.toggle == config.locationAccuracySetting.highVal}
 				/>
 				<label htmlFor="switch_right">{this.props.rightLabel}</label>
 			</form>
@@ -77,4 +65,6 @@ export default class ToggleSwitch extends React.Component {
 	}
 }
 
+ToggleSwitch.contextType = LocaleContext;
 
+export default ToggleSwitch;

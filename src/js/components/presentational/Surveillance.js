@@ -181,7 +181,6 @@ class Surveillance extends React.Component {
      */
 
     handleTrackingData(){
-
         const { rssi } = this.props;
         axios.post(dataAPI.trackingData, {
             rssi: rssi
@@ -402,7 +401,7 @@ class Surveillance extends React.Component {
 
     render(){
         return(
-            <div>            
+            <div>      
                 <div id='mapid' className='cmp-block'>
                 {/* {console.log(this.state.objectInfo)} */}
                 </div>

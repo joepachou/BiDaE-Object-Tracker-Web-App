@@ -28,7 +28,6 @@ app.get(/^\/page\/(.*)/, (req, res) => {
     res.sendFile(path.join(__dirname, 'dist','index.html'));
 })
 
-app.get('/data/trackingData', db.getTrackingData);
 
 app.get('/data/objectTable', db.getObjectTable);
 

@@ -1,5 +1,5 @@
-import tw from '../locale/zw-tw';
-import en from '../locale/en';
+import tw from '../locale/zw-TW';
+import en from '../locale/en-US';
 
 const locale = {
     changeLocale: function(lang) {
