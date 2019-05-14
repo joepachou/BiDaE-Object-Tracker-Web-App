@@ -1,16 +1,19 @@
-/** General Custom CSS */
+/** General customized css */
 import '../css/App.css'
 
-/** ObjectListMenu Component Custom CSS */
+/** ObjectListMenu Component customized css */
 import '../css/ObjectListMenu.css'
 
-/** Surveillance Component Custom CSS */
+/** Surveillance Component customized css */
 import '../css/Surveillance.css'
 
-/** RWD CSS */
+/** RWD customized css */
 import '../css/RWD.css'
 
-/** SearchContainer Custom CSS */
+/** SearchContainer customized css */
 import '../css/SearchContainer.css'
+
+/** ToggleSwitch customized css */
+import '../css/ToggleSwitch.css'
 
 

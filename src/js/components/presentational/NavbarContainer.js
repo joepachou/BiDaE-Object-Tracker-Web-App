@@ -34,6 +34,7 @@ class NavbarContainer extends React.Component {
             color: rgba(0,0,0,.5);
         `
         const locale = this.context;
+
         return (
             <Navsbar className="navbar sticky-top navbar-light">
                 <Navbar.Brand className='px-0 mx-0'>

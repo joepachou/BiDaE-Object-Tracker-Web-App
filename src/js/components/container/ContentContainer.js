@@ -40,9 +40,9 @@ export default class ContentContainer extends React.Component{
             column.push(field);
         })
 
-        data.rows.map(item => {
-            item.avg = item.avg.slice(0,6)
-        })
+        // data.rows.map(item => {
+        //     item.avg = item.avg.slice(0,6)
+        // })
 
         this.setState({
             trackingData: data.rows,

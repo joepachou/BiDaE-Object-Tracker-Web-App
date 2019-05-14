@@ -4,7 +4,6 @@ import React from 'react';
 /** Import survelliance general map  */
 import BOTLogo from '../../../img/BOTLogo.png'
 import IIS_Newbuilding_4F from '../../../img/IIS_Newbuilding_4F.png'
-import IIS4F from '../../../img/IIS4F.png'
 
 /** Import Axios */
 import axios from 'axios';
@@ -36,6 +35,8 @@ import {
 
 import { connect } from 'react-redux';
 
+import config from '../../config';
+
 class Surveillance extends React.Component {
 
     constructor(props){
@@ -60,13 +61,13 @@ class Surveillance extends React.Component {
         this.calculateScale = this.calculateScale.bind(this);
 
         this.StartSetInterval = true; 
-        this.isShownTrackingData = !true;
+        this.isShownTrackingData = true;
     }
 
     componentDidMount(){
         this.initMap();  
         this.handleTrackingData(); 
-        this.interval = this.StartSetInterval == true ? setInterval(this.handleTrackingData, 3000) : null;
+        this.interval = this.StartSetInterval == true ? setInterval(this.handleTrackingData, config.surveillanceMap.intevalTime) : null;
     }
 
     componentDidUpdate(){
@@ -81,7 +82,7 @@ class Surveillance extends React.Component {
 
     initMap(){
         let map = L.map('mapid', mapOptions);
-        let bounds = [[0,0], [21130,35710]];
+        let bounds = config.surveillanceMap.mapBound;
         let image = L.imageOverlay(IIS_Newbuilding_4F, bounds).addTo(map);
         map.fitBounds(bounds);
         this.map = map;
@@ -223,6 +224,7 @@ class Surveillance extends React.Component {
                     objectInfoHash[items.object_mac_address].coverLbeaconInfo = {}
                     objectInfoHash[items.object_mac_address].name = items.name
                     objectInfoHash[items.object_mac_address].mac_address = items.object_mac_address
+                    objectInfoHash[items.object_mac_address].push_button = items.push_button;
                     objectInfoHash[items.object_mac_address].coverLbeaconInfo[lbeaconCoordinate] = object
                     objectInfoHash[items.object_mac_address].status = items.avg_stable !== null ? 'stationary' : 'moving';
 
@@ -257,7 +259,7 @@ class Surveillance extends React.Component {
                 objectInfoHash[items.object_mac_address].lbeaconDetectedNum = Object.keys(objectInfoHash[items.object_mac_address].coverLbeaconInfo).length;
                 // markerClusters.addLayer(L.marker(lbeaconCoordinate));
             })
-            if (this.state.isShownTrackingData === true ) (console.log(objectInfoHash)); 
+            if (this.isShownTrackingData === true ) (console.log(objectInfoHash)); 
             // this.map.addLayer(markerClusters);
             // markerClusters.on('clusterclick', this.handlemenu)
 
@@ -302,14 +304,21 @@ class Surveillance extends React.Component {
             radius: this.scalableErrorCircleRadius,
         }
 
+        const iconSize = [this.scalableIconSize, this.scalableIconSize];
+
         const stationaryIconOptions = {
-            iconSize:[this.scalableIconSize, this.scalableIconSize],
+            iconSize: iconSize,
             iconUrl: iconOptions.stationaryIconUrl,
         }
 
         const movingIconOptions = {
-            iconSize:[this.scalableIconSize, this.scalableIconSize],
+            iconSize: iconSize,
             iconUrl: iconOptions.movinfIconUrl,
+        }
+
+        const sosIconOptions = {
+            iconSize: iconSize,
+            iconUrl: iconOptions.sosIconUrl,
         }
 
         for (var key in objects){
@@ -332,7 +341,14 @@ class Surveillance extends React.Component {
              * Create the marker, if the 'status' of the object is 'stationary', 
              * then the color will be black, or grey.
              */
-            let iconOption = objects[key].status === 'stationary' ? stationaryIconOptions : movingIconOptions;
+            let iconOption = {}
+            if (objects[key].push_button === 1) {
+                iconOption = sosIconOptions;
+            } else if (objects[key].status === 'stationary') {
+                iconOption = stationaryIconOptions;
+            } else {
+                iconOption = movingIconOptions;
+            }
             let marker =  L.marker(position, {icon: L.icon(iconOption)}).bindPopup(popupContent, popupCustomStyle).addTo(this.markersLayer)
             
             /** Set the marker's event. */

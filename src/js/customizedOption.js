@@ -4,6 +4,7 @@ import black_drip from '../img/black_drip.svg'
 import white_pin from '../img/white_pin.svg'
 import grey_pin from '../img/grey_pin.svg';
 import darkGrey_pin from '../img/darkGrey_pin_v2.svg';
+import sos from '../img/sos.svg'
 
 
 /** Custom Option of surveillance component  */
@@ -22,6 +23,7 @@ const iconOptions = {
     iconSize: 50,
     stationaryIconUrl: black_pin,
     movinfIconUrl: darkGrey_pin,
+    sosIconUrl: sos,
 }
 
 /**

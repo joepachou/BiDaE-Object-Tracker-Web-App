@@ -7,29 +7,30 @@ import { matchRoutes,renderRoutes } from 'react-router-config';
 import routes from './js/routes';
 import locale from './js/locale';
 import LocaleContext from './js/context/LocaleContext';
+import config from './js/config';
 
 class App extends React.Component {
 
     constructor() {
         super()
         this.state = { 
-            locale: locale.changeLocale('tw'),
+            locale: locale.changeLocale(config.locale.defaultLocale),
         }
         this.handleChangeLocale = this.handleChangeLocale.bind(this);
     }
 
-    handleChangeLocale(lang){
+    handleChangeLocale(changedLocale){
         this.setState({
-            locale: locale.changeLocale(lang)
+            locale: locale.changeLocale(changedLocale)
         })
     }
 
     render() { 
-        const { locale, lang } = this.state;
+        const { locale } = this.state;
         return (
             <LocaleContext.Provider value={locale}>
                 <Router>         
-                    <NavbarContainer changeLocale={this.handleChangeLocale} lang={lang}/>
+                    <NavbarContainer changeLocale={this.handleChangeLocale} locale={locale}/>
                     <div className='my-6' id='contentContainer'>
                         <Switch>
                             {renderRoutes(routes)}

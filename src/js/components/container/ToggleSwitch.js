@@ -7,7 +7,7 @@ class ToggleSwitch extends React.Component {
 	constructor(props, context) {
 		super(props, context);
 		this.state = {
-			toggle: config.locationAccuracySetting.defaultVal,
+			toggle: config.locationAccuracy.defaultVal,
 	};
 		
 	this.toggleState = this.toggleState.bind(this);
@@ -16,7 +16,6 @@ class ToggleSwitch extends React.Component {
 
 	toggleState(e) {
 		const value = e.target.value;
-		const name = e.target.name;
 		const { adjustRssi } = this.props 
 
 		adjustRssi(value);
@@ -35,9 +34,9 @@ class ToggleSwitch extends React.Component {
 					type="radio"
 					id="switch_left"
 					name={this.props.leftLabel}
-					value={config.locationAccuracySetting.lowVal}
+					value={config.locationAccuracy.lowVal}
 					onChange={this.toggleState}
-					checked={this.state.toggle == config.locationAccuracySetting.lowVal}
+					checked={this.state.toggle == config.locationAccuracy.lowVal}
 				/>
 				<label htmlFor="switch_left">{this.props.leftLabel}</label>
 
@@ -45,9 +44,9 @@ class ToggleSwitch extends React.Component {
 					type="radio"
 					id="switch_middle"
 					name={this.props.defaultLabel}
-					value={config.locationAccuracySetting.defaultVal}
+					value={config.locationAccuracy.defaultVal}
 					onChange={this.toggleState}
-					checked={this.state.toggle == config.locationAccuracySetting.defaultVal}
+					checked={this.state.toggle == config.locationAccuracy.defaultVal}
 				/>
 				<label htmlFor="switch_middle">{this.props.defaultLabel}</label>
 
@@ -55,9 +54,9 @@ class ToggleSwitch extends React.Component {
 					type="radio"
 					id="switch_right"
 					name={this.props.rightLabel}
-					value={config.locationAccuracySetting.highVal}
+					value={config.locationAccuracy.highVal}
 					onChange={this.toggleState}
-					checked={this.state.toggle == config.locationAccuracySetting.highVal}
+					checked={this.state.toggle == config.locationAccuracy.highVal}
 				/>
 				<label htmlFor="switch_right">{this.props.rightLabel}</label>
 			</form>
