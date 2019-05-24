@@ -216,7 +216,7 @@ class Surveillance extends React.Component {
                     objectInfoHash[items.object_mac_address].coverLbeaconInfo = {}
                     objectInfoHash[items.object_mac_address].name = items.name
                     objectInfoHash[items.object_mac_address].mac_address = items.object_mac_address
-                    objectInfoHash[items.object_mac_address].push_button = items.push_button;
+                    objectInfoHash[items.object_mac_address].panic_button = items.panic_button;
                     objectInfoHash[items.object_mac_address].coverLbeaconInfo[lbeaconCoordinate] = object
                     objectInfoHash[items.object_mac_address].status = items.avg_stable !== null ? 'stationary' : 'moving';
 
@@ -334,7 +334,7 @@ class Surveillance extends React.Component {
              * then the color will be black, or grey.
              */
             let iconOption = {}
-            if (objects[key].push_button === 1) {
+            if (objects[key].panic_button === 1) {
                 iconOption = sosIconOptions;
             } else if (objects[key].status === 'stationary') {
                 iconOption = stationaryIconOptions;
