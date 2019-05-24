@@ -35,7 +35,11 @@ app.get('/data/lbeaconTable', db.getLbeaconTable);
 
 app.get('/data/gatewayTable', db.getGatewayTable);
 
+app.get('/data/geofenceData', db.getGeofenceData);
+
 app.post('/data/trackingData', db.getTrackingData);
+
+app.post('/data/searchResult', db.getSearchResult);
 
 app.listen(PORT, () => {
     console.log(`App running on PORT ${PORT}.`)

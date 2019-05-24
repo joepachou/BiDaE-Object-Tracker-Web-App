@@ -5,9 +5,9 @@
     html, body {
         font-size: 10px;
     }
-    .navbar {
+    /* .navbar {
         height:50px;
-    }
+    } */
     .navbar img {
         width: 30px;
     }
@@ -21,9 +21,9 @@
     html, body {
         font-size: 18px;
     }
-    .navbar {
+    /* .navbar {
         height:60px;
-    }
+    } */
     .navbar img {
         width: 60px;
     }
@@ -31,14 +31,14 @@
 
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) and (max-width: 1199.98px) {
-    .navbar {
-        height: 80px;
-    }
+    /* .navbar {
+        height: 100px;
+    } */
   }
 
 /* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
-    .navbar {
+    /* .navbar {
         height: 80px;
-    }
+    } */
   }

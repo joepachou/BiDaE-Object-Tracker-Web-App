@@ -157,12 +157,28 @@ const query_getGatewayTable =
     `
     select id, last_report_timestamp, ip_address from gateway_table ORDER BY last_report_timestamp DESC`;
     // `
-    // select * from gateway_table ORDER BY last_report_timestamp DESC`;
+	// select * from gateway_table ORDER BY last_report_timestamp DESC`;
+
+const query_getGeofenceData = 
+	`
+	SELECT * FROM geo_fence_alert
+	`;
+	
+
+function query_getSearchResult (searchKey) {
+	return `	
+		select * from object_table where name='${searchKey}'
+	`;
+	
+}
+
 
 module.exports = {
     query_getTrackingData,
     query_getObjectTable,
     query_getLbeaconTable,
-    query_getGatewayTable,
+	query_getGatewayTable,
+	query_getSearchResult,
+	query_getGeofenceData,
 }
 

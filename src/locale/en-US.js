@@ -4,7 +4,7 @@ const en =  {
     health_report: 'Health Report',
     log_out: 'LogOut',
     frequent_searches: 'frequent searches',
-    searchable_object_types: 'searchable object types',
+    object_types: 'object types',
     search: 'search',
     language: 'language',
     search_result: 'search result',
