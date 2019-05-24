@@ -6,7 +6,8 @@ import styled from 'styled-components';
 
 
 /** Import Image */
-import BOTLogo from '../../../img/BOTLogo.png';
+import BOTLogo_Green from '../../../img/BOTLogo.png';
+import BOT_LOGO_RED from '../../../img/BOT_LOGO_RED_MOD.png'; 
 
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav';
@@ -26,27 +27,24 @@ class NavbarContainer extends React.Component {
     }
 
     render() {
-        const Navsbar = styled(Navbar)`
-            background: rgba(25, 85, 165, 0.9);//'#14477A'
-            border-bottom: 3px solid rgb(16, 58, 113);
-        `
-        const NavBrandLink = styled(Link)`
-            color: rgba(0,0,0,.5);
-        `
+        const NavbarStyle = {
+            height: "100px",
+            boxShadow: "0 1px 6px 0 rgba(32,33,36,0.28)",
+        }
         const locale = this.context;
 
         return (
-            <Navsbar className="navbar sticky-top navbar-light">
+            <Navbar className="navbar sticky-top navbar-light" style={NavbarStyle}>
                 <Navbar.Brand className='px-0 mx-0'>
-                    <NavBrandLink to="/" className="nav-link nav-brand d-flex align-items-center px-0" >
+                    <Link style={{color: "black"}} to="/" className="nav-link nav-brand d-flex align-items-center px-0" >
                         <img
                             alt=""
-                            src={BOTLogo}
-                            width="70px"
+                            src={BOT_LOGO_RED}
+                            width="50px"
                             className="d-inline-block align-top px-1"
                         />
                         BOT
-                    </NavBrandLink>
+                    </Link>
                 </Navbar.Brand>
                 {/* <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav"> */}
@@ -54,6 +52,7 @@ class NavbarContainer extends React.Component {
                     <Nav className="mr-auto" >
                         <Nav.Item><Link to="/page/surveillance" className="nav-link nav-route" >{locale.surveillance}</Link></Nav.Item>
                         <Nav.Item><Link to="/page/healthReport" className="nav-link nav-route" >{locale.health_report}</Link></Nav.Item>
+                        <Nav.Item><Link to="/page/geofence" className="nav-link nav-route" >Geofence</Link></Nav.Item>
                     </Nav>
                     <Nav>
                         <NavDropdown title={locale.language} id="collasible-nav-dropdown" alignRight onSelect={this.handleLangSelect}>
@@ -61,10 +60,10 @@ class NavbarContainer extends React.Component {
                                 return <NavDropdown.Item key={index} className="lang-select" eventKey={locale.abbr}>{locale.name}</NavDropdown.Item>
                             })}
                         </NavDropdown>
-                        <Nav.Link ><i className="fas fa-user-alt">{locale.log_out}</i></Nav.Link>
+                        <Nav.Link ><i className="fas fa-user-alt"></i></Nav.Link>
                     </Nav>
                 {/* </Navbar.Collapse> */}
-            </Navsbar>
+            </Navbar>
         );
     }
 }

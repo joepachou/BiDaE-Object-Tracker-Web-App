@@ -2,9 +2,7 @@
 import React from 'react';
 
 /** Import survelliance general map  */
-import BOTLogo from '../../../img/BOTLogo.png'
-import IIS_Newbuilding_4F from '../../../img/IIS_Newbuilding_4F.png'
-
+import BOTLogo from '../../../img/BOTLogo.png';
 /** Import Axios */
 import axios from 'axios';
 
@@ -17,12 +15,6 @@ import 'leaflet.markercluster';
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import '../../../css/CustomMarkerCluster.css'
-
-import {
-    mapOptions, 
-    popupContent, 
-    iconOptions
-} from '../../customizedOption';
 
 /** API url */
 import dataAPI from '../../../js/dataAPI';
@@ -51,7 +43,7 @@ class Surveillance extends React.Component {
         this.map = null;
         this.markersLayer = L.layerGroup();
         this.errorCircle = L.layerGroup();
-        this.popupContent = popupContent;
+        this.popupContent = this.popupContent.bind(this);
 
         this.handlemenu = this.handlemenu.bind(this);
         this.handleTrackingData = this.handleTrackingData.bind(this);
@@ -60,8 +52,8 @@ class Surveillance extends React.Component {
         this.resizeMarkers = this.resizeMarkers.bind(this);
         this.calculateScale = this.calculateScale.bind(this);
 
-        this.StartSetInterval = true; 
-        this.isShownTrackingData = true;
+        this.StartSetInterval = config.surveillanceMap.startInteval; 
+        this.isShownTrackingData = !true;
     }
 
     componentDidMount(){
@@ -81,9 +73,9 @@ class Surveillance extends React.Component {
     
 
     initMap(){
-        let map = L.map('mapid', mapOptions);
+        let map = L.map('mapid', config.surveillanceMap.mapOptions);
         let bounds = config.surveillanceMap.mapBound;
-        let image = L.imageOverlay(IIS_Newbuilding_4F, bounds).addTo(map);
+        let image = L.imageOverlay(config.surveillanceMap.map, bounds).addTo(map);
         map.fitBounds(bounds);
         this.map = map;
 
@@ -119,7 +111,7 @@ class Surveillance extends React.Component {
         this.resizeFactor = Math.pow(2, (this.zoomDiff));
         this.resizeConst = this.zoomDiff * 30;
         this.scalableErrorCircleRadius = 200 * this.resizeFactor;
-        this.scalableIconSize = iconOptions.iconSize + this.resizeConst
+        this.scalableIconSize = config.surveillanceMap.iconOptions.iconSize + this.resizeConst
     }
 
     /**
@@ -308,17 +300,17 @@ class Surveillance extends React.Component {
 
         const stationaryIconOptions = {
             iconSize: iconSize,
-            iconUrl: iconOptions.stationaryIconUrl,
+            iconUrl: config.surveillanceMap.iconOptions.stationaryIconUrl,
         }
 
         const movingIconOptions = {
             iconSize: iconSize,
-            iconUrl: iconOptions.movinfIconUrl,
+            iconUrl: config.surveillanceMap.iconOptions.movinfIconUrl,
         }
 
         const sosIconOptions = {
             iconSize: iconSize,
-            iconUrl: iconOptions.sosIconUrl,
+            iconUrl: config.surveillanceMap.iconOptions.sosIconUrl,
         }
 
         for (var key in objects){
@@ -413,6 +405,36 @@ class Surveillance extends React.Component {
 		const yyy = origin_y + parseInt(yy, 16) * multiplier;
         return [yyy, xxx];
         
+    }
+
+    /**
+     * The html content of popup of markers.
+     * @param {*} objectName The user friendly name of the object.
+     * @param {*} objectImg  The image of the object.
+     * @param {*} imgWidth The width of the image.
+     */
+    popupContent (objectName, objectImg, imgWidth){
+        const content = 
+            `
+            <a href='#'>
+                <div class='contentBox'>
+                    <div class='textBox'>
+                        <div>
+                            <h2 className="mb-1">${objectName}</h2>
+                            <small>詳細資料</small>
+                        </div>
+                        <small></small>
+                    </div> 
+                    <div class='imgBox'>
+                        <span className="pull-left ">
+                            <img src=${objectImg} width=${imgWidth} className="img-reponsive img-rounded" />
+                        </span>
+                    </div>
+                </div>
+            </a>
+            `
+        
+        return content
     }
 
     render(){

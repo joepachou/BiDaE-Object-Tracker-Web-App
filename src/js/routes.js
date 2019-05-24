@@ -1,5 +1,6 @@
 import ContentContainer from "./components/container/ContentContainer";
 import HealthReport from "./components/container/HealthReport";
+import Geofence from "./components/container/Geofence";
 
 const routes = [
     {
@@ -15,6 +16,11 @@ const routes = [
     {
         path: '/page/healthReport',
         component: HealthReport,
+        exact: true,
+    },
+    {
+        path: '/page/geofence',
+        component: Geofence,
         exact: true,
     },
 ];

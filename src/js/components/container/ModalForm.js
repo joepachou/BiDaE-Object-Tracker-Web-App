@@ -7,37 +7,55 @@ import styled from 'styled-components';
 
 class ModalForm extends React.Component {
     
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
     
         this.handleShow = this.handleShow.bind(this);
         this.handleClose = this.handleClose.bind(this);
     
         this.state = {
-            show: false,
+            show: this.props.show,
+            editObjectFormIsShow: false,
+            
         };
     }
   
     handleClose() {
-      this.setState({ show: false });
+        this.setState({ 
+            show: false 
+        });
     }
   
     handleShow() {
-      this.setState({ show: true });
+        this.setState({ 
+            show: true 
+        });
     }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps != this.props) {
+            this.setState({
+                show: this.props.show,
+                editObjectFormIsShow: true,
+            })
+        }
+    }
+
   
     render() {
 
         const { title } = this.props;
 
-        const ModalHeader = styled(Modal.Header)`
-            padding: 0;
-        `
+        const style = {
+            button: {
+                
+            }
+        }
 
         return (
             <>
-                <ListGroup.Item variant="light" onClick={this.handleShow}>{title}</ListGroup.Item>
-                    
+                {/* <Button onClick={this.handleShow} variant="primary" style={style.button}>{title}</Button> */}
+
                 <Modal show={this.state.show} onHide={this.handleClose} >
                     <Modal.Header>{title}</Modal.Header>
                     <Modal.Body>

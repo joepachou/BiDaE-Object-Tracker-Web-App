@@ -384,18 +384,18 @@ class SearchContainer extends React.Component {
             searchResult: [],
         }
     
-        this.handleSectionTitleClick = this.handleSectionTitleClick.bind(this);
         this.handleTouchStart = this.handleTouchStart.bind(this);
         this.handleTouchMove = this.handleTouchMove.bind(this);
         this.handleMouseOver = this.handleMouseOver.bind(this);
-        this.getSearchableObjectData = this.getSearchableObjectData.bind(this);
         
+        this.getObjectType = this.getObjectType.bind(this);
+        this.getResultData = this.getResultData.bind(this);
     }
 
     
 
     componentDidMount() {
-        this.getSearchableObjectData();
+        this.getObjectType();
         const targetElement = document.body;
         document.body.style.position = "fixed";
 
@@ -406,25 +406,15 @@ class SearchContainer extends React.Component {
         return this.state !== nextState;
     }
 
-    componentWillUnmount() {
-        clearAllBodyScrollLocks();
-    }
+    // componentWillUnmount() {
+    //     clearAllBodyScrollLocks();
+    // }
 
-    getSearchableObjectData() {
-        // axios.get(dataAPI.objectTable).then(res => {
-        //     console.log(res.data.rows)
 
-        //     let sectionTitleList = [];
-        //     res.data.rows.map( item => {
-        //         console.log(item.name)
-        //         return <ListGroup.Item>{item.name}</ListGroup.Item>
-        //     })
-        //     this.setState({
-        //         sectionTitleList:res.data.rows
-        //     })
-        // }).catch(function (error) {
-        //     console.log(error);
-        // })
+    /**
+     * Get the searchable object type, maybe from the object_type_table, but now is from the object_table
+     */
+    getObjectType() {
         const titleElementStyle = {
             background: 'rgba(227, 222, 222, 0.619)',
             fontWeight: 'bold',
@@ -437,30 +427,59 @@ class SearchContainer extends React.Component {
             padding: 5
         }
 
-        let objectTypeSet = new Set();
-        this.state.data.map(item => {
-            objectTypeSet.add(item.type);
-        })
-        
-        let sectionTitleList = [];
-        let groupLetter = '';
+        axios.get(dataAPI.objectTable).then(res => {
+            const objectData = res.data.rows;
 
-        Array.from(objectTypeSet).map( (item,index) => {
-            // let currentLetter = item.toUpperCase().slice(0,1);
-            let currentLetter = item.toUpperCase().charAt(0);
-            if(!(groupLetter === currentLetter)) {
-                groupLetter = currentLetter;
-                let titleElement = <a id={groupLetter} key={groupLetter} className='titleElementStyle'><ListGroup.Item style={titleElementStyle}>{groupLetter}</ListGroup.Item></a>;
-                sectionTitleList.push(titleElement)
-            }
-            let itemElement = <a onClick={this.handleSectionTitleClick} key={index}><ListGroup.Item action style={itemElementStyle} >{item}</ListGroup.Item></a>;
-            sectionTitleList.push(itemElement);
-        })
-        this.setState({
-            sectionTitleList: sectionTitleList,
+            let objectTypeSet = new Set();
+            objectData.map( item => {
+                objectTypeSet.add(item.name);
+            })
+        
+            let sectionTitleList = [];
+            let groupLetter = '';
+            let elementIndex = 0;
+            Array.from(objectTypeSet).map( item => {
+                // let currentLetter = item.toUpperCase().slice(0,1);
+                let currentLetter = item.toUpperCase().charAt(0);
+                if(!(groupLetter === currentLetter)) {
+                    groupLetter = currentLetter;
+                    let titleElement = <a id={groupLetter} key={elementIndex} className='titleElementStyle'><ListGroup.Item style={titleElementStyle}>{groupLetter}</ListGroup.Item></a>;
+                    sectionTitleList.push(titleElement)
+                    elementIndex++;
+                }
+                let itemElement = <a onClick={this.getResultData} key={elementIndex}><ListGroup.Item action style={itemElementStyle} >{item}</ListGroup.Item></a>;
+                sectionTitleList.push(itemElement);
+                elementIndex++;
+            })
+            this.setState({
+                sectionTitleList: sectionTitleList,
+            })
+        }).catch(function (error) {
+            console.log(error);
         })
     }
 
+    getResultData(e) {
+        const searchKey = e.target.innerText;
+
+        axios.post(dataAPI.searchResult, {
+            searchkey: searchKey,
+        }).then(res => {
+            let result = [];
+            res.data.rows.map(item => {
+                result.push(item)
+            })
+
+            this.setState({
+                hasSearchResult: true,
+                searchKey: searchKey,
+                searchResult: result,
+            })
+        }).catch( error => {
+            console.log(error)
+        })
+
+    }
 
 
     handleMouseOver(e) {
@@ -470,20 +489,6 @@ class SearchContainer extends React.Component {
         this.setState({
             isShowSectionTitle: true,
             sectionIndex: e.target.innerText,
-        })
-    }
-
-    handleSectionTitleClick(e){
-        let searchResult = [];
-        this.state.data.map(item => {
-            if (item.type === e.target.innerText) {
-                searchResult.push(item);
-            }
-        })
-        this.setState({
-            hasSearchResult: true,
-            searchKey:e.target.innerText,
-            searchResult: searchResult,
         })
     }
 
@@ -550,7 +555,7 @@ class SearchContainer extends React.Component {
                     
                         </Col>
                         <Col id='searchableObjectType' md={6} sm={6} xs={6} className='px-0'>
-                            <h6 className="font-weight-bold">{locale.searchable_object_types.toUpperCase()}</h6>
+                            <h6 className="font-weight-bold">{locale.object_types.toUpperCase()}</h6>
                             <SearchableObjectType sectionTitleList={this.state.sectionTitleList} 
                                 sectionIndexList={this.state.sectionIndexList} sectionIndex={this.state.sectionIndex} 
                                     handleMouseOver={this.handleMouseOver} handleTouchStart={this.handleTouchStart} 

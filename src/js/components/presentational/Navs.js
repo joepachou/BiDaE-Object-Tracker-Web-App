@@ -1,8 +1,6 @@
 import React from 'react';
-import Nav from 'react-bootstrap/Nav';
 import ListGroup from 'react-bootstrap/ListGroup'
 import ModalForm from '../container/ModalForm';
-import styled from 'styled-components';
 
 
 class Navs extends React.Component {
@@ -21,7 +19,6 @@ class Navs extends React.Component {
     }
 
     
-
     render(){
 
         return (
