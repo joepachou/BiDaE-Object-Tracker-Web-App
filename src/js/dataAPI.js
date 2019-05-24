@@ -1,12 +1,12 @@
 const LocalIP = 'localhost:3000'
-const RemoteIP = 'bot.iis.sinica.edu.tw'
+const RemoteIP = 'bot.iis.sinica.edu.tw:80'
 
-const trackingData = 'http://' + LocalIP + '/data/trackingData';
-const objectTable = 'http://' + LocalIP + '/data/objectTable';
-const lbeaconTable = 'http://' + LocalIP + '/data/lbeaconTable';
-const gatewayTable = 'http://' + LocalIP + '/data/gatewayTable';
-const searchResult = 'http://' + LocalIP + '/data/searchResult';
-const geofenceData = 'http://' + LocalIP + '/data/geofenceData';
+const trackingData = 'http://' + RemoteIP + '/data/trackingData';
+const objectTable = 'http://'  + RemoteIP + '/data/objectTable';
+const lbeaconTable = 'http://' + RemoteIP + '/data/lbeaconTable';
+const gatewayTable = 'http://' + RemoteIP + '/data/gatewayTable';
+const searchResult = 'http://' + RemoteIP + '/data/searchResult';
+const geofenceData = 'http://' + RemoteIP + '/data/geofenceData';
 
 
 module.exports = {
