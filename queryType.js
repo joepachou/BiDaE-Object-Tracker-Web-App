@@ -62,7 +62,7 @@ const query_getObjectTable = `
 
 const query_getLbeaconTable = 
     `
-    select uuid, last_report_timestamp from lbeacon_table ORDER BY last_report_timestamp DESC`;
+    select uuid, ip_address, gateway_ip_address, last_report_timestamp from lbeacon_table ORDER BY last_report_timestamp DESC`;
     // `
     // select * from lbeacon_table ORDER BY last_report_timestamp DESC`;
 
