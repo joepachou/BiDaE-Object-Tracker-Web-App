@@ -1,5 +1,5 @@
 const LocalIP = 'localhost:3000'
-const RemoteIP = 'bot.iis.sinica.edu.tw:80'
+const RemoteIP = 'bot.iis.sinica.edu.tw'
 
 const trackingData = 'http://' + RemoteIP + '/data/trackingData';
 const objectTable = 'http://'  + RemoteIP + '/data/objectTable';
