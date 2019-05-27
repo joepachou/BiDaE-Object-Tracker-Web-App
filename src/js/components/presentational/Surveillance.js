@@ -217,35 +217,59 @@ class Surveillance extends React.Component {
                     objectInfoHash[items.object_mac_address].name = items.name
                     objectInfoHash[items.object_mac_address].mac_address = items.object_mac_address
                     objectInfoHash[items.object_mac_address].panic_button = items.panic_button;
+					objectInfoHash[items.object_mac_address].geofence_type = items.geofence_type;
                     objectInfoHash[items.object_mac_address].coverLbeaconInfo[lbeaconCoordinate] = object
-                    objectInfoHash[items.object_mac_address].status = items.avg_stable !== null ? 'stationary' : 'moving';
+                    objectInfoHash[items.object_mac_address].status = items.avg_stable !== null ? 'stationary' : 'stationary';
 
                 } else {
                     // console.log(dt.getSeconds() + ' ' + items.object_mac_address + ' Scanned by other lbeacon')
                     let maxRSSI = objectInfoHash[items.object_mac_address].maxRSSI;
                     let status = objectInfoHash[items.object_mac_address].status;
+					let geofence_type = objectInfoHash[items.object_mac_address].geofence_type;
+					
+					if(items.panic_button){
+						objectInfoHash[items.object_mac_address].panic_button = 1;
+					}
+					if(items.geofence_type !== null){
+						if(items.geofence_type === 'F')
+						    objectInfoHash[items.object_mac_address].geofence_type = items.geofence_type;
+						else if(items.geofence_type === 'P'){
+							if(objectInfoHash[items.object_mac_address].geofence_type === null)
+								objectInfoHash[items.object_mac_address].geofence_type = items.geofence_type;
+						}
+					}
 
+                    if( parseFloat(items.avg) > parseFloat(maxRSSI)) {
+                        objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
+                        objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
+                    }
+					
                     if (items.avg_stable !== null) {
                         /** 
                          * If the RSSI of one object scanned by the the other lbeacon is larger than the previous one, then
                          * current position = new lbeacon location
                          * max rssi = new lbeacon rssi
                          */
+						 /*
                         if ((status === 'stationary' && parseFloat(items.avg) > parseFloat(maxRSSI))|| status === 'moving' ){
                             objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
                             objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
                             objectInfoHash[items.object_mac_address].status = 'stationary'
                         } 
+						*/
                         
                     } else {
-
+/*
                         if(status === 'moving' && parseFloat(items.avg) > parseFloat(maxRSSI)) {
                             objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
                             objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
                         }
-                    }
-                    objectInfoHash[items.object_mac_address].coverLbeaconInfo[lbeaconCoordinate] = object;
+*/						
 
+                    }
+/*
+                    objectInfoHash[items.object_mac_address].coverLbeaconInfo[lbeaconCoordinate] = object;
+*/
                 }
 
                 objectInfoHash[items.object_mac_address].lbeaconDetectedNum = Object.keys(objectInfoHash[items.object_mac_address].coverLbeaconInfo).length;
@@ -312,6 +336,16 @@ class Surveillance extends React.Component {
             iconSize: iconSize,
             iconUrl: config.surveillanceMap.iconOptions.sosIconUrl,
         }
+		
+		 const geofenceFIconOptions = {
+            iconSize: iconSize,
+            iconUrl: config.surveillanceMap.iconOptions.geofenceIconFence,
+        }
+		
+		 const geofencePIconOptions = {
+            iconSize: iconSize,
+            iconUrl: config.surveillanceMap.iconOptions.geofenceIconPerimeter,
+        }
 
         for (var key in objects){
                 
@@ -334,7 +368,11 @@ class Surveillance extends React.Component {
              * then the color will be black, or grey.
              */
             let iconOption = {}
-            if (objects[key].panic_button === 1) {
+			if (objects[key].geofence_type === 'F'){
+				iconOption = geofenceFIconOptions;
+			} else if (objects[key].geofence_type === 'P'){
+				iconOption = geofencePIconOptions;
+			} else if (objects[key].panic_button === 1) {
                 iconOption = sosIconOptions;
             } else if (objects[key].status === 'stationary') {
                 iconOption = stationaryIconOptions;
@@ -398,7 +436,7 @@ class Surveillance extends React.Component {
         const xx = mac_address.slice(12,14);
         const yy = mac_address.slice(15,17);
 		
-		const multiplier = 6; // 1m = 100cm = 1000mm, multipler = 1000/16*16 = 3
+		const multiplier = 2; // 1m = 100cm = 1000mm, multipler = 1000/16*16 = 3
 		const origin_x = lbeacon_coordinate[1] - parseInt(80, 16) * multiplier ; 
 		const origin_y = lbeacon_coordinate[0] - parseInt(80, 16) * multiplier ;
 		const xxx = origin_x + parseInt(xx, 16) * multiplier;
