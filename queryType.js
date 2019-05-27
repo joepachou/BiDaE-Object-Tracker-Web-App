@@ -62,19 +62,19 @@ const query_getObjectTable = `
 
 const query_getLbeaconTable = 
     `
-    select uuid, ip_address, gateway_ip_address, last_report_timestamp from lbeacon_table ORDER BY last_report_timestamp DESC`;
+    select uuid, ip_address, health_status, gateway_ip_address, last_report_timestamp from lbeacon_table ORDER BY last_report_timestamp DESC`;
     // `
     // select * from lbeacon_table ORDER BY last_report_timestamp DESC`;
 
 const query_getGatewayTable = 
     `
-    select id, last_report_timestamp, ip_address from gateway_table ORDER BY last_report_timestamp DESC`;
+    select ip_address, health_status, last_report_timestamp from gateway_table ORDER BY last_report_timestamp DESC`;
     // `
 	// select * from gateway_table ORDER BY last_report_timestamp DESC`;
 
 const query_getGeofenceData = 
 	`
-	SELECT * FROM geo_fence_alert
+	SELECT * FROM geo_fence_alert order by receive_time DESC
 	`;
 	
 
