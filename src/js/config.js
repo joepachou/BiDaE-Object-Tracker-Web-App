@@ -3,6 +3,8 @@ import map from '../img/IIS_Newbuilding_4F.png';
 import black_pin from '../img/black_pin_v2.svg'
 import darkGrey_pin from '../img/darkGrey_pin_v2.svg';
 import sos from '../img/sos.svg'
+import geofence_fence from '../img/geo_fence_fence.svg'
+import geofence_perimeter from '../img/geo_fence_perimeter.svg'
 
 
 const config = {
@@ -29,6 +31,8 @@ const config = {
             stationaryIconUrl: black_pin,
             movinfIconUrl: darkGrey_pin,
             sosIconUrl: sos,
+			geofenceIconFence: geofence_fence,
+			geofenceIconPerimeter: geofence_perimeter,
         },
 
         /* For test. To start object tracking*/
