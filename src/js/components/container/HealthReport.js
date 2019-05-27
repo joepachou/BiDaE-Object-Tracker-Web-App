@@ -8,7 +8,7 @@ import 'react-table/react-table.css';
 
 
 import axios from 'axios';
-import dataAPI from '../../../js/dataAPI'
+import dataSrc from '../../../js/dataSrc'
 
 
 export default class HealthReport extends React.Component{
@@ -38,7 +38,7 @@ export default class HealthReport extends React.Component{
     }
 
     getGatewayData(){
-        axios.get(dataAPI.gatewayTable).then(res => {
+        axios.get(dataSrc.gatewayTable).then(res => {
             let column = [];
             res.data.fields.map(item => {
                 let field = {};
@@ -57,7 +57,7 @@ export default class HealthReport extends React.Component{
     }
 
     getLbeaconData(){
-        axios.get(dataAPI.lbeaconTable).then(res => {
+        axios.get(dataSrc.lbeaconTable).then(res => {
             let column = [];
             res.data.fields.map(item => {
                 let field = {};

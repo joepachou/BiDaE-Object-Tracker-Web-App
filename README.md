@@ -32,3 +32,12 @@ To initiate the web server, execute below:
 ```
 $ npm run server
 ```
+
+# Usage Guide
+### SQL command interface
+If user would like to modify or add the sql command, query functions used in BOT are list in ./query.js and all sql query string are list in ./queryType.js. 
+
+### Data request interface
+In ./src/js/dataSrc.js, there are the list of requests used in UI code. The default router is http://localhost:3000. If user would like to modify or create new data retrieving url, one can find the info in this file.
+
+

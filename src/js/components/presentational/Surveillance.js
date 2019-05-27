@@ -17,7 +17,7 @@ import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import '../../../css/CustomMarkerCluster.css'
 
 /** API url */
-import dataAPI from '../../../js/dataAPI';
+import dataSrc from '../../../js/dataSrc';
 
 /** Redux related Library  */
 import { 
@@ -175,7 +175,7 @@ class Surveillance extends React.Component {
 
     handleTrackingData(){
         const { rssi } = this.props;
-        axios.post(dataAPI.trackingData, {
+        axios.post(dataSrc.trackingData, {
             rssi: rssi
         }).then(res => {
             // console.log(res.data.rows)

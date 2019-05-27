@@ -8,7 +8,7 @@ import 'react-table/react-table.css';
 
 
 import axios from 'axios';
-import dataAPI from '../../../js/dataAPI'
+import dataSrc from '../../../js/dataSrc'
 
 
 export default class HealthReport extends React.Component{
@@ -33,7 +33,7 @@ export default class HealthReport extends React.Component{
     }
 
     getGeofenceData(){
-        axios.get(dataAPI.geofenceData).then(res => {
+        axios.get(dataSrc.geofenceData).then(res => {
             let column = [];
             res.data.fields.map(item => {
                 let field = {};

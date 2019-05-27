@@ -17,22 +17,31 @@ class SearchResult extends React.Component {
         super()
         this.state = {
             showEditObjectForm: false,
+            selectObjectIndex:0,
         }
         
         this.editObject = this.editObject.bind(this)
     }
 
 
-    editObject(e) {
+    editObject(eventKey) {
         this.setState({
             showEditObjectForm: true,
+            selectObjectIndex: eventKey,
         })
     }
 
     render() {
         const locale = this.context;
         const { result, searchKey } = this.props;
-        const { showEditObjectForm } = this.state;
+        const { showEditObjectForm, selectObjectIndex } = this.state;
+
+        const style = {
+            listItem: {
+                position: 'relative',
+                zIndex: 6,
+            }
+        }
 
         return(
             <>
@@ -43,18 +52,21 @@ class SearchResult extends React.Component {
                             <h6 className="d-inline pl-2">on</h6>
                                     <h6 className="d-inline pl-2">F4</h6>
                 </Alert> */}
-                <h6>Search Result</h6>
-                <Tab.Container id="left-tabs-example" defaultActiveKey="#0">
+                <div className='text-left'>
+                    <h6>Search Result</h6>
+                </div>
+                {/* <Tab.Container id="left-tabs-example" defaultActiveKey="#0"> */}
                     <Row className=''style={{height:'100%'}} >
                         <Col className='border px-0 overflow-auto'>
-                            <ListGroup variant="flush">
+                            <ListGroup variant="flush" onSelect={this.editObject}>
                                 {result.map((item,index) => {
                                     let element = 
-                                        <ListGroup.Item href={'#' + index} className='searchResultList' onClick={this.editObject}>
-                                            <div className="d-flex flex-column text-left">
-                                                <div className="font-weight-bold py-1">{item.name}</div>
-                                                <small>ACN: xxxx-xxxx-00{item.id}</small>
-                                                <small>location: {item.location}</small>
+                                        <ListGroup.Item href={'#' + index} style={style.listItem} className='searchResultList' eventKey={index} key={index}>
+                                            <div className="d-flex justify-content-around text-left">
+                                                <div className="font-weight-bold">{index + 1}.</div>
+                                                <div className="font-weight-bold">{item.name}</div>
+                                                <div>ACN: xxxx-xxxx-00{item.id}</div>
+                                                <div>location: {item.location}</div>
                                             </div>
                                         </ListGroup.Item>
                                     return element
@@ -74,9 +86,9 @@ class SearchResult extends React.Component {
                             </Tab.Content>
                         </Col> */}
                     </Row>
-                </Tab.Container>
+                {/* </Tab.Container> */}
 
-                <ModalForm show={showEditObjectForm}/>
+                <ModalForm show={showEditObjectForm} title='Edit Object' selectedObjectData={result[selectObjectIndex]} />
             </>
         )
     }
