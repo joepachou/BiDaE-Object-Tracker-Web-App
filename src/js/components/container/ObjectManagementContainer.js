@@ -7,7 +7,7 @@ import TableContainer from './ObjectListContainer';
 import ReactTable from 'react-table';
 import Navs from '../presentational/Navs'
 import ListGroup from 'react-bootstrap/ListGroup';
-import dataAPI from "../../../js/dataAPI";
+import dataSrc from "../../../js/dataSrc";
 import axios from 'axios';
 import 'react-table/react-table.css';
 
@@ -33,7 +33,7 @@ export default class ObjectManagement extends React.Component{
     }
 
     componentDidMount(){
-        axios.get(dataAPI.objectTable).then(res => {
+        axios.get(dataSrc.objectTable).then(res => {
             // console.log('Get data successfully')
             // console.log(res.data.rows)
             res.data.rows.map(item => {

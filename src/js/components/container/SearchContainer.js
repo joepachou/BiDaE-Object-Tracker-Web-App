@@ -17,7 +17,7 @@ import blankerWarmer from '../../../img/blanket_warmer.jpg';
 
 
 /** API url */
-import dataAPI from '../../../js/dataAPI';
+import dataSrc from '../../../js/dataSrc';
 
 import SearchableObjectType from '../presentational/SeachableObjectType';
 import SearchResult from '../presentational/SearchResult'
@@ -427,7 +427,7 @@ class SearchContainer extends React.Component {
             padding: 5
         }
 
-        axios.get(dataAPI.objectTable).then(res => {
+        axios.get(dataSrc.objectTable).then(res => {
             const objectData = res.data.rows;
 
             let objectTypeSet = new Set();
@@ -462,7 +462,7 @@ class SearchContainer extends React.Component {
     getResultData(e) {
         const searchKey = e.target.innerText;
 
-        axios.post(dataAPI.searchResult, {
+        axios.post(dataSrc.searchResult, {
             searchkey: searchKey,
         }).then(res => {
             let result = [];
