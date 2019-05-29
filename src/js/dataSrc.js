@@ -1,4 +1,4 @@
-const IP = 'localhost:3000' //'bot.iis.sinica.edu.tw'
+const IP = 'bot.iis.sinica.edu.tw'
 
 const trackingData = 'http://' + IP + '/data/trackingData';
 const objectTable = 'http://' + IP + '/data/objectTable';
