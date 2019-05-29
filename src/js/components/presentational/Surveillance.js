@@ -249,19 +249,14 @@ class Surveillance extends React.Component {
 							
 						}else{
 						    if(items.panic_button){
-							    if(panic_button === 0 ||
-                                   (panic_button === 1 && parseFloat(items.avg) > parseFloat(maxRSSI))){
-									   
-									objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
-                                    objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
-					                objectInfoHash[items.object_mac_address].panic_button = items.panic_button;  	 
-								}  								
-							}else{
-								if(panic_button === 0 && parseFloat(items.avg) > parseFloat(maxRSSI)){
-									objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
-                                    objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
-								}
+							    objectInfoHash[items.object_mac_address].panic_button = items.panic_button;
 							}
+							
+							if(parseFloat(items.avg) > parseFloat(maxRSSI)){
+									   
+						        objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
+                                objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
+							} 
 						}
 					}
 				/*
