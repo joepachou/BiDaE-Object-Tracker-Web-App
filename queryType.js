@@ -46,9 +46,9 @@ function query_getTrackingData (rssi = -55) {
 	
 	UNION
 	
-	SELECT mac_address as object_mac_address, uuid as lbeacon_uuid, round(avg(rssi),2) as avg, NULL as avg_table, NULL panic_button, type as geofence_type 
+	SELECT mac_address as object_mac_address, uuid as lbeacon_uuid, MAX(rssi) as avg, NULL as avg_table, NULL panic_button, type as geofence_type 
 	 FROM geo_fence_alert 
-	     WHERE receive_time >= NOW() - INTERVAL '10 seconds'
+	     WHERE receive_time >= NOW() - INTERVAL '5 seconds'
 		 GROUP BY mac_address, uuid, type
     
 	ORDER BY object_mac_address ASC, lbeacon_uuid ASC

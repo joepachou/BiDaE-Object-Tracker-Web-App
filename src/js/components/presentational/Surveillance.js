@@ -230,18 +230,12 @@ class Surveillance extends React.Component {
 					if(items.panic_button){
 						objectInfoHash[items.object_mac_address].panic_button = 1;
 					}
-					if(items.geofence_type !== null){
-						if(items.geofence_type === 'F')
-						    objectInfoHash[items.object_mac_address].geofence_type = items.geofence_type;
-						else if(items.geofence_type === 'P'){
-							if(objectInfoHash[items.object_mac_address].geofence_type === null)
-								objectInfoHash[items.object_mac_address].geofence_type = items.geofence_type;
-						}
-					}
-
+					
                     if( parseFloat(items.avg) > parseFloat(maxRSSI)) {
                         objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
                         objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
+						
+						objectInfoHash[items.object_mac_address].geofence_type = items.geofence_type;
                     }
 					
                     if (items.avg_stable !== null) {
