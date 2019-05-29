@@ -226,7 +226,45 @@ class Surveillance extends React.Component {
                     let maxRSSI = objectInfoHash[items.object_mac_address].maxRSSI;
                     let status = objectInfoHash[items.object_mac_address].status;
 					let geofence_type = objectInfoHash[items.object_mac_address].geofence_type;
+					let panic_button = objectInfoHash[items.object_mac_address].panic_button;
 					
+				    if(items.geofence_type === 'F'){
+				        if(geofence_type === null || geofence_type === 'P' || 
+						   (geofence_type === 'F' &&  parseFloat(items.avg) > parseFloat(maxRSSI))) {
+							   
+						    objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
+                            objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
+					        objectInfoHash[items.object_mac_address].geofence_type = items.geofence_type;
+						}
+					}else if(items.geofence_type === 'P'){
+						if(geofence_type === null || 
+						   (geofence_type === 'P' && parseFloat(items.avg) > parseFloat(maxRSSI))) {
+							   
+						    objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
+                            objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
+					        objectInfoHash[items.object_mac_address].geofence_type = items.geofence_type;
+						}
+					}else{
+						if(geofence_type !== null){
+							
+						}else{
+						    if(items.panic_button){
+							    if(panic_button === 0 ||
+                                   (panic_button === 1 && parseFloat(items.avg) > parseFloat(maxRSSI))){
+									   
+									objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
+                                    objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
+					                objectInfoHash[items.object_mac_address].panic_button = items.panic_button;  	 
+								}  								
+							}else{
+								if(panic_button === 0 && parseFloat(items.avg) > parseFloat(maxRSSI)){
+									objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
+                                    objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
+								}
+							}
+						}
+					}
+				/*
 					if(items.panic_button){
 						objectInfoHash[items.object_mac_address].panic_button = 1;
 					}
@@ -239,7 +277,7 @@ class Surveillance extends React.Component {
                     }
 					
                     if (items.avg_stable !== null) {
-                        /** 
+                    */    /** 
                          * If the RSSI of one object scanned by the the other lbeacon is larger than the previous one, then
                          * current position = new lbeacon location
                          * max rssi = new lbeacon rssi
@@ -251,16 +289,18 @@ class Surveillance extends React.Component {
                             objectInfoHash[items.object_mac_address].status = 'stationary'
                         } 
 						*/
-                        
+                    /*    
                     } else {
+						*/
 /*
                         if(status === 'moving' && parseFloat(items.avg) > parseFloat(maxRSSI)) {
                             objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
                             objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
                         }
 */						
-
+/*
                     }
+					*/
 /*
                     objectInfoHash[items.object_mac_address].coverLbeaconInfo[lbeaconCoordinate] = object;
 */
@@ -430,7 +470,7 @@ class Surveillance extends React.Component {
         const xx = mac_address.slice(12,14);
         const yy = mac_address.slice(15,17);
 		
-		const multiplier = 2; // 1m = 100cm = 1000mm, multipler = 1000/16*16 = 3
+		const multiplier = 4; // 1m = 100cm = 1000mm, multipler = 1000/16*16 = 3
 		const origin_x = lbeacon_coordinate[1] - parseInt(80, 16) * multiplier ; 
 		const origin_y = lbeacon_coordinate[0] - parseInt(80, 16) * multiplier ;
 		const xxx = origin_x + parseInt(xx, 16) * multiplier;
