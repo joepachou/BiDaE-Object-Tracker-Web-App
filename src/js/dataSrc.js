@@ -6,6 +6,7 @@ const lbeaconTable = 'http://' + IP + '/data/lbeaconTable';
 const gatewayTable = 'http://' + IP + '/data/gatewayTable';
 const searchResult = 'http://' + IP + '/data/searchResult';
 const geofenceData = 'http://' + IP + '/data/geofenceData';
+const editObject = 'http://' + IP + '/data/editObject';
 
 module.exports = {
     trackingData,
@@ -14,4 +15,5 @@ module.exports = {
     gatewayTable,
     searchResult,
     geofenceData,
+    editObject,
 };

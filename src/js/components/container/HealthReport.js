@@ -87,11 +87,21 @@ export default class HealthReport extends React.Component{
                 <Row className='d-flex w-100 justify-content-around mx-0'>
                     <Col>
                         <h5>lbeacon table</h5>
-                        <ReactTable style={reactTableStyle} data={this.state.lbeaconData} columns={this.state.lbeaconColumn}/>
+                        <ReactTable 
+                            style={reactTableStyle} 
+                            data={this.state.lbeaconData} 
+                            columns={this.state.lbeaconColumn}
+                            showPagination = {false}
+                        />
                     </Col>
                     <Col>
                         <h5>gateway table</h5>
-                        <ReactTable style={reactTableStyle} data={this.state.gatewayData} columns={this.state.gatewayColunm}/>
+                        <ReactTable 
+                            style={reactTableStyle} 
+                            data={this.state.gatewayData} 
+                            columns={this.state.gatewayColunm}
+                            showPagination = {false}
+                        />
                     </Col>
 
                 </Row>

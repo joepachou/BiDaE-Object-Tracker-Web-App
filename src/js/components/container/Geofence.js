@@ -62,7 +62,7 @@ export default class HealthReport extends React.Component{
         return(
                 <Row className='d-flex w-100 justify-content-around mx-0'>
                     <Col>
-                        <ReactTable style={reactTableStyle} data={this.state.geofenceData} columns={this.state.geofenceColumn}/>
+                        <ReactTable style={reactTableStyle} data={this.state.geofenceData} columns={this.state.geofenceColumn}  />
                     </Col>
                 </Row>
         )

@@ -9,14 +9,20 @@ import Col from 'react-bootstrap/Col';
 import FormCheck from 'react-bootstrap/FormCheck';
 import VerticalTable from '../presentational/VerticalTable';
 import Select from 'react-select';
+import config from '../../config';
+import LocaleContext from '../../context/LocaleContext';
+import axios from 'axios';
+import dataSrc from '../../dataSrc';
 
-const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' }
-  ];
+const transferredLocations = config.transferredLocation;
+
+const options = transferredLocations.map( location => {
+    let locationObj = {};
+    locationObj["value"] = location;
+    locationObj["label"] = location;
+    return locationObj
+})
   
-
 class ModalForm extends React.Component {
     
     constructor(props) {
@@ -61,13 +67,29 @@ class ModalForm extends React.Component {
     }
 
     handleSubmit(e) {
-        console.log(this.state.formOption);
+        console.log(this.state.formOption)
+        const button = e.target
+        axios.post(dataSrc.editObject, {
+            formOption: this.state.formOption
+        }).then(res => {
+            button.style.opacity = 0.4
+            setTimeout(
+                function() {
+                   this.setState ({
+                       show: false,
+                   }) 
+                }
+                .bind(this),
+                1000
+            )
+        }).catch( error => {
+            console.log(error)
+        })
 
-        e.preventDefault();
+    
     }
 
     handleCheck(e) {
-        console.log(this.state)
         this.setState({
             formOption: {
                 ...this.state.formOption,
@@ -77,10 +99,10 @@ class ModalForm extends React.Component {
     }
 
     handleSelect(selectedOption) {
-        console.log(this.state)
         this.setState({
             formOption: {
-                selectedOption: selectedOption.value,
+                ...this.state.formOption,
+                selectedOption: selectedOption,
             }
         })
     }
@@ -100,25 +122,51 @@ class ModalForm extends React.Component {
 
         return (
             <>
-                {/* <Button onClick={this.handleShow} variant="primary" style={style.button}>{title}</Button> */}
-                <Modal show={this.state.show} onHide={this.handleClose} size="lg" >
-                    <Modal.Header>{title}</Modal.Header>
+                <Modal show={this.state.show} onHide={this.handleClose} size="lg">
+                    <Modal.Header closeButton>{title}</Modal.Header >
                     <Modal.Body>
-                        <Form onSubmit={this.handleSubmit}>
-                            <Form.Group as={Row} >
-                                <Form.Label column sm={5}>
+                        <Form >
+                            <Row>
+                                <Col sm={3} className="font-weight-bold">
+                                    Device Name
+                                </Col>
+                                <Col sm={9}>
+                                    {selectedObjectData ? selectedObjectData.name : null}
+                                </Col>
+
+                            </Row>
+                            <Row>
+                                <Col sm={3} className="font-weight-bold">
+                                    Device Type
+                                </Col>
+                                <Col sm={9}>
+                                    {selectedObjectData ? selectedObjectData.type : null}
+                                </Col>
+
+                            </Row>
+                            <Row>
+                                <Col sm={3} className="font-weight-bold">
+                                    ACN
+                                </Col>
+                                <Col sm={9}>
+                                    {selectedObjectData ? selectedObjectData.id : null}
+                                </Col>
+
+                            </Row>
+                            {/* <Form.Group as={Row} >
+                                <Form.Label column sm={4}>
                                     Device Name
                                 </Form.Label>
-                                <Col sm={7} >
+                                <Col sm={8} >
                                     <Form.Control type="text" placeholder={selectedObjectData ? selectedObjectData.name : null} disabled/>
                                 </Col>
                             </Form.Group>
                             <Form.Group as={Row}>
-                                <Form.Label column sm={5} >
+                                <Form.Label column sm={3} >
                                     Device Type
                                 </Form.Label>
-                                <Col sm={7} >
-                                    <Form.Control type="input" placeholder={selectedObjectData ? selectedObjectData.name : null} disabled/>
+                                <Col sm={9} >
+                                    <Form.Control type="input" placeholder={selectedObjectData ? selectedObjectData.type : null} disabled/>
                                 </Col>
                             </Form.Group>
                             <Form.Group as={Row}>
@@ -128,14 +176,14 @@ class ModalForm extends React.Component {
                                 <Col sm={7} >
                                     <Form.Control type="text" placeholder={selectedObjectData ? selectedObjectData.id : null} disabled/>
                                 </Col>
-                            </Form.Group>
+                            </Form.Group> */}
                             <hr></hr>
                             <fieldset>
                                 <Form.Group as={Row}>
-                                    <Form.Label as="legend" column sm={4}>
+                                    <Form.Label as="legend" column sm={3}>
                                         Status
                                     </Form.Label>
-                                    <Col sm={8}>
+                                    <Col sm={9}>
                                         <Form.Check
                                             custom
                                             type="radio"
@@ -158,7 +206,7 @@ class ModalForm extends React.Component {
                                             onChange={this.handleCheck}   
                                         />
                                         <Form.Row>
-                                            <Form.Group as={Col}>
+                                            <Form.Group as={Col} sm={4}>
                                                 <Form.Check
                                                     custom
                                                     type="radio"
@@ -171,12 +219,11 @@ class ModalForm extends React.Component {
                                                     onChange={this.handleCheck}   
                                                 />
                                             </Form.Group>
-                                            <Form.Group as={Col}>
+                                            <Form.Group as={Col} sm={8} >
                                                 {/* <Form.Control as="select" disabled = {checkedStatus === "Transferred" ? false : true } onChange={this.handleCheck} >
                                                     <option>Choose...</option>
                                                     <option>...</option>
                                                 </Form.Control> */}
-                                                {console.log(selectedOption)}
                                                     <Select
                                                         placeholder = "Select Location"
                                                         value = {selectedOption}
@@ -197,7 +244,7 @@ class ModalForm extends React.Component {
                         <Button variant="secondary" onClick={this.handleClose}>
                             Cancel
                         </Button>
-                        <Button variant="primary" type="submit">
+                        <Button variant="primary" onClick={this.handleSubmit}>
                             Save
                         </Button>
                     </Modal.Footer>
@@ -206,5 +253,7 @@ class ModalForm extends React.Component {
         );
     }
 }
+
+Modal.contextType = LocaleContext;
   
 export default ModalForm;

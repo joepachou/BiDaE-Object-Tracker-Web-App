@@ -96,6 +96,14 @@ function query_getSearchResult (searchKey) {
 	
 }
 
+function query_editObject () {
+	return `
+		UPDATE object_table
+		SET type = 10
+		WHERE name = '1CA5'
+	`
+}
+
 
 module.exports = {
     query_getTrackingData,
@@ -104,5 +112,6 @@ module.exports = {
 	query_getGatewayTable,
 	query_getSearchResult,
 	query_getGeofenceData,
+	query_editObject,
 }
 

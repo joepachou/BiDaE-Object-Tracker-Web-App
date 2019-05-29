@@ -1,6 +1,7 @@
 import ContentContainer from "./components/container/ContentContainer";
 import HealthReport from "./components/container/HealthReport";
 import Geofence from "./components/container/Geofence";
+import ObjectManagementContainer from "./components/container/ObjectManagementContainer";
 
 const routes = [
     {
@@ -23,6 +24,11 @@ const routes = [
         component: Geofence,
         exact: true,
     },
+    {
+        path: '/page/objectManagement',
+        component: ObjectManagementContainer,
+        exact: true,
+    }
 ];
 
 export default routes;

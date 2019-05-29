@@ -33,6 +33,7 @@ html,body {
     border-color:transparent;
 }
 
+button:focus, 
 :focus {
     outline: 0;
 }
@@ -78,4 +79,8 @@ input {
 #searchbar:hover,
 #searchbar:focus-within {
     box-shadow: 0 1px 6px 0 rgba(32,33,36,0.28);
+}
+
+.form-group {
+    margin-bottom: 0;
 }

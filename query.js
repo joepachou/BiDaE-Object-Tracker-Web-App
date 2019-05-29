@@ -88,12 +88,26 @@ const getSearchResult = (request, response) => {
     const searchKey = request.body.searchkey
     pool.query(queryType.query_getSearchResult(searchKey), (error, results) => {
         if (error) {
-            console.log("Get Search Result fails: "+ error) 
+            console.log("Get Search Result fails: " + error) 
         } else {
             console.log("Get Search Result");
         }
 
         response.status(200).json(results)
+    })
+}
+
+const editObject = (request, response) => {
+    console.log(request.body);
+    pool.query(queryType.query_editObject(), (error, results) => {
+        if (error) {
+            console.log("Edit Object Fails: " + error)
+        } else {
+            console.log("Edit Object Success");
+        }
+        
+        response.status(200).json(results)
+
     })
 }
     
@@ -104,4 +118,5 @@ module.exports = {
     getGatewayTable,
     getSearchResult,
     getGeofenceData,
+    editObject,
 }

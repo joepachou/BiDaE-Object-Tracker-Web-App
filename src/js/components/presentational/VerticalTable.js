@@ -1,6 +1,5 @@
 import React from "react";
 import Table from 'react-bootstrap/Table'
-import styled from 'styled-components';
 
 
 
@@ -29,28 +28,13 @@ const VerticalTable = (props) => {
             <tbody className="text-uppercase">
                 <tr className="table-tr" >
                     <th className="text-right font-weight-bold" style={thStyle}>Name</th>
-                    <td className="text-left " style={tdStyle}>{props.item.name}</td>
+                    <td className="text-left " style={tdStyle}>123</td>
                 </tr>
                 <tr className="table-tr">
                     <th className="text-right font-weight-bold" style={thStyle}>Object Type</th>
-                    <td className="text-left" style={tdStyle}>{props.item.type}</td>
+                    <td className="text-left" style={tdStyle}>123</td>
                 </tr>
-                <tr className="table-tr">
-                    <th className="text-right table_th" style={thStyle}>Location</th>
-                    <td className="text-left" style={tdStyle}>{props.item.location}</td>
-                </tr>
-                <tr className="table-tr">
-                    <th className="text-right table_th" style={thStyle}>Status</th>
-                    <td className="text-left" style={tdStyle}>{props.item.status}</td>
-                </tr>
-                <tr className="table-tr">
-                    <th className="text-right table_th" style={thStyle}>Access control number</th>
-                    <td className="text-left" style={tdStyle}>{props.item.ACN}</td>
-                </tr>
-                <tr className="table-tr">
-                    <th className="text-right table_th" style={thStyle}>Manufacturer ID</th>
-                    <td className="text-left" style={tdStyle}>{Math.floor(Math.random() * 1000)}</td>
-                </tr>
+
             </tbody>
         </Table>
     )
