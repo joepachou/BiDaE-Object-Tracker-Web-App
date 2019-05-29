@@ -1,11 +1,10 @@
 
 function query_getTrackingData (rssi = -55) {
 	return `
-	SELECT table_surveillance.object_mac_address, table_device.name, table_surveillance.lbeacon_uuid, table_surveillance.avg, table_surveillance.avg_stable, table_surveillance.panic_button, table_surveillance.type as geofence_type FROM
+	SELECT table_location.object_mac_address, table_device.name, table_location.lbeacon_uuid, table_location.avg as avg, table_location.avg_stable as avg_stable, table_location.panic_button as panic_button, table_location.geofence_type as geofence_type 
+	FROM
 	(
-	SELECT table_location.object_mac_address, table_location.lbeacon_uuid, table_location.avg as avg, table_location.avg_stable as avg_stable, table_location.panic_button as panic_button, table_geofence.type
-	FROM 
-	(SELECT table_track_data.object_mac_address, table_track_data.lbeacon_uuid, table_track_data.avg as avg, table_track_data.avg_stable as avg_stable, table_panic.panic_button as panic_button 
+	SELECT table_track_data.object_mac_address, table_track_data.lbeacon_uuid, table_track_data.avg as avg, table_track_data.avg_stable as avg_stable, table_panic.panic_button as panic_button, NULL as geofence_type 
 	     FROM
 		(SELECT table_recent.object_mac_address, table_recent.lbeacon_uuid, table_recent.rssi as avg, table_stable.avg_stable as avg_stable 
 		 FROM 
@@ -39,36 +38,31 @@ function query_getTrackingData (rssi = -55) {
             AND final_timestamp >= NOW() - (server_time_offset||' seconds')::INTERVAL - INTERVAL '180 seconds'
             GROUP BY object_mac_address, lbeacon_uuid			
 		    HAVING max(panic_button) > 0
-		) as table_panic		
+		) as table_panic	
 		
 		ON table_track_data.object_mac_address = table_panic.object_mac_address 
 		AND table_track_data.lbeacon_uuid = table_panic.lbeacon_uuid
+	
+	
+	UNION
+	
+	SELECT mac_address as object_mac_address, uuid as lbeacon_uuid, round(avg(rssi),2) as avg, NULL as avg_table, NULL panic_button, type as geofence_type 
+	 FROM geo_fence_alert 
+	     WHERE receive_time >= NOW() - INTERVAL '10 seconds'
+		 GROUP BY mac_address, uuid, type
+    
+	ORDER BY object_mac_address ASC, lbeacon_uuid ASC
+     
 	) as table_location
 	
-	LEFT JOIN
-	
-	(SELECT mac_address, uuid, type 
-	 FROM geo_fence_alert 
-	     WHERE receive_time >= NOW() - INTERVAL '190 seconds'
-		 AND receive_time >= NOW() - INTERVAL '180 seconds'
-		 GROUP BY mac_address, uuid, type
-		 HAVING max(rssi) > -50
-    ) as table_geofence
-	
-	ON table_location.object_mac_address = table_geofence.mac_address
-	AND table_location.lbeacon_uuid = table_geofence.uuid
-	
-	) as table_surveillance
-	
-	LEFT JOIN
+	LEFT JOIN 
 	
 	(SELECT mac_address, name
 	 FROM object_table
 	) as table_device
-		
-	ON table_surveillance.object_mac_address = table_device.mac_address 	
 	
-	ORDER BY object_mac_address ASC, lbeacon_uuid ASC
+	ON table_location.object_mac_address = table_device.mac_address
+    
 	`;
 }
 
