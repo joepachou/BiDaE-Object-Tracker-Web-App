@@ -56,7 +56,7 @@ const config = {
     transferredLocation: [
         "Yunlin_Christian_Hospital",
         "NTU_Hospital_Yunlin",
-        "NTU_Hospital_Taipe",
+        "NTU_Hospital_Taipei",
     ],
     
     locale: {

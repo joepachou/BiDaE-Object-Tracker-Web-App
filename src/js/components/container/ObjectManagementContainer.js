@@ -99,7 +99,7 @@ export default class ObjectManagement extends React.Component{
                 {/* <Navs navsItem={this.state.navsItem}/> */}
                 {/* <div className="d-flex w-100 justify-content-around"> */}
                 <Nav className='d-flex align-items-center'>
-                    <Button variant="primary" onClick = {this.handleModalForm}>Add Object</Button>
+                    {/* <Button variant="primary" onClick = {this.handleModalForm}>Add Object</Button> */}
                 </Nav>
                 {/* <Nav variant="pills" defaultActiveKey="/home">
                     <Nav.Item>

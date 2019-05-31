@@ -278,6 +278,7 @@ class EditObjectForm extends React.Component {
                                         type="text" 
                                         placeholder={selectedObjectData ? selectedObjectData.mac_address : ''}
                                         disabled 
+                                        readOnly
                                     />
                                 </Col>
                             </Form.Group>
