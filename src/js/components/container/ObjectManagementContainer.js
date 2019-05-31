@@ -11,7 +11,7 @@ import axios from 'axios';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import { Col, Row, Button, Nav, Container} from 'react-bootstrap';
-import ModalForm from '../container/ModalForm';
+import EditObjectForm from './EditObjectForm'
 
 export default class ObjectManagement extends React.Component{
 
@@ -22,6 +22,7 @@ export default class ObjectManagement extends React.Component{
             column:[],
             filterData:[],
             showModalForm: false,
+            selectedRowData: {},
         }
         this.handleType = this.handleType.bind(this);
         this.handleModalForm = this.handleModalForm.bind(this);
@@ -86,14 +87,8 @@ export default class ObjectManagement extends React.Component{
     }
 
     render(){
+        const { showModalForm, selectedRowData } = this.state
 
-        const style = {
-            button: {
-                
-            }
-        }
-
-        const { showModalForm } = this.state
         return (
             <Container fluid className='py-2'>
                 {/* <Navs navsItem={this.state.navsItem}/> */}
@@ -122,10 +117,32 @@ export default class ObjectManagement extends React.Component{
                             data = {this.state.filterData} 
                             columns = {this.state.column} 
                             showPagination = {false}
+                            noDataText="No Data Available"
+                            className="-highlight"
+                            getTrProps={(state, rowInfo, column, instance) => {
+                                return {
+                                    onClick: (e, handleOriginal) => {
+                                        this.setState({
+                                            selectedRowData: rowInfo.original,
+                                            showModalForm: true,
+                                            
+                                        })
+                                
+                                        // IMPORTANT! React-Table uses onClick internally to trigger
+                                        // events like expanding SubComponents and pivots.
+                                        // By default a custom 'onClick' handler will override this functionality.
+                                        // If you want to fire the original onClick handler, call the
+                                        // 'handleOriginal' function.
+                                        if (handleOriginal) {
+                                            handleOriginal()
+                                        }
+                                    }
+                                }
+                            }}
                         />
                     </Col>
                 </Row>
-                <ModalForm show = {showModalForm} title = 'Add Object'/>
+                <EditObjectForm show = {showModalForm} title='Edit Object' selectedObjectData={selectedRowData} />
             </Container>
                     
         )

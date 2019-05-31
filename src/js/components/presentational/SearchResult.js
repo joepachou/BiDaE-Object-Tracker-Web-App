@@ -8,6 +8,7 @@ import Row from 'react-bootstrap/Row'
 import VerticalTable from '../presentational/VerticalTable';
 import ModalForm from '../container/ModalForm';
 import LocaleContext from '../../context/LocaleContext';
+import ChangeStatusForm from '../container/ChangeStatusForm';
 
 
 
@@ -88,7 +89,7 @@ class SearchResult extends React.Component {
                     </Row>
                 {/* </Tab.Container> */}
 
-                <ModalForm show={showEditObjectForm} title='Edit Object' selectedObjectData={result[selectObjectIndex]} />
+                <ChangeStatusForm show={showEditObjectForm} title='Change Status' selectedObjectData={result[selectObjectIndex]} />
             </>
         )
     }

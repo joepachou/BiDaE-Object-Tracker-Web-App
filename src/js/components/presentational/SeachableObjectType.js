@@ -1,9 +1,6 @@
 import React from 'react';
 
-import ListGroup from 'react-bootstrap/ListGroup';
-import Nav from 'react-bootstrap/Nav';
-import styled from 'styled-components';
-
+import { ListGroup, Nav } from 'react-bootstrap';
 
 const SearchableObjectType = (props) => {
 
