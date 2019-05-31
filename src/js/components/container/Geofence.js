@@ -60,11 +60,13 @@ export default class HealthReport extends React.Component{
             fontSize: '1vw',
         }
         return(
+            <Container fluid className="py-2">
                 <Row className='d-flex w-100 justify-content-around mx-0'>
                     <Col>
                         <ReactTable style={reactTableStyle} data={this.state.geofenceData} columns={this.state.geofenceColumn}  />
                     </Col>
                 </Row>
+            </Container>
         )
     }
 }
