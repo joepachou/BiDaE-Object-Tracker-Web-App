@@ -46,6 +46,10 @@ class EditObjectForm extends React.Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
+    /**
+     * EditObjectForm will update if user selects one of the object table.
+     * The selected object data will transfer from ObjectMangentContainer to EditObjectForm
+     */
 
     componentDidUpdate(prevProps) {
         const { name, type, status, transferred_location } = this.props.selectedObjectData;
@@ -105,6 +109,7 @@ class EditObjectForm extends React.Component {
                 .bind(this),
                 1000
             )
+            this.props.refresh();
         }).catch( error => {
             console.log(error)
         })
@@ -250,7 +255,6 @@ class EditObjectForm extends React.Component {
                                                 />
                                             </Form.Group>
                                             <Form.Group as={Col} sm={8} >
-                                            {console.log(transferredLocation)}
                                                     <Select
                                                         placeholder = "Select Location"
                                                         value={transferredLocation}

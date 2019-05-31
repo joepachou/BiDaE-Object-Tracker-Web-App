@@ -26,9 +26,14 @@ export default class ObjectManagement extends React.Component{
         }
         this.handleType = this.handleType.bind(this);
         this.handleModalForm = this.handleModalForm.bind(this);
+        this.getObjectData = this.getObjectData.bind(this);
     }
 
     componentDidMount(){
+        this.getObjectData();
+    }
+
+    getObjectData() {
         axios.get(dataSrc.objectTable).then(res => {
             let column = [];
             res.data.fields.map(item => {
@@ -125,7 +130,6 @@ export default class ObjectManagement extends React.Component{
                                         this.setState({
                                             selectedRowData: rowInfo.original,
                                             showModalForm: true,
-                                            
                                         })
                                 
                                         // IMPORTANT! React-Table uses onClick internally to trigger
@@ -142,7 +146,7 @@ export default class ObjectManagement extends React.Component{
                         />
                     </Col>
                 </Row>
-                <EditObjectForm show = {showModalForm} title='Edit Object' selectedObjectData={selectedRowData} />
+                <EditObjectForm show = {showModalForm} title='Edit Object' selectedObjectData={selectedRowData} refresh={this.getObjectData}/>
             </Container>
                     
         )
