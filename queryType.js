@@ -99,9 +99,11 @@ function query_getTrackingData (rssi = -55) {
 }
 
 
-const query_getObjectTable = `
-    select *
-    from object_table ORDER BY name ASC`;
+const query_getObjectTable = 
+	`
+    SELECT id, name, type, location, status, transferred_location, mac_address
+	FROM object_table ORDER BY name ASC
+	`;
 
 const query_getLbeaconTable = 
     `
@@ -122,18 +124,41 @@ const query_getGeofenceData =
 	
 
 function query_getSearchResult (searchKey) {
-	return `	
-		select * from object_table where name='${searchKey}'
-	`;
+	const text = 
+		`
+		SELECT * 
+		FROM object_table
+		WHERE type = $1
+		`;
+	const values = [searchKey];
+
+	const query = {
+		text, 
+		values
+	};
+
+	return query;
 	
 }
 
-function query_editObject () {
-	return `
-		UPDATE object_table
-		SET type = 10
-		WHERE name = '1CA5'
-	`
+function query_editObject (formOption) {
+	const text = 
+		`
+		Update object_table 
+		SET type = $2,
+			status = $3,
+			transferred_location = $4
+		WHERE mac_address = $1
+		`;
+		
+	const values = [formOption.mac_address, formOption.type, formOption.status, formOption.transferredLocation.value];
+
+	const query = {
+		text,
+		values
+	};
+
+	return query;
 }
 
 

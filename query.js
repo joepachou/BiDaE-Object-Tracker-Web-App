@@ -1,15 +1,16 @@
 require('dotenv').config();
 const moment = require('moment-timezone');
-const Pool = require('pg').Pool;
-const pool = new Pool({
+const queryType = require ('./queryType')
+const pg = require('pg');
+const config = {
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
     database: process.env.DB_DATABASE,
     password: process.env.DB_PASS,
     port: process.env.DB_PORT,
-})
+}
+const pool = new pg.Pool(config)
 
-const queryType = require ('./queryType')
 
 
 const getTrackingData = (request, response) => {
@@ -18,8 +19,9 @@ const getTrackingData = (request, response) => {
     pool.query(queryType.query_getTrackingData(modifiedRssi), (error, results) => {        
         if (error) {
             console.log("Get trackingData fails : " + error)
+        } else {
+            console.log('Get tracking data!')
         }
-        console.log('Get tracking data!')
 
 
         response.status(200).json(results)
@@ -98,8 +100,8 @@ const getSearchResult = (request, response) => {
 }
 
 const editObject = (request, response) => {
-    console.log(request.body);
-    pool.query(queryType.query_editObject(), (error, results) => {
+    const formOption = request.body.formOption
+    pool.query(queryType.query_editObject(formOption), (error, results) => {
         if (error) {
             console.log("Edit Object Fails: " + error)
         } else {
