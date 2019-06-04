@@ -1,4 +1,4 @@
-import ContentContainer from "./components/container/ContentContainer";
+import MainContainer from "./components/container/MainContainer";
 import HealthReport from "./components/container/HealthReport";
 import Geofence from "./components/container/Geofence";
 import ObjectManagementContainer from "./components/container/ObjectManagementContainer";
@@ -6,12 +6,12 @@ import ObjectManagementContainer from "./components/container/ObjectManagementCo
 const routes = [
     {
         path: '/',
-        component: ContentContainer,
+        component: MainContainer,
         exact: true,
     },
     {
         path: '/page/surveillance',
-        component: ContentContainer,
+        component: MainContainer,
         exact: true,
     },
     {

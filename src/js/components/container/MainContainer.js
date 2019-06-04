@@ -6,7 +6,7 @@ import ObjectManagementContainer from './ObjectManagementContainer';
 import SearchContainer from './SearchContainer';
 
 /** Import Presentational Component */
-import dataSrc from '../../../js/dataSrc'
+import dataSrc from '../../dataSrc'
 import axios from 'axios';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
