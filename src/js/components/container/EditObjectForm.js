@@ -1,13 +1,9 @@
 import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import ListGroup from 'react-bootstrap/ListGroup';
 import Form from 'react-bootstrap/Form'
-import FormControl from 'react-bootstrap/FormControl'
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import FormCheck from 'react-bootstrap/FormCheck';
-import VerticalTable from '../presentational/VerticalTable';
 import Select from 'react-select';
 import config from '../../config';
 import LocaleContext from '../../context/LocaleContext';
@@ -84,32 +80,37 @@ class EditObjectForm extends React.Component {
     }
 
     handleSubmit(e) {
-        const button = e.target;
+        const buttonStyle = e.target.style
         const { selectedObjectData } = this.props;
         const { formOption } = this.state;
 
+        let transferredLocation = '';
+        if (formOption.status === 'Transferred' || selectedObjectData.status === 'Transferred') {
+            transferredLocation = formOption.transferredLocation || selectedObjectData.transferredLocation;
+        }
+        
         const postOption = {
             name: formOption.name || selectedObjectData.name,
             type: formOption.type || selectedObjectData.type,
             status: formOption.status || selectedObjectData.status,
-            transferredLocation: formOption.transferredLocation || selectedObjectData.transferred_location || '',
+            transferredLocation: transferredLocation,
             mac_address: selectedObjectData.mac_address,
         }
 
         axios.post(dataSrc.editObject, {
             formOption: postOption
         }).then(res => {
-            button.style.opacity = 0.4
+            buttonStyle.opacity = 0.4
             setTimeout(
                 function() {
                    this.setState ({
                        show: false,
-                   }) 
+                   })
                 }
                 .bind(this),
                 1000
             )
-            this.props.refresh();
+
         }).catch( error => {
             console.log(error)
         })
@@ -212,7 +213,7 @@ class EditObjectForm extends React.Component {
                             </Form.Group>
 
                            
-                            <hr></hr>
+                            <hr/>
                             <fieldset>
                                 <Form.Group as={Row}>
                                     <Form.Label as="legend" column sm={3}>

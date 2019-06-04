@@ -202,7 +202,10 @@ class SearchContainer extends React.Component {
                 </div>
 
                 <div id='searchResult' style={searchResultStyle} className='py-3'>
-                    <SearchResult result={searchResult} searchKey={searchKey} />
+                    <SearchResult 
+                        result={searchResult} 
+                        searchKey={searchKey}
+                        refresh={this.getResultData} />
                 </div>
 
                 <div id='searchOption' style={searchOptionStyle} className='pt-2'>

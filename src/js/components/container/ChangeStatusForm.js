@@ -32,8 +32,8 @@ class ChangeStatusForm extends React.Component {
             show: this.props.show,
             isShowForm: false,
             formOption: {
-                checkedStatus: 'Normal', 
-                selectedOption: null,
+                status: 'Normal', 
+                transferredLocation: null,
             }
         };
 
@@ -58,18 +58,39 @@ class ChangeStatusForm extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
+        const { selectedObjectData } = this.props;
+
         if (prevProps != this.props) {
             this.setState({
                 show: this.props.show,
                 isShowForm: true,
+                formOption: {
+                    name: selectedObjectData ? selectedObjectData.name : '',
+                    type: selectedObjectData ? selectedObjectData.type : '',
+                    status: selectedObjectData ? selectedObjectData.status : '',
+                    transferredLocation: selectedObjectData && selectedObjectData.transferred_location ? {
+                        'value' : selectedObjectData.transferred_location,
+                        'label' : selectedObjectData.transferred_location
+                    } : null,
+                }
             })
         }
     }
 
     handleSubmit(e) {
-        const button = e.target
+        const button = e.target;
+        const { mac_address, name, type } = this.props.selectedObjectData;
+        const { status, transferredLocation } = this.state.formOption;
+        console.log(this.props)
+        const postOption = {
+            name: name,
+            type: type,
+            status: status,
+            transferredLocation: transferredLocation || '',
+            mac_address: mac_address
+        }
         axios.post(dataSrc.editObject, {
-            formOption: this.state.formOption
+            formOption: postOption
         }).then(res => {
             button.style.opacity = 0.4
             setTimeout(
@@ -84,15 +105,13 @@ class ChangeStatusForm extends React.Component {
         }).catch( error => {
             console.log(error)
         })
-
-    
     }
 
     handleCheck(e) {
         this.setState({
             formOption: {
                 ...this.state.formOption,
-                checkedStatus: e.target.value,
+                status: e.target.value,
             }
         })
     }
@@ -101,7 +120,7 @@ class ChangeStatusForm extends React.Component {
         this.setState({
             formOption: {
                 ...this.state.formOption,
-                selectedOption: selectedOption,
+                transferredLocation: selectedOption,
             }
         })
     }
@@ -109,15 +128,19 @@ class ChangeStatusForm extends React.Component {
   
     render() {
 
-        const { title, selectedObjectData } = this.props;
-        const { checkedStatus, selectedOption } = this.state.formOption;
-
-
         const style = {
-            button: {
+            input: {
+                borderRadius: 0,
+                borderBottom: '1 solid grey',
+                borderTop: 0,
+                borderLeft: 0,
+                borderRight: 0,
                 
             }
         }
+
+        const { title, selectedObjectData } = this.props;
+        const { name, type, status, transferredLocation } = this.state.formOption;
 
         return (
             <>
@@ -125,33 +148,39 @@ class ChangeStatusForm extends React.Component {
                     <Modal.Header closeButton>{title}</Modal.Header >
                     <Modal.Body>
                         <Form >
-                            <Row>
-                                <Col sm={3} className="font-weight-bold">
-                                    Device Name
-                                </Col>
+                            <Form.Group as={Row} controlId="formHorizontalEmail">
+                                <Form.Label column sm={3}>
+                                    Name
+                                </Form.Label>
                                 <Col sm={9}>
-                                    {selectedObjectData ? selectedObjectData.name : null}
+                                    <Form.Control 
+                                        type="text" 
+                                        placeholder={selectedObjectData ? selectedObjectData.name : ''} 
+                                        onChange={this.handleChange} 
+                                        value={name} 
+                                        name='name'
+                                        style={style.input}
+                                        disabled
+                                    />
                                 </Col>
+                            </Form.Group>
 
-                            </Row>
-                            <Row>
-                                <Col sm={3} className="font-weight-bold">
-                                    Device Type
-                                </Col>
+                            <Form.Group as={Row} controlId="formHorizontalPassword">
+                                <Form.Label column sm={3}>
+                                    Type
+                                </Form.Label>
                                 <Col sm={9}>
-                                    {selectedObjectData ? selectedObjectData.type : null}
+                                    <Form.Control 
+                                        type="text" 
+                                        placeholder={selectedObjectData ? selectedObjectData.type : ''} 
+                                        onChange={this.handleChange} 
+                                        value={type} 
+                                        name='type'
+                                        style={style.input}
+                                        disabled
+                                    />
                                 </Col>
-
-                            </Row>
-                            <Row>
-                                <Col sm={3} className="font-weight-bold">
-                                    ACN
-                                </Col>
-                                <Col sm={9}>
-                                    {selectedObjectData ? selectedObjectData.id : null}
-                                </Col>
-
-                            </Row>
+                            </Form.Group>
                             <hr/>
                             <fieldset>
                                 <Form.Group as={Row}>
@@ -166,7 +195,7 @@ class ChangeStatusForm extends React.Component {
                                             name="formHorizontalRadios"
                                             id="formHorizontalRadios1"
                                             value="Normal"
-                                            checked={checkedStatus === 'Normal'}
+                                            checked={status === 'Normal'}
                                             onChange={this.handleCheck}                                     
                                         />
                                         <Form.Check
@@ -176,7 +205,7 @@ class ChangeStatusForm extends React.Component {
                                             name="formHorizontalRadios"
                                             id="formHorizontalRadios2"
                                             value="Broken"
-                                            checked={checkedStatus === 'Broken'}
+                                            checked={status === 'Broken'}
 
                                             onChange={this.handleCheck}   
                                         />
@@ -189,22 +218,17 @@ class ChangeStatusForm extends React.Component {
                                                     name="formHorizontalRadios"
                                                     id="formHorizontalRadios3"
                                                     value="Transferred"
-                                                    checked={checkedStatus === 'Transferred'}
-
+                                                    checked={status === 'Transferred'}
                                                     onChange={this.handleCheck}   
                                                 />
                                             </Form.Group>
                                             <Form.Group as={Col} sm={8} >
-                                                {/* <Form.Control as="select" disabled = {checkedStatus === "Transferred" ? false : true } onChange={this.handleCheck} >
-                                                    <option>Choose...</option>
-                                                    <option>...</option>
-                                                </Form.Control> */}
                                                     <Select
                                                         placeholder = "Select Location"
-                                                        value = {selectedOption}
+                                                        value = {transferredLocation}
                                                         onChange={this.handleSelect}
                                                         options={options}
-                                                        isDisabled = {checkedStatus === 'Transferred' ? false : true}
+                                                        isDisabled = {status === 'Transferred' ? false : true}
                                                     />
                                             </Form.Group>
                                             

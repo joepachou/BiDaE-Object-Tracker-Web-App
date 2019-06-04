@@ -34,7 +34,7 @@ class SearchResult extends React.Component {
 
     render() {
         const locale = this.context;
-        const { result, searchKey } = this.props;
+        const { result, searchKey, refresh } = this.props;
         const { showEditObjectForm, selectObjectIndex } = this.state;
 
         const style = {
@@ -88,8 +88,12 @@ class SearchResult extends React.Component {
                         </Col> */}
                     </Row>
                 {/* </Tab.Container> */}
-
-                <ChangeStatusForm show={showEditObjectForm} title='Change Status' selectedObjectData={result[selectObjectIndex]} />
+                <ChangeStatusForm 
+                    show={showEditObjectForm} 
+                    title='Edit Object' 
+                    selectedObjectData={result.length ? result[selectObjectIndex] : null} 
+                    searchKey={searchKey}
+                />
             </>
         )
     }
