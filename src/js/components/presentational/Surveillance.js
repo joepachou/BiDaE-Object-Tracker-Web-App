@@ -55,7 +55,7 @@ class Surveillance extends React.Component {
         this.calculateScale = this.calculateScale.bind(this);
 
         this.StartSetInterval = config.surveillanceMap.startInteval; 
-        this.isShownTrackingData = true;
+        this.isShownTrackingData = !true;
     }
 
     componentDidMount(){
@@ -215,6 +215,7 @@ class Surveillance extends React.Component {
                     objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate
                     objectInfoHash[items.object_mac_address].coverLbeaconInfo = {}
                     objectInfoHash[items.object_mac_address].name = items.name
+                    objectInfoHash[items.object_mac_address].type = items.type
                     objectInfoHash[items.object_mac_address].mac_address = items.object_mac_address
                     objectInfoHash[items.object_mac_address].panic_button = items.panic_button;
 					objectInfoHash[items.object_mac_address].geofence_type = items.geofence_type;
@@ -308,7 +309,7 @@ class Surveillance extends React.Component {
             // markerClusters.on('clusterclick', this.handlemenu)
 
             /** Return Tracking data to caller(ContentContainer.js) */
-            this.props.retrieveTrackingData(res.data)
+            this.props.retrieveTrackingData(res.data, objectInfoHash)
 
             this.setState({
                 data: res.data.rows,
@@ -332,13 +333,14 @@ class Surveillance extends React.Component {
      * Create the error circle of markers, and add into this.markersLayer.
      */
     handleObjectMakers(){
+        const { hasSearchKey, searchResult } = this.props;
 
-        const { hasSearchKey, searchedObjectData } = this.props;
-
+        /** 
+         * Consider to remove these line if it does not optimize marking objects
+         */
         var searchedObjectDataSet = new Set();
-
         if (hasSearchKey) {
-            searchedObjectData.map(item => {
+            searchResult.map(item => {
                 searchedObjectDataSet.add(item.mac_address)
             })
         }
@@ -410,15 +412,11 @@ class Surveillance extends React.Component {
         let counter = 0;
         for (var key in objects){
 
+            /** Tag the searched object */
             if (searchedObjectDataSet.has(key)) {
                 objects[key].searched = true
                 counter++;
             }
-
-            const searchedObjectAweIconOptions = new L.AwesomeNumberMarkers ({
-                number: counter, 
-                markerColor: "lightblue",
-            })
                 
             let detectedNum = objects[key].lbeaconDetectedNum;
             let position = this.macAddressToCoordinate(key.toString(), objects[key].currentPosition);
@@ -440,7 +438,10 @@ class Surveillance extends React.Component {
              */
             let iconOption = {}
             if (objects[key].searched) {
-                iconOption = searchedObjectAweIconOptions
+                iconOption = new L.AwesomeNumberMarkers ({
+                    number: counter, 
+                    markerColor: "blue",
+                })
             } else if (objects[key].geofence_type === 'F'){
 				iconOption = geofenceFAweIconOptions;
 			} else if (objects[key].geofence_type === 'P'){
@@ -455,8 +456,8 @@ class Surveillance extends React.Component {
             let marker =  L.marker(position, {icon: iconOption}).bindPopup(popupContent, popupCustomStyle).addTo(this.markersLayer)
             
             /** 
-             * Set the z-index offset of the searhed object
-             * Put the searched object icon on top of all others
+             * Set the z-index offset of the searhed object so that
+             * the searched object icon will be on top of all others 
              */
             if (objects[key].searched) {
                 marker.setZIndexOffset(1000);
@@ -559,7 +560,6 @@ class Surveillance extends React.Component {
         return(
             <div>      
                 <div id='mapid' className='cmp-block'>
-                {/* {console.log(this.state.objectInfo)} */}
                 </div>
                 {/* <div>
                     <ToggleSwitch title="Location Accuracy" options={toggleSwitchOptions}/>

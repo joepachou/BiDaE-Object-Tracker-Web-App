@@ -26,7 +26,7 @@ class SurveillanceContainer extends React.Component {
     
     render(){
         const { rssi } = this.state;
-        const { hasSearchKey, searchedObjectData } = this.props;
+        const { hasSearchKey, searchResult} = this.props;
         const locale = this.context;
 
         const titleStyle = {
@@ -40,9 +40,8 @@ class SurveillanceContainer extends React.Component {
                     rssi={rssi} 
                     retrieveTrackingData={this.props.retrieveTrackingData}
                     hasSearchKey={hasSearchKey}
-                    searchedObjectData={searchedObjectData}
+                    searchResult={searchResult}
                 />
-
                 <Nav className='d-flex align-items-center'>
                     {/* <Nav.Item className='d-flex align-items-baseline'>
                         <small style={titleStyle}>{locale.location_accuracy.toUpperCase()}</small>

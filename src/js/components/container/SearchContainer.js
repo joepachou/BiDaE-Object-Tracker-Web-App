@@ -27,6 +27,7 @@ class SearchContainer extends React.Component {
             sectionTitleList: [],
             sectionIndex:'',
             searchResult: [],
+            hasSearchableObjectData: false,
         }
     
         this.handleTouchStart = this.handleTouchStart.bind(this);
@@ -40,11 +41,19 @@ class SearchContainer extends React.Component {
     
 
     componentDidMount() {
-        this.getObjectType();
         const targetElement = document.body;
         document.body.style.position = "fixed";
 
         // disableBodyScroll(targetElement);
+    }
+
+    componentDidUpdate() {
+        if (this.props.searchableObjectData != null && this.state.hasSearchableObjectData === false) {
+            this.getObjectType();
+            this.setState({
+                hasSearchableObjectData: true,
+            })
+        }
     }
 
     shouldComponentUpdate(nextProps, nextState){
@@ -57,7 +66,8 @@ class SearchContainer extends React.Component {
 
 
     /**
-     * Get the searchable object type, maybe from the object_type_table, but now is from the object_table
+     * Get the searchable object type. 
+     * The data is retrieving from Surveillance -> MainContain -> SearchContainer
      */
     getObjectType() {
         const titleElementStyle = {
@@ -70,41 +80,38 @@ class SearchContainer extends React.Component {
         const itemElementStyle = {
             padding: 5
         }
+        
 
-        axios.get(dataSrc.objectTable).then(res => {
+        /** Creat a set that stands for the unique object in this searching area */
+        const searchableObjectData = this.props.searchableObjectData
+        let objectTypeSet = new Set();
+        let objectTypeMap = new Map();
+        
+        for (let object in searchableObjectData) {
+            objectTypeSet.add(searchableObjectData[object].type)
+        }
 
-            /** Creat a set that stands for the unique object in this searching area */
-            const objectData = res.data.rows;
-            let objectTypeSet = new Set();
-            objectData.map( item => {
-                objectTypeSet.add(item.type);
-            })
-
-            /** Creat the titleList by inserting the item in the objectTypeSet
-             *  Also, create the character title element
-             */
-            let sectionTitleList = [];
-            let groupLetter = '';
-            let elementIndex = 0;
-            Array.from(objectTypeSet).map( item => {
-                // let currentLetter = item.toUpperCase().slice(0,1);
-                let currentLetter = item ? item.toUpperCase().charAt(0) : item;
-                if(!(groupLetter === currentLetter)) {
-                    groupLetter = currentLetter;
-                    let titleElement = <a id={groupLetter} key={elementIndex} className='titleElementStyle'><ListGroup.Item style={titleElementStyle}>{groupLetter}</ListGroup.Item></a>;
-                    sectionTitleList.push(titleElement)
-                    elementIndex++;
-                }
-                let itemElement = <a onClick={this.getResultData} key={elementIndex}><ListGroup.Item action style={itemElementStyle} >{item}</ListGroup.Item></a>;
-                sectionTitleList.push(itemElement);
+        /** Creat the titleList by inserting the item in the objectTypeSet
+         *  Also, create the character title element
+         */
+        let sectionTitleList = [];
+        let groupLetter = '';
+        let elementIndex = 0;
+        Array.from(objectTypeSet).map( item => {
+            // let currentLetter = item.toUpperCase().slice(0,1);
+            let currentLetter = item ? item.toUpperCase().charAt(0) : item;
+            if(!(groupLetter === currentLetter)) {
+                groupLetter = currentLetter;
+                let titleElement = <a id={groupLetter} key={elementIndex} className='titleElementStyle'><ListGroup.Item style={titleElementStyle}>{groupLetter}</ListGroup.Item></a>;
+                sectionTitleList.push(titleElement)
                 elementIndex++;
-            })
-            this.setState({
-                sectionTitleList: sectionTitleList,
-            })
-
-        }).catch(function (error) {
-            console.log(error);
+            }
+            let itemElement = <a onClick={this.getResultData} key={elementIndex}><ListGroup.Item action style={itemElementStyle} >{item}</ListGroup.Item></a>;
+            sectionTitleList.push(itemElement);
+            elementIndex++;
+        })
+        this.setState({
+            sectionTitleList: sectionTitleList,
         })
     }
 
@@ -113,27 +120,23 @@ class SearchContainer extends React.Component {
      * Also, popout the searchResult component.
      */
     getResultData(e) {
+        const searchableObjectData = this.props.searchableObjectData;
         const searchKey = e.target.innerText;
-
-        axios.post(dataSrc.searchResult, {
-            searchkey: searchKey,
-        }).then(res => {
-            let result = [];
-            res.data.rows.map(item => {
-                result.push(item)
-            })
-
-            this.setState({
-                hasSearchKey: true,
-                searchKey: searchKey,
-                searchResult: result,
-            })
-
-            // Transfer the searched object data from search container to search map
-            this.props.transferSearchResultFromSearchToMap(result)
-        }).catch( error => {
-            console.log(error)
+        let searchResult = [];
+        for (let object in searchableObjectData) {
+            if (searchableObjectData[object].type == searchKey) {
+                searchResult.push(searchableObjectData[object])
+            }
+        }
+        this.setState({
+            hasSearchKey: true,
+            searchKey: searchKey,
+            searchResult: searchResult,
         })
+        console.log(searchResult)
+
+        /** Transfer the searched object data from search container to search map(Surveillance Map) */
+        this.props.transferSearchResultFromSearchToMap(searchResult)
 
     }
 
@@ -197,6 +200,7 @@ class SearchContainer extends React.Component {
 
         const locale = this.context;
         const { searchResult, searchKey } = this.state;
+        const { trackingData } = this.props
         
         return (
             <div id='searchContainer' className="mx-2" onTouchMove={this.handleTouchMove}>
