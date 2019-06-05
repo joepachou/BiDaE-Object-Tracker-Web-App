@@ -2,7 +2,8 @@
 function query_getTrackingData (rssi = -55) {
 	return `
 	SELECT table_location.object_mac_address, 
-	       table_device.name, 
+		   table_device.name, 
+		   table_device.type,
 		   table_location.lbeacon_uuid, 
 		   table_location.avg as avg, 
 		   table_location.avg_stable as avg_stable, 
@@ -89,7 +90,7 @@ function query_getTrackingData (rssi = -55) {
 	    LEFT JOIN 
 	
 	    (
-		SELECT mac_address, name
+		SELECT mac_address, name, type
 	    FROM object_table
 	    ) as table_device
 	
@@ -107,9 +108,10 @@ const query_getObjectTable =
 
 const query_getLbeaconTable = 
     `
-    select uuid, ip_address, health_status, gateway_ip_address, last_report_timestamp from lbeacon_table ORDER BY last_report_timestamp DESC`;
-    // `
-    // select * from lbeacon_table ORDER BY last_report_timestamp DESC`;
+	SELECT uuid, description, ip_address, health_status, gateway_ip_address, last_report_timestamp 
+	FROM lbeacon_table 
+	ORDER BY last_report_timestamp DESC
+	`;
 
 const query_getGatewayTable = 
     `
