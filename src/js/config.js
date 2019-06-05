@@ -5,6 +5,7 @@ import darkGrey_pin from '../img/darkGrey_pin_v2.svg';
 import sos from '../img/sos.svg'
 import geofence_fence from '../img/geo_fence_fence.svg'
 import geofence_perimeter from '../img/geo_fence_perimeter.svg'
+import white_pin from '../img/white_pin.svg'
 
 
 const config = {
@@ -19,7 +20,7 @@ const config = {
             crs: L.CRS.Simple,
             minZoom: -5,
             maxZoom: 0,
-            zoomControl: true,
+            zoomControl: !true,
             attributionControl: false,
             dragging: true,
             doubleClickZoom: false,
@@ -32,7 +33,8 @@ const config = {
             movinfIconUrl: darkGrey_pin,
             sosIconUrl: sos,
 			geofenceIconFence: geofence_fence,
-			geofenceIconPerimeter: geofence_perimeter,
+            geofenceIconPerimeter: geofence_perimeter,
+            searchedObjectIconUrl: white_pin,
         },
 
         /* For test. To start object tracking*/

@@ -21,7 +21,7 @@ class SearchContainer extends React.Component {
         this.state = {
             sectionIndexList:['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'],
             isShowSectionTitle: false,
-            hasSearchResult: false,
+            hasSearchKey: false,
             isShowSearchOption: false,
             searchKey:'',
             sectionTitleList: [],
@@ -124,10 +124,13 @@ class SearchContainer extends React.Component {
             })
 
             this.setState({
-                hasSearchResult: true,
+                hasSearchKey: true,
                 searchKey: searchKey,
                 searchResult: result,
             })
+
+            // Transfer the searched object data from search container to search map
+            this.props.transferSearchResultFromSearchToMap(result)
         }).catch( error => {
             console.log(error)
         })
@@ -184,12 +187,12 @@ class SearchContainer extends React.Component {
 
         /** Customized CSS of searchResult */
         const searchResultStyle = {
-            display: this.state.hasSearchResult ? null : 'none',
+            display: this.state.hasSearchKey ? null : 'none',
             paddingTop: 30,
         }
 
         const searchOptionStyle = {
-            display: this.state.hasSearchResult ? 'none' : null,
+            display: this.state.hasSearchKey ? 'none' : null,
         }
 
         const locale = this.context;

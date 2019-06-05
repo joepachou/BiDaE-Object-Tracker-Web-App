@@ -26,6 +26,7 @@ class SurveillanceContainer extends React.Component {
     
     render(){
         const { rssi } = this.state;
+        const { hasSearchKey, searchedObjectData } = this.props;
         const locale = this.context;
 
         const titleStyle = {
@@ -35,7 +36,12 @@ class SurveillanceContainer extends React.Component {
 
         return(
             <>
-                <Surveillance rssi={rssi} retrieveTrackingData={this.props.retrieveTrackingData}/>
+                <Surveillance 
+                    rssi={rssi} 
+                    retrieveTrackingData={this.props.retrieveTrackingData}
+                    hasSearchKey={hasSearchKey}
+                    searchedObjectData={searchedObjectData}
+                />
 
                 <Nav className='d-flex align-items-center'>
                     {/* <Nav.Item className='d-flex align-items-baseline'>

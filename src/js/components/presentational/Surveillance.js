@@ -28,6 +28,8 @@ import {
 import { connect } from 'react-redux';
 
 import config from '../../config';
+import white_pin from '../../../img/white_pin.svg';
+import '../../leaflet_awesome_number_markers';
 
 class Surveillance extends React.Component {
 
@@ -53,7 +55,7 @@ class Surveillance extends React.Component {
         this.calculateScale = this.calculateScale.bind(this);
 
         this.StartSetInterval = config.surveillanceMap.startInteval; 
-        this.isShownTrackingData = !true;
+        this.isShownTrackingData = true;
     }
 
     componentDidMount(){
@@ -65,6 +67,7 @@ class Surveillance extends React.Component {
     componentDidUpdate(){
         this.handleObjectMakers();
         this.createLbeaconMarkers();
+
     }
     
     componentWillUnmount() {
@@ -178,7 +181,6 @@ class Surveillance extends React.Component {
         axios.post(dataSrc.trackingData, {
             rssi: rssi
         }).then(res => {
-            // console.log(res.data.rows)
             
             let objectRows = res.data.rows;
             let lbsPosition = new Set(),
@@ -205,10 +207,8 @@ class Surveillance extends React.Component {
                  *  we will check if the object is stationary or moving first,
                  *  then check if the current RSSI is the largest.
                  */
-                // var dt = new Date();
                 if (!(items.object_mac_address in objectInfoHash)) {
                     
-                    // console.log(dt.getSeconds() + ' ' + items.object_mac_address + ' Scanned by one lbeacon')
                     objectInfoHash[items.object_mac_address] = {};
                     objectInfoHash[items.object_mac_address].lbeaconDetectedNum = 1
                     objectInfoHash[items.object_mac_address].maxRSSI = items.avg
@@ -222,7 +222,6 @@ class Surveillance extends React.Component {
                     objectInfoHash[items.object_mac_address].status = items.avg_stable !== null ? 'stationary' : 'stationary';
 
                 } else {
-                    // console.log(dt.getSeconds() + ' ' + items.object_mac_address + ' Scanned by other lbeacon')
                     let maxRSSI = objectInfoHash[items.object_mac_address].maxRSSI;
                     let status = objectInfoHash[items.object_mac_address].status;
 					let geofence_type = objectInfoHash[items.object_mac_address].geofence_type;
@@ -333,11 +332,24 @@ class Surveillance extends React.Component {
      * Create the error circle of markers, and add into this.markersLayer.
      */
     handleObjectMakers(){
-        let objects = this.state.objectInfo
+
+        const { hasSearchKey, searchedObjectData } = this.props;
+
+        var searchedObjectDataSet = new Set();
+
+        if (hasSearchKey) {
+            searchedObjectData.map(item => {
+                searchedObjectDataSet.add(item.mac_address)
+            })
+        }
+
+        
+        const objects = this.state.objectInfo;
 
         /** Clear the old markerslayers. */
         this.markersLayer.clearLayers();
         this.errorCircle .clearLayers();
+
 
         /** Mark the objects onto the map  */
         this.calculateScale();
@@ -351,32 +363,62 @@ class Surveillance extends React.Component {
 
         const iconSize = [this.scalableIconSize, this.scalableIconSize];
 
-        const stationaryIconOptions = {
+        /** Icon options for pin */
+        const stationaryIconOptions = L.icon({
             iconSize: iconSize,
             iconUrl: config.surveillanceMap.iconOptions.stationaryIconUrl,
-        }
+        });
 
-        const movingIconOptions = {
+        const movingIconOptions = L.icon({
             iconSize: iconSize,
             iconUrl: config.surveillanceMap.iconOptions.movinfIconUrl,
-        }
+        });
 
-        const sosIconOptions = {
+        const sosIconOptions = L.icon({
             iconSize: iconSize,
             iconUrl: config.surveillanceMap.iconOptions.sosIconUrl,
-        }
+        });
 		
-		 const geofenceFIconOptions = {
+		 const geofenceFIconOptions = L.icon({
             iconSize: iconSize,
             iconUrl: config.surveillanceMap.iconOptions.geofenceIconFence,
-        }
+        });
 		
-		 const geofencePIconOptions = {
+		const geofencePIconOptions = L.icon({
             iconSize: iconSize,
             iconUrl: config.surveillanceMap.iconOptions.geofenceIconPerimeter,
-        }
+        });
 
+        const searchedObjectIconOptions = L.icon({
+            iconSize: iconSize,
+            iconUrl: config.surveillanceMap.iconOptions.searchedObjectIconUrl
+        });
+        
+        /** Icon options for drip */
+        const stationaryAweIconOptions = new L.AwesomeNumberMarkers ({
+            markerColor: "darkblue",
+        })
+
+        const geofencePAweIconOptions = new L.AwesomeNumberMarkers ({
+            markerColor: "orange",
+        })
+
+        const geofenceFAweIconOptions = new L.AwesomeNumberMarkers ({
+            markerColor: "red"
+        })
+
+        let counter = 0;
         for (var key in objects){
+
+            if (searchedObjectDataSet.has(key)) {
+                objects[key].searched = true
+                counter++;
+            }
+
+            const searchedObjectAweIconOptions = new L.AwesomeNumberMarkers ({
+                number: counter, 
+                markerColor: "lightblue",
+            })
                 
             let detectedNum = objects[key].lbeaconDetectedNum;
             let position = this.macAddressToCoordinate(key.toString(), objects[key].currentPosition);
@@ -397,19 +439,28 @@ class Surveillance extends React.Component {
              * then the color will be black, or grey.
              */
             let iconOption = {}
-			if (objects[key].geofence_type === 'F'){
-				iconOption = geofenceFIconOptions;
+            if (objects[key].searched) {
+                iconOption = searchedObjectAweIconOptions
+            } else if (objects[key].geofence_type === 'F'){
+				iconOption = geofenceFAweIconOptions;
 			} else if (objects[key].geofence_type === 'P'){
-				iconOption = geofencePIconOptions;
+				iconOption = geofencePAweIconOptions;
 			} else if (objects[key].panic_button === 1) {
                 iconOption = sosIconOptions;
             } else if (objects[key].status === 'stationary') {
-                iconOption = stationaryIconOptions;
+                iconOption = stationaryAweIconOptions;
             } else {
                 iconOption = movingIconOptions;
             }
-            let marker =  L.marker(position, {icon: L.icon(iconOption)}).bindPopup(popupContent, popupCustomStyle).addTo(this.markersLayer)
+            let marker =  L.marker(position, {icon: iconOption}).bindPopup(popupContent, popupCustomStyle).addTo(this.markersLayer)
             
+            /** 
+             * Set the z-index offset of the searhed object
+             * Put the searched object icon on top of all others
+             */
+            if (objects[key].searched) {
+                marker.setZIndexOffset(1000);
+            }
             /** Set the marker's event. */
             marker.on('mouseover', function () { this.openPopup(); })
             marker.on('mouseout', function () { this.closePopup(); })

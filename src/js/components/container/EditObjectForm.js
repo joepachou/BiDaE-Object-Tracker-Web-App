@@ -85,7 +85,7 @@ class EditObjectForm extends React.Component {
         const { formOption } = this.state;
 
         let transferredLocation = '';
-        if (formOption.status === 'Transferred' || selectedObjectData.status === 'Transferred') {
+        if (formOption.status === 'Transferred') {
             transferredLocation = formOption.transferredLocation || selectedObjectData.transferredLocation;
         }
         

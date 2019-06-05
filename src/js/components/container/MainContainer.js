@@ -24,9 +24,12 @@ export default class ContentContainer extends React.Component{
         this.state = {
             trackingData: [],
             trackingColunm: [],
+            hasSearchKey: false,
+            searchedObjectData: null,
         }
 
         this.retrieveTrackingData = this.retrieveTrackingData.bind(this)
+        this.transferSearchResultFromSearchToMap = this.transferSearchResultFromSearchToMap.bind(this);
     }
 
 
@@ -40,13 +43,16 @@ export default class ContentContainer extends React.Component{
             column.push(field);
         })
 
-        // data.rows.map(item => {
-        //     item.avg = item.avg.slice(0,6)
-        // })
-
         this.setState({
             trackingData: data.rows,
             trackingColunm: column,
+        })
+    }
+
+    transferSearchResultFromSearchToMap(data) {
+        this.setState({
+            hasSearchKey: true,
+            searchedObjectData: data,
         })
     }
 
@@ -57,8 +63,10 @@ export default class ContentContainer extends React.Component{
             width: '100%',
             fontSize: '0.7vw',
         }
-
+        
+        const { hasSearchKey, searchedObjectData } = this.state;
         return(
+
             /** "page-wrap" the default id named by react-burget-menu */
             <div id="page-wrap" className='py-3'>
                 <Row className='d-flex w-100 justify-content-around mx-0'>
@@ -67,10 +75,14 @@ export default class ContentContainer extends React.Component{
                             <br/>
                             {/* <Surveillance retrieveTrackingData={this.retrieveTrackingData}/>
                             <ToggleSwitch title="Location Accuracy" leftLabel='Low' middleLabel='Med' rightLabel='High' /> */}
-                            <SurveillanceContainer retrieveTrackingData={this.retrieveTrackingData}/>
+                            <SurveillanceContainer 
+                                retrieveTrackingData={this.retrieveTrackingData} 
+                                hasSearchKey={hasSearchKey} 
+                                searchedObjectData={searchedObjectData}
+                            />
 
                             <h5 className='mt-2'>Tracking Table</h5>
-                            <ReactTable style={reactTableStyle} minRows={6} defaultPageSize={10} data={this.state.trackingData} columns={this.state.trackingColunm} pageSizeOptions={[5, 10]}/>
+                            <ReactTable minRows={6} defaultPageSize={10} data={this.state.trackingData} columns={this.state.trackingColunm} pageSizeOptions={[5, 10]}/>
                         </Hidden>
                     </Col>
                     {/* <Col>
@@ -78,7 +90,7 @@ export default class ContentContainer extends React.Component{
                         <Navs />
                     </Col> */}
                     <Col xs={12} sm={12} md={12} xl={4} className="w-100">
-                        <SearchContainer/>
+                        <SearchContainer transferSearchResultFromSearchToMap={this.transferSearchResultFromSearchToMap}/>
                     </Col>
                 </Row>
             </div>
