@@ -186,7 +186,6 @@ class Surveillance extends React.Component {
             let lbsPosition = new Set(),
                 objectInfoHash = {}
             let counter = 0;
-
             objectRows.map(items =>{
                 /**
                  * Every lbeacons coordinate sended by response will store in lbsPosition
@@ -197,6 +196,7 @@ class Surveillance extends React.Component {
                 
                 let object = {
                     lbeaconCoordinate: lbeaconCoordinate,
+                    location_description: items.location_description,
                     rssi: items.avg,
                     rssi_avg : items.avg_stable,
                 }
@@ -213,6 +213,7 @@ class Surveillance extends React.Component {
                     objectInfoHash[items.object_mac_address].lbeaconDetectedNum = 1
                     objectInfoHash[items.object_mac_address].maxRSSI = items.avg
                     objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate
+                    objectInfoHash[items.object_mac_address].location_description = items.location_description
                     objectInfoHash[items.object_mac_address].coverLbeaconInfo = {}
                     objectInfoHash[items.object_mac_address].name = items.name
                     objectInfoHash[items.object_mac_address].type = items.type
@@ -234,6 +235,7 @@ class Surveillance extends React.Component {
 							   
 						    objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
                             objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
+                            objectInfoHash[items.object_mac_address].location_description = items.location_description
 					        objectInfoHash[items.object_mac_address].geofence_type = items.geofence_type;
 						}
 					}else if(items.geofence_type === 'P'){
@@ -242,6 +244,7 @@ class Surveillance extends React.Component {
 							   
 						    objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
                             objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
+                            objectInfoHash[items.object_mac_address].location_description = items.location_description
 					        objectInfoHash[items.object_mac_address].geofence_type = items.geofence_type;
 						}
 					}else{
@@ -256,6 +259,8 @@ class Surveillance extends React.Component {
 									   
 						        objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
                                 objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
+                                objectInfoHash[items.object_mac_address].location_description = items.location_description
+
 							} 
 						}
 					}

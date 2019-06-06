@@ -8,7 +8,8 @@ function query_getTrackingData (rssi = -55) {
 		   table_location.avg as avg, 
 		   table_location.avg_stable as avg_stable, 
 		   table_location.panic_button as panic_button, 
-		   table_location.geofence_type as geofence_type 
+		   table_location.geofence_type as geofence_type ,
+		   lbeacon_table.description as location_description
 	FROM
 	
 	    (
@@ -94,7 +95,12 @@ function query_getTrackingData (rssi = -55) {
 	    FROM object_table
 	    ) as table_device
 	
-	    ON table_location.object_mac_address = table_device.mac_address
+		ON table_location.object_mac_address = table_device.mac_address
+		
+		LEFT JOIN lbeacon_table
+		ON lbeacon_table.uuid=table_location.lbeacon_uuid
+
+		ORDER BY table_device.type ASC;
     
 	`;
 }

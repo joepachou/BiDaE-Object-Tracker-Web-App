@@ -36,7 +36,6 @@ export default class ContentContainer extends React.Component{
 
 
     retrieveTrackingData(rawData, processedData){
-        console.log(rawData)
         let column = [];
         rawData.fields.map(item => {
             let field = {};

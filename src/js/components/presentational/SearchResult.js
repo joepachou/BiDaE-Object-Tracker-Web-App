@@ -67,7 +67,7 @@ class SearchResult extends React.Component {
                                                 <div className="font-weight-bold">{index + 1}.</div>
                                                 <div className="font-weight-bold">{item.name}</div>
                                                 <div>ACN: xxxx-xxxx-00{item.id}</div>
-                                                <div>location: {item.location}</div>
+                                                <div>location: {item.location_description}</div>
                                             </div>
                                         </ListGroup.Item>
                                     return element
