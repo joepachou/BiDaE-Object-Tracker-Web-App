@@ -1,6 +1,8 @@
 /* Marker setup */
 .awesome-number-marker {
-    background: url('../img/markers-soft.png') no-repeat 0 0;
+    /* background: url('../img/blue_pin_v2.svg') no-repeat;
+    background-size: contain;
+    background-position: center; */
     width: 35px;
     height: 46px;
     position:absolute;
@@ -8,14 +10,14 @@
     top:0;
     display: block;
     text-align: center;
-    z-index: 9999;
   }
   
   .awesome-number-marker i {
     color: #333;
-    margin-top: 10px;
+    /* margin-top: 10px;
+    margin-left: 10px; */
     display: inline-block;
-    font-size: 14px;
+    font-size: 20px;
   }
   
   .awesome-number-marker .icon-white {
@@ -24,11 +26,12 @@
   
   /* Colors */
   .awesome-number-marker-icon-red {
-    background-position: 0 0;
+    background: url('../img/geo_fence_fence.svg') no-repeat center/contain;
+    /* background-position: 0 0; */
   }
   
   .awesome-number-marker-icon-darkred {
-    background-position: -180px 0;
+    /* background-position: -180px 0; */
   }
   
   .awesome-number-marker-icon-lightred {
@@ -36,7 +39,8 @@
   }
   
   .awesome-number-marker-icon-orange {
-    background-position: -36px 0;
+    background: url('../img/geo_fence_perimeter.svg') no-repeat center/contain;
+    /* background-position: -36px 0; */
   }
   
   .awesome-number-marker-icon-beige {
@@ -56,7 +60,8 @@
   }
   
   .awesome-number-marker-icon-blue {
-    background-position: -108px 0;
+    background: url('../img/blue_pin_v2.svg') no-repeat center/contain;
+    /* background-position: -108px 0; */
   }
   
   .awesome-number-marker-icon-darkblue {
@@ -96,5 +101,6 @@
   }
   
   .awesome-number-marker-icon-black {
-    background-position: -682px 0;
+    background: url('../img/black_pin_v2.svg') no-repeat center/contain;
+    /* background-position: -682px 0; */
   }

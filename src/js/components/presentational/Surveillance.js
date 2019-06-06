@@ -371,49 +371,61 @@ class Surveillance extends React.Component {
         const iconSize = [this.scalableIconSize, this.scalableIconSize];
 
         /** Icon options for pin */
-        const stationaryIconOptions = L.icon({
-            iconSize: iconSize,
-            iconUrl: config.surveillanceMap.iconOptions.stationaryIconUrl,
-        });
+        // const stationaryIconOptions = L.icon({
+        //     iconSize: iconSize,
+        //     iconUrl: config.surveillanceMap.iconOptions.stationaryIconUrl,
+        // });
 
-        const movingIconOptions = L.icon({
-            iconSize: iconSize,
-            iconUrl: config.surveillanceMap.iconOptions.movinfIconUrl,
-        });
+        // const movingIconOptions = L.icon({
+        //     iconSize: iconSize,
+        //     iconUrl: config.surveillanceMap.iconOptions.movinfIconUrl,
+        // });
 
-        const sosIconOptions = L.icon({
-            iconSize: iconSize,
-            iconUrl: config.surveillanceMap.iconOptions.sosIconUrl,
-        });
+        // const sosIconOptions = L.icon({
+        //     iconSize: iconSize,
+        //     iconUrl: config.surveillanceMap.iconOptions.sosIconUrl,
+        // });
 		
-		 const geofenceFIconOptions = L.icon({
-            iconSize: iconSize,
-            iconUrl: config.surveillanceMap.iconOptions.geofenceIconFence,
-        });
+		//  const geofenceFIconOptions = L.icon({
+        //     iconSize: iconSize,
+        //     iconUrl: config.surveillanceMap.iconOptions.geofenceIconFence,
+        // });
 		
-		const geofencePIconOptions = L.icon({
-            iconSize: iconSize,
-            iconUrl: config.surveillanceMap.iconOptions.geofenceIconPerimeter,
-        });
+		// const geofencePIconOptions = L.icon({
+        //     iconSize: iconSize,
+        //     iconUrl: config.surveillanceMap.iconOptions.geofenceIconPerimeter,
+        // });
 
-        const searchedObjectIconOptions = L.icon({
-            iconSize: iconSize,
-            iconUrl: config.surveillanceMap.iconOptions.searchedObjectIconUrl
-        });
+        // const searchedObjectIconOptions = L.icon({
+        //     iconSize: iconSize,
+        //     iconUrl: config.surveillanceMap.iconOptions.searchedObjectIconUrl
+        // });
         
-        /** Icon options for drip */
-        const stationaryAweIconOptions = new L.AwesomeNumberMarkers ({
-            markerColor: "darkblue",
-        })
+        /** Icon options for AwesomeNumberMarkers */
+        const stationaryAweIconOptions = {
+            iconSize: iconSize,
+            markerColor: "black",
+        }
 
-        const geofencePAweIconOptions = new L.AwesomeNumberMarkers ({
+        const geofencePAweIconOptions = {
+            iconSize: iconSize,
             markerColor: "orange",
-        })
+            numberColor: "white",
+        }
 
-        const geofenceFAweIconOptions = new L.AwesomeNumberMarkers ({
-            markerColor: "red"
-        })
+        const geofenceFAweIconOptions = {
+            iconSize: iconSize,
+            markerColor: "red",
+            numberColor: "white"
+        }
 
+        const searchedObjectAweIconOptions = {
+            iconSize: iconSize,
+            markerColor: "blue",
+            numberColor: "white"
+        }
+
+        
         let counter = 0;
         for (var key in objects){
 
@@ -431,7 +443,7 @@ class Surveillance extends React.Component {
              * popupContent (objectName, objectImg, objectImgWidth)
              * More Style sheet include in Surveillance.css
             */
-            let popupContent = this.popupContent(objects[key].name, BOTLogo, 100)
+            let popupContent = this.popupContent(objects[key], BOTLogo, 100)
             let popupCustomStyle = {
                 minWidth: '300',
                 maxHeight: '300',
@@ -442,23 +454,37 @@ class Surveillance extends React.Component {
              * then the color will be black, or grey.
              */
             let iconOption = {}
-            if (objects[key].searched) {
-                iconOption = new L.AwesomeNumberMarkers ({
-                    number: counter, 
-                    markerColor: "blue",
-                })
-            } else if (objects[key].geofence_type === 'F'){
-				iconOption = geofenceFAweIconOptions;
+            if (objects[key].geofence_type === 'F'){
+                iconOption = geofenceFAweIconOptions;
+                if (objects[key].searched) {
+                    iconOption = {
+                        ...iconOption,
+                        number: counter
+                    }
+                }
 			} else if (objects[key].geofence_type === 'P'){
-				iconOption = geofencePAweIconOptions;
+                iconOption = geofencePAweIconOptions;
+                if (objects[key].searched) {
+                    iconOption = {
+                        ...iconOption,
+                        number: counter
+                    }
+                }
 			} else if (objects[key].panic_button === 1) {
                 iconOption = sosIconOptions;
+            } else if (objects[key].searched) {
+                iconOption = {
+                    ...searchedObjectAweIconOptions,
+                    number: counter, 
+                }
             } else if (objects[key].status === 'stationary') {
                 iconOption = stationaryAweIconOptions;
             } else {
                 iconOption = movingIconOptions;
             }
-            let marker =  L.marker(position, {icon: iconOption}).bindPopup(popupContent, popupCustomStyle).addTo(this.markersLayer)
+
+            const option = new L.AwesomeNumberMarkers (iconOption)
+            let marker =  L.marker(position, {icon: option}).bindPopup(popupContent, popupCustomStyle).addTo(this.markersLayer)
             
             /** 
              * Set the z-index offset of the searhed object so that
@@ -537,25 +563,18 @@ class Surveillance extends React.Component {
      * @param {*} objectImg  The image of the object.
      * @param {*} imgWidth The width of the image.
      */
-    popupContent (objectName, objectImg, imgWidth){
+    popupContent (object, objectImg, imgWidth){
         const content = 
             `
-            <a href='#'>
-                <div class='contentBox'>
-                    <div class='textBox'>
-                        <div>
-                            <h2 className="mb-1">${objectName}</h2>
-                            <small>詳細資料</small>
-                        </div>
-                        <small></small>
-                    </div> 
-                    <div class='imgBox'>
-                        <span className="pull-left ">
-                            <img src=${objectImg} width=${imgWidth} className="img-reponsive img-rounded" />
-                        </span>
+            <div class='contentBox'>
+                <div class='textBox'>
+                    <div>
+                        <h2 className="mb-1">${object.location_description}</h2>
+                        <small className="d-flex">${object.type|| 'TYPE'} xxxx-xxxx-00${object.id || '00'}</small>
                     </div>
-                </div>
-            </a>
+                    <small></small>
+                </div> 
+            </div>
             `
         
         return content

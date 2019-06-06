@@ -16,5 +16,5 @@ import '../css/SearchContainer.css'
 /** ToggleSwitch customized css */
 import '../css/ToggleSwitch.css'
 
-import '../css/leaflet_awesome_number_markers.css'
+import '../css/leafletMarkers.css'
 

@@ -1,8 +1,7 @@
 import React from 'react';
 import Searchbar from '../presentational/Searchbar';
 import ListGroup from 'react-bootstrap/ListGroup';
-import Col from 'react-bootstrap/Col'
-import Row from 'react-bootstrap/Row'
+import { Col, Row, Nav} from 'react-bootstrap'
 
 import axios from 'axios';
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
@@ -83,7 +82,8 @@ class SearchContainer extends React.Component {
         
 
         /** Creat a set that stands for the unique object in this searching area */
-        const searchableObjectData = this.props.searchableObjectData
+        const { searchableObjectData } = this.props;
+        
         let objectTypeSet = new Set();
         let objectTypeMap = new Map();
         
@@ -97,6 +97,7 @@ class SearchContainer extends React.Component {
         let sectionTitleList = [];
         let groupLetter = '';
         let elementIndex = 0;
+
         Array.from(objectTypeSet).map( item => {
             // let currentLetter = item.toUpperCase().slice(0,1);
             let currentLetter = item ? item.toUpperCase().charAt(0) : item;
@@ -133,7 +134,6 @@ class SearchContainer extends React.Component {
             searchKey: searchKey,
             searchResult: searchResult,
         })
-        console.log(searchResult)
 
         /** Transfer the searched object data from search container to search map(Surveillance Map) */
         this.props.transferSearchResultFromSearchToMap(searchResult)
@@ -199,7 +199,7 @@ class SearchContainer extends React.Component {
         }
 
         const locale = this.context;
-        const { searchResult, searchKey } = this.state;
+        const { searchResult, searchKey, sectionIndexList, sectionIndex, isShowSectionTitle } = this.state;
         const { trackingData } = this.props
         
         return (
@@ -227,11 +227,16 @@ class SearchContainer extends React.Component {
                         </Col>
                         <Col id='searchableObjectType' md={6} sm={6} xs={6} className='px-0'>
                             <h6 className="font-weight-bold">{locale.object_types.toUpperCase()}</h6>
-                            <SearchableObjectType sectionTitleList={this.state.sectionTitleList} 
-                                sectionIndexList={this.state.sectionIndexList} sectionIndex={this.state.sectionIndex} 
-                                    handleMouseOver={this.handleMouseOver} handleTouchStart={this.handleTouchStart} 
-                                        handleTouchMove={this.handleTouchMove} isShowSectionTitle={this.state.isShowSectionTitle}
-                                            clientHeight={this.state.clientHeight}/>
+                            <SearchableObjectType 
+                                sectionTitleList={this.state.sectionTitleList} 
+                                sectionIndexList={this.state.sectionIndexList} 
+                                sectionIndex={this.state.sectionIndex} 
+                                handleMouseOver={this.handleMouseOver} 
+                                handleTouchStart={this.handleTouchStart} 
+                                handleTouchMove={this.handleTouchMove} 
+                                isShowSectionTitle={this.state.isShowSectionTitle}
+                                clientHeight={this.state.clientHeight}
+                            />
                         </Col>
                     </Row>
                 </div>

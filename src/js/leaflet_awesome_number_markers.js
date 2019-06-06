@@ -10,13 +10,13 @@
     "use strict";
     L.AwesomeNumberMarkers = L.Icon.extend({
       options: {
-        iconSize: [35, 45],
-        iconAnchor:   [17, 42],
-        popupAnchor: [1, -32],
+        iconSize: [50, 50], // [35, 45]
+        iconAnchor:   [25, 25], // [17, 42]
+        popupAnchor: [0, -10], // [1, -32]
         className: 'awesome-number-marker',
         icon: 'home',
         markerColor: 'blue',
-        numberColor: 'white',
+        numberColor: 'black',
         number: '',
       },
       
