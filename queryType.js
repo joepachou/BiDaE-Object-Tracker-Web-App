@@ -73,7 +73,7 @@ function query_getTrackingData (rssi = -55) {
 		LEFT JOIN lbeacon_table
 		ON lbeacon_table.uuid=table_location.lbeacon_uuid
 
-		ORDER BY table_device.type ASC;
+		ORDER BY table_device.type ASC, object_mac_address ASC;
     
 	`;
 }
