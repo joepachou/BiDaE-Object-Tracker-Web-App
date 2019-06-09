@@ -6,7 +6,6 @@ function query_getTrackingData (rssi = -55) {
 		   table_device.type,
 		   table_location.lbeacon_uuid, 
 		   table_location.avg as avg, 
-		   table_location.avg_stable as avg_stable, 
 		   table_location.panic_button as panic_button, 
 		   table_location.geofence_type as geofence_type ,
 		   lbeacon_table.description as location_description
@@ -16,44 +15,19 @@ function query_getTrackingData (rssi = -55) {
 	    SELECT table_track_data.object_mac_address, 
 		       table_track_data.lbeacon_uuid, 
 			   table_track_data.avg as avg, 
-			   table_track_data.avg_stable as avg_stable, 
 			   table_panic.panic_button as panic_button, 
 			   NULL as geofence_type 
 	    FROM
 		
 		    (
-			SELECT table_recent.object_mac_address, 
-			       table_recent.lbeacon_uuid, 
-				   table_recent.rssi as avg, 
-				   table_stable.avg_stable as avg_stable    
-		    FROM 
-			
-	            (
-				SELECT object_mac_address, 
-				       lbeacon_uuid, 
-					   round(avg(rssi),2) as rssi
-		        FROM tracking_table
-		            WHERE final_timestamp >= NOW() - INTERVAL '10 seconds'  
-		            AND final_timestamp >= NOW() - (server_time_offset||' seconds')::INTERVAL - INTERVAL '3 seconds'  
-		            GROUP BY object_mac_address, lbeacon_uuid
-				    HAVING avg(rssi) > -65
-		        ) as table_recent 
-		
-		        LEFT JOIN
-		
-		        (
-				SELECT object_mac_address, 
-				       lbeacon_uuid, 
-					   round(avg(rssi),2) as avg_stable
-		        FROM tracking_table 
-		            WHERE final_timestamp >= NOW() - INTERVAL '70 seconds'
-		            AND final_timestamp >= NOW() - (server_time_offset||' seconds')::INTERVAL - INTERVAL '60 seconds' 
-		            GROUP BY object_mac_address, lbeacon_uuid
-		            HAVING avg(rssi) > -65 and count(object_mac_address) >= 40
-		        ) as table_stable 
-		
-		        ON table_recent.object_mac_address = table_stable.object_mac_address 
-		        AND table_recent.lbeacon_uuid = table_stable.lbeacon_uuid
+			SELECT object_mac_address, 
+				   lbeacon_uuid, 
+				   round(avg(rssi),2) as avg
+		    FROM tracking_table
+		        WHERE final_timestamp >= NOW() - INTERVAL '15 seconds'  
+		        AND final_timestamp >= NOW() - (server_time_offset||' seconds')::INTERVAL - INTERVAL '10 seconds'
+                GROUP BY object_mac_address, lbeacon_uuid
+				HAVING avg(rssi) > -65
             ) as table_track_data	    
 		     
 		    LEFT JOIN
@@ -77,7 +51,6 @@ function query_getTrackingData (rssi = -55) {
 	    SELECT mac_address as object_mac_address, 
 		       uuid as lbeacon_uuid, 
 			   MAX(rssi) as avg, 
-			   NULL as avg_table,
 			   NULL panic_button, 
 			   type as geofence_type 
 	    FROM geo_fence_alert 
