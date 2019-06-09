@@ -61,11 +61,12 @@ function query_getTrackingData (rssi = -55) {
      
 	    ) as table_location
 	
-	    LEFT JOIN 
+	    INNER JOIN 
 	
 	    (
 		SELECT mac_address, name, type
 	    FROM object_table
+		WHERE status = 'Normal'
 	    ) as table_device
 	
 		ON table_location.object_mac_address = table_device.mac_address
