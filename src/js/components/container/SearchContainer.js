@@ -122,17 +122,22 @@ class SearchContainer extends React.Component {
      */
     getResultData(e) {
         if (typeof e === 'string') {
-            console.log('yes')
             var searchKey = e
         } else {
             var searchKey = e.target.innerText;
         }
+
+        /** this.props.searchableObjectData data path: Surveillance -> SurveillanceContainer -> MainContainer -> SearchContainer  */
         const searchableObjectData = this.props.searchableObjectData;
+
         let searchResult = [];
         for (let object in searchableObjectData) {
             if (searchableObjectData[object].type == searchKey) {
                 searchResult.push(searchableObjectData[object])
+            } else if (searchableObjectData[object].type.indexOf(searchKey) === 0){
+                searchResult.push(searchableObjectData[object])
             }
+
         }
         this.setState({
             hasSearchKey: true,
