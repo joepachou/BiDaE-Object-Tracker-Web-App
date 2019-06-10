@@ -41,32 +41,43 @@ class SearchResult extends React.Component {
             listItem: {
                 position: 'relative',
                 zIndex: 6,
+            }, 
+            noResultDiv: {
+                color: 'grey',
+                fontSize: 30,
             }
+
         }
 
         return(
             <>
                 <div className='text-left'>
-                    <h6>Search Result</h6>
+                    <h5>Search Result</h5>
                 </div>
                 {/* <Tab.Container id="left-tabs-example" defaultActiveKey="#0"> */}
                     <Row className=''style={{height:'100%'}} >
-                        <Col className='border px-0 overflow-auto'>
-                            <ListGroup variant="flush" onSelect={this.editObject}>
-                                {result.map((item,index) => {
-                                    let element = 
-                                        <ListGroup.Item href={'#' + index} style={style.listItem} className='searchResultList' eventKey={index} key={index}>
-                                            <div className="d-flex justify-content-around text-left">
-                                                <div className="font-weight-bold text-left">{index + 1}.</div>
-                                                <div className="font-weight-bold">{item.name}</div>
-                                                <div>xxxx-xxxx-{item.access_control_number.slice(10, 14)}</div>
-                                                <div>near {item.location_description}</div>
-                                            </div>
-                                        </ListGroup.Item>
-                                    return element
-                                })}
-                            </ListGroup>
-                        </Col>
+                        {result.length === 0 
+                        ?   <Col className='text-left' style={style.noResultDiv}>
+                                <em>no result</em>
+                            </Col> 
+                        
+                        :   <Col className='border px-0 overflow-auto'>
+                                <ListGroup variant="flush" onSelect={this.editObject}>
+                                    {result.map((item,index) => {
+                                        let element = 
+                                            <ListGroup.Item href={'#' + index} style={style.listItem} className='searchResultList' eventKey={index} key={index}>
+                                                <div className="d-flex justify-content-between">
+                                                    <div className="font-weight-bold text-left">{index + 1}.</div>
+                                                    <div className="font-weight-bold">{item.type}</div>
+                                                    <div>xxxx-xxxx-{item.access_control_number.slice(10, 14)}</div>
+                                                    <div>near {item.location_description}</div>
+                                                </div>
+                                            </ListGroup.Item>
+                                        return element
+                                    })}
+                                </ListGroup>
+                            </Col> 
+                        }
                         {/* <Col className=' border px-0' >
                             <Tab.Content >
                                 {result.map((item,index) => {

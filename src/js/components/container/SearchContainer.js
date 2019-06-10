@@ -139,6 +139,7 @@ class SearchContainer extends React.Component {
             }
 
         }
+        console.log(searchResult)
         this.setState({
             hasSearchKey: true,
             searchKey: searchKey,

@@ -67,7 +67,6 @@ class Surveillance extends React.Component {
     componentDidUpdate(){
         this.handleObjectMakers();
         this.createLbeaconMarkers();
-
     }
     
     componentWillUnmount() {
@@ -344,7 +343,8 @@ class Surveillance extends React.Component {
         /** 
          * Consider to remove these line if it does not optimize marking objects
          */
-        var searchedObjectDataSet = new Set();
+        let searchedObjectDataSet = new Set();
+
         if (hasSearchKey) {
             searchResult.map(item => {
                 searchedObjectDataSet.add(item.mac_address)
@@ -430,14 +430,22 @@ class Surveillance extends React.Component {
             iconSize: iconSize,
             markerColor: "sos"
         };
+
+        let popupOptions = {
+            minWidth: '400',
+            maxHeight: '300',
+            className : 'customPopup',
+        }
         
         let counter = 0;
-        for (var key in objects){
 
+        for (var key in objects){
             /** Tag the searched object */
             if (searchedObjectDataSet.has(key)) {
                 objects[key].searched = true
                 counter++;
+            } else {
+                objects[key].searched = false
             }
                 
             let detectedNum = objects[key].lbeaconDetectedNum;
@@ -449,11 +457,7 @@ class Surveillance extends React.Component {
              * More Style sheet include in Surveillance.css
             */
             let popupContent = this.popupContent(objects[key], BOTLogo, 100)
-            let popupOptions = {
-                minWidth: '400',
-                maxHeight: '300',
-                className : 'customPopup',
-            }
+
             /**
              * Create the marker, if the 'status' of the object is 'stationary', 
              * then the color will be black, or grey.
@@ -477,7 +481,7 @@ class Surveillance extends React.Component {
                 }
 			} else if (objects[key].panic_button === 1) {
                 iconOption = sosIconOptions;
-            } else if (objects[key].searched) {
+            } else if (objects[key].searched === true) {
                 iconOption = {
                     ...searchedObjectAweIconOptions,
                     number: counter, 
