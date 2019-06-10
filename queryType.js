@@ -4,6 +4,7 @@ function query_getTrackingData (rssi = -55) {
 	SELECT table_location.object_mac_address, 
 		   table_device.name, 
 		   table_device.type,
+		   table_device.access_control_number,
 		   table_location.lbeacon_uuid, 
 		   table_location.avg as avg, 
 		   table_location.panic_button as panic_button, 
@@ -64,7 +65,7 @@ function query_getTrackingData (rssi = -55) {
 	    INNER JOIN 
 	
 	    (
-		SELECT mac_address, name, type
+		SELECT mac_address, name, type, access_control_number
 	    FROM object_table
 		WHERE status = 'Normal'
 	    ) as table_device

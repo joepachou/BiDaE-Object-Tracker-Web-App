@@ -449,8 +449,8 @@ class Surveillance extends React.Component {
              * More Style sheet include in Surveillance.css
             */
             let popupContent = this.popupContent(objects[key], BOTLogo, 100)
-            let popupCustomStyle = {
-                minWidth: '300',
+            let popupOptions = {
+                minWidth: '400',
                 maxHeight: '300',
                 className : 'customPopup',
             }
@@ -489,7 +489,7 @@ class Surveillance extends React.Component {
             }
 
             const option = new L.AwesomeNumberMarkers (iconOption)
-            let marker =  L.marker(position, {icon: option}).bindPopup(popupContent, popupCustomStyle).addTo(this.markersLayer)
+            let marker =  L.marker(position, {icon: option}).bindPopup(popupContent, popupOptions).addTo(this.markersLayer)
             
             /** 
              * Set the z-index offset of the searhed object so that
@@ -575,7 +575,8 @@ class Surveillance extends React.Component {
                 <div class='textBox'>
                     <div>
                         <h4 className="mb-1">${object.location_description}</h4>
-                        <small className="d-flex">${object.type|| 'TYPE'} ${object.access_control_number}</small>
+                        <div>${object.type.toUpperCase()|| 'TYPE'}</div>
+                        <div>xxxx-xxxx-${object.access_control_number.slice(10, 14)}</div>
                     </div>
                     <small></small>
                 </div> 
