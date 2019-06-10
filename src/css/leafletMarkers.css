@@ -104,3 +104,8 @@
     background: url('../img/black_pin_v2.svg') no-repeat center/contain;
     /* background-position: -682px 0; */
   }
+
+  .awesome-number-marker-icon-sos {
+    background: url('../img/sos.svg') no-repeat center/contain;
+
+  }

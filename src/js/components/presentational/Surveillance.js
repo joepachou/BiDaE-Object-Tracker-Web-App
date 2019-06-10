@@ -198,7 +198,7 @@ class Surveillance extends React.Component {
                     lbeaconCoordinate: lbeaconCoordinate,
                     location_description: items.location_description,
                     rssi: items.avg,
-                    rssi_avg : items.avg_stable,
+                    // rssi_avg : items.avg_stable,
                 }
                 /**
                  * If the object has not scanned by one lbeacon yet, 
@@ -214,6 +214,7 @@ class Surveillance extends React.Component {
                     objectInfoHash[items.object_mac_address].maxRSSI = items.avg
                     objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate
                     objectInfoHash[items.object_mac_address].location_description = items.location_description
+                    objectInfoHash[items.object_mac_address].access_control_number = items.access_control_number
                     objectInfoHash[items.object_mac_address].coverLbeaconInfo = {}
                     objectInfoHash[items.object_mac_address].name = items.name
                     objectInfoHash[items.object_mac_address].type = items.type
@@ -425,6 +426,10 @@ class Surveillance extends React.Component {
             numberColor: "white"
         }
 
+        const sosIconOptions = {
+            iconSize: iconSize,
+            markerColor: "sos"
+        };
         
         let counter = 0;
         for (var key in objects){
@@ -559,7 +564,7 @@ class Surveillance extends React.Component {
 
     /**
      * The html content of popup of markers.
-     * @param {*} objectName The user friendly name of the object.
+     * @param {*} object The fields in object will present if only the field is add into objectInfoHash in handleTrackingData method
      * @param {*} objectImg  The image of the object.
      * @param {*} imgWidth The width of the image.
      */
@@ -569,8 +574,8 @@ class Surveillance extends React.Component {
             <div class='contentBox'>
                 <div class='textBox'>
                     <div>
-                        <h2 className="mb-1">${object.location_description}</h2>
-                        <small className="d-flex">${object.type|| 'TYPE'} xxxx-xxxx-00${object.id || '00'}</small>
+                        <h4 className="mb-1">${object.location_description}</h4>
+                        <small className="d-flex">${object.type|| 'TYPE'} ${object.access_control_number}</small>
                     </div>
                     <small></small>
                 </div> 
