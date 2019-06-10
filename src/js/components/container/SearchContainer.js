@@ -121,8 +121,13 @@ class SearchContainer extends React.Component {
      * Also, popout the searchResult component.
      */
     getResultData(e) {
+        if (typeof e === 'string') {
+            console.log('yes')
+            var searchKey = e
+        } else {
+            var searchKey = e.target.innerText;
+        }
         const searchableObjectData = this.props.searchableObjectData;
-        const searchKey = e.target.innerText;
         let searchResult = [];
         for (let object in searchableObjectData) {
             if (searchableObjectData[object].type == searchKey) {
@@ -137,7 +142,6 @@ class SearchContainer extends React.Component {
 
         /** Transfer the searched object data from search container to search map(Surveillance Map) */
         this.props.transferSearchResultFromSearchToMap(searchResult)
-
     }
 
     /**
@@ -205,7 +209,10 @@ class SearchContainer extends React.Component {
         return (
             <div id='searchContainer' className="mx-2" onTouchMove={this.handleTouchMove}>
                 <div id='searchBar' className='d-flex w-100 justify-content-center align-items-center'>
-                    <Searchbar placeholder={this.state.searchKey}/>
+                    <Searchbar 
+                        placeholder={this.state.searchKey}
+                        getResultData={this.getResultData}    
+                    />
                 </div>
 
                 <div id='searchResult' style={searchResultStyle} className='py-3'>
