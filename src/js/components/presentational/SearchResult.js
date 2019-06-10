@@ -46,13 +46,6 @@ class SearchResult extends React.Component {
 
         return(
             <>
-                {/* <Alert variant={"secondary"} className='text-left'>
-                <h6 className='d-inline font-weight-bold'>{locale.search_result.toUpperCase()}</h6> 
-                    <h6 className="d-inline pl-3">{result.length}</h6>
-                        <h6 className="d-inline pl-3">{searchKey}</h6>
-                            <h6 className="d-inline pl-2">on</h6>
-                                    <h6 className="d-inline pl-2">F4</h6>
-                </Alert> */}
                 <div className='text-left'>
                     <h6>Search Result</h6>
                 </div>
@@ -64,9 +57,9 @@ class SearchResult extends React.Component {
                                     let element = 
                                         <ListGroup.Item href={'#' + index} style={style.listItem} className='searchResultList' eventKey={index} key={index}>
                                             <div className="d-flex justify-content-around text-left">
-                                                <div className="font-weight-bold">{index + 1}.</div>
+                                                <div className="font-weight-bold text-left">{index + 1}.</div>
                                                 <div className="font-weight-bold">{item.name}</div>
-                                                <div>ACN: xxxx-xxxx-00{item.id}</div>
+                                                <div>xxxx-xxxx-{item.access_control_number.slice(10, 14)}</div>
                                                 <div>near {item.location_description}</div>
                                             </div>
                                         </ListGroup.Item>
