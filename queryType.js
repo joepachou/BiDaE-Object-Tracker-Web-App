@@ -82,7 +82,7 @@ function query_getTrackingData (rssi = -55) {
 
 const query_getObjectTable = 
 	`
-    SELECT id, name, type, location, status, transferred_location, mac_address
+    SELECT id, name, type, access_control_number, status, transferred_location, mac_address
 	FROM object_table ORDER BY name ASC
 	`;
 
@@ -129,11 +129,12 @@ function query_editObject (formOption) {
 		Update object_table 
 		SET type = $2,
 			status = $3,
-			transferred_location = $4
+			transferred_location = $4,
+			access_control_number = $5
 		WHERE mac_address = $1
 		`;
 		
-	const values = [formOption.mac_address, formOption.type, formOption.status, formOption.transferredLocation.value];
+	const values = [formOption.mac_address, formOption.type, formOption.status, formOption.transferredLocation.value, formOption.access_control_number];
 
 	const query = {
 		text,

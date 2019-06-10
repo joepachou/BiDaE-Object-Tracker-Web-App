@@ -32,14 +32,15 @@ const getObjectTable = (request, response) => {
     pool.query(queryType.query_getObjectTable, (error, results) => {        
         if (error) {
             console.log("Get data fails : " + error)
+        } else {
+            console.log('Get objectTable data!')
+        
+            results.rows.map(item => {
+                const localLastReportTimeStamp = moment(item.last_report_timestamp).tz(process.env.TZ);
+                item.last_report_timestamp = localLastReportTimeStamp.format();
+            })
+            response.status(200).json(results)
         }
-        console.log('Get objectTable data!')
-    
-        results.rows.map(item => {
-            const localLastReportTimeStamp = moment(item.last_report_timestamp).tz(process.env.TZ);
-            item.last_report_timestamp = localLastReportTimeStamp.format();
-        })
-        response.status(200).json(results)
     })
 }
 

@@ -1,3 +1,11 @@
+/**
+ * EditObjectForm is the Modal in ObjectManagementContainer.
+ * To increase the input in this form, please add the following code
+ * 1. Creat the state of the desired input name in constructor and the html content in render function
+ * 2. Add the corresponding terms in handleSubmit and handleChange
+ * 3. Modify the query_editObject function in queryType
+ */
+
 import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
@@ -31,6 +39,7 @@ class EditObjectForm extends React.Component {
                 name: '',
                 type: '',
                 status: '', 
+                access_control_number: '',
                 transferredLocation: null,
             }
         };
@@ -48,7 +57,7 @@ class EditObjectForm extends React.Component {
      */
 
     componentDidUpdate(prevProps) {
-        const { name, type, status, transferred_location } = this.props.selectedObjectData;
+        const { name, type, status, transferred_location, access_control_number } = this.props.selectedObjectData;
         if (prevProps != this.props) {
             this.setState({
                 show: this.props.show,
@@ -57,6 +66,7 @@ class EditObjectForm extends React.Component {
                     name: name,
                     type: type,
                     status: status,
+                    access_control_number: access_control_number,
                     transferredLocation: transferred_location ? {
                         'value': transferred_location, 
                         'label': transferred_location
@@ -92,6 +102,7 @@ class EditObjectForm extends React.Component {
         const postOption = {
             name: formOption.name || selectedObjectData.name,
             type: formOption.type || selectedObjectData.type,
+            access_control_number: formOption.access_control_number || selectedObjectData.access_control_number,
             status: formOption.status || selectedObjectData.status,
             transferredLocation: transferredLocation,
             mac_address: selectedObjectData.mac_address,
@@ -153,6 +164,13 @@ class EditObjectForm extends React.Component {
                     }
                 })
                 break;
+            case 'access_control_number':
+                this.setState({
+                    formOption: {
+                        ...this.state.formOption,
+                        access_control_number: e.target.value,
+                    }
+                })
         }
 
     }
@@ -172,7 +190,7 @@ class EditObjectForm extends React.Component {
         }
 
         const { title, selectedObjectData } = this.props;
-        const { status, transferredLocation, name, type } = this.state.formOption;
+        const { status, transferredLocation, name, type, access_control_number } = this.state.formOption;
 
         return (
             <>
@@ -207,6 +225,22 @@ class EditObjectForm extends React.Component {
                                         onChange={this.handleChange} 
                                         value={type} 
                                         name='type'
+                                        style={style.input}
+                                    />
+                                </Col>
+                            </Form.Group>
+
+                            <Form.Group as={Row} controlId="formHorizontalPassword">
+                                <Form.Label column sm={3}>
+                                    ACN
+                                </Form.Label>
+                                <Col sm={9}>
+                                    <Form.Control 
+                                        type="text" 
+                                        placeholder={selectedObjectData ? selectedObjectData.access_control_number : ''} 
+                                        onChange={this.handleChange} 
+                                        value={access_control_number} 
+                                        name='access_control_number'
                                         style={style.input}
                                     />
                                 </Col>
