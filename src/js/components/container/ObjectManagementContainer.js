@@ -27,6 +27,7 @@ export default class ObjectManagement extends React.Component{
         this.handleType = this.handleType.bind(this);
         this.handleModalForm = this.handleModalForm.bind(this);
         this.getObjectData = this.getObjectData.bind(this);
+        this.handleSubmitForm = this.handleSubmitForm.bind(this);
     }
 
     componentDidMount(){
@@ -91,6 +92,12 @@ export default class ObjectManagement extends React.Component{
         }) 
     }
 
+    handleSubmitForm() {
+        this.setState({
+            showModalForm: false
+        })
+    }
+
     render(){
         const { showModalForm, selectedRowData } = this.state
 
@@ -146,7 +153,12 @@ export default class ObjectManagement extends React.Component{
                         />
                     </Col>
                 </Row>
-                <EditObjectForm show = {showModalForm} title='Edit Object' selectedObjectData={selectedRowData} refresh={this.getObjectData}/>
+                <EditObjectForm 
+                    show = {showModalForm} 
+                    title='Edit Object' 
+                    selectedObjectData={selectedRowData} 
+                    handleSubmitForm={this.handleSubmitForm}
+                />
             </Container>
                     
         )

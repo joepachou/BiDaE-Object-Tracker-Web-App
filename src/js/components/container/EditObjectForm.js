@@ -117,11 +117,11 @@ class EditObjectForm extends React.Component {
                    this.setState ({
                        show: false,
                    })
+                   this.props.handleSubmitForm();
                 }
                 .bind(this),
                 1000
             )
-
         }).catch( error => {
             console.log(error)
         })
