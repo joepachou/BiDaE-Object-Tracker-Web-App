@@ -580,7 +580,7 @@ class Surveillance extends React.Component {
                     <div>
                         <h4 className="mb-1">${object.location_description}</h4>
                         <div>${object.type.toUpperCase()|| 'TYPE'}</div>
-                        <div>xxxx-xxxx-${object.access_control_number.slice(10, 14)}</div>
+                        <div>xxxx-xxxx-${object.access_control_number ?object.access_control_number.slice(10, 14) : ''}</div>
                     </div>
                     <small></small>
                 </div> 
