@@ -146,33 +146,14 @@ class EditObjectForm extends React.Component {
     }
 
     handleChange(e) {
-        const field = e.target.name;
-        switch(field) {
-            case 'name':
-                this.setState({
-                    formOption: {
-                        ...this.state.formOption,
-                        name: e.target.value,
-                    }
-                })
-                break;
-            case 'type':
-                this.setState({
-                    formOption: {
-                        ...this.state.formOption,
-                        type: e.target.value,
-                    }
-                })
-                break;
-            case 'access_control_number':
-                this.setState({
-                    formOption: {
-                        ...this.state.formOption,
-                        access_control_number: e.target.value,
-                    }
-                })
-        }
-
+        const target = e.target;
+        const { name } = target;
+        this.setState({
+            formOption: {
+                ...this.state.formOption,
+                [name]: target.value
+            }
+        })
     }
 
   

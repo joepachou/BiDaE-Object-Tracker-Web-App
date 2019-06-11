@@ -43,10 +43,10 @@ class SurveillanceContainer extends React.Component {
                     searchResult={searchResult}
                 />
                 <Nav className='d-flex align-items-center'>
-                    {/* <Nav.Item className='d-flex align-items-baseline'>
+                    <Nav.Item className='d-flex align-items-baseline'>
                         <small style={titleStyle}>{locale.location_accuracy.toUpperCase()}</small>
                         <ToggleSwitch adjustRssi={this.adjustRssi} leftLabel={locale.low} defaultLabel={locale.med} rightLabel={locale.high} />
-                    </Nav.Item> */}
+                    </Nav.Item>
                     {/* <Nav.Item>
                         <ModalForm title='Add object'/>
                     </Nav.Item> */}

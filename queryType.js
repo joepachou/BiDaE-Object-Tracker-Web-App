@@ -131,11 +131,12 @@ function query_editObject (formOption) {
 		SET type = $2,
 			status = $3,
 			transferred_location = $4,
-			access_control_number = $5
+			access_control_number = $5,
+			name = $6
 		WHERE mac_address = $1
 		`;
 		
-	const values = [formOption.mac_address, formOption.type, formOption.status, formOption.transferredLocation.value, formOption.access_control_number];
+	const values = [formOption.mac_address, formOption.type, formOption.status, formOption.transferredLocation.value, formOption.access_control_number, formOption.name];
 
 	const query = {
 		text,
