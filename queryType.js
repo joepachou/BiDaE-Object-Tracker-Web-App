@@ -108,24 +108,6 @@ const query_getGeofenceData =
 	`;
 	
 
-function query_getSearchResult (searchKey) {
-	const text = 
-		`
-		SELECT * 
-		FROM object_table
-		WHERE type = $1
-		`;
-	const values = [searchKey];
-
-	const query = {
-		text, 
-		values
-	};
-
-	return query;
-	
-}
-
 function query_editObject (formOption) {
 	const text = 
 		`
@@ -154,7 +136,6 @@ module.exports = {
     query_getObjectTable,
     query_getLbeaconTable,
 	query_getGatewayTable,
-	query_getSearchResult,
 	query_getGeofenceData,
 	query_editObject,
 }

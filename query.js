@@ -87,19 +87,6 @@ const getGeofenceData = (request, response) => {
     })
 }
 
-const getSearchResult = (request, response) => {
-    const searchKey = request.body.searchkey
-    pool.query(queryType.query_getSearchResult(searchKey), (error, results) => {
-        if (error) {
-            console.log("Get Search Result fails: " + error) 
-        } else {
-            console.log("Get Search Result");
-        }
-
-        response.status(200).json(results)
-    })
-}
-
 const editObject = (request, response) => {
     const formOption = request.body.formOption
     pool.query(queryType.query_editObject(formOption), (error, results) => {
@@ -119,7 +106,6 @@ module.exports = {
     getObjectTable,
     getLbeaconTable,
     getGatewayTable,
-    getSearchResult,
     getGeofenceData,
     editObject,
 }
