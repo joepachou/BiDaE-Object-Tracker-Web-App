@@ -463,7 +463,7 @@ class Surveillance extends React.Component {
              * then the color will be black, or grey.
              */
             let iconOption = {}
-            if (objects[key].geofence_type === 'F'){
+            if (objects[key].geofence_type === 'Fence'){
                 iconOption = geofenceFAweIconOptions;
                 if (objects[key].searched) {
                     iconOption = {
@@ -471,7 +471,7 @@ class Surveillance extends React.Component {
                         number: counter
                     }
                 }
-			} else if (objects[key].geofence_type === 'P'){
+			} else if (objects[key].geofence_type === 'Perimeter'){
                 iconOption = geofencePAweIconOptions;
                 if (objects[key].searched) {
                     iconOption = {
