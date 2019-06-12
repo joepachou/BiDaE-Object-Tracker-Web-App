@@ -37,7 +37,12 @@ export default class ContentContainer extends React.Component{
 
     retrieveTrackingData(rawData, processedData){
         let column = [];
-        rawData.fields.map(item => {
+
+        let raw = rawData.fields.filter(item => {
+            return item.name !== 'access_control_number' && item.name !== 'transferred_location'
+        })
+
+        raw.map(item => {
             let field = {};
             field.Header = item.name,
             field.accessor = item.name,

@@ -32,7 +32,9 @@ class ChangeStatusForm extends React.Component {
             show: this.props.show,
             isShowForm: false,
             formOption: {
-                status: 'Normal', 
+                name: '',
+                type: '',
+                status: '', 
                 transferredLocation: null,
             }
         };
@@ -57,18 +59,18 @@ class ChangeStatusForm extends React.Component {
         });
     }
 
-    componentDidUpdate(prevProps) {
-        const { selectedObjectData } = this.props;
 
-        if (prevProps != this.props) {
+    componentDidUpdate(prevProps) {
+        const { selectedObjectData } = this.props
+        if (prevProps != this.props && selectedObjectData) {
             this.setState({
                 show: this.props.show,
                 isShowForm: true,
                 formOption: {
-                    name: selectedObjectData ? selectedObjectData.name : '',
-                    type: selectedObjectData ? selectedObjectData.type : '',
-                    status: selectedObjectData ? selectedObjectData.status : '',
-                    transferredLocation: selectedObjectData && selectedObjectData.transferred_location ? {
+                    name: selectedObjectData.name,
+                    type: selectedObjectData.type,
+                    status: selectedObjectData.status,
+                    transferredLocation: selectedObjectData.transferred_location ? {
                         'value' : selectedObjectData.transferred_location,
                         'label' : selectedObjectData.transferred_location
                     } : null,
@@ -79,15 +81,15 @@ class ChangeStatusForm extends React.Component {
 
     handleSubmit(e) {
         const button = e.target;
-        const { mac_address, name, type } = this.props.selectedObjectData;
+        const { mac_address, name, type, access_control_number } = this.props.selectedObjectData;
         const { status, transferredLocation } = this.state.formOption;
-        console.log(this.props)
         const postOption = {
             name: name,
             type: type,
             status: status,
             transferredLocation: transferredLocation || '',
-            mac_address: mac_address
+            mac_address: mac_address,
+            access_control_number: access_control_number,
         }
         axios.post(dataSrc.editObject, {
             formOption: postOption
@@ -143,7 +145,7 @@ class ChangeStatusForm extends React.Component {
         const { name, type, status, transferredLocation } = this.state.formOption;
 
         return (
-            <>
+            <>  
                 <Modal show={this.state.show} onHide={this.handleClose} size="lg">
                     <Modal.Header closeButton>{title}</Modal.Header >
                     <Modal.Body>
