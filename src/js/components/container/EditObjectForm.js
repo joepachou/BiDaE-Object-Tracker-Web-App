@@ -7,11 +7,7 @@
  */
 
 import React from 'react';
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form'
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
 import Select from 'react-select';
 import config from '../../config';
 import LocaleContext from '../../context/LocaleContext';
@@ -50,6 +46,7 @@ class EditObjectForm extends React.Component {
         this.handleSelect = this.handleSelect.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
+
 
     /**
      * EditObjectForm will update if user selects one of the object table.
@@ -174,144 +171,142 @@ class EditObjectForm extends React.Component {
         const { status, transferredLocation, name, type, access_control_number } = this.state.formOption;
 
         return (
-            <>
-                <Modal show={this.state.show} onHide={this.handleClose} size="lg">
-                    <Modal.Header closeButton>{title}</Modal.Header >
-                    <Modal.Body>
-                        <Form >
-                            <Form.Group as={Row} controlId="formHorizontalEmail">
-                                <Form.Label column sm={3}>
-                                    Name
+            <Modal show={this.state.show} onHide={this.handleClose} size="lg">
+                <Modal.Header closeButton>{title}</Modal.Header >
+                <Modal.Body>
+                    <Form >
+                        <Form.Group as={Row} controlId="formHorizontalEmail">
+                            <Form.Label column sm={3}>
+                                Name
+                            </Form.Label>
+                            <Col sm={9}>
+                                <Form.Control 
+                                    type="text" 
+                                    placeholder={selectedObjectData ? selectedObjectData.name : ''} 
+                                    onChange={this.handleChange} 
+                                    value={name} 
+                                    name='name'
+                                    style={style.input}
+                                />
+                            </Col>
+                        </Form.Group>
+
+                        <Form.Group as={Row} controlId="formHorizontalPassword">
+                            <Form.Label column sm={3}>
+                                Type
+                            </Form.Label>
+                            <Col sm={9}>
+                                <Form.Control 
+                                    type="text" 
+                                    placeholder={selectedObjectData ? selectedObjectData.type : ''} 
+                                    onChange={this.handleChange} 
+                                    value={type} 
+                                    name='type'
+                                    style={style.input}
+                                />
+                            </Col>
+                        </Form.Group>
+
+                        <Form.Group as={Row} controlId="formHorizontalPassword">
+                            <Form.Label column sm={3}>
+                                ACN
+                            </Form.Label>
+                            <Col sm={9}>
+                                <Form.Control 
+                                    type="text" 
+                                    placeholder={selectedObjectData ? selectedObjectData.access_control_number : ''} 
+                                    onChange={this.handleChange} 
+                                    value={access_control_number} 
+                                    name='access_control_number'
+                                    style={style.input}
+                                />
+                            </Col>
+                        </Form.Group>
+
+                        
+                        <hr/>
+                        <fieldset>
+                            <Form.Group as={Row}>
+                                <Form.Label as="legend" column sm={3}>
+                                    Status
                                 </Form.Label>
                                 <Col sm={9}>
-                                    <Form.Control 
-                                        type="text" 
-                                        placeholder={selectedObjectData ? selectedObjectData.name : ''} 
-                                        onChange={this.handleChange} 
-                                        value={name} 
-                                        name='name'
-                                        style={style.input}
+                                    <Form.Check
+                                        custom
+                                        type="radio"
+                                        label="Normal"
+                                        name="formHorizontalRadios"
+                                        id="formHorizontalRadios1"
+                                        value="Normal"
+                                        checked={status === 'Normal'}
+                                        onChange={this.handleCheck}                                     
                                     />
-                                </Col>
-                            </Form.Group>
+                                    <Form.Check
+                                        custom
+                                        type="radio"
+                                        label="Broken"
+                                        name="formHorizontalRadios"
+                                        id="formHorizontalRadios2"
+                                        value="Broken"
+                                        checked={status === 'Broken'}
 
-                            <Form.Group as={Row} controlId="formHorizontalPassword">
-                                <Form.Label column sm={3}>
-                                    Type
-                                </Form.Label>
-                                <Col sm={9}>
-                                    <Form.Control 
-                                        type="text" 
-                                        placeholder={selectedObjectData ? selectedObjectData.type : ''} 
-                                        onChange={this.handleChange} 
-                                        value={type} 
-                                        name='type'
-                                        style={style.input}
+                                        onChange={this.handleCheck}   
                                     />
-                                </Col>
-                            </Form.Group>
+                                    <Form.Row>
+                                        <Form.Group as={Col} sm={4}>
+                                            <Form.Check
+                                                custom
+                                                type="radio"
+                                                label="Transferred"
+                                                name="formHorizontalRadios"
+                                                id="formHorizontalRadios3"
+                                                value="Transferred"
+                                                checked={status === 'Transferred'}
 
-                            <Form.Group as={Row} controlId="formHorizontalPassword">
-                                <Form.Label column sm={3}>
-                                    ACN
-                                </Form.Label>
-                                <Col sm={9}>
-                                    <Form.Control 
-                                        type="text" 
-                                        placeholder={selectedObjectData ? selectedObjectData.access_control_number : ''} 
-                                        onChange={this.handleChange} 
-                                        value={access_control_number} 
-                                        name='access_control_number'
-                                        style={style.input}
-                                    />
-                                </Col>
-                            </Form.Group>
-
-                           
-                            <hr/>
-                            <fieldset>
-                                <Form.Group as={Row}>
-                                    <Form.Label as="legend" column sm={3}>
-                                        Status
-                                    </Form.Label>
-                                    <Col sm={9}>
-                                        <Form.Check
-                                            custom
-                                            type="radio"
-                                            label="Normal"
-                                            name="formHorizontalRadios"
-                                            id="formHorizontalRadios1"
-                                            value="Normal"
-                                            checked={status === 'Normal'}
-                                            onChange={this.handleCheck}                                     
-                                        />
-                                        <Form.Check
-                                            custom
-                                            type="radio"
-                                            label="Broken"
-                                            name="formHorizontalRadios"
-                                            id="formHorizontalRadios2"
-                                            value="Broken"
-                                            checked={status === 'Broken'}
-
-                                            onChange={this.handleCheck}   
-                                        />
-                                        <Form.Row>
-                                            <Form.Group as={Col} sm={4}>
-                                                <Form.Check
-                                                    custom
-                                                    type="radio"
-                                                    label="Transferred"
-                                                    name="formHorizontalRadios"
-                                                    id="formHorizontalRadios3"
-                                                    value="Transferred"
-                                                    checked={status === 'Transferred'}
-
-                                                    onChange={this.handleCheck}   
+                                                onChange={this.handleCheck}   
+                                            />
+                                        </Form.Group>
+                                        <Form.Group as={Col} sm={8} >
+                                                <Select
+                                                    placeholder = "Select Location"
+                                                    value={transferredLocation}
+                                                    onChange={this.handleSelect}
+                                                    options={options}
+                                                    isDisabled = {status === 'Transferred' ? false : true}
                                                 />
-                                            </Form.Group>
-                                            <Form.Group as={Col} sm={8} >
-                                                    <Select
-                                                        placeholder = "Select Location"
-                                                        value={transferredLocation}
-                                                        onChange={this.handleSelect}
-                                                        options={options}
-                                                        isDisabled = {status === 'Transferred' ? false : true}
-                                                    />
-                                            </Form.Group>
-                                            
-                                        </Form.Row>
-                                    </Col>
-                                </Form.Group>
-                             </fieldset>
-                             <hr/>
-                             <Form.Group as={Row} controlId="formHorizontalPassword">
-                                <Form.Label column sm={3}>
-                                    Mac address
-                                </Form.Label>
-                                <Col sm={9}>
-                                    <Form.Control 
-                                        type="text" 
-                                        placeholder={selectedObjectData ? selectedObjectData.mac_address : ''}
-                                        disabled 
-                                        readOnly
-                                    />
+                                        </Form.Group>
+                                        
+                                    </Form.Row>
                                 </Col>
                             </Form.Group>
+                            </fieldset>
+                            <hr/>
+                            <Form.Group as={Row} controlId="formHorizontalPassword">
+                            <Form.Label column sm={3}>
+                                Mac address
+                            </Form.Label>
+                            <Col sm={9}>
+                                <Form.Control 
+                                    type="text" 
+                                    placeholder={selectedObjectData ? selectedObjectData.mac_address : ''}
+                                    disabled 
+                                    readOnly
+                                />
+                            </Col>
+                        </Form.Group>
 
-                        </Form>
+                    </Form>
 
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={this.handleClose}>
-                            Cancel
-                        </Button>
-                        <Button variant="primary" onClick={this.handleSubmit}>
-                            Save
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
-            </>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={this.handleClose}>
+                        Cancel
+                    </Button>
+                    <Button variant="primary" onClick={this.handleSubmit}>
+                        Save
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         );
     }
 }
