@@ -207,7 +207,6 @@ class Surveillance extends React.Component {
                  *  then check if the current RSSI is the largest.
                  */
                 if (!(items.object_mac_address in objectInfoHash)) {
-                    
                     objectInfoHash[items.object_mac_address] = {};
                     objectInfoHash[items.object_mac_address].lbeaconDetectedNum = 1
                     objectInfoHash[items.object_mac_address].maxRSSI = items.avg
@@ -220,27 +219,29 @@ class Surveillance extends React.Component {
                     objectInfoHash[items.object_mac_address].mac_address = items.object_mac_address
                     objectInfoHash[items.object_mac_address].panic_button = items.panic_button;
 					objectInfoHash[items.object_mac_address].geofence_type = items.geofence_type;
-                    objectInfoHash[items.object_mac_address].coverLbeaconInfo[lbeaconCoordinate] = object
-                    objectInfoHash[items.object_mac_address].status = items.avg_stable !== null ? 'stationary' : 'stationary';
+                    objectInfoHash[items.object_mac_address].coverLbeaconInfo[lbeaconCoordinate] = object;
+                    objectInfoHash[items.object_mac_address].status = items.status;
+                    objectInfoHash[items.object_mac_address].transferred_location = items.transferred_location;
+                    objectInfoHash[items.object_mac_address].moving_status = items.avg_stable !== null ? 'stationary' : 'stationary';
 
                 } else {
                     let maxRSSI = objectInfoHash[items.object_mac_address].maxRSSI;
-                    let status = objectInfoHash[items.object_mac_address].status;
+                    let moving_status = objectInfoHash[items.object_mac_address].moving_status;
 					let geofence_type = objectInfoHash[items.object_mac_address].geofence_type;
 					let panic_button = objectInfoHash[items.object_mac_address].panic_button;
 					
-				    if(items.geofence_type === 'F'){
-				        if(geofence_type === null || geofence_type === 'P' || 
-						   (geofence_type === 'F' &&  parseFloat(items.avg) > parseFloat(maxRSSI))) {
+				    if(items.geofence_type === 'Fence'){
+				        if(geofence_type === null || geofence_type === 'Perimeter' || 
+						   (geofence_type === 'Fence' &&  parseFloat(items.avg) > parseFloat(maxRSSI))) {
 							   
 						    objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
                             objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
                             objectInfoHash[items.object_mac_address].location_description = items.location_description
 					        objectInfoHash[items.object_mac_address].geofence_type = items.geofence_type;
 						}
-					}else if(items.geofence_type === 'P'){
+					}else if(items.geofence_type === 'Perimeter'){
 						if(geofence_type === null || 
-						   (geofence_type === 'P' && parseFloat(items.avg) > parseFloat(maxRSSI))) {
+						   (geofence_type === 'Perimeter' && parseFloat(items.avg) > parseFloat(maxRSSI))) {
 							   
 						    objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
                             objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
@@ -283,17 +284,17 @@ class Surveillance extends React.Component {
                          * max rssi = new lbeacon rssi
                          */
 						 /*
-                        if ((status === 'stationary' && parseFloat(items.avg) > parseFloat(maxRSSI))|| status === 'moving' ){
+                        if ((moving_status === 'stationary' && parseFloat(items.avg) > parseFloat(maxRSSI))|| moving_status === 'moving' ){
                             objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
                             objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
-                            objectInfoHash[items.object_mac_address].status = 'stationary'
+                            objectInfoHash[items.object_mac_address].moving_status = 'stationary'
                         } 
 						*/
                     /*    
                     } else {
 						*/
 /*
-                        if(status === 'moving' && parseFloat(items.avg) > parseFloat(maxRSSI)) {
+                        if(moving_status === 'moving' && parseFloat(items.avg) > parseFloat(maxRSSI)) {
                             objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
                             objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
                         }
@@ -459,7 +460,7 @@ class Surveillance extends React.Component {
             let popupContent = this.popupContent(objects[key], BOTLogo, 100)
 
             /**
-             * Create the marker, if the 'status' of the object is 'stationary', 
+             * Create the marker, if the 'moving_status' of the object is 'stationary', 
              * then the color will be black, or grey.
              */
             let iconOption = {}
@@ -486,7 +487,7 @@ class Surveillance extends React.Component {
                     ...searchedObjectAweIconOptions,
                     number: counter, 
                 }
-            } else if (objects[key].status === 'stationary') {
+            } else if (objects[key].moving_status === 'stationary') {
                 iconOption = stationaryAweIconOptions;
             } else {
                 iconOption = movingIconOptions;
@@ -508,7 +509,7 @@ class Surveillance extends React.Component {
 
 
             /** Set the error circles of the markers. */
-            if (detectedNum > 1 && objects[key].status === 'stationary') {
+            if (detectedNum > 1 && objects[key].moving_status === 'stationary') {
                 let errorCircle = L.circleMarker(position ,errorCircleOptions).addTo(this.errorCircle);
             }
         }
