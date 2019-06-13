@@ -7,6 +7,7 @@ const gatewayTable = 'http://' + IP + '/data/gatewayTable';
 const searchResult = 'http://' + IP + '/data/searchResult';
 const geofenceData = 'http://' + IP + '/data/geofenceData';
 const editObject = 'http://' + IP + '/data/editObject';
+const login = 'http://' + IP + '/user/login';
 
 module.exports = {
     trackingData,
@@ -16,4 +17,5 @@ module.exports = {
     searchResult,
     geofenceData,
     editObject,
+    login,
 };

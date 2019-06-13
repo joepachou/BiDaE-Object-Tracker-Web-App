@@ -130,6 +130,26 @@ function query_editObject (formOption) {
 	return query;
 }
 
+function query_login(username) {
+
+	const text =
+		`
+		SELECT name, password
+		FROM user_table
+		WHERE name= $1
+		`;
+
+	const values = [username];
+
+	const query = {
+		text,
+		values
+	};
+
+	return query;
+	
+}
+
 
 module.exports = {
     query_getTrackingData,
@@ -138,5 +158,6 @@ module.exports = {
 	query_getGatewayTable,
 	query_getGeofenceData,
 	query_editObject,
+	query_login,
 }
 

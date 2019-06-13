@@ -100,6 +100,26 @@ const editObject = (request, response) => {
 
     })
 }
+
+const login = (request, response) => {
+    const auth = request.body.auth
+
+    pool.query(queryType.query_login(auth.username), (error, results) => {
+
+        if (error) {
+            console.log("Login Fails!")
+        } else {
+            const auth = results.rows[0];
+            const pwd = auth.password;
+            if (pwd === auth.password) {
+                console.log('log in!')
+            }
+        }
+
+        response.status(200).json(results)
+    })
+
+}
     
 module.exports = {
     getTrackingData,
@@ -108,4 +128,5 @@ module.exports = {
     getGatewayTable,
     getGeofenceData,
     editObject,
+    login
 }

@@ -39,12 +39,11 @@ app.get('/data/geofenceData', db.getGeofenceData);
 
 app.post('/data/trackingData', db.getTrackingData);
 
-app.post('/data/searchResult', db.getSearchResult);
-
 app.post('/data/editObject', db.editObject);
+
+app.post('/user/login', db.login);
 
 app.listen(PORT, () => {
     console.log(`App running on PORT ${PORT}.`)
-
 })
 
