@@ -73,7 +73,7 @@ class NavbarContainer extends React.Component {
 
     render() {
         const NavbarStyle = {
-            height: "100px",
+            height: "80px",
             boxShadow: "0 1px 6px 0 rgba(32,33,36,0.28)",
         }
         const locale = this.context;
@@ -81,7 +81,6 @@ class NavbarContainer extends React.Component {
 
         return (
             <Navbar className="navbar sticky-top navbar-light" style={NavbarStyle}>
-            {console.log(this.state)}
                 <Navbar.Brand className='px-0 mx-0'>
                     <Link style={{color: "black"}} to="/" className="nav-link nav-brand d-flex align-items-center px-0" >
                         <Image
