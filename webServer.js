@@ -41,7 +41,9 @@ app.post('/data/trackingData', db.getTrackingData);
 
 app.post('/data/editObject', db.editObject);
 
-app.post('/user/login', db.login);
+app.post('/user/signin', db.signin);
+
+app.post('/user/signup', db.signup);
 
 app.listen(PORT, () => {
     console.log(`App running on PORT ${PORT}.`)

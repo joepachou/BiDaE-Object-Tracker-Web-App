@@ -130,11 +130,11 @@ function query_editObject (formOption) {
 	return query;
 }
 
-function query_login(username) {
+function query_signin(username) {
 
 	const text =
 		`
-		SELECT name, password
+		SELECT password
 		FROM user_table
 		WHERE name= $1
 		`;
@@ -150,6 +150,23 @@ function query_login(username) {
 	
 }
 
+function query_signup(signupPackage) {
+
+	const text = 
+		`
+		INSERT INTO user_table (name, password)
+		VALUES ($1, $2)
+		`;
+	const values = [signupPackage.username, signupPackage.password];
+
+	const query = {
+		text,
+		values
+	};
+
+	return query
+}
+
 
 module.exports = {
     query_getTrackingData,
@@ -158,6 +175,7 @@ module.exports = {
 	query_getGatewayTable,
 	query_getGeofenceData,
 	query_editObject,
-	query_login,
+	query_signin,
+	query_signup
 }
 

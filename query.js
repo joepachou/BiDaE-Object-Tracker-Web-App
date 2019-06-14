@@ -1,6 +1,7 @@
 require('dotenv').config();
 const moment = require('moment-timezone');
-const queryType = require ('./queryType')
+const queryType = require ('./queryType');
+const bcrypt = require('bcrypt');
 const pg = require('pg');
 const config = {
     user: process.env.DB_USER,
@@ -101,19 +102,53 @@ const editObject = (request, response) => {
     })
 }
 
-const login = (request, response) => {
-    const auth = request.body.auth
+const signin = (request, response) => {
+    const { username, password } = request.body
 
-    pool.query(queryType.query_login(auth.username), (error, results) => {
+    pool.query(queryType.query_signin(username), (error, results) => {
+        const hash = results.rows[0].password;
+        if (error) {
+            console.log("Login Fails: " + error)
+        } else {
+
+            if (results.rowCount < 1) {
+                response.json({
+                    authentication: false,
+                    message: "Username or password is incorrect"
+                })
+            } else {
+                if (bcrypt.compareSync(password, hash)) {
+                    response.json({
+                        authentication: true,
+                    })
+                } else {
+                    response.json({
+                        authentication: false,
+                        message: "password is incorrect"
+                    })
+                }
+            }
+        }
+
+    })
+
+}
+
+const signup = (request, response) => {
+    const { username, password } = request.body;
+    
+    const saltRounds = 10;
+    const hash = bcrypt.hashSync(password, saltRounds);
+    const signupPackage = {
+        username: username,
+        password: hash,
+    }
+    pool.query(queryType.query_signup(signupPackage), (error, results) => {
 
         if (error) {
             console.log("Login Fails!")
         } else {
-            const auth = results.rows[0];
-            const pwd = auth.password;
-            if (pwd === auth.password) {
-                console.log('log in!')
-            }
+            console.log('Sign up Success')
         }
 
         response.status(200).json(results)
@@ -128,5 +163,6 @@ module.exports = {
     getGatewayTable,
     getGeofenceData,
     editObject,
-    login
+    signin,
+    signup
 }
