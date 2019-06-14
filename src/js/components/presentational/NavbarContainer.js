@@ -2,14 +2,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom";
 import { supportedLocale } from '../../../js/locale';
-
-/** Import Image */
-import BOTLogo_Green from '../../../img/BOTLogo.png';
-import BOT_LOGO_RED from '../../../img/BOT_LOGO_RED_MOD.png'; 
-
 import { Navbar, Nav, NavDropdown, Image  } from 'react-bootstrap'
-
 import LocaleContext from '../../context/LocaleContext';
+import SigninPage from '../container/SigninPage';
 import SignupPage from '../container/SignupPage';
 
 import config from '../../config';
@@ -19,28 +14,54 @@ class NavbarContainer extends React.Component {
         super();
         this.state = {
             isSignin: false,
-            isShowModal: false,
+            isShowSigninForm: false,
+            isShowSignupForm: false,
         }
         this.handleLangSelect = this.handleLangSelect.bind(this);
-        this.handleSigninForm = this.handleSigninForm.bind(this);
-        this.handleSignin = this.handleSignin.bind(this);
+        this.handleSigninFormShowUp = this.handleSigninFormShowUp.bind(this);
+        this.handleSigninFormSubmit = this.handleSigninFormSubmit.bind(this);
         this.handleClickHeadIcon = this.handleClickHeadIcon.bind(this);
+        this.handleSignupFormShowUp = this.handleSignupFormShowUp.bind(this);
+        this.handleSignupFormSubmit = this.handleSignupFormSubmit.bind(this);
+
     }
 
     handleLangSelect(eventKey) {
         this.props.changeLocale(eventKey);
     }
 
-    handleSigninForm() {
+    handleSigninFormShowUp() {
         this.setState({
-            isShowModal: true,
+            isShowSigninForm: true,
+            isShowSignupForm: false,
         })
     }
 
-    handleSignin() {
+    handleSignupFormShowUp() {
+        this.setState({
+            isShowSigninForm: false,
+        })
+        setTimeout(
+            function() {
+                this.setState({
+                    isShowSignupForm: true,
+                })
+            }.bind(this),
+            300
+        )
+    }
+
+    handleSigninFormSubmit() {
         this.setState({
             isSignin: true,
-            isShowModal: false,
+            isShowSigninForm: false,
+        })
+    }
+
+    handleSignupFormSubmit() {
+        console.log('signupformcomplete')
+        this.setState({
+            isShowSignupForm: false,
         })
     }
 
@@ -56,10 +77,11 @@ class NavbarContainer extends React.Component {
             boxShadow: "0 1px 6px 0 rgba(32,33,36,0.28)",
         }
         const locale = this.context;
-        const { isSignin, isShowModal } = this.state;
+        const { isSignin, isShowSigninForm, isShowSignupForm } = this.state;
 
         return (
             <Navbar className="navbar sticky-top navbar-light" style={NavbarStyle}>
+            {console.log(this.state)}
                 <Navbar.Brand className='px-0 mx-0'>
                     <Link style={{color: "black"}} to="/" className="nav-link nav-brand d-flex align-items-center px-0" >
                         <Image
@@ -86,19 +108,23 @@ class NavbarContainer extends React.Component {
                             {Object.values(supportedLocale).map( (locale,index) => {
                                 return <NavDropdown.Item key={index} className="lang-select" eventKey={locale.abbr}>{locale.name}</NavDropdown.Item>
                             })}
-                        </NavDropdown>
+                        </NavDropdown>          
                         <Nav.Link >
                             {isSignin 
                                 ? <i className="fas fa-user-alt" onClick={this.handleClickHeadIcon}></i> 
-                                : <div onClick={this.handleSigninForm}>Sign In</div>
+                                : <div onClick={this.handleSigninFormShowUp}>Sign In</div>
                             }
                         </Nav.Link>
                     </Nav>
-                <SignupPage 
-                    show={isShowModal}
-                    handleSignin={this.handleSignin}
+                <SigninPage 
+                    show={isShowSigninForm}
+                    handleSigninFormSubmit={this.handleSigninFormSubmit}
+                    handleSignupFormShowUp={this.handleSignupFormShowUp}
                 />
-                {console.log(this.state)}
+                <SignupPage 
+                    show={isShowSignupForm}
+                    handleSignupFormSubmit={this.handleSignupFormSubmit}
+                />
             </Navbar>
         );
     }
