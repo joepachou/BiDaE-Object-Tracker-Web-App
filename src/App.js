@@ -8,6 +8,10 @@ import routes from './js/routes';
 import locale from './js/locale';
 import LocaleContext from './js/context/LocaleContext';
 import config from './js/config';
+import axios from 'axios';
+import dataSrc from './js/dataSrc';
+import { retrieveTrackingData } from './js/action/action';
+import { connect } from 'react-redux';
 
 class App extends React.Component {
 
@@ -17,6 +21,8 @@ class App extends React.Component {
             locale: locale.changeLocale(config.locale.defaultLocale),
         }
         this.handleChangeLocale = this.handleChangeLocale.bind(this);
+        this.getTrackingData = this.getTrackingData.bind(this);
+        this.StartSetInterval = config.surveillanceMap.startInteval; 
     }
 
     handleChangeLocale(changedLocale){
@@ -25,21 +31,48 @@ class App extends React.Component {
         })
     }
 
+    componentDidMount() {
+        this.getTrackingData();
+        this.interval = this.StartSetInterval == true ? setInterval(this.getTrackingData, config.surveillanceMap.intevalTime) : null;
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+    
+    getTrackingData() {
+        axios.post(dataSrc.trackingData, {
+            rssi: 50
+        }).then(res => {
+            this.props.retrieveTrackingData(res.data)
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    }
+
     render() { 
         const { locale } = this.state;
         return (
             <LocaleContext.Provider value={locale}>
                 <Router>         
-                    <NavbarContainer changeLocale={this.handleChangeLocale} locale={locale}/>
-                    <div className='my-6' id='contentContainer'>
-                        <Switch>
-                            {renderRoutes(routes)}
-                        </Switch>
-                    </div>       
+                    <NavbarContainer changeLocale={this.handleChangeLocale} locale={locale} trackingData={this.retrievingTrackingData}/>
+                    <Switch>
+                        {renderRoutes(routes)}
+                    </Switch>
                 </Router>
             </LocaleContext.Provider>
         );
     }  
 };
 
-export default App
+const mapDispatchToProps = (dispatch) => {
+    return {
+        retrieveTrackingData: object => dispatch(retrieveTrackingData(object)),
+    }
+}
+
+export default connect(null, mapDispatchToProps)(App)
+
+
+

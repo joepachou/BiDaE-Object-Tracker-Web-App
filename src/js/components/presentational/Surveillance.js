@@ -1,8 +1,6 @@
 /** Import React */
 import React from 'react';
 
-/** Import survelliance general map  */
-import BOTLogo from '../../../img/BOTLogo.png';
 /** Import Axios */
 import axios from 'axios';
 
@@ -16,9 +14,6 @@ import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import '../../../css/CustomMarkerCluster.css'
 
-/** API url */
-import dataSrc from '../../../js/dataSrc';
-
 /** Redux related Library  */
 import { 
     isObjectListShown,
@@ -28,7 +23,6 @@ import {
 import { connect } from 'react-redux';
 
 import config from '../../config';
-import white_pin from '../../../img/white_pin.svg';
 import '../../leaflet_awesome_number_markers';
 
 class Surveillance extends React.Component {
@@ -49,7 +43,7 @@ class Surveillance extends React.Component {
 
         this.handlemenu = this.handlemenu.bind(this);
         this.handleTrackingData = this.handleTrackingData.bind(this);
-        this.handleObjectMakers = this.handleObjectMakers.bind(this);
+        this.handleObjectMarkers = this.handleObjectMarkers.bind(this);
         this.createLbeaconMarkers = this.createLbeaconMarkers.bind(this);
         this.resizeMarkers = this.resizeMarkers.bind(this);
         this.calculateScale = this.calculateScale.bind(this);
@@ -60,20 +54,19 @@ class Surveillance extends React.Component {
 
     componentDidMount(){
         this.initMap();  
-        this.handleTrackingData(); 
-        this.interval = this.StartSetInterval == true ? setInterval(this.handleTrackingData, config.surveillanceMap.intevalTime) : null;
     }
 
-    componentDidUpdate(){
-        this.handleObjectMakers();
-        this.createLbeaconMarkers();
-    }
-    
-    componentWillUnmount() {
-        clearInterval(this.interval);
-    }
-    
+    componentDidUpdate(prepProps){
 
+        /** Check whether there is the new tracking data retrieving from store */
+        if (this.props.objectInfo !== prepProps.objectInfo) {
+            this.handleTrackingData(); 
+        }
+        this.handleObjectMarkers();
+        // this.createLbeaconMarkers();
+    }
+    
+    /** Set the search map configuration which establishs in config.js  */
     initMap(){
         let map = L.map('mapid', config.surveillanceMap.mapOptions);
         let bounds = config.surveillanceMap.mapBound;
@@ -81,9 +74,7 @@ class Surveillance extends React.Component {
         map.fitBounds(bounds);
         this.map = map;
 
-        /**
-         * Set the map's events
-         */
+        /** Set the map's events */
         this.map.on('zoomend', this.resizeMarkers)
     }
 
@@ -157,7 +148,6 @@ class Surveillance extends React.Component {
      * It will use redux's dispatch to transfer datas, including isObjectListShown and selectObjectList
      * @param e the object content of the mouse clicking. 
      */
-
     handlemenu(e){
         const { objectInfo } = this.state
         const lbeacon_coorinate = Object.values(e.target._latlng).toString();
@@ -172,160 +162,150 @@ class Surveillance extends React.Component {
     }
 
     /**
-     * Retrieve tracking data from database, then reconstruct the data to desired form.
+     * Retrieve tracking data from redux store, and do the processing.
      */
-
-    handleTrackingData(){
-        const { rssi } = this.props;
-        axios.post(dataSrc.trackingData, {
-            rssi: rssi
-        }).then(res => {
+    handleTrackingData() {
+        let objectRows = this.props.objectInfo === undefined ? [] : this.props.objectInfo
+        let lbsPosition = new Set(),
+            objectInfoHash = {}
+        let counter = 0;
+        objectRows.map(items =>{
+            /**
+             * Every lbeacons coordinate sended by response will store in lbsPosition
+             * Update(3/14): use Set instead.
+             */
+            const lbeaconCoordinate = this.createLbeaconCoordinate(items.lbeacon_uuid);
+            lbsPosition.add(lbeaconCoordinate.toString());
             
-            let objectRows = res.data.rows;
-            let lbsPosition = new Set(),
-                objectInfoHash = {}
-            let counter = 0;
-            objectRows.map(items =>{
-                /**
-                 * Every lbeacons coordinate sended by response will store in lbsPosition
-                 * Update(3/14): use Set instead.
-                 */
-                const lbeaconCoordinate = this.createLbeaconCoordinate(items.lbeacon_uuid);
-                lbsPosition.add(lbeaconCoordinate.toString());
+            let object = {
+                lbeaconCoordinate: lbeaconCoordinate,
+                location_description: items.location_description,
+                rssi: items.avg,
+                // rssi_avg : items.avg_stable,
+            }
+            /**
+             * If the object has not scanned by one lbeacon yet, 
+             *  then the object is going to be append in objectInfoHash
+             * Else, the object is already in objectInfoHash, 
+             *  we will check if the object is stationary or moving first,
+             *  then check if the current RSSI is the largest.
+             */
+            if (!(items.object_mac_address in objectInfoHash)) {
+                objectInfoHash[items.object_mac_address] = {};
+                objectInfoHash[items.object_mac_address].lbeaconDetectedNum = 1
+                objectInfoHash[items.object_mac_address].maxRSSI = items.avg
+                objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate
+                objectInfoHash[items.object_mac_address].location_description = items.location_description
+                objectInfoHash[items.object_mac_address].access_control_number = items.access_control_number
+                objectInfoHash[items.object_mac_address].coverLbeaconInfo = {}
+                objectInfoHash[items.object_mac_address].name = items.name
+                objectInfoHash[items.object_mac_address].type = items.type
+                objectInfoHash[items.object_mac_address].mac_address = items.object_mac_address
+                objectInfoHash[items.object_mac_address].panic_button = items.panic_button;
+                objectInfoHash[items.object_mac_address].geofence_type = items.geofence_type;
+                objectInfoHash[items.object_mac_address].coverLbeaconInfo[lbeaconCoordinate] = object;
+                objectInfoHash[items.object_mac_address].status = items.status;
+                objectInfoHash[items.object_mac_address].transferred_location = items.transferred_location;
+                objectInfoHash[items.object_mac_address].moving_status = items.avg_stable !== null ? 'stationary' : 'stationary';
+
+            } else {
+                let maxRSSI = objectInfoHash[items.object_mac_address].maxRSSI;
+                let moving_status = objectInfoHash[items.object_mac_address].moving_status;
+                let geofence_type = objectInfoHash[items.object_mac_address].geofence_type;
+                let panic_button = objectInfoHash[items.object_mac_address].panic_button;
                 
-                let object = {
-                    lbeaconCoordinate: lbeaconCoordinate,
-                    location_description: items.location_description,
-                    rssi: items.avg,
-                    // rssi_avg : items.avg_stable,
-                }
-                /**
-                 * If the object has not scanned by one lbeacon yet, 
-                 *  then the object is going to be append in objectInfoHash
-                 * Else, the object is already in objectInfoHash, 
-                 *  we will check if the object is stationary or moving first,
-                 *  then check if the current RSSI is the largest.
-                 */
-                if (!(items.object_mac_address in objectInfoHash)) {
-                    objectInfoHash[items.object_mac_address] = {};
-                    objectInfoHash[items.object_mac_address].lbeaconDetectedNum = 1
-                    objectInfoHash[items.object_mac_address].maxRSSI = items.avg
-                    objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate
-                    objectInfoHash[items.object_mac_address].location_description = items.location_description
-                    objectInfoHash[items.object_mac_address].access_control_number = items.access_control_number
-                    objectInfoHash[items.object_mac_address].coverLbeaconInfo = {}
-                    objectInfoHash[items.object_mac_address].name = items.name
-                    objectInfoHash[items.object_mac_address].type = items.type
-                    objectInfoHash[items.object_mac_address].mac_address = items.object_mac_address
-                    objectInfoHash[items.object_mac_address].panic_button = items.panic_button;
-					objectInfoHash[items.object_mac_address].geofence_type = items.geofence_type;
-                    objectInfoHash[items.object_mac_address].coverLbeaconInfo[lbeaconCoordinate] = object;
-                    objectInfoHash[items.object_mac_address].status = items.status;
-                    objectInfoHash[items.object_mac_address].transferred_location = items.transferred_location;
-                    objectInfoHash[items.object_mac_address].moving_status = items.avg_stable !== null ? 'stationary' : 'stationary';
-
-                } else {
-                    let maxRSSI = objectInfoHash[items.object_mac_address].maxRSSI;
-                    let moving_status = objectInfoHash[items.object_mac_address].moving_status;
-					let geofence_type = objectInfoHash[items.object_mac_address].geofence_type;
-					let panic_button = objectInfoHash[items.object_mac_address].panic_button;
-					
-				    if(items.geofence_type === 'Fence'){
-				        if(geofence_type === null || geofence_type === 'Perimeter' || 
-						   (geofence_type === 'Fence' &&  parseFloat(items.avg) > parseFloat(maxRSSI))) {
-							   
-						    objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
-                            objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
-                            objectInfoHash[items.object_mac_address].location_description = items.location_description
-					        objectInfoHash[items.object_mac_address].geofence_type = items.geofence_type;
-						}
-					}else if(items.geofence_type === 'Perimeter'){
-						if(geofence_type === null || 
-						   (geofence_type === 'Perimeter' && parseFloat(items.avg) > parseFloat(maxRSSI))) {
-							   
-						    objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
-                            objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
-                            objectInfoHash[items.object_mac_address].location_description = items.location_description
-					        objectInfoHash[items.object_mac_address].geofence_type = items.geofence_type;
-						}
-					}else{
-						if(geofence_type !== null){
-							
-						}else{
-						    if(items.panic_button){
-							    objectInfoHash[items.object_mac_address].panic_button = items.panic_button;
-							}
-							
-							if(parseFloat(items.avg) > parseFloat(maxRSSI)){
-									   
-						        objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
-                                objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
-                                objectInfoHash[items.object_mac_address].location_description = items.location_description
-
-							} 
-						}
-					}
-				/*
-					if(items.panic_button){
-						objectInfoHash[items.object_mac_address].panic_button = 1;
-					}
-					
-                    if( parseFloat(items.avg) > parseFloat(maxRSSI)) {
+                if(items.geofence_type === 'Fence'){
+                    if(geofence_type === null || geofence_type === 'Perimeter' || 
+                        (geofence_type === 'Fence' &&  parseFloat(items.avg) > parseFloat(maxRSSI))) {
+                            
                         objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
                         objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
-						
-						objectInfoHash[items.object_mac_address].geofence_type = items.geofence_type;
+                        objectInfoHash[items.object_mac_address].location_description = items.location_description
+                        objectInfoHash[items.object_mac_address].geofence_type = items.geofence_type;
                     }
-					
-                    if (items.avg_stable !== null) {
-                    */    /** 
-                         * If the RSSI of one object scanned by the the other lbeacon is larger than the previous one, then
-                         * current position = new lbeacon location
-                         * max rssi = new lbeacon rssi
-                         */
-						 /*
-                        if ((moving_status === 'stationary' && parseFloat(items.avg) > parseFloat(maxRSSI))|| moving_status === 'moving' ){
-                            objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
-                            objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
-                            objectInfoHash[items.object_mac_address].moving_status = 'stationary'
-                        } 
-						*/
-                    /*    
-                    } else {
-						*/
-/*
-                        if(moving_status === 'moving' && parseFloat(items.avg) > parseFloat(maxRSSI)) {
-                            objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
-                            objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
+                }else if(items.geofence_type === 'Perimeter'){
+                    if(geofence_type === null || 
+                        (geofence_type === 'Perimeter' && parseFloat(items.avg) > parseFloat(maxRSSI))) {
+                            
+                        objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
+                        objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
+                        objectInfoHash[items.object_mac_address].location_description = items.location_description
+                        objectInfoHash[items.object_mac_address].geofence_type = items.geofence_type;
+                    }
+                }else{
+                    if(geofence_type !== null){
+                        
+                    }else{
+                        if(items.panic_button){
+                            objectInfoHash[items.object_mac_address].panic_button = items.panic_button;
                         }
+                        
+                        if(parseFloat(items.avg) > parseFloat(maxRSSI)){
+                                    
+                            objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
+                            objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
+                            objectInfoHash[items.object_mac_address].location_description = items.location_description
+
+                        } 
+                    }
+                }
+            /*
+                if(items.panic_button){
+                    objectInfoHash[items.object_mac_address].panic_button = 1;
+                }
+                
+                if( parseFloat(items.avg) > parseFloat(maxRSSI)) {
+                    objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
+                    objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
+                    
+                    objectInfoHash[items.object_mac_address].geofence_type = items.geofence_type;
+                }
+                
+                if (items.avg_stable !== null) {
+                */    /** 
+                        * If the RSSI of one object scanned by the the other lbeacon is larger than the previous one, then
+                        * current position = new lbeacon location
+                        * max rssi = new lbeacon rssi
+                        */
+                        /*
+                    if ((moving_status === 'stationary' && parseFloat(items.avg) > parseFloat(maxRSSI))|| moving_status === 'moving' ){
+                        objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
+                        objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
+                        objectInfoHash[items.object_mac_address].moving_status = 'stationary'
+                    } 
+                    */
+                /*    
+                } else {
+                    */
+/*
+                    if(moving_status === 'moving' && parseFloat(items.avg) > parseFloat(maxRSSI)) {
+                        objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
+                        objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
+                    }
 */						
 /*
-                    }
-					*/
-/*
-                    objectInfoHash[items.object_mac_address].coverLbeaconInfo[lbeaconCoordinate] = object;
-*/
                 }
+                */
+/*
+                objectInfoHash[items.object_mac_address].coverLbeaconInfo[lbeaconCoordinate] = object;
+*/
+            }
 
-                objectInfoHash[items.object_mac_address].lbeaconDetectedNum = Object.keys(objectInfoHash[items.object_mac_address].coverLbeaconInfo).length;
-                // markerClusters.addLayer(L.marker(lbeaconCoordinate));
-            })
-            if (this.isShownTrackingData === true ) (console.log(objectInfoHash)); 
-            // this.map.addLayer(markerClusters);
-            // markerClusters.on('clusterclick', this.handlemenu)
+            objectInfoHash[items.object_mac_address].lbeaconDetectedNum = Object.keys(objectInfoHash[items.object_mac_address].coverLbeaconInfo).length;
+            // markerClusters.addLayer(L.marker(lbeaconCoordinate));
+        })
+        if (this.isShownTrackingData === true ) (console.log(objectInfoHash)); 
+        // this.map.addLayer(markerClusters);
+        // markerClusters.on('clusterclick', this.handlemenu)
 
-            /** Return Tracking data to caller(ContentContainer.js) */
-            this.props.retrieveTrackingData(res.data, objectInfoHash)
+        /** Return Tracking data (searchableObjectData) to Search Container */
+        this.props.transferSearchableObjectData(objectInfoHash)
 
-            this.setState({
-                data: res.data.rows,
-                lbeaconsPosition: lbsPosition,
-                objectInfo: objectInfoHash,
-                hasErrorCircle: false,
-            })
-
-        }).catch(function (error) {
-            console.log(error);
+        this.setState({
+            data: this.props.objectInfo,
+            lbeaconsPosition: lbsPosition,
+            objectInfo: objectInfoHash,
+            hasErrorCircle: false,
         })
     }
 
@@ -338,7 +318,7 @@ class Surveillance extends React.Component {
      * Create the popup's event.
      * Create the error circle of markers, and add into this.markersLayer.
      */
-    handleObjectMakers(){
+    handleObjectMarkers(){
         const { hasSearchKey, searchResult } = this.props;
 
         /** 
@@ -457,7 +437,7 @@ class Surveillance extends React.Component {
              * popupContent (objectName, objectImg, objectImgWidth)
              * More Style sheet include in Surveillance.css
             */
-            let popupContent = this.popupContent(objects[key], BOTLogo, 100)
+            let popupContent = this.popupContent(objects[key])
 
             /**
              * Create the marker, if the 'moving_status' of the object is 'stationary', 
@@ -573,7 +553,7 @@ class Surveillance extends React.Component {
      * @param {*} objectImg  The image of the object.
      * @param {*} imgWidth The width of the image.
      */
-    popupContent (object, objectImg, imgWidth){
+    popupContent (object){
         const content = 
             `
             <div class='contentBox'>
@@ -595,12 +575,11 @@ class Surveillance extends React.Component {
         return(
             <div>      
                 <div id='mapid' className='cmp-block'>
+                {/* {console.log(this.props.objectInfo)} */}
                 </div>
                 {/* <div>
                     <ToggleSwitch title="Location Accuracy" options={toggleSwitchOptions}/>
                 </div> */}
-
-
             </div>
 
         )
@@ -614,5 +593,11 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(Surveillance)
+const mapStateToProps = (state) => {
+    return {
+        objectInfo: state.retrieveTrackingData.rows,
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Surveillance)
 

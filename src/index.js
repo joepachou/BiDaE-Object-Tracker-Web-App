@@ -15,16 +15,17 @@ import './js/customizedCSS';
 /** Container Component */
 import App from './App'
 import objectListReducer from './js/reducer/ObjectListReducer';
+import retrieveTrackingData from './js/reducer/RetrieveTrackingDataReducer';
 
 
 
 const reducers = combineReducers({
     objectListOption: objectListReducer,
+    retrieveTrackingData: retrieveTrackingData,
 })
 const store = createStore(reducers)
 
-store.subscribe(() => console.log(store.getState()))
-
+// store.subscribe(() => console.log(store.getState()))
 
 
 const rootElement = document.getElementById('root');
