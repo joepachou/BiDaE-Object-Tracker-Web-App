@@ -21,7 +21,7 @@ export default class ObjectManagement extends React.Component{
             data:[],
             column:[],
             filterData:[],
-            showModalForm: false,
+            isShowModal: false,
             selectedRowData: {},
         }
         this.handleType = this.handleType.bind(this);
@@ -88,18 +88,18 @@ export default class ObjectManagement extends React.Component{
 
     handleModalForm() {
         this.setState({
-            showModalForm: true,
+            isShowModal: true,
         }) 
     }
 
     handleSubmitForm() {
         this.setState({
-            showModalForm: false
+            isShowModal: false
         })
     }
 
     render(){
-        const { showModalForm, selectedRowData } = this.state
+        const { isShowModal, selectedRowData } = this.state
 
         return (
             <Container fluid className='py-2'>
@@ -136,7 +136,7 @@ export default class ObjectManagement extends React.Component{
                                     onClick: (e, handleOriginal) => {
                                         this.setState({
                                             selectedRowData: rowInfo.original,
-                                            showModalForm: true,
+                                            isShowModal: true,
                                         })
                                 
                                         // IMPORTANT! React-Table uses onClick internally to trigger
@@ -154,7 +154,7 @@ export default class ObjectManagement extends React.Component{
                     </Col>
                 </Row>
                 <EditObjectForm 
-                    show = {showModalForm} 
+                    show = {isShowModal} 
                     title='Edit Object' 
                     selectedObjectData={selectedRowData} 
                     handleSubmitForm={this.handleSubmitForm}
