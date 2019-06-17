@@ -5,7 +5,8 @@ import darkGrey_pin from '../img/darkGrey_pin_v2.svg';
 import sos from '../img/sos.svg'
 import geofence_fence from '../img/geo_fence_fence.svg'
 import geofence_perimeter from '../img/geo_fence_perimeter.svg'
-import white_pin from '../img/white_pin.svg'
+import white_pin from '../img/white_pin.svg';
+import BOT_LOGO from '../img/BOT_LOGO_RED_MOD.png';
 
 
 const config = {
@@ -38,7 +39,7 @@ const config = {
         },
 
         /* For test. To start object tracking*/
-        startInteval: !true,
+        startInteval: true,
 
         /* Object tracking query inteval */
         intevalTime: 1000,
@@ -64,6 +65,10 @@ const config = {
     locale: {
         defaultLocale: 'en'
     },
+
+    image: {
+        logo: BOT_LOGO,
+    }
 
 
 
