@@ -12,7 +12,7 @@ const initialState = {
 
 }
 
-function reducer (state = initialState, action) {
+function ObjectListReducer (state = initialState, action) {
     switch (action.type) {
         case IS_OBJECT_LIST_SHOWN:
             return {
@@ -33,4 +33,4 @@ function reducer (state = initialState, action) {
     }
 }
 
-export default reducer
+export default ObjectListReducer
