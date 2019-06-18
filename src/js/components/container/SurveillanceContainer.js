@@ -6,6 +6,9 @@ import Nav from 'react-bootstrap/Nav';
 import ChangeStatusForm from './ChangeStatusForm';
 import config from '../../config';
 import LocaleContext from '../../context/LocaleContext';
+import ConfirmForm from './ConfirmForm'
+import axios from 'axios';
+import dataSrc from '../../dataSrc';
 
 class SurveillanceContainer extends React.Component {
     constructor(props){
@@ -13,13 +16,17 @@ class SurveillanceContainer extends React.Component {
         this.state = {
             rssi: config.surveillanceMap.locationAccuracy.defaultVal,
             showEditObjectForm: false,
+            showConfirmForm: false,
             selectedObjectData: [],
-            shouldComponentUpdate: true,
+            openSurveillanceUpdate: true,
+            formOption: [],
         }
 
         this.adjustRssi = this.adjustRssi.bind(this);
         this.handleChangeObjectStatusForm = this.handleChangeObjectStatusForm.bind(this);
         this.handleChangeObjectStatusFormClose = this.handleChangeObjectStatusFormClose.bind(this);
+        this.handleChangeObjectStatusFormSubmit = this.handleChangeObjectStatusFormSubmit.bind(this);
+        this.handleConfirmFormSubmit = this.handleConfirmFormSubmit.bind(this);
     }
 
 
@@ -29,28 +36,72 @@ class SurveillanceContainer extends React.Component {
         })
     }
 
-    shouldComponentUpdate() {
-        return this.state.shouldComponentUpdate;
-    }
 
     handleChangeObjectStatusForm(objectData) {
         this.setState({
             showEditObjectForm: true,
             selectedObjectData: objectData,
-            shouldComponentUpdate: false
+            openSurveillanceUpdate: false,
         })
     }
 
     handleChangeObjectStatusFormClose() {
         this.setState({
             showEditObjectForm: false,
-            shouldComponentUpdate: true
+            showConfirmForm: false,
+            openSurveillanceUpdate: true,
+        })
+    }
+
+    handleChangeObjectStatusFormSubmit(postOption) {
+        this.setState({
+            showEditObjectForm: false,
+        })
+        setTimeout(
+            function() {
+                this.setState({
+                    showConfirmForm: true,
+                    formOption: postOption,
+                    openSurveillanceUpdate: false
+                })
+            }.bind(this),
+            1000
+        )
+    }
+
+    handleConfirmFormSubmit(e) {
+        const button = e.target
+        const postOption = this.state.formOption;
+
+        axios.post(dataSrc.editObject, {
+            formOption: postOption
+        }).then(res => {
+            button.style.opacity = 0.4
+            setTimeout(
+                function() {
+                    this.setState ({
+                        showConfirmForm: false,
+                        formOption: [],
+                        openSurveillanceUpdate: true
+                    }) 
+                }
+                .bind(this),
+                1000
+            )
+        }).catch( error => {
+            console.log(error)
         })
     }
 
     
     render(){
-        const { rssi, showEditObjectForm, selectedObjectData } = this.state;
+        const { rssi, 
+                showEditObjectForm, 
+                showConfirmForm, 
+                selectedObjectData, 
+                formOption, 
+                openSurveillanceUpdate
+            } = this.state;
         const { hasSearchKey, searchResult, transferSearchableObjectData} = this.props;
         const locale = this.context;
 
@@ -73,6 +124,7 @@ class SurveillanceContainer extends React.Component {
                     transferSearchableObjectData={transferSearchableObjectData}
                     handleChangeObjectStatusForm={this.handleChangeObjectStatusForm}
                     style={style.searchMap}
+                    openSurveillanceUpdate={openSurveillanceUpdate}
 
                 />
                 <Nav className='d-flex align-items-center'>
@@ -84,15 +136,21 @@ class SurveillanceContainer extends React.Component {
                         <ModalForm title='Add object'/>
                     </Nav.Item> */}
                 </Nav>
-                {/* {console.log(selectedObjectData)} */}
                 <ChangeStatusForm 
                     show={showEditObjectForm} 
                     title='Report device status' 
                     selectedObjectData={selectedObjectData} 
                     searchKey={null}
                     handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose}
+                    handleChangeObjectStatusFormSubmit={this.handleChangeObjectStatusFormSubmit}
                 />
-
+                <ConfirmForm 
+                    show={showConfirmForm}  
+                    title='Thank you for reporting' 
+                    selectedObjectData={formOption} 
+                    handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose} 
+                    handleConfirmFormSubmit={this.handleConfirmFormSubmit}
+                />
             </>
         )
     }

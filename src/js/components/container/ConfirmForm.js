@@ -13,6 +13,7 @@ import config from '../../config';
 import LocaleContext from '../../context/LocaleContext';
 import axios from 'axios';
 import dataSrc from '../../dataSrc';
+import moment from 'moment';
 
 const transferredLocations = config.transferredLocation;
 
@@ -23,7 +24,7 @@ const options = transferredLocations.map( location => {
     return locationObj
 })
   
-class ChangeStatusForm extends React.Component {
+class ConfirmForm extends React.Component {
     
     constructor(props) {
         super(props);
@@ -48,7 +49,7 @@ class ChangeStatusForm extends React.Component {
     }
   
     handleClose(e) {
-        console.log(4444)
+        console.log(123)
         if(this.props.handleChangeObjectStatusFormClose) {
             this.props.handleChangeObjectStatusFormClose();
         }
@@ -66,7 +67,7 @@ class ChangeStatusForm extends React.Component {
 
     componentDidUpdate(prevProps) {
         const { selectedObjectData } = this.props
-        if (prevProps != this.props && selectedObjectData) {
+        if (prevProps != this.props) {
             this.setState({
                 show: this.props.show,
                 isShowForm: true,
@@ -84,36 +85,7 @@ class ChangeStatusForm extends React.Component {
     }
 
     handleSubmit(e) {
-        const button = e.target;
-        const { mac_address, name, type, access_control_number } = this.props.selectedObjectData;
-        const { status, transferredLocation } = this.state.formOption;
-        const postOption = {
-            name: name,
-            type: type,
-            status: status,
-            transferredLocation: transferredLocation || '',
-            mac_address: mac_address,
-            access_control_number: access_control_number,
-        }
-        if(this.props.handleChangeObjectStatusFormSubmit) {
-            this.props.handleChangeObjectStatusFormSubmit(postOption);
-        }
-        // axios.post(dataSrc.editObject, {
-        //     formOption: postOption
-        // }).then(res => {
-        //     button.style.opacity = 0.4
-        //     setTimeout(
-        //         function() {
-        //            this.setState ({
-        //                show: false,
-        //            }) 
-        //         }
-        //         .bind(this),
-        //         1000
-        //     )
-        // }).catch( error => {
-        //     console.log(error)
-        // })
+        this.props.handleConfirmFormSubmit(e)
     }
 
     handleCheck(e) {
@@ -189,63 +161,19 @@ class ChangeStatusForm extends React.Component {
                                         disabled
                                     />
                                 </Col>
-                            </Form.Group>
-                            <hr/>
-                            <fieldset>
-                                <Form.Group as={Row}>
-                                    <Form.Label as="legend" column sm={3}>
-                                        Status
-                                    </Form.Label>
-                                    <Col sm={9}>
-                                        <Form.Check
-                                            custom
-                                            type="radio"
-                                            label="Normal"
-                                            name="formHorizontalRadios"
-                                            id="formHorizontalRadios1"
-                                            value="Normal"
-                                            checked={status === 'Normal'}
-                                            onChange={this.handleCheck}                                     
-                                        />
-                                        <Form.Check
-                                            custom
-                                            type="radio"
-                                            label="Broken"
-                                            name="formHorizontalRadios"
-                                            id="formHorizontalRadios2"
-                                            value="Broken"
-                                            checked={status === 'Broken'}
-
-                                            onChange={this.handleCheck}   
-                                        />
-                                        <Form.Row>
-                                            <Form.Group as={Col} sm={4}>
-                                                <Form.Check
-                                                    custom
-                                                    type="radio"
-                                                    label="Transferred"
-                                                    name="formHorizontalRadios"
-                                                    id="formHorizontalRadios3"
-                                                    value="Transferred"
-                                                    checked={status === 'Transferred'}
-                                                    onChange={this.handleCheck}   
-                                                />
-                                            </Form.Group>
-                                            <Form.Group as={Col} sm={8} >
-                                                    <Select
-                                                        placeholder = "Select Location"
-                                                        value = {transferredLocation}
-                                                        onChange={this.handleSelect}
-                                                        options={options}
-                                                        isDisabled = {status === 'Transferred' ? false : true}
-                                                    />
-                                            </Form.Group>
-                                            
-                                        </Form.Row>
-                                    </Col>
-                                </Form.Group>
-                             </fieldset>
+                            </Form.Group> 
                         </Form>
+                        <hr/>
+                        <Row>
+                            <Col className='d-flex justify-content-center'>
+                                <h5>{selectedObjectData.status}</h5>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col className='d-flex justify-content-center'>
+                                <h6>{moment().format('LLLL')}</h6>    
+                            </Col>
+                        </Row>
 
                     </Modal.Body>
                     <Modal.Footer>
@@ -253,7 +181,7 @@ class ChangeStatusForm extends React.Component {
                             Cancel
                         </Button>
                         <Button variant="primary" onClick={this.handleSubmit}>
-                            Save
+                            Send
                         </Button>
                     </Modal.Footer>
                 </Modal>
@@ -262,6 +190,6 @@ class ChangeStatusForm extends React.Component {
     }
 }
 
-ChangeStatusForm.contextType = LocaleContext;
+ConfirmForm.contextType = LocaleContext;
   
-export default ChangeStatusForm;
+export default ConfirmForm;

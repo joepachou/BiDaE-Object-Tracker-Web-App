@@ -33,6 +33,7 @@ class Surveillance extends React.Component {
             objectInfo: {},
             hasErrorCircle: false,
             hasInvisibleCircle: false,       
+            openSurveillanceUpdate: true,
         }
         this.map = null;
         this.markersLayer = L.layerGroup();
@@ -57,14 +58,21 @@ class Surveillance extends React.Component {
     }
 
     componentDidUpdate(prepProps){
+        if(this.props.openSurveillanceUpdate) {
 
-        /** Check whether there is the new tracking data retrieving from store */
-        if (this.props.objectInfo !== prepProps.objectInfo) {
-            this.handleTrackingData(); 
+            /** Check whether there is the new tracking data retrieving from store */
+            if (this.props.objectInfo !== prepProps.objectInfo) {
+                this.handleTrackingData(); 
+            }
+            this.handleObjectMarkers();
+            this.createLbeaconMarkers();
         }
-        this.handleObjectMarkers();
-        this.createLbeaconMarkers();
     }
+
+    shouldComponentUpdate(nextProps){
+        return nextProps.openSurveillanceUpdate
+    }
+
     
     /** Set the search map configuration which establishs in config.js  */
     initMap(){
