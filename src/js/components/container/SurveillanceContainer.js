@@ -3,7 +3,7 @@ import React from 'react';
 import Surveillance from '../presentational/Surveillance';
 import ToggleSwitch from './ToggleSwitch';
 import Nav from 'react-bootstrap/Nav';
-import ModalForm from './ModalForm';
+import ChangeStatusForm from './ChangeStatusForm';
 import config from '../../config';
 import LocaleContext from '../../context/LocaleContext';
 
@@ -12,10 +12,16 @@ class SurveillanceContainer extends React.Component {
         super(props)
         this.state = {
             rssi: config.surveillanceMap.locationAccuracy.defaultVal,
+            showEditObjectForm: false,
+            selectedObjectData: [],
+            shouldComponentUpdate: true,
         }
 
         this.adjustRssi = this.adjustRssi.bind(this);
+        this.handleChangeObjectStatusForm = this.handleChangeObjectStatusForm.bind(this);
+        this.handleChangeObjectStatusFormClose = this.handleChangeObjectStatusFormClose.bind(this);
     }
+
 
     adjustRssi(adjustedRssi) {
         this.setState({
@@ -23,15 +29,39 @@ class SurveillanceContainer extends React.Component {
         })
     }
 
+    shouldComponentUpdate() {
+        return this.state.shouldComponentUpdate;
+    }
+
+    handleChangeObjectStatusForm(objectData) {
+        this.setState({
+            showEditObjectForm: true,
+            selectedObjectData: objectData,
+            shouldComponentUpdate: false
+        })
+    }
+
+    handleChangeObjectStatusFormClose() {
+        this.setState({
+            showEditObjectForm: false,
+            shouldComponentUpdate: true
+        })
+    }
+
     
     render(){
-        const { rssi } = this.state;
+        const { rssi, showEditObjectForm, selectedObjectData } = this.state;
         const { hasSearchKey, searchResult, transferSearchableObjectData} = this.props;
         const locale = this.context;
 
-        const titleStyle = {
-            color: 'grey',
-            fontSize: 8,
+        const style = {
+            title: {
+                color: 'grey',
+                fontSize: 8,
+            },
+            searchMap: {
+                // height: '100vh'
+            }
         }
 
         return(
@@ -41,19 +71,27 @@ class SurveillanceContainer extends React.Component {
                     hasSearchKey={hasSearchKey}
                     searchResult={searchResult}
                     transferSearchableObjectData={transferSearchableObjectData}
+                    handleChangeObjectStatusForm={this.handleChangeObjectStatusForm}
+                    style={style.searchMap}
+
                 />
                 <Nav className='d-flex align-items-center'>
                     <Nav.Item className='d-flex align-items-baseline'>
-                        <small style={titleStyle}>{locale.location_accuracy.toUpperCase()}</small>
+                        <small style={style.title}>{locale.location_accuracy.toUpperCase()}</small>
                         <ToggleSwitch adjustRssi={this.adjustRssi} leftLabel={locale.low} defaultLabel={locale.med} rightLabel={locale.high} />
                     </Nav.Item>
                     {/* <Nav.Item>
                         <ModalForm title='Add object'/>
                     </Nav.Item> */}
-                    
-
-                    
                 </Nav>
+                {/* {console.log(selectedObjectData)} */}
+                <ChangeStatusForm 
+                    show={showEditObjectForm} 
+                    title='Report device status' 
+                    selectedObjectData={selectedObjectData} 
+                    searchKey={null}
+                    handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose}
+                />
 
             </>
         )

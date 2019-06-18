@@ -212,7 +212,7 @@ class SearchContainer extends React.Component {
         const { trackingData } = this.props
         
         return (
-            <div id='searchContainer' className="mx-2" onTouchMove={this.handleTouchMove}>
+            <div id='searchContainer' className="m-3" onTouchMove={this.handleTouchMove}>
                 <div id='searchBar' className='d-flex w-100 justify-content-center align-items-center'>
                     <Searchbar 
                         placeholder={this.state.searchKey}

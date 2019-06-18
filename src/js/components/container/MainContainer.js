@@ -52,10 +52,16 @@ export default class ContentContainer extends React.Component{
     render(){
 
         const { hasSearchKey, searchResult, searchableObjectData } = this.state;
+
+        const style = {
+            container: {
+                // height: '100vh'
+            }
+        }
         return(
 
             /** "page-wrap" the default id named by react-burget-menu */
-            <div id="page-wrap" className='py-3'>
+            <div id="page-wrap" className='' style={style.container}>
                 <Row className='d-flex w-100 justify-content-around mx-0'>
                     <Col xl={8} >
                         <Hidden xs sm md lg>

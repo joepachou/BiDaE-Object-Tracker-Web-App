@@ -94,7 +94,7 @@ class SearchResult extends React.Component {
                 {/* </Tab.Container> */}
                 <ChangeStatusForm 
                     show={showEditObjectForm} 
-                    title='Edit Object' 
+                    title='Report device status' 
                     selectedObjectData={result.length ? result[selectObjectIndex] : null} 
                     searchKey={searchKey}
                 />

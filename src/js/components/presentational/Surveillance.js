@@ -1,9 +1,6 @@
 /** Import React */
 import React from 'react';
 
-/** Import Axios */
-import axios from 'axios';
-
 /** Import leaflet.js */
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -13,17 +10,17 @@ import 'leaflet.markercluster';
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import '../../../css/CustomMarkerCluster.css'
+import '../../leaflet_awesome_number_markers';
+
 
 /** Redux related Library  */
 import { 
     isObjectListShown,
     selectObjectList,
 } from '../../action/action';
-
 import { connect } from 'react-redux';
 
 import config from '../../config';
-import '../../leaflet_awesome_number_markers';
 
 class Surveillance extends React.Component {
 
@@ -45,6 +42,8 @@ class Surveillance extends React.Component {
         this.handleTrackingData = this.handleTrackingData.bind(this);
         this.handleObjectMarkers = this.handleObjectMarkers.bind(this);
         this.createLbeaconMarkers = this.createLbeaconMarkers.bind(this);
+        this.handleMarkerClick = this.handleMarkerClick.bind(this);
+
         this.resizeMarkers = this.resizeMarkers.bind(this);
         this.calculateScale = this.calculateScale.bind(this);
 
@@ -63,7 +62,7 @@ class Surveillance extends React.Component {
             this.handleTrackingData(); 
         }
         this.handleObjectMarkers();
-        // this.createLbeaconMarkers();
+        this.createLbeaconMarkers();
     }
     
     /** Set the search map configuration which establishs in config.js  */
@@ -114,7 +113,7 @@ class Surveillance extends React.Component {
         /** 
          * Creat the marker of all lbeacons onto the map 
          */
-        let lbeaconsPosition = Array.from(this.state.lbeaconsPosition)
+        let lbeaconsPosition = this.state.lbeaconsPosition !== null ? Array.from(this.state.lbeaconsPosition) :[];
         lbeaconsPosition.map(items => {
             let lbLatLng = items.split(",")
             // let lbeacon = L.circleMarker(lbLatLng,{
@@ -134,6 +133,7 @@ class Surveillance extends React.Component {
                 radius: 80,
             }).addTo(this.map);
 
+            // invisibleCircle.on('mouseover', console.log(123))
             invisibleCircle.on('click', this.handlemenu);
         })
         if (!this.state.hasInvisibleCircle){
@@ -419,7 +419,6 @@ class Surveillance extends React.Component {
         }
         
         let counter = 0;
-
         for (var key in objects){
             /** Tag the searched object */
             if (searchedObjectDataSet.has(key)) {
@@ -484,9 +483,11 @@ class Surveillance extends React.Component {
                 marker.setZIndexOffset(1000);
             }
             /** Set the marker's event. */
-            marker.on('mouseover', function () { this.openPopup(); })
-            marker.on('mouseout', function () { this.closePopup(); })
 
+            marker.on('mouseover', function () { this.openPopup(); })
+            marker.on('click', this.handleMarkerClick);
+            marker.on('mouseout', function () { this.closePopup(); })
+            
 
             /** Set the error circles of the markers. */
             if (detectedNum > 1 && objects[key].moving_status === 'stationary') {
@@ -504,6 +505,12 @@ class Surveillance extends React.Component {
             })
         }
     }
+
+    handleMarkerClick(e) {
+       this.CoordinateToMacAddress(e.layerPoint, e.latlng)
+    }
+
+
 
     /**
      * Retrieve the lbeacon's location coordinate from lbeacon_uuid.
@@ -537,14 +544,22 @@ class Surveillance extends React.Component {
 
         const xx = mac_address.slice(12,14);
         const yy = mac_address.slice(15,17);
-		
-		const multiplier = 4; // 1m = 100cm = 1000mm, multipler = 1000/16*16 = 3
+
+        const multiplier = 4; // 1m = 100cm = 1000mm, multipler = 1000/16*16 = 3
 		const origin_x = lbeacon_coordinate[1] - parseInt(80, 16) * multiplier ; 
 		const origin_y = lbeacon_coordinate[0] - parseInt(80, 16) * multiplier ;
 		const xxx = origin_x + parseInt(xx, 16) * multiplier;
 		const yyy = origin_y + parseInt(yy, 16) * multiplier;
         return [yyy, xxx];
         
+    }
+
+    CoordinateToMacAddress(markerPos, lbeaconPos) {
+        const multiplier = 4;
+
+        const xxx = (Object.values(markerPos)[1] - Object.values(lbeaconPos)[1] + parseInt(80, 16) * multiplier) / multiplier;
+        const xx = xxx.toString(16)
+        console.log(xx)
     }
 
     /**
@@ -572,15 +587,22 @@ class Surveillance extends React.Component {
     }
 
     render(){
+
+        const style = {
+            map: {
+                height: '80vh'
+            }
+        }
         return(
-            <div>      
-                <div id='mapid' className='cmp-block'>
+            <>      
+                <div id='mapid' className='cmp-block' style={style.map}>
+                {/* {console.log(document.body.Element.clientHeight)} */}
                 {/* {console.log(this.props.objectInfo)} */}
                 </div>
                 {/* <div>
                     <ToggleSwitch title="Location Accuracy" options={toggleSwitchOptions}/>
                 </div> */}
-            </div>
+            </>
 
         )
     }
