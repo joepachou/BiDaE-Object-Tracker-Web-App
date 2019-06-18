@@ -151,6 +151,7 @@ class Surveillance extends React.Component {
     handlemenu(e){
         const { objectInfo } = this.state
         const lbeacon_coorinate = Object.values(e.target._latlng).toString();
+        console.log(e.target._latlng)
         let objectList = [], key;
         for (key in objectInfo) {
             if (objectInfo[key].currentPosition.toString() == lbeacon_coorinate) {
@@ -166,6 +167,19 @@ class Surveillance extends React.Component {
      */
     handleTrackingData() {
         let objectRows = this.props.objectInfo === undefined ? [] : this.props.objectInfo
+        // const fakeData = [{
+        //     access_control_number: "1111-2222-0101",
+        //     avg: "-48",
+        //     geofence_type: "Perimeter",
+        //     lbeacon_uuid: "00000018-0000-0000-3060-000000010700",
+        //     location_description: "T16",
+        //     name: "ACB0",
+        //     object_mac_address: "c1:0f:00:12:ac:b0",
+        //     panic_button: null,
+        //     status: "Normal",
+        //     transferred_location: null,
+        //     type: "bed",
+        // }]
         let lbsPosition = new Set(),
             objectInfoHash = {}
         let counter = 0;
@@ -443,6 +457,7 @@ class Surveillance extends React.Component {
              * then the color will be black, or grey.
              */
             let iconOption = {}
+
             if (objects[key].geofence_type === 'Fence'){
                 iconOption = geofenceFAweIconOptions;
                 if (objects[key].searched) {
@@ -470,6 +485,11 @@ class Surveillance extends React.Component {
                 iconOption = stationaryAweIconOptions;
             } else {
                 iconOption = movingIconOptions;
+            }
+
+            iconOption = {
+                ...iconOption,
+                macAddress: objects[key].mac_address
             }
 
             const option = new L.AwesomeNumberMarkers (iconOption)
@@ -507,7 +527,8 @@ class Surveillance extends React.Component {
     }
 
     handleMarkerClick(e) {
-       this.CoordinateToMacAddress(e.layerPoint, e.latlng)
+        const objectInfo = this.state.objectInfo[e.target.options.icon.options.macAddress]
+        this.props.handleChangeObjectStatusForm(objectInfo)
     }
 
 
@@ -552,14 +573,6 @@ class Surveillance extends React.Component {
 		const yyy = origin_y + parseInt(yy, 16) * multiplier;
         return [yyy, xxx];
         
-    }
-
-    CoordinateToMacAddress(markerPos, lbeaconPos) {
-        const multiplier = 4;
-
-        const xxx = (Object.values(markerPos)[1] - Object.values(lbeaconPos)[1] + parseInt(80, 16) * multiplier) / multiplier;
-        const xx = xxx.toString(16)
-        console.log(xx)
     }
 
     /**

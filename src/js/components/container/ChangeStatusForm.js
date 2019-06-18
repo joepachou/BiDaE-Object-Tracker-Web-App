@@ -47,7 +47,11 @@ class ChangeStatusForm extends React.Component {
         this.handleSelect = this.handleSelect.bind(this);
     }
   
-    handleClose() {
+    handleClose(e) {
+        console.log(e)
+        if(this.props.handleChangeObjectStatusFormClose) {
+            this.props.handleChangeObjectStatusFormClose();
+        }
         this.setState({ 
             show: false 
         });
