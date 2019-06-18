@@ -18,3 +18,13 @@
     display: flex;
     align-items: center
 }
+
+#popupContent {
+    font-size: 30px;
+}
+
+#popupContent > .popupItem {
+    display: inline-block;
+    color:grey;
+    font-size: 20px;
+}

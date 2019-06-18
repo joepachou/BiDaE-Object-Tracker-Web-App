@@ -18,6 +18,7 @@ import {
     isObjectListShown,
     selectObjectList,
 } from '../../action/action';
+import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import config from '../../config';
@@ -127,14 +128,14 @@ class Surveillance extends React.Component {
          * Creat the invisible Circle marker of all lbeacons onto the map 
          */
             let invisibleCircle = L.circleMarker(lbLatLng,{
-                color: 'rgba(0, 0, 0, 0)',
+                color: 'rgba(0, 0, 0, 0',
                 fillColor: 'rgba(0, 76, 238, 0.995)',
                 fillOpacity: 0,
-                radius: 80,
+                radius: 60,
             }).addTo(this.map);
 
-            // invisibleCircle.on('mouseover', console.log(123))
-            invisibleCircle.on('click', this.handlemenu);
+            invisibleCircle.on('mouseover', this.handlemenu)
+            invisibleCircle.on('mouseout', function() {this.closePopup();})
         })
         if (!this.state.hasInvisibleCircle){
             this.setState({
@@ -142,22 +143,31 @@ class Surveillance extends React.Component {
             })
         }
     }
-
     /**
      * When user click the coverage of one lbeacon, it will retrieve the object data from this.state.pbjectInfo.
      * It will use redux's dispatch to transfer datas, including isObjectListShown and selectObjectList
      * @param e the object content of the mouse clicking. 
      */
     handlemenu(e){
+
+        let popupOptions = {
+            minWidth: '400',
+            maxWidth: '600',
+            maxHeight: '500',
+            className : 'customPopup',
+        }
+
         const { objectInfo } = this.state
         const lbeacon_coorinate = Object.values(e.target._latlng).toString();
-        console.log(e.target._latlng)
         let objectList = [], key;
         for (key in objectInfo) {
             if (objectInfo[key].currentPosition.toString() == lbeacon_coorinate) {
                 objectList.push(objectInfo[key])
             }
         }
+        const popupContent = this.popupContent(objectList)
+        e.target.bindPopup(popupContent, popupOptions).openPopup();
+
         this.props.isObjectListShownProp(true);
         this.props.selectObjectListProp(objectList);
     }
@@ -450,8 +460,8 @@ class Surveillance extends React.Component {
              * popupContent (objectName, objectImg, objectImgWidth)
              * More Style sheet include in Surveillance.css
             */
-            let popupContent = this.popupContent(objects[key])
-
+            
+            let popupContent = this.popupContent([objects[key]])
             /**
              * Create the marker, if the 'moving_status' of the object is 'stationary', 
              * then the color will be black, or grey.
@@ -487,6 +497,7 @@ class Surveillance extends React.Component {
                 iconOption = movingIconOptions;
             }
 
+            /** Insert the object's mac_address to be the data when clicking the object's marker */
             iconOption = {
                 ...iconOption,
                 macAddress: objects[key].mac_address
@@ -582,16 +593,23 @@ class Surveillance extends React.Component {
      * @param {*} imgWidth The width of the image.
      */
     popupContent (object){
+
         const content = 
             `
             <div class='contentBox'>
                 <div class='textBox'>
                     <div>
-                        <h4 className="mb-1">${object.location_description}</h4>
-                        <div>${object.type.toUpperCase()|| 'TYPE'}</div>
-                        <div>xxxx-xxxx-${object.access_control_number ?object.access_control_number.slice(10, 14) : ''}</div>
+                        <h4>${object[0].location_description}</h4>
+                        ${object.map( item =>{
+                            const element =     
+                            `<div id='popupContent'>
+                                <small>${item.type}</small>
+                                <div class='popupItem'>${item.access_control_number}</div>
+                            </div>`
+                            return element
+                        }).join('')
+                    }
                     </div>
-                    <small></small>
                 </div> 
             </div>
             `
