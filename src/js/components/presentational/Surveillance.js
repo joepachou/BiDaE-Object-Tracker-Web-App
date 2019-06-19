@@ -173,8 +173,11 @@ class Surveillance extends React.Component {
                 objectList.push(objectInfo[key])
             }
         }
-        const popupContent = this.popupContent(objectList)
-        e.target.bindPopup(popupContent, popupOptions).openPopup();
+        if (objectList.length !== 0) {
+            const popupContent = this.popupContent(objectList)
+            e.target.bindPopup(popupContent, popupOptions).openPopup();
+        }
+
 
         this.props.isObjectListShownProp(true);
         this.props.selectObjectListProp(objectList);
@@ -601,7 +604,9 @@ class Surveillance extends React.Component {
      * @param {*} imgWidth The width of the image.
      */
     popupContent (object){
-
+        if (object.length === 0) {
+            return null
+        }
         const content = 
             `
             <div class='contentBox'>
