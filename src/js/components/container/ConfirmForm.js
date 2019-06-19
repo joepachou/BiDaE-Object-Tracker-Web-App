@@ -49,7 +49,6 @@ class ConfirmForm extends React.Component {
     }
   
     handleClose(e) {
-        console.log(123)
         if(this.props.handleChangeObjectStatusFormClose) {
             this.props.handleChangeObjectStatusFormClose();
         }

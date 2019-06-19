@@ -55,6 +55,10 @@ class SurveillanceContainer extends React.Component {
 
     handleChangeObjectStatusFormSubmit(postOption) {
         this.setState({
+            selectedObjectData: {
+                ...this.state.selectedObjectData,
+                ...postOption,
+            },
             showEditObjectForm: false,
         })
         setTimeout(
@@ -144,6 +148,8 @@ class SurveillanceContainer extends React.Component {
                     handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose}
                     handleChangeObjectStatusFormSubmit={this.handleChangeObjectStatusFormSubmit}
                 />
+                {        console.log(this.state.selectedObjectData)
+}
                 <ConfirmForm 
                     show={showConfirmForm}  
                     title='Thank you for reporting' 

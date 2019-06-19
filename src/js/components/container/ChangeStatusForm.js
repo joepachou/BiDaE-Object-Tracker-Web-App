@@ -48,7 +48,6 @@ class ChangeStatusForm extends React.Component {
     }
   
     handleClose(e) {
-        console.log(4444)
         if(this.props.handleChangeObjectStatusFormClose) {
             this.props.handleChangeObjectStatusFormClose();
         }
@@ -95,6 +94,7 @@ class ChangeStatusForm extends React.Component {
             mac_address: mac_address,
             access_control_number: access_control_number,
         }
+
         if(this.props.handleChangeObjectStatusFormSubmit) {
             this.props.handleChangeObjectStatusFormSubmit(postOption);
         }
@@ -154,7 +154,7 @@ class ChangeStatusForm extends React.Component {
         return (
             <>  
                 <Modal show={this.state.show} onHide={this.handleClose} size="lg">
-                    <Modal.Header closeButton>{title}</Modal.Header >
+                    <Modal.Header closeButton className='font-weight-bold'>{title}</Modal.Header >
                     <Modal.Body>
                         <Form >
                             <Form.Group as={Row} controlId="formHorizontalEmail">
