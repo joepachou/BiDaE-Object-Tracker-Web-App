@@ -356,13 +356,13 @@ class Surveillance extends React.Component {
         const { hasSearchKey, searchResult } = this.props;
 
         /** 
-         * Consider to remove these line if it does not optimize marking objects
+         * Process the search object data
          */
-        let searchedObjectDataSet = new Set();
+        let searchedObjectDataColorMap = new Map();
 
         if (hasSearchKey) {
             searchResult.map(item => {
-                searchedObjectDataSet.add(item.mac_address)
+                searchedObjectDataColorMap.set(item.mac_address, item.pinColor)
             })
         }
 
@@ -463,14 +463,17 @@ class Surveillance extends React.Component {
         
         let counter = 0;
         for (var key in objects){
-            /** Tag the searched object */
-            if (searchedObjectDataSet.has(key)) {
+
+            /** Tag the searched object by searched and pinColor*/
+            if (searchedObjectDataColorMap.has(key)) {
                 objects[key].searched = true
+                objects[key].pinColor = searchedObjectDataColorMap.get(key)
                 counter++;
             } else {
                 objects[key].searched = false
             }
-                
+
+
             let detectedNum = objects[key].lbeaconDetectedNum;
             let position = this.macAddressToCoordinate(key.toString(), objects[key].currentPosition);
 
@@ -490,7 +493,7 @@ class Surveillance extends React.Component {
                 iconOption = unNormalIconOptions;
             } else if (objects[key].geofence_type === 'Fence'){
                 iconOption = geofenceFAweIconOptions;
-                if (objects[key].searched) {
+                if (objects[key].searched && config.surveillanceMap.iconOptions.showNumber) {
                     iconOption = {
                         ...iconOption,
                         number: counter
@@ -498,19 +501,26 @@ class Surveillance extends React.Component {
                 }
 			} else if (objects[key].geofence_type === 'Perimeter'){
                 iconOption = geofencePAweIconOptions;
-                if (objects[key].searched) {
+                if (objects[key].searched && config.surveillanceMap.iconOptions.showNumber) {
                     iconOption = {
                         ...iconOption,
                         number: counter
                     }
                 }
-			} else if (objects[key].panic_button === 1) {
+			} else if (objects[key].pinColor) {
+                iconOption = {
+                    iconSize: iconSize,
+                    markerColor: objects[key].pinColor,
+                }
+            } else if (objects[key].panic_button === 1) {
                 iconOption = sosIconOptions;
             } else if (objects[key].searched === true) {
+                config.surveillanceMap.iconOptions.showNumber 
+                ? 
                 iconOption = {
                     ...searchedObjectAweIconOptions,
                     number: counter, 
-                }
+                } : null;                
             } else if (objects[key].moving_status === 'stationary') {
                 iconOption = stationaryAweIconOptions;
             } else {
@@ -613,9 +623,6 @@ class Surveillance extends React.Component {
      * @param {*} imgWidth The width of the image.
      */
     popupContent (object){
-        if (object.length === 0) {
-            return null
-        }
         const content = 
             `
             <div class='contentBox'>

@@ -3,7 +3,7 @@
 html,body {
     -webkit-overflow-scrolling: touch;
     margin: 0;
-    font-family: 'Noto Sans TC', sans-serif;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif; /* 'Noto Sans TC', sans-serif; */
     /* font-size: 1.8vh; */
     font-size: 18px;
     /* position: fixed; */

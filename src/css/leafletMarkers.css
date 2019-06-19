@@ -10,103 +10,124 @@
     top:0;
     display: block;
     text-align: center;
-  }
-  
-  .awesome-number-marker i {
-    color: #333;
-    /* margin-top: 10px;
-    margin-left: 10px; */
-    display: inline-block;
-    font-size: 20px;
-  }
-  
-  .awesome-number-marker .icon-white {
-    color: #fff;
-  }
-  
-  /* Colors */
-  .awesome-number-marker-icon-red {
-    background: url('../img/geo_fence_fence.svg') no-repeat center/contain;
-    /* background-position: 0 0; */
-  }
-  
-  .awesome-number-marker-icon-darkred {
-    /* background-position: -180px 0; */
-  }
-  
-  .awesome-number-marker-icon-lightred {
-    background-position: -360px 0;
-  }
-  
-  .awesome-number-marker-icon-orange {
-    background: url('../img/geo_fence_perimeter.svg') no-repeat center/contain;
-    /* background-position: -36px 0; */
-  }
-  
-  .awesome-number-marker-icon-beige {
-    background-position: -396px 0;
-  }
-  
-  .awesome-number-marker-icon-green {
-    background-position: -72px 0;
-  }
-  
-  .awesome-number-marker-icon-darkgreen {
-    background-position: -252px 0;
-  }
-  
-  .awesome-number-marker-icon-lightgreen {
-    background-position: -432px 0;
-  }
-  
-  .awesome-number-marker-icon-blue {
-    background: url('../img/blue_pin_v2.svg') no-repeat center/contain;
-    /* background-position: -108px 0; */
-  }
-  
-  .awesome-number-marker-icon-darkblue {
-    background-position: -216px 0;
-  }
-  
-  .awesome-number-marker-icon-lightblue {
-    background-position: -468px 0;
-  }
-  
-  .awesome-number-marker-icon-purple {
-    background-position: -144px 0;
-  }
-  
-  .awesome-number-marker-icon-darkpurple {
-    background-position: -288px 0;
-  }
-  
-  .awesome-number-marker-icon-pink {
-    background-position: -504px 0;
-  }
-  
-  .awesome-number-marker-icon-cadetblue {
-    background-position: -324px 0;
-  }
-  
-  .awesome-number-marker-icon-white {
-    background-position: -574px 0;
-  }
-  
-  .awesome-number-marker-icon-grey {
-    background: url('../img/darkGrey_pin.svg') no-repeat center/contain;
-    /* background-position: -648px 0; */
-  }
-  
-  .awesome-number-marker-icon-lightgray {
-    background-position: -612px 0;
-  }
-  
-  .awesome-number-marker-icon-black {
-    background: url('../img/black_pin.svg') no-repeat center/contain;
-    /* background-position: -682px 0; */
-  }
+}
 
-  .awesome-number-marker-icon-sos {
-    background: url('../img/sos.svg') no-repeat center/contain;
+.awesome-number-marker i {
+  color: #333;
+  /* margin-top: 10px;
+  margin-left: 10px; */
+  display: inline-block;
+  font-size: 20px;
+}
 
-  }
+.awesome-number-marker .icon-white {
+  color: #fff;
+}
+
+/* Colors */
+.awesome-number-marker-icon-red {
+  background: url('../img/geo_fence_fence.svg') no-repeat center/contain;
+  /* background-position: 0 0; */
+}
+
+.awesome-number-marker-icon-darkred {
+  /* background-position: -180px 0; */
+}
+
+.awesome-number-marker-icon-lavender  {
+  background: url('../img/colorPin/Lavender.svg') no-repeat center/contain;
+}
+
+.awesome-number-marker-icon-lightyellow  {
+  background: url('../img/colorPin/LightYellow.svg') no-repeat center/contain;
+}
+
+.awesome-number-marker-icon-lightred {
+  background-position: -360px 0;
+}
+
+.awesome-number-marker-icon-tan {
+  background: url('../img/colorPin/Tan.svg') no-repeat center/contain;
+}
+
+.awesome-number-marker-icon-mistyrose {
+  background: url('../img/colorPin/MistyRose.svg') no-repeat center/contain;
+}
+
+.awesome-number-marker-icon-orange {
+  background: url('../img/geo_fence_perimeter.svg') no-repeat center/contain;
+  /* background-position: -36px 0; */
+}
+
+.awesome-number-marker-icon-beige {
+  background-position: -396px 0;
+}
+
+.awesome-number-marker-icon-green {
+  background-position: -72px 0;
+}
+
+.awesome-number-marker-icon-darkgreen {
+  background-position: -252px 0;
+}
+
+.awesome-number-marker-icon-lightgreen {
+  background-position: -432px 0;
+}
+
+.awesome-number-marker-icon-blue {
+  background: url('../img/blue_pin_v2.svg') no-repeat center/contain;
+  /* background-position: -108px 0; */
+}
+
+.awesome-number-marker-icon-darkblue {
+  background-position: -216px 0;
+}
+
+.awesome-number-marker-icon-darkseagreen {
+  background: url('../img/colorPin/DarkSeaGreen.svg') no-repeat center/contain;
+}
+
+.awesome-number-marker-icon-lightblue {
+  background: url('../img/colorPin/lightblue.svg') no-repeat center/contain;
+  /* background-position: -468px 0; */
+}
+
+.awesome-number-marker-icon-purple {
+  background-position: -144px 0;
+}
+
+.awesome-number-marker-icon-darkpurple {
+  background-position: -288px 0;
+}
+
+.awesome-number-marker-icon-pink {
+  background-position: -504px 0;
+}
+
+.awesome-number-marker-icon-cadetblue {
+  background-position: -324px 0;
+}
+
+.awesome-number-marker-icon-white {
+  background-position: -574px 0;
+}
+
+.awesome-number-marker-icon-grey {
+  background: url('../img/darkGrey_pin.svg') no-repeat center/contain;
+  /* background-position: -648px 0; */
+}
+
+.awesome-number-marker-icon-lightgray {
+  background-position: -612px 0;
+}
+
+.awesome-number-marker-icon-black {
+  background: url('../img/black_pin.svg') no-repeat center/contain;
+  /* background-position: -682px 0; */
+}
+
+.awesome-number-marker-icon-sos {
+  background: url('../img/sos.svg') no-repeat center/contain;
+
+}

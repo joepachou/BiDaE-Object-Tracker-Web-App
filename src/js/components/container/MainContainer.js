@@ -16,6 +16,7 @@ import Navs from '../presentational/Navs'
 
 import { Row, Col, Hidden, Visible } from 'react-grid-system';
 import SurveillanceContainer from './SurveillanceContainer';
+import GridButton from './GridButton';
 
 export default class ContentContainer extends React.Component{
 
@@ -30,7 +31,7 @@ export default class ContentContainer extends React.Component{
         }
 
         this.transferSearchableObjectData = this.transferSearchableObjectData.bind(this)
-        this.transferSearchResultFromSearchToMap = this.transferSearchResultFromSearchToMap.bind(this);
+        this.transferSearchResult = this.transferSearchResult.bind(this);
     }
 
 
@@ -41,7 +42,7 @@ export default class ContentContainer extends React.Component{
         })
     }
 
-    transferSearchResultFromSearchToMap(searchResult) {
+    transferSearchResult(searchResult) {
         this.setState({
             hasSearchKey: true,
             searchResult: searchResult,
@@ -77,9 +78,17 @@ export default class ContentContainer extends React.Component{
                     <Col xs={12} sm={12} md={12} xl={4} className="w-100">
                         <SearchContainer 
                             searchableObjectData={searchableObjectData} 
-                            transferSearchResultFromSearchToMap={this.transferSearchResultFromSearchToMap}
+                            transferSearchResult={this.transferSearchResult}
                         />
+                        
+                        <GridButton
+                            searchableObjectData={searchableObjectData} 
+                            transferSearchResult={this.transferSearchResult}
+                        />
+                        
                     </Col>
+
+
                 </Row>
             </div>
             

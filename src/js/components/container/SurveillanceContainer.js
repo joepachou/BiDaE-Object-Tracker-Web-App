@@ -76,7 +76,6 @@ class SurveillanceContainer extends React.Component {
     handleConfirmFormSubmit(e) {
         const button = e.target
         const postOption = this.state.formOption;
-
         axios.post(dataSrc.editObject, {
             formOption: postOption
         }).then(res => {
