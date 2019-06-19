@@ -178,7 +178,6 @@ class Surveillance extends React.Component {
             e.target.bindPopup(popupContent, popupOptions).openPopup();
         }
 
-
         this.props.isObjectListShownProp(true);
         this.props.selectObjectListProp(objectList);
     }
@@ -418,33 +417,42 @@ class Surveillance extends React.Component {
         //     iconUrl: config.surveillanceMap.iconOptions.searchedObjectIconUrl
         // });
         
-        /** Icon options for AwesomeNumberMarkers */
+        /** Icon options for AwesomeNumberMarkers 
+         * The process: 
+         * 1. Add the declaration of the desired icon option
+         * 2. Add the CSS description in leafletMarker.css
+        */
         const stationaryAweIconOptions = {
             iconSize: iconSize,
-            markerColor: "black",
+            markerColor: config.surveillanceMap.iconColor.stationary,
         }
 
         const geofencePAweIconOptions = {
             iconSize: iconSize,
-            markerColor: "orange",
-            numberColor: "white",
+            markerColor: config.surveillanceMap.iconColor.geofenceP,
+            numberColor: config.surveillanceMap.iconColor.number,
         }
 
         const geofenceFAweIconOptions = {
             iconSize: iconSize,
-            markerColor: "red",
-            numberColor: "white"
+            markerColor: config.surveillanceMap.iconColor.geofenceF,
+            numberColor: config.surveillanceMap.iconColor.number,
         }
 
         const searchedObjectAweIconOptions = {
             iconSize: iconSize,
-            markerColor: "blue",
-            numberColor: "white"
+            markerColor: config.surveillanceMap.iconColor.searched,
+            numberColor: config.surveillanceMap.iconColor.number,
         }
 
         const sosIconOptions = {
             iconSize: iconSize,
-            markerColor: "sos"
+            markerColor: config.surveillanceMap.iconColor.sos,
+        };
+
+        const unNormalIconOptions = {
+            iconSize: iconSize,
+            markerColor: config.surveillanceMap.iconColor.unNormal,
         };
 
         let popupOptions = {
@@ -478,8 +486,9 @@ class Surveillance extends React.Component {
              * then the color will be black, or grey.
              */
             let iconOption = {}
-
-            if (objects[key].geofence_type === 'Fence'){
+            if (objects[key].status === 'Broken' || objects[key].status === 'Transferred') {
+                iconOption = unNormalIconOptions;
+            } else if (objects[key].geofence_type === 'Fence'){
                 iconOption = geofenceFAweIconOptions;
                 if (objects[key].searched) {
                     iconOption = {

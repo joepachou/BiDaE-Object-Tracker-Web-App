@@ -92,8 +92,9 @@
     background-position: -574px 0;
   }
   
-  .awesome-number-marker-icon-gray {
-    background-position: -648px 0;
+  .awesome-number-marker-icon-grey {
+    background: url('../img/darkGrey_pin.svg') no-repeat center/contain;
+    /* background-position: -648px 0; */
   }
   
   .awesome-number-marker-icon-lightgray {
@@ -101,7 +102,7 @@
   }
   
   .awesome-number-marker-icon-black {
-    background: url('../img/black_pin_v2.svg') no-repeat center/contain;
+    background: url('../img/black_pin.svg') no-repeat center/contain;
     /* background-position: -682px 0; */
   }
 

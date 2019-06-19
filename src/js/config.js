@@ -38,6 +38,16 @@ const config = {
             searchedObjectIconUrl: white_pin,
         },
 
+        iconColor: {
+            stationary: 'black',
+            geofenceF: 'red',
+            geofenceP: 'orange',
+            searched: 'blue',
+            unNormal: 'grey',
+            sos: 'sos',
+            number: 'white'
+        },
+
         /* For test. To start object tracking*/
         startInteval: true,
 

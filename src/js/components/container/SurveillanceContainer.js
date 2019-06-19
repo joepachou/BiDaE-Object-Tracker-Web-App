@@ -69,7 +69,7 @@ class SurveillanceContainer extends React.Component {
                     openSurveillanceUpdate: false
                 })
             }.bind(this),
-            1000
+            500
         )
     }
 
@@ -148,8 +148,6 @@ class SurveillanceContainer extends React.Component {
                     handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose}
                     handleChangeObjectStatusFormSubmit={this.handleChangeObjectStatusFormSubmit}
                 />
-                {        console.log(this.state.selectedObjectData)
-}
                 <ConfirmForm 
                     show={showConfirmForm}  
                     title='Thank you for reporting' 
