@@ -69,7 +69,6 @@ function query_getTrackingData (rssi = -55) {
 	    (
 		SELECT mac_address, name, type, access_control_number, status, transferred_location
 	    FROM object_table
-		WHERE status = 'Normal'
 	    ) as table_device
 	
 		ON table_location.object_mac_address = table_device.mac_address
