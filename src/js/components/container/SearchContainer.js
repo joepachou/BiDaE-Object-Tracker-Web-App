@@ -146,7 +146,7 @@ class SearchContainer extends React.Component {
         })
 
         /** Transfer the searched object data from search container to search map(Surveillance Map) */
-        this.props.transferSearchResultFromSearchToMap(searchResult)
+        this.props.transferSearchResult(searchResult)
     }
 
     /**
@@ -229,7 +229,7 @@ class SearchContainer extends React.Component {
 
                 <div id='searchOption' style={searchOptionStyle} className='pt-2'>
                     <Row>
-                        <Col id='frequentSearch' md={6} sm={6} xs={6} className=''>
+                        <Col id='frequentSearch' className=''>
                             <h6 className="font-weight-bold">{locale.frequent_searches.toUpperCase()}</h6>
                             <ListGroup variant="flush">
                                 <ListGroup.Item onClick={this.handleSectionTitleClick}>Bladder Scanner</ListGroup.Item>
@@ -237,7 +237,7 @@ class SearchContainer extends React.Component {
                             </ListGroup>
                     
                         </Col>
-                        <Col id='searchableObjectType' md={6} sm={6} xs={6} className='px-0'>
+                        {/* <Col id='searchableObjectType' md={6} sm={6} xs={6} className='px-0'>
                             <h6 className="font-weight-bold">{locale.object_types.toUpperCase()}</h6>
                             <SearchableObjectType 
                                 sectionTitleList={this.state.sectionTitleList} 
@@ -249,7 +249,7 @@ class SearchContainer extends React.Component {
                                 isShowSectionTitle={this.state.isShowSectionTitle}
                                 clientHeight={this.state.clientHeight}
                             />
-                        </Col>
+                        </Col> */}
                     </Row>
                 </div>
             </div>
