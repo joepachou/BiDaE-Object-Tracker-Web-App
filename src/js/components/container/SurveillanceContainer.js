@@ -133,6 +133,7 @@ class SurveillanceContainer extends React.Component {
                     handleChangeObjectStatusForm={this.handleChangeObjectStatusForm}
                     style={style.searchMap}
                     openSurveillanceUpdate={openSurveillanceUpdate}
+                    colorPanel={this.props.colorPanel}
 
                 />
                 <Nav className='d-flex align-items-center'>

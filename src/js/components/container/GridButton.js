@@ -58,8 +58,7 @@ class GridButton extends React.Component {
                 searchResult.push(item)
             } 
         })
-
-        transferSearchResult(searchResult, 'gridButton')
+        transferSearchResult(searchResult, searchObjectType)
         
     }
 
@@ -71,7 +70,7 @@ class GridButton extends React.Component {
             <div className="gridbutton_wrapper">
                 {objectTypeSet.size !== 0 
                     ? Array.from(objectTypeSet).map( (item,index) => {
-                        return <div onClick={this.handleClick} key={index}>{item}</div>
+                        return <div className='gridbutton'onClick={this.handleClick} key={index}>{item}</div>
                     })
                     : null
                 }
