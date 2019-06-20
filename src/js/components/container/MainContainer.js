@@ -35,7 +35,7 @@ export default class ContentContainer extends React.Component{
     }
 
 
-
+    /** Transfer the processed object tracking data from Surveillance to MainContainer */
     transferSearchableObjectData(processedData){
         this.setState({
             searchableObjectData: processedData

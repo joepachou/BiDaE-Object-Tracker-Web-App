@@ -3,15 +3,11 @@ import Searchbar from '../presentational/Searchbar';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { Col, Row, Nav} from 'react-bootstrap'
 
-import axios from 'axios';
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
-
-/** API url */
-import dataSrc from '../../../js/dataSrc';
 
 import SearchableObjectType from '../presentational/SeachableObjectType';
 import SearchResult from '../presentational/SearchResult'
-import LocaleContext from '../../context/LocaleContext';
+import FrequentSearch from './FrequentSearch';
 
 class SearchContainer extends React.Component {
 
@@ -55,9 +51,10 @@ class SearchContainer extends React.Component {
         }
     }
 
-    shouldComponentUpdate(nextProps, nextState){
-        return this.state !== nextState;
-    }
+    // shouldComponentUpdate(nextProps, nextState){
+    //     console.log(this.props.searchableObjectData)
+    //     return this.state !== nextState;
+    // }
 
     // componentWillUnmount() {
     //     clearAllBodyScrollLocks();
@@ -116,38 +113,7 @@ class SearchContainer extends React.Component {
         })
     }
 
-    /**
-     * Fired once the user click the item in object type list or in frequent seaerch
-     * Also, popout the searchResult component.
-     */
-    getResultData(e) {
-        if (typeof e === 'string') {
-            var searchKey = e
-        } else {
-            var searchKey = e.target.innerText;
-        }
-
-        /** this.props.searchableObjectData data path: Surveillance -> SurveillanceContainer -> MainContainer -> SearchContainer  */
-        const searchableObjectData = this.props.searchableObjectData;
-
-        let searchResult = [];
-        for (let object in searchableObjectData) {
-            if (searchableObjectData[object].type == searchKey) {
-                searchResult.push(searchableObjectData[object])
-            } else if (searchableObjectData[object].type.indexOf(searchKey) === 0){
-                searchResult.push(searchableObjectData[object])
-            }
-
-        }
-        this.setState({
-            hasSearchKey: true,
-            searchKey: searchKey,
-            searchResult: searchResult,
-        })
-
-        /** Transfer the searched object data from search container to search map(Surveillance Map) */
-        this.props.transferSearchResult(searchResult)
-    }
+ 
 
     /**
      * Handle the cursor hover events in device that can use mouse.
@@ -195,6 +161,54 @@ class SearchContainer extends React.Component {
         }
     }
 
+    /**
+     * Fired once the user click the item in object type list or in frequent seaerch
+     * Also, popout the searchResult component.
+     */
+    getResultData(e) {
+
+        let isMydevice = false;
+        if (typeof e === 'string') {
+            var searchKey = e
+        } else if (e.target) {
+            var searchKey = e.target.innerText;
+        } else {
+            isMydevice = true;
+            var searchKey = e;
+
+            /** The variable is to check the unfound object */
+            var duplicatedSearchKey = new Set(searchKey)
+        }
+
+        /** this.props.searchableObjectData data path: Surveillance -> SurveillanceContainer -> MainContainer -> SearchContainer  */
+        const searchableObjectData = this.props.searchableObjectData;
+
+        let searchResult = [];
+        for (let object in searchableObjectData) {
+
+            if (isMydevice) {
+                if (searchKey.has(searchableObjectData[object].access_control_number)) {
+                    searchResult.push(searchableObjectData[object])
+                    duplicatedSearchKey.delete(searchableObjectData[object].access_control_number)
+                }
+            } else if (searchableObjectData[object].type == searchKey) {
+                searchResult.push(searchableObjectData[object])
+            } else if (searchableObjectData[object].type.toLowerCase().indexOf(searchKey.toLowerCase()) === 0){
+                searchResult.push(searchableObjectData[object])
+            }
+
+        }
+
+        this.setState({
+            hasSearchKey: true,
+            searchKey: searchKey,
+            searchResult: searchResult,
+        })
+
+        /** Transfer the searched object data from SearchContainer to MainContainer */
+        this.props.transferSearchResult(searchResult)
+    }
+
     render() {
 
         /** Customized CSS of searchResult */
@@ -207,9 +221,8 @@ class SearchContainer extends React.Component {
             display: this.state.hasSearchKey ? 'none' : null,
         }
 
-        const locale = this.context;
         const { searchResult, searchKey, sectionIndexList, sectionIndex, isShowSectionTitle } = this.state;
-        const { trackingData } = this.props
+        const { trackingData, searchableObjectData, transferSearchResult } = this.props
         
         return (
             <div id='searchContainer' className="m-3" onTouchMove={this.handleTouchMove}>
@@ -218,27 +231,18 @@ class SearchContainer extends React.Component {
                         placeholder={this.state.searchKey}
                         getResultData={this.getResultData}    
                     />
-                </div>
-
-                <div id='searchResult' style={searchResultStyle} className='py-3'>
-                    <SearchResult 
-                        result={searchResult} 
-                        searchKey={searchKey}
-                        refresh={this.getResultData} />
-                </div>
-
-                <div id='searchOption' style={searchOptionStyle} className='pt-2'>
-                    <Row>
-                        <Col id='frequentSearch' className=''>
-                            <h6 className="font-weight-bold">{locale.frequent_searches.toUpperCase()}</h6>
-                            <ListGroup variant="flush">
-                                <ListGroup.Item onClick={this.handleSectionTitleClick}>Bladder Scanner</ListGroup.Item>
-                                <ListGroup.Item onClick={this.handleSectionTitleClick}>Alarm</ListGroup.Item>
-                            </ListGroup>
                     
-                        </Col>
+                </div>
+
+                <div id='searchOption' className='pt-2'>
+                    <Row>
+                        <FrequentSearch 
+                            searchableObjectData={searchableObjectData}
+                            getResultData={this.getResultData}  
+                            transferSearchResult={transferSearchResult}  
+                        />
                         {/* <Col id='searchableObjectType' md={6} sm={6} xs={6} className='px-0'>
-                            <h6 className="font-weight-bold">{locale.object_types.toUpperCase()}</h6>
+                            <h6 className="font-weight-bold">{}</h6>
                             <SearchableObjectType 
                                 sectionTitleList={this.state.sectionTitleList} 
                                 sectionIndexList={this.state.sectionIndexList} 
@@ -252,11 +256,17 @@ class SearchContainer extends React.Component {
                         </Col> */}
                     </Row>
                 </div>
+
+                <div id='searchResult' style={searchResultStyle} className='py-3'>
+                    <SearchResult 
+                        result={searchResult} 
+                        searchKey={searchKey}    
+                    />
+                </div>
             </div>
         );
     }
 }
 
-SearchContainer.contextType = LocaleContext;
 
 export default SearchContainer;
