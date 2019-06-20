@@ -7,7 +7,8 @@ class GridButton extends React.Component {
         super()
         this.state = {
             objectTypeSet: new Set(),
-            pinColorSet: config.surveillanceMap.iconColor.pinColorSet
+            pinColorSet: config.surveillanceMap.iconColor.pinColorSet,
+            searchObjectType: new Map(),
         }
         this.processObjectType = this.processObjectType.bind(this);
         this.handleClick = this.handleClick.bind(this)
@@ -36,21 +37,30 @@ class GridButton extends React.Component {
         const pinColorSet = this.state.pinColorSet
         let searchResult = [];
         var pinColor = '';
+        let searchObjectType = this.state.searchObjectType;
         
         if (e.target.style.background !== '') {
             pinColorSet.push(e.target.style.background);
             e.target.style.background = ''
-            pinColor = 'black'
+            searchObjectType.set(searchKey, 'black')
         } else {
             pinColor = e.target.style.background = pinColorSet.pop();
+            searchObjectType.set(searchKey, pinColor)
         }
-        Object.values(searchableObjectData).map(item => {
-            if (item.type === searchKey) {
-                item.pinColor = pinColor;
-                searchResult.push(item)
-                console.log(item)
-            }
+
+        this.setState({
+            searchObjectType: searchObjectType
         })
+        console.log(searchObjectType)
+        
+        Object.values(searchableObjectData).map(item => {
+            if (searchObjectType.has(item.type) && searchObjectType.values(item.type) !== 'black') {
+                item.pinColor = searchObjectType.get(item.type);
+                searchResult.push(item)
+            } 
+        })
+
+        
         transferSearchResult(searchResult)
         
     }

@@ -42,10 +42,11 @@ export default class ContentContainer extends React.Component{
         })
     }
 
+    /** Transfer the searched object data from SearchContainer, GridButton to MainContainer */
     transferSearchResult(searchResult) {
         this.setState({
             hasSearchKey: true,
-            searchResult: searchResult,
+            searchResult: searchResult
         })
     }
 
@@ -64,7 +65,7 @@ export default class ContentContainer extends React.Component{
             /** "page-wrap" the default id named by react-burget-menu */
             <div id="page-wrap" className='' style={style.container}>
                 <Row className='d-flex w-100 justify-content-around mx-0'>
-                    <Col xl={9} >
+                    <Col xl={8} >
                         <Hidden xs sm md lg>
                             <br/>
                             <SurveillanceContainer 
@@ -74,8 +75,7 @@ export default class ContentContainer extends React.Component{
                             />
                         </Hidden>
                     </Col>
-
-                    <Col xs={12} sm={12} md={12} xl={3} className="w-100">
+                    <Col xs={12} sm={12} md={12} xl={4} className="w-100">
                         <SearchContainer 
                             searchableObjectData={searchableObjectData} 
                             transferSearchResult={this.transferSearchResult}
