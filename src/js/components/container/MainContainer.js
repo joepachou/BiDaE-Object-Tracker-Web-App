@@ -23,11 +23,10 @@ export default class ContentContainer extends React.Component{
     constructor(props){
         super(props)
         this.state = {
-            trackingData: [],
-            trackingColunm: [],
             hasSearchKey: false,
             searchableObjectData: null,
             searchResult: [],
+            searchType: '',
         }
 
         this.transferSearchableObjectData = this.transferSearchableObjectData.bind(this)
@@ -43,17 +42,18 @@ export default class ContentContainer extends React.Component{
     }
 
     /** Transfer the searched object data from SearchContainer, GridButton to MainContainer */
-    transferSearchResult(searchResult) {
+    transferSearchResult(searchResult, searchType) {
         this.setState({
             hasSearchKey: true,
-            searchResult: searchResult
+            searchResult: searchResult,
+            searchType: searchType,
         })
     }
 
     
     render(){
 
-        const { hasSearchKey, searchResult, searchableObjectData } = this.state;
+        const { hasSearchKey, searchResult, searchableObjectData, searchType } = this.state;
 
         const style = {
             container: {
@@ -72,6 +72,7 @@ export default class ContentContainer extends React.Component{
                                 hasSearchKey={hasSearchKey} 
                                 searchResult={searchResult}
                                 transferSearchableObjectData={this.transferSearchableObjectData}
+                                searchType={searchType}
                             />
                         </Hidden>
                     </Col>

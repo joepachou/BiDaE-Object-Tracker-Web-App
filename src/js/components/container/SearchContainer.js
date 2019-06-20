@@ -168,13 +168,17 @@ class SearchContainer extends React.Component {
     getResultData(e) {
 
         let isMydevice = false;
+        var searchType = '';
         if (typeof e === 'string') {
             var searchKey = e
+            searchType = 'searchBar'
         } else if (e.target) {
             var searchKey = e.target.innerText;
+            searchType = 'searchList'
         } else {
             isMydevice = true;
             var searchKey = e;
+            searchType = 'frequentSearch'
 
             /** The variable is to check the unfound object */
             var duplicatedSearchKey = new Set(searchKey)
@@ -206,7 +210,7 @@ class SearchContainer extends React.Component {
         })
 
         /** Transfer the searched object data from SearchContainer to MainContainer */
-        this.props.transferSearchResult(searchResult)
+        this.props.transferSearchResult(searchResult, searchType)
     }
 
     render() {

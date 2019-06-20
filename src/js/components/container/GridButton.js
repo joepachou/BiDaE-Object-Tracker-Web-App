@@ -51,7 +51,6 @@ class GridButton extends React.Component {
         this.setState({
             searchObjectType: searchObjectType
         })
-        console.log(searchObjectType)
         
         Object.values(searchableObjectData).map(item => {
             if (searchObjectType.has(item.type) && searchObjectType.values(item.type) !== 'black') {
@@ -60,8 +59,7 @@ class GridButton extends React.Component {
             } 
         })
 
-        
-        transferSearchResult(searchResult)
+        transferSearchResult(searchResult, 'gridButton')
         
     }
 

@@ -77,6 +77,7 @@ class Surveillance extends React.Component {
     /** Set the search map configuration which establishs in config.js  */
     initMap(){
         let map = L.map('mapid', config.surveillanceMap.mapOptions);
+        
         let bounds = config.surveillanceMap.mapBound;
         let image = L.imageOverlay(config.surveillanceMap.map, bounds).addTo(map);
         map.fitBounds(bounds);
@@ -353,14 +354,13 @@ class Surveillance extends React.Component {
      * Create the error circle of markers, and add into this.markersLayer.
      */
     handleObjectMarkers(){
-        const { hasSearchKey, searchResult } = this.props;
+        const { hasSearchKey, searchResult, searchType } = this.props;
 
         /** 
          * Process the search object data
          */
         let searchedObjectDataColorMap = new Map();
-
-        if (hasSearchKey) {
+        if (hasSearchKey && searchType === 'gridButton') {
             searchResult.map(item => {
                 searchedObjectDataColorMap.set(item.mac_address, item.pinColor)
             })
@@ -464,15 +464,19 @@ class Surveillance extends React.Component {
         let counter = 0;
         for (var key in objects){
 
-            /** Tag the searched object by searched and pinColor*/
-            if (searchedObjectDataColorMap.has(key)) {
-                objects[key].searched = true
-                objects[key].pinColor = searchedObjectDataColorMap.get(key)
-                counter++;
-            } else {
-                objects[key].searched = false
+            /** Tag the searched object with searched and pinColor*/
+            switch(searchType) {
+                case 'gridButton':
+                    objects[key].searched = true
+                    objects[key].pinColor = searchedObjectDataColorMap.get(key)
+                    break;
+                case 'normalSearch':
+                    objects[key].searched = true
+                    counter++;
+                    break;
+                default:
+                    objects[key].searched = false;
             }
-
 
             let detectedNum = objects[key].lbeaconDetectedNum;
             let position = this.macAddressToCoordinate(key.toString(), objects[key].currentPosition);
@@ -507,14 +511,14 @@ class Surveillance extends React.Component {
                         number: counter
                     }
                 }
-			} else if (objects[key].pinColor) {
+			} else if (objects[key].panic_button === 1) {
+                iconOption = sosIconOptions;
+            } else if (searchType === 'gridButton') {
                 iconOption = {
                     iconSize: iconSize,
                     markerColor: objects[key].pinColor,
                 }
-            } else if (objects[key].panic_button === 1) {
-                iconOption = sosIconOptions;
-            } else if (objects[key].searched === true) {
+            } else if (searchType === 'normalSearch') {
                 config.surveillanceMap.iconOptions.showNumber 
                 ? 
                 iconOption = {
@@ -657,7 +661,6 @@ class Surveillance extends React.Component {
             <>      
                 <div id='mapid' className='cmp-block' style={style.map}>
                 {/* {console.log(document.body.Element.clientHeight)} */}
-                {/* {console.log(this.props.objectInfo)} */}
                 </div>
                 {/* <div>
                     <ToggleSwitch title="Location Accuracy" options={toggleSwitchOptions}/>

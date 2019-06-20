@@ -103,9 +103,13 @@ class SurveillanceContainer extends React.Component {
                 showConfirmForm, 
                 selectedObjectData, 
                 formOption, 
-                openSurveillanceUpdate
+                openSurveillanceUpdate,
             } = this.state;
-        const { hasSearchKey, searchResult, transferSearchableObjectData} = this.props;
+        const { hasSearchKey, 
+                searchResult,
+                searchType, 
+                transferSearchableObjectData
+            } = this.props;
         const locale = this.context;
 
         const style = {
@@ -124,6 +128,7 @@ class SurveillanceContainer extends React.Component {
                     rssi={rssi} 
                     hasSearchKey={hasSearchKey}
                     searchResult={searchResult}
+                    searchType={searchType}
                     transferSearchableObjectData={transferSearchableObjectData}
                     handleChangeObjectStatusForm={this.handleChangeObjectStatusForm}
                     style={style.searchMap}
