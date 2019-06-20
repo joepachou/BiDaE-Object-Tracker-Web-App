@@ -82,6 +82,7 @@ function query_getTrackingData (rssi = -55) {
 }
 
 
+
 const query_getObjectTable = 
 	`
     SELECT id, name, type, access_control_number, status, transferred_location, mac_address
@@ -166,6 +167,12 @@ function query_signup(signupPackage) {
 	return query
 }
 
+function query_getUserInfo() {
+	return `
+	SELECT name, mydevice from user_table where name='joechou'
+	`;
+}
+
 
 module.exports = {
     query_getTrackingData,
@@ -175,6 +182,7 @@ module.exports = {
 	query_getGeofenceData,
 	query_editObject,
 	query_signin,
-	query_signup
+	query_signup,
+	query_getUserInfo,
 }
 

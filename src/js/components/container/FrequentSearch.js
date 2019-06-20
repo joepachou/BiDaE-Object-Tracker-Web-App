@@ -1,27 +1,35 @@
 import React from 'react';
 import { Col, ListGroup } from 'react-bootstrap';
 import LocaleContext from '../../context/LocaleContext';
-
-const mydevice = new Set(['9992-3301-0001', '0002-9338-0003'])
+import axios from 'axios';
+import dataSrc from '../../dataSrc';
 
 class FrequentSearch extends React.Component {
 
     constructor(){
         super()
+        this.state = {
+            hasGetUserInfo: false,
+        }
 
         this.handleClick = this.handleClick.bind(this);
     }
 
     handleClick() {
-        let searchResult = [];
-        let notFoundObject = [];
-        Object.values(this.props.searchableObjectData).map( item => {
-            if (mydevice.has(item.access_control_number)) {
-                searchResult.push(item);
-                // mydevice.delete(item.access_control_number)
-            }
-        })
-        this.props.getResultData(mydevice)
+        if (!this.state.hasGetUserInfo) {
+            axios.get(dataSrc.userInfo).then( res => {
+                var mydevice = new Set(res.data.rows[0].mydevice);
+                this.props.getResultData(mydevice)
+                this.setState({
+                    hasGetUserInfo: true,
+                    mydevice: mydevice,
+                })
+            }).catch(error => {
+                console.log(error)
+            })
+        } else {
+            this.props.getResultData(this.state.mydevice)
+        }
     }
 
     render() {

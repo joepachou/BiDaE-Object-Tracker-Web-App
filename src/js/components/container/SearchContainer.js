@@ -166,19 +166,18 @@ class SearchContainer extends React.Component {
      * Also, popout the searchResult component.
      */
     getResultData(e) {
-
         let isMydevice = false;
         var searchType = '';
         if (typeof e === 'string') {
             var searchKey = e
-            searchType = 'searchBar'
+            searchType = 'normalSearch'
         } else if (e.target) {
             var searchKey = e.target.innerText;
-            searchType = 'searchList'
+            searchType = 'normalSearch'
         } else {
             isMydevice = true;
             var searchKey = e;
-            searchType = 'frequentSearch'
+            searchType = 'normalSearch'
 
             /** The variable is to check the unfound object */
             var duplicatedSearchKey = new Set(searchKey)
@@ -189,7 +188,6 @@ class SearchContainer extends React.Component {
 
         let searchResult = [];
         for (let object in searchableObjectData) {
-
             if (isMydevice) {
                 if (searchKey.has(searchableObjectData[object].access_control_number)) {
                     searchResult.push(searchableObjectData[object])

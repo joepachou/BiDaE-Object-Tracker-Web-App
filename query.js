@@ -155,6 +155,17 @@ const signup = (request, response) => {
     })
 
 }
+
+const userInfo = (request, response) => {
+    pool.query(queryType.query_getUserInfo(), (error, results) => {
+        if (error) {
+            console.log('Get user info Fails!')
+        } else {
+            console.log('Get user info success')
+        }
+        response.status(200).json(results)
+    })
+}
     
 module.exports = {
     getTrackingData,
@@ -164,5 +175,6 @@ module.exports = {
     getGeofenceData,
     editObject,
     signin,
-    signup
+    signup,
+    userInfo
 }

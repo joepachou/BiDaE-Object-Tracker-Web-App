@@ -9,6 +9,7 @@ const geofenceData = 'http://' + IP + '/data/geofenceData';
 const editObject = 'http://' + IP + '/data/editObject';
 const signin = 'http://' + IP + '/user/signin';
 const signup = 'http://' + IP + '/user/signup';
+const userInfo = 'http://' + IP + '/user/info';
 
 module.exports = {
     trackingData,
@@ -20,4 +21,5 @@ module.exports = {
     editObject,
     signin,
     signup,
+    userInfo,
 };
