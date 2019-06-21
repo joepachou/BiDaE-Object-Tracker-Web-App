@@ -7,7 +7,7 @@ class GridButton extends React.Component {
         super()
         this.state = {
             objectTypeSet: new Set(),
-            pinColorSet: config.surveillanceMap.iconColor.pinColorSet,
+            pinColorArray: config.surveillanceMap.iconColor.pinColorArray.slice(),
             searchObjectType: new Map(),
         }
         this.processObjectType = this.processObjectType.bind(this);
@@ -18,6 +18,7 @@ class GridButton extends React.Component {
         if (prepProps.searchableObjectData === null) {
             this.processObjectType();
         }
+
     }
 
     processObjectType() {
@@ -32,24 +33,27 @@ class GridButton extends React.Component {
     }
 
     handleClick(e) {
+
         const searchKey = e.target.innerText;
-        const { searchableObjectData, transferSearchResult } = this.props
-        const pinColorSet = this.state.pinColorSet
+        const { searchableObjectData, transferSearchResult, clearColorPanel } = this.props
         let searchResult = [];
         var pinColor = '';
-        let searchObjectType = this.state.searchObjectType;
         
+        let pinColorArray = clearColorPanel ? config.surveillanceMap.iconColor.pinColorArray.slice():this.state.pinColorArray;
+        let searchObjectType = clearColorPanel ? new Map() : this.state.searchObjectType;
+
         if (e.target.style.background !== '') {
-            pinColorSet.push(e.target.style.background);
+            pinColorArray.push(e.target.style.background);
             e.target.style.background = ''
             searchObjectType.set(searchKey, 'black')
         } else {
-            pinColor = e.target.style.background = pinColorSet.pop();
+            pinColor = e.target.style.background = pinColorArray.pop();
             searchObjectType.set(searchKey, pinColor)
         }
 
         this.setState({
-            searchObjectType: searchObjectType
+            searchObjectType: searchObjectType,
+            pinColorArray: pinColorArray
         })
         
         Object.values(searchableObjectData).map(item => {

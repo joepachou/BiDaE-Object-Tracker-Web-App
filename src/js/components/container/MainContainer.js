@@ -28,6 +28,7 @@ export default class ContentContainer extends React.Component{
             searchResult: [],
             searchType: '',
             colorPanel: null,
+            clearColorPanel: false,
         }
 
         this.transferSearchableObjectData = this.transferSearchableObjectData.bind(this)
@@ -44,22 +45,24 @@ export default class ContentContainer extends React.Component{
 
     /** Transfer the searched object data from SearchContainer, GridButton to MainContainer */
     transferSearchResult(searchResult, colorPanel) {
+        console.log(colorPanel)
         if(colorPanel) {
             this.setState({
                 hasSearchKey: true,
                 searchResult: searchResult,
-                colorPanel: colorPanel
+                colorPanel: colorPanel,
+                clearColorPanel: false,
             })
         } else {
             var gridbuttons = document.getElementsByClassName('gridbutton')
             for(let button of gridbuttons) {
-                button.style.background = '#fff'
+                button.style.background = ''
             }
-
             this.setState({
                 hasSearchKey: true,
                 searchResult: searchResult,
                 colorPanel: null,
+                clearColorPanel: true
             })
         }
     }
@@ -67,7 +70,7 @@ export default class ContentContainer extends React.Component{
     
     render(){
 
-        const { hasSearchKey, searchResult, searchableObjectData, searchType, colorPanel } = this.state;
+        const { hasSearchKey, searchResult, searchableObjectData, searchType, colorPanel, clearColorPanel } = this.state;
 
         const style = {
             container: {
@@ -100,6 +103,7 @@ export default class ContentContainer extends React.Component{
                         <GridButton
                             searchableObjectData={searchableObjectData} 
                             transferSearchResult={this.transferSearchResult}
+                            clearColorPanel={clearColorPanel}
                         />
                         
                     </Col>

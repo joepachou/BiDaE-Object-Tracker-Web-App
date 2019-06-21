@@ -36,7 +36,7 @@ const config = {
 			geofenceIconFence: geofence_fence,
             geofenceIconPerimeter: geofence_perimeter,
             searchedObjectIconUrl: white_pin,
-            showNumber: false,
+            showNumber: !false,
         },
 
         iconColor: {
@@ -47,11 +47,11 @@ const config = {
             unNormal: 'grey',
             sos: 'sos',
             number: 'white',
-            pinColorSet: ['tan', 'lightyellow', 'lavender', 'lightblue', 'darkseagreen', 'mistyrose']
+            pinColorArray: ['tan', 'lightyellow', 'lavender', 'lightblue', 'darkseagreen', 'mistyrose']
         },
 
         /* For test. To start object tracking*/
-        startInteval: !true,
+        startInteval: true,
 
         /* Object tracking query inteval */
         intevalTime: 1000,
