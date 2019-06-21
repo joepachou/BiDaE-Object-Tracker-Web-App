@@ -172,7 +172,7 @@ class EditObjectForm extends React.Component {
 
         return (
             <Modal show={this.state.show} onHide={this.handleClose} size="lg">
-                <Modal.Header closeButton>{title}</Modal.Header >
+                <Modal.Header closeButton className='font-weight-bold'>{title}</Modal.Header >
                 <Modal.Body>
                     <Form >
                         <Form.Group as={Row} controlId="formHorizontalEmail">

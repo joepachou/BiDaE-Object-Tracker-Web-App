@@ -45,7 +45,6 @@ export default class ContentContainer extends React.Component{
 
     /** Transfer the searched object data from SearchContainer, GridButton to MainContainer */
     transferSearchResult(searchResult, colorPanel) {
-        console.log(colorPanel)
         if(colorPanel) {
             this.setState({
                 hasSearchKey: true,
@@ -66,7 +65,6 @@ export default class ContentContainer extends React.Component{
             })
         }
     }
-
     
     render(){
 

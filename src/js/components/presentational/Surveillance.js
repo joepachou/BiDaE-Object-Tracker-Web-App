@@ -33,7 +33,6 @@ class Surveillance extends React.Component {
             objectInfo: {},
             hasErrorCircle: false,
             hasInvisibleCircle: false,       
-            openSurveillanceUpdate: true,
         }
         this.map = null;
         this.markersLayer = L.layerGroup();
@@ -58,7 +57,7 @@ class Surveillance extends React.Component {
     }
 
     componentDidUpdate(prepProps){
-        if(this.props.openSurveillanceUpdate) {
+        if(this.props.shouldTrackingDataUpdate) {
 
             /** Check whether there is the new tracking data retrieving from store */
             if (this.props.objectInfo !== prepProps.objectInfo) {
@@ -70,7 +69,7 @@ class Surveillance extends React.Component {
     }
 
     shouldComponentUpdate(nextProps){
-        return nextProps.openSurveillanceUpdate
+        return this.props.shouldTrackingDataUpdate
     }
 
     
@@ -188,19 +187,6 @@ class Surveillance extends React.Component {
      */
     handleTrackingData() {
         let objectRows = this.props.objectInfo === undefined ? [] : this.props.objectInfo
-        // const fakeData = [{
-        //     access_control_number: "1111-2222-0101",
-        //     avg: "-48",
-        //     geofence_type: "Perimeter",
-        //     lbeacon_uuid: "00000018-0000-0000-3060-000000010700",
-        //     location_description: "T16",
-        //     name: "ACB0",
-        //     object_mac_address: "c1:0f:00:12:ac:b0",
-        //     panic_button: null,
-        //     status: "Normal",
-        //     transferred_location: null,
-        //     type: "bed",
-        // }]
         let lbsPosition = new Set(),
             objectInfoHash = {}
         let counter = 0;
@@ -216,7 +202,6 @@ class Surveillance extends React.Component {
                 lbeaconCoordinate: lbeaconCoordinate,
                 location_description: items.location_description,
                 rssi: items.avg,
-                // rssi_avg : items.avg_stable,
             }
             /**
              * If the object has not scanned by one lbeacon yet, 
@@ -500,20 +485,20 @@ class Surveillance extends React.Component {
                 iconOption = unNormalIconOptions;
             } else if (objects[key].geofence_type === 'Fence'){
                 iconOption = geofenceFAweIconOptions;
-                // if (objects[key].searched && config.surveillanceMap.iconOptions.showNumber) {
-                //     iconOption = {
-                //         ...iconOption,
-                //         number: ++counter
-                //     }
-                // }
+                if (objects[key].searched && config.surveillanceMap.iconOptions.showNumber) {
+                    iconOption = {
+                        ...iconOption,
+                        number: counter
+                    }
+                }
 			} else if (objects[key].geofence_type === 'Perimeter'){
                 iconOption = geofencePAweIconOptions;
-                // if (objects[key].searched && config.surveillanceMap.iconOptions.showNumber) {
-                //     iconOption = {
-                //         ...iconOption,
-                //         number: ++counter
-                //     }
-                // }
+                if (objects[key].searched && config.surveillanceMap.iconOptions.showNumber) {
+                    iconOption = {
+                        ...iconOption,
+                        number: counter
+                    }
+                }
 			} else if (objects[key].panic_button === 1) {
                 iconOption = sosIconOptions;
             } else if (objects[key].searched && this.props.colorPanel) {
@@ -682,7 +667,8 @@ const mapDispatchToProps = (dispatch) => {
 
 const mapStateToProps = (state) => {
     return {
-        objectInfo: state.retrieveTrackingData.rows,
+        shouldTrackingDataUpdate: state.retrieveTrackingData.shouldTrackingDataUpdate,
+        objectInfo: state.retrieveTrackingData.objectInfo.rows,
     }
 }
 

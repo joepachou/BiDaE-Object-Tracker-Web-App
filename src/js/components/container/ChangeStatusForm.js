@@ -90,30 +90,13 @@ class ChangeStatusForm extends React.Component {
             name: name,
             type: type,
             status: status,
-            transferredLocation: transferredLocation || '',
+            transferredLocation: status !== 'Transferred' ? '' : transferredLocation,
             mac_address: mac_address,
             access_control_number: access_control_number,
         }
-
         if(this.props.handleChangeObjectStatusFormSubmit) {
             this.props.handleChangeObjectStatusFormSubmit(postOption);
         }
-        // axios.post(dataSrc.editObject, {
-        //     formOption: postOption
-        // }).then(res => {
-        //     button.style.opacity = 0.4
-        //     setTimeout(
-        //         function() {
-        //            this.setState ({
-        //                show: false,
-        //            }) 
-        //         }
-        //         .bind(this),
-        //         1000
-        //     )
-        // }).catch( error => {
-        //     console.log(error)
-        // })
     }
 
     handleCheck(e) {

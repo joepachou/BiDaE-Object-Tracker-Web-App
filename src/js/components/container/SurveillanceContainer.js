@@ -9,6 +9,8 @@ import LocaleContext from '../../context/LocaleContext';
 import ConfirmForm from './ConfirmForm'
 import axios from 'axios';
 import dataSrc from '../../dataSrc';
+import { connect } from 'react-redux'
+import { shouldUpdateTrackingData } from '../../action/action'
 
 class SurveillanceContainer extends React.Component {
     constructor(props){
@@ -18,7 +20,6 @@ class SurveillanceContainer extends React.Component {
             showEditObjectForm: false,
             showConfirmForm: false,
             selectedObjectData: [],
-            openSurveillanceUpdate: true,
             formOption: [],
         }
 
@@ -41,16 +42,16 @@ class SurveillanceContainer extends React.Component {
         this.setState({
             showEditObjectForm: true,
             selectedObjectData: objectData,
-            openSurveillanceUpdate: false,
         })
+        this.props.shouldUpdateTrackingData(false)
     }
 
     handleChangeObjectStatusFormClose() {
         this.setState({
             showEditObjectForm: false,
             showConfirmForm: false,
-            openSurveillanceUpdate: true,
         })
+        this.props.shouldUpdateTrackingData(true);
     }
 
     handleChangeObjectStatusFormSubmit(postOption) {
@@ -66,8 +67,8 @@ class SurveillanceContainer extends React.Component {
                 this.setState({
                     showConfirmForm: true,
                     formOption: postOption,
-                    openSurveillanceUpdate: false
                 })
+                this.props.shouldUpdateTrackingData(false)
             }.bind(this),
             500
         )
@@ -85,8 +86,8 @@ class SurveillanceContainer extends React.Component {
                     this.setState ({
                         showConfirmForm: false,
                         formOption: [],
-                        openSurveillanceUpdate: true
                     }) 
+                    this.props.shouldUpdateTrackingData(true)
                 }
                 .bind(this),
                 1000
@@ -103,7 +104,6 @@ class SurveillanceContainer extends React.Component {
                 showConfirmForm, 
                 selectedObjectData, 
                 formOption, 
-                openSurveillanceUpdate,
             } = this.state;
         const { hasSearchKey, 
                 searchResult,
@@ -132,7 +132,6 @@ class SurveillanceContainer extends React.Component {
                     transferSearchableObjectData={transferSearchableObjectData}
                     handleChangeObjectStatusForm={this.handleChangeObjectStatusForm}
                     style={style.searchMap}
-                    openSurveillanceUpdate={openSurveillanceUpdate}
                     colorPanel={this.props.colorPanel}
 
                 />
@@ -166,4 +165,10 @@ class SurveillanceContainer extends React.Component {
 }
 SurveillanceContainer.contextType = LocaleContext;
 
-export default SurveillanceContainer;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        shouldUpdateTrackingData: value => dispatch(shouldUpdateTrackingData(value))
+    }
+}
+
+export default connect(null, mapDispatchToProps)(SurveillanceContainer)

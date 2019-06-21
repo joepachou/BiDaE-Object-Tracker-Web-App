@@ -9,28 +9,85 @@ import VerticalTable from '../presentational/VerticalTable';
 import ModalForm from '../container/ModalForm';
 import LocaleContext from '../../context/LocaleContext';
 import ChangeStatusForm from '../container/ChangeStatusForm';
+import ConfirmForm from '../container/ConfirmForm';
+import shallowCompare from 'react-addons-shallow-compare'
+import { connect } from 'react-redux'
+import { shouldUpdateTrackingData } from '../../action/action';
+import axios from 'axios';
+import dataSrc from '../../dataSrc';
 
 
 
 class SearchResult extends React.Component {
 
-    constructor(){
-        super()
+    constructor(props){
+        super(props)
         this.state = {
             showEditObjectForm: false,
+            showConfirmForm: false,
             selectObjectIndex:0,
+            showConfirmForm: false,
+            selectedObjectData: [],
+            formOption: [],
+            thisComponentShouldUpdate: true
         }
         
-        this.editObject = this.editObject.bind(this)
+        this.handleChangeObjectStatusForm = this.handleChangeObjectStatusForm.bind(this)
+        this.handleChangeObjectStatusFormSubmit = this.handleChangeObjectStatusFormSubmit.bind(this)
+        this.handleConfirmFormSubmit = this.handleConfirmFormSubmit.bind(this)
     }
 
-
-    editObject(eventKey) {
+    handleChangeObjectStatusForm(eventKey) {
+        this.props.shouldUpdateTrackingData(false)
         this.setState({
             showEditObjectForm: true,
             selectObjectIndex: eventKey,
         })
     }
+
+    handleChangeObjectStatusFormSubmit(postOption) {
+        this.setState({
+            selectedObjectData: {
+                ...this.state.selectedObjectData,
+                ...postOption,
+            },
+            showEditObjectForm: false,
+        })
+        setTimeout(
+            function() {
+                this.setState({
+                    showConfirmForm: true,
+                    formOption: postOption,
+                })
+            }.bind(this),
+            500
+        )
+    }
+
+    handleConfirmFormSubmit(e) {
+        const button = e.target
+        const postOption = this.state.formOption;
+        axios.post(dataSrc.editObject, {
+            formOption: postOption
+        }).then(res => {
+            button.style.opacity = 0.4
+            setTimeout(
+                function() {
+                    this.setState ({
+                        showConfirmForm: false,
+                        formOption: [],
+                        openSurveillanceUpdate: true
+                    }) 
+                }
+                .bind(this),
+                1000
+            )
+        }).catch( error => {
+            console.log(error)
+        })
+    }
+
+    
 
     render() {
         const locale = this.context;
@@ -62,7 +119,7 @@ class SearchResult extends React.Component {
                             </Col> 
                         
                         :   <Col className='border px-0 overflow-auto'>
-                                <ListGroup variant="flush" onSelect={this.editObject}>
+                                <ListGroup variant="flush" onSelect={this.handleChangeObjectStatusForm}>
                                     {result.map((item,index) => {
                                         let element = 
                                             <ListGroup.Item href={'#' + index} style={style.listItem} className='searchResultList' eventKey={index} key={index}>
@@ -93,15 +150,33 @@ class SearchResult extends React.Component {
                     </Row>
                 {/* </Tab.Container> */}
                 <ChangeStatusForm 
-                    show={showEditObjectForm} 
+                    show={this.state.showEditObjectForm} 
                     title='Report device status' 
                     selectedObjectData={result.length ? result[selectObjectIndex] : null} 
                     searchKey={searchKey}
+                    handleChangeStatusFormClose={this.handleChangeStatusFormClose}
+                    handleChangeObjectStatusForm={this.handleChangeObjectStatusForm}
+                    handleChangeObjectStatusFormSubmit={this.handleChangeObjectStatusFormSubmit}
                 />
+                <ConfirmForm 
+                    show={this.state.showConfirmForm}  
+                    title='Thank you for reporting' 
+                    selectedObjectData={this.state.formOption} 
+                    handleChangeStatusFormClose={this.handleChangeStatusFormClose} 
+                    handleConfirmFormSubmit={this.handleConfirmFormSubmit}
+                />
+                {console.log('Rerender')}
             </>
         )
     }
 }
 SearchResult.contextType = LocaleContext;
 
-export default SearchResult;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        shouldUpdateTrackingData: value => dispatch(shouldUpdateTrackingData(value))
+    }
+}
+
+export default connect(null, mapDispatchToProps)(SearchResult);
+
