@@ -51,7 +51,7 @@ const config = {
         },
 
         /* For test. To start object tracking*/
-        startInteval: true,
+        startInteval: !true,
 
         /* Object tracking query inteval */
         intevalTime: 1000,

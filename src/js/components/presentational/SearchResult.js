@@ -165,7 +165,6 @@ class SearchResult extends React.Component {
                     handleChangeStatusFormClose={this.handleChangeStatusFormClose} 
                     handleConfirmFormSubmit={this.handleConfirmFormSubmit}
                 />
-                {console.log('Rerender')}
             </>
         )
     }

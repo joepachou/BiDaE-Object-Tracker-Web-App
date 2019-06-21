@@ -1,7 +1,8 @@
 import { RETRIEVE_TRACKING_DATA, SHOULD_UPDATE_TRACKING_DATA } from '../action/actionType';
+import config from '../config';
 
 const initialState = {
-    shouldTrackingDataUpdate: true,
+    shouldTrackingDataUpdate: config.surveillanceMap.startInteval,
     objectInfo: {},
 }
 

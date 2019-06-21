@@ -83,6 +83,8 @@ export default class ContentContainer extends React.Component{
                     <Col xl={8} >
                         <Hidden xs sm md lg>
                             <br/>
+                            {/* {console.log(this.state)} */}
+                            <h4>123</h4>
                             <SurveillanceContainer 
                                 hasSearchKey={hasSearchKey} 
                                 searchResult={searchResult}

@@ -15,13 +15,14 @@ class GridButton extends React.Component {
     }
 
     componentDidUpdate(prepProps) {
-        if (prepProps.searchableObjectData === null) {
+        if (prepProps.searchableObjectData === null && this.props.searchableObjectData !== null) {
             this.processObjectType();
         }
 
     }
 
     processObjectType() {
+        console.log()
         const searchableObjectData = this.props.searchableObjectData;
         const objectTypeSet = new Set();
         Object.values(searchableObjectData).map(item => {
@@ -55,7 +56,6 @@ class GridButton extends React.Component {
             searchObjectType: searchObjectType,
             pinColorArray: pinColorArray
         })
-        
         Object.values(searchableObjectData).map(item => {
             if (searchObjectType.has(item.type) && searchObjectType.values(item.type) !== 'black') {
                 item.pinColor = searchObjectType.get(item.type);

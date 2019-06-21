@@ -15,14 +15,14 @@ import { connect } from 'react-redux';
 
 class App extends React.Component {
 
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = { 
             locale: locale.changeLocale(config.locale.defaultLocale),
+            shouldTrackingDataUpdate: props.shouldTrackingDataUpdate
         }
         this.handleChangeLocale = this.handleChangeLocale.bind(this);
         this.getTrackingData = this.getTrackingData.bind(this);
-        this.StartSetInterval = config.surveillanceMap.startInteval; 
     }
 
     handleChangeLocale(changedLocale){
@@ -32,8 +32,13 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        this.getTrackingData();
-        this.interval = this.StartSetInterval == true ? setInterval(this.getTrackingData, config.surveillanceMap.intevalTime) : null;
+        this.props.shouldTrackingDataUpdate ? this.getTrackingData() : null;
+    }
+
+    componentDidUpdate(prepProps) {
+        if (prepProps.shouldTrackingDataUpdate !== this.props.shouldTrackingDataUpdate) {
+            this.interval = this.props.shouldTrackingDataUpdate ? setInterval(this.getTrackingData, config.surveillanceMap.intevalTime) : null;
+        }
     }
 
     componentWillUnmount() {
@@ -66,13 +71,19 @@ class App extends React.Component {
     }  
 };
 
+const mapStateToProps = (state) => {
+    return {
+        shouldTrackingDataUpdate: state.retrieveTrackingData.shouldTrackingDataUpdate,
+    }
+}
+
 const mapDispatchToProps = (dispatch) => {
     return {
         retrieveTrackingData: object => dispatch(retrieveTrackingData(object)),
     }
 }
 
-export default connect(null, mapDispatchToProps)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(App)
 
 
 
