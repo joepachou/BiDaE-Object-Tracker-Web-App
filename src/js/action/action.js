@@ -1,14 +1,15 @@
 import { 
     IS_OBJECT_LIST_SHOWN, 
     SELECT_OBJECT_LIST,
-    RETRIEVE_TRACKING_DATA
+    RETRIEVE_TRACKING_DATA,
+    SHOULD_UPDATE_TRACKING_DATA
 } from './actionType';
 
 /** Action Creator for Sidebar */
-export const isObjectListShown = (value) => {
+export const isObjectListShown = (boolean) => {
     return {
         type: IS_OBJECT_LIST_SHOWN,
-        value: value
+        value: boolean
     }
 }
 
@@ -24,5 +25,12 @@ export const retrieveTrackingData = (objectInfo) => {
     return {
         type: RETRIEVE_TRACKING_DATA,
         object: objectInfo
+    }
+}
+
+export const shouldUpdateTrackingData = (boolean) => {
+    return {
+        type: SHOULD_UPDATE_TRACKING_DATA,
+        value: boolean 
     }
 }

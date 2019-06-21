@@ -6,3 +6,5 @@ export const SELECT_OBJECT_LIST = 'SELECT_OBJECT_LIST';
 
 /** Actions related to Retreiving Data */
 export const RETRIEVE_TRACKING_DATA = 'RETRIEVE_TRACKING_DATA';
+
+export const SHOULD_UPDATE_TRACKING_DATA = 'SHOULD_UPDATE_TRACKING_DATA';
