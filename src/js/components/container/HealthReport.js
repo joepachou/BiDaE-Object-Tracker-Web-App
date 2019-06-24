@@ -159,7 +159,7 @@ class HealthReport extends React.Component{
 /** Which State do you need */
 const mapStateToProps = state => {
     return {
-        objectInfo: state.retrieveTrackingData
+        objectInfo: state.retrieveTrackingData.objectInfo
     }
 }
 
