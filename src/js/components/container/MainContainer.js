@@ -17,6 +17,7 @@ import Navs from '../presentational/Navs'
 import { Row, Col, Hidden, Visible } from 'react-grid-system';
 import SurveillanceContainer from './SurveillanceContainer';
 import GridButton from './GridButton';
+import { Alert } from 'react-bootstrap';
 
 export default class ContentContainer extends React.Component{
 
@@ -29,6 +30,7 @@ export default class ContentContainer extends React.Component{
             searchType: '',
             colorPanel: null,
             clearColorPanel: false,
+            searchResultObjectTypeMap: null,
         }
 
         this.transferSearchableObjectData = this.transferSearchableObjectData.bind(this)
@@ -45,30 +47,45 @@ export default class ContentContainer extends React.Component{
 
     /** Transfer the searched object data from SearchContainer, GridButton to MainContainer */
     transferSearchResult(searchResult, colorPanel) {
+        let searchResultObjectTypeMap = {}
+        searchResult.map( item => {
+            if (!(item.type in searchResultObjectTypeMap)){
+                searchResultObjectTypeMap[item.type] = 1
+            } else {
+                searchResultObjectTypeMap[item.type] = searchResultObjectTypeMap[item.type] + 1
+            }
+        })
         if(colorPanel) {
             this.setState({
                 hasSearchKey: true,
                 searchResult: searchResult,
                 colorPanel: colorPanel,
                 clearColorPanel: false,
+                searchResultObjectTypeMap: searchResultObjectTypeMap, 
             })
         } else {
             var gridbuttons = document.getElementsByClassName('gridbutton')
             for(let button of gridbuttons) {
                 button.style.background = ''
             }
+
             this.setState({
                 hasSearchKey: true,
                 searchResult: searchResult,
                 colorPanel: null,
-                clearColorPanel: true
+                clearColorPanel: true,
+                searchResultObjectTypeMap: searchResultObjectTypeMap, 
             })
         }
+    }
+
+    handleMapforEach(value,key) {
+        return `<h4>${value} ${key} found</h4>`
     }
     
     render(){
 
-        const { hasSearchKey, searchResult, searchableObjectData, searchType, colorPanel, clearColorPanel } = this.state;
+        const { hasSearchKey, searchResult, searchType, colorPanel, clearColorPanel } = this.state;
 
         const style = {
             container: {
@@ -83,8 +100,15 @@ export default class ContentContainer extends React.Component{
                     <Col xl={8} >
                         <Hidden xs sm md lg>
                             <br/>
-                            {/* {console.log(this.state)} */}
-                            <h4>123</h4>
+                            <div>
+                                
+                                    {this.state.searchResult.length === 0  
+                                        ? this.state.searchableObjectData ? <Alert variant='secondary'>{Object.keys(this.state.searchableObjectData).length + ' devices found'}</Alert>: <br/>
+                                        : Object.keys(this.state.searchResultObjectTypeMap).map((item,index) => {
+                                            return <Alert variant='secondary' key={index}>{this.state.searchResultObjectTypeMap[item]} {item} found</Alert> 
+                                        })
+                                    } 
+                            </div>
                             <SurveillanceContainer 
                                 hasSearchKey={hasSearchKey} 
                                 searchResult={searchResult}
@@ -96,19 +120,17 @@ export default class ContentContainer extends React.Component{
                     </Col>
                     <Col xs={12} sm={12} md={12} xl={4} className="w-100">
                         <SearchContainer 
-                            searchableObjectData={searchableObjectData} 
+                            searchableObjectData={this.state.searchableObjectData} 
                             transferSearchResult={this.transferSearchResult}
                         />
                         
                         <GridButton
-                            searchableObjectData={searchableObjectData} 
+                            searchableObjectData={this.state.searchableObjectData} 
                             transferSearchResult={this.transferSearchResult}
                             clearColorPanel={clearColorPanel}
                         />
                         
                     </Col>
-
-
                 </Row>
             </div>
             
