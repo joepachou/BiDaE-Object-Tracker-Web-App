@@ -49,8 +49,8 @@ class FrequentSearch extends React.Component {
             <Col id='frequentSearch' className=''>
                 <h6 className="font-weight-bold">{locale.frequent_searches.toUpperCase()}</h6>
                 <ListGroup variant="flush">
-                    <ListGroup.Item onClick={this.handleClick}>My Device</ListGroup.Item>
-                    <ListGroup.Item onClick={this.handleClick}>All Device</ListGroup.Item>
+                    <ListGroup.Item onClick={this.handleClick} action>My Device</ListGroup.Item>
+                    <ListGroup.Item onClick={this.handleClick} action>All Device</ListGroup.Item>
                 </ListGroup>
         
             </Col>

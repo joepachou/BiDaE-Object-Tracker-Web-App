@@ -33,6 +33,7 @@ class App extends React.Component {
 
     componentDidMount() {
         this.props.shouldTrackingDataUpdate ? this.getTrackingData() : null;
+        this.interval = this.props.shouldTrackingDataUpdate ? setInterval(this.getTrackingData, config.surveillanceMap.intevalTime) : null;
     }
 
     componentDidUpdate(prepProps) {
