@@ -59,7 +59,7 @@ export default class ContentContainer extends React.Component{
         })
         if(colorPanel) {
             this.setState({
-                hasSearchKey: true,
+                hasSearchKey: colorPanel.size === 0 ? false : true,
                 searchResult: searchResult,
                 colorPanel: colorPanel,
                 clearColorPanel: false,
