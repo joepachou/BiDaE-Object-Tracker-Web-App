@@ -16,6 +16,7 @@ import './js/customizedCSS';
 import App from './App'
 import objectListReducer from './js/reducer/ObjectListReducer';
 import retrieveTrackingData from './js/reducer/RetrieveTrackingDataReducer';
+import config from './js/config';
 
 
 
@@ -25,7 +26,7 @@ const reducers = combineReducers({
 })
 const store = createStore(reducers)
 
-store.subscribe(() => console.log(store.getState()))
+config.systemAdmin.openGlobalStateMonitor ? store.subscribe(() => console.log(store.getState())) : null;
 
 
 const rootElement = document.getElementById('root');

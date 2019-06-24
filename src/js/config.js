@@ -36,7 +36,7 @@ const config = {
 			geofenceIconFence: geofence_fence,
             geofenceIconPerimeter: geofence_perimeter,
             searchedObjectIconUrl: white_pin,
-            showNumber: !false,
+            showNumber: false,
         },
 
         iconColor: {
@@ -65,6 +65,8 @@ const config = {
             lowVal: -60,
             highVal: -30,
         },
+
+        objectTypeSet: new Set(['Bed', 'EKG Machine', 'Infusion pump', 'SONOSITE Ultrasound', 'Ultrasound'])
         
     },
 
@@ -80,6 +82,10 @@ const config = {
 
     image: {
         logo: BOT_LOGO,
+    },
+
+    systemAdmin: {
+        openGlobalStateMonitor: !true
     }
 
 
