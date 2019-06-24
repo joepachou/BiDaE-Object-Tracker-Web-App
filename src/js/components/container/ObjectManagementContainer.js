@@ -24,7 +24,6 @@ export default class ObjectManagement extends React.Component{
             isShowModal: false,
             selectedRowData: {},
         }
-        this.handleType = this.handleType.bind(this);
         this.handleModalForm = this.handleModalForm.bind(this);
         this.getObjectData = this.getObjectData.bind(this);
         this.handleSubmitForm = this.handleSubmitForm.bind(this);
@@ -54,45 +53,14 @@ export default class ObjectManagement extends React.Component{
         })
     }
 
-    handleType(e){
-        let filterData = [];
-        // switch(e.target.innerText) {
-        //     case 'ALL':
-        //         searchType = 0;
-        //         break;
-        //     case 'Inpatient':
-        //         searchType = 1;
-        //         break;
-        //     case 'Medical device':
-        //         searchType = 2;
-        //         break;
-        // }
-        // this.setState({
-        //     searchType : searchType,
-        // })
-        if (e.target.innerText === 'All') {
-            this.setState({
-                filterData: this.state.data,
-            })
-        } else {
-            this.state.data.map(item => {
-                if (item.type === e.target.innerText) {
-                    filterData.push(item);
-                }
-            });
-            this.setState({
-                filterData:filterData,
-            })
-        }
-    }
-
     handleModalForm() {
         this.setState({
             isShowModal: true,
-        }) 
+        })
     }
 
     handleSubmitForm() {
+        setTimeout(this.getObjectData,500) 
         this.setState({
             isShowModal: false
         })
@@ -103,27 +71,7 @@ export default class ObjectManagement extends React.Component{
 
         return (
             <Container fluid className='py-2'>
-                {/* <Navs navsItem={this.state.navsItem}/> */}
-                {/* <div className="d-flex w-100 justify-content-around"> */}
-                <Nav className='d-flex align-items-center'>
-                    {/* <Button variant="primary" onClick = {this.handleModalForm}>Add Object</Button> */}
-                </Nav>
-                {/* <Nav variant="pills" defaultActiveKey="/home">
-                    <Nav.Item>
-                        <Nav.Link href="/home">Active</Nav.Link>
-                    </Nav.Item>
-                </Nav> */}
                 <Row className='d-flex w-100 justify-content-around'>
-
-                    {/* {console.log(this.state.data)} */}
-                    {/* <div className='col-2'>
-                        <h2>Objects </h2>
-                        <ListGroup variant="flush">
-                            <ListGroup.Item onClick={this.handleType} value={0}>All</ListGroup.Item>
-                            <ListGroup.Item onClick={this.handleType} value={1}>Inpatient</ListGroup.Item>
-                            <ListGroup.Item onClick={this.handleType} value={2}>Medical device</ListGroup.Item>
-                        </ListGroup>
-                    </div> */}
                     <Col className='py-2'>
                         <ReactTable 
                             data = {this.state.filterData} 
