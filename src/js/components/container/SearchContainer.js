@@ -42,13 +42,19 @@ class SearchContainer extends React.Component {
         // disableBodyScroll(targetElement);
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prepProps) {
         if (this.props.searchableObjectData != null && this.state.hasSearchableObjectData === false) {
             this.getObjectType();
             this.setState({
                 hasSearchableObjectData: true,
             })
         }
+        if (prepProps.hasSearchKey !== this.props.hasSearchKey) {
+            this.setState({
+                hasSearchKey: this.props.hasSearchKey,
+            })
+        }
+
     }
 
     // shouldComponentUpdate(nextProps, nextState){
@@ -209,13 +215,7 @@ class SearchContainer extends React.Component {
     }
 
     render() {
-
         /** Customized CSS of searchResult */
-        const searchResultStyle = {
-            display: this.state.hasSearchKey ? null : 'none',
-            paddingTop: 30,
-        }
-
         const searchOptionStyle = {
             display: this.state.hasSearchKey ? 'none' : null,
         }
@@ -256,12 +256,6 @@ class SearchContainer extends React.Component {
                     </Row>
                 </div>
 
-                <div id='searchResult' style={searchResultStyle} className='py-3'>
-                    <SearchResult 
-                        result={searchResult} 
-                        searchKey={searchKey}    
-                    />
-                </div>
             </div>
         );
     }

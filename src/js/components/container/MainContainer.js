@@ -12,6 +12,7 @@ import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import ModalForm from './ModalForm';
 import Navs from '../presentational/Navs'
+import SearchResult from '../presentational/SearchResult'
 
 
 import { Row, Col, Hidden, Visible } from 'react-grid-system';
@@ -30,11 +31,12 @@ export default class ContentContainer extends React.Component{
             searchType: '',
             colorPanel: null,
             clearColorPanel: false,
-            searchResultObjectTypeMap: null,
+            searchResultObjectTypeMap: {},
         }
 
         this.transferSearchableObjectData = this.transferSearchableObjectData.bind(this)
         this.transferSearchResult = this.transferSearchResult.bind(this);
+        this.handleClearButton = this.handleClearButton.bind(this)
     }
 
 
@@ -64,11 +66,7 @@ export default class ContentContainer extends React.Component{
                 searchResultObjectTypeMap: searchResultObjectTypeMap, 
             })
         } else {
-            var gridbuttons = document.getElementsByClassName('gridbutton')
-            for(let button of gridbuttons) {
-                button.style.background = ''
-            }
-
+            this.clearGridButtonBGColor();
             this.setState({
                 hasSearchKey: true,
                 searchResult: searchResult,
@@ -79,8 +77,22 @@ export default class ContentContainer extends React.Component{
         }
     }
 
-    handleMapforEach(value,key) {
-        return `<h4>${value} ${key} found</h4>`
+    clearGridButtonBGColor() {
+        var gridbuttons = document.getElementsByClassName('gridbutton')
+        for(let button of gridbuttons) {
+            button.style.background = ''
+        }
+    }
+
+    handleClearButton() {
+        this.clearGridButtonBGColor();
+        this.setState({
+            hasSearchKey: false,
+            searchResult: [],
+            colorPanel: null,
+            clearColorPanel: true,
+            searchResultObjectTypeMap: {}
+        })
     }
     
     render(){
@@ -90,7 +102,12 @@ export default class ContentContainer extends React.Component{
         const style = {
             container: {
                 // height: '100vh'
+            },
+            searchResult: {
+                display: this.state.hasSearchKey ? null : 'none',
+                paddingTop: 30,
             }
+
         }
         return(
 
@@ -101,9 +118,8 @@ export default class ContentContainer extends React.Component{
                         <Hidden xs sm md lg>
                             <br/>
                             <div>
-                                
-                                    {this.state.searchResult.length === 0  
-                                        ? this.state.searchableObjectData ? <Alert variant='secondary'>{Object.keys(this.state.searchableObjectData).length + ' devices found'}</Alert>: <br/>
+                                    {this.state.searchResult.length === 0
+                                        ? this.state.searchableObjectData ? <Alert variant='secondary'>{Object.keys(this.state.searchableObjectData).length + ' devices found'}</Alert>: <br></br>
                                         : Object.keys(this.state.searchResultObjectTypeMap).map((item,index) => {
                                             return <Alert variant='secondary' key={index}>{this.state.searchResultObjectTypeMap[item]} {item} found</Alert> 
                                         })
@@ -115,6 +131,7 @@ export default class ContentContainer extends React.Component{
                                 transferSearchableObjectData={this.transferSearchableObjectData}
                                 searchType={searchType}
                                 colorPanel={colorPanel}
+                                handleClearButton={this.handleClearButton}
                             />
                         </Hidden>
                     </Col>
@@ -122,6 +139,7 @@ export default class ContentContainer extends React.Component{
                         <SearchContainer 
                             searchableObjectData={this.state.searchableObjectData} 
                             transferSearchResult={this.transferSearchResult}
+                            hasSearchKey={this.state.hasSearchKey}
                         />
                         
                         <GridButton
@@ -129,7 +147,12 @@ export default class ContentContainer extends React.Component{
                             transferSearchResult={this.transferSearchResult}
                             clearColorPanel={clearColorPanel}
                         />
-                        
+                        <div style={style.searchResult} className='py-3'>
+                            <SearchResult 
+                                result={searchResult} 
+                                searchKey={this.state.searchKey}    
+                            />
+                        </div>
                     </Col>
                 </Row>
             </div>

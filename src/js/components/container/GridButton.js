@@ -6,7 +6,7 @@ class GridButton extends React.Component {
     constructor() {
         super()
         this.state = {
-            objectTypeSet: new Set(),
+            objectTypeSet: config.surveillanceMap.objectTypeSet,
             pinColorArray: config.surveillanceMap.iconColor.pinColorArray.slice(),
             searchObjectType: new Map(),
         }
@@ -22,7 +22,6 @@ class GridButton extends React.Component {
     }
 
     processObjectType() {
-        console.log()
         const searchableObjectData = this.props.searchableObjectData;
         const objectTypeSet = new Set();
         Object.values(searchableObjectData).map(item => {
@@ -46,7 +45,7 @@ class GridButton extends React.Component {
         if (e.target.style.background !== '') {
             pinColorArray.push(e.target.style.background);
             e.target.style.background = ''
-            searchObjectType.set(searchKey, 'black')
+            searchObjectType.delete(searchKey)
         } else {
             pinColor = e.target.style.background = pinColorArray.pop();
             searchObjectType.set(searchKey, pinColor)

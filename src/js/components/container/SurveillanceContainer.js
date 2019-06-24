@@ -2,7 +2,7 @@ import React from 'react';
 
 import Surveillance from '../presentational/Surveillance';
 import ToggleSwitch from './ToggleSwitch';
-import Nav from 'react-bootstrap/Nav';
+import { Nav, Row, ButtonToolbar, Button, ToggleButton}  from 'react-bootstrap';
 import ChangeStatusForm from './ChangeStatusForm';
 import config from '../../config';
 import LocaleContext from '../../context/LocaleContext';
@@ -11,6 +11,9 @@ import axios from 'axios';
 import dataSrc from '../../dataSrc';
 import { connect } from 'react-redux'
 import { shouldUpdateTrackingData } from '../../action/action'
+import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom";
+import GridButton from '../container/GridButton';
+
 
 class SurveillanceContainer extends React.Component {
     constructor(props){
@@ -21,6 +24,7 @@ class SurveillanceContainer extends React.Component {
             showConfirmForm: false,
             selectedObjectData: [],
             formOption: [],
+            showDevice: false,
         }
 
         this.adjustRssi = this.adjustRssi.bind(this);
@@ -28,6 +32,7 @@ class SurveillanceContainer extends React.Component {
         this.handleChangeObjectStatusFormClose = this.handleChangeObjectStatusFormClose.bind(this);
         this.handleChangeObjectStatusFormSubmit = this.handleChangeObjectStatusFormSubmit.bind(this);
         this.handleConfirmFormSubmit = this.handleConfirmFormSubmit.bind(this);
+        this.handleClickButton = this.handleClickButton.bind(this)
     }
 
 
@@ -97,6 +102,22 @@ class SurveillanceContainer extends React.Component {
         })
     }
 
+    handleClickButton(e) {
+        const buttonName = e.target.innerText;
+        switch(buttonName.toLowerCase()) {
+            case 'show devices':
+            case 'hide devices':
+                this.setState({
+                    showDevice: !this.state.showDevice
+                })
+                break;
+            case 'clear':
+                this.props.handleClearButton();
+                
+        }
+
+    }
+
     
     render(){
         const { rssi, 
@@ -117,13 +138,13 @@ class SurveillanceContainer extends React.Component {
                 color: 'grey',
                 fontSize: 8,
             },
-            searchMap: {
-                // height: '100vh'
+            surveillanceContainer: {
+                height: '100vh'
             }
         }
 
         return(
-            <>
+            <div style={style.surveillanceContainer}>
                 <Surveillance 
                     rssi={rssi} 
                     hasSearchKey={hasSearchKey}
@@ -140,10 +161,15 @@ class SurveillanceContainer extends React.Component {
                         <small style={style.title}>{locale.location_accuracy.toUpperCase()}</small>
                         <ToggleSwitch adjustRssi={this.adjustRssi} leftLabel={locale.low} defaultLabel={locale.med} rightLabel={locale.high} />
                     </Nav.Item>
-                    {/* <Nav.Item>
-                        <ModalForm title='Add object'/>
-                    </Nav.Item> */}
                 </Nav>
+                <ButtonToolbar>
+                    <Button variant="outline-primary" className='mr-1' onClick={this.handleClickButton}>Clear</Button>
+                    <Button variant="outline-primary" className='mr-1' onClick={this.handleClickButton}>Save</Button>
+                    <Button variant="outline-primary" className='mr-1' onClick={this.handleClickButton}>
+                        {this.state.showDevice ? 'Hide devices' : 'Show devices' }
+                    </Button>
+                </ButtonToolbar>
+
                 <ChangeStatusForm 
                     show={showEditObjectForm} 
                     title='Report device status' 
@@ -159,7 +185,7 @@ class SurveillanceContainer extends React.Component {
                     handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose} 
                     handleConfirmFormSubmit={this.handleConfirmFormSubmit}
                 />
-            </>
+            </div>
         )
     }
 }
