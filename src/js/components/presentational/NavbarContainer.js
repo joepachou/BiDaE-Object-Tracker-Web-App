@@ -6,6 +6,7 @@ import { Navbar, Nav, NavDropdown, Image  } from 'react-bootstrap'
 import LocaleContext from '../../context/LocaleContext';
 import SigninPage from '../container/SigninPage';
 import SignupPage from '../container/SignupPage';
+import Cookies from 'js-cookie'
 
 import config from '../../config';
 
@@ -16,11 +17,12 @@ class NavbarContainer extends React.Component {
             isSignin: false,
             isShowSigninForm: false,
             isShowSignupForm: false,
+            user: Cookies.get('user') || null,
         }
         this.handleLangSelect = this.handleLangSelect.bind(this);
         this.handleSigninFormShowUp = this.handleSigninFormShowUp.bind(this);
         this.handleSigninFormSubmit = this.handleSigninFormSubmit.bind(this);
-        this.handleClickHeadIcon = this.handleClickHeadIcon.bind(this);
+        this.handleSignout = this.handleSignout.bind(this);
         this.handleSignupFormShowUp = this.handleSignupFormShowUp.bind(this);
         this.handleSignupFormSubmit = this.handleSignupFormSubmit.bind(this);
 
@@ -51,7 +53,7 @@ class NavbarContainer extends React.Component {
         )
     }
 
-    handleSigninFormSubmit() {
+    handleSigninFormSubmit(username) {
         this.setState({
             isSignin: true,
             isShowSigninForm: false,
@@ -65,9 +67,14 @@ class NavbarContainer extends React.Component {
         })
     }
 
-    handleClickHeadIcon() {
-        console.log('click head icon')
+    handleSignout() {
+        Cookies.remove('user')
+        this.setState({
+            user: null
+        })
     }
+
+    
 
     
 
@@ -108,12 +115,13 @@ class NavbarContainer extends React.Component {
                                 return <NavDropdown.Item key={index} className="lang-select" eventKey={locale.abbr}>{locale.name}</NavDropdown.Item>
                             })}
                         </NavDropdown>          
-                        <Nav.Link >
-                            {isSignin 
-                                ? <i className="fas fa-user-alt" onClick={this.handleClickHeadIcon}></i> 
-                                : <div onClick={this.handleSigninFormShowUp}>Sign In</div>
-                            }
-                        </Nav.Link>
+                        {Cookies.get('user')
+                            ? <NavDropdown title={<i className="fas fa-user-alt"></i> }id="collasible-nav-dropdown" alignRight>
+                                <NavDropdown.Item className="lang-select" onClick={this.handleSignout}>Sign out</NavDropdown.Item>
+                            </NavDropdown> 
+                                
+                            : <Nav.Item className="nav-link" onClick={this.handleSigninFormShowUp}>Sign In</Nav.Item>
+                        }
                     </Nav>
                 <SigninPage 
                     show={isShowSigninForm}

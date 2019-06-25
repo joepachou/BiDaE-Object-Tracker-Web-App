@@ -101,3 +101,8 @@ input {
     background: transparent;
     border: 0
 } */
+
+/* React-bootstrap dropdown css */
+.dropdown-toggle::after {
+    display: none;
+}

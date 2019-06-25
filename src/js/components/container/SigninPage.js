@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import config from '../../config';
 import axios from 'axios';
 import dataSrc from '../../dataSrc';
+import Cookies from 'js-cookie';
 
 class SigninPage extends React.Component {
     constructor(props) {
@@ -77,12 +78,12 @@ class SigninPage extends React.Component {
                                 password: password
                             
                             }).then(res => {
-                                console.log(res)
-                                if (!res.data.authentication) { 
+                                if (!res.data.authentication) {  
                                     setStatus(res.data.message)
                                     setSubmitting(false)
                                 } else {
-                                    handleSigninFormSubmit()
+                                    Cookies.set('user', username)
+                                    handleSigninFormSubmit(username)
                                 }
                             }).catch(error => {
                                 console.log(error)
