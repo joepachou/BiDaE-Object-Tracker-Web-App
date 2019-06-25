@@ -157,7 +157,9 @@ const signup = (request, response) => {
 }
 
 const userInfo = (request, response) => {
-    pool.query(queryType.query_getUserInfo(), (error, results) => {
+    console.log(request.body)
+    const username = request.body.username;
+    pool.query(queryType.query_getUserInfo(username), (error, results) => {
         if (error) {
             console.log('Get user info Fails!')
         } else {

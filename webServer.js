@@ -45,7 +45,7 @@ app.post('/user/signin', db.signin);
 
 app.post('/user/signup', db.signup);
 
-app.get('/user/info', db.userInfo)
+app.post('/user/info', db.userInfo)
 
 app.listen(PORT, () => {
     console.log(`App running on PORT ${PORT}.`)

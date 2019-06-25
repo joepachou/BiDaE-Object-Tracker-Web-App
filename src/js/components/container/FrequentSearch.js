@@ -5,6 +5,7 @@ import axios from 'axios';
 import dataSrc from '../../dataSrc';
 import { connect } from 'react-redux';
 import { shouldUpdateTrackingData } from '../../action/action';
+import Cookies from 'js-cookie'
 
 class FrequentSearch extends React.Component {
 
@@ -19,25 +20,32 @@ class FrequentSearch extends React.Component {
 
     handleClick(e) {
         const itemName = e.target.innerText.toLowerCase();
-        if (itemName === 'my device') {
-            if (!this.state.hasGetUserInfo) {
-                axios.get(dataSrc.userInfo).then( res => {
-                    var mydevice = new Set(res.data.rows[0].mydevice);
-                    this.props.getResultData(mydevice)
-                    this.setState({
-                        hasGetUserInfo: true,
-                        mydevice: mydevice,
+        switch(itemName) {
+            case 'my device':
+                if (!this.state.hasGetUserInfo && Cookies.get('user')) {
+                    axios.post(dataSrc.userInfo, {
+                        username: Cookies.get('user')
+                    }).then( res => {
+                        var mydevice = new Set(res.data.rows[0].mydevice);
+                        this.props.getResultData(mydevice)
+                        this.setState({
+                            hasGetUserInfo: true,
+                            mydevice: mydevice,
+                        })
+                    }).catch(error => {
+                        console.log(error)
                     })
-                }).catch(error => {
-                    console.log(error)
-                })
-            } else {
-                this.props.getResultData(this.state.mydevice)
-            }
-        } else if (itemName === 'all device') {
-            this.props.shouldUpdateTrackingData(true)
-        }
-     
+                } else if (!Cookies.get('user')) {
+                    return
+                } else {
+                    this.props.getResultData(this.state.mydevice)
+                };
+
+                break;
+            case 'all device':
+                this.props.shouldUpdateTrackingData(true)
+                break;
+        }     
     }
 
     render() {

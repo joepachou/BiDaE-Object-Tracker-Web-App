@@ -167,10 +167,19 @@ function query_signup(signupPackage) {
 	return query
 }
 
-function query_getUserInfo() {
-	return `
-	SELECT name, mydevice from user_table where name='joechou'
+function query_getUserInfo(username) {
+	const text =  `
+	SELECT name, mydevice from user_table where name= $1
 	`;
+
+	const values = [username];
+
+	const query = {
+		text,
+		values
+	};
+
+	return query
 }
 
 
