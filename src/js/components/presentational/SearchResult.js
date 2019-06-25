@@ -1,12 +1,7 @@
 import React from 'react';
 
-import Alert from 'react-bootstrap/Alert';
-import Tab from 'react-bootstrap/Tab'
-import ListGroup from 'react-bootstrap/ListGroup';
-import Col from 'react-bootstrap/Col'
-import Row from 'react-bootstrap/Row'
-import VerticalTable from '../presentational/VerticalTable';
-import ModalForm from '../container/ModalForm';
+
+import { Alert, Tab, ListGroup, Col, Row } from 'react-bootstrap'
 import LocaleContext from '../../context/LocaleContext';
 import ChangeStatusForm from '../container/ChangeStatusForm';
 import ConfirmForm from '../container/ConfirmForm';
@@ -25,8 +20,6 @@ class SearchResult extends React.Component {
         this.state = {
             showEditObjectForm: false,
             showConfirmForm: false,
-            selectObjectIndex:0,
-            showConfirmForm: false,
             selectedObjectData: [],
             formOption: [],
             thisComponentShouldUpdate: true
@@ -35,14 +28,23 @@ class SearchResult extends React.Component {
         this.handleChangeObjectStatusForm = this.handleChangeObjectStatusForm.bind(this)
         this.handleChangeObjectStatusFormSubmit = this.handleChangeObjectStatusFormSubmit.bind(this)
         this.handleConfirmFormSubmit = this.handleConfirmFormSubmit.bind(this)
+        this.handleChangeObjectStatusFormClose = this.handleChangeObjectStatusFormClose.bind(this);
     }
 
     handleChangeObjectStatusForm(eventKey) {
-        this.props.shouldUpdateTrackingData(false)
         this.setState({
             showEditObjectForm: true,
-            selectObjectIndex: eventKey,
+            selectedObjectData: this.props.searchResult[eventKey],
         })
+        this.props.shouldUpdateTrackingData(false)
+    }
+
+    handleChangeObjectStatusFormClose() {
+        this.setState({
+            showEditObjectForm: false,
+            showConfirmForm: false,
+        })
+        this.props.shouldUpdateTrackingData(true)
     }
 
     handleChangeObjectStatusFormSubmit(postOption) {
@@ -76,8 +78,9 @@ class SearchResult extends React.Component {
                     this.setState ({
                         showConfirmForm: false,
                         formOption: [],
-                        openSurveillanceUpdate: true
-                    }) 
+                    })
+                    this.props.shouldUpdateTrackingData(true)
+
                 }
                 .bind(this),
                 1000
@@ -85,14 +88,12 @@ class SearchResult extends React.Component {
         }).catch( error => {
             console.log(error)
         })
-    }
-
-    
+    }    
 
     render() {
         const locale = this.context;
-        const { result, searchKey, refresh } = this.props;
-        const { showEditObjectForm, selectObjectIndex } = this.state;
+        const { searchResult, searchKey, refresh } = this.props;
+        const { showEditObjectForm } = this.state;
 
         const style = {
             listItem: {
@@ -108,19 +109,44 @@ class SearchResult extends React.Component {
 
         return(
             <>
-                <div className='text-left'>
+                <Row className='text-left'>
                     <h5>Search Result</h5>
-                </div>
-                {/* <Tab.Container id="left-tabs-example" defaultActiveKey="#0"> */}
-                    <Row className=''style={{height:'100%'}} >
-                        {result.length === 0 
-                        ?   <Col className='text-left' style={style.noResultDiv}>
-                                <em>no result</em>
-                            </Col> 
-                        
-                        :   <Col className='border px-0 overflow-auto'>
+                    {console.log(this.props)}
+                </Row>
+                <Row className=''style={{height:'100%'}} >
+                    {searchResult.length === 0 
+                    ?   <Col className='text-left' style={style.noResultDiv}>
+                            <em>no searchResult</em>
+                        </Col> 
+                    
+                    :   <Col className='border px-0 overflow-auto'>
+                            <ListGroup variant="flush" onSelect={this.handleChangeObjectStatusForm}>
+                                {searchResult.map((item,index) => {
+                                    let element = 
+                                        <ListGroup.Item href={'#' + index} style={style.listItem} className='searchResultList' eventKey={index} key={index}>
+                                            <div className="d-flex justify-content-between">
+                                                <div className="font-weight-bold text-left">{index + 1}.</div>
+                                                <div className="font-weight-bold">{item.type}</div>
+                                                <div>xxxx-xxxx-{item.access_control_number.slice(10, 14)}</div>
+                                                <div>near {item.location_description}</div>
+                                            </div>
+                                        </ListGroup.Item>
+                                    return element
+                                })}
+                            </ListGroup>
+                        </Col> 
+                    }
+                </Row>
+                {this.props.notFoundList.length !== 0 
+                ? 
+                    <>
+                        <Row className='text-left mt-3'>
+                            <h5>Devices not found</h5>
+                        </Row>
+                        <Row>
+                            <Col className='border px-0 overflow-auto'>
                                 <ListGroup variant="flush" onSelect={this.handleChangeObjectStatusForm}>
-                                    {result.map((item,index) => {
+                                    {this.props.notFoundList.map((item,index) => {
                                         let element = 
                                             <ListGroup.Item href={'#' + index} style={style.listItem} className='searchResultList' eventKey={index} key={index}>
                                                 <div className="d-flex justify-content-between">
@@ -128,41 +154,32 @@ class SearchResult extends React.Component {
                                                     <div className="font-weight-bold">{item.type}</div>
                                                     <div>xxxx-xxxx-{item.access_control_number.slice(10, 14)}</div>
                                                     <div>near {item.location_description}</div>
+
                                                 </div>
                                             </ListGroup.Item>
                                         return element
                                     })}
                                 </ListGroup>
                             </Col> 
-                        }
-                        {/* <Col className=' border px-0' >
-                            <Tab.Content >
-                                {result.map((item,index) => {
-                                    let element = 
-                                        <Tab.Pane eventKey={'#' + index} className=''>
-                                            <img src={item.img} width='100' className='py-4' />
-                                            <VerticalTable item={item}/>
-                                        </Tab.Pane>
-                                    return element
-                                })}
-                            </Tab.Content>
-                        </Col> */}
-                    </Row>
-                {/* </Tab.Container> */}
+                        </Row>
+                    </>
+                : null}
+            
+
+
                 <ChangeStatusForm 
                     show={this.state.showEditObjectForm} 
                     title='Report device status' 
-                    selectedObjectData={result.length ? result[selectObjectIndex] : null} 
+                    selectedObjectData={this.state.selectedObjectData} 
                     searchKey={searchKey}
-                    handleChangeStatusFormClose={this.handleChangeStatusFormClose}
-                    handleChangeObjectStatusForm={this.handleChangeObjectStatusForm}
+                    handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose}
                     handleChangeObjectStatusFormSubmit={this.handleChangeObjectStatusFormSubmit}
                 />
                 <ConfirmForm 
                     show={this.state.showConfirmForm}  
                     title='Thank you for reporting' 
                     selectedObjectData={this.state.formOption} 
-                    handleChangeStatusFormClose={this.handleChangeStatusFormClose} 
+                    handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose} 
                     handleConfirmFormSubmit={this.handleConfirmFormSubmit}
                 />
             </>
