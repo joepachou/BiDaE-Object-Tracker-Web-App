@@ -13,11 +13,25 @@ class FrequentSearch extends React.Component {
         super()
         this.state = {
             hasGetUserInfo: false,
+            searchHistory: null,
         }
 
         this.handleClick = this.handleClick.bind(this);
     }
 
+    componentDidMount() {
+        this.getFrequentSearch()
+    }
+
+    getFrequentSearch() {
+        axios.post(dataSrc.userSearchHistory, {
+            username: Cookies.get('user')
+        }).then( res => {
+            this.props.getSearchHistory(res.data.rows[0])
+        }).catch(error => {
+            console.log(error)
+        })
+    }
     handleClick(e) {
         const itemName = e.target.innerText.toLowerCase();
         switch(itemName) {
@@ -57,7 +71,7 @@ class FrequentSearch extends React.Component {
             <Col id='frequentSearch' className=''>
                 <h6 className="font-weight-bold">{locale.frequent_searches.toUpperCase()}</h6>
                 <ListGroup variant="flush">
-                    <ListGroup.Item onClick={this.handleClick} action>My Device</ListGroup.Item>
+                    {Cookies.get('user') && <ListGroup.Item onClick={this.handleClick} action>My Device</ListGroup.Item>}
                     <ListGroup.Item onClick={this.handleClick} action>All Device</ListGroup.Item>
                 </ListGroup>
         

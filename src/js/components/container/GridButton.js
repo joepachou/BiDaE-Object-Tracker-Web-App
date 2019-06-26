@@ -1,5 +1,8 @@
 import React from 'react';
 import config from '../../config';
+import axios from 'axios';
+import dataSrc from '../../dataSrc';
+import Cookies from 'js-cookie'
 
 class GridButton extends React.Component {
 
@@ -35,6 +38,7 @@ class GridButton extends React.Component {
     handleClick(e) {
 
         const searchKey = e.target.innerText;
+
         const { searchableObjectData, transferSearchResult, clearColorPanel } = this.props
         let searchResult = [];
         var pinColor = '';
@@ -60,8 +64,24 @@ class GridButton extends React.Component {
                 searchResult.push(item)
             } 
         })
+        this.putSearchHistory(searchKey)
         transferSearchResult(searchResult, searchObjectType)
         
+    }
+
+    putSearchHistory(searchKey) {
+        const toPutSearchHistory = {
+            [searchKey]: 1
+        }
+        console.log(toPutSearchHistory)
+        axios.post(dataSrc.addUserSearchHistory, {
+            username: Cookies.get('user'),
+            history: toPutSearchHistory
+        }).then( res => {
+            console.log(res)
+        }).catch( error => {
+            console.log(error)
+        })
     }
 
 

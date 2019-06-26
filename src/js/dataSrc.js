@@ -10,6 +10,8 @@ const editObject = 'http://' + IP + '/data/editObject';
 const signin = 'http://' + IP + '/user/signin';
 const signup = 'http://' + IP + '/user/signup';
 const userInfo = 'http://' + IP + '/user/info';
+const userSearchHistory = 'http://' + IP + '/user/searchHistory'
+const addUserSearchHistory = 'http://' + IP + '/user/addUserSearchHistory'
 
 module.exports = {
     trackingData,
@@ -22,4 +24,6 @@ module.exports = {
     signin,
     signup,
     userInfo,
+    userSearchHistory,
+    addUserSearchHistory
 };

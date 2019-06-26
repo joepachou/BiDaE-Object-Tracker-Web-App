@@ -244,6 +244,7 @@ class SearchContainer extends React.Component {
                             searchableObjectData={searchableObjectData}
                             getResultData={this.getResultData}  
                             transferSearchResult={transferSearchResult}  
+                            getSearchHistory={this.props.getSearchHistory}
                         />
                         {/* <Col id='searchableObjectType' md={6} sm={6} xs={6} className='px-0'>
                             <h6 className="font-weight-bold">{}</h6>

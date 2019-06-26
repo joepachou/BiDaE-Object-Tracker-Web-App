@@ -157,7 +157,6 @@ const signup = (request, response) => {
 }
 
 const userInfo = (request, response) => {
-    console.log(request.body)
     const username = request.body.username;
     pool.query(queryType.query_getUserInfo(username), (error, results) => {
         if (error) {
@@ -167,6 +166,32 @@ const userInfo = (request, response) => {
         }
         response.status(200).json(results)
     })
+}
+
+const userSearchHistory = (request, response) => {
+    const username = request.body.username;
+    pool.query(queryType.query_getUserSearchHistory(username), (error, results) => {
+        if (error) {
+            console.log('Get user search history Fails')
+        } else {
+            console.log('Get user search history success')
+        }
+        response.status(200).json(results)
+    })
+}
+
+const addUserSearchHistory = (request, response) => {
+    const { username, history } = request.body;
+    console.log(username, history)
+    pool.query(queryType.query_addUserSearchHistory(username, history), (error, results) => {
+        if (error) {
+            console.log('Add user search history fails')
+        } else {
+            console.log('Add user searech history success')
+        }
+        response.status(200).json(results)
+    })
+
 }
     
 module.exports = {
@@ -178,5 +203,7 @@ module.exports = {
     editObject,
     signin,
     signup,
-    userInfo
+    userInfo,
+    userSearchHistory,
+    addUserSearchHistory,
 }

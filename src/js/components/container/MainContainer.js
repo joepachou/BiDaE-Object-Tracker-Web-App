@@ -27,11 +27,13 @@ export default class ContentContainer extends React.Component{
             colorPanel: null,
             clearColorPanel: false,
             searchResultObjectTypeMap: {},
+            userSearchHistory: null,
         }
 
         this.transferSearchableObjectData = this.transferSearchableObjectData.bind(this)
         this.transferSearchResult = this.transferSearchResult.bind(this);
         this.handleClearButton = this.handleClearButton.bind(this)
+        this.getSearchHistory = this.getSearchHistory.bind(this)
     }
 
 
@@ -79,6 +81,12 @@ export default class ContentContainer extends React.Component{
         for(let button of gridbuttons) {
             button.style.background = ''
         }
+    }
+
+    getSearchHistory(history) {
+        this.setState({
+            userSearchHistory: history
+        })
     }
 
     handleClearButton() {
@@ -140,12 +148,14 @@ export default class ContentContainer extends React.Component{
                             searchableObjectData={this.state.searchableObjectData} 
                             transferSearchResult={this.transferSearchResult}
                             hasSearchKey={this.state.hasSearchKey}
+                            getSearchHistory={this.getSearchHistory}
                         />
                         
                         <GridButton
                             searchableObjectData={this.state.searchableObjectData} 
                             transferSearchResult={this.transferSearchResult}
                             clearColorPanel={clearColorPanel}
+                            userSearchHistory={this.state.userSearchHistory}
                         />
                         <div style={style.searchResult} className='py-3'>
                             <SearchResult 

@@ -182,6 +182,38 @@ function query_getUserInfo(username) {
 	return query
 }
 
+function query_getUserSearchHistory (username) {
+	const text = `
+		SELECT history from user_table where name=$1
+	`;
+
+	const values = [username];
+
+	const query = {
+		text,
+		values
+	};
+
+	return query
+}
+
+function query_addUserSearchHistory (username, history) {
+	const text = `
+		UPDATE user_table
+		SET history = $1
+		WHERE name = $2
+	`;
+
+	const values = [history, username];
+
+	const query = {
+		text, 
+		values
+	};
+
+	return query
+}
+
 
 module.exports = {
     query_getTrackingData,
@@ -193,5 +225,7 @@ module.exports = {
 	query_signin,
 	query_signup,
 	query_getUserInfo,
+	query_getUserSearchHistory,
+	query_addUserSearchHistory
 }
 
