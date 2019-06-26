@@ -176,13 +176,13 @@ const userSearchHistory = (request, response) => {
         } else {
             console.log('Get user search history success')
         }
+ 
         response.status(200).json(results)
     })
 }
 
 const addUserSearchHistory = (request, response) => {
     const { username, history } = request.body;
-    console.log(username, history)
     pool.query(queryType.query_addUserSearchHistory(username, history), (error, results) => {
         if (error) {
             console.log('Add user search history fails')

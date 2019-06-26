@@ -184,7 +184,7 @@ function query_getUserInfo(username) {
 
 function query_getUserSearchHistory (username) {
 	const text = `
-		SELECT history from user_table where name=$1
+		SELECT search_history from user_table where name=$1
 	`;
 
 	const values = [username];
@@ -200,7 +200,7 @@ function query_getUserSearchHistory (username) {
 function query_addUserSearchHistory (username, history) {
 	const text = `
 		UPDATE user_table
-		SET history = $1
+		SET search_history = $1
 		WHERE name = $2
 	`;
 

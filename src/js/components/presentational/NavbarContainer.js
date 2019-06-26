@@ -2,7 +2,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom";
 import { supportedLocale } from '../../../js/locale';
-import { Navbar, Nav, NavDropdown, Image  } from 'react-bootstrap'
+import { Navbar, Nav, NavDropdown, Image, Dropdown  } from 'react-bootstrap'
 import LocaleContext from '../../context/LocaleContext';
 import SigninPage from '../container/SigninPage';
 import SignupPage from '../container/SignupPage';
@@ -69,6 +69,7 @@ class NavbarContainer extends React.Component {
 
     handleSignout() {
         Cookies.remove('user')
+        Cookies.remove('searchHistory')
         this.setState({
             user: null
         })
@@ -117,6 +118,8 @@ class NavbarContainer extends React.Component {
                         </NavDropdown>          
                         {Cookies.get('user')
                             ? <NavDropdown title={<i className="fas fa-user-alt"></i> }id="collasible-nav-dropdown" alignRight>
+                                <NavDropdown.Item className="lang-select">{Cookies.get('user')}</NavDropdown.Item>
+                                <Dropdown.Divider />
                                 <NavDropdown.Item className="lang-select" onClick={this.handleSignout}>Sign out</NavDropdown.Item>
                             </NavDropdown> 
                                 

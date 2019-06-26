@@ -70,17 +70,37 @@ class GridButton extends React.Component {
     }
 
     putSearchHistory(searchKey) {
-        const toPutSearchHistory = {
-            [searchKey]: 1
-        }
-        console.log(toPutSearchHistory)
+        const searchHistory = JSON.parse(Cookies.get('searchHistory'))
+        let flag = false; 
+        const toPutSearchHistory = searchHistory.map( item => {
+            if (item.name === searchKey) {
+                item.value = item.value + 1;
+                flag = true;
+            }
+            return item
+        })
+        flag === false ? toPutSearchHistory.push({name: searchKey, value: 1}) : null;
+        this.sortSearchHistory(toPutSearchHistory)
+        Cookies.set('searchHistory', JSON.stringify(toPutSearchHistory))
+        this.checkInSearchHistory()
+        
+    }
+
+    checkInSearchHistory() {
+        const searchHistory = JSON.stringify(Cookies.get('searchHistory'))
         axios.post(dataSrc.addUserSearchHistory, {
             username: Cookies.get('user'),
-            history: toPutSearchHistory
+            history: searchHistory
         }).then( res => {
-            console.log(res)
+            console.log('done')
         }).catch( error => {
             console.log(error)
+        })
+    }
+
+    sortSearchHistory(history) {
+        history.sort( (a,b) => {
+            return b.value - a.value
         })
     }
 
