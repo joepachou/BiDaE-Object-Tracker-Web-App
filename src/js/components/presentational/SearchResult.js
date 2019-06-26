@@ -10,6 +10,8 @@ import { connect } from 'react-redux'
 import { shouldUpdateTrackingData } from '../../action/action';
 import axios from 'axios';
 import dataSrc from '../../dataSrc';
+import _ from 'lodash';
+import { deepEqual } from 'assert';
 
 
 
@@ -22,7 +24,10 @@ class SearchResult extends React.Component {
             showConfirmForm: false,
             selectedObjectData: [],
             formOption: [],
-            thisComponentShouldUpdate: true
+            thisComponentShouldUpdate: true,
+            foundResult: [],
+            notFoundResult: [],
+
         }
         
         this.handleChangeObjectStatusForm = this.handleChangeObjectStatusForm.bind(this)
@@ -30,11 +35,31 @@ class SearchResult extends React.Component {
         this.handleConfirmFormSubmit = this.handleConfirmFormSubmit.bind(this)
         this.handleChangeObjectStatusFormClose = this.handleChangeObjectStatusFormClose.bind(this);
     }
+    
+    componentDidUpdate(prepProps) {
+        if(!(_.isEqual(prepProps.searchResult, this.props.searchResult))) {
+            let notFoundResult = [];
+            let foundResult = [];
+            this.props.searchResult.map(item => {
+                if (item.status.toLowerCase() !== 'normal') {
+                    notFoundResult.push(item)
+                }
+            })
+            foundResult = this.props.searchResult.filter(item => item.status.toLowerCase() === 'normal')
+            this.setState({
+                foundResult: foundResult,
+                notFoundResult: notFoundResult,
+            })
+        }        
+    }
 
     handleChangeObjectStatusForm(eventKey) {
+        const eventItem = eventKey.split(':');
+        const isFound = eventItem[0]
+        const number = eventItem[1]
         this.setState({
             showEditObjectForm: true,
-            selectedObjectData: this.props.searchResult[eventKey],
+            selectedObjectData: isFound.toLowerCase() === 'found' ? this.state.foundResult[number] : this.state.notFoundResult[number]
         })
         this.props.shouldUpdateTrackingData(false)
     }
@@ -69,6 +94,17 @@ class SearchResult extends React.Component {
     handleConfirmFormSubmit(e) {
         const button = e.target
         const postOption = this.state.formOption;
+        const colorPanel = this.props.colorPanel ? this.props.colorPanel : null;
+        let changedStatusSearchResult = this.props.searchResult.map(item => {
+            if (postOption.mac_address === item.mac_address) {
+                item = {
+                    ...item,
+                    ...postOption
+                }
+            }
+            return item
+        })
+
         axios.post(dataSrc.editObject, {
             formOption: postOption
         }).then(res => {
@@ -79,8 +115,8 @@ class SearchResult extends React.Component {
                         showConfirmForm: false,
                         formOption: [],
                     })
+                    this.props.transferSearchResult(changedStatusSearchResult, colorPanel )
                     this.props.shouldUpdateTrackingData(true)
-
                 }
                 .bind(this),
                 1000
@@ -92,8 +128,7 @@ class SearchResult extends React.Component {
 
     render() {
         const locale = this.context;
-        const { searchResult, searchKey, refresh } = this.props;
-        const { showEditObjectForm } = this.state;
+        const { searchResult, searchKey} = this.props;
 
         const style = {
             listItem: {
@@ -111,19 +146,18 @@ class SearchResult extends React.Component {
             <>
                 <Row className='text-left'>
                     <h5>Search Result</h5>
-                    {console.log(this.props)}
                 </Row>
                 <Row className=''style={{height:'100%'}} >
-                    {searchResult.length === 0 
+                    {this.state.foundResult.length === 0 
                     ?   <Col className='text-left' style={style.noResultDiv}>
                             <em>no searchResult</em>
                         </Col> 
                     
                     :   <Col className='border px-0 overflow-auto'>
                             <ListGroup variant="flush" onSelect={this.handleChangeObjectStatusForm}>
-                                {searchResult.map((item,index) => {
+                                {searchResult.filter(item => item.status.toLowerCase() === 'normal').map((item,index) => {
                                     let element = 
-                                        <ListGroup.Item href={'#' + index} style={style.listItem} className='searchResultList' eventKey={index} key={index}>
+                                        <ListGroup.Item href={'#' + index} style={style.listItem} className='searchResultList' eventKey={'found:' + index} key={index}>
                                             <div className="d-flex justify-content-between">
                                                 <div className="font-weight-bold text-left">{index + 1}.</div>
                                                 <div className="font-weight-bold">{item.type}</div>
@@ -137,7 +171,7 @@ class SearchResult extends React.Component {
                         </Col> 
                     }
                 </Row>
-                {this.props.notFoundList.length !== 0 
+                {this.state.notFoundResult.length !== 0 
                 ? 
                     <>
                         <Row className='text-left mt-3'>
@@ -146,9 +180,9 @@ class SearchResult extends React.Component {
                         <Row>
                             <Col className='border px-0 overflow-auto'>
                                 <ListGroup variant="flush" onSelect={this.handleChangeObjectStatusForm}>
-                                    {this.props.notFoundList.map((item,index) => {
+                                    {this.state.notFoundResult.map((item,index) => {
                                         let element = 
-                                            <ListGroup.Item href={'#' + index} style={style.listItem} className='searchResultList' eventKey={index} key={index}>
+                                            <ListGroup.Item href={'#' + index} style={style.listItem} className='searchResultList' eventKey={'notfound:' + index} key={index}>
                                                 <div className="d-flex justify-content-between">
                                                     <div className="font-weight-bold text-left">{index + 1}.</div>
                                                     <div className="font-weight-bold">{item.type}</div>

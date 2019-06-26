@@ -6,7 +6,6 @@ import { Col, Row, Nav} from 'react-bootstrap'
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
 import SearchableObjectType from '../presentational/SeachableObjectType';
-import SearchResult from '../presentational/SearchResult'
 import FrequentSearch from './FrequentSearch';
 
 class SearchContainer extends React.Component {
@@ -23,6 +22,7 @@ class SearchContainer extends React.Component {
             sectionIndex:'',
             searchResult: [],
             hasSearchableObjectData: false,
+            notFoundList: [],
         }
     
         this.handleTouchStart = this.handleTouchStart.bind(this);
@@ -190,28 +190,33 @@ class SearchContainer extends React.Component {
         const searchableObjectData = this.props.searchableObjectData;
 
         let searchResult = [];
+        let notFoundList = [];
         for (let object in searchableObjectData) {
             if (isMydevice) {
                 if (searchKey.has(searchableObjectData[object].access_control_number)) {
-                    searchResult.push(searchableObjectData[object])
-                    duplicatedSearchKey.delete(searchableObjectData[object].access_control_number)
+                    // if (searchableObjectData[object].status.toLowerCase() !== 'normal') {
+                    //     notFoundList.push(searchableObjectData[object])
+                    // } else {
+                        searchResult.push(searchableObjectData[object])
+                        // duplicatedSearchKey.delete(searchableObjectData[object].access_control_number)
+                    // }
                 }
             } else if (searchableObjectData[object].type == searchKey) {
                 searchResult.push(searchableObjectData[object])
             } else if (searchableObjectData[object].type.toLowerCase().indexOf(searchKey.toLowerCase()) === 0){
                 searchResult.push(searchableObjectData[object])
             }
-
         }
 
         this.setState({
             hasSearchKey: true,
             searchKey: searchKey,
             searchResult: searchResult,
+            notFoundList: notFoundList
         })
 
         /** Transfer the searched object data from SearchContainer to MainContainer */
-        this.props.transferSearchResult(searchResult)
+        this.props.transferSearchResult(searchResult, null)
     }
 
     render() {

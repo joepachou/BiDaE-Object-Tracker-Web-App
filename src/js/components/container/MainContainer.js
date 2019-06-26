@@ -2,16 +2,11 @@
 import React from 'react';
 
 /** Import Container Component */
-import ObjectManagementContainer from './ObjectManagementContainer';
 import SearchContainer from './SearchContainer';
 
 /** Import Presentational Component */
-import dataSrc from '../../dataSrc'
-import axios from 'axios';
-import ReactTable from 'react-table';
+
 import 'react-table/react-table.css';
-import ModalForm from './ModalForm';
-import Navs from '../presentational/Navs'
 import SearchResult from '../presentational/SearchResult'
 
 
@@ -47,7 +42,9 @@ export default class ContentContainer extends React.Component{
         })
     }
 
-    /** Transfer the searched object data from SearchContainer, GridButton to MainContainer */
+    /** Transfer the search result, not found list and color panel from SearchContainer, GridButton to MainContainer 
+     *  The three variable will then pass into SurveillanceContainer
+    */
     transferSearchResult(searchResult, colorPanel) {
         let searchResultObjectTypeMap = {}
         searchResult.map( item => {
@@ -120,9 +117,12 @@ export default class ContentContainer extends React.Component{
                             <div>
                                     {this.state.searchResult.length === 0
                                         ? this.state.searchableObjectData ? <Alert variant='secondary'>{Object.keys(this.state.searchableObjectData).length + ' devices found'}</Alert>: <br></br>
-                                        : Object.keys(this.state.searchResultObjectTypeMap).map((item,index) => {
-                                            return <Alert variant='secondary' key={index}>{this.state.searchResultObjectTypeMap[item]} {item} found</Alert> 
-                                        })
+                                        : <Alert variant='secondary'>
+                                            {Object.keys(this.state.searchResultObjectTypeMap).map((item) => {
+                                                return this.state.searchResultObjectTypeMap[item]+ item + 'found       '})
+                                                }
+                                            </Alert> 
+                                        
                                     } 
                             </div>
                             <SurveillanceContainer 
@@ -149,8 +149,10 @@ export default class ContentContainer extends React.Component{
                         />
                         <div style={style.searchResult} className='py-3'>
                             <SearchResult 
-                                result={searchResult} 
-                                searchKey={this.state.searchKey}    
+                                searchResult={searchResult} 
+                                searchKey={this.state.searchKey}
+                                transferSearchResult={this.transferSearchResult}
+                                colorPanel={this.state.colorPanel}
                             />
                         </div>
                     </Col>

@@ -38,7 +38,6 @@ class GridButton extends React.Component {
         const { searchableObjectData, transferSearchResult, clearColorPanel } = this.props
         let searchResult = [];
         var pinColor = '';
-        
         let pinColorArray = clearColorPanel ? config.surveillanceMap.iconColor.pinColorArray.slice():this.state.pinColorArray;
         let searchObjectType = clearColorPanel ? new Map() : this.state.searchObjectType;
 
