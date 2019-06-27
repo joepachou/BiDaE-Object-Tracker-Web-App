@@ -64,7 +64,10 @@ class GridButton extends React.Component {
                 searchResult.push(item)
             } 
         })
-        this.putSearchHistory(searchKey)
+
+        if (Cookies.get('user')){
+            this.putSearchHistory(searchKey)
+        }
         transferSearchResult(searchResult, searchObjectType)
         
     }
