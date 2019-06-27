@@ -314,6 +314,7 @@ class Surveillance extends React.Component {
             objectInfoHash[items.object_mac_address].lbeaconDetectedNum = Object.keys(objectInfoHash[items.object_mac_address].coverLbeaconInfo).length;
             // markerClusters.addLayer(L.marker(lbeaconCoordinate));
         })
+        // console.log(objectInfoHash['c1:0f:00:0f:60:58'])
         if (this.isShownTrackingData === true ) (console.log(objectInfoHash)); 
         // this.map.addLayer(markerClusters);
         // markerClusters.on('clusterclick', this.handlemenu)
@@ -342,10 +343,7 @@ class Surveillance extends React.Component {
         const { hasSearchKey, searchResult, searchType } = this.props;
         const objects = this.state.objectInfo;
 
-
-        /** 
-         * Process the search object data
-         */
+        /** Process the search object data */
         let searchedObjectDataColorMap = new Map();
         var searchedObjectDataMap= new Map();
         if (hasSearchKey) {
@@ -453,6 +451,7 @@ class Surveillance extends React.Component {
         }
         
         let counter = 0;
+        // console.log('been processed and hasSearchKey = ' + this.props.hasSearchKey  )
         for (var key in objects){
 
             /** Tag the searched object with searched and pinColor*/
@@ -488,7 +487,7 @@ class Surveillance extends React.Component {
                 if (objects[key].searched && config.surveillanceMap.iconOptions.showNumber) {
                     iconOption = {
                         ...iconOption,
-                        number: counter
+                        number: ++counter
                     }
                 }
 			} else if (objects[key].geofence_type === 'Perimeter'){
@@ -496,7 +495,7 @@ class Surveillance extends React.Component {
                 if (objects[key].searched && config.surveillanceMap.iconOptions.showNumber) {
                     iconOption = {
                         ...iconOption,
-                        number: counter
+                        number: ++counter
                     }
                 }
 			} else if (objects[key].panic_button === 1) {
@@ -642,7 +641,7 @@ class Surveillance extends React.Component {
 
         const style = {
             map: {
-                height: '80vh'
+                height: '70vh'
             }
         }
         return(

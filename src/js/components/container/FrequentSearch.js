@@ -59,8 +59,8 @@ class FrequentSearch extends React.Component {
 
         return (
             <Col id='frequentSearch' className=''>
-                <h6 className="font-weight-bold">{locale.frequent_searches.toUpperCase()}</h6>
-                <ListGroup variant="flush">
+                <h6 className="font-weight-bold">Frequent Search</h6>
+                <ListGroup variant="flush" className='border-0'>
                     {Cookies.get('user') && JSON.parse(Cookies.get('searchHistory')).map( (item, index) => {
                         return <ListGroup.Item onClick={this.handleClick} action key={index}>{item.name}</ListGroup.Item>
                     })}

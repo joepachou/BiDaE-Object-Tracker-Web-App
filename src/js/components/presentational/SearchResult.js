@@ -27,6 +27,7 @@ class SearchResult extends React.Component {
             thisComponentShouldUpdate: true,
             foundResult: [],
             notFoundResult: [],
+            showNotResult: false,
 
         }
         
@@ -34,6 +35,7 @@ class SearchResult extends React.Component {
         this.handleChangeObjectStatusFormSubmit = this.handleChangeObjectStatusFormSubmit.bind(this)
         this.handleConfirmFormSubmit = this.handleConfirmFormSubmit.bind(this)
         this.handleChangeObjectStatusFormClose = this.handleChangeObjectStatusFormClose.bind(this);
+        this.handleToggleNotFound = this.handleToggleNotFound.bind(this);
     }
     
     componentDidUpdate(prepProps) {
@@ -124,7 +126,15 @@ class SearchResult extends React.Component {
         }).catch( error => {
             console.log(error)
         })
-    }    
+    } 
+
+    handleToggleNotFound(e) {
+        e.preventDefault()
+        this.setState({
+            showNotResult: !this.state.showNotResult
+        })
+        
+    }
 
     render() {
         const locale = this.context;
@@ -138,13 +148,33 @@ class SearchResult extends React.Component {
             noResultDiv: {
                 color: 'grey',
                 fontSize: 30,
+            },
+            firstText: {
+                paddingLeft: 15,
+                paddingRight: 0,
+                // background: 'rgb(227, 222, 222)',
+                // height: 30,
+                // width: 30,
+            },
+            middleText: {
+                paddingLeft: 2,
+                paddingRight: 2,
+            },
+            lastText: {
+                // textAlign: 'right'
+            },
+            titleText: {
+                color: 'rgb(80, 80, 80, 0.9)'
+            }, 
+            notFoundResultDiv: {
+                display: this.state.showNotResult ? null : 'none',
             }
 
         }
 
         return(
             <>
-                <Row className='text-left'>
+                <Row className='text-left' style={style.titleText}>
                     <h5>Search Result</h5>
                 </Row>
                 <Row className=''style={{height:'100%'}} >
@@ -153,17 +183,17 @@ class SearchResult extends React.Component {
                             <em>no searchResult</em>
                         </Col> 
                     
-                    :   <Col className='border px-0 overflow-auto'>
-                            <ListGroup variant="flush" onSelect={this.handleChangeObjectStatusForm}>
+                    :   <Col className='px-0 overflow-auto'>
+                            <ListGroup onSelect={this.handleChangeObjectStatusForm}>
                                 {searchResult.filter(item => item.status.toLowerCase() === 'normal').map((item,index) => {
                                     let element = 
-                                        <ListGroup.Item href={'#' + index} style={style.listItem} className='searchResultList' eventKey={'found:' + index} key={index}>
-                                            <div className="d-flex justify-content-between">
-                                                <div className="font-weight-bold text-left">{index + 1}.</div>
-                                                <div className="font-weight-bold">{item.type}</div>
-                                                <div>xxxx-xxxx-{item.access_control_number.slice(10, 14)}</div>
-                                                <div>near {item.location_description}</div>
-                                            </div>
+                                        <ListGroup.Item href={'#' + index} action style={style.listItem} className='searchResultList' eventKey={'found:' + index} key={index}>
+                                            <Row className="d-flex justify-content-around">
+                                                <Col lg={1} className="font-weight-bold d-flex align-self-center" style={style.firstText}>{index + 1}</Col>
+                                                <Col lg={3} className="d-flex align-self-center justify-content-center" style={style.middleText}>{item.type}</Col>
+                                                <Col lg={4} className="d-flex align-self-center text-muted" style={style.middleText}>ACN: xxxx-xxxx-{item.access_control_number.slice(10, 14)}</Col>
+                                                <Col lg={3} className="d-flex align-self-center text-muted justify-content-center" style={style.lastText}>near {item.location_description}</Col>
+                                            </Row>
                                         </ListGroup.Item>
                                     return element
                                 })}
@@ -174,22 +204,24 @@ class SearchResult extends React.Component {
                 {this.state.notFoundResult.length !== 0 
                 ? 
                     <>
-                        <Row className='text-left mt-3'>
-                            <h5>Devices not found</h5>
+                        <Row className='text-left mt-3' style={style.titleText}>
+                            <h5><a href="" onClick={this.handleToggleNotFound}>Show {this.state.notFoundResult.length} Devices Not Found </a></h5>
                         </Row>
-                        <Row>
-                            <Col className='border px-0 overflow-auto'>
-                                <ListGroup variant="flush" onSelect={this.handleChangeObjectStatusForm}>
+                        {/* <Row className='text-left mt-3' style={style.titleText}>
+                            <h5>Devices not found</h5>
+                        </Row> */}
+                        <Row style={style.notFoundResultDiv}>
+                            <Col className='px-0 overflow-auto'>
+                                <ListGroup onSelect={this.handleChangeObjectStatusForm}>
                                     {this.state.notFoundResult.map((item,index) => {
                                         let element = 
-                                            <ListGroup.Item href={'#' + index} style={style.listItem} className='searchResultList' eventKey={'notfound:' + index} key={index}>
-                                                <div className="d-flex justify-content-between">
-                                                    <div className="font-weight-bold text-left">{index + 1}.</div>
-                                                    <div className="font-weight-bold">{item.type}</div>
-                                                    <div>xxxx-xxxx-{item.access_control_number.slice(10, 14)}</div>
-                                                    <div>near {item.location_description}</div>
-
-                                                </div>
+                                            <ListGroup.Item href={'#' + index} action style={style.listItem} className='searchResultList' eventKey={'notfound:' + index} key={index}>
+                                                <Row className="d-flex justify-content-around">
+                                                    <Col lg={1} className="font-weight-bold d-flex align-self-center" style={style.firstText}>{index + 1}</Col>
+                                                    <Col lg={3} className="d-flex align-self-center justify-content-center" style={style.middleText}>{item.type}</Col>
+                                                    <Col lg={4} className="d-flex align-self-center text-muted" style={style.middleText}>ACN: xxxx-xxxx-{item.access_control_number.slice(10, 14)}</Col>
+                                                    <Col lg={3} className="d-flex align-self-center text-muted justify-content-center" style={style.lastText}>near {item.location_description}</Col>
+                                                </Row>
                                             </ListGroup.Item>
                                         return element
                                     })}

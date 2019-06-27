@@ -27,13 +27,11 @@ export default class ContentContainer extends React.Component{
             colorPanel: null,
             clearColorPanel: false,
             searchResultObjectTypeMap: {},
-            userSearchHistory: null,
         }
 
         this.transferSearchableObjectData = this.transferSearchableObjectData.bind(this)
         this.transferSearchResult = this.transferSearchResult.bind(this);
         this.handleClearButton = this.handleClearButton.bind(this)
-        this.getSearchHistory = this.getSearchHistory.bind(this)
     }
 
 
@@ -83,11 +81,6 @@ export default class ContentContainer extends React.Component{
         }
     }
 
-    getSearchHistory(history) {
-        this.setState({
-            userSearchHistory: history
-        })
-    }
 
     handleClearButton() {
         this.clearGridButtonBGColor();
@@ -106,7 +99,7 @@ export default class ContentContainer extends React.Component{
 
         const style = {
             container: {
-                // height: '100vh'
+                height: '100vh'
             },
             searchResult: {
                 display: this.state.hasSearchKey ? null : 'none',
@@ -117,21 +110,21 @@ export default class ContentContainer extends React.Component{
         return(
 
             /** "page-wrap" the default id named by react-burget-menu */
-            <div id="page-wrap" className='' style={style.container}>
-                <Row className='d-flex w-100 justify-content-around mx-0'>
-                    <Col xl={8} >
+            <div id="page-wrap" className='' >
+                <Row id="mainContainer" className='d-flex w-100 justify-content-around mx-0 overflow-hidden' style={style.container}>
+                    <Col xs={9} sm={9} md={9} xl={9} >
                         <Hidden xs sm md lg>
                             <br/>
                             <div>
-                                    {this.state.searchResult.length === 0
-                                        ? this.state.searchableObjectData ? <Alert variant='secondary'>{Object.keys(this.state.searchableObjectData).length + ' devices found'}</Alert>: <br></br>
-                                        : <Alert variant='secondary'>
-                                            {Object.keys(this.state.searchResultObjectTypeMap).map((item) => {
-                                                return this.state.searchResultObjectTypeMap[item]+ item + 'found       '})
-                                                }
-                                            </Alert> 
-                                        
-                                    } 
+                                {this.state.searchResult.length === 0
+                                    ? this.state.searchableObjectData ? <Alert variant='secondary'>{Object.keys(this.state.searchableObjectData).length + ' devices found'}</Alert>: <br></br>
+                                    : <Alert variant='secondary'>
+                                        {Object.keys(this.state.searchResultObjectTypeMap).map((item) => {
+                                            return this.state.searchResultObjectTypeMap[item]+ item + 'found       '})
+                                            }
+                                        </Alert> 
+                                    
+                                } 
                             </div>
                             <SurveillanceContainer 
                                 hasSearchKey={hasSearchKey} 
@@ -143,20 +136,18 @@ export default class ContentContainer extends React.Component{
                             />
                         </Hidden>
                     </Col>
-                    <Col xs={12} sm={12} md={12} xl={4} className="w-100">
+                    <Col xs={3} sm={3} md={3} xl={3} className="w-100 px-4">
                         <SearchContainer 
                             searchableObjectData={this.state.searchableObjectData} 
                             transferSearchResult={this.transferSearchResult}
                             hasSearchKey={this.state.hasSearchKey}
-                            getSearchHistory={this.getSearchHistory}
                         />
                         
-                        <GridButton
+                        {/* <GridButton
                             searchableObjectData={this.state.searchableObjectData} 
                             transferSearchResult={this.transferSearchResult}
                             clearColorPanel={clearColorPanel}
-                            userSearchHistory={this.state.userSearchHistory}
-                        />
+                        /> */}
                         <div style={style.searchResult} className='py-3'>
                             <SearchResult 
                                 searchResult={searchResult} 

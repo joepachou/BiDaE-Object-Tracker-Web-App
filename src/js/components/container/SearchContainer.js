@@ -1,7 +1,6 @@
 import React from 'react';
 import Searchbar from '../presentational/Searchbar';
-import ListGroup from 'react-bootstrap/ListGroup';
-import { Col, Row, Nav} from 'react-bootstrap'
+import { Col, Row, Nav, ListGroup} from 'react-bootstrap'
 
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
@@ -175,6 +174,9 @@ class SearchContainer extends React.Component {
         let isMydevice = false;
         var searchType = '';
         if (typeof e === 'string') {
+            if(e === '') {
+                return;
+            } 
             var searchKey = e
         } else if (e.target) {
             var searchKey = e.target.innerText;
@@ -225,12 +227,12 @@ class SearchContainer extends React.Component {
             display: this.state.hasSearchKey ? 'none' : null,
         }
 
-        const { searchResult, searchKey, sectionIndexList, sectionIndex, isShowSectionTitle } = this.state;
+        // const { searchResult, searchKey, sectionIndexList, sectionIndex, isShowSectionTitle } = this.state;
         const { trackingData, searchableObjectData, transferSearchResult } = this.props
         
         return (
-            <div id='searchContainer' className="m-3" onTouchMove={this.handleTouchMove}>
-                <div id='searchBar' className='d-flex w-100 justify-content-center align-items-center'>
+            <div id='searchContainer' className="m-4" onTouchMove={this.handleTouchMove}>
+                <div id='searchBar' className='d-flex w-100 justify-content-center align-items-center pb-3'>
                     <Searchbar 
                         placeholder={this.state.searchKey}
                         getResultData={this.getResultData}    

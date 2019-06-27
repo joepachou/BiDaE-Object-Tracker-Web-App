@@ -140,35 +140,45 @@ class SurveillanceContainer extends React.Component {
             },
             surveillanceContainer: {
                 height: '100vh'
+            },
+            block: {
+                height: '30%'
+            }, 
+            block2: {
+                height: '70%'
             }
         }
 
         return(
-            <div style={style.surveillanceContainer}>
-                <Surveillance 
-                    rssi={rssi} 
-                    hasSearchKey={hasSearchKey}
-                    searchResult={searchResult}
-                    searchType={searchType}
-                    transferSearchableObjectData={transferSearchableObjectData}
-                    handleChangeObjectStatusForm={this.handleChangeObjectStatusForm}
-                    style={style.searchMap}
-                    colorPanel={this.props.colorPanel}
+            <div id="surveillanceContainer" style={style.surveillanceContainer} className='overflow-hidden'>
+                <div style={style.block2}>
+                    <Surveillance 
+                        rssi={rssi} 
+                        hasSearchKey={hasSearchKey}
+                        searchResult={searchResult}
+                        searchType={searchType}
+                        transferSearchableObjectData={transferSearchableObjectData}
+                        handleChangeObjectStatusForm={this.handleChangeObjectStatusForm}
+                        style={style.searchMap}
+                        colorPanel={this.props.colorPanel}
 
-                />
-                <Nav className='d-flex align-items-center'>
-                    <Nav.Item className='d-flex align-items-baseline'>
-                        <small style={style.title}>{locale.location_accuracy.toUpperCase()}</small>
-                        <ToggleSwitch adjustRssi={this.adjustRssi} leftLabel={locale.low} defaultLabel={locale.med} rightLabel={locale.high} />
-                    </Nav.Item>
-                </Nav>
-                <ButtonToolbar>
-                    <Button variant="outline-primary" className='mr-1' onClick={this.handleClickButton}>Clear</Button>
-                    <Button variant="outline-primary" className='mr-1' onClick={this.handleClickButton}>Save</Button>
-                    <Button variant="outline-primary" className='mr-1' onClick={this.handleClickButton}>
-                        {this.state.showDevice ? 'Hide devices' : 'Show devices' }
-                    </Button>
-                </ButtonToolbar>
+                    />
+                </div>
+                <div style={style.block}>
+                    <Nav className='d-flex align-items-center'>
+                        <Nav.Item className='d-flex align-items-baseline'>
+                            <small style={style.title}>{locale.location_accuracy.toUpperCase()}</small>
+                            <ToggleSwitch adjustRssi={this.adjustRssi} leftLabel={locale.low} defaultLabel={locale.med} rightLabel={locale.high} />
+                        </Nav.Item>
+                    </Nav>
+                    <ButtonToolbar>
+                        <Button variant="outline-primary" className='mr-1' onClick={this.handleClickButton}>Clear</Button>
+                        <Button variant="outline-primary" className='mr-1' onClick={this.handleClickButton}>Save</Button>
+                        <Button variant="outline-primary" className='mr-1' onClick={this.handleClickButton}>
+                            {this.state.showDevice ? 'Hide devices' : 'Show devices' }
+                        </Button>
+                    </ButtonToolbar>
+                </div>
 
                 <ChangeStatusForm 
                     show={showEditObjectForm} 

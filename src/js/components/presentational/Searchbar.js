@@ -1,7 +1,7 @@
 import React from 'react';
 import LocaleContext from '../../context/LocaleContext';
 import searchIcon from '../../../img/search.png';
-import { Form } from 'react-bootstrap';
+import { Form, Row, Col } from 'react-bootstrap';
 
 
 class Searchbar extends React.Component {

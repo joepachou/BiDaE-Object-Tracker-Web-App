@@ -20,8 +20,10 @@ const config = {
         mapOptions: {
             crs: L.CRS.Simple,
             minZoom: -5,
-            maxZoom: 0,
-            zoomControl: !true,
+            maxZoom: -4,
+            zoomDelta: 0.25,
+            zoomSnap: 0,
+            zoomControl: true,
             attributionControl: false,
             dragging: true,
             doubleClickZoom: false,
@@ -36,7 +38,7 @@ const config = {
 			geofenceIconFence: geofence_fence,
             geofenceIconPerimeter: geofence_perimeter,
             searchedObjectIconUrl: white_pin,
-            showNumber: false,
+            showNumber: !false,
         },
 
         iconColor: {
@@ -51,7 +53,7 @@ const config = {
         },
 
         /* For test. To start object tracking*/
-        startInteval: !true,
+        startInteval: true,
 
         /* Object tracking query inteval */
         intevalTime: 1000,
