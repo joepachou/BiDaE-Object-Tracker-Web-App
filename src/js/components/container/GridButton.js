@@ -39,7 +39,7 @@ class GridButton extends React.Component {
 
         const searchKey = e.target.innerText;
 
-        const { searchableObjectData, transferSearchResult, clearColorPanel } = this.props
+        const { searchableObjectData, clearColorPanel } = this.props
         let searchResult = [];
         var pinColor = '';
         let pinColorArray = clearColorPanel ? config.surveillanceMap.iconColor.pinColorArray.slice():this.state.pinColorArray;
@@ -68,7 +68,7 @@ class GridButton extends React.Component {
         if (Cookies.get('user')){
             this.putSearchHistory(searchKey)
         }
-        transferSearchResult(searchResult, searchObjectType)
+        this.props.transferSearchResult(searchResult, searchObjectType)
         
     }
 

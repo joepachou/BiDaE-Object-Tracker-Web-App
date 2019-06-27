@@ -21,7 +21,7 @@ export default class ContentContainer extends React.Component{
         super(props)
         this.state = {
             hasSearchKey: false,
-            searchableObjectData: null,
+            searchableObjectData: [],
             searchResult: [],
             searchType: '',
             colorPanel: null,
@@ -104,6 +104,9 @@ export default class ContentContainer extends React.Component{
             searchResult: {
                 display: this.state.hasSearchKey ? null : 'none',
                 paddingTop: 30,
+            },
+            alertText: {
+                fontWeight: '600'
             }
 
         }
@@ -112,31 +115,53 @@ export default class ContentContainer extends React.Component{
             /** "page-wrap" the default id named by react-burget-menu */
             <div id="page-wrap" className='' >
                 <Row id="mainContainer" className='d-flex w-100 justify-content-around mx-0 overflow-hidden' style={style.container}>
-                    <Col xs={9} sm={9} md={9} xl={9} >
-                        <Hidden xs sm md lg>
-                            <br/>
-                            <div>
-                                {this.state.searchResult.length === 0
-                                    ? this.state.searchableObjectData ? <Alert variant='secondary'>{Object.keys(this.state.searchableObjectData).length + ' devices found'}</Alert>: <br></br>
-                                    : <Alert variant='secondary'>
-                                        {Object.keys(this.state.searchResultObjectTypeMap).map((item) => {
-                                            return this.state.searchResultObjectTypeMap[item]+ item + 'found       '})
-                                            }
-                                        </Alert> 
-                                    
-                                } 
-                            </div>
-                            <SurveillanceContainer 
-                                hasSearchKey={hasSearchKey} 
-                                searchResult={searchResult}
-                                transferSearchableObjectData={this.transferSearchableObjectData}
-                                searchType={searchType}
-                                colorPanel={colorPanel}
-                                handleClearButton={this.handleClearButton}
-                            />
-                        </Hidden>
-                    </Col>
-                    <Col xs={3} sm={3} md={3} xl={3} className="w-100 px-4">
+                    <Hidden xs>
+                        <Col sm={9} md={9} lg={9} xl={9} >
+                                <br/>
+                                <div>
+                                    {this.state.searchResult.length === 0
+                                        ? 
+                                            <Alert variant='secondary' className='d-flex justify-content-center'>
+                                                <div style={style.alertText}>{Object.keys(this.state.searchableObjectData).length}</div>
+                                                &nbsp;
+                                                <div>{'devices found'}</div>
+                                            </Alert>
+                                        : 
+                                            <Alert variant='secondary' className='d-flex justify-content-center'>
+                                                {Object.keys(this.state.searchResultObjectTypeMap).map((item) => {
+                                                    return  <>
+                                                                <div style={style.alertText}>
+                                                                    {this.state.searchResultObjectTypeMap[item]}
+                                                                </div>
+                                                                &nbsp;
+                                                                <div>
+                                                                    {item}
+                                                                </div>
+                                                                &nbsp;
+                                                                <div>{'found'}</div>
+                                                                &nbsp;
+                                                                &nbsp;
+                                                                &nbsp;
+                                                            </>
+                                                    })}
+                                            </Alert> 
+                                        
+                                    } 
+                                </div>
+                                <SurveillanceContainer 
+                                    hasSearchKey={hasSearchKey} 
+                                    searchResult={searchResult}
+                                    transferSearchableObjectData={this.transferSearchableObjectData}
+                                    searchType={searchType}
+                                    colorPanel={colorPanel}
+                                    handleClearButton={this.handleClearButton}
+                                    transferSearchResult={this.transferSearchResult}
+                                    clearColorPanel={clearColorPanel}
+
+                                />
+                        </Col>
+                    </Hidden>
+                    <Col xs={12} sm={3} md={3} lg={3} xl={3} className="w-100 px-4">
                         <SearchContainer 
                             searchableObjectData={this.state.searchableObjectData} 
                             transferSearchResult={this.transferSearchResult}

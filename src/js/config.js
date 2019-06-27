@@ -38,7 +38,7 @@ const config = {
 			geofenceIconFence: geofence_fence,
             geofenceIconPerimeter: geofence_perimeter,
             searchedObjectIconUrl: white_pin,
-            showNumber: !false,
+            showNumber: false,
         },
 
         iconColor: {

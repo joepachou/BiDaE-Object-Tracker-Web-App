@@ -641,12 +641,12 @@ class Surveillance extends React.Component {
 
         const style = {
             map: {
-                height: '70vh'
+                height: '65vh'
             }
         }
         return(
             <>      
-                <div id='mapid' className='cmp-block' style={style.map}>
+                <div id='mapid' style={style.map}>
                 </div>
                 {/* <div>
                     <ToggleSwitch title="Location Accuracy" options={toggleSwitchOptions}/>

@@ -25,6 +25,8 @@ class SurveillanceContainer extends React.Component {
             selectedObjectData: [],
             formOption: [],
             showDevice: false,
+            searchableObjectData: [],
+
         }
 
         this.adjustRssi = this.adjustRssi.bind(this);
@@ -33,6 +35,7 @@ class SurveillanceContainer extends React.Component {
         this.handleChangeObjectStatusFormSubmit = this.handleChangeObjectStatusFormSubmit.bind(this);
         this.handleConfirmFormSubmit = this.handleConfirmFormSubmit.bind(this);
         this.handleClickButton = this.handleClickButton.bind(this)
+        this.transferSearchableObjectData = this.transferSearchableObjectData.bind(this)
     }
 
 
@@ -103,7 +106,8 @@ class SurveillanceContainer extends React.Component {
     }
 
     handleClickButton(e) {
-        const buttonName = e.target.innerText;
+        const button = e.target;
+        const buttonName = button.innerText
         switch(buttonName.toLowerCase()) {
             case 'show devices':
             case 'hide devices':
@@ -116,6 +120,13 @@ class SurveillanceContainer extends React.Component {
                 
         }
 
+    }
+
+    transferSearchableObjectData(processData) {
+        this.props.transferSearchableObjectData(processData)
+        this.setState({
+            searchableObjectData: processData,
+        })
     }
 
     
@@ -141,43 +152,55 @@ class SurveillanceContainer extends React.Component {
             surveillanceContainer: {
                 height: '100vh'
             },
-            block: {
+            navBlock: {
                 height: '30%'
             }, 
-            block2: {
-                height: '70%'
+            mapBlock: {
+                height: '70%',
+                border: 'solid 2px rgba(227, 222, 222, 0.619)',
+                padding: '5px',
+            },
+            gridButton: {
+                display: this.state.showDevice ? null : 'none'
             }
         }
 
         return(
             <div id="surveillanceContainer" style={style.surveillanceContainer} className='overflow-hidden'>
-                <div style={style.block2}>
+                <div style={style.mapBlock}>
                     <Surveillance 
                         rssi={rssi} 
                         hasSearchKey={hasSearchKey}
                         searchResult={searchResult}
                         searchType={searchType}
-                        transferSearchableObjectData={transferSearchableObjectData}
+                        transferSearchableObjectData={this.transferSearchableObjectData}
                         handleChangeObjectStatusForm={this.handleChangeObjectStatusForm}
                         style={style.searchMap}
                         colorPanel={this.props.colorPanel}
 
                     />
                 </div>
-                <div style={style.block}>
+                <div style={style.navBlock}>
+
                     <Nav className='d-flex align-items-center'>
                         <Nav.Item className='d-flex align-items-baseline'>
                             <small style={style.title}>{locale.location_accuracy.toUpperCase()}</small>
                             <ToggleSwitch adjustRssi={this.adjustRssi} leftLabel={locale.low} defaultLabel={locale.med} rightLabel={locale.high} />
+                            <Button variant="outline-primary" className='mr-1' onClick={this.handleClickButton}>Clear</Button>
+                            <Button variant="outline-primary" className='mr-1' onClick={this.handleClickButton}>Save</Button>
+                            <Button variant="outline-primary" className='mr-1' onClick={this.handleClickButton} active={this.state.showDevice}>
+                                {this.state.showDevice ? 'Hide devices' : 'Show devices' }
+                            </Button>
+                            <div style={style.gridButton}>
+                                <GridButton
+                                    searchableObjectData={this.state.searchableObjectData} 
+                                    transferSearchResult={this.props.transferSearchResult}
+                                    clearColorPanel={this.props.clearColorPanel}
+                                />
+                            </div>
                         </Nav.Item>
                     </Nav>
-                    <ButtonToolbar>
-                        <Button variant="outline-primary" className='mr-1' onClick={this.handleClickButton}>Clear</Button>
-                        <Button variant="outline-primary" className='mr-1' onClick={this.handleClickButton}>Save</Button>
-                        <Button variant="outline-primary" className='mr-1' onClick={this.handleClickButton}>
-                            {this.state.showDevice ? 'Hide devices' : 'Show devices' }
-                        </Button>
-                    </ButtonToolbar>
+
                 </div>
 
                 <ChangeStatusForm 
