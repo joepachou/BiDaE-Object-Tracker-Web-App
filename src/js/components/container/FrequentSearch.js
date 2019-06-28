@@ -68,7 +68,7 @@ class FrequentSearch extends React.Component {
                     <h5>Frequent Search</h5>
                 </Row>
                 <ListGroup>
-                    {Cookies.get('user') && JSON.parse(Cookies.get('searchHistory')).map( (item, index) => {
+                    {Cookies.get('searchHistory') && JSON.parse(Cookies.get('searchHistory')).map( (item, index) => {
                         return <ListGroup.Item onClick={this.handleClick} action key={index}>{item.name}</ListGroup.Item>
                     })}
                     {Cookies.get('user') && <ListGroup.Item onClick={this.handleClick} action>My Device</ListGroup.Item>}
