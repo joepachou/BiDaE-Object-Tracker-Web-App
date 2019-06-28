@@ -3,7 +3,8 @@ require('dotenv').config();
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
-const PORT = process.env.PORT || 3000;
+const httpPort = process.env.httpPort || 80;
+const httpsPort = process.env.httpsPort || 443;
 const db = require('./query')
 const path = require('path');
 const fs = require('fs');
@@ -65,10 +66,10 @@ app.post('/user/addUserSearchHistory', db.addUserSearchHistory)
 const httpsServer = https.createServer(credentials, app);
 const httpServer = http.createServer(app);
 
-httpServer.listen(80, () =>{
-    console.log('HTTP Server running on port 80')
+httpServer.listen(httpPort, () =>{
+    console.log(`HTTP Server running on port ${httpPort}`)
 })
-httpsServer.listen(443, () => {
-    console.log(`HTTPS Server running on PORT 443.`)
+httpsServer.listen(httpsPort, () => {
+    console.log(`HTTPS Server running on PORT ${httpsPort}`)
 })
 
