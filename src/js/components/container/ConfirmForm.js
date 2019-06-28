@@ -1,19 +1,12 @@
 import React from 'react';
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
-import ListGroup from 'react-bootstrap/ListGroup';
-import Form from 'react-bootstrap/Form'
-import FormControl from 'react-bootstrap/FormControl'
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import FormCheck from 'react-bootstrap/FormCheck';
-import VerticalTable from '../presentational/VerticalTable';
+import { Modal, Button, Form, Row, Col, Image} from 'react-bootstrap'
 import Select from 'react-select';
 import config from '../../config';
 import LocaleContext from '../../context/LocaleContext';
 import axios from 'axios';
 import dataSrc from '../../dataSrc';
 import moment from 'moment';
+import tempImg from '../../../img/doppler.jpg'
 
 const transferredLocations = config.transferredLocation;
 
@@ -120,48 +113,46 @@ class ConfirmForm extends React.Component {
         }
 
         const { title, selectedObjectData } = this.props;
-        const { name, type, status, transferredLocation } = this.state.formOption;
 
         return (
             <>  
-                <Modal show={this.state.show} onHide={this.handleClose} size="lg">
+                <Modal show={this.state.show} onHide={this.handleClose} size="md">
                     <Modal.Header closeButton className='font-weight-bold'>{title}</Modal.Header >
                     <Modal.Body>
                         <Form >
-                            <Form.Group as={Row} controlId="formHorizontalEmail">
-                                <Form.Label column sm={3}>
-                                    Name
-                                </Form.Label>
-                                <Col sm={9}>
-                                    <Form.Control 
-                                        type="text" 
-                                        placeholder={selectedObjectData ? selectedObjectData.name : ''} 
-                                        onChange={this.handleChange} 
-                                        value={name} 
-                                        name='name'
-                                        style={style.input}
-                                        disabled
-                                    />
+                        <Row>
+                                <Col sm={10}>
+                                    <Row>
+                                        <Col sm={5}>
+                                            Device Type
+                                        </Col>
+                                        <Col sm={7} className='text-muted pb-1'>
+                                            {selectedObjectData.type}
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col sm={5}>
+                                            Device Name
+                                        </Col>
+                                        <Col sm={7} className='text-muted pb-1'>
+                                            {selectedObjectData.name}
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col sm={5}>
+                                            ACN
+                                        </Col>
+                                        <Col sm={7} className='text-muted pb-1'>
+                                            {selectedObjectData.access_control_number}
+                                        </Col>
+                                    </Row>
                                 </Col>
-                            </Form.Group>
-
-                            <Form.Group as={Row} controlId="formHorizontalPassword">
-                                <Form.Label column sm={3}>
-                                    Type
-                                </Form.Label>
-                                <Col sm={9}>
-                                    <Form.Control 
-                                        type="text" 
-                                        placeholder={selectedObjectData ? selectedObjectData.type : ''} 
-                                        onChange={this.handleChange} 
-                                        value={type} 
-                                        name='type'
-                                        style={style.input}
-                                        disabled
-                                    />
+                                <Col sm={2} className='d-flex align-items-center'>
+                                    <Image src={tempImg} width={60}/>
                                 </Col>
-                            </Form.Group> 
+                            </Row>
                         </Form>
+                        
                         <hr/>
                         <Row>
                             <Col className='d-flex justify-content-center'>

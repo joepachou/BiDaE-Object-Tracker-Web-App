@@ -13,6 +13,8 @@ import config from '../../config';
 import LocaleContext from '../../context/LocaleContext';
 import axios from 'axios';
 import dataSrc from '../../dataSrc';
+import { Image } from 'react-bootstrap'
+import tempImg from '../../../img/doppler.jpg'
 
 const transferredLocations = config.transferredLocation;
 
@@ -89,10 +91,10 @@ class ChangeStatusForm extends React.Component {
         const postOption = {
             name: name,
             type: type,
+            access_control_number: access_control_number,
             status: status,
             transferredLocation: status !== 'Transferred' ? '' : transferredLocation,
             mac_address: mac_address,
-            access_control_number: access_control_number,
         }
         if(this.props.handleChangeObjectStatusFormSubmit) {
             this.props.handleChangeObjectStatusFormSubmit(postOption);
@@ -128,7 +130,8 @@ class ChangeStatusForm extends React.Component {
                 borderLeft: 0,
                 borderRight: 0,
                 
-            }
+            },
+
         }
 
         const { title, selectedObjectData } = this.props;
@@ -136,15 +139,15 @@ class ChangeStatusForm extends React.Component {
 
         return (
             <>  
-                <Modal show={this.state.show} onHide={this.handleClose} size="lg">
+                <Modal show={this.state.show} onHide={this.handleClose} size="md">
                     <Modal.Header closeButton className='font-weight-bold'>{title}</Modal.Header >
                     <Modal.Body>
                         <Form >
-                            <Form.Group as={Row} controlId="formHorizontalEmail">
-                                <Form.Label column sm={3}>
+                            {/* <Form.Group as={Row} controlId="formHorizontalEmail">
+                                <Form.Label column sm={2}>
                                     Name
                                 </Form.Label>
-                                <Col sm={9}>
+                                <Col sm={10}>
                                     <Form.Control 
                                         type="text" 
                                         placeholder={selectedObjectData ? selectedObjectData.name : ''} 
@@ -152,16 +155,15 @@ class ChangeStatusForm extends React.Component {
                                         value={name} 
                                         name='name'
                                         style={style.input}
-                                        disabled
                                     />
                                 </Col>
                             </Form.Group>
 
                             <Form.Group as={Row} controlId="formHorizontalPassword">
-                                <Form.Label column sm={3}>
+                                <Form.Label column sm={2}>
                                     Type
                                 </Form.Label>
-                                <Col sm={9}>
+                                <Col sm={10}>
                                     <Form.Control 
                                         type="text" 
                                         placeholder={selectedObjectData ? selectedObjectData.type : ''} 
@@ -169,17 +171,67 @@ class ChangeStatusForm extends React.Component {
                                         value={type} 
                                         name='type'
                                         style={style.input}
-                                        disabled
+                                        
                                     />
                                 </Col>
                             </Form.Group>
+
+                            <Form.Group as={Row} controlId="formHorizontalEmail">
+                                <Form.Label column sm={2}>
+                                    ACN
+                                </Form.Label>
+                                <Col sm={10}>
+                                    <Form.Control 
+                                        type="text" 
+                                        placeholder={selectedObjectData ? selectedObjectData.access_control_number : ''} 
+                                        onChange={this.handleChange} 
+                                        value={access_control_number} 
+                                        name='name'
+                                        style={style.input}
+                                    />
+                                </Col>
+                            </Form.Group> */}
+
+                            <Row>
+                                <Col sm={10}>
+                                    <Row>
+                                        <Col sm={5}>
+                                            Device Type
+                                        </Col>
+                                        <Col sm={7} className='text-muted pb-1'>
+                                            {selectedObjectData.type}
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col sm={5}>
+                                            Device Name
+                                        </Col>
+                                        <Col sm={7} className='text-muted pb-1'>
+                                            {selectedObjectData.name}
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col sm={5}>
+                                            ACN
+                                        </Col>
+                                        <Col sm={7} className='text-muted pb-1'>
+                                            {selectedObjectData.access_control_number}
+                                        </Col>
+                                    </Row>
+                                </Col>
+                                <Col sm={2} className='d-flex align-items-center'>
+                                    <Image src={tempImg} width={60}/>
+                                </Col>
+
+                            </Row>
+
                             <hr/>
                             <fieldset>
                                 <Form.Group as={Row}>
-                                    <Form.Label as="legend" column sm={3}>
+                                    <Form.Label as="legend" column sm={2} className='pt-0'>
                                         Status
                                     </Form.Label>
-                                    <Col sm={9}>
+                                    <Col sm={10}>
                                         <Form.Check
                                             custom
                                             type="radio"
