@@ -6,6 +6,9 @@ const bodyParser = require('body-parser')
 const PORT = process.env.PORT || 3000;
 const db = require('./query')
 const path = require('path');
+const fs = require('fs');
+const http = require('http');
+const https = require('https');
 
 app.use(bodyParser.json())
 
@@ -23,6 +26,13 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
+
+var privateKey = fs.readFileSync(__dirname + '/sslforfree/private.key');
+var certificate = fs.readFileSync(__dirname + '/sslforfree/certificate.crt');
+var ca_bundle = fs.readFileSync(__dirname + '/sslforfree/ca_bundle.crt');
+
+var credentials = { key: privateKey, cert: certificate, ca: ca_bundle };
+
 
 app.get(/^\/page\/(.*)/, (req, res) => {
     res.sendFile(path.join(__dirname, 'dist','index.html'));
@@ -51,7 +61,14 @@ app.post('/user/searchHistory', db.userSearchHistory)
 
 app.post('/user/addUserSearchHistory', db.addUserSearchHistory)
 
-app.listen(PORT, () => {
-    console.log(`App running on PORT ${PORT}.`)
+
+const httpsServer = https.createServer(credentials, app);
+const httpServer = http.createServer(app);
+
+httpServer.listen(80, () =>{
+    console.log('HTTP Server running on port 80')
+})
+httpsServer.listen(443, () => {
+    console.log(`HTTPS Server running on PORT 443.`)
 })
 
