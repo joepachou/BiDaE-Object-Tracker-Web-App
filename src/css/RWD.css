@@ -38,7 +38,7 @@
     }
 
     #navbar {
-        height: 60px;
+        height: 50px;
         font-size: 14px;
     }
 
@@ -50,19 +50,22 @@
     } */
 
     #mapid {
-        height: 50vh;
+        height: 45vh;
     } 
+    #searchbar {
+        min-width: 200;
+    }
   }
 
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) and (max-width: 1199.98px) {
     #navbar {
-        height: 60px;
+        height: 55px;
         font-size: 14px;
     }
 
     #mapid {
-        height: 55vh;
+        height: 50vh;
     } 
   }
 

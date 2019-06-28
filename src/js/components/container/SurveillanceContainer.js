@@ -195,15 +195,13 @@ class SurveillanceContainer extends React.Component {
                                 {this.state.showDevice ? 'Hide devices' : 'Show devices' }
                             </Button>
                         </ButtonToolbar>
-                        <Nav.Item className='d-flex align-items-baseline'>
-                            <div style={style.gridButton}>
-                                <GridButton
-                                    searchableObjectData={this.state.searchableObjectData} 
-                                    transferSearchResult={this.props.transferSearchResult}
-                                    clearColorPanel={this.props.clearColorPanel}
-                                />
-                            </div>
-                        </Nav.Item>
+                        <div style={style.gridButton}>
+                            <GridButton
+                                searchableObjectData={this.state.searchableObjectData} 
+                                transferSearchResult={this.props.transferSearchResult}
+                                clearColorPanel={this.props.clearColorPanel}
+                            />
+                        </div>
                     </Nav>
 
                 </div>

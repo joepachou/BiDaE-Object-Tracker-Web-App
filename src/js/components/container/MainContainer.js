@@ -21,6 +21,7 @@ export default class ContentContainer extends React.Component{
         super(props)
         this.state = {
             hasSearchKey: false,
+            searchKey: '',
             searchableObjectData: [],
             searchResult: [],
             searchType: '',
@@ -45,7 +46,7 @@ export default class ContentContainer extends React.Component{
     /** Transfer the search result, not found list and color panel from SearchContainer, GridButton to MainContainer 
      *  The three variable will then pass into SurveillanceContainer
     */
-    transferSearchResult(searchResult, colorPanel) {
+    transferSearchResult(searchResult, colorPanel, searchKey) {
         let searchResultObjectTypeMap = {}
         searchResult.map( item => {
             if (!(item.type in searchResultObjectTypeMap)){
@@ -66,6 +67,7 @@ export default class ContentContainer extends React.Component{
             this.clearGridButtonBGColor();
             this.setState({
                 hasSearchKey: true,
+                searchKey: searchKey,
                 searchResult: searchResult,
                 colorPanel: null,
                 clearColorPanel: true,
@@ -106,7 +108,7 @@ export default class ContentContainer extends React.Component{
                 paddingTop: 30,
             },
             alertText: {
-                fontWeight: '600'
+                fontWeight: '700'
             }
 
         }
@@ -116,16 +118,25 @@ export default class ContentContainer extends React.Component{
             <div id="page-wrap" className='' >
                 <Row id="mainContainer" className='d-flex w-100 justify-content-around mx-0 overflow-hidden' style={style.container}>
                     <Hidden xs>
-                        <Col sm={9} md={9} lg={9} xl={9} >
+                        <Col sm={8} md={8} lg={9} xl={9} >
                                 <br/>
                                 <div>
                                     {this.state.searchResult.length === 0
-                                        ? 
-                                            <Alert variant='secondary' className='d-flex justify-content-center'>
-                                                <div style={style.alertText}>{Object.keys(this.state.searchableObjectData).length}</div>
-                                                &nbsp;
-                                                <div>{'devices found'}</div>
-                                            </Alert>
+                                        ? this.state.hasSearchKey 
+                                            ?
+                                                <Alert variant='secondary' className='d-flex justify-content-center'>
+                                                    <div style={style.alertText}>{this.state.searchResult.length}</div>
+                                                    &nbsp;
+                                                    <div style={style.alertText}>{this.state.searchKey}</div>
+                                                    &nbsp;
+                                                    <div>{'found'}</div>
+                                                </Alert>
+                                            :    
+                                                <Alert variant='secondary' className='d-flex justify-content-center'>
+                                                    <div style={style.alertText}>{Object.keys(this.state.searchableObjectData).length}</div>
+                                                    &nbsp;
+                                                    <div>{'devices found'}</div>
+                                                </Alert>
                                         : 
                                             <Alert variant='secondary' className='d-flex justify-content-center'>
                                                 {Object.keys(this.state.searchResultObjectTypeMap).map((item) => {
@@ -134,7 +145,7 @@ export default class ContentContainer extends React.Component{
                                                                     {this.state.searchResultObjectTypeMap[item]}
                                                                 </div>
                                                                 &nbsp;
-                                                                <div>
+                                                                <div style={style.alertText}>
                                                                     {item}
                                                                 </div>
                                                                 &nbsp;
@@ -161,7 +172,7 @@ export default class ContentContainer extends React.Component{
                                 />
                         </Col>
                     </Hidden>
-                    <Col xs={12} sm={3} md={3} lg={3} xl={3} className="w-100 px-4">
+                    <Col xs={12} sm={4} md={4} lg={3} xl={3} className="w-100 px-4">
                         <SearchContainer 
                             searchableObjectData={this.state.searchableObjectData} 
                             transferSearchResult={this.transferSearchResult}

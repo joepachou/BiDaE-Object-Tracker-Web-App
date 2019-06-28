@@ -218,7 +218,7 @@ class SearchContainer extends React.Component {
         })
 
         /** Transfer the searched object data from SearchContainer to MainContainer */
-        this.props.transferSearchResult(searchResult, null)
+        this.props.transferSearchResult(searchResult, null, searchKey)
     }
 
     render() {
