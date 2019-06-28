@@ -5,39 +5,62 @@
     html, body {
         font-size: 10px;
     }
-    /* .navbar {
-        height:50px;
-    } */
+
+    #navbar {
+        height: 60px;
+        font-size: 14px;
+    }
+    .navbar-brand {
+        font-size: 1rem;
+    }
+
     .navbar img {
         width: 30px;
     }
+
+    #mapid {
+        height: 40vh;
+    } 
 }
 
 /* Small devices (landscape phones, 576px and up) */
-@media (min-width: 576px) and (max-width: 767.98px) {  }
+@media (min-width: 576px) and (max-width: 767.98px) { 
+
+    #mapid {
+        height: 45vh;
+    } 
+ }
 
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) and (max-width: 991.98px) {
     html, body {
-        font-size: 18px;
+        /* font-size: 18px; */
     }
-    /* .navbar {
-        height:60px;
-    } */
+
+    #navbar {
+        height: 60px;
+        font-size: 14px;
+    }
+
+    .navbar-brand {
+        font-size: 1rem;
+    }
     /* .navbar img {
         width: 60px;
     } */
 
     #mapid {
-        height: 75vh;
+        height: 50vh;
     } 
   }
 
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) and (max-width: 1199.98px) {
-    /* .navbar {
-        height: 100px;
-    } */
+    #navbar {
+        height: 60px;
+        font-size: 14px;
+    }
+
     #mapid {
         height: 55vh;
     } 
@@ -45,10 +68,12 @@
 
 /* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
-    /* .navbar {
+    #navbar {
         height: 80px;
-    } */
+    }
     #mapid {
         height: 65vh;
     } 
+
+
   }

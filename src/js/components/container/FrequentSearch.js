@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, ListGroup } from 'react-bootstrap';
+import { Col, ListGroup, Row } from 'react-bootstrap';
 import LocaleContext from '../../context/LocaleContext';
 import axios from 'axios';
 import dataSrc from '../../dataSrc';
@@ -53,14 +53,21 @@ class FrequentSearch extends React.Component {
     }
 
     render() {
-
+        const style = {
+            titleText: {
+                color: 'rgb(80, 80, 80, 0.9)'
+            }, 
+        }
 
         const locale = this.context;
 
         return (
-            <Col id='frequentSearch' className=''>
-                <h6 className="font-weight-bold">Frequent Search</h6>
-                <ListGroup variant="flush" className='border-0'>
+            <>
+                {/* <h6 className="font-weight-bold">Frequent Search</h6> */}
+                <Row className='text-left' style={style.titleText}>
+                    <h5>Frequent Search</h5>
+                </Row>
+                <ListGroup>
                     {Cookies.get('user') && JSON.parse(Cookies.get('searchHistory')).map( (item, index) => {
                         return <ListGroup.Item onClick={this.handleClick} action key={index}>{item.name}</ListGroup.Item>
                     })}
@@ -68,7 +75,7 @@ class FrequentSearch extends React.Component {
                     <ListGroup.Item onClick={this.handleClick} action>All Device</ListGroup.Item>
                 </ListGroup>
         
-            </Col>
+            </>
         )
     }
 }

@@ -211,8 +211,8 @@ class SearchResult extends React.Component {
                             <h5>Devices not found</h5>
                         </Row> */}
                         <Row style={style.notFoundResultDiv}>
-                            <Col className='px-0 overflow-auto'>
-                                <ListGroup onSelect={this.handleChangeObjectStatusForm}>
+                            <Col className=''>
+                                <ListGroup onSelect={this.handleChangeObjectStatusForm} className='overflow-auto'>
                                     {this.state.notFoundResult.map((item,index) => {
                                         let element = 
                                             <ListGroup.Item href={'#' + index} action style={style.listItem} className='searchResultList' eventKey={'notfound:' + index} key={index}>

@@ -52,7 +52,7 @@ input {
     border-color: rgba(227, 222, 222, 0.447);
 }
 
-/* NavbarContainer customized CSS */
+/* React-bootstrap navbar */
 .lang-select.dropdown-item:active,
 .lang-select.dropdown-item.active {
     background-color:  rgba(179, 177, 177, 0.317);
@@ -63,6 +63,14 @@ input {
     color: black;
 }
 
+.navbar {
+    padding: 0.5rem 2.5rem
+}
+
+.navbar-brand {
+    font-size: 1.25rem;
+}
+
 #searchOption {
     height: 100%;
 }
@@ -70,6 +78,7 @@ input {
 /* Already Set in the NavbarContainer */ 
 .navbar-light .navbar-nav .nav-link {
     color:black;
+    padding: 0.5rem 1.5rem
 } 
 
 /* SearchBar customized CSS */
@@ -113,3 +122,7 @@ input {
 .alert {
     margin-bottom: 0.5rem;
 }
+
+div { 
+    white-space:nowrap; 
+} 

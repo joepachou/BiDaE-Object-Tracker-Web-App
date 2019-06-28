@@ -81,7 +81,6 @@ class NavbarContainer extends React.Component {
 
     render() {
         const NavbarStyle = {
-            height: "80px",
             boxShadow: "0 1px 6px 0 rgba(32,33,36,0.28)",
             fontWeight: '450',
         }
@@ -89,7 +88,7 @@ class NavbarContainer extends React.Component {
         const { isSignin, isShowSigninForm, isShowSignupForm } = this.state;
 
         return (
-            <Navbar className="navbar sticky-top navbar-light" style={NavbarStyle}>
+            <Navbar id='navbar' className="navbar sticky-top navbar-light" style={NavbarStyle}>
                 <Navbar.Brand className='px-0 mx-0'>
                     <Link style={{color: "black"}} to="/" className="nav-link nav-brand d-flex align-items-center px-0" >
                         <Image
@@ -101,15 +100,16 @@ class NavbarContainer extends React.Component {
                         BOT
                     </Link>
                 </Navbar.Brand>
-                {/* <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse id="basic-navbar-nav"> */}
 
                     <Nav className="mr-auto" >
                         <Nav.Item><Link to="/page/surveillance" className="nav-link nav-route" >Home</Link></Nav.Item>
-                        <Nav.Item><Link to="/page/healthReport" className="nav-link nav-route" >{locale.health_report}</Link></Nav.Item>
-                        <Nav.Item><Link to="/page/geofence" className="nav-link nav-route" >Geofence</Link></Nav.Item>
-                        <Nav.Item><Link to="/page/objectManagement" className="nav-link nav-route" >Object Management</Link></Nav.Item>
-
+                        {!Cookies.get('user') &&
+                            <>
+                                <Nav.Item><Link to="/page/healthReport" className="nav-link nav-route" >{locale.health_report}</Link></Nav.Item>
+                                <Nav.Item><Link to="/page/geofence" className="nav-link nav-route" >Geofence</Link></Nav.Item>
+                                <Nav.Item><Link to="/page/objectManagement" className="nav-link nav-route" >Object Management</Link></Nav.Item>
+                            </>
+                        }
                     </Nav>
                     <Nav>
                         <NavDropdown title={locale.language} id="collasible-nav-dropdown" alignRight onSelect={this.handleLangSelect}>

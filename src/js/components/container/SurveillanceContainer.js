@@ -148,7 +148,7 @@ class SurveillanceContainer extends React.Component {
             title: {
                 color: 'grey',
                 fontSize: 8,
-                'word-wrap': 'break-word',
+                'wordWrap': 'break-word',
             },
             // surveillanceContainer: {
             //     height: '100vh'

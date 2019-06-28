@@ -231,8 +231,8 @@ class SearchContainer extends React.Component {
         const { trackingData, searchableObjectData, transferSearchResult } = this.props
         
         return (
-            <div id='searchContainer' className="m-4" onTouchMove={this.handleTouchMove}>
-                <div id='searchBar' className='d-flex w-100 justify-content-center align-items-center pb-3'>
+            <div id='searchContainer' className="" onTouchMove={this.handleTouchMove}>
+                <div id='searchBar' className='d-flex justify-content-center align-items-center pt-4 pb-2'>
                     <Searchbar 
                         placeholder={this.state.searchKey}
                         getResultData={this.getResultData}    
@@ -241,7 +241,7 @@ class SearchContainer extends React.Component {
                 </div>
 
                 <div id='searchOption' className='pt-2'>
-                    <Row>
+                    
                         <FrequentSearch 
                             searchableObjectData={searchableObjectData}
                             getResultData={this.getResultData}  
@@ -261,7 +261,7 @@ class SearchContainer extends React.Component {
                                 clientHeight={this.state.clientHeight}
                             />
                         </Col> */}
-                    </Row>
+                    
                 </div>
 
             </div>
