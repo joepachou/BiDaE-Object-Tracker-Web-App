@@ -640,9 +640,9 @@ class Surveillance extends React.Component {
     render(){
 
         const style = {
-            map: {
-                height: '65vh'
-            }
+            // map: {
+            //     height: '65vh'
+            // }
         }
         return(
             <>      

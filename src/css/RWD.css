@@ -24,9 +24,13 @@
     /* .navbar {
         height:60px;
     } */
-    .navbar img {
+    /* .navbar img {
         width: 60px;
-    }
+    } */
+
+    #mapid {
+        height: 75vh;
+    } 
   }
 
 /* Large devices (desktops, 992px and up) */
@@ -34,6 +38,9 @@
     /* .navbar {
         height: 100px;
     } */
+    #mapid {
+        height: 55vh;
+    } 
   }
 
 /* Extra large devices (large desktops, 1200px and up) */
@@ -41,4 +48,7 @@
     /* .navbar {
         height: 80px;
     } */
+    #mapid {
+        height: 65vh;
+    } 
   }

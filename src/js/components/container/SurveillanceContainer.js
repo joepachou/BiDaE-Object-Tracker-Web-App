@@ -148,10 +148,11 @@ class SurveillanceContainer extends React.Component {
             title: {
                 color: 'grey',
                 fontSize: 8,
+                'word-wrap': 'break-word',
             },
-            surveillanceContainer: {
-                height: '100vh'
-            },
+            // surveillanceContainer: {
+            //     height: '100vh'
+            // },
             navBlock: {
                 height: '30%'
             }, 
@@ -184,13 +185,17 @@ class SurveillanceContainer extends React.Component {
 
                     <Nav className='d-flex align-items-center'>
                         <Nav.Item className='d-flex align-items-baseline'>
-                            <small style={style.title}>{locale.location_accuracy.toUpperCase()}</small>
+                            <div style={style.title}>Location Accuracy</div>
                             <ToggleSwitch adjustRssi={this.adjustRssi} leftLabel={locale.low} defaultLabel={locale.med} rightLabel={locale.high} />
+                        </Nav.Item>
+                        <ButtonToolbar>
                             <Button variant="outline-primary" className='mr-1' onClick={this.handleClickButton}>Clear</Button>
                             <Button variant="outline-primary" className='mr-1' onClick={this.handleClickButton}>Save</Button>
                             <Button variant="outline-primary" className='mr-1' onClick={this.handleClickButton} active={this.state.showDevice}>
                                 {this.state.showDevice ? 'Hide devices' : 'Show devices' }
                             </Button>
+                        </ButtonToolbar>
+                        <Nav.Item className='d-flex align-items-baseline'>
                             <div style={style.gridButton}>
                                 <GridButton
                                     searchableObjectData={this.state.searchableObjectData} 
