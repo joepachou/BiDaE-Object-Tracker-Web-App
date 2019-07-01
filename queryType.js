@@ -104,7 +104,9 @@ const query_getGatewayTable =
 
 const query_getGeofenceData = 
 	`
-	SELECT * FROM geo_fence_alert order by receive_time DESC
+	SELECT * FROM geo_fence_alert 
+	WHERE receive_time > current_timestamp - INTERVAL '7 days'
+	order by receive_time DESC 
 	`;
 	
 

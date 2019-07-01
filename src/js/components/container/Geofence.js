@@ -25,7 +25,7 @@ export default class HealthReport extends React.Component{
 
     componentDidMount(){
         this.getGeofenceData();
-        this.getGeofenceDataInterval = setInterval(this.getGeofenceData,60000)
+        this.getGeofenceDataInterval = setInterval(this.getGeofenceData,3000)
     }
 
     componentWillUnmount() {
@@ -55,15 +55,17 @@ export default class HealthReport extends React.Component{
     
     render(){
 
-        const reactTableStyle = {
-            width:'100%',
-            fontSize: '1vw',
+        const style = {
+            reactTable: {
+                width:'100%',
+                fontSize: '1em',
+            }    
         }
         return(
             <Container fluid className="py-2">
                 <Row className='d-flex w-100 justify-content-around mx-0'>
                     <Col>
-                        <ReactTable style={reactTableStyle} data={this.state.geofenceData} columns={this.state.geofenceColumn}  />
+                        <ReactTable style={style.reactTable} data={this.state.geofenceData} columns={this.state.geofenceColumn}  />
                     </Col>
                 </Row>
             </Container>
