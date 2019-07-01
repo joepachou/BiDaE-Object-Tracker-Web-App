@@ -53,8 +53,7 @@ const getLbeaconTable = (request, response) => {
         console.log('Get lbeaconTable data!')
     
         results.rows.map(item => {
-            const localLastReportTimeStamp = moment(item.last_report_timestamp).tz(process.env.TZ);
-            item.last_report_timestamp = localLastReportTimeStamp.format();
+            item.last_report_timestamp = moment(item.last_report_timestamp).tz(process.env.TZ).format();
         })
         response.status(200).json(results)
     })
@@ -64,12 +63,12 @@ const getGatewayTable = (request, response) => {
     pool.query(queryType.query_getGatewayTable, (error, results) => {        
         if (error) {
             console.log("Get data fails : " + error)                
+        } else {
+            console.log('Get gatewayTable data!')
         }
-        console.log('Get gatewayTable data!')
 
         results.rows.map(item => {
-            const localLastReportTimeStamp = moment(item.last_report_timestamp).tz(process.env.TZ);
-            item.last_report_timestamp = localLastReportTimeStamp.format();
+            item.last_report_timestamp = moment(item.last_report_timestamp).tz(process.env.TZ).format()
         })
         response.status(200).json(results)
     })
@@ -83,6 +82,10 @@ const getGeofenceData = (request, response) => {
             console.log("Get Geofence Data")
         }
 
+        results.rows.map(item => {
+            const localLastReportTimeStamp = moment(item.receive_time).tz(process.env.TZ);
+            item.receive_time = localLastReportTimeStamp.format();
+        })
         response.status(200).json(results);
         
     })
