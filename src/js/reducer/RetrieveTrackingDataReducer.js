@@ -1,9 +1,14 @@
-import { RETRIEVE_TRACKING_DATA, SHOULD_UPDATE_TRACKING_DATA } from '../action/actionType';
+import { 
+    RETRIEVE_TRACKING_DATA, 
+    SHOULD_UPDATE_TRACKING_DATA,
+    CHANGE_LOCATION_ACCURACY,
+} from '../action/actionType';
 import config from '../config';
 
 const initialState = {
     shouldTrackingDataUpdate: config.surveillanceMap.startInteval,
     objectInfo: {},
+    locationAccuracy: config.surveillanceMap.locationAccuracy.defaultVal
 }
 
 function RetrieveTrackingDataReducer (state = initialState, action) {
@@ -17,6 +22,12 @@ function RetrieveTrackingDataReducer (state = initialState, action) {
             return {
                 ...state,
                 shouldTrackingDataUpdate: action.value
+            }
+
+        case CHANGE_LOCATION_ACCURACY:
+            return {
+                ...state,
+                locationAccuracy: action.value
             }
 
         default:

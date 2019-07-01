@@ -48,7 +48,7 @@ class App extends React.Component {
     
     getTrackingData() {
         axios.post(dataSrc.trackingData, {
-            rssi: 50
+            rssi: this.props.locationAccuracy
         }).then(res => {
             this.props.retrieveTrackingData(res.data)
         })
@@ -75,6 +75,7 @@ class App extends React.Component {
 const mapStateToProps = (state) => {
     return {
         shouldTrackingDataUpdate: state.retrieveTrackingData.shouldTrackingDataUpdate,
+        locationAccuracy: state.retrieveTrackingData.locationAccuracy
     }
 }
 

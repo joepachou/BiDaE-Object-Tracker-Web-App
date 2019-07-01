@@ -10,7 +10,10 @@ import ConfirmForm from './ConfirmForm'
 import axios from 'axios';
 import dataSrc from '../../dataSrc';
 import { connect } from 'react-redux'
-import { shouldUpdateTrackingData } from '../../action/action'
+import { 
+    shouldUpdateTrackingData,
+    changeLocationAccuracy
+} from '../../action/action'
 import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom";
 import GridButton from '../container/GridButton';
 
@@ -40,6 +43,7 @@ class SurveillanceContainer extends React.Component {
 
 
     adjustRssi(adjustedRssi) {
+        this.props.changeLocationAccuracy(adjustedRssi)
         this.setState({
             rssi: adjustedRssi,
         })
@@ -129,6 +133,9 @@ class SurveillanceContainer extends React.Component {
         })
     }
 
+    capitalFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.substring(1)
+    }
     
     render(){
         const { rssi, 
@@ -148,7 +155,7 @@ class SurveillanceContainer extends React.Component {
             title: {
                 color: 'grey',
                 fontSize: 8,
-                'wordWrap': 'break-word',
+                wordWrap: 'break-word',
             },
             // surveillanceContainer: {
             //     height: '100vh'
@@ -184,17 +191,37 @@ class SurveillanceContainer extends React.Component {
                 <div style={style.navBlock}>
 
                     <Nav className='d-flex align-items-center'>
-                        <Nav.Item className='d-flex align-items-baseline'>
-                            <div style={style.title}>Location Accuracy</div>
-                            <ToggleSwitch adjustRssi={this.adjustRssi} leftLabel={locale.low} defaultLabel={locale.med} rightLabel={locale.high} />
+                        <Nav.Item>
+                            <div style={style.title}>Location</div>
+                            <div style={style.title}>Accuracy</div>
                         </Nav.Item>
-                        <ButtonToolbar>
+                        <Nav.Item className='pt-2'  >
+                            <ToggleSwitch 
+                                adjustRssi={this.adjustRssi} 
+                                leftLabel={this.capitalFirstLetter(locale.low)} 
+                                defaultLabel={this.capitalFirstLetter(locale.med)} 
+                                rightLabel={this.capitalFirstLetter(locale.high)} 
+                            />
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Button variant="outline-primary" className='mr-1 ml-2' onClick={this.handleClickButton}>Clear</Button>
+                        </Nav.Item>
+                        <Nav.Item >
+                            <Button variant="outline-primary" className='mr-1' onClick={this.handleClickButton}>Save</Button>
+
+                        </Nav.Item>
+                        <Nav.Item >
+                            <Button variant="outline-primary" className='mr-1' onClick={this.handleClickButton} active={this.state.showDevice}>
+                                {this.state.showDevice ? 'Hide devices' : 'Show devices' }
+                            </Button>
+                        </Nav.Item>
+                        {/* <ButtonToolbar>
                             <Button variant="outline-primary" className='mr-1' onClick={this.handleClickButton}>Clear</Button>
                             <Button variant="outline-primary" className='mr-1' onClick={this.handleClickButton}>Save</Button>
                             <Button variant="outline-primary" className='mr-1' onClick={this.handleClickButton} active={this.state.showDevice}>
                                 {this.state.showDevice ? 'Hide devices' : 'Show devices' }
                             </Button>
-                        </ButtonToolbar>
+                        </ButtonToolbar> */}
                         <div style={style.gridButton}>
                             <GridButton
                                 searchableObjectData={this.state.searchableObjectData} 
@@ -229,7 +256,8 @@ SurveillanceContainer.contextType = LocaleContext;
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        shouldUpdateTrackingData: value => dispatch(shouldUpdateTrackingData(value))
+        shouldUpdateTrackingData: value => dispatch(shouldUpdateTrackingData(value)),
+        changeLocationAccuracy: value => dispatch(changeLocationAccuracy(value))
     }
 }
 

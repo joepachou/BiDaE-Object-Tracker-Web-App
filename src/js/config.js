@@ -1,4 +1,4 @@
-import map from '../img/IIS_Newbuilding_4F.png';
+import map from '../img/IIS_Newbuilding_4F_reBack.png';
 
 import black_pin from '../img/black_pin_v2.svg'
 import darkGrey_pin from '../img/darkGrey_pin_v2.svg';
@@ -20,7 +20,7 @@ const config = {
         mapOptions: {
             crs: L.CRS.Simple,
             minZoom: -5,
-            maxZoom: -4,
+            maxZoom: 0,
             zoomDelta: 0.25,
             zoomSnap: 0,
             zoomControl: true,
@@ -63,9 +63,9 @@ const config = {
         
         /* Tracking object Rssi filter */
         locationAccuracy: {
-            defaultVal: -55,
-            lowVal: -60,
-            highVal: -30,
+            defaultVal: -65,
+            lowVal: -100,
+            highVal: -10,
         },
 
         objectTypeSet: new Set(['Bed', 'EKG Machine', 'Infusion pump', 'SONOSITE Ultrasound', 'Ultrasound'])
@@ -73,9 +73,9 @@ const config = {
     },
 
     transferredLocation: [
-        "Yunlin_Christian_Hospital",
-        "NTU_Hospital_Yunlin",
-        "NTU_Hospital_Taipei",
+        "Yunlin Christian Hospital",
+        "NTU Hospital Yunlin",
+        "NTU Hospital Taipei",
     ],
     
     locale: {

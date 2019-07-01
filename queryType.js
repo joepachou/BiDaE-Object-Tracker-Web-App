@@ -1,6 +1,6 @@
 
 function query_getTrackingData (rssi = -55) {
-	return `
+	const text = `
 	SELECT table_location.object_mac_address, 
 		   table_device.name, 
 		   table_device.type,
@@ -30,7 +30,7 @@ function query_getTrackingData (rssi = -55) {
 		        WHERE final_timestamp >= NOW() - INTERVAL '15 seconds'  
 		        AND final_timestamp >= NOW() - (server_time_offset||' seconds')::INTERVAL - INTERVAL '5 seconds'
                 GROUP BY object_mac_address, lbeacon_uuid
-				HAVING avg(rssi) > -65
+				HAVING avg(rssi) > $1
             ) as table_track_data	    
 		     
 		    LEFT JOIN
@@ -79,6 +79,15 @@ function query_getTrackingData (rssi = -55) {
 		ORDER BY table_device.type ASC, object_mac_address ASC;
     
 	`;
+
+	const values = [rssi]
+
+	const query = {
+		text,
+		values
+	}
+
+	 return query
 }
 
 
@@ -103,10 +112,15 @@ const query_getGatewayTable =
 	// select * from gateway_table ORDER BY last_report_timestamp DESC`;
 
 const query_getGeofenceData = 
+	// `
+	// SELECT * FROM geo_fence_alert 
+	// WHERE receive_time > current_timestamp - INTERVAL '7 days'
+	// order by receive_time DESC 
+	// `;
 	`
 	SELECT * FROM geo_fence_alert 
-	WHERE receive_time > current_timestamp - INTERVAL '7 days'
-	order by receive_time DESC 
+	ORDER BY receive_time DESC 
+	LIMIT 5
 	`;
 	
 

@@ -2,7 +2,8 @@ import {
     IS_OBJECT_LIST_SHOWN, 
     SELECT_OBJECT_LIST,
     RETRIEVE_TRACKING_DATA,
-    SHOULD_UPDATE_TRACKING_DATA
+    SHOULD_UPDATE_TRACKING_DATA,
+    CHANGE_LOCATION_ACCURACY
 } from './actionType';
 
 /** Action Creator for Sidebar */
@@ -32,5 +33,12 @@ export const shouldUpdateTrackingData = (boolean) => {
     return {
         type: SHOULD_UPDATE_TRACKING_DATA,
         value: boolean 
+    }
+}
+
+export const changeLocationAccuracy = (value) => {
+    return {
+        type: CHANGE_LOCATION_ACCURACY,
+        value: value
     }
 }

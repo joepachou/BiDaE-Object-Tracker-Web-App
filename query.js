@@ -16,14 +16,12 @@ const pool = new pg.Pool(config)
 
 const getTrackingData = (request, response) => {
     const modifiedRssi = request.body.rssi || undefined;
-    // console.log(modifiedRssi)
     pool.query(queryType.query_getTrackingData(modifiedRssi), (error, results) => {        
         if (error) {
             console.log("Get trackingData fails : " + error)
         } else {
             console.log('Get tracking data!')
         }
-
 
         response.status(200).json(results)
     })
