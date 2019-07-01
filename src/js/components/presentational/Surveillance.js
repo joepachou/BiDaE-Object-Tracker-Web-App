@@ -344,7 +344,6 @@ class Surveillance extends React.Component {
         const objects = this.state.objectInfo;
 
         /** Process the search object data */
-        let searchedObjectDataColorMap = new Map();
         var searchedObjectDataMap= new Map();
         if (hasSearchKey) {
             searchResult.map( item => {
@@ -508,10 +507,11 @@ class Surveillance extends React.Component {
             } else if (objects[key].searched) {
                 config.surveillanceMap.iconOptions.showNumber 
                 ? 
-                iconOption = {
-                    ...searchedObjectAweIconOptions,
-                    number: ++counter, 
-                } : null;                
+                    iconOption = {
+                        ...searchedObjectAweIconOptions,
+                        number: ++counter, 
+                    } 
+                : iconOption = searchedObjectAweIconOptions    
             } else if (objects[key].moving_status === 'stationary') {
                 iconOption = stationaryAweIconOptions;
             } else {
