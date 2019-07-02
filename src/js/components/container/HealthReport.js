@@ -5,6 +5,7 @@ import React from 'react';
 import { Row, Col, Container, Tabs, Tab } from 'react-bootstrap';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
+import test from '../../../img/colorPin/Tan.svg'
 
 
 import axios from 'axios';
@@ -30,10 +31,10 @@ class HealthReport extends React.Component{
     }
 
     componentDidMount(){
-        this.getGatewayData();
         this.getLbeaconData();
+        this.getGatewayData();
         this.getGatewayDataInterval = setInterval(this.getGatewayData,60000)
-        this.getLbeaconDataInterval = setInterval(this.getLbeaconData,60000)
+        this.getLbeaconDataInterval = setInterval(this.getLbeaconData,1000)
     }
 
     componentWillUnmount() {
@@ -46,7 +47,11 @@ class HealthReport extends React.Component{
             let column = [];
             res.data.fields.map(item => {
                 let field = {};
-                field.Header = item.name,
+                field.Header = item.name.replace(/_/g, ' ')
+                    .toLowerCase()
+                    .split(' ')
+                    .map( s => s.charAt(0).toUpperCase() + s.substring(1))
+                    .join(' '),                
                 field.accessor = item.name,
                 column.push(field);
             })
@@ -65,7 +70,12 @@ class HealthReport extends React.Component{
             let column = [];
             res.data.fields.map(item => {
                 let field = {};
-                field.Header = item.name,
+
+                field.Header = item.name.replace(/_/g, ' ')
+                    .toLowerCase()
+                    .split(' ')
+                    .map( s => s.charAt(0).toUpperCase() + s.substring(1))
+                    .join(' '),
                 field.accessor = item.name,
                 column.push(field);
                 
@@ -96,7 +106,11 @@ class HealthReport extends React.Component{
 
         raw.map(item => {
             let field = {};
-            field.Header = item.name,
+            field.Header = item.name.replace(/_/g, ' ')
+                .toLowerCase()
+                .split(' ')
+                .map( s => s.charAt(0).toUpperCase() + s.substring(1))
+                .join(' '),
             field.accessor = item.name,
             column.push(field);
         })
@@ -114,13 +128,13 @@ class HealthReport extends React.Component{
             reactTable: {
                 width:'100%',
                 fontSize: '1em',
-            }    
+            },
         }
 
         const { trackingData, trackingColunm } = this.state;
 
         return(
-            <Container className='py-2'fluid >
+            <Container className='py-4'fluid >
                 <Tabs defaultActiveKey="lbeacon_table" transition={false} id="noanim-tab-example">
                     <Tab eventKey="lbeacon_table" title="LBeacon">
                         <ReactTable 
@@ -128,6 +142,10 @@ class HealthReport extends React.Component{
                             data={this.state.lbeaconData} 
                             columns={this.state.lbeaconColumn}
                             showPagination = {false}
+
+                            defaultPageSize={10}
+
+                            
                         />
                     </Tab>
                     <Tab eventKey="gateway_table" title="Gateway">
@@ -136,6 +154,10 @@ class HealthReport extends React.Component{
                             data={this.state.gatewayData} 
                             columns={this.state.gatewayColunm}
                             showPagination = {false}
+                            resizable={true}
+                            freezeWhenExpanded={false}
+
+
                         />
                     </Tab>
                     <Tab eventKey="tracking_table" title="Track">
@@ -146,7 +168,8 @@ class HealthReport extends React.Component{
                             columns={trackingColunm} 
                             pageSizeOptions={[5, 10]}
                             showPagination = {false}
-
+                            resizable={true}
+                            freezeWhenExpanded={false}
                         />
                     </Tab>
                 </Tabs>

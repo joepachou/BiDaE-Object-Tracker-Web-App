@@ -25,7 +25,7 @@ export default class HealthReport extends React.Component{
 
     componentDidMount(){
         this.getGeofenceData();
-        this.getGeofenceDataInterval = setInterval(this.getGeofenceData,3000)
+        this.getGeofenceDataInterval = setInterval(this.getGeofenceData,10000)
     }
 
     componentWillUnmount() {
@@ -37,7 +37,11 @@ export default class HealthReport extends React.Component{
             let column = [];
             res.data.fields.map(item => {
                 let field = {};
-                field.Header = item.name,
+                field.Header = item.name.replace(/_/g, ' ')
+                    .toLowerCase()
+                    .split(' ')
+                    .map( s => s.charAt(0).toUpperCase() + s.substring(1))
+                    .join(' '),                
                 field.accessor = item.name,
                 column.push(field);
                 
@@ -64,8 +68,13 @@ export default class HealthReport extends React.Component{
         return(
             <Container fluid className="py-2">
                 <Row className='d-flex w-100 justify-content-around mx-0'>
-                    <Col>
-                        <ReactTable style={style.reactTable} data={this.state.geofenceData} columns={this.state.geofenceColumn}  />
+                    <Col className='py-2'>
+                        <ReactTable 
+                            style={style.reactTable} 
+                            data={this.state.geofenceData} 
+                            columns={this.state.geofenceColumn}
+
+                            />
                     </Col>
                 </Row>
             </Container>

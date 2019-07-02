@@ -38,7 +38,11 @@ export default class ObjectManagement extends React.Component{
             let column = [];
             res.data.fields.map(item => {
                 let field = {};
-                field.Header = item.name,
+                field.Header = item.name.replace(/_/g, ' ')
+                    .toLowerCase()
+                    .split(' ')
+                    .map( s => s.charAt(0).toUpperCase() + s.substring(1))
+                    .join(' '),                
                 field.accessor = item.name,
                 column.push(field);
             })
