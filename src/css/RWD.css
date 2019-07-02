@@ -25,16 +25,20 @@
 
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) and (max-width: 767.98px) { 
+    html, body {
+        font-size: 12px;
+    }
 
     #mapid {
         height: 45vh;
     } 
+
  }
 
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) and (max-width: 991.98px) {
     html, body {
-        /* font-size: 18px; */
+        font-size: 14px;
     }
 
     #navbar {
@@ -55,10 +59,19 @@
     #searchbar {
         min-width: 200;
     }
+    .gridbutton_wrapper {
+        display: grid;
+        grid-template-columns: 100px 100px 100px;
+      }
+      * {box-sizing: border-box;}
+
   }
 
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) and (max-width: 1199.98px) {
+    html, body {
+        font-size: 16px;
+    }
     #navbar {
         height: 55px;
         font-size: 14px;
@@ -67,16 +80,30 @@
     #mapid {
         height: 50vh;
     } 
-  }
+
+    .nav {
+        font-size: 8px;
+    }
+    .gridbutton_wrapper {
+        display: grid;
+        grid-template-columns: 150px 150px 150px;
+      }
+      * {box-sizing: border-box;}
+}
 
 /* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
+
     #navbar {
         height: 80px;
     }
     #mapid {
         height: 65vh;
     } 
+    .gridbutton_wrapper {
+        display: grid;
+        grid-template-columns: 220px 220px 220px;
+      }
+      * {box-sizing: border-box;}
 
-
-  }
+}

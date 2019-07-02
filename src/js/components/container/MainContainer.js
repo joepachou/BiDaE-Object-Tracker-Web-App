@@ -109,6 +109,10 @@ export default class ContentContainer extends React.Component{
             },
             alertText: {
                 fontWeight: '700'
+            },
+            alertTextTitle: {
+                fontWeight: 1000,
+                color: 'rgba(101, 111, 121, 0.78)'
             }
 
         }
@@ -118,29 +122,41 @@ export default class ContentContainer extends React.Component{
             <div id="page-wrap" className='' >
                 <Row id="mainContainer" className='d-flex w-100 justify-content-around mx-0 overflow-hidden' style={style.container}>
                     <Hidden xs>
-                        <Col sm={8} md={8} lg={9} xl={9} >
+                        <Col sm={7} md={8} lg={8} xl={9} >
                                 <br/>
                                 <div>
                                     {this.state.searchResult.length === 0
                                         ? this.state.hasSearchKey 
                                             ?
-                                                <Alert variant='secondary' className='d-flex justify-content-center'>
+                                                <Alert variant='secondary' className='d-flex justify-content-start'>
+                                                    <div style={style.alertTextTitle}>{'Found '}</div>
+                                                    &nbsp;
+                                                    &nbsp;
+
                                                     <div style={style.alertText}>{this.state.searchResult.length}</div>
                                                     &nbsp;
                                                     <div style={style.alertText}>{this.state.searchKey}</div>
                                                     &nbsp;
-                                                    <div>{'found'}</div>
                                                 </Alert>
                                             :    
-                                                <Alert variant='secondary' className='d-flex justify-content-center'>
+                                                <Alert variant='secondary' className='d-flex justify-content-start'>
+                                                    <div style={style.alertTextTitle}>{'Found '}</div>
+                                                    &nbsp;
+                                                    &nbsp;
+
                                                     <div style={style.alertText}>{Object.keys(this.state.searchableObjectData).length}</div>
                                                     &nbsp;
-                                                    <div>{'devices found'}</div>
+                                                    <div style={style.alertText}>{'devices'}</div>
                                                 </Alert>
                                         : 
-                                            <Alert variant='secondary' className='d-flex justify-content-center'>
+                                            <Alert variant='secondary' className='d-flex justify-content-start'>
+                                                <div style={style.alertTextTitle}>{'Found '}</div>
+
                                                 {Object.keys(this.state.searchResultObjectTypeMap).map((item) => {
                                                     return  <>
+                                                                &nbsp;
+                                                                &nbsp;
+
                                                                 <div style={style.alertText}>
                                                                     {this.state.searchResultObjectTypeMap[item]}
                                                                 </div>
@@ -149,7 +165,6 @@ export default class ContentContainer extends React.Component{
                                                                     {item}
                                                                 </div>
                                                                 &nbsp;
-                                                                <div>{'found'}</div>
                                                                 &nbsp;
                                                                 &nbsp;
                                                                 &nbsp;
@@ -172,7 +187,7 @@ export default class ContentContainer extends React.Component{
                                 />
                         </Col>
                     </Hidden>
-                    <Col xs={12} sm={4} md={4} lg={3} xl={3} className="w-100 px-4">
+                    <Col xs={12} sm={5} md={4} lg={4} xl={3} className="w-100 px-4">
                         <SearchContainer 
                             searchableObjectData={this.state.searchableObjectData} 
                             transferSearchResult={this.transferSearchResult}

@@ -121,4 +121,6 @@ input {
 
 .alert {
     margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+    box-shadow: 2px 5px 4px 0 #cbcbcb
 }

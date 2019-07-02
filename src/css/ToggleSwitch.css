@@ -1,8 +1,7 @@
 /* ToggleSwitch customized CSS */
  
 .switch-field {
-    font-family: "Lucida Grande", Tahoma, Verdana, sans-serif;
-    padding: 20px;
+    padding: 10px 10px 10px 5px;
     overflow: hidden;
 }
 
@@ -25,7 +24,6 @@
     width: 50px;
     background-color: #e4e4e4;
     color: rgba(0, 0, 0, 0.6);
-    font-size: 14px;
     font-weight: normal;
     text-align: center;
     text-shadow: none;
