@@ -124,3 +124,8 @@ input {
     font-size: 1.2rem;
     box-shadow: 2px 5px 4px 0 #cbcbcb
 }
+
+/* React-table */
+.ReactTable .rt-thead .rt-tr {
+    font-weight: 500;
+}

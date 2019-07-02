@@ -53,6 +53,9 @@ class HealthReport extends React.Component{
                     .map( s => s.charAt(0).toUpperCase() + s.substring(1))
                     .join(' '),                
                 field.accessor = item.name,
+                field.headerStyle={
+                    textAlign: 'left',
+                }
                 column.push(field);
             })
             this.setState({
@@ -77,6 +80,9 @@ class HealthReport extends React.Component{
                     .map( s => s.charAt(0).toUpperCase() + s.substring(1))
                     .join(' '),
                 field.accessor = item.name,
+                field.headerStyle={
+                    textAlign: 'left',
+                }
                 column.push(field);
                 
             })
@@ -112,6 +118,9 @@ class HealthReport extends React.Component{
                 .map( s => s.charAt(0).toUpperCase() + s.substring(1))
                 .join(' '),
             field.accessor = item.name,
+            field.headerStyle={
+                textAlign: 'left',
+            }
             column.push(field);
         })
 
