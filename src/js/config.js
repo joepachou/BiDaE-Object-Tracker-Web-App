@@ -11,6 +11,7 @@ import BOT_LOGO from '../img/BOT_LOGO_RED_MOD.png';
 
 const config = {
 
+
     surveillanceMap: {
 
         /* Surveillance map source*/
@@ -85,6 +86,8 @@ const config = {
     image: {
         logo: BOT_LOGO,
     },
+
+    companyName: 'BeDITech',
 
     systemAdmin: {
         openGlobalStateMonitor: !true

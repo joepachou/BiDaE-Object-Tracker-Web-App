@@ -97,12 +97,12 @@ class NavbarContainer extends React.Component {
                             width={50}
                             className="d-inline-block align-top px-1"
                         />
-                        BOT
+                        {config.companyName}
                     </Link>
                 </Navbar.Brand>
 
                     <Nav className="mr-auto" >
-                        <Nav.Item><Link to="/page/surveillance" className="nav-link nav-route" >Home</Link></Nav.Item>
+                        <Nav.Item><Link to="/" className="nav-link nav-route" >Home</Link></Nav.Item>
                         {!Cookies.get('user') &&
                             <>
                                 <Nav.Item><Link to="/page/healthReport" className="nav-link nav-route" >{locale.health_report}</Link></Nav.Item>
