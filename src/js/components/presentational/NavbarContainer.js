@@ -124,7 +124,7 @@ class NavbarContainer extends React.Component {
                         </NavDropdown>          
                         {Cookies.get('user')
                             ? <NavDropdown title={<i className="fas fa-user-alt"></i> }id="collasible-nav-dropdown" alignRight>
-                                <NavDropdown.Item className="lang-select">{Cookies.get('user')}</NavDropdown.Item>
+                                <NavDropdown.Item className="lang-select" disabled>{Cookies.get('user')}</NavDropdown.Item>
                                 <Dropdown.Divider />
                                 <NavDropdown.Item className="lang-select" onClick={this.handleSignout}>Sign out</NavDropdown.Item>
                             </NavDropdown> 

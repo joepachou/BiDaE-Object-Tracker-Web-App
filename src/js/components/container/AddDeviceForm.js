@@ -67,7 +67,6 @@ class AddDeviceForm extends React.Component {
     }
 
     getData() {
-        console.log(this.props.searchableObjectData ? Object.values(this.props.searchableObjectData) : null)
 
         Axios.get(dataSrc.objectTable).then( res => {
             let columns = this.getColumns(res.data.fields)
@@ -85,7 +84,6 @@ class AddDeviceForm extends React.Component {
         field.filter( item => {
             return item.name === 'name' || item.name === 'access_control_number' || item.name === 'location_description'
         }).map(item => {
-            console.log(this.props.searchableObjectData ? Object.values(this.props.searchableObjectData) : null)
 
             let field = {};
             field.Header = item.name.replace(/_/g, ' ')
@@ -162,7 +160,6 @@ class AddDeviceForm extends React.Component {
                 }
             });
         }
-        console.log(selection)
         this.setState({ selectAll, selection });
     };
     

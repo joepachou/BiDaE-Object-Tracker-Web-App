@@ -13,6 +13,7 @@ class FrequentSearch extends React.Component {
         super()
         this.state = {
             hasGetUserInfo: false,
+            searchkey: '',
         }
 
         this.handleClick = this.handleClick.bind(this);
@@ -21,6 +22,7 @@ class FrequentSearch extends React.Component {
 
     handleClick(e) {
         const itemName = e.target.innerText.toLowerCase();
+        console.log(itemName)
         switch(itemName) {
             case 'my device':
                 if (!this.state.hasGetUserInfo && Cookies.get('user')) {
@@ -49,7 +51,10 @@ class FrequentSearch extends React.Component {
             default:
                 this.props.getResultData(itemName)
                 break;
-        }     
+        }
+        this.setState({
+            searchkey: itemName
+        })
     }
 
     render() {
@@ -63,18 +68,38 @@ class FrequentSearch extends React.Component {
 
         return (
             <>
-                {/* <h6 className="font-weight-bold">Frequent Search</h6> */}
                 <Row className='d-flex justify-content-center' style={style.titleText}>
                     <h5>Frequent Search</h5>
                 </Row>
                 <ListGroup>
                     {Cookies.get('searchHistory') && JSON.parse(Cookies.get('searchHistory')).map( (item, index) => {
-                        return <ListGroup.Item onClick={this.handleClick} action key={index}>{item.name}</ListGroup.Item>
+                        return (
+                            <ListGroup.Item 
+                                onClick={this.handleClick} 
+                                action 
+                                active={this.state.searchkey === item.name.toLowerCase()} 
+                                key={index}
+                            >
+                                {item.name}
+                            </ListGroup.Item>
+                        )
                     })}
-                    {Cookies.get('user') && <ListGroup.Item onClick={this.handleClick} action>My Device</ListGroup.Item>}
-                    <ListGroup.Item onClick={this.handleClick} action>All Device</ListGroup.Item>
+                    {Cookies.get('user') && 
+                        <ListGroup.Item 
+                            onClick={this.handleClick} 
+                            action
+                            active={this.state.searchkey === 'my device'}
+                        >
+                            My Device
+                        </ListGroup.Item>}
+                    <ListGroup.Item 
+                        onClick={this.handleClick} 
+                        action
+                        active={this.state.searchkey === 'all device'}
+                    >
+                        All Device
+                    </ListGroup.Item>
                 </ListGroup>
-        
             </>
         )
     }

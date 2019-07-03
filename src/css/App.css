@@ -34,8 +34,17 @@ html,body {
     /* border-color:transparent; */
 }
 
+.list-group-item-action:hover {
+    font-weight: 700
+}
+
+.list-group-item.action {
+    font-weight: 700
+}
+
+
 .list-group-item.active {
-    /* border-color:transparent; */
+    font-weight: 700
 }
 
 .list-group-item.action {
