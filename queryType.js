@@ -120,7 +120,7 @@ const query_getGeofenceData =
 	`
 	SELECT * FROM geo_fence_alert 
 	ORDER BY receive_time DESC 
-	LIMIT 5
+	LIMIT 50
 	`;
 	
 
