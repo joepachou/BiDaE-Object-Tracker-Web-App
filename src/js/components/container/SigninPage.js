@@ -28,6 +28,7 @@ class SigninPage extends React.Component {
     }
 
     handleClose() {
+        this.props.handleSignFormClose()
         this.setState({
             show: false
         })

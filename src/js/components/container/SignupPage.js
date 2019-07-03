@@ -26,6 +26,7 @@ class SignupPage extends React.Component {
     }
 
     handleClose() {
+        this.props.handleSignFormClose()
         this.setState({
             show: false
         })

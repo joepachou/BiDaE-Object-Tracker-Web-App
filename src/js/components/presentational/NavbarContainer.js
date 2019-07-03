@@ -25,6 +25,7 @@ class NavbarContainer extends React.Component {
         this.handleSignout = this.handleSignout.bind(this);
         this.handleSignupFormShowUp = this.handleSignupFormShowUp.bind(this);
         this.handleSignupFormSubmit = this.handleSignupFormSubmit.bind(this);
+        this.handleSignFormClose = this.handleSignFormClose.bind(this)
 
     }
 
@@ -61,7 +62,6 @@ class NavbarContainer extends React.Component {
     }
 
     handleSignupFormSubmit() {
-        console.log('signupformcomplete')
         this.setState({
             isShowSignupForm: false,
         })
@@ -75,9 +75,12 @@ class NavbarContainer extends React.Component {
         })
     }
 
-    
-
-    
+    handleSignFormClose() {
+        this.setState({
+            isShowSigninForm: false,
+            isShowSignupForm: false,
+        })
+    }
 
     render() {
         const style = {
@@ -136,10 +139,12 @@ class NavbarContainer extends React.Component {
                     show={isShowSigninForm}
                     handleSigninFormSubmit={this.handleSigninFormSubmit}
                     handleSignupFormShowUp={this.handleSignupFormShowUp}
+                    handleSignFormClose={this.handleSignFormClose}
                 />
                 <SignupPage 
                     show={isShowSignupForm}
                     handleSignupFormSubmit={this.handleSignupFormSubmit}
+                    handleSignFormClose={this.handleSignFormClose}
                 />
             </Navbar>
         );
