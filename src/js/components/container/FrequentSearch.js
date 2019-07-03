@@ -55,7 +55,7 @@ class FrequentSearch extends React.Component {
     render() {
         const style = {
             titleText: {
-                color: 'rgb(80, 80, 80, 0.9)'
+                color: 'rgb(80, 80, 80, 1)'
             }, 
         }
 
@@ -64,7 +64,7 @@ class FrequentSearch extends React.Component {
         return (
             <>
                 {/* <h6 className="font-weight-bold">Frequent Search</h6> */}
-                <Row className='text-left' style={style.titleText}>
+                <Row className='d-flex justify-content-center' style={style.titleText}>
                     <h5>Frequent Search</h5>
                 </Row>
                 <ListGroup>

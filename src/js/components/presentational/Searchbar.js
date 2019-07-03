@@ -32,7 +32,8 @@ class Searchbar extends React.Component {
                 border: "2px solid rgba(227, 222, 222, 0.447)",
                 borderRadius : '25px',
                 fontSize: '16px',
-                minWidth: 280
+                minWidth: 280,
+                width:300,
             }
         }
 
@@ -41,10 +42,10 @@ class Searchbar extends React.Component {
         const locale = this.context;
 
         return (            
-            <Form id='searchbar' className="form-inline d-flex justify-content-between w-75" style={style.form}>
+            <Form className="form-inline d-flex justify-content-between w-75" style={style.form}>
                 <div className="form-group mx-3">
                     <label htmlFor="inputPassword2" className="sr-only">{locale.search.toUpperCase()}</label>
-                    <input id='test' type="text" className="form-control-sm border-0" value={value} onChange={this.handleChange}/>
+                    <input type="text" className="form-control-sm border-0" value={value} onChange={this.handleChange}/>
                 </div>
                 <button type="submit" className="btn btn-link btn-sm text-uppercase" onClick={this.handleSubmit}><img src={searchIcon} width="30px" /></button>
             </Form>

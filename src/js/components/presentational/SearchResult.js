@@ -148,6 +148,7 @@ class SearchResult extends React.Component {
             noResultDiv: {
                 color: 'grey',
                 fontSize: 30,
+                fontWeight: 300
             },
             firstText: {
                 paddingLeft: 15,
@@ -174,16 +175,16 @@ class SearchResult extends React.Component {
 
         return(
             <>
-                <Row className='text-left' style={style.titleText}>
+                <Row className='d-flex justify-content-center' style={style.titleText}>
                     <h5>Search Result</h5>
                 </Row>
                 <Row className=''style={{height:'100%'}} >
                     {this.state.foundResult.length === 0 
-                    ?   <Col className='text-left' style={style.noResultDiv}>
-                            <em>no searchResult</em>
+                    ?   <Col className='d-flex justify-content-center font-italic font-weight-lighter' style={style.noResultDiv}>
+                            <div>No Result</div>
                         </Col> 
                     
-                    :   <Col className='px-0 overflow-auto'>
+                    :   <Col className='overflow-auto'>
                             <ListGroup onSelect={this.handleChangeObjectStatusForm}>
                                 {searchResult.filter(item => item.status.toLowerCase() === 'normal').map((item,index) => {
                                     let element = 
@@ -204,7 +205,7 @@ class SearchResult extends React.Component {
                 {this.state.notFoundResult.length !== 0 
                 ? 
                     <>
-                        <Row className='text-left mt-3' style={style.titleText}>
+                        <Row className='d-flex justify-content-center mt-3' style={style.titleText}>
                             <h5><a href="" onClick={this.handleToggleNotFound}>Show {this.state.notFoundResult.length} Devices Not Found </a></h5>
                         </Row>
                         {/* <Row className='text-left mt-3' style={style.titleText}>

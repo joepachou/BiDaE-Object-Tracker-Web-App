@@ -87,7 +87,7 @@ const config = {
         logo: BOT_LOGO,
     },
 
-    companyName: 'BeDITech',
+    companyName: 'BeDI Tech',
 
     systemAdmin: {
         openGlobalStateMonitor: !true
