@@ -284,7 +284,7 @@ class ChangeStatusForm extends React.Component {
 
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="secondary" onClick={this.handleClose}>
+                        <Button variant="outline-secondary" onClick={this.handleClose}>
                             Cancel
                         </Button>
                         <Button variant="primary" onClick={this.handleSubmit}>

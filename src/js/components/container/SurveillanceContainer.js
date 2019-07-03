@@ -68,6 +68,7 @@ class SurveillanceContainer extends React.Component {
 
     handleChangeObjectStatusFormSubmit(postOption) {
         this.setState({
+            formOption: postOption,
             selectedObjectData: {
                 ...this.state.selectedObjectData,
                 ...postOption,
@@ -78,7 +79,6 @@ class SurveillanceContainer extends React.Component {
             function() {
                 this.setState({
                     showConfirmForm: true,
-                    formOption: postOption,
                 })
                 this.props.shouldUpdateTrackingData(false)
             }.bind(this),
@@ -247,6 +247,7 @@ class SurveillanceContainer extends React.Component {
                     selectedObjectData={formOption} 
                     handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose} 
                     handleConfirmFormSubmit={this.handleConfirmFormSubmit}
+                    searchableObjectData={this.state.searchableObjectData}
                 />
             </div>
         )

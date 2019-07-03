@@ -1,12 +1,12 @@
 import React from 'react';
-import { Modal, Button, Form, Row, Col, Image} from 'react-bootstrap'
+import { Modal, Button, Form, Row, Col, Image, ButtonToolbar} from 'react-bootstrap'
 import Select from 'react-select';
 import config from '../../config';
 import LocaleContext from '../../context/LocaleContext';
-import axios from 'axios';
-import dataSrc from '../../dataSrc';
 import moment from 'moment';
 import tempImg from '../../../img/doppler.jpg'
+import ChangeStatusForm from './ChangeStatusForm';
+import AddDeviceForm from './AddDeviceForm'
 
 const transferredLocations = config.transferredLocation;
 
@@ -25,20 +25,26 @@ class ConfirmForm extends React.Component {
         this.state = {
             show: this.props.show,
             isShowForm: false,
+            showAddDeviceForm: false,
             formOption: {
                 name: '',
                 type: '',
                 status: '', 
                 transferredLocation: null,
-            }
+            },
+            showNotesControl: false,
+            notesText:'',
+            addedDevices: []
         };
 
 
         this.handleShow = this.handleShow.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleCheck = this.handleCheck.bind(this);
-        this.handleSelect = this.handleSelect.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleClick = this.handleClick.bind(this);
+        this.addedDevice = this.addedDevice.bind(this);
+        this.handleAddDeviceFormClose = this.handleAddDeviceFormClose.bind(this)
     }
   
     handleClose(e) {
@@ -46,7 +52,8 @@ class ConfirmForm extends React.Component {
             this.props.handleChangeObjectStatusFormClose();
         }
         this.setState({ 
-            show: false 
+            show: false ,
+            addedDevices: []
         });
     }
   
@@ -58,18 +65,17 @@ class ConfirmForm extends React.Component {
 
 
     componentDidUpdate(prevProps) {
-        const { selectedObjectData } = this.props
         if (prevProps != this.props) {
             this.setState({
                 show: this.props.show,
                 isShowForm: true,
                 formOption: {
-                    name: selectedObjectData.name,
-                    type: selectedObjectData.type,
-                    status: selectedObjectData.status,
-                    transferredLocation: selectedObjectData.transferred_location ? {
-                        'value' : selectedObjectData.transferred_location,
-                        'label' : selectedObjectData.transferred_location
+                    name: this.props.selectedObjectData.name,
+                    type: this.props.selectedObjectData.type,
+                    status: this.props.selectedObjectData.status,
+                    transferredLocation: this.props.selectedObjectData.transferred_location ? {
+                        'value' : this.props.selectedObjectData.transferred_location,
+                        'label' : this.props.selectedObjectData.transferred_location
                     } : null,
                 }
             })
@@ -80,21 +86,45 @@ class ConfirmForm extends React.Component {
         this.props.handleConfirmFormSubmit(e)
     }
 
-    handleCheck(e) {
+    handleChange(e) {
+        const { name }  = e.target
         this.setState({
-            formOption: {
-                ...this.state.formOption,
-                status: e.target.value,
-            }
+            [name]: e.target.value
         })
     }
 
-    handleSelect(selectedOption) {
+    handleClick(e) {
+        const item = e.target.innerText;
+        switch(item.toLowerCase()) {
+            case 'add device':
+                this.setState({
+                    showAddDeviceForm: true
+                })
+                break;
+            case 'remove device':
+                console.log(item)
+                break;
+            case 'add notes':
+            case 'hide notes':
+                this.setState({
+                    showNotesControl: !this.state.showNotesControl
+                })
+                break;
+
+        }
+    }
+
+    addedDevice(selectedDevice) {
         this.setState({
-            formOption: {
-                ...this.state.formOption,
-                transferredLocation: selectedOption,
-            }
+            addedDevices: selectedDevice,
+            showAddDeviceForm: false,
+        })
+        console.log(selectedDevice)
+    }
+
+    handleAddDeviceFormClose() {
+        this.setState({
+            showAddDeviceForm: false
         })
     }
 
@@ -109,10 +139,13 @@ class ConfirmForm extends React.Component {
                 borderLeft: 0,
                 borderRight: 0,
                 
+            },
+            notesControl: {
+                display: this.state.showNotesControl ? null : 'none', 
             }
         }
 
-        const { title, selectedObjectData } = this.props;
+        const { title } = this.props;
 
         return (
             <>  
@@ -120,14 +153,14 @@ class ConfirmForm extends React.Component {
                     <Modal.Header closeButton className='font-weight-bold'>{title}</Modal.Header >
                     <Modal.Body>
                         <Form >
-                        <Row>
+                            <Row>
                                 <Col sm={10}>
                                     <Row>
                                         <Col sm={5}>
                                             Device Type
                                         </Col>
                                         <Col sm={7} className='text-muted pb-1'>
-                                            {selectedObjectData.type}
+                                            {this.props.selectedObjectData.type}
                                         </Col>
                                     </Row>
                                     <Row>
@@ -135,7 +168,7 @@ class ConfirmForm extends React.Component {
                                             Device Name
                                         </Col>
                                         <Col sm={7} className='text-muted pb-1'>
-                                            {selectedObjectData.name}
+                                            {this.props.selectedObjectData.name}
                                         </Col>
                                     </Row>
                                     <Row>
@@ -143,7 +176,7 @@ class ConfirmForm extends React.Component {
                                             ACN
                                         </Col>
                                         <Col sm={7} className='text-muted pb-1'>
-                                            {selectedObjectData.access_control_number}
+                                            {this.props.selectedObjectData.access_control_number}
                                         </Col>
                                     </Row>
                                 </Col>
@@ -151,12 +184,59 @@ class ConfirmForm extends React.Component {
                                     <Image src={tempImg} width={60}/>
                                 </Col>
                             </Row>
+                            {this.state.addedDevices.length !== 0 
+                                ? 
+                                    this.state.addedDevices.map((item,index) => {
+                                        return (
+                                            <>
+                                                <hr/>
+                                                <Row >
+                                                    <Col sm={10}>
+                                                        <Row>
+                                                            <Col sm={5}>
+                                                                Device Type
+                                                            </Col>
+                                                            <Col sm={7} className='text-muted pb-1'>
+                                                                {item.type}
+                                                            </Col>
+                                                        </Row>
+                                                        <Row>
+                                                            <Col sm={5}>
+                                                                Device Name
+                                                            </Col>
+                                                            <Col sm={7} className='text-muted pb-1'>
+                                                                {item.name}
+                                                            </Col>
+                                                        </Row>
+                                                        <Row>
+                                                            <Col sm={5}>
+                                                                ACN
+                                                            </Col>
+                                                            <Col sm={7} className='text-muted pb-1'>
+                                                                {item.access_control_number}
+                                                            </Col>
+                                                        </Row>
+                                                    </Col>
+                                                    <Col sm={2} className='d-flex align-items-center'>
+                                                        <Image src={tempImg} width={60}/>
+                                                    </Col>
+                                                </Row>
+                                            </>
+                                        )
+                                    })   
+                                : null
+                            }
                         </Form>
                         
                         <hr/>
                         <Row>
                             <Col className='d-flex justify-content-center'>
-                                <h5>{selectedObjectData.status}</h5>
+                                <h5>{this.props.selectedObjectData.status}
+                                    {this.props.selectedObjectData.status === 'Transferred' 
+                                        ? '  to  ' + this.props.selectedObjectData.transferredLocation.value 
+                                        : null
+                                    }
+                                </h5>
                             </Col>
                         </Row>
                         <Row>
@@ -164,10 +244,34 @@ class ConfirmForm extends React.Component {
                                 <h6>{moment().format('LLLL')}</h6>    
                             </Col>
                         </Row>
+                        <hr/>
 
+                        <Row className='d-flex justify-content-center'>
+                            <ButtonToolbar >
+                                <Button variant="outline-secondary" className='mr-2' onClick={this.handleClick}>Add Device</Button>
+                                <Button variant="outline-secondary" className='mr-2' onClick={this.handleClick}>Remove Device</Button>
+                                <Button variant="outline-secondary" className='mr-2' onClick={this.handleClick}>
+                                    {this.state.showNotesControl ? 'Add Notes' : 'Hide Notes'}
+                                </Button>
+                            </ButtonToolbar>
+                        </Row>
+
+                        <Form style={style.notesControl}>
+                        <hr/>
+                            <Form.Group controlId="exampleForm.ControlTextarea1">
+                                <Form.Control 
+                                    as="textarea" 
+                                    rows="3" 
+                                    placeholder='notes...' 
+                                    value={this.state.notesText}
+                                    name='notesText'
+                                    onChange={this.handleChange}
+                                />
+                            </Form.Group>
+                        </Form>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="secondary" onClick={this.handleClose}>
+                        <Button variant="outline-secondary" onClick={this.handleClose}>
                             Cancel
                         </Button>
                         <Button variant="primary" onClick={this.handleSubmit}>
@@ -175,6 +279,13 @@ class ConfirmForm extends React.Component {
                         </Button>
                     </Modal.Footer>
                 </Modal>
+                <AddDeviceForm
+                    show={this.state.showAddDeviceForm}  
+                    title='Add device' 
+                    searchableObjectData={this.props.searchableObjectData}
+                    addedDevice={this.addedDevice}
+                    handleAddDeviceFormClose={this.handleAddDeviceFormClose}
+                />
             </>
         );
     }
