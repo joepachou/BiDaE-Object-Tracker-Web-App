@@ -80,17 +80,22 @@ class NavbarContainer extends React.Component {
     
 
     render() {
-        const NavbarStyle = {
-            boxShadow: "0 1px 6px 0 rgba(32,33,36,0.28)",
-            fontWeight: '450',
+        const style = {
+            navbar: {
+                boxShadow: "0 1px 6px 0 rgba(32,33,36,0.28)",
+                fontWeight: '450',
+            },
+            navbarBrand: {
+                color: 'black'
+            }
         }
         const locale = this.context;
         const { isSignin, isShowSigninForm, isShowSignupForm } = this.state;
 
         return (
-            <Navbar id='navbar' className="navbar sticky-top navbar-light" style={NavbarStyle}>
+            <Navbar id='navbar' className="navbar sticky-top navbar-light" style={style.navbar}>
                 <Navbar.Brand className='px-0 mx-0'>
-                    <Link style={{color: "black"}} to="/" className="nav-link nav-brand d-flex align-items-center px-0" >
+                    <Link to="/" className="nav-link nav-brand d-flex align-items-center px-0" style={style.navbarBrand}>
                         <Image
                             alt=""
                             src={config.image.logo}

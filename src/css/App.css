@@ -59,8 +59,11 @@ input {
     color: black;
 }
 
-.nav-light.nav-brand:hover {
+/* .nav-light.nav-brand:hover {
     color: grey;
+} */
+a:hover {
+    font-weight: 700
 }
 
 .navbar {
