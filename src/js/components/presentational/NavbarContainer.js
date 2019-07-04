@@ -96,8 +96,8 @@ class NavbarContainer extends React.Component {
         const { isSignin, isShowSigninForm, isShowSignupForm } = this.state;
 
         return (
-            <Navbar id='navbar' className="navbar sticky-top navbar-light" style={style.navbar}>
-                <Navbar.Brand className='px-0 mx-0'>
+            <Navbar id='navbar' className="navbar sticky-top navbar-light" expand='md' style={style.navbar}>
+                <Navbar.Brand className='px-0 mx-0'>  
                     <Link to="/" className="nav-link nav-brand d-flex align-items-center px-0" style={style.navbarBrand}>
                         <Image
                             alt=""
@@ -108,7 +108,9 @@ class NavbarContainer extends React.Component {
                         {config.companyName}
                     </Link>
                 </Navbar.Brand>
-
+                
+                <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                <Navbar.Collapse id="responsive-navbar-nav">  
                     <Nav className="mr-auto" >
                         <Nav.Item><Link to="/" className="nav-link nav-route" >Home</Link></Nav.Item>
                         {Cookies.get('user') &&
@@ -135,6 +137,8 @@ class NavbarContainer extends React.Component {
                             : <Nav.Item className="nav-link" onClick={this.handleSigninFormShowUp}>Sign In</Nav.Item>
                         }
                     </Nav>
+                </Navbar.Collapse>
+
                 <SigninPage 
                     show={isShowSigninForm}
                     handleSigninFormSubmit={this.handleSigninFormSubmit}

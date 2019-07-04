@@ -83,6 +83,9 @@ a:hover {
     font-size: 1.25rem;
 }
 
+.navbar-light .navbar-toggler {
+    border: none;
+}
 #searchOption {
     height: 100%;
 }

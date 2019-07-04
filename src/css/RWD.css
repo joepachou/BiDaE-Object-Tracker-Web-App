@@ -3,19 +3,19 @@
  /* Extra small devices (portrait phones, less than 576px) */
 @media (max-width: 575.98px) {
     html, body {
-        font-size: 12px;
+        font-size: 14px;
     }
 
     #navbar {
-        height: 60px;
-        font-size: 14px;
+        font-size: 0.78rem;
     }
     .navbar-brand {
         font-size: 1rem;
+
     }
 
     .navbar img {
-        width: 30px;
+        width: 25px;
     }
 
     #mapid {
@@ -26,7 +26,7 @@
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) and (max-width: 767.98px) { 
     html, body {
-        font-size: 12px;
+        font-size: 14px;
     }
 
     #mapid {
