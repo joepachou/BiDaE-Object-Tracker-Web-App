@@ -45,7 +45,8 @@ class FrequentSearch extends React.Component {
 
                 break;
             case 'all device':
-                this.props.shouldUpdateTrackingData(true)
+                // this.props.shouldUpdateTrackingData(true)
+                this.props.getResultData(e)
                 break;
             default:
                 this.props.getResultData(itemName)
@@ -90,14 +91,14 @@ class FrequentSearch extends React.Component {
                             action
                             active={this.state.searchkey === 'my device'}
                         >
-                            My Device
+                            My Devices
                         </ListGroup.Item>}
                     <ListGroup.Item 
                         onClick={this.handleClick} 
                         action
                         active={this.state.searchkey === 'all device'}
                     >
-                        All Device
+                        All Devices
                     </ListGroup.Item>
                 </ListGroup>
             </>

@@ -200,6 +200,10 @@ class SearchResult extends React.Component {
                 <Row className='d-flex justify-content-center' style={style.titleText}>
                     <h5>Search Result</h5>
                 </Row>
+                <Row id="searchResultForMobile" className='' style={style.titleText}>
+                    <Col>Found {this.state.foundResult.length} devices</Col>
+                    <Col>Not Found {this.state.notFoundResult.length} devices</Col>
+                </Row>
                 <Row className=''style={{height:'100%'}} >
                     {this.state.foundResult.length === 0 
                     ?   <Col className='d-flex justify-content-center font-italic font-weight-lighter' style={style.noResultDiv}>

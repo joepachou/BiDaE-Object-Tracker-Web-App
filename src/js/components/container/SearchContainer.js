@@ -173,7 +173,17 @@ class SearchContainer extends React.Component {
     getResultData(e) {
         let isMydevice = false;
         var searchType = '';
-        if (typeof e === 'string') {
+        if (e === 'all devices') {
+            let searchResult = Object.values(this.props.searchableObjectData)
+            this.setState({
+                hasSearchKey: true,
+                searchKey: e,
+                searchResult: searchResult,
+            })
+
+            this.props.transferSearchResult(searchResult, null, e)
+            return 
+        } else if (typeof e === 'string') {
             if(e === '') {
                 return;
             } 
@@ -209,7 +219,6 @@ class SearchContainer extends React.Component {
                 searchResult.push(searchableObjectData[object])
             }
         }
-
         this.setState({
             hasSearchKey: true,
             searchKey: searchKey,
