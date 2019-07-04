@@ -142,8 +142,8 @@ class Surveillance extends React.Component {
                 radius: 60,
             }).addTo(this.map);
 
-            invisibleCircle.on('mouseover', this.handlemenu)
-            invisibleCircle.on('mouseout', function() {this.closePopup();})
+            // invisibleCircle.on('mouseover', this.handlemenu)
+            // invisibleCircle.on('mouseout', function() {this.closePopup();})
         })
         if (!this.state.hasInvisibleCircle){
             this.setState({
@@ -472,7 +472,6 @@ class Surveillance extends React.Component {
              * popupContent (objectName, objectImg, objectImgWidth)
              * More Style sheet include in Surveillance.css
             */
-            
             let popupContent = this.popupContent([objects[key]])
             /**
              * Create the marker, if the 'moving_status' of the object is 'stationary', 
@@ -521,7 +520,7 @@ class Surveillance extends React.Component {
             /** Insert the object's mac_address to be the data when clicking the object's marker */
             iconOption = {
                 ...iconOption,
-                macAddress: objects[key].mac_address
+                macAddress: objects[key].mac_address,
             }
 
             const option = new L.AwesomeNumberMarkers (iconOption)
@@ -614,6 +613,11 @@ class Surveillance extends React.Component {
      * @param {*} imgWidth The width of the image.
      */
     popupContent (object){
+        let objectList = [];
+        Object.values(this.state.objectInfo).map(item => {
+            item.currentPosition.toString() === object[0].currentPosition.toString() ? objectList.push(item) : null
+        })
+        object = objectList
         const content = 
             `
             <div class='contentBox'>
