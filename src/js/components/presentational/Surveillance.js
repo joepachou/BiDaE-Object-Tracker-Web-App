@@ -537,7 +537,7 @@ class Surveillance extends React.Component {
 
             marker.on('mouseover', function () { this.openPopup(); })
             marker.on('click', this.handleMarkerClick);
-            marker.on('mouseout', function () { this.closePopup(); })
+            // marker.on('mouseout', function () { this.closePopup(); })
             
 
             /** Set the error circles of the markers. */
@@ -618,25 +618,48 @@ class Surveillance extends React.Component {
             item.currentPosition.toString() === object[0].currentPosition.toString() ? objectList.push(item) : null
         })
         object = objectList
+
+        /* The style sheet is right in the src/css/Surveillance.css*/
         const content = 
             `
-            <div class='contentBox'>
-                <div class='textBox'>
-                    <div>
-                        <h4>${object[0].location_description}</h4>
-                        ${object.map( item =>{
-                            const element =     
-                            `<div id='popupContent'>
-                                <small>${item.type}</small>
-                                <div class='popupItem'>${item.access_control_number}</div>
-                            </div>`
-                            return element
+                <div>
+                    <h4 class='border-bottom pb-1 px-2'>${object[0].location_description}</h4>
+                    ${object.map( item =>{
+                        const element =     
+                            `
+                                <div class='row popupRow mb-2'>
+                                    <div class='col-6 popupType d-flex align-items-center'>${item.type}</div>
+                                    <div class='col-6 popupItem d-flex align-items-center'>${item.access_control_number}</div>
+                                </div>
+                            `
+                                return element
                         }).join('')
                     }
-                    </div>
-                </div> 
-            </div>
+                </div>
             `
+            // `
+            // <div class='contentBox'>
+            //     <div class='textBox'>
+            //         <PopupContent />
+            //         <div class='container'>
+            //             <h4>${object[0].location_description}</h4>
+            //             <table>
+            //                 <tbody>
+            //                     ${object.map( item =>{
+            //                         const element =     
+            //                             `<tr>
+            //                                 <td>${item.type}</td>
+            //                                 <td>${item.access_control_number}</td>
+            //                             </tr>`
+            //                             return element
+            //                         }).join('')
+            //                     }
+            //                 </tbody>
+            //             </table>
+            //         </div>
+            //     </div> 
+            // </div>
+            // `
         
         return content
     }

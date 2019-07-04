@@ -8,23 +8,34 @@
     font-size: 30px;   
 }
 
+.leaflet-popup-content {
+    padding: 0;
+}
+
 .customPopup .contentBox {
     display: flex;
     flex-direction:row;
     justify-content:space-between;
 }
 
-.customPopup .contentBox .textBox{
+.customPopup .contentBox {
     display: flex;
     align-items: center
 }
 
-#popupContent {
-    font-size: 30px;
+.popupRow:first-child {
+    background-color: black;
 }
 
-#popupContent > .popupItem {
+.popupType {
+    display: inline-block;
+    color:rgba(50, 47, 47, 0.89);
+    font-size: 15px;
+    font-weight: 600;
+}
+.popupItem {
     display: inline-block;
     color:grey;
-    font-size: 20px;
+    font-size: 15px;
+    font-weight: 500
 }
