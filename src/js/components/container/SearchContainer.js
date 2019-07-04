@@ -36,7 +36,7 @@ class SearchContainer extends React.Component {
 
     componentDidMount() {
         const targetElement = document.body;
-        document.body.style.position = "fixed";
+        // document.body.style.position = "fixed";
 
         // disableBodyScroll(targetElement);
     }
@@ -241,7 +241,6 @@ class SearchContainer extends React.Component {
                 </div>
 
                 <div id='searchOption' className='pt-2'>
-                    
                         <FrequentSearch 
                             searchableObjectData={searchableObjectData}
                             getResultData={this.getResultData}  
