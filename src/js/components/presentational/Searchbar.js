@@ -1,7 +1,7 @@
 import React from 'react';
 import LocaleContext from '../../context/LocaleContext';
 import searchIcon from '../../../img/search.png';
-import { Form, Row, Col } from 'react-bootstrap';
+import { Form, Row, Col, Button } from 'react-bootstrap';
 
 
 class Searchbar extends React.Component {
@@ -34,6 +34,9 @@ class Searchbar extends React.Component {
                 fontSize: '16px',
                 minWidth: 280,
                 width:300,
+            },
+            input: {
+                background: 'rgba(0,0,0,0'
             }
         }
 
@@ -42,12 +45,16 @@ class Searchbar extends React.Component {
         const locale = this.context;
 
         return (            
-            <Form className="form-inline d-flex justify-content-between w-75" style={style.form}>
-                <div className="form-group mx-3">
+            <Form className="d-flex justify-content-between" style={style.form} inline>
+                {/* <div className="form-group mx-3">
                     <label htmlFor="inputPassword2" className="sr-only">{locale.search.toUpperCase()}</label>
                     <input type="text" className="form-control-sm border-0" value={value} onChange={this.handleChange}/>
-                </div>
-                <button type="submit" className="btn btn-link btn-sm text-uppercase" onClick={this.handleSubmit}><img src={searchIcon} width="30px" /></button>
+                </div> */}
+                <Form.Group>
+                    <Form.Label></Form.Label>
+                    <Form.Control type='text' style={style.input} className='border-0 pl-3' value={value} onChange={this.handleChange}></Form.Control>
+                </Form.Group>
+                <Button type="submit" variant='link' className="btn btn-link btn-sm text-uppercase" onClick={this.handleSubmit}><img src={searchIcon} width="30px" /></Button>
             </Form>
         );
     }
