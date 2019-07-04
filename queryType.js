@@ -146,6 +146,34 @@ function query_editObject (formOption) {
 	return query;
 }
 
+function query_editObjectPackage (formOption) {
+	
+	let query = '';
+	formOption.map(item => {
+		query += `
+			Update object_table 
+			SET status = '${item.status}',
+				transferred_location = '${item.transferredLocation.value}'
+			WHERE mac_address = '${item.mac_address}';
+		`;
+	})
+
+	// const text = `
+	// 	UPDATE object_table as origin 
+	// 	SET
+	// 		status = package.status,
+	// 		transferred_location = package.transferredLocation
+	// 	FROM (values
+	// 		${formOption.map()}
+	// 		()
+	// 	) as package(mac_address, status, transferredLocation)
+	// 	WHERE package.mac_address = origin.mac_address
+	
+	// `
+
+	return query
+}
+
 function query_signin(username) {
 
 	const text =
@@ -238,6 +266,7 @@ module.exports = {
 	query_getGatewayTable,
 	query_getGeofenceData,
 	query_editObject,
+	query_editObjectPackage,
 	query_signin,
 	query_signup,
 	query_getUserInfo,

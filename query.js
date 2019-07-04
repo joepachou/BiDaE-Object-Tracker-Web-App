@@ -103,6 +103,18 @@ const editObject = (request, response) => {
     })
 }
 
+const editObjectPackage = (request, response) => {
+    const formOption = request.body.formOption
+    pool.query(queryType.query_editObjectPackage(formOption), (error, results) => {
+        if (error) {
+            console.log(error)
+        } else {
+            console.log('success')
+            response.status(200).json(results)
+        } 
+    })
+}
+
 const signin = (request, response) => {
     const { username, password } = request.body
 
@@ -202,9 +214,11 @@ module.exports = {
     getGatewayTable,
     getGeofenceData,
     editObject,
+    editObjectPackage,
     signin,
     signup,
     userInfo,
     userSearchHistory,
     addUserSearchHistory,
+    
 }

@@ -52,6 +52,8 @@ app.post('/data/trackingData', db.getTrackingData);
 
 app.post('/data/editObject', db.editObject);
 
+app.post('/data/editObjectPackage', db.editObjectPackage)
+
 app.post('/user/signin', db.signin);
 
 app.post('/user/signup', db.signup);
@@ -61,6 +63,7 @@ app.post('/user/info', db.userInfo)
 app.post('/user/searchHistory', db.userSearchHistory)
 
 app.post('/user/addUserSearchHistory', db.addUserSearchHistory)
+
 
 
 const httpsServer = https.createServer(credentials, app);

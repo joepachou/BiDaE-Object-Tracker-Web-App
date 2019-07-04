@@ -8,7 +8,9 @@ import "react-table/"
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
 import Axios from 'axios';
 import dataSrc from '../../dataSrc';
-
+import Cookies from 'js-cookie';
+import _ from 'lodash'
+import { get } from 'http';
 const SelectTable = selecTableHOC(ReactTable);
 
 class AddDeviceForm extends React.Component {
@@ -23,8 +25,8 @@ class AddDeviceForm extends React.Component {
             columns: null,
             selection: [],
             selectAll: false,
-            selectType: "checkbox",
-            selectDevices: []
+            selectDevices: [],
+            isSave: false,
             
         };
 
@@ -33,7 +35,6 @@ class AddDeviceForm extends React.Component {
         this.handleClose = this.handleClose.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.toggleAll = this.toggleAll.bind(this)
-        this.toggleType = this.toggleType.bind(this)
         this.toggleSelection = this.toggleSelection.bind(this)
         this.isSelected = this.isSelected.bind(this)
     }
@@ -44,7 +45,8 @@ class AddDeviceForm extends React.Component {
             this.props.handleAddDeviceFormClose();
         }
         this.setState({ 
-            show: false 
+            show: false,
+            selection: this.state.isSave ?  this.state.selection : []
         });
     }
   
@@ -55,11 +57,20 @@ class AddDeviceForm extends React.Component {
     }
 
     componentDidMount() {
-        this.getData()
     }
 
     componentDidUpdate(prevProps) {
+        
+        if(!(_.isEqual(this.props, prevProps)) && this.props.searchResult) {
+            let data = this.getData();
+            let columns = this.getColumns(this.props.searchResult[0] || [])
+            this.setState({
+                data: data,
+                columns: columns 
+            })
+        }
         if (prevProps.show != this.props.show) {
+            
             this.setState({
                 show: this.props.show,
             })
@@ -68,29 +79,55 @@ class AddDeviceForm extends React.Component {
 
     getData() {
 
-        Axios.get(dataSrc.objectTable).then( res => {
-            let columns = this.getColumns(res.data.fields)
-            this.setState({
-                data: res.data.rows,
-                columns: columns
-            })
-        }).catch( err => {
-            console.log(err)
+        // Axios.get(dataSrc.objectTable).then( res => {
+        //     let columns = this.getColumns(res.data.fields)
+        //     this.setState({
+        //         data: res.data.rows,
+        //         columns: columns
+        //     })
+        // }).catch( err => {
+        //     console.log(err)
+        // })
+
+        // Axios.post(dataSrc.userInfo, {
+        //     username: Cookies.get('user')
+        // }).then( res => {
+        //     let columns = this.getColumns(res.data.fields)
+        //     this.setState({
+        //         data: res.data.rows,
+        //         columns: columns
+        //     })
+        //     console.log(res)
+        // }).catch( err => {
+        //     console.log(err)
+        // })
+        let data = this.props.searchResult.filter(item => {
+            return item.access_control_number !== this.props.selectedObjectData.access_control_number
+        }).map((item, index) => {
+            return {
+                ...item,
+                id: index.toString()
+            }
         })
+        return data
     }
 
-    getColumns(field) {
+    getColumns(fieldArray) {
+
         let columns = []
-        field.filter( item => {
-            return item.name === 'name' || item.name === 'access_control_number' || item.name === 'location_description'
+        
+        Object.keys(fieldArray).filter( item => {
+            return item === 'location_description' ||
+                    item === 'name' || 
+                    item === 'access_control_number' 
         }).map(item => {
 
             let field = {};
-            field.Header = item.name.replace(/_/g, ' ')
+            field.Header = item.replace(/_/g, ' ')
                     .split(' ')
                     .map( item => item.charAt(0).toUpperCase() + item.substring(1))
                     .join(' ')
-            field.accessor = item.name
+            field.accessor = item
             field.headerStyle={
                 textAlign: 'left',
             }
@@ -106,6 +143,7 @@ class AddDeviceForm extends React.Component {
           Other implementations could use object keys, a Javascript Set, or Redux... etc.
         */
         // start off with the existing state
+
         let selection = [...this.state.selection];
         key = key.split('-')[1] ? key.split('-')[1] : key
         const keyIndex = selection.indexOf(key);
@@ -172,23 +210,6 @@ class AddDeviceForm extends React.Component {
     return this.state.selection.includes(key);
     };
 
-    isSelected (key){
-        /*
-          Instead of passing our external selection state we provide an 'isSelected'
-          callback and detect the selection state ourselves. This allows any implementation
-          for selection (either an array, object keys, or even a Javascript Set object).
-        */
-        return this.state.selection.includes(key);
-      };
-
-    toggleType () {
-        this.setState({
-          selectType: this.state.selectType === "radio" ? "checkbox" : "radio",
-          selection: [],
-          selectAll: false
-        });
-    };
-
     handleSubmit(e) {
         let selection = new Set(this.state.selection)
         let selectedDevices = []
@@ -196,6 +217,11 @@ class AddDeviceForm extends React.Component {
             selection.has(item.id) ? selectedDevices.push(item) : null;
         })
         this.props.addedDevice(selectedDevices)
+
+        this.setState({
+            selectDevices: selectedDevices,
+            isSave: true,
+        })
     }
   
     render() {
@@ -270,7 +296,7 @@ class AddDeviceForm extends React.Component {
                             Cancel
                         </Button>
                         <Button variant="primary" onClick={this.handleSubmit}>
-                            Submit
+                            Save
                         </Button>
                     </Modal.Footer>
                 </Modal>

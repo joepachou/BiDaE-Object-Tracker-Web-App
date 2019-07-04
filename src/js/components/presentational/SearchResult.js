@@ -93,22 +93,44 @@ class SearchResult extends React.Component {
         )
     }
 
-    handleConfirmFormSubmit(e) {
+    handleConfirmFormSubmit(e, addedDevices) {
         const button = e.target
         const postOption = this.state.formOption;
+        const { status, transferredLocation } = postOption
+
         const colorPanel = this.props.colorPanel ? this.props.colorPanel : null;
+
+        let editObjectPackages = [];
+        let editObjectIdSet = new Set();
+
+        /** Add the original edit device into editObjectPackages */
+        editObjectPackages.push(postOption)
+        editObjectIdSet.add(postOption.mac_address)
+
+        /** Add the added device into editObjectPackages */
+        if (addedDevices) {
+            addedDevices.map( item => {
+                item.status = status
+                delete item.transferred_location
+                item.transferredLocation = transferredLocation
+                editObjectPackages.push(item)
+                editObjectIdSet.add(item.mac_address)
+            })
+        }
+
         let changedStatusSearchResult = this.props.searchResult.map(item => {
-            if (postOption.mac_address === item.mac_address) {
+            if (editObjectIdSet.has(item.mac_address)) {
                 item = {
                     ...item,
-                    ...postOption
+                    status: postOption.status,
+                    transferredLocation: postOption.transferredLocation
                 }
             }
             return item
         })
 
-        axios.post(dataSrc.editObject, {
-            formOption: postOption
+        axios.post(dataSrc.editObjectPackage, {
+            formOption: editObjectPackages
         }).then(res => {
             button.style.opacity = 0.4
             setTimeout(
@@ -213,7 +235,7 @@ class SearchResult extends React.Component {
                         </Row> */}
                         <Row style={style.notFoundResultDiv}>
                             <Col className=''>
-                                <ListGroup onSelect={this.handleChangeObjectStatusForm} className='overflow-auto'>
+                                <ListGroup onSelect={this.handleChangeObjectStatusForm} className=''>
                                     {this.state.notFoundResult.map((item,index) => {
                                         let element = 
                                             <ListGroup.Item href={'#' + index} action style={style.listItem} className='searchResultList' eventKey={'notfound:' + index} key={index}>
@@ -248,6 +270,7 @@ class SearchResult extends React.Component {
                     selectedObjectData={this.state.formOption} 
                     handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose} 
                     handleConfirmFormSubmit={this.handleConfirmFormSubmit}
+                    searchResult={this.props.searchResult}
                 />
             </>
         )

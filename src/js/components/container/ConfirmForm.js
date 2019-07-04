@@ -83,7 +83,7 @@ class ConfirmForm extends React.Component {
     }
 
     handleSubmit(e) {
-        this.props.handleConfirmFormSubmit(e)
+        this.props.handleConfirmFormSubmit(e, this.state.addedDevices)
     }
 
     handleChange(e) {
@@ -119,7 +119,6 @@ class ConfirmForm extends React.Component {
             addedDevices: selectedDevice,
             showAddDeviceForm: false,
         })
-        console.log(selectedDevice)
     }
 
     handleAddDeviceFormClose() {
@@ -244,17 +243,20 @@ class ConfirmForm extends React.Component {
                                 <h6>{moment().format('LLLL')}</h6>    
                             </Col>
                         </Row>
-                        <hr/>
-
-                        <Row className='d-flex justify-content-center'>
-                            <ButtonToolbar >
-                                <Button variant="outline-secondary" className='mr-2' onClick={this.handleClick}>Add Device</Button>
-                                <Button variant="outline-secondary" className='mr-2' onClick={this.handleClick}>Remove Device</Button>
-                                <Button variant="outline-secondary" className='mr-2' onClick={this.handleClick}>
-                                    {this.state.showNotesControl ? 'Add Notes' : 'Hide Notes'}
-                                </Button>
-                            </ButtonToolbar>
-                        </Row>
+                        {this.props.selectedObjectData.status === 'Transferred' && 
+                            <>
+                                <hr/>
+                                <Row className='d-flex justify-content-center'>
+                                    <ButtonToolbar >
+                                        <Button variant="outline-secondary" className='mr-2' onClick={this.handleClick}>Add Device</Button>
+                                        <Button variant="outline-secondary" className='mr-2' onClick={this.handleClick}>Remove Device</Button>
+                                        <Button variant="outline-secondary" className='mr-2' onClick={this.handleClick}>
+                                            {this.state.showNotesControl ? 'Add Notes' : 'Hide Notes'}
+                                        </Button>
+                                    </ButtonToolbar>
+                                </Row>
+                            </>
+                        }
 
                         <Form style={style.notesControl}>
                         <hr/>
@@ -285,6 +287,8 @@ class ConfirmForm extends React.Component {
                     searchableObjectData={this.props.searchableObjectData}
                     addedDevice={this.addedDevice}
                     handleAddDeviceFormClose={this.handleAddDeviceFormClose}
+                    searchResult={this.props.searchResult}
+                    selectedObjectData={this.props.selectedObjectData}
                 />
             </>
         );

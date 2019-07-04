@@ -143,55 +143,6 @@ class ChangeStatusForm extends React.Component {
                     <Modal.Header closeButton className='font-weight-bold'>{title}</Modal.Header >
                     <Modal.Body>
                         <Form >
-                            {/* <Form.Group as={Row} controlId="formHorizontalEmail">
-                                <Form.Label column sm={2}>
-                                    Name
-                                </Form.Label>
-                                <Col sm={10}>
-                                    <Form.Control 
-                                        type="text" 
-                                        placeholder={selectedObjectData ? selectedObjectData.name : ''} 
-                                        onChange={this.handleChange} 
-                                        value={name} 
-                                        name='name'
-                                        style={style.input}
-                                    />
-                                </Col>
-                            </Form.Group>
-
-                            <Form.Group as={Row} controlId="formHorizontalPassword">
-                                <Form.Label column sm={2}>
-                                    Type
-                                </Form.Label>
-                                <Col sm={10}>
-                                    <Form.Control 
-                                        type="text" 
-                                        placeholder={selectedObjectData ? selectedObjectData.type : ''} 
-                                        onChange={this.handleChange} 
-                                        value={type} 
-                                        name='type'
-                                        style={style.input}
-                                        
-                                    />
-                                </Col>
-                            </Form.Group>
-
-                            <Form.Group as={Row} controlId="formHorizontalEmail">
-                                <Form.Label column sm={2}>
-                                    ACN
-                                </Form.Label>
-                                <Col sm={10}>
-                                    <Form.Control 
-                                        type="text" 
-                                        placeholder={selectedObjectData ? selectedObjectData.access_control_number : ''} 
-                                        onChange={this.handleChange} 
-                                        value={access_control_number} 
-                                        name='name'
-                                        style={style.input}
-                                    />
-                                </Col>
-                            </Form.Group> */}
-
                             <Row>
                                 <Col sm={10}>
                                     <Row>

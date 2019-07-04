@@ -22,7 +22,6 @@ class FrequentSearch extends React.Component {
 
     handleClick(e) {
         const itemName = e.target.innerText.toLowerCase();
-        console.log(itemName)
         switch(itemName) {
             case 'my device':
                 if (!this.state.hasGetUserInfo && Cookies.get('user')) {
@@ -73,6 +72,7 @@ class FrequentSearch extends React.Component {
                 </Row>
                 <ListGroup>
                     {Cookies.get('searchHistory') && JSON.parse(Cookies.get('searchHistory')).map( (item, index) => {
+                        
                         return (
                             <ListGroup.Item 
                                 onClick={this.handleClick} 
