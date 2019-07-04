@@ -32,7 +32,6 @@ class Searchbar extends React.Component {
                 border: "2px solid rgba(227, 222, 222, 0.447)",
                 borderRadius : '25px',
                 fontSize: '16px',
-                minWidth: 280,
                 width:300,
             },
             input: {
@@ -45,16 +44,15 @@ class Searchbar extends React.Component {
         const locale = this.context;
 
         return (            
-            <Form className="d-flex justify-content-between" style={style.form} inline>
+            <Form className="d-flex" style={style.form} inline>
                 {/* <div className="form-group mx-3">
                     <label htmlFor="inputPassword2" className="sr-only">{locale.search.toUpperCase()}</label>
                     <input type="text" className="form-control-sm border-0" value={value} onChange={this.handleChange}/>
                 </div> */}
-                <Form.Group>
-                    <Form.Label></Form.Label>
-                    <Form.Control type='text' style={style.input} className='border-0 pl-3' value={value} onChange={this.handleChange}></Form.Control>
+                <Form.Group className='flex-grow-1 '>
+                    <Form.Control type='text' style={style.input} className='border-0 pl-3 w-100' value={value} onChange={this.handleChange}></Form.Control>
                 </Form.Group>
-                <Button type="submit" variant='link' className="btn btn-link btn-sm text-uppercase" onClick={this.handleSubmit}><img src={searchIcon} width="30px" /></Button>
+                <Button type="submit" variant='link' className="btn btn-link btn-sm text-uppercase bd-highlight" onClick={this.handleSubmit}><img src={searchIcon} width="30px" /></Button>
             </Form>
         );
     }
