@@ -193,10 +193,10 @@ class SearchResult extends React.Component {
                 display: this.state.showNotResult ? null : 'none',
             },
             foundResultDiv: {
-                height: '300px',
-                minHeight: '400px',
-                maxHeight: '500px',
-                overflow: 'scroll'
+                // height: '300px',
+                // minHeight: '400px',
+                // maxHeight: '500px',
+                // overflow: 'scroll'
             }
 
         }

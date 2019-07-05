@@ -28,7 +28,7 @@ function query_getTrackingData (rssi = -55) {
 				   round(avg(rssi),2) as avg
 		    FROM tracking_table
 		        WHERE final_timestamp >= NOW() - INTERVAL '15 seconds'  
-		        AND final_timestamp >= NOW() - (server_time_offset||' seconds')::INTERVAL - INTERVAL '5 seconds'
+		        AND final_timestamp >= NOW() - (server_time_offset||' seconds')::INTERVAL - INTERVAL '10 seconds'
                 GROUP BY object_mac_address, lbeacon_uuid
 				HAVING avg(rssi) > $1
             ) as table_track_data	    

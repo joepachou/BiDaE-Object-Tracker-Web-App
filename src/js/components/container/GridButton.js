@@ -10,8 +10,9 @@ class GridButton extends React.Component {
         super()
         this.state = {
             objectTypeSet: config.surveillanceMap.objectTypeSet,
-            pinColorArray: config.surveillanceMap.iconColor.pinColorArray.slice(),
-            searchObjectType: new Map(),
+            pinColorArray: config.surveillanceMap.iconColor.pinColorArray,
+            searchObjectTypeMap: new Map(),
+            selectAll: false,
         }
         this.processObjectType = this.processObjectType.bind(this);
         this.handleClick = this.handleClick.bind(this)
@@ -42,33 +43,75 @@ class GridButton extends React.Component {
         const { searchableObjectData, clearColorPanel } = this.props
         let searchResult = [];
         var pinColor = '';
-        let pinColorArray = clearColorPanel ? config.surveillanceMap.iconColor.pinColorArray.slice():this.state.pinColorArray;
-        let searchObjectType = clearColorPanel ? new Map() : this.state.searchObjectType;
+        let pinColorArray = clearColorPanel ? config.surveillanceMap.iconColor.pinColorArray.slice() : this.state.pinColorArray.slice();
+        let searchObjectTypeMap = clearColorPanel ? new Map() : this.state.searchObjectTypeMap;
+        let selectAll = this.state.selectAll ? false : true;
 
-        if (e.target.style.background !== '') {
-            pinColorArray.push(e.target.style.background);
-            e.target.style.background = ''
-            searchObjectType.delete(searchKey)
+        if(searchKey.toLowerCase() === 'all') {
+
+            if (selectAll) {
+                e.target.style.background = 'grey'
+
+                let childrenNodesArray = Array.from(e.target.parentElement.children)
+                    .filter(item => {
+                        return item.textContent !== 'All'
+                    })
+    
+                let items = Array.from(this.state.objectTypeSet)
+                items.map(item => {
+                    let color = pinColorArray.pop();
+                    this.state.searchObjectTypeMap.set(item, color);
+                    childrenNodesArray.map( node => {
+                        if (item === node.textContent) {
+                            node.style.background = color
+                        }
+                    })
+                })
+                selectAll = true;
+            } else {
+                let childrenNodesArray = Array.from(e.target.parentElement.children)
+                childrenNodesArray.map(node=> {
+                    node.style.background = ''
+                })
+                // let items = Array.from(this.state.objectTypeSet)
+                // items.map(item => {
+                //     let color = pinColorArray.pop();
+                //     this.state.searchObjectTypeMap.set(item, color);
+                //     childrenNodesArray.map( node => {
+                //         if (item === node.textContent) {
+                //             node.style.background = color
+                //         }
+                //     })
+                // })
+            }
         } else {
-            pinColor = e.target.style.background = pinColorArray.pop();
-            searchObjectType.set(searchKey, pinColor)
+            if (e.target.style.background !== '') {
+                pinColorArray.push(e.target.style.background);
+                e.target.style.background = ''
+                searchObjectTypeMap.delete(searchKey)
+            } else {
+                pinColor = e.target.style.background = pinColorArray.pop();
+                searchObjectTypeMap.set(searchKey, pinColor)
+            }
         }
 
+
         this.setState({
-            searchObjectType: searchObjectType,
-            pinColorArray: pinColorArray
+            searchObjectTypeMap,
+            pinColorArray,
+            selectAll,
         })
         Object.values(searchableObjectData).map(item => {
-            if (searchObjectType.has(item.type) && searchObjectType.values(item.type) !== 'black') {
-                item.pinColor = searchObjectType.get(item.type);
+            if (searchObjectTypeMap.has(item.type) && searchObjectTypeMap.values(item.type) !== 'black') {
+                item.pinColor = searchObjectTypeMap.get(item.type);
                 searchResult.push(item)
             } 
         })
 
-        if (Cookies.get('user')){
-            this.putSearchHistory(searchKey)
-        }
-        this.props.transferSearchResult(searchResult, searchObjectType)
+        // if (Cookies.get('user')){
+        //     this.putSearchHistory(searchKey)
+        // }
+        this.props.transferSearchResult(searchResult, searchObjectTypeMap)
         
     }
 

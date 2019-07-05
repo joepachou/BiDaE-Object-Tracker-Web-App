@@ -33,7 +33,7 @@ class SurveillanceContainer extends React.Component {
         }
 
         this.adjustRssi = this.adjustRssi.bind(this);
-        this.handleChangeObjectStatusForm = this.handleChangeObjectStatusForm.bind(this);
+        this.handleMarkerClick = this.handleMarkerClick.bind(this);
         this.handleChangeObjectStatusFormClose = this.handleChangeObjectStatusFormClose.bind(this);
         this.handleChangeObjectStatusFormSubmit = this.handleChangeObjectStatusFormSubmit.bind(this);
         this.handleConfirmFormSubmit = this.handleConfirmFormSubmit.bind(this);
@@ -50,10 +50,10 @@ class SurveillanceContainer extends React.Component {
     }
 
 
-    handleChangeObjectStatusForm(objectData) {
+    handleMarkerClick(objectList) {
         this.setState({
             showEditObjectForm: true,
-            selectedObjectData: objectData,
+            selectedObjectData: objectList,
         })
         this.props.shouldUpdateTrackingData(false)
     }
@@ -86,11 +86,23 @@ class SurveillanceContainer extends React.Component {
         )
     }
 
-    handleConfirmFormSubmit(e) {
+    handleConfirmFormSubmit(e, addedDevices) {
         const button = e.target
         const postOption = this.state.formOption;
+
+        const { status, transferredLocation } = postOption
+        let editObjectPackages = []
+        editObjectPackages.push(postOption)
+        if (addedDevices) {
+            addedDevices.map( item => {
+                item.status = status
+                delete item.transferred_location
+                item.transferredLocation = transferredLocation
+                editObjectPackages.push(item)
+            })
+        }
         axios.post(dataSrc.editObject, {
-            formOption: postOption
+            formOption: editObjectPackages
         }).then(res => {
             button.style.opacity = 0.4
             setTimeout(
@@ -161,10 +173,10 @@ class SurveillanceContainer extends React.Component {
             //     height: '100vh'
             // },
             navBlock: {
-                height: '30%'
+                height: '40%'
             }, 
             mapBlock: {
-                height: '70%',
+                height: '60%',
                 border: 'solid 2px rgba(227, 222, 222, 0.619)',
                 padding: '5px',
             },
@@ -182,7 +194,7 @@ class SurveillanceContainer extends React.Component {
                         searchResult={searchResult}
                         searchType={searchType}
                         transferSearchableObjectData={this.transferSearchableObjectData}
-                        handleChangeObjectStatusForm={this.handleChangeObjectStatusForm}
+                        handleMarkerClick={this.handleMarkerClick}
                         style={style.searchMap}
                         colorPanel={this.props.colorPanel}
 

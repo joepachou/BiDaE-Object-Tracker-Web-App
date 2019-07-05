@@ -521,6 +521,7 @@ class Surveillance extends React.Component {
             iconOption = {
                 ...iconOption,
                 macAddress: objects[key].mac_address,
+                currentPosition: objects[key].currentPosition
             }
 
             const option = new L.AwesomeNumberMarkers (iconOption)
@@ -536,7 +537,7 @@ class Surveillance extends React.Component {
             /** Set the marker's event. */
 
             marker.on('mouseover', function () { this.openPopup(); })
-            marker.on('click', this.handleMarkerClick);
+            // marker.on('click', this.handleMarkerClick);
             // marker.on('mouseout', function () { this.closePopup(); })
             
 
@@ -558,10 +559,18 @@ class Surveillance extends React.Component {
     }
 
     handleMarkerClick(e) {
-        const objectInfo = this.state.objectInfo[e.target.options.icon.options.macAddress]
-        this.props.handleChangeObjectStatusForm(objectInfo)
+        const currentPosition =  e.target.options.icon.options.currentPosition
+        let objectList = this.collectObjectsByLatLng(currentPosition)
+        this.props.handleMarkerClick(objectList)
     }
 
+    collectObjectsByLatLng(currentPositionArray) {
+        let objectList = []
+        Object.values(this.state.objectInfo).map(item => {
+            item.currentPosition.toString() === currentPositionArray.toString() ? objectList.push(item) : null;
+        })
+        return objectList 
+    }
 
 
     /**
@@ -612,22 +621,19 @@ class Surveillance extends React.Component {
      * @param {*} objectImg  The image of the object.
      * @param {*} imgWidth The width of the image.
      */
-    popupContent (object){
-        let objectList = [];
-        Object.values(this.state.objectInfo).map(item => {
-            item.currentPosition.toString() === object[0].currentPosition.toString() ? objectList.push(item) : null
-        })
-        object = objectList
+    popupContent (objectsMap){
+        let currentPosition = objectsMap[0].currentPosition
+        let objectList = this.collectObjectsByLatLng(currentPosition)
 
         /* The style sheet is right in the src/css/Surveillance.css*/
         const content = 
             `
                 <div>
-                    <h4 class='border-bottom pb-1 px-2'>${object[0].location_description}</h4>
-                    ${object.map( item =>{
+                    <h4 class='border-bottom pb-1 px-2'>${objectsMap[0].location_description}</h4>
+                    ${objectList.map( item =>{
                         const element =     
                             `
-                                <div class='row popupRow mb-2'>
+                                <div class='row popupRow mb-2 ml-1'>
                                     <div class='col-6 popupType d-flex align-items-center'>${item.type}</div>
                                     <div class='col-6 popupItem d-flex align-items-center'>${item.access_control_number}</div>
                                 </div>
@@ -637,30 +643,6 @@ class Surveillance extends React.Component {
                     }
                 </div>
             `
-            // `
-            // <div class='contentBox'>
-            //     <div class='textBox'>
-            //         <PopupContent />
-            //         <div class='container'>
-            //             <h4>${object[0].location_description}</h4>
-            //             <table>
-            //                 <tbody>
-            //                     ${object.map( item =>{
-            //                         const element =     
-            //                             `<tr>
-            //                                 <td>${item.type}</td>
-            //                                 <td>${item.access_control_number}</td>
-            //                             </tr>`
-            //                             return element
-            //                         }).join('')
-            //                     }
-            //                 </tbody>
-            //             </table>
-            //         </div>
-            //     </div> 
-            // </div>
-            // `
-        
         return content
     }
 
@@ -675,11 +657,7 @@ class Surveillance extends React.Component {
             <>      
                 <div id='mapid' style={style.map}>
                 </div>
-                {/* <div>
-                    <ToggleSwitch title="Location Accuracy" options={toggleSwitchOptions}/>
-                </div> */}
             </>
-
         )
     }
 }

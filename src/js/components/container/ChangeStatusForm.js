@@ -75,7 +75,7 @@ class ChangeStatusForm extends React.Component {
                     name: selectedObjectData.name,
                     type: selectedObjectData.type,
                     status: selectedObjectData.status,
-                    transferredLocation: selectedObjectData.transferred_location ? {
+                    transferredLocation: selectedObjectData.status === 'Transferred' && selectedObjectData.transferred_location ? {
                         'value' : selectedObjectData.transferred_location,
                         'label' : selectedObjectData.transferred_location
                     } : null,
@@ -85,6 +85,7 @@ class ChangeStatusForm extends React.Component {
     }
 
     handleSubmit(e) {
+        
         const button = e.target;
         const { mac_address, name, type, access_control_number } = this.props.selectedObjectData;
         const { status, transferredLocation } = this.state.formOption;

@@ -121,7 +121,7 @@ export default class ContentContainer extends React.Component{
             /** "page-wrap" the default id named by react-burget-menu */
             <div id="page-wrap" className='' >
                 <Row id="mainContainer" className='d-flex w-100 justify-content-around mx-0 overflow-hidden' style={style.container}>
-                    <Col sm={7} md={8} lg={8} xl={9} id='searchMap' >
+                    <Col sm={7} md={9} lg={9} xl={9} id='searchMap' >
                             <br/>
                             <div>
                                 {this.state.searchResult.length === 0
@@ -185,7 +185,7 @@ export default class ContentContainer extends React.Component{
 
                             />
                     </Col>
-                    <Col xs={12} sm={5} md={4} lg={4} xl={3} className="w-100 px-4">
+                    <Col xs={12} sm={5} md={3} lg={3} xl={3} className="w-100 px-4">
                         <SearchContainer 
                             searchableObjectData={this.state.searchableObjectData} 
                             transferSearchResult={this.transferSearchResult}
