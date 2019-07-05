@@ -113,7 +113,7 @@ class NavbarContainer extends React.Component {
                 <Navbar.Collapse id="responsive-navbar-nav">  
                     <Nav className="mr-auto" >
                         <Nav.Item><Link to="/" className="nav-link nav-route" >Home</Link></Nav.Item>
-                        {Cookies.get('user') &&
+                        {!Cookies.get('user') &&
                             <>
                                 <Nav.Item><Link to="/page/healthReport" className="nav-link nav-route" >{locale.health_report}</Link></Nav.Item>
                                 <Nav.Item><Link to="/page/geofence" className="nav-link nav-route" >Geofence</Link></Nav.Item>
