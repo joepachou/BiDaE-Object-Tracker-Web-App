@@ -29,7 +29,7 @@ class SurveillanceContainer extends React.Component {
             formOption: [],
             showDevice: false,
             searchableObjectData: [],
-
+            isClear: false,
         }
 
         this.adjustRssi = this.adjustRssi.bind(this);
@@ -39,6 +39,7 @@ class SurveillanceContainer extends React.Component {
         this.handleConfirmFormSubmit = this.handleConfirmFormSubmit.bind(this);
         this.handleClickButton = this.handleClickButton.bind(this)
         this.transferSearchableObjectData = this.transferSearchableObjectData.bind(this)
+        this.handleClearGridButtonStatus = this.handleClearGridButtonStatus.bind(this)
     }
 
 
@@ -133,9 +134,15 @@ class SurveillanceContainer extends React.Component {
                 break;
             case 'clear':
                 this.props.handleClearButton();
-                
+                this.handleClearGridButtonStatus();
         }
 
+    }
+
+    handleClearGridButtonStatus() {
+        this.setState({
+            isClear: true,
+        })
     }
 
     transferSearchableObjectData(processData) {
@@ -227,18 +234,12 @@ class SurveillanceContainer extends React.Component {
                                 {this.state.showDevice ? 'Hide devices' : 'Show devices' }
                             </Button>
                         </Nav.Item>
-                        {/* <ButtonToolbar>
-                            <Button variant="outline-primary" className='mr-1' onClick={this.handleClickButton}>Clear</Button>
-                            <Button variant="outline-primary" className='mr-1' onClick={this.handleClickButton}>Save</Button>
-                            <Button variant="outline-primary" className='mr-1' onClick={this.handleClickButton} active={this.state.showDevice}>
-                                {this.state.showDevice ? 'Hide devices' : 'Show devices' }
-                            </Button>
-                        </ButtonToolbar> */}
                         <div style={style.gridButton}>
                             <GridButton
                                 searchableObjectData={this.state.searchableObjectData} 
                                 transferSearchResult={this.props.transferSearchResult}
                                 clearColorPanel={this.props.clearColorPanel}
+                                isClear={this.state.isClear}
                             />
                         </div>
                     </Nav>

@@ -70,11 +70,6 @@
     #searchbar {
         min-width: 200;
     }
-    .gridbutton_wrapper {
-        display: grid;
-        grid-template-columns: 100px 100px 100px;
-      }
-      * {box-sizing: border-box;}
 
   }
 
@@ -95,11 +90,7 @@
     .nav {
         font-size: 8px;
     }
-    .gridbutton_wrapper {
-        display: grid;
-        grid-template-columns: 150px 150px 150px 150px;
-    }
-    * {box-sizing: border-box;}
+
 }
 
 /* Extra large devices (large desktops, 1200px and up) */
@@ -111,10 +102,6 @@
     #mapid {
         height: 65vh;
     } 
-    .gridbutton_wrapper {
-        display: grid;
-        grid-template-columns: 220px 220px 220px 220px;
-    }
-    * {box-sizing: border-box;}
+
 
 }

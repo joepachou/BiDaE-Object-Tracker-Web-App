@@ -9,30 +9,52 @@ class GridButton extends React.Component {
     constructor() {
         super()
         this.state = {
+
+            /** Retrieve the object type from config */
             objectTypeSet: config.surveillanceMap.objectTypeSet,
+
+            /** Store the remianed pin colors that are usable for next pin color object representation */
             pinColorArray: config.surveillanceMap.iconColor.pinColorArray,
-            searchObjectTypeMap: new Map(),
+
+            /** Record the searched object type and the corresponding representation pin color */
+            searchObjectTypeColorMap: new Map(),
+
             selectAll: false,
         }
-        this.processObjectType = this.processObjectType.bind(this);
+        this.processObjectTypeSet = this.processObjectTypeSet.bind(this);
         this.handleClick = this.handleClick.bind(this)
     }
 
     componentDidUpdate(prepProps) {
-        if (prepProps.searchableObjectData === null && this.props.searchableObjectData !== null) {
-            this.processObjectType();
-        }
-
+        // if(this.props.isClear) {
+        //     console.log('hi')
+        //     this.setState({
+                
+        //     })
+        // }
+        // if (!(_.isEqual(prepProps.searchableObjectData, this.props.searchableObjectData))) {
+        //     this.processObjectTypeSet();
+        // }
     }
 
-    processObjectType() {
-        const searchableObjectData = this.props.searchableObjectData;
-        const objectTypeSet = new Set();
-        Object.values(searchableObjectData).map(item => {
-            objectTypeSet.add(item.type)
-        })
+    componentDidMount() {
+        this.processObjectTypeSet();
+    }
+
+    processObjectTypeSet() {
+        /** Get the item name of the GridButton from searchableObjectData */
+        // const searchableObjectData = this.props.searchableObjectData;
+        // const objectTypeSet = new Set();
+        // Object.values(searchableObjectData).map(item => {
+        //     objectTypeSet.add(item.type)
+        // })
+
+        /** Get the item name of the GridButton from the state */
+        const objectTypeSet = this.state.objectTypeSet
+        objectTypeSet.add('All')
+        
         this.setState({
-            objectTypeSet: objectTypeSet,
+            objectTypeSet
         })
     }
 
@@ -42,68 +64,70 @@ class GridButton extends React.Component {
 
         const { searchableObjectData, clearColorPanel } = this.props
         let searchResult = [];
-        var pinColor = '';
+        let pinColor = '';
         let pinColorArray = clearColorPanel ? config.surveillanceMap.iconColor.pinColorArray.slice() : this.state.pinColorArray.slice();
-        let searchObjectTypeMap = clearColorPanel ? new Map() : this.state.searchObjectTypeMap;
-        let selectAll = this.state.selectAll ? false : true;
+        let searchObjectTypeColorMap = clearColorPanel ? new Map() : this.state.searchObjectTypeColorMap;
+        let objectTypeSet = this.state.objectTypeSet;
+        let selectAll;
+        if (this.props.clearColorPanel) {
+            selectAll = true
+        } else {
+            selectAll = this.state.selectAll ? false : true;
+        }
+        console.log(selectAll)
 
         if(searchKey.toLowerCase() === 'all') {
 
             if (selectAll) {
-                e.target.style.background = 'grey'
-
                 let childrenNodesArray = Array.from(e.target.parentElement.children)
                     .filter(item => {
                         return item.textContent !== 'All'
                     })
-    
-                let items = Array.from(this.state.objectTypeSet)
-                items.map(item => {
+                
+                Array.from(objectTypeSet).map(item => {
+                    if (searchObjectTypeColorMap.has(item)) {
+                        return;
+                    }
                     let color = pinColorArray.pop();
-                    this.state.searchObjectTypeMap.set(item, color);
+                    searchObjectTypeColorMap.set(item, color);
                     childrenNodesArray.map( node => {
                         if (item === node.textContent) {
                             node.style.background = color
                         }
                     })
                 })
-                selectAll = true;
+                e.target.style.background = 'rgba(143, 143, 143, 0.5)'
+                
             } else {
-                let childrenNodesArray = Array.from(e.target.parentElement.children)
-                childrenNodesArray.map(node=> {
+                Array.from(e.target.parentElement.children).map(node=> {
                     node.style.background = ''
                 })
-                // let items = Array.from(this.state.objectTypeSet)
-                // items.map(item => {
-                //     let color = pinColorArray.pop();
-                //     this.state.searchObjectTypeMap.set(item, color);
-                //     childrenNodesArray.map( node => {
-                //         if (item === node.textContent) {
-                //             node.style.background = color
-                //         }
-                //     })
-                // })
+                searchObjectTypeColorMap.clear();
+                pinColorArray = config.surveillanceMap.iconColor.pinColorArray;
+
             }
+            this.setState({
+                selectAll
+            })
         } else {
             if (e.target.style.background !== '') {
                 pinColorArray.push(e.target.style.background);
                 e.target.style.background = ''
-                searchObjectTypeMap.delete(searchKey)
+                searchObjectTypeColorMap.delete(searchKey);
             } else {
                 pinColor = e.target.style.background = pinColorArray.pop();
-                searchObjectTypeMap.set(searchKey, pinColor)
+                searchObjectTypeColorMap.set(searchKey, pinColor)
             }
         }
 
-
         this.setState({
-            searchObjectTypeMap,
+            searchObjectTypeColorMap,
             pinColorArray,
-            selectAll,
         })
+
         Object.values(searchableObjectData).map(item => {
-            if (searchObjectTypeMap.has(item.type) && searchObjectTypeMap.values(item.type) !== 'black') {
-                item.pinColor = searchObjectTypeMap.get(item.type);
+            if (searchObjectTypeColorMap.has(item.type)) {
+                item.pinColor = searchObjectTypeColorMap.get(item.type);
                 searchResult.push(item)
             } 
         })
@@ -111,7 +135,7 @@ class GridButton extends React.Component {
         // if (Cookies.get('user')){
         //     this.putSearchHistory(searchKey)
         // }
-        this.props.transferSearchResult(searchResult, searchObjectTypeMap)
+        this.props.transferSearchResult(searchResult, searchObjectTypeColorMap)
         
     }
 
@@ -158,7 +182,7 @@ class GridButton extends React.Component {
             <div className="gridbutton_wrapper">
                 {objectTypeSet.size !== 0 
                     ? Array.from(objectTypeSet).map( (item,index) => {
-                        return <div className='gridbutton'onClick={this.handleClick} key={index}>{item}</div>
+                        return <div className='gridbutton' onClick={this.handleClick} key={index}>{item}</div>
                     })
                     : null
                 }
