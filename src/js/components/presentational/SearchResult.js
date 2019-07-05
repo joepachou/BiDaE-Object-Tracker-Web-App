@@ -31,7 +31,7 @@ class SearchResult extends React.Component {
 
         }
         
-        this.handleChangeObjectStatusForm = this.handleChangeObjectStatusForm.bind(this)
+        this.handleClickResultItem = this.handleClickResultItem.bind(this)
         this.handleChangeObjectStatusFormSubmit = this.handleChangeObjectStatusFormSubmit.bind(this)
         this.handleConfirmFormSubmit = this.handleConfirmFormSubmit.bind(this)
         this.handleChangeObjectStatusFormClose = this.handleChangeObjectStatusFormClose.bind(this);
@@ -55,13 +55,15 @@ class SearchResult extends React.Component {
         }        
     }
 
-    handleChangeObjectStatusForm(eventKey) {
+    handleClickResultItem(eventKey) {
         const eventItem = eventKey.split(':');
         const isFound = eventItem[0]
         const number = eventItem[1]
         this.setState({
             showEditObjectForm: true,
-            selectedObjectData: isFound.toLowerCase() === 'found' ? this.state.foundResult[number] : this.state.notFoundResult[number]
+
+            /** The reason using array to encapture the selectedObjectData is to have the consisten data form passed into ChangeStatusForm */
+            selectedObjectData: isFound.toLowerCase() === 'found' ? [this.state.foundResult[number]] : [this.state.notFoundResult[number]]
         })
         this.props.shouldUpdateTrackingData(false)
     }
@@ -219,7 +221,7 @@ class SearchResult extends React.Component {
                         </Col> 
                     
                     :   <Col className='' style={style.foundResultDiv}>
-                            <ListGroup onSelect={this.handleChangeObjectStatusForm}>
+                            <ListGroup onSelect={this.handleClickResultItem}>
                                 {searchResult.filter(item => item.status.toLowerCase() === 'normal').map((item,index) => {
                                     let element = 
                                         <ListGroup.Item href={'#' + index} action style={style.listItem} className='searchResultList' eventKey={'found:' + index} key={index}>
@@ -247,7 +249,7 @@ class SearchResult extends React.Component {
                         </Row> */}
                         <Row style={style.notFoundResultDiv}>
                             <Col className=''>
-                                <ListGroup onSelect={this.handleChangeObjectStatusForm} className=''>
+                                <ListGroup onSelect={this.handleClickResultItem} className=''>
                                     {this.state.notFoundResult.map((item,index) => {
                                         let element = 
                                             <ListGroup.Item href={'#' + index} action style={style.listItem} className='searchResultList' eventKey={'notfound:' + index} key={index}>

@@ -537,7 +537,7 @@ class Surveillance extends React.Component {
             /** Set the marker's event. */
 
             marker.on('mouseover', function () { this.openPopup(); })
-            // marker.on('click', this.handleMarkerClick);
+            marker.on('click', this.handleMarkerClick);
             // marker.on('mouseout', function () { this.closePopup(); })
             
 
@@ -561,6 +561,7 @@ class Surveillance extends React.Component {
     handleMarkerClick(e) {
         const currentPosition =  e.target.options.icon.options.currentPosition
         let objectList = this.collectObjectsByLatLng(currentPosition)
+        console.log(objectList)
         this.props.handleMarkerClick(objectList)
     }
 

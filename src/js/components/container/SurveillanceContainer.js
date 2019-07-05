@@ -90,9 +90,11 @@ class SurveillanceContainer extends React.Component {
     handleConfirmFormSubmit(e, addedDevices) {
         const button = e.target
         const postOption = this.state.formOption;
-
         const { status, transferredLocation } = postOption
+
         let editObjectPackages = []
+        editObjectPackages.push(postOption)
+
         editObjectPackages.push(postOption)
         if (addedDevices) {
             addedDevices.map( item => {
@@ -102,7 +104,8 @@ class SurveillanceContainer extends React.Component {
                 editObjectPackages.push(item)
             })
         }
-        axios.post(dataSrc.editObject, {
+        
+        axios.post(dataSrc.editObjectPackage, {
             formOption: editObjectPackages
         }).then(res => {
             button.style.opacity = 0.4

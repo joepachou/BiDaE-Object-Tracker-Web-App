@@ -68,6 +68,7 @@ class ChangeStatusForm extends React.Component {
     componentDidUpdate(prevProps) {
         const { selectedObjectData } = this.props
         if (prevProps != this.props && selectedObjectData) {
+            let selectedObjectData = this.props.selectedObjectData.length !== 0 ? this.props.selectedObjectData[0] : []
             this.setState({
                 show: this.props.show,
                 isShowForm: true,
@@ -87,7 +88,8 @@ class ChangeStatusForm extends React.Component {
     handleSubmit(e) {
         
         const button = e.target;
-        const { mac_address, name, type, access_control_number } = this.props.selectedObjectData;
+        let selectedObjectData = this.props.selectedObjectData.length !== 0 ? this.props.selectedObjectData[0] : []
+        const { mac_address, name, type, access_control_number } = selectedObjectData;
         const { status, transferredLocation } = this.state.formOption;
         const postOption = {
             name: name,
@@ -135,7 +137,14 @@ class ChangeStatusForm extends React.Component {
 
         }
 
-        const { title, selectedObjectData } = this.props;
+        const rwdProp = { 
+            sm: 5,
+            md: 5,
+            lg: 5,
+        }
+
+        let { title } = this.props;
+        let selectedObjectData = this.props.selectedObjectData.length !== 0 ? this.props.selectedObjectData[0] : []
         const { name, type, status, transferredLocation } = this.state.formOption;
 
         return (
@@ -145,9 +154,9 @@ class ChangeStatusForm extends React.Component {
                     <Modal.Body>
                         <Form >
                             <Row>
-                                <Col sm={10}>
+                                <Col sm={8}>
                                     <Row>
-                                        <Col sm={5}>
+                                        <Col {...rwdProp}>
                                             Device Type
                                         </Col>
                                         <Col sm={7} className='text-muted pb-1'>
@@ -171,8 +180,8 @@ class ChangeStatusForm extends React.Component {
                                         </Col>
                                     </Row>
                                 </Col>
-                                <Col sm={2} className='d-flex align-items-center'>
-                                    <Image src={tempImg} width={60}/>
+                                <Col sm={4} className='d-flex align-items-center'>
+                                    <Image src={tempImg} width={80}/>
                                 </Col>
 
                             </Row>
