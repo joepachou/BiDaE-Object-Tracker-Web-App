@@ -23,7 +23,7 @@ class FrequentSearch extends React.Component {
     handleClick(e) {
         const itemName = e.target.innerText.toLowerCase();
         switch(itemName) {
-            case 'my device':
+            case 'my devices':
                 if (!this.state.hasGetUserInfo && Cookies.get('user')) {
                     axios.post(dataSrc.userInfo, {
                         username: Cookies.get('user')
@@ -44,9 +44,9 @@ class FrequentSearch extends React.Component {
                 };
 
                 break;
-            case 'all device':
+            case 'all devices':
                 // this.props.shouldUpdateTrackingData(true)
-                this.props.getResultData(e)
+                this.props.getResultData(itemName)
                 break;
             default:
                 this.props.getResultData(itemName)
