@@ -97,9 +97,9 @@
     }
     .gridbutton_wrapper {
         display: grid;
-        grid-template-columns: 150px 150px 150px;
-      }
-      * {box-sizing: border-box;}
+        grid-template-columns: 150px 150px 150px 150px;
+    }
+    * {box-sizing: border-box;}
 }
 
 /* Extra large devices (large desktops, 1200px and up) */
@@ -113,8 +113,8 @@
     } 
     .gridbutton_wrapper {
         display: grid;
-        grid-template-columns: 220px 220px 220px;
-      }
-      * {box-sizing: border-box;}
+        grid-template-columns: 220px 220px 220px 220px;
+    }
+    * {box-sizing: border-box;}
 
 }
