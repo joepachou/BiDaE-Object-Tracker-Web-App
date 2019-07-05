@@ -191,6 +191,12 @@ class SearchResult extends React.Component {
             }, 
             notFoundResultDiv: {
                 display: this.state.showNotResult ? null : 'none',
+            },
+            foundResultDiv: {
+                height: '300px',
+                minHeight: '400px',
+                maxHeight: '500px',
+                overflow: 'scroll'
             }
 
         }
@@ -200,17 +206,19 @@ class SearchResult extends React.Component {
                 <Row className='d-flex justify-content-center' style={style.titleText}>
                     <h5>Search Result</h5>
                 </Row>
-                <Row id="searchResultForMobile" className='' style={style.titleText}>
-                    <Col>Found {this.state.foundResult.length} devices</Col>
-                    <Col>Not Found {this.state.notFoundResult.length} devices</Col>
-                </Row>
-                <Row className=''style={{height:'100%'}} >
+                <div id="searchResultForMobile" className='w-100'>
+                    <Row className='d-flex justify-content-between' style={style.titleText}>
+                        <Col xs={6}>Found {this.state.foundResult.length} devices</Col>
+                        <Col xs={6}>Not Found {this.state.notFoundResult.length} devices</Col>
+                    </Row>
+                </div>
+                <Row className=''>
                     {this.state.foundResult.length === 0 
                     ?   <Col className='d-flex justify-content-center font-italic font-weight-lighter' style={style.noResultDiv}>
                             <div>No Result</div>
                         </Col> 
                     
-                    :   <Col className='overflow-auto'>
+                    :   <Col className='' style={style.foundResultDiv}>
                             <ListGroup onSelect={this.handleChangeObjectStatusForm}>
                                 {searchResult.filter(item => item.status.toLowerCase() === 'normal').map((item,index) => {
                                     let element = 
