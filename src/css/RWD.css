@@ -4,6 +4,8 @@
 @media (max-width: 575.98px) {
     html, body {
         font-size: 14px;
+        position: static;
+
     }
 
     #searchMap {

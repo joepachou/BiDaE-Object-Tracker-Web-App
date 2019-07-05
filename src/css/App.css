@@ -6,7 +6,7 @@ html,body {
     font-family: 'Noto Sans TC', sans-serif; /* "Roboto", "Helvetica", "Arial", sans-serif; /* 
     /* font-size: 1.8vh; */
     /* font-size: 18px; */
-    /* position: fixed; */
+    position: fixed;
     width: 100%;
     overscroll-behavior: none;
     background: white;
