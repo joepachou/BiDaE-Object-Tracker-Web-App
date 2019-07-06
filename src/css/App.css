@@ -8,7 +8,7 @@ html,body {
     /* font-size: 18px; */
     position: fixed;
     width: 100%;
-    overscroll-behavior: none;
+    overscroll-behavior: auto;
     background: white;
     /* height: 100%; */
 }
