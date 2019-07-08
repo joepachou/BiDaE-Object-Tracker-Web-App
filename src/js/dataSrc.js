@@ -13,6 +13,7 @@ const signup = 'http://' + IP + '/user/signup';
 const userInfo = 'http://' + IP + '/user/info';
 const userSearchHistory = 'http://' + IP + '/user/searchHistory'
 const addUserSearchHistory = 'http://' + IP + '/user/addUserSearchHistory'
+const editLbeacon = 'http://' + IP + '/data/editLbeacon'
 
 module.exports = {
     trackingData,
@@ -27,5 +28,6 @@ module.exports = {
     signup,
     userInfo,
     userSearchHistory,
-    addUserSearchHistory
+    addUserSearchHistory,
+    editLbeacon
 };

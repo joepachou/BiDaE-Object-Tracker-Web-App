@@ -210,6 +210,24 @@ const addUserSearchHistory = (request, response) => {
     })
 
 }
+
+const editLbeacon = (request, response) => {
+
+    const low = request.body.formOption.low || null
+    const med = request.body.formOption.med || null
+    const high = request.body.formOption.high || null
+    const uuid = request.body.formOption.uuid
+
+    console.log(low)    
+    pool.query(queryType.query_editLbeacon(uuid, low, med, high), (error, results) => {
+        if (error) {
+            console.log('Edit lbeacon fails ' + error)
+        } else {
+            console.log('Edit lbeacon success')
+        }
+        response.status(200).json(results)
+    })
+}
     
 module.exports = {
     getTrackingData,
@@ -224,5 +242,6 @@ module.exports = {
     userInfo,
     userSearchHistory,
     addUserSearchHistory,
+    editLbeacon
     
 }

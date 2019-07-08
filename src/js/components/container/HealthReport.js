@@ -5,8 +5,7 @@ import React from 'react';
 import { Row, Col, Container, Tabs, Tab } from 'react-bootstrap';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
-import test from '../../../img/colorPin/Tan.svg'
-
+import EditLbeaconForm from './EditLbeaconForm'
 
 import axios from 'axios';
 import dataSrc from '../../../js/dataSrc'
@@ -24,17 +23,20 @@ class HealthReport extends React.Component{
             gatewayColunm: [],
             trackingData: [],
             trackingColunm: [],
+            selectedRowData: {},
+            isShowModal: false,
         }
         this.getGatewayData = this.getGatewayData.bind(this)
         this.getLbeaconData = this.getLbeaconData.bind(this)
         this.processTrackingData = this.processTrackingData.bind(this)
+        this.handleSubmitForm = this.handleSubmitForm.bind(this)
     }
 
     componentDidMount(){
         this.getLbeaconData();
         this.getGatewayData();
         this.getGatewayDataInterval = setInterval(this.getGatewayData,60000)
-        this.getLbeaconDataInterval = setInterval(this.getLbeaconData,1000)
+        this.getLbeaconDataInterval = setInterval(this.getLbeaconData,60000)
     }
 
     componentWillUnmount() {
@@ -130,6 +132,12 @@ class HealthReport extends React.Component{
         })
     }
 
+    handleSubmitForm() {
+        this.setState({
+            isShowModal: false
+        })
+
+    }
     
     render(){
 
@@ -153,6 +161,26 @@ class HealthReport extends React.Component{
                             showPagination = {false}
 
                             defaultPageSize={10}
+                            className="-highlight"
+                            getTrProps={(state, rowInfo, column, instance) => {
+                                return {
+                                    onClick: (e, handleOriginal) => {
+                                        this.setState({
+                                            selectedRowData: rowInfo.original,
+                                            isShowModal: true,
+                                        })
+                                
+                                        // IMPORTANT! React-Table uses onClick internally to trigger
+                                        // events like expanding SubComponents and pivots.
+                                        // By default a custom 'onClick' handler will override this functionality.
+                                        // If you want to fire the original onClick handler, call the
+                                        // 'handleOriginal' function.
+                                        if (handleOriginal) {
+                                            handleOriginal()
+                                        }
+                                    }
+                                }
+                            }}
 
                             
                         />
@@ -182,6 +210,12 @@ class HealthReport extends React.Component{
                         />
                     </Tab>
                 </Tabs>
+                <EditLbeaconForm 
+                    show = {this.state.isShowModal} 
+                    title='Edit Object' 
+                    selectedObjectData={this.state.selectedRowData} 
+                    handleSubmitForm={this.handleSubmitForm}
+                />
             </Container>
         )
     }
