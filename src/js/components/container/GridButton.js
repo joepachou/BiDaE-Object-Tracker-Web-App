@@ -74,7 +74,6 @@ class GridButton extends React.Component {
         } else {
             selectAll = this.state.selectAll ? false : true;
         }
-        console.log(selectAll)
 
         if(searchKey.toLowerCase() === 'all') {
 
@@ -132,9 +131,9 @@ class GridButton extends React.Component {
             } 
         })
 
-        // if (Cookies.get('user')){
-        //     this.putSearchHistory(searchKey)
-        // }
+        if (Cookies.get('user')){
+            this.putSearchHistory(searchKey)
+        }
         this.props.transferSearchResult(searchResult, searchObjectTypeColorMap)
         
     }
@@ -150,8 +149,8 @@ class GridButton extends React.Component {
             return item
         })
         flag === false ? toPutSearchHistory.push({name: searchKey, value: 1}) : null;
-        this.sortSearchHistory(toPutSearchHistory)
-        Cookies.set('searchHistory', JSON.stringify(toPutSearchHistory))
+        const sortedSearchHistory = this.sortSearchHistory(toPutSearchHistory)
+        Cookies.set('searchHistory', JSON.stringify(sortedSearchHistory))
         this.checkInSearchHistory()
         
     }
@@ -162,16 +161,19 @@ class GridButton extends React.Component {
             username: Cookies.get('user'),
             history: searchHistory
         }).then( res => {
-            console.log('done')
         }).catch( error => {
             console.log(error)
         })
     }
 
+    /** Sort the user search history and limit the history number */
     sortSearchHistory(history) {
-        history.sort( (a,b) => {
+        let toReturn = history.sort( (a,b) => {
             return b.value - a.value
+        }).filter((item, index) => {
+            return index < 4
         })
+        return toReturn
     }
 
 
@@ -181,9 +183,10 @@ class GridButton extends React.Component {
         return (
             <div className="gridbutton_wrapper">
                 {objectTypeSet.size !== 0 
-                    ? Array.from(objectTypeSet).map( (item,index) => {
-                        return <div className='gridbutton' onClick={this.handleClick} key={index}>{item}</div>
-                    })
+                    ? 
+                        Array.from(objectTypeSet).map( (item,index) => {
+                            return <div className='gridbutton' onClick={this.handleClick} key={index}>{item}</div>
+                        })
                     : null
                 }
             </div>
