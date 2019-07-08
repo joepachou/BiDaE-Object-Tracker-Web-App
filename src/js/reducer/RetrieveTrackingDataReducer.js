@@ -8,7 +8,7 @@ import config from '../config';
 const initialState = {
     shouldTrackingDataUpdate: config.surveillanceMap.startInteval,
     objectInfo: {},
-    locationAccuracy: config.surveillanceMap.locationAccuracy.defaultVal
+    locationAccuracy: 1
 }
 
 function RetrieveTrackingDataReducer (state = initialState, action) {
