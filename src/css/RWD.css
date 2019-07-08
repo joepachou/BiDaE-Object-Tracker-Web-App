@@ -50,6 +50,10 @@
         font-size: 14px;
     }
 
+    #searchMap {
+        display: none;
+    }
+
     #mapid {
         height: 45vh;
     } 

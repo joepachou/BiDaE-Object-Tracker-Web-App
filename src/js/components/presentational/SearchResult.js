@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-import { Alert, Tab, ListGroup, Col, Row } from 'react-bootstrap'
+import { Alert, Tab, ListGroup, Col, Row, Nav } from 'react-bootstrap'
 import LocaleContext from '../../context/LocaleContext';
 import ChangeStatusForm from '../container/ChangeStatusForm';
 import ConfirmForm from '../container/ConfirmForm';
@@ -195,6 +195,7 @@ class SearchResult extends React.Component {
                 display: this.state.showNotResult ? null : 'none',
             },
             foundResultDiv: {
+                display: this.state.showNotResult ? 'none' : null,
                 // height: '300px',
                 // minHeight: '400px',
                 // maxHeight: '500px',
@@ -229,7 +230,7 @@ class SearchResult extends React.Component {
                         &nbsp;
                     </Alert>
                 </Row>
-                <Row className=''>
+                <Row className='' style={style.foundResultDiv}>
                     {this.state.foundResult.length === 0 
                     ?   <Col className='d-flex justify-content-center font-italic font-weight-lighter' style={style.noResultDiv}>
                             <div className='searchResultForDestop'>No Result</div>
@@ -258,7 +259,11 @@ class SearchResult extends React.Component {
                 ? 
                     <>
                         <Row className='d-flex justify-content-center mt-3' style={style.titleText}>
-                            <h5><a href="" onClick={this.handleToggleNotFound}>Show {this.state.notFoundResult.length} Devices Not Found </a></h5>
+                            <h5>
+                                <a href="" onClick={this.handleToggleNotFound}>
+                                    {this.state.showNotResult ? 'Hide' : 'Show' + ' ' + this.state.notFoundResult.length} Devices Not Found 
+                                </a>
+                            </h5>
                         </Row>
                         {/* <Row className='text-left mt-3' style={style.titleText}>
                             <h5>Devices not found</h5>

@@ -39,7 +39,7 @@ a:hover {
     padding: 0.5rem 0.5rem;
     border: none;
     border-radius: 0;
-    border-bottom: 3px solid rgba(227, 222, 222, 0.62);
+    border-bottom: 2px solid rgba(227, 222, 222, 0.62);
 }
 
 .list-group-item:last-child {
@@ -214,12 +214,11 @@ a:hover {
     outline: 0;
 }
 
-.btn-online-custom:hover {
-    color: rgb(0, 123, 255, 0.2);
+.btn-outline-custom:hover {
+    color: rgba(4, 53, 106, 1);
 }
 
 .btn:hover {
-    color: rgba(4, 53, 106, 1);
 }
 
 
@@ -233,3 +232,4 @@ a:hover {
     max-Height: 45vh;
     overflow: hidden scroll;
 }
+
