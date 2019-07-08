@@ -204,6 +204,8 @@ class SearchContainer extends React.Component {
         let searchResult = [];
         let notFoundList = [];
         for (let object in searchableObjectData) {
+
+            /* Search by 'my device' */
             if (isMydevice) {
                 if (searchKey.has(searchableObjectData[object].access_control_number)) {
                     // if (searchableObjectData[object].status.toLowerCase() !== 'normal') {
@@ -213,11 +215,17 @@ class SearchContainer extends React.Component {
                         // duplicatedSearchKey.delete(searchableObjectData[object].access_control_number)
                     // }
                 }
+
+            /* Search by object type */
             } else if (searchableObjectData[object].type == searchKey) {
                 searchResult.push(searchableObjectData[object])
-            } else if (searchableObjectData[object].type.toLowerCase().indexOf(searchKey.toLowerCase()) === 0){
+
+            /* Search by search bar. The search key covers type, name, access_control_number */
+            } else if (searchableObjectData[object].type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0
+                        || searchableObjectData[object].access_control_number.slice(10,14).indexOf(searchKey) >= 0
+                        || searchableObjectData[object].name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0) {
                 searchResult.push(searchableObjectData[object])
-            }
+            } 
         }
         this.setState({
             hasSearchKey: true,
