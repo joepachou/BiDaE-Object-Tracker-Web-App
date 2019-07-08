@@ -34,24 +34,8 @@
   /* background-position: -180px 0; */
 }
 
-.awesome-number-marker-icon-lavender  {
-  background: url('../img/colorPin/Lavender.svg') no-repeat center/contain;
-}
-
-.awesome-number-marker-icon-lightyellow  {
-  background: url('../img/colorPin/LightYellow.svg') no-repeat center/contain;
-}
-
 .awesome-number-marker-icon-lightred {
   background-position: -360px 0;
-}
-
-.awesome-number-marker-icon-tan {
-  background: url('../img/colorPin/Tan.svg') no-repeat center/contain;
-}
-
-.awesome-number-marker-icon-mistyrose {
-  background: url('../img/colorPin/MistyRose.svg') no-repeat center/contain;
 }
 
 .awesome-number-marker-icon-orange {
@@ -84,14 +68,7 @@
   background-position: -216px 0;
 }
 
-.awesome-number-marker-icon-darkseagreen {
-  background: url('../img/colorPin/DarkSeaGreen.svg') no-repeat center/contain;
-}
 
-.awesome-number-marker-icon-lightblue {
-  background: url('../img/colorPin/lightblue.svg') no-repeat center/contain;
-  /* background-position: -468px 0; */
-}
 
 .awesome-number-marker-icon-purple {
   background-position: -144px 0;
@@ -130,4 +107,40 @@
 .awesome-number-marker-icon-sos {
   background: url('../img/sos.svg') no-repeat center/contain;
 
+}
+.awesome-number-marker-icon-lavender  {
+  background: url('../img/colorPin/Lavender.svg') no-repeat center/contain;
+}
+
+.awesome-number-marker-icon-lightyellow  {
+  background: url('../img/colorPin/LightYellow.svg') no-repeat center/contain;
+}
+
+.awesome-number-marker-icon-slateblue {
+  background: url('../img/colorPin/SlateBlue.svg') no-repeat center/contain;
+
+}
+
+.awesome-number-marker-icon-darkseagreen {
+  background: url('../img/colorPin/DarkSeaGreen.svg') no-repeat center/contain;
+}
+
+.awesome-number-marker-icon-lightblue {
+  background: url('../img/colorPin/lightblue.svg') no-repeat center/contain;
+}
+
+.awesome-number-marker-icon-tan {
+  background: url('../img/colorPin/Tan.svg') no-repeat center/contain;
+}
+
+.awesome-number-marker-icon-mistyrose {
+  background: url('../img/colorPin/MistyRose.svg') no-repeat center/contain;
+}
+
+.awesome-number-marker-icon-yellowgreen {
+  background: url('../img/colorPin/YellowGreen.svg') no-repeat center/contain;
+}
+
+.awesome-number-marker-icon-orange {
+  background: url('../img/colorPin/Orange.svg') no-repeat center/contain;
 }

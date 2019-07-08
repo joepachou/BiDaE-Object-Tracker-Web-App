@@ -50,7 +50,9 @@ const config = {
             unNormal: 'grey',
             sos: 'sos',
             number: 'white',
-            pinColorArray: ['tan', 'lightyellow', 'lavender', 'lightblue', 'darkseagreen', 'mistyrose']
+
+            // ['slateblue', 'tan', 'lightyellow', 'lavender', 'orange','lightblue', 'mistyrose', 'yellowgreen', 'darkseagreen]
+            pinColorArray: ['mistyrose', 'tan', 'lightyellow', 'lavender', 'orange','lightblue', 'yellowgreen']
         },
 
         /* For test. To start object tracking*/
@@ -72,7 +74,7 @@ const config = {
         /* Marker dispersity, can be any positive number */
         markerDispersity: 8,
 
-        objectTypeSet: new Set(['Bed', 'EKG Machine', 'Infusion pump', 'SONOSITE Ultrasound', 'Ultrasound', 'Bladder scanner'])
+        objectTypeSet: new Set(['Bed', 'EKG Machine', 'Infusion pump', 'SONOSITE Ultrasound', 'Ultrasound', 'Bladder scanner', 'CPM'])
         
     },
 
