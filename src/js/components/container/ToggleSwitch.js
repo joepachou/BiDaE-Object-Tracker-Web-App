@@ -7,7 +7,7 @@ class ToggleSwitch extends React.Component {
 	constructor(props, context) {
 		super(props, context);
 		this.state = {
-			toggle: config.surveillanceMap.locationAccuracy.defaultVal,
+			toggle: props.defaultLabel,
 	};
 		
 	this.toggleState = this.toggleState.bind(this);
@@ -15,13 +15,16 @@ class ToggleSwitch extends React.Component {
 	}
 
 	toggleState(e) {
-		const value = e.target.value;
-		const { adjustRssi } = this.props 
+		const name = e.target.name;
 
-		adjustRssi(value);
+		const locationAccuracyNameMapToVal = config.surveillanceMap.locationAccuracyNameMapToVal
+
+		const accuracyValue = locationAccuracyNameMapToVal[name.toLowerCase()]
+
+		this.props.adjustRssi(accuracyValue);
 
 		this.setState({
-			toggle: value,
+			toggle: name,
 		});
 	}
 
@@ -36,7 +39,7 @@ class ToggleSwitch extends React.Component {
 					name={this.props.leftLabel}
 					value={config.surveillanceMap.locationAccuracy.lowVal}
 					onChange={this.toggleState}
-					checked={this.state.toggle == config.surveillanceMap.locationAccuracy.lowVal}
+					checked={this.state.toggle == this.props.leftLabel}
 				/>
 				<label htmlFor="switch_left">{this.props.leftLabel}</label>
 
@@ -46,7 +49,7 @@ class ToggleSwitch extends React.Component {
 					name={this.props.defaultLabel}
 					value={config.surveillanceMap.locationAccuracy.defaultVal}
 					onChange={this.toggleState}
-					checked={this.state.toggle == config.surveillanceMap.locationAccuracy.defaultVal}
+					checked={this.state.toggle === this.props.defaultLabel}
 				/>
 				<label htmlFor="switch_middle">{this.props.defaultLabel}</label>
 
@@ -56,7 +59,7 @@ class ToggleSwitch extends React.Component {
 					name={this.props.rightLabel}
 					value={config.surveillanceMap.locationAccuracy.highVal}
 					onChange={this.toggleState}
-					checked={this.state.toggle == config.surveillanceMap.locationAccuracy.highVal}
+					checked={this.state.toggle === this.props.rightLabel}
 				/>
 				<label htmlFor="switch_right">{this.props.rightLabel}</label>
 			</form>

@@ -71,6 +71,24 @@ const config = {
             highVal: -10,
         },
 
+        locationAccuracyMapToDefault: {
+            0: -100,
+            1: -65,
+            2: -10,
+        },
+
+        locationAccuracyMapToDB: {
+            0: 'low_rssi',
+            1: 'med_rssi',
+            2: 'high_rssi',
+        },
+
+        locationAccuracyNameMapToVal: {
+			'low': 0,
+			'med': 1,
+			'high': 2,
+		},
+
         /* Marker dispersity, can be any positive number */
         markerDispersity: 8,
 
@@ -102,4 +120,5 @@ const config = {
 
 }
 
-export default config;
+export default config
+

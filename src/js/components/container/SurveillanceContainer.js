@@ -41,10 +41,10 @@ class SurveillanceContainer extends React.Component {
     }
 
 
-    adjustRssi(adjustedRssi) {
-        this.props.changeLocationAccuracy(adjustedRssi)
+    adjustRssi(accuracyValue) {
+        this.props.changeLocationAccuracy(accuracyValue)
         this.setState({
-            rssi: adjustedRssi,
+            rssi: accuracyValue,
         })
     }
 
@@ -168,7 +168,7 @@ class SurveillanceContainer extends React.Component {
         const style = {
             title: {
                 color: 'grey',
-                fontSize: 8,
+                fontSize: '1rem',
                 wordWrap: 'break-word',
             },
             // surveillanceContainer: {
@@ -204,12 +204,12 @@ class SurveillanceContainer extends React.Component {
                 </div>
                 <div style={style.navBlock}>
 
-                    <Nav className='d-flex align-items-center'>
-                        <Nav.Item>
+                    <Nav className='d-flex align-items-baseline'>
+                        <Nav.Item className='pr-1'>
                             <div style={style.title}>Location</div>
                             <div style={style.title}>Accuracy</div>
                         </Nav.Item>
-                        <Nav.Item className='pt-2'  >
+                        <Nav.Item className='pt-2 mr-5'>
                             <ToggleSwitch 
                                 adjustRssi={this.adjustRssi} 
                                 leftLabel={this.capitalFirstLetter(locale.low)} 
@@ -221,7 +221,7 @@ class SurveillanceContainer extends React.Component {
                             <Button variant="outline-primary" className='mr-1 ml-2' onClick={this.handleClickButton}>Clear</Button>
                         </Nav.Item>
                         <Nav.Item >
-                            <Button variant="outline-primary" className='mr-1' onClick={this.handleClickButton}>Save</Button>
+                            <Button variant="outline-primary" className='mr-1 mr-5' onClick={this.handleClickButton}>Save</Button>
 
                         </Nav.Item>
                         <Nav.Item >
