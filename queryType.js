@@ -1,5 +1,17 @@
+function query_getTrackingData (accuracy = 1) {
+	const locationAccuracyMapToDefault = {
+		0: -100,
+		1: -65,
+		2: -10,
+	}
 
-function query_getTrackingData (rssi = -55) {
+	const locationAccuracyMapToDB = {
+		0: 'low_rssi',
+		1: 'med_rssi',
+		2: 'high_rssi',
+	}
+
+	const rssi = locationAccuracyMapToDefault[accuracy]
 	const text = `
 	SELECT table_location.object_mac_address, 
 		   table_device.name, 
