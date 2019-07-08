@@ -200,6 +200,11 @@ class SearchResult extends React.Component {
                 // maxHeight: '500px',
                 // overflow: 'scroll'
             },
+
+            resultListGroup: {
+                maxHeight: '45vh',
+                overflow: 'hidden scroll',
+            },
             alertTextTitle: {
                 fontWeight: 1000,
                 color: 'rgba(101, 111, 121, 0.78)'
@@ -212,7 +217,7 @@ class SearchResult extends React.Component {
                 <Row className='d-flex justify-content-center' style={style.titleText}>
                     <h5>Search Result</h5>
                 </Row>
-                <Row id="searchResultForMobile" className='w-100'>
+                <Row className='w-100 searchResultForMobile'>
                     <Alert variant='secondary' className='d-flex justify-content-start'>
                         <div style={style.alertTextTitle}>{'Found '}</div>
                         &nbsp;
@@ -227,25 +232,26 @@ class SearchResult extends React.Component {
                 <Row className=''>
                     {this.state.foundResult.length === 0 
                     ?   <Col className='d-flex justify-content-center font-italic font-weight-lighter' style={style.noResultDiv}>
-                            <div>No Result</div>
+                            <div className='searchResultForDestop'>No Result</div>
                         </Col> 
                     
-                    :   <Col className='' style={style.foundResultDiv}>
-                            <ListGroup onSelect={this.handleClickResultItem}>
-                                {searchResult.filter(item => item.status.toLowerCase() === 'normal').map((item,index) => {
-                                    let element = 
-                                        <ListGroup.Item href={'#' + index} action style={style.listItem} className='searchResultList' eventKey={'found:' + index} key={index}>
-                                            <Row className="d-flex justify-content-around">
-                                                <Col xs={1} sm={1} lg={1} className="font-weight-bold d-flex align-self-center" style={style.firstText}>{index + 1}</Col>
-                                                <Col xs={3} sm={3} lg={3} className="d-flex align-self-center justify-content-center" style={style.middleText}>{item.type}</Col>
-                                                <Col xs={4} sm={4} lg={4} className="d-flex align-self-center text-muted" style={style.middleText}>ACN: xxxx-xxxx-{item.access_control_number.slice(10, 14)}</Col>
-                                                <Col xs={3} sm={3} lg={3} className="d-flex align-self-center text-muted justify-content-center" style={style.lastText}>near {item.location_description}</Col>
-                                            </Row>
-                                        </ListGroup.Item>
-                                    return element
-                                })}
-                            </ListGroup>
-                        </Col> 
+                    :   
+                            <Col className=''>
+                                <ListGroup onSelect={this.handleClickResultItem} id='searchResultListGroup'>
+                                    {searchResult.filter(item => item.status.toLowerCase() === 'normal').map((item,index) => {
+                                        let element = 
+                                            <ListGroup.Item href={'#' + index} action style={style.listItem} className='searchResultList' eventKey={'found:' + index} key={index}>
+                                                <Row className="d-flex justify-content-around">
+                                                    <Col xs={1} sm={1} lg={1} className="font-weight-bold d-flex align-self-center" style={style.firstText}>{index + 1}</Col>
+                                                    <Col xs={3} sm={3} lg={3} className="d-flex align-self-center justify-content-center" style={style.middleText}>{item.type}</Col>
+                                                    <Col xs={4} sm={4} lg={4} className="d-flex align-self-center text-muted" style={style.middleText}>ACN: xxxx-xxxx-{item.access_control_number.slice(10, 14)}</Col>
+                                                    <Col xs={3} sm={3} lg={3} className="d-flex align-self-center text-muted justify-content-center" style={style.lastText}>near {item.location_description}</Col>
+                                                </Row>
+                                            </ListGroup.Item>
+                                        return element
+                                    })}
+                                </ListGroup>
+                            </Col>
                     }
                 </Row>
                 {this.state.notFoundResult.length !== 0 

@@ -12,8 +12,18 @@
         display: none;
     }
 
-    #searchResultForMobile {
+    .searchResultForMobile {
         display: inline-block
+    }
+
+    .searchResultForDestop {
+        display: none;
+    }
+
+    #searchResultListGroup {
+        max-Height: none;
+        overflow-Y: auto;
+        overflow-X: auto;
     }
 
     #navbar {

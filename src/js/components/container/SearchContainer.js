@@ -264,27 +264,27 @@ class SearchContainer extends React.Component {
                 </div>
 
                 <div id='searchOption' className='pt-2'>
-                        <FrequentSearch 
-                            searchableObjectData={searchableObjectData}
-                            getResultData={this.getResultData}  
-                            transferSearchResult={transferSearchResult}  
-                            getResultData={this.getResultData}
-                            clearSearchResult={this.props.clearSearchResult}    
+                    <FrequentSearch 
+                        searchableObjectData={searchableObjectData}
+                        getResultData={this.getResultData}  
+                        transferSearchResult={transferSearchResult}  
+                        getResultData={this.getResultData}
+                        clearSearchResult={this.props.clearSearchResult}    
+                    />
+                    {/* <Col id='searchableObjectType' md={6} sm={6} xs={6} className='px-0'>
+                        <h6 className="font-weight-bold">{}</h6>
+                        <SearchableObjectType 
+                            sectionTitleList={this.state.sectionTitleList} 
+                            sectionIndexList={this.state.sectionIndexList} 
+                            sectionIndex={this.state.sectionIndex} 
+                            handleMouseOver={this.handleMouseOver} 
+                            handleTouchStart={this.handleTouchStart} 
+                            handleTouchMove={this.handleTouchMove} 
+                            isShowSectionTitle={this.state.isShowSectionTitle}
+                            clientHeight={this.state.clientHeight}
                         />
-                        {/* <Col id='searchableObjectType' md={6} sm={6} xs={6} className='px-0'>
-                            <h6 className="font-weight-bold">{}</h6>
-                            <SearchableObjectType 
-                                sectionTitleList={this.state.sectionTitleList} 
-                                sectionIndexList={this.state.sectionIndexList} 
-                                sectionIndex={this.state.sectionIndex} 
-                                handleMouseOver={this.handleMouseOver} 
-                                handleTouchStart={this.handleTouchStart} 
-                                handleTouchMove={this.handleTouchMove} 
-                                isShowSectionTitle={this.state.isShowSectionTitle}
-                                clientHeight={this.state.clientHeight}
-                            />
-                        </Col> */}
-                    
+                    </Col> */}
+                
                 </div>
 
             </div>

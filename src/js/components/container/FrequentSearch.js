@@ -19,7 +19,6 @@ class FrequentSearch extends React.Component {
         this.handleClick = this.handleClick.bind(this);
     }
     componentDidUpdate(prepProps) {
-        console.log(prepProps.clearSearchResult, this.props.clearSearchResult)
         if (prepProps.clearSearchResult !== this.props.clearSearchResult && !prepProps.clearSearchResult) {
             this.setState({
                 searchkey: '',
@@ -79,7 +78,7 @@ class FrequentSearch extends React.Component {
                 <Row className='d-flex justify-content-center' style={style.titleText}>
                     <h5>Frequent Search</h5>
                 </Row>
-                <div className='d-inline-flex flex-column mb-3 justify-content-end' >
+                <div className='d-inline-flex flex-column mb-3' >
                     {Cookies.get('searchHistory') && JSON.parse(Cookies.get('searchHistory')).filter( item => {
                         return item.name !== 'All'
                     }).map( (item, index) => {
@@ -107,7 +106,6 @@ class FrequentSearch extends React.Component {
                             My Devices
                         </Button>
                     }
-                    {console.log(this.state.searchkey)}
                         <Button 
                             variant="outline-custom"
                             onClick={this.handleClick} 
