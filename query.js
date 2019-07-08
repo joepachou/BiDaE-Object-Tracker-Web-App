@@ -16,7 +16,10 @@ const pool = new pg.Pool(config)
 
 const getTrackingData = (request, response) => {
     const modifiedRssi = request.body.accuracyValue
-    pool.query(queryType.query_getTrackingData(modifiedRssi), (error, results) => {        
+    const locationAccuracyMapToDefault = request.body.locationAccuracyMapToDefault
+    const locationAccuracyMapToDB = request.body.locationAccuracyMapToDB
+
+    pool.query(queryType.query_getTrackingData(modifiedRssi, locationAccuracyMapToDefault, locationAccuracyMapToDB ), (error, results) => {        
         if (error) {
             console.log("Get trackingData fails : " + error)
         } else {

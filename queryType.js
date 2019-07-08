@@ -1,15 +1,6 @@
-function query_getTrackingData (accuracy = 1) {
-	const locationAccuracyMapToDefault = {
-		0: -100,
-		1: -65,
-		2: -10,
-	}
 
-	const locationAccuracyMapToDB = {
-		0: 'low_rssi',
-		1: 'med_rssi',
-		2: 'high_rssi',
-	}
+
+function query_getTrackingData (accuracy = 1,locationAccuracyMapToDefault, locationAccuracyMapToDB) {
 
 	const rssi = locationAccuracyMapToDefault[accuracy]
 	const text = `
