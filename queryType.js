@@ -131,7 +131,7 @@ const query_getObjectTable =
 
 const query_getLbeaconTable = 
     `
-	SELECT uuid, description, ip_address, health_status, gateway_ip_address, last_report_timestamp 
+	SELECT uuid, low_rssi, med_rssi, high_rssi, description, ip_address, health_status, gateway_ip_address, last_report_timestamp 
 	FROM lbeacon_table 
 	ORDER BY last_report_timestamp DESC
 	`;
