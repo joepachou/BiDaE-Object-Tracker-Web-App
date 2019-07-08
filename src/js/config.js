@@ -69,6 +69,9 @@ const config = {
             highVal: -10,
         },
 
+        /* Marker dispersity, can be any positive number */
+        markerDispersity: 8,
+
         objectTypeSet: new Set(['Bed', 'EKG Machine', 'Infusion pump', 'SONOSITE Ultrasound', 'Ultrasound', 'Bladder scanner'])
         
     },

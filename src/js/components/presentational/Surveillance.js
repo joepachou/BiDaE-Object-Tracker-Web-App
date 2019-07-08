@@ -607,7 +607,7 @@ class Surveillance extends React.Component {
         const xx = mac_address.slice(12,14);
         const yy = mac_address.slice(15,17);
 
-        const multiplier = 4; // 1m = 100cm = 1000mm, multipler = 1000/16*16 = 3
+        const multiplier = config.surveillanceMap.markerDispersity; // 1m = 100cm = 1000mm, multipler = 1000/16*16 = 3
 		const origin_x = lbeacon_coordinate[1] - parseInt(80, 16) * multiplier ; 
 		const origin_y = lbeacon_coordinate[0] - parseInt(80, 16) * multiplier ;
 		const xxx = origin_x + parseInt(xx, 16) * multiplier;
