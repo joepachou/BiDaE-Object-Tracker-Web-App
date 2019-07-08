@@ -2,7 +2,7 @@ function query_getTrackingData (accuracy = 1) {
 	const locationAccuracyMapToDefault = {
 		0: -100,
 		1: -65,
-		2: -10,
+		2: -45,
 	}
 
 	const locationAccuracyMapToDB = {
@@ -11,7 +11,10 @@ function query_getTrackingData (accuracy = 1) {
 		2: 'high_rssi',
 	}
 
-	const rssi = locationAccuracyMapToDefault[accuracy]
+	const lowest_rssi = locationAccuracyMapToDefault[0];
+	const default_rssi = locationAccuracyMapToDefault[accuracy];
+	const field_name = locationAccuracyMapToDB[accuracy];
+
 	const text = `
 	SELECT table_location.object_mac_address, 
 		   table_device.name, 
@@ -27,24 +30,50 @@ function query_getTrackingData (accuracy = 1) {
 	FROM
 	
 	    (
-	    SELECT table_track_data.object_mac_address, 
-		       table_track_data.lbeacon_uuid, 
-			   table_track_data.avg as avg, 
+	    SELECT table_track_data_by_thresholds.object_mac_address, 
+		       table_track_data_by_thresholds.lbeacon_uuid, 
+		       table_track_data_by_thresholds.avg as avg, 
 			   table_panic.panic_button as panic_button, 
 			   NULL as geofence_type 
 	    FROM
 		
-		    (
-			SELECT object_mac_address, 
-				   lbeacon_uuid, 
-				   round(avg(rssi),2) as avg
-		    FROM tracking_table
-		        WHERE final_timestamp >= NOW() - INTERVAL '15 seconds'  
-		        AND final_timestamp >= NOW() - (server_time_offset||' seconds')::INTERVAL - INTERVAL '10 seconds'
-                GROUP BY object_mac_address, lbeacon_uuid
-				HAVING avg(rssi) > $1
-            ) as table_track_data	    
-		     
+			(
+	        SELECT table_track_data.object_mac_address,
+			       table_track_data.lbeacon_uuid,
+			       table_track_data.avg as avg
+			FROM
+			    
+				(
+			    SELECT object_mac_address, 
+			           lbeacon_uuid, 
+			           round(avg(rssi),2) as avg
+				FROM tracking_table		  
+			        WHERE final_timestamp >= NOW() - INTERVAL '15 seconds'  
+		            AND final_timestamp >= NOW() - (server_time_offset||' seconds')::INTERVAL - INTERVAL '10 seconds'
+                    GROUP BY object_mac_address, lbeacon_uuid
+			        HAVING avg(rssi) > ${lowest_rssi}
+			    ) as table_track_data	    
+				
+			    INNER JOIN 
+
+			    (
+			    SELECT uuid,
+			     	   high_rssi,
+			     	   med_rssi,
+			    	   low_rssi
+			    FROM lbeacon_table
+			    ) as table_beacons
+
+				ON table_track_data.lbeacon_uuid = table_beacons.uuid
+					
+				WHERE (table_beacons.${field_name} is NULL AND 
+					table_track_data.avg >= ${default_rssi}) 
+					OR
+					(table_beacons.${field_name} is NOT NULL AND 
+					table_track_data.avg > table_beacons.${field_name}) 
+			
+		    )as table_track_data_by_thresholds
+			
 		    LEFT JOIN
 		
 		    (
@@ -58,8 +87,8 @@ function query_getTrackingData (accuracy = 1) {
 		        HAVING max(panic_button) > 0
 		    ) as table_panic	
 		
-		    ON table_track_data.object_mac_address = table_panic.object_mac_address 
-		    AND table_track_data.lbeacon_uuid = table_panic.lbeacon_uuid
+		    ON table_track_data_by_thresholds.object_mac_address = table_panic.object_mac_address 
+		    AND table_track_data_by_thresholds.lbeacon_uuid = table_panic.lbeacon_uuid
 	
 	    UNION
 	
@@ -92,14 +121,7 @@ function query_getTrackingData (accuracy = 1) {
     
 	`;
 
-	const values = [rssi]
-
-	const query = {
-		text,
-		values
-	}
-
-	 return query
+	 return text;
 }
 
 
