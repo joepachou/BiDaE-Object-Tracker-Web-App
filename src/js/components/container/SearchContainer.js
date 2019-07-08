@@ -42,6 +42,11 @@ class SearchContainer extends React.Component {
     }
 
     componentDidUpdate(prepProps) {
+        if (prepProps.clearSearchResult !== this.props.clearSearchResult) {
+            this.setState({
+                searchKey: '',
+            })
+        }
         if (this.props.searchableObjectData != null && this.state.hasSearchableObjectData === false) {
             this.getObjectType();
             this.setState({
@@ -252,7 +257,8 @@ class SearchContainer extends React.Component {
                 <div id='searchBar' className='d-flex justify-content-center align-items-center pt-4 pb-2'>
                     <Searchbar 
                         placeholder={this.state.searchKey}
-                        getResultData={this.getResultData}    
+                        getResultData={this.getResultData}
+                        clearSearchResult={this.props.clearSearchResult}    
                     />
                     
                 </div>
@@ -262,7 +268,8 @@ class SearchContainer extends React.Component {
                             searchableObjectData={searchableObjectData}
                             getResultData={this.getResultData}  
                             transferSearchResult={transferSearchResult}  
-                            getResultData={this.getResultData}    
+                            getResultData={this.getResultData}
+                            clearSearchResult={this.props.clearSearchResult}    
                         />
                         {/* <Col id='searchableObjectType' md={6} sm={6} xs={6} className='px-0'>
                             <h6 className="font-weight-bold">{}</h6>

@@ -28,6 +28,7 @@ export default class ContentContainer extends React.Component{
             colorPanel: null,
             clearColorPanel: false,
             searchResultObjectTypeMap: {},
+            clearSearchResult: false,
         }
 
         this.transferSearchableObjectData = this.transferSearchableObjectData.bind(this)
@@ -62,6 +63,7 @@ export default class ContentContainer extends React.Component{
                 colorPanel: colorPanel,
                 clearColorPanel: false,
                 searchResultObjectTypeMap: searchResultObjectTypeMap, 
+                clearSearchResult: false,
             })
         } else {
             this.clearGridButtonBGColor();
@@ -72,6 +74,7 @@ export default class ContentContainer extends React.Component{
                 colorPanel: null,
                 clearColorPanel: true,
                 searchResultObjectTypeMap: searchResultObjectTypeMap, 
+                clearSearchResult: false
             })
         }
     }
@@ -91,7 +94,8 @@ export default class ContentContainer extends React.Component{
             searchResult: [],
             colorPanel: null,
             clearColorPanel: true,
-            searchResultObjectTypeMap: {}
+            searchResultObjectTypeMap: {},
+            clearSearchResult: this.state.hasSearchKey ? true : false,
         })
     }
     
@@ -101,6 +105,10 @@ export default class ContentContainer extends React.Component{
 
         const style = {
             container: {
+
+                /** The height: 100vh will cause the page can only have 100vh height.
+                 * In other word, if the seaerch result is too long and have to scroll down, the page cannot scroll down
+                 */
                 // height: '100vh'
             },
             searchResult: {
@@ -190,6 +198,7 @@ export default class ContentContainer extends React.Component{
                             searchableObjectData={this.state.searchableObjectData} 
                             transferSearchResult={this.transferSearchResult}
                             hasSearchKey={this.state.hasSearchKey}
+                            clearSearchResult={this.state.clearSearchResult}
                         />
                         
                         {/* <GridButton

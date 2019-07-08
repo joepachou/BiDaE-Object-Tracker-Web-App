@@ -29,7 +29,6 @@ class SurveillanceContainer extends React.Component {
             formOption: [],
             showDevice: false,
             searchableObjectData: [],
-            isClear: false,
         }
 
         this.adjustRssi = this.adjustRssi.bind(this);
@@ -39,7 +38,6 @@ class SurveillanceContainer extends React.Component {
         this.handleConfirmFormSubmit = this.handleConfirmFormSubmit.bind(this);
         this.handleClickButton = this.handleClickButton.bind(this)
         this.transferSearchableObjectData = this.transferSearchableObjectData.bind(this)
-        this.handleClearGridButtonStatus = this.handleClearGridButtonStatus.bind(this)
     }
 
 
@@ -137,16 +135,10 @@ class SurveillanceContainer extends React.Component {
                 break;
             case 'clear':
                 this.props.handleClearButton();
-                this.handleClearGridButtonStatus();
         }
 
     }
 
-    handleClearGridButtonStatus() {
-        this.setState({
-            isClear: true,
-        })
-    }
 
     transferSearchableObjectData(processData) {
         this.props.transferSearchableObjectData(processData)

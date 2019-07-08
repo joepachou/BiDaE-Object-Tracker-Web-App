@@ -18,6 +18,14 @@ class FrequentSearch extends React.Component {
 
         this.handleClick = this.handleClick.bind(this);
     }
+    componentDidUpdate(prepProps) {
+        console.log(prepProps.clearSearchResult, this.props.clearSearchResult)
+        if (prepProps.clearSearchResult !== this.props.clearSearchResult && !prepProps.clearSearchResult) {
+            this.setState({
+                searchkey: '',
+            })
+        }
+    }
 
 
     handleClick(e) {
@@ -97,7 +105,9 @@ class FrequentSearch extends React.Component {
                             active={this.state.searchkey === 'my devices'}
                         >
                             My Devices
-                        </Button>}
+                        </Button>
+                    }
+                    {console.log(this.state.searchkey)}
                         <Button 
                             variant="outline-custom"
                             onClick={this.handleClick} 

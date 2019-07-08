@@ -14,6 +14,14 @@ class Searchbar extends React.Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
+    componentDidUpdate(prepProps) {
+        if (prepProps.clearSearchResult !== this.props.clearSearchResult && !prepProps.clearSearchResult) {
+            this.setState({
+                value: '',
+            })
+        }
+    }
+
     handleSubmit(e) {
         e.preventDefault();
         this.props.getResultData(this.state.value);
