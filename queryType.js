@@ -131,7 +131,7 @@ const query_getObjectTable =
 
 const query_getLbeaconTable = 
     `
-	SELECT uuid, description, low_rssi, med_rssi, high_rssi, ip_address, health_status, gateway_ip_address, last_report_timestamp 
+	SELECT uuid, description, ip_address, health_status, gateway_ip_address, last_report_timestamp 
 	FROM lbeacon_table 
 	ORDER BY last_report_timestamp DESC
 	`;
@@ -289,27 +289,6 @@ function query_addUserSearchHistory (username, history) {
 	return query
 }
 
-function query_editLbeacon (uuid, low, med, high) {
-	
-
-	const text = `
-		UPDATE lbeacon_table
-		SET low_rssi = $2,
-			med_rssi = $3,
-			high_rssi = $4
-		WHERE uuid = $1
-	`;
-
-	const values = [uuid, low, med, high]
-	const query = {
-		text, 
-		values
-	};
-
-	return query
-
-}
-
 
 module.exports = {
     query_getTrackingData,
@@ -323,6 +302,5 @@ module.exports = {
 	query_signup,
 	query_getUserInfo,
 	query_getUserSearchHistory,
-	query_addUserSearchHistory,
-	query_editLbeacon
+	query_addUserSearchHistory
 }
