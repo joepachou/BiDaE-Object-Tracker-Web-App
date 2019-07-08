@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, ListGroup, Row } from 'react-bootstrap';
+import { Col, ListGroup, Row, Button } from 'react-bootstrap';
 import LocaleContext from '../../context/LocaleContext';
 import axios from 'axios';
 import dataSrc from '../../dataSrc';
@@ -71,36 +71,42 @@ class FrequentSearch extends React.Component {
                 <Row className='d-flex justify-content-center' style={style.titleText}>
                     <h5>Frequent Search</h5>
                 </Row>
-                <ListGroup>
-                    {Cookies.get('searchHistory') && JSON.parse(Cookies.get('searchHistory')).map( (item, index) => {
+                <div className='d-inline-flex flex-column mb-3 justify-content-end' >
+                    {Cookies.get('searchHistory') && JSON.parse(Cookies.get('searchHistory')).filter( item => {
+                        return item.name !== 'All'
+                    }).map( (item, index) => {
                         
                         return (
-                            <ListGroup.Item 
+                            <Button
+                                variant="outline-custom"
                                 onClick={this.handleClick} 
                                 action 
                                 active={this.state.searchkey === item.name.toLowerCase()} 
                                 key={index}
                             >
                                 {item.name}
-                            </ListGroup.Item>
+                            </Button>
                         )
                     })}
+                    &nbsp;
                     {Cookies.get('user') && 
-                        <ListGroup.Item 
+                        <Button
+                            variant="outline-custom"
                             onClick={this.handleClick} 
                             action
-                            active={this.state.searchkey === 'my device'}
+                            active={this.state.searchkey === 'my devices'}
                         >
                             My Devices
-                        </ListGroup.Item>}
-                    <ListGroup.Item 
-                        onClick={this.handleClick} 
-                        action
-                        active={this.state.searchkey === 'all device'}
-                    >
-                        All Devices
-                    </ListGroup.Item>
-                </ListGroup>
+                        </Button>}
+                        <Button 
+                            variant="outline-custom"
+                            onClick={this.handleClick} 
+                            action
+                            active={this.state.searchkey === 'all devices'}
+                        >
+                            All Devices
+                        </Button>
+                </div>
             </>
         )
     }
