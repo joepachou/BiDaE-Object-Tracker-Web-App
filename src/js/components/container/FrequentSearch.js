@@ -87,7 +87,6 @@ class FrequentSearch extends React.Component {
                             <Button
                                 variant="outline-custom"
                                 onClick={this.handleClick} 
-                                action 
                                 active={this.state.searchkey === item.name.toLowerCase()} 
                                 key={index}
                             >
@@ -100,7 +99,6 @@ class FrequentSearch extends React.Component {
                         <Button
                             variant="outline-custom"
                             onClick={this.handleClick} 
-                            action
                             active={this.state.searchkey === 'my devices'}
                         >
                             My Devices
@@ -109,7 +107,6 @@ class FrequentSearch extends React.Component {
                         <Button 
                             variant="outline-custom"
                             onClick={this.handleClick} 
-                            action
                             active={this.state.searchkey === 'all devices'}
                         >
                             All Devices
