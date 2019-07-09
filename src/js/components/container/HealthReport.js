@@ -8,7 +8,8 @@ import 'react-table/react-table.css';
 import EditLbeaconForm from './EditLbeaconForm'
 
 import axios from 'axios';
-import dataSrc from '../../../js/dataSrc'
+import dataSrc from '../../../js/dataSrc';
+import config from '../../config';
 import { connect } from 'react-redux';
 
 
@@ -30,13 +31,14 @@ class HealthReport extends React.Component{
         this.getLbeaconData = this.getLbeaconData.bind(this)
         this.processTrackingData = this.processTrackingData.bind(this)
         this.handleSubmitForm = this.handleSubmitForm.bind(this)
+        this.handleCloseForm = this.handleCloseForm.bind(this)
     }
 
     componentDidMount(){
         this.getLbeaconData();
         this.getGatewayData();
-        this.getGatewayDataInterval = setInterval(this.getGatewayData,60000)
-        this.getLbeaconDataInterval = setInterval(this.getLbeaconData,60000)
+        this.getGatewayDataInterval = setInterval(this.getGatewayData, config.healthReport.pollGatewayTableIntevalTime)
+        this.getLbeaconDataInterval = setInterval(this.getLbeaconData, config.healthReport.pollLbeaconTabelIntevalTime)
     }
 
     componentWillUnmount() {
@@ -82,11 +84,16 @@ class HealthReport extends React.Component{
                     .map( s => s.charAt(0).toUpperCase() + s.substring(1))
                     .join(' '),
                 field.accessor = item.name,
+
+
                 field.headerStyle={
                     textAlign: 'left',
                 }
+
+                if (item.name === 'uuid') {
+                    field.width = 350
+                }
                 column.push(field);
-                
             })
             this.setState({
                 lbeaconData: res.data.rows,
@@ -100,7 +107,7 @@ class HealthReport extends React.Component{
     }
 
     componentDidUpdate(prepProps) {
-        if (prepProps !== this.props && this.props.objectInfo !== undefined) {
+        if (prepProps !== this.props && this.props.objectInfo) {
             this.processTrackingData(this.props.objectInfo)
         }
     }
@@ -136,7 +143,16 @@ class HealthReport extends React.Component{
         this.setState({
             isShowModal: false
         })
+        setInterval(
+            this.getLbeaconData()
+            ,1000
+        )
+    }
 
+    handleCloseForm() {
+        this.setState({
+            isShowModal: false
+        })
     }
     
     render(){
@@ -197,14 +213,13 @@ class HealthReport extends React.Component{
 
                         />
                     </Tab>
-                    <Tab eventKey="tracking_table" title="Track">
+                    <Tab eventKey="tracking_table" title="Tracking Object">
                         <ReactTable 
                             minRows={6} 
                             defaultPageSize={50} 
                             data={trackingData} 
                             columns={trackingColunm} 
                             pageSizeOptions={[5, 10]}
-                            showPagination = {false}
                             resizable={true}
                             freezeWhenExpanded={false}
                         />
@@ -215,6 +230,7 @@ class HealthReport extends React.Component{
                     title='Edit Object' 
                     selectedObjectData={this.state.selectedRowData} 
                     handleSubmitForm={this.handleSubmitForm}
+                    handleCloseForm={this.handleCloseForm}
                 />
             </Container>
         )

@@ -13,15 +13,6 @@ import config from '../../config';
 import LocaleContext from '../../context/LocaleContext';
 import axios from 'axios';
 import dataSrc from '../../dataSrc';
-
-const transferredLocations = config.transferredLocation;
-
-const options = transferredLocations.map( location => {
-    let locationObj = {};
-    locationObj["value"] = location;
-    locationObj["label"] = location;
-    return locationObj
-})
   
 class EditLbeaconForm extends React.Component {
     
@@ -30,9 +21,11 @@ class EditLbeaconForm extends React.Component {
 
         this.state = {
             show: props.show,
-            low: '',
-            med: '',
-            high: '',
+            formOption: {
+                low: '',
+                med: '',
+                high: '',
+            }
             
         };
         this.handleShow = this.handleShow.bind(this);
@@ -56,6 +49,7 @@ class EditLbeaconForm extends React.Component {
     }
   
     handleClose() {
+        this.props.handleCloseForm()
         this.setState({ 
             show: false,
         });
@@ -69,23 +63,17 @@ class EditLbeaconForm extends React.Component {
 
     handleSubmit(e) {
         const buttonStyle = e.target.style
-        const { low, med, high } = this.state
-        const lbeaconPackage = {
-            uuid: this.props.selectedObjectData.uuid,
-            low: low,
-            med: med,
-            high: high
-        }
-
+        const lbeaconSettingPackage = this.state.formOption
+        lbeaconSettingPackage.uuid = this.props.selectedObjectData.uuid
         axios.post(dataSrc.editLbeacon, {
-            formOption: lbeaconPackage
+            formOption: lbeaconSettingPackage
         }).then(res => {
             buttonStyle.opacity = 0.4
             setTimeout(
                 function() {
-                   this.setState ({
-                       show: false,
-                   })
+                    this.setState({
+                        formOption: {}
+                    })
                    this.props.handleSubmitForm()
                 }
                 .bind(this),
@@ -102,7 +90,10 @@ class EditLbeaconForm extends React.Component {
         const target = e.target;
         const { name } = target;
         this.setState({
-            [name]: target.value
+            formOption: {
+                ...this.state.formOption,
+                [name]: target.value
+            }
         })
     }
 
@@ -159,7 +150,7 @@ class EditLbeaconForm extends React.Component {
                                     type="text" 
                                     placeholder={selectedObjectData ? selectedObjectData.name : ''} 
                                     onChange={this.handleChange} 
-                                    value={this.state.high} 
+                                    value={this.state.formOption.high} 
                                     name='high'
                                     style={style.input}
                                 />
@@ -174,7 +165,7 @@ class EditLbeaconForm extends React.Component {
                                     type="text" 
                                     placeholder={selectedObjectData ? selectedObjectData.name : ''} 
                                     onChange={this.handleChange} 
-                                    value={this.state.med} 
+                                    value={this.state.formOption.med} 
                                     name='med'
                                     style={style.input}
                                 />
@@ -189,7 +180,7 @@ class EditLbeaconForm extends React.Component {
                                     type="text" 
                                     placeholder={selectedObjectData ? selectedObjectData.name : ''} 
                                     onChange={this.handleChange} 
-                                    value={this.state.low} 
+                                    value={this.state.formOption.low} 
                                     name='low'
                                     style={style.input}
                                 />
