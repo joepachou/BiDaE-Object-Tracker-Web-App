@@ -181,7 +181,7 @@ class GridButton extends React.Component {
 
         const { objectTypeSet } = this.state;
         return (
-            <div className="gridbutton_wrapper">
+            <div className="gridbutton_wrapper d-flex justify-content-start">
                 {objectTypeSet.size !== 0 
                     ? 
                         Array.from(objectTypeSet).map( (item,index) => {

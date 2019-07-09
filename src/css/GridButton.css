@@ -1,6 +1,9 @@
 .gridbutton_wrapper {
-    display: grid;
-    grid-template-columns: 200px 200px;
+    /* display: grid;
+    display: -ms-grid;
+    grid-template-columns: 200px; 
+    -ms-grid-columns: 200px; */
+    min-width: 500px;
   }
   * {box-sizing: border-box;}
 
@@ -10,11 +13,13 @@
 }
 .gridbutton {
     border-radius: 5px;
+    margin-right: 10px;
     color: rgba(0, 0, 0, 0.54);
     font-weight: 500;
     padding: 0.5rem;
     /* padding: 0px; */
-    margin: 1px;
+    margin-right: 3px;
+    min-width: 60px;
     box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 2px 1px -1px rgba(0,0,0,0.12);
     display: flex;
     align-items: center;

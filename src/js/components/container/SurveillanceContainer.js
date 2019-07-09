@@ -208,7 +208,7 @@ class SurveillanceContainer extends React.Component {
                         <Nav.Item className='d-flex align-self-start'>
                             <div style={style.title} className='text-wrap'>Location Accuracy</div>
                         </Nav.Item>
-                        <Nav.Item className='pt-2 mr-5'>
+                        <Nav.Item className='pt-2 mr-2'>
                             <ToggleSwitch 
                                 adjustRssi={this.adjustRssi} 
                                 leftLabel={this.capitalFirstLetter(locale.low)} 
@@ -220,7 +220,7 @@ class SurveillanceContainer extends React.Component {
                             <Button variant="outline-primary" className='mr-1 ml-2' onClick={this.handleClickButton}>Clear</Button>
                         </Nav.Item>
                         <Nav.Item className='mt-2'>
-                            <Button variant="outline-primary" className='mr-1 mr-5' onClick={this.handleClickButton}>Save</Button>
+                            <Button variant="outline-primary" className='mr-1 mr-4' onClick={this.handleClickButton}>Save</Button>
 
                         </Nav.Item>
                         <Nav.Item className='mt-2'>
