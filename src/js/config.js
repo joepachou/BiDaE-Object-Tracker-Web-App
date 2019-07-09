@@ -66,16 +66,10 @@ const config = {
         mapBound:[[0,0], [21130,35710]],
         
         /* Tracking object Rssi filter */
-        locationAccuracy: {
-            defaultVal: -65,
-            lowVal: -100,
-            highVal: -10,
-        },
-
         locationAccuracyMapToDefault: {
             0: -100,
             1: -65,
-            2: -10,
+            2: -50,
         },
 
         locationAccuracyMapToDB: {
@@ -83,12 +77,6 @@ const config = {
             1: 'med_rssi',
             2: 'high_rssi',
         },
-
-        locationAccuracyNameMapToVal: {
-			'low': 0,
-			'med': 1,
-			'high': 2,
-		},
 
         /* Marker dispersity, can be any positive number */
         markerDispersity: 8,

@@ -48,7 +48,9 @@ class App extends React.Component {
     
     getTrackingData() {
         axios.post(dataSrc.trackingData, {
-            rssi: this.props.locationAccuracy
+            accuracyValue: this.props.locationAccuracy,
+            locationAccuracyMapToDefault: config.surveillanceMap.locationAccuracyMapToDefault,
+            locationAccuracyMapToDB: config.surveillanceMap.locationAccuracyMapToDB,
         }).then(res => {
             this.props.retrieveTrackingData(res.data)
         })

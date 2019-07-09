@@ -15,11 +15,8 @@ const pool = new pg.Pool(config)
 
 
 const getTrackingData = (request, response) => {
-    const modifiedRssi = request.body.accuracyValue
-    const locationAccuracyMapToDefault = request.body.locationAccuracyMapToDefault
-    const locationAccuracyMapToDB = request.body.locationAccuracyMapToDB
-
-    pool.query(queryType.query_getTrackingData(modifiedRssi, locationAccuracyMapToDefault, locationAccuracyMapToDB ), (error, results) => {        
+    const { locationAccuracyMapToDefault, locationAccuracyMapToDB, accuracyValue } = request.body
+    pool.query(queryType.query_getTrackingData(accuracyValue, locationAccuracyMapToDefault, locationAccuracyMapToDB), (error, results) => {        
         if (error) {
             console.log("Get trackingData fails : " + error)
         } else {
@@ -218,7 +215,6 @@ const editLbeacon = (request, response) => {
     const high = request.body.formOption.high || null
     const uuid = request.body.formOption.uuid
 
-    console.log(low)    
     pool.query(queryType.query_editLbeacon(uuid, low, med, high), (error, results) => {
         if (error) {
             console.log('Edit lbeacon fails ' + error)

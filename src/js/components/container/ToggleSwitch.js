@@ -16,13 +16,7 @@ class ToggleSwitch extends React.Component {
 
 	toggleState(e) {
 		const name = e.target.name;
-
-		const locationAccuracyNameMapToVal = config.surveillanceMap.locationAccuracyNameMapToVal
-
-		const accuracyValue = locationAccuracyNameMapToVal[name.toLowerCase()]
-
-		this.props.adjustRssi(accuracyValue);
-
+		this.props.adjustRssi(e.target.value);
 		this.setState({
 			toggle: name,
 		});
@@ -37,7 +31,7 @@ class ToggleSwitch extends React.Component {
 					type="radio"
 					id="switch_left"
 					name={this.props.leftLabel}
-					value={config.surveillanceMap.locationAccuracy.lowVal}
+					value={0}
 					onChange={this.toggleState}
 					checked={this.state.toggle == this.props.leftLabel}
 				/>
@@ -47,7 +41,7 @@ class ToggleSwitch extends React.Component {
 					type="radio"
 					id="switch_middle"
 					name={this.props.defaultLabel}
-					value={config.surveillanceMap.locationAccuracy.defaultVal}
+					value={1}
 					onChange={this.toggleState}
 					checked={this.state.toggle === this.props.defaultLabel}
 				/>
@@ -57,7 +51,7 @@ class ToggleSwitch extends React.Component {
 					type="radio"
 					id="switch_right"
 					name={this.props.rightLabel}
-					value={config.surveillanceMap.locationAccuracy.highVal}
+					value={2}
 					onChange={this.toggleState}
 					checked={this.state.toggle === this.props.rightLabel}
 				/>

@@ -22,7 +22,7 @@ class SurveillanceContainer extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            rssi: config.surveillanceMap.locationAccuracy.defaultVal,
+            rssi: 1,
             showEditObjectForm: false,
             showConfirmForm: false,
             selectedObjectData: [],
