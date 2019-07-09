@@ -289,6 +289,26 @@ function query_addUserSearchHistory (username, history) {
 	return query
 }
 
+function query_editLbeacon (uuid, low, med, high) {
+	const text =
+		`
+		UPDATE lbeacon_table
+		SET low_rssi = $1,
+			med_rssi = $2,
+			high_rssi = $3
+		WHERE uuid = $4
+	`;
+
+	const values = [low, med, high, uuid]
+
+	const query = {
+		text, 
+		values
+	};
+
+	return query
+}
+
 
 module.exports = {
     query_getTrackingData,
@@ -302,5 +322,6 @@ module.exports = {
 	query_signup,
 	query_getUserInfo,
 	query_getUserSearchHistory,
-	query_addUserSearchHistory
+	query_addUserSearchHistory,
+	query_editLbeacon,
 }
