@@ -76,9 +76,9 @@ class FrequentSearch extends React.Component {
         return (
             <>
                 <Row className='d-flex justify-content-center' style={style.titleText}>
-                    <h5>Frequent Search</h5>
+                    <h4>Frequent Search</h4>
                 </Row>
-                <div className='d-inline-flex flex-column mb-3' >
+                <div className='d-inline-flex flex-column mb-3' id='frequentSearch' >
                     {Cookies.get('searchHistory') && JSON.parse(Cookies.get('searchHistory')).filter( item => {
                         return item.name !== 'All'
                     }).map( (item, index) => {

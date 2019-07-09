@@ -116,9 +116,11 @@ export default class ContentContainer extends React.Component{
                 paddingTop: 30,
             },
             alertText: {
+                fontSize: '1.2rem',
                 fontWeight: '700'
             },
             alertTextTitle: {
+                fontSize: '1.2rem',
                 fontWeight: 1000,
                 color: 'rgba(101, 111, 121, 0.78)'
             }

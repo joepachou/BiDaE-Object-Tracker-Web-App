@@ -216,7 +216,7 @@ class SearchResult extends React.Component {
         return(
             <>
                 <Row className='d-flex justify-content-center' style={style.titleText}>
-                    <h5>Search Result</h5>
+                    <h4>Search Result</h4>
                 </Row>
                 <Row className='w-100 searchResultForMobile'>
                     <Alert variant='secondary' className='d-flex justify-content-start'>
@@ -259,11 +259,11 @@ class SearchResult extends React.Component {
                 ? 
                     <>
                         <Row className='d-flex justify-content-center mt-3' style={style.titleText}>
-                            <h5>
+                            <h4>
                                 <a href="" onClick={this.handleToggleNotFound}>
                                     {this.state.showNotResult ? 'Hide' : 'Show' + ' ' + this.state.notFoundResult.length} Devices Not Found 
                                 </a>
-                            </h5>
+                            </h4>
                         </Row>
                         {/* <Row className='text-left mt-3' style={style.titleText}>
                             <h5>Devices not found</h5>

@@ -111,11 +111,10 @@
 @media (min-width: 1200px) {
 
     #navbar {
-        height: 80px;
+        height: 65px;
     }
     #mapid {
         height: 65vh;
     } 
-
 
 }
