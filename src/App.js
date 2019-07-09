@@ -47,10 +47,14 @@ class App extends React.Component {
     }
     
     getTrackingData() {
+
+        const locationAccuracyMapToDefault = config.surveillanceMap.locationAccuracyMapToDefault;
+        const locationAccuracyMapToDB =  config.surveillanceMap.locationAccuracyMapToDB;
+
         axios.post(dataSrc.trackingData, {
             accuracyValue: this.props.locationAccuracy,
-            locationAccuracyMapToDefault: config.surveillanceMap.locationAccuracyMapToDefault,
-            locationAccuracyMapToDB: config.surveillanceMap.locationAccuracyMapToDB,
+            locationAccuracyMapToDefault,
+            locationAccuracyMapToDB,
         }).then(res => {
             this.props.retrieveTrackingData(res.data)
         })
