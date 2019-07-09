@@ -1,6 +1,6 @@
 /* Marker setup */
 .awesome-number-marker {
-    /* background: url('../img/blue_pin_v2.svg') no-repeat;
+    /* background: url('../img/blue_pin_v2.png') no-repeat;
     background-size: contain;
     background-position: center; */
     width: 35px;
@@ -26,7 +26,7 @@
 
 /* Colors */
 .awesome-number-marker-icon-red {
-  background: url('../img/geo_fence_fence.svg') no-repeat center/contain;
+  background: url('../img/colorPin/Red.png') no-repeat center/contain;
   /* background-position: 0 0; */
 }
 
@@ -39,7 +39,7 @@
 }
 
 .awesome-number-marker-icon-orange {
-  background: url('../img/geo_fence_perimeter.svg') no-repeat center/contain;
+  background: url('../img/colorPin/Orange.png') no-repeat center/contain;
   /* background-position: -36px 0; */
 }
 
@@ -60,7 +60,7 @@
 }
 
 .awesome-number-marker-icon-blue {
-  background: url('../img/blue_pin_v2.svg') no-repeat center/contain;
+  background: url('../img/colorPin/DarkBlue.png') no-repeat center/contain;
   /* background-position: -108px 0; */
 }
 
@@ -91,7 +91,7 @@
 }
 
 .awesome-number-marker-icon-grey {
-  background: url('../img/darkGrey_pin.svg') no-repeat center/contain;
+  background: url('../img/colorPin//DarkGrey.png') no-repeat center/contain;
   /* background-position: -648px 0; */
 }
 
@@ -100,47 +100,51 @@
 }
 
 .awesome-number-marker-icon-black {
-  background: url('../img/black_pin.svg') no-repeat center/contain;
+  background: url('../img/colorPin/Black.png') no-repeat center/contain;
   /* background-position: -682px 0; */
 }
 
 .awesome-number-marker-icon-sos {
-  background: url('../img/sos.svg') no-repeat center/contain;
+  background: url('../img/sos.png') no-repeat center/contain;
 
 }
 .awesome-number-marker-icon-lavender  {
-  background: url('../img/colorPin/Lavender.svg') no-repeat center/contain;
+  background: url('../img/colorPin/Lavender.png') no-repeat center/contain;
 }
 
 .awesome-number-marker-icon-lightyellow  {
-  background: url('../img/colorPin/LightYellow.svg') no-repeat center/contain;
+  background: url('../img/colorPin/LightYellow.png') no-repeat center/contain;
 }
 
 .awesome-number-marker-icon-slateblue {
-  background: url('../img/colorPin/SlateBlue.svg') no-repeat center/contain;
+  background: url('../img/colorPin/SlateBlue.png') no-repeat center/contain;
 
 }
 
 .awesome-number-marker-icon-darkseagreen {
-  background: url('../img/colorPin/DarkSeaGreen.svg') no-repeat center/contain;
+  background: url('../img/colorPin/DarkSeaGreen.png') no-repeat center/contain;
 }
 
 .awesome-number-marker-icon-lightblue {
-  background: url('../img/colorPin/lightblue.svg') no-repeat center/contain;
+  background: url('../img/colorPin/lightblue.png') no-repeat center/contain;
 }
 
 .awesome-number-marker-icon-tan {
-  background: url('../img/colorPin/Tan.svg') no-repeat center/contain;
+  background: url('../img/colorPin/Tan.png') no-repeat center/contain;
 }
 
 .awesome-number-marker-icon-mistyrose {
-  background: url('../img/colorPin/MistyRose.svg') no-repeat center/contain;
+  background: url('../img/colorPin/MistyRose.png') no-repeat center/contain;
 }
 
 .awesome-number-marker-icon-yellowgreen {
-  background: url('../img/colorPin/YellowGreen.svg') no-repeat center/contain;
+  background: url('../img/colorPin/YellowGreen.png') no-repeat center/contain;
 }
 
 .awesome-number-marker-icon-orange {
-  background: url('../img/colorPin/Orange.svg') no-repeat center/contain;
+  background: url('../img/colorPin/Orange.png') no-repeat center/contain;
+}
+
+.awesome-number-marker-icon-orchid {
+  background: url('../img/colorPin/Orchid.png') no-repeat center/contain;
 }

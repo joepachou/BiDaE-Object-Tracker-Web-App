@@ -51,8 +51,8 @@ const config = {
             sos: 'sos',
             number: 'white',
 
-            // ['slateblue', 'tan', 'lightyellow', 'lavender', 'orange','lightblue', 'mistyrose', 'yellowgreen', 'darkseagreen]
-            pinColorArray: ['mistyrose', 'tan', 'lightyellow', 'lavender', 'orange','lightblue', 'yellowgreen']
+            // ['slateblue', 'tan', 'lightyellow', 'lavender', 'orange','lightblue', 'mistyrose', 'yellowgreen', 'darkseagreen', 'orchid']
+            pinColorArray: ['orchid','mistyrose', 'tan', 'lightyellow', 'lavender','lightblue', 'yellowgreen']
         },
 
         /* For test. To start object tracking*/
