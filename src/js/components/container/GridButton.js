@@ -2,7 +2,8 @@ import React from 'react';
 import config from '../../config';
 import axios from 'axios';
 import dataSrc from '../../dataSrc';
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
+import { Nav, Button } from 'react-bootstrap';
 
 class GridButton extends React.Component {
 
@@ -82,7 +83,6 @@ class GridButton extends React.Component {
                     .filter(item => {
                         return item.textContent !== 'All'
                     })
-                
                 Array.from(objectTypeSet).map(item => {
                     if (searchObjectTypeColorMap.has(item)) {
                         return;
@@ -185,7 +185,7 @@ class GridButton extends React.Component {
                 {objectTypeSet.size !== 0 
                     ? 
                         Array.from(objectTypeSet).map( (item,index) => {
-                            return <div className='gridbutton' onClick={this.handleClick} key={index}>{item}</div>
+                            return  <div className='gridbutton' onClick={this.handleClick} key={index}>{item}</div>
                         })
                     : null
                 }

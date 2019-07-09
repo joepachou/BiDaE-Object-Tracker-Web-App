@@ -169,7 +169,7 @@ class SurveillanceContainer extends React.Component {
             title: {
                 color: 'grey',
                 fontSize: '1rem',
-                wordWrap: 'break-word',
+                width: '5rem'
             },
             // surveillanceContainer: {
             //     height: '100vh'
@@ -204,10 +204,9 @@ class SurveillanceContainer extends React.Component {
                 </div>
                 <div style={style.navBlock}>
 
-                    <Nav className='d-flex align-items-baseline'>
-                        <Nav.Item className='pr-1'>
-                            <div style={style.title}>Location</div>
-                            <div style={style.title}>Accuracy</div>
+                    <Nav className='d-flex align-items-start'>
+                        <Nav.Item className='d-flex align-self-start'>
+                            <div style={style.title} className='text-wrap'>Location Accuracy</div>
                         </Nav.Item>
                         <Nav.Item className='pt-2 mr-5'>
                             <ToggleSwitch 
@@ -217,19 +216,19 @@ class SurveillanceContainer extends React.Component {
                                 rightLabel={this.capitalFirstLetter(locale.high)} 
                             />
                         </Nav.Item>
-                        <Nav.Item>
+                        <Nav.Item className='mt-2'>
                             <Button variant="outline-primary" className='mr-1 ml-2' onClick={this.handleClickButton}>Clear</Button>
                         </Nav.Item>
-                        <Nav.Item >
+                        <Nav.Item className='mt-2'>
                             <Button variant="outline-primary" className='mr-1 mr-5' onClick={this.handleClickButton}>Save</Button>
 
                         </Nav.Item>
-                        <Nav.Item >
+                        <Nav.Item className='mt-2'>
                             <Button variant="outline-primary" className='mr-1' onClick={this.handleClickButton} active={this.state.showDevice}>
                                 {this.state.showDevice ? 'Hide devices' : 'Show devices' }
                             </Button>
-                        </Nav.Item>
-                        <div style={style.gridButton}>
+                        </Nav.Item >
+                        <div style={style.gridButton} className='mt-2'>
                             <GridButton
                                 searchableObjectData={this.state.searchableObjectData} 
                                 transferSearchResult={this.props.transferSearchResult}

@@ -187,6 +187,7 @@ a:hover {
 }
 
 .btn {
+    font-size: 1rem;
     font-weight: 500;
     transition: none;
 }
@@ -218,9 +219,13 @@ a:hover {
     color: rgba(4, 53, 106, 1);
 }
 
-.btn:hover {
+.btn-outline-custom {
+    font-size: 18px;
 }
 
+.btn-outline-grid {
+    border-color: red;
+}
 
 /* SearchResult style sheet for mobile*/
 .searchResultForMobile {
@@ -229,7 +234,7 @@ a:hover {
 
 /** Search Result List Group */ 
 #searchResultListGroup {
-    max-Height: 45vh;
+    max-Height: 40vh;
     overflow: hidden scroll;
 }
 
