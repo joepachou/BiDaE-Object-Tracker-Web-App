@@ -96,7 +96,7 @@ class NavbarContainer extends React.Component {
         const { isSignin, isShowSigninForm, isShowSignupForm } = this.state;
 
         return (
-            <Navbar id='navbar' bg="white" className="navbar sticky-top navbar-light" fixed="bottom" expand='md' style={style.navbar}>
+            <Navbar id='navbar' bg="white" className="navbar sticky-top navbar-light" expand='md' style={style.navbar}>
                 <Navbar.Brand className='px-0 mx-0'>  
                     <Link to="/" className="nav-link nav-brand d-flex align-items-center px-0" style={style.navbarBrand}>
                         <Image
@@ -122,7 +122,7 @@ class NavbarContainer extends React.Component {
                         }
                     </Nav>
                     <Nav>
-                        <NavDropdown title={locale.language} id="collasible-nav-dropdown" alignRight onSelect={this.handleLangSelect}>
+                        <NavDropdown className='text-capitalize' title={locale.language} id="collasible-nav-dropdown" alignRight onSelect={this.handleLangSelect}>
                             {Object.values(supportedLocale).map( (locale,index) => {
                                 return <NavDropdown.Item key={index} className="lang-select" eventKey={locale.abbr}>{locale.name}</NavDropdown.Item>
                             })}
