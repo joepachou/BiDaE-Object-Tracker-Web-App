@@ -22,9 +22,9 @@ class EditLbeaconForm extends React.Component {
         this.state = {
             show: props.show,
             formOption: {
-                low: '',
-                med: '',
-                high: '',
+                low_rssi: '',
+                med_rssi: '',
+                high_rssi: '',
             }
             
         };
@@ -41,9 +41,14 @@ class EditLbeaconForm extends React.Component {
      */
 
     componentDidUpdate(prevProps) {
-        if (prevProps != this.props) {
+        if (prevProps.show != this.props.show && this.props.show) {
             this.setState({
                 show: this.props.show,
+                formOption: {
+                    low_rssi: this.state.formOption.low_rssi || this.props.selectedObjectData.low_rssi,
+                    med_rssi: this.state.formOption.med_rssi || this.props.selectedObjectData.med_rssi,
+                    high_rssi: this.state.formOption.high_rssi || this.props.selectedObjectData.high_rssi
+                }
             })
         }
     }
@@ -52,6 +57,12 @@ class EditLbeaconForm extends React.Component {
         this.props.handleCloseForm()
         this.setState({ 
             show: false,
+            selectedObjectData: {},
+            formOption: {
+                low_rssi: '',
+                med_rssi: '',
+                high_rssi: '',
+            }
         });
     }
   
@@ -72,7 +83,8 @@ class EditLbeaconForm extends React.Component {
             setTimeout(
                 function() {
                     this.setState({
-                        formOption: {}
+                        formOption: {},
+                        show: false,
                     })
                    this.props.handleSubmitForm()
                 }
@@ -143,15 +155,14 @@ class EditLbeaconForm extends React.Component {
 
                         <Form.Group as={Row} controlId="formHorizontalEmail">
                             <Form.Label column sm={3}>
-                                High
+                                Low
                             </Form.Label>
                             <Col sm={9}>
                                 <Form.Control 
                                     type="text" 
-                                    placeholder={selectedObjectData ? selectedObjectData.name : ''} 
                                     onChange={this.handleChange} 
-                                    value={this.state.formOption.high} 
-                                    name='high'
+                                    value={this.state.formOption.low_rssi} 
+                                    name='low_rssi'
                                     style={style.input}
                                 />
                             </Col>
@@ -163,35 +174,32 @@ class EditLbeaconForm extends React.Component {
                             <Col sm={9}>
                                 <Form.Control 
                                     type="text" 
-                                    placeholder={selectedObjectData ? selectedObjectData.name : ''} 
                                     onChange={this.handleChange} 
-                                    value={this.state.formOption.med} 
-                                    name='med'
+                                    value={this.state.formOption.med_rssi} 
+                                    name='med_rssi'
                                     style={style.input}
                                 />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} controlId="formHorizontalEmail">
                             <Form.Label column sm={3}>
-                                Low
+                                High
                             </Form.Label>
                             <Col sm={9}>
                                 <Form.Control 
                                     type="text" 
-                                    placeholder={selectedObjectData ? selectedObjectData.name : ''} 
                                     onChange={this.handleChange} 
-                                    value={this.state.formOption.low} 
-                                    name='low'
+                                    value={this.state.formOption.high_rssi} 
+                                    name='high_rssi'
                                     style={style.input}
                                 />
                             </Col>
                         </Form.Group>
-
                     </Form>
 
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={this.handleClose}>
+                    <Button variant="outline-secondary" onClick={this.handleClose}>
                         Cancel
                     </Button>
                     <Button variant="primary" onClick={this.handleSubmit}>

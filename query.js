@@ -209,10 +209,9 @@ const addUserSearchHistory = (request, response) => {
 }
 
 const editLbeacon = (request, response) => {
-
-    const low = request.body.formOption.low || null
-    const med = request.body.formOption.med || null
-    const high = request.body.formOption.high || null
+    const low = request.body.formOption.low_rssi || null
+    const med = request.body.formOption.med_rssi || null
+    const high = request.body.formOption.high_rssi || null
     const uuid = request.body.formOption.uuid
 
     pool.query(queryType.query_editLbeacon(uuid, low, med, high), (error, results) => {
