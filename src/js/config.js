@@ -7,6 +7,7 @@ import geofence_fence from '../img/geo_fence_fence.svg'
 import geofence_perimeter from '../img/geo_fence_perimeter.svg'
 import white_pin from '../img/white_pin.svg';
 import BOT_LOGO from '../img/BOT_LOGO_RED_MOD.png';
+import HealthReport from './components/container/HealthReport';
 
 
 const config = {
@@ -113,7 +114,13 @@ const config = {
     companyName: 'BeDI Tech',
 
     systemAdmin: {
-        openGlobalStateMonitor: !true
+
+        openGlobalStateMonitor: !true,
+    },
+
+    healthReport: {
+        pollLbeaconTabelIntevalTime: 60000,
+        pollGatewayTableIntevalTime: 60000,
     }
 
 
