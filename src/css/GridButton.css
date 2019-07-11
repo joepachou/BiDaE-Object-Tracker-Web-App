@@ -1,10 +1,8 @@
 .gridbutton_wrapper {
-    /* display: grid;
-    display: -ms-grid;
-    grid-template-columns: 200px; 
-    -ms-grid-columns: 200px; */
-    min-width: 500px;
-  }
+    display: grid;
+    grid-template-columns: 200px 200px; 
+    /* min-width: 500px; */
+}
   * {box-sizing: border-box;}
 
 .gridbutton_wrapper {
@@ -24,6 +22,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.gridbutton:hover {
+    cursor: pointer;
 }
 /* .nested {
     border: 2px solid #ffec99;
