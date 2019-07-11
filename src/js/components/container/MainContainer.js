@@ -144,7 +144,7 @@ export default class ContentContainer extends React.Component{
 
                                                 <div style={style.alertText}>{this.state.searchResult.length}</div>
                                                 &nbsp;
-                                                <div style={style.alertText}>{this.state.searchKey}</div>
+                                                <div style={style.alertText}>{'device'}</div>
                                                 &nbsp;
                                             </Alert>
                                         :    
@@ -155,7 +155,7 @@ export default class ContentContainer extends React.Component{
 
                                                 <div style={style.alertText}>{Object.keys(this.state.searchableObjectData).length}</div>
                                                 &nbsp;
-                                                <div style={style.alertText}>{'devices'}</div>
+                                                <div style={style.alertText}>{'device'}</div>
                                             </Alert>
                                     : 
                                         <Alert variant='secondary' className='d-flex justify-content-start'>
