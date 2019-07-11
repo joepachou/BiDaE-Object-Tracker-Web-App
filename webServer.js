@@ -40,15 +40,15 @@ app.get(/^\/page\/(.*)/, (req, res) => {
 })
 
 
-app.get('/data/objectTable', db.getObjectTable);
+app.get('/data/getObjectTable', db.getObjectTable);
 
-app.get('/data/lbeaconTable', db.getLbeaconTable);
+app.get('/data/getLbeaconTable', db.getLbeaconTable);
 
-app.get('/data/gatewayTable', db.getGatewayTable);
+app.get('/data/getGatewayTable', db.getGatewayTable);
 
 app.get('/data/geofenceData', db.getGeofenceData);
 
-app.post('/data/trackingData', db.getTrackingData);
+app.post('/data/getTrackingData', db.getTrackingData);
 
 app.post('/data/editObject', db.editObject);
 
@@ -58,9 +58,9 @@ app.post('/user/signin', db.signin);
 
 app.post('/user/signup', db.signup);
 
-app.post('/user/info', db.userInfo)
+app.post('/user/getUserInfo', db.getUserInfo)
 
-app.post('/user/searchHistory', db.userSearchHistory)
+app.post('/user/getUserSearchHistory', db.getUserSearchHistory)
 
 app.post('/user/addUserSearchHistory', db.addUserSearchHistory)
 

@@ -170,7 +170,7 @@ const signup = (request, response) => {
 
 }
 
-const userInfo = (request, response) => {
+const getUserInfo = (request, response) => {
     const username = request.body.username;
     pool.query(queryType.query_getUserInfo(username), (error, results) => {
         if (error) {
@@ -182,7 +182,7 @@ const userInfo = (request, response) => {
     })
 }
 
-const userSearchHistory = (request, response) => {
+const getUserSearchHistory = (request, response) => {
     const username = request.body.username;
     pool.query(queryType.query_getUserSearchHistory(username), (error, results) => {
         if (error) {
@@ -234,8 +234,8 @@ module.exports = {
     editObjectPackage,
     signin,
     signup,
-    userInfo,
-    userSearchHistory,
+    getUserInfo,
+    getUserSearchHistory,
     addUserSearchHistory,
     editLbeacon
     

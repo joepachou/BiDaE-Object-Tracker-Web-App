@@ -36,23 +36,29 @@ class SearchResult extends React.Component {
         this.handleConfirmFormSubmit = this.handleConfirmFormSubmit.bind(this)
         this.handleChangeObjectStatusFormClose = this.handleChangeObjectStatusFormClose.bind(this);
         this.handleToggleNotFound = this.handleToggleNotFound.bind(this);
+        this.sortNotFoundResult = this.sortNotFoundResult.bind(this);
     }
     
     componentDidUpdate(prepProps) {
         if(!(_.isEqual(prepProps.searchResult, this.props.searchResult))) {
-            let notFoundResult = [];
-            let foundResult = [];
-            this.props.searchResult.map(item => {
-                if (item.status.toLowerCase() !== 'normal') {
-                    notFoundResult.push(item)
-                }
-            })
-            foundResult = this.props.searchResult.filter(item => item.status.toLowerCase() === 'normal')
-            this.setState({
-                foundResult: foundResult,
-                notFoundResult: notFoundResult,
-            })
+            this.sortNotFoundResult(this.props.searchResult)
+            this.store
         }        
+    }
+
+    sortNotFoundResult(searchResult) {
+        let notFoundResult = [];
+        let foundResult = [];
+        searchResult.map(item => {
+            // if (item.status.toLowerCase() !== 'normal') {
+            //     notFoundResult.push(item)
+            // }
+        })
+        // foundResult = searchResult.filter(item => item.status.toLowerCase() === 'normal')
+        this.setState({
+            foundResult: searchResult,
+            notFoundResult: notFoundResult,
+        })
     }
 
     handleClickResultItem(eventKey) {
@@ -231,29 +237,34 @@ class SearchResult extends React.Component {
                     </Alert>
                 </Row>
                 <Row className='' style={style.foundResultDiv}>
-                    {this.state.foundResult.length === 0 
-                    ?   <Col className='d-flex justify-content-center font-italic font-weight-lighter' style={style.noResultDiv}>
-                            <div className='searchResultForDestop'>No Result</div>
-                        </Col> 
-                    
-                    :   
+                    {this.props.searchResult.length === 0 
+                        ?   <Col className='d-flex justify-content-center font-italic font-weight-lighter' style={style.noResultDiv}>
+                                <div className='searchResultForDestop'>No Result</div>
+                            </Col> 
+                        
+                        :   
                             <Col className=''>
                                 <ListGroup onSelect={this.handleClickResultItem} id='searchResultListGroup'>
-                                    {searchResult.filter(item => item.status.toLowerCase() === 'normal').map((item,index) => {
+                                    {this.props.searchResult.map((item,index) => {
                                         let element = 
                                             <ListGroup.Item href={'#' + index} action style={style.listItem} className='searchResultList' eventKey={'found:' + index} key={index}>
                                                 <Row className="d-flex justify-content-around">
                                                     <Col xs={1} sm={1} lg={1} className="font-weight-bold d-flex align-self-center" style={style.firstText}>{index + 1}</Col>
                                                     <Col xs={3} sm={3} lg={3} className="d-flex align-self-center justify-content-center" style={style.middleText}>{item.type}</Col>
-                                                    <Col xs={4} sm={4} lg={4} className="d-flex align-self-center text-muted" style={style.middleText}>ACN: xxxx-xxxx-{item.access_control_number.slice(10, 14)}</Col>
-                                                    <Col xs={3} sm={3} lg={3} className="d-flex align-self-center text-muted justify-content-center" style={style.lastText}>near {item.location_description}</Col>
+                                                    <Col xs={4} sm={4} lg={4} className="d-flex align-self-center text-muted" style={style.middleText}>xxxx-xxxx-{item.access_control_number.slice(10, 14)}</Col>
+                                                    {item.status.toLowerCase() === 'normal'
+                                                        ?
+                                                            <Col xs={3} sm={3} lg={3} className="d-flex align-self-center text-muted justify-content-center" style={style.lastText}>near {item.location_description}</Col>
+                                                        : 
+                                                            <Col xs={3} sm={3} lg={3} className="d-flex align-self-center text-muted justify-content-center" style={style.lastText}>{item.status}</Col>
+                                                    }
                                                 </Row>
                                             </ListGroup.Item>
                                         return element
                                     })}
                                 </ListGroup>
                             </Col>
-                    }
+                        }
                 </Row>
                 {this.state.notFoundResult.length !== 0 
                 ? 

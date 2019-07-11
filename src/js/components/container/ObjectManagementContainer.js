@@ -33,7 +33,7 @@ export default class ObjectManagement extends React.Component{
     }
 
     getObjectData() {
-        axios.get(dataSrc.objectTable).then(res => {
+        axios.get(dataSrc.getObjectTable).then(res => {
             let column = [];
             res.data.fields.map(item => {
                 let field = {};

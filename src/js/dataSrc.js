@@ -1,33 +1,33 @@
 const IP = 'localhost';//'bot.iis.sinica.edu.tw'
 
-const trackingData = 'https://' + IP + '/data/trackingData';
-const objectTable = 'https://' + IP + '/data/objectTable';
-const lbeaconTable = 'https://' + IP + '/data/lbeaconTable';
-const gatewayTable = 'https://' + IP + '/data/gatewayTable';
+const getTrackingData = 'https://' + IP + '/data/getTrackingData';
+const getObjectTable = 'https://' + IP + '/data/getObjectTable';
+const getLbeaconTable = 'https://' + IP + '/data/getLbeaconTable';
+const getGatewayTable = 'https://' + IP + '/data/getGatewayTable';
 const searchResult = 'https://' + IP + '/data/searchResult';
 const geofenceData = 'https://' + IP + '/data/geofenceData';
 const editObject = 'https://' + IP + '/data/editObject';
 const editObjectPackage = 'https://' + IP +'/data/editObjectPackage';
 const signin = 'https://' + IP + '/user/signin';
 const signup = 'https://' + IP + '/user/signup';
-const userInfo = 'https://' + IP + '/user/info';
-const userSearchHistory = 'https://' + IP + '/user/searchHistory'
+const getUserInfo = 'https://' + IP + '/user/getUserInfo';
+const getUserSearchHistory = 'https://' + IP + '/user/getUserSearchHistory'
 const addUserSearchHistory = 'https://' + IP + '/user/addUserSearchHistory'
 const editLbeacon = 'https://' + IP + '/data/editLbeacon'
 
 module.exports = {
-    trackingData,
-    objectTable,
-    lbeaconTable,
-    gatewayTable,
+    getTrackingData,
+    getObjectTable,
+    getLbeaconTable,
+    getGatewayTable,
     searchResult,
     geofenceData,
     editObject,
     editObjectPackage,
     signin,
     signup,
-    userInfo,
-    userSearchHistory,
+    getUserInfo,
+    getUserSearchHistory,
     addUserSearchHistory,
     editLbeacon
 };

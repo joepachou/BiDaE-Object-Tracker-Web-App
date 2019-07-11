@@ -40,7 +40,7 @@ class SigninPage extends React.Component {
     }
 
     getSearchHistory() {
-        axios.post(dataSrc.userSearchHistory, {
+        axios.post(dataSrc.getUserSearchHistory, {
             username: Cookies.get('user')
         }).then( res => {
             const history = res.data.rows[0].search_history

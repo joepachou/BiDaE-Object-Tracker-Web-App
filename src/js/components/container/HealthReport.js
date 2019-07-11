@@ -7,7 +7,7 @@ import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import EditLbeaconForm from './EditLbeaconForm'
 
-import axios from 'axios';
+import Axios from 'axios';
 import dataSrc from '../../../js/dataSrc';
 import config from '../../config';
 import { connect } from 'react-redux';
@@ -47,7 +47,7 @@ class HealthReport extends React.Component{
     }
 
     getGatewayData(){
-        axios.get(dataSrc.gatewayTable).then(res => {
+        Axios.get(dataSrc.getGatewayTable).then(res => {
             let column = [];
             res.data.fields.map(item => {
                 let field = {};
@@ -73,7 +73,7 @@ class HealthReport extends React.Component{
     }
 
     getLbeaconData(){
-        axios.get(dataSrc.lbeaconTable).then(res => {
+        Axios.get(dataSrc.getLbeaconTable).then(res => {
             let column = [];
             res.data.fields.map(item => {
                 let field = {};
