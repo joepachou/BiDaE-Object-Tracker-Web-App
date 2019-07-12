@@ -234,18 +234,18 @@ class Surveillance extends React.Component {
                 let geofence_type = objectInfoHash[items.object_mac_address].geofence_type;
                 let panic_button = objectInfoHash[items.object_mac_address].panic_button;
                 
-                if(items.geofence_type === config.geofence.type.FENCE){
-                    if(geofence_type === null || geofence_type === config.geofence.type.PERIMETER || 
-                        (geofence_type === config.geofence.type.FENCE &&  parseFloat(items.avg) > parseFloat(maxRSSI))) {
+                if(items.geofence_type === config.surveillanceMap.objectStatus.FENCE){
+                    if(geofence_type === null || geofence_type === config.surveillanceMap.objectStatus.PERIMETER || 
+                        (geofence_type === config.surveillanceMap.objectStatus.FENCE &&  parseFloat(items.avg) > parseFloat(maxRSSI))) {
                             
                         objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
                         objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
                         objectInfoHash[items.object_mac_address].location_description = items.location_description
                         objectInfoHash[items.object_mac_address].geofence_type = items.geofence_type;
                     }
-                }else if(items.geofence_type === config.geofence.type.PERIMETER){
+                }else if(items.geofence_type === config.surveillanceMap.objectStatus.PERIMETER){
                     if(geofence_type === null || 
-                        (geofence_type === config.geofence.type.PERIMETER && parseFloat(items.avg) > parseFloat(maxRSSI))) {
+                        (geofence_type === config.surveillanceMap.objectStatus.PERIMETER && parseFloat(items.avg) > parseFloat(maxRSSI))) {
                             
                         objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
                         objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
@@ -478,9 +478,10 @@ class Surveillance extends React.Component {
              * then the color will be black, or grey.
              */
             let iconOption = {}
-            if (objects[key].status === 'Broken' || objects[key].status === 'Transferred') {
+            if (objects[key].status.toLowerCase() === config.surveillanceMap.objectStatus.BROKEN 
+                || objects[key].status.toLowerCase() === config.surveillanceMap.objectStatus.TRANSFERRED) {
                 iconOption = unNormalIconOptions;
-            } else if (objects[key].geofence_type === config.geofence.type.FENCE){
+            } else if (objects[key].geofence_type === config.surveillanceMap.objectStatus.FENCE){
                 iconOption = geofenceFAweIconOptions;
                 if (objects[key].searched && config.surveillanceMap.iconOptions.showNumber) {
                     iconOption = {
@@ -488,7 +489,7 @@ class Surveillance extends React.Component {
                         number: ++counter
                     }
                 }
-			} else if (objects[key].geofence_type === config.geofence.type.PERIMETER){
+			} else if (objects[key].geofence_type === config.surveillanceMap.objectStatus.PERIMETER){
                 iconOption = geofencePAweIconOptions;
                 if (objects[key].searched && config.surveillanceMap.iconOptions.showNumber) {
                     iconOption = {

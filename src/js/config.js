@@ -53,6 +53,15 @@ const config = {
             pinColorArray: ['orchid','mistyrose', 'tan', 'lightyellow', 'lavender','lightblue', 'yellowgreen']
         },
 
+        objectStatus: {
+            
+            PERIMETER: 'perimeter',
+            FENCE: 'fence',
+            BROKEN: 'broken',
+            TRANSFERRED: 'transferred'
+             
+        },
+
         /* For test. To start object tracking*/
         startInteval: true,
 
@@ -110,12 +119,7 @@ const config = {
         pollGatewayTableIntevalTime: 60000,
     },
 
-    geofence: {
-      type: {
-            PERIMETER: 'perimeter',
-            FENCE: 'fence'
-      }   
-    }
+
 
 }
 
