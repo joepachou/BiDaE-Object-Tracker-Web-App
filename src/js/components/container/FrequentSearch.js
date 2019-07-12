@@ -6,6 +6,7 @@ import dataSrc from '../../dataSrc';
 import { connect } from 'react-redux';
 import { shouldUpdateTrackingData } from '../../action/action';
 import Cookies from 'js-cookie'
+import config from '../../config';
 
 class FrequentSearch extends React.Component {
 
@@ -17,6 +18,7 @@ class FrequentSearch extends React.Component {
         }
 
         this.handleClick = this.handleClick.bind(this);
+        this.getSearchKey = this.getSearchKey.bind(this);
     }
     componentDidUpdate(prepProps) {
         if (prepProps.clearSearchResult !== this.props.clearSearchResult && !prepProps.clearSearchResult) {
@@ -29,26 +31,17 @@ class FrequentSearch extends React.Component {
 
     handleClick(e) {
         const itemName = e.target.innerText.toLowerCase();
+        this.getSearchKey(itemName)
+    }
+
+    getSearchKey(itemName) {
         switch(itemName) {
             case 'my devices':
-                if (!this.state.hasGetUserInfo && Cookies.get('user')) {
-                    axios.post(dataSrc.userInfo, {
-                        username: Cookies.get('user')
-                    }).then( res => {
-                        var mydevice = new Set(res.data.rows[0].mydevice);
-                        this.props.getResultData(mydevice)
-                        this.setState({
-                            hasGetUserInfo: true,
-                            mydevice: mydevice,
-                        })
-                    }).catch(error => {
-                        console.log(error)
-                    })
-                } else if (!Cookies.get('user')) {
-                    return
-                } else {
-                    this.props.getResultData(this.state.mydevice)
-                };
+                const mydevice = new Set(JSON.parse(Cookies.get('userDevice')))
+                this.setState({
+                    hasGetUserInfo: true,
+                })
+                this.props.getResultData(mydevice)
 
                 break;
             case 'all devices':
@@ -79,8 +72,8 @@ class FrequentSearch extends React.Component {
                     <h4>Frequent Search</h4>
                 </Row>
                 <div className='d-inline-flex flex-column mb-3' id='frequentSearch' >
-                    {Cookies.get('searchHistory') && JSON.parse(Cookies.get('searchHistory')).filter( item => {
-                        return item.name !== 'All'
+                    {Cookies.get('searchHistory') && JSON.parse(Cookies.get('searchHistory')).filter( (item,index) => {
+                        return item.name !== 'All' && index < config.userPreference.searchHistoryNumber
                     }).map( (item, index) => {
                         
                         return (

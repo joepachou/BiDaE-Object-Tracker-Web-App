@@ -168,10 +168,9 @@ class GridButton extends React.Component {
 
     /** Sort the user search history and limit the history number */
     sortSearchHistory(history) {
+        console.log(history)
         let toReturn = history.sort( (a,b) => {
             return b.value - a.value
-        }).filter((item, index) => {
-            return index < 4
         })
         return toReturn
     }

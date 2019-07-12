@@ -119,6 +119,10 @@ const config = {
         pollGatewayTableIntevalTime: 60000,
     },
 
+    userPreference: {
+        searchHistoryNumber: 4
+    }
+
 
 
 }
