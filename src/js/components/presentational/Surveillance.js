@@ -234,18 +234,18 @@ class Surveillance extends React.Component {
                 let geofence_type = objectInfoHash[items.object_mac_address].geofence_type;
                 let panic_button = objectInfoHash[items.object_mac_address].panic_button;
                 
-                if(items.geofence_type === 'Fence'){
-                    if(geofence_type === null || geofence_type === 'Perimeter' || 
-                        (geofence_type === 'Fence' &&  parseFloat(items.avg) > parseFloat(maxRSSI))) {
+                if(items.geofence_type === config.geofence.type.FENCE){
+                    if(geofence_type === null || geofence_type === config.geofence.type.PERIMETER || 
+                        (geofence_type === config.geofence.type.FENCE &&  parseFloat(items.avg) > parseFloat(maxRSSI))) {
                             
                         objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
                         objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
                         objectInfoHash[items.object_mac_address].location_description = items.location_description
                         objectInfoHash[items.object_mac_address].geofence_type = items.geofence_type;
                     }
-                }else if(items.geofence_type === 'Perimeter'){
+                }else if(items.geofence_type === config.geofence.type.PERIMETER){
                     if(geofence_type === null || 
-                        (geofence_type === 'Perimeter' && parseFloat(items.avg) > parseFloat(maxRSSI))) {
+                        (geofence_type === config.geofence.type.PERIMETER && parseFloat(items.avg) > parseFloat(maxRSSI))) {
                             
                         objectInfoHash[items.object_mac_address].maxRSSI = items.avg;
                         objectInfoHash[items.object_mac_address].currentPosition = lbeaconCoordinate;
@@ -392,12 +392,12 @@ class Surveillance extends React.Component {
 		
 		//  const geofenceFIconOptions = L.icon({
         //     iconSize: iconSize,
-        //     iconUrl: config.surveillanceMap.iconOptions.geofenceIconFence,
+        //     iconUrl: config.surveillanceMap.iconOptions.geofenceIconfence,
         // });
 		
 		// const geofencePIconOptions = L.icon({
         //     iconSize: iconSize,
-        //     iconUrl: config.surveillanceMap.iconOptions.geofenceIconPerimeter,
+        //     iconUrl: config.surveillanceMap.iconOptions.geofenceIconperimeter,
         // });
 
         // const searchedObjectIconOptions = L.icon({
@@ -480,7 +480,7 @@ class Surveillance extends React.Component {
             let iconOption = {}
             if (objects[key].status === 'Broken' || objects[key].status === 'Transferred') {
                 iconOption = unNormalIconOptions;
-            } else if (objects[key].geofence_type === 'Fence'){
+            } else if (objects[key].geofence_type === config.geofence.type.FENCE){
                 iconOption = geofenceFAweIconOptions;
                 if (objects[key].searched && config.surveillanceMap.iconOptions.showNumber) {
                     iconOption = {
@@ -488,7 +488,7 @@ class Surveillance extends React.Component {
                         number: ++counter
                     }
                 }
-			} else if (objects[key].geofence_type === 'Perimeter'){
+			} else if (objects[key].geofence_type === config.geofence.type.PERIMETER){
                 iconOption = geofencePAweIconOptions;
                 if (objects[key].searched && config.surveillanceMap.iconOptions.showNumber) {
                     iconOption = {

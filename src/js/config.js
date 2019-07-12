@@ -7,12 +7,9 @@ import geofence_fence from '../img/geo_fence_fence.svg'
 import geofence_perimeter from '../img/geo_fence_perimeter.svg'
 import white_pin from '../img/white_pin.svg';
 import BOT_LOGO from '../img/BOT_LOGO_RED_MOD.png';
-import HealthReport from './components/container/HealthReport';
-
 
 const config = {
-
-
+    
     surveillanceMap: {
 
         /* Surveillance map source*/
@@ -104,14 +101,21 @@ const config = {
     systemAdmin: {
 
         openGlobalStateMonitor: !true,
+
+        dataSrcIp: 'localhost'
     },
 
     healthReport: {
         pollLbeaconTabelIntevalTime: 60000,
         pollGatewayTableIntevalTime: 60000,
+    },
+
+    geofence: {
+      type: {
+            PERIMETER: 'perimeter',
+            FENCE: 'fence'
+      }   
     }
-
-
 
 }
 
