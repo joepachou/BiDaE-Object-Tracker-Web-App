@@ -8,10 +8,9 @@ import ConfirmForm from '../container/ConfirmForm';
 import shallowCompare from 'react-addons-shallow-compare'
 import { connect } from 'react-redux'
 import { shouldUpdateTrackingData } from '../../action/action';
-import axios from 'axios';
 import dataSrc from '../../dataSrc';
 import _ from 'lodash';
-import { deepEqual } from 'assert';
+import Axios from 'axios';
 
 
 
@@ -26,9 +25,9 @@ class SearchResult extends React.Component {
             formOption: [],
             thisComponentShouldUpdate: true,
             foundResult: [],
-            notFoundResult: [],
+            notFoundObjectMacAddressArray: [],
             showNotResult: false,
-
+            notFoundObject: [],
         }
         
         this.handleClickResultItem = this.handleClickResultItem.bind(this)
@@ -41,9 +40,32 @@ class SearchResult extends React.Component {
     
     componentDidUpdate(prepProps) {
         if(!(_.isEqual(prepProps.searchResult, this.props.searchResult))) {
-            this.sortNotFoundResult(this.props.searchResult)
-            this.store
+            if (this.props.searchKey === 'all devices') this.filterNotFoundObject()
+
+
         }        
+    }
+
+    filterNotFoundObject() {
+        Axios.get(dataSrc.getObjectTable).then( res => {
+            const objects = res.data.rows
+            const { searchResult } = this.props
+
+            const searchObjectMacAddressArray = searchResult.map( item => {
+                return item.mac_address
+            })
+            const notFoundObjectMacAddressArray = [];
+            objects.map(item => {
+                if (!(searchObjectMacAddressArray.includes(item.mac_address))) {
+                    notFoundObjectMacAddressArray.push(item.mac_address)
+                }
+            })
+            this.setState({
+                notFoundObjectMacAddressArray,
+            })
+        }).catch( error => {
+            console.log(error)
+        })            
     }
 
     sortNotFoundResult(searchResult) {
@@ -69,7 +91,7 @@ class SearchResult extends React.Component {
             showEditObjectForm: true,
 
             /** The reason using array to encapture the selectedObjectData is to have the consisten data form passed into ChangeStatusForm */
-            selectedObjectData: isFound.toLowerCase() === 'found' ? [this.state.foundResult[number]] : [this.state.notFoundResult[number]]
+            selectedObjectData: isFound.toLowerCase() === 'found' ? [this.props.searchResult[number]] : [this.state.notFoundResult[number]]
         })
         this.props.shouldUpdateTrackingData(false)
     }
@@ -137,7 +159,7 @@ class SearchResult extends React.Component {
             return item
         })
 
-        axios.post(dataSrc.editObjectPackage, {
+        Axios.post(dataSrc.editObjectPackage, {
             formOption: editObjectPackages
         }).then(res => {
             button.style.opacity = 0.4
@@ -160,10 +182,26 @@ class SearchResult extends React.Component {
 
     handleToggleNotFound(e) {
         e.preventDefault()
-        this.setState({
-            showNotResult: !this.state.showNotResult
-        })
         
+        this.state.showNotResult 
+            ?
+                this.setState({
+                    showNotResult: !this.state.showNotResult
+                })
+            : this.getNotFoundResult(this.state.notFoundObjectMacAddressArray);
+    }
+
+    getNotFoundResult(macAddressArray) {
+        Axios.post(dataSrc.getNotFoundTag, {
+            macAddressArray: macAddressArray
+        }).then( res => {
+            this.setState({
+                notFoundObject: res.data.rows,
+                showNotResult: !this.state.showNotResult
+            })
+        }).catch( error => {
+            console.log(error)
+        })
     }
 
     render() {
@@ -244,7 +282,7 @@ class SearchResult extends React.Component {
                         
                         :   
                             <Col className=''>
-                                <ListGroup onSelect={this.handleClickResultItem} id='searchResultListGroup'>
+                                <ListGroup onSelect={this.handleClickResultItem} className='searchResultListGroup'>
                                     {this.props.searchResult.map((item,index) => {
                                         let element = 
                                             <ListGroup.Item href={'#' + index} action style={style.listItem} className='searchResultList' eventKey={'found:' + index} key={index}>
@@ -266,23 +304,21 @@ class SearchResult extends React.Component {
                             </Col>
                         }
                 </Row>
-                {this.state.notFoundResult.length !== 0 
+                {this.state.notFoundObjectMacAddressArray && this.state.notFoundObjectMacAddressArray.length !== 0 
                 ? 
                     <>
                         <Row className='d-flex justify-content-center mt-3' style={style.titleText}>
                             <h4>
                                 <a href="" onClick={this.handleToggleNotFound}>
-                                    {this.state.showNotResult ? 'Hide' : 'Show' + ' ' + this.state.notFoundResult.length} Devices Not Found 
+                                    {this.state.showNotResult ? 'Hide' : 'Show' + ' ' + this.state.notFoundObjectMacAddressArray.length} Devices Not Found 
                                 </a>
                             </h4>
                         </Row>
-                        {/* <Row className='text-left mt-3' style={style.titleText}>
-                            <h5>Devices not found</h5>
-                        </Row> */}
+
                         <Row style={style.notFoundResultDiv}>
                             <Col className=''>
-                                <ListGroup onSelect={this.handleClickResultItem} className=''>
-                                    {this.state.notFoundResult.map((item,index) => {
+                                <ListGroup onSelect={this.handleClickResultItem} className='searchResultListGroup'>
+                                    {this.state.notFoundObject.map((item,index) => {
                                         let element = 
                                             <ListGroup.Item href={'#' + index} action style={style.listItem} className='searchResultList' eventKey={'notfound:' + index} key={index}>
                                                 <Row className="">

@@ -66,6 +66,8 @@ app.post('/user/addUserSearchHistory', db.addUserSearchHistory)
 
 app.post('/data/editLbeacon', db.editLbeacon)
 
+app.post('/data/getNotFoundTag', db.getNotFoundTag)
+
 
 const httpsServer = https.createServer(credentials, app);
 const httpServer = http.createServer(app);

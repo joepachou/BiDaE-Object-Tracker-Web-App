@@ -223,6 +223,18 @@ const editLbeacon = (request, response) => {
         response.status(200).json(results)
     })
 }
+
+const getNotFoundTag = (request, response) => {
+    const { macAddressArray } = request.body
+    pool.query(queryType.query_getNotFoundTag(macAddressArray), (error, results) => {
+        if (error) {
+            console.log('Get Not Found Tags Fails ' + error)
+        } else {
+            console.log('Get Not Found Tags success')
+            response.status(200).json(results)
+        }
+    })
+}
     
 module.exports = {
     getTrackingData,
@@ -230,6 +242,7 @@ module.exports = {
     getLbeaconTable,
     getGatewayTable,
     getGeofenceData,
+    getNotFoundTag,
     editObject,
     editObjectPackage,
     signin,

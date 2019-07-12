@@ -62,7 +62,8 @@ function query_getTrackingData (accuracyValue = 1) {
 			     	   med_rssi,
 			    	   low_rssi
 			    FROM lbeacon_table
-			    ) as table_beacons
+				) as table_beacons
+				
 				ON table_track_data.lbeacon_uuid = table_beacons.uuid
 					
 				WHERE (table_beacons.${field_name} is NULL AND 
@@ -116,6 +117,7 @@ function query_getTrackingData (accuracyValue = 1) {
 		LEFT JOIN lbeacon_table
 		ON lbeacon_table.uuid=table_location.lbeacon_uuid
 		ORDER BY table_device.type ASC, object_mac_address ASC;
+		
     
 	`;
 
@@ -310,6 +312,62 @@ function query_editLbeacon (uuid, low, med, high) {
 	return query
 }
 
+function query_getNotFoundTag (macAddressArray) {
+
+	
+	let text = `
+	SELECT
+		last_location_table.object_mac_address,
+		last_location_table.rssi,
+		last_location_table.max,
+		last_location_table.lbeacon_uuid,
+		lbeacon_table.description as location_description,
+		object_table.status,
+		object_table.access_control_number,
+		object_table.name,
+		object_table.type
+	FROM
+
+	(SELECT
+		mac_rssi_time_table.object_mac_address,
+		mac_rssi_time_table.rssi,
+		mac_rssi_time_table.max,
+		tracking_table.lbeacon_uuid
+	FROM tracking_table,
+		(SELECT
+			tracking_table.object_mac_address,
+			MAX(tracking_table.rssi) as rssi,
+			max_time_table.max
+		FROM tracking_table,
+			(SELECT object_mac_address,
+					MAX(final_timestamp) as max
+			FROM tracking_table
+			WHERE object_mac_address IN ('${macAddressArray[0]}',${macAddressArray.filter((item,index) => {
+				return index > 0
+			}).map(item => {
+				return `'${item}'` 
+			})}) 
+			GROUP BY object_mac_address
+			) as max_time_table
+		WHERE (tracking_table.object_mac_address = max_time_table.object_mac_address)
+		AND (tracking_table.final_timestamp = max_time_table.max)
+		GROUP BY tracking_table.object_mac_address, max_time_table.max
+		) as mac_rssi_time_table
+
+	WHERE (tracking_table.object_mac_address = mac_rssi_time_table.object_mac_address)
+	AND (tracking_table.final_timestamp = mac_rssi_time_table.max)
+	AND (tracking_table.rssi = mac_rssi_time_table.rssi)
+	) as last_location_table
+
+	LEFT JOIN lbeacon_table
+	ON lbeacon_table.uuid = last_location_table.lbeacon_uuid
+
+	INNER JOIN object_table
+	ON object_table.mac_address = last_location_table.object_mac_address
+	`	
+	return text
+}
+
 
 module.exports = {
     query_getTrackingData,
@@ -317,6 +375,7 @@ module.exports = {
     query_getLbeaconTable,
 	query_getGatewayTable,
 	query_getGeofenceData,
+	query_getNotFoundTag,
 	query_editObject,
 	query_editObjectPackage,
 	query_signin,
