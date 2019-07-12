@@ -120,7 +120,16 @@ const config = {
     },
 
     userPreference: {
-        searchHistoryNumber: 4
+        searchHistoryNumber: 4,
+        cookies: {
+            SEARCH_HISTORY: 'searchHistory',
+            USER_DEVICES: 'userDevices'
+        }
+    },
+
+    frequentSearchOption: {
+        MY_DEVICES: 'my devices',
+        ALL_DEVICES: 'all devices'
     }
 
 

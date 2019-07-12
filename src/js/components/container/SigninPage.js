@@ -20,8 +20,6 @@ class SigninPage extends React.Component {
     }
 
     componentDidUpdate(preProps) {
-
-        if (preProps != this.props)
         this.setState({
             show: this.props.show,
         })
@@ -44,8 +42,8 @@ class SigninPage extends React.Component {
             username: Cookies.get('user')
         }).then( res => {
             const { search_history, mydevice } = res.data.rows[0]
-            Cookies.set('searchHistory', search_history)
-            Cookies.set('userDevice', mydevice)
+            Cookies.set(config.userPreference.cookies.SEARCH_HISTORY, search_history)
+            Cookies.set(config.userPreference.cookies.USER_DEVICES, mydevice)
 
         }).catch(error => {
             console.log(error)

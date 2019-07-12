@@ -36,15 +36,15 @@ class FrequentSearch extends React.Component {
 
     getSearchKey(itemName) {
         switch(itemName) {
-            case 'my devices':
-                const mydevice = new Set(JSON.parse(Cookies.get('userDevice')))
+            case config.frequentSearchOption.MY_DEVICES:
+                const mydevice = new Set(JSON.parse(Cookies.get(config.userPreference.cookies.USER_DEVICES)))
                 this.setState({
                     hasGetUserInfo: true,
                 })
                 this.props.getResultData(mydevice)
 
                 break;
-            case 'all devices':
+            case config.frequentSearchOption.ALL_DEVICES:
                 // this.props.shouldUpdateTrackingData(true)
                 this.props.getResultData(itemName)
                 break;
