@@ -33,7 +33,6 @@ class SignupPage extends React.Component {
     }
 
     handleSignupFormShowUp() {
-        console.log(13)
         this.props.handleSignupFormShowUp()
     }
 

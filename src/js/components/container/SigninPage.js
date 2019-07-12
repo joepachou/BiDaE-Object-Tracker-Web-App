@@ -39,12 +39,14 @@ class SigninPage extends React.Component {
         this.props.handleSignupFormShowUp()
     }
 
-    getSearchHistory() {
-        axios.post(dataSrc.getUserSearchHistory, {
+    getUserInfo() {
+        axios.post(dataSrc.getUserInfo, {
             username: Cookies.get('user')
         }).then( res => {
-            const history = res.data.rows[0].search_history
-            Cookies.set('searchHistory', history)
+            const { search_history, mydevice } = res.data.rows[0]
+            Cookies.set('searchHistory', search_history)
+            Cookies.set('userDevice', mydevice)
+
         }).catch(error => {
             console.log(error)
         })
@@ -95,7 +97,7 @@ class SigninPage extends React.Component {
                                     setSubmitting(false)
                                 } else {
                                     Cookies.set('user', username)
-                                    this.getSearchHistory()
+                                    this.getUserInfo()
                                     handleSigninFormSubmit(username)
                                 }
                             }).catch(error => {
