@@ -5,7 +5,6 @@ import { Alert, Tab, ListGroup, Col, Row, Nav } from 'react-bootstrap'
 import LocaleContext from '../../context/LocaleContext';
 import ChangeStatusForm from '../container/ChangeStatusForm';
 import ConfirmForm from '../container/ConfirmForm';
-import shallowCompare from 'react-addons-shallow-compare'
 import { connect } from 'react-redux'
 import { shouldUpdateTrackingData } from '../../action/action';
 import dataSrc from '../../dataSrc';
@@ -169,7 +168,7 @@ class SearchResult extends React.Component {
                         showConfirmForm: false,
                         formOption: [],
                     })
-                    this.props.transferSearchResult(changedStatusSearchResult, colorPanel )
+                    this.props.transferSearchResultToMain(changedStatusSearchResult, colorPanel )
                     this.props.shouldUpdateTrackingData(true)
                 }
                 .bind(this),
