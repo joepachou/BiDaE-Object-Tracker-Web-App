@@ -111,7 +111,9 @@ const config = {
 
         openGlobalStateMonitor: !true,
 
-        dataSrcIp: 'localhost'
+        dataSrcIp: 'localhost',
+
+        refreshSearchResult: true,
     },
 
     healthReport: {

@@ -23,6 +23,7 @@ class SearchContainer extends React.Component {
             sectionIndex:'',
             searchResult: [],
             hasSearchableObjectData: false,
+            refreshSearchResult: config.systemAdmin.refreshSearchResult
         }
     
         this.handleTouchStart = this.handleTouchStart.bind(this);
@@ -37,12 +38,19 @@ class SearchContainer extends React.Component {
 
     componentDidMount() {
         const targetElement = document.body;
+
         // document.body.style.position = "fixed";
 
         // disableBodyScroll(targetElement);
     }
 
     componentDidUpdate(prepProps) {
+        if (this.state.refreshSearchResult 
+            && this.state.hasSearchKey 
+            && !(_.isEqual(prepProps.searchableObjectData, this.props.searchableObjectData))) {
+            this.getResultData(this.state.searchKey)
+        }
+        
         if (prepProps.clearSearchResult !== this.props.clearSearchResult) {
             this.setState({
                 searchKey: '',
