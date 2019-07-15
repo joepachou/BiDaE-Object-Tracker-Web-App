@@ -45,6 +45,10 @@ class SearchContainer extends React.Component {
     }
 
     componentDidUpdate(prepProps) {
+
+        /** Refresh the search result automatically 
+         *  This feature can be adjust by the user by changing the boolean value in config
+        */
         if (this.state.refreshSearchResult 
             && this.state.hasSearchKey 
             && !(_.isEqual(prepProps.searchableObjectData, this.props.searchableObjectData))) {

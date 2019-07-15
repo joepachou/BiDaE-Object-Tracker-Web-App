@@ -48,7 +48,6 @@ export default class ContentContainer extends React.Component{
      *  The three variable will then pass into SurveillanceContainer
     */
     transferSearchResultToMain(searchResult, colorPanel, searchKey) {
-        console.log(searchResult)
         let searchResultObjectTypeMap = {}
         searchResult.map( item => {
             if (!(item.type in searchResultObjectTypeMap)){
