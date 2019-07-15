@@ -233,7 +233,6 @@ class SurveillanceContainer extends React.Component {
                                 searchableObjectData={this.state.searchableObjectData} 
                                 transferSearchResultToMain={this.props.transferSearchResultToMain}
                                 clearColorPanel={this.props.clearColorPanel}
-                                isClear={this.state.isClear}
                             />
                         </div>
                     </Nav>
