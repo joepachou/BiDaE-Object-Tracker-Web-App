@@ -34,20 +34,17 @@ class SearchResult extends React.Component {
         this.handleConfirmFormSubmit = this.handleConfirmFormSubmit.bind(this)
         this.handleChangeObjectStatusFormClose = this.handleChangeObjectStatusFormClose.bind(this);
         this.handleToggleNotFound = this.handleToggleNotFound.bind(this);
-        this.sortNotFoundResult = this.sortNotFoundResult.bind(this);
     }
     
     componentDidUpdate(prepProps) {
+        console.log(this.props.searchKey)
         if(!(_.isEqual(prepProps.searchResult, this.props.searchResult))) {
             if (this.props.searchKey === 'all devices') this.filterNotFoundObject()
-
-
         }        
     }
 
     filterNotFoundObject() {
         const { searchResult } = this.props
-
         const searchObjectMacAddressArray = searchResult.map( item => {
             return item.mac_address
         })
@@ -60,21 +57,6 @@ class SearchResult extends React.Component {
         this.setState({
             notFoundObjectMacAddressArray,
         })       
-    }
-
-    sortNotFoundResult(searchResult) {
-        let notFoundResult = [];
-        let foundResult = [];
-        searchResult.map(item => {
-            // if (item.status.toLowerCase() !== 'normal') {
-            //     notFoundResult.push(item)
-            // }
-        })
-        // foundResult = searchResult.filter(item => item.status.toLowerCase() === 'normal')
-        this.setState({
-            foundResult: searchResult,
-            notFoundResult: notFoundResult,
-        })
     }
 
     handleClickResultItem(eventKey) {
@@ -227,7 +209,8 @@ class SearchResult extends React.Component {
                 // textAlign: 'right'
             },
             titleText: {
-                color: 'rgb(80, 80, 80, 0.9)'
+                color: 'rgb(80, 80, 80, 0.9)',
+                display: this.props.searchKey === 'all devices' ? null : 'none',
             }, 
             notFoundResultDiv: {
                 display: this.state.showNotResult ? null : 'none',
@@ -301,8 +284,8 @@ class SearchResult extends React.Component {
                 {this.state.notFoundObjectMacAddressArray && this.state.notFoundObjectMacAddressArray.length !== 0 
                 ? 
                     <>
-                        <Row className='d-flex justify-content-center mt-3' style={style.titleText}>
-                            <h4>
+                        <Row className='d-flex justify-content-center mt-3'>
+                            <h4 style={style.titleText}>
                                 <a href="" onClick={this.handleToggleNotFound}>
                                     {this.state.showNotResult ? 'Hide' : 'Show' + ' ' + this.state.notFoundObjectMacAddressArray.length} Devices Not Found 
                                 </a>
