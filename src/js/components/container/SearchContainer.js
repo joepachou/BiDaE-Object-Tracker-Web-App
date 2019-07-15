@@ -45,28 +45,29 @@ class SearchContainer extends React.Component {
     }
 
     componentDidUpdate(prepProps) {
-
         /** Refresh the search result automatically 
          *  This feature can be adjust by the user by changing the boolean value in config
         */
         if (this.state.refreshSearchResult 
             && this.state.hasSearchKey 
+            && !this.props.hasGridButton
             && !(_.isEqual(prepProps.searchableObjectData, this.props.searchableObjectData))) {
-            this.getResultData(this.state.searchKey)
+            this.getResultData(this.state.searchKey)            
         }
         
-        if (prepProps.clearSearchResult !== this.props.clearSearchResult) {
+        if (prepProps.clearSearchResult !== this.props.clearSearchResult && this.props.clearSearchResult) {
             this.setState({
                 searchKey: '',
             })
         }
+
         if (this.props.searchableObjectData != null && this.state.hasSearchableObjectData === false) {
             this.getObjectType();
             this.setState({
                 hasSearchableObjectData: true,
             })
         }
-        if (prepProps.hasSearchKey !== this.props.hasSearchKey) {
+        if (prepProps.hasSearchKey !== this.props.hasSearchKey && prepProps.hasSearchKey) {
             this.setState({
                 hasSearchKey: this.props.hasSearchKey,
             })
@@ -255,7 +256,8 @@ class SearchContainer extends React.Component {
                         getResultData={this.getResultData}  
                         transferSearchResultToMain={transferSearchResultToMain}  
                         getResultData={this.getResultData}
-                        clearSearchResult={this.props.clearSearchResult}    
+                        clearSearchResult={this.props.clearSearchResult}   
+                        hasGridButton={this.props.hasGridButton} 
                     />
                     {/* <Col id='searchableObjectType' md={6} sm={6} xs={6} className='px-0'>
                         <h6 className="font-weight-bold">{}</h6>

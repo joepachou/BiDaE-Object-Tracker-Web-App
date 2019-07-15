@@ -13,7 +13,7 @@ class FrequentSearch extends React.Component {
     constructor(){
         super()
         this.state = {
-            searchkey: '',
+            searchKey: '',
         }
 
         this.handleClick = this.handleClick.bind(this);
@@ -22,7 +22,12 @@ class FrequentSearch extends React.Component {
     componentDidUpdate(prepProps) {
         if (prepProps.clearSearchResult !== this.props.clearSearchResult && !prepProps.clearSearchResult) {
             this.setState({
-                searchkey: '',
+                searchKey: '',
+            })
+        }
+        if (prepProps.hasGridButton !== this.props.hasGridButton && this.props.hasGridButton) {
+            this.setState({
+                searchKey: ''
             })
         }
     }
@@ -35,7 +40,7 @@ class FrequentSearch extends React.Component {
     getSearchKey(itemName) {
         this.props.getResultData(itemName)
         this.setState({
-            searchkey: itemName
+            searchKey: itemName
         })
     }
 
@@ -62,7 +67,7 @@ class FrequentSearch extends React.Component {
                             <Button
                                 variant="outline-custom"
                                 onClick={this.handleClick} 
-                                active={this.state.searchkey === item.name.toLowerCase()} 
+                                active={this.state.searchKey === item.name.toLowerCase()} 
                                 key={index}
                             >
                                 {item.name}
@@ -74,7 +79,7 @@ class FrequentSearch extends React.Component {
                         <Button
                             variant="outline-custom"
                             onClick={this.handleClick} 
-                            active={this.state.searchkey === 'my devices'}
+                            active={this.state.searchKey === 'my devices'}
                         >
                             My Devices
                         </Button>
@@ -82,7 +87,7 @@ class FrequentSearch extends React.Component {
                         <Button 
                             variant="outline-custom"
                             onClick={this.handleClick} 
-                            active={this.state.searchkey === 'all devices'}
+                            active={this.state.searchKey === 'all devices'}
                         >
                             All Devices
                         </Button>

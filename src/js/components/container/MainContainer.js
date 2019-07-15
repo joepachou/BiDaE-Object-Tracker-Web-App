@@ -29,6 +29,7 @@ export default class ContentContainer extends React.Component{
             clearColorPanel: false,
             searchResultObjectTypeMap: {},
             clearSearchResult: false,
+            hasGridButton: false,
         }
 
         this.transferSearchableObjectDataToMain = this.transferSearchableObjectDataToMain.bind(this)
@@ -61,10 +62,12 @@ export default class ContentContainer extends React.Component{
             this.setState({
                 hasSearchKey: colorPanel.size === 0 ? false : true,
                 searchResult: searchResult,
+                searchKey: '',
                 colorPanel: colorPanel,
                 clearColorPanel: false,
                 searchResultObjectTypeMap: searchResultObjectTypeMap, 
                 clearSearchResult: false,
+                hasGridButton: true,
             })
         } else {
             this.clearGridButtonBGColor();
@@ -75,7 +78,8 @@ export default class ContentContainer extends React.Component{
                 colorPanel: null,
                 clearColorPanel: true,
                 searchResultObjectTypeMap: searchResultObjectTypeMap, 
-                clearSearchResult: false
+                clearSearchResult: false,
+                hasGridButton: false,
             })
         }
     }
@@ -202,6 +206,7 @@ export default class ContentContainer extends React.Component{
                             transferSearchResultToMain={this.transferSearchResultToMain}
                             hasSearchKey={this.state.hasSearchKey}
                             clearSearchResult={this.state.clearSearchResult}
+                            hasGridButton={this.state.hasGridButton}
                         />
                         
                         {/* <GridButton
