@@ -10,16 +10,16 @@ import axios from 'axios';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import { Col, Row, Button, Nav, Container} from 'react-bootstrap';
-import EditObjectForm from './EditObjectForm'
+import EditObjectForm from './EditObjectForm';
+import { connect } from 'react-redux';
 
-export default class ObjectManagement extends React.Component{
+class ObjectManagement extends React.Component{
 
     constructor() {
         super();
         this.state = {
             data:[],
             column:[],
-            filterData:[],
             isShowModal: false,
             selectedRowData: {},
         }
@@ -28,35 +28,34 @@ export default class ObjectManagement extends React.Component{
         this.handleSubmitForm = this.handleSubmitForm.bind(this);
     }
 
-    componentDidMount(){
-        this.getObjectData();
+
+    componentDidUpdate(preProps) {
+        if (preProps.objectTable.length === 0) {
+            this.getObjectData();
+        }
     }
 
     getObjectData() {
-        axios.get(dataSrc.getObjectTable).then(res => {
-            let column = [];
-            res.data.fields.map(item => {
-                let field = {};
-                field.Header = item.name.replace(/_/g, ' ')
-                    .toLowerCase()
-                    .split(' ')
-                    .map( s => s.charAt(0).toUpperCase() + s.substring(1))
-                    .join(' '),                
-                field.accessor = item.name,
-                field.headerStyle={
-                    textAlign: 'left',
-                }
-                column.push(field);
-            })
-            this.setState({
-                data: res.data.rows,
-                filterData: res.data.rows,
-                column: column,
-            })
+        const { objectTable } = this.props
+        let column = [];
+        objectTable.fields.map(item => {
+            let field = {};
+            field.Header = item.name.replace(/_/g, ' ')
+                .toLowerCase()
+                .split(' ')
+                .map( s => s.charAt(0).toUpperCase() + s.substring(1))
+                .join(' '),                
+            field.accessor = item.name,
+            field.headerStyle={
+                textAlign: 'left',
+            }
+            column.push(field);
         })
-        .catch(function (error) {
-            console.log(error);
+        this.setState({
+            data: objectTable.rows,
+            column: column,
         })
+
     }
 
     handleModalForm() {
@@ -80,7 +79,7 @@ export default class ObjectManagement extends React.Component{
                 <Row className='d-flex w-100 justify-content-around'>
                     <Col className='py-2'>
                         <ReactTable 
-                            data = {this.state.filterData} 
+                            data = {this.state.data} 
                             columns = {this.state.column} 
                             showPagination = {false}
                             noDataText="No Data Available"
@@ -118,3 +117,13 @@ export default class ObjectManagement extends React.Component{
         )
     }
 }
+
+
+const mapStateToProps = (state) => {
+    return {
+        objectTable: state.retrieveTrackingData.objectTable
+    }
+}
+
+
+export default connect(mapStateToProps)(ObjectManagement);

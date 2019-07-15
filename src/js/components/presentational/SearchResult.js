@@ -46,25 +46,20 @@ class SearchResult extends React.Component {
     }
 
     filterNotFoundObject() {
-        Axios.get(dataSrc.getObjectTable).then( res => {
-            const objects = res.data.rows
-            const { searchResult } = this.props
+        const { searchResult } = this.props
 
-            const searchObjectMacAddressArray = searchResult.map( item => {
-                return item.mac_address
-            })
-            const notFoundObjectMacAddressArray = [];
-            objects.map(item => {
-                if (!(searchObjectMacAddressArray.includes(item.mac_address))) {
-                    notFoundObjectMacAddressArray.push(item.mac_address)
-                }
-            })
-            this.setState({
-                notFoundObjectMacAddressArray,
-            })
-        }).catch( error => {
-            console.log(error)
-        })            
+        const searchObjectMacAddressArray = searchResult.map( item => {
+            return item.mac_address
+        })
+        const notFoundObjectMacAddressArray = [];
+        this.props.objectTable.rows.map(item => {
+            if (!(searchObjectMacAddressArray.includes(item.mac_address))) {
+                notFoundObjectMacAddressArray.push(item.mac_address)
+            }
+        })
+        this.setState({
+            notFoundObjectMacAddressArray,
+        })       
     }
 
     sortNotFoundResult(searchResult) {
@@ -359,11 +354,17 @@ class SearchResult extends React.Component {
 }
 SearchResult.contextType = LocaleContext;
 
+const mapStateToProps = (state) => {
+    return {
+        objectTable: state.retrieveTrackingData.objectTable
+    }
+}
+
 const mapDispatchToProps = (dispatch) => {
     return {
         shouldUpdateTrackingData: value => dispatch(shouldUpdateTrackingData(value))
     }
 }
 
-export default connect(null, mapDispatchToProps)(SearchResult);
+export default connect(mapStateToProps, mapDispatchToProps)(SearchResult);
 

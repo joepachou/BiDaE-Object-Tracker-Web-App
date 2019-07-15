@@ -8,9 +8,12 @@ import routes from './js/routes';
 import locale from './js/locale';
 import LocaleContext from './js/context/LocaleContext';
 import config from './js/config';
-import axios from 'axios';
+import Axios from 'axios';
 import dataSrc from './js/dataSrc';
-import { retrieveTrackingData } from './js/action/action';
+import { 
+    retrieveTrackingData,
+    retrieveObjectTable
+} from './js/action/action';
 import { connect } from 'react-redux';
 
 class App extends React.Component {
@@ -32,6 +35,7 @@ class App extends React.Component {
     }
 
     componentDidMount() {
+        this.getObjectTable()
         this.props.shouldTrackingDataUpdate ? this.getTrackingData() : null;
         this.interval = this.props.shouldTrackingDataUpdate ? setInterval(this.getTrackingData, config.surveillanceMap.intevalTime) : null;
     }
@@ -51,7 +55,7 @@ class App extends React.Component {
         const locationAccuracyMapToDefault = config.surveillanceMap.locationAccuracyMapToDefault;
         const locationAccuracyMapToDB =  config.surveillanceMap.locationAccuracyMapToDB;
 
-        axios.post(dataSrc.trackingData, {
+        Axios.post(dataSrc.getTrackingData, {
             accuracyValue: this.props.locationAccuracy,
             locationAccuracyMapToDefault,
             locationAccuracyMapToDB,
@@ -60,6 +64,14 @@ class App extends React.Component {
         })
         .catch(error => {
             console.log(error)
+        })
+    }
+
+    getObjectTable() {
+        Axios.get(dataSrc.getObjectTable).then(res => {
+            this.props.retrieveObjectTable(res.data)
+        }).catch(err => {
+            console.log(err)
         })
     }
 
@@ -88,6 +100,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         retrieveTrackingData: object => dispatch(retrieveTrackingData(object)),
+        retrieveObjectTable: objectArray => dispatch(retrieveObjectTable(objectArray))
     }
 }
 
