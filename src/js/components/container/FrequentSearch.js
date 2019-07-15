@@ -27,30 +27,12 @@ class FrequentSearch extends React.Component {
         }
     }
 
-
     handleClick(e) {
         const itemName = e.target.innerText.toLowerCase();
         this.getSearchKey(itemName)
     }
 
     getSearchKey(itemName) {
-        // console.log(itemName)
-        // const myDevices = config.frequentSearchOption.MY_DEVICES
-        // const allDevices = config.frequentSearchOption.ALL_DEVICES
-        // switch(itemName) {
-        //     case myDevices:
-        //         const mydevice = new Set(JSON.parse(Cookies.get(config.userPreference.cookies.USER_DEVICES)))
-        //         this.props.getResultData(mydevice)
-
-        //         break;
-        //     case allDevices:
-        //         // this.props.shouldUpdateTrackingData(true)
-        //         this.props.getResultData(itemName)
-        //         break;
-        //     default:
-        //         this.props.getResultData(itemName)
-        //         break;
-        // }
         this.props.getResultData(itemName)
         this.setState({
             searchkey: itemName
