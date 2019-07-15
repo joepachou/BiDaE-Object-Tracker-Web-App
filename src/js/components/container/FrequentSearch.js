@@ -13,7 +13,6 @@ class FrequentSearch extends React.Component {
     constructor(){
         super()
         this.state = {
-            hasGetUserInfo: false,
             searchkey: '',
         }
 
@@ -35,23 +34,24 @@ class FrequentSearch extends React.Component {
     }
 
     getSearchKey(itemName) {
-        switch(itemName) {
-            case config.frequentSearchOption.MY_DEVICES:
-                const mydevice = new Set(JSON.parse(Cookies.get(config.userPreference.cookies.USER_DEVICES)))
-                this.setState({
-                    hasGetUserInfo: true,
-                })
-                this.props.getResultData(mydevice)
+        // console.log(itemName)
+        // const myDevices = config.frequentSearchOption.MY_DEVICES
+        // const allDevices = config.frequentSearchOption.ALL_DEVICES
+        // switch(itemName) {
+        //     case myDevices:
+        //         const mydevice = new Set(JSON.parse(Cookies.get(config.userPreference.cookies.USER_DEVICES)))
+        //         this.props.getResultData(mydevice)
 
-                break;
-            case config.frequentSearchOption.ALL_DEVICES:
-                // this.props.shouldUpdateTrackingData(true)
-                this.props.getResultData(itemName)
-                break;
-            default:
-                this.props.getResultData(itemName)
-                break;
-        }
+        //         break;
+        //     case allDevices:
+        //         // this.props.shouldUpdateTrackingData(true)
+        //         this.props.getResultData(itemName)
+        //         break;
+        //     default:
+        //         this.props.getResultData(itemName)
+        //         break;
+        // }
+        this.props.getResultData(itemName)
         this.setState({
             searchkey: itemName
         })
