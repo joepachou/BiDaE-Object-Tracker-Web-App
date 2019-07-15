@@ -320,7 +320,7 @@ class Surveillance extends React.Component {
         // markerClusters.on('clusterclick', this.handlemenu)
 
         /** Return Tracking data (searchableObjectData) to Search Container */
-        this.props.transferSearchableObjectData(objectInfoHash)
+        this.props.transferSearchableObjectDataToMain(objectInfoHash)
 
         this.setState({
             data: this.props.objectInfo,

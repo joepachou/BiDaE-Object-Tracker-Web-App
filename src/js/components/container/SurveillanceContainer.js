@@ -37,7 +37,7 @@ class SurveillanceContainer extends React.Component {
         this.handleChangeObjectStatusFormSubmit = this.handleChangeObjectStatusFormSubmit.bind(this);
         this.handleConfirmFormSubmit = this.handleConfirmFormSubmit.bind(this);
         this.handleClickButton = this.handleClickButton.bind(this)
-        this.transferSearchableObjectData = this.transferSearchableObjectData.bind(this)
+        this.transferSearchableObjectDataToMain = this.transferSearchableObjectDataToMain.bind(this)
     }
 
 
@@ -140,8 +140,8 @@ class SurveillanceContainer extends React.Component {
     }
 
 
-    transferSearchableObjectData(processData) {
-        this.props.transferSearchableObjectData(processData)
+    transferSearchableObjectDataToMain(processData) {
+        this.props.transferSearchableObjectDataToMain(processData)
         this.setState({
             searchableObjectData: processData,
         })
@@ -161,7 +161,7 @@ class SurveillanceContainer extends React.Component {
         const { hasSearchKey, 
                 searchResult,
                 searchType, 
-                transferSearchableObjectData
+                transferSearchableObjectDataToMain
             } = this.props;
         const locale = this.context;
 
@@ -195,7 +195,7 @@ class SurveillanceContainer extends React.Component {
                         hasSearchKey={hasSearchKey}
                         searchResult={searchResult}
                         searchType={searchType}
-                        transferSearchableObjectData={this.transferSearchableObjectData}
+                        transferSearchableObjectDataToMain={this.transferSearchableObjectDataToMain}
                         handleMarkerClick={this.handleMarkerClick}
                         style={style.searchMap}
                         colorPanel={this.props.colorPanel}

@@ -31,14 +31,14 @@ export default class ContentContainer extends React.Component{
             clearSearchResult: false,
         }
 
-        this.transferSearchableObjectData = this.transferSearchableObjectData.bind(this)
+        this.transferSearchableObjectDataToMain = this.transferSearchableObjectDataToMain.bind(this)
         this.transferSearchResultToMain = this.transferSearchResultToMain.bind(this);
         this.handleClearButton = this.handleClearButton.bind(this)
     }
 
 
     /** Transfer the processed object tracking data from Surveillance to MainContainer */
-    transferSearchableObjectData(processedData){
+    transferSearchableObjectDataToMain(processedData){
         this.setState({
             searchableObjectData: processedData
         })
@@ -48,6 +48,7 @@ export default class ContentContainer extends React.Component{
      *  The three variable will then pass into SurveillanceContainer
     */
     transferSearchResultToMain(searchResult, colorPanel, searchKey) {
+        console.log(searchResult)
         let searchResultObjectTypeMap = {}
         searchResult.map( item => {
             if (!(item.type in searchResultObjectTypeMap)){
@@ -187,7 +188,7 @@ export default class ContentContainer extends React.Component{
                             <SurveillanceContainer 
                                 hasSearchKey={hasSearchKey} 
                                 searchResult={searchResult}
-                                transferSearchableObjectData={this.transferSearchableObjectData}
+                                transferSearchableObjectDataToMain={this.transferSearchableObjectDataToMain}
                                 searchType={searchType}
                                 colorPanel={colorPanel}
                                 handleClearButton={this.handleClearButton}
