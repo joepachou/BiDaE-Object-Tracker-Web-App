@@ -32,7 +32,7 @@ export default class ContentContainer extends React.Component{
         }
 
         this.transferSearchableObjectData = this.transferSearchableObjectData.bind(this)
-        this.transferSearchResult = this.transferSearchResult.bind(this);
+        this.transferSearchResultToMain = this.transferSearchResultToMain.bind(this);
         this.handleClearButton = this.handleClearButton.bind(this)
     }
 
@@ -47,7 +47,8 @@ export default class ContentContainer extends React.Component{
     /** Transfer the search result, not found list and color panel from SearchContainer, GridButton to MainContainer 
      *  The three variable will then pass into SurveillanceContainer
     */
-    transferSearchResult(searchResult, colorPanel, searchKey) {
+    transferSearchResultToMain(searchResult, colorPanel, searchKey) {
+        console.log(searchResult)
         let searchResultObjectTypeMap = {}
         searchResult.map( item => {
             if (!(item.type in searchResultObjectTypeMap)){
@@ -56,6 +57,8 @@ export default class ContentContainer extends React.Component{
                 searchResultObjectTypeMap[item.type] = searchResultObjectTypeMap[item.type] + 1
             }
         })
+        console.log(searchResultObjectTypeMap)
+
         if(colorPanel) {
             this.setState({
                 hasSearchKey: colorPanel.size === 0 ? false : true,
@@ -190,7 +193,7 @@ export default class ContentContainer extends React.Component{
                                 searchType={searchType}
                                 colorPanel={colorPanel}
                                 handleClearButton={this.handleClearButton}
-                                transferSearchResult={this.transferSearchResult}
+                                transferSearchResultToMain={this.transferSearchResultToMain}
                                 clearColorPanel={clearColorPanel}
 
                             />
@@ -198,21 +201,21 @@ export default class ContentContainer extends React.Component{
                     <Col xs={12} sm={5} md={3} lg={3} xl={3} className="w-100 px-2">
                         <SearchContainer 
                             searchableObjectData={this.state.searchableObjectData} 
-                            transferSearchResult={this.transferSearchResult}
+                            transferSearchResultToMain={this.transferSearchResultToMain}
                             hasSearchKey={this.state.hasSearchKey}
                             clearSearchResult={this.state.clearSearchResult}
                         />
                         
                         {/* <GridButton
                             searchableObjectData={this.state.searchableObjectData} 
-                            transferSearchResult={this.transferSearchResult}
+                            transferSearchResultToMain={this.transferSearchResultToMain}
                             clearColorPanel={clearColorPanel}
                         /> */}
                         <div style={style.searchResultDiv} className='py-3'>
                             <SearchResult 
                                 searchResult={this.state.searchResult} 
                                 searchKey={this.state.searchKey}
-                                transferSearchResult={this.transferSearchResult}
+                                transferSearchResultToMain={this.transferSearchResultToMain}
                                 colorPanel={this.state.colorPanel}
                             />
                         </div>

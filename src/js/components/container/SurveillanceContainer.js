@@ -231,7 +231,7 @@ class SurveillanceContainer extends React.Component {
                         <div style={style.gridButton} className='mt-2'>
                             <GridButton
                                 searchableObjectData={this.state.searchableObjectData} 
-                                transferSearchResult={this.props.transferSearchResult}
+                                transferSearchResultToMain={this.props.transferSearchResultToMain}
                                 clearColorPanel={this.props.clearColorPanel}
                                 isClear={this.state.isClear}
                             />

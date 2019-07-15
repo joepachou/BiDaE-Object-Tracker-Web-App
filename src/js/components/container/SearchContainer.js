@@ -6,6 +6,8 @@ import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
 import SearchableObjectType from '../presentational/SeachableObjectType';
 import FrequentSearch from './FrequentSearch';
+import config from '../../config';
+import Cookies from 'js-cookie'
 
 class SearchContainer extends React.Component {
 
@@ -21,7 +23,6 @@ class SearchContainer extends React.Component {
             sectionIndex:'',
             searchResult: [],
             hasSearchableObjectData: false,
-            notFoundList: [],
         }
     
         this.handleTouchStart = this.handleTouchStart.bind(this);
@@ -175,72 +176,45 @@ class SearchContainer extends React.Component {
      * Fired once the user click the item in object type list or in frequent seaerch
      * Also, popout the searchResult component.
      */
-    getResultData(e) {
-        let isMydevice = false;
-        var searchType = '';
-        if (e === 'all devices') {
-            let searchResult = Object.values(this.props.searchableObjectData)
-            this.setState({
-                hasSearchKey: true,
-                searchKey: e,
-                searchResult: searchResult,
-            })
-
-            this.props.transferSearchResult(searchResult, null, e)
-            return 
-        } else if (typeof e === 'string') {
-            if(e === '') {
-                return;
-            } 
-            var searchKey = e
-        } else if (e.target) {
-            var searchKey = e.target.innerText;
-        } else {
-            isMydevice = true;
-            var searchKey = e;
-
-            /** The variable is to check the unfound object */
-            var duplicatedSearchKey = new Set(searchKey)
-        }
-
+    getResultData(searchKey) {
         /** this.props.searchableObjectData data path: Surveillance -> SurveillanceContainer -> MainContainer -> SearchContainer  */
-        const searchableObjectData = this.props.searchableObjectData;
-
-        let searchResult = [];
-        let notFoundList = [];
-        for (let object in searchableObjectData) {
-
-            /* Search by 'my device' */
-            if (isMydevice) {
-                if (searchKey.has(searchableObjectData[object].access_control_number)) {
-                    // if (searchableObjectData[object].status.toLowerCase() !== 'normal') {
-                    //     notFoundList.push(searchableObjectData[object])
-                    // } else {
-                        searchResult.push(searchableObjectData[object])
-                        // duplicatedSearchKey.delete(searchableObjectData[object].access_control_number)
-                    // }
-                }
-
-            /* Search by object type */
-            } else if (searchableObjectData[object].type == searchKey) {
-                searchResult.push(searchableObjectData[object])
-
-            /* Search by search bar. The search key covers type, name, access_control_number */
-            } else if (searchableObjectData[object].type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0
-                        || searchableObjectData[object].access_control_number.slice(10,14).indexOf(searchKey) >= 0
-                        || searchableObjectData[object].name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0) {
-                searchResult.push(searchableObjectData[object])
-            } 
-        }
-        this.setState({
-            hasSearchKey: true,
-            searchKey: searchKey,
-            searchResult: searchResult,
-            notFoundList: notFoundList
-        })
+        const searchResult = this.getResultBySearchKey(searchKey)
 
         /** Transfer the searched object data from SearchContainer to MainContainer */
-        this.props.transferSearchResult(searchResult, null, searchKey)
+        this.props.transferSearchResultToMain(searchResult, null, searchKey)
+
+        this.setState({
+            searchResult: searchResult,
+            hasSearchKey: true,
+            searchKey: searchKey,
+        })
+    }
+
+    getResultBySearchKey(searchKey) {
+        const myDevices = config.frequentSearchOption.MY_DEVICES;
+        const allDevices = config.frequentSearchOption.ALL_DEVICES;
+        let searchResult = [];
+            switch(searchKey) {
+                case myDevices:
+                    const devicesAccessControlNumber = JSON.parse(Cookies.get(config.userPreference.cookies.USER_DEVICES));
+                    Object.values(this.props.searchableObjectData).map(item => {
+                        devicesAccessControlNumber.includes(item.access_control_number) ? searchResult.push(item) : null;
+                    })
+                    break;
+                case allDevices:
+                    searchResult = Object.values(this.props.searchableObjectData)
+                    break;
+                default: 
+                    Object.values(this.props.searchableObjectData).map(item => {
+                        if (item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0
+                            || item.access_control_number.slice(10,14).indexOf(searchKey) >= 0
+                            || item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0) {
+                            searchResult.push(item)
+                        }
+                    })
+                    break;
+            }
+        return searchResult
     }
 
     render() {
@@ -250,7 +224,7 @@ class SearchContainer extends React.Component {
         }
 
         // const { searchResult, searchKey, sectionIndexList, sectionIndex, isShowSectionTitle } = this.state;
-        const { trackingData, searchableObjectData, transferSearchResult } = this.props
+        const { trackingData, searchableObjectData, transferSearchResultToMain } = this.props
         
         return (
             <div id='searchContainer' className="" onTouchMove={this.handleTouchMove}>
@@ -267,7 +241,7 @@ class SearchContainer extends React.Component {
                     <FrequentSearch 
                         searchableObjectData={searchableObjectData}
                         getResultData={this.getResultData}  
-                        transferSearchResult={transferSearchResult}  
+                        transferSearchResultToMain={transferSearchResultToMain}  
                         getResultData={this.getResultData}
                         clearSearchResult={this.props.clearSearchResult}    
                     />

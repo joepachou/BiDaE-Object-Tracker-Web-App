@@ -134,7 +134,7 @@ class GridButton extends React.Component {
         if (Cookies.get('user')){
             this.putSearchHistory(searchKey)
         }
-        this.props.transferSearchResult(searchResult, searchObjectTypeColorMap)
+        this.props.transferSearchResultToMain(searchResult, searchObjectTypeColorMap)
         
     }
 
