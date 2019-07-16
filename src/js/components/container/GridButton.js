@@ -3,7 +3,7 @@ import config from '../../config';
 import axios from 'axios';
 import dataSrc from '../../dataSrc';
 import Cookies from 'js-cookie';
-import { Nav, Button } from 'react-bootstrap';
+import { Nav, Button, Container, Row, Col } from 'react-bootstrap';
 
 class GridButton extends React.Component {
 
@@ -90,7 +90,7 @@ class GridButton extends React.Component {
         if(searchKey.toLowerCase() === 'all') {
 
             if (selectAll) {
-                let childrenNodesArray = Array.from(e.target.parentElement.children)
+                let childrenNodesArray = Array.from(document.getElementsByClassName('gridbutton'))
                     .filter(item => {
                         return item.textContent !== 'All'
                     })
@@ -109,7 +109,7 @@ class GridButton extends React.Component {
                 e.target.style.background = 'rgba(143, 143, 143, 0.5)'
                 
             } else {
-                Array.from(e.target.parentElement.children).map(node=> {
+                Array.from(document.getElementsByClassName('gridbutton')).map(node=> {
                     node.style.background = ''
                 })
                 searchObjectTypeColorMap.clear();
@@ -200,13 +200,31 @@ class GridButton extends React.Component {
     render(){
 
         const { objectTypeSet } = this.state;
+
+        const style = {
+            row: {
+                width: 500,
+            }
+        }
         return (
-            <div className="gridbutton_wrapper d-flex justify-content-start">
+            // <div className="gridbutton_wrapper d-flex justify-content-start">
+            <div>
                 {objectTypeSet.size !== 0 
                     ? 
-                        Array.from(objectTypeSet).map( (item,index) => {
-                            return  <div className='gridbutton' onClick={this.handleClick} key={index}>{item}</div>
-                        })
+                        // Array.from(objectTypeSet).map( (item,index) => {
+                        //     return  <div className='gridbutton' onClick={this.handleClick} key={index}>{item}</div>
+                        // })
+                            <Row className='' style={style.row}>
+                                {Array.from(objectTypeSet).map( (item,index) => {
+                                    return (
+                                        <Col sm={6} md={6} lg={6} xl={6} className='px-1'>
+                                            <div className='gridbutton' onClick={this.handleClick} key={index}>
+                                                {item}
+                                            </div>
+                                        </Col>
+                                    )
+                                })}
+                            </Row>
                     : null
                 }
             </div>
