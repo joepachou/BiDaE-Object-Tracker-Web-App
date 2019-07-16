@@ -228,7 +228,7 @@ class SurveillanceContainer extends React.Component {
                                 {this.state.showDevice ? 'Hide devices' : 'Show devices' }
                             </Button>
                         </Nav.Item >
-                        <div style={style.gridButton} className='mt-2'>
+                        <div style={style.gridButton} className='mt-2 mx-3'>
                             <GridButton
                                 searchableObjectData={this.state.searchableObjectData} 
                                 transferSearchResultToMain={this.props.transferSearchResultToMain}
