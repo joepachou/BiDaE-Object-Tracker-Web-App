@@ -1,8 +1,8 @@
 import map from '../img/IIS_Newbuilding_4F_reBack.png';
 
-import black_pin from '../img/black_pin_v2.svg'
-import darkGrey_pin from '../img/darkGrey_pin_v2.svg';
-import sos from '../img/sos.svg'
+import black_pin from '../img/colorPin/Black.svg'
+import darkGrey_pin from '../img/colorPin/DarkGrey.svg';
+import sos from '../img/colorPin/sos.svg'
 import geofence_fence from '../img/geo_fence_fence.svg'
 import geofence_perimeter from '../img/geo_fence_perimeter.svg'
 import white_pin from '../img/white_pin.svg';
@@ -98,7 +98,8 @@ const config = {
     ],
     
     locale: {
-        defaultLocale: 'en'
+        defaultLocale: 'en',
+        supportedLocale: ['en', 'tw']
     },
 
     image: {
