@@ -20,9 +20,12 @@ class SigninPage extends React.Component {
     }
 
     componentDidUpdate(preProps) {
-        this.setState({
-            show: this.props.show,
-        })
+
+        if (preProps != this.props) {
+            this.setState({
+                show: this.props.show,
+            })
+        }
     }
 
     handleClose() {
