@@ -10,6 +10,8 @@ import { shouldUpdateTrackingData } from '../../action/action';
 import dataSrc from '../../dataSrc';
 import _ from 'lodash';
 import Axios from 'axios';
+import Cookies from 'js-cookie';
+import config from '../../config';
 
 
 
@@ -24,7 +26,7 @@ class SearchResult extends React.Component {
             formOption: [],
             thisComponentShouldUpdate: true,
             foundResult: [],
-            notFoundObjectMacAddressArray: [],
+            notFoundObject: [],
             showNotResult: false,
             notFoundObject: [],
         }
@@ -34,28 +36,52 @@ class SearchResult extends React.Component {
         this.handleConfirmFormSubmit = this.handleConfirmFormSubmit.bind(this)
         this.handleChangeObjectStatusFormClose = this.handleChangeObjectStatusFormClose.bind(this);
         this.handleToggleNotFound = this.handleToggleNotFound.bind(this);
+
     }
+
+    
     
     componentDidUpdate(prepProps) {
-        console.log(this.props.searchKey)
         if(!(_.isEqual(prepProps.searchResult, this.props.searchResult))) {
-            if (this.props.searchKey === 'all devices') this.filterNotFoundObject()
+            // if (this.props.searchKey === 'all devices') {
+                this.filterNotFoundObject()
+            // }
         }        
     }
 
     filterNotFoundObject() {
         const { searchResult } = this.props
-        const searchObjectMacAddressArray = searchResult.map( item => {
-            return item.mac_address
-        })
-        const notFoundObjectMacAddressArray = [];
-        this.props.objectTable.rows.map(item => {
-            if (!(searchObjectMacAddressArray.includes(item.mac_address))) {
-                notFoundObjectMacAddressArray.push(item.mac_address)
-            }
-        })
+        const myDevices = config.frequentSearchOption.MY_DEVICES;
+        const allDevices = config.frequentSearchOption.ALL_DEVICES;
+        let notFoundObject = []
+        switch(this.props.searchKey) {
+            case myDevices: 
+                const userDevicesACN = JSON.parse(Cookies.get('userDevices'))
+                const searchObjectACNArray = searchResult.map( item => {
+                    return item.access_control_number
+                })
+                userDevicesACN.map(acn => {
+                    if (!searchObjectACNArray.includes(acn)) {
+                        notFoundObject.push(acn)
+                    }
+                })
+                break;
+            case allDevices:
+                const searchObjectMacAddressArray = searchResult.map( item => {
+                    return item.mac_address
+                })
+                this.props.objectTable.rows.map(item => {
+                    if (!(searchObjectMacAddressArray.includes(item.mac_address))) {
+                        notFoundObject.push(item.mac_address)
+                    }
+                })
+                break;
+            default:
+                return;
+        }
+        console.log(notFoundObject)
         this.setState({
-            notFoundObjectMacAddressArray,
+            notFoundObject,
         })       
     }
 
@@ -160,24 +186,22 @@ class SearchResult extends React.Component {
         e.preventDefault()
         
         this.state.showNotResult 
-            ?
-                this.setState({
-                    showNotResult: !this.state.showNotResult
-                })
-            : this.getNotFoundResult(this.state.notFoundObjectMacAddressArray);
+            ? this.setState({ showNotResult: !this.state.showNotResult })
+            : this.getNotFoundResult(this.state.notFoundObject);
     }
 
-    getNotFoundResult(macAddressArray) {
-        Axios.post(dataSrc.getNotFoundTag, {
-            macAddressArray: macAddressArray
-        }).then( res => {
-            this.setState({
-                notFoundObject: res.data.rows,
-                showNotResult: !this.state.showNotResult
-            })
-        }).catch( error => {
-            console.log(error)
-        })
+    getNotFoundResult(notFoundObject) {
+        console.log(notFoundObject)
+        // Axios.post(dataSrc.getNotFoundTag, {
+        //     macAddressArray: notFoundObject
+        // }).then( res => {
+        //     this.setState({
+        //         notFoundObject: res.data.rows,
+        //         showNotResult: !this.state.showNotResult
+        //     })
+        // }).catch( error => {
+        //     console.log(error)
+        // })
     }
 
     render() {
@@ -245,7 +269,7 @@ class SearchResult extends React.Component {
                         &nbsp;
                         &nbsp;
 
-                        <div style={style.alertText}>{this.state.foundResult.length}</div>
+                        <div style={style.alertText}>{this.props.searchResult.length}</div>
                         &nbsp;
                         <div style={style.alertText}>devices</div>
                         &nbsp;
@@ -281,13 +305,13 @@ class SearchResult extends React.Component {
                             </Col>
                         }
                 </Row>
-                {this.state.notFoundObjectMacAddressArray && this.state.notFoundObjectMacAddressArray.length !== 0 
+                {this.state.notFoundObject && this.state.notFoundObject.length !== 0 
                 ? 
                     <>
                         <Row className='d-flex justify-content-center mt-3'>
                             <h4 style={style.titleText}>
                                 <a href="" onClick={this.handleToggleNotFound}>
-                                    {this.state.showNotResult ? 'Hide' : 'Show' + ' ' + this.state.notFoundObjectMacAddressArray.length} Devices Not Found 
+                                    {this.state.showNotResult ? 'Hide' : 'Show' + ' ' + this.state.notFoundObject.length} Devices Not Found 
                                 </a>
                             </h4>
                         </Row>
@@ -301,8 +325,8 @@ class SearchResult extends React.Component {
                                                 <Row className="">
                                                     <Col xs={1} sm='1' lg='1' className="font-weight-bold d-flex align-self-center" style={style.firstText}>{index + 1}</Col>
                                                     <Col xs={3} sm='3' lg='3' className="d-flex align-self-center justify-content-center" style={style.middleText}>{item.type}</Col>
-                                                    <Col xs={4} sm='4' lg='4' className="d-flex align-self-center text-muted" style={style.middleText}>ACN: xxxx-xxxx-{item.access_control_number.slice(10, 14)}</Col>
-                                                    <Col xs={3} sm='3' lg='3' className="d-flex align-self-center text-muted justify-content-center" style={style.lastText}>near {item.location_description}</Col>
+                                                    {/* <Col xs={4} sm='4' lg='4' className="d-flex align-self-center text-muted" style={style.middleText}>ACN: xxxx-xxxx-{item.access_control_number.slice(10, 14)}</Col> */}
+                                                    {/* <Col xs={3} sm='3' lg='3' className="d-flex align-self-center text-muted justify-content-center" style={style.lastText}>near {item.location_description}</Col> */}
                                                 </Row>
                                             </ListGroup.Item>
                                         return element
