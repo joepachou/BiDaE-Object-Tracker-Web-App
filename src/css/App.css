@@ -87,9 +87,9 @@ a:hover {
     color: black;
 }
 
-/* .nav-light.nav-brand:hover {
-    color: grey;
-} */
+.navbar-light .navbar-nav .nav-link {
+    cursor: pointer;
+}
 
 .navbar {
     padding: 0.5rem 2.5rem
@@ -233,7 +233,7 @@ a:hover {
 }
 
 /** Search Result List Group */ 
-#searchResultListGroup {
+.searchResultListGroup {
     max-Height: 40vh;
     overflow: hidden scroll;
 }
