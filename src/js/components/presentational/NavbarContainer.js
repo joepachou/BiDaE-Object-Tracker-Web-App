@@ -18,6 +18,7 @@ class NavbarContainer extends React.Component {
             isShowSigninForm: false,
             isShowSignupForm: false,
             user: Cookies.get('user') || null,
+            currentLocale: config.locale.defaultLocale
         }
         this.handleLangSelect = this.handleLangSelect.bind(this);
         this.handleSigninFormShowUp = this.handleSigninFormShowUp.bind(this);
@@ -29,8 +30,14 @@ class NavbarContainer extends React.Component {
 
     }
 
-    handleLangSelect(eventKey) {
-        this.props.changeLocale(eventKey);
+    handleLangSelect() {
+        const lang = supportedLocale[config.locale.supportedLocale
+                        .filter(item => item !== this.state.currentLocale)
+                        .join()].abbr
+        this.setState({
+            currentLocale: lang
+        })
+        this.props.changeLocale(lang);
     }
 
     handleSigninFormShowUp() {
@@ -111,30 +118,33 @@ class NavbarContainer extends React.Component {
                 
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">  
-                    <Nav className="mr-auto" >
-                        <Nav.Item><Link to="/" className="nav-link nav-route" >Home</Link></Nav.Item>
+                    <Nav className="mr-auto text-capitalize" >
+                        <Nav.Item><Link to="/" className="nav-link nav-route" >{locale.HOME}</Link></Nav.Item>
                         {!Cookies.get('user') &&
                             <>
-                                <Nav.Item><Link to="/page/healthReport" className="nav-link nav-route" >{locale.health_report}</Link></Nav.Item>
-                                <Nav.Item><Link to="/page/geofence" className="nav-link nav-route" >Geofence</Link></Nav.Item>
-                                <Nav.Item><Link to="/page/objectManagement" className="nav-link nav-route" >Object Management</Link></Nav.Item>
+                                <Nav.Item><Link to="/page/healthReport" className="nav-link nav-route" >{locale.HEALTH_REPORT}</Link></Nav.Item>
+                                <Nav.Item><Link to="/page/geofence" className="nav-link nav-route" >{locale.GEOFENCE}</Link></Nav.Item>
+                                <Nav.Item><Link to="/page/objectManagement" className="nav-link nav-route" >{locale.OBJECT_MANAGEMENT}</Link></Nav.Item>
                             </>
                         }
                     </Nav>
-                    <Nav>
-                        <NavDropdown className='text-capitalize' title={locale.language} id="collasible-nav-dropdown" alignRight onSelect={this.handleLangSelect}>
+                    <Nav className='text-capitalize'>
+                        {/* <NavDropdown title={locale.language} id="collasible-nav-dropdown" alignRight onSelect={this.handleLangSelect}>
                             {Object.values(supportedLocale).map( (locale,index) => {
                                 return <NavDropdown.Item key={index} className="lang-select" eventKey={locale.abbr}>{locale.name}</NavDropdown.Item>
                             })}
-                        </NavDropdown>          
+                        </NavDropdown>           */}
+                        <Nav.Item className="nav-link" onClick={this.handleLangSelect}>
+                            {supportedLocale[config.locale.supportedLocale.filter(item => item !== this.state.currentLocale).join()].name}
+                        </Nav.Item>
                         {Cookies.get('user')
                             ? <NavDropdown title={<i className="fas fa-user-alt"></i> }id="collasible-nav-dropdown" alignRight>
                                 <NavDropdown.Item className="lang-select" disabled>{Cookies.get('user')}</NavDropdown.Item>
                                 <Dropdown.Divider />
-                                <NavDropdown.Item className="lang-select" onClick={this.handleSignout}>Sign out</NavDropdown.Item>
+                                <NavDropdown.Item className="lang-select" onClick={this.handleSignout}>{locale.SIGN_OUT}</NavDropdown.Item>
                             </NavDropdown> 
                                 
-                            : <Nav.Item className="nav-link" onClick={this.handleSigninFormShowUp}>Sign In</Nav.Item>
+                            : <Nav.Item className="nav-link" onClick={this.handleSigninFormShowUp}>{locale.SIGN_IN}</Nav.Item>
                         }
                     </Nav>
                 </Navbar.Collapse>
