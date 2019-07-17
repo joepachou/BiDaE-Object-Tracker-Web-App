@@ -15,7 +15,7 @@ import SurveillanceContainer from './SurveillanceContainer';
 import GridButton from './GridButton';
 import { Alert } from 'react-bootstrap';
 
-export default class ContentContainer extends React.Component{
+export default class MainContainer extends React.Component{
 
     constructor(props){
         super(props)
@@ -166,8 +166,8 @@ export default class ContentContainer extends React.Component{
                                         <Alert variant='secondary' className='d-flex justify-content-start'>
                                             <div style={style.alertTextTitle}>{'Found '}</div>
 
-                                            {Object.keys(this.state.searchResultObjectTypeMap).map((item) => {
-                                                return  <>
+                                            {Object.keys(this.state.searchResultObjectTypeMap).map((item,index) => {
+                                                return  <div key={index} className="d-inline-flex">
                                                             &nbsp;
                                                             &nbsp;
 
@@ -182,7 +182,7 @@ export default class ContentContainer extends React.Component{
                                                             &nbsp;
                                                             &nbsp;
                                                             &nbsp;
-                                                        </>
+                                                        </div>
                                                 })}
                                         </Alert> 
                                     

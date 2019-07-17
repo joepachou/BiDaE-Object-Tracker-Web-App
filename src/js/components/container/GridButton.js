@@ -217,7 +217,7 @@ class GridButton extends React.Component {
                             <Row className='' style={style.row}>
                                 {Array.from(objectTypeSet).map( (item,index) => {
                                     return (
-                                        <Col sm={6} md={6} lg={6} xl={6} className='px-1'>
+                                        <Col sm={6} md={6} lg={6} xl={6} className='px-1' key={index}>
                                             <div className='gridbutton' onClick={this.handleClick} key={index}>
                                                 {item}
                                             </div>
