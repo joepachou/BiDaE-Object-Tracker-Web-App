@@ -125,8 +125,11 @@ const config = {
     userPreference: {
         searchHistoryNumber: 4,
         cookies: {
-            SEARCH_HISTORY: 'searchHistory',
-            USER_DEVICES: 'userDevices'
+            userInfo: {
+                NAME: name,
+                SEARCH_HISTORY: 'search_history',
+                MY_DEVICES: 'mydevice'
+            }
         }
     },
 

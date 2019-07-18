@@ -1,4 +1,8 @@
 const tw = {
+    HOME: '首頁',
+    HEALTH_REPORT: 'health report',
+    GEOFENCE: 'geofence',
+    OBJECT_MANAGEMENT: 'object management',
     greeting :'哈囉',
     surveillance: '監控',
     health_report: '監測裝置報告',
@@ -13,7 +17,13 @@ const tw = {
     location_accuracy: '位置精準度',
     low: '低',
     med: '中',
-    high: '高'   
+    high: '高',
+    
+    SIGN_IN: 'sign in',
+    SIGN_UP: 'sign up',
+    SIGN_OUT: 'sign out',
+
+    EDIT_LBEACON: 'edit Lbeacon'
 
 }
 

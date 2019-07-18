@@ -25,6 +25,9 @@ const en =  {
     SIGN_UP: 'sign up',
     SIGN_OUT: 'sign out',
 
+    EDIT_LBEACON: 'edit Lbeacon'
+
+
 }
 
 export default en;
