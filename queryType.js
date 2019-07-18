@@ -3,7 +3,7 @@ function query_getTrackingData (accuracyValue = 1) {
 
 	const locationAccuracyMapToDefault = {
 		0: -100,
-		1: -65,
+		1: -55,
 		2: -50,
 	}
 
@@ -247,22 +247,7 @@ function query_signup(signupPackage) {
 
 function query_getUserInfo(username) {
 	const text =  `
-	SELECT name, mydevice from user_table where name= $1
-	`;
-
-	const values = [username];
-
-	const query = {
-		text,
-		values
-	};
-
-	return query
-}
-
-function query_getUserSearchHistory (username) {
-	const text = `
-		SELECT search_history from user_table where name=$1
+	SELECT name, mydevice, search_history from user_table where name= $1
 	`;
 
 	const values = [username];
@@ -314,57 +299,74 @@ function query_editLbeacon (uuid, low, med, high) {
 
 function query_getNotFoundTag (macAddressArray) {
 
-	
+	// let text = `
+	// SELECT
+	// 	last_location_table.object_mac_address,
+	// 	last_location_table.rssi,
+	// 	last_location_table.max,
+	// 	last_location_table.lbeacon_uuid,
+	// 	lbeacon_table.description as location_description,
+	// 	object_table.status,
+	// 	object_table.access_control_number,
+	// 	object_table.name,
+	// 	object_table.type
+	// FROM
+
+	// (SELECT
+	// 	mac_rssi_time_table.object_mac_address,
+	// 	mac_rssi_time_table.rssi,
+	// 	mac_rssi_time_table.max,
+	// 	tracking_table.lbeacon_uuid
+	// FROM tracking_table,
+	// 	(SELECT
+	// 		tracking_table.object_mac_address,
+	// 		MAX(tracking_table.rssi) as rssi,
+	// 		max_time_table.max
+	// 	FROM tracking_table,
+	// 		(SELECT object_mac_address,
+	// 				MAX(final_timestamp) as max
+	// 		FROM tracking_table
+	// 		WHERE object_mac_address IN ('${macAddressArray[0]}',${macAddressArray.filter((item,index) => {
+	// 			return index > 0
+	// 		}).map(item => {
+	// 			return `'${item}'` 
+	// 		})}) 
+	// 		GROUP BY object_mac_address
+	// 		) as max_time_table
+	// 	WHERE (tracking_table.object_mac_address = max_time_table.object_mac_address)
+	// 	AND (tracking_table.final_timestamp = max_time_table.max)
+	// 	GROUP BY tracking_table.object_mac_address, max_time_table.max
+	// 	) as mac_rssi_time_table
+
+	// WHERE (tracking_table.object_mac_address = mac_rssi_time_table.object_mac_address)
+	// AND (tracking_table.final_timestamp = mac_rssi_time_table.max)
+	// AND (tracking_table.rssi = mac_rssi_time_table.rssi)
+	// ) as last_location_table
+
+	// LEFT JOIN lbeacon_table
+	// ON lbeacon_table.uuid = last_location_table.lbeacon_uuid
+
+	// INNER JOIN object_table
+	// ON object_table.mac_address = last_location_table.object_mac_address
+	// `	
 	let text = `
-	SELECT
-		last_location_table.object_mac_address,
-		last_location_table.rssi,
-		last_location_table.max,
-		last_location_table.lbeacon_uuid,
-		lbeacon_table.description as location_description,
-		object_table.status,
-		object_table.access_control_number,
-		object_table.name,
-		object_table.type
-	FROM
-
-	(SELECT
-		mac_rssi_time_table.object_mac_address,
-		mac_rssi_time_table.rssi,
-		mac_rssi_time_table.max,
-		tracking_table.lbeacon_uuid
-	FROM tracking_table,
-		(SELECT
-			tracking_table.object_mac_address,
-			MAX(tracking_table.rssi) as rssi,
-			max_time_table.max
-		FROM tracking_table,
-			(SELECT object_mac_address,
-					MAX(final_timestamp) as max
-			FROM tracking_table
-			WHERE object_mac_address IN ('${macAddressArray[0]}',${macAddressArray.filter((item,index) => {
-				return index > 0
-			}).map(item => {
-				return `'${item}'` 
-			})}) 
-			GROUP BY object_mac_address
-			) as max_time_table
-		WHERE (tracking_table.object_mac_address = max_time_table.object_mac_address)
-		AND (tracking_table.final_timestamp = max_time_table.max)
-		GROUP BY tracking_table.object_mac_address, max_time_table.max
-		) as mac_rssi_time_table
-
-	WHERE (tracking_table.object_mac_address = mac_rssi_time_table.object_mac_address)
-	AND (tracking_table.final_timestamp = mac_rssi_time_table.max)
-	AND (tracking_table.rssi = mac_rssi_time_table.rssi)
-	) as last_location_table
-
-	LEFT JOIN lbeacon_table
-	ON lbeacon_table.uuid = last_location_table.lbeacon_uuid
-
-	INNER JOIN object_table
-	ON object_table.mac_address = last_location_table.object_mac_address
-	`	
+	SELECT data.*, o.access_control_number, o.type, lbeacon_table.description FROM object_table o 
+	INNER JOIN LATERAL ( 
+		SELECT object_mac_address, final_timestamp, lbeacon_uuid, rssi FROM tracking_table t 
+		WHERE t.object_mac_address = o.mac_address 
+		AND o.mac_address IN ('${macAddressArray[0]}',${macAddressArray.filter((item,index) => {
+						return index > 0
+					}).map(item => {
+						return `'${item}'` 
+					})}) 
+		AND rssi > -60 
+		ORDER BY final_timestamp DESC LIMIT 1 
+	) AS data 
+	ON true 
+	INNER JOIN lbeacon_table ON lbeacon_table.uuid = data.lbeacon_uuid 
+	ORDER BY data.final_timestamp DESC;
+		
+	`
 	return text
 }
 
@@ -381,7 +383,6 @@ module.exports = {
 	query_signin,
 	query_signup,
 	query_getUserInfo,
-	query_getUserSearchHistory,
 	query_addUserSearchHistory,
 	query_editLbeacon,
 }

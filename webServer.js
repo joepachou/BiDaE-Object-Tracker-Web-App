@@ -60,8 +60,6 @@ app.post('/user/signup', db.signup);
 
 app.post('/user/getUserInfo', db.getUserInfo)
 
-app.post('/user/getUserSearchHistory', db.getUserSearchHistory)
-
 app.post('/user/addUserSearchHistory', db.addUserSearchHistory)
 
 app.post('/data/editLbeacon', db.editLbeacon)

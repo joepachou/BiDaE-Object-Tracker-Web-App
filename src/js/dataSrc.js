@@ -11,7 +11,6 @@ const editObjectPackage = 'https://' + IP +'/data/editObjectPackage';
 const signin = 'https://' + IP + '/user/signin';
 const signup = 'https://' + IP + '/user/signup';
 const getUserInfo = 'https://' + IP + '/user/getUserInfo';
-const getUserSearchHistory = 'https://' + IP + '/user/getUserSearchHistory'
 const addUserSearchHistory = 'https://' + IP + '/user/addUserSearchHistory'
 const editLbeacon = 'https://' + IP + '/data/editLbeacon'
 const getNotFoundTag = 'https://' + IP + '/data/getNotFoundTag'
@@ -29,7 +28,6 @@ module.exports = {
     signin,
     signup,
     getUserInfo,
-    getUserSearchHistory,
     addUserSearchHistory,
     editLbeacon
 };

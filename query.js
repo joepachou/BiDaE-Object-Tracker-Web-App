@@ -182,19 +182,6 @@ const getUserInfo = (request, response) => {
     })
 }
 
-const getUserSearchHistory = (request, response) => {
-    const username = request.body.username;
-    pool.query(queryType.query_getUserSearchHistory(username), (error, results) => {
-        if (error) {
-            console.log('Get user search history Fails')
-        } else {
-            console.log('Get user search history success')
-        }
- 
-        response.status(200).json(results)
-    })
-}
-
 const addUserSearchHistory = (request, response) => {
     const { username, history } = request.body;
     pool.query(queryType.query_addUserSearchHistory(username, history), (error, results) => {
@@ -248,7 +235,6 @@ module.exports = {
     signin,
     signup,
     getUserInfo,
-    getUserSearchHistory,
     addUserSearchHistory,
     editLbeacon
     
