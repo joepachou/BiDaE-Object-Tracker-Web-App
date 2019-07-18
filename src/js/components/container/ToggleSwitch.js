@@ -25,8 +25,10 @@ class ToggleSwitch extends React.Component {
 	
 
 	render() {
+
+		const locale = this.context
 		return (
-			<form className="switch-field">
+			<form className="switch-field text-capitalize">
 				<input
 					type="radio"
 					id="switch_left"
@@ -35,7 +37,7 @@ class ToggleSwitch extends React.Component {
 					onChange={this.toggleState}
 					checked={this.state.toggle == this.props.leftLabel}
 				/>
-				<label htmlFor="switch_left">{this.props.leftLabel}</label>
+				<label htmlFor="switch_left">{locale[this.props.leftLabel]}</label>
 
 				<input
 					type="radio"
@@ -45,7 +47,7 @@ class ToggleSwitch extends React.Component {
 					onChange={this.toggleState}
 					checked={this.state.toggle === this.props.defaultLabel}
 				/>
-				<label htmlFor="switch_middle">{this.props.defaultLabel}</label>
+				<label htmlFor="switch_middle">{locale[this.props.defaultLabel]}</label>
 
 				<input
 					type="radio"
@@ -55,7 +57,7 @@ class ToggleSwitch extends React.Component {
 					onChange={this.toggleState}
 					checked={this.state.toggle === this.props.rightLabel}
 				/>
-				<label htmlFor="switch_right">{this.props.rightLabel}</label>
+				<label htmlFor="switch_right">{locale[this.props.rightLabel]}</label>
 			</form>
 		);
 	}

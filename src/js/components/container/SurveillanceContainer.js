@@ -211,9 +211,9 @@ class SurveillanceContainer extends React.Component {
                         <Nav.Item className='pt-2 mr-2'>
                             <ToggleSwitch 
                                 adjustRssi={this.adjustRssi} 
-                                leftLabel={this.capitalFirstLetter(locale.low)} 
-                                defaultLabel={this.capitalFirstLetter(locale.med)} 
-                                rightLabel={this.capitalFirstLetter(locale.high)} 
+                                leftLabel='low'
+                                defaultLabel='med' 
+                                rightLabel='high'
                             />
                         </Nav.Item>
                         <Nav.Item className='mt-2'>
