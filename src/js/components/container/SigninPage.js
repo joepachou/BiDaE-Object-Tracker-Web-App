@@ -97,10 +97,8 @@ class SigninPage extends React.Component {
                                         setStatus(res.data.message)
                                         setSubmitting(false)
                                     } else {
-                                        // Cookies.set('user', username)
+                                        console.log(res.data)
                                         this.props.handleSigninFormSubmit(res.data)
-                                        // this.getUserInfo()
-                                        // handleSigninFormSubmit(username)
                                     }
                                 }).catch(error => {
                                     console.log(error)

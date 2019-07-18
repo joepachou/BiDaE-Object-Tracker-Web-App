@@ -161,12 +161,17 @@ a:hover {
 .alert-secondary {
     border: 0;
     background: rgba(143, 143, 143, 0.1);
+    box-shadow: 2px 5px 4px 0 #cbcbcb
 }
 
 .alert {
-    margin-bottom: 0.5rem;
     font-size: 1.2rem;
-    box-shadow: 2px 5px 4px 0 #cbcbcb
+}
+
+.alert-danger {
+    padding: 5px 10px;
+    margin-bottom: 0px;
+    font-size: 1rem;
 }
 
 /* React-table */
