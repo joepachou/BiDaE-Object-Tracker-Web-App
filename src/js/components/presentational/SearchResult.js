@@ -56,7 +56,7 @@ class SearchResult extends React.Component {
         let notFoundObject = []
         switch(this.props.searchKey) {
             case myDevices: 
-                const userDevicesACN = JSON.parse(Cookies.get('userDevices'))
+                const userDevicesACN = this.props.auth.userInfo.myDevice
                 const searchObjectACNArray = searchResult.map( item => {
                     return item.access_control_number
                 })
@@ -79,7 +79,6 @@ class SearchResult extends React.Component {
             default:
                 return;
         }
-        console.log(notFoundObject)
         this.setState({
             notFoundObject,
         })       

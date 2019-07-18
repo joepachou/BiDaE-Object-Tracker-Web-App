@@ -1,14 +1,16 @@
-import React from 'react';
+import React  from 'react';
 import { Col, ListGroup, Row, Button } from 'react-bootstrap';
 import LocaleContext from '../../context/LocaleContext';
 import axios from 'axios';
 import dataSrc from '../../dataSrc';
 import { connect } from 'react-redux';
 import { shouldUpdateTrackingData } from '../../action/action';
-import Cookies from 'js-cookie'
 import config from '../../config';
+import AuthenticationContext from '../../context/AuthenticationContext';
+
 
 class FrequentSearch extends React.Component {
+    
 
     constructor(){
         super()
@@ -19,6 +21,7 @@ class FrequentSearch extends React.Component {
         this.handleClick = this.handleClick.bind(this);
         this.getSearchKey = this.getSearchKey.bind(this);
     }
+
     componentDidUpdate(prepProps) {
         if (prepProps.clearSearchResult !== this.props.clearSearchResult && !prepProps.clearSearchResult) {
             this.setState({
@@ -51,48 +54,54 @@ class FrequentSearch extends React.Component {
             }, 
         }
 
-        const locale = this.context;
+        const locale = this.context
+
 
         return (
-            <>
-                <Row className='d-flex justify-content-center' style={style.titleText}>
-                    <h4>Frequent Search</h4>
-                </Row>
-                <div className='d-inline-flex flex-column mb-3' id='frequentSearch' >
-                    {Cookies.get('searchHistory') && JSON.parse(Cookies.get('searchHistory')).filter( (item,index) => {
-                        return item.name !== 'All' && index < config.userPreference.searchHistoryNumber
-                    }).map( (item, index) => {
-                        
-                        return (
-                            <Button
-                                variant="outline-custom"
-                                onClick={this.handleClick} 
-                                active={this.state.searchKey === item.name.toLowerCase()} 
-                                key={index}
-                            >
-                                {item.name}
-                            </Button>
-                        )
-                    })}
-                    &nbsp;
-                    {Cookies.get('user') && 
-                        <Button
-                            variant="outline-custom"
-                            onClick={this.handleClick} 
-                            active={this.state.searchKey === 'my devices'}
-                        >
-                            My Devices
-                        </Button>
-                    }
-                        <Button 
-                            variant="outline-custom"
-                            onClick={this.handleClick} 
-                            active={this.state.searchKey === 'all devices'}
-                        >
-                            All Devices
-                        </Button>
-                </div>
-            </>
+            <AuthenticationContext.Consumer>
+                {auth => (
+                    <>
+                        <Row className='d-flex justify-content-center' style={style.titleText}>
+                            <h4>Frequent Search</h4>
+                        </Row>
+                        <div className='d-inline-flex flex-column mb-3' id='frequentSearch' >
+                            {auth.isSignin
+                                && auth.userInfo.searchHistory.filter( (item,index) => {
+                                return item.name !== 'All' && index < config.userPreference.searchHistoryNumber
+                            }).map( (item, index) => {
+                                
+                                return (
+                                    <Button
+                                        variant="outline-custom"
+                                        onClick={this.handleClick} 
+                                        active={this.state.searchKey === item.name.toLowerCase()} 
+                                        key={index}
+                                    >
+                                        {item.name}
+                                    </Button>
+                                )
+                            })}
+                            &nbsp;
+                            {auth.isSignin && 
+                                <Button
+                                    variant="outline-custom"
+                                    onClick={this.handleClick} 
+                                    active={this.state.searchKey === 'my devices'}
+                                >
+                                    My Devices
+                                </Button>
+                            }
+                                <Button 
+                                    variant="outline-custom"
+                                    onClick={this.handleClick} 
+                                    active={this.state.searchKey === 'all devices'}
+                                >
+                                    All Devices
+                                </Button>
+                        </div>
+                    </>
+                )}
+            </AuthenticationContext.Consumer>
         )
     }
 }

@@ -24,15 +24,15 @@ export default class ObjectManagement extends React.Component{
             selectedRowData: {},
         }
         this.handleModalForm = this.handleModalForm.bind(this);
-        this.getObjectData = this.getObjectData.bind(this);
+        this.getData = this.getData.bind(this);
         this.handleSubmitForm = this.handleSubmitForm.bind(this);
     }
 
     componentDidMount(){
-        this.getObjectData();
+        this.getData();
     }
 
-    getObjectData() {
+    getData() {
         Axios.get(dataSrc.getObjectTable).then(res => {
             let column = [];
             res.data.fields.map(item => {
@@ -66,7 +66,7 @@ export default class ObjectManagement extends React.Component{
     }
 
     handleSubmitForm() {
-        setTimeout(this.getObjectData,500) 
+        setTimeout(this.getData,500) 
         this.setState({
             isShowModal: false
         })

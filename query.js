@@ -124,7 +124,6 @@ const signin = (request, response) => {
         if (error) {
             console.log("Login Fails: " + error)
         } else {
-
             if (results.rowCount < 1) {
                 response.json({
                     authentication: false,
@@ -132,8 +131,14 @@ const signin = (request, response) => {
                 })
             } else {
                 if (bcrypt.compareSync(pwd, hash)) {
+
+                    let userInfo = {}
+                    userInfo.myDevice = results.rows[0].mydevice
+                    userInfo.name= results.rows[0].name
+                    userInfo.searchHistory = JSON.parse(results.rows[0].search_history)
                     response.json({
                         authentication: true,
+                        userInfo
                     })
                 } else {
                     response.json({
@@ -172,14 +177,15 @@ const signup = (request, response) => {
 
 const getUserInfo = (request, response) => {
     const username = request.body.username;
-    pool.query(queryType.query_getUserInfo(username), (error, results) => {
-        if (error) {
+    pool.query(queryType.query_getUserInfo(username))
+        .then(res => {
             console.log('Get user info Fails!')
-        } else {
-            console.log('Get user info success')
-        }
-        response.status(200).json(results)
-    })
+            response.status(200).json(res)
+        })
+        .catch(error => {
+            console.log('Get user info Fails! error: ' + error)
+        })
+    
 }
 
 const addUserSearchHistory = (request, response) => {

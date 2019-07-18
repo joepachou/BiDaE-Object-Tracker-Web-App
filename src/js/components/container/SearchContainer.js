@@ -8,6 +8,7 @@ import SearchableObjectType from '../presentational/SeachableObjectType';
 import FrequentSearch from './FrequentSearch';
 import config from '../../config';
 import Cookies from 'js-cookie'
+import LocaleContext from '../../context/LocaleContext'
 
 class SearchContainer extends React.Component {
 
@@ -23,6 +24,7 @@ class SearchContainer extends React.Component {
             sectionIndex:'',
             searchResult: [],
             hasSearchableObjectData: false,
+            isSignin: Cookies.get('user') ? true : false,
             refreshSearchResult: config.systemAdmin.refreshSearchResult
         }
     
@@ -32,16 +34,6 @@ class SearchContainer extends React.Component {
         
         this.getObjectType = this.getObjectType.bind(this);
         this.getResultData = this.getResultData.bind(this);
-    }
-
-    
-
-    componentDidMount() {
-        const targetElement = document.body;
-
-        // document.body.style.position = "fixed";
-
-        // disableBodyScroll(targetElement);
     }
 
     componentDidUpdate(prepProps) {
@@ -74,17 +66,6 @@ class SearchContainer extends React.Component {
         }
 
     }
-
-    // shouldComponentUpdate(nextProps, nextState){
-    //     console.log(this.props.searchableObjectData)
-    //     return this.state !== nextState;
-    // }
-
-    // componentWillUnmount() {
-    //     clearAllBodyScrollLocks();
-    // }
-
-
     /**
      * Get the searchable object type. 
      * The data is retrieving from Surveillance -> MainContain -> SearchContainer
@@ -209,7 +190,7 @@ class SearchContainer extends React.Component {
         let searchResult = [];
             switch(searchKey) {
                 case myDevices:
-                    const devicesAccessControlNumber = JSON.parse(Cookies.get(config.userPreference.cookies.USER_DEVICES));
+                    const devicesAccessControlNumber = this.props.auth.userInfo.myDevice
                     Object.values(this.props.searchableObjectData).map(item => {
                         devicesAccessControlNumber.includes(item.access_control_number) ? searchResult.push(item) : null;
                     })
@@ -239,7 +220,7 @@ class SearchContainer extends React.Component {
         // const { searchResult, searchKey, sectionIndexList, sectionIndex, isShowSectionTitle } = this.state;
         const { trackingData, searchableObjectData, transferSearchResultToMain } = this.props
         
-        return (
+        return (                   
             <div id='searchContainer' className="" onTouchMove={this.handleTouchMove}>
                 <div id='searchBar' className='d-flex justify-content-center align-items-center pt-4 pb-2'>
                     <Searchbar 
@@ -252,7 +233,6 @@ class SearchContainer extends React.Component {
 
                 <div id='searchOption' className='pt-2'>
                     <FrequentSearch 
-                        searchableObjectData={searchableObjectData}
                         getResultData={this.getResultData}  
                         transferSearchResultToMain={transferSearchResultToMain}  
                         getResultData={this.getResultData}
@@ -272,9 +252,7 @@ class SearchContainer extends React.Component {
                             clientHeight={this.state.clientHeight}
                         />
                     </Col> */}
-                
                 </div>
-
             </div>
         );
     }

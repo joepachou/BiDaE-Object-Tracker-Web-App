@@ -7,6 +7,7 @@ import axios from 'axios';
 import dataSrc from '../../dataSrc';
 import Cookies from 'js-cookie';
 import LocaleContext from '../../context/LocaleContext'
+import { authenticationService } from '../../authenticationService';
 
 class SigninPage extends React.Component {
     constructor(props) {
@@ -41,18 +42,18 @@ class SigninPage extends React.Component {
         this.props.handleSignupFormShowUp()
     }
 
-    getUserInfo() {
-        axios.post(dataSrc.getUserInfo, {
-            username: Cookies.get('user')
-        }).then( res => {
-            const { search_history, mydevice } = res.data.rows[0]
-            Cookies.set(config.userPreference.cookies.SEARCH_HISTORY, search_history)
-            Cookies.set(config.userPreference.cookies.USER_DEVICES, mydevice)
+    // getUserInfo() {
+    //     axios.post(dataSrc.getUserInfo, {
+    //         username: Cookies.get('user')
+    //     }).then( res => {
+    //         const { search_history, mydevice } = res.data.rows[0]
+    //         Cookies.set(config.userPreference.cookies.SEARCH_HISTORY, search_history)
+    //         Cookies.set(config.userPreference.cookies.USER_DEVICES, mydevice)
 
-        }).catch(error => {
-            console.log(error)
-        })
-    }
+    //     }).catch(error => {
+    //         console.log(error)
+    //     })
+    // }
 
 
     render() {
@@ -90,24 +91,20 @@ class SigninPage extends React.Component {
 
                         onSubmit={({ username, password }, { setStatus, setSubmitting }) => {
 
-                            axios.post(dataSrc.signin, {
-                            
-                                username: username,
-                                password: password
-                            
-                            }).then(res => {
-                                if (!res.data.authentication) {  
-                                    setStatus(res.data.message)
-                                    setSubmitting(false)
-                                } else {
-                                    Cookies.set('user', username)
-                                    this.getUserInfo()
-                                    handleSigninFormSubmit(username)
-                                }
-                            }).catch(error => {
-                                console.log(error)
-                            })
-
+                            authenticationService.signin(username, password)
+                                .then(res => {
+                                    if (!res.data.authentication) {  
+                                        setStatus(res.data.message)
+                                        setSubmitting(false)
+                                    } else {
+                                        // Cookies.set('user', username)
+                                        this.props.handleSigninFormSubmit(res.data)
+                                        // this.getUserInfo()
+                                        // handleSigninFormSubmit(username)
+                                    }
+                                }).catch(error => {
+                                    console.log(error)
+                                })
 
                         }}
 
@@ -126,10 +123,9 @@ class SigninPage extends React.Component {
                                 </div>
                                 <br/>
                                 <div className="form-group py-1">
-                                    <button type="submit" className="btn btn-primary btn-block text-capitalize"  disabled={isSubmitting}>{locale.SIGN_IN}</button>
-                                    {isSubmitting &&
-                                        <img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-                                    }
+                                    <button type="submit" className="btn btn-primary btn-block text-capitalize"  disabled={isSubmitting}>
+                                        {locale.SIGN_IN}
+                                    </button>
                                 </div>
                                 {status &&
                                     <div className={'alert alert-danger'}>{status}</div>

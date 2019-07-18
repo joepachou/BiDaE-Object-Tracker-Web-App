@@ -14,6 +14,7 @@ import { Row, Col, Hidden, Visible } from 'react-grid-system';
 import SurveillanceContainer from './SurveillanceContainer';
 import GridButton from './GridButton';
 import { Alert } from 'react-bootstrap';
+import AuthenticationContext from '../../context/AuthenticationContext';
 
 export default class MainContainer extends React.Component{
 
@@ -132,100 +133,104 @@ export default class MainContainer extends React.Component{
 
         }
         return(
+            <AuthenticationContext.Consumer>
+                {auth => (
+                    /** "page-wrap" the default id named by react-burget-menu */
+                    <div id="page-wrap" className='' >
+                        <Row id="mainContainer" className='d-flex w-100 justify-content-around mx-0 overflow-hidden' style={style.container}>
+                            <Col sm={7} md={9} lg={9} xl={9} id='searchMap' className="pl-2 pr-1" >
+                                    <br/>
+                                    <div>
+                                        {this.state.searchResult.length === 0
+                                            ? this.state.hasSearchKey 
+                                                ?
+                                                    <Alert variant='secondary' className='d-flex justify-content-start'>
+                                                        <div style={style.alertTextTitle}>{'Found '}</div>
+                                                        &nbsp;
+                                                        &nbsp;
 
-            /** "page-wrap" the default id named by react-burget-menu */
-            <div id="page-wrap" className='' >
-                <Row id="mainContainer" className='d-flex w-100 justify-content-around mx-0 overflow-hidden' style={style.container}>
-                    <Col sm={7} md={9} lg={9} xl={9} id='searchMap' className="pl-2 pr-1" >
-                            <br/>
-                            <div>
-                                {this.state.searchResult.length === 0
-                                    ? this.state.hasSearchKey 
-                                        ?
-                                            <Alert variant='secondary' className='d-flex justify-content-start'>
-                                                <div style={style.alertTextTitle}>{'Found '}</div>
-                                                &nbsp;
-                                                &nbsp;
+                                                        <div style={style.alertText}>{this.state.searchResult.length}</div>
+                                                        &nbsp;
+                                                        <div style={style.alertText}>{'device'}</div>
+                                                        &nbsp;
+                                                    </Alert>
+                                                :    
+                                                    <Alert variant='secondary' className='d-flex justify-content-start'>
+                                                        <div style={style.alertTextTitle}>{'Found '}</div>
+                                                        &nbsp;
+                                                        &nbsp;
 
-                                                <div style={style.alertText}>{this.state.searchResult.length}</div>
-                                                &nbsp;
-                                                <div style={style.alertText}>{'device'}</div>
-                                                &nbsp;
-                                            </Alert>
-                                        :    
-                                            <Alert variant='secondary' className='d-flex justify-content-start'>
-                                                <div style={style.alertTextTitle}>{'Found '}</div>
-                                                &nbsp;
-                                                &nbsp;
+                                                        <div style={style.alertText}>{Object.keys(this.state.searchableObjectData).length}</div>
+                                                        &nbsp;
+                                                        <div style={style.alertText}>{'device'}</div>
+                                                    </Alert>
+                                            : 
+                                                <Alert variant='secondary' className='d-flex justify-content-start'>
+                                                    <div style={style.alertTextTitle}>{'Found '}</div>
 
-                                                <div style={style.alertText}>{Object.keys(this.state.searchableObjectData).length}</div>
-                                                &nbsp;
-                                                <div style={style.alertText}>{'device'}</div>
-                                            </Alert>
-                                    : 
-                                        <Alert variant='secondary' className='d-flex justify-content-start'>
-                                            <div style={style.alertTextTitle}>{'Found '}</div>
+                                                    {Object.keys(this.state.searchResultObjectTypeMap).map((item,index) => {
+                                                        return  <div key={index} className="d-inline-flex">
+                                                                    &nbsp;
+                                                                    &nbsp;
 
-                                            {Object.keys(this.state.searchResultObjectTypeMap).map((item,index) => {
-                                                return  <div key={index} className="d-inline-flex">
-                                                            &nbsp;
-                                                            &nbsp;
+                                                                    <div style={style.alertText}>
+                                                                        {this.state.searchResultObjectTypeMap[item]}
+                                                                    </div>
+                                                                    &nbsp;
+                                                                    <div style={style.alertText}>
+                                                                        {item}
+                                                                    </div>
+                                                                    &nbsp;
+                                                                    &nbsp;
+                                                                    &nbsp;
+                                                                    &nbsp;
+                                                                </div>
+                                                        })}
+                                                </Alert> 
+                                            
+                                        } 
+                                    </div>
+                                    <SurveillanceContainer 
+                                        hasSearchKey={hasSearchKey} 
+                                        searchResult={searchResult}
+                                        transferSearchableObjectDataToMain={this.transferSearchableObjectDataToMain}
+                                        searchType={searchType}
+                                        colorPanel={colorPanel}
+                                        handleClearButton={this.handleClearButton}
+                                        transferSearchResultToMain={this.transferSearchResultToMain}
+                                        clearColorPanel={clearColorPanel}
 
-                                                            <div style={style.alertText}>
-                                                                {this.state.searchResultObjectTypeMap[item]}
-                                                            </div>
-                                                            &nbsp;
-                                                            <div style={style.alertText}>
-                                                                {item}
-                                                            </div>
-                                                            &nbsp;
-                                                            &nbsp;
-                                                            &nbsp;
-                                                            &nbsp;
-                                                        </div>
-                                                })}
-                                        </Alert> 
-                                    
-                                } 
-                            </div>
-                            <SurveillanceContainer 
-                                hasSearchKey={hasSearchKey} 
-                                searchResult={searchResult}
-                                transferSearchableObjectDataToMain={this.transferSearchableObjectDataToMain}
-                                searchType={searchType}
-                                colorPanel={colorPanel}
-                                handleClearButton={this.handleClearButton}
-                                transferSearchResultToMain={this.transferSearchResultToMain}
-                                clearColorPanel={clearColorPanel}
-
-                            />
-                    </Col>
-                    <Col xs={12} sm={5} md={3} lg={3} xl={3} className="w-100 px-2">
-                        <SearchContainer 
-                            searchableObjectData={this.state.searchableObjectData} 
-                            transferSearchResultToMain={this.transferSearchResultToMain}
-                            hasSearchKey={this.state.hasSearchKey}
-                            clearSearchResult={this.state.clearSearchResult}
-                            hasGridButton={this.state.hasGridButton}
-                        />
-                        
-                        {/* <GridButton
-                            searchableObjectData={this.state.searchableObjectData} 
-                            transferSearchResultToMain={this.transferSearchResultToMain}
-                            clearColorPanel={clearColorPanel}
-                        /> */}
-                        <div style={style.searchResultDiv} className='py-3'>
-                            <SearchResult 
-                                searchResult={this.state.searchResult} 
-                                searchKey={this.state.searchKey}
-                                transferSearchResultToMain={this.transferSearchResultToMain}
-                                colorPanel={this.state.colorPanel}
-                            />
-                        </div>
-                    </Col>
-                </Row>
-            </div>
-            
+                                    />
+                            </Col>
+                            <Col xs={12} sm={5} md={3} lg={3} xl={3} className="w-100 px-2">
+                                <SearchContainer 
+                                    searchableObjectData={this.state.searchableObjectData} 
+                                    transferSearchResultToMain={this.transferSearchResultToMain}
+                                    hasSearchKey={this.state.hasSearchKey}
+                                    clearSearchResult={this.state.clearSearchResult}
+                                    hasGridButton={this.state.hasGridButton}
+                                    auth={auth}
+                                />
+                                
+                                {/* <GridButton
+                                    searchableObjectData={this.state.searchableObjectData} 
+                                    transferSearchResultToMain={this.transferSearchResultToMain}
+                                    clearColorPanel={clearColorPanel}
+                                /> */}
+                                <div style={style.searchResultDiv} className='py-3'>
+                                    <SearchResult 
+                                        searchResult={this.state.searchResult} 
+                                        searchKey={this.state.searchKey}
+                                        transferSearchResultToMain={this.transferSearchResultToMain}
+                                        colorPanel={this.state.colorPanel}
+                                        auth={auth}
+                                    />
+                                </div>
+                            </Col>
+                        </Row>
+                    </div>
+                )}
+            </AuthenticationContext.Consumer>
         )
     }
 }

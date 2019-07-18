@@ -3,7 +3,7 @@ function query_getTrackingData (accuracyValue = 1) {
 
 	const locationAccuracyMapToDefault = {
 		0: -100,
-		1: -55,
+		1: -65,
 		2: -50,
 	}
 
@@ -212,7 +212,7 @@ function query_signin(username) {
 
 	const text =
 		`
-		SELECT password
+		SELECT name, password, mydevice, search_history
 		FROM user_table
 		WHERE name= $1
 		`;

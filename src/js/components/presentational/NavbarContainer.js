@@ -9,15 +9,15 @@ import SignupPage from '../container/SignupPage';
 import Cookies from 'js-cookie'
 
 import config from '../../config';
+import AuthenticationContext from '../../context/AuthenticationContext';
+import { authenticationService } from '../../authenticationService';
 
 class NavbarContainer extends React.Component {
     constructor() {
         super();
         this.state = {
-            isSignin: false,
             isShowSigninForm: false,
             isShowSignupForm: false,
-            user: Cookies.get('user') || null,
             currentLocale: config.locale.defaultLocale
         }
         this.handleLangSelect = this.handleLangSelect.bind(this);
@@ -61,9 +61,9 @@ class NavbarContainer extends React.Component {
         )
     }
 
-    handleSigninFormSubmit(username) {
+    handleSigninFormSubmit(authentication) {
+        this.props.handleAuthentication(authentication)
         this.setState({
-            isSignin: true,
             isShowSigninForm: false,
         })
     }
@@ -75,11 +75,8 @@ class NavbarContainer extends React.Component {
     }
 
     handleSignout() {
-        Cookies.remove('user')
-        Cookies.remove('searchHistory')
-        this.setState({
-            user: null
-        })
+        const authentication = authenticationService.signout()
+        this.props.handleAuthentication(authentication)
     }
 
     handleSignFormClose() {
@@ -100,67 +97,74 @@ class NavbarContainer extends React.Component {
             }
         }
         const locale = this.context;
-        const { isSignin, isShowSigninForm, isShowSignupForm } = this.state;
+        const { isShowSigninForm, isShowSignupForm } = this.state;
 
         return (
-            <Navbar id='navbar' bg="white" className="navbar sticky-top navbar-light" expand='md' style={style.navbar}>
-                <Navbar.Brand className='px-0 mx-0'>  
-                    <Link to="/" className="nav-link nav-brand d-flex align-items-center px-0" style={style.navbarBrand}>
-                        <Image
-                            alt=""
-                            src={config.image.logo}
-                            width={50}
-                            className="d-inline-block align-top px-1"
-                        />
-                        {config.companyName}
-                    </Link>
-                </Navbar.Brand>
-                
-                <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-                <Navbar.Collapse id="responsive-navbar-nav">  
-                    <Nav className="mr-auto text-capitalize" >
-                        <Nav.Item><Link to="/" className="nav-link nav-route" >{locale.HOME}</Link></Nav.Item>
-                        {!Cookies.get('user') &&
+            <AuthenticationContext.Consumer>
+                {auth => (
+                    <Navbar id='navbar' bg="white" className="navbar sticky-top navbar-light" expand='md' style={style.navbar}>
+                        <Navbar.Brand className='px-0 mx-0'>  
+                            <Link to="/" className="nav-link nav-brand d-flex align-items-center px-0" style={style.navbarBrand}>
+                                <Image
+                                    alt=""
+                                    src={config.image.logo}
+                                    width={50}
+                                    className="d-inline-block align-top px-1"
+                                />
+                                {config.companyName}
+                            </Link>
+                        </Navbar.Brand>
+                        
+                        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                        <Navbar.Collapse id="responsive-navbar-nav">  
+                            <Nav className="mr-auto text-capitalize" >
+                                <Nav.Item><Link to="/" className="nav-link nav-route" >{locale.HOME}</Link></Nav.Item>
+                        {!auth.isSignin &&
                             <>
                                 <Nav.Item><Link to="/page/healthReport" className="nav-link nav-route" >{locale.HEALTH_REPORT}</Link></Nav.Item>
                                 <Nav.Item><Link to="/page/geofence" className="nav-link nav-route" >{locale.GEOFENCE}</Link></Nav.Item>
                                 <Nav.Item><Link to="/page/objectManagement" className="nav-link nav-route" >{locale.OBJECT_MANAGEMENT}</Link></Nav.Item>
                             </>
                         }
-                    </Nav>
-                    <Nav className='text-capitalize'>
-                        {/* <NavDropdown title={locale.language} id="collasible-nav-dropdown" alignRight onSelect={this.handleLangSelect}>
-                            {Object.values(supportedLocale).map( (locale,index) => {
-                                return <NavDropdown.Item key={index} className="lang-select" eventKey={locale.abbr}>{locale.name}</NavDropdown.Item>
-                            })}
-                        </NavDropdown>           */}
-                        <Nav.Item className="nav-link" onClick={this.handleLangSelect}>
-                            {supportedLocale[config.locale.supportedLocale.filter(item => item !== this.state.currentLocale).join()].name}
-                        </Nav.Item>
-                        {Cookies.get('user')
-                            ? <NavDropdown title={<i className="fas fa-user-alt"></i> }id="collasible-nav-dropdown" alignRight>
-                                <NavDropdown.Item className="lang-select" disabled>{Cookies.get('user')}</NavDropdown.Item>
-                                <Dropdown.Divider />
-                                <NavDropdown.Item className="lang-select" onClick={this.handleSignout}>{locale.SIGN_OUT}</NavDropdown.Item>
-                            </NavDropdown> 
-                                
-                            : <Nav.Item className="nav-link" onClick={this.handleSigninFormShowUp}>{locale.SIGN_IN}</Nav.Item>
-                        }
-                    </Nav>
-                </Navbar.Collapse>
+                            </Nav>
+                            <Nav className='text-capitalize'>
+                                {/* <NavDropdown title={locale.language} id="collasible-nav-dropdown" alignRight onSelect={this.handleLangSelect}>
+                                    {Object.values(supportedLocale).map( (locale,index) => {
+                                        return <NavDropdown.Item key={index} className="lang-select" eventKey={locale.abbr}>{locale.name}</NavDropdown.Item>
+                                    })}
+                                </NavDropdown>           */}
+                                <Nav.Item className="nav-link nav-route" onClick={this.handleLangSelect}>
+                                    {supportedLocale[config.locale.supportedLocale.filter(item => item !== this.state.currentLocale).join()].name}
+                                </Nav.Item>
+                                {auth.isSignin
+                                    ? 
+                                        <NavDropdown title={<i className="fas fa-user-alt"></i> }id="collasible-nav-dropdown" alignRight>
+                                            <NavDropdown.Item className="lang-select" disabled>{auth.userInfo.name}</NavDropdown.Item>
+                                            <Dropdown.Divider />
+                                            <NavDropdown.Item className="lang-select" onClick={this.handleSignout}>{locale.SIGN_OUT}</NavDropdown.Item>
+                                        </NavDropdown> 
+                                        
+                                    : 
+                                        <Nav.Item className="nav-link nav-route" onClick={this.handleSigninFormShowUp}>{locale.SIGN_IN}</Nav.Item>
+                                }
+                            </Nav>
+                        </Navbar.Collapse>
 
-                <SigninPage 
-                    show={isShowSigninForm}
-                    handleSigninFormSubmit={this.handleSigninFormSubmit}
-                    handleSignupFormShowUp={this.handleSignupFormShowUp}
-                    handleSignFormClose={this.handleSignFormClose}
-                />
-                <SignupPage 
-                    show={isShowSignupForm}
-                    handleSignupFormSubmit={this.handleSignupFormSubmit}
-                    handleSignFormClose={this.handleSignFormClose}
-                />
-            </Navbar>
+                        <SigninPage 
+                            show={isShowSigninForm}
+                            handleSigninFormSubmit={this.handleSigninFormSubmit}
+                            handleSignupFormShowUp={this.handleSignupFormShowUp}
+                            handleSignFormClose={this.handleSignFormClose}
+                            handleAuthentication={this.props.handleAuthentication}
+                        />
+                        <SignupPage 
+                            show={isShowSignupForm}
+                            handleSignupFormSubmit={this.handleSignupFormSubmit}
+                            handleSignFormClose={this.handleSignFormClose}
+                        />
+                    </Navbar>
+                )}
+            </AuthenticationContext.Consumer>
         );
     }
 }
