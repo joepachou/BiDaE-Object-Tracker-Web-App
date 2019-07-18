@@ -171,7 +171,7 @@ class EditObjectForm extends React.Component {
         const { status, transferredLocation, name, type, access_control_number } = this.state.formOption;
 
         return (
-            <Modal show={this.state.show} onHide={this.handleClose} size="lg">
+            <Modal show={this.state.show} onHide={this.handleClose} size='md'>
                 <Modal.Header closeButton className='font-weight-bold'>{title}</Modal.Header >
                 <Modal.Body>
                     <Form >
@@ -299,7 +299,7 @@ class EditObjectForm extends React.Component {
 
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={this.handleClose}>
+                    <Button variant="outline-secondary" onClick={this.handleClose}>
                         Cancel
                     </Button>
                     <Button variant="primary" onClick={this.handleSubmit}>

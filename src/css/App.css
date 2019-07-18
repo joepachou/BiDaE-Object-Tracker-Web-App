@@ -191,6 +191,12 @@ a:hover {
     color: black;
 }
 
+.btn-outline-secondary:not(:disabled):not(.disabled):active {
+    color: black;
+    background-color: rgb(242, 242, 242);
+    border-color: rgb(224, 224, 224);
+}
+
 .btn {
     font-size: 1rem;
     font-weight: 500;
