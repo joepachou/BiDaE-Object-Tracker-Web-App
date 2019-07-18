@@ -120,7 +120,6 @@ const signin = (request, response) => {
     const pwd = request.body.password
 
     pool.query(queryType.query_signin(username), (error, results) => {
-        const hash = results.rows[0].password
         if (error) {
             console.log("Login Fails: " + error)
         } else {
@@ -130,6 +129,7 @@ const signin = (request, response) => {
                     message: "Username or password is incorrect"
                 })
             } else {
+                const hash = results.rows[0].password
                 if (bcrypt.compareSync(pwd, hash)) {
 
                     let userInfo = {}
