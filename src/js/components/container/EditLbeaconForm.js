@@ -7,12 +7,15 @@
  */
 
 import React from 'react';
-import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
+import { Modal, Button, Row, Col } from 'react-bootstrap';
 import Select from 'react-select';
 import config from '../../config';
 import LocaleContext from '../../context/LocaleContext';
 import axios from 'axios';
 import dataSrc from '../../dataSrc';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+
   
 class EditLbeaconForm extends React.Component {
     
@@ -20,18 +23,12 @@ class EditLbeaconForm extends React.Component {
         super(props);
 
         this.state = {
-            show: props.show,
-            formOption: {
-                low_rssi: '',
-                med_rssi: '',
-                high_rssi: '',
-            }
-            
+            show: props.show,            
         };
         this.handleShow = this.handleShow.bind(this);
         this.handleClose = this.handleClose.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleChange = this.handleChange.bind(this);
+        // this.handleSubmit = this.handleSubmit.bind(this);
+        // this.handleChange = this.handleChange.bind(this);
     }
 
 
@@ -44,11 +41,11 @@ class EditLbeaconForm extends React.Component {
         if (prevProps.show != this.props.show && this.props.show) {
             this.setState({
                 show: this.props.show,
-                formOption: {
-                    low_rssi: this.state.formOption.low_rssi || this.props.selectedObjectData.low_rssi,
-                    med_rssi: this.state.formOption.med_rssi || this.props.selectedObjectData.med_rssi,
-                    high_rssi: this.state.formOption.high_rssi || this.props.selectedObjectData.high_rssi
-                }
+                // formOption: {
+                //     low_rssi: this.state.formOption.low_rssi || this.props.selectedObjectData.low_rssi,
+                //     med_rssi: this.state.formOption.med_rssi || this.props.selectedObjectData.med_rssi,
+                //     high_rssi: this.state.formOption.high_rssi || this.props.selectedObjectData.high_rssi
+                // }
             })
         }
     }
@@ -72,42 +69,43 @@ class EditLbeaconForm extends React.Component {
         });
     }
 
-    handleSubmit(e) {
-        const buttonStyle = e.target.style
-        const lbeaconSettingPackage = this.state.formOption
-        lbeaconSettingPackage.uuid = this.props.selectedObjectData.uuid
-        axios.post(dataSrc.editLbeacon, {
-            formOption: lbeaconSettingPackage
-        }).then(res => {
-            buttonStyle.opacity = 0.4
-            setTimeout(
-                function() {
-                    this.setState({
-                        formOption: {},
-                        show: false,
-                    })
-                   this.props.handleSubmitForm()
-                }
-                .bind(this),
-                1000
-            )
-        }).catch( error => {
-            console.log(error)
-        })
-    }
+    // handleSubmit(e) {
+    //     const buttonStyle = e.target.style
+    //     const lbeaconSettingPackage = this.state.formOption
+    //     console.log(lbeaconSettingPackage)
+    //     lbeaconSettingPackage.uuid = this.props.selectedObjectData.uuid
+    //     axios.post(dataSrc.editLbeacon, {
+    //         formOption: lbeaconSettingPackage
+    //     }).then(res => {
+    //         buttonStyle.opacity = 0.4
+    //         setTimeout(
+    //             function() {
+    //                 this.setState({
+    //                     formOption: {},
+    //                     show: false,
+    //                 })
+    //                this.props.handleSubmitForm()
+    //             }
+    //             .bind(this),
+    //             1000
+    //         )
+    //     }).catch( error => {
+    //         console.log(error)
+    //     })
+    // }
 
 
 
-    handleChange(e) {
-        const target = e.target;
-        const { name } = target;
-        this.setState({
-            formOption: {
-                ...this.state.formOption,
-                [name]: target.value
-            }
-        })
-    }
+    // handleChange(e) {
+    //     const target = e.target;
+    //     const { name } = target;
+    //     this.setState({
+    //         formOption: {
+    //             ...this.state.formOption,
+    //             [name]: target.value
+    //         }
+    //     })
+    // }
 
   
     render() {
@@ -124,88 +122,123 @@ class EditLbeaconForm extends React.Component {
         }
 
         const { title, selectedObjectData } = this.props;
+        const locale = this.context;
 
         return (
             <Modal show={this.state.show} onHide={this.handleClose} size="md">
-                <Modal.Header closeButton className='font-weight-bold'>{title}</Modal.Header >
+                <Modal.Header closeButton className='font-weight-bold text-capitalize'>{title}</Modal.Header >
                 <Modal.Body>
-                    <Form >
-                        <Row>
-                            <Col sm={3}>
-                                UUID
-                            </Col>
-                            <Col sm={9} className='text-muted pb-1'>
-                                {selectedObjectData.uuid}
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col sm={3}>
-                                Location
-                            </Col>
-                            <Col sm={9} className='text-muted pb-1'>
-                                {selectedObjectData.description}
-                            </Col>
-                        </Row>
-                        <hr/>
-                        <Row>
-                            <Col className='font-weight-bold'>
-                                RSSI Threshold
-                            </Col>
-                        </Row>
+                    <Row>
+                        <Col sm={2}>
+                            UUID
+                        </Col>
+                        <Col sm={10} className='text-muted pb-1'>
+                            {selectedObjectData.uuid}
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col sm={2}>
+                            Location
+                        </Col>
+                        <Col sm={10} className='text-muted pb-1'>
+                            {selectedObjectData.description}
+                        </Col>
+                    </Row>
+                    <hr/>
+                    <Row>
+                        <Col className='font-weight-bold'>
+                            RSSI Threshold
+                        </Col>
+                    </Row>
+                    <Formik
+                        initialValues = {{
+                            low: this.props.selectedObjectData.low_rssi || '',
+                            med: this.props.selectedObjectData.med_rssi || '',
+                            high: this.props.selectedObjectData.high_rssi || '',
+                        }}
 
-                        <Form.Group as={Row} controlId="formHorizontalEmail">
-                            <Form.Label column sm={3}>
-                                Low
-                            </Form.Label>
-                            <Col sm={9}>
-                                <Form.Control 
-                                    type="text" 
-                                    onChange={this.handleChange} 
-                                    value={this.state.formOption.low_rssi} 
-                                    name='low_rssi'
-                                    style={style.input}
-                                />
-                            </Col>
-                        </Form.Group>
-                        <Form.Group as={Row} controlId="formHorizontalEmail">
-                            <Form.Label column sm={3}>
-                                Med
-                            </Form.Label>
-                            <Col sm={9}>
-                                <Form.Control 
-                                    type="text" 
-                                    onChange={this.handleChange} 
-                                    value={this.state.formOption.med_rssi} 
-                                    name='med_rssi'
-                                    style={style.input}
-                                />
-                            </Col>
-                        </Form.Group>
-                        <Form.Group as={Row} controlId="formHorizontalEmail">
-                            <Form.Label column sm={3}>
-                                High
-                            </Form.Label>
-                            <Col sm={9}>
-                                <Form.Control 
-                                    type="text" 
-                                    onChange={this.handleChange} 
-                                    value={this.state.formOption.high_rssi} 
-                                    name='high_rssi'
-                                    style={style.input}
-                                />
-                            </Col>
-                        </Form.Group>
-                    </Form>
+                        validationSchema = {
+                            Yup.object().shape({
+                            low: Yup.number().negative('The value must be a negative number'),
+                            med: Yup.number().negative('The value must be a negative number'),
+                            high: Yup.number().negative('The value must be a negative number'),
 
+                        })}
+
+                        onSubmit={({ low, med, high }, { setStatus, setSubmitting }) => {
+                            let lbeaconSettingPackage = {
+                                uuid: this.props.selectedObjectData.uuid,
+                                low_rssi: low,
+                                med_rssi: med,
+                                high_rssi: high,
+                            }
+
+                            axios.post(dataSrc.editLbeacon, {
+                                formOption: lbeaconSettingPackage
+                            }).then(res => {
+                                setTimeout(
+                                    function() {
+                                        this.setState({
+                                            formOption: {},
+                                            show: false,
+                                        })
+                                       this.props.handleSubmitForm()
+                                    }
+                                    .bind(this),
+                                    1000
+                                )
+                            }).catch( error => {
+                                console.log(error)
+                            })
+                        }}
+
+                        render={({ errors, status, touched, isSubmitting }) => (
+                            <Form>
+                                <Row className="form-group">
+                                    {/* <label htmlFor="username">Username</label> */}
+                                    <Col sm={2} className='d-flex align-items-center'>
+                                        {locale.low}
+                                    </Col>
+                                    <Col sm={10}>
+                                        <Field name="low" type="text" style={style.input} className={'form-control' + (errors.low && touched.low ? ' is-invalid' : '')} placeholder=''/>
+                                        <ErrorMessage name="low" component="div" className="invalid-feedback" />                                    
+                                    </Col>
+                                </Row>
+                                <br/>
+                                <Row className="form-group">
+                                    {/* <label htmlFor="username">Username</label> */}
+                                    <Col sm={2} className='d-flex align-items-center'>
+                                        {locale.med}
+                                    </Col>
+                                    <Col sm={10}>
+                                        <Field name="med" type="text" style={style.input} className={'form-control' + (errors.med && touched.med ? ' is-invalid' : '')} placeholder=''/>
+                                        <ErrorMessage name="med" component="div" className="invalid-feedback" />                                    
+                                    </Col>
+                                </Row>
+                                <br/>
+                                <Row className="form-group">
+                                    {/* <label htmlFor="username">Username</label> */}
+                                    <Col sm={2} className='d-flex align-items-center'>
+                                        {locale.high}
+                                    </Col>
+                                    <Col sm={10}>
+                                        <Field name="high" type="text" style={style.input} className={'form-control' + (errors.high && touched.high ? ' is-invalid' : '')} placeholder=''/>
+                                        <ErrorMessage name="high" component="div" className="invalid-feedback" />                                    
+                                    </Col>
+                                </Row>
+                                <br/>
+                                <Modal.Footer>
+                                    <Button variant="outline-secondary" onClick={this.handleClose} disabled={isSubmitting}>
+                                        Cancel
+                                    </Button>
+                                    <Button type="submit" variant="primary" disabled={isSubmitting}>
+                                        Send
+                                    </Button>
+                                </Modal.Footer>
+                            </Form>
+                        )}
+                    />
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="outline-secondary" onClick={this.handleClose}>
-                        Cancel
-                    </Button>
-                    <Button variant="primary" onClick={this.handleSubmit}>
-                        Save
-                    </Button>
-                </Modal.Footer>
             </Modal>
         );
     }
