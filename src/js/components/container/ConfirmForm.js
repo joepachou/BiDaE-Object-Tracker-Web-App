@@ -146,6 +146,17 @@ class ConfirmForm extends React.Component {
 
         const { title } = this.props;
 
+        const colProps = {
+            titleCol: {
+                xs: 5,
+                sm: 5
+            },
+            inputCol: {
+                xs: 7,
+                sm: 7,
+            }
+        }
+
         return (
             <>  
                 <Modal show={this.state.show} onHide={this.handleClose} size="md">
@@ -153,33 +164,33 @@ class ConfirmForm extends React.Component {
                     <Modal.Body>
                         <Form >
                             <Row>
-                                <Col sm={10}>
+                                <Col xs={12} sm={10}>
                                     <Row>
-                                        <Col sm={5}>
+                                        <Col {...colProps.titleCol}>
                                             Device Type
                                         </Col>
-                                        <Col sm={7} className='text-muted pb-1'>
+                                        <Col {...colProps.inputCol} className='text-muted pb-1'>
                                             {this.props.selectedObjectData.type}
                                         </Col>
                                     </Row>
                                     <Row>
-                                        <Col sm={5}>
+                                        <Col {...colProps.titleCol}>
                                             Device Name
                                         </Col>
-                                        <Col sm={7} className='text-muted pb-1'>
+                                        <Col {...colProps.inputCol} className='text-muted pb-1'>
                                             {this.props.selectedObjectData.name}
                                         </Col>
                                     </Row>
                                     <Row>
-                                        <Col sm={5}>
+                                        <Col {...colProps.titleCol}>
                                             ACN
                                         </Col>
-                                        <Col sm={7} className='text-muted pb-1'>
+                                        <Col {...colProps.inputCol} className='text-muted pb-1'>
                                             {this.props.selectedObjectData.access_control_number}
                                         </Col>
                                     </Row>
                                 </Col>
-                                <Col sm={2} className='d-flex align-items-center'>
+                                <Col xs={12} sm={2} className='d-flex align-items-center'>
                                     <Image src={tempImg} width={60}/>
                                 </Col>
                             </Row>
@@ -190,33 +201,33 @@ class ConfirmForm extends React.Component {
                                             <>
                                                 <hr/>
                                                 <Row >
-                                                    <Col sm={10}>
+                                                    <Col xs={12} sm={10}>
                                                         <Row>
-                                                            <Col sm={5}>
+                                                            <Col {...colProps.titleCol}>
                                                                 Device Type
                                                             </Col>
-                                                            <Col sm={7} className='text-muted pb-1'>
+                                                            <Col {...colProps.inputCol} className='text-muted pb-1'>
                                                                 {item.type}
                                                             </Col>
                                                         </Row>
                                                         <Row>
-                                                            <Col sm={5}>
+                                                            <Col {...colProps.titleCol}>
                                                                 Device Name
                                                             </Col>
-                                                            <Col sm={7} className='text-muted pb-1'>
+                                                            <Col {...colProps.inputCol} className='text-muted pb-1'>
                                                                 {item.name}
                                                             </Col>
                                                         </Row>
                                                         <Row>
-                                                            <Col sm={5}>
+                                                            <Col {...colProps.titleCol}>
                                                                 ACN
                                                             </Col>
-                                                            <Col sm={7} className='text-muted pb-1'>
+                                                            <Col {...colProps.inputCol} className='text-muted pb-1'>
                                                                 {item.access_control_number}
                                                             </Col>
                                                         </Row>
                                                     </Col>
-                                                    <Col sm={2} className='d-flex align-items-center'>
+                                                    <Col xs={12} sm={2} className='d-flex align-items-center'>
                                                         <Image src={tempImg} width={60}/>
                                                     </Col>
                                                 </Row>

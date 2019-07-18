@@ -124,23 +124,33 @@ class EditLbeaconForm extends React.Component {
         const { title, selectedObjectData } = this.props;
         const locale = this.context;
 
+        const colProps = {
+            titleCol: {
+                xs: 2,
+                sm: 2
+            },
+            inputCol: {
+                xs: 10,
+                sm: 10,
+            }
+        }
         return (
             <Modal show={this.state.show} onHide={this.handleClose} size="md">
                 <Modal.Header closeButton className='font-weight-bold text-capitalize'>{title}</Modal.Header >
                 <Modal.Body>
                     <Row>
-                        <Col sm={2}>
+                        <Col {...colProps.titleCol}>
                             UUID
                         </Col>
-                        <Col sm={10} className='text-muted pb-1'>
+                        <Col {...colProps.inputCol} className='text-muted pb-1'>
                             {selectedObjectData.uuid}
                         </Col>
                     </Row>
                     <Row>
-                        <Col sm={2}>
+                        <Col {...colProps.titleCol}>
                             Location
                         </Col>
-                        <Col sm={10} className='text-muted pb-1'>
+                        <Col {...colProps.inputCol} className='text-muted pb-1'>
                             {selectedObjectData.description}
                         </Col>
                     </Row>
@@ -196,10 +206,10 @@ class EditLbeaconForm extends React.Component {
                             <Form>
                                 <Row className="form-group">
                                     {/* <label htmlFor="username">Username</label> */}
-                                    <Col sm={2} className='d-flex align-items-center'>
+                                    <Col {...colProps.titleCol} className='d-flex align-items-center'>
                                         {locale.low}
                                     </Col>
-                                    <Col sm={10}>
+                                    <Col {...colProps.inputCol}>
                                         <Field name="low" type="text" style={style.input} className={'form-control' + (errors.low && touched.low ? ' is-invalid' : '')} placeholder=''/>
                                         <ErrorMessage name="low" component="div" className="invalid-feedback" />                                    
                                     </Col>
@@ -207,10 +217,10 @@ class EditLbeaconForm extends React.Component {
                                 <br/>
                                 <Row className="form-group">
                                     {/* <label htmlFor="username">Username</label> */}
-                                    <Col sm={2} className='d-flex align-items-center'>
+                                    <Col {...colProps.titleCol}className='d-flex align-items-center'>
                                         {locale.med}
                                     </Col>
-                                    <Col sm={10}>
+                                    <Col {...colProps.inputCol}>
                                         <Field name="med" type="text" style={style.input} className={'form-control' + (errors.med && touched.med ? ' is-invalid' : '')} placeholder=''/>
                                         <ErrorMessage name="med" component="div" className="invalid-feedback" />                                    
                                     </Col>
@@ -218,10 +228,10 @@ class EditLbeaconForm extends React.Component {
                                 <br/>
                                 <Row className="form-group">
                                     {/* <label htmlFor="username">Username</label> */}
-                                    <Col sm={2} className='d-flex align-items-center'>
+                                    <Col {...colProps.titleCol} className='d-flex align-items-center'>
                                         {locale.high}
                                     </Col>
-                                    <Col sm={10}>
+                                    <Col {...colProps.inputCol}>
                                         <Field name="high" type="text" style={style.input} className={'form-control' + (errors.high && touched.high ? ' is-invalid' : '')} placeholder=''/>
                                         <ErrorMessage name="high" component="div" className="invalid-feedback" />                                    
                                     </Col>

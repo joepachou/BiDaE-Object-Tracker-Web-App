@@ -137,10 +137,15 @@ class ChangeStatusForm extends React.Component {
 
         }
 
-        const rwdProp = { 
-            sm: 5,
-            md: 5,
-            lg: 5,
+        const colProps = {
+            titleCol: {
+                xs: 5,
+                sm: 5
+            },
+            inputCol: {
+                xs: 7,
+                sm: 7,
+            }
         }
 
         let { title } = this.props;
@@ -154,33 +159,33 @@ class ChangeStatusForm extends React.Component {
                     <Modal.Body>
                         <Form >
                             <Row>
-                                <Col sm={8}>
+                                <Col xs={12} sm={8}>
                                     <Row>
-                                        <Col {...rwdProp}>
+                                        <Col {...colProps.titleCol}>
                                             Device Type
                                         </Col>
-                                        <Col sm={7} className='text-muted pb-1'>
+                                        <Col {...colProps.inputCol} className='text-muted pb-1'>
                                             {selectedObjectData.type}
                                         </Col>
                                     </Row>
                                     <Row>
-                                        <Col sm={5}>
+                                        <Col {...colProps.titleCol}>
                                             Device Name
                                         </Col>
-                                        <Col sm={7} className='text-muted pb-1'>
+                                        <Col {...colProps.inputCol} className='text-muted pb-1'>
                                             {selectedObjectData.name}
                                         </Col>
                                     </Row>
                                     <Row>
-                                        <Col sm={5}>
+                                        <Col {...colProps.titleCol}>
                                             ACN
                                         </Col>
-                                        <Col sm={7} className='text-muted pb-1'>
+                                        <Col {...colProps.inputCol} className='text-muted pb-1'>
                                             {selectedObjectData.access_control_number}
                                         </Col>
                                     </Row>
                                 </Col>
-                                <Col sm={4} className='d-flex align-items-center'>
+                                <Col xs={12} sm={4} className='d-flex align-items-center'>
                                     <Image src={tempImg} width={80}/>
                                 </Col>
 
