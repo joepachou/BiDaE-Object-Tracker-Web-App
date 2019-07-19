@@ -290,12 +290,12 @@ class SearchResult extends React.Component {
                                                     <Col xs={1} sm={1} lg={1} className="font-weight-bold d-flex align-self-center" style={style.firstText}>{index + 1}</Col>
                                                     <Col xs={3} sm={3} lg={3} className="d-flex align-self-center justify-content-center" style={style.middleText}>{item.type}</Col>
                                                     <Col xs={4} sm={4} lg={4} className="d-flex align-self-center text-muted" style={style.middleText}>xxxx-xxxx-{item.access_control_number.slice(10, 14)}</Col>
-                                                    {item.status.toLowerCase() === 'normal'
-                                                        ?
-                                                            <Col xs={3} sm={3} lg={3} className="d-flex align-self-center text-muted justify-content-center" style={style.lastText}>near {item.location_description}</Col>
-                                                        : 
-                                                            <Col xs={3} sm={3} lg={3} className="d-flex align-self-center text-muted justify-content-center" style={style.lastText}>{item.status}</Col>
-                                                    }
+                                                    <Col xs={3} sm={3} lg={3} className="d-flex align-self-center text-muted justify-content-center text-capitalize" style={style.lastText}>
+                                                        {item.status.toLowerCase() === config.objectStatus.NORMAL
+                                                            ? `near ${item.location_description}`
+                                                            : item.status
+                                                        }
+                                                    </Col>
                                                 </Row>
                                             </ListGroup.Item>
                                         return element
