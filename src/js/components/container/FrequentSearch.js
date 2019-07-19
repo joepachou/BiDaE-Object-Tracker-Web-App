@@ -58,11 +58,11 @@ class FrequentSearch extends React.Component {
 
 
         return (
-            <AuthenticationContext.Consumer>
+            <AuthenticationContext.Consumer className="text-capitalize">
                 {auth => (
                     <>
                         <Row className='d-flex justify-content-center' style={style.titleText}>
-                            <h4>Frequent Search</h4>
+                            <h4 className='text-capitalize'>{locale.FREQUENT_SEARCH}</h4>
                         </Row>
                         <div className='d-inline-flex flex-column mb-3' id='frequentSearch' >
                             {auth.isSignin
@@ -88,7 +88,7 @@ class FrequentSearch extends React.Component {
                                     onClick={this.handleClick} 
                                     active={this.state.searchKey === 'my devices'}
                                 >
-                                    My Devices
+                                    {locale.MY_DEVICE}
                                 </Button>
                             }
                                 <Button 
@@ -96,7 +96,7 @@ class FrequentSearch extends React.Component {
                                     onClick={this.handleClick} 
                                     active={this.state.searchKey === 'all devices'}
                                 >
-                                    All Devices
+                                    {locale.ALL_DEVICE}
                                 </Button>
                         </div>
                     </>

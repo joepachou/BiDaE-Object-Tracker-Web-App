@@ -37,7 +37,7 @@ class ToggleSwitch extends React.Component {
 					onChange={this.toggleState}
 					checked={this.state.toggle == this.props.leftLabel}
 				/>
-				<label htmlFor="switch_left">{locale[this.props.leftLabel]}</label>
+				<label htmlFor="switch_left">{locale[this.props.leftLabel.toUpperCase()]}</label>
 
 				<input
 					type="radio"
@@ -47,7 +47,7 @@ class ToggleSwitch extends React.Component {
 					onChange={this.toggleState}
 					checked={this.state.toggle === this.props.defaultLabel}
 				/>
-				<label htmlFor="switch_middle">{locale[this.props.defaultLabel]}</label>
+				<label htmlFor="switch_middle">{locale[this.props.defaultLabel.toUpperCase()]}</label>
 
 				<input
 					type="radio"
@@ -57,7 +57,7 @@ class ToggleSwitch extends React.Component {
 					onChange={this.toggleState}
 					checked={this.state.toggle === this.props.rightLabel}
 				/>
-				<label htmlFor="switch_right">{locale[this.props.rightLabel]}</label>
+				<label htmlFor="switch_right">{locale[this.props.rightLabel.toUpperCase()]}</label>
 			</form>
 		);
 	}

@@ -4,17 +4,26 @@ const en =  {
     HEALTH_REPORT: 'health report',
     GEOFENCE: 'geofence',
     OBJECT_MANAGEMENT: 'object management',
-    frequent_searches: 'frequent searches',
     object_types: 'object types',
     search: 'search',
     language: 'language',
     search_result: 'search result',
 
+
+    /* Frequent Search */
+    FREQUENT_SEARCH: 'frequent searches',
+    ALL_DEVICE: 'All Devices',
+    MY_DEVICE: 'My Devices',
+
     /* Location accuracy */
-    location_accuracy: 'location accuracy',
-    low: 'low',
-    med: 'med',
-    high: 'high',
+    LOCATION_ACCURACY: 'Location Accuracy',
+    LOW: 'low',
+    MED: 'med',
+    HIGH: 'high',
+
+    // clear and save
+    CLEAR : 'clear',
+    SAVE : 'save',
     
     /* Search related term */
     Yunlin_Christian_Hospital: 'Yunlin Christian Hospital',
