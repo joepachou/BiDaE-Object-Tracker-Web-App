@@ -11,6 +11,7 @@ import Axios from 'axios';
 import dataSrc from '../../../js/dataSrc';
 import config from '../../config';
 import { connect } from 'react-redux';
+import LocaleContext from '../../context/LocaleContext';
 
 
 class HealthReport extends React.Component{
@@ -32,13 +33,14 @@ class HealthReport extends React.Component{
         this.processTrackingData = this.processTrackingData.bind(this)
         this.handleSubmitForm = this.handleSubmitForm.bind(this)
         this.handleCloseForm = this.handleCloseForm.bind(this)
+        this.startSetInterval = config.healthReport.startInteval
     }
 
     componentDidMount(){
         this.getLbeaconData();
         this.getGatewayData();
-        this.getGatewayDataInterval = setInterval(this.getGatewayData, config.healthReport.pollGatewayTableIntevalTime)
-        this.getLbeaconDataInterval = setInterval(this.getLbeaconData, config.healthReport.pollLbeaconTabelIntevalTime)
+        this.getGatewayDataInterval = this.startSetInterval ? setInterval(this.getGatewayData, config.healthReport.pollGatewayTableIntevalTime) : null;
+        this.getLbeaconDataInterval = this.startSetInterval ? setInterval(this.getLbeaconData, config.healthReport.pollLbeaconTabelIntevalTime) : null;
     }
 
     componentWillUnmount() {
@@ -166,6 +168,8 @@ class HealthReport extends React.Component{
 
         const { trackingData, trackingColunm } = this.state;
 
+        const locale = this.context;
+
         return(
             <Container className='py-4'fluid >
                 <Tabs defaultActiveKey="lbeacon_table" transition={false} id="noanim-tab-example">
@@ -227,7 +231,7 @@ class HealthReport extends React.Component{
                 </Tabs>
                 <EditLbeaconForm 
                     show = {this.state.isShowModal} 
-                    title='Edit Object' 
+                    title={locale.EDIT_LBEACON}
                     selectedObjectData={this.state.selectedRowData} 
                     handleSubmitForm={this.handleSubmitForm}
                     handleCloseForm={this.handleCloseForm}
@@ -236,6 +240,8 @@ class HealthReport extends React.Component{
         )
     }
 }
+
+HealthReport.contextType = LocaleContext
 
 
 /** Which State do you need */

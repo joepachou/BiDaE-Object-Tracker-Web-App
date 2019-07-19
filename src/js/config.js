@@ -53,15 +53,6 @@ const config = {
             pinColorArray: ['orchid','mistyrose', 'tan', 'lightyellow', 'lavender','lightblue', 'yellowgreen']
         },
 
-        objectStatus: {
-            
-            PERIMETER: 'perimeter',
-            FENCE: 'fence',
-            BROKEN: 'broken',
-            TRANSFERRED: 'transferred'
-             
-        },
-
         /* For test. To start object tracking*/
         startInteval: true,
 
@@ -91,6 +82,16 @@ const config = {
         
     },
 
+    objectStatus: {
+            
+        PERIMETER: 'perimeter',
+        FENCE: 'fence',
+        NORMAL: 'normal',
+        BROKEN: 'broken',
+        RESERVE: 'reserve',
+        TRANSFERRED: 'transferred',   
+    },
+
     transferredLocation: [
         "Yunlin Christian Hospital",
         "NTU Hospital Yunlin",
@@ -118,6 +119,7 @@ const config = {
     },
 
     healthReport: {
+        startInteval: false,
         pollLbeaconTabelIntevalTime: 60000,
         pollGatewayTableIntevalTime: 60000,
     },
