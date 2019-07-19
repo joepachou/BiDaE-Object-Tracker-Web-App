@@ -112,11 +112,11 @@ class EditLbeaconForm extends React.Component {
 
         const style = {
             input: {
-                borderRadius: 0,
-                borderBottom: '1 solid grey',
-                borderTop: 0,
-                borderLeft: 0,
-                borderRight: 0,
+                // borderRadius: 0,
+                // borderBottom: '1 solid grey',
+                // borderTop: 0,
+                // borderLeft: 0,
+                // borderRight: 0,
                 
             }
         }
@@ -189,7 +189,6 @@ class EditLbeaconForm extends React.Component {
                                 setTimeout(
                                     function() {
                                         this.setState({
-                                            formOption: {},
                                             show: false,
                                         })
                                        this.props.handleSubmitForm()
@@ -207,7 +206,7 @@ class EditLbeaconForm extends React.Component {
                                 <Row className="form-group">
                                     {/* <label htmlFor="username">Username</label> */}
                                     <Col {...colProps.titleCol} className='d-flex align-items-center'>
-                                        {locale.low}
+                                        {locale.LOW}
                                     </Col>
                                     <Col {...colProps.inputCol}>
                                         <Field name="low" type="text" style={style.input} className={'form-control' + (errors.low && touched.low ? ' is-invalid' : '')} placeholder=''/>
@@ -218,7 +217,7 @@ class EditLbeaconForm extends React.Component {
                                 <Row className="form-group">
                                     {/* <label htmlFor="username">Username</label> */}
                                     <Col {...colProps.titleCol}className='d-flex align-items-center'>
-                                        {locale.med}
+                                        {locale.MED}
                                     </Col>
                                     <Col {...colProps.inputCol}>
                                         <Field name="med" type="text" style={style.input} className={'form-control' + (errors.med && touched.med ? ' is-invalid' : '')} placeholder=''/>
@@ -229,7 +228,7 @@ class EditLbeaconForm extends React.Component {
                                 <Row className="form-group">
                                     {/* <label htmlFor="username">Username</label> */}
                                     <Col {...colProps.titleCol} className='d-flex align-items-center'>
-                                        {locale.high}
+                                        {locale.HIGH}
                                     </Col>
                                     <Col {...colProps.inputCol}>
                                         <Field name="high" type="text" style={style.input} className={'form-control' + (errors.high && touched.high ? ' is-invalid' : '')} placeholder=''/>
