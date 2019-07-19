@@ -164,7 +164,7 @@ class ConfirmForm extends React.Component {
                     <Modal.Body>
                         <Form >
                             <Row>
-                                <Col xs={12} sm={10}>
+                                <Col xs={12} sm={8}>
                                     <Row>
                                         <Col {...colProps.titleCol}>
                                             Device Type
@@ -190,7 +190,7 @@ class ConfirmForm extends React.Component {
                                         </Col>
                                     </Row>
                                 </Col>
-                                <Col xs={12} sm={2} className='d-flex align-items-center'>
+                                <Col xs={12} sm={4} className='d-flex align-items-center'>
                                     <Image src={tempImg} width={60}/>
                                 </Col>
                             </Row>
@@ -240,7 +240,7 @@ class ConfirmForm extends React.Component {
                         
                         <hr/>
                         <Row>
-                            <Col className='d-flex justify-content-center'>
+                            <Col className='d-flex justify-content-center text-capitalize'>
                                 <h5>{this.props.selectedObjectData.status}
                                     {this.props.selectedObjectData.status === 'Transferred' 
                                         ? '  to  ' + this.props.selectedObjectData.transferredLocation.value 
