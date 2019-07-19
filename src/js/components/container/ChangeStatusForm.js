@@ -112,7 +112,7 @@ class ChangeStatusForm extends React.Component {
         return (
             <>  
                 <Modal show={this.state.show} onHide={this.handleClose} size="md">
-                    <Modal.Header closeButton className='font-weight-bold'>{title}</Modal.Header >
+                    <Modal.Header closeButton className='font-weight-bold text-capitalize'>{title}</Modal.Header >
                     <Modal.Body>
                         <Row>
                             <Col xs={12} sm={8}>
@@ -176,7 +176,7 @@ class ChangeStatusForm extends React.Component {
                                         <Col sm={2} className='d-flex'>
                                             <label htmlFor="status">{locale.STATUS}</label>
                                         </Col>
-                                        <Col sm={10}>
+                                        <Col sm={10} >
                                             <Field
                                                 component={RadioButton}
                                                 name="radioGroup"
@@ -184,42 +184,47 @@ class ChangeStatusForm extends React.Component {
                                                 label={locale.NORMAL}
                                             />
                                         
-                                        <Field
+                                            <Field
                                                 component={RadioButton}
                                                 name="radioGroup"
                                                 id={config.objectStatus.BROKEN}
                                                 label={locale.BROKEN}
                                             />
+
                                             <Field
                                                 component={RadioButton}
                                                 name="radioGroup"
                                                 id={config.objectStatus.RESERVE}
                                                 label={locale.RESERVE}
                                             />
-                                            <Field
-                                                component={RadioButton}
-                                                name="radioGroup"
-                                                id={config.objectStatus.TRANSFERRED}
-                                                label={locale.TRANSFERRED}
-                                            />
 
-                                            <Select
-                                                placeholder = "Select Location"
-                                                name="select"
-                                                value = {values.select}
-                                                onChange={value => setFieldValue("select", value)}
-                                                options={options}
-                                                isSearchable={false}
-                                                isDisabled={values.radioGroup !== config.objectStatus.TRANSFERRED}
-                                                style={style.select}
-                                                components={{
-                                                    IndicatorSeparator: () => null
-                                                }}
-                                            />
-                                            {touched.select && errors.select &&
-                                            <div style={style.errorMessage}>{errors.select}</div>}
-
-                                                
+                                            <Row className='no-gutters' className='d-flex align-self-center'>
+                                                <Col sm={4} className='d-flex align-self-center'>
+                                                    <Field
+                                                        component={RadioButton}
+                                                        name="radioGroup"
+                                                        id={config.objectStatus.TRANSFERRED}
+                                                        label={locale.TRANSFERRED}
+                                                    />
+                                                </Col>
+                                                <Col sm={8}>
+                                                    <Select
+                                                        placeholder = "Select Location"
+                                                        name="select"
+                                                        value = {values.select}
+                                                        onChange={value => setFieldValue("select", value)}
+                                                        options={options}
+                                                        isSearchable={false}
+                                                        isDisabled={values.radioGroup !== config.objectStatus.TRANSFERRED}
+                                                        style={style.select}
+                                                        components={{
+                                                            IndicatorSeparator: () => null
+                                                        }}
+                                                    />
+                                                    {touched.select && errors.select &&
+                                                    <div style={style.errorMessage}>{errors.select}</div>}
+                                                </Col>
+                                            </Row>                                                
                                         </Col>
                                     </Row>
                                     <Modal.Footer>
@@ -227,7 +232,7 @@ class ChangeStatusForm extends React.Component {
                                             {locale.CANCEL}
                                         </Button>
                                         <Button type="submit" className="text-capitalize" variant="primary" disabled={isSubmitting}>
-                                            {locale.SEND}
+                                            {locale.SAVE}
                                         </Button>
                                     </Modal.Footer>
                                 </Form>
