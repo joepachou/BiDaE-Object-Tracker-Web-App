@@ -1,20 +1,12 @@
 import React from 'react';
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
-import ListGroup from 'react-bootstrap/ListGroup';
-import Form from 'react-bootstrap/Form'
-import FormControl from 'react-bootstrap/FormControl'
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import FormCheck from 'react-bootstrap/FormCheck';
-import VerticalTable from '../presentational/VerticalTable';
+import { Modal, Button, Row, Col, Image} from 'react-bootstrap'
 import Select from 'react-select';
 import config from '../../config';
 import LocaleContext from '../../context/LocaleContext';
-import axios from 'axios';
-import dataSrc from '../../dataSrc';
-import { Image } from 'react-bootstrap'
 import tempImg from '../../../img/doppler.jpg'
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import RadioButton from '../presentational/RadioButton'
 
 const transferredLocations = config.transferredLocation;
 
@@ -24,7 +16,6 @@ const options = transferredLocations.map( location => {
     locationObj["label"] = location;
     return locationObj
 })
-  
 class ChangeStatusForm extends React.Component {
     
     constructor(props) {
@@ -33,20 +24,12 @@ class ChangeStatusForm extends React.Component {
         this.state = {
             show: this.props.show,
             isShowForm: false,
-            formOption: {
-                name: '',
-                type: '',
-                status: '', 
-                transferredLocation: null,
-            }
         };
 
 
         this.handleShow = this.handleShow.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleCheck = this.handleCheck.bind(this);
-        this.handleSelect = this.handleSelect.bind(this);
     }
   
     handleClose(e) {
@@ -66,63 +49,30 @@ class ChangeStatusForm extends React.Component {
 
 
     componentDidUpdate(prevProps) {
-        const { selectedObjectData } = this.props
-        if (prevProps != this.props && selectedObjectData) {
-            let selectedObjectData = this.props.selectedObjectData.length !== 0 ? this.props.selectedObjectData[0] : []
+        if (prevProps != this.props && this.props.selectedObjectData.length !== 0) {
             this.setState({
                 show: this.props.show,
                 isShowForm: true,
-                formOption: {
-                    name: selectedObjectData.name,
-                    type: selectedObjectData.type,
-                    status: selectedObjectData.status,
-                    transferredLocation: selectedObjectData.status === 'Transferred' && selectedObjectData.transferred_location ? {
-                        'value' : selectedObjectData.transferred_location,
-                        'label' : selectedObjectData.transferred_location
-                    } : null,
-                }
             })
         }
     }
 
-    handleSubmit(e) {
+    handleSubmit(radioGroup, select) {
         
-        const button = e.target;
-        let selectedObjectData = this.props.selectedObjectData.length !== 0 ? this.props.selectedObjectData[0] : []
+        let selectedObjectData = this.props.selectedObjectData[0]
         const { mac_address, name, type, access_control_number } = selectedObjectData;
-        const { status, transferredLocation } = this.state.formOption;
         const postOption = {
             name: name,
             type: type,
             access_control_number: access_control_number,
-            status: status,
-            transferredLocation: status !== 'Transferred' ? '' : transferredLocation,
             mac_address: mac_address,
+            status: radioGroup,
+            transferredLocation: radioGroup !== config.objectStatus.TRANSFERRED ? '' : select.value,
         }
-        if(this.props.handleChangeObjectStatusFormSubmit) {
-            this.props.handleChangeObjectStatusFormSubmit(postOption);
-        }
+        this.props.handleChangeObjectStatusFormSubmit(postOption)
     }
 
-    handleCheck(e) {
-        this.setState({
-            formOption: {
-                ...this.state.formOption,
-                status: e.target.value,
-            }
-        })
-    }
 
-    handleSelect(selectedOption) {
-        this.setState({
-            formOption: {
-                ...this.state.formOption,
-                transferredLocation: selectedOption,
-            }
-        })
-    }
-
-  
     render() {
 
         const style = {
@@ -134,6 +84,13 @@ class ChangeStatusForm extends React.Component {
                 borderRight: 0,
                 
             },
+            errorMessage: {
+                width: '100%',
+                marginTop: '0.25rem',
+                marginBottom: '0.25rem',
+                fontSize: '80%',
+                color: '#dc3545'
+            }
 
         }
 
@@ -150,113 +107,136 @@ class ChangeStatusForm extends React.Component {
 
         let { title } = this.props;
         let selectedObjectData = this.props.selectedObjectData.length !== 0 ? this.props.selectedObjectData[0] : []
-        const { name, type, status, transferredLocation } = this.state.formOption;
+        const locale = this.context
 
         return (
             <>  
                 <Modal show={this.state.show} onHide={this.handleClose} size="md">
                     <Modal.Header closeButton className='font-weight-bold'>{title}</Modal.Header >
                     <Modal.Body>
-                        <Form >
-                            <Row>
-                                <Col xs={12} sm={8}>
-                                    <Row>
-                                        <Col {...colProps.titleCol}>
-                                            Device Type
-                                        </Col>
-                                        <Col {...colProps.inputCol} className='text-muted pb-1'>
-                                            {selectedObjectData.type}
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col {...colProps.titleCol}>
-                                            Device Name
-                                        </Col>
-                                        <Col {...colProps.inputCol} className='text-muted pb-1'>
-                                            {selectedObjectData.name}
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col {...colProps.titleCol}>
-                                            ACN
-                                        </Col>
-                                        <Col {...colProps.inputCol} className='text-muted pb-1'>
-                                            {selectedObjectData.access_control_number}
-                                        </Col>
-                                    </Row>
-                                </Col>
-                                <Col xs={12} sm={4} className='d-flex align-items-center'>
-                                    <Image src={tempImg} width={80}/>
-                                </Col>
-
-                            </Row>
-
-                            <hr/>
-                            <fieldset>
-                                <Form.Group as={Row}>
-                                    <Form.Label as="legend" column sm={2} className='pt-0'>
-                                        Status
-                                    </Form.Label>
-                                    <Col sm={10}>
-                                        <Form.Check
-                                            custom
-                                            type="radio"
-                                            label="Normal"
-                                            name="formHorizontalRadios"
-                                            id="formHorizontalRadios1"
-                                            value="Normal"
-                                            checked={status === 'Normal'}
-                                            onChange={this.handleCheck}                                     
-                                        />
-                                        <Form.Check
-                                            custom
-                                            type="radio"
-                                            label="Broken"
-                                            name="formHorizontalRadios"
-                                            id="formHorizontalRadios2"
-                                            value="Broken"
-                                            checked={status === 'Broken'}
-
-                                            onChange={this.handleCheck}   
-                                        />
-                                        <Form.Row>
-                                            <Form.Group as={Col} sm={4}>
-                                                <Form.Check
-                                                    custom
-                                                    type="radio"
-                                                    label="Transferred"
-                                                    name="formHorizontalRadios"
-                                                    id="formHorizontalRadios3"
-                                                    value="Transferred"
-                                                    checked={status === 'Transferred'}
-                                                    onChange={this.handleCheck}   
-                                                />
-                                            </Form.Group>
-                                            <Form.Group as={Col} sm={8} >
-                                                    <Select
-                                                        placeholder = "Select Location"
-                                                        value = {transferredLocation}
-                                                        onChange={this.handleSelect}
-                                                        options={options}
-                                                        isDisabled = {status === 'Transferred' ? false : true}
-                                                    />
-                                            </Form.Group>
-                                            
-                                        </Form.Row>
+                        <Row>
+                            <Col xs={12} sm={8}>
+                                <Row>
+                                    <Col {...colProps.titleCol}>
+                                        Device Type
                                     </Col>
-                                </Form.Group>
-                             </fieldset>
-                        </Form>
+                                    <Col {...colProps.inputCol} className='text-muted pb-1'>
+                                        {selectedObjectData.type}
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col {...colProps.titleCol}>
+                                        Device Name
+                                    </Col>
+                                    <Col {...colProps.inputCol} className='text-muted pb-1'>
+                                        {selectedObjectData.name}
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col {...colProps.titleCol}>
+                                        ACN
+                                    </Col>
+                                    <Col {...colProps.inputCol} className='text-muted pb-1'>
+                                        {selectedObjectData.access_control_number}
+                                    </Col>
+                                </Row>
+                            </Col>
+                            <Col xs={12} sm={4} className='d-flex align-items-center'>
+                                <Image src={tempImg} width={80}/>
+                            </Col>
+                        </Row>
+                    
+                        <hr/>
+                        <Formik
+                            initialValues = {{
+                                radioGroup: this.props.selectedObjectData.length !== 0 ? this.props.selectedObjectData[0].status : '',
+                                select: this.props.selectedObjectData.length !== 0 && this.props.selectedObjectData[0].status === "Transferred" 
+                                    ? this.props.selectedObjectData[0].transferredLocation
+                                    : '',
+                            }}
 
+                            validationSchema = {
+                                Yup.object().shape({
+                                    radioGroup: Yup.string().required('Object status is required'),
+
+                                    select: Yup.string()
+                                        .when('radioGroup', {
+                                            is: config.objectStatus.TRANSFERRED,
+                                            then: Yup.string().required('Location is required')
+                                        })
+                            })}
+
+                            onSubmit={({ radioGroup, select }, { setStatus, setSubmitting }) => {
+                                this.handleSubmit(radioGroup, select)
+                            }}
+
+                            render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
+                                <Form className="text-capitalize">
+                                    <Row className="form-group">
+                                        <Col sm={3} className='d-flex'>
+                                            <label htmlFor="status">{locale.STATUS}</label>
+                                        </Col>
+                                        <Col sm={3}>
+                                            <Field
+                                                component={RadioButton}
+                                                name="radioGroup"
+                                                id={config.objectStatus.NORMAL}
+                                                label={locale.NORMAL}
+                                            />
+                                        </Col>
+                                        <Col sm={3}>
+                                        <Field
+                                                component={RadioButton}
+                                                name="radioGroup"
+                                                id={config.objectStatus.BROKEN}
+                                                label={locale.BROKEN}
+                                            />
+                                        </Col>
+                                        <Col sm={3}>
+                                            <Field
+                                                component={RadioButton}
+                                                name="radioGroup"
+                                                id={config.objectStatus.RESERVE}
+                                                label={locale.RESERVE}
+                                            />
+                                        </Col>
+                                    </Row>
+                                    <Row className='pb-1'>
+                                        <Col sm={{ span: 4, offset: 3 }}>
+                                            <Field
+                                                component={RadioButton}
+                                                name="radioGroup"
+                                                id={config.objectStatus.TRANSFERRED}
+                                                label={locale.TRANSFERRED}
+                                            />
+                                        </Col>
+                                        <Col>
+                                            <Select
+                                                placeholder = "Select Location"
+                                                name="select"
+                                                value = {values.select}
+                                                onChange={value => setFieldValue("select", value)}
+                                                options={options}
+                                                isSearchable={false}
+                                                isDisabled={values.radioGroup !== config.objectStatus.TRANSFERRED}
+                                            />
+    
+                                            {touched.select && errors.select &&
+                                             <div style={style.errorMessage}>{errors.select}</div>}
+                                        </Col>
+                                    </Row>
+                                    <Modal.Footer>
+                                        <Button variant="outline-secondary" onClick={this.handleClose} disabled={isSubmitting}>
+                                            {locale.CANCEL}
+                                        </Button>
+                                        <Button type="submit" variant="primary">
+                                            {locale.SEND}
+                                        </Button>
+                                    </Modal.Footer>
+                                </Form>
+                            )}
+                        />
                     </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="outline-secondary" onClick={this.handleClose}>
-                            Cancel
-                        </Button>
-                        <Button variant="primary" onClick={this.handleSubmit}>
-                            Save
-                        </Button>
-                    </Modal.Footer>
                 </Modal>
             </>
         );
