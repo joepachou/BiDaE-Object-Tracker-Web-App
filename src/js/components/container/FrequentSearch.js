@@ -36,7 +36,7 @@ class FrequentSearch extends React.Component {
     }
 
     handleClick(e) {
-        const itemName = e.target.innerText.toLowerCase();
+        const itemName = e.target.name.toLowerCase();
         this.getSearchKey(itemName)
     }
 
@@ -76,6 +76,7 @@ class FrequentSearch extends React.Component {
                                         onClick={this.handleClick} 
                                         active={this.state.searchKey === item.name.toLowerCase()} 
                                         key={index}
+                                        name={item.name}
                                     >
                                         {item.name}
                                     </Button>
@@ -87,6 +88,7 @@ class FrequentSearch extends React.Component {
                                     variant="outline-custom"
                                     onClick={this.handleClick} 
                                     active={this.state.searchKey === 'my devices'}
+                                    name='my devices'
                                 >
                                     {locale.MY_DEVICE}
                                 </Button>
@@ -95,6 +97,7 @@ class FrequentSearch extends React.Component {
                                     variant="outline-custom"
                                     onClick={this.handleClick} 
                                     active={this.state.searchKey === 'all devices'}
+                                    name='all devices'
                                 >
                                     {locale.ALL_DEVICE}
                                 </Button>
