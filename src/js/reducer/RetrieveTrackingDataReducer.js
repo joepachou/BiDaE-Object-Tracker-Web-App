@@ -8,7 +8,7 @@ import config from '../config';
 
 const initialState = {
     shouldTrackingDataUpdate: config.surveillanceMap.startInteval,
-    objectInfo: {},
+    objectInfo: [],
     locationAccuracy: 1,
     objectTable: [],
 }

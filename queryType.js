@@ -121,7 +121,31 @@ function query_getTrackingData (accuracyValue = 1) {
     
 	`;
 
-	 return text;
+	const query = `
+		SELECT 
+			object_table.mac_address,
+			object_summary_table.uuid as lbeacon_uuid,
+			object_summary_table.rssi,
+			object_summary_table.first_seen_timestamp,
+			object_summary_table.last_seen_timestamp,
+			object_table.name,
+			object_table.type,
+			object_table.status,
+			object_table.access_control_number,
+			split_part(object_table.access_control_number, '-', 3) as last_four_acn,
+			lbeacon_table.description as location_description
+
+		FROM object_summary_table
+
+		LEFT JOIN object_table
+		ON object_table.mac_address = object_summary_table.mac_address
+
+		LEFT JOIN lbeacon_table
+		ON lbeacon_table.uuid = object_summary_table.uuid
+
+		ORDER BY object_table.type ASC, last_four_acn ASC;
+	`
+	return query;
 }
 
 

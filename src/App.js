@@ -16,7 +16,8 @@ import {
     retrieveObjectTable
 } from './js/action/action';
 import { connect } from 'react-redux';
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
+import moment from 'moment'
 
 class App extends React.Component {
 
@@ -59,8 +60,6 @@ class App extends React.Component {
 
     handleAuthentication(auth) {
         auth.authentication ? Cookies.set('userInfo', auth.userInfo) : Cookies.remove('userInfo');
-        console.log(auth)
-        // console.log(Cookies.get())
         this.setState({
             auth: {
                 isSignin: auth.authentication,
@@ -70,16 +69,10 @@ class App extends React.Component {
     }
     
     getTrackingData() {
-
-        const locationAccuracyMapToDefault = config.surveillanceMap.locationAccuracyMapToDefault;
-        const locationAccuracyMapToDB =  config.surveillanceMap.locationAccuracyMapToDB;
-
-        Axios.post(dataSrc.getTrackingData, {
-            accuracyValue: this.props.locationAccuracy,
-            locationAccuracyMapToDefault,
-            locationAccuracyMapToDB,
-        }).then(res => {
-            this.props.retrieveTrackingData(res.data)
+        Axios.get(dataSrc.getTrackingData)
+        .then(res => {
+            const processedTrackingData = this.handleTrackingData(res.data.rows)
+            this.props.retrieveTrackingData(processedTrackingData)
         })
         .catch(error => {
             console.log(error)
@@ -94,6 +87,41 @@ class App extends React.Component {
         })
     }
 
+    handleTrackingData(rawTrackingData) {
+        
+        let lbsPosition = new Set()
+        const processedTrackingData = rawTrackingData.map(item => {
+            /**
+             * Every lbeacons coordinate sended by response will store in lbsPosition
+             * Update(3/14): use Set instead.
+             */
+            const lbeaconCoordinate = this.createLbeaconCoordinate(item.lbeacon_uuid);
+            lbsPosition.add(lbeaconCoordinate.toString());
+            item.currentPosition = lbeaconCoordinate
+
+            const firstSeenTimestamp = moment(item.first_seen_timestamp)
+            const finalSeenTimestamp = moment(item.final_seen_timestamp)
+            const duration = moment.duration(finalSeenTimestamp.diff(firstSeenTimestamp))
+            item.duration = duration._data
+
+            item.found = moment().diff(item.last_seen_timestamp, 'seconds') < config.objectManage.notFoundObjectTimePeriod ? true : false
+            return item
+        })
+        return processedTrackingData
+    }
+
+    /**
+     * Retrieve the lbeacon's location coordinate from lbeacon_uuid.
+     * @param   lbeacon_uuid The uuid of lbeacon retrieved from DB.
+     */
+    createLbeaconCoordinate(lbeacon_uuid){
+        /** Example of lbeacon_uuid: 00000018-0000-0000-7310-000000004610 */
+        const zz = lbeacon_uuid.slice(6,8);
+        const xx = parseInt(lbeacon_uuid.slice(14,18) + lbeacon_uuid.slice(19,23));
+        const yy = parseInt(lbeacon_uuid.slice(-8));
+        return [yy, xx];
+    }
+
     render() { 
         const { locale } = this.state;
         return (
@@ -102,9 +130,8 @@ class App extends React.Component {
                     <Router>          
                         <NavbarContainer 
                             changeLocale={this.handleChangeLocale} 
-                            locale={locale} 
-                            trackingData={this.retrievingTrackingData}
                             handleAuthentication={this.handleAuthentication}
+                            locale={locale} 
                         />
                         <Switch>
                             {renderRoutes(routes)}
