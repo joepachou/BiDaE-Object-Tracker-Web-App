@@ -129,7 +129,9 @@ const signin = (request, response) => {
                     message: "Username or password is incorrect"
                 })
             } else {
+
                 const hash = results.rows[0].password
+
                 if (bcrypt.compareSync(pwd, hash)) {
 
                     let userInfo = {}
@@ -162,17 +164,16 @@ const signup = (request, response) => {
         username: username,
         password: hash,
     }
-    pool.query(queryType.query_signup(signupPackage), (error, results) => {
-
-        if (error) {
-            console.log("Login Fails!")
-        } else {
+    pool.query(queryType.query_signup(signupPackage))
+        .then(res => {
             console.log('Sign up Success')
-        }
+            response.status(200).json(results)
 
-        response.status(200).json(results)
-    })
+        })
+        .catch(err => {
+            console.log("Signup Fails!")
 
+        })
 }
 
 const getUserInfo = (request, response) => {

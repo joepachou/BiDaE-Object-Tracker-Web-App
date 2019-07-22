@@ -48,7 +48,7 @@ app.get('/data/getGatewayTable', db.getGatewayTable);
 
 app.get('/data/geofenceData', db.getGeofenceData);
 
-app.post('/data/getTrackingData', db.getTrackingData);
+app.get('/data/getTrackingData', db.getTrackingData);
 
 app.post('/data/editObject', db.editObject);
 
