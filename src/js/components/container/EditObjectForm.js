@@ -92,7 +92,7 @@ class EditObjectForm extends React.Component {
         const { formOption } = this.state;
 
         let transferredLocation = '';
-        if (formOption.status === 'Transferred') {
+        if (formOption.status === 'transferred') {
             transferredLocation = formOption.transferredLocation || selectedObjectData.transferredLocation;
         }
         
@@ -234,21 +234,21 @@ class EditObjectForm extends React.Component {
                                     <Form.Check
                                         custom
                                         type="radio"
-                                        label="Normal"
+                                        label="normal"
                                         name="formHorizontalRadios"
                                         id="formHorizontalRadios1"
-                                        value="Normal"
-                                        checked={status === 'Normal'}
+                                        value="normal"
+                                        checked={status === 'normal'}
                                         onChange={this.handleCheck}                                     
                                     />
                                     <Form.Check
                                         custom
                                         type="radio"
-                                        label="Broken"
+                                        label="broken"
                                         name="formHorizontalRadios"
                                         id="formHorizontalRadios2"
-                                        value="Broken"
-                                        checked={status === 'Broken'}
+                                        value="broken"
+                                        checked={status === 'broken'}
 
                                         onChange={this.handleCheck}   
                                     />
@@ -257,11 +257,11 @@ class EditObjectForm extends React.Component {
                                             <Form.Check
                                                 custom
                                                 type="radio"
-                                                label="Transferred"
+                                                label="transferred"
                                                 name="formHorizontalRadios"
                                                 id="formHorizontalRadios3"
-                                                value="Transferred"
-                                                checked={status === 'Transferred'}
+                                                value="transferred"
+                                                checked={status === 'transferred'}
 
                                                 onChange={this.handleCheck}   
                                             />
@@ -272,7 +272,7 @@ class EditObjectForm extends React.Component {
                                                     value={transferredLocation}
                                                     onChange={this.handleSelect}
                                                     options={options}
-                                                    isDisabled = {status === 'Transferred' ? false : true}
+                                                    isDisabled = {status === 'transferred' ? false : true}
                                                 />
                                         </Form.Group>
                                         

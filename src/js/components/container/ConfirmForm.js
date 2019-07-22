@@ -94,8 +94,8 @@ class ConfirmForm extends React.Component {
     }
 
     handleClick(e) {
-        const item = e.target.innerText;
-        switch(item.toLowerCase()) {
+        const item = e.target.innerText.toLowerCase();
+        switch(item) {
             case 'add device':
                 this.setState({
                     showAddDeviceForm: true
@@ -162,88 +162,86 @@ class ConfirmForm extends React.Component {
                 <Modal show={this.state.show} onHide={this.handleClose} size="md">
                     <Modal.Header closeButton className='font-weight-bold'>{title}</Modal.Header >
                     <Modal.Body>
-                        <Form >
-                            <Row>
-                                <Col xs={12} sm={8}>
-                                    <Row>
-                                        <Col {...colProps.titleCol}>
-                                            Device Type
-                                        </Col>
-                                        <Col {...colProps.inputCol} className='text-muted pb-1'>
-                                            {this.props.selectedObjectData.type}
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col {...colProps.titleCol}>
-                                            Device Name
-                                        </Col>
-                                        <Col {...colProps.inputCol} className='text-muted pb-1'>
-                                            {this.props.selectedObjectData.name}
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col {...colProps.titleCol}>
-                                            ACN
-                                        </Col>
-                                        <Col {...colProps.inputCol} className='text-muted pb-1'>
-                                            {this.props.selectedObjectData.access_control_number}
-                                        </Col>
-                                    </Row>
-                                </Col>
-                                <Col xs={12} sm={4} className='d-flex align-items-center'>
-                                    <Image src={tempImg} width={60}/>
-                                </Col>
-                            </Row>
-                            {this.state.addedDevices.length !== 0 
-                                ? 
-                                    this.state.addedDevices.map((item,index) => {
-                                        return (
-                                            <>
-                                                <hr/>
-                                                <Row >
-                                                    <Col xs={12} sm={10}>
-                                                        <Row>
-                                                            <Col {...colProps.titleCol}>
-                                                                Device Type
-                                                            </Col>
-                                                            <Col {...colProps.inputCol} className='text-muted pb-1'>
-                                                                {item.type}
-                                                            </Col>
-                                                        </Row>
-                                                        <Row>
-                                                            <Col {...colProps.titleCol}>
-                                                                Device Name
-                                                            </Col>
-                                                            <Col {...colProps.inputCol} className='text-muted pb-1'>
-                                                                {item.name}
-                                                            </Col>
-                                                        </Row>
-                                                        <Row>
-                                                            <Col {...colProps.titleCol}>
-                                                                ACN
-                                                            </Col>
-                                                            <Col {...colProps.inputCol} className='text-muted pb-1'>
-                                                                {item.access_control_number}
-                                                            </Col>
-                                                        </Row>
-                                                    </Col>
-                                                    <Col xs={12} sm={2} className='d-flex align-items-center'>
-                                                        <Image src={tempImg} width={60}/>
-                                                    </Col>
-                                                </Row>
-                                            </>
-                                        )
-                                    })   
-                                : null
-                            }
-                        </Form>
+                        <Row>
+                            <Col xs={12} sm={8}>
+                                <Row>
+                                    <Col {...colProps.titleCol}>
+                                        Device Type
+                                    </Col>
+                                    <Col {...colProps.inputCol} className='text-muted pb-1'>
+                                        {this.props.selectedObjectData.type}
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col {...colProps.titleCol}>
+                                        Device Name
+                                    </Col>
+                                    <Col {...colProps.inputCol} className='text-muted pb-1'>
+                                        {this.props.selectedObjectData.name}
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col {...colProps.titleCol}>
+                                        ACN
+                                    </Col>
+                                    <Col {...colProps.inputCol} className='text-muted pb-1'>
+                                        {this.props.selectedObjectData.access_control_number}
+                                    </Col>
+                                </Row>
+                            </Col>
+                            <Col xs={12} sm={4} className='d-flex align-items-center'>
+                                <Image src={tempImg} width={60}/>
+                            </Col>
+                        </Row>
+                        {this.state.addedDevices.length !== 0 
+                            ? 
+                                this.state.addedDevices.map((item,index) => {
+                                    return (
+                                        <>
+                                            <hr/>
+                                            <Row >
+                                                <Col xs={12} sm={10}>
+                                                    <Row>
+                                                        <Col {...colProps.titleCol}>
+                                                            Device Type
+                                                        </Col>
+                                                        <Col {...colProps.inputCol} className='text-muted pb-1'>
+                                                            {item.type}
+                                                        </Col>
+                                                    </Row>
+                                                    <Row>
+                                                        <Col {...colProps.titleCol}>
+                                                            Device Name
+                                                        </Col>
+                                                        <Col {...colProps.inputCol} className='text-muted pb-1'>
+                                                            {item.name}
+                                                        </Col>
+                                                    </Row>
+                                                    <Row>
+                                                        <Col {...colProps.titleCol}>
+                                                            ACN
+                                                        </Col>
+                                                        <Col {...colProps.inputCol} className='text-muted pb-1'>
+                                                            {item.access_control_number}
+                                                        </Col>
+                                                    </Row>
+                                                </Col>
+                                                <Col xs={12} sm={2} className='d-flex align-items-center'>
+                                                    <Image src={tempImg} width={60}/>
+                                                </Col>
+                                            </Row>
+                                        </>
+                                    )
+                                })   
+                            : null
+                        }
                         
                         <hr/>
                         <Row>
                             <Col className='d-flex justify-content-center text-capitalize'>
                                 <h5>{this.props.selectedObjectData.status}
-                                    {this.props.selectedObjectData.status === 'Transferred' 
-                                        ? '  to  ' + this.props.selectedObjectData.transferredLocation.value 
+                                    {this.props.selectedObjectData.status === config.objectStatus.TRANSFERRED
+                                        ? '  to  ' + this.props.selectedObjectData.transferredLocation
                                         : null
                                     }
                                 </h5>
@@ -254,7 +252,7 @@ class ConfirmForm extends React.Component {
                                 <h6>{moment().format('LLLL')}</h6>    
                             </Col>
                         </Row>
-                        {this.props.selectedObjectData.status === 'Transferred' && 
+                        {this.props.selectedObjectData.status === config.objectStatus.TRANSFERRED && 
                             <>
                                 <hr/>
                                 <Row className='d-flex justify-content-center'>
@@ -263,6 +261,19 @@ class ConfirmForm extends React.Component {
                                         <Button variant="outline-secondary" className='mr-2' onClick={this.handleClick}>Remove Device</Button>
                                         <Button variant="outline-secondary" className='mr-2' onClick={this.handleClick}>
                                             {this.state.showNotesControl ? 'Add Notes' : 'Hide Notes'}
+                                        </Button>
+
+                                    </ButtonToolbar>
+                                </Row>
+                            </>
+                        }
+                        {this.props.selectedObjectData.status === config.objectStatus.RESERVE && 
+                            <>
+                                <hr/>
+                                <Row className='d-flex justify-content-center'>
+                                    <ButtonToolbar >
+                                        <Button variant="outline-secondary" className='mr-2' onClick={this.handleClick}>
+                                            Delay by 10 minutes
                                         </Button>
                                     </ButtonToolbar>
                                 </Row>
