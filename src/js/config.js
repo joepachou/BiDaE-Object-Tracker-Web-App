@@ -93,9 +93,9 @@ const config = {
     },
 
     transferredLocation: [
-        "Yunlin Christian Hospital",
-        "NTU Hospital Yunlin",
-        "NTU Hospital Taipei",
+        "Yuanlin Christian Hospital",
+        "NTU Hosp, Yunlin",
+        "NTU Hosp, Taipei",
     ],
     
     locale: {
