@@ -14,7 +14,6 @@ import Cookies from 'js-cookie';
 import config from '../../config';
 
 
-
 class SearchResult extends React.Component {
 
     constructor(props){
@@ -26,9 +25,8 @@ class SearchResult extends React.Component {
             formOption: [],
             thisComponentShouldUpdate: true,
             foundResult: [],
-            notFoundObject: [],
-            showNotResult: false,
-            notFoundObject: [],
+            showNotFoundResult: false,
+            notFoundObjects: [],
         }
         
         this.handleClickResultItem = this.handleClickResultItem.bind(this)
@@ -39,14 +37,22 @@ class SearchResult extends React.Component {
 
     }
 
-    
-    
-    componentDidUpdate(prepProps) {
-        if(!(_.isEqual(prepProps.searchResult, this.props.searchResult))) {
-            // if (this.props.searchKey === 'all devices') {
-                this.filterNotFoundObject()
-            // }
-        }        
+    componentDidUpdate(prevProps, prevState) {
+        if (this.state.showNotFoundResult && this.props.searchResult.filter(item => !item.found).length === 0) {
+            this.setState({
+                showNotFoundResult: false
+            })
+        }
+    }
+
+    filterNotFound() {
+        let notFoundObjects = this.props.searchResult.reduce((notFoundObjects, item) => {
+            !item.found ? notFoundObjects.push(item) : null
+            return notFoundObjects
+        }, [])
+        this.setState({
+            notFoundObjects
+        })
     }
 
     filterNotFoundObject() {
@@ -92,7 +98,9 @@ class SearchResult extends React.Component {
             showEditObjectForm: true,
 
             /** The reason using array to encapture the selectedObjectData is to have the consisten data form passed into ChangeStatusForm */
-            selectedObjectData: isFound.toLowerCase() === 'found' ? [this.props.searchResult[number]] : [this.state.notFoundResult[number]]
+            selectedObjectData: isFound.toLowerCase() === 'found' 
+                ? [this.props.searchResult[number]] 
+                : [this.props.searchResult.filter(item => !item.found)[number]]
         })
         this.props.shouldUpdateTrackingData(false)
     }
@@ -183,29 +191,18 @@ class SearchResult extends React.Component {
 
     handleToggleNotFound(e) {
         e.preventDefault()
+        console.log(this.props.searchResult.filter(item => !item.found))
         
-        this.state.showNotResult 
-            ? this.setState({ showNotResult: !this.state.showNotResult })
-            : this.getNotFoundResult(this.state.notFoundObject);
+        this.setState({ 
+            showNotFoundResult: !this.state.showNotFoundResult 
+        })
     }
 
-    getNotFoundResult(notFoundObject) {
-        console.log(notFoundObject)
-        // Axios.post(dataSrc.getNotFoundTag, {
-        //     macAddressArray: notFoundObject
-        // }).then( res => {
-        //     this.setState({
-        //         notFoundObject: res.data.rows,
-        //         showNotResult: !this.state.showNotResult
-        //     })
-        // }).catch( error => {
-        //     console.log(error)
-        // })
-    }
+
 
     render() {
         const locale = this.context;
-        const { searchResult, searchKey} = this.props;
+        const { searchKey } = this.props;
 
         const style = {
             listItem: {
@@ -233,13 +230,13 @@ class SearchResult extends React.Component {
             },
             titleText: {
                 color: 'rgb(80, 80, 80, 0.9)',
-                display: this.props.searchKey === 'all devices' ? null : 'none',
+                // display: this.props.searchKey === 'all devices' ? null : 'none',
             }, 
             notFoundResultDiv: {
-                display: this.state.showNotResult ? null : 'none',
+                display: this.state.showNotFoundResult ? null : 'none',
             },
             foundResultDiv: {
-                display: this.state.showNotResult ? 'none' : null,
+                display: this.state.showNotFoundResult ? 'none' : null,
                 // height: '300px',
                 // minHeight: '400px',
                 // maxHeight: '500px',
@@ -260,7 +257,7 @@ class SearchResult extends React.Component {
         return(
             <>
                 <Row className='d-flex justify-content-center' style={style.titleText}>
-                    <h4>Search Result</h4>
+                    <h4>{locale.SEARCH_RESULT}</h4>
                 </Row>
                 <Row className='w-100 searchResultForMobile'>
                     <Alert variant='secondary' className='d-flex justify-content-start'>
@@ -275,22 +272,66 @@ class SearchResult extends React.Component {
                     </Alert>
                 </Row>
                 <Row className='' style={style.foundResultDiv}>
+                
                     {this.props.searchResult.length === 0 
                         ?   <Col className='d-flex justify-content-center font-italic font-weight-lighter' style={style.noResultDiv}>
                                 <div className='searchResultForDestop'>No Result</div>
                             </Col> 
+                            
                         
                         :   
                             <Col className=''>
                                 <ListGroup onSelect={this.handleClickResultItem} className='searchResultListGroup'>
-                                    {this.props.searchResult.map((item,index) => {
+                                    {this.props.searchResult.filter(item => item.found).map((item,index) => {
                                         let element = 
                                             <ListGroup.Item href={'#' + index} action style={style.listItem} className='searchResultList' eventKey={'found:' + index} key={index}>
-                                                <Row className="d-flex justify-content-around">
+                                                <Row>
                                                     <Col xs={1} sm={1} lg={1} className="font-weight-bold d-flex align-self-center" style={style.firstText}>{index + 1}</Col>
                                                     <Col xs={3} sm={3} lg={3} className="d-flex align-self-center justify-content-center" style={style.middleText}>{item.type}</Col>
-                                                    <Col xs={4} sm={4} lg={4} className="d-flex align-self-center text-muted" style={style.middleText}>xxxx-xxxx-{item.access_control_number.slice(10, 14)}</Col>
-                                                    <Col xs={3} sm={3} lg={3} className="d-flex align-self-center text-muted justify-content-center text-capitalize" style={style.lastText}>
+                                                    <Col xs={4} sm={4} lg={1} className="d-flex align-self-center text-muted" style={style.middleText}>{item.access_control_number.slice(10, 14)}</Col>
+                                                    <Col xs={3} sm={3} lg={3} className="d-flex align-self-center text-muted justify-content-center text-capitalize w" style={style.lastText}>
+                                                        {item.status.toLowerCase() === config.objectStatus.NORMAL
+                                                            ? `near ${item.location_description}`
+                                                            : item.status
+                                                        }
+                                                    </Col>
+                                                    <Col xs={1} sm={1} lg={4} className="d-flex align-self-center text-muted" style={style.middleText}>
+                                                        for past &nbsp; 
+                                                            { item.duration.days !== 0 && item.duration.days + ' ' + locale.DAY
+                                                            ||item.duration.hours !== 0 && item.duration.hours + ' ' + locale.HOUR
+                                                            ||item.duration.minutes !== 0 && item.duration.minutes + ' ' + locale.MINUTE
+                                                            ||item.duration.seconds !== 0 && item.duration.seconds + ' ' + locale.SECOND}
+                                                    </Col>
+                                                </Row>
+                                            </ListGroup.Item>
+                                        return element
+                                    })}
+                                </ListGroup>
+                            </Col>
+                        }
+                </Row>
+                {this.props.searchResult 
+                && this.props.searchResult.filter(item => !item.found).length !== 0 
+                && <>
+                        <Row className='d-flex justify-content-center mt-3'>
+                            <h4 style={style.titleText}>
+                                <a href="" onClick={this.handleToggleNotFound}>
+                                    {this.state.showNotFoundResult ? 'Hide' : 'Show' + ' ' + this.props.searchResult.filter(item => !item.found).length} Devices Not Found 
+                                </a>
+                            </h4>
+                        </Row>
+
+                        <Row style={style.notFoundResultDiv}>
+                            <Col className=''>
+                                <ListGroup onSelect={this.handleClickResultItem} className='searchResultListGroup'>
+                                    {this.props.searchResult.filter(item => !item.found).map((item,index) => {
+                                        let element = 
+                                            <ListGroup.Item href={'#' + index} action style={style.listItem} className='searchResultList' eventKey={'notfound:' + index} key={index}>
+                                                <Row className="">
+                                                <Col xs={1} sm={1} lg={1} className="font-weight-bold d-flex align-self-center" style={style.firstText}>{index + 1}</Col>
+                                                    <Col xs={3} sm={3} lg={3} className="d-flex align-self-center justify-content-center" style={style.middleText}>{item.type}</Col>
+                                                    <Col xs={4} sm={4} lg={2} className="d-flex align-self-center text-muted" style={style.middleText}>{item.access_control_number.slice(10, 14)}</Col>
+                                                    <Col xs={3} sm={3} lg={4} className="d-flex align-self-center text-muted justify-content-center text-capitalize w" style={style.lastText}>
                                                         {item.status.toLowerCase() === config.objectStatus.NORMAL
                                                             ? `near ${item.location_description}`
                                                             : item.status
@@ -301,43 +342,10 @@ class SearchResult extends React.Component {
                                         return element
                                     })}
                                 </ListGroup>
-                            </Col>
-                        }
-                </Row>
-                {this.state.notFoundObject && this.state.notFoundObject.length !== 0 
-                ? 
-                    <>
-                        <Row className='d-flex justify-content-center mt-3'>
-                            <h4 style={style.titleText}>
-                                <a href="" onClick={this.handleToggleNotFound}>
-                                    {this.state.showNotResult ? 'Hide' : 'Show' + ' ' + this.state.notFoundObject.length} Devices Not Found 
-                                </a>
-                            </h4>
-                        </Row>
-
-                        <Row style={style.notFoundResultDiv}>
-                            <Col className=''>
-                                <ListGroup onSelect={this.handleClickResultItem} className='searchResultListGroup'>
-                                    {this.state.notFoundObject.map((item,index) => {
-                                        let element = 
-                                            <ListGroup.Item href={'#' + index} action style={style.listItem} className='searchResultList' eventKey={'notfound:' + index} key={index}>
-                                                <Row className="">
-                                                    <Col xs={1} sm='1' lg='1' className="font-weight-bold d-flex align-self-center" style={style.firstText}>{index + 1}</Col>
-                                                    <Col xs={3} sm='3' lg='3' className="d-flex align-self-center justify-content-center" style={style.middleText}>{item.type}</Col>
-                                                    {/* <Col xs={4} sm='4' lg='4' className="d-flex align-self-center text-muted" style={style.middleText}>ACN: xxxx-xxxx-{item.access_control_number.slice(10, 14)}</Col> */}
-                                                    {/* <Col xs={3} sm='3' lg='3' className="d-flex align-self-center text-muted justify-content-center" style={style.lastText}>near {item.location_description}</Col> */}
-                                                </Row>
-                                            </ListGroup.Item>
-                                        return element
-                                    })}
-                                </ListGroup>
                             </Col> 
                         </Row>
                     </>
-                : null}
-            
-
-
+                }
                 <ChangeStatusForm 
                     show={this.state.showEditObjectForm} 
                     title='Report device status' 
