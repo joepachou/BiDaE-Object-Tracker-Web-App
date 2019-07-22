@@ -92,6 +92,13 @@ const config = {
         TRANSFERRED: 'transferred',   
     },
 
+    objectManage: {
+
+        /* The definition of the time period that the object is not scanned by lbeacon
+         * The time period unit is seconds */
+        notFoundObjectTimePeriod: 30,
+    },
+
     transferredLocation: [
         "Yuanlin Christian Hospital",
         "NTU Hosp, Yunlin",
@@ -138,7 +145,7 @@ const config = {
     frequentSearchOption: {
         MY_DEVICES: 'my devices',
         ALL_DEVICES: 'all devices'
-    }
+    },
 
 
 
