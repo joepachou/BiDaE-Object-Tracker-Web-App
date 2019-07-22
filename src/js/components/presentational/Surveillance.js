@@ -20,9 +20,9 @@ import {
 } from '../../action/action';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
-
+import LocaleContext from '../../context/LocaleContext';
 import config from '../../config';
-import moment, { months } from 'moment';
+import moment from 'moment';
 import _ from 'lodash'
 
 class Surveillance extends React.Component {
@@ -368,13 +368,12 @@ class Surveillance extends React.Component {
     handleMarkerClick(e) {
         const currentPosition =  e.target.options.icon.options.currentPosition
         let objectList = this.collectObjectsByLatLng(currentPosition)
-        console.log(objectList)
         this.props.handleMarkerClick(objectList)
     }
 
     collectObjectsByLatLng(currentPositionArray) {
         let objectList = []
-        Object.values(this.state.objectInfo).map(item => {
+        Object.values(this.props.objectInfo).map(item => {
             item.currentPosition.toString() === currentPositionArray.toString() ? objectList.push(item) : null;
         })
         return objectList 
@@ -418,7 +417,10 @@ class Surveillance extends React.Component {
     popupContent (objectsMap){
         let currentPosition = objectsMap[0].currentPosition
         let objectList = this.collectObjectsByLatLng(currentPosition)
+
         /* The style sheet is right in the src/css/Surveillance.css*/
+        const locale = this.context
+
         const content = 
             `
                 <div>
@@ -428,8 +430,15 @@ class Surveillance extends React.Component {
                             `
                                 <div class='row popupRow mb-2 ml-1'>
                                     <div class='col-4 popupType d-flex align-items-center'>${item.type}</div>
-                                    <div class='col-4 popupType d-flex align-items-center'>${item.mac_address.slice(12, 17).split(':').join(' ')}</div>
-                                    <div class='col-4 popupItem d-flex align-items-center'>${item.access_control_number}</div>
+                                    <div class='col-3 popupItem d-flex align-items-center'>${item.access_control_number.slice(10, 14)}</div>
+                                    <div class='col-5 popupItem d-flex align-items-center'>
+                                        for past &nbsp; 
+                                        ${item.duration.days !== 0 && item.duration.days + ' ' + locale.DAY
+                                        ||item.duration.hours !== 0 && item.duration.hours + ' ' + locale.HOUR
+                                        ||item.duration.minutes !== 0 && item.duration.minutes + ' ' + locale.MINUTE
+                                        ||item.duration.seconds !== 0 && item.duration.seconds + ' ' + locale.SECOND}
+                    
+                                    </div>
                                 </div>
                             `
                                 return element
@@ -441,20 +450,14 @@ class Surveillance extends React.Component {
     }
 
     render(){
-
-        const style = {
-            // map: {
-            //     height: '65vh'
-            // }
-        }
-        return(
-            <>      
-                <div id='mapid' style={style.map}>
-                </div>
-            </>
+        return(   
+            <div id='mapid'>
+            </div>
         )
     }
 }
+
+Surveillance.contextType = LocaleContext;
 
 const mapDispatchToProps = (dispatch) => {
     return {
