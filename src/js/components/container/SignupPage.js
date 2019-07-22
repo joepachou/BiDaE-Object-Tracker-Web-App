@@ -77,7 +77,6 @@ class SignupPage extends React.Component {
                                 username: username,
                                 password: password
                             }).then(res => {
-                                console.log(res)
                                 handleSignupFormSubmit()
 
                             }).catch(error => {

@@ -3,9 +3,6 @@ import { Modal, Image, Row, Col } from 'react-bootstrap';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import config from '../../config';
-import axios from 'axios';
-import dataSrc from '../../dataSrc';
-import Cookies from 'js-cookie';
 import LocaleContext from '../../context/LocaleContext'
 import { authenticationService } from '../../authenticationService';
 
@@ -42,20 +39,6 @@ class SigninPage extends React.Component {
         this.props.handleSignupFormShowUp()
     }
 
-    // getUserInfo() {
-    //     axios.post(dataSrc.getUserInfo, {
-    //         username: Cookies.get('user')
-    //     }).then( res => {
-    //         const { search_history, mydevice } = res.data.rows[0]
-    //         Cookies.set(config.userPreference.cookies.SEARCH_HISTORY, search_history)
-    //         Cookies.set(config.userPreference.cookies.USER_DEVICES, mydevice)
-
-    //     }).catch(error => {
-    //         console.log(error)
-    //     })
-    // }
-
-
     render() {
 
         const style = {
@@ -90,7 +73,6 @@ class SigninPage extends React.Component {
                         })}
 
                         onSubmit={({ username, password }, { setStatus, setSubmitting }) => {
-
                             authenticationService.signin(username, password)
                                 .then(res => {
                                     if (!res.data.authentication) {  
@@ -129,7 +111,9 @@ class SigninPage extends React.Component {
                                     <div className={'alert alert-danger'}>{status}</div>
                                 }
                                 <div className='d-flex justify-content-center py-2'>
-                                    <button type='button' className='btn btn-link text-capitalize' onClick={this.handleSignupFormShowUp}>{locale.SIGN_UP}</button>
+                                    <button type='button' className='btn btn-link text-capitalize' onClick={this.handleSignupFormShowUp}>
+                                        {locale.SIGN_UP}
+                                    </button>
                                 </div>
                             </Form>
                         )}
