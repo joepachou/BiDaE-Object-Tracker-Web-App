@@ -257,7 +257,7 @@ class SearchResult extends React.Component {
         return(
             <>
                 <Row className='d-flex justify-content-center' style={style.titleText}>
-                    <h4>{locale.SEARCH_RESULT}</h4>
+                    <h4 className='text-capitalize'>{locale.SEARCH_RESULT}</h4>
                 </Row>
                 <Row className='w-100 searchResultForMobile'>
                     <Alert variant='secondary' className='d-flex justify-content-start'>

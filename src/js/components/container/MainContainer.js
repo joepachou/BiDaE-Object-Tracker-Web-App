@@ -12,18 +12,17 @@ import SearchResult from '../presentational/SearchResult'
 
 import { Row, Col, Hidden, Visible } from 'react-grid-system';
 import SurveillanceContainer from './SurveillanceContainer';
-import GridButton from './GridButton';
 import { Alert } from 'react-bootstrap';
 import AuthenticationContext from '../../context/AuthenticationContext';
+import { connect } from 'react-redux'
 
-export default class MainContainer extends React.Component{
+class MainContainer extends React.Component{
 
     constructor(props){
         super(props)
         this.state = {
             hasSearchKey: false,
             searchKey: '',
-            searchableObjectData: [],
             searchResult: [],
             searchType: '',
             colorPanel: null,
@@ -33,31 +32,20 @@ export default class MainContainer extends React.Component{
             hasGridButton: false,
         }
 
-        this.transferSearchableObjectDataToMain = this.transferSearchableObjectDataToMain.bind(this)
         this.transferSearchResultToMain = this.transferSearchResultToMain.bind(this);
         this.handleClearButton = this.handleClearButton.bind(this)
-    }
-
-
-    /** Transfer the processed object tracking data from Surveillance to MainContainer */
-    transferSearchableObjectDataToMain(processedData){
-        this.setState({
-            searchableObjectData: processedData
-        })
     }
 
     /** Transfer the search result, not found list and color panel from SearchContainer, GridButton to MainContainer 
      *  The three variable will then pass into SurveillanceContainer
     */
     transferSearchResultToMain(searchResult, colorPanel, searchKey) {
-        let searchResultObjectTypeMap = {}
-        searchResult.map( item => {
-            if (!(item.type in searchResultObjectTypeMap)){
-                searchResultObjectTypeMap[item.type] = 1
-            } else {
-                searchResultObjectTypeMap[item.type] = searchResultObjectTypeMap[item.type] + 1
-            }
-        })
+
+        /** Count Object Type */
+        let searchResultObjectTypeMap = searchResult.reduce((allObjectTypes, item) => {
+            item.type in allObjectTypes ? allObjectTypes[item.type] ++ : allObjectTypes[item.type] = 1 ;
+            return allObjectTypes
+        }, {})
 
         if(colorPanel) {
             this.setState({
@@ -160,7 +148,9 @@ export default class MainContainer extends React.Component{
                                                         &nbsp;
                                                         &nbsp;
 
-                                                        <div style={style.alertText}>{Object.keys(this.state.searchableObjectData).length}</div>
+                                                        <div style={style.alertText}>
+                                                            {Object.keys(this.props.objectInfo.filter(item => item.found)).length}
+                                                        </div>
                                                         &nbsp;
                                                         <div style={style.alertText}>{'device'}</div>
                                                     </Alert>
@@ -191,9 +181,9 @@ export default class MainContainer extends React.Component{
                                         } 
                                     </div>
                                     <SurveillanceContainer 
-                                        hasSearchKey={hasSearchKey} 
+                                        hasSearchKey={hasSearchKey}
+                                        searchableObjectData={this.props.objectInfo} 
                                         searchResult={searchResult}
-                                        transferSearchableObjectDataToMain={this.transferSearchableObjectDataToMain}
                                         searchType={searchType}
                                         colorPanel={colorPanel}
                                         handleClearButton={this.handleClearButton}
@@ -204,7 +194,7 @@ export default class MainContainer extends React.Component{
                             </Col>
                             <Col xs={12} sm={5} md={3} lg={3} xl={3} className="w-100 px-2">
                                 <SearchContainer 
-                                    searchableObjectData={this.state.searchableObjectData} 
+                                    searchableObjectData={this.props.objectInfo} 
                                     transferSearchResultToMain={this.transferSearchResultToMain}
                                     hasSearchKey={this.state.hasSearchKey}
                                     clearSearchResult={this.state.clearSearchResult}
@@ -212,11 +202,6 @@ export default class MainContainer extends React.Component{
                                     auth={auth}
                                 />
                                 
-                                {/* <GridButton
-                                    searchableObjectData={this.state.searchableObjectData} 
-                                    transferSearchResultToMain={this.transferSearchResultToMain}
-                                    clearColorPanel={clearColorPanel}
-                                /> */}
                                 <div style={style.searchResultDiv} className='py-3'>
                                     <SearchResult 
                                         searchResult={this.state.searchResult} 
@@ -234,3 +219,14 @@ export default class MainContainer extends React.Component{
         )
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        objectInfo: state.retrieveTrackingData.objectInfo
+    }
+}
+
+export default connect(mapStateToProps)(MainContainer)
+
+
+

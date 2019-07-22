@@ -14,7 +14,6 @@ import {
     shouldUpdateTrackingData,
     changeLocationAccuracy
 } from '../../action/action'
-import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom";
 import GridButton from '../container/GridButton';
 
 
@@ -195,7 +194,6 @@ class SurveillanceContainer extends React.Component {
                         hasSearchKey={hasSearchKey}
                         searchResult={searchResult}
                         searchType={searchType}
-                        transferSearchableObjectDataToMain={this.transferSearchableObjectDataToMain}
                         handleMarkerClick={this.handleMarkerClick}
                         style={style.searchMap}
                         colorPanel={this.props.colorPanel}
@@ -230,7 +228,7 @@ class SurveillanceContainer extends React.Component {
                         </Nav.Item >
                         <div style={style.gridButton} className='mt-2 mx-3'>
                             <GridButton
-                                searchableObjectData={this.state.searchableObjectData} 
+                                searchableObjectData={this.props.searchableObjectData} 
                                 transferSearchResultToMain={this.props.transferSearchResultToMain}
                                 clearColorPanel={this.props.clearColorPanel}
                             />
