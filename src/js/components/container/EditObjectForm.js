@@ -36,20 +36,10 @@ class EditObjectForm extends React.Component {
         this.state = {
             show: props.show,
             isShowForm: false,
-            formOption: {
-                name: '',
-                type: '',
-                status: '', 
-                access_control_number: '',
-                transferredLocation: null,
-            }
         };
         this.handleShow = this.handleShow.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleCheck = this.handleCheck.bind(this);
-        this.handleSelect = this.handleSelect.bind(this);
-        this.handleChange = this.handleChange.bind(this);
     }
 
 
@@ -57,23 +47,11 @@ class EditObjectForm extends React.Component {
      * EditObjectForm will update if user selects one of the object table.
      * The selected object data will transfer from ObjectMangentContainer to EditObjectForm
      */
-
     componentDidUpdate(prevProps) {
-        const { name, type, status, transferred_location, access_control_number } = this.props.selectedObjectData;
-        if (prevProps != this.props) {
+        if (!(_.isEqual(prevProps, this.props))) {
             this.setState({
                 show: this.props.show,
                 isShowForm: true,
-                formOption: {
-                    name: name,
-                    type: type,
-                    status: status,
-                    access_control_number: access_control_number,
-                    transferredLocation: transferred_location ? {
-                        'value': transferred_location, 
-                        'label': transferred_location
-                    } : null,
-                }
             })
         }
     }
@@ -81,7 +59,6 @@ class EditObjectForm extends React.Component {
     handleClose() {
         this.setState({ 
             show: false,
-            formOption: {}
         });
     }
   
@@ -93,7 +70,6 @@ class EditObjectForm extends React.Component {
 
     handleSubmit(postOption) {
         const path = this.props.formPath
-        console.log(path)
         axios.post(path, {
             formOption: postOption
         }).then(res => {
@@ -112,36 +88,6 @@ class EditObjectForm extends React.Component {
         })
     }
 
-    handleCheck(e) {
-        this.setState({
-            formOption: {
-                ...this.state.formOption,
-                status: e.target.value,
-            }
-        })
-    }
-
-    handleSelect(selectedOption) {
-        this.setState({
-            formOption: {
-                ...this.state.formOption,
-                transferredLocation: selectedOption,
-            }
-        })
-    }
-
-    handleChange(e) {
-        const target = e.target;
-        const { name } = target;
-        this.setState({
-            formOption: {
-                ...this.state.formOption,
-                [name]: target.value
-            }
-        })
-    }
-
-  
     render() {
 
         const style = {
@@ -152,7 +98,14 @@ class EditObjectForm extends React.Component {
                 borderLeft: 0,
                 borderRight: 0,
                 
-            }
+            },
+            errorMessage: {
+                width: '100%',
+                marginTop: '0.25rem',
+                marginBottom: '0.25rem',
+                fontSize: '80%',
+                color: '#dc3545'
+            },
         }
 
         const { title, selectedObjectData } = this.props;
@@ -181,14 +134,16 @@ class EditObjectForm extends React.Component {
                             access_control_number: selectedObjectData.access_control_number || '',
                             mac_address: selectedObjectData.mac_address || '',
                             radioGroup: selectedObjectData.status || '',
-                            select: this.props.selectedObjectData.status === config.objectStatus.TRANSFERRED 
-                                ? this.props.selectedObjectData.transferred_location
-                                : '',
+                            select: ''
                         }}
 
                         validationSchema = {
                             Yup.object().shape({
-                                radioGroup: Yup.string().required('Object status is required'),
+                                name: Yup.string().required(locale.NAME_IS_REQUIRED),
+                                type: Yup.string().required(locale.TYPE_IS_REQUIRED),
+                                access_control_number: Yup.string().required(locale.ACCESS_CONTROL_NUMBER_IS_REQUIRED),
+                                mac_address: Yup.string().required(locale.MAC_ADDRESS_IS_REQUIRED),
+                                radioGroup: Yup.string().required(locale.STATUS_IS_REQUIRED),
 
                                 select: Yup.string()
                                     .when('radioGroup', {
@@ -204,9 +159,6 @@ class EditObjectForm extends React.Component {
                                 transferredLocation: values.radioGroup === config.objectStatus.TRANSFERRED ? values.select.value : '',
                                 registered_timestamp: moment()
                             }
-
-                            delete postOption.radioGroup
-                            delete postOption.select
                             this.handleSubmit(postOption)
                             
                         }}
@@ -215,29 +167,29 @@ class EditObjectForm extends React.Component {
                             <Form>
                                 <div className="form-group">
                                     <label htmlFor="name">Device Name</label>
-                                    <Field name="name" type="text" className={'form-control' + (errors.username && touched.username ? ' is-invalid' : '')} placeholder=''/>
+                                    <Field name="name" type="text" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} placeholder=''/>
                                     <ErrorMessage name="name" component="div" className="invalid-feedback" />
                                 </div>
                                 <br/>
                                 <div className="form-group">
                                     <label htmlFor="type">Device Type</label>
-                                    <Field name="type" type="text" className={'form-control' + (errors.username && touched.username ? ' is-invalid' : '')} placeholder=''/>
+                                    <Field name="type" type="text" className={'form-control' + (errors.type && touched.type ? ' is-invalid' : '')} placeholder=''/>
                                     <ErrorMessage name="type" component="div" className="invalid-feedback" />
                                 </div>
                                 <br/>
                                 <div className="form-group">
                                     <label htmlFor="access_control_number">ACN</label>
-                                    <Field name="access_control_number" type="text" className={'form-control' + (errors.username && touched.username ? ' is-invalid' : '')} placeholder=''/>
+                                    <Field name="access_control_number" type="text" className={'form-control' + (errors.access_control_number && touched.access_control_number ? ' is-invalid' : '')} placeholder=''/>
                                     <ErrorMessage name="access_control_number" component="div" className="invalid-feedback" />
                                 </div>
                                 <br/>
                                 <div className="form-group">
                                     <label htmlFor="mac_address">Mac Address</label>
-                                    <Field name="mac_address" type="text" className={'form-control' + (errors.username && touched.username ? ' is-invalid' : '')} disabled={title.toLowerCase() === locale.EDIT_OBJECT}/>
+                                    <Field name="mac_address" type="text" className={'form-control' + (errors.mac_address && touched.mac_address ? ' is-invalid' : '')} disabled={title.toLowerCase() === locale.EDIT_OBJECT}/>
                                     <ErrorMessage name="mac_address" component="div" className="invalid-feedback" />
                                 </div>
                                 <hr/>
-                                <Row className="form-group my-3">
+                                <Row className="form-group my-3 text-capitalize">
                                     <Col sm={2} className='d-flex'>
                                         <label htmlFor="status">{locale.STATUS}</label>
                                     </Col>
@@ -274,7 +226,6 @@ class EditObjectForm extends React.Component {
                                             </Col>
                                             <Col sm={8}>
                                                 <Select
-                                                    placeholder = "Select Location"
                                                     name="select"
                                                     value = {values.select}
                                                     onChange={value => setFieldValue("select", value)}
@@ -282,11 +233,17 @@ class EditObjectForm extends React.Component {
                                                     isSearchable={false}
                                                     isDisabled={values.radioGroup !== config.objectStatus.TRANSFERRED}
                                                     style={style.select}
-                                                    placeholder={selectedObjectData.transferred_location}
+                                                    placeholder={selectedObjectData.transferred_location || locale.SELECT_LOCATION}
                                                     components={{
                                                         IndicatorSeparator: () => null
                                                     }}
                                                 />
+                                            </Col>
+                                        </Row>
+                                        <Row className='no-gutters' className='d-flex align-self-center'>
+                                            <Col>
+                                                {touched.radioGroup && errors.radioGroup &&
+                                                <div style={style.errorMessage}>{errors.radioGroup}</div>}
                                                 {touched.select && errors.select &&
                                                 <div style={style.errorMessage}>{errors.select}</div>}
                                             </Col>

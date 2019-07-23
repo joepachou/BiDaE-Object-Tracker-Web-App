@@ -111,7 +111,7 @@ const addObject = (request, response) => {
             response.status(200).json(res)
         })
         .catch(err => {
-            console.log("Add Object Fails: " + error)
+            console.log("Add Object Fails: " + err)
         })
     
 }

@@ -74,7 +74,7 @@ class ObjectManagementContainer extends React.Component{
             isShowEdit: true,
             formTitle: e.target.innerText,
             selectedRowData: [],
-            formPath: dataSrc.addObject,
+            formPath: dataSrc.addObject
         })
     }
 

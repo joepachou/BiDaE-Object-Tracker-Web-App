@@ -33,7 +33,40 @@ const tw = {
     SIGN_OUT: '登出',
     SHIFT_CHANGE_RECORD: '交接記錄',
 
-    EDIT_LBEACON: 'edit Lbeacon'
+    EDIT_LBEACON: 'edit Lbeacon',
+    ADD_OBJECT: 'add object',
+    EDIT_OBJECT: 'edit object',
+
+    /* Object Status */
+    NORMAL: 'normal',
+    BROKEN: 'broken',
+    TRANSFERRED: 'transferred',
+    RESERVE: 'reserve',
+
+
+    STATUS: 'status',
+
+    /* Form */
+    CANCEL: '取消',
+    SEND: 'send',
+
+    /* Time Scale*/
+    DAY: 'day',
+    HOUR: 'hour',
+    MINUTE: 'minute',
+    SECOND: 'second',
+
+    SEARCH_RESULT: 'search result',
+
+    SELECT_LOCATION: 'select location',
+
+    NAME_IS_REQUIRED: 'Name is required',
+    TYPE_IS_REQUIRED: 'Type is required',
+    ACCESS_CONTROL_NUMBER_IS_REQUIRED: 'Access control number is required',
+    MAC_ADDRESS_IS_REQUIRED: 'Mac address is required',
+    STATUS_IS_REQUIRED: 'Status is required',
+
+
 
 }
 

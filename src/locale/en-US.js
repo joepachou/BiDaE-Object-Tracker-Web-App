@@ -59,7 +59,16 @@ const en =  {
     MINUTE: 'minute',
     SECOND: 'second',
 
-    SEARCH_RESULT: 'search result'
+    SEARCH_RESULT: 'search result',
+
+    SELECT_LOCATION: 'select location',
+
+    NAME_IS_REQUIRED: 'Name is required',
+    TYPE_IS_REQUIRED: 'Type is required',
+    ACCESS_CONTROL_NUMBER_IS_REQUIRED: 'Access control number is required',
+    MAC_ADDRESS_IS_REQUIRED: 'Mac address is required',
+    STATUS_IS_REQUIRED: 'Status is required',
+
 
 
 }

@@ -99,7 +99,7 @@ class App extends React.Component {
              */
             const lbeaconCoordinate = this.createLbeaconCoordinate(item.lbeacon_uuid);
             lbsPosition.add(lbeaconCoordinate.toString());
-            item.currentPosition = lbeaconCoordinate
+            item.currentPosition = lbeaconCoordinate.toString()
 
             item.found = moment().diff(item.last_seen_timestamp, 'seconds') < config.objectManage.notFoundObjectTimePeriod ? 1 : 0
             const firstSeenTimestamp = moment(item.first_seen_timestamp)
@@ -116,6 +116,7 @@ class App extends React.Component {
      */
     createLbeaconCoordinate(lbeacon_uuid){
         /** Example of lbeacon_uuid: 00000018-0000-0000-7310-000000004610 */
+        if (!lbeacon_uuid) return; 
         const zz = lbeacon_uuid.slice(6,8);
         const xx = parseInt(lbeacon_uuid.slice(14,18) + lbeacon_uuid.slice(19,23));
         const yy = parseInt(lbeacon_uuid.slice(-8));
