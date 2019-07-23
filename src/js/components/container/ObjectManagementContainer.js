@@ -11,8 +11,9 @@ import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import { Col, Row, Button, Nav, Container} from 'react-bootstrap';
 import EditObjectForm from './EditObjectForm'
+import LocaleContext from '../../context/LocaleContext.js';
 
-export default class ObjectManagement extends React.Component{
+class ObjectManagementContainer extends React.Component{
 
     constructor() {
         super();
@@ -20,12 +21,15 @@ export default class ObjectManagement extends React.Component{
             data:[],
             column:[],
             filterData:[],
-            isShowModal: false,
-            selectedRowData: {},
+            isShowEdit: false,
+            selectedRowData: [],
+            formTitle:'',
+            formPath: '',
         }
         this.handleModalForm = this.handleModalForm.bind(this);
         this.getData = this.getData.bind(this);
         this.handleSubmitForm = this.handleSubmitForm.bind(this);
+        this.handleClickButton = this.handleClickButton.bind(this);
     }
 
     componentDidMount(){
@@ -61,28 +65,43 @@ export default class ObjectManagement extends React.Component{
 
     handleModalForm() {
         this.setState({
-            isShowModal: true,
+            isShowEdit: true,
+        })
+    }
+
+    handleClickButton(e) {
+        this.setState({
+            isShowEdit: true,
+            formTitle: e.target.innerText,
+            selectedRowData: [],
+            formPath: dataSrc.addObject,
         })
     }
 
     handleSubmitForm() {
         setTimeout(this.getData,500) 
         this.setState({
-            isShowModal: false
+            isShowEdit: false
         })
     }
 
     render(){
-        const { isShowModal, selectedRowData } = this.state
-
+        const { isShowEdit, selectedRowData } = this.state
+        const locale = this.context
         return (
             <Container fluid className='py-2'>
+                <Row className='mt-1'>
+                    <Col>
+                        <Button variant='primary' className='text-capitalize' onClick={this.handleClickButton}>
+                            {locale.ADD_OBJECT}
+                        </Button>
+                    </Col>
+                </Row>
                 <Row className='d-flex w-100 justify-content-around'>
                     <Col className='py-2'>
                         <ReactTable 
                             data = {this.state.filterData} 
                             columns = {this.state.column} 
-                            showPagination = {false}
                             noDataText="No Data Available"
                             className="-highlight"
                             getTrProps={(state, rowInfo, column, instance) => {
@@ -90,7 +109,9 @@ export default class ObjectManagement extends React.Component{
                                     onClick: (e, handleOriginal) => {
                                         this.setState({
                                             selectedRowData: rowInfo.original,
-                                            isShowModal: true,
+                                            isShowEdit: true,
+                                            formTitle: locale.EDIT_OBJECT,
+                                            formPath: dataSrc.editObject
                                         })
                                 
                                         // IMPORTANT! React-Table uses onClick internally to trigger
@@ -106,15 +127,19 @@ export default class ObjectManagement extends React.Component{
                             }}
                         />
                     </Col>
-                </Row>
+                </Row>                
                 <EditObjectForm 
-                    show = {isShowModal} 
-                    title='Edit Object' 
+                    show = {isShowEdit} 
+                    title= {this.state.formTitle || locale.EDIT_OBJECT} 
                     selectedObjectData={selectedRowData} 
                     handleSubmitForm={this.handleSubmitForm}
-                />
+                    formPath={this.state.formPath}
+                />                
             </Container>
                     
         )
     }
 }
+
+ObjectManagementContainer.contextType = LocaleContext
+export default ObjectManagementContainer

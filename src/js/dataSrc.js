@@ -7,6 +7,7 @@ const getGatewayTable = 'https://' + IP + '/data/getGatewayTable';
 const searchResult = 'https://' + IP + '/data/searchResult';
 const geofenceData = 'https://' + IP + '/data/geofenceData';
 const editObject = 'https://' + IP + '/data/editObject';
+const addObject = 'https://' + IP + '/data/addObject';
 const editObjectPackage = 'https://' + IP +'/data/editObjectPackage';
 const signin = 'https://' + IP + '/user/signin';
 const signup = 'https://' + IP + '/user/signup';
@@ -24,6 +25,7 @@ module.exports = {
     searchResult,
     geofenceData,
     editObject,
+    addObject,
     editObjectPackage,
     signin,
     signup,

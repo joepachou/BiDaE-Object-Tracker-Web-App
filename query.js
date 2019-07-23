@@ -103,6 +103,19 @@ const editObject = (request, response) => {
     })
 }
 
+const addObject = (request, response) => {
+    const formOption = request.body.formOption
+    pool.query(queryType.query_addObject(formOption))
+        .then(res => {
+            console.log("Add Object Success");
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log("Add Object Fails: " + error)
+        })
+    
+}
+
 const editObjectPackage = (request, response) => {
     const formOption = request.body.formOption
     pool.query(queryType.query_editObjectPackage(formOption), (error, results) => {
@@ -238,6 +251,7 @@ module.exports = {
     getGeofenceData,
     getNotFoundTag,
     editObject,
+    addObject,
     editObjectPackage,
     signin,
     signup,

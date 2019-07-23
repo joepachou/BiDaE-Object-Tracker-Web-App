@@ -7,12 +7,17 @@
  */
 
 import React from 'react';
-import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
+import { Modal, Button, Row, Col } from 'react-bootstrap';
 import Select from 'react-select';
 import config from '../../config';
 import LocaleContext from '../../context/LocaleContext';
 import axios from 'axios';
 import dataSrc from '../../dataSrc';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import RadioButton from '../presentational/RadioButton'
+import moment from 'moment'
+
 
 const transferredLocations = config.transferredLocation;
 
@@ -86,29 +91,12 @@ class EditObjectForm extends React.Component {
         });
     }
 
-    handleSubmit(e) {
-        const buttonStyle = e.target.style
-        const { selectedObjectData } = this.props;
-        const { formOption } = this.state;
-
-        let transferredLocation = '';
-        if (formOption.status === 'transferred') {
-            transferredLocation = formOption.transferredLocation || selectedObjectData.transferredLocation;
-        }
-        
-        const postOption = {
-            name: formOption.name || selectedObjectData.name,
-            type: formOption.type || selectedObjectData.type,
-            access_control_number: formOption.access_control_number || selectedObjectData.access_control_number,
-            status: formOption.status || selectedObjectData.status,
-            transferredLocation: transferredLocation,
-            mac_address: selectedObjectData.mac_address,
-        }
-
-        axios.post(dataSrc.editObject, {
+    handleSubmit(postOption) {
+        const path = this.props.formPath
+        console.log(path)
+        axios.post(path, {
             formOption: postOption
         }).then(res => {
-            buttonStyle.opacity = 0.4
             setTimeout(
                 function() {
                    this.setState ({
@@ -168,144 +156,155 @@ class EditObjectForm extends React.Component {
         }
 
         const { title, selectedObjectData } = this.props;
-        const { status, transferredLocation, name, type, access_control_number } = this.state.formOption;
+
+        const locale = this.context
+
+        const colProps = {
+            titleCol: {
+                xs: 5,
+                sm: 5
+            },
+            inputCol: {
+                xs: 7,
+                sm: 7,
+            }
+        }
 
         return (
             <Modal show={this.state.show} onHide={this.handleClose} size='md'>
-                <Modal.Header closeButton className='font-weight-bold'>{title}</Modal.Header >
+                <Modal.Header closeButton className='font-weight-bold text-capitalize'>{title}</Modal.Header >
                 <Modal.Body>
-                    <Form >
-                        <Form.Group as={Row} controlId="formHorizontalEmail">
-                            <Form.Label column sm={3}>
-                                Name
-                            </Form.Label>
-                            <Col sm={9}>
-                                <Form.Control 
-                                    type="text" 
-                                    placeholder={selectedObjectData ? selectedObjectData.name : ''} 
-                                    onChange={this.handleChange} 
-                                    value={name} 
-                                    name='name'
-                                    style={style.input}
-                                />
-                            </Col>
-                        </Form.Group>
+                    <Formik
+                        initialValues = {{
+                            name: selectedObjectData.name || '' ,
+                            type: selectedObjectData.type || '',
+                            access_control_number: selectedObjectData.access_control_number || '',
+                            mac_address: selectedObjectData.mac_address || '',
+                            radioGroup: selectedObjectData.status || '',
+                            select: this.props.selectedObjectData.status === config.objectStatus.TRANSFERRED 
+                                ? this.props.selectedObjectData.transferred_location
+                                : '',
+                        }}
 
-                        <Form.Group as={Row} controlId="formHorizontalPassword">
-                            <Form.Label column sm={3}>
-                                Type
-                            </Form.Label>
-                            <Col sm={9}>
-                                <Form.Control 
-                                    type="text" 
-                                    placeholder={selectedObjectData ? selectedObjectData.type : ''} 
-                                    onChange={this.handleChange} 
-                                    value={type} 
-                                    name='type'
-                                    style={style.input}
-                                />
-                            </Col>
-                        </Form.Group>
+                        validationSchema = {
+                            Yup.object().shape({
+                                radioGroup: Yup.string().required('Object status is required'),
 
-                        <Form.Group as={Row} controlId="formHorizontalPassword">
-                            <Form.Label column sm={3}>
-                                ACN
-                            </Form.Label>
-                            <Col sm={9}>
-                                <Form.Control 
-                                    type="text" 
-                                    placeholder={selectedObjectData ? selectedObjectData.access_control_number : ''} 
-                                    onChange={this.handleChange} 
-                                    value={access_control_number} 
-                                    name='access_control_number'
-                                    style={style.input}
-                                />
-                            </Col>
-                        </Form.Group>
+                                select: Yup.string()
+                                    .when('radioGroup', {
+                                        is: config.objectStatus.TRANSFERRED,
+                                        then: Yup.string().required('Location is required')
+                                    })
+                        })}
 
-                        
-                        <hr/>
-                        <fieldset>
-                            <Form.Group as={Row}>
-                                <Form.Label as="legend" column sm={3}>
-                                    Status
-                                </Form.Label>
-                                <Col sm={9}>
-                                    <Form.Check
-                                        custom
-                                        type="radio"
-                                        label="normal"
-                                        name="formHorizontalRadios"
-                                        id="formHorizontalRadios1"
-                                        value="normal"
-                                        checked={status === 'normal'}
-                                        onChange={this.handleCheck}                                     
-                                    />
-                                    <Form.Check
-                                        custom
-                                        type="radio"
-                                        label="broken"
-                                        name="formHorizontalRadios"
-                                        id="formHorizontalRadios2"
-                                        value="broken"
-                                        checked={status === 'broken'}
+                        onSubmit={(values, { setStatus, setSubmitting }) => {
+                            const postOption = {
+                                ...values,
+                                status: values.radioGroup,
+                                transferredLocation: values.radioGroup === config.objectStatus.TRANSFERRED ? values.select.value : '',
+                                registered_timestamp: moment()
+                            }
 
-                                        onChange={this.handleCheck}   
-                                    />
-                                    <Form.Row>
-                                        <Form.Group as={Col} sm={4}>
-                                            <Form.Check
-                                                custom
-                                                type="radio"
-                                                label="transferred"
-                                                name="formHorizontalRadios"
-                                                id="formHorizontalRadios3"
-                                                value="transferred"
-                                                checked={status === 'transferred'}
+                            delete postOption.radioGroup
+                            delete postOption.select
+                            this.handleSubmit(postOption)
+                            
+                        }}
 
-                                                onChange={this.handleCheck}   
-                                            />
-                                        </Form.Group>
-                                        <Form.Group as={Col} sm={8} >
+                        render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
+                            <Form>
+                                <div className="form-group">
+                                    <label htmlFor="name">Device Name</label>
+                                    <Field name="name" type="text" className={'form-control' + (errors.username && touched.username ? ' is-invalid' : '')} placeholder=''/>
+                                    <ErrorMessage name="name" component="div" className="invalid-feedback" />
+                                </div>
+                                <br/>
+                                <div className="form-group">
+                                    <label htmlFor="type">Device Type</label>
+                                    <Field name="type" type="text" className={'form-control' + (errors.username && touched.username ? ' is-invalid' : '')} placeholder=''/>
+                                    <ErrorMessage name="type" component="div" className="invalid-feedback" />
+                                </div>
+                                <br/>
+                                <div className="form-group">
+                                    <label htmlFor="access_control_number">ACN</label>
+                                    <Field name="access_control_number" type="text" className={'form-control' + (errors.username && touched.username ? ' is-invalid' : '')} placeholder=''/>
+                                    <ErrorMessage name="access_control_number" component="div" className="invalid-feedback" />
+                                </div>
+                                <br/>
+                                <div className="form-group">
+                                    <label htmlFor="mac_address">Mac Address</label>
+                                    <Field name="mac_address" type="text" className={'form-control' + (errors.username && touched.username ? ' is-invalid' : '')} disabled={title.toLowerCase() === locale.EDIT_OBJECT}/>
+                                    <ErrorMessage name="mac_address" component="div" className="invalid-feedback" />
+                                </div>
+                                <hr/>
+                                <Row className="form-group my-3">
+                                    <Col sm={2} className='d-flex'>
+                                        <label htmlFor="status">{locale.STATUS}</label>
+                                    </Col>
+                                    <Col sm={10}>
+                                        <Field
+                                            component={RadioButton}
+                                            name="radioGroup"
+                                            id={config.objectStatus.NORMAL}
+                                            label={locale.NORMAL}
+                                        />
+                                    
+                                        <Field
+                                            component={RadioButton}
+                                            name="radioGroup"
+                                            id={config.objectStatus.BROKEN}
+                                            label={locale.BROKEN}
+                                        />
+
+                                        <Field
+                                            component={RadioButton}
+                                            name="radioGroup"
+                                            id={config.objectStatus.RESERVE}
+                                            label={locale.RESERVE}
+                                        />
+
+                                        <Row className='no-gutters' className='d-flex align-self-center'>
+                                            <Col sm={4} className='d-flex align-self-center'>
+                                                <Field
+                                                    component={RadioButton}
+                                                    name="radioGroup"
+                                                    id={config.objectStatus.TRANSFERRED}
+                                                    label={locale.TRANSFERRED}
+                                                />
+                                            </Col>
+                                            <Col sm={8}>
                                                 <Select
                                                     placeholder = "Select Location"
-                                                    value={transferredLocation}
-                                                    onChange={this.handleSelect}
+                                                    name="select"
+                                                    value = {values.select}
+                                                    onChange={value => setFieldValue("select", value)}
                                                     options={options}
-                                                    isDisabled = {status === 'transferred' ? false : true}
+                                                    isSearchable={false}
+                                                    isDisabled={values.radioGroup !== config.objectStatus.TRANSFERRED}
+                                                    style={style.select}
+                                                    placeholder={selectedObjectData.transferred_location}
+                                                    components={{
+                                                        IndicatorSeparator: () => null
+                                                    }}
                                                 />
-                                        </Form.Group>
-                                        
-                                    </Form.Row>
-                                </Col>
-                            </Form.Group>
-                            </fieldset>
-                            <hr/>
-                            <Form.Group as={Row} controlId="formHorizontalPassword">
-                            <Form.Label column sm={3}>
-                                Mac address
-                            </Form.Label>
-                            <Col sm={9}>
-                                <Form.Control 
-                                    type="text" 
-                                    placeholder={selectedObjectData ? selectedObjectData.mac_address : ''}
-                                    disabled 
-                                    readOnly
-                                />
-                            </Col>
-                        </Form.Group>
-
-                    </Form>
-
+                                                {touched.select && errors.select &&
+                                                <div style={style.errorMessage}>{errors.select}</div>}
+                                            </Col>
+                                        </Row>                                                
+                                    </Col>
+                                </Row>
+                                <Modal.Footer>
+                                    <Button variant="outline-secondary" className="text-capitalize" onClick={this.handleClose}>
+                                        {locale.CANCEL}
+                                    </Button>
+                                    <Button type="submit" className="text-capitalize" variant="primary" disabled={isSubmitting}>
+                                        {locale.SAVE}
+                                    </Button>
+                                </Modal.Footer>
+                            </Form>
+                        )}
+                    />
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="outline-secondary" onClick={this.handleClose}>
-                        Cancel
-                    </Button>
-                    <Button variant="primary" onClick={this.handleSubmit}>
-                        Save
-                    </Button>
-                </Modal.Footer>
             </Modal>
         );
     }
