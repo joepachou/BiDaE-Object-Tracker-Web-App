@@ -94,13 +94,14 @@ class SearchResult extends React.Component {
         const eventItem = eventKey.split(':');
         const isFound = eventItem[0]
         const number = eventItem[1]
+
+        /** The reason using array to encapture the selectedObjectData is to have the consisten data form passed into ChangeStatusForm */
+        let selectedObjectData = isFound == true
+            ? [this.props.searchResult.filter(item => item.found)[number]] 
+            : [this.props.searchResult.filter(item => !item.found)[number]]
         this.setState({
             showEditObjectForm: true,
-
-            /** The reason using array to encapture the selectedObjectData is to have the consisten data form passed into ChangeStatusForm */
-            selectedObjectData: isFound.toLowerCase() === 'found' 
-                ? [this.props.searchResult[number]] 
-                : [this.props.searchResult.filter(item => !item.found)[number]]
+            selectedObjectData,
         })
         this.props.shouldUpdateTrackingData(false)
     }
@@ -284,10 +285,10 @@ class SearchResult extends React.Component {
                                 <ListGroup onSelect={this.handleClickResultItem} className='searchResultListGroup'>
                                     {this.props.searchResult.filter(item => item.found).map((item,index) => {
                                         let element = 
-                                            <ListGroup.Item href={'#' + index} action style={style.listItem} className='searchResultList' eventKey={'found:' + index} key={index}>
+                                            <ListGroup.Item href={'#' + index} action style={style.listItem} className='searchResultList' eventKey={1 + ':'+ index} key={index}>
                                                 <Row>
                                                     <Col xs={1} sm={1} lg={1} className="font-weight-bold d-flex align-self-center" style={style.firstText}>{index + 1}</Col>
-                                                    <Col xs={3} sm={3} lg={3} className="d-flex align-self-center justify-content-center" style={style.middleText}>{item.type}</Col>
+                                                    <Col xs={3} sm={3} lg={4} className="d-flex align-self-center justify-content-center" style={style.middleText}>{item.type}</Col>
                                                     <Col xs={4} sm={4} lg={1} className="d-flex align-self-center text-muted" style={style.middleText}>{item.access_control_number.slice(10, 14)}</Col>
                                                     <Col xs={3} sm={3} lg={3} className="d-flex align-self-center text-muted justify-content-center text-capitalize w" style={style.lastText}>
                                                         {item.status.toLowerCase() === config.objectStatus.NORMAL
@@ -295,7 +296,7 @@ class SearchResult extends React.Component {
                                                             : item.status
                                                         }
                                                     </Col>
-                                                    <Col xs={1} sm={1} lg={4} className="d-flex align-self-center text-muted" style={style.middleText}>
+                                                    <Col xs={1} sm={1} lg={3} className="d-flex align-self-center text-muted" style={style.middleText}>
                                                         {item.residence_time}
                                                     </Col>
                                                 </Row>
@@ -322,7 +323,7 @@ class SearchResult extends React.Component {
                                 <ListGroup onSelect={this.handleClickResultItem} className='searchResultListGroup'>
                                     {this.props.searchResult.filter(item => !item.found).map((item,index) => {
                                         let element = 
-                                            <ListGroup.Item href={'#' + index} action style={style.listItem} className='searchResultList' eventKey={'notfound:' + index} key={index}>
+                                            <ListGroup.Item href={'#' + index} action style={style.listItem} className='searchResultList' eventKey={0 + ':' + index} key={index}>
                                                 <Row className="">
                                                 <Col xs={1} sm={1} lg={1} className="font-weight-bold d-flex align-self-center" style={style.firstText}>{index + 1}</Col>
                                                     <Col xs={3} sm={3} lg={3} className="d-flex align-self-center justify-content-center" style={style.middleText}>{item.type}</Col>
