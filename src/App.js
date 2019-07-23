@@ -99,12 +99,11 @@ class App extends React.Component {
             lbsPosition.add(lbeaconCoordinate.toString());
             item.currentPosition = lbeaconCoordinate
 
+            item.found = moment().diff(item.last_seen_timestamp, 'seconds') < config.objectManage.notFoundObjectTimePeriod ? 1 : 0
+            moment.locale(this.state.locale.ABBR)
             const firstSeenTimestamp = moment(item.first_seen_timestamp)
             const finalSeenTimestamp = moment(item.final_seen_timestamp)
-            const duration = moment.duration(finalSeenTimestamp.diff(firstSeenTimestamp))
-            item.duration = duration._data
-
-            item.found = moment().diff(item.last_seen_timestamp, 'seconds') < config.objectManage.notFoundObjectTimePeriod ? true : false
+            item.residence_time = item.found ? finalSeenTimestamp.from(firstSeenTimestamp) : null;
             return item
         })
         return processedTrackingData
@@ -131,7 +130,6 @@ class App extends React.Component {
                         <NavbarContainer 
                             changeLocale={this.handleChangeLocale} 
                             handleAuthentication={this.handleAuthentication}
-                            locale={locale} 
                         />
                         <Switch>
                             {renderRoutes(routes)}

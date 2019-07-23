@@ -1,4 +1,6 @@
 const en =  {
+    ABBR: 'en-US',
+
     surveillance: 'Surveillance',
     HOME: 'home',
     HEALTH_REPORT: 'health report',
@@ -34,7 +36,30 @@ const en =  {
     SIGN_UP: 'sign up',
     SIGN_OUT: 'sign out',
 
-    EDIT_LBEACON: 'edit Lbeacon'
+    EDIT_LBEACON: 'edit lbeacon',
+    ADD_OBJECT: 'add object',
+    EDIT_OBJECT: 'edit object',
+
+    /* Object Status */
+    NORMAL: 'normal',
+    BROKEN: 'broken',
+    TRANSFERRED: 'transferred',
+    RESERVE: 'reserve',
+
+
+    STATUS: 'status',
+
+    /* Form */
+    CANCEL: 'cancel',
+    SEND: 'send',
+
+    /* Time Scale*/
+    DAY: 'day',
+    HOUR: 'hour',
+    MINUTE: 'minute',
+    SECOND: 'second',
+
+    SEARCH_RESULT: 'search result'
 
 
 }

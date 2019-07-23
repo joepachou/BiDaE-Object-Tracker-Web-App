@@ -431,14 +431,7 @@ class Surveillance extends React.Component {
                                 <div class='row popupRow mb-2 ml-1'>
                                     <div class='col-4 popupType d-flex align-items-center'>${item.type}</div>
                                     <div class='col-3 popupItem d-flex align-items-center'>${item.access_control_number.slice(10, 14)}</div>
-                                    <div class='col-5 popupItem d-flex align-items-center'>
-                                        for past &nbsp; 
-                                        ${item.duration.days !== 0 && item.duration.days + ' ' + locale.DAY
-                                        ||item.duration.hours !== 0 && item.duration.hours + ' ' + locale.HOUR
-                                        ||item.duration.minutes !== 0 && item.duration.minutes + ' ' + locale.MINUTE
-                                        ||item.duration.seconds !== 0 && item.duration.seconds + ' ' + locale.SECOND}
-                    
-                                    </div>
+                                    <div class='col-5 popupItem d-flex align-items-center'>${item.residence_time}</div>
                                 </div>
                             `
                                 return element

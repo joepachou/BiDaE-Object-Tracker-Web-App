@@ -1,4 +1,6 @@
 const tw = {
+    ABBR: 'zh-tw',
+
     object_types: '可搜尋物件',
     search: '搜尋',
     language: '語言',

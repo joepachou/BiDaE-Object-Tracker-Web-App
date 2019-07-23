@@ -296,11 +296,7 @@ class SearchResult extends React.Component {
                                                         }
                                                     </Col>
                                                     <Col xs={1} sm={1} lg={4} className="d-flex align-self-center text-muted" style={style.middleText}>
-                                                        for past &nbsp; 
-                                                            { item.duration.days !== 0 && item.duration.days + ' ' + locale.DAY
-                                                            ||item.duration.hours !== 0 && item.duration.hours + ' ' + locale.HOUR
-                                                            ||item.duration.minutes !== 0 && item.duration.minutes + ' ' + locale.MINUTE
-                                                            ||item.duration.seconds !== 0 && item.duration.seconds + ' ' + locale.SECOND}
+                                                        {item.residence_time}
                                                     </Col>
                                                 </Row>
                                             </ListGroup.Item>
