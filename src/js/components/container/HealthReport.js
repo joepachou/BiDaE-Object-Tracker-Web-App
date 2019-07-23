@@ -12,6 +12,7 @@ import dataSrc from '../../../js/dataSrc';
 import config from '../../config';
 import { connect } from 'react-redux';
 import LocaleContext from '../../context/LocaleContext';
+import { trackingTable } from '../../tables';
 
 
 class HealthReport extends React.Component{
@@ -34,6 +35,12 @@ class HealthReport extends React.Component{
         this.handleSubmitForm = this.handleSubmitForm.bind(this)
         this.handleCloseForm = this.handleCloseForm.bind(this)
         this.startSetInterval = config.healthReport.startInteval
+    }
+
+    componentDidUpdate(prepProps) {
+        if (prepProps !== this.props && this.props.objectInfo) {
+            this.processTrackingData(this.props.objectInfo)
+        }
     }
 
     componentDidMount(){
@@ -108,36 +115,13 @@ class HealthReport extends React.Component{
         })
     }
 
-    componentDidUpdate(prepProps) {
-        if (prepProps !== this.props && this.props.objectInfo) {
-            this.processTrackingData(this.props.objectInfo)
-        }
-    }
-
     processTrackingData(rawData){
-        let column = [];
 
-        let raw = rawData.fields.filter(item => {
-            return item.name !== 'access_control_number' && item.name !== 'transferred_location'
-        })
-
-        raw.map(item => {
-            let field = {};
-            field.Header = item.name.replace(/_/g, ' ')
-                .toLowerCase()
-                .split(' ')
-                .map( s => s.charAt(0).toUpperCase() + s.substring(1))
-                .join(' '),
-            field.accessor = item.name,
-            field.headerStyle={
-                textAlign: 'left',
-            }
-            column.push(field);
-        })
+        const columns = trackingTable
 
         this.setState({
-            trackingData: rawData.rows,
-            trackingColunm: column,
+            trackingData: rawData,
+            trackingColunm: columns,
         })
     }
 
