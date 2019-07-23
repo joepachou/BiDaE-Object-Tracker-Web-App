@@ -11,11 +11,13 @@ const locale = {
 export const supportedLocale = {
     tw: {
         name:'中文',
-        abbr: 'tw',
+        lang: 'tw',
+        abbr: 'zh-tw',
         textPackage: tw,
     },
     en: {
         name:'English',
+        lang: 'en',
         abbr: 'en',
         textPackage: en,
     }

@@ -5,7 +5,7 @@ import { BrowserRouter as Router,Switch, Route,  } from "react-router-dom";
 import NavbarContainer from './js/components/presentational/NavbarContainer'
 import { matchRoutes,renderRoutes } from 'react-router-config';
 import routes from './js/routes';
-import locale from './js/locale';
+import locale, { supportedLocale } from './js/locale';
 import LocaleContext from './js/context/LocaleContext';
 import AuthenticationContext from './js/context/AuthenticationContext'
 import config from './js/config';
@@ -52,9 +52,11 @@ class App extends React.Component {
         clearInterval(this.interval);
     }
 
-    handleChangeLocale(changedLocale){
+    handleChangeLocale(lang){
+        
+        moment.locale(supportedLocale[lang].abbr)
         this.setState({
-            locale: locale.changeLocale(changedLocale)
+            locale: locale.changeLocale(lang)
         })
     }
 
@@ -100,7 +102,6 @@ class App extends React.Component {
             item.currentPosition = lbeaconCoordinate
 
             item.found = moment().diff(item.last_seen_timestamp, 'seconds') < config.objectManage.notFoundObjectTimePeriod ? 1 : 0
-            moment.locale(this.state.locale.ABBR)
             const firstSeenTimestamp = moment(item.first_seen_timestamp)
             const finalSeenTimestamp = moment(item.final_seen_timestamp)
             item.residence_time = item.found ? finalSeenTimestamp.from(firstSeenTimestamp) : null;

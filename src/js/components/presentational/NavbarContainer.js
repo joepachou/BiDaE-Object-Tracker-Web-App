@@ -33,7 +33,7 @@ class NavbarContainer extends React.Component {
     handleLangSelect() {
         const lang = supportedLocale[config.locale.supportedLocale
                         .filter(item => item !== this.state.currentLocale)
-                        .join()].abbr
+                        .join()].lang
         this.setState({
             currentLocale: lang
         })
