@@ -288,15 +288,15 @@ class SearchResult extends React.Component {
                                             <ListGroup.Item href={'#' + index} action style={style.listItem} className='searchResultList' eventKey={1 + ':'+ index} key={index}>
                                                 <Row>
                                                     <Col xs={1} sm={1} lg={1} className="font-weight-bold d-flex align-self-center" style={style.firstText}>{index + 1}</Col>
-                                                    <Col xs={3} sm={3} lg={4} className="d-flex align-self-center justify-content-center" style={style.middleText}>{item.type}</Col>
-                                                    <Col xs={4} sm={4} lg={1} className="d-flex align-self-center text-muted" style={style.middleText}>{item.access_control_number.slice(10, 14)}</Col>
+                                                    <Col xs={4} sm={4} lg={4} className="d-flex align-self-center justify-content-center" style={style.middleText}>{item.type}</Col>
+                                                    <Col xs={1} sm={1} lg={1} className="d-flex align-self-center text-muted" style={style.middleText}>{item.access_control_number && item.access_control_number.slice(10, 14)}</Col>
                                                     <Col xs={3} sm={3} lg={3} className="d-flex align-self-center text-muted justify-content-center text-capitalize w" style={style.lastText}>
                                                         {item.status.toLowerCase() === config.objectStatus.NORMAL
                                                             ? `near ${item.location_description}`
                                                             : item.status
                                                         }
                                                     </Col>
-                                                    <Col xs={1} sm={1} lg={3} className="d-flex align-self-center text-muted" style={style.middleText}>
+                                                    <Col xs={3} sm={3} lg={3} className="d-flex align-self-center text-muted" style={style.middleText}>
                                                         {item.residence_time}
                                                     </Col>
                                                 </Row>
@@ -327,7 +327,7 @@ class SearchResult extends React.Component {
                                                 <Row className="">
                                                 <Col xs={1} sm={1} lg={1} className="font-weight-bold d-flex align-self-center" style={style.firstText}>{index + 1}</Col>
                                                     <Col xs={3} sm={3} lg={3} className="d-flex align-self-center justify-content-center" style={style.middleText}>{item.type}</Col>
-                                                    <Col xs={4} sm={4} lg={2} className="d-flex align-self-center text-muted" style={style.middleText}>{item.access_control_number.slice(10, 14)}</Col>
+                                                    <Col xs={4} sm={4} lg={2} className="d-flex align-self-center text-muted" style={style.middleText}>{item.access_control_number && item.access_control_number.slice(10, 14)}</Col>
                                                     <Col xs={3} sm={3} lg={4} className="d-flex align-self-center text-muted justify-content-center text-capitalize w" style={style.lastText}>
                                                         {item.status.toLowerCase() === config.objectStatus.NORMAL
                                                             ? `near ${item.location_description}`

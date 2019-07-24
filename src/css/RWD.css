@@ -20,7 +20,7 @@
         display: none;
     }
 
-    #searchResultListGroup {
+    .searchResultListGroup {
         max-Height: none;
         overflow-Y: auto;
         overflow-X: auto;
