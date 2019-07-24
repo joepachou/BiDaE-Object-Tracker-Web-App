@@ -220,8 +220,10 @@ const editLbeacon = (request, response) => {
     const med = request.body.formOption.med_rssi || null
     const high = request.body.formOption.high_rssi || null
     const uuid = request.body.formOption.uuid
+    const description = request.body.formOption.description
 
-    pool.query(queryType.query_editLbeacon(uuid, low, med, high), (error, results) => {
+
+    pool.query(queryType.query_editLbeacon(uuid, low, med, high, description), (error, results) => {
         if (error) {
             console.log('Edit lbeacon fails ' + error)
         } else {

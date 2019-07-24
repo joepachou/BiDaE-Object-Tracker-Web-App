@@ -138,33 +138,12 @@ class EditLbeaconForm extends React.Component {
             <Modal show={this.state.show} onHide={this.handleClose} size="md">
                 <Modal.Header closeButton className='font-weight-bold text-capitalize'>{title}</Modal.Header >
                 <Modal.Body>
-                    <Row>
-                        <Col {...colProps.titleCol}>
-                            UUID
-                        </Col>
-                        <Col {...colProps.inputCol} className='text-muted pb-1'>
-                            {selectedObjectData.uuid}
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col {...colProps.titleCol}>
-                            Location
-                        </Col>
-                        <Col {...colProps.inputCol} className='text-muted pb-1'>
-                            {selectedObjectData.description}
-                        </Col>
-                    </Row>
-                    <hr/>
-                    <Row>
-                        <Col className='font-weight-bold'>
-                            RSSI Threshold
-                        </Col>
-                    </Row>
                     <Formik
                         initialValues = {{
                             low: this.props.selectedObjectData.low_rssi || '',
                             med: this.props.selectedObjectData.med_rssi || '',
                             high: this.props.selectedObjectData.high_rssi || '',
+                            description: this.props.selectedObjectData.description
                         }}
 
                         validationSchema = {
@@ -172,15 +151,17 @@ class EditLbeaconForm extends React.Component {
                             low: Yup.number().negative('The value must be a negative number'),
                             med: Yup.number().negative('The value must be a negative number'),
                             high: Yup.number().negative('The value must be a negative number'),
+                            description: Yup.string().required()
 
                         })}
 
-                        onSubmit={({ low, med, high }, { setStatus, setSubmitting }) => {
+                        onSubmit={({ low, med, high, description }, { setStatus, setSubmitting }) => {
                             let lbeaconSettingPackage = {
                                 uuid: this.props.selectedObjectData.uuid,
                                 low_rssi: low,
                                 med_rssi: med,
                                 high_rssi: high,
+                                description,
                             }
 
                             axios.post(dataSrc.editLbeacon, {
@@ -203,6 +184,29 @@ class EditLbeaconForm extends React.Component {
 
                         render={({ errors, status, touched, isSubmitting }) => (
                             <Form>
+                                <Row>
+                                    <Col {...colProps.titleCol}>
+                                        UUID
+                                    </Col>
+                                    <Col {...colProps.inputCol} className='text-muted pb-1'>
+                                        {selectedObjectData.uuid}
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col {...colProps.titleCol}>
+                                        Location
+                                    </Col>
+                                    <Col {...colProps.inputCol}>
+                                        <Field name="description" type="text" style={style.input} className={'form-control' + (errors.description && touched.description ? ' is-invalid' : '')} placeholder=''/>
+                                        <ErrorMessage name="description" component="div" className="invalid-feedback" />                                    
+                                    </Col>
+                                </Row>
+                                <hr/>
+                                <Row>
+                                    <Col className='font-weight-bold'>
+                                        RSSI Threshold
+                                    </Col>
+                                </Row>
                                 <Row className="form-group">
                                     {/* <label htmlFor="username">Username</label> */}
                                     <Col {...colProps.titleCol} className='d-flex align-items-center'>

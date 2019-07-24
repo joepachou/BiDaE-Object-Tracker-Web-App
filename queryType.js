@@ -3,7 +3,6 @@ function query_getTrackingData (accuracyValue = 1) {
 		SELECT 
 			object_table.mac_address,
 			object_summary_table.uuid as lbeacon_uuid,
-			object_summary_table.rssi,
 			object_summary_table.first_seen_timestamp,
 			object_summary_table.last_seen_timestamp,
 			object_table.name,
@@ -22,7 +21,7 @@ function query_getTrackingData (accuracyValue = 1) {
 		LEFT JOIN lbeacon_table
 		ON lbeacon_table.uuid = object_summary_table.uuid
 
-		ORDER BY object_table.type ASC, last_four_acn ASC;
+		ORDER BY object_table.type ASC, object_table.name ASC, last_four_acn ASC;
 	`
 	return query;
 }
@@ -31,13 +30,29 @@ function query_getTrackingData (accuracyValue = 1) {
 
 const query_getObjectTable = 
 	`
-    SELECT id, name, type, access_control_number, status, transferred_location, mac_address
+	SELECT 
+		id, 
+		name, 
+		type, 
+		access_control_number, 
+		status, 
+		transferred_location, 
+		mac_address
 	FROM object_table ORDER BY name ASC
 	`;
 
 const query_getLbeaconTable = 
     `
-	SELECT uuid, low_rssi, med_rssi, high_rssi, description, ip_address, health_status, gateway_ip_address, last_report_timestamp 
+	SELECT 
+		uuid, 
+		low_rssi, 
+		med_rssi, 
+		high_rssi, 
+		description, 
+		ip_address, 
+		health_status, 
+		gateway_ip_address, 
+		last_report_timestamp 
 	FROM lbeacon_table 
 	ORDER BY last_report_timestamp DESC
 	`;
@@ -198,17 +213,18 @@ function query_addUserSearchHistory (username, history) {
 	return query
 }
 
-function query_editLbeacon (uuid, low, med, high) {
+function query_editLbeacon (uuid, low, med, high, description) {
 	const text =
 		`
 		UPDATE lbeacon_table
 		SET low_rssi = $1,
 			med_rssi = $2,
-			high_rssi = $3
+			high_rssi = $3,
+			description = $5
 		WHERE uuid = $4
 	`;
 
-	const values = [low, med, high, uuid]
+	const values = [low, med, high, uuid, description]
 
 	const query = {
 		text, 
