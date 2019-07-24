@@ -65,6 +65,7 @@ class SurveillanceContainer extends React.Component {
     }
 
     handleChangeObjectStatusFormSubmit(postOption) {
+        console.log(postOption)
         this.setState({
             formOption: postOption,
             selectedObjectData: {
@@ -92,7 +93,6 @@ class SurveillanceContainer extends React.Component {
         let editObjectPackages = []
         editObjectPackages.push(postOption)
 
-        editObjectPackages.push(postOption)
         if (addedDevices) {
             addedDevices.map( item => {
                 item.status = status
@@ -101,6 +101,7 @@ class SurveillanceContainer extends React.Component {
                 editObjectPackages.push(item)
             })
         }
+        console.log(editObjectPackages)
         
         axios.post(dataSrc.editObjectPackage, {
             formOption: editObjectPackages
