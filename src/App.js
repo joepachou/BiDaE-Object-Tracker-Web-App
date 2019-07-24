@@ -17,7 +17,7 @@ import {
 } from './js/action/action';
 import { connect } from 'react-redux';
 import Cookies from 'js-cookie';
-import moment from 'moment'
+import moment, { now } from 'moment'
 
 class App extends React.Component {
 
@@ -93,6 +93,28 @@ class App extends React.Component {
         
         let lbsPosition = new Set()
 
+        moment.updateLocale('en', {
+            relativeTime : Object
+        });
+
+        moment.updateLocale('en', {
+            relativeTime : {
+                future: "in %s",
+                past:   "%s ago",
+                s  : '1 minute',
+                ss : '1 minute',
+                m:  "1 minute",
+                mm: "%d minutes",
+                h:  "1 hour",
+                hh: "%d hours",
+                d:  "1 day",
+                dd: "%d days",
+                M:  "1 month",
+                MM: "%d months",
+                y:  "1 year",
+                yy: "%d years"
+            }
+        });
         const processedTrackingData = rawTrackingData.filter(item => {
                 return item.lbeacon_uuid !== null
             })
@@ -108,8 +130,11 @@ class App extends React.Component {
 
             item.found = moment().diff(item.last_seen_timestamp, 'seconds') < config.objectManage.notFoundObjectTimePeriod ? 1 : 0
             const firstSeenTimestamp = moment(item.first_seen_timestamp)
-            const finalSeenTimestamp = moment(item.final_seen_timestamp)
-            item.residence_time = item.found ? finalSeenTimestamp.from(firstSeenTimestamp) : null;
+            const lastSeenTimestamp = moment(item.last_seen_timestamp)
+            item.residence_time = item.found ? lastSeenTimestamp.from(firstSeenTimestamp) : lastSeenTimestamp.fromNow();
+            
+            delete item.first_seen_timestamp
+            delete item.last_seen_timestamp
             return item
         })
         return processedTrackingData
