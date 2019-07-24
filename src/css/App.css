@@ -204,7 +204,7 @@ a:hover {
 }
 
 .btn:focus {
-    box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 1)
+    box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0)
 }
 
 .btn-outline-custom {
