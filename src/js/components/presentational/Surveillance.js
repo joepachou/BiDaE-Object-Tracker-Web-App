@@ -429,8 +429,8 @@ class Surveillance extends React.Component {
                         const element =     
                             `
                                 <div class='row popupRow mb-2 ml-1'>
-                                    <div class='col-4 popupType d-flex align-items-center'>${item.type}</div>
-                                    <div class='col-3 popupItem d-flex align-items-center'>${item.access_control_number && item.access_control_number.slice(10, 14)}</div>
+                                    <div class='col-5 popupType d-flex align-items-center'>${item.type}</div>
+                                    <div class='col-2 popupItem d-flex align-items-center'>${item.access_control_number && item.access_control_number.slice(10, 14)}</div>
                                     <div class='col-5 popupItem d-flex align-items-center'>${item.residence_time}</div>
                                 </div>
                             `

@@ -167,7 +167,6 @@ class ChangeStatusForm extends React.Component {
                             })}
 
                             onSubmit={({ radioGroup, select }, { setStatus, setSubmitting }) => {
-                                console.log(radioGroup, select)
                                 this.handleSubmit(radioGroup, select)
                             }}
 

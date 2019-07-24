@@ -108,7 +108,7 @@ function query_editObjectPackage (formOption) {
 		query += `
 			Update object_table 
 			SET status = '${item.status}',
-				transferred_location = '${item.transferredLocation.value}'
+				transferred_location = '${item.transferredLocation}'
 			WHERE mac_address = '${item.mac_address}';
 		`;
 	})

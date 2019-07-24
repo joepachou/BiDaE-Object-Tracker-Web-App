@@ -64,13 +64,12 @@ class SurveillanceContainer extends React.Component {
         this.props.shouldUpdateTrackingData(true);
     }
 
-    handleChangeObjectStatusFormSubmit(postOption) {
-        console.log(postOption)
+    handleChangeObjectStatusFormSubmit(formOption) {
         this.setState({
-            formOption: postOption,
+            formOption: formOption,
             selectedObjectData: {
                 ...this.state.selectedObjectData,
-                ...postOption,
+                ...formOption,
             },
             showEditObjectForm: false,
         })
@@ -87,11 +86,11 @@ class SurveillanceContainer extends React.Component {
 
     handleConfirmFormSubmit(e, addedDevices) {
         const button = e.target
-        const postOption = this.state.formOption;
-        const { status, transferredLocation } = postOption
+        const formOption = this.state.formOption;
+        const { status, transferredLocation } = formOption
 
         let editObjectPackages = []
-        editObjectPackages.push(postOption)
+        editObjectPackages.push(formOption)
 
         if (addedDevices) {
             addedDevices.map( item => {
@@ -101,7 +100,6 @@ class SurveillanceContainer extends React.Component {
                 editObjectPackages.push(item)
             })
         }
-        console.log(editObjectPackages)
         
         axios.post(dataSrc.editObjectPackage, {
             formOption: editObjectPackages
