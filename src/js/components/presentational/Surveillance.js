@@ -85,9 +85,7 @@ class Surveillance extends React.Component {
         this.map.on('zoomend', this.resizeMarkers)
     }
 
-    /**
-     * Resize the markers and errorCircles when the view is zoomend.
-     */
+    /** Resize the markers and errorCircles when the view is zoomend. */
     resizeMarkers(){
         this.calculateScale();
         this.markersLayer.eachLayer( marker => {
@@ -101,9 +99,7 @@ class Surveillance extends React.Component {
         })
     }
 
-    /**
-     * Calculate the current scale for creating markers and resizing.
-     */
+    /** Calculate the current scale for creating markers and resizing. */
     calculateScale() {
         this.currentZoom = this.map.getZoom();
         this.minZoom = this.map.getMinZoom();
@@ -265,11 +261,11 @@ class Surveillance extends React.Component {
             */
             let popupContent = this.popupContent([item])
             /**
-             * Create the marker, if the 'moving_status' of the object is 'stationary', 
+             * Create the marker, if the status of the object is not normal, 
              * then the color will be black, or grey.
              */
             let iconOption = {}
-            if (item.status.toLowerCase() !== config.objectStatus.NORMAL) {
+            if (item.status !== config.objectStatus.NORMAL) {
                 iconOption = unNormalIconOptions;
             } else if (item.geofence_type === config.objectStatus.FENCE){
                 iconOption = geofenceFAweIconOptions;
@@ -350,7 +346,6 @@ class Surveillance extends React.Component {
     }
 
     /**
-    /**
      * Retrieve the object's offset from object's mac_address.
      * @param   mac_address The mac_address of the object retrieved from DB. 
      * @param   lbeacon_coordinate The lbeacon's coordinate processed by createLbeaconCoordinate().
@@ -391,9 +386,8 @@ class Surveillance extends React.Component {
                         const element =     
                             `
                                 <div class='row popupRow mb-2 ml-1'>
-                                    <div class='col-5 popupType d-flex align-items-center'>${item.type}</div>
-                                    <div class='col-2 popupItem d-flex align-items-center'>${item.access_control_number && item.access_control_number.slice(10, 14)}</div>
-                                    <div class='col-5 popupItem d-flex align-items-center'>${item.residence_time}</div>
+                                    <div class='col-6 popupType d-flex align-items-center'>${item.type}</div>
+                                    <div class='col-6 popupItem d-flex align-items-center'>${item.access_control_number && item.access_control_number.slice(10, 14)}</div>
                                 </div>
                             `
                                 return element
