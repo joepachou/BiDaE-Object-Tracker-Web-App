@@ -12,17 +12,16 @@ import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import '../../../css/CustomMarkerCluster.css'
 import '../../leaflet_awesome_number_markers';
 
+import { Row, Col } from 'react-bootstrap';
 
 /** Redux related Library  */
 import { 
     isObjectListShown,
     selectObjectList,
 } from '../../action/action';
-import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import LocaleContext from '../../context/LocaleContext';
 import config from '../../config';
-import moment from 'moment';
 import _ from 'lodash'
 
 class Surveillance extends React.Component {
@@ -56,15 +55,14 @@ class Surveillance extends React.Component {
         this.initMap();  
     }
 
-    componentDidUpdate(prepProps){
-        if(this.props.shouldTrackingDataUpdate) {
-            this.handleObjectMarkers();
-            this.createLbeaconMarkers();
-        }
+    componentDidUpdate(prevProps){
+        this.handleObjectMarkers();
+        this.createLbeaconMarkers();
+        
     }
 
-    shouldComponentUpdate(nextProps){
-        return this.props.shouldTrackingDataUpdate
+    shouldComponentUpdate(nextProps, nextState){
+        return !(_.isEqual(nextProps.searchResult, this.props.searchResult)) || (this.props.shouldTrackingDataUpdate && !(_.isEqual(nextProps.objectInfo, this.props.objectInfo)))
     }
 
     
@@ -188,7 +186,7 @@ class Surveillance extends React.Component {
      */
     handleObjectMarkers(){
         const { hasSearchKey, searchResult, searchType } = this.props;
-        const objects = this.props.objectInfo
+        let objects = _.cloneDeep(this.props.objectInfo)        
 
         /** Process the search object data */
         var searchedObjectDataMap= new Map();
@@ -389,14 +387,6 @@ class Surveillance extends React.Component {
         /** Example of lbeacon_uuid: 01:1f:2d:13:5e:33 
          *                           0123456789       16
          */
- 
-        // const xx = mac_address.slice(15,16);
-        // const yy = mac_address.slice(16,17);
-        // const xSign = parseInt(mac_address.slice(9,10), 16) % 2 == 1 ? 1 : -1 ;
-        // const ySign = parseInt(mac_address.slice(10,11), 16) % 2 == 1 ? 1 : -1 ;
-
-        // const xxx = lbeacon_coordinate[1] + xSign * parseInt(xx, 16) * 12;
-        // const yyy = lbeacon_coordinate[0] + ySign * parseInt(yy, 16) * 12;
         const xx = mac_address.slice(12,14);
         const yy = mac_address.slice(15,17);
         const multiplier = config.surveillanceMap.markerDispersity; // 1m = 100cm = 1000mm, multipler = 1000/16*16 = 3
@@ -445,6 +435,7 @@ class Surveillance extends React.Component {
     render(){
         return(   
             <div id='mapid'>
+            {console.log('render')}
             </div>
         )
     }
