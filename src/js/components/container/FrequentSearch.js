@@ -41,7 +41,7 @@ class FrequentSearch extends React.Component {
     }
 
     getSearchKey(itemName) {
-        this.props.getResultData(itemName)
+        this.props.getSearchKey(itemName)
         this.setState({
             searchKey: itemName
         })

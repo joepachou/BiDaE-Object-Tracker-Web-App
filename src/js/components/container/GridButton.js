@@ -18,7 +18,7 @@ class GridButton extends React.Component {
             pinColorArray: config.surveillanceMap.iconColor.pinColorArray,
 
             /** Record the searched object type and the corresponding representation pin color */
-            searchObjectTypeColorMap: new Map(),
+            colorPanel: {},
 
             searchResult: [],
 
@@ -28,7 +28,7 @@ class GridButton extends React.Component {
         }
         this.processObjectTypeSet = this.processObjectTypeSet.bind(this);
         this.handleClick = this.handleClick.bind(this)
-        this.addSearchableObjectDataWithPinColorToSeachResult = this.addSearchableObjectDataWithPinColorToSeachResult.bind(this)
+        // this.addSearchableObjectDataWithPinColorToSeachResult = this.addSearchableObjectDataWithPinColorToSeachResult.bind(this)
     }
 
     componentDidUpdate(prepProps) {
@@ -43,10 +43,10 @@ class GridButton extends React.Component {
         // }
         if (this.state.refreshSearchResult
             && !this.props.clearColorPanel
-            && this.state.searchObjectTypeColorMap.size !== 0
+            && Object.keys(this.state.colorPanel).length !== 0
             && !(_.isEqual(prepProps.searchableObjectData, this.props.searchableObjectData))) {
-            let searchResult = this.addSearchableObjectDataWithPinColorToSeachResult(this.state.searchObjectTypeColorMap)
-            this.props.transferSearchResultToMain(searchResult, this.state.searchObjectTypeColorMap)
+
+            this.props.getSearchKey(this.state.searchResult, this.state.colorPanel)
         }
     }
 
@@ -78,7 +78,7 @@ class GridButton extends React.Component {
         const { searchableObjectData, clearColorPanel } = this.props
         let pinColor = '';
         let pinColorArray = clearColorPanel ? config.surveillanceMap.iconColor.pinColorArray.slice() : this.state.pinColorArray.slice();
-        let searchObjectTypeColorMap = clearColorPanel ? new Map() : this.state.searchObjectTypeColorMap;
+        let colorPanel = clearColorPanel ? {} : this.state.colorPanel;
         let objectTypeSet = this.state.objectTypeSet;
         let selectAll;
         if (this.props.clearColorPanel) {
@@ -91,15 +91,12 @@ class GridButton extends React.Component {
 
             if (selectAll) {
                 let childrenNodesArray = Array.from(document.getElementsByClassName('gridbutton'))
-                    .filter(item => {
-                        return item.textContent !== 'All'
-                    })
+                    .filter(item => item.textContent !== 'All')
+
                 Array.from(objectTypeSet).map(item => {
-                    if (searchObjectTypeColorMap.has(item)) {
-                        return;
-                    }
+                    if (colorPanel[item]) return;
                     let color = pinColorArray.pop();
-                    searchObjectTypeColorMap.set(item, color);
+                    colorPanel[item] = color
                     childrenNodesArray.map( node => {
                         if (item === node.textContent) {
                             node.style.background = color
@@ -112,7 +109,7 @@ class GridButton extends React.Component {
                 Array.from(document.getElementsByClassName('gridbutton')).map(node=> {
                     node.style.background = ''
                 })
-                searchObjectTypeColorMap.clear();
+                colorPanel = {}
                 pinColorArray = config.surveillanceMap.iconColor.pinColorArray;
 
             }
@@ -123,42 +120,43 @@ class GridButton extends React.Component {
             if (e.target.style.background !== '') {
                 pinColorArray.push(e.target.style.background);
                 e.target.style.background = ''
-                searchObjectTypeColorMap.delete(searchKey);
+                delete colorPanel[searchKey]
             } else {
                 pinColor = e.target.style.background = pinColorArray.pop();
-                searchObjectTypeColorMap.set(searchKey, pinColor)
+                colorPanel[searchKey] = pinColor
             }
         }
 
 
+        
 
-
-        let searchResult = this.addSearchableObjectDataWithPinColorToSeachResult(searchObjectTypeColorMap)
+        // let searchResult = this.addSearchableObjectDataWithPinColorToSeachResult(colorPanel)
+        const searchResult = Object.keys(colorPanel)
 
         if (Cookies.get('user')){
             this.putSearchHistory(searchKey)
         }
 
         this.setState({
-            searchObjectTypeColorMap,
+            colorPanel,
             pinColorArray,
             searchResult,
         })
 
-        this.props.transferSearchResultToMain(searchResult, searchObjectTypeColorMap)
-        
+        this.props.getSearchKey(searchResult, colorPanel)
+
     }
 
-    addSearchableObjectDataWithPinColorToSeachResult(searchObjectTypeColorMap) {
-        let searchResult = []
-        Object.values(this.props.searchableObjectData).map(item => {
-            if (searchObjectTypeColorMap.has(item.type)) {
-                item.pinColor = searchObjectTypeColorMap.get(item.type);
-                searchResult.push(item)
-            } 
-        })
-        return searchResult
-    }
+    // addSearchableObjectDataWithPinColorToSeachResult(colorPanel) {
+    //     let searchResult = []
+    //     Object.values(this.props.searchableObjectData).map(item => {
+    //         if (colorPanel.has(item.type)) {
+    //             item.pinColor = colorPanel.get(item.type);
+    //             searchResult.push(item)
+    //         } 
+    //     })
+    //     return searchResult
+    // }
 
     putSearchHistory(searchKey) {
         const searchHistory = JSON.parse(Cookies.get('searchHistory'))

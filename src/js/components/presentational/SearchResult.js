@@ -179,7 +179,7 @@ class SearchResult extends React.Component {
                         showConfirmForm: false,
                         formOption: [],
                     })
-                    this.props.transferSearchResultToMain(changedStatusSearchResult, colorPanel )
+                    this.props.processSearchResult(changedStatusSearchResult, colorPanel )
                     this.props.shouldUpdateTrackingData(true)
                 }
                 .bind(this),

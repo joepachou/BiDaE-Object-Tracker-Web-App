@@ -242,7 +242,7 @@ class Surveillance extends React.Component {
         };
 
         let counter = 0;
-        objects.filter(item => item.found)
+        objects.filter(item => !item.found)
             .map(item => {
             /** Tag the searched object with searched and pinColor*/
             if(searchedObjectDataMap.has(item.mac_address)) {

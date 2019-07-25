@@ -33,7 +33,6 @@ class SearchContainer extends React.Component {
         this.handleMouseOver = this.handleMouseOver.bind(this);
         
         this.getObjectType = this.getObjectType.bind(this);
-        this.getResultData = this.getResultData.bind(this);
     }
 
     componentDidUpdate(prepProps) {
@@ -44,7 +43,7 @@ class SearchContainer extends React.Component {
             && this.state.hasSearchKey 
             && !this.props.hasGridButton
             && !(_.isEqual(prepProps.searchableObjectData, this.props.searchableObjectData))) {
-            this.getResultData(this.state.searchKey)            
+            this.props.getSearchKey(this.state.searchKey)            
         }
         
         if (prepProps.clearSearchResult !== this.props.clearSearchResult && this.props.clearSearchResult) {
@@ -109,7 +108,7 @@ class SearchContainer extends React.Component {
                 sectionTitleList.push(titleElement)
                 elementIndex++;
             }
-            let itemElement = <a onClick={this.getResultData} key={elementIndex}><ListGroup.Item action style={itemElementStyle} >{item}</ListGroup.Item></a>;
+            let itemElement = <a onClick={this.props.getSearchKey} key={elementIndex}><ListGroup.Item action style={itemElementStyle} >{item}</ListGroup.Item></a>;
             sectionTitleList.push(itemElement);
             elementIndex++;
         })
@@ -170,46 +169,47 @@ class SearchContainer extends React.Component {
      * Fired once the user click the item in object type list or in frequent seaerch
      * Also, popout the searchResult component.
      */
-    getResultData(searchKey) {
-        /** this.props.searchableObjectData data path: Surveillance -> SurveillanceContainer -> MainContainer -> SearchContainer  */
-        const searchResult = this.getResultBySearchKey(searchKey)
+    // getSearchKey(searchKey) {
+    //     /** this.props.searchableObjectData data path: Surveillance -> SurveillanceContainer -> MainContainer -> SearchContainer  */
+    //     const searchResult = this.getResultBySearchKey(searchKey)
 
-        /** Transfer the searched object data from SearchContainer to MainContainer */
-        this.props.transferSearchResultToMain(searchResult, null, searchKey)
+    //     /** Transfer the searched object data from SearchContainer to MainContainer */
+    //     this.props.transferSearchResultToMain(searchResult, null, searchKey)
 
-        this.setState({
-            searchResult: searchResult,
-            hasSearchKey: true,
-            searchKey: searchKey,
-        })
-    }
+    //     this.setState({
+    //         searchResult: searchResult,
+    //         hasSearchKey: true,
+    //         searchKey: searchKey,
+    //     })
+    // }
 
-    getResultBySearchKey(searchKey) {
-        const myDevices = config.frequentSearchOption.MY_DEVICES;
-        const allDevices = config.frequentSearchOption.ALL_DEVICES;
-        let searchResult = [];
-            switch(searchKey) {
-                case myDevices:
-                    const devicesAccessControlNumber = this.props.auth.userInfo.myDevice
-                    Object.values(this.props.searchableObjectData).map(item => {
-                        devicesAccessControlNumber.includes(item.access_control_number) ? searchResult.push(item) : null;
-                    })
-                    break;
-                case allDevices:
-                    searchResult = Object.values(this.props.searchableObjectData)
-                    break;
-                default: 
-                    Object.values(this.props.searchableObjectData).map(item => {
-                        if (item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0
-                            || item.access_control_number.slice(10,14).indexOf(searchKey) >= 0
-                            || item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0) {
-                            searchResult.push(item)
-                        }
-                    })
-                    break;
-            }
-        return searchResult
-    }
+    // getResultBySearchKey(searchKey) {
+    //     console.log(searchKey)
+    //     const myDevices = config.frequentSearchOption.MY_DEVICES;
+    //     const allDevices = config.frequentSearchOption.ALL_DEVICES;
+    //     let searchResult = [];
+    //         switch(searchKey) {
+    //             case myDevices:
+    //                 const devicesAccessControlNumber = this.props.auth.userInfo.myDevice
+    //                 Object.values(this.props.searchableObjectData).map(item => {
+    //                     devicesAccessControlNumber.includes(item.access_control_number) ? searchResult.push(item) : null;
+    //                 })
+    //                 break;
+    //             case allDevices:
+    //                 searchResult = Object.values(this.props.searchableObjectData)
+    //                 break;
+    //             default: 
+    //                 Object.values(this.props.searchableObjectData).map(item => {
+    //                     if (item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0
+    //                         || item.access_control_number.slice(10,14).indexOf(searchKey) >= 0
+    //                         || item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0) {
+    //                         searchResult.push(item)
+    //                     }
+    //                 })
+    //                 break;
+    //         }
+    //     return searchResult
+    // }
 
     render() {
         /** Customized CSS of searchResult */
@@ -218,14 +218,14 @@ class SearchContainer extends React.Component {
         }
 
         // const { searchResult, searchKey, sectionIndexList, sectionIndex, isShowSectionTitle } = this.state;
-        const { trackingData, searchableObjectData, transferSearchResultToMain } = this.props
+        const { transferSearchResultToMain } = this.props
         
         return (                   
             <div id='searchContainer' className="" onTouchMove={this.handleTouchMove}>
                 <div id='searchBar' className='d-flex justify-content-center align-items-center pt-4 pb-2'>
                     <Searchbar 
                         placeholder={this.state.searchKey}
-                        getResultData={this.getResultData}
+                        getSearchKey={this.props.getSearchKey}
                         clearSearchResult={this.props.clearSearchResult}    
                     />
                     
@@ -233,9 +233,7 @@ class SearchContainer extends React.Component {
 
                 <div id='searchOption' className='pt-2'>
                     <FrequentSearch 
-                        getResultData={this.getResultData}  
-                        transferSearchResultToMain={transferSearchResultToMain}  
-                        getResultData={this.getResultData}
+                        getSearchKey={this.props.getSearchKey}  
                         clearSearchResult={this.props.clearSearchResult}   
                         hasGridButton={this.props.hasGridButton} 
                     />

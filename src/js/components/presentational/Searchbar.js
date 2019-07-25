@@ -24,7 +24,7 @@ class Searchbar extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        this.props.getResultData(this.state.value);
+        this.props.getSearchKey(this.state.value);
     }
 
     handleChange(e) {

@@ -228,8 +228,8 @@ class SurveillanceContainer extends React.Component {
                         <div style={style.gridButton} className='mt-2 mx-3'>
                             <GridButton
                                 searchableObjectData={this.props.searchableObjectData} 
-                                transferSearchResultToMain={this.props.transferSearchResultToMain}
                                 clearColorPanel={this.props.clearColorPanel}
+                                getSearchKey={this.props.getSearchKey}
                             />
                         </div>
                     </Nav>
