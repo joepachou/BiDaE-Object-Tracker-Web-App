@@ -24,6 +24,12 @@ import LocaleContext from '../../context/LocaleContext';
 import config from '../../config';
 import _ from 'lodash'
 
+let popupOptions = {
+    minWidth: '400',
+    maxHeight: '300',
+    className : 'customPopup',
+}
+
 class Surveillance extends React.Component {
 
     constructor(props){
@@ -108,26 +114,21 @@ class Surveillance extends React.Component {
         this.scalableIconSize = config.surveillanceMap.iconOptions.iconSize + this.resizeConst
     }
 
-    /**
-     * Create the lbeacon and invisibleCircle markers
-     */
+    /** Create the lbeacon and invisibleCircle markers */
     createLbeaconMarkers(){
-        /** 
-         * Creat the marker of all lbeacons onto the map 
-         */
+
+        /** Creat the marker of all lbeacons onto the map  */
         let lbeaconsPosition = this.state.lbeaconsPosition !== null ? Array.from(this.state.lbeaconsPosition) :[];
         lbeaconsPosition.map(items => {
             let lbLatLng = items.split(",")
-            // let lbeacon = L.circleMarker(lbLatLng,{
-            //     color: 'rgba(0, 0, 0, 0)',
-            //     fillColor: 'yellow',
-            //     fillOpacity: 0.5,
-            //     radius: 15,
-            // }).addTo(this.map);
+            let lbeacon = L.circleMarker(lbLatLng,{
+                color: 'rgba(0, 0, 0, 0)',
+                fillColor: 'yellow',
+                fillOpacity: 0.5,
+                radius: 15,
+            }).addTo(this.map);
 
-        /** 
-         * Creat the invisible Circle marker of all lbeacons onto the map 
-         */
+        /** Creat the invisible Circle marker of all lbeacons onto the map */
             let invisibleCircle = L.circleMarker(lbLatLng,{
                 color: 'rgba(0, 0, 0, 0',
                 fillColor: 'rgba(0, 76, 238, 0.995)',
@@ -135,8 +136,8 @@ class Surveillance extends React.Component {
                 radius: 60,
             }).addTo(this.map);
 
-            // invisibleCircle.on('mouseover', this.handlemenu)
-            // invisibleCircle.on('mouseout', function() {this.closePopup();})
+            invisibleCircle.on('mouseover', this.handlemenu)
+            invisibleCircle.on('mouseout', function() {this.closePopup();})
         })
         if (!this.state.hasInvisibleCircle){
             this.setState({
@@ -150,13 +151,6 @@ class Surveillance extends React.Component {
      * @param e the object content of the mouse clicking. 
      */
     handlemenu(e){
-
-        let popupOptions = {
-            minWidth: '400',
-            maxWidth: '600',
-            maxHeight: '500',
-            className : 'customPopup',
-        }
 
         const { objectInfo } = this.state
         const lbeacon_coorinate = Object.values(e.target._latlng).toString();
@@ -185,7 +179,7 @@ class Surveillance extends React.Component {
      * Create the error circle of markers, and add into this.markersLayer.
      */
     handleObjectMarkers(){
-        const { hasSearchKey, searchResult, searchType } = this.props;
+        const { hasSearchKey, searchResult } = this.props;
         let objects = _.cloneDeep(this.props.objectInfo)        
 
         /** Process the search object data */
@@ -251,12 +245,6 @@ class Surveillance extends React.Component {
             markerColor: config.surveillanceMap.iconColor.unNormal,
         };
 
-        let popupOptions = {
-            minWidth: '400',
-            maxHeight: '300',
-            className : 'customPopup',
-        }
-        
         let counter = 0;
         objects.filter(item => item.found)
             .map(item => {
@@ -281,25 +269,12 @@ class Surveillance extends React.Component {
              * then the color will be black, or grey.
              */
             let iconOption = {}
-            if (item.status.toLowerCase() === config.objectStatus.BROKEN 
-                ||item.status.toLowerCase() === config.objectStatus.TRANSFERRED) {
+            if (item.status.toLowerCase() !== config.objectStatus.NORMAL) {
                 iconOption = unNormalIconOptions;
             } else if (item.geofence_type === config.objectStatus.FENCE){
                 iconOption = geofenceFAweIconOptions;
-                if (item.searched && config.surveillanceMap.iconOptions.showNumber) {
-                    iconOption = {
-                        ...iconOption,
-                        number: ++counter
-                    }
-                }
 			} else if (item.geofence_type === config.objectStatus.PERIMETER){
                 iconOption = geofencePAweIconOptions;
-                if (item.searched && config.surveillanceMap.iconOptions.showNumber) {
-                    iconOption = {
-                        ...iconOption,
-                        number: ++counter
-                    }
-                }
 			} else if (item.panic_button === 1) {
                 iconOption = sosIconOptions;
             } else if (item.searched && this.props.colorPanel) {
@@ -308,19 +283,18 @@ class Surveillance extends React.Component {
                     markerColor:item.pinColor,
                 }
             } else if (item.searched) {
-                config.surveillanceMap.iconOptions.showNumber 
-                ? 
-                    iconOption = {
-                        ...searchedObjectAweIconOptions,
-                        number: ++counter, 
-                    } 
-                : iconOption = searchedObjectAweIconOptions    
-            } else if (item.moving_status === 'stationary') {
-                iconOption = stationaryAweIconOptions;
+                iconOption = searchedObjectAweIconOptions    
             } else {
                 iconOption = stationaryAweIconOptions;
             }
 
+            /** Show the order number on location pin if necessary */
+            if (item.searched && config.surveillanceMap.iconOptions.showNumber) {
+                iconOption = {
+                    ...iconOption,
+                    number: ++counter
+                }
+            }
 
             /** Insert the object's mac_address to be the data when clicking the object's marker */
             iconOption = {
@@ -336,14 +310,12 @@ class Surveillance extends React.Component {
              * Set the z-index offset of the searhed object so that
              * the searched object icon will be on top of all others 
              */
-            if (item.searched) {
-                marker.setZIndexOffset(1000);
-            }
+            if (item.searched) marker.setZIndexOffset(1000);
+        
             /** Set the marker's event. */
-
             marker.on('mouseover', function () { this.openPopup(); })
             marker.on('click', this.handleMarkerClick);
-            // marker.on('mouseout', function () { this.closePopup(); })
+            marker.on('mouseout', function () { this.closePopup(); })
             
 
             /** Set the error circles of the markers. */
@@ -435,7 +407,6 @@ class Surveillance extends React.Component {
     render(){
         return(   
             <div id='mapid'>
-            {console.log('render')}
             </div>
         )
     }
