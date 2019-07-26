@@ -266,7 +266,7 @@ class SearchResult extends React.Component {
                         &nbsp;
                         &nbsp;
 
-                        <div style={style.alertText}>{this.props.searchResult.length}</div>
+                        <div style={style.alertText}>{this.props.searchResult.filter(item => item.found).length}</div>
                         &nbsp;
                         <div style={style.alertText}>devices</div>
                         &nbsp;
