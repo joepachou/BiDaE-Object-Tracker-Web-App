@@ -59,6 +59,7 @@ class Surveillance extends React.Component {
 
     componentDidMount(){
         this.initMap();  
+        this.handleObjectMarkers();
     }
 
     componentDidUpdate(prevProps){
@@ -68,7 +69,8 @@ class Surveillance extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState){
-        return !(_.isEqual(nextProps.searchResult, this.props.searchResult)) || (this.props.shouldTrackingDataUpdate && !(_.isEqual(nextProps.objectInfo, this.props.objectInfo)))
+        return !(_.isEqual(nextProps.searchResult, this.props.searchResult)) 
+            || (this.props.shouldTrackingDataUpdate && !(_.isEqual(nextProps.objectInfo, this.props.objectInfo)))
     }
 
     
@@ -385,7 +387,8 @@ class Surveillance extends React.Component {
                             `
                                 <div class='row popupRow mb-2 ml-1'>
                                     <div class='col-6 popupType d-flex align-items-center'>${item.type}</div>
-                                    <div class='col-6 popupItem d-flex align-items-center'>${item.access_control_number && item.access_control_number.slice(10, 14)}</div>
+                                    <div class='col-3 popupItem d-flex align-items-center'>${item.access_control_number && item.access_control_number.slice(10, 14)}</div>
+                                    <div class='col-3 popupItem d-flex align-items-center text-capitalize'>${item.status}</div>
                                 </div>
                             `
                                 return element
