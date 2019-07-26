@@ -20,7 +20,7 @@ class GridButton extends React.Component {
             /** Record the searched object type and the corresponding representation pin color */
             colorPanel: {},
 
-            searchResult: [],
+            searchKeys: [],
 
             selectAll: false,
 
@@ -46,7 +46,7 @@ class GridButton extends React.Component {
             && Object.keys(this.state.colorPanel).length !== 0
             && !(_.isEqual(prepProps.searchableObjectData, this.props.searchableObjectData))) {
 
-            this.props.getSearchKey(this.state.searchResult, this.state.colorPanel)
+                this.props.getSearchKey(this.state.searchKeys, this.state.colorPanel)
         }
     }
 
@@ -87,22 +87,23 @@ class GridButton extends React.Component {
             selectAll = this.state.selectAll ? false : true;
         }
 
-        if(searchKey.toLowerCase() === 'all') {
+        if(searchKey.toLowerCase() == 'all') {
 
             if (selectAll) {
                 let childrenNodesArray = Array.from(document.getElementsByClassName('gridbutton'))
                     .filter(item => item.textContent !== 'All')
 
-                Array.from(objectTypeSet).map(item => {
-                    if (colorPanel[item]) return;
-                    let color = pinColorArray.pop();
-                    colorPanel[item] = color
-                    childrenNodesArray.map( node => {
-                        if (item === node.textContent) {
-                            node.style.background = color
-                        }
+                Array.from(objectTypeSet).filter(item => item !== 'All')
+                    .map(item => {
+                        if (colorPanel[item]) return;
+                        let color = pinColorArray.pop();
+                        colorPanel[item] = color
+                        childrenNodesArray.map( node => {
+                            if (item === node.textContent) {
+                                node.style.background = color
+                            }
+                        })
                     })
-                })
                 e.target.style.background = 'rgba(143, 143, 143, 0.5)'
                 
             } else {
@@ -126,37 +127,24 @@ class GridButton extends React.Component {
                 colorPanel[searchKey] = pinColor
             }
         }
-
-
-        
+    
 
         // let searchResult = this.addSearchableObjectDataWithPinColorToSeachResult(colorPanel)
-        const searchResult = Object.keys(colorPanel)
+        const searchKeys = Object.keys(colorPanel)
 
-        if (Cookies.get('user')){
-            this.putSearchHistory(searchKey)
-        }
+        // if (Cookies.get('user')){
+        //     this.putSearchHistory(searchKey)
+        // }
 
         this.setState({
             colorPanel,
             pinColorArray,
-            searchResult,
+            searchKeys,
         })
 
-        this.props.getSearchKey(searchResult, colorPanel)
+        this.props.getSearchKey(searchKeys, colorPanel)
 
     }
-
-    // addSearchableObjectDataWithPinColorToSeachResult(colorPanel) {
-    //     let searchResult = []
-    //     Object.values(this.props.searchableObjectData).map(item => {
-    //         if (colorPanel.has(item.type)) {
-    //             item.pinColor = colorPanel.get(item.type);
-    //             searchResult.push(item)
-    //         } 
-    //     })
-    //     return searchResult
-    // }
 
     putSearchHistory(searchKey) {
         const searchHistory = JSON.parse(Cookies.get('searchHistory'))
@@ -216,7 +204,7 @@ class GridButton extends React.Component {
                                 {Array.from(objectTypeSet).map( (item,index) => {
                                     return (
                                         <Col sm={6} md={6} lg={6} xl={6} className='px-1' key={index}>
-                                            <div className='gridbutton' onClick={this.handleClick} key={index}>
+                                            <div className='gridbutton' onClick={this.handleClick} key={index} name={item.toLowerCase()}>
                                                 {item}
                                             </div>
                                         </Col>

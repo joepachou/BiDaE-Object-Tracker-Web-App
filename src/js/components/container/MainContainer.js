@@ -12,10 +12,11 @@ import SearchResult from '../presentational/SearchResult'
 
 import { Row, Col, Hidden, Visible } from 'react-grid-system';
 import SurveillanceContainer from './SurveillanceContainer';
-import { Alert } from 'react-bootstrap';
 import AuthenticationContext from '../../context/AuthenticationContext';
 import { connect } from 'react-redux'
 import config from '../../config';
+import InfoPrompt from '../presentational/InfoPrompt';
+import _ from 'lodash'
 
 const myDevices = config.frequentSearchOption.MY_DEVICES;
 const allDevices = config.frequentSearchOption.ALL_DEVICES;
@@ -42,14 +43,32 @@ class MainContainer extends React.Component{
     }
 
     /** Transfer the search result, not found list and color panel from SearchContainer, GridButton to MainContainer 
-     *  The three variable will then pass into SurveillanceContainer
-    */
+     *  The three variable will then pass into SurveillanceContainer */
     processSearchResult(searchResult, colorPanel, searchKey) {
-        /** Count Object Type */
+        /** Count the number of found object type */
+        let duplicateSearchKey = []
+        if (typeof searchKey === 'string') {
+            searchKey === 'all devices' || searchKey === 'my devices' ? null : duplicateSearchKey.push(searchKey)
+        } else {
+            duplicateSearchKey = [...searchKey]
+        }
+        duplicateSearchKey.filter(key => {
+            console.log(key !== 'all devices')
+            return key !== 'all devices' || key !== 'my devices'
+        })
+
         let searchResultObjectTypeMap = searchResult.reduce((allObjectTypes, item) => {
-            item.type in allObjectTypes ? allObjectTypes[item.type] ++ : allObjectTypes[item.type] = 1 ;
+            if (item.type in allObjectTypes) allObjectTypes[item.type]++
+            else {
+                allObjectTypes[item.type] = 1
+                let index = duplicateSearchKey.indexOf(item.type)
+                if (index > -1) {
+                    duplicateSearchKey.splice(index, 1)
+                }
+            }
             return allObjectTypes
         }, {})
+        duplicateSearchKey.map(key => searchResultObjectTypeMap[key] = 0)
 
         if(colorPanel) {
             this.setState({
@@ -105,33 +124,27 @@ class MainContainer extends React.Component{
     getResultBySearchKey(searchKey, colorPanel) {
         const auth = this.context
         let searchResult = [];
-        switch(searchKey) {
-            case myDevices:
-                const devicesAccessControlNumber = auth.userInfo.myDevice
-                this.props.objectInfo.map(item => {
-                    devicesAccessControlNumber.includes(item.access_control_number) ? searchResult.push(item) : null;
-                })
-                break;
-            case allDevices:
-                searchResult = this.props.objectInfo
-                break;
-            default: 
-                if (typeof searchKey === 'object') {
-                    this.props.objectInfo.map(item => {
-                        searchKey.includes(item.type) ? searchResult.push(item) : null;
-                        item.pinColor = colorPanel[item.type];
-                    })
-                } else {
-                    this.props.objectInfo.map(item => {
-                        if (item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0
-                            || item.access_control_number.slice(10,14).indexOf(searchKey) >= 0
-                            || item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0) {
-                            searchResult.push(item)
-                        }
-    
-                    })
+
+        if (searchKey === myDevices) {
+            const devicesAccessControlNumber = auth.userInfo.myDevice
+            this.props.objectInfo.map(item => {
+                devicesAccessControlNumber.includes(item.access_control_number) ? searchResult.push(item) : null;
+            })
+        } else if (searchKey === allDevices) {
+            searchResult = this.props.objectInfo
+        } else if (typeof searchKey === 'object') {
+            this.props.objectInfo.map(item => {
+                searchKey.includes(item.type) ? searchResult.push(item) : null;
+                item.pinColor = colorPanel[item.type];
+            })
+        } else {
+            this.props.objectInfo.map(item => {
+                if (item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0
+                    || item.access_control_number.slice(10,14).indexOf(searchKey) >= 0
+                    || item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0) {
+                    searchResult.push(item)
                 }
-                break;
+            })
         }
         return searchResult
     }
@@ -152,16 +165,6 @@ class MainContainer extends React.Component{
                 display: this.state.hasSearchKey ? null : 'none',
                 paddingTop: 30,
             },
-            alertText: {
-                fontSize: '1.2rem',
-                fontWeight: '700'
-            },
-            alertTextTitle: {
-                fontSize: '1.2rem',
-                fontWeight: 1000,
-                color: 'rgba(101, 111, 121, 0.78)'
-            }
-
         }
         return(
             <AuthenticationContext.Consumer>
@@ -171,58 +174,10 @@ class MainContainer extends React.Component{
                         <Row id="mainContainer" className='d-flex w-100 justify-content-around mx-0 overflow-hidden' style={style.container}>
                             <Col sm={7} md={9} lg={9} xl={9} id='searchMap' className="pl-2 pr-1" >
                                 <br/>
-                                <div>
-                                    {this.state.searchResult.length === 0
-                                        ? this.state.hasSearchKey 
-                                            ?
-                                                <Alert variant='secondary' className='d-flex justify-content-start'>
-                                                    <div style={style.alertTextTitle}>{'Found '}</div>
-                                                    &nbsp;
-                                                    &nbsp;
-
-                                                    <div style={style.alertText}>{this.state.searchResult.length}</div>
-                                                    &nbsp;
-                                                    <div style={style.alertText}>{'device'}</div>
-                                                    &nbsp;
-                                                </Alert>
-                                            :    
-                                                <Alert variant='secondary' className='d-flex justify-content-start'>
-                                                    <div style={style.alertTextTitle}>{'Found '}</div>
-                                                    &nbsp;
-                                                    &nbsp;
-
-                                                    <div style={style.alertText}>
-                                                        {Object.keys(this.props.objectInfo.filter(item => item.found)).length}
-                                                    </div>
-                                                    &nbsp;
-                                                    <div style={style.alertText}>{'device'}</div>
-                                                </Alert>
-                                        : 
-                                            <Alert variant='secondary' className='d-flex justify-content-start'>
-                                                <div style={style.alertTextTitle}>{'Found '}</div>
-
-                                                {Object.keys(this.state.searchResultObjectTypeMap).map((item,index) => {
-                                                    return  <div key={index} className="d-inline-flex">
-                                                                &nbsp;
-                                                                &nbsp;
-
-                                                                <div style={style.alertText}>
-                                                                    {this.state.searchResultObjectTypeMap[item]}
-                                                                </div>
-                                                                &nbsp;
-                                                                <div style={style.alertText}>
-                                                                    {item}
-                                                                </div>
-                                                                &nbsp;
-                                                                &nbsp;
-                                                                &nbsp;
-                                                                &nbsp;
-                                                            </div>
-                                                })}
-                                            </Alert> 
-                                        
-                                    } 
-                                </div>
+                                {this.state.hasSearchKey 
+                                    ?   <InfoPrompt data={this.state.searchResultObjectTypeMap} />                                        
+                                    :   <InfoPrompt data={{devices: this.props.objectInfo.filter(item => item.found).length}} />
+                                }     
                                 <SurveillanceContainer 
                                     hasSearchKey={hasSearchKey}
                                     searchableObjectData={this.props.objectInfo} 
