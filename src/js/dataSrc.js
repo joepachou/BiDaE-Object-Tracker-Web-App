@@ -14,14 +14,12 @@ const signup = 'https://' + IP + '/user/signup';
 const getUserInfo = 'https://' + IP + '/user/getUserInfo';
 const addUserSearchHistory = 'https://' + IP + '/user/addUserSearchHistory'
 const editLbeacon = 'https://' + IP + '/data/editLbeacon'
-const getNotFoundTag = 'https://' + IP + '/data/getNotFoundTag'
 
 module.exports = {
     getTrackingData,
     getObjectTable,
     getLbeaconTable,
     getGatewayTable,
-    getNotFoundTag,
     searchResult,
     geofenceData,
     editObject,
