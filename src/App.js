@@ -115,35 +115,53 @@ class App extends React.Component {
                 yy: "%d years"
             }
         });
+        console.log(rawTrackingData)
         const processedTrackingData = rawTrackingData.filter(item => {
                 return item.lbeacon_uuid !== null
             })
             .map(item => {
-            /**
-             * Every lbeacons coordinate sended by response will store in lbsPosition
-             * Update(3/14): use Set instead.
-             */
+
+            /** Set the object's location in the form of lbeacon coordinate parsing by lbeacon uuid  */
             const lbeaconCoordinate = this.createLbeaconCoordinate(item.lbeacon_uuid);
             
             lbsPosition.add(lbeaconCoordinate.toString());
             item.currentPosition = lbeaconCoordinate
 
+            /** Tag the object that is found */
             item.found = moment().diff(item.last_seen_timestamp, 'seconds') < config.objectManage.notFoundObjectTimePeriod ? 1 : 0
-            const firstSeenTimestamp = moment(item.first_seen_timestamp)
-            const lastSeenTimestamp = moment(item.last_seen_timestamp)
-            item.residence_time = item.found ? lastSeenTimestamp.from(firstSeenTimestamp) : lastSeenTimestamp.fromNow();
+
+            /** Set the residence time of the object */
+            item.residence_time = this.createResidenceTime(item.first_seen_timestamp, item.last_seen_timestamp, item.found)
+
+            /** Tag the object that is violate geofence */
+            if (moment().diff(item.geofence_violation_timestamp, 'seconds') < config.objectManage.geofenceViolationTimePeriod) {
+                delete item.geofence_type;
+            }
+
+            /** Tag the object that is on sos */
+            if (moment().diff(item.panic_timestamp, 'second') < config.objectManage.sosTimePeriod) {
+                item.panic = true
+            }
             
+            /** Omit the unused field of the object */
             delete item.first_seen_timestamp
             delete item.last_seen_timestamp
+            delete item.geofence_violation_timestamp
+            delete item.panic_timestamp
+
             return item
         })
         return processedTrackingData
     }
+    
+    /** Set the residence time of the object */
+    createResidenceTime(start, end, isFound) {
+        const firstSeenTimestamp = moment(start)
+        const lastSeenTimestamp = moment(end)
+        return isFound ? lastSeenTimestamp.from(firstSeenTimestamp) : lastSeenTimestamp.fromNow();
+    }
 
-    /**
-     * Retrieve the lbeacon's location coordinate from lbeacon_uuid.
-     * @param   lbeacon_uuid The uuid of lbeacon retrieved from DB.
-     */
+    /** Parsing the lbeacon's location coordinate from lbeacon_uuid*/
     createLbeaconCoordinate(lbeacon_uuid){
         /** Example of lbeacon_uuid: 00000018-0000-0000-7310-000000004610 */
         const zz = lbeacon_uuid.slice(6,8);

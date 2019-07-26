@@ -97,6 +97,8 @@ const config = {
         /* The definition of the time period that the object is not scanned by lbeacon
          * The time period unit is seconds */
         notFoundObjectTimePeriod: 30,
+        geofenceViolationTimePeriod: 300,
+        sosTimePeriod: 600,
     },
 
     transferredLocation: [

@@ -242,7 +242,7 @@ class Surveillance extends React.Component {
         };
 
         let counter = 0;
-        objects.filter(item => !item.found)
+        objects.filter(item => item.found)
             .map(item => {
             /** Tag the searched object with searched and pinColor*/
             if(searchedObjectDataMap.has(item.mac_address)) {
@@ -265,19 +265,17 @@ class Surveillance extends React.Component {
              * then the color will be black, or grey.
              */
             let iconOption = {}
-            if (item.status !== config.objectStatus.NORMAL) {
-                iconOption = unNormalIconOptions;
+
+            if (item.panic) {
+                iconOption = sosIconOptions;
             } else if (item.geofence_type === config.objectStatus.FENCE){
                 iconOption = geofenceFAweIconOptions;
 			} else if (item.geofence_type === config.objectStatus.PERIMETER){
                 iconOption = geofencePAweIconOptions;
-			} else if (item.panic_button === 1) {
-                iconOption = sosIconOptions;
+			} else if (item.status !== config.objectStatus.NORMAL) {
+                iconOption = unNormalIconOptions;
             } else if (item.searched && this.props.colorPanel) {
-                iconOption = {
-                    iconSize: iconSize,
-                    markerColor:item.pinColor,
-                }
+                iconOption = { markerColor:item.pinColor }
             } else if (item.searched) {
                 iconOption = searchedObjectAweIconOptions    
             } else {
