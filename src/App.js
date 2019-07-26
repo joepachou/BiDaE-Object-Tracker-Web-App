@@ -115,7 +115,6 @@ class App extends React.Component {
                 yy: "%d years"
             }
         });
-        console.log(rawTrackingData)
         const processedTrackingData = rawTrackingData.filter(item => {
                 return item.lbeacon_uuid !== null
             })
@@ -134,9 +133,10 @@ class App extends React.Component {
             item.residence_time = this.createResidenceTime(item.first_seen_timestamp, item.last_seen_timestamp, item.found)
 
             /** Tag the object that is violate geofence */
-            if (moment().diff(item.geofence_violation_timestamp, 'seconds') < config.objectManage.geofenceViolationTimePeriod) {
-                delete item.geofence_type;
+            if (moment().diff(item.geofence_violation_timestamp, 'seconds') > config.objectManage.geofenceViolationTimePeriod) {
+                delete item.geofence_type
             }
+
 
             /** Tag the object that is on sos */
             if (moment().diff(item.panic_timestamp, 'second') < config.objectManage.sosTimePeriod) {
