@@ -28,26 +28,6 @@ class GridButton extends React.Component {
         }
         this.processObjectTypeSet = this.processObjectTypeSet.bind(this);
         this.handleClick = this.handleClick.bind(this)
-        // this.addSearchableObjectDataWithPinColorToSeachResult = this.addSearchableObjectDataWithPinColorToSeachResult.bind(this)
-    }
-
-    componentDidUpdate(prepProps) {
-        // if(this.props.isClear) {
-        //     console.log('hi')
-        //     this.setState({
-                
-        //     })
-        // }
-        // if (!(_.isEqual(prepProps.searchableObjectData, this.props.searchableObjectData))) {
-        //     this.processObjectTypeSet();
-        // }
-        if (this.state.refreshSearchResult
-            && !this.props.clearColorPanel
-            && Object.keys(this.state.colorPanel).length !== 0
-            && !(_.isEqual(prepProps.searchableObjectData, this.props.searchableObjectData))) {
-
-                this.props.getSearchKey(this.state.searchKeys, this.state.colorPanel)
-        }
     }
 
     componentDidMount() {
@@ -75,7 +55,7 @@ class GridButton extends React.Component {
 
         const searchKey = e.target.innerText;
 
-        const { searchableObjectData, clearColorPanel } = this.props
+        const { clearColorPanel } = this.props
         let pinColor = '';
         let pinColorArray = clearColorPanel ? config.surveillanceMap.iconColor.pinColorArray.slice() : this.state.pinColorArray.slice();
         let colorPanel = clearColorPanel ? {} : this.state.colorPanel;
@@ -193,24 +173,20 @@ class GridButton extends React.Component {
             }
         }
         return (
-            // <div className="gridbutton_wrapper d-flex justify-content-start">
             <div>
                 {objectTypeSet.size !== 0 
                     ? 
-                        // Array.from(objectTypeSet).map( (item,index) => {
-                        //     return  <div className='gridbutton' onClick={this.handleClick} key={index}>{item}</div>
-                        // })
-                            <Row className='' style={style.row}>
-                                {Array.from(objectTypeSet).map( (item,index) => {
-                                    return (
-                                        <Col sm={6} md={6} lg={6} xl={6} className='px-1' key={index}>
-                                            <div className='gridbutton' onClick={this.handleClick} key={index} name={item.toLowerCase()}>
-                                                {item}
-                                            </div>
-                                        </Col>
-                                    )
-                                })}
-                            </Row>
+                        <Row className='' style={style.row}>
+                            {Array.from(objectTypeSet).map( (item,index) => {
+                                return (
+                                    <Col sm={6} md={6} lg={6} xl={6} className='px-1' key={index}>
+                                        <div className='gridbutton' onClick={this.handleClick} key={index} name={item.toLowerCase()}>
+                                            {item}
+                                        </div>
+                                    </Col>
+                                )
+                            })}
+                        </Row>
                     : null
                 }
             </div>
