@@ -69,6 +69,12 @@ class Surveillance extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState){
+        // nextProps.objectInfo.map(item => {
+        //     if(item.access_control_number === '0603-2425-7711') {
+        //         console.log(item.status)
+        //     }
+        // })
+        // console.log(_.isEqual(nextProps.objectInfo, this.props.objectInfo))
         return !(_.isEqual(nextProps.searchResult, this.props.searchResult)) 
             || (this.props.shouldTrackingDataUpdate && !(_.isEqual(nextProps.objectInfo, this.props.objectInfo)))
     }
@@ -340,7 +346,7 @@ class Surveillance extends React.Component {
     collectObjectsByLatLng(currentPositionArray) {
         let objectList = []
         Object.values(this.props.objectInfo).map(item => {
-            item.currentPosition.toString() === currentPositionArray.toString() ? objectList.push(item) : null;
+            item.currentPosition && item.currentPosition.toString() === currentPositionArray.toString() ? objectList.push(item) : null;
         })
         return objectList 
     }
@@ -388,7 +394,7 @@ class Surveillance extends React.Component {
                                 <div class='row popupRow mb-2 ml-1'>
                                     <div class='col-6 popupType d-flex align-items-center'>${item.type}</div>
                                     <div class='col-3 popupItem d-flex align-items-center'>${item.access_control_number && item.access_control_number.slice(10, 14)}</div>
-                                    <div class='col-3 popupItem d-flex align-items-center text-capitalize'>${item.status}</div>
+                                    <div class='col-3 popupItem d-flex align-items-center text-capitalize'>${item.geofence_type || item.status}</div>
                                 </div>
                             `
                                 return element
