@@ -105,8 +105,8 @@ function query_addObject (formOption) {
 	const text = 
 		`
 		INSERT INTO object_table 
-		(type, status, transferred_location, access_control_number, name, mac_address, available_status, registered_timestamp)
-		VALUES($1, $2, $3, $4, $5, $6, 1, $7)
+		(type, status, transferred_location, access_control_number, name, mac_address, registered_timestamp)
+		VALUES($1, $2, $3, $4, $5, $6, $7)
 		`;
 		
 	const values = [formOption.type, formOption.status, formOption.transferredLocation?formOption.transferredLocation.value:null, formOption.access_control_number, formOption.name, formOption.mac_address, formOption.registered_timestamp];
