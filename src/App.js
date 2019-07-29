@@ -131,10 +131,11 @@ class App extends React.Component {
             item.residence_time = this.createResidenceTime(item.first_seen_timestamp, item.last_seen_timestamp, item.found)
 
             /** Tag the object that is violate geofence */
-            if (moment().diff(item.geofence_violation_timestamp, 'seconds') > config.objectManage.geofenceViolationTimePeriod) {
+            if (moment().diff(item.geofence_violation_timestamp, 'seconds') > config.objectManage.geofenceViolationTimePeriod
+                || moment(item.first_seen_timestamp).diff(moment(item.geofence_violation_timestamp)) > 0) {
+                    
                 delete item.geofence_type
             }
-
 
             /** Tag the object that is on sos */
             if (moment().diff(item.panic_timestamp, 'second') < config.objectManage.sosTimePeriod) {
