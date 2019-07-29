@@ -115,15 +115,13 @@ class App extends React.Component {
                 yy: "%d years"
             }
         });
-        const processedTrackingData = rawTrackingData.filter(item => {
-                return item.lbeacon_uuid !== null
-            })
-            .map(item => {
+        const processedTrackingData = rawTrackingData.map(item => {
+
 
             /** Set the object's location in the form of lbeacon coordinate parsing by lbeacon uuid  */
-            const lbeaconCoordinate = this.createLbeaconCoordinate(item.lbeacon_uuid);
+            const lbeaconCoordinate = item.lbeacon_uuid ? this.createLbeaconCoordinate(item.lbeacon_uuid) : null;
             
-            lbsPosition.add(lbeaconCoordinate.toString());
+            // lbsPosition.add(lbeaconCoordinate.toString());
             item.currentPosition = lbeaconCoordinate
 
             /** Tag the object that is found */

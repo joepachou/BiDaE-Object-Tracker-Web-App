@@ -53,11 +53,13 @@ class MainContainer extends React.Component{
             duplicateSearchKey = [...searchKey]
         }
         duplicateSearchKey.filter(key => {
-            console.log(key !== 'all devices')
             return key !== 'all devices' || key !== 'my devices'
         })
 
-        let searchResultObjectTypeMap = searchResult.reduce((allObjectTypes, item) => {
+        let searchResultObjectTypeMap = searchResult
+            .filter(item => item.found)
+            .reduce((allObjectTypes, item) => {
+
             if (item.type in allObjectTypes) allObjectTypes[item.type]++
             else {
                 allObjectTypes[item.type] = 1

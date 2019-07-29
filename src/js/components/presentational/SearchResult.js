@@ -260,7 +260,7 @@ class SearchResult extends React.Component {
                 <Row className='d-flex justify-content-center' style={style.titleText}>
                     <h4 className='text-capitalize'>{locale.SEARCH_RESULT}</h4>
                 </Row>
-                <Row className='w-100 searchResultForMobile'>
+                <Row className='w-100 searchResultForMobile' style={style.foundResultDiv}>
                     <Alert variant='secondary' className='d-flex justify-content-start'>
                         <div style={style.alertTextTitle}>{'Found '}</div>
                         &nbsp;
@@ -314,12 +314,23 @@ class SearchResult extends React.Component {
                                 </a>
                             </h4>
                         </Row>
+                        <Row className='w-100 searchResultForMobile' style={style.notFoundResultDiv}>
+                            <Alert variant='secondary' className='d-flex justify-content-start'>
+                                <div style={style.alertTextTitle}>{'Not Found '}</div>
+                                &nbsp;
+                                &nbsp;
 
+                                <div style={style.alertText}>{this.props.searchResult.filter(item => !item.found).length}</div>
+                                &nbsp;
+                                <div style={style.alertText}>devices</div>
+                                &nbsp;
+                            </Alert>
+                        </Row>
                         <Row style={style.notFoundResultDiv}>
                             <Col className=''>
                                 <ListGroup onSelect={this.handleClickResultItem} className='searchResultListGroup'>
                                     {this.props.searchResult.filter(item => !item.found).map((item,index) => {
-                                        let element = 
+                                        let element =  
                                             <ListGroup.Item href={'#' + index} action style={style.listItem} className='searchResultList' eventKey={0 + ':' + index} key={index}>
                                                 <Row className="">
                                                     <Col xs={1} sm={1} lg={1} className="font-weight-bold d-flex align-self-center" style={style.firstText}>{index + 1}</Col>
@@ -327,12 +338,14 @@ class SearchResult extends React.Component {
                                                     <Col xs={1} sm={1} lg={1} className="d-flex align-self-center text-muted" style={style.middleText}>{item.access_control_number && item.access_control_number.slice(10, 14)}</Col>
                                                     <Col xs={3} sm={3} lg={3} className="d-flex align-self-center text-muted justify-content-center text-capitalize w" style={style.lastText}>
                                                         {item.status.toLowerCase() === config.objectStatus.NORMAL
-                                                            ? `near ${item.location_description}`
-                                                            : item.status
+                                                            ? item.lbeacon_uuid
+                                                                ? `near ${item.location_description}`
+                                                                : 'no record'
+                                                            : item.status                                                                
                                                         }
                                                     </Col>
-                                                    <Col xs={3} sm={3} lg={3} className="d-flex align-self-center text-muted" style={style.middleText}>
-                                                        {item.residence_time}
+                                                    <Col xs={3} sm={3} lg={3} className="d-flex align-self-center text-muted text-capitalize" style={style.middleText}>
+                                                        {item.lbeacon_uuid ? item.residence_time : 'no record'}
                                                     </Col>
                                                 </Row>
                                             </ListGroup.Item>
