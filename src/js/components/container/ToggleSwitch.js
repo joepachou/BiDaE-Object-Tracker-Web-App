@@ -16,7 +16,7 @@ class ToggleSwitch extends React.Component {
 
 	toggleState(e) {
 		const name = e.target.name;
-		this.props.adjustRssi(e.target.value);
+		this.props.changeLocationAccuracy(e.target.value);
 		this.setState({
 			toggle: name,
 		});

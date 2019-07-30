@@ -12,7 +12,6 @@ import dataSrc from '../../dataSrc';
 import { connect } from 'react-redux'
 import { 
     shouldUpdateTrackingData,
-    changeLocationAccuracy
 } from '../../action/action'
 import GridButton from '../container/GridButton';
 
@@ -30,7 +29,6 @@ class SurveillanceContainer extends React.Component {
             searchableObjectData: [],
         }
 
-        this.adjustRssi = this.adjustRssi.bind(this);
         this.handleMarkerClick = this.handleMarkerClick.bind(this);
         this.handleChangeObjectStatusFormClose = this.handleChangeObjectStatusFormClose.bind(this);
         this.handleChangeObjectStatusFormSubmit = this.handleChangeObjectStatusFormSubmit.bind(this);
@@ -38,15 +36,6 @@ class SurveillanceContainer extends React.Component {
         this.handleClickButton = this.handleClickButton.bind(this)
         this.transferSearchableObjectDataToMain = this.transferSearchableObjectDataToMain.bind(this)
     }
-
-
-    adjustRssi(accuracyValue) {
-        this.props.changeLocationAccuracy(accuracyValue)
-        this.setState({
-            rssi: accuracyValue,
-        })
-    }
-
 
     handleMarkerClick(objectList) {
         this.setState({
@@ -207,7 +196,7 @@ class SurveillanceContainer extends React.Component {
                         </Nav.Item>
                         <Nav.Item className='pt-2 mr-2'>
                             <ToggleSwitch 
-                                adjustRssi={this.adjustRssi} 
+                                changeLocationAccuracy={this.props.changeLocationAccuracy} 
                                 leftLabel='low'
                                 defaultLabel='med' 
                                 rightLabel='high'
@@ -260,7 +249,6 @@ SurveillanceContainer.contextType = LocaleContext;
 const mapDispatchToProps = (dispatch) => {
     return {
         shouldUpdateTrackingData: value => dispatch(shouldUpdateTrackingData(value)),
-        changeLocationAccuracy: value => dispatch(changeLocationAccuracy(value))
     }
 }
 

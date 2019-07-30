@@ -8,6 +8,7 @@ function query_getTrackingData (accuracyValue = 1) {
 			object_summary_table.geofence_type,
 			object_summary_table.panic_timestamp,
 			object_summary_table.geofence_violation_timestamp,
+			object_summary_table.rssi,
 			object_table.name,
 			object_table.type,
 			object_table.status,

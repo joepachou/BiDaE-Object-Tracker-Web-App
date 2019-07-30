@@ -28,6 +28,29 @@ import {
 const myDevices = config.frequentSearchOption.MY_DEVICES;
 const allDevices = config.frequentSearchOption.ALL_DEVICES;
 
+moment.updateLocale('en', {
+    relativeTime : Object
+});
+
+moment.updateLocale('en', {
+    relativeTime : {
+        future: "in %s",
+        past:   "%s ago",
+        s  : '1 minute',
+        ss : '1 minute',
+        m:  "1 minute",
+        mm: "%d minutes",
+        h:  "1 hour",
+        hh: "%d hours",
+        d:  "1 day",
+        dd: "%d days",
+        M:  "1 month",
+        MM: "%d months",
+        y:  "1 year",
+        yy: "%d years"
+    }
+});
+
 class MainContainer extends React.Component{
 
     constructor(props){
@@ -42,12 +65,14 @@ class MainContainer extends React.Component{
             searchResultObjectTypeMap: {},
             clearSearchResult: false,
             hasGridButton: false,
+            rssiThreshold: config.surveillanceMap.locationAccuracyMapToDefault[1]
         }
 
         this.processSearchResult = this.processSearchResult.bind(this);
         this.handleClearButton = this.handleClearButton.bind(this)
         this.getSearchKey = this.getSearchKey.bind(this)
         this.getTrackingData = this.getTrackingData.bind(this)
+        this.changeLocationAccuracy = this.changeLocationAccuracy.bind(this)
     }
 
     componentDidMount() {
@@ -65,6 +90,13 @@ class MainContainer extends React.Component{
         clearInterval(this.interval);
     }
 
+    changeLocationAccuracy(locationAccuracy) {
+        const rssiThreshold = config.surveillanceMap.locationAccuracyMapToDefault[locationAccuracy]
+        this.setState({
+            rssiThreshold
+        })
+    }
+
     getTrackingData() {
         Axios.get(dataSrc.getTrackingData)
         .then(res => {
@@ -79,31 +111,7 @@ class MainContainer extends React.Component{
     handleTrackingData(rawTrackingData) {
         
         // let lbsPosition = new Set()
-
-        moment.updateLocale('en', {
-            relativeTime : Object
-        });
-
-        moment.updateLocale('en', {
-            relativeTime : {
-                future: "in %s",
-                past:   "%s ago",
-                s  : '1 minute',
-                ss : '1 minute',
-                m:  "1 minute",
-                mm: "%d minutes",
-                h:  "1 hour",
-                hh: "%d hours",
-                d:  "1 day",
-                dd: "%d days",
-                M:  "1 month",
-                MM: "%d months",
-                y:  "1 year",
-                yy: "%d years"
-            }
-        });
         const processedTrackingData = rawTrackingData.map(item => {
-
 
             /** Set the object's location in the form of lbeacon coordinate parsing by lbeacon uuid  */
             const lbeaconCoordinate = item.lbeacon_uuid ? this.createLbeaconCoordinate(item.lbeacon_uuid) : null;
@@ -111,8 +119,11 @@ class MainContainer extends React.Component{
             // lbsPosition.add(lbeaconCoordinate.toString());
             item.currentPosition = lbeaconCoordinate
 
-            /** Tag the object that is found */
-            item.found = moment().diff(item.last_seen_timestamp, 'seconds') < config.objectManage.notFoundObjectTimePeriod ? 1 : 0
+            /** Tag the object that is found 
+             *  if the object's last_seen_timestamp is in the specific time period
+             *  and its rssi is below the specific rssi threshold  */
+            item.found = moment().diff(item.last_seen_timestamp, 'seconds') < config.objectManage.notFoundObjectTimePeriod 
+                && item.rssi > this.state.rssiThreshold ? 1: 0;
 
             /** Set the residence time of the object */
             item.residence_time = this.createResidenceTime(item.first_seen_timestamp, item.last_seen_timestamp, item.found)
@@ -303,6 +314,7 @@ class MainContainer extends React.Component{
                                     handleClearButton={this.handleClearButton}
                                     getSearchKey={this.getSearchKey}
                                     clearColorPanel={clearColorPanel}
+                                    changeLocationAccuracy={this.changeLocationAccuracy}
 
                                 />
                             </Col>
