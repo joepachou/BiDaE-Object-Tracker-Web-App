@@ -249,3 +249,7 @@ a:hover {
     overflow: hidden scroll;
 }
 
+/* React-table*/
+.rt-td {
+    margin: 5px
+}
