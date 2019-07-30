@@ -31,6 +31,7 @@ class MainContainer extends React.Component{
     constructor(props){
         super(props)
         this.state = {
+            trackingData: [],
             hasSearchKey: false,
             searchKey: '',
             searchResult: [],
@@ -75,8 +76,10 @@ class MainContainer extends React.Component{
     getTrackingData() {
         retrieveDataService.getTrackingData()
         .then(res => {
-            const processedTrackingData = this.handleTrackingData(res.data.rows)
-            this.props.retrieveTrackingData(processedTrackingData)
+            const trackingData = this.handleTrackingData(res.data.rows)
+            this.setState({
+                trackingData
+            })
         })
         .catch(error => {
             console.log(error)
@@ -143,6 +146,7 @@ class MainContainer extends React.Component{
             delete item.last_seen_timestamp
             delete item.geofence_violation_timestamp
             delete item.panic_timestamp
+            delete item.rssi
 
             return item
         })
@@ -252,18 +256,18 @@ class MainContainer extends React.Component{
 
         if (searchKey === myDevices) {
             const devicesAccessControlNumber = auth.userInfo.myDevice
-            this.props.objectInfo.map(item => {
+            this.state.trackingData.map(item => {
                 devicesAccessControlNumber.includes(item.access_control_number) ? searchResult.push(item) : null;
             })
         } else if (searchKey === allDevices) {
-            searchResult = this.props.objectInfo
+            searchResult = this.state.trackingData
         } else if (typeof searchKey === 'object') {
-            this.props.objectInfo.map(item => {
+            this.state.trackingData.map(item => {
                 searchKey.includes(item.type) ? searchResult.push(item) : null;
                 item.pinColor = colorPanel[item.type];
             })
         } else {
-            this.props.objectInfo.map(item => {
+            this.state.trackingData.map(item => {
                 if (item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0
                     || item.access_control_number.slice(10,14).indexOf(searchKey) >= 0
                     || item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0) {
@@ -301,11 +305,11 @@ class MainContainer extends React.Component{
                                 <br/>
                                 {this.state.hasSearchKey 
                                     ?   <InfoPrompt data={this.state.searchResultObjectTypeMap} />                                        
-                                    :   <InfoPrompt data={{devices: this.props.objectInfo.filter(item => item.found).length}} />
+                                    :   <InfoPrompt data={{devices: this.state.trackingData.filter(item => item.found).length}} />
                                 }     
                                 <SurveillanceContainer 
+                                    trackingData={this.state.trackingData}
                                     hasSearchKey={hasSearchKey}
-                                    searchableObjectData={this.props.objectInfo} 
                                     searchResult={searchResult}
                                     searchType={searchType}
                                     colorPanel={colorPanel}
@@ -318,7 +322,6 @@ class MainContainer extends React.Component{
                             </Col>
                             <Col xs={12} sm={5} md={3} lg={3} xl={3} className="w-100 px-2">
                                 <SearchContainer 
-                                    searchableObjectData={this.props.objectInfo} 
                                     hasSearchKey={this.state.hasSearchKey}
                                     clearSearchResult={this.state.clearSearchResult}
                                     hasGridButton={this.state.hasGridButton}
@@ -348,17 +351,10 @@ MainContainer.contextType = AuthenticationContext;
 const mapStateToProps = (state) => {
     return {
         shouldTrackingDataUpdate: state.retrieveTrackingData.shouldTrackingDataUpdate,
-        objectInfo: state.retrieveTrackingData.objectInfo
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        retrieveTrackingData: object => dispatch(retrieveTrackingData(object)),
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(MainContainer)
+export default connect(mapStateToProps)(MainContainer)
 
 
 

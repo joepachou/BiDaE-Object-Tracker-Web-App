@@ -41,21 +41,12 @@ class SearchContainer extends React.Component {
         */
         if (this.state.refreshSearchResult 
             && this.state.hasSearchKey 
-            && !this.props.hasGridButton
-            && !(_.isEqual(prepProps.searchableObjectData, this.props.searchableObjectData))) {
+            && !this.props.hasGridButton) {
             this.props.getSearchKey(this.state.searchKey)            
         }
-        
         if (prepProps.clearSearchResult !== this.props.clearSearchResult && this.props.clearSearchResult) {
             this.setState({
                 searchKey: '',
-            })
-        }
-
-        if (this.props.searchableObjectData != null && this.state.hasSearchableObjectData === false) {
-            this.getObjectType();
-            this.setState({
-                hasSearchableObjectData: true,
             })
         }
         if (prepProps.hasSearchKey !== this.props.hasSearchKey && prepProps.hasSearchKey) {
@@ -164,52 +155,6 @@ class SearchContainer extends React.Component {
             })
         }
     }
-
-    /**
-     * Fired once the user click the item in object type list or in frequent seaerch
-     * Also, popout the searchResult component.
-     */
-    // getSearchKey(searchKey) {
-    //     /** this.props.searchableObjectData data path: Surveillance -> SurveillanceContainer -> MainContainer -> SearchContainer  */
-    //     const searchResult = this.getResultBySearchKey(searchKey)
-
-    //     /** Transfer the searched object data from SearchContainer to MainContainer */
-    //     this.props.transferSearchResultToMain(searchResult, null, searchKey)
-
-    //     this.setState({
-    //         searchResult: searchResult,
-    //         hasSearchKey: true,
-    //         searchKey: searchKey,
-    //     })
-    // }
-
-    // getResultBySearchKey(searchKey) {
-    //     console.log(searchKey)
-    //     const myDevices = config.frequentSearchOption.MY_DEVICES;
-    //     const allDevices = config.frequentSearchOption.ALL_DEVICES;
-    //     let searchResult = [];
-    //         switch(searchKey) {
-    //             case myDevices:
-    //                 const devicesAccessControlNumber = this.props.auth.userInfo.myDevice
-    //                 Object.values(this.props.searchableObjectData).map(item => {
-    //                     devicesAccessControlNumber.includes(item.access_control_number) ? searchResult.push(item) : null;
-    //                 })
-    //                 break;
-    //             case allDevices:
-    //                 searchResult = Object.values(this.props.searchableObjectData)
-    //                 break;
-    //             default: 
-    //                 Object.values(this.props.searchableObjectData).map(item => {
-    //                     if (item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0
-    //                         || item.access_control_number.slice(10,14).indexOf(searchKey) >= 0
-    //                         || item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0) {
-    //                         searchResult.push(item)
-    //                     }
-    //                 })
-    //                 break;
-    //         }
-    //     return searchResult
-    // }
 
     render() {
         /** Customized CSS of searchResult */

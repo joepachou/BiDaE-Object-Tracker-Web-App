@@ -12,8 +12,6 @@ import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import '../../../css/CustomMarkerCluster.css'
 import '../../leaflet_awesome_number_markers';
 
-import { Row, Col } from 'react-bootstrap';
-
 /** Redux related Library  */
 import { 
     isObjectListShown,
@@ -76,7 +74,7 @@ class Surveillance extends React.Component {
         // })
         // console.log(_.isEqual(nextProps.objectInfo, this.props.objectInfo))
         return !(_.isEqual(nextProps.searchResult, this.props.searchResult)) 
-            || (this.props.shouldTrackingDataUpdate && !(_.isEqual(nextProps.objectInfo, this.props.objectInfo)))
+            || (this.props.shouldTrackingDataUpdate && !(_.isEqual(nextProps.trackingData, this.props.trackingData)))
     }
 
     
@@ -184,7 +182,7 @@ class Surveillance extends React.Component {
      */
     handleObjectMarkers(){
         const { hasSearchKey, searchResult } = this.props;
-        let objects = _.cloneDeep(this.props.objectInfo)        
+        let objects = _.cloneDeep(this.props.trackingData)        
 
         /** Process the search object data */
         var searchedObjectDataMap= new Map();
@@ -345,7 +343,7 @@ class Surveillance extends React.Component {
 
     collectObjectsByLatLng(currentPositionArray) {
         let objectList = []
-        Object.values(this.props.objectInfo).map(item => {
+        Object.values(this.props.trackingData).map(item => {
             item.currentPosition && item.currentPosition.toString() === currentPositionArray.toString() ? objectList.push(item) : null;
         })
         return objectList 
@@ -380,7 +378,6 @@ class Surveillance extends React.Component {
     popupContent (objectsMap){
         let currentPosition = objectsMap[0].currentPosition
         let objectList = this.collectObjectsByLatLng(currentPosition)
-
         /* The style sheet is right in the src/css/Surveillance.css*/
         const locale = this.context
 
@@ -425,7 +422,6 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state) => {
     return {
         shouldTrackingDataUpdate: state.retrieveTrackingData.shouldTrackingDataUpdate,
-        objectInfo: state.retrieveTrackingData.objectInfo
     }
 }
 

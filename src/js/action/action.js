@@ -1,7 +1,6 @@
 import { 
     IS_OBJECT_LIST_SHOWN, 
     SELECT_OBJECT_LIST,
-    RETRIEVE_TRACKING_DATA,
     SHOULD_UPDATE_TRACKING_DATA,
 } from './actionType';
 
@@ -21,12 +20,6 @@ export const selectObjectList = (array) => {
 }
 
 /** Retrieve tracking data action creator */
-export const retrieveTrackingData = (objectInfo) => {
-    return {
-        type: RETRIEVE_TRACKING_DATA,
-        object: objectInfo
-    }
-}
 
 export const shouldUpdateTrackingData = (boolean) => {
     return {

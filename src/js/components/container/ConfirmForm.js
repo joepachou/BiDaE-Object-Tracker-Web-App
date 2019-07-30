@@ -306,7 +306,6 @@ class ConfirmForm extends React.Component {
                 <AddDeviceForm
                     show={this.state.showAddDeviceForm}  
                     title='Add device' 
-                    searchableObjectData={this.props.searchableObjectData}
                     addedDevice={this.addedDevice}
                     handleAddDeviceFormClose={this.handleAddDeviceFormClose}
                     searchResult={this.props.searchResult}

@@ -26,7 +26,6 @@ class SurveillanceContainer extends React.Component {
             selectedObjectData: [],
             formOption: [],
             showDevice: false,
-            searchableObjectData: [],
         }
 
         this.handleMarkerClick = this.handleMarkerClick.bind(this);
@@ -34,7 +33,6 @@ class SurveillanceContainer extends React.Component {
         this.handleChangeObjectStatusFormSubmit = this.handleChangeObjectStatusFormSubmit.bind(this);
         this.handleConfirmFormSubmit = this.handleConfirmFormSubmit.bind(this);
         this.handleClickButton = this.handleClickButton.bind(this)
-        this.transferSearchableObjectDataToMain = this.transferSearchableObjectDataToMain.bind(this)
     }
 
     handleMarkerClick(objectList) {
@@ -125,18 +123,6 @@ class SurveillanceContainer extends React.Component {
         }
 
     }
-
-
-    transferSearchableObjectDataToMain(processData) {
-        this.props.transferSearchableObjectDataToMain(processData)
-        this.setState({
-            searchableObjectData: processData,
-        })
-    }
-
-    capitalFirstLetter(string) {
-        return string.charAt(0).toUpperCase() + string.substring(1)
-    }
     
     render(){
         const { rssi, 
@@ -148,7 +134,6 @@ class SurveillanceContainer extends React.Component {
         const { hasSearchKey, 
                 searchResult,
                 searchType, 
-                transferSearchableObjectDataToMain
             } = this.props;
         const locale = this.context;
 
@@ -185,6 +170,7 @@ class SurveillanceContainer extends React.Component {
                         handleMarkerClick={this.handleMarkerClick}
                         style={style.searchMap}
                         colorPanel={this.props.colorPanel}
+                        trackingData={this.props.trackingData}
 
                     />
                 </div>
@@ -238,7 +224,6 @@ class SurveillanceContainer extends React.Component {
                     selectedObjectData={formOption} 
                     handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose} 
                     handleConfirmFormSubmit={this.handleConfirmFormSubmit}
-                    searchableObjectData={this.state.searchableObjectData}
                 />
             </div>
         )
