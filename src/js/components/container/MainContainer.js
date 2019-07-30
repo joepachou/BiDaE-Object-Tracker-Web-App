@@ -17,6 +17,13 @@ import { connect } from 'react-redux'
 import config from '../../config';
 import InfoPrompt from '../presentational/InfoPrompt';
 import _ from 'lodash'
+import Axios from 'axios'
+import dataSrc from '../../dataSrc'
+import moment from 'moment'
+import { 
+    retrieveTrackingData,
+    retrieveObjectTable
+} from '../../action/action';
 
 const myDevices = config.frequentSearchOption.MY_DEVICES;
 const allDevices = config.frequentSearchOption.ALL_DEVICES;
@@ -40,6 +47,113 @@ class MainContainer extends React.Component{
         this.processSearchResult = this.processSearchResult.bind(this);
         this.handleClearButton = this.handleClearButton.bind(this)
         this.getSearchKey = this.getSearchKey.bind(this)
+        this.getTrackingData = this.getTrackingData.bind(this)
+    }
+
+    componentDidMount() {
+        this.props.shouldTrackingDataUpdate ? this.getTrackingData() : null;
+        this.interval = this.props.shouldTrackingDataUpdate ? setInterval(this.getTrackingData, config.surveillanceMap.intevalTime) : null;
+    }
+
+    componentDidUpdate(prepProps) {
+        if (prepProps.shouldTrackingDataUpdate !== this.props.shouldTrackingDataUpdate) {
+            this.interval = this.props.shouldTrackingDataUpdate ? setInterval(this.getTrackingData, config.surveillanceMap.intevalTime) : null;
+        }
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+
+    getTrackingData() {
+        Axios.get(dataSrc.getTrackingData)
+        .then(res => {
+            const processedTrackingData = this.handleTrackingData(res.data.rows)
+            this.props.retrieveTrackingData(processedTrackingData)
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    }
+
+    handleTrackingData(rawTrackingData) {
+        
+        // let lbsPosition = new Set()
+
+        moment.updateLocale('en', {
+            relativeTime : Object
+        });
+
+        moment.updateLocale('en', {
+            relativeTime : {
+                future: "in %s",
+                past:   "%s ago",
+                s  : '1 minute',
+                ss : '1 minute',
+                m:  "1 minute",
+                mm: "%d minutes",
+                h:  "1 hour",
+                hh: "%d hours",
+                d:  "1 day",
+                dd: "%d days",
+                M:  "1 month",
+                MM: "%d months",
+                y:  "1 year",
+                yy: "%d years"
+            }
+        });
+        const processedTrackingData = rawTrackingData.map(item => {
+
+
+            /** Set the object's location in the form of lbeacon coordinate parsing by lbeacon uuid  */
+            const lbeaconCoordinate = item.lbeacon_uuid ? this.createLbeaconCoordinate(item.lbeacon_uuid) : null;
+            
+            // lbsPosition.add(lbeaconCoordinate.toString());
+            item.currentPosition = lbeaconCoordinate
+
+            /** Tag the object that is found */
+            item.found = moment().diff(item.last_seen_timestamp, 'seconds') < config.objectManage.notFoundObjectTimePeriod ? 1 : 0
+
+            /** Set the residence time of the object */
+            item.residence_time = this.createResidenceTime(item.first_seen_timestamp, item.last_seen_timestamp, item.found)
+
+            /** Tag the object that is violate geofence */
+            if (moment().diff(item.geofence_violation_timestamp, 'seconds') > config.objectManage.geofenceViolationTimePeriod
+                || moment(item.first_seen_timestamp).diff(moment(item.geofence_violation_timestamp)) > 0) {
+                    
+                delete item.geofence_type
+            }
+
+            /** Tag the object that is on sos */
+            if (moment().diff(item.panic_timestamp, 'second') < config.objectManage.sosTimePeriod) {
+                item.panic = true
+            }
+            
+            /** Omit the unused field of the object */
+            delete item.first_seen_timestamp
+            delete item.last_seen_timestamp
+            delete item.geofence_violation_timestamp
+            delete item.panic_timestamp
+
+            return item
+        })
+        return processedTrackingData
+    }
+    
+    /** Set the residence time of the object */
+    createResidenceTime(start, end, isFound) {
+        const firstSeenTimestamp = moment(start)
+        const lastSeenTimestamp = moment(end)
+        return isFound ? lastSeenTimestamp.from(firstSeenTimestamp) : lastSeenTimestamp.fromNow();
+    }
+
+    /** Parsing the lbeacon's location coordinate from lbeacon_uuid*/
+    createLbeaconCoordinate(lbeacon_uuid){
+        /** Example of lbeacon_uuid: 00000018-0000-0000-7310-000000004610 */
+        const zz = lbeacon_uuid.slice(6,8);
+        const xx = parseInt(lbeacon_uuid.slice(14,18) + lbeacon_uuid.slice(19,23));
+        const yy = parseInt(lbeacon_uuid.slice(-8));
+        return [yy, xx];
     }
 
     /** Transfer the search result, not found list and color panel from SearchContainer, GridButton to MainContainer 
@@ -223,11 +337,20 @@ MainContainer.contextType = AuthenticationContext;
 
 const mapStateToProps = (state) => {
     return {
+        shouldTrackingDataUpdate: state.retrieveTrackingData.shouldTrackingDataUpdate,
         objectInfo: state.retrieveTrackingData.objectInfo
     }
 }
 
-export default connect(mapStateToProps)(MainContainer)
+const mapDispatchToProps = (dispatch) => {
+    return {
+        retrieveTrackingData: object => dispatch(retrieveTrackingData(object)),
+        retrieveObjectTable: objectArray => dispatch(retrieveObjectTable(objectArray))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainContainer)
+
 
 
 
