@@ -10,9 +10,9 @@ import EditLbeaconForm from './EditLbeaconForm'
 import Axios from 'axios';
 import dataSrc from '../../../js/dataSrc';
 import config from '../../config';
-import { connect } from 'react-redux';
 import LocaleContext from '../../context/LocaleContext';
 import { trackingTable } from '../../tables';
+import { retrieveDataService } from '../../retrieveDataService';
 
 
 class HealthReport extends React.Component{
@@ -31,7 +31,7 @@ class HealthReport extends React.Component{
         }
         this.getGatewayData = this.getGatewayData.bind(this)
         this.getLbeaconData = this.getLbeaconData.bind(this)
-        this.processTrackingData = this.processTrackingData.bind(this)
+        this.getTrackingData = this.getTrackingData.bind(this)
         this.handleSubmitForm = this.handleSubmitForm.bind(this)
         this.handleCloseForm = this.handleCloseForm.bind(this)
         this.startSetInterval = config.healthReport.startInteval
@@ -46,6 +46,7 @@ class HealthReport extends React.Component{
     componentDidMount(){
         this.getLbeaconData();
         this.getGatewayData();
+        this.getTrackingData()
         this.getGatewayDataInterval = this.startSetInterval ? setInterval(this.getGatewayData, config.healthReport.pollGatewayTableIntevalTime) : null;
         this.getLbeaconDataInterval = this.startSetInterval ? setInterval(this.getLbeaconData, config.healthReport.pollLbeaconTabelIntevalTime) : null;
     }
@@ -115,14 +116,14 @@ class HealthReport extends React.Component{
         })
     }
 
-    processTrackingData(rawData){
-
-        const columns = trackingTable
-
-        this.setState({
-            trackingData: rawData,
-            trackingColunm: columns,
-        })
+    getTrackingData() {
+        retrieveDataService.getTrackingData()
+            .then(res => {
+                this.setState({
+                    trackingData: res.data.rows,
+                    trackingColunm: trackingTable
+                })
+            })
     }
 
     handleSubmitForm() {
@@ -148,16 +149,20 @@ class HealthReport extends React.Component{
                 width:'100%',
                 fontSize: '1em',
             },
+            container: {
+                width: '100%',
+                paddingRight: 15,
+                paddingLeft: 15,
+                margin: '0 10rem 0 10rem'
+            }
         }
-
-        const { trackingData, trackingColunm } = this.state;
 
         const locale = this.context;
 
         return(
-            <Container className='py-4'fluid >
-                <Tabs defaultActiveKey="lbeacon_table" transition={false} id="noanim-tab-example">
-                    <Tab eventKey="lbeacon_table" title="LBeacon">
+            <Container className='py-4' fluid>
+                <Tabs defaultActiveKey="lbeacon_table" transition={false} id="noanim-tab-example" variant="pills">
+                    <Tab eventKey="lbeacon_table" title="LBeacon" > 
                         <ReactTable 
                             style={style.reactTable} 
                             data={this.state.lbeaconData} 
@@ -185,8 +190,6 @@ class HealthReport extends React.Component{
                                     }
                                 }
                             }}
-
-                            
                         />
                     </Tab>
                     <Tab eventKey="gateway_table" title="Gateway">
@@ -197,16 +200,14 @@ class HealthReport extends React.Component{
                             showPagination = {false}
                             resizable={true}
                             freezeWhenExpanded={false}
-
-
                         />
                     </Tab>
                     <Tab eventKey="tracking_table" title="Tracking Object">
                         <ReactTable 
                             minRows={6} 
                             defaultPageSize={50} 
-                            data={trackingData} 
-                            columns={trackingColunm} 
+                            data={this.state.trackingData} 
+                            columns={this.state.trackingColunm} 
                             pageSizeOptions={[5, 10]}
                             resizable={true}
                             freezeWhenExpanded={false}
@@ -227,12 +228,4 @@ class HealthReport extends React.Component{
 
 HealthReport.contextType = LocaleContext
 
-
-/** Which State do you need */
-const mapStateToProps = state => {
-    return {
-        objectInfo: state.retrieveTrackingData.objectInfo
-    }
-}
-
-export default connect(mapStateToProps)(HealthReport);
+export default HealthReport;

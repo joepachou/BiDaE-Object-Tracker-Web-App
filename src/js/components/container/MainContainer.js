@@ -17,13 +17,12 @@ import { connect } from 'react-redux'
 import config from '../../config';
 import InfoPrompt from '../presentational/InfoPrompt';
 import _ from 'lodash'
-import Axios from 'axios'
-import dataSrc from '../../dataSrc'
 import moment from 'moment'
 import { 
     retrieveTrackingData,
     retrieveObjectTable
 } from '../../action/action';
+import { retrieveDataService } from '../../retrieveDataService'
 
 const myDevices = config.frequentSearchOption.MY_DEVICES;
 const allDevices = config.frequentSearchOption.ALL_DEVICES;
@@ -98,7 +97,7 @@ class MainContainer extends React.Component{
     }
 
     getTrackingData() {
-        Axios.get(dataSrc.getTrackingData)
+        retrieveDataService.getTrackingData()
         .then(res => {
             const processedTrackingData = this.handleTrackingData(res.data.rows)
             this.props.retrieveTrackingData(processedTrackingData)
