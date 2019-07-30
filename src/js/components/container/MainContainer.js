@@ -10,7 +10,7 @@ import 'react-table/react-table.css';
 import SearchResult from '../presentational/SearchResult'
 
 
-import { Row, Col, Hidden, Visible } from 'react-grid-system';
+import { Row, Col } from 'react-bootstrap'
 import SurveillanceContainer from './SurveillanceContainer';
 import AuthenticationContext from '../../context/AuthenticationContext';
 import { connect } from 'react-redux'
@@ -20,35 +20,11 @@ import _ from 'lodash'
 import moment from 'moment'
 import { 
     retrieveTrackingData,
-    retrieveObjectTable
 } from '../../action/action';
 import { retrieveDataService } from '../../retrieveDataService'
 
 const myDevices = config.frequentSearchOption.MY_DEVICES;
 const allDevices = config.frequentSearchOption.ALL_DEVICES;
-
-moment.updateLocale('en', {
-    relativeTime : Object
-});
-
-moment.updateLocale('en', {
-    relativeTime : {
-        future: "in %s",
-        past:   "%s ago",
-        s  : '1 minute',
-        ss : '1 minute',
-        m:  "1 minute",
-        mm: "%d minutes",
-        h:  "1 hour",
-        hh: "%d hours",
-        d:  "1 day",
-        dd: "%d days",
-        M:  "1 month",
-        MM: "%d months",
-        y:  "1 year",
-        yy: "%d years"
-    }
-});
 
 class MainContainer extends React.Component{
 
@@ -108,6 +84,29 @@ class MainContainer extends React.Component{
     }
 
     handleTrackingData(rawTrackingData) {
+
+        moment.updateLocale('en', {
+            relativeTime : Object
+        });
+        
+        moment.updateLocale('en', {
+            relativeTime : {
+                future: "in %s",
+                past:   "%s ago",
+                s  : '1 minute',
+                ss : '1 minute',
+                m:  "1 minute",
+                mm: "%d minutes",
+                h:  "1 hour",
+                hh: "%d hours",
+                d:  "1 day",
+                dd: "%d days",
+                M:  "1 month",
+                MM: "%d months",
+                y:  "1 year",
+                yy: "%d years"
+            }
+        });
         
         // let lbsPosition = new Set()
         const processedTrackingData = rawTrackingData.map(item => {
@@ -356,7 +355,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         retrieveTrackingData: object => dispatch(retrieveTrackingData(object)),
-        retrieveObjectTable: objectArray => dispatch(retrieveObjectTable(objectArray))
     }
 }
 

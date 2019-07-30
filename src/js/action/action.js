@@ -3,7 +3,6 @@ import {
     SELECT_OBJECT_LIST,
     RETRIEVE_TRACKING_DATA,
     SHOULD_UPDATE_TRACKING_DATA,
-    RETRIEVE_OBJECT_TABLE
 } from './actionType';
 
 /** Action Creator for Sidebar */
@@ -33,12 +32,5 @@ export const shouldUpdateTrackingData = (boolean) => {
     return {
         type: SHOULD_UPDATE_TRACKING_DATA,
         value: boolean 
-    }
-}
-
-export const retrieveObjectTable = (objectArray) => {
-    return {
-        type: RETRIEVE_OBJECT_TABLE,
-        value: objectArray 
     }
 }

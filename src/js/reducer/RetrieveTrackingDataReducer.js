@@ -1,14 +1,12 @@
 import { 
     RETRIEVE_TRACKING_DATA, 
     SHOULD_UPDATE_TRACKING_DATA,
-    RETRIEVE_OBJECT_TABLE,
 } from '../action/actionType';
 import config from '../config';
 
 const initialState = {
     shouldTrackingDataUpdate: config.surveillanceMap.startInteval,
     objectInfo: [],
-    objectTable: [],
 }
 
 function RetrieveTrackingDataReducer (state = initialState, action) {
@@ -23,13 +21,6 @@ function RetrieveTrackingDataReducer (state = initialState, action) {
                 ...state,
                 shouldTrackingDataUpdate: action.value
             }
-        case RETRIEVE_OBJECT_TABLE:
-            return {
-                ...state,
-                objectTable: action.value
-            }
-
-
         default:
             return state
             

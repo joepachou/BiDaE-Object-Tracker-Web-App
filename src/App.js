@@ -3,20 +3,14 @@ import React from 'react';
 /** Container Component */
 import { BrowserRouter as Router,Switch, Route,  } from "react-router-dom";
 import NavbarContainer from './js/components/presentational/NavbarContainer'
-import { matchRoutes,renderRoutes } from 'react-router-config';
+import { renderRoutes } from 'react-router-config';
 import routes from './js/routes';
 import locale, { supportedLocale } from './js/locale';
 import LocaleContext from './js/context/LocaleContext';
 import AuthenticationContext from './js/context/AuthenticationContext'
 import config from './js/config';
-import Axios from 'axios';
-import dataSrc from './js/dataSrc';
-import { 
-    retrieveObjectTable
-} from './js/action/action';
-import { connect } from 'react-redux';
 import Cookies from 'js-cookie';
-import moment, { now } from 'moment'
+import moment from 'moment'
 
 class App extends React.Component {
 
@@ -34,9 +28,6 @@ class App extends React.Component {
         this.handleAuthentication = this.handleAuthentication.bind(this)
     }
 
-    componentDidMount() {
-        this.getObjectTable()
-    }
 
     handleChangeLocale(lang){
         
@@ -53,14 +44,6 @@ class App extends React.Component {
                 isSignin: auth.authentication,
                 userInfo: auth.userInfo
             }
-        })
-    }
-    
-    getObjectTable() {
-        Axios.get(dataSrc.getObjectTable).then(res => {
-            this.props.retrieveObjectTable(res.data)
-        }).catch(err => {
-            console.log(err)
         })
     }
 
@@ -86,13 +69,7 @@ class App extends React.Component {
 };
 
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        retrieveObjectTable: objectArray => dispatch(retrieveObjectTable(objectArray))
-    }
-}
-
-export default connect(null, mapDispatchToProps)(App)
+export default App;
 
 
 
