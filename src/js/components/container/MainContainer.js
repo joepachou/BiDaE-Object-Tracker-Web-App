@@ -37,6 +37,7 @@ class MainContainer extends React.Component{
             searchResultObjectTypeMap: {},
             clearSearchResult: false,
             hasGridButton: false,
+            isHighlightSearchPanel: false,
             rssiThreshold: config.surveillanceMap.locationAccuracyMapToDefault[1]
         }
 
@@ -45,6 +46,7 @@ class MainContainer extends React.Component{
         this.getSearchKey = this.getSearchKey.bind(this)
         this.getTrackingData = this.getTrackingData.bind(this)
         this.changeLocationAccuracy = this.changeLocationAccuracy.bind(this)
+        this.highlightSearchPanel = this.highlightSearchPanel.bind(this)
     }
 
     componentDidMount() {
@@ -273,6 +275,12 @@ class MainContainer extends React.Component{
         }
         return searchResult
     }
+
+    highlightSearchPanel(boolean) {
+        this.setState({
+            isHighlightSearchPanel: boolean
+        })
+    }
     
     render(){
 
@@ -291,7 +299,7 @@ class MainContainer extends React.Component{
                 paddingTop: 30,
             },
             searchPanel: {
-                zIndex: 1060,
+                zIndex: this.state.isHighlightSearchPanel ? 1060 : null,
                 background: 'white',
                 borderRadius: 10,
             }
@@ -336,6 +344,7 @@ class MainContainer extends React.Component{
                                         processSearchResult={this.processSearchResult}
                                         colorPanel={this.state.colorPanel}
                                         auth={auth}
+                                        highlightSearchPanel={this.highlightSearchPanel}
                                     />
                                 </div>
                             </Col>

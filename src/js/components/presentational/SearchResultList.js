@@ -74,6 +74,7 @@ class SearchResult extends React.Component {
         const number = parseInt(eventItem[1])
         /** The reason using array to encapture the selectedObjectData is to have the consisten data form passed into ChangeStatusForm */
         this.toggleSelection(number, isFound)
+        this.props.highlightSearchPanel(true)
 
         this.props.shouldUpdateTrackingData(false)
     }
@@ -135,6 +136,7 @@ class SearchResult extends React.Component {
                 this.setState({
                     showConfirmForm: true,
                 })
+                this.props.highlightSearchPanel(false)
             }.bind(this),
             500
         )
@@ -180,6 +182,7 @@ class SearchResult extends React.Component {
                 function() {
                     this.setState ({
                         showConfirmForm: false,
+                        editedObjectPackage: []
                     })
                     // this.props.processSearchResult(changedStatusSearchResult, colorPanel )
                     this.props.shouldUpdateTrackingData(true)
@@ -255,7 +258,7 @@ class SearchResult extends React.Component {
                 color: 'rgba(101, 111, 121, 0.78)'
             },
             listgroupItem: {
-                zIndex: this.state.showCheckResult ? 1600 : null
+                cursor: this.state.showConfirmForm ? 'not-drop': null
             }, 
             icon: {
                 color: '#007bff'
@@ -290,10 +293,17 @@ class SearchResult extends React.Component {
                                 <ListGroup onSelect={this.handleSelectResultItem} className='searchResultListGroup'>
                                     {this.props.searchResult.filter(item => item.found).map((item,index) => {
                                         let element = 
-                                            <ListGroup.Item href={'#' + index} action style={style.listItem} className='searchResultList' eventKey={item.found + ':'+ index} key={index} style={style.listgroupItem}>
+                                            <ListGroup.Item 
+                                                href={'#' + index} 
+                                                action style={style.listItem} 
+                                                className='searchResultList' 
+                                                eventKey={item.found + ':'+ index} 
+                                                key={index} 
+                                                style={style.listgroupItem} 
+                                                disabled={this.state.showConfirmForm}
+                                            >
                                                 <Row>
-
-                                                    {this.state.showEditObjectForm
+                                                    {this.state.showEditObjectForm || this.state.showConfirmForm
                                                     ?
                                                         <Col xs={1} sm={1} lg={1} className="font-weight-bold d-flex align-self-center" style={style.firstText}>
                                                             {this.state.selection.indexOf(index) >= 0 
