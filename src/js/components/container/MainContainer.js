@@ -7,7 +7,7 @@ import SearchContainer from './SearchContainer';
 /** Import Presentational Component */
 
 import 'react-table/react-table.css';
-import SearchResult from '../presentational/SearchResult'
+import SearchResult from '../presentational/SearchResultList'
 
 
 import { Row, Col } from 'react-bootstrap'
@@ -18,9 +18,6 @@ import config from '../../config';
 import InfoPrompt from '../presentational/InfoPrompt';
 import _ from 'lodash'
 import moment from 'moment'
-import { 
-    retrieveTrackingData,
-} from '../../action/action';
 import { retrieveDataService } from '../../retrieveDataService'
 
 const myDevices = config.frequentSearchOption.MY_DEVICES;
@@ -35,7 +32,6 @@ class MainContainer extends React.Component{
             hasSearchKey: false,
             searchKey: '',
             searchResult: [],
-            searchType: '',
             colorPanel: null,
             clearColorPanel: false,
             searchResultObjectTypeMap: {},
@@ -280,7 +276,7 @@ class MainContainer extends React.Component{
     
     render(){
 
-        const { hasSearchKey, searchResult, searchType, colorPanel, clearColorPanel } = this.state;
+        const { hasSearchKey, searchResult, colorPanel, clearColorPanel } = this.state;
 
         const style = {
             container: {
@@ -294,12 +290,17 @@ class MainContainer extends React.Component{
                 display: this.state.hasSearchKey ? null : 'none',
                 paddingTop: 30,
             },
+            searchPanel: {
+                zIndex: 1060,
+                background: 'white',
+                borderRadius: 10,
+            }
         }
         return(
             <AuthenticationContext.Consumer>
                 {auth => (
                     /** "page-wrap" the default id named by react-burget-menu */
-                    <div id="page-wrap" className='' >
+                    <div id="page-wrap" className='mx-2' >
                         <Row id="mainContainer" className='d-flex w-100 justify-content-around mx-0 overflow-hidden' style={style.container}>
                             <Col sm={7} md={9} lg={9} xl={9} id='searchMap' className="pl-2 pr-1" >
                                 <br/>
@@ -311,7 +312,6 @@ class MainContainer extends React.Component{
                                     trackingData={this.state.trackingData}
                                     hasSearchKey={hasSearchKey}
                                     searchResult={searchResult}
-                                    searchType={searchType}
                                     colorPanel={colorPanel}
                                     handleClearButton={this.handleClearButton}
                                     getSearchKey={this.getSearchKey}
@@ -320,7 +320,7 @@ class MainContainer extends React.Component{
 
                                 />
                             </Col>
-                            <Col xs={12} sm={5} md={3} lg={3} xl={3} className="w-100 px-2">
+                            <Col xs={12} sm={5} md={3} lg={3} xl={3} className="w-100 px-2" style={style.searchPanel}>
                                 <SearchContainer 
                                     hasSearchKey={this.state.hasSearchKey}
                                     clearSearchResult={this.state.clearSearchResult}

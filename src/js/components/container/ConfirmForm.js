@@ -40,7 +40,6 @@ class ConfirmForm extends React.Component {
 
         this.handleShow = this.handleShow.bind(this);
         this.handleClose = this.handleClose.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleClick = this.handleClick.bind(this);
         this.addedDevice = this.addedDevice.bind(this);
@@ -80,10 +79,6 @@ class ConfirmForm extends React.Component {
                 }
             })
         }
-    }
-
-    handleSubmit(e) {
-        this.props.handleConfirmFormSubmit(e, this.state.addedDevices)
     }
 
     handleChange(e) {
@@ -162,84 +157,47 @@ class ConfirmForm extends React.Component {
                 <Modal show={this.state.show} onHide={this.handleClose} size="md">
                     <Modal.Header closeButton className='font-weight-bold'>{title}</Modal.Header >
                     <Modal.Body>
-                        <Row>
-                            <Col xs={12} sm={8}>
-                                <Row>
-                                    <Col {...colProps.titleCol}>
-                                        Device Type
-                                    </Col>
-                                    <Col {...colProps.inputCol} className='text-muted pb-1'>
-                                        {this.props.selectedObjectData.type}
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col {...colProps.titleCol}>
-                                        Device Name
-                                    </Col>
-                                    <Col {...colProps.inputCol} className='text-muted pb-1'>
-                                        {this.props.selectedObjectData.name}
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col {...colProps.titleCol}>
-                                        ACN
-                                    </Col>
-                                    <Col {...colProps.inputCol} className='text-muted pb-1'>
-                                        {this.props.selectedObjectData.access_control_number}
-                                    </Col>
-                                </Row>
-                            </Col>
-                            <Col xs={12} sm={4} className='d-flex align-items-center'>
-                                <Image src={tempImg} width={60}/>
-                            </Col>
-                        </Row>
-                        {this.state.addedDevices.length !== 0 
-                            ? 
-                                this.state.addedDevices.map((item,index) => {
-                                    return (
-                                        <>
-                                            <hr/>
-                                            <Row >
-                                                <Col xs={12} sm={10}>
-                                                    <Row>
-                                                        <Col {...colProps.titleCol}>
-                                                            Device Type
-                                                        </Col>
-                                                        <Col {...colProps.inputCol} className='text-muted pb-1'>
-                                                            {item.type}
-                                                        </Col>
-                                                    </Row>
-                                                    <Row>
-                                                        <Col {...colProps.titleCol}>
-                                                            Device Name
-                                                        </Col>
-                                                        <Col {...colProps.inputCol} className='text-muted pb-1'>
-                                                            {item.name}
-                                                        </Col>
-                                                    </Row>
-                                                    <Row>
-                                                        <Col {...colProps.titleCol}>
-                                                            ACN
-                                                        </Col>
-                                                        <Col {...colProps.inputCol} className='text-muted pb-1'>
-                                                            {item.access_control_number}
-                                                        </Col>
-                                                    </Row>
-                                                </Col>
-                                                <Col xs={12} sm={2} className='d-flex align-items-center'>
-                                                    <Image src={tempImg} width={60}/>
-                                                </Col>
-                                            </Row>
-                                        </>
-                                    )
-                                })   
-                            : null
-                        }
-                        
-                        <hr/>
+                        {this.props.selectedObjectData.map((item,index) => {
+                                return (
+                                    <div key={index}>
+                                        <Row key={index}>
+                                            <Col xs={12} sm={8}>
+                                                <Row>
+                                                    <Col {...colProps.titleCol}>
+                                                        Device Type
+                                                    </Col>
+                                                    <Col {...colProps.inputCol} className='text-muted pb-1'>
+                                                        {item.type}
+                                                    </Col>
+                                                </Row>
+                                                <Row>
+                                                    <Col {...colProps.titleCol}>
+                                                        Device Name
+                                                    </Col>
+                                                    <Col {...colProps.inputCol} className='text-muted pb-1'>
+                                                        {item.name}
+                                                    </Col>
+                                                </Row>
+                                                <Row>
+                                                    <Col {...colProps.titleCol}>
+                                                        ACN
+                                                    </Col>
+                                                    <Col {...colProps.inputCol} className='text-muted pb-1'>
+                                                        {item.access_control_number}
+                                                    </Col>
+                                                </Row>
+                                            </Col>
+                                            <Col xs={12} sm={4} className='d-flex align-items-center'>
+                                                <Image src={tempImg} width={80}/>
+                                            </Col>
+                                        </Row>
+                                        <hr/>
+                                    </div>
+                                )
+                            })}
                         <Row>
                             <Col className='d-flex justify-content-center text-capitalize'>
-                                <h5>{this.props.selectedObjectData.status}
+                                <h5>{this.props.selectedObjectData.length > 0 && this.props.selectedObjectData[0].status}
                                     {this.props.selectedObjectData.status === config.objectStatus.TRANSFERRED
                                         ? '  to  ' + this.props.selectedObjectData.transferredLocation
                                         : null
@@ -252,7 +210,7 @@ class ConfirmForm extends React.Component {
                                 <h6>{moment().format('LLLL')}</h6>    
                             </Col>
                         </Row>
-                        {this.props.selectedObjectData.status === config.objectStatus.TRANSFERRED && 
+                        {/* {this.props.selectedObjectData.status === config.objectStatus.TRANSFERRED && 
                             <>
                                 <hr/>
                                 <Row className='d-flex justify-content-center'>
@@ -266,7 +224,7 @@ class ConfirmForm extends React.Component {
                                     </ButtonToolbar>
                                 </Row>
                             </>
-                        }
+                        } */}
                         {this.props.selectedObjectData.status === config.objectStatus.RESERVE && 
                             <>
                                 <hr/>
@@ -298,7 +256,7 @@ class ConfirmForm extends React.Component {
                         <Button variant="outline-secondary" onClick={this.handleClose}>
                             Cancel
                         </Button>
-                        <Button variant="primary" onClick={this.handleSubmit}>
+                        <Button variant="primary" onClick={this.props.handleConfirmFormSubmit}>
                             Send
                         </Button>
                     </Modal.Footer>

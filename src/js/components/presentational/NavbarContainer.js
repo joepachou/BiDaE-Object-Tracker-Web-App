@@ -91,6 +91,7 @@ class NavbarContainer extends React.Component {
             navbar: {
                 boxShadow: "0 1px 6px 0 rgba(32,33,36,0.28)",
                 fontWeight: '450',
+                marginBottom: 10
             },
             navbarBrand: {
                 color: 'black'
@@ -117,7 +118,7 @@ class NavbarContainer extends React.Component {
                         
                         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                         <Navbar.Collapse id="responsive-navbar-nav">  
-                            <Nav className="mr-auto text-capitalize" >
+                            <Nav className="mr-auto text-capitalize my-auto" >
                                 <Nav.Item><Link to="/" className="nav-link nav-route" >{locale.HOME}</Link></Nav.Item>
                         {!auth.isSignin &&
                             <>

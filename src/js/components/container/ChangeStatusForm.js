@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Button, Row, Col, Image} from 'react-bootstrap'
+import { Modal, Button, Row, Col, Image, ButtonToolbar, ToggleButton} from 'react-bootstrap'
 import Select from 'react-select';
 import config from '../../config';
 import LocaleContext from '../../context/LocaleContext';
@@ -25,11 +25,10 @@ class ChangeStatusForm extends React.Component {
             show: this.props.show,
             isShowForm: false,
         };
-
-
         this.handleShow = this.handleShow.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleClick = this.handleClick.bind(this)
     }
   
     handleClose(e) {
@@ -56,6 +55,9 @@ class ChangeStatusForm extends React.Component {
             })
         }
     }
+    // shouldComponentUpdate(nextProps) {
+    //     return nextProps.selectedObjectData !== this.props.selectedObjectData
+    // }
 
     handleSubmit(radioGroup, select) {
         
@@ -69,7 +71,27 @@ class ChangeStatusForm extends React.Component {
             status: radioGroup,
             transferredLocation: radioGroup !== config.objectStatus.TRANSFERRED ? '' : select.value,
         }
-        this.props.handleChangeObjectStatusFormSubmit(postOption)
+        // this.props.handleChangeObjectStatusFormSubmit(postOption)
+        this.props.handleChangeObjectStatusFormSubmit(radioGroup, select)
+
+    }
+
+    handleClick(e) {
+        const item = e.target.innerText.toLowerCase();
+        switch(item) {
+            case 'add device':
+                this.props.handleAdditionalButton(item);
+                break;
+            case 'remove device':
+                console.log(item)
+                break;
+            case 'add notes':
+            case 'hide notes':
+                this.setState({
+                    showNotesControl: !this.state.showNotesControl
+                })
+                break;
+        }
     }
 
 
@@ -91,6 +113,18 @@ class ChangeStatusForm extends React.Component {
                 fontSize: '80%',
                 color: '#dc3545'
             },
+            modal: {
+                zIndex: 1050,
+                top:'10%',
+                left:'-10%',
+                right:'auto',
+                bottom:'auto',
+                padding: 0,
+            },
+            deviceList: {
+                maxHeight: '20rem',
+                overflow: 'hidden scroll' 
+            }
 
         }
 
@@ -111,41 +145,49 @@ class ChangeStatusForm extends React.Component {
 
         return (
             <>  
-                <Modal show={this.state.show} onHide={this.handleClose} size="md">
+                <Modal show={this.state.show} onHide={this.handleClose} size="md" style={style.modal}>
                     <Modal.Header closeButton className='font-weight-bold text-capitalize'>{title}</Modal.Header >
-                    <Modal.Body>
-                        <Row>
-                            <Col xs={12} sm={8}>
-                                <Row>
-                                    <Col {...colProps.titleCol}>
-                                        Device Type
-                                    </Col>
-                                    <Col {...colProps.inputCol} className='text-muted pb-1'>
-                                        {selectedObjectData.type}
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col {...colProps.titleCol}>
-                                        Device Name
-                                    </Col>
-                                    <Col {...colProps.inputCol} className='text-muted pb-1'>
-                                        {selectedObjectData.name}
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col {...colProps.titleCol}>
-                                        ACN
-                                    </Col>
-                                    <Col {...colProps.inputCol} className='text-muted pb-1'>
-                                        {selectedObjectData.access_control_number}
-                                    </Col>
-                                </Row>
-                            </Col>
-                            <Col xs={12} sm={4} className='d-flex align-items-center'>
-                                <Image src={tempImg} width={80}/>
-                            </Col>
-                        </Row>
-                    
+                    <div>
+                        <div className='m-3' style={style.deviceList}>
+                            {this.props.selectedObjectData.map((item,index) => {
+                                return (
+                                    <div key={index}>
+                                        {index > 0 ? <hr/> : null}
+                                        <Row>
+                                            <Col xs={12} sm={8}>
+                                                <Row>
+                                                    <Col {...colProps.titleCol}>
+                                                        Device Type
+                                                    </Col>
+                                                    <Col {...colProps.inputCol} className='text-muted pb-1'>
+                                                        {item.type}
+                                                    </Col>
+                                                </Row>
+                                                <Row>
+                                                    <Col {...colProps.titleCol}>
+                                                        Device Name
+                                                    </Col>
+                                                    <Col {...colProps.inputCol} className='text-muted pb-1'>
+                                                        {item.name}
+                                                    </Col>
+                                                </Row>
+                                                <Row>
+                                                    <Col {...colProps.titleCol}>
+                                                        ACN
+                                                    </Col>
+                                                    <Col {...colProps.inputCol} className='text-muted pb-1'>
+                                                        {item.access_control_number}
+                                                    </Col>
+                                                </Row>
+                                            </Col>
+                                            <Col xs={12} sm={4} className='d-flex align-items-center'>
+                                                <Image src={tempImg} width={80}/>
+                                            </Col>
+                                        </Row>
+                                    </div>
+                                )
+                            })}
+                        </div>
                         <hr/>
                         <Formik
                             initialValues = {{
@@ -167,12 +209,12 @@ class ChangeStatusForm extends React.Component {
                             })}
 
                             onSubmit={({ radioGroup, select }, { setStatus, setSubmitting }) => {
-                                this.handleSubmit(radioGroup, select)
+                                this.props.handleChangeObjectStatusFormSubmit(radioGroup, select)
                             }}
 
                             render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
-                                <Form className="text-capitalize">
-                                    <Row className="form-group my-3">
+                                <Form className="text-capitalize mx-3">
+                                    <Row className="form-group">
                                         <Col sm={2} className='d-flex'>
                                             <label htmlFor="status">{locale.STATUS}</label>
                                         </Col>
@@ -227,6 +269,17 @@ class ChangeStatusForm extends React.Component {
                                             </Row>                                                
                                         </Col>
                                     </Row>
+                                    <hr/>
+                                    <Row className='d-flex justify-content-center pb-3'>
+                                        <ButtonToolbar >
+                                            <Button variant="outline-secondary" className='mr-2' onClick={this.handleClick} active={this.props.showCheckResult}>
+                                                Add Device
+                                            </Button>
+                                            <Button variant="outline-secondary" className='mr-2' onClick={this.handleClick}>
+                                                {this.state.showNotesControl ? 'Add Notes' : 'Hide Notes'}
+                                            </Button>
+                                        </ButtonToolbar>
+                                    </Row>
                                     <Modal.Footer>
                                         <Button variant="outline-secondary" className="text-capitalize" onClick={this.handleClose}>
                                             {locale.CANCEL}
@@ -238,7 +291,7 @@ class ChangeStatusForm extends React.Component {
                                 </Form>
                             )}
                         />
-                    </Modal.Body>
+                    </div>
                 </Modal>
             </>
         );
