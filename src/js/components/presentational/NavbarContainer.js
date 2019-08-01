@@ -103,7 +103,7 @@ class NavbarContainer extends React.Component {
         return (
             <AuthenticationContext.Consumer>
                 {auth => (
-                    <Navbar id='navbar' bg="white" className="navbar sticky-top navbar-light" expand='md' style={style.navbar}>
+                    <Navbar id='navbar' bg="white" className="navbar sticky-top navbar-light" expand='lg' style={style.navbar}>
                         <Navbar.Brand className='px-0 mx-0'>  
                             <Link to="/" className="nav-link nav-brand d-flex align-items-center px-0" style={style.navbarBrand}>
                                 <Image

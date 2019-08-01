@@ -31,8 +31,7 @@
         font-size: 0.78rem;
     }
     .navbar-brand {
-        font-size: 1rem;
-        
+        font-size: 1rem;  
     }
 
     .navbar img {
@@ -47,11 +46,15 @@
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) and (max-width: 767.98px) { 
     html, body {
-        font-size: 14px;
+        /* font-size: 14px; */
     }
 
     #searchMap {
         display: none;
+    }
+
+    .navbar-brand {
+        font-size: 1rem;
     }
 
     #mapid {
@@ -63,17 +66,14 @@
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) and (max-width: 991.98px) {
     html, body {
-        font-size: 14px;
+        /* font-size: 14px; */
     }
 
     #navbar {
-        height: 50px;
-        font-size: 14px;
+        /* height: 50px; */
+        /* font-size: 14px; */
     }
 
-    .navbar-brand {
-        font-size: 1rem;
-    }
     /* .navbar img {
         width: 60px;
     } */
@@ -114,7 +114,7 @@
         height: 65px;
     }
     #mapid {
-        height: 65vh;
+        height: 55vh;
     } 
 
 }

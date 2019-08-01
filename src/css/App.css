@@ -13,6 +13,7 @@ html,body {
     /* height: 100%; */
 }
 
+
 /* html element */
 
 :focus {
@@ -85,6 +86,10 @@ a:hover {
 .lang-select.dropdown-item.active {
     background-color:  rgba(179, 177, 177, 0.317);
     color: black;
+}
+
+.modal-backdrop.show {
+    opacity: .4;
 }
 
 .navbar-light .navbar-nav .nav-link {
@@ -245,7 +250,7 @@ a:hover {
 
 /** Search Result List Group */ 
 .searchResultListGroup {
-    max-Height: 40vh;
+    max-Height: 35vh;
     overflow: hidden scroll;
 }
 
