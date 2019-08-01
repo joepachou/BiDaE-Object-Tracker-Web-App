@@ -271,7 +271,6 @@ class Surveillance extends React.Component {
              * then the color will be black, or grey.
              */
             let iconOption = {}
-
             if (item.panic) {
                 iconOption = sosIconOptions;
             } else if (item.geofence_type === config.objectStatus.FENCE){
@@ -336,15 +335,14 @@ class Surveillance extends React.Component {
     }
 
     handleMarkerClick(e) {
-        const currentPosition =  e.target.options.icon.options.currentPosition
-        let objectList = this.collectObjectsByLatLng(currentPosition)
-        this.props.handleMarkerClick(objectList)
+        const lbPosition =  e.target.options.icon.options.currentPosition
+        this.props.getSearchKey('coordinate', null, lbPosition)
     }
 
-    collectObjectsByLatLng(currentPositionArray) {
+    collectObjectsByLatLng(lbPosition) {
         let objectList = []
-        Object.values(this.props.trackingData).map(item => {
-            item.currentPosition && item.currentPosition.toString() === currentPositionArray.toString() ? objectList.push(item) : null;
+        this.props.trackingData.map(item => {
+            item.currentPosition && item.currentPosition.toString() === lbPosition.toString() ? objectList.push(item) : null;
         })
         return objectList 
     }

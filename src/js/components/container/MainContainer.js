@@ -243,12 +243,12 @@ class MainContainer extends React.Component{
     }
 
     /** Fired once the user click the item in object type list or in frequent seaerch */
-    getSearchKey(searchKey, colorPanel = null) {
-        const searchResult = this.getResultBySearchKey(searchKey, colorPanel)
+    getSearchKey(searchKey, colorPanel = null, searchValue = null) {
+        const searchResult = this.getResultBySearchKey(searchKey, colorPanel, searchValue)
         this.processSearchResult(searchResult, colorPanel, searchKey)
     }
 
-    getResultBySearchKey(searchKey, colorPanel) {
+    getResultBySearchKey(searchKey, colorPanel, searchValue) {
         const auth = this.context
         let searchResult = [];
 
@@ -259,6 +259,8 @@ class MainContainer extends React.Component{
             })
         } else if (searchKey === allDevices) {
             searchResult = this.state.trackingData
+        } else if (searchKey === 'coordinate') {
+            searchResult = this.collectObjectsByLatLng(searchValue)
         } else if (typeof searchKey === 'object') {
             this.state.trackingData.map(item => {
                 searchKey.includes(item.type) ? searchResult.push(item) : null;
@@ -275,7 +277,13 @@ class MainContainer extends React.Component{
         }
         return searchResult
     }
-
+    collectObjectsByLatLng(lbPosition) {
+        let objectList = []
+        this.state.trackingData.map(item => {
+            item.currentPosition && item.currentPosition.toString() === lbPosition.toString() ? objectList.push(item) : null;
+        })
+        return objectList 
+    }
     highlightSearchPanel(boolean) {
         this.setState({
             isHighlightSearchPanel: boolean
@@ -299,7 +307,7 @@ class MainContainer extends React.Component{
                 paddingTop: 30,
             },
             searchPanel: {
-                zIndex: this.state.isHighlightSearchPanel ? 1060 : null,
+                zIndex: this.state.isHighlightSearchPanel ? 10700 : 1,
                 background: 'white',
                 borderRadius: 10,
             }
@@ -325,7 +333,6 @@ class MainContainer extends React.Component{
                                     getSearchKey={this.getSearchKey}
                                     clearColorPanel={clearColorPanel}
                                     changeLocationAccuracy={this.changeLocationAccuracy}
-
                                 />
                             </Col>
                             <Col xs={12} sm={5} md={3} lg={3} xl={3} className="w-100 px-2" style={style.searchPanel}>

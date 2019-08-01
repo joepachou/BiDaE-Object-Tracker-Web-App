@@ -28,26 +28,19 @@ class SurveillanceContainer extends React.Component {
             showDevice: false,
         }
 
-        this.handleMarkerClick = this.handleMarkerClick.bind(this);
         this.handleChangeObjectStatusFormClose = this.handleChangeObjectStatusFormClose.bind(this);
         this.handleChangeObjectStatusFormSubmit = this.handleChangeObjectStatusFormSubmit.bind(this);
         this.handleConfirmFormSubmit = this.handleConfirmFormSubmit.bind(this);
         this.handleClickButton = this.handleClickButton.bind(this)
     }
 
-    handleMarkerClick(objectList) {
-        this.setState({
-            showEditObjectForm: true,
-            selectedObjectData: objectList,
-        })
-        this.props.shouldUpdateTrackingData(false)
-    }
 
     handleChangeObjectStatusFormClose() {
         this.setState({
             showEditObjectForm: false,
             showConfirmForm: false,
         })
+        this.props.getSearchKey('coordinate', null, )
         this.props.shouldUpdateTrackingData(true);
     }
 
@@ -133,7 +126,6 @@ class SurveillanceContainer extends React.Component {
             } = this.state;
         const { hasSearchKey, 
                 searchResult,
-                searchType, 
             } = this.props;
         const locale = this.context;
 
@@ -166,12 +158,10 @@ class SurveillanceContainer extends React.Component {
                         rssi={rssi} 
                         hasSearchKey={hasSearchKey}
                         searchResult={searchResult}
-                        searchType={searchType}
-                        handleMarkerClick={this.handleMarkerClick}
                         style={style.searchMap}
                         colorPanel={this.props.colorPanel}
                         trackingData={this.props.trackingData}
-
+                        getSearchKey={this.props.getSearchKey}
                     />
                 </div>
                 <div style={style.navBlock}>
@@ -207,24 +197,7 @@ class SurveillanceContainer extends React.Component {
                             />
                         </div>
                     </Nav>
-
                 </div>
-
-                <ChangeStatusForm 
-                    show={showEditObjectForm} 
-                    title='Report device status' 
-                    selectedObjectData={selectedObjectData} 
-                    searchKey={null}
-                    handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose}
-                    handleChangeObjectStatusFormSubmit={this.handleChangeObjectStatusFormSubmit}
-                />
-                <ConfirmForm 
-                    show={showConfirmForm}  
-                    title='Thank you for reporting' 
-                    selectedObjectData={formOption} 
-                    handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose} 
-                    handleConfirmFormSubmit={this.handleConfirmFormSubmit}
-                />
             </div>
         )
     }
