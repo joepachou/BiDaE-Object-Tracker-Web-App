@@ -125,7 +125,6 @@ class ChangeStatusForm extends React.Component {
                 maxHeight: '20rem',
                 overflow: 'hidden scroll' 
             }
-
         }
 
         const colProps = {
@@ -145,7 +144,13 @@ class ChangeStatusForm extends React.Component {
 
         return (
             <>  
-                <Modal show={this.state.show} onHide={this.handleClose} size="md" style={style.modal}>
+                <Modal id='myModal' 
+                    show={this.state.show} 
+                    onHide={this.handleClose} 
+                    size="md" 
+                    style={style.modal} 
+                    enforceFocus={false}
+                >
                     <Modal.Header closeButton className='font-weight-bold text-capitalize'>{title}</Modal.Header >
                     <div>
                         <div className='m-3' style={style.deviceList}>
@@ -256,7 +261,6 @@ class ChangeStatusForm extends React.Component {
                                                         value = {values.select}
                                                         onChange={value => setFieldValue("select", value)}
                                                         options={options}
-                                                        isSearchable={false}
                                                         isDisabled={values.radioGroup !== config.objectStatus.TRANSFERRED}
                                                         style={style.select}
                                                         components={{
