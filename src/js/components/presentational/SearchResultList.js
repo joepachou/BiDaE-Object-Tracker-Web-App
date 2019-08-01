@@ -119,6 +119,7 @@ class SearchResult extends React.Component {
             showCheckResult: false
         })
         this.props.shouldUpdateTrackingData(true)
+        this.props.highlightSearchPanel(false)
     }
 
     handleChangeObjectStatusFormSubmit(radioGroup, select) {
@@ -300,7 +301,6 @@ class SearchResult extends React.Component {
                                                 eventKey={item.found + ':'+ index} 
                                                 key={index} 
                                                 style={style.listgroupItem} 
-                                                disabled={this.state.showConfirmForm}
                                             >
                                                 <Row>
                                                     {this.state.showEditObjectForm || this.state.showConfirmForm
@@ -364,16 +364,8 @@ class SearchResult extends React.Component {
                                                     <Col xs={1} sm={1} lg={1} className="font-weight-bold d-flex align-self-center" style={style.firstText}>{index + 1}</Col>
                                                     <Col xs={4} sm={4} lg={4} className="d-flex align-self-center justify-content-center" style={style.middleText}>{item.type}</Col>
                                                     <Col xs={1} sm={1} lg={1} className="d-flex align-self-center text-muted" style={style.middleText}>{item.access_control_number && item.access_control_number.slice(10, 14)}</Col>
-                                                    <Col xs={3} sm={3} lg={3} className="d-flex align-self-center text-muted justify-content-center text-capitalize w" style={style.lastText}>
-                                                        {item.status.toLowerCase() === config.objectStatus.NORMAL
-                                                            ? item.lbeacon_uuid
-                                                                ? `near ${item.location_description}`
-                                                                : 'no record'
-                                                            : item.status                                                                
-                                                        }
-                                                    </Col>
-                                                    <Col xs={3} sm={3} lg={3} className="d-flex align-self-center text-muted text-capitalize" style={style.middleText}>
-                                                        {item.lbeacon_uuid ? item.residence_time : 'no record'}
+                                                    <Col xs={3} sm={3} lg={6} className="d-flex align-self-center text-muted justify-content-center text-capitalize w" style={style.lastText}>
+                                                        N/A
                                                     </Col>
                                                 </Row>
                                             </ListGroup.Item>
