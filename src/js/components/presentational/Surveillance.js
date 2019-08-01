@@ -277,12 +277,12 @@ class Surveillance extends React.Component {
                 iconOption = geofenceFAweIconOptions;
 			} else if (item.geofence_type === config.objectStatus.PERIMETER){
                 iconOption = geofencePAweIconOptions;
-			} else if (item.status !== config.objectStatus.NORMAL) {
-                iconOption = unNormalIconOptions;
-            } else if (item.searched && this.props.colorPanel) {
+			} else if (item.searched && this.props.colorPanel) {
                 iconOption = { markerColor:item.pinColor }
             } else if (item.searched) {
                 iconOption = searchedObjectAweIconOptions    
+            } else if (item.status !== config.objectStatus.NORMAL) {
+                iconOption = unNormalIconOptions;
             } else {
                 iconOption = stationaryAweIconOptions;
             }
