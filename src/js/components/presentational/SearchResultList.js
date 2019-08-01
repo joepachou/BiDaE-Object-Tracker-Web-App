@@ -49,7 +49,7 @@ class SearchResult extends React.Component {
             showNotFoundResult: false,
             selection: [],
             editedObjectPackage: [],
-            showCheckResult: false
+            showAddDevice: false
         }
         
         this.handleSelectResultItem = this.handleSelectResultItem.bind(this)
@@ -72,6 +72,7 @@ class SearchResult extends React.Component {
         const eventItem = eventKey.split(':');
         const isFound = parseInt(eventItem[0])
         const number = parseInt(eventItem[1])
+
         /** The reason using array to encapture the selectedObjectData is to have the consisten data form passed into ChangeStatusForm */
         this.toggleSelection(number, isFound)
         this.props.highlightSearchPanel(true)
@@ -79,29 +80,30 @@ class SearchResult extends React.Component {
         this.props.shouldUpdateTrackingData(false)
     }
 
-    toggleSelection(selectItem, isFound) {
+    toggleSelection(number, isFound) {
         let selection = [...this.state.selection]
-        const selectItemIndex = selection.indexOf(selectItem);
+        let selectItem = isFound ? this.props.searchResult.filter(item => item.found)[number]
+                                : this.props.searchResult.filter(item => !item.found)[number]
+        let mac = selectItem.mac_address
+        const index = selection.indexOf(mac);
+
         let selectedObjectData = [...this.state.selectedObjectData]
         if (isFound) {
-            if (this.state.showCheckResult) {
-                if (selectItemIndex >= 0) {
+            if (this.state.showAddDevice) {
+                if (index >= 0) {
                     if (selection.length === 1) return;
-                    selection = [...selection.slice(0, selectItemIndex), ...selection.slice(selectItemIndex + 1)];
-                    selectedObjectData = [...selectedObjectData.slice(0, selectItemIndex), ...selectedObjectData.slice(selectItemIndex + 1)]
+                    selection = [...selection.slice(0, index), ...selection.slice(index + 1)];
+                    selectedObjectData = [...selectedObjectData.slice(0, index), ...selectedObjectData.slice(index + 1)]
                 } else {
-                    selection.push(selectItem)
-                    selectedObjectData.push(this.props.searchResult.filter(item => item.found)[selectItem])
+                    selection.push(mac)
+                    selectedObjectData.push(selectItem)
                 }
             } else {
-                selection = []
-                selection.push(selectItem)
-                selectedObjectData = []
-                selectedObjectData.push(this.props.searchResult.filter(item => item.found)[selectItem])
+                selection = [mac]
+                selectedObjectData = [selectItem]
             }
         } else {
-            selectedObjectData = []
-            selectedObjectData.push(this.props.searchResult.filter(item => !item.found)[selectItem])
+            selectedObjectData = [selectItem]
         }
         this.setState({
             showEditObjectForm: true,
@@ -116,7 +118,7 @@ class SearchResult extends React.Component {
             showConfirmForm: false,
             selection: [],
             selectedObjectData: [],
-            showCheckResult: false
+            showAddDevice: false
         })
         this.props.shouldUpdateTrackingData(true)
         this.props.highlightSearchPanel(false)
@@ -183,7 +185,9 @@ class SearchResult extends React.Component {
                 function() {
                     this.setState ({
                         showConfirmForm: false,
-                        editedObjectPackage: []
+                        editedObjectPackage: [],
+                        selection: [],
+                        selectedObjectData: [],
                     })
                     // this.props.processSearchResult(changedStatusSearchResult, colorPanel )
                     this.props.shouldUpdateTrackingData(true)
@@ -198,15 +202,22 @@ class SearchResult extends React.Component {
 
     handleToggleNotFound(e) {
         e.preventDefault()
-        console.log(this.props.searchResult.filter(item => !item.found))
         this.setState({ 
             showNotFoundResult: !this.state.showNotFoundResult 
         })
     }
 
     handleAdditionalButton(text) {
+        let selection = []
+        let selectedObjectData = []
+        if (this.state.showAddDevice) {
+            selection.push(this.state.selection[0])
+            selectedObjectData.push(this.state.selectedObjectData[0])
+        }
         this.setState({
-            showCheckResult: !this.state.showCheckResult
+            showAddDevice: !this.state.showAddDevice,
+            selection: this.state.showAddDevice ? selection : this.state.selection,
+            selectedObjectData: this.state.showAddDevice ? selectedObjectData : this.state.selectedObjectData
         })
     }
 
@@ -283,7 +294,7 @@ class SearchResult extends React.Component {
                         &nbsp;
                     </Alert>
                 </Row>
-                <Row className='' style={style.foundResultDiv}>
+                <Row className='searchResultListGroup' style={style.foundResultDiv}>
                 
                     {this.props.searchResult.length === 0 
                         ?   <Col className='d-flex justify-content-center font-italic font-weight-lighter' style={style.noResultDiv}>
@@ -303,20 +314,14 @@ class SearchResult extends React.Component {
                                                 style={style.listgroupItem} 
                                             >
                                                 <Row>
-                                                    {this.state.showEditObjectForm || this.state.showConfirmForm
-                                                    ?
-                                                        <Col xs={1} sm={1} lg={1} className="font-weight-bold d-flex align-self-center" style={style.firstText}>
-                                                            {this.state.selection.indexOf(index) >= 0 
-                                                                ? <i className="fas fa-check" style={style.icon}></i> 
-                                                                : ''}
-                                                        </Col>
-                                                    : 
-                                                        <Col xs={1} sm={1} lg={1} className="font-weight-bold d-flex align-self-center" style={style.firstText}>
-                                                            {index + 1}
-                                                        </Col>
-                                                    }
-
-                                                    <Col xs={5} sm={5} lg={5} className="d-flex align-self-center justify-content-center" style={style.middleText}>{item.type}</Col>
+                                                    <Col xs={1} sm={1} lg={1} className="font-weight-bold d-flex align-self-center" style={style.firstText}>
+                                                        {this.state.selection.indexOf(item.mac_address) >= 0 
+                                                            ? <i className="fas fa-check" style={style.icon}></i> : ''}
+                                                    </Col>
+                                                    <Col xs={1} sm={1} lg={1} className="font-weight-bold d-flex align-self-center" style={style.firstText}>
+                                                        {index + 1}
+                                                    </Col>
+                                                    <Col xs={5} sm={5} lg={4} className="d-flex align-self-center justify-content-center" style={style.middleText}>{item.type}</Col>
                                                     <Col xs={2} sm={2} lg={2} className="d-flex align-self-center text-muted" style={style.middleText}>{item.access_control_number && item.access_control_number.slice(10, 14)}</Col>
                                                     <Col xs={4} sm={4} lg={4} className="d-flex align-self-center text-muted justify-content-center text-capitalize w" style={style.lastText}>
                                                         {item.status.toLowerCase() === config.objectStatus.NORMAL
@@ -384,7 +389,7 @@ class SearchResult extends React.Component {
                     handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose}
                     handleChangeObjectStatusFormSubmit={this.handleChangeObjectStatusFormSubmit}
                     handleAdditionalButton={this.handleAdditionalButton}
-                    showCheckResult={this.state.showCheckResult}
+                    showAddDevice={this.state.showAddDevice}
                 />
                 <ConfirmForm 
                     show={this.state.showConfirmForm}  

@@ -27,7 +27,6 @@ class ChangeStatusForm extends React.Component {
         };
         this.handleShow = this.handleShow.bind(this);
         this.handleClose = this.handleClose.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
         this.handleClick = this.handleClick.bind(this)
     }
   
@@ -59,23 +58,6 @@ class ChangeStatusForm extends React.Component {
     //     return nextProps.selectedObjectData !== this.props.selectedObjectData
     // }
 
-    handleSubmit(radioGroup, select) {
-        
-        let selectedObjectData = this.props.selectedObjectData[0]
-        const { mac_address, name, type, access_control_number } = selectedObjectData;
-        const postOption = {
-            name: name,
-            type: type,
-            access_control_number: access_control_number,
-            mac_address: mac_address,
-            status: radioGroup,
-            transferredLocation: radioGroup !== config.objectStatus.TRANSFERRED ? '' : select.value,
-        }
-        // this.props.handleChangeObjectStatusFormSubmit(postOption)
-        this.props.handleChangeObjectStatusFormSubmit(radioGroup, select)
-
-    }
-
     handleClick(e) {
         const item = e.target.innerText.toLowerCase();
         switch(item) {
@@ -83,7 +65,6 @@ class ChangeStatusForm extends React.Component {
                 this.props.handleAdditionalButton(item);
                 break;
             case 'remove device':
-                console.log(item)
                 break;
             case 'add notes':
             case 'hide notes':
@@ -144,7 +125,7 @@ class ChangeStatusForm extends React.Component {
 
         return (
             <>  
-                <Modal id='myModal' 
+                <Modal  
                     show={this.state.show} 
                     onHide={this.handleClose} 
                     size="md" 
@@ -153,10 +134,10 @@ class ChangeStatusForm extends React.Component {
                 >
                     <Modal.Header closeButton className='font-weight-bold text-capitalize'>{title}</Modal.Header >
                     <div>
-                        <div className='m-3' style={style.deviceList}>
+                        <div className='m-3 modalDeviceListGroup' style={style.deviceList}>
                             {this.props.selectedObjectData.map((item,index) => {
                                 return (
-                                    <div key={index}>
+                                    <div key={index} >
                                         {index > 0 ? <hr/> : null}
                                         <Row>
                                             <Col xs={12} sm={8}>
@@ -276,7 +257,7 @@ class ChangeStatusForm extends React.Component {
                                     <hr/>
                                     <Row className='d-flex justify-content-center pb-3'>
                                         <ButtonToolbar >
-                                            <Button variant="outline-secondary" className='mr-2' onClick={this.handleClick} active={this.props.showCheckResult}>
+                                            <Button variant="outline-secondary" className='mr-2' onClick={this.handleClick} active={this.props.showAddDevice}>
                                                 Add Device
                                             </Button>
                                             <Button variant="outline-secondary" className='mr-2' onClick={this.handleClick}>
