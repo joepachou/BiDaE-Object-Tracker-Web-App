@@ -10,12 +10,10 @@ html,body {
     width: 100%;
     overscroll-behavior: auto;
     background: white;
-    /* height: 100%; */
+    /* height: 100%; */   
 }
 
-
 /* html element */
-
 :focus {
     outline: 0;
 }
@@ -253,8 +251,28 @@ a:hover {
     max-Height: 35vh;
     overflow: hidden scroll;
 }
+.searchResultListGroup::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+}
+.searchResultListGroup::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, .5);
+    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+}
 
 /* React-table*/
 .rt-td {
     margin: 5px
+}
+
+/* Modal Device List Group */
+.modalDeviceListGroup::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+}
+.modalDeviceListGroup::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, .5);
+    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
 }
