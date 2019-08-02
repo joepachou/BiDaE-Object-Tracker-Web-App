@@ -47,21 +47,30 @@ class MainContainer extends React.Component{
         this.getTrackingData = this.getTrackingData.bind(this)
         this.changeLocationAccuracy = this.changeLocationAccuracy.bind(this)
         this.highlightSearchPanel = this.highlightSearchPanel.bind(this)
+        this.handleRefreshSearchResult = this.handleRefreshSearchResult.bind(this)
     }
 
     componentDidMount() {
-        this.props.shouldTrackingDataUpdate ? this.getTrackingData() : null;
+        // this.props.shouldTrackingDataUpdate ? this.getTrackingData() : null;
+        this.getTrackingData();
         this.interval = this.props.shouldTrackingDataUpdate ? setInterval(this.getTrackingData, config.surveillanceMap.intevalTime) : null;
     }
 
-    componentDidUpdate(prepProps) {
-        if (prepProps.shouldTrackingDataUpdate !== this.props.shouldTrackingDataUpdate) {
-            this.interval = this.props.shouldTrackingDataUpdate ? setInterval(this.getTrackingData, config.surveillanceMap.intevalTime) : null;
-        }
+    componentDidUpdate(prepProps) {    
     }
+
+    // shouldComponentUpdate(nextProps,nextState) {
+    //     console.log()
+    //     return (!(_.isEqual(this.state))) ||(!(_.isEqual(this.state.trackingData, nextState.trackingData)))
+    // }
 
     componentWillUnmount() {
         clearInterval(this.interval);
+    }
+
+    handleRefreshSearchResult() {
+        let { searchKey, colorPanel, searchValue } = this.state
+        this.getSearchKey(searchKey, colorPanel, searchValue)
     }
 
     changeLocationAccuracy(locationAccuracy) {
@@ -169,7 +178,7 @@ class MainContainer extends React.Component{
 
     /** Transfer the search result, not found list and color panel from SearchContainer, GridButton to MainContainer 
      *  The three variable will then pass into SurveillanceContainer */
-    processSearchResult(searchResult, colorPanel, searchKey) {
+    processSearchResult(searchResult, colorPanel, searchKey, searchValue) {
         /** Count the number of found object type */
         let duplicateSearchKey = []
         if (typeof searchKey === 'string') {
@@ -219,6 +228,7 @@ class MainContainer extends React.Component{
                 searchResultObjectTypeMap: searchResultObjectTypeMap, 
                 clearSearchResult: false,
                 hasGridButton: false,
+                searchValue
             })
         }
     }
@@ -245,7 +255,7 @@ class MainContainer extends React.Component{
     /** Fired once the user click the item in object type list or in frequent seaerch */
     getSearchKey(searchKey, colorPanel = null, searchValue = null) {
         const searchResult = this.getResultBySearchKey(searchKey, colorPanel, searchValue)
-        this.processSearchResult(searchResult, colorPanel, searchKey)
+        this.processSearchResult(searchResult, colorPanel, searchKey, searchValue)
     }
 
     getResultBySearchKey(searchKey, colorPanel, searchValue) {
@@ -352,6 +362,7 @@ class MainContainer extends React.Component{
                                         colorPanel={this.state.colorPanel}
                                         auth={auth}
                                         highlightSearchPanel={this.highlightSearchPanel}
+                                        handleRefreshSearchResult={this.handleRefreshSearchResult}
                                     />
                                 </div>
                             </Col>

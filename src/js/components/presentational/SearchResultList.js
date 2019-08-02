@@ -13,31 +13,6 @@ import Axios from 'axios';
 import Cookies from 'js-cookie';
 import config from '../../config';
 
-const Checkbox = ({
-        name, value, onChange, onBlur
-        ,errors, touched, setFieldValue,
-        id,
-        label,
-        className,
-        ...props
-    }) => {
-        return (
-            <div>
-                <input
-                    name={name}
-                    id={id}
-                    type="checkbox"
-                    value={value}
-                    checked={value}
-                    onChange={onChange}
-                    onBlur={onBlur}
-                />
-                <label htmlFor={id}>{label}</label>
-            </div>
-        );
-  };
-
-
 class SearchResult extends React.Component {
 
     constructor(props){
@@ -58,15 +33,22 @@ class SearchResult extends React.Component {
         this.handleChangeObjectStatusFormClose = this.handleChangeObjectStatusFormClose.bind(this);
         this.handleToggleNotFound = this.handleToggleNotFound.bind(this);
         this.handleAdditionalButton = this.handleAdditionalButton.bind(this);
+        this.handleRemoveButton = this.handleRemoveButton.bind(this)
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (this.state.showNotFoundResult && this.props.searchResult.filter(item => !item.found).length === 0) {
-            this.setState({
-                showNotFoundResult: false
-            })
-        }
+
+        // if (this.state.showNotFoundResult && this.props.searchResult.filter(item => !item.found).length === 0) {
+        //     this.setState({
+        //         showNotFoundResult: false
+        //     })
+        // }
     }
+    
+    // shouldComponentUpdate() {
+    //     console.log('should update');
+    //     return true
+    // }
 
     handleSelectResultItem(eventKey) {
         const eventItem = eventKey.split(':');
@@ -105,6 +87,8 @@ class SearchResult extends React.Component {
         } else {
             selectedObjectData = [selectItem]
         }
+        // console.log(selection)
+
         this.setState({
             showEditObjectForm: true,
             selection,
@@ -120,7 +104,7 @@ class SearchResult extends React.Component {
             selectedObjectData: [],
             showAddDevice: false
         })
-        this.props.shouldUpdateTrackingData(true)
+        // this.props.shouldUpdateTrackingData(true)
         this.props.highlightSearchPanel(false)
     }
 
@@ -147,7 +131,6 @@ class SearchResult extends React.Component {
 
     handleConfirmFormSubmit(e) {
         let { editedObjectPackage } = this.state;
-        const button = e.target
 
         const colorPanel = this.props.colorPanel ? this.props.colorPanel : null;
 
@@ -180,7 +163,6 @@ class SearchResult extends React.Component {
         Axios.post(dataSrc.editObjectPackage, {
             formOption: editedObjectPackage
         }).then(res => {
-            button.style.opacity = 0.4
             setTimeout(
                 function() {
                     this.setState ({
@@ -190,7 +172,8 @@ class SearchResult extends React.Component {
                         selectedObjectData: [],
                     })
                     // this.props.processSearchResult(changedStatusSearchResult, colorPanel )
-                    this.props.shouldUpdateTrackingData(true)
+                    // this.props.shouldUpdateTrackingData(true)
+                    this.props.handleRefreshSearchResult(true)
                 }
                 .bind(this),
                 1000
@@ -218,6 +201,23 @@ class SearchResult extends React.Component {
             showAddDevice: !this.state.showAddDevice,
             selection: this.state.showAddDevice ? selection : this.state.selection,
             selectedObjectData: this.state.showAddDevice ? selectedObjectData : this.state.selectedObjectData
+        })
+    }
+
+    handleRemoveButton(e) {
+        let mac = e.target.getAttribute('name')
+        let selection = [...this.state.selection]
+        let selectedObjectData = [...this.state.selectedObjectData]
+        let index = selection.indexOf(mac)
+        if (index > -1) {
+            selection = [...selection.slice(0, index), ...selection.slice(index + 1)]
+            selectedObjectData = [...selectedObjectData.slice(0, index), ...selectedObjectData.slice(index + 1)]
+        } else {
+            return 
+        }
+        this.setState({
+            selection,
+            selectedObjectData
         })
     }
 
@@ -279,6 +279,7 @@ class SearchResult extends React.Component {
 
         return(
             <div>
+                {console.log('searchResult render ')}
                 <Row className='d-flex justify-content-center' style={style.titleText}>
                     <h4 className='text-capitalize'>{locale.SEARCH_RESULT}</h4>
                 </Row>
@@ -307,11 +308,12 @@ class SearchResult extends React.Component {
                                         let element = 
                                             <ListGroup.Item 
                                                 href={'#' + index} 
-                                                action style={style.listItem} 
+                                                style={style.listItem} 
                                                 className='searchResultList' 
                                                 eventKey={item.found + ':'+ index} 
                                                 key={index} 
                                                 style={style.listgroupItem} 
+                                                action
                                             >
                                                 <Row>
                                                     <Col xs={1} sm={1} lg={1} className="font-weight-bold d-flex align-self-center" style={style.firstText}>
@@ -364,12 +366,20 @@ class SearchResult extends React.Component {
                                 <ListGroup onSelect={this.handleSelectResultItem} className='searchResultListGroup'>
                                     {this.props.searchResult.filter(item => !item.found).map((item,index) => {
                                         let element =  
-                                            <ListGroup.Item href={'#' + index} action style={style.listItem} className='searchResultList' eventKey={item.found + ':' + index} key={index}>
+                                            <ListGroup.Item 
+                                                href={'#' + index} 
+                                                action 
+                                                style={style.listItem} 
+                                                className='searchResultList' 
+                                                eventKey={item.found + ':' + index} 
+                                                key={index}
+                                            >
                                                 <Row className="">
+                                                    <Col xs={1} sm={1} lg={1} className="font-weight-bold d-flex align-self-center" style={style.firstText}></Col>
                                                     <Col xs={1} sm={1} lg={1} className="font-weight-bold d-flex align-self-center" style={style.firstText}>{index + 1}</Col>
                                                     <Col xs={4} sm={4} lg={4} className="d-flex align-self-center justify-content-center" style={style.middleText}>{item.type}</Col>
                                                     <Col xs={1} sm={1} lg={1} className="d-flex align-self-center text-muted" style={style.middleText}>{item.access_control_number && item.access_control_number.slice(10, 14)}</Col>
-                                                    <Col xs={3} sm={3} lg={6} className="d-flex align-self-center text-muted justify-content-center text-capitalize w" style={style.lastText}>
+                                                    <Col xs={3} sm={3} lg={5} className="d-flex align-self-center text-muted justify-content-center text-capitalize w" style={style.lastText}>
                                                         N/A
                                                     </Col>
                                                 </Row>
@@ -390,6 +400,7 @@ class SearchResult extends React.Component {
                     handleChangeObjectStatusFormSubmit={this.handleChangeObjectStatusFormSubmit}
                     handleAdditionalButton={this.handleAdditionalButton}
                     showAddDevice={this.state.showAddDevice}
+                    handleRemoveButton={this.handleRemoveButton}
                 />
                 <ConfirmForm 
                     show={this.state.showConfirmForm}  
