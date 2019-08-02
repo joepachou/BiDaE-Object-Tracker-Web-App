@@ -210,7 +210,7 @@ class MainContainer extends React.Component{
             this.setState({
                 hasSearchKey: Object.keys(colorPanel).length === 0 ? false : true,
                 searchResult: searchResult,
-                searchKey: '',
+                searchKey,
                 colorPanel: colorPanel,
                 clearColorPanel: false,
                 searchResultObjectTypeMap: searchResultObjectTypeMap, 

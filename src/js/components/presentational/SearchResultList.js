@@ -132,34 +132,6 @@ class SearchResult extends React.Component {
     handleConfirmFormSubmit(e) {
         let { editedObjectPackage } = this.state;
 
-        const colorPanel = this.props.colorPanel ? this.props.colorPanel : null;
-
-        // let editObjectIdSet = new Set();
-
-        /** Add the original edit device into editedObjectPackages */
-        // editObjectIdSet.add(postOption.mac_address)
-
-        /** Add the added device into editedObjectPackages */
-        // if (addedDevices) {
-        //     addedDevices.map( item => {
-        //         item.status = status
-        //         delete item.transferred_location
-        //         item.transferredLocation = transferredLocation
-        //         editedObjectPackages.push(item)
-        //         editObjectIdSet.add(item.mac_address)
-        //     })
-        // }
-
-        // let changedStatusSearchResult = this.props.searchResult.map(item => {
-        //     if (editObjectIdSet.has(item.mac_address)) {
-        //         item = {
-        //             ...item,
-        //             status: postOption.status,
-        //             transferredLocation: postOption.transferredLocation
-        //         }
-        //     }
-        //     return item
-        // })
         Axios.post(dataSrc.editObjectPackage, {
             formOption: editedObjectPackage
         }).then(res => {
@@ -171,7 +143,6 @@ class SearchResult extends React.Component {
                         selection: [],
                         selectedObjectData: [],
                     })
-                    // this.props.processSearchResult(changedStatusSearchResult, colorPanel )
                     // this.props.shouldUpdateTrackingData(true)
                     this.props.handleRefreshSearchResult(true)
                 }
@@ -279,7 +250,6 @@ class SearchResult extends React.Component {
 
         return(
             <div>
-                {console.log('searchResult render ')}
                 <Row className='d-flex justify-content-center' style={style.titleText}>
                     <h4 className='text-capitalize'>{locale.SEARCH_RESULT}</h4>
                 </Row>
