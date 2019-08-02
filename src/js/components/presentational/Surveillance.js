@@ -74,7 +74,7 @@ class Surveillance extends React.Component {
         // })
         // console.log(_.isEqual(nextProps.objectInfo, this.props.objectInfo))
         return !(_.isEqual(nextProps.searchResult, this.props.searchResult)) 
-            || (this.props.shouldTrackingDataUpdate && !(_.isEqual(nextProps.trackingData, this.props.trackingData)))
+            || (this.props.shouldTrackingDataUpdate)
     }
 
     
@@ -383,7 +383,7 @@ class Surveillance extends React.Component {
             `
                 <div>
                     <h4 class='border-bottom pb-1 px-2'>${objectsMap[0].location_description}</h4>
-                    ${objectList.map( item =>{
+                    ${objectList.filter(item => item.found).map( item =>{
                         const element =     
                             `
                                 <div class='row popupRow mb-2 ml-1'>
