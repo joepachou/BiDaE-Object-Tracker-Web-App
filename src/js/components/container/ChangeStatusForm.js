@@ -93,14 +93,7 @@ class ChangeStatusForm extends React.Component {
                 fontSize: '80%',
                 color: '#dc3545'
             },
-            modal: {
-                zIndex: 1050,
-                top:'10%',
-                left:'-10%',
-                right:'auto',
-                bottom:'auto',
-                padding: 0,
-            },
+
             deviceList: {
                 maxHeight: '20rem',
                 overflow: 'hidden scroll' 
@@ -128,7 +121,7 @@ class ChangeStatusForm extends React.Component {
                     show={this.state.show} 
                     onHide={this.handleClose} 
                     size="md" 
-                    style={style.modal} 
+                    id='changeStatusForm' 
                     enforceFocus={false}
                 >
                     <Modal.Header closeButton className='font-weight-bold text-capitalize'>{title}</Modal.Header >
@@ -139,13 +132,13 @@ class ChangeStatusForm extends React.Component {
                                     <div key={index} >
                                         {index > 0 ? <hr/> : null}
                                         <Row>
-                                            <Col xs={12} sm={1} className='d-flex align-items-center'>
+                                            <Col xs={1} sm={1} className='d-flex align-items-center'>
                                                 {this.props.selectedObjectData.length > 1 
                                                     ? <i className="fas fa-times" onClick={this.props.handleRemoveButton} name={item.mac_address}></i> 
                                                     : null
                                                 }
                                             </Col>
-                                            <Col xs={12} sm={8}>
+                                            <Col xs={8} sm={8}>
                                                 <Row>
                                                     <Col {...colProps.titleCol}>
                                                         Device Type
@@ -171,7 +164,7 @@ class ChangeStatusForm extends React.Component {
                                                     </Col>
                                                 </Row>
                                             </Col>
-                                            <Col xs={12} sm={3} className='d-flex align-items-center'>
+                                            <Col xs={3} sm={3} className='d-flex align-items-center'>
                                                 <Image src={tempImg} width={80}/>
                                             </Col>
                                         </Row>
@@ -262,7 +255,7 @@ class ChangeStatusForm extends React.Component {
                                     <hr/>
                                     <Row className='d-flex justify-content-center pb-3'>
                                         <ButtonToolbar >
-                                            <Button variant="outline-secondary" className='mr-2' onClick={this.handleClick} active={this.props.showAddDevice}>
+                                            <Button variant="outline-secondary" className='mr-2 notShowOnMobile' onClick={this.handleClick} active={this.props.showAddDevice}>
                                                 Add Device
                                             </Button>
                                             <Button variant="outline-secondary" className='mr-2' onClick={this.handleClick}>

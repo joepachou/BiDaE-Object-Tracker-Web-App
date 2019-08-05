@@ -66,11 +66,11 @@ a:hover {
 .list-group-item.active {
     background: rgba(227, 222, 222, 0.62);
     color: black;
-    border: none;
+    border: rgba(227, 222, 222, 0.62);
 }
 
 .list-group-item-action:hover {
-    /* font-weight: 700 */
+    background: rgba(227, 222, 222, 0.2)
 }
 
 .list-group-item.action {

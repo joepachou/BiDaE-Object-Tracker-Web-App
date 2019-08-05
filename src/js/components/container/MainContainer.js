@@ -356,7 +356,7 @@ class MainContainer extends React.Component{
                 paddingTop: 30,
             },
             searchPanel: {
-                zIndex: this.state.isHighlightSearchPanel ? 10700 : 1,
+                zIndex: this.state.isHighlightSearchPanel ? 1060 : 1,
                 background: 'white',
                 borderRadius: 10,
             }
