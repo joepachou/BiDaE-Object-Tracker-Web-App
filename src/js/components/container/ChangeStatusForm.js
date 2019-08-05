@@ -102,12 +102,12 @@ class ChangeStatusForm extends React.Component {
 
         const colProps = {
             titleCol: {
-                xs: 5,
-                sm: 5
+                xs: 3,
+                sm: 3
             },
             inputCol: {
-                xs: 7,
-                sm: 7,
+                xs: 9,
+                sm: 9,
             }
         }
 
@@ -125,23 +125,23 @@ class ChangeStatusForm extends React.Component {
                     enforceFocus={false}
                 >
                     <Modal.Header closeButton className='font-weight-bold text-capitalize'>{title}</Modal.Header >
-                    <div>
-                        <div className='m-3 modalDeviceListGroup' style={style.deviceList}>
+                    <Modal.Body>
+                        <div className='modalDeviceListGroup' style={style.deviceList}>
                             {this.props.selectedObjectData.map((item,index) => {
                                 return (
                                     <div key={index} >
                                         {index > 0 ? <hr/> : null}
                                         <Row>
-                                            <Col xs={1} sm={1} className='d-flex align-items-center'>
+                                            {/* <Col xs={1} sm={1} className='d-flex align-items-center'>
                                                 {this.props.selectedObjectData.length > 1 
                                                     ? <i className="fas fa-times" onClick={this.props.handleRemoveButton} name={item.mac_address}></i> 
                                                     : null
                                                 }
-                                            </Col>
+                                            </Col> */}
                                             <Col xs={8} sm={8}>
                                                 <Row>
                                                     <Col {...colProps.titleCol}>
-                                                        Device Type
+                                                        Type
                                                     </Col>
                                                     <Col {...colProps.inputCol} className='text-muted pb-1'>
                                                         {item.type}
@@ -149,7 +149,7 @@ class ChangeStatusForm extends React.Component {
                                                 </Row>
                                                 <Row>
                                                     <Col {...colProps.titleCol}>
-                                                        Device Name
+                                                        Name
                                                     </Col>
                                                     <Col {...colProps.inputCol} className='text-muted pb-1'>
                                                         {item.name}
@@ -164,7 +164,7 @@ class ChangeStatusForm extends React.Component {
                                                     </Col>
                                                 </Row>
                                             </Col>
-                                            <Col xs={3} sm={3} className='d-flex align-items-center'>
+                                            <Col xs={4} sm={4} className='d-flex align-items-center'>
                                                 <Image src={tempImg} width={80}/>
                                             </Col>
                                         </Row>
@@ -197,12 +197,12 @@ class ChangeStatusForm extends React.Component {
                             }}
 
                             render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
-                                <Form className="text-capitalize mx-3">
+                                <Form className="text-capitalize">
                                     <Row className="form-group">
-                                        <Col sm={2} className='d-flex'>
+                                        <Col xs={2} sm={2} className='d-flex'>
                                             <label htmlFor="status">{locale.STATUS}</label>
                                         </Col>
-                                        <Col sm={10} >
+                                        <Col xs={10} sm={10} >
                                             <Field
                                                 component={RadioButton}
                                                 name="radioGroup"
@@ -274,7 +274,7 @@ class ChangeStatusForm extends React.Component {
                                 </Form>
                             )}
                         />
-                    </div>
+                    </Modal.Body>
                 </Modal>
             </>
         );
