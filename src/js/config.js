@@ -31,12 +31,12 @@ const config = {
 
         iconOptions: {
             iconSize: 50,
-            stationaryIconUrl: black_pin,
-            movinfIconUrl: darkGrey_pin,
-            sosIconUrl: sos,
-			geofenceIconFence: geofence_fence,
-            geofenceIconPerimeter: geofence_perimeter,
-            searchedObjectIconUrl: white_pin,
+            // stationaryIconUrl: black_pin,
+            // movinfIconUrl: darkGrey_pin,
+            // sosIconUrl: sos,
+			// geofenceIconFence: geofence_fence,
+            // geofenceIconPerimeter: geofence_perimeter,
+            // searchedObjectIconUrl: white_pin,
             showNumber: false,
         },
 
@@ -98,7 +98,7 @@ const config = {
          * The time period unit is seconds */
         notFoundObjectTimePeriod: 30,
         geofenceViolationTimePeriod: 300,
-        sosTimePeriod: 600,
+        sosTimePeriod: 300,
     },
 
     transferredLocation: [
@@ -116,7 +116,7 @@ const config = {
         logo: BOT_LOGO,
     },
 
-    companyName: 'BeDI Tech',
+    companyName: 'BeDITech',
 
     systemAdmin: {
 
@@ -125,6 +125,7 @@ const config = {
         dataSrcIp: 'localhost',
 
         refreshSearchResult: true,
+
     },
 
     healthReport: {
@@ -141,15 +142,14 @@ const config = {
                 SEARCH_HISTORY: 'search_history',
                 MY_DEVICES: 'mydevice'
             }
-        }
+        },
+        searchResultForm: 'List'
     },
 
     frequentSearchOption: {
         MY_DEVICES: 'my devices',
         ALL_DEVICES: 'all devices'
     },
-
-
 
 }
 
