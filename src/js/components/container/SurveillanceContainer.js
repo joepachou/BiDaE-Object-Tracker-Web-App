@@ -1,14 +1,8 @@
 import React from 'react';
-
 import Surveillance from '../presentational/Surveillance';
 import ToggleSwitch from './ToggleSwitch';
-import { Nav, Row, ButtonToolbar, Button, ToggleButton}  from 'react-bootstrap';
-import ChangeStatusForm from './ChangeStatusForm';
-import config from '../../config';
+import { Nav, Button }  from 'react-bootstrap';
 import LocaleContext from '../../context/LocaleContext';
-import ConfirmForm from './ConfirmForm'
-import axios from 'axios';
-import dataSrc from '../../dataSrc';
 import { connect } from 'react-redux'
 import { 
     shouldUpdateTrackingData,
@@ -21,84 +15,10 @@ class SurveillanceContainer extends React.Component {
         super(props)
         this.state = {
             rssi: 1,
-            showEditObjectForm: false,
-            showConfirmForm: false,
             selectedObjectData: [],
-            formOption: [],
             showDevice: false,
         }
-
-        this.handleChangeObjectStatusFormClose = this.handleChangeObjectStatusFormClose.bind(this);
-        this.handleChangeObjectStatusFormSubmit = this.handleChangeObjectStatusFormSubmit.bind(this);
-        this.handleConfirmFormSubmit = this.handleConfirmFormSubmit.bind(this);
         this.handleClickButton = this.handleClickButton.bind(this)
-    }
-
-
-    handleChangeObjectStatusFormClose() {
-        this.setState({
-            showEditObjectForm: false,
-            showConfirmForm: false,
-        })
-        this.props.getSearchKey('coordinate', null, )
-        this.props.shouldUpdateTrackingData(true);
-    }
-
-    handleChangeObjectStatusFormSubmit(formOption) {
-        this.setState({
-            formOption: formOption,
-            selectedObjectData: {
-                ...this.state.selectedObjectData,
-                ...formOption,
-            },
-            showEditObjectForm: false,
-        })
-        setTimeout(
-            function() {
-                this.setState({
-                    showConfirmForm: true,
-                })
-                this.props.shouldUpdateTrackingData(false)
-            }.bind(this),
-            500
-        )
-    }
-
-    handleConfirmFormSubmit(e, addedDevices) {
-        const button = e.target
-        const formOption = this.state.formOption;
-        const { status, transferredLocation } = formOption
-
-        let editObjectPackages = []
-        editObjectPackages.push(formOption)
-
-        if (addedDevices) {
-            addedDevices.map( item => {
-                item.status = status
-                delete item.transferred_location
-                item.transferredLocation = transferredLocation
-                editObjectPackages.push(item)
-            })
-        }
-        
-        axios.post(dataSrc.editObjectPackage, {
-            formOption: editObjectPackages
-        }).then(res => {
-            button.style.opacity = 0.4
-            setTimeout(
-                function() {
-                    this.setState ({
-                        showConfirmForm: false,
-                        formOption: [],
-                    }) 
-                    this.props.shouldUpdateTrackingData(true)
-                }
-                .bind(this),
-                1000
-            )
-        }).catch( error => {
-            console.log(error)
-        })
     }
 
     handleClickButton(e) {
@@ -157,7 +77,6 @@ class SurveillanceContainer extends React.Component {
                     <Surveillance 
                         rssi={rssi} 
                         hasSearchKey={hasSearchKey}
-                        searchResult={searchResult}
                         style={style.searchMap}
                         colorPanel={this.props.colorPanel}
                         proccessedTrackingData={this.props.proccessedTrackingData}
