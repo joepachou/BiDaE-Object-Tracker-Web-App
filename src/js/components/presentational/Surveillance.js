@@ -63,19 +63,12 @@ class Surveillance extends React.Component {
     componentDidUpdate(prevProps){
         this.handleObjectMarkers();
         this.createLbeaconMarkers();
-        
     }
 
-    shouldComponentUpdate(nextProps, nextState){
-        // nextProps.objectInfo.map(item => {
-        //     if(item.access_control_number === '0603-2425-7711') {
-        //         console.log(item.status)
-        //     }
-        // })
-        // console.log(_.isEqual(nextProps.objectInfo, this.props.objectInfo))
-        return !(_.isEqual(nextProps.searchResult, this.props.searchResult)) 
-            || (this.props.shouldTrackingDataUpdate)
-    }
+    // shouldComponentUpdate(nextProps, nextState){
+    //     let isProccessedTrackingDataChange = !(_.isEqual(this.props.proccessedTrackingData, nextProps.proccessedTrackingData))
+    //     return this.props.shouldTrackingDataUpdate && isProccessedTrackingDataChange
+    // }
 
     
     /** Set the search map configuration which establishs in config.js  */
@@ -181,16 +174,7 @@ class Surveillance extends React.Component {
      * Create the error circle of markers, and add into this.markersLayer.
      */
     handleObjectMarkers(){
-        const { hasSearchKey, searchResult } = this.props;
-        let objects = _.cloneDeep(this.props.trackingData)        
-
-        /** Process the search object data */
-        var searchedObjectDataMap= new Map();
-        if (hasSearchKey) {
-            searchResult.map( item => {
-                searchedObjectDataMap.set(item.mac_address, item)
-            })
-        }
+        let objects = _.cloneDeep(this.props.proccessedTrackingData)        
 
         /** Clear the old markerslayers. */
         this.markersLayer.clearLayers();
@@ -250,13 +234,6 @@ class Surveillance extends React.Component {
         let counter = 0;
         objects.filter(item => item.found)
             .map(item => {
-            /** Tag the searched object with searched and pinColor*/
-            if(searchedObjectDataMap.has(item.mac_address)) {
-               item = searchedObjectDataMap.get(item.mac_address)
-               item.searched = true;
-            } else {
-               item.searched = false;
-            }
 
             // let detectedNum = item.lbeaconDetectedNum;
             let position = this.macAddressToCoordinate(item.mac_address,item.currentPosition);
@@ -341,7 +318,7 @@ class Surveillance extends React.Component {
 
     collectObjectsByLatLng(lbPosition) {
         let objectList = []
-        this.props.trackingData.map(item => {
+        this.props.proccessedTrackingData.map(item => {
             item.currentPosition && item.currentPosition.toString() === lbPosition.toString() ? objectList.push(item) : null;
         })
         return objectList 

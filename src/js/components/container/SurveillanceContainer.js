@@ -160,7 +160,7 @@ class SurveillanceContainer extends React.Component {
                         searchResult={searchResult}
                         style={style.searchMap}
                         colorPanel={this.props.colorPanel}
-                        trackingData={this.props.trackingData}
+                        proccessedTrackingData={this.props.proccessedTrackingData}
                         getSearchKey={this.props.getSearchKey}
                     />
                 </div>
