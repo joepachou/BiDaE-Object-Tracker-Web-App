@@ -131,13 +131,15 @@ class ChangeStatusForm extends React.Component {
                                 return (
                                     <div key={index} >
                                         {index > 0 ? <hr/> : null}
-                                        <Row>
-                                            {/* <Col xs={1} sm={1} className='d-flex align-items-center'>
-                                                {this.props.selectedObjectData.length > 1 
-                                                    ? <i className="fas fa-times" onClick={this.props.handleRemoveButton} name={item.mac_address}></i> 
-                                                    : null
-                                                }
-                                            </Col> */}
+                                        <Row noGutters={true}>
+                                            {this.props.selectedObjectData.length > 1 
+                                                ? 
+                                                    <Col xs={1} sm={1} className='d-flex align-items-center'>
+                                                        <i className="fas fa-times" onClick={this.props.handleRemoveButton} name={item.mac_address}></i> 
+                                                    </Col>
+                                                : null
+                                            }
+
                                             <Col xs={8} sm={8}>
                                                 <Row>
                                                     <Col {...colProps.titleCol}>
@@ -164,7 +166,7 @@ class ChangeStatusForm extends React.Component {
                                                     </Col>
                                                 </Row>
                                             </Col>
-                                            <Col xs={4} sm={4} className='d-flex align-items-center'>
+                                            <Col xs={3} sm={3} className='d-flex align-items-center'>
                                                 <Image src={tempImg} width={80}/>
                                             </Col>
                                         </Row>
