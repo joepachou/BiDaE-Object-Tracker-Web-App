@@ -1,9 +1,10 @@
 import React from 'react';
-import { Modal, Button, Form, Row, Col, Image, ButtonToolbar} from 'react-bootstrap'
+import { Modal, Button, Row, Col, Image, ButtonToolbar} from 'react-bootstrap'
 import config from '../../config';
 import LocaleContext from '../../context/LocaleContext';
 import moment from 'moment';
 import tempImg from '../../../img/doppler.jpg'
+import { Formik, Form } from 'formik';
   
 class ConfirmForm extends React.Component {
     
@@ -13,18 +14,12 @@ class ConfirmForm extends React.Component {
         this.state = {
             show: this.props.show,
             isShowForm: false,
-            showAddDeviceForm: false,
-            showNotesControl: false,
-            notesText:'',
         };
 
 
         this.handleShow = this.handleShow.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.handleClick = this.handleClick.bind(this);
-        this.addedDevice = this.addedDevice.bind(this);
-        this.handleAddDeviceFormClose = this.handleAddDeviceFormClose.bind(this)
     }
   
     handleClose(e) {
@@ -59,41 +54,6 @@ class ConfirmForm extends React.Component {
         })
     }
 
-    handleClick(e) {
-        const item = e.target.innerText.toLowerCase();
-        switch(item) {
-            case 'add device':
-                this.setState({
-                    showAddDeviceForm: true
-                })
-                break;
-            case 'remove device':
-                console.log(item)
-                break;
-            case 'add notes':
-            case 'hide notes':
-                this.setState({
-                    showNotesControl: !this.state.showNotesControl
-                })
-                break;
-
-        }
-    }
-
-    addedDevice(selectedDevice) {
-        this.setState({
-            addedDevices: selectedDevice,
-            showAddDeviceForm: false,
-        })
-    }
-
-    handleAddDeviceFormClose() {
-        this.setState({
-            showAddDeviceForm: false
-        })
-    }
-
-  
     render() {
 
         const style = {
@@ -105,9 +65,6 @@ class ConfirmForm extends React.Component {
                 borderRight: 0,
                 
             },
-            notesControl: {
-                display: this.state.showNotesControl ? null : 'none', 
-            },
             deviceList: {
                 maxHeight: '20rem',
                 overflow: 'hidden scroll' 
@@ -118,64 +75,71 @@ class ConfirmForm extends React.Component {
 
         const colProps = {
             titleCol: {
-                xs: 5,
-                sm: 5
+                xs: 3,
+                sm: 3
             },
             inputCol: {
-                xs: 7,
-                sm: 7,
+                xs: 9,
+                sm: 9,
             }
         }
 
         return (
             <>  
-                <Modal show={this.state.show} onHide={this.handleClose} size="md">
+                <Modal 
+                    id='confirmForm' 
+                    show={this.state.show} 
+                    onHide={this.handleClose} 
+                    size="md"
+                >
                     <Modal.Header closeButton className='font-weight-bold'>{title}</Modal.Header >
-                    <div>
-                        <div className='m-3' style={style.deviceList}>
+                    <Modal.Body>
+                        <div className='modalDeviceListGroup' style={style.deviceList}>
                             {this.props.selectedObjectData.map((item,index) => {
-                                    return (
-                                        <div key={index}>
-                                            {index > 0 ? <hr/> : null}
-                                            <Row key={index}>
-                                                <Col xs={12} sm={1} className='d-flex align-items-center'>
-                                                    {this.props.selectedObjectData.length > 1 
-                                                        ? <i className="fas fa-times" onClick={this.props.handleRemoveButton} name={item.mac_address}></i> 
-                                                        : null
-                                                    }
-                                                </Col>
-                                                <Col xs={12} sm={8}>
-                                                    <Row>
-                                                        <Col {...colProps.titleCol}>
-                                                            Device Type
-                                                        </Col>
-                                                        <Col {...colProps.inputCol} className='text-muted pb-1'>
-                                                            {item.type}
-                                                        </Col>
-                                                    </Row>
-                                                    <Row>
-                                                        <Col {...colProps.titleCol}>
-                                                            Device Name
-                                                        </Col>
-                                                        <Col {...colProps.inputCol} className='text-muted pb-1'>
-                                                            {item.name}
-                                                        </Col>
-                                                    </Row>
-                                                    <Row>
-                                                        <Col {...colProps.titleCol}>
-                                                            ACN
-                                                        </Col>
-                                                        <Col {...colProps.inputCol} className='text-muted pb-1'>
-                                                            {item.access_control_number}
-                                                        </Col>
-                                                    </Row>
-                                                </Col>
-                                                <Col xs={12} sm={3} className='d-flex align-items-center'>
-                                                    <Image src={tempImg} width={80}/>
-                                                </Col>
-                                            </Row>
-                                        </div>
-                                    )
+                                return (
+                                    <div key={index} >
+                                        {index > 0 ? <hr/> : null}
+                                        <Row noGutters={true}>
+                                            {this.props.selectedObjectData.length > 1 
+                                                ? 
+                                                    <Col xs={1} sm={1} className='d-flex align-items-center'>
+                                                        <i className="fas fa-times" onClick={this.props.handleRemoveButton} name={item.mac_address}></i> 
+                                                    </Col>
+                                                : null
+                                            }
+
+                                            <Col xs={8} sm={8}>
+                                                <Row>
+                                                    <Col {...colProps.titleCol}>
+                                                        Type
+                                                    </Col>
+                                                    <Col {...colProps.inputCol} className='text-muted pb-1'>
+                                                        {item.type}
+                                                    </Col>
+                                                </Row>
+                                                <Row>
+                                                    <Col {...colProps.titleCol}>
+                                                        Name
+                                                    </Col>
+                                                    <Col {...colProps.inputCol} className='text-muted pb-1'>
+                                                        {item.name}
+                                                    </Col>
+                                                </Row>
+                                                <Row>
+                                                    <Col {...colProps.titleCol}>
+                                                        ACN
+                                                    </Col>
+                                                    <Col {...colProps.inputCol} className='text-muted pb-1'>
+                                                        {item.access_control_number}
+                                                    </Col>
+                                                </Row>
+                                            </Col>
+                                            <Col xs={3} sm={3} className='d-flex align-items-center'>
+                                                <Image src={tempImg} width={80}/>
+                                            </Col>
+                                        </Row>
+                                    </div>
+                                )
                             })}
                         </div>
                         <hr/>
@@ -206,29 +170,25 @@ class ConfirmForm extends React.Component {
                                 </Row>
                             </>
                         }
+                        <Formik    
+                            onSubmit={({ radioGroup, select }, { setStatus, setSubmitting }) => {
+                                this.props.handleConfirmFormSubmit()
+                            }}
 
-                        <Form style={style.notesControl}>
-                        <hr/>
-                            <Form.Group controlId="exampleForm.ControlTextarea1">
-                                <Form.Control 
-                                    as="textarea" 
-                                    rows="3" 
-                                    placeholder='notes...' 
-                                    value={this.state.notesText}
-                                    name='notesText'
-                                    onChange={this.handleChange}
-                                />
-                            </Form.Group>
-                        </Form>
-                    </div>
-                    <Modal.Footer>
-                        <Button variant="outline-secondary" onClick={this.handleClose}>
-                            Cancel
-                        </Button>
-                        <Button variant="primary" onClick={this.props.handleConfirmFormSubmit}>
-                            Send
-                        </Button>
-                    </Modal.Footer>
+                            render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
+                                <Form>
+                                    <Modal.Footer>
+                                        <Button variant="outline-secondary" onClick={this.handleClose}>
+                                            Cancel
+                                        </Button>
+                                        <Button type="submit" className="text-capitalize" variant="primary" disabled={isSubmitting}>
+                                            Send
+                                        </Button>
+                                    </Modal.Footer>
+                                </Form>
+                            )}
+                        />
+                    </Modal.Body>
                 </Modal>
             </>
         );
