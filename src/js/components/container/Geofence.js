@@ -76,7 +76,7 @@ export default class HealthReport extends React.Component{
                             style={style.reactTable} 
                             data={this.state.geofenceData} 
                             columns={this.state.geofenceColumn}
-
+                            defaultPageSize={15} 
                             />
                     </Col>
                 </Row>

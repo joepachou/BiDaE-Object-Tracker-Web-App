@@ -167,9 +167,7 @@ class HealthReport extends React.Component{
                             style={style.reactTable} 
                             data={this.state.lbeaconData} 
                             columns={this.state.lbeaconColumn}
-                            showPagination = {false}
-
-                            defaultPageSize={10}
+                            defaultPageSize={15}
                             className="-highlight"
                             getTrProps={(state, rowInfo, column, instance) => {
                                 return {
@@ -197,7 +195,7 @@ class HealthReport extends React.Component{
                             style={style.reactTable} 
                             data={this.state.gatewayData} 
                             columns={this.state.gatewayColunm}
-                            showPagination = {false}
+                            defaultPageSize={15} 
                             resizable={true}
                             freezeWhenExpanded={false}
                         />
@@ -205,7 +203,7 @@ class HealthReport extends React.Component{
                     <Tab eventKey="tracking_table" title="Tracking Object">
                         <ReactTable 
                             minRows={6} 
-                            defaultPageSize={50} 
+                            defaultPageSize={15} 
                             data={this.state.trackingData} 
                             columns={this.state.trackingColunm} 
                             pageSizeOptions={[5, 10]}
