@@ -264,6 +264,7 @@ class MainContainer extends React.Component{
             clearColorPanel: true,
             searchResultObjectTypeMap: {},
             clearSearchResult: this.state.hasSearchKey ? true : false,
+            proccessedTrackingData: []
         })
     }
 
@@ -279,13 +280,13 @@ class MainContainer extends React.Component{
         let proccessedTrackingData = _.cloneDeep(this.state.trackingData)
 
         if (searchKey === myDevices) {
-            const devicesAccessControlNumber = auth.userInfo.myDevice
-            proccessedTrackingData.map(item => {
-                if (devicesAccessControlNumber.includes(item.access_control_number)) {
-                    item.searched = true;
-                    searchResult.push(item)
-                }
-            })
+            // const devicesAccessControlNumber = auth.userInfo.myDevice
+            // proccessedTrackingData.map(item => {
+            //     if (devicesAccessControlNumber.includes(item.access_control_number)) {
+            //         item.searched = true;
+            //         searchResult.push(item)
+            //     }
+            // })
         } else if (searchKey === allDevices) {
             searchResult = proccessedTrackingData.map(item => {
                 item.searched = true
