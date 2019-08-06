@@ -1,12 +1,10 @@
 import React from 'react';
 import { Alert } from 'react-bootstrap'
 
-
 const style = {
-
     alertText: {
         fontSize: '1.2rem',
-        fontWeight: '700'
+        fontWeight: 700
     },
     alertTextTitle: {
         fontSize: '1.2rem',
@@ -30,7 +28,7 @@ const InfoPrompt = ({
                             {data[item]}
                         </div>
                         &nbsp;
-                        <div style={style.alertText}>
+                        <div>
                             {item}
                         </div>
                         &nbsp;

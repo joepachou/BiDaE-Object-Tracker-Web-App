@@ -196,11 +196,11 @@ class MainContainer extends React.Component{
     processSearchResult(searchResult, colorPanel, searchKey, searchValue) {
         /** Count the number of found object type */
         let duplicateSearchKey = []
-        if (typeof searchKey === 'string') {
-            searchKey === 'all devices' || searchKey === 'my devices' ? null : duplicateSearchKey.push(searchKey)
-        } else {
+
+        if (typeof searchKey !== 'string') {
             duplicateSearchKey = [...searchKey]
         }
+
         duplicateSearchKey.filter(key => {
             return key !== 'all devices' || key !== 'my devices'
         })
@@ -208,17 +208,17 @@ class MainContainer extends React.Component{
         let searchResultObjectTypeMap = searchResult
             .filter(item => item.found)
             .reduce((allObjectTypes, item) => {
-
-            if (item.type in allObjectTypes) allObjectTypes[item.type]++
-            else {
-                allObjectTypes[item.type] = 1
-                let index = duplicateSearchKey.indexOf(item.type)
-                if (index > -1) {
-                    duplicateSearchKey.splice(index, 1)
+                if (item.type in allObjectTypes) allObjectTypes[item.type]++
+                else {
+                    allObjectTypes[item.type] = 1
+                    let index = duplicateSearchKey.indexOf(item.type)
+                    if (index > -1) {
+                        duplicateSearchKey.splice(index, 1)
+                    }
                 }
-            }
-            return allObjectTypes
+                return allObjectTypes
         }, {})
+
         duplicateSearchKey.map(key => searchResultObjectTypeMap[key] = 0)
 
         if(colorPanel) {
@@ -280,13 +280,13 @@ class MainContainer extends React.Component{
         let proccessedTrackingData = _.cloneDeep(this.state.trackingData)
 
         if (searchKey === myDevices) {
-            // const devicesAccessControlNumber = auth.userInfo.myDevice
-            // proccessedTrackingData.map(item => {
-            //     if (devicesAccessControlNumber.includes(item.access_control_number)) {
-            //         item.searched = true;
-            //         searchResult.push(item)
-            //     }
-            // })
+            const devicesAccessControlNumber = auth.userInfo.myDevice
+            proccessedTrackingData.map(item => {
+                if (devicesAccessControlNumber.includes(item.access_control_number)) {
+                    item.searched = true;
+                    searchResult.push(item)
+                }
+            })
         } else if (searchKey === allDevices) {
             searchResult = proccessedTrackingData.map(item => {
                 item.searched = true
