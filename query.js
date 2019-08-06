@@ -144,13 +144,11 @@ const signin = (request, response) => {
             } else {
 
                 const hash = results.rows[0].password
-
                 if (bcrypt.compareSync(pwd, hash)) {
-
                     let userInfo = {}
                     userInfo.myDevice = results.rows[0].mydevice
                     userInfo.name= results.rows[0].name
-                    userInfo.searchHistory = JSON.parse(results.rows[0].search_history)
+                    userInfo.searchHistory = results.rows[0].search_history
                     response.json({
                         authentication: true,
                         userInfo
@@ -206,7 +204,7 @@ const addUserSearchHistory = (request, response) => {
     const { username, history } = request.body;
     pool.query(queryType.query_addUserSearchHistory(username, history), (error, results) => {
         if (error) {
-            console.log('Add user search history fails')
+            console.log('Add user search history fails: ' + error)
         } else {
             console.log('Add user searech history success')
         }

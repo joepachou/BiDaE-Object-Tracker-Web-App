@@ -109,10 +109,10 @@ class GridButton extends React.Component {
         }
     
 
-        // let searchResult = this.addSearchableObjectDataWithPinColorToSeachResult(colorPanel)
         const searchKeys = Object.keys(colorPanel)
+        // this.putSearchHistory(searchKey)
 
-        // if (Cookies.get('user')){
+        // if (Cookies.get('userInfo')){
         //     this.putSearchHistory(searchKey)
         // }
 
@@ -127,27 +127,50 @@ class GridButton extends React.Component {
     }
 
     putSearchHistory(searchKey) {
-        const searchHistory = JSON.parse(Cookies.get('searchHistory'))
-        let flag = false; 
-        const toPutSearchHistory = searchHistory.map( item => {
-            if (item.name === searchKey) {
-                item.value = item.value + 1;
-                flag = true;
-            }
-            return item
-        })
-        flag === false ? toPutSearchHistory.push({name: searchKey, value: 1}) : null;
-        const sortedSearchHistory = this.sortSearchHistory(toPutSearchHistory)
-        Cookies.set('searchHistory', JSON.stringify(sortedSearchHistory))
+        // const searchHistory = JSON.parse(Cookies.get('searchHistory'))
+        // let flag = false; 
+        // const toPutSearchHistory = searchHistory.map( item => {
+        //     if (item.name === searchKey) {
+        //         item.value = item.value + 1;
+        //         flag = true;
+        //     }
+        //     return item
+        // })
+        // flag === false ? toPutSearchHistory.push({name: searchKey, value: 1}) : null;
+        // const sortedSearchHistory = this.sortSearchHistory(toPutSearchHistory)
+        // Cookies.set('searchHistory', JSON.stringify(sortedSearchHistory))
         this.checkInSearchHistory()
         
     }
 
     checkInSearchHistory() {
-        const searchHistory = JSON.stringify(Cookies.get('searchHistory'))
+        // const searchHistory = JSON.stringify(Cookies.get('searchHistory'))
+        const searchHistory = [
+            {
+                name: 'electric sphygmomanometer',
+                value: 1
+            },
+            {
+                name: 'monitor',
+                value: 3
+            },            
+            {
+                name: 'IV pump',
+                value: 5
+            },
+            {
+                name: 'syringe pump',
+                value: 10
+            },
+            {
+                name: 'blood warming device',
+                value: 4
+            }
+        ]
+        let username = JSON.parse(Cookies.get('userInfo')).name 
         axios.post(dataSrc.addUserSearchHistory, {
-            username: Cookies.get('user'),
-            history: searchHistory
+            username,
+            history: JSON.stringify(searchHistory)
         }).then( res => {
         }).catch( error => {
             console.log(error)
