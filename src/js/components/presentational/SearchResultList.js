@@ -285,14 +285,17 @@ class SearchResult extends React.Component {
                                                 action
                                             >
                                                 <Row>
-                                                    <Col xs={1} sm={1} lg={1} className="font-weight-bold d-flex align-self-center" style={style.firstText}>
-                                                        {this.state.selection.indexOf(item.mac_address) >= 0 
-                                                            ? <i className="fas fa-check" style={style.icon}></i> : ''}
-                                                    </Col>
-                                                    <Col xs={1} sm={1} lg={1} className="font-weight-bold d-flex align-self-center" style={style.firstText}>
-                                                        {index + 1}
-                                                    </Col>
-                                                    <Col xs={4} sm={5} lg={4} className="d-flex align-self-center justify-content-center" style={style.middleText}>{item.type}</Col>
+                                                    {this.state.selection.indexOf(item.mac_address) >= 0 
+                                                        ? 
+                                                            <Col xs={1} sm={1} lg={1} className="font-weight-bold d-flex align-self-center" style={style.firstText}>
+                                                                <i className="fas fa-check" style={style.icon}></i> 
+                                                            </Col>
+                                                        :
+                                                            <Col xs={1} sm={1} lg={1} className="font-weight-bold d-flex align-self-center" style={style.firstText}>
+                                                                {index + 1}
+                                                            </Col>
+                                                    }
+                                                    <Col xs={5} sm={5} lg={5} className="d-flex align-self-center justify-content-center" style={style.middleText}>{item.type}</Col>
                                                     <Col xs={2} sm={2} lg={2} className="d-flex align-self-center text-muted" style={style.middleText}>{item.last_four_acn}</Col>
                                                     <Col xs={4} sm={4} lg={4} className="d-flex align-self-center text-muted justify-content-center text-capitalize w" style={style.lastText}>
                                                         {item.status.toLowerCase() === config.objectStatus.NORMAL
@@ -344,11 +347,10 @@ class SearchResult extends React.Component {
                                                 key={index}
                                             >
                                                 <Row className="">
-                                                    <Col xs={1} sm={1} lg={1} className="font-weight-bold d-flex align-self-center" style={style.firstText}></Col>
                                                     <Col xs={1} sm={1} lg={1} className="font-weight-bold d-flex align-self-center" style={style.firstText}>{index + 1}</Col>
-                                                    <Col xs={3} sm={4} lg={3} className="d-flex align-self-center justify-content-center" style={style.middleText}>{item.type}</Col>
+                                                    <Col xs={5} sm={5} lg={5} className="d-flex align-self-center justify-content-center" style={style.middleText}>{item.type}</Col>
                                                     <Col xs={1} sm={1} lg={1} className="d-flex align-self-center text-muted" style={style.middleText}>{item.last_four_acn}</Col>
-                                                    <Col xs={3} sm={3} lg={3} className="d-flex align-self-center text-muted justify-content-center text-capitalize w" style={style.lastText}>
+                                                    <Col xs={2} sm={2} lg={2} className="d-flex align-self-center text-muted justify-content-center text-capitalize w" style={style.lastText}>
                                                         {item.lbeacon_uuid
                                                             ? `near ${item.location_description}`
                                                             : 'N/A'
