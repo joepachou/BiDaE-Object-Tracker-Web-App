@@ -1,9 +1,10 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
+
 var path = require('path')
 
 
 module.exports = {
-    entry: ['babel-polyfill', './src/index.js'],
+    entry: './src/index.js',
     mode: 'development',
     output: {
         path: path.join(__dirname, 'dist'),
@@ -25,6 +26,7 @@ module.exports = {
                 use: {
                     loader: "babel-loader"
                 }
+                
             },
             {
                 test: /\.html$/,
