@@ -177,11 +177,6 @@ a:hover {
     font-size: 1rem;
 }
 
-/* React-table */
-.ReactTable .rt-thead .rt-tr {
-    font-weight: 500;
-}
-
 /* React-bootstrap button */
 .btn-outline-secondary {
     border-color: rgb(224, 224, 224);
@@ -261,9 +256,12 @@ a:hover {
     -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
 }
 
-/* React-table*/
+/* React-table */
+.ReactTable .rt-thead .rt-tr {
+    font-weight: 500;
+}
 .rt-td {
-    margin: 5px
+    margin: 5px 0px
 }
 
 /* Modal Device List Group */
@@ -275,4 +273,9 @@ a:hover {
     border-radius: 4px;
     background-color: rgba(0, 0, 0, .5);
     -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+}
+
+/* Boot strap layout */
+.container-fluid {
+    width: 80%
 }
