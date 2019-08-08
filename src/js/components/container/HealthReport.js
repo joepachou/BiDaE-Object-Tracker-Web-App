@@ -11,7 +11,11 @@ import Axios from 'axios';
 import dataSrc from '../../../js/dataSrc';
 import config from '../../config';
 import LocaleContext from '../../context/LocaleContext';
-import { trackingTable } from '../../tables';
+import { 
+    trackingTable,
+    lbeaconTable,
+    gatewayTable
+} from '../../tables';
 import { retrieveDataService } from '../../retrieveDataService';
 
 
@@ -57,73 +61,41 @@ class HealthReport extends React.Component{
     }
 
     getGatewayData(){
-        Axios.get(dataSrc.getGatewayTable).then(res => {
-            let column = [];
-            res.data.fields.map(item => {
-                let field = {};
-                field.Header = item.name.replace(/_/g, ' ')
-                    .toLowerCase()
-                    .split(' ')
-                    .map( s => s.charAt(0).toUpperCase() + s.substring(1))
-                    .join(' '),                
-                field.accessor = item.name,
-                field.headerStyle={
-                    textAlign: 'left',
-                }
-                column.push(field);
+        Axios.get(dataSrc.getGatewayTable)
+            .then(res => {
+                this.setState({
+                    gatewayData: res.data.rows,
+                    gatewayColunm: gatewayTable
+                })
             })
-            this.setState({
-                gatewayData: res.data.rows,
-                gatewayColunm: column,
+            .catch(function (error) {
+                console.log(error);
             })
-        })
-        .catch(function (error) {
-            console.log(error);
-        })
-    }
+        }
 
     getLbeaconData(){
-        Axios.get(dataSrc.getLbeaconTable).then(res => {
-            let column = [];
-            res.data.fields.map(item => {
-                let field = {};
-
-                field.Header = item.name.replace(/_/g, ' ')
-                    .toLowerCase()
-                    .split(' ')
-                    .map( s => s.charAt(0).toUpperCase() + s.substring(1))
-                    .join(' '),
-                field.accessor = item.name,
-
-
-                field.headerStyle={
-                    textAlign: 'left',
-                }
-
-                if (item.name === 'uuid') {
-                    field.width = 350
-                }
-                column.push(field);
+        Axios.get(dataSrc.getLbeaconTable)
+            .then(res => {
+                this.setState({
+                    lbeaconData: res.data.rows,
+                    lbeaconColumn: lbeaconTable
+                })
             })
-            this.setState({
-                lbeaconData: res.data.rows,
-                lbeaconColumn: column,
-
+            .catch(function (error) {
+                console.log(error);
             })
-        })
-        .catch(function (error) {
-            console.log(error);
-        })
     }
 
     getTrackingData() {
-        retrieveDataService.getTrackingData()
-            .then(res => {
-                this.setState({
-                    trackingData: res.data.rows,
-                    trackingColunm: trackingTable
-                })
+        Axios.post(dataSrc.getTrackingData,{
+            rssiThreshold: config.surveillanceMap.locationAccuracyMapToDefault[1]
+        })
+        .then(res => {
+            this.setState({
+                trackingData: res.data.rows,
+                trackingColunm: trackingTable
             })
+        })
     }
 
     handleSubmitForm() {
@@ -161,7 +133,7 @@ class HealthReport extends React.Component{
 
         return(
             <Container className='py-4' fluid>
-                <Tabs defaultActiveKey="lbeacon_table" transition={false} id="noanim-tab-example" variant="pills">
+                <Tabs defaultActiveKey="lbeacon_table" transition={false} variant="pills" className='mb-1'>
                     <Tab eventKey="lbeacon_table" title="LBeacon" > 
                         <ReactTable 
                             style={style.reactTable} 
