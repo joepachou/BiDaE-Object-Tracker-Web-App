@@ -19,6 +19,8 @@ import InfoPrompt from '../presentational/InfoPrompt';
 import _ from 'lodash'
 import moment from 'moment'
 import { retrieveDataService } from '../../retrieveDataService'
+import Axios from 'axios';
+import dataSrc from '../../dataSrc'
 
 const myDevices = config.frequentSearchOption.MY_DEVICES;
 const allDevices = config.frequentSearchOption.ALL_DEVICES;
@@ -96,7 +98,9 @@ class MainContainer extends React.Component{
     }
 
     getTrackingData() {
-        retrieveDataService.getTrackingData()
+        Axios.post(dataSrc.getTrackingData,{
+            rssiThreshold: this.state.rssiThreshold
+        })
         .then(res => {
             const trackingData = this.handleRawTrackingData(res.data.rows)
             this.setState({
@@ -109,7 +113,6 @@ class MainContainer extends React.Component{
     }
 
     handleRawTrackingData(rawTrackingData) {
-
         moment.updateLocale('en', {
             relativeTime : Object
         });
@@ -132,54 +135,16 @@ class MainContainer extends React.Component{
                 yy: "%d years"
             }
         });
-        
-        // let lbsPosition = new Set()
-        const trackingData = rawTrackingData.map(item => {
+                const trackingData = rawTrackingData.map(item => {
 
             /** Set the object's location in the form of lbeacon coordinate parsing by lbeacon uuid  */
             const lbeaconCoordinate = item.lbeacon_uuid ? this.createLbeaconCoordinate(item.lbeacon_uuid) : null;
-            
-            // lbsPosition.add(lbeaconCoordinate.toString());
             item.currentPosition = lbeaconCoordinate
 
-            /** Tag the object that is found 
-             *  if the object's last_seen_timestamp is in the specific time period
-             *  and its rssi is below the specific rssi threshold  */
-            item.found = moment().diff(item.last_seen_timestamp, 'seconds') < config.objectManage.notFoundObjectTimePeriod 
-                && item.rssi > this.state.rssiThreshold ? 1: 0;
-
-            /** Set the residence time of the object */
-            item.residence_time = this.createResidenceTime(item.first_seen_timestamp, item.last_seen_timestamp, item.found)
-
-            /** Tag the object that is violate geofence */
-            if (moment().diff(item.geofence_violation_timestamp, 'seconds') > config.objectManage.geofenceViolationTimePeriod
-                || moment(item.first_seen_timestamp).diff(moment(item.geofence_violation_timestamp)) > 0) {
-                    
-                delete item.geofence_type
-            }
-
-            /** Tag the object that is on sos */
-            if (moment().diff(item.panic_timestamp, 'second') < config.objectManage.sosTimePeriod) {
-                item.panic = true
-            }
-            
-            /** Omit the unused field of the object */
-            delete item.first_seen_timestamp
-            delete item.last_seen_timestamp
-            delete item.geofence_violation_timestamp
-            delete item.panic_timestamp
-            delete item.rssi
-
+            delete item.lbeacon_uuid
             return item
         })
         return trackingData
-    }
-    
-    /** Set the residence time of the object */
-    createResidenceTime(start, end, isFound) {
-        const firstSeenTimestamp = moment(start)
-        const lastSeenTimestamp = moment(end)
-        return isFound ? lastSeenTimestamp.from(firstSeenTimestamp) : lastSeenTimestamp.fromNow();
     }
 
     /** Parsing the lbeacon's location coordinate from lbeacon_uuid*/
@@ -371,8 +336,8 @@ class MainContainer extends React.Component{
                             <Col sm={7} md={9} lg={9} xl={9} id='searchMap' className="pl-2 pr-1" >
                                 <br/>
                                 {this.state.hasSearchKey 
-                                    ?   <InfoPrompt data={this.state.searchResultObjectTypeMap} />                                        
-                                    :   <InfoPrompt data={{devices: this.state.trackingData.filter(item => item.found).length}} />
+                                    ?   <InfoPrompt data={this.state.searchResultObjectTypeMap} title="found" />                                        
+                                    :   <InfoPrompt data={{devices: this.state.trackingData.filter(item => item.found).length}} title="found" />
                                 }     
                                 <SurveillanceContainer 
                                     proccessedTrackingData={proccessedTrackingData.length === 0 ? trackingData : proccessedTrackingData}
