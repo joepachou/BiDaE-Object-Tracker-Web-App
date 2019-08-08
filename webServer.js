@@ -1,10 +1,9 @@
 require('dotenv').config();
-
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
-const httpPort = process.env.httpPort || 80;
-const httpsPort = process.env.httpsPort || 443;
+const httpPort = process.env.HTTP_PORT || 80;
+const httpsPort = process.env.HTTPS_PORT || 443;
 const db = require('./query')
 const path = require('path');
 const fs = require('fs');
@@ -48,7 +47,7 @@ app.get('/data/getGatewayTable', db.getGatewayTable);
 
 app.get('/data/geofenceData', db.getGeofenceData);
 
-app.get('/data/getTrackingData', db.getTrackingData);
+app.post('/data/getTrackingData', db.getTrackingData);
 
 app.post('/data/editObject', db.editObject);
 

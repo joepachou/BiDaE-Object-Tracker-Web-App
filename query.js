@@ -15,16 +15,48 @@ const pool = new pg.Pool(config)
 
 
 const getTrackingData = (request, response) => {
-    const { locationAccuracyMapToDefault, locationAccuracyMapToDB, accuracyValue } = request.body
-    pool.query(queryType.query_getTrackingData(accuracyValue, locationAccuracyMapToDefault, locationAccuracyMapToDB), (error, results) => {        
-        if (error) {
-            console.log("Get trackingData fails : " + error)
-        } else {
+    const { rssiThreshold } = request.body
+    pool.query(queryType.query_getTrackingData())        
+        .then(res => {
             console.log('Get tracking data!')
-        }
+            res.rows.map(item => {
 
-        response.status(200).json(results)
-    })
+                /** Tag the object that is found 
+                 *  if the object's last_seen_timestamp is in the specific time period
+                 *  and its rssi is below the specific rssi threshold  */
+                item.found = moment().diff(item.last_seen_timestamp, 'seconds') < 30 && item.rssi > rssiThreshold ? 1: 0;
+    
+                /** Set the residence time of the object */
+                item.residence_time =  item.found 
+                    ? moment(item.last_seen_timestamp).from(moment(item.first_seen_timestamp)) 
+                    : moment(item.last_seen_timestamp).fromNow();
+    
+                /** Tag the object that is violate geofence */
+                if (moment().diff(item.geofence_violation_timestamp, 'seconds') > 300
+                    || moment(item.first_seen_timestamp).diff(moment(item.geofence_violation_timestamp)) > 0) {
+                        
+                    delete item.geofence_type
+                }
+    
+                /** Tag the object that is on sos */
+                if (moment().diff(item.panic_timestamp, 'second') < 300) {
+                    item.panic = true
+                }
+                
+                /** Omit the unused field of the object */
+                delete item.first_seen_timestamp
+                delete item.last_seen_timestamp
+                delete item.geofence_violation_timestamp
+                delete item.panic_timestamp
+                delete item.rssi
+    
+                return item
+            })
+            response.status(200).json(res)
+
+        }).catch(err => {
+            console.log("Get trackingData fails : " + err)
+        })
 }
 
 const getObjectTable = (request, response) => {
@@ -44,32 +76,39 @@ const getObjectTable = (request, response) => {
 }
 
 const getLbeaconTable = (request, response) => {
-    pool.query(queryType.query_getLbeaconTable, (error, results) => {        
-        if (error) {
-            console.log("Get data fails : " + error)
-        }
-        console.log('Get lbeaconTable data!')
-    
-        results.rows.map(item => {
-            item.last_report_timestamp = moment(item.last_report_timestamp).tz(process.env.TZ).format();
+    pool.query(queryType.query_getLbeaconTable)
+        .then(res => {
+            console.log('Get lbeaconTable data!')
+            res.rows.map(item => {
+                item.last_report_timestamp = moment(item.last_report_timestamp).tz(process.env.TZ).format('lll');
+                item.health_status =  moment().diff(item.last_report_timestamp, 'days') < 1 ? 0 : 1 
+            })
+            response.status(200).json(res)
+
         })
-        response.status(200).json(results)
-    })
+        .catch(err => {
+            console.log("Get data fails : " + err)
+        })        
+
+
 }
 
 const getGatewayTable = (request, response) => {
-    pool.query(queryType.query_getGatewayTable, (error, results) => {        
-        if (error) {
-            console.log("Get data fails : " + error)                
-        } else {
+    pool.query(queryType.query_getGatewayTable)
+        .then(res => {
             console.log('Get gatewayTable data!')
-        }
+            res.rows.map(item => {
+                item.last_report_timestamp = moment(item.last_report_timestamp).tz(process.env.TZ).format('lll');
+                item.registered_timestamp = moment(item.registered_timestamp).tz(process.env.TZ).format('lll');
 
-        results.rows.map(item => {
-            item.last_report_timestamp = moment(item.last_report_timestamp).tz(process.env.TZ).format()
+                item.health_status =  item.health_status === 0 && moment().diff(item.last_report_timestamp, 'days') < 1 ? 0 : 1 
+            })
+            response.status(200).json(res)
+        })    
+        .catch(err => {
+            console.log("Get data fails : " + err)                
+
         })
-        response.status(200).json(results)
-    })
 }
 
 const getGeofenceData = (request, response) => {

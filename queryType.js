@@ -1,4 +1,4 @@
-function query_getTrackingData (accuracyValue = 1) {
+function query_getTrackingData () {
 	const query = `
 		SELECT 
 			object_table.mac_address,
@@ -63,9 +63,14 @@ const query_getLbeaconTable =
 
 const query_getGatewayTable = 
     `
-    select ip_address, health_status, last_report_timestamp from gateway_table ORDER BY last_report_timestamp DESC`;
-    // `
-	// select * from gateway_table ORDER BY last_report_timestamp DESC`;
+	SELECT 
+		ip_address, 
+		health_status, 
+		last_report_timestamp,
+		registered_timestamp 
+	FROM 
+		gateway_table 
+	ORDER BY last_report_timestamp DESC`;
 
 const query_getGeofenceData = 
 	// `
