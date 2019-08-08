@@ -48,6 +48,9 @@
     .notShowOnMobile {
         display: none;
     }
+    .container-fluid {
+        width: 100%
+    }
 }
 
 /* Small devices (landscape phones, 576px and up) */
