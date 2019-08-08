@@ -29,7 +29,9 @@ const getTrackingData = (request, response) => {
                 /** Set the residence time of the object */
                 item.residence_time =  item.found 
                     ? moment(item.last_seen_timestamp).from(moment(item.first_seen_timestamp)) 
-                    : moment(item.last_seen_timestamp).fromNow();
+                    : item.last_seen_timestamp 
+                        ? moment(item.last_seen_timestamp).fromNow()
+                        : 'N/A'
     
                 /** Tag the object that is violate geofence */
                 if (moment().diff(item.geofence_violation_timestamp, 'seconds') > 300
