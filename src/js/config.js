@@ -6,7 +6,7 @@ import sos from '../img/colorPin/sos.svg'
 import geofence_fence from '../img/geo_fence_fence.svg'
 import geofence_perimeter from '../img/geo_fence_perimeter.svg'
 import white_pin from '../img/white_pin.svg';
-import BOT_LOGO from '../img/BOT_LOGO_RED_MOD.png';
+import BOT_LOGO from '../img/BOT_LOGO_RED.png';
 
 const config = {
     
