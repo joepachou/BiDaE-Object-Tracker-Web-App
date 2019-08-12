@@ -11,6 +11,7 @@ import Cookies from 'js-cookie'
 import config from '../../config';
 import AuthenticationContext from '../../context/AuthenticationContext';
 import { authenticationService } from '../../authenticationService';
+import AccessControl from './AccessControl';
 
 class NavbarContainer extends React.Component {
     constructor() {
@@ -23,7 +24,6 @@ class NavbarContainer extends React.Component {
         this.handleLangSelect = this.handleLangSelect.bind(this);
         this.handleSigninFormShowUp = this.handleSigninFormShowUp.bind(this);
         this.handleSigninFormSubmit = this.handleSigninFormSubmit.bind(this);
-        this.handleSignout = this.handleSignout.bind(this);
         this.handleSignupFormShowUp = this.handleSignupFormShowUp.bind(this);
         this.handleSignupFormSubmit = this.handleSignupFormSubmit.bind(this);
         this.handleSignFormClose = this.handleSignFormClose.bind(this)
@@ -61,8 +61,7 @@ class NavbarContainer extends React.Component {
         )
     }
 
-    handleSigninFormSubmit(authentication) {
-        this.props.handleAuthentication(authentication)
+    handleSigninFormSubmit() {
         this.setState({
             isShowSigninForm: false,
         })
@@ -72,11 +71,6 @@ class NavbarContainer extends React.Component {
         this.setState({
             isShowSignupForm: false,
         })
-    }
-
-    handleSignout() {
-        const authentication = authenticationService.signout()
-        this.props.handleAuthentication(authentication)
     }
 
     handleSignFormClose() {
@@ -120,29 +114,35 @@ class NavbarContainer extends React.Component {
                         <Navbar.Collapse id="responsive-navbar-nav">  
                             <Nav className="mr-auto text-capitalize my-auto" >
                                 <Nav.Item><Link to="/" className="nav-link nav-route" >{locale.HOME}</Link></Nav.Item>
-                        {!auth.isSignin &&
-                            <>
-                                <Nav.Item><Link to="/page/healthReport" className="nav-link nav-route" >{locale.HEALTH_REPORT}</Link></Nav.Item>
-                                <Nav.Item><Link to="/page/geofence" className="nav-link nav-route" >{locale.GEOFENCE}</Link></Nav.Item>
-                                <Nav.Item><Link to="/page/objectManagement" className="nav-link nav-route" >{locale.OBJECT_MANAGEMENT}</Link></Nav.Item>
-                            </>
-                        }
+                                <AccessControl
+                                    permission={'route:geofence'}
+                                    renderNoAccess={() => null}
+                                >
+                                    <Nav.Item><Link to="/page/geofence" className="nav-link nav-route" >{locale.GEOFENCE}</Link></Nav.Item>
+                                </AccessControl>
+                                <AccessControl
+                                    permission={'route:healthReport'}
+                                    renderNoAccess={() => null}
+                                >
+                                    <Nav.Item><Link to="/page/healthReport" className="nav-link nav-route" >{locale.HEALTH_REPORT}</Link></Nav.Item>
+                                </AccessControl>
+                                <AccessControl
+                                    permission={'route:objectManagement'}
+                                    renderNoAccess={() => null}
+                                >
+                                    <Nav.Item><Link to="/page/objectManagement" className="nav-link nav-route" >{locale.OBJECT_MANAGEMENT}</Link></Nav.Item>
+                                </AccessControl>
                             </Nav>
                             <Nav className='text-capitalize'>
-                                {/* <NavDropdown title={locale.language} id="collasible-nav-dropdown" alignRight onSelect={this.handleLangSelect}>
-                                    {Object.values(supportedLocale).map( (locale,index) => {
-                                        return <NavDropdown.Item key={index} className="lang-select" eventKey={locale.abbr}>{locale.name}</NavDropdown.Item>
-                                    })}
-                                </NavDropdown>           */}
                                 <Nav.Item className="nav-link nav-route" onClick={this.handleLangSelect}>
                                     {supportedLocale[config.locale.supportedLocale.filter(item => item !== this.state.currentLocale).join()].name}
                                 </Nav.Item>
-                                {auth.isSignin
+                                {auth.authenticated
                                     ? 
                                         <NavDropdown title={<i className="fas fa-user-alt"></i> }id="collasible-nav-dropdown" alignRight>
-                                            <NavDropdown.Item className="lang-select" disabled>{auth.userInfo.name}</NavDropdown.Item>
+                                            <NavDropdown.Item className="lang-select" disabled>{auth.user.name}</NavDropdown.Item>
                                             <Dropdown.Divider />
-                                            <NavDropdown.Item className="lang-select" onClick={this.handleSignout}>{locale.SIGN_OUT}</NavDropdown.Item>
+                                            <NavDropdown.Item className="lang-select" onClick={auth.signout}>{locale.SIGN_OUT}</NavDropdown.Item>
                                         </NavDropdown> 
                                         
                                     : 
@@ -156,7 +156,7 @@ class NavbarContainer extends React.Component {
                             handleSigninFormSubmit={this.handleSigninFormSubmit}
                             handleSignupFormShowUp={this.handleSignupFormShowUp}
                             handleSignFormClose={this.handleSignFormClose}
-                            handleAuthentication={this.props.handleAuthentication}
+                            signin={auth.signin}
                         />
                         <SignupPage 
                             show={isShowSignupForm}
