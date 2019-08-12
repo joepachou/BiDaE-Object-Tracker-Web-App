@@ -9,7 +9,7 @@ import locale, { supportedLocale } from './js/locale';
 import LocaleContext from './js/context/LocaleContext';
 import config from './js/config';
 import moment from 'moment'
-import Auth from './js/components/Auth'
+import Auth from './js/Auth'
 
 class App extends React.Component {
 
