@@ -186,6 +186,10 @@ class SearchResult extends React.Component {
             ? this.props.searchResult.filter(item => !item.found) 
             : this.props.searchResult.filter(item => item.found)
 
+        let deviceNum = this.state.showNotFoundResult
+            ? this.props.searchResult.filter(item => item.found).length
+            : this.props.searchResult.filter(item => !item.found).length
+
         let title = this.state.showNotFoundResult 
             ? 'not found'
             : 'found'
@@ -230,7 +234,7 @@ class SearchResult extends React.Component {
                         <Row className='d-flex justify-content-center mt-3'>
                             <h4 style={style.titleText}>
                                 <a href="" onClick={this.handleToggleNotFound}>
-                                    {'Show' + ' ' + searchResult.length + ' Devices '}{this.state.showNotFoundResult ? null : 'not' } Found 
+                                    {'Show' + ' ' + deviceNum + ' Devices '}{this.state.showNotFoundResult ? null : 'not' } Found 
                                 </a>
                             </h4>
                         </Row>
