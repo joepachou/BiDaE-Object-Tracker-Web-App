@@ -203,7 +203,7 @@ class SearchResult extends React.Component {
                     <InfoPrompt data={{devices: searchResult.length}} title={title}/>
                 </Row>
                 <Row className='searchResultListGroup'>
-                    {this.props.searchResult.length === 0 
+                    {searchResult.length === 0 
                         ?   <Col className='d-flex justify-content-center font-italic font-weight-lighter' style={style.noResultDiv}>
                                 <div className='searchResultForDestop'>No Result</div>
                             </Col> 
@@ -221,7 +221,7 @@ class SearchResult extends React.Component {
                                     }
                                 >
                                     <SearchResultListGroup 
-                                        data={this.props.searchResult.filter(item => item.found)}
+                                        data={searchResult}
                                         handleSelectResultItem={this.handleSelectResultItem}
                                         selection={this.state.selection}
                                     />
