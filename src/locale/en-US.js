@@ -47,8 +47,6 @@ const en =  {
     RESERVE: 'reserve',
 
 
-    STATUS: 'status',
-
     /* Form */
     CANCEL: 'cancel',
     SEND: 'send',
@@ -69,7 +67,25 @@ const en =  {
     MAC_ADDRESS_IS_REQUIRED: 'Mac address is required',
     STATUS_IS_REQUIRED: 'Status is required',
 
+    /* Form field */
+    NAME: 'name',
+    TYPE: 'type',
+    ACCESS_CONTROL_NUMBER: 'access control number',
+    MAC_ADDRESS: 'mac address',
+    STATUS: 'status',
+    ACN: 'acn',
 
+    FOUND: 'found',
+
+    SHIFT_CHANGE_RECORD: 'Shift Change Record',
+
+    DEVICE_FOUND: function (length){
+        return length.toString()+' devices are found'
+    },
+    DEVICE_NOT_FOUND: function (length){
+        return length.toString()+' devices are not found'
+    },
+    SEARCH_RESULT: 'Search Results',
 
 }
 

@@ -1,19 +1,24 @@
-const IP = 'localhost';//'bot.iis.sinica.edu.tw'
+const IP = 'localhost:3000';//'bot.iis.sinica.edu.tw'
 
-const getTrackingData = 'https://' + IP + '/data/getTrackingData';
-const getObjectTable = 'https://' + IP + '/data/getObjectTable';
-const getLbeaconTable = 'https://' + IP + '/data/getLbeaconTable';
-const getGatewayTable = 'https://' + IP + '/data/getGatewayTable';
-const searchResult = 'https://' + IP + '/data/searchResult';
-const geofenceData = 'https://' + IP + '/data/geofenceData';
-const editObject = 'https://' + IP + '/data/editObject';
-const addObject = 'https://' + IP + '/data/addObject';
-const editObjectPackage = 'https://' + IP +'/data/editObjectPackage';
-const signin = 'https://' + IP + '/user/signin';
-const signup = 'https://' + IP + '/user/signup';
-const getUserInfo = 'https://' + IP + '/user/getUserInfo';
-const addUserSearchHistory = 'https://' + IP + '/user/addUserSearchHistory'
-const editLbeacon = 'https://' + IP + '/data/editLbeacon'
+const getTrackingData = 'http://' + IP + '/data/getTrackingData';
+const getObjectTable = 'http://' + IP + '/data/getObjectTable';
+const getLbeaconTable = 'http://' + IP + '/data/getLbeaconTable';
+const getGatewayTable = 'http://' + IP + '/data/getGatewayTable';
+const searchResult = 'http://' + IP + '/data/searchResult';
+const geofenceData = 'http://' + IP + '/data/geofenceData';
+const editObject = 'http://' + IP + '/data/editObject';
+const addObject = 'http://' + IP + '/data/addObject';
+const editObjectPackage = 'http://' + IP +'/data/editObjectPackage';
+const signin = 'http://' + IP + '/user/signin';
+const signup = 'http://' + IP + '/user/signup';
+const getUserInfo = 'http://' + IP + '/user/getUserInfo';
+const addUserSearchHistory = 'http://' + IP + '/user/addUserSearchHistory'
+const editLbeacon = 'http://' + IP + '/data/editLbeacon'
+
+const pdfUrl = function(path){
+    return 'http://' + IP + '/' + path
+}
+const QRCode = 'http://' + IP + '/data/QRCOde'
 
 module.exports = {
     getTrackingData,
@@ -29,5 +34,7 @@ module.exports = {
     signup,
     getUserInfo,
     addUserSearchHistory,
-    editLbeacon
+    editLbeacon,
+    pdfUrl,
+    QRCode
 };

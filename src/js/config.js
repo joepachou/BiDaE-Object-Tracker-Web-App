@@ -151,6 +151,12 @@ const config = {
         ALL_DEVICES: 'all devices'
     },
 
+    searchResult:{
+        showImage: false,
+        style: 'list',
+        displayMode: 'showAll',
+    }
+
 }
 
 export default config

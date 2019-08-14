@@ -9,16 +9,18 @@ const path = require('path');
 const fs = require('fs');
 const http = require('http');
 const https = require('https');
+var session = require('express-session')
+
 
 app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: true,}));
+// app.use(express.static(path.join(__dirname,'dist')));
 
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-  })
-);
-
-app.use(express.static(path.join(__dirname,'dist')));
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true
+}))
 
 
 app.use(function(req, res, next) {
@@ -35,7 +37,8 @@ var credentials = { key: privateKey, cert: certificate, ca: ca_bundle };
 
 
 app.get(/^\/page\/(.*)/, (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist','index.html'));
+    console.log(req.test)
+    res.sendFile(path.join(__dirname, 'dist','index.html'));    
 })
 
 
@@ -64,6 +67,9 @@ app.post('/user/getUserInfo', db.getUserInfo)
 app.post('/user/addUserSearchHistory', db.addUserSearchHistory)
 
 app.post('/data/editLbeacon', db.editLbeacon)
+
+app.post('/data/QRCode',db.QRCode)
+
 
 
 const httpsServer = https.createServer(credentials, app);

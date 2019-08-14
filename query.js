@@ -3,6 +3,8 @@ const moment = require('moment-timezone');
 const queryType = require ('./queryType');
 const bcrypt = require('bcrypt');
 const pg = require('pg');
+const pdf = require('html-pdf');
+
 const config = {
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
@@ -14,8 +16,9 @@ const pool = new pg.Pool(config)
 
 
 
+
 const getTrackingData = (request, response) => {
-    const { rssiThreshold } = request.body
+    const rssiThreshold = request.body.rssiThreshold || -65
     pool.query(queryType.query_getTrackingData())        
         .then(res => {
             console.log('Get tracking data!')
@@ -24,7 +27,7 @@ const getTrackingData = (request, response) => {
                 /** Tag the object that is found 
                  *  if the object's last_seen_timestamp is in the specific time period
                  *  and its rssi is below the specific rssi threshold  */
-                item.found = moment().diff(item.last_seen_timestamp, 'seconds') < 30 && item.rssi > rssiThreshold ? 1: 0;
+                item.found = moment().diff(item.last_seen_timestamp, 'seconds') < 30 && item.rssi > rssiThreshold ? 1 : 0;
     
                 /** Set the residence time of the object */
                 item.residence_time =  item.found 
@@ -271,6 +274,70 @@ const editLbeacon = (request, response) => {
         response.status(200).json(results)
     })
 }
+
+const  QRCode = (request, response) => {
+    // console.log(result)
+    var {foundResult, notFoundResult, user} = request.body
+    console.log(typeof user)
+    var header = "<h1 style='text-align: center;'>" + "checked by " + user + "</h1>"
+    console.log(header)
+    var timestamp = "<h3 style='text-align: center;'>" + moment().format('LLLL') + "</h3>"
+
+    function generateTable(title, types, lists, attributes){
+        var html = "<div>"
+        html += "<h2 style='text-align: center;'>" + title + "</h2>"
+        html += "<table border='1' style='width:100%;word-break:break-word;'>";
+        html += "<tr>";
+        for(var i in types){
+            html += "<th >" + types[i] + "</th>";
+        }
+        for (var i of lists){
+            html += "<tr>";
+            for(var j of attributes){
+                html += "<td>"+i[j]+"</td>";
+            }
+        }
+        html += "</table></div>"
+
+        return html
+    }
+
+    // foundResult to Table
+    
+    var types = ["Name", "Type", "ACN", "Location"]
+    var attributes = ["name", "type", "access_control_number", "location_description"]
+
+    var title = "Found Results"
+    var lists = foundResult
+    var foundTable = generateTable(title, types, lists, attributes)
+
+
+    var title = "Not Found Results"
+    var lists = notFoundResult
+    var notFoundTable = generateTable(title, types, lists, attributes)
+
+
+    
+    
+    var options = {
+        "format": "A4",
+        "orientation": "landscape",
+        "border": {
+            "top": "0.3in",            // default is 0, units: mm, cm, in, px
+            "right": "2in",
+            "bottom": "0.3in",
+            "left": "2in"
+        },
+        "timeout": "120000"
+    };
+    var html = header + timestamp + foundTable + notFoundTable
+    var filePath = `save_file_path/${user}_${moment().format('LLLL')}.pdf`
+    pdf.create(html, options).toFile(filePath, function(err, result) {
+        if (err) return console.log(err);
+        console.log("pdf create");
+        response.status(200).json(filePath)
+    });
+}
     
 module.exports = {
     getTrackingData,
@@ -285,6 +352,8 @@ module.exports = {
     signup,
     getUserInfo,
     addUserSearchHistory,
-    editLbeacon
+    editLbeacon,
+    QRCode
+
     
 }

@@ -12,6 +12,7 @@ import config from '../../config';
 import AuthenticationContext from '../../context/AuthenticationContext';
 import { authenticationService } from '../../authenticationService';
 import AccessControl from './AccessControl';
+import ShiftChange from '../container/ShiftChange'
 
 class NavbarContainer extends React.Component {
     constructor() {
@@ -19,6 +20,7 @@ class NavbarContainer extends React.Component {
         this.state = {
             isShowSigninForm: false,
             isShowSignupForm: false,
+            isShowShiftChange: false,
             currentLocale: config.locale.defaultLocale
         }
         this.handleLangSelect = this.handleLangSelect.bind(this);
@@ -80,6 +82,18 @@ class NavbarContainer extends React.Component {
         })
     }
 
+    handleShiftChangeRecordShowUp = () => {
+        this.setState({
+            isShowShiftChange: true
+        })
+    }
+
+    handleShiftChangeRecordClose = () => {
+        this.setState({
+            isShowShiftChange: false
+        })
+    }
+
     render() {
         const style = {
             navbar: {
@@ -92,7 +106,11 @@ class NavbarContainer extends React.Component {
             }
         }
         const locale = this.context;
-        const { isShowSigninForm, isShowSignupForm } = this.state;
+        const { 
+            isShowSigninForm, 
+            isShowSignupForm,
+            isShowShiftChange
+        } = this.state;
 
         return (
             <AuthenticationContext.Consumer>
@@ -142,6 +160,8 @@ class NavbarContainer extends React.Component {
                                         <NavDropdown title={<i className="fas fa-user-alt"></i> }id="collasible-nav-dropdown" alignRight>
                                             <NavDropdown.Item className="lang-select" disabled>{auth.user.name}</NavDropdown.Item>
                                             <Dropdown.Divider />
+                                            <NavDropdown.Item className="lang-select" onClick={this.handleShiftChangeRecordShowUp}>{locale.SHIFT_CHANGE_RECORD}</NavDropdown.Item>
+                                            <Dropdown.Divider />
                                             <NavDropdown.Item className="lang-select" onClick={auth.signout}>{locale.SIGN_OUT}</NavDropdown.Item>
                                         </NavDropdown> 
                                         
@@ -162,6 +182,11 @@ class NavbarContainer extends React.Component {
                             show={isShowSignupForm}
                             handleSignupFormSubmit={this.handleSignupFormSubmit}
                             handleSignFormClose={this.handleSignFormClose}
+                        />
+                        <ShiftChange 
+                            show = {isShowShiftChange}
+                            handleShiftChangeRecordSubmit = {this.handleShiftChangeRecordSubmit}
+                            handleShiftChangeRecordClose={this.handleShiftChangeRecordClose}
                         />
                     </Navbar>
                 )}
