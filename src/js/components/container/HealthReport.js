@@ -2,7 +2,7 @@
 import React from 'react';
 
 /** Import Components */
-import { Row, Col, Container, Tabs, Tab } from 'react-bootstrap';
+import { Row, Col, Container, Tabs, Tab, Nav, Button, ButtonToolbar } from 'react-bootstrap';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import EditLbeaconForm from './EditLbeaconForm'
@@ -88,7 +88,7 @@ class HealthReport extends React.Component{
 
     getTrackingData() {
         Axios.post(dataSrc.getTrackingData,{
-            rssiThreshold: config.surveillanceMap.locationAccuracyMapToDefault[1]
+            rssiThreshold: config.surveillanceMap.locationAccuracyMapToDefault[config.objectManage.objectManagementRSSIThreshold]
         })
         .then(res => {
             this.setState({
@@ -133,6 +133,35 @@ class HealthReport extends React.Component{
 
         return(
             <Container className='py-4' fluid>
+            <ButtonToolbar>
+                <Button variant="outline-primary">Primary</Button>
+                <Button variant="outline-secondary">Secondary</Button>
+                <Button variant="outline-success">Success</Button>
+                <Button variant="outline-warning">Warning</Button>
+                <Button variant="outline-danger">Danger</Button>
+                <Button variant="outline-info">Info</Button>
+                <Button variant="outline-light">Light</Button>
+                <Button variant="outline-dark">Dark</Button>
+            </ButtonToolbar>
+            <Nav
+                activeKey="/home"
+                onSelect={selectedKey => alert(`selected ${selectedKey}`)}
+            >
+                <Nav.Item>
+                    <Button>123</Button>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link eventKey="link-1">Link</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link eventKey="link-2">Link</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link eventKey="disabled" disabled>
+                    Disabled
+                    </Nav.Link>
+                </Nav.Item>
+            </Nav>
                 <Tabs defaultActiveKey="lbeacon_table" transition={false} variant="pills" className='mb-1'>
                     <Tab eventKey="lbeacon_table" title="LBeacon" > 
                         <ReactTable 

@@ -1,4 +1,5 @@
 import map from '../img/IIS_Newbuilding_4F_reBack.png';
+import NTUH_YUNLIN_BRANCH_MAP from '../img/NTUH_Yunlin_Branch_Map.png';
 
 import black_pin from '../img/colorPin/Black.svg'
 import darkGrey_pin from '../img/colorPin/DarkGrey.svg';
@@ -13,7 +14,7 @@ const config = {
     surveillanceMap: {
 
         /* Surveillance map source*/
-        map: map,
+        map: NTUH_YUNLIN_BRANCH_MAP,
 
         /* Map customization */
         mapOptions: {
@@ -60,7 +61,11 @@ const config = {
         intevalTime: 1000,
 
         /* Bound of surveillance map*/
-        mapBound:[[0,0], [21130,35710]],
+        // mapBound:[[0,0], [21130,35710]],
+
+        // mapBound:[[0,0], [651,1584]],
+        mapBound:[[2000,-8500], [14067,18428]],
+
         
         /* Tracking object Rssi filter */
         locationAccuracyMapToDefault: {
@@ -76,9 +81,11 @@ const config = {
         },
 
         /* Marker dispersity, can be any positive number */
-        markerDispersity: 8,
+        markerDispersity: 5,
 
-        objectTypeSet: new Set(['Bed', 'EKG Machine', 'Infusion pump', 'SONOSITE Ultrasound', 'Ultrasound', 'Bladder scanner', 'CPM'])
+        // objectTypeSet: new Set(['Bed', 'EKG Machine', 'Infusion pump', 'SONOSITE Ultrasound', 'Ultrasound', 'Bladder scanner', 'CPM'])
+        objectTypeSet: ['三合一Monitoring', 'EKG', 'IV Pump', '烤燈', '血壓血氧監視器', '電擊器', 'CPM']
+
         
     },
 
@@ -97,8 +104,12 @@ const config = {
         /* The definition of the time period that the object is not scanned by lbeacon
          * The time period unit is seconds */
         notFoundObjectTimePeriod: 30,
+
         geofenceViolationTimePeriod: 300,
+
         sosTimePeriod: 300,
+
+        objectManagementRSSIThreshold: 0
     },
 
     transferredLocation: [
