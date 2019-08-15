@@ -4,6 +4,8 @@ const queryType = require ('./queryType');
 const bcrypt = require('bcrypt');
 const pg = require('pg');
 const pdf = require('html-pdf');
+const session = require('express-session')
+
 
 const config = {
     user: process.env.DB_USER,
@@ -193,6 +195,8 @@ const signin = (request, response) => {
                     userInfo.myDevice = results.rows[0].mydevice
                     userInfo.name= results.rows[0].name
                     userInfo.searchHistory = results.rows[0].search_history
+                    request.session.userInfo = userInfo
+                    
                     response.json({
                         authentication: true,
                         userInfo
@@ -278,9 +282,7 @@ const editLbeacon = (request, response) => {
 const  QRCode = (request, response) => {
     // console.log(result)
     var {foundResult, notFoundResult, user} = request.body
-    console.log(typeof user)
     var header = "<h1 style='text-align: center;'>" + "checked by " + user + "</h1>"
-    console.log(header)
     var timestamp = "<h3 style='text-align: center;'>" + moment().format('LLLL') + "</h3>"
 
     function generateTable(title, types, lists, attributes){
@@ -314,7 +316,7 @@ const  QRCode = (request, response) => {
 
     var title = "Not Found Results"
     var lists = notFoundResult
-    var notFoundTable = generateTable(title, types, lists, attributes)
+    var notFoundTable = lists.length !== 0 ? generateTable(title, types, lists, attributes) : '';
 
 
     
