@@ -7,7 +7,7 @@ import SearchContainer from './SearchContainer';
 /** Import Presentational Component */
 
 import 'react-table/react-table.css';
-import SearchResult from '../presentational/SearchResultList'
+import SearchResultList from '../presentational/SearchResultList'
 
 
 import { Row, Col } from 'react-bootstrap'
@@ -41,7 +41,8 @@ class MainContainer extends React.Component{
             clearSearchResult: false,
             hasGridButton: false,
             isHighlightSearchPanel: false,
-            rssiThreshold: config.surveillanceMap.locationAccuracyMapToDefault[1]
+            rssiThreshold: config.surveillanceMap.locationAccuracyMapToDefault[1],
+            // objectTypeList: []
         }
 
         this.processSearchResult = this.processSearchResult.bind(this);
@@ -135,17 +136,38 @@ class MainContainer extends React.Component{
                 yy: "%d years"
             }
         });
-                const trackingData = rawTrackingData.map(item => {
+        const trackingData = rawTrackingData.map(item => {
 
             /** Set the object's location in the form of lbeacon coordinate parsing by lbeacon uuid  */
             const lbeaconCoordinate = item.lbeacon_uuid ? this.createLbeaconCoordinate(item.lbeacon_uuid) : null;
             item.currentPosition = lbeaconCoordinate
 
+            // if (!objectType.includes(item.type)) objectType.push(item.type)
+
             delete item.lbeacon_uuid
+
             return item
         })
+        // let objectTypeList = []
+        // objectTypeList = this.GetTypeKeyList(trackingData)
+
+        // console.log(objectTypeList)
+        // this.setState({
+        //     objectTypeList: objectTypeList
+        // })
         return trackingData
     }
+
+    // GetTypeKeyList = (searchableObjectList) => {
+    //     var set = new Array()
+    //     for(var item of searchableObjectList){
+    //         if(!set.includes(item.type)){
+    //             set.push(item.type)
+    //         }
+            
+    //     }
+    //     return set
+    // }
 
     /** Parsing the lbeacon's location coordinate from lbeacon_uuid*/
     createLbeaconCoordinate(lbeacon_uuid){
@@ -185,7 +207,6 @@ class MainContainer extends React.Component{
         }, {})
 
         duplicateSearchKey.map(key => searchResultObjectTypeMap[key] = 0)
-
         if(colorPanel) {
             this.setState({
                 hasSearchKey: Object.keys(colorPanel).length === 0 ? false : true,
@@ -235,6 +256,7 @@ class MainContainer extends React.Component{
 
     /** Fired once the user click the item in object type list or in frequent seaerch */
     getSearchKey(searchKey, colorPanel = null, searchValue = null) {
+
         const searchResult = this.getResultBySearchKey(searchKey, colorPanel, searchValue)
         this.processSearchResult(searchResult, colorPanel, searchKey, searchValue)
     }
@@ -245,7 +267,7 @@ class MainContainer extends React.Component{
         let proccessedTrackingData = _.cloneDeep(this.state.trackingData)
 
         if (searchKey === myDevices) {
-            const devicesAccessControlNumber = auth.userInfo.myDevice
+            const devicesAccessControlNumber = auth.user.myDevice
             proccessedTrackingData.map(item => {
                 if (devicesAccessControlNumber.includes(item.access_control_number)) {
                     item.searched = true;
@@ -356,14 +378,13 @@ class MainContainer extends React.Component{
                                     hasGridButton={this.state.hasGridButton}
                                     auth={auth}
                                     getSearchKey={this.getSearchKey}
+                                    // objectTypeList={this.state.objectTypeList}
                                 />
                                 
                                 <div style={style.searchResultDiv} className='py-3'>
-                                    <SearchResult 
+                                    <SearchResultList
                                         searchResult={this.state.searchResult} 
                                         searchKey={this.state.searchKey}
-                                        colorPanel={this.state.colorPanel}
-                                        auth={auth}
                                         highlightSearchPanel={this.highlightSearchPanel}
                                     />
                                 </div>

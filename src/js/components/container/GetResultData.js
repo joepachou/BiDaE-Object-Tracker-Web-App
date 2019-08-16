@@ -16,7 +16,6 @@ export default async function GetResultData(SearchKey, searchableObjectList){
             await axios.post(dataSrc.getUserInfo, {
                 username: 'joechou'
             }).then( res => {
-                console.log(searchableObjectList)
                 var mydevice = new Set(res.data.rows[0].mydevice);
                 for(var i in searchableObjectList){
                     if(mydevice.has(searchableObjectList[i].access_control_number)){

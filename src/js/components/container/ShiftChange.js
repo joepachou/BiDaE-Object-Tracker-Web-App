@@ -88,7 +88,6 @@ class ShiftChange extends React.Component {
                         notFoundResult: notFoundResult,
                     }
                 })
-                console.log(this.state.searchResult)
             }) 
         })
         .catch(error => {
@@ -109,6 +108,9 @@ class ShiftChange extends React.Component {
                 foundResult: this.state.searchResult.foundResult,
                 notFoundResult: this.state.searchResult.notFoundResult,
             }).then(res => {
+                setTimeout(() => {
+                    this.props.handleShiftChangeRecordClose()
+                }, 3000)
                 this.setState({
                     fileURL: res.data
                 })
@@ -122,8 +124,8 @@ class ShiftChange extends React.Component {
             <Fragment>
                 <Modal show={show} size="lg" style={{height: '90vh'}} onHide={this.handleClose}>
                     <Modal.Header > 
-                        <div className="w-100 text-center">
-                            <h3>Checked by joechou</h3>
+                        <div className="w-100 text-center text-capitalize">
+                            <h3>Checked By Joechou Day Shift</h3>
                                 <br />
                             <h5>At {moment().format('LLLL')}</h5>
                         </div>
