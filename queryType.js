@@ -157,9 +157,20 @@ function query_signin(username) {
 
 	const text =
 		`
-		SELECT name, password, mydevice, search_history
+		SELECT 
+			user_table.name, 
+			user_table.password,
+			roles.role, 
+			user_table.mydevice, 
+			user_table.search_history
+
 		FROM user_table
-		WHERE name= $1
+
+		LEFT JOIN roles
+		ON roles.id = user_table.role
+
+		WHERE name = $1
+		
 		`;
 
 	const values = [username];

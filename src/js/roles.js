@@ -15,7 +15,7 @@ const rules = {
     register: {
         permission: [
             "form:edit",
-            "route:healthReport",
+            "route:geofence",
         ]
     },
     admin: {

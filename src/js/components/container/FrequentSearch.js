@@ -65,8 +65,8 @@ class FrequentSearch extends React.Component {
                             <h4 className='text-capitalize'>{locale.FREQUENT_SEARCH}</h4>
                         </Row>
                         <div className='d-inline-flex flex-column mb-3' id='frequentSearch' >
-                            {auth.isSignin
-                                && auth.userInfo.searchHistory.filter( (item,index) => {
+                            {auth.authenticated && auth.user.searchHistory
+                                && auth.user.searchHistory.filter( (item,index) => {
                                 return item.name !== 'All' && index < config.userPreference.searchHistoryNumber
                             }).map( (item, index) => {
                                 
@@ -77,13 +77,14 @@ class FrequentSearch extends React.Component {
                                         active={this.state.searchKey === item.name.toLowerCase()} 
                                         key={index}
                                         name={item.name}
+                                        className="text-capitalize"
                                     >
                                         {item.name}
                                     </Button>
                                 )
                             })}
                             &nbsp;
-                            {auth.isSignin && 
+                            {auth.authenticated && auth.user.myDevice &&
                                 <Button
                                     variant="outline-custom"
                                     onClick={this.handleClick} 

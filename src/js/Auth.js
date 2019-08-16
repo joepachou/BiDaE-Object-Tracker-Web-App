@@ -5,26 +5,25 @@ import Cookies from 'js-cookie'
 class Auth extends React.Component {
 
     state = {
-        authenticated: false,
-        user: {
-            role: "guest"
-        },
+        authenticated: Cookies.get('authenticated'),
+        user: Cookies.get('user') ? {...JSON.parse(Cookies.get('user'))} : null,
         accessToken: ""
     }
 
-    signin = (user) => {
+    signin = (userInfo) => {
         Cookies.set('authenticated', true)
+        Cookies.set('user', userInfo)
         this.setState({
             authenticated: true,
             user: {
-                ...user,
-                role: "register"
+                ...userInfo,
             }
         })
     };
   
     signout = () => {
         Cookies.remove('authenticated')
+        Cookies.remove('user')
         this.setState({
             authenticated: false,
             user: {

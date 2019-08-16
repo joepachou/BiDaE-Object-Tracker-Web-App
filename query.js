@@ -4,7 +4,6 @@ const queryType = require ('./queryType');
 const bcrypt = require('bcrypt');
 const pg = require('pg');
 const pdf = require('html-pdf');
-const session = require('express-session')
 
 
 const config = {
@@ -191,12 +190,20 @@ const signin = (request, response) => {
 
                 const hash = results.rows[0].password
                 if (bcrypt.compareSync(pwd, hash)) {
+                    console.log(results.rows[0])
                     let userInfo = {}
-                    userInfo.myDevice = results.rows[0].mydevice
-                    userInfo.name= results.rows[0].name
-                    userInfo.searchHistory = results.rows[0].search_history
+                    let { 
+                        name, 
+                        role, 
+                        mydevice, 
+                        search_history 
+                    } = results.rows[0]
+                    userInfo.name= name
+                    userInfo.myDevice = mydevice
+                    userInfo.role = role
+                    userInfo.searchHistory = search_history
+
                     request.session.userInfo = userInfo
-                    
                     response.json({
                         authentication: true,
                         userInfo
@@ -282,7 +289,7 @@ const editLbeacon = (request, response) => {
 const  QRCode = (request, response) => {
     // console.log(result)
     var {foundResult, notFoundResult, user} = request.body
-    var header = "<h1 style='text-align: center;'>" + "checked by " + user + "</h1>"
+    var header = "<h1 style='text-align: center; class='text-capitalize'>" + "Checked By " + 'Joechou' +  ' Day Shift' + "</h1>"
     var timestamp = "<h3 style='text-align: center;'>" + moment().format('LLLL') + "</h3>"
 
     function generateTable(title, types, lists, attributes){
@@ -333,7 +340,7 @@ const  QRCode = (request, response) => {
         "timeout": "120000"
     };
     var html = header + timestamp + foundTable + notFoundTable
-    var filePath = `save_file_path/${user}_${moment().format('LLLL')}.pdf`
+    var filePath = `save_file_path/joechou_day_shift_${moment().format('LLLL')}.pdf`
     pdf.create(html, options).toFile(filePath, function(err, result) {
         if (err) return console.log(err);
         console.log("pdf create");
