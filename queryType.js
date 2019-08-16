@@ -160,16 +160,19 @@ function query_signin(username) {
 		SELECT 
 			user_table.name, 
 			user_table.password,
-			roles.role, 
+			roles.name as role, 
 			user_table.mydevice, 
 			user_table.search_history
 
 		FROM user_table
 
-		LEFT JOIN roles
-		ON roles.id = user_table.role
+		LEFT JOIN user_roles
+		ON user_roles.user_id = user_table.id
 
-		WHERE name = $1
+		LEFT JOIN roles
+		ON user_roles.role_id = roles.id
+
+		WHERE user_table.name = $1
 		
 		`;
 
@@ -254,6 +257,26 @@ function query_editLbeacon (uuid, low, med, high, description) {
 	return query
 }
 
+function query_modifyUserDevices(username, mode, acn){
+	console.log(acn)
+	var text = ""
+	if(mode === 'add'){
+		text = `UPDATE user_table SET mydevice = array_append(mydevice, '${acn}') WHERE name = '${username}';`
+	}else if(mode === 'remove'){
+		text = `UPDATE user_table SET mydevice = array_remove(mydevice, '${acn}') WHERE name = '${username}';`
+	}else{
+		text = ""
+	}
+
+	return text
+	
+}
+
+function query_getShiftChangeRecord(){
+	const query = `SELECT * FROM shift_change_record`
+	return query
+}
+
 module.exports = {
     query_getTrackingData,
     query_getObjectTable,
@@ -268,4 +291,8 @@ module.exports = {
 	query_getUserInfo,
 	query_addUserSearchHistory,
 	query_editLbeacon,
+	query_modifyUserDevices,
+	query_getShiftChangeRecord,
+	
+
 }

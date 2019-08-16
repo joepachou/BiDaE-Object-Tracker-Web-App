@@ -2,15 +2,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom";
 import { supportedLocale } from '../../../js/locale';
+import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Nav, NavDropdown, Image, Dropdown  } from 'react-bootstrap'
 import LocaleContext from '../../context/LocaleContext';
 import SigninPage from '../container/SigninPage';
 import SignupPage from '../container/SignupPage';
-import Cookies from 'js-cookie'
-
 import config from '../../config';
 import AuthenticationContext from '../../context/AuthenticationContext';
-import { authenticationService } from '../../authenticationService';
 import AccessControl from './AccessControl';
 import ShiftChange from '../container/ShiftChange'
 
@@ -158,7 +156,9 @@ class NavbarContainer extends React.Component {
                                 {auth.authenticated
                                     ? 
                                         <NavDropdown title={<i className="fas fa-user-alt"></i> }id="collasible-nav-dropdown" alignRight>
-                                            <NavDropdown.Item className="lang-select" disabled>{auth.user.name}</NavDropdown.Item>
+                                            <LinkContainer to="/page/userSetting" className="bg-white">
+                                                <NavDropdown.Item className="lang-select">{auth.user.name}</NavDropdown.Item>
+                                            </LinkContainer>
                                             <Dropdown.Divider />
                                             <NavDropdown.Item className="lang-select" onClick={this.handleShiftChangeRecordShowUp}>{locale.SHIFT_CHANGE_RECORD}</NavDropdown.Item>
                                             <Dropdown.Divider />

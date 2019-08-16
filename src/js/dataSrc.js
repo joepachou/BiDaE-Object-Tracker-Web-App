@@ -14,11 +14,15 @@ const signup = 'http://' + IP + '/user/signup';
 const getUserInfo = 'http://' + IP + '/user/getUserInfo';
 const addUserSearchHistory = 'http://' + IP + '/user/addUserSearchHistory'
 const editLbeacon = 'http://' + IP + '/data/editLbeacon'
+const modifyMyDevice = 'http://' + IP + '/data/modifyMyDevice';
+const QRCode = 'http://' + IP + '/data/QRCOde'
+const getPDFInfo = 'http://' + IP + '/data/PDFInfo'
+
+
 
 const pdfUrl = function(path){
     return 'http://' + IP + '/' + path
 }
-const QRCode = 'http://' + IP + '/data/QRCOde'
 
 module.exports = {
     getTrackingData,
@@ -36,5 +40,7 @@ module.exports = {
     addUserSearchHistory,
     editLbeacon,
     pdfUrl,
-    QRCode
+    QRCode,
+    modifyMyDevice,
+    getPDFInfo
 };

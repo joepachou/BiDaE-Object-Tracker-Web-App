@@ -9,19 +9,20 @@ const path = require('path');
 const fs = require('fs');
 const http = require('http');
 const https = require('https');
-var session = require('express-session')
-
+const session = require('express-session')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true,}));
-// app.use(express.static(path.join(__dirname,'dist')));
+app.use(express.static(path.join(__dirname,'dist')));
 
 app.use(session({
-    secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: true
+    secret: 'super_hound',
+    resave: true,
+    saveUninitialized: true,
+    cookie: {
+        maxAge: 60 * 1000 * 300
+    }
 }))
-
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -29,18 +30,22 @@ app.use(function(req, res, next) {
     next();
 });
 
-var privateKey = fs.readFileSync(__dirname + '/sslforfree/private.key');
-var certificate = fs.readFileSync(__dirname + '/sslforfree/certificate.crt');
-var ca_bundle = fs.readFileSync(__dirname + '/sslforfree/ca_bundle.crt');
 
-var credentials = { key: privateKey, cert: certificate, ca: ca_bundle };
+app.get('/', (req,res) => {
+    console.log(123)
+    if (req.session.userInfo) {
+        res.write('views: ' + req.session.userInfo + req.sessionID)
+        res.end()
+    } else {
+        req.session.userInfo = 'joechou'
+        res.end('welcome to the session demo. refresh!')
+    }
+})
 
 
 app.get(/^\/page\/(.*)/, (req, res) => {
-    console.log(req.test)
-    res.sendFile(path.join(__dirname, 'dist','index.html'));    
+    res.sendFile(path.join(__dirname, 'dist','index.html'));
 })
-
 
 app.get('/data/getObjectTable', db.getObjectTable);
 
@@ -58,7 +63,7 @@ app.post('/data/addObject', db.addObject);
 
 app.post('/data/editObjectPackage', db.editObjectPackage)
 
-app.post('/user/signin', db.signin);
+app.post('/user/signin', db.signin)
 
 app.post('/user/signup', db.signup);
 
@@ -70,7 +75,20 @@ app.post('/data/editLbeacon', db.editLbeacon)
 
 app.post('/data/QRCode',db.QRCode)
 
+app.get('/data/PDFInfo',db.getPDFInfo)
 
+app.post('/data/modifyMyDevice', db.modifyUserDevices)
+
+
+var privateKey = fs.readFileSync(__dirname + '/sslforfree/private.key');
+var certificate = fs.readFileSync(__dirname + '/sslforfree/certificate.crt');
+var ca_bundle = fs.readFileSync(__dirname + '/sslforfree/ca_bundle.crt');
+
+var credentials = { 
+    key: privateKey, 
+    cert: certificate, 
+    ca: ca_bundle 
+};
 
 const httpsServer = https.createServer(credentials, app);
 const httpServer = http.createServer(app);

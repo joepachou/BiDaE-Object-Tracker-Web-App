@@ -286,6 +286,8 @@ const editLbeacon = (request, response) => {
     })
 }
 
+
+
 const  QRCode = (request, response) => {
     // console.log(result)
     var {foundResult, notFoundResult, user} = request.body
@@ -347,6 +349,34 @@ const  QRCode = (request, response) => {
         response.status(200).json(filePath)
     });
 }
+
+const modifyUserDevices = (request, response) => {
+    const {username, mode, acn} = request.body
+    console.log(queryType.query_modifyUserDevices(username, mode, acn))
+    pool.query(queryType.query_modifyUserDevices(username, mode, acn), (error, results) => {
+        if (error) {
+            
+        } else {
+            console.log('Modify Success')
+            // console.log('Get user info success')
+        }
+        
+        response.status(200).json(results)
+    })
+}
+
+const getPDFInfo = (request, response) => {
+    var query = queryType.query_getShiftChangeRecord()
+    pool.query(query, (error, results) => {
+        if (error) {
+            console.log('save pdf file fails ' + error)
+        } else {
+            response.status(200).json(results)
+            console.log('save pdf file success')
+        }
+        
+    })   
+}
     
 module.exports = {
     getTrackingData,
@@ -362,7 +392,7 @@ module.exports = {
     getUserInfo,
     addUserSearchHistory,
     editLbeacon,
-    QRCode
-
-    
+    QRCode,
+    modifyUserDevices,
+    getPDFInfo
 }
