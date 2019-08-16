@@ -79,6 +79,11 @@ app.get('/data/PDFInfo',db.getPDFInfo)
 
 app.post('/data/modifyMyDevice', db.modifyUserDevices)
 
+app.get('/download', (req, res) => {
+    const file = `${__dirname}/Download/com.beditech.IndoorNavigation.apk`;
+    res.download(file); // Set disposition and send it.
+});
+
 
 var privateKey = fs.readFileSync(__dirname + '/sslforfree/private.key');
 var certificate = fs.readFileSync(__dirname + '/sslforfree/certificate.crt');
