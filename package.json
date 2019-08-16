@@ -43,6 +43,7 @@
     "bcrypt": "^3.0.6",
     "body-scroll-lock": "^2.6.1",
     "bootstrap": "^4.3.1",
+    "cookie-parser": "^1.4.4",
     "dotenv": "^6.2.0",
     "express-session": "^1.16.2",
     "formik": "^1.5.7",
