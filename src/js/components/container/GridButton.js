@@ -44,7 +44,7 @@ class GridButton extends React.Component {
 
         /** Get the item name of the GridButton from the state */
         const objectTypeSet = this.state.objectTypeSet
-        objectTypeSet.add('All')
+        objectTypeSet.push('All')
         
         this.setState({
             objectTypeSet
@@ -145,29 +145,51 @@ class GridButton extends React.Component {
 
     checkInSearchHistory() {
         // const searchHistory = JSON.stringify(Cookies.get('searchHistory'))
+        // const searchHistory = [
+        //     {
+        //         name: 'electric sphygmomanometer',
+        //         value: 1
+        //     },
+        //     {
+        //         name: 'monitor',
+        //         value: 3
+        //     },            
+        //     {
+        //         name: 'IV pump',
+        //         value: 5
+        //     },
+        //     {
+        //         name: 'syringe pump',
+        //         value: 10
+        //     },
+        //     {
+        //         name: 'blood warming device',
+        //         value: 4
+        //     }
+        // ]
         const searchHistory = [
             {
-                name: 'electric sphygmomanometer',
+                name: '三合一Monitor',
                 value: 1
             },
             {
-                name: 'monitor',
+                name: 'IV Pump',
                 value: 3
             },            
             {
-                name: 'IV pump',
+                name: '烤燈',
                 value: 5
             },
             {
-                name: 'syringe pump',
+                name: '電擊器',
                 value: 10
             },
             {
-                name: 'blood warming device',
+                name: 'CPM',
                 value: 4
             }
         ]
-        let username = JSON.parse(Cookies.get('userInfo')).name 
+        let username = 'joechou'
         axios.post(dataSrc.addUserSearchHistory, {
             username,
             history: JSON.stringify(searchHistory)
@@ -197,7 +219,7 @@ class GridButton extends React.Component {
         }
         return (
             <div>
-                {objectTypeSet.size !== 0 
+                {objectTypeSet.length !== 0 
                     ? 
                         <Row className='' style={style.row}>
                             {Array.from(objectTypeSet).map( (item,index) => {
