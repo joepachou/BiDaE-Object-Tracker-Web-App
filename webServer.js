@@ -79,8 +79,8 @@ app.get('/data/PDFInfo',db.getPDFInfo)
 
 app.post('/data/modifyMyDevice', db.modifyUserDevices)
 
-app.get('/download', (req, res) => {
-    const file = `${__dirname}/Download/com.beditech.IndoorNavigation.apk`;
+app.get('/download/com.beditech.IndoorNavigation.apk', (req, res) => {
+    const file = `${__dirname}/download/com.beditech.IndoorNavigation.apk`;
     res.download(file); // Set disposition and send it.
 });
 

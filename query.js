@@ -352,7 +352,6 @@ const  QRCode = (request, response) => {
 
 const modifyUserDevices = (request, response) => {
     const {username, mode, acn} = request.body
-    console.log(queryType.query_modifyUserDevices(username, mode, acn))
     pool.query(queryType.query_modifyUserDevices(username, mode, acn), (error, results) => {
         if (error) {
             
@@ -374,7 +373,6 @@ const getPDFInfo = (request, response) => {
             response.status(200).json(results)
             console.log('save pdf file success')
         }
-        
     })   
 }
     
