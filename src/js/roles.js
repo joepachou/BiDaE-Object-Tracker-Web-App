@@ -12,13 +12,13 @@ const rules = {
 
       
     },
-    register: {
+    careProvider: {
         permission: [
             "form:edit",
             "route:geofence",
         ]
     },
-    admin: {
+    systemAdmin: {
         permission: [
             "form:edit",
             "route:healthReport",
