@@ -197,7 +197,7 @@ class ObjectManagementContainer extends React.Component{
                 </Row>
                 <Row className='d-flex w-100 justify-content-around'>
                     <Col className='py-2'>
-                        {/* <ReactTable 
+                        <ReactTable 
                             data = {this.state.data} 
                             columns = {this.state.column} 
                             noDataText="No Data Available"
@@ -223,8 +223,8 @@ class ObjectManagementContainer extends React.Component{
                                     }
                                 }
                             }}
-                        /> */}
-                        <SelectTable
+                        />
+                        {/* <SelectTable
                             keyField='id'
                             data={this.state.data}
                             columns={this.state.column}
@@ -250,7 +250,7 @@ class ObjectManagementContainer extends React.Component{
                                     }
                                 }
                             }}
-                        />
+                        /> */}
                     </Col>
                 </Row>                
                 <EditObjectForm 

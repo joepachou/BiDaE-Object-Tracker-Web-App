@@ -16,8 +16,6 @@ import {
     lbeaconTable,
     gatewayTable
 } from '../../tables';
-import { retrieveDataService } from '../../retrieveDataService';
-
 
 class HealthReport extends React.Component{
 
@@ -133,34 +131,11 @@ class HealthReport extends React.Component{
 
         return(
             <Container className='py-4' fluid>
-            <ButtonToolbar>
-                <Button variant="outline-primary">Primary</Button>
-                <Button variant="outline-secondary">Secondary</Button>
-                <Button variant="outline-success">Success</Button>
-                <Button variant="outline-warning">Warning</Button>
-                <Button variant="outline-danger">Danger</Button>
-                <Button variant="outline-info">Info</Button>
-                <Button variant="outline-light">Light</Button>
-                <Button variant="outline-dark">Dark</Button>
-            </ButtonToolbar>
+
             <Nav
                 activeKey="/home"
                 onSelect={selectedKey => alert(`selected ${selectedKey}`)}
             >
-                <Nav.Item>
-                    <Button>123</Button>
-                </Nav.Item>
-                <Nav.Item>
-                    <Nav.Link eventKey="link-1">Link</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                    <Nav.Link eventKey="link-2">Link</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                    <Nav.Link eventKey="disabled" disabled>
-                    Disabled
-                    </Nav.Link>
-                </Nav.Item>
             </Nav>
                 <Tabs defaultActiveKey="lbeacon_table" transition={false} variant="pills" className='mb-1'>
                     <Tab eventKey="lbeacon_table" title="LBeacon" > 
