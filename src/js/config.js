@@ -1,5 +1,5 @@
 import map from '../img/IIS_Newbuilding_4F_reBack.png';
-import NTUH_YUNLIN_BRANCH_MAP from '../img/NTUH_Yunlin_Branch_Map.png';
+// import NTUH_YUNLIN_BRANCH_MAP from '../img/NTUH_Yunlin_Branch_Map.png';
 
 import black_pin from '../img/colorPin/Black.svg'
 import darkGrey_pin from '../img/colorPin/DarkGrey.svg';
@@ -14,7 +14,8 @@ const config = {
     surveillanceMap: {
 
         /* Surveillance map source*/
-        map: NTUH_YUNLIN_BRANCH_MAP,
+        // map: NTUH_YUNLIN_BRANCH_MAP,
+        map: map,
 
         /* Map customization */
         mapOptions: {
@@ -61,10 +62,10 @@ const config = {
         intevalTime: 1000,
 
         /* Bound of surveillance map*/
-        // mapBound:[[0,0], [21130,35710]],
+        mapBound:[[0,0], [21130,35710]],
 
         // mapBound:[[0,0], [651,1584]],
-        mapBound:[[2000,-8500], [14067,18428]],
+        // mapBound:[[2000,-8500], [14067,18428]],
 
         
         /* Tracking object Rssi filter */
