@@ -14,11 +14,12 @@ const style = {
 }
 
 const InfoPrompt = ({
-    data
+    data,
+    title
 }) => {
     return (
         <Alert variant='secondary' className='d-flex justify-content-start'>
-            <div style={style.alertTextTitle}>{'Found '}</div>
+            <div className='text-capitalize' style={style.alertTextTitle}>{title}</div>
             &nbsp;
             &nbsp;
             {Object.keys(data).map((item, index) => {

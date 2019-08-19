@@ -10,6 +10,7 @@ import config from '../../config';
 import Cookies from 'js-cookie'
 import LocaleContext from '../../context/LocaleContext'
 
+
 class SearchContainer extends React.Component {
 
     constructor(){
@@ -24,7 +25,6 @@ class SearchContainer extends React.Component {
             sectionIndex:'',
             searchResult: [],
             hasSearchableObjectData: false,
-            isSignin: Cookies.get('user') ? true : false,
             refreshSearchResult: config.systemAdmin.refreshSearchResult
         }
     
@@ -34,6 +34,17 @@ class SearchContainer extends React.Component {
         
         this.getObjectType = this.getObjectType.bind(this);
     }
+
+    // GetResultData = (searchableObjectList) =>{
+    //     var set = new Array()
+    //     for(var item of searchableObjectList){
+    //         if(!set.includes(item.type)){
+    //             set.push(item.type)
+    //         }
+            
+    //     }
+    //     return set
+    // }
 
     componentDidUpdate(prepProps) {
         /** Refresh the search result automatically 
@@ -195,6 +206,11 @@ class SearchContainer extends React.Component {
                             clientHeight={this.state.clientHeight}
                         />
                     </Col> */}
+                    {/* <SearchableObjectType
+                        floatUp = {this.props.floatUp}
+                        objectTypeList = {this.props.objectTypeList}
+                        onSubmit={this.getSearchResult}
+                    /> */}
                 </div>
             </div>
         );

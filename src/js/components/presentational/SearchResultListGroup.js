@@ -46,6 +46,24 @@ const SearchResultListGroup = ({
                         disabled={disabled}
                     >
                         <Row>
+                            <Col xs={1} sm={1} lg={1} style={style.firstText}>
+                                {selection.indexOf(item.mac_address) >= 0 
+                                    ? <i className="fas fa-check" style={style.icon}></i> 
+                                    : index + 1
+                                }
+                            </Col>
+                            <Col xs={11} sm={11} lg={11} className='text-left'>
+                                {item.type}, 
+                                ACN: xxxx-xxxx-{item.last_four_acn}, 
+                                is {item.currentPosition 
+                                    ? item.status.toLowerCase() === config.objectStatus.NORMAL
+                                        ? `near ${item.location_description}`
+                                        : item.status
+                                    : 'N/A'
+                                }
+                            </Col>
+                        </Row>
+                        {/* <Row>
                             <Col xs={1} sm={1} lg={1} className="font-weight-bold d-flex align-self-center" style={style.firstText}>
                                 {selection.indexOf(item.mac_address) >= 0 
                                     ? <i className="fas fa-check" style={style.icon}></i> 
@@ -68,7 +86,7 @@ const SearchResultListGroup = ({
                                     : ''
                                 }
                             </Col>
-                        </Row>
+                        </Row> */}
                     </ListGroup.Item>
                 return element
             })}

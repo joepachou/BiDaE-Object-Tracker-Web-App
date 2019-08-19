@@ -229,7 +229,7 @@ class SearchResult extends React.Component {
                             </Col>
                     }
                 </Row>
-                { searchResult.length !== 0 
+                { deviceNum !== 0 
                     && 
                         <Row className='d-flex justify-content-center mt-3'>
                             <h4 style={style.titleText}>
