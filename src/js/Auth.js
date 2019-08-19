@@ -6,7 +6,7 @@ class Auth extends React.Component {
 
     state = {
         authenticated: Cookies.get('authenticated'),
-        user: Cookies.get('user') ? {...JSON.parse(Cookies.get('user'))} : null,
+        user: Cookies.get('user') ? {...JSON.parse(Cookies.get('user'))} : {role: "guest"},
         accessToken: ""
     }
 
