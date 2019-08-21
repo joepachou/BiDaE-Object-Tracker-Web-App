@@ -201,7 +201,7 @@ function query_signup(signupPackage) {
 	const text = 
 		`
 		INSERT INTO user_table (name, password)
-		VALUES ($1, $2)
+		VALUES ($1, $2);
 		`;
 	const values = [signupPackage.username, signupPackage.password];
 

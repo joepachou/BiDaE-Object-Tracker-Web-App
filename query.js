@@ -233,12 +233,24 @@ const signup = (request, response) => {
 
     pool.query(`select name from user_table where name='${username}'`)
         .then(res => {
-            console.log(res)
             if(!res.rowCount) {
                 pool.query(queryType.query_signup(signupPackage))
                 .then(res => {
-                    console.log('Sign up Success')
-                    response.status(200).json(res)
+                    pool.query(`select id from user_table where name='${username}'`)
+                        .then(res => {
+                            let user_id = res.rows[0].id
+                            pool.query(`insert into user_roles (user_id, role_id) values(${user_id}, 2)`)
+                                .then(res => {
+                                    console.log('Sign up Success')
+                                    response.status(200).json(res)
+                                })
+                                .catch(err => {
+                                    console.log(err)
+                                })
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
                 })
                 .catch((err,res) => {
                     console.log("Signup Fails!" + err)
