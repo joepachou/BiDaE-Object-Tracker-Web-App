@@ -14,10 +14,12 @@ import LocaleContext from '../../context/LocaleContext';
 import axios from 'axios';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import RadioButton from '../presentational/RadioButton'
 import moment from 'moment'
 import CheckboxGroup from './CheckboxGroup'
 import Checkbox from '../presentational/Checkbox'
+import RadioButtonGroup from './RadioButtonGroup'
+import RadioButton from '../presentational/RadioButton'
+
 
 
 const transferredLocations = config.transferredLocation;
@@ -153,7 +155,8 @@ class EditObjectForm extends React.Component {
                                 registered_timestamp: moment(),
                                 monitor_type,
                             }
-                            this.handleSubmit(postOption)
+                            console.log(postOption)
+                            // this.handleSubmit(postOption)
                             
                         }}
 
@@ -184,56 +187,52 @@ class EditObjectForm extends React.Component {
                                 </div>
                                 <hr/>
                                 <Row className="form-group my-3 text-capitalize">
-                                    <Col sm={2} className='d-flex'>
-                                        <label htmlFor="status">{locale.STATUS}</label>
-                                    </Col>
-                                    <Col sm={10}>
-                                        <Field
-                                            component={RadioButton}
-                                            name="radioGroup"
-                                            id={config.objectStatus.NORMAL}
-                                            label={locale.NORMAL}
-                                        />
-                                    
-                                        <Field
-                                            component={RadioButton}
-                                            name="radioGroup"
-                                            id={config.objectStatus.BROKEN}
-                                            label={locale.BROKEN}
-                                        />
-
-                                        <Field
-                                            component={RadioButton}
-                                            name="radioGroup"
-                                            id={config.objectStatus.RESERVE}
-                                            label={locale.RESERVE}
-                                        />
-
-                                        <Row className='no-gutters' className='d-flex align-self-center'>
-                                            <Col sm={4} className='d-flex align-self-center'>
-                                                <Field
-                                                    component={RadioButton}
-                                                    name="radioGroup"
-                                                    id={config.objectStatus.TRANSFERRED}
-                                                    label={locale.TRANSFERRED}
-                                                />
-                                            </Col>
-                                            <Col sm={8}>
-                                                <Select
-                                                    name="select"
-                                                    value = {values.select}
-                                                    onChange={value => setFieldValue("select", value)}
-                                                    options={options}
-                                                    isSearchable={false}
-                                                    isDisabled={values.radioGroup !== config.objectStatus.TRANSFERRED}
-                                                    style={style.select}
-                                                    placeholder={selectedObjectData.transferred_location || locale.SELECT_LOCATION}
-                                                    components={{
-                                                        IndicatorSeparator: () => null
-                                                    }}
-                                                />
-                                            </Col>
-                                        </Row>
+                                    <Col>
+                                        <RadioButtonGroup
+                                            id="radioGroup"
+                                            label={locale.STATUS}
+                                            value={values.radioGroup}
+                                            error={errors.radioGroup}
+                                            touched={touched.radioGroup}
+                                        >
+                                            <Field
+                                                component={RadioButton}
+                                                name="radioGroup"
+                                                id={config.objectStatus.NORMAL}
+                                                label={locale.NORMAL}
+                                            />
+                                            <Field
+                                                component={RadioButton}
+                                                name="radioGroup"
+                                                id={config.objectStatus.BROKEN}
+                                                label={locale.BROKEN}
+                                            />
+                                            <Field
+                                                component={RadioButton}
+                                                name="radioGroup"
+                                                id={config.objectStatus.RESERVE}
+                                                label={locale.RESERVE}
+                                            />
+                                            <Field
+                                                component={RadioButton}
+                                                name="radioGroup"
+                                                id={config.objectStatus.TRANSFERRED}
+                                                label={locale.TRANSFERRED}
+                                            />
+                                            <Select
+                                                name="select"
+                                                value = {values.select}
+                                                onChange={value => setFieldValue("select", value)}
+                                                options={options}
+                                                isSearchable={false}
+                                                isDisabled={values.radioGroup !== config.objectStatus.TRANSFERRED}
+                                                style={style.select}
+                                                placeholder={selectedObjectData.transferred_location || locale.SELECT_LOCATION}
+                                                components={{
+                                                    IndicatorSeparator: () => null
+                                                }}
+                                            />
+                                        </RadioButtonGroup>
                                         <Row className='no-gutters' className='d-flex align-self-center'>
                                             <Col>
                                                 {touched.radioGroup && errors.radioGroup &&

@@ -73,6 +73,7 @@ const en =  {
     ACCESS_CONTROL_NUMBER: 'access control number',
     MAC_ADDRESS: 'mac address',
     STATUS: 'status',
+    MONITOR_TYPE: 'monitor type',
     ACN: 'acn',
 
     FOUND: 'found',
@@ -85,6 +86,7 @@ const en =  {
     DEVICE_NOT_FOUND: function (length){
         return length.toString()+' devices are not found'
     },
+
     SEARCH_RESULT: 'Search Results',
 
 }

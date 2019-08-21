@@ -10,9 +10,9 @@ class CheckboxGroup extends React.Component {
         let valueArray = [...this.props.value] || [];
 
         if (target.checked) {
-        valueArray.push(target.id);
+            valueArray.push(target.id);
         } else {
-        valueArray.splice(valueArray.indexOf(target.id), 1);
+            valueArray.splice(valueArray.indexOf(target.id), 1);
         }
 
         this.props.onChange(this.props.id, valueArray);
@@ -39,7 +39,7 @@ class CheckboxGroup extends React.Component {
             <div className=''>
                 <fieldset>
                 {/* <legend>{label}</legend> */}
-                <label htmlFor="status">{label}</label>
+                <label>{label}</label>
                 {React.Children.map(children, child => {
                     return React.cloneElement(child, {
                                 field: {
