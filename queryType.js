@@ -35,7 +35,6 @@ function query_getTrackingData () {
 const query_getObjectTable = 
 	`
 	SELECT 
-		id, 
 		name, 
 		type, 
 		access_control_number, 
@@ -94,11 +93,20 @@ function query_editObject (formOption) {
 			status = $3,
 			transferred_location = $4,
 			access_control_number = $5,
-			name = $6
+			name = $6,
+			monitor_type = $7
 		WHERE mac_address = $1
 		`;
 		
-	const values = [formOption.mac_address, formOption.type, formOption.status, formOption.transferredLocation, formOption.access_control_number, formOption.name];
+	const values = [
+		formOption.mac_address, 
+		formOption.type, 
+		formOption.status, 
+		formOption.transferredLocation, 
+		formOption.access_control_number, 
+		formOption.name,
+		formOption.monitor_type
+	];
 
 	const query = {
 		text,
@@ -294,6 +302,4 @@ module.exports = {
 	query_editLbeacon,
 	query_modifyUserDevices,
 	query_getShiftChangeRecord,
-	
-
 }

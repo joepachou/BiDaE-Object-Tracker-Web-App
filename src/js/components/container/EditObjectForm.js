@@ -12,11 +12,12 @@ import Select from 'react-select';
 import config from '../../config';
 import LocaleContext from '../../context/LocaleContext';
 import axios from 'axios';
-import dataSrc from '../../dataSrc';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import RadioButton from '../presentational/RadioButton'
 import moment from 'moment'
+import CheckboxGroup from './CheckboxGroup'
+import Checkbox from '../presentational/Checkbox'
 
 
 const transferredLocations = config.transferredLocation;
@@ -29,25 +30,16 @@ const options = transferredLocations.map( location => {
 })
   
 class EditObjectForm extends React.Component {
-    
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            show: props.show,
-            isShowForm: false,
-        };
-        this.handleShow = this.handleShow.bind(this);
-        this.handleClose = this.handleClose.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
+    state = {
+        show: false,
+        isShowForm: false,
+    };
 
     /**
      * EditObjectForm will update if user selects one of the object table.
      * The selected object data will transfer from ObjectMangentContainer to EditObjectForm
      */
-    componentDidUpdate(prevProps) {
+    componentDidUpdate = (prevProps) => {
         if (!(_.isEqual(prevProps, this.props))) {
             this.setState({
                 show: this.props.show,
@@ -56,19 +48,19 @@ class EditObjectForm extends React.Component {
         }
     }
   
-    handleClose() {
+    handleClose = () => {
         this.setState({ 
             show: false,
         });
     }
   
-    handleShow() {
+    handleShow = () => {
         this.setState({ 
             show: true 
         });
     }
 
-    handleSubmit(postOption) {
+    handleSubmit = (postOption) => {
         const path = this.props.formPath
         axios.post(path, {
             formOption: postOption
@@ -89,6 +81,7 @@ class EditObjectForm extends React.Component {
     }
 
     render() {
+        const locale = this.context
 
         const style = {
             input: {
@@ -110,22 +103,17 @@ class EditObjectForm extends React.Component {
 
         const { title, selectedObjectData } = this.props;
 
-        const locale = this.context
+        let monitorTypeMap = {};
 
-        const colProps = {
-            titleCol: {
-                xs: 5,
-                sm: 5
-            },
-            inputCol: {
-                xs: 7,
-                sm: 7,
-            }
-        }
+        Object.keys(config.monitorType).forEach(key => {
+            monitorTypeMap[config.monitorType[key]] = key
+        })
 
         return (
             <Modal show={this.state.show} onHide={this.handleClose} size='md'>
-                <Modal.Header closeButton className='font-weight-bold text-capitalize'>{title}</Modal.Header >
+                <Modal.Header closeButton className='font-weight-bold text-capitalize'>
+                    {title}
+                </Modal.Header >
                 <Modal.Body>
                     <Formik
                         initialValues = {{
@@ -134,7 +122,8 @@ class EditObjectForm extends React.Component {
                             access_control_number: selectedObjectData.access_control_number || '',
                             mac_address: selectedObjectData.mac_address || '',
                             radioGroup: selectedObjectData.status || '',
-                            select: ''
+                            select: '',
+                            checkboxGroup: selectedObjectData.length !== 0 ? selectedObjectData.monitor_type.split(',') : ''
                         }}
 
                         validationSchema = {
@@ -152,39 +141,44 @@ class EditObjectForm extends React.Component {
                                     })
                         })}
 
-                        onSubmit={(values, { setStatus, setSubmitting }) => {
+                        onSubmit={(values, { setStatus, setSubmitting }) => {                            
+                            let monitor_type = values.checkboxGroup.reduce((sum, item) => {
+                                sum += parseInt(monitorTypeMap[item])
+                                return sum
+                            },0)
                             const postOption = {
                                 ...values,
                                 status: values.radioGroup,
                                 transferredLocation: values.radioGroup === config.objectStatus.TRANSFERRED ? values.select.value : '',
-                                registered_timestamp: moment()
+                                registered_timestamp: moment(),
+                                monitor_type,
                             }
                             this.handleSubmit(postOption)
                             
                         }}
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
-                            <Form>
+                            <Form className="text-capitalize">
                                 <div className="form-group">
-                                    <label htmlFor="name">Device Name</label>
+                                    <label htmlFor="name">{locale.NAME}*</label>
                                     <Field name="name" type="text" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} placeholder=''/>
                                     <ErrorMessage name="name" component="div" className="invalid-feedback" />
                                 </div>
                                 <br/>
                                 <div className="form-group">
-                                    <label htmlFor="type">Device Type</label>
+                                    <label htmlFor="type">{locale.TYPE}*</label>
                                     <Field name="type" type="text" className={'form-control' + (errors.type && touched.type ? ' is-invalid' : '')} placeholder=''/>
                                     <ErrorMessage name="type" component="div" className="invalid-feedback" />
                                 </div>
                                 <br/>
                                 <div className="form-group">
-                                    <label htmlFor="access_control_number">ACN</label>
+                                    <label htmlFor="access_control_number" className='text-uppercase'>{locale.ACN}*</label>
                                     <Field name="access_control_number" type="text" className={'form-control' + (errors.access_control_number && touched.access_control_number ? ' is-invalid' : '')} placeholder=''/>
                                     <ErrorMessage name="access_control_number" component="div" className="invalid-feedback" />
                                 </div>
                                 <br/>
                                 <div className="form-group">
-                                    <label htmlFor="mac_address">Mac Address</label>
+                                    <label htmlFor="mac_address">{locale.MAC_ADDRESS}*</label>
                                     <Field name="mac_address" type="text" className={'form-control' + (errors.mac_address && touched.mac_address ? ' is-invalid' : '')} disabled={title.toLowerCase() === locale.EDIT_OBJECT}/>
                                     <ErrorMessage name="mac_address" component="div" className="invalid-feedback" />
                                 </div>
@@ -248,6 +242,30 @@ class EditObjectForm extends React.Component {
                                                 <div style={style.errorMessage}>{errors.select}</div>}
                                             </Col>
                                         </Row>                                                
+                                    </Col>
+                                </Row>
+                                <hr/>
+                                <Row className="form-group my-3 text-capitalize">
+                                    <Col>
+                                        <CheckboxGroup
+                                            id="checkboxGroup"
+                                            label={locale.MONITOR_TYPE}
+                                            value={values.checkboxGroup}
+                                            error={errors.checkboxGroup}
+                                            touched={touched.checkboxGroup}
+                                            onChange={setFieldValue}
+                                            // onBlur={setFieldTouched}
+                                        >
+                                        {Object.values(config.monitorType).map((item,index) => {
+                                            return <Field
+                                                key={index}
+                                                component={Checkbox}
+                                                name="checkboxGroup"
+                                                id={item}
+                                                label={item}
+                                            />
+                                        })}
+                                        </CheckboxGroup>
                                     </Col>
                                 </Row>
                                 <Modal.Footer>

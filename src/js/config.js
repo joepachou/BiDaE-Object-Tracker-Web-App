@@ -167,8 +167,12 @@ const config = {
         showImage: false,
         style: 'list',
         displayMode: 'showAll',
-    }
+    },
 
+    monitorType: {
+        1: 'geofence',
+        2: 'schedule geofence'
+    },
 }
 
 export default config
