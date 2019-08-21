@@ -190,7 +190,6 @@ const signin = (request, response) => {
 
                 const hash = results.rows[0].password
                 if (bcrypt.compareSync(pwd, hash)) {
-                    console.log(results.rows[0])
                     let userInfo = {}
                     let { 
                         name, 
@@ -226,19 +225,22 @@ const signup = (request, response) => {
     
     const saltRounds = 10;
     const hash = bcrypt.hashSync(password, saltRounds);
+
     const signupPackage = {
         username: username,
         password: hash,
     }
+
     pool.query(queryType.query_signup(signupPackage))
         .then(res => {
             console.log('Sign up Success')
-            response.status(200).json(results)
-
+            response.status(200)
         })
-        .catch(err => {
-            console.log("Signup Fails!")
-
+        .catch((err,res) => {
+            console.log("Signup Fails!" + err)
+            response.status(500).json({
+                message: err,
+            })
         })
 }
 
@@ -288,7 +290,7 @@ const editLbeacon = (request, response) => {
 
 
 
-const  QRCode = (request, response) => {
+const  generatePDF = (request, response) => {
     // console.log(result)
     var {foundResult, notFoundResult, user} = request.body
     var header = "<h1 style='text-align: center; class='text-capitalize'>" + "Checked By " + 'Joechou' +  ' Day Shift' + "</h1>"
@@ -390,7 +392,7 @@ module.exports = {
     getUserInfo,
     addUserSearchHistory,
     editLbeacon,
-    QRCode,
+    generatePDF,
     modifyUserDevices,
     getPDFInfo
 }

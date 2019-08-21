@@ -8,6 +8,7 @@ import {
     shouldUpdateTrackingData,
 } from '../../action/action'
 import GridButton from '../container/GridButton';
+import PdfDownloadForm from './PdfDownloadForm'
 
 
 class SurveillanceContainer extends React.Component {
@@ -17,37 +18,40 @@ class SurveillanceContainer extends React.Component {
             rssi: 1,
             selectedObjectData: [],
             showDevice: false,
+            showPdfDownloadForm: false,
         }
         this.handleClickButton = this.handleClickButton.bind(this)
     }
 
     handleClickButton(e) {
         const button = e.target;
-        const buttonName = button.innerText
+        const buttonName = button.name
         switch(buttonName.toLowerCase()) {
             case 'show devices':
-            case 'hide devices':
                 this.setState({
                     showDevice: !this.state.showDevice
                 })
                 break;
             case 'clear':
                 this.props.handleClearButton();
+            case 'save':
+                this.setState({
+                    showPdfDownloadForm: true,
+                })
         }
 
     }
-    
+
+    handleClosePdfForm = () => {
+        this.setState({
+            showPdfDownloadForm: false
+        })
+    }
+
     render(){
-        const { rssi, 
-                showEditObjectForm, 
-                showConfirmForm, 
-                selectedObjectData, 
-                formOption, 
-            } = this.state;
         const { hasSearchKey, 
                 searchResult,
             } = this.props;
-        const locale = this.context;
 
         const style = {
             title: {
@@ -71,11 +75,13 @@ class SurveillanceContainer extends React.Component {
             }
         }
 
+        const locale = this.context;
+
         return(
             <div id="surveillanceContainer" style={style.surveillanceContainer} className='overflow-hidden'>
                 <div style={style.mapBlock}>
                     <Surveillance 
-                        rssi={rssi} 
+                        rssi={this.state.rssi} 
                         hasSearchKey={hasSearchKey}
                         style={style.searchMap}
                         colorPanel={this.props.colorPanel}
@@ -98,14 +104,23 @@ class SurveillanceContainer extends React.Component {
                             />
                         </Nav.Item>
                         <Nav.Item className='mt-2'>
-                            <Button variant="outline-primary" className='mr-1 ml-2' onClick={this.handleClickButton}>Clear</Button>
+                            <Button variant="outline-primary" className='mr-1 ml-2' onClick={this.handleClickButton} name='clear'>
+                                Clear
+                            </Button>
                         </Nav.Item>
                         <Nav.Item className='mt-2'>
-                            <Button variant="outline-primary" className='mr-1 mr-4' onClick={this.handleClickButton}>Save</Button>
-
+                            <Button variant="outline-primary" className='mr-1 mr-4' onClick={this.handleClickButton} name='save'>
+                                Save
+                            </Button>
                         </Nav.Item>
                         <Nav.Item className='mt-2'>
-                            <Button variant="outline-primary" className='mr-1' onClick={this.handleClickButton} active={this.state.showDevice}>
+                            <Button 
+                                variant="outline-primary" 
+                                className='mr-1' 
+                                onClick={this.handleClickButton} 
+                                active={this.state.showDevice}
+                                name='show devices'
+                            >
                                 {this.state.showDevice ? 'Hide devices' : 'Show devices' }
                             </Button>
                         </Nav.Item >
@@ -117,6 +132,11 @@ class SurveillanceContainer extends React.Component {
                         </div>
                     </Nav>
                 </div>
+                <PdfDownloadForm 
+                    show={this.state.showPdfDownloadForm}
+                    data={searchResult}
+                    handleClose = {this.handleClosePdfForm}
+                />
             </div>
         )
     }

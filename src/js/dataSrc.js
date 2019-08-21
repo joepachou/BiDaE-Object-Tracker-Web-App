@@ -15,7 +15,7 @@ const getUserInfo = 'http://' + IP + '/user/getUserInfo';
 const addUserSearchHistory = 'http://' + IP + '/user/addUserSearchHistory'
 const editLbeacon = 'http://' + IP + '/data/editLbeacon'
 const modifyMyDevice = 'http://' + IP + '/data/modifyMyDevice';
-const QRCode = 'http://' + IP + '/data/QRCOde'
+const generatePDF = 'http://' + IP + '/data/generatePDF'
 const getPDFInfo = 'http://' + IP + '/data/PDFInfo'
 
 
@@ -40,7 +40,8 @@ module.exports = {
     addUserSearchHistory,
     editLbeacon,
     pdfUrl,
-    QRCode,
+    generatePDF,
     modifyMyDevice,
-    getPDFInfo
+    getPDFInfo,
+    
 };

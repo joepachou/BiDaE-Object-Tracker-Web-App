@@ -73,7 +73,7 @@ app.post('/user/addUserSearchHistory', db.addUserSearchHistory)
 
 app.post('/data/editLbeacon', db.editLbeacon)
 
-app.post('/data/QRCode',db.QRCode)
+app.post('/data/generatePDF',db.generatePDF)
 
 app.get('/data/PDFInfo',db.getPDFInfo)
 

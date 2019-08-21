@@ -41,7 +41,8 @@ const query_getObjectTable =
 		access_control_number, 
 		status, 
 		transferred_location, 
-		mac_address
+		mac_address,
+		monitor_type
 	FROM object_table ORDER BY name ASC
 	`;
 

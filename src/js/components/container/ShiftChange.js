@@ -102,7 +102,7 @@ class ShiftChange extends React.Component {
     }
 
     confirmShift(){
-        axios.post(dataSrc.QRCode,
+        axios.post(dataSrc.generatePDF,
             {
                 user: 'joechou', 
                 foundResult: this.state.searchResult.foundResult,
