@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
     "start": "webpack-dev-server --open --mode development",
-    "server": "nodemon webServer.js"
+    "server": "nodemon webServer.js",
+    "production": "webpack && npm install --produciton"
   },
   "keywords": [],
   "author": "",
