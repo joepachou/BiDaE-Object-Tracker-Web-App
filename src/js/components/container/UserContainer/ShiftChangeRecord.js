@@ -35,13 +35,11 @@ export default class ShiftChangeRecord extends React.Component{
     getPDFInfo(){
         axios.get(dataSrc.getPDFInfo).then((res) => {
             this.API.setShiftChangeRecord(res.data.rows)
-            console.log(res.data.rows)
         })
     }
     onClickFile(e){
         var file_path = e.target.getAttribute('name')
         var path = dataSrc.IP + '/' + file_path
-        console.log(path)
         window.open(path);
     }
     itemLayout(item, index, name){
