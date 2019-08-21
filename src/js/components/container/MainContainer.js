@@ -8,8 +8,6 @@ import SearchContainer from './SearchContainer';
 
 import 'react-table/react-table.css';
 import SearchResultList from '../presentational/SearchResultList'
-
-
 import { Row, Col } from 'react-bootstrap'
 import SurveillanceContainer from './SurveillanceContainer';
 import AuthenticationContext from '../../context/AuthenticationContext';
@@ -18,55 +16,43 @@ import config from '../../config';
 import InfoPrompt from '../presentational/InfoPrompt';
 import _ from 'lodash'
 import moment from 'moment'
-import { retrieveDataService } from '../../retrieveDataService'
-import Axios from 'axios';
+import axios from 'axios';
 import dataSrc from '../../dataSrc'
 
 const myDevices = config.frequentSearchOption.MY_DEVICES;
 const allDevices = config.frequentSearchOption.ALL_DEVICES;
 
 class MainContainer extends React.Component{
-
-    constructor(props){
-        super(props)
-        this.state = {
-            trackingData: [],
-            proccessedTrackingData: [],
-            hasSearchKey: false,
-            searchKey: '',
-            searchResult: [],
-            colorPanel: null,
-            clearColorPanel: false,
-            searchResultObjectTypeMap: {},
-            clearSearchResult: false,
-            hasGridButton: false,
-            isHighlightSearchPanel: false,
-            rssiThreshold: config.surveillanceMap.locationAccuracyMapToDefault[1],
-            // objectTypeList: []
-        }
-
-        this.processSearchResult = this.processSearchResult.bind(this);
-        this.handleClearButton = this.handleClearButton.bind(this)
-        this.getSearchKey = this.getSearchKey.bind(this)
-        this.getTrackingData = this.getTrackingData.bind(this)
-        this.changeLocationAccuracy = this.changeLocationAccuracy.bind(this)
-        this.highlightSearchPanel = this.highlightSearchPanel.bind(this)
-        this.handleRefreshSearchResult = this.handleRefreshSearchResult.bind(this)
+    state = {
+        trackingData: [],
+        proccessedTrackingData: [],
+        hasSearchKey: false,
+        searchKey: '',
+        searchResult: [],
+        colorPanel: null,
+        clearColorPanel: false,
+        searchResultObjectTypeMap: {},
+        clearSearchResult: false,
+        hasGridButton: false,
+        isHighlightSearchPanel: false,
+        rssiThreshold: window.innerWidth < 600 
+            ? config.surveillanceMap.locationAccuracyMapToDefault[0]
+            : config.surveillanceMap.locationAccuracyMapToDefault[1],
     }
 
-    componentDidMount() {
+    componentDidMount = () => {
         this.getTrackingData();
         this.interval = this.props.shouldTrackingDataUpdate ? setInterval(this.getTrackingData, config.surveillanceMap.intevalTime) : null;
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate = (prevProps, prevState) => {
         let isTrackingDataChange = !(_.isEqual(this.state.trackingData, prevState.trackingData))
         if (isTrackingDataChange && this.state.hasSearchKey) {
             this.handleRefreshSearchResult()
         }
     }
 
-    shouldComponentUpdate(nextProps,nextState) {
+    shouldComponentUpdate = (nextProps,nextState) => {
         let isTrackingDataChange = !(_.isEqual(this.state.trackingData, nextState.trackingData))
         let hasSearchKey = nextState.hasSearchKey !== this.state.hasSearchKey
         let isSearchKeyChange = this.state.searchKey !== nextState.searchKey
@@ -82,24 +68,24 @@ class MainContainer extends React.Component{
         return shouldUpdate
     }
 
-    componentWillUnmount() {
+    componentWillUnmount = () => {
         clearInterval(this.interval);
     }
 
-    handleRefreshSearchResult() {
+    handleRefreshSearchResult = () => {
         let { searchKey, colorPanel, searchValue } = this.state
         this.getSearchKey(searchKey, colorPanel, searchValue)
     }
 
-    changeLocationAccuracy(locationAccuracy) {
+    changeLocationAccuracy = (locationAccuracy) => {
         const rssiThreshold = config.surveillanceMap.locationAccuracyMapToDefault[locationAccuracy]
         this.setState({
             rssiThreshold
         })
     }
 
-    getTrackingData() {
-        Axios.post(dataSrc.getTrackingData,{
+    getTrackingData = () => {
+        axios.post(dataSrc.getTrackingData,{
             rssiThreshold: this.state.rssiThreshold
         })
         .then(res => {
@@ -113,7 +99,7 @@ class MainContainer extends React.Component{
         })
     }
 
-    handleRawTrackingData(rawTrackingData) {
+    handleRawTrackingData = (rawTrackingData) => {
         moment.updateLocale('en', {
             relativeTime : Object
         });
@@ -170,7 +156,7 @@ class MainContainer extends React.Component{
     // }
 
     /** Parsing the lbeacon's location coordinate from lbeacon_uuid*/
-    createLbeaconCoordinate(lbeacon_uuid){
+    createLbeaconCoordinate = (lbeacon_uuid) => {
         /** Example of lbeacon_uuid: 00000018-0000-0000-7310-000000004610 */
         const zz = lbeacon_uuid.slice(6,8);
         const xx = parseInt(lbeacon_uuid.slice(14,18) + lbeacon_uuid.slice(19,23));
@@ -180,7 +166,7 @@ class MainContainer extends React.Component{
 
     /** Transfer the search result, not found list and color panel from SearchContainer, GridButton to MainContainer 
      *  The three variable will then pass into SurveillanceContainer */
-    processSearchResult(searchResult, colorPanel, searchKey, searchValue) {
+    processSearchResult = (searchResult, colorPanel, searchKey, searchValue) => {
         /** Count the number of found object type */
         let duplicateSearchKey = []
 
@@ -234,14 +220,14 @@ class MainContainer extends React.Component{
         }
     }
 
-    clearGridButtonBGColor() {
+    clearGridButtonBGColor = () => {
         var gridbuttons = document.getElementsByClassName('gridbutton')
         for(let button of gridbuttons) {
             button.style.background = ''
         }
     }
 
-    handleClearButton() {
+    handleClearButton = () => {
         this.clearGridButtonBGColor();
         this.setState({
             hasSearchKey: false,
@@ -255,13 +241,13 @@ class MainContainer extends React.Component{
     }
 
     /** Fired once the user click the item in object type list or in frequent seaerch */
-    getSearchKey(searchKey, colorPanel = null, searchValue = null) {
+    getSearchKey = (searchKey, colorPanel = null, searchValue = null) => {
 
         const searchResult = this.getResultBySearchKey(searchKey, colorPanel, searchValue)
         this.processSearchResult(searchResult, colorPanel, searchKey, searchValue)
     }
 
-    getResultBySearchKey(searchKey, colorPanel, searchValue) {
+    getResultBySearchKey = (searchKey, colorPanel, searchValue) => {
         const auth = this.context
         let searchResult = [];
         let proccessedTrackingData = _.cloneDeep(this.state.trackingData)
@@ -305,7 +291,7 @@ class MainContainer extends React.Component{
         return searchResult
     }
 
-    collectObjectsByLatLng(lbPosition, proccessedTrackingData) {
+    collectObjectsByLatLng = (lbPosition, proccessedTrackingData) => {
         let objectList = []
         proccessedTrackingData.map(item => {
             if (item.currentPosition && item.currentPosition.toString() === lbPosition.toString()) {
@@ -315,7 +301,7 @@ class MainContainer extends React.Component{
         })
         return objectList 
     }
-    highlightSearchPanel(boolean) {
+    highlightSearchPanel = (boolean) => {
         this.setState({
             isHighlightSearchPanel: boolean
         })
