@@ -155,9 +155,7 @@ class EditObjectForm extends React.Component {
                                 registered_timestamp: moment(),
                                 monitor_type,
                             }
-                            console.log(postOption)
-                            // this.handleSubmit(postOption)
-                            
+                            this.handleSubmit(postOption)                            
                         }}
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
