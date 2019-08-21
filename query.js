@@ -231,16 +231,26 @@ const signup = (request, response) => {
         password: hash,
     }
 
-    pool.query(queryType.query_signup(signupPackage))
+    pool.query(`select name from user_table where name='${username}'`)
         .then(res => {
-            console.log('Sign up Success')
-            response.status(200)
+            console.log(res)
+            if(!res.rowCount) {
+                pool.query(queryType.query_signup(signupPackage))
+                .then(res => {
+                    console.log('Sign up Success')
+                    response.status(200).json(res)
+                })
+                .catch((err,res) => {
+                    console.log("Signup Fails!" + err)
+                })
+            } else {
+                response.status(200).json({
+                    message: "Username is already in used"
+                })
+            }
         })
-        .catch((err,res) => {
-            console.log("Signup Fails!" + err)
-            response.status(500).json({
-                message: err,
-            })
+        .catch(err => {
+            console.log(err)
         })
 }
 
@@ -307,7 +317,7 @@ const  generatePDF = (request, response) => {
         for (var i of lists){
             html += "<tr>";
             for(var j of attributes){
-                html += "<td>"+i[j]+"</td>";
+                html += "<td>"+ i[j] +"</td>";
             }
         }
         html += "</table></div>"
@@ -320,12 +330,12 @@ const  generatePDF = (request, response) => {
     var types = ["Name", "Type", "ACN", "Location"]
     var attributes = ["name", "type", "access_control_number", "location_description"]
 
-    var title = "Found Results"
+    var title = "Results are Found"
     var lists = foundResult
     var foundTable = generateTable(title, types, lists, attributes)
 
 
-    var title = "Not Found Results"
+    var title = "Results are NOT Found "
     var lists = notFoundResult
     var notFoundTable = lists.length !== 0 ? generateTable(title, types, lists, attributes) : '';
 
@@ -354,6 +364,7 @@ const  generatePDF = (request, response) => {
 
 const modifyUserDevices = (request, response) => {
     const {username, mode, acn} = request.body
+    console.log(request.body)
     pool.query(queryType.query_modifyUserDevices(username, mode, acn), (error, results) => {
         if (error) {
             

@@ -3,8 +3,6 @@ import { Modal, Image, Row, Col } from 'react-bootstrap';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import config from '../../config';
-import axios from 'axios';
-import dataSrc from '../../dataSrc';
 import LocaleContext from '../../context/LocaleContext';
 
 class SignupPage extends React.Component {
@@ -15,7 +13,6 @@ class SignupPage extends React.Component {
             isSignin: false,
         }
         this.handleClose = this.handleClose.bind(this)
-        this.handleSignupFormShowUp = this.handleSignupFormShowUp.bind(this)
     }
 
     componentDidUpdate(preProps) {
@@ -33,12 +30,6 @@ class SignupPage extends React.Component {
         })
     }
 
-    handleSignupFormShowUp() {
-        this.props.handleSignupFormShowUp()
-    }
-
-
-
     render() {
 
         const style = {
@@ -48,7 +39,6 @@ class SignupPage extends React.Component {
         }
 
         const { show } = this.state;
-        const { handleSignupFormSubmit } = this.props;
         const locale = this.context;
         return (
             <Modal show={show} size="md" onHide={this.handleClose}>
@@ -74,17 +64,17 @@ class SignupPage extends React.Component {
 
                         onSubmit={({ username, password }, { setStatus, setSubmitting }) => {
 
-                            axios.post(dataSrc.signup, {
-                                username: username,
-                                password: password
-                            }).then(res => {
-                                handleSignupFormSubmit()
-
-                            }).catch(error => {
-                                console.log(error)
-                            })
-
-
+                            this.props.signup(username, password)
+                                .then(res => {
+                                    if (res.data.message) {
+                                        setStatus(res.data.message)
+                                    } else {
+                                        this.props.handleSignupFormSubmit()
+                                    }
+                                })
+                                .catch(error => {
+                                    console.log(error)
+                                })
                         }}
 
                         render={({ errors, status, touched, isSubmitting }) => (
@@ -101,11 +91,11 @@ class SignupPage extends React.Component {
                                     <ErrorMessage name="password" component="div" className="invalid-feedback" />
                                 </div>
                                 <br/>
-                                <div className="form-group">
+                                <div className="form-group pb-1">
                                     <button type="submit" className="btn btn-primary btn-block text-capitalize"  disabled={isSubmitting}>{locale.SIGN_UP}</button>
                                 </div>
                                 {status &&
-                                    <div className={'alert alert-danger'}>{status}</div>
+                                    <div className='alert alert-danger'>{status}</div>
                                 }
                             </Form>
                         )}

@@ -1,11 +1,13 @@
 import React from 'react';
 import AuthenticationContext from './context/AuthenticationContext';
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
+import axios from 'axios';
+import dataSrc from './dataSrc';
 
 class Auth extends React.Component {
 
     state = {
-        authenticated: Cookies.get('authenticated'),
+        authenticated: Cookies.get('authenticated') ? true : false,
         user: Cookies.get('user') ? {...JSON.parse(Cookies.get('user'))} : {role: "guest"},
         accessToken: ""
     }
@@ -33,6 +35,14 @@ class Auth extends React.Component {
         });
 
     };
+
+    async signup (username, password) {
+        let result = await axios.post(dataSrc.signup, {
+            username: username,
+            password: password
+        })
+        return result
+    }
   
     handleAuthentication = () => {
     };
@@ -49,6 +59,7 @@ class Auth extends React.Component {
         const authProviderValue = {
             ...this.state,
             signin: this.signin,
+            signup: this.signup,
             handleAuthentication: this.handleAuthentication,
             signout: this.signout
         };
