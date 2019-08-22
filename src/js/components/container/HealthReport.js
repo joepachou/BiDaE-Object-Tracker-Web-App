@@ -7,7 +7,7 @@ import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import EditLbeaconForm from './EditLbeaconForm'
 
-import Axios from 'axios';
+import axios from 'axios';
 import dataSrc from '../../../js/dataSrc';
 import config from '../../config';
 import LocaleContext from '../../context/LocaleContext';
@@ -19,33 +19,24 @@ import {
 
 class HealthReport extends React.Component{
 
-    constructor(props){
-        super(props)
-        this.state = {
-            lbeaconData: [],
-            lbeaconColumn: [],
-            gatewayData: [],
-            gatewayColunm: [],
-            trackingData: [],
-            trackingColunm: [],
-            selectedRowData: {},
-            isShowModal: false,
-        }
-        this.getGatewayData = this.getGatewayData.bind(this)
-        this.getLbeaconData = this.getLbeaconData.bind(this)
-        this.getTrackingData = this.getTrackingData.bind(this)
-        this.handleSubmitForm = this.handleSubmitForm.bind(this)
-        this.handleCloseForm = this.handleCloseForm.bind(this)
-        this.startSetInterval = config.healthReport.startInteval
+    state = {
+        lbeaconData: [],
+        lbeaconColumn: [],
+        gatewayData: [],
+        gatewayColunm: [],
+        trackingData: [],
+        trackingColunm: [],
+        selectedRowData: {},
+        isShowModal: false,
     }
 
-    componentDidUpdate(prepProps) {
+    componentDidUpdate = (prepProps) => {
         if (prepProps !== this.props && this.props.objectInfo) {
             this.processTrackingData(this.props.objectInfo)
         }
     }
 
-    componentDidMount(){
+    componentDidMount = () => {
         this.getLbeaconData();
         this.getGatewayData();
         this.getTrackingData()
@@ -53,27 +44,19 @@ class HealthReport extends React.Component{
         this.getLbeaconDataInterval = this.startSetInterval ? setInterval(this.getLbeaconData, config.healthReport.pollLbeaconTabelIntevalTime) : null;
     }
 
-    componentWillUnmount() {
+    componentWillUnmount = () => {
         clearInterval(this.getGatewayDataInterval);
         clearInterval(this.getLbeaconDataInterval);
     }
 
-    getGatewayData(){
-        Axios.get(dataSrc.getGatewayTable)
+    getLbeaconData = () => {
+        axios.get(dataSrc.getLbeaconTable)
             .then(res => {
-                this.setState({
-                    gatewayData: res.data.rows,
-                    gatewayColunm: gatewayTable
+                lbeaconTable.map(field => {
+                    field.headerStyle = {
+                        textAlign: 'left',
+                    }
                 })
-            })
-            .catch(function (error) {
-                console.log(error);
-            })
-        }
-
-    getLbeaconData(){
-        Axios.get(dataSrc.getLbeaconTable)
-            .then(res => {
                 this.setState({
                     lbeaconData: res.data.rows,
                     lbeaconColumn: lbeaconTable
@@ -84,11 +67,34 @@ class HealthReport extends React.Component{
             })
     }
 
-    getTrackingData() {
-        Axios.post(dataSrc.getTrackingData,{
+    getGatewayData = () => {
+        axios.get(dataSrc.getGatewayTable)
+            .then(res => {
+                gatewayTable.map(field => {
+                    field.headerStyle = {
+                        textAlign: 'left',
+                    }
+                })
+                this.setState({
+                    gatewayData: res.data.rows,
+                    gatewayColunm: gatewayTable
+                })
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+        }
+
+    getTrackingData = () => {
+        axios.post(dataSrc.getTrackingData,{
             rssiThreshold: config.surveillanceMap.locationAccuracyMapToDefault[config.objectManage.objectManagementRSSIThreshold]
         })
         .then(res => {
+            trackingTable.map(field => {
+                field.headerStyle = {
+                    textAlign: 'left',
+                }
+            })
             this.setState({
                 trackingData: res.data.rows,
                 trackingColunm: trackingTable
@@ -96,7 +102,7 @@ class HealthReport extends React.Component{
         })
     }
 
-    handleSubmitForm() {
+    handleSubmitForm = () => {
         this.setState({
             isShowModal: false
         })
@@ -106,7 +112,7 @@ class HealthReport extends React.Component{
         )
     }
 
-    handleCloseForm() {
+    handleCloseForm = () => {
         this.setState({
             isShowModal: false
         })
@@ -131,14 +137,16 @@ class HealthReport extends React.Component{
 
         return(
             <Container className='py-4' fluid>
-
-            <Nav
-                activeKey="/home"
-                onSelect={selectedKey => alert(`selected ${selectedKey}`)}
-            >
-            </Nav>
+                <Nav
+                    activeKey="/home"
+                    onSelect={selectedKey => alert(`selected ${selectedKey}`)}
+                >
+                </Nav>
                 <Tabs defaultActiveKey="lbeacon_table" transition={false} variant="pills" className='mb-1'>
-                    <Tab eventKey="lbeacon_table" title="LBeacon" > 
+                    <Tab 
+                        eventKey="lbeacon_table" 
+                        title="LBeacon" 
+                    > 
                         <ReactTable 
                             style={style.reactTable} 
                             data={this.state.lbeaconData} 
@@ -166,7 +174,10 @@ class HealthReport extends React.Component{
                             }}
                         />
                     </Tab>
-                    <Tab eventKey="gateway_table" title="Gateway">
+                    <Tab 
+                        eventKey="gateway_table" 
+                        title="Gateway"
+                    >
                         <ReactTable 
                             style={style.reactTable} 
                             data={this.state.gatewayData} 
@@ -176,7 +187,10 @@ class HealthReport extends React.Component{
                             freezeWhenExpanded={false}
                         />
                     </Tab>
-                    <Tab eventKey="tracking_table" title="Tracking Object">
+                    <Tab 
+                        eventKey="tracking_table" 
+                        title="Tracking"
+                    >
                         <ReactTable 
                             minRows={6} 
                             defaultPageSize={15} 

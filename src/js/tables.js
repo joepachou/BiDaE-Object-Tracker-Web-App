@@ -18,6 +18,117 @@ const style = {
     }
 }
 
+const lbeaconTable = [
+    // {
+    //     Header: 'Info',
+    //     columns: [
+            {
+                Header: 'Status',
+                accessor: 'health_status',
+                width: 60,
+                style: style.column,
+                Cell: props => !props.value 
+                    ? <i className="fas fa-check-circle text-center" style={style.icon.check}></i> 
+                    : <i className="fas fa-times" style={style.icon.times}></i>
+            },
+            {
+                Header: 'uuid',
+                accessor: 'uuid',
+                width: 330
+            },
+            {
+                Header: 'Description',
+                accessor: 'description',
+                width: 200
+            },
+            {
+                Header: 'IP Address',
+                accessor: 'ip_address',
+                width: 150
+            },
+            {
+                Header: 'Gateway IP Address',
+                accessor: 'gateway_ip_address',
+                width: 180
+            },
+            {
+                Header: 'Last Report Time',
+                accessor: 'last_report_timestamp',
+                width: 200,
+            },
+    //     ]
+    // },
+    // {
+    //     Header: 'RSSI Threshold',
+    //     columns: [
+            {
+                Header: 'High',
+                accessor: 'high_rssi',
+                maxWidth: 50
+            },
+            {
+                Header: 'Med',
+                accessor: 'med_rssi',
+                maxWidth: 50
+            },
+            {
+                Header: 'Low',
+                accessor: 'low_rssi',
+                maxWidth: 50,
+            },
+    //     ]
+    // }
+    // {
+    //     Header: 'Gateway IP',
+    //     accessor: 'gateway_ip_address',
+    //     width: 200
+    // },
+]
+
+const gatewayTable = [
+    // {
+    //     Header: 'Info',
+    //     columns: [
+            {
+                Header: 'Status',
+                accessor: 'health_status',
+                width: 60,
+                style: style.column,
+                Cell: props => !props.value 
+                    ? <i className="fas fa-check-circle text-center" style={style.icon.check}></i> 
+                    : <i className="fas fa-times" style={style.icon.times}></i>
+            },
+
+            {
+                Header: 'IP Address',
+                accessor: 'ip_address',
+                width: 150
+            },
+            {
+                Header: 'Last Report Time',
+                accessor: 'last_report_timestamp',
+                width: 200,
+            },
+            {
+                Header: 'Registered Time',
+                accessor: 'registered_timestamp',
+                width: 200,
+            },
+            {
+                Header: 'Note',
+                accessor: 'note',
+                width: 200,
+            },
+    //     ]
+    // },
+    // {
+    //     Header: 'Gateway IP',
+    //     accessor: 'gateway_ip_address',
+    //     width: 200
+    // },
+
+]
+
 const trackingTable = [
     {
         Header: 'Found',
@@ -74,118 +185,6 @@ const trackingTable = [
     },
 ]
 
-const lbeaconTable = [
-    // {
-    //     Header: 'Info',
-    //     columns: [
-            {
-                Header: 'Status',
-                accessor: 'health_status',
-                width: 80,
-                style: style.column,
-                Cell: props => !props.value 
-                    ? <i className="fas fa-check-circle text-center" style={style.icon.check}></i> 
-                    : <i className="fas fa-times" style={style.icon.times}></i>
-            },
-            {
-                Header: 'uuid',
-                accessor: 'uuid',
-                minWidth: 350
-            },
-            {
-                Header: 'Description',
-                accessor: 'description',
-                width: 200
-            },
-            {
-                Header: 'IP Address',
-                accessor: 'ip_address',
-                width: 150
-            },
-            {
-                Header: 'Gateway IP Address',
-                accessor: 'gateway_ip_address',
-                width: 180
-            },
-            {
-                Header: 'Last Report Time',
-                accessor: 'last_report_timestamp',
-                width: 200,
-            },
-    //     ]
-    // },
-    // {
-    //     Header: 'RSSI Threshold',
-    //     columns: [
-            {
-                Header: 'High',
-                accessor: 'high_rssi',
-                maxWidth: 50
-            },
-            {
-                Header: 'Med',
-                accessor: 'med_rssi',
-                maxWidth: 50
-            },
-            {
-                Header: 'Low',
-                accessor: 'low_rssi',
-                maxWidth: 50,
-            },
-    //     ]
-    // }
-    // {
-    //     Header: 'Gateway IP',
-    //     accessor: 'gateway_ip_address',
-    //     width: 200
-    // },
-
-]
-
-const gatewayTable = [
-    // {
-    //     Header: 'Info',
-    //     columns: [
-            {
-                Header: 'Status',
-                accessor: 'health_status',
-                width: 80,
-                style: style.column,
-                Cell: props => !props.value 
-                    ? <i className="fas fa-check-circle text-center" style={style.icon.check}></i> 
-                    : <i className="fas fa-times" style={style.icon.times}></i>
-            },
-
-            {
-                Header: 'IP Address',
-                accessor: 'ip_address',
-                width: 150
-            },
-            {
-                Header: 'Last Report Time',
-                accessor: 'last_report_timestamp',
-                width: 200,
-            },
-            {
-                Header: 'Registered Time',
-                accessor: 'registered_timestamp',
-                width: 200,
-            },
-            {
-                Header: 'Note',
-                accessor: 'note',
-                width: 200,
-            },
-    //     ]
-    // },
-    // {
-    //     Header: 'Gateway IP',
-    //     accessor: 'gateway_ip_address',
-    //     width: 200
-    // },
-
-]
-
 const searchResultTable = [
     // {
     //     Header: 'Name',
@@ -217,9 +216,41 @@ const searchResultTable = [
     },
 ]
 
+const objectTable = [
+    {
+        Header: 'Name',
+        accessor: 'name'
+    },
+    {
+        Header: 'Type',
+        accessor: 'type'
+    },
+    {
+        Header: 'Access Control Number',
+        accessor: 'access_control_number'
+    },
+    {
+        Header: 'Status',
+        accessor: 'status'
+    },
+    {
+        Header: 'Transferred Location',
+        accessor: 'transferred_location'
+    },
+    {
+        Header: 'Mac Address',
+        accessor: 'mac_address',
+    },
+    {
+        Header: 'Monitor Type',
+        accessor: 'monitor_type'
+    }
+]
+
 export { 
     trackingTable,
     searchResultTable,
     lbeaconTable,
-    gatewayTable
+    gatewayTable,
+    objectTable
 }
