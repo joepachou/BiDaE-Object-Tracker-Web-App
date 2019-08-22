@@ -123,7 +123,7 @@ class EditObjectForm extends React.Component {
                             select: selectedObjectData.status === config.objectStatus.TRANSFERRED 
                                 ? selectedObjectData.transferred_location
                                 : '',
-                            checkboxGroup: selectedObjectData.length !== 0 ? selectedObjectData.monitor_type.split(',') : ''
+                            checkboxGroup: selectedObjectData.length !== 0 ? selectedObjectData.monitor_type.split(',') : []
                         }}
 
                         validationSchema = {
@@ -141,14 +141,13 @@ class EditObjectForm extends React.Component {
                                     })
                         })}
 
-                        onSubmit={(values, { setStatus, setSubmitting }) => {                            
+                        onSubmit={(values, { setStatus, setSubmitting }) => {
                             let monitor_type = values.checkboxGroup
-                                .filter(item => item)
-                                .reduce((sum, item) => {
-                                sum += parseInt(monitorTypeMap[item])
-                                return sum
+                                    .filter(item => item)
+                                    .reduce((sum, item) => {
+                                    sum += parseInt(monitorTypeMap[item])
+                                    return sum
                             },0)
-                            
                             const postOption = {
                                 ...values,
                                 status: values.radioGroup,
