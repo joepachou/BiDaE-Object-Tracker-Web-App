@@ -81,7 +81,7 @@ class SearchResult extends React.Component {
     handleChangeObjectStatusFormSubmit = (radioGroup, select) => {
         let editedObjectPackage = _.cloneDeep(this.state.selectedObjectData).map(item => {
             item.status = radioGroup
-            item.transferred_location = select.value || ''
+            item.transferred_location = select ? select.value : '';
             return item
         })
         this.setState({
