@@ -21,7 +21,6 @@ import RadioButtonGroup from './RadioButtonGroup'
 import RadioButton from '../presentational/RadioButton'
 
 
-
 const transferredLocations = config.transferredLocation;
 
 const options = transferredLocations.map( location => {
@@ -117,14 +116,16 @@ class EditObjectForm extends React.Component {
                     {title}
                 </Modal.Header >
                 <Modal.Body>
-                    <Formik
+                    <Formik                    
                         initialValues = {{
                             name: selectedObjectData.name || '' ,
                             type: selectedObjectData.type || '',
                             access_control_number: selectedObjectData.access_control_number || '',
                             mac_address: selectedObjectData.mac_address || '',
                             radioGroup: selectedObjectData.status || '',
-                            select: '',
+                            select: selectedObjectData.status === config.objectStatus.TRANSFERRED 
+                                ? selectedObjectData.transferred_location
+                                : '',
                             checkboxGroup: selectedObjectData.length !== 0 ? selectedObjectData.monitor_type.split(',') : ''
                         }}
 
@@ -144,14 +145,19 @@ class EditObjectForm extends React.Component {
                         })}
 
                         onSubmit={(values, { setStatus, setSubmitting }) => {                            
-                            let monitor_type = values.checkboxGroup.reduce((sum, item) => {
+                            let monitor_type = values.checkboxGroup
+                                .filter(item => item)
+                                .reduce((sum, item) => {
                                 sum += parseInt(monitorTypeMap[item])
                                 return sum
                             },0)
+                            
                             const postOption = {
                                 ...values,
                                 status: values.radioGroup,
-                                transferredLocation: values.radioGroup === config.objectStatus.TRANSFERRED ? values.select.value : '',
+                                transferredLocation: values.radioGroup === config.objectStatus.TRANSFERRED 
+                                    ? values.select.value || values.select
+                                    : '',
                                 registered_timestamp: moment(),
                                 monitor_type,
                             }
