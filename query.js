@@ -48,6 +48,15 @@ const getTrackingData = (request, response) => {
                 if (moment().diff(item.panic_timestamp, 'second') < 300) {
                     item.panic = true
                 }
+
+                /** Tag the object's battery volumn is limiting */
+                if (item.battery_voltage >= 27) {
+                    item.battery_voltage = 3;
+                } else if (item.battery_voltage < 27 && item.battery_voltage >= 25) {
+                    item.battery_voltage = 2;
+                } else {
+                    item.battery_voltage = 0
+                }
                 
                 /** Omit the unused field of the object */
                 delete item.first_seen_timestamp
@@ -235,22 +244,22 @@ const signup = (request, response) => {
         .then(res => {
             if(!res.rowCount) {
                 pool.query(queryType.query_signup(signupPackage))
-                .then(res => {
-                    pool.query(`select id from user_table where name='${username}'`)
-                        .then(res => {
-                            let user_id = res.rows[0].id
-                            pool.query(`insert into user_roles (user_id, role_id) values(${user_id}, 2)`)
-                                .then(res => {
-                                    console.log('Sign up Success')
-                                    response.status(200).json(res)
-                                })
-                                .catch(err => {
-                                    console.log(err)
-                                })
-                        })
-                        .catch(err => {
-                            console.log(err)
-                        })
+                    .then(res => {
+                        pool.query(`select id from user_table where name='${username}'`)
+                            .then(res => {
+                                let user_id = res.rows[0].id
+                                pool.query(`insert into user_roles (user_id, role_id) values(${user_id}, 2)`)
+                                    .then(res => {
+                                        console.log('Sign up Success')
+                                        response.status(200).json(res)
+                                    })
+                                    .catch(err => {
+                                        console.log(err)
+                                    })
+                            })
+                            .catch(err => {
+                                console.log(err)
+                            })
                 })
                 .catch((err,res) => {
                     console.log("Signup Fails!" + err)

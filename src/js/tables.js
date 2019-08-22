@@ -13,7 +13,7 @@ const style = {
             color: 'red',
         },
         exclamation: {
-            color: 'red',
+            color: 'orange',
         }
     }
 }
@@ -29,10 +29,10 @@ const lbeaconTable = [
                 style: style.column,
                 Cell: props => !props.value 
                     ? <i className="fas fa-check-circle text-center" style={style.icon.check}></i> 
-                    : <i className="fas fa-times" style={style.icon.times}></i>
+                    : <i className="fas fa-times-circle" style={style.icon.times}></i>
             },
             {
-                Header: 'uuid',
+                Header: 'UUID',
                 accessor: 'uuid',
                 width: 330
             },
@@ -96,7 +96,7 @@ const gatewayTable = [
                 style: style.column,
                 Cell: props => !props.value 
                     ? <i className="fas fa-check-circle text-center" style={style.icon.check}></i> 
-                    : <i className="fas fa-times" style={style.icon.times}></i>
+                    : <i className="fas fa-times-circle" style={style.icon.times}></i>
             },
 
             {
@@ -134,19 +134,31 @@ const trackingTable = [
         Header: 'Found',
         accessor: 'found',
         style: style.column,
-        width: 70
+        width: 60,
+        Cell: props => props.value 
+            ? <i className="fas fa-check-circle text-center" style={style.icon.check}></i> 
+            : <i className="fas fa-times" style={style.icon.times}></i>
+    },
+    {
+        Header: 'Battery',
+        accessor: 'battery_voltage',
+        style: style.column,
+        width: 70,
+        Cell: props => 
+            props.value === 2 && <i className="fas fa-check-circle text-center" style={style.icon.check}></i> ||
+            props.value === 3 && <i className="fas fa-exclamation-circle text-center" style={style.icon.exclamation}></i>
     },
     {
         Header: 'Panic',
         accessor: 'panic',
-        width: 70,
+        width: 60,
         style: style.column,
         Cell: props => props.value ? <i className="fas fa-exclamation" style={style.icon.exclamation}></i> : null
     },
     {
         Header: 'Alert',
         accessor: 'geofence_type',
-        width: 70,
+        width: 60,
     },
     {
         Header: 'Name',
@@ -156,7 +168,7 @@ const trackingTable = [
     {
         Header: 'Type',
         accessor: 'type',
-        width: 250
+        width: 150
     },
     {
         Header: 'Access Control Number',
@@ -171,7 +183,7 @@ const trackingTable = [
     {
         Header: 'Transferred Location',
         accessor: 'transferred_location',
-        width: 180
+        width: 100
     },
     {
         Header: 'Last Location',
