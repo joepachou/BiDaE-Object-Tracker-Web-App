@@ -140,7 +140,7 @@ class ChangeStatusForm extends React.Component {
                                                 : null
                                             }
 
-                                            <Col xs={8} sm={8}>
+                                            <Col>
                                                 <Row>
                                                     <Col {...colProps.titleCol}>
                                                         Type
@@ -166,9 +166,9 @@ class ChangeStatusForm extends React.Component {
                                                     </Col>
                                                 </Row>
                                             </Col>
-                                            <Col xs={3} sm={3} className='d-flex align-items-center'>
+                                            {/* <Col xs={3} sm={3} className='d-flex align-items-center'>
                                                 <Image src={tempImg} width={80}/>
-                                            </Col>
+                                            </Col> */}
                                         </Row>
                                     </div>
                                 )
@@ -261,7 +261,7 @@ class ChangeStatusForm extends React.Component {
                                                 Add Device
                                             </Button>
                                             <Button variant="outline-secondary" className='mr-2' onClick={this.handleClick}>
-                                                {this.state.showNotesControl ? 'Add Notes' : 'Hide Notes'}
+                                                {!this.state.showNotesControl ? 'Add Notes' : 'Hide Notes'}
                                             </Button>
                                         </ButtonToolbar>
                                     </Row>

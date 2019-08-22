@@ -100,15 +100,10 @@ class ConfirmForm extends React.Component {
                                     <div key={index} >
                                         {index > 0 ? <hr/> : null}
                                         <Row noGutters={true}>
-                                            {this.props.selectedObjectData.length > 1 
-                                                ? 
-                                                    <Col xs={1} sm={1} className='d-flex align-items-center'>
-                                                        <i className="fas fa-times" onClick={this.props.handleRemoveButton} name={item.mac_address}></i> 
-                                                    </Col>
-                                                : null
-                                            }
-
-                                            <Col xs={8} sm={8}>
+                                            <Col xs={1} sm={1} className='d-flex align-items-center'>
+                                                {null}
+                                            </Col>
+                                            <Col>
                                                 <Row>
                                                     <Col {...colProps.titleCol}>
                                                         Type
@@ -134,9 +129,9 @@ class ConfirmForm extends React.Component {
                                                     </Col>
                                                 </Row>
                                             </Col>
-                                            <Col xs={3} sm={3} className='d-flex align-items-center'>
+                                            {/* <Col xs={3} sm={3} className='d-flex align-items-center'>
                                                 <Image src={tempImg} width={80}/>
-                                            </Col>
+                                            </Col> */}
                                         </Row>
                                     </div>
                                 )
