@@ -145,8 +145,8 @@ const trackingTable = [
         style: style.column,
         width: 70,
         Cell: props => 
-            props.value === 2 && <i className="fas fa-check-circle text-center" style={style.icon.check}></i> ||
-            props.value === 3 && <i className="fas fa-exclamation-circle text-center" style={style.icon.exclamation}></i>
+            props.value === 3 && <i className="fas fa-check-circle text-center" style={style.icon.check}></i> ||
+            props.value === 2 && <i className="fas fa-exclamation-circle text-center" style={style.icon.exclamation}></i>
     },
     {
         Header: 'Panic',
