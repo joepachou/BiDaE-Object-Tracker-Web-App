@@ -5,7 +5,6 @@
  * 2. Add the corresponding terms in handleSubmit and handleChange
  * 3. Modify the query_editObject function in queryType
  */
-
 import React from 'react';
 import { Modal, Button, Row, Col } from 'react-bootstrap';
 import Select from 'react-select';
@@ -32,7 +31,7 @@ const options = transferredLocations.map( location => {
   
 class EditObjectForm extends React.Component {
     state = {
-        show: false,
+        show: this.props.show,
         isShowForm: false,
     };
 
@@ -50,9 +49,7 @@ class EditObjectForm extends React.Component {
     }
   
     handleClose = () => {
-        this.setState({ 
-            show: false,
-        });
+        this.props.handleCloseForm()
     }
   
     handleShow = () => {

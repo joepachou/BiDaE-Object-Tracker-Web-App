@@ -12,19 +12,17 @@ import selecTableHOC from 'react-table/lib/hoc/selectTable';
 import config from '../../config'
 const SelectTable = selecTableHOC(ReactTable);
 
-
-
 class ObjectManagementContainer extends React.Component{
-        state = {
-            column:[],
-            data:[],
-            isShowEdit: false,
-            selection: [],
-            selectedRowData: [],
-            formTitle:'',
-            formPath: '',
-            selectAll: false,
-        }
+    state = {
+        column:[],
+        data:[],
+        isShowEdit: false,
+        selection: [],
+        selectedRowData: [],
+        formTitle:'',
+        formPath: '',
+        selectAll: false,
+    }
 
     componentDidMount = () => {
         this.getData();
@@ -77,6 +75,12 @@ class ObjectManagementContainer extends React.Component{
     handleModalForm = () => {
         this.setState({
             isShowEdit: true,
+        })
+    }
+
+    handleCloseForm = () => {
+        this.setState({
+            isShowEdit: false,
         })
     }
 
@@ -265,6 +269,7 @@ class ObjectManagementContainer extends React.Component{
                     selectedObjectData={selectedRowData || null} 
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={this.state.formPath}
+                    handleCloseForm={this.handleCloseForm}
                 />                
             </Container>
                     
