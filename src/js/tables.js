@@ -137,7 +137,7 @@ const trackingTable = [
         width: 60,
         Cell: props => props.value 
             ? <i className="fas fa-check-circle text-center" style={style.icon.check}></i> 
-            : <i className="fas fa-times" style={style.icon.times}></i>
+            : <i className="fas fa-times-circle" style={style.icon.times}></i>
     },
     {
         Header: 'Battery',
