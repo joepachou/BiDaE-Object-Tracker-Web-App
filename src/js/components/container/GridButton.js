@@ -12,7 +12,7 @@ class GridButton extends React.Component {
         this.state = {
 
             /** Retrieve the object type from config */
-            objectTypeSet: config.surveillanceMap.objectTypeSet,
+            objectType: config.surveillanceMap.objectType,
 
             /** Store the remianed pin colors that are usable for next pin color object representation */
             pinColorArray: config.surveillanceMap.iconColor.pinColorArray,
@@ -37,17 +37,17 @@ class GridButton extends React.Component {
     processObjectTypeSet() {
         /** Get the item name of the GridButton from searchableObjectData */
         // const searchableObjectData = this.props.searchableObjectData;
-        // const objectTypeSet = new Set();
+        // const objectType = new Set();
         // Object.values(searchableObjectData).map(item => {
-        //     objectTypeSet.add(item.type)
+        //     objectType.add(item.type)
         // })
 
         /** Get the item name of the GridButton from the state */
-        const objectTypeSet = this.state.objectTypeSet
-        objectTypeSet.push('All')
+        const objectType = Array.from(config.surveillanceMap.objectType)
+        objectType.push('All')
         
         this.setState({
-            objectTypeSet
+            objectType
         })
     }
 
@@ -59,7 +59,7 @@ class GridButton extends React.Component {
         let pinColor = '';
         let pinColorArray = clearColorPanel ? config.surveillanceMap.iconColor.pinColorArray.slice() : this.state.pinColorArray.slice();
         let colorPanel = clearColorPanel ? {} : this.state.colorPanel;
-        let objectTypeSet = this.state.objectTypeSet;
+        let objectType = this.state.objectType;
         let selectAll;
         if (this.props.clearColorPanel) {
             selectAll = true
@@ -73,7 +73,7 @@ class GridButton extends React.Component {
                 let childrenNodesArray = Array.from(document.getElementsByClassName('gridbutton'))
                     .filter(item => item.textContent !== 'All')
 
-                Array.from(objectTypeSet).filter(item => item !== 'All')
+                Array.from(objectType).filter(item => item !== 'All')
                     .map(item => {
                         if (colorPanel[item]) return;
                         let color = pinColorArray.pop();
@@ -110,7 +110,7 @@ class GridButton extends React.Component {
     
 
         const searchKeys = Object.keys(colorPanel)
-        // this.putSearchHistory(searchKey)
+        this.putSearchHistory(searchKey)
 
         // if (Cookies.get('userInfo')){
         //     this.putSearchHistory(searchKey)
@@ -210,7 +210,7 @@ class GridButton extends React.Component {
 
     render(){
 
-        const { objectTypeSet } = this.state;
+        const { objectType } = this.state;
 
         const style = {
             row: {
@@ -219,10 +219,10 @@ class GridButton extends React.Component {
         }
         return (
             <div>
-                {objectTypeSet.length !== 0 
+                {objectType.length !== 0 
                     ? 
                         <Row className='' style={style.row}>
-                            {Array.from(objectTypeSet).map( (item,index) => {
+                            {Array.from(objectType).map( (item,index) => {
                                 return (
                                     <Col sm={6} md={6} lg={6} xl={6} className='px-1' key={index}>
                                         <div className='gridbutton' onClick={this.handleClick} key={index} name={item.toLowerCase()}>

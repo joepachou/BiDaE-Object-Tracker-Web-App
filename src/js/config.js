@@ -85,7 +85,7 @@ const config = {
         markerDispersity: 5,
 
         // objectTypeSet: new Set(['Bed', 'EKG Machine', 'Infusion pump', 'SONOSITE Ultrasound', 'Ultrasound', 'Bladder scanner', 'CPM'])
-        objectTypeSet: ['三合一Monitoring', 'EKG', 'IV Pump', '烤燈', '血壓血氧監視器', '電擊器', 'CPM']
+        objectType: ['三合一Monitoring', 'EKG', 'IV Pump', '烤燈', '血壓血氧監視器', '電擊器', 'CPM']
 
         
     },
