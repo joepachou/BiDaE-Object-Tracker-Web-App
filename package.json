@@ -8,7 +8,10 @@
     "build": "webpack",
     "start": "webpack-dev-server --open --mode development",
     "server": "nodemon webServer.js",
-    "production": "npm run build && npm install --produciton && npm install bcrypt && pm2 start webServer.js"
+    "fetch": "git fetch --all",
+    "reset": "git reset --hard origin/master",
+    "git": "npm run fetch && npm run reset",
+    "production": "npm run build && npm install --produciton && pm2 start webServer.js"
   },
   "keywords": [],
   "author": "",
