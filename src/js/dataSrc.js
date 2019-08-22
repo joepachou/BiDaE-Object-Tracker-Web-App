@@ -1,5 +1,4 @@
-const IP = 'localhost:3000';//'bot.iis.sinica.edu.tw'
-
+const IP = process.env.dataSrcIP;
 const getTrackingData = 'http://' + IP + '/data/getTrackingData';
 const getObjectTable = 'http://' + IP + '/data/getObjectTable';
 const getLbeaconTable = 'http://' + IP + '/data/getLbeaconTable';
@@ -17,8 +16,6 @@ const editLbeacon = 'http://' + IP + '/data/editLbeacon'
 const modifyMyDevice = 'http://' + IP + '/data/modifyMyDevice';
 const generatePDF = 'http://' + IP + '/data/generatePDF'
 const getPDFInfo = 'http://' + IP + '/data/PDFInfo'
-
-
 
 const pdfUrl = function(path){
     return 'http://' + IP + '/' + path
