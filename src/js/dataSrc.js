@@ -1,24 +1,25 @@
-const IP = process.env.dataSrcIP;
-const getTrackingData = 'http://' + IP + '/data/getTrackingData';
-const getObjectTable = 'http://' + IP + '/data/getObjectTable';
-const getLbeaconTable = 'http://' + IP + '/data/getLbeaconTable';
-const getGatewayTable = 'http://' + IP + '/data/getGatewayTable';
-const searchResult = 'http://' + IP + '/data/searchResult';
-const geofenceData = 'http://' + IP + '/data/geofenceData';
-const editObject = 'http://' + IP + '/data/editObject';
-const addObject = 'http://' + IP + '/data/addObject';
-const editObjectPackage = 'http://' + IP +'/data/editObjectPackage';
-const signin = 'http://' + IP + '/user/signin';
-const signup = 'http://' + IP + '/user/signup';
-const getUserInfo = 'http://' + IP + '/user/getUserInfo';
-const addUserSearchHistory = 'http://' + IP + '/user/addUserSearchHistory'
-const editLbeacon = 'http://' + IP + '/data/editLbeacon'
-const modifyMyDevice = 'http://' + IP + '/data/modifyMyDevice';
-const generatePDF = 'http://' + IP + '/data/generatePDF'
-const getPDFInfo = 'http://' + IP + '/data/PDFInfo'
+const dataSrcIP = process.env.dataSrcIP;
+const getTrackingData = 'http://' + dataSrcIP + '/data/getTrackingData';
+const getObjectTable = 'http://' + dataSrcIP + '/data/getObjectTable';
+const getLbeaconTable = 'http://' + dataSrcIP + '/data/getLbeaconTable';
+const getGatewayTable = 'http://' + dataSrcIP + '/data/getGatewayTable';
+const searchResult = 'http://' + dataSrcIP + '/data/searchResult';
+const geofenceData = 'http://' + dataSrcIP + '/data/geofenceData';
+const editObject = 'http://' + dataSrcIP + '/data/editObject';
+const addObject = 'http://' + dataSrcIP + '/data/addObject';
+const editObjectPackage = 'http://' + dataSrcIP +'/data/editObjectPackage';
+const signin = 'http://' + dataSrcIP + '/user/signin';
+const signup = 'http://' + dataSrcIP + '/user/signup';
+const getUserInfo = 'http://' + dataSrcIP + '/user/getUserInfo';
+const addUserSearchHistory = 'http://' + dataSrcIP + '/user/addUserSearchHistory'
+const editLbeacon = 'http://' + dataSrcIP + '/data/editLbeacon'
+const modifyMyDevice = 'http://' + dataSrcIP + '/data/modifyMyDevice';
+const generatePDF = 'http://' + dataSrcIP + '/data/generatePDF'
+const getPDFInfo = 'http://' + dataSrcIP + '/data/PDFInfo'
+const validateUsername = `http://${dataSrcIP}/validation/username`;
 
 const pdfUrl = function(path){
-    return 'http://' + IP + '/' + path
+    return 'http://' + dataSrcIP + '/' + path
 }
 
 module.exports = {
@@ -40,5 +41,6 @@ module.exports = {
     generatePDF,
     modifyMyDevice,
     getPDFInfo,
+    validateUsername
     
 };

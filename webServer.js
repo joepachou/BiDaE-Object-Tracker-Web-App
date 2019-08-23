@@ -84,6 +84,7 @@ app.get('/download/com.beditech.IndoorNavigation.apk', (req, res) => {
     res.download(file); // Set disposition and send it.
 });
 
+app.post('/validation/username', db.validateUsername)
 
 var privateKey = fs.readFileSync(__dirname + '/sslforfree/private.key');
 var certificate = fs.readFileSync(__dirname + '/sslforfree/certificate.crt');

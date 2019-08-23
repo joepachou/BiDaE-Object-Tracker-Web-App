@@ -4,6 +4,8 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import config from '../../config';
 import LocaleContext from '../../context/LocaleContext';
+import axios from 'axios';
+import dataSrc from '../../dataSrc';
 
 class SignupPage extends React.Component {
     constructor(props) {
@@ -57,7 +59,23 @@ class SignupPage extends React.Component {
 
                         validationSchema = {
                             Yup.object().shape({
-                                username: Yup.string().required('Username is required'),
+                                username: Yup.string()
+                                    .required('Username is required')
+                                    .test(
+                                        'username', 
+                                        'The username is already taken',
+                                        value => {
+                                            return new Promise((resolve, _reject) => {
+                                                axios.post(dataSrc.validateUsername, {
+                                                    username: value
+                                                })
+                                                .then(res => {
+                                                    resolve(res.data.precheck)
+                                                },
+                                            );
+                                        });
+                                    }
+                                ),
                                 password: Yup.string().required('Password is required')
                             })
                         }

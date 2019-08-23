@@ -120,12 +120,28 @@ function query_editObject (formOption) {
 function query_addObject (formOption) {
 	const text = 
 		`
-		INSERT INTO object_table 
-		(type, status, transferred_location, access_control_number, name, mac_address, registered_timestamp)
-		VALUES($1, $2, $3, $4, $5, $6, $7)
+		INSERT INTO object_table (
+			type, 
+			status, 
+			transferred_location, 
+			access_control_number, 
+			name, mac_address, 
+			registered_timestamp,
+			monitor_type
+		)
+		VALUES($1, $2, $3, $4, $5, $6, $7, $8)
 		`;
 		
-	const values = [formOption.type, formOption.status, formOption.transferredLocation?formOption.transferredLocation.value:null, formOption.access_control_number, formOption.name, formOption.mac_address, formOption.registered_timestamp];
+	const values = [
+		formOption.type, 
+		formOption.status, 
+		formOption.transferredLocation ? formOption.transferredLocation.value : null, 
+		formOption.access_control_number, 
+		formOption.name, 
+		formOption.mac_address, 
+		formOption.registered_timestamp,
+		formOption.monitor_type
+	];
 
 	const query = {
 		text,
@@ -287,6 +303,26 @@ function query_getShiftChangeRecord(){
 	return query
 }
 
+const query_validateUsername = (username) => {
+	const text = `
+		SELECT 
+			name
+		FROM
+			user_table
+		WHERE name=$1
+	`
+
+	const values = [
+		username
+	]
+
+	const query = {
+		text, 
+		values
+	}
+	return query
+}
+
 module.exports = {
     query_getTrackingData,
     query_getObjectTable,
@@ -303,4 +339,5 @@ module.exports = {
 	query_editLbeacon,
 	query_modifyUserDevices,
 	query_getShiftChangeRecord,
+	query_validateUsername,
 }

@@ -52,7 +52,7 @@ const getTrackingData = (request, response) => {
                 /** Tag the object's battery volumn is limiting */
                 if (item.battery_voltage >= 27) {
                     item.battery_voltage = 3;
-                } else if (item.battery_voltage < 27 && item.battery_voltage >= 25) {
+                } else if (item.battery_voltage < 27 && item.battery_voltage > 0) {
                     item.battery_voltage = 2;
                 } else {
                     item.battery_voltage = 0
@@ -166,6 +166,9 @@ const addObject = (request, response) => {
         })
         .catch(err => {
             console.log("Add Object Fails: " + err)
+            response.status(500).json({
+                message:'not good'
+            })
         })
     
 }
@@ -240,38 +243,26 @@ const signup = (request, response) => {
         password: hash,
     }
 
-    pool.query(`select name from user_table where name='${username}'`)
+    pool.query(queryType.query_signup(signupPackage))
         .then(res => {
-            if(!res.rowCount) {
-                pool.query(queryType.query_signup(signupPackage))
-                    .then(res => {
-                        pool.query(`select id from user_table where name='${username}'`)
-                            .then(res => {
-                                let user_id = res.rows[0].id
-                                pool.query(`insert into user_roles (user_id, role_id) values(${user_id}, 2)`)
-                                    .then(res => {
-                                        console.log('Sign up Success')
-                                        response.status(200).json(res)
-                                    })
-                                    .catch(err => {
-                                        console.log(err)
-                                    })
-                            })
-                            .catch(err => {
-                                console.log(err)
-                            })
+            pool.query(`select id from user_table where name='${username}'`)
+                .then(res => {
+                    let user_id = res.rows[0].id
+                    pool.query(`insert into user_roles (user_id, role_id) values(${user_id}, 2)`)
+                        .then(res => {
+                            console.log('Sign up Success')
+                            response.status(200).json(res)
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
                 })
-                .catch((err,res) => {
-                    console.log("Signup Fails!" + err)
+                .catch(err => {
+                    console.log(err)
                 })
-            } else {
-                response.status(200).json({
-                    message: "Username is already in used"
-                })
-            }
         })
-        .catch(err => {
-            console.log(err)
+        .catch((err,res) => {
+            console.log("Signup Fails!" + err)
         })
 }
 
@@ -409,6 +400,19 @@ const getPDFInfo = (request, response) => {
         }
     })   
 }
+
+const validateUsername = (request, response) => {
+    let { username } = request.body
+    pool.query(queryType.query_validateUsername(username))
+        .then(res => {
+            let precheck = false
+            res.rowCount === 0 ? precheck = true : precheck = false;
+            response.status(200).json({precheck})
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
     
 module.exports = {
     getTrackingData,
@@ -426,5 +430,6 @@ module.exports = {
     editLbeacon,
     generatePDF,
     modifyUserDevices,
-    getPDFInfo
+    getPDFInfo,
+    validateUsername
 }
