@@ -270,6 +270,7 @@ class ObjectManagementContainer extends React.Component{
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={this.state.formPath}
                     handleCloseForm={this.handleCloseForm}
+                    data={this.state.data}
                 />                
             </Container>
                     

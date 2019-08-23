@@ -65,7 +65,7 @@ class SignupPage extends React.Component {
                                         'username', 
                                         'The username is already taken',
                                         value => {
-                                            return new Promise((resolve, _reject) => {
+                                            return new Promise((resolve, reject) => {
                                                 axios.post(dataSrc.validateUsername, {
                                                     username: value
                                                 })

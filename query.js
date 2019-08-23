@@ -413,7 +413,7 @@ const validateUsername = (request, response) => {
             console.log(err)
         })
 }
-    
+
 module.exports = {
     getTrackingData,
     getObjectTable,
@@ -431,5 +431,5 @@ module.exports = {
     generatePDF,
     modifyUserDevices,
     getPDFInfo,
-    validateUsername
+    validateUsername,
 }

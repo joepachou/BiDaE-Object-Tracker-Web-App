@@ -18,21 +18,31 @@ import CheckboxGroup from './CheckboxGroup'
 import Checkbox from '../presentational/Checkbox'
 import RadioButtonGroup from './RadioButtonGroup'
 import RadioButton from '../presentational/RadioButton'
+import dataSrc from '../../dataSrc'
 
-
-const transferredLocations = config.transferredLocation;
-
-const options = transferredLocations.map( location => {
+const options = config.transferredLocation.map( location => {
     let locationObj = {};
     locationObj["value"] = location;
     locationObj["label"] = location;
     return locationObj
 })
+
+const objectTypeOptions = config.surveillanceMap.objectType.map(type => {
+    let objectTypeObj = {};
+    objectTypeObj["value"] = type;
+    objectTypeObj["label"] = type;
+    return objectTypeObj
+})
+
+let monitorTypeMap = {};
+
+Object.keys(config.monitorType).forEach(key => {
+    monitorTypeMap[config.monitorType[key]] = key
+})
   
 class EditObjectForm extends React.Component {
     state = {
         show: this.props.show,
-        isShowForm: false,
     };
 
     /**
@@ -43,7 +53,6 @@ class EditObjectForm extends React.Component {
         if (!(_.isEqual(prevProps, this.props))) {
             this.setState({
                 show: this.props.show,
-                isShowForm: true,
             })
         }
     }
@@ -51,28 +60,13 @@ class EditObjectForm extends React.Component {
     handleClose = () => {
         this.props.handleCloseForm()
     }
-  
-    handleShow = () => {
-        this.setState({ 
-            show: true 
-        });
-    }
 
     handleSubmit = (postOption) => {
         const path = this.props.formPath
         axios.post(path, {
             formOption: postOption
         }).then(res => {
-            setTimeout(
-                function() {
-                   this.setState ({
-                       show: false,
-                   })
-                   this.props.handleSubmitForm();
-                }
-                .bind(this),
-                1000
-            )
+            setTimeout(this.props.handleSubmitForm(),1000)
         }).catch( error => {
             console.log(error)
         })
@@ -101,12 +95,6 @@ class EditObjectForm extends React.Component {
 
         const { title, selectedObjectData } = this.props;
 
-        let monitorTypeMap = {};
-
-        Object.keys(config.monitorType).forEach(key => {
-            monitorTypeMap[config.monitorType[key]] = key
-        })
-
         return (
             <Modal show={this.state.show} onHide={this.handleClose} size='md'>
                 <Modal.Header closeButton className='font-weight-bold text-capitalize'>
@@ -130,8 +118,26 @@ class EditObjectForm extends React.Component {
                             Yup.object().shape({
                                 name: Yup.string().required(locale.NAME_IS_REQUIRED),
                                 type: Yup.string().required(locale.TYPE_IS_REQUIRED),
-                                access_control_number: Yup.string().required(locale.ACCESS_CONTROL_NUMBER_IS_REQUIRED),
-                                mac_address: Yup.string().required(locale.MAC_ADDRESS_IS_REQUIRED),
+                                access_control_number: Yup.string()
+                                    .required(locale.ACCESS_CONTROL_NUMBER_IS_REQUIRED)
+                                    .test(
+                                        'access_control_number', 
+                                        'The access control number is already used',
+                                        value => {
+                                            return value === selectedObjectData.access_control_number || 
+                                                !this.props.data.map(item => item.access_control_number).includes(value)
+                                        }
+                                    ),
+                                mac_address: Yup.string()
+                                    .required(locale.MAC_ADDRESS_IS_REQUIRED)
+                                    .test(
+                                        'mac_address',
+                                        'The Mac Address is already used',
+                                        value => {
+                                            return value === selectedObjectData.mac_address ||
+                                                !this.props.data.map(item => item.mac_address).includes(value)
+                                        }
+                                    ),
                                 radioGroup: Yup.string().required(locale.STATUS_IS_REQUIRED),
 
                                 select: Yup.string()
@@ -145,9 +151,9 @@ class EditObjectForm extends React.Component {
                             let monitor_type = values.checkboxGroup
                                     .filter(item => item)
                                     .reduce((sum, item) => {
-                                    sum += parseInt(monitorTypeMap[item])
-                                    return sum
-                            },0)
+                                        sum += parseInt(monitorTypeMap[item])
+                                        return sum
+                                    },0)
                             const postOption = {
                                 ...values,
                                 status: values.radioGroup,
@@ -155,7 +161,7 @@ class EditObjectForm extends React.Component {
                                     ? values.select.value || values.select
                                     : '',
                                 registered_timestamp: moment(),
-                                monitor_type,
+                                monitor_type: monitor_type
                             }
                             this.handleSubmit(postOption)                            
                         }}
@@ -182,7 +188,12 @@ class EditObjectForm extends React.Component {
                                 <br/>
                                 <div className="form-group">
                                     <label htmlFor="mac_address">{locale.MAC_ADDRESS}*</label>
-                                    <Field name="mac_address" type="text" className={'form-control' + (errors.mac_address && touched.mac_address ? ' is-invalid' : '')} disabled={title.toLowerCase() === locale.EDIT_OBJECT}/>
+                                    <Field 
+                                        name="mac_address" 
+                                        type="text" 
+                                        className={'form-control' + (errors.mac_address && touched.mac_address ? ' is-invalid' : '')} 
+                                        disabled={title.toLowerCase() === locale.EDIT_OBJECT}
+                                    />
                                     <ErrorMessage name="mac_address" component="div" className="invalid-feedback" />
                                 </div>
                                 <hr/>
