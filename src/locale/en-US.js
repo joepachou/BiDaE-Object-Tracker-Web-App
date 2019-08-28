@@ -6,6 +6,7 @@ const en =  {
     HOME: 'home',
     HEALTH_REPORT: 'health report',
     DEVICE_MONITOR: 'device monitor',
+    MONITOR_MANAGEMENT: 'monitor management',
     GEOFENCE: 'geofence',
     OBJECT_MANAGEMENT: 'object management',
 

@@ -10,6 +10,7 @@ import EditObjectForm from './EditObjectForm'
 import LocaleContext from '../../context/LocaleContext.js';
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
 import config from '../../config'
+import { objectTableColumn } from '../../tables'
 const SelectTable = selecTableHOC(ReactTable);
 
 class ObjectManagementContainer extends React.Component{
@@ -22,6 +23,16 @@ class ObjectManagementContainer extends React.Component{
         formTitle:'',
         formPath: '',
         selectAll: false,
+        locale: this.context.lang
+    }
+
+    componentDidUpdate = (prevProps, prevState) => {
+        if (this.context.lang !== prevState.locale) {
+            this.getData()
+            this.setState({
+                locale: this.context.lang
+            })
+        }
     }
 
     componentDidMount = () => {
@@ -29,47 +40,39 @@ class ObjectManagementContainer extends React.Component{
     }
 
     getData = () => {
-        axios.get(dataSrc.getObjectTable)
-            .then(res => {
-                let column = [];
-                res.data.fields.map(item => {
-
-                    let field = {};
-                    field.Header = item.name.replace(/_/g, ' ')
-                        .toLowerCase()
-                        .split(' ')
-                        .map( s => s.charAt(0).toUpperCase() + s.substring(1))
-                        .join(' '),                
-                    field.accessor = item.name,
-                    field.headerStyle={
-                        textAlign: 'left',
-                    }
-
-                    switch(item.name) {
-                        case 'status':
-                            field.width = 100
-                            break;
-                    }
-
-                    column.push(field);
-                })
-                res.data.rows.map(item => {
-                    let checkboxGroup = []
-                    Object.keys(config.monitorType).map(index => {
-                        if (item.monitor_type & index) {
-                            checkboxGroup.push(config.monitorType[index])
-                        }
-                    })
-                    item.monitor_type = checkboxGroup.join(',')
-                })
-                this.setState({
-                    data: res.data.rows,
-                    column: column,
-                })
+        let locale = this.context
+        axios.post(dataSrc.getObjectTable, {
+            locale: locale.lang
+        })
+        .then(res => {
+            let column = _.cloneDeep(objectTableColumn)
+            column.map(field => {
+                field.headerStyle = {
+                    textAlign: 'left',
+                }
+                field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })
-            .catch(err => {
-                console.log(err);
+            res.data.rows.map(item => {
+                let checkboxGroup = []
+                Object.keys(config.monitorType).map(index => {
+                    if (item.monitor_type & index) {
+                        checkboxGroup.push(config.monitorType[index])
+                    }
+                })
+                item.monitor_type = checkboxGroup.join(',')
+                item.status = locale.texts[item.status.toUpperCase()]
+                item.transferred_location = item.transferred_location 
+                    ? locale.texts[item.transferred_location.toUpperCase().replace(/ /g, '_')]
+                    : ''
             })
+            this.setState({
+                data: res.data.rows,
+                column: column,
+            })
+        })
+        .catch(err => {
+            console.log(err);
+        })
     }
 
     handleModalForm = () => {
@@ -196,8 +199,7 @@ class ObjectManagementContainer extends React.Component{
             selectType
         };
         return (
-            <Container fluid className='py-2'>
-        
+            <Container fluid className='py-2 text-capitalize'>
                 <Row className='mt-1'>
                     <Col>
                         <Button variant='primary' className='text-capitalize' onClick={this.handleClickButton}>

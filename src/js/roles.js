@@ -21,7 +21,7 @@ const rules = {
     systemAdmin: {
         permission: [
             "form:edit",
-            "route:deviceMonitor",
+            "route:monitorManagement",
             "route:geofence",
             "route:objectManagement",
         ]

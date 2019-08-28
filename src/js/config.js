@@ -120,7 +120,7 @@ const config = {
     ],
     
     locale: {
-        defaultLocale: 'en',
+        defaultLocale: 'tw',
     },
 
     image: {

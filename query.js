@@ -96,19 +96,15 @@ const getTrackingData = (request, response) => {
 }
 
 const getObjectTable = (request, response) => {
-    pool.query(queryType.query_getObjectTable, (error, results) => {        
-        if (error) {
-            console.log("Get data fails : " + error)
-        } else {
+    let { locale } = request.body
+    pool.query(queryType.query_getObjectTable)       
+        .then(res => {
             console.log('Get objectTable data!')
-        
-            // results.rows.map(item => {
-            //     const localLastReportTimeStamp = moment(item.last_report_timestamp).tz(process.env.TZ);
-            //     item.last_report_timestamp = localLastReportTimeStamp.format();
-            // })
-            response.status(200).json(results)
-        }
-    })
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log("Get data fails : " + error)
+        })     
 }
 
 const getLbeaconTable = (request, response) => {

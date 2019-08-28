@@ -1,5 +1,5 @@
 import MainContainer from "./components/container/MainContainer";
-import DeviceMonitor from "./components/container/DeviceMonitor";
+import MonitorManagement from "./components/container/MonitorManagement";
 import Geofence from "./components/container/Geofence";
 import ObjectManagementContainer from "./components/container/ObjectManagementContainer";
 import UserSettingContainer from "./components/container/UserContainer/UserSettingContainer";
@@ -11,8 +11,8 @@ const routes = [
         exact: true,
     },
     {
-        path: '/page/deviceMonitor',
-        component: DeviceMonitor,
+        path: '/page/monitorManagement',
+        component: MonitorManagement,
         exact: true,
     },
     {

@@ -18,7 +18,7 @@ const style = {
     }
 }
 
-const lbeaconTable = [
+const lbeaconTableColumn = [
     // {
     //     Header: 'Info',
     //     columns: [
@@ -85,7 +85,7 @@ const lbeaconTable = [
     // },
 ]
 
-const gatewayTable = [
+const gatewayTableColumn = [
     // {
     //     Header: 'Info',
     //     columns: [
@@ -129,7 +129,7 @@ const gatewayTable = [
 
 ]
 
-const trackingTable = [
+const trackingTableColumn = [
     {
         Header: 'Found',
         accessor: 'found',
@@ -183,7 +183,7 @@ const trackingTable = [
     {
         Header: 'Transferred Location',
         accessor: 'transferred_location',
-        width: 100
+        width: 230
     },
     {
         Header: 'Last Location',
@@ -197,7 +197,7 @@ const trackingTable = [
     },
 ]
 
-const searchResultTable = [
+const searchResultTableColumn = [
     // {
     //     Header: 'Name',
     //     accessor: 'name'
@@ -228,7 +228,7 @@ const searchResultTable = [
     },
 ]
 
-const objectTable = [
+const objectTableColumn = [
     {
         Header: 'Name',
         accessor: 'name'
@@ -243,7 +243,8 @@ const objectTable = [
     },
     {
         Header: 'Status',
-        accessor: 'status'
+        accessor: 'status',
+        width: 100,
     },
     {
         Header: 'Transferred Location',
@@ -260,9 +261,9 @@ const objectTable = [
 ]
 
 export { 
-    trackingTable,
-    searchResultTable,
-    lbeaconTable,
-    gatewayTable,
-    objectTable
+    trackingTableColumn,
+    searchResultTableColumn,
+    lbeaconTableColumn,
+    gatewayTableColumn,
+    objectTableColumn
 }

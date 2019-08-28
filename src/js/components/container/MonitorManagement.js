@@ -12,9 +12,9 @@ import dataSrc from '../../dataSrc';
 import config from '../../config';
 import LocaleContext from '../../context/LocaleContext';
 import { 
-    trackingTable,
-    lbeaconTable,
-    gatewayTable
+    trackingTableColumn,
+    lbeaconTableColumn,
+    gatewayTableColumn
 } from '../../tables';
 
 class ScanMonitor extends React.Component{
@@ -60,8 +60,8 @@ class ScanMonitor extends React.Component{
             locale: locale.abbr
         })
         .then(res => {
-            let table = _.cloneDeep(lbeaconTable)
-            table.map(field => {
+            let column = _.cloneDeep(lbeaconTableColumn)
+            column.map(field => {
                 field.headerStyle = {
                     textAlign: 'left',
                 }
@@ -69,7 +69,7 @@ class ScanMonitor extends React.Component{
             })
             this.setState({
                 lbeaconData: res.data.rows,
-                lbeaconColumn: table
+                lbeaconColumn: column
             })
         })
         .catch(function (error) {
@@ -83,8 +83,8 @@ class ScanMonitor extends React.Component{
             locale: locale.abbr
         })
         .then(res => {
-            let table = _.cloneDeep(gatewayTable)
-            table.map(field => {
+            let column = _.cloneDeep(gatewayTableColumn)
+            column.map(field => {
                 field.headerStyle = {
                     textAlign: 'left',
                 }
@@ -92,7 +92,7 @@ class ScanMonitor extends React.Component{
             })
             this.setState({
                 gatewayData: res.data.rows,
-                gatewayColunm: table
+                gatewayColunm: column
             })
         })
         .catch(function (error) {
@@ -107,16 +107,22 @@ class ScanMonitor extends React.Component{
             locale: this.context.abbr
         })
         .then(res => {
-            let table = _.cloneDeep(trackingTable)
-            table.map(field => {
+            let column = _.cloneDeep(trackingTableColumn)
+            column.map(field => {
                 field.headerStyle = {
                     textAlign: 'left',
                 }
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })
+            res.data.rows.map(item => {
+                item.status = locale.texts[item.status.toUpperCase()]
+                item.transferred_location = item.transferred_location 
+                    ? locale.texts[item.transferred_location.toUpperCase().replace(/ /g, '_')]
+                    : ''
+            })
             this.setState({
                 trackingData: res.data.rows,
-                trackingColunm: table
+                trackingColunm: column
             })
         })
     }
