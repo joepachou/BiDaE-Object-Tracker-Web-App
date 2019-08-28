@@ -115,13 +115,12 @@ const config = {
 
     transferredLocation: [
         "Yuanlin Christian Hospital",
-        "NTU Hosp, Yunlin",
-        "NTU Hosp, Taipei",
+        "NTU Hospital Yunlin branch",
+        "NTU Hospital Taipei",
     ],
     
     locale: {
         defaultLocale: 'en',
-        supportedLocale: ['en', 'tw']
     },
 
     image: {

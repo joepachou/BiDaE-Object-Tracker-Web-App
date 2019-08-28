@@ -20,13 +20,6 @@ import RadioButtonGroup from './RadioButtonGroup'
 import RadioButton from '../presentational/RadioButton'
 import dataSrc from '../../dataSrc'
 
-const options = config.transferredLocation.map( location => {
-    let locationObj = {};
-    locationObj["value"] = location;
-    locationObj["label"] = location;
-    return locationObj
-})
-
 const objectTypeOptions = config.surveillanceMap.objectType.map(type => {
     let objectTypeObj = {};
     objectTypeObj["value"] = type;
@@ -73,7 +66,14 @@ class EditObjectForm extends React.Component {
     }
 
     render() {
-        const locale = this.context
+        const locale = this.context.texts
+
+        const options = config.transferredLocation.map(location => {
+            let locationObj = {};
+            locationObj["value"] = location;
+            locationObj["label"] = locale[location.toUpperCase().replace(/ /g, '_')];
+            return locationObj
+        })
 
         const style = {
             input: {
@@ -95,10 +95,12 @@ class EditObjectForm extends React.Component {
 
         const { title, selectedObjectData } = this.props;
 
+        
+
         return (
             <Modal show={this.state.show} onHide={this.handleClose} size='md'>
                 <Modal.Header closeButton className='font-weight-bold text-capitalize'>
-                    {title}
+                    {locale[title.toUpperCase().replace(/ /g, '_')]}
                 </Modal.Header >
                 <Modal.Body>
                     <Formik                    
@@ -109,7 +111,10 @@ class EditObjectForm extends React.Component {
                             mac_address: selectedObjectData.mac_address || '',
                             radioGroup: selectedObjectData.status || '',
                             select: selectedObjectData.status === config.objectStatus.TRANSFERRED 
-                                ? selectedObjectData.transferred_location
+                                ? { 
+                                    value: selectedObjectData.transferred_location,
+                                    label: locale[selectedObjectData.transferred_location.toUpperCase().replace(/ /g, '_')]
+                                }
                                 : '',
                             checkboxGroup: selectedObjectData.length !== 0 ? selectedObjectData.monitor_type.split(',') : []
                         }}
@@ -157,8 +162,8 @@ class EditObjectForm extends React.Component {
                             const postOption = {
                                 ...values,
                                 status: values.radioGroup,
-                                transferredLocation: values.radioGroup === config.objectStatus.TRANSFERRED 
-                                    ? values.select.value || values.select
+                                transferred_location: values.radioGroup === config.objectStatus.TRANSFERRED 
+                                    ? values.select
                                     : '',
                                 registered_timestamp: moment(),
                                 monitor_type: monitor_type
@@ -182,7 +187,12 @@ class EditObjectForm extends React.Component {
                                 <br/>
                                 <div className="form-group">
                                     <label htmlFor="access_control_number" className='text-uppercase'>{locale.ACN}*</label>
-                                    <Field name="access_control_number" type="text" className={'form-control' + (errors.access_control_number && touched.access_control_number ? ' is-invalid' : '')} placeholder=''/>
+                                    <Field 
+                                        name="access_control_number" 
+                                        type="text" 
+                                        className={'form-control' + (errors.access_control_number && touched.access_control_number ? ' is-invalid' : '')} 
+                                        placeholder=''
+                                    />
                                     <ErrorMessage name="access_control_number" component="div" className="invalid-feedback" />
                                 </div>
                                 <br/>
@@ -231,14 +241,14 @@ class EditObjectForm extends React.Component {
                                                 label={locale.TRANSFERRED}
                                             />
                                             <Select
-                                                name="select"
+                                                name = "select"
                                                 value = {values.select}
                                                 onChange={value => setFieldValue("select", value)}
                                                 options={options}
                                                 isSearchable={false}
                                                 isDisabled={values.radioGroup !== config.objectStatus.TRANSFERRED}
                                                 style={style.select}
-                                                placeholder={selectedObjectData.transferred_location || locale.SELECT_LOCATION}
+                                                placeholder={locale.SELECT_LOCATION}
                                                 components={{
                                                     IndicatorSeparator: () => null
                                                 }}

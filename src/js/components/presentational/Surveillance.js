@@ -65,10 +65,10 @@ class Surveillance extends React.Component {
         this.createLbeaconMarkers();
     }
 
-    // shouldComponentUpdate(nextProps, nextState){
-    //     let isProccessedTrackingDataChange = !(_.isEqual(this.props.proccessedTrackingData, nextProps.proccessedTrackingData))
-    //     return this.props.shouldTrackingDataUpdate && isProccessedTrackingDataChange
-    // }
+    shouldComponentUpdate(nextProps, nextState){
+        let isProccessedTrackingDataChange = !(_.isEqual(this.props.proccessedTrackingData, nextProps.proccessedTrackingData))
+        return this.props.shouldTrackingDataUpdate && isProccessedTrackingDataChange
+    }
 
     
     /** Set the search map configuration which establishs in config.js  */

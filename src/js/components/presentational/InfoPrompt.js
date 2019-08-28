@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert } from 'react-bootstrap'
+import { Alert, Row, Col } from 'react-bootstrap'
 
 const style = {
     alertText: {
@@ -24,7 +24,7 @@ const InfoPrompt = ({
             &nbsp;
             {Object.keys(data).map((item, index) => {
                 return (
-                    <div className='d-flex justify-content-start' key={index}>
+                    <Row className='d-flex justify-content-start no-gutters' key={index}>
                         <div style={style.alertText}>
                             {data[item]}
                         </div>
@@ -34,7 +34,7 @@ const InfoPrompt = ({
                         </div>
                         &nbsp;
                         &nbsp;
-                    </div>
+                    </Row>
                 )
             })}
         </Alert>

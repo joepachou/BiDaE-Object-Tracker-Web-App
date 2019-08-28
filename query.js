@@ -1,5 +1,6 @@
 require('dotenv').config();
-const moment = require('moment-timezone');
+const moment = require('moment');
+const momentTZ = require('moment-timezone')
 const queryType = require ('./queryType');
 const bcrypt = require('bcrypt');
 const pg = require('pg');
@@ -15,11 +16,32 @@ const config = {
 }
 const pool = new pg.Pool(config)
 
+moment.updateLocale('en', {
+    relativeTime : Object
+});
 
-
+moment.updateLocale('en', {
+    relativeTime : {
+        future: "in %s",
+        past:   "%s ago",
+        s  : '1 minute',
+        ss : '1 minute',
+        m:  "1 minute",
+        mm: "%d minutes",
+        h:  "1 hour",
+        hh: "%d hours",
+        d:  "1 day",
+        dd: "%d days",
+        M:  "1 month",
+        MM: "%d months",
+        y:  "1 year",
+        yy: "%d years"
+    }
+});
 
 const getTrackingData = (request, response) => {
     const rssiThreshold = request.body.rssiThreshold || -65
+    const locale = request.body.locale || 'en'
     pool.query(queryType.query_getTrackingData())        
         .then(res => {
             console.log('Get tracking data!')
@@ -32,9 +54,9 @@ const getTrackingData = (request, response) => {
     
                 /** Set the residence time of the object */
                 item.residence_time =  item.found 
-                    ? moment(item.last_seen_timestamp).from(moment(item.first_seen_timestamp)) 
+                    ? moment(item.last_seen_timestamp).locale(locale).from(moment(item.first_seen_timestamp)) 
                     : item.last_seen_timestamp 
-                        ? moment(item.last_seen_timestamp).fromNow()
+                        ? moment(item.last_seen_timestamp).local(locale).fromNow()
                         : 'N/A'
     
                 /** Tag the object that is violate geofence */
@@ -57,7 +79,6 @@ const getTrackingData = (request, response) => {
                 } else {
                     item.battery_voltage = 0
                 }
-                
                 /** Omit the unused field of the object */
                 delete item.first_seen_timestamp
                 delete item.last_seen_timestamp
@@ -81,22 +102,24 @@ const getObjectTable = (request, response) => {
         } else {
             console.log('Get objectTable data!')
         
-            results.rows.map(item => {
-                const localLastReportTimeStamp = moment(item.last_report_timestamp).tz(process.env.TZ);
-                item.last_report_timestamp = localLastReportTimeStamp.format();
-            })
+            // results.rows.map(item => {
+            //     const localLastReportTimeStamp = moment(item.last_report_timestamp).tz(process.env.TZ);
+            //     item.last_report_timestamp = localLastReportTimeStamp.format();
+            // })
             response.status(200).json(results)
         }
     })
 }
 
 const getLbeaconTable = (request, response) => {
+    let { locale } = request.body
     pool.query(queryType.query_getLbeaconTable)
         .then(res => {
             console.log('Get lbeaconTable data!')
             res.rows.map(item => {
-                item.last_report_timestamp = moment(item.last_report_timestamp).tz(process.env.TZ).format('lll');
-                item.health_status =  moment().diff(item.last_report_timestamp, 'days') < 1 ? 0 : 1 
+                let mn = moment().locale(locale)
+                item.health_status =  mn.diff(item.last_report_timestamp, 'days') < 1 ? 0 : 1 
+                item.last_report_timestamp = moment(momentTZ(item.last_report_timestamp).tz(process.env.TZ).locale(locale)).format('lll');
             })
             response.status(200).json(res)
 
@@ -109,14 +132,16 @@ const getLbeaconTable = (request, response) => {
 }
 
 const getGatewayTable = (request, response) => {
+    let { locale } = request.body
     pool.query(queryType.query_getGatewayTable)
         .then(res => {
             console.log('Get gatewayTable data!')
             res.rows.map(item => {
-                item.last_report_timestamp = moment(item.last_report_timestamp).tz(process.env.TZ).format('lll');
-                item.registered_timestamp = moment(item.registered_timestamp).tz(process.env.TZ).format('lll');
+                let mn = moment().locale(locale)
+                item.health_status =  item.health_status === 0 && mn.diff(item.last_report_timestamp, 'days') < 1 ? 0 : 1 
+                item.last_report_timestamp = moment(momentTZ(item.last_report_timestamp).tz(process.env.TZ)).locale(locale).format('lll');
+                item.registered_timestamp = moment(momentTZ(item.registered_timestamp).tz(process.env.TZ)).locale(locale).format('lll');
 
-                item.health_status =  item.health_status === 0 && moment().diff(item.last_report_timestamp, 'days') < 1 ? 0 : 1 
             })
             response.status(200).json(res)
         })    
@@ -135,7 +160,7 @@ const getGeofenceData = (request, response) => {
         }
 
         results.rows.map(item => {
-            const localLastReportTimeStamp = moment(item.receive_time).tz(process.env.TZ);
+            const localLastReportTimeStamp = momentTZ(item.receive_time).tz(process.env.TZ);
             item.receive_time = localLastReportTimeStamp.format();
         })
         response.status(200).json(results);

@@ -14,7 +14,7 @@ const supportedLocale = {
     en: {
         name:'English',
         lang: 'en',
-        abbr: 'en-US',
+        abbr: 'en',
         texts: en,
     }
 }
@@ -24,10 +24,15 @@ class Locale extends React.Component {
     state = {
         lang: config.locale.defaultLocale,
         texts: supportedLocale[config.locale.defaultLocale].texts,
+        abbr: supportedLocale[config.locale.defaultLocale].abbr
     }
 
     changeTexts = (lang) => {
         return supportedLocale[lang].texts;
+    }
+
+    changeAbbr = (lang) => {
+        return supportedLocale[lang].abbr;
     }
 
     toggleLang = () => {
@@ -43,7 +48,8 @@ class Locale extends React.Component {
         const nextLang = this.toggleLang().nextLang
         this.setState({
             lang: nextLang,
-            texts: this.changeTexts(nextLang)
+            texts: this.changeTexts(nextLang),
+            abbr: this.changeAbbr(nextLang),            
         })
 
     }

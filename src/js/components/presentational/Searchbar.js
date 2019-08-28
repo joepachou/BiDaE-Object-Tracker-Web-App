@@ -43,7 +43,7 @@ class Searchbar extends React.Component {
                 width:300,
             },
             input: {
-                background: 'rgba(0,0,0,0'
+                background: 'rgba(0,0,0,0',
             }
         }
 
@@ -53,12 +53,15 @@ class Searchbar extends React.Component {
 
         return (            
             <Form className="d-flex" style={style.form}>
-                {/* <div className="form-group mx-3">
-                    <label htmlFor="inputPassword2" className="sr-only">{locale.search.toUpperCase()}</label>
-                    <input type="text" className="form-control-sm border-0" value={value} onChange={this.handleChange}/>
-                </div> */}
                 <Form.Group className='flex-grow-1 '>
-                    <Form.Control type='text' style={style.input} className='border-0 pl-3 w-100' value={value} onChange={this.handleChange}></Form.Control>
+                    <Form.Control 
+                        id='searchbarText' 
+                        type='text' 
+                        style={style.input} 
+                        className='border-0 pl-3 w-100' 
+                        value={value} 
+                        onChange={this.handleChange}
+                    />
                 </Form.Group>
                 <Button type="submit" variant='link' className="btn btn-link btn-sm text-uppercase bd-highlight" onClick={this.handleSubmit}><img src={searchIcon} width="30px" /></Button>
             </Form>

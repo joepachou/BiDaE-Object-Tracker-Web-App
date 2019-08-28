@@ -1,7 +1,6 @@
 /** React Plugin */
 import React from 'react';
 import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom";
-import { supportedLocale } from '../../../js/locale';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Nav, NavDropdown, Image, Dropdown  } from 'react-bootstrap'
 import LocaleContext from '../../context/LocaleContext';
@@ -13,46 +12,26 @@ import AccessControl from './AccessControl';
 import ShiftChange from '../container/ShiftChange'
 
 class NavbarContainer extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            isShowSigninForm: false,
-            isShowSignupForm: false,
-            isShowShiftChange: false,
-            currentLocale: config.locale.defaultLocale
-        }
-        this.handleLangSelect = this.handleLangSelect.bind(this);
-        this.handleSigninFormShowUp = this.handleSigninFormShowUp.bind(this);
-        this.handleSigninFormSubmit = this.handleSigninFormSubmit.bind(this);
-        this.handleSignupFormShowUp = this.handleSignupFormShowUp.bind(this);
-        this.handleSignupFormSubmit = this.handleSignupFormSubmit.bind(this);
-        this.handleSignFormClose = this.handleSignFormClose.bind(this)
 
+    state = {
+        isShowSigninForm: false,
+        isShowSignupForm: false,
+        isShowShiftChange: false,
     }
 
-    handleLangSelect() {
-        const lang = supportedLocale[config.locale.supportedLocale
-                        .filter(item => item !== this.state.currentLocale)
-                        .join()].lang
-        this.setState({
-            currentLocale: lang
-        })
-        this.props.changeLocale(lang);
-    }
-
-    handleSigninFormShowUp() {
+    handleSigninFormShowUp = () => {
         this.setState({
             isShowSigninForm: true,
             isShowSignupForm: false,
         })
     }
 
-    handleSignupFormShowUp() {
+    handleSignupFormShowUp = () => {
         this.setState({
             isShowSigninForm: false,
         })
         setTimeout(
-            function() {
+            function (){
                 this.setState({
                     isShowSignupForm: true,
                 })
@@ -61,19 +40,24 @@ class NavbarContainer extends React.Component {
         )
     }
 
-    handleSigninFormSubmit() {
+    handleSigninFormSubmit = () => {
         this.setState({
             isShowSigninForm: false,
         })
     }
 
-    handleSignupFormSubmit() {
-        this.setState({
-            isShowSignupForm: false,
-        })
+    handleSignupFormSubmit = () => {
+        setTimeout(
+            function(){
+                this.setState({
+                    isShowSignupForm: false,
+                })
+            }.bind(this),
+            1000
+        )
     }
 
-    handleSignFormClose() {
+    handleSignFormClose = () => {
         this.setState({
             isShowSigninForm: false,
             isShowSignupForm: false,
@@ -92,7 +76,7 @@ class NavbarContainer extends React.Component {
         })
     }
 
-    render() {
+    render= () => {
         const style = {
             navbar: {
                 boxShadow: "0 1px 6px 0 rgba(32,33,36,0.28)",
@@ -122,36 +106,40 @@ class NavbarContainer extends React.Component {
                                     width={50}
                                     className="d-inline-block align-top px-1"
                                 />
-                                {config.companyName}
+                                {locale.texts.BEDI_TECH}
                             </Link>
                         </Navbar.Brand>
                         
                         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                         <Navbar.Collapse id="responsive-navbar-nav">  
                             <Nav className="mr-auto text-capitalize my-auto" >
-                                <Nav.Item><Link to="/" className="nav-link nav-route" >{locale.HOME}</Link></Nav.Item>
+                                <Nav.Item><Link to="/" className="nav-link nav-route" >{locale.texts.HOME}</Link></Nav.Item>
                                 <AccessControl
                                     permission={'route:geofence'}
                                     renderNoAccess={() => null}
                                 >
-                                    <Nav.Item><Link to="/page/geofence" className="nav-link nav-route" >{locale.GEOFENCE}</Link></Nav.Item>
+                                    <Nav.Item><Link to="/page/geofence" className="nav-link nav-route" >{locale.texts.GEOFENCE}</Link></Nav.Item>
                                 </AccessControl>
                                 <AccessControl
-                                    permission={'route:healthReport'}
+                                    permission={'route:deviceMonitor'}
                                     renderNoAccess={() => null}
                                 >
-                                    <Nav.Item><Link to="/page/healthReport" className="nav-link nav-route" >{locale.HEALTH_REPORT}</Link></Nav.Item>
+                                    <Nav.Item><Link to="/page/deviceMonitor" className="nav-link nav-route" >{locale.texts.DEVICE_MONITOR}</Link></Nav.Item>
                                 </AccessControl>
                                 <AccessControl
                                     permission={'route:objectManagement'}
                                     renderNoAccess={() => null}
                                 >
-                                    <Nav.Item><Link to="/page/objectManagement" className="nav-link nav-route" >{locale.OBJECT_MANAGEMENT}</Link></Nav.Item>
+                                    <Nav.Item><Link to="/page/objectManagement" className="nav-link nav-route" >{locale.texts.OBJECT_MANAGEMENT}</Link></Nav.Item>
                                 </AccessControl>
                             </Nav>
                             <Nav className='text-capitalize'>
-                                <Nav.Item className="nav-link nav-route" onClick={this.handleLangSelect}>
-                                    {supportedLocale[config.locale.supportedLocale.filter(item => item !== this.state.currentLocale).join()].name}
+                                <Nav.Item 
+                                    className="nav-link nav-route" 
+                                    onClick={locale.changeLocale}
+                                    name={'en'}
+                                >
+                                    {locale.toggleLang().nextLangName}
                                 </Nav.Item>
                                 {auth.authenticated
                                     ? 
@@ -160,13 +148,18 @@ class NavbarContainer extends React.Component {
                                                 <NavDropdown.Item className="lang-select">{auth.user.name}</NavDropdown.Item>
                                             </LinkContainer>
                                             <Dropdown.Divider />
-                                            <NavDropdown.Item className="lang-select" onClick={this.handleShiftChangeRecordShowUp}>{locale.SHIFT_CHANGE_RECORD}</NavDropdown.Item>
+                                            <NavDropdown.Item 
+                                                className="lang-select" 
+                                                onClick={this.handleShiftChangeRecordShowUp}
+                                            >
+                                                {locale.texts.SHIFT_CHANGE_RECORD}
+                                            </NavDropdown.Item>
                                             <Dropdown.Divider />
-                                            <NavDropdown.Item className="lang-select" onClick={auth.signout}>{locale.SIGN_OUT}</NavDropdown.Item>
+                                            <NavDropdown.Item className="lang-select" onClick={auth.signout}>{locale.texts.SIGN_OUT}</NavDropdown.Item>
                                         </NavDropdown> 
                                         
                                     : 
-                                        <Nav.Item className="nav-link nav-route" onClick={this.handleSigninFormShowUp}>{locale.SIGN_IN}</Nav.Item>
+                                        <Nav.Item className="nav-link nav-route" onClick={this.handleSigninFormShowUp}>{locale.texts.SIGN_IN}</Nav.Item>
                                 }
                             </Nav>
                         </Navbar.Collapse>
@@ -182,6 +175,7 @@ class NavbarContainer extends React.Component {
                             show={isShowSignupForm}
                             handleSignupFormSubmit={this.handleSignupFormSubmit}
                             handleSignFormClose={this.handleSignFormClose}
+                            signup={auth.signup}
                         />
                         <ShiftChange 
                             show = {isShowShiftChange}
@@ -191,6 +185,7 @@ class NavbarContainer extends React.Component {
                     </Navbar>
                 )}
             </AuthenticationContext.Consumer>
+
         );
     }
 }

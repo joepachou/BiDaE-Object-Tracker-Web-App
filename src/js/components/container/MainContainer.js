@@ -1,11 +1,5 @@
-/** React Plugin */
 import React from 'react';
-
-/** Import Container Component */
 import SearchContainer from './SearchContainer';
-
-/** Import Presentational Component */
-
 import 'react-table/react-table.css';
 import SearchResultList from '../presentational/SearchResultList'
 import { Row, Col } from 'react-bootstrap'
@@ -18,6 +12,8 @@ import _ from 'lodash'
 import moment from 'moment'
 import axios from 'axios';
 import dataSrc from '../../dataSrc'
+import LocaleContext from '../../context/LocaleContext';
+import Cookies from 'js-cookie'
 
 const myDevices = config.frequentSearchOption.MY_DEVICES;
 const allDevices = config.frequentSearchOption.ALL_DEVICES;
@@ -86,7 +82,8 @@ class MainContainer extends React.Component{
 
     getTrackingData = () => {
         axios.post(dataSrc.getTrackingData,{
-            rssiThreshold: this.state.rssiThreshold
+            rssiThreshold: this.state.rssiThreshold,
+            locale: this.context.abbr
         })
         .then(res => {
             const trackingData = this.handleRawTrackingData(res.data.rows)
@@ -100,28 +97,6 @@ class MainContainer extends React.Component{
     }
 
     handleRawTrackingData = (rawTrackingData) => {
-        moment.updateLocale('en', {
-            relativeTime : Object
-        });
-        
-        moment.updateLocale('en', {
-            relativeTime : {
-                future: "in %s",
-                past:   "%s ago",
-                s  : '1 minute',
-                ss : '1 minute',
-                m:  "1 minute",
-                mm: "%d minutes",
-                h:  "1 hour",
-                hh: "%d hours",
-                d:  "1 day",
-                dd: "%d days",
-                M:  "1 month",
-                MM: "%d months",
-                y:  "1 year",
-                yy: "%d years"
-            }
-        });
         const trackingData = rawTrackingData.map(item => {
 
             /** Set the object's location in the form of lbeacon coordinate parsing by lbeacon uuid  */
@@ -248,12 +223,10 @@ class MainContainer extends React.Component{
     }
 
     getResultBySearchKey = (searchKey, colorPanel, searchValue) => {
-        const auth = this.context
         let searchResult = [];
         let proccessedTrackingData = _.cloneDeep(this.state.trackingData)
-
         if (searchKey === myDevices) {
-            const devicesAccessControlNumber = auth.user.myDevice
+            const devicesAccessControlNumber = JSON.parse(Cookies.get('user')).myDevice
             proccessedTrackingData.map(item => {
                 if (devicesAccessControlNumber.includes(item.access_control_number)) {
                     item.searched = true;
@@ -335,17 +308,30 @@ class MainContainer extends React.Component{
                 borderRadius: 10,
             }
         }
+        const locale = this.context.texts
+
+        let deviceNum = this.state.trackingData.filter(item => item.found).length
+        let devicePlural = deviceNum === 1 ? locale.DEVICE : locale.DEVICES
+
         return(
             <AuthenticationContext.Consumer>
                 {auth => (
                     /** "page-wrap" the default id named by react-burget-menu */
-                    <div id="page-wrap" className='mx-2' >
+                    <div id="page-wrap" className='mx-1' >
                         <Row id="mainContainer" className='d-flex w-100 justify-content-around mx-0 overflow-hidden' style={style.container}>
                             <Col sm={7} md={9} lg={9} xl={9} id='searchMap' className="pl-2 pr-1" >
                                 <br/>
                                 {this.state.hasSearchKey 
-                                    ?   <InfoPrompt data={this.state.searchResultObjectTypeMap} title="found" />                                        
-                                    :   <InfoPrompt data={{devices: this.state.trackingData.filter(item => item.found).length}} title="found" />
+                                    ?   <InfoPrompt 
+                                            data={this.state.searchResultObjectTypeMap} 
+                                            title={locale.FOUND} 
+                                        />                                        
+                                    :   <InfoPrompt 
+                                            data={{
+                                                [devicePlural]: this.state.trackingData.filter(item => item.found).length
+                                            }}
+                                            title={locale.FOUND} 
+                                        />
                                 }     
                                 <SurveillanceContainer 
                                     proccessedTrackingData={proccessedTrackingData.length === 0 ? trackingData : proccessedTrackingData}
@@ -382,7 +368,7 @@ class MainContainer extends React.Component{
         )
     }
 }
-MainContainer.contextType = AuthenticationContext;
+MainContainer.contextType = LocaleContext
 
 const mapStateToProps = (state) => {
     return {

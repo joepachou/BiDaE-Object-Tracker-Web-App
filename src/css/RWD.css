@@ -111,10 +111,6 @@
         height: 50vh;
     } 
 
-    .nav {
-        font-size: 8px;
-    }
-
 }
 
 /* Extra large devices (large desktops, 1200px and up) */
@@ -124,7 +120,7 @@
         height: 65px;
     }
     #mapid {
-        height: 55vh;
+        height: 65vh;
     } 
 
     #changeStatusForm {

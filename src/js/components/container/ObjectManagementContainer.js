@@ -87,7 +87,7 @@ class ObjectManagementContainer extends React.Component{
     handleClickButton = (e) => {
         this.setState({
             isShowEdit: true,
-            formTitle: e.target.innerText,
+            formTitle: 'add object',
             selectedRowData: [],
             formPath: dataSrc.addObject
         })
@@ -201,7 +201,7 @@ class ObjectManagementContainer extends React.Component{
                 <Row className='mt-1'>
                     <Col>
                         <Button variant='primary' className='text-capitalize' onClick={this.handleClickButton}>
-                            {locale.ADD_OBJECT}
+                            {locale.texts.ADD_OBJECT}
                         </Button>
                     </Col>
                 </Row>
@@ -218,7 +218,7 @@ class ObjectManagementContainer extends React.Component{
                                         this.setState({
                                             selectedRowData: rowInfo.original,
                                             isShowEdit: true,
-                                            formTitle: locale.EDIT_OBJECT,
+                                            formTitle: 'edit object',
                                             formPath: dataSrc.editObject
                                         })
                                 
@@ -262,10 +262,10 @@ class ObjectManagementContainer extends React.Component{
                             }}
                         /> */}
                     </Col>
-                </Row>                
+                </Row>      
                 <EditObjectForm 
                     show = {isShowEdit} 
-                    title= {this.state.formTitle || locale.EDIT_OBJECT} 
+                    title= {this.state.formTitle} 
                     selectedObjectData={selectedRowData || null} 
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={this.state.formPath}

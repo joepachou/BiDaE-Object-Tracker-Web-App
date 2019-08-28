@@ -1,8 +1,11 @@
 const tw = {
     ABBR: 'zh-tw',
 
+    BEDI_TECH: '畢迪科技',
+
     HOME : '首頁',
     HEALTH_REPORT: 'Health Report',
+    DEVICE_MONITOR: '偵測裝置',
     GEOFENCE: 'Geofence',
     OBJECT_MANAGEMENT: '物件管理',
 
@@ -40,44 +43,51 @@ const tw = {
 
 
     /* Form Field */
-    NAME: 'name',
-    TYPE: 'type',
+    NAME: '名稱',
+    TYPE: '類別',
     ACCESS_CONTROL_NUMBER: '財產編號',
     MAC_ADDRESS: 'mac address',
-    STATUS: 'status',
-    MONITOR_TYPE: 'monitor type',
+    STATUS: '儀器狀態',
+    MONITOR_TYPE: '監控類別',
     ACN: '財產編號',
-    SELECT_LOCATION: 'select location',
-    NAME_IS_REQUIRED: 'Name is required',
-    TYPE_IS_REQUIRED: 'Type is required',
-    ACCESS_CONTROL_NUMBER_IS_REQUIRED: 'Access control number is required',
-    MAC_ADDRESS_IS_REQUIRED: 'Mac address is required',
-    STATUS_IS_REQUIRED: 'Status is required',
+    LOCATION: '地點',
+    RSSI_THRESHOLD: 'RSSI設定',
+    LAST_FOUR_DIGIT_OF_ACN: '產編後四碼',
+    SELECT_LOCATION: '選擇地點',
+    ADD_DEVICE: '增加儀器',
+    ADD_NOTE: '增加註記',
+    HIDE_NOTE: '隱藏註記',
+    DELAY_BY: 'delay by',
+
+    /** Error Message */
+    NAME_IS_REQUIRED: '請填入名字',
+    TYPE_IS_REQUIRED: '請填入類別',
+    ACCESS_CONTROL_NUMBER_IS_REQUIRED: '請填入財產編號',
+    MAC_ADDRESS_IS_REQUIRED: '請填入Mac address',
+    STATUS_IS_REQUIRED: '請填入儀器狀態',
+    USERNAME_IS_REQUIRED: '請填入使用者名稱',
+    PASSWORD_IS_REQUIRED: '請填入密碼',
+    THE_USERNAME_IS_ALREADY_TAKEN: '使用者名稱已被使用',
+    
 
     /** Form Title */
-    EDIT_LBEACON: 'edit lbeacon',
-    ADD_OBJECT: 'add object',
-    EDIT_OBJECT: 'edit object',
-    REPORT_DEVICE_STATUS: 'Report device status',
-    THANK_YOU_FOR_REPORTING: 'Thank you for reporting',
+    EDIT_LBEACON: '編輯 lbeacon',
+    ADD_OBJECT: '增加儀器',
+    EDIT_OBJECT: '編輯儀器',
+    REPORT_DEVICE_STATUS: '回報儀器狀態',
+    THANK_YOU_FOR_REPORTING: '謝謝您的回報',
 
     /* Object Status */
-    STATUS: 'status',
-    NORMAL: 'normal',
-    BROKEN: 'broken',
-    TRANSFERRED: 'transferred',
-    RESERVE: 'reserve',
+    STATUS: '狀態',
+    NORMAL: '正常',
+    BROKEN: '損壞',
+    TRANSFERRED: '轉移',
+    RESERVE: '預定',
 
-    /* Time Scale*/
-    DAY: 'day',
-    HOUR: 'hour',
-    MINUTE: 'minute',
-    SECOND: 'second',
-
-    /* Search related term */
-    Yunlin_Christian_Hospital: 'Yunlin Christian Hospital',
-    NTU_Hospital_Yunlin: 'NTU Hospital Yunlin Branch',
-    NTU_Hospital_Taipe: 'NTU Hospital Taipe Branch',
+    /** Transferred Location */
+    YUANLIN_CHRISTIAN_HOSPITAL: '員林基督教醫院',
+    NTU_HOSPITAL_YUNLIN_BRANCH: '台大醫院雲林分院',
+    NTU_HOSPITAL_TAIPEI: '台大醫院台北總院',
 
     /** User Setting */
     User_Setting: '帳戶設定',
@@ -90,6 +100,42 @@ const tw = {
     ADMIN: 'Admin',
     CONFIRM: 'Confirm', 
     REMOVE_USER_CONFIRM: 'Remove User',
+
+    /** Table Title */
+    TRACKING: '物件追蹤',
+
+    /** Table Field */
+    HEALTH_STATUS: '狀態',
+    UUID: 'UUID',
+    DESCRIPTION: '地點描述',
+    IP_ADDRESS: 'IP位址',
+    GATEWAY_IP_ADDRESS: 'gateway IP位址',
+    LAST_REPORT_TIMESTAMP: '最後回報時間',
+    LAST_REPORT_TIME: '最後回報時間',
+    REGISTERED_TIMESTAMP: '註冊時間',
+    HIGH_RSSI: '高RSSI',
+    MED_RSSI: '中RSSI',
+    LOW_RSSI: '低RSSI',
+    NOTE: '註記',
+    BATTERY_VOLTAGE: '電量',
+    BATTERY: '電量',
+    PANIC: '求救',
+    GEOFENCE_TYPE: 'geofence類別',
+    ALERT: '警告',
+    TRANSFERRED_LOCATION: '轉移單位',
+    LAST_LOCATION: '最後所在地點',
+    LOCATION_DESCRIPTION: '所在地點',
+    RESIDENCE_TIME: '停留時間',
+
+    /** User Setting */
+    USERNAME: '使用者名稱',
+    PASSWORD: '密碼',
+
+    TO: '至',
+    NEAR: '鄰近',
+    IS: 'is',
+    WHEN: '於',
+    NOT_AVAILABLE: '無資料顯示'
 
 }
 

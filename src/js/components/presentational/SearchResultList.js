@@ -7,9 +7,7 @@ import { connect } from 'react-redux'
 import { shouldUpdateTrackingData } from '../../action/action';
 import dataSrc from '../../dataSrc';
 import _ from 'lodash';
-import Axios from 'axios';
-import Cookies from 'js-cookie';
-import config from '../../config';
+import axios from 'axios';
 import InfoPrompt from './InfoPrompt';
 import AccessControl from './AccessControl';
 import SearchResultListGroup from '../presentational/SearchResultListGroup'
@@ -24,6 +22,12 @@ class SearchResult extends React.Component {
         selection: [],
         editedObjectPackage: [],
         showAddDevice: false,
+    }
+
+    componentDidUpdate = (prevProps) => {
+        if (prevProps.searchKey !== this.props.searchKey) {
+            
+        }
     }
 
     handleSelectResultItem = (eventKey) => {
@@ -74,6 +78,14 @@ class SearchResult extends React.Component {
             selectedObjectData: [],
             showAddDevice: false
         })
+        // setTimeout(
+        //     function (){
+        //         this.setState({
+        //             selectedObjectData: [],
+        //         })
+        //     }.bind(this),
+        //     200
+        // )
         // this.props.shouldUpdateTrackingData(true)
         this.props.highlightSearchPanel(false)
     }
@@ -81,7 +93,7 @@ class SearchResult extends React.Component {
     handleChangeObjectStatusFormSubmit = (radioGroup, select) => {
         let editedObjectPackage = _.cloneDeep(this.state.selectedObjectData).map(item => {
             item.status = radioGroup
-            item.transferred_location = select ? select.value : '';
+            item.transferred_location = select ? select : '';
             return item
         })
         this.setState({
@@ -101,8 +113,7 @@ class SearchResult extends React.Component {
 
     handleConfirmFormSubmit = (e) => {
         let { editedObjectPackage } = this.state;
-
-        Axios.post(dataSrc.editObjectPackage, {
+        axios.post(dataSrc.editObjectPackage, {
             formOption: editedObjectPackage
         }).then(res => {
             setTimeout(
@@ -164,7 +175,7 @@ class SearchResult extends React.Component {
 
 
     render() {
-        const locale = this.context;
+        const locale = this.context.texts;
         const { searchKey } = this.props;
 
         const style = {
@@ -191,8 +202,10 @@ class SearchResult extends React.Component {
             : this.props.searchResult.filter(item => !item.found).length
 
         let title = this.state.showNotFoundResult 
-            ? 'not found'
-            : 'found'
+            ? locale.NOT_FOUND
+            : locale.FOUND
+
+        let devicePlural = deviceNum === 1 ? locale.DEVICE : locale.DEVICES
 
         return(
             <>
@@ -205,7 +218,7 @@ class SearchResult extends React.Component {
                 <Row className='searchResultListGroup'>
                     {searchResult.length === 0 
                         ?   <Col className='d-flex justify-content-center font-italic font-weight-lighter' style={style.noResultDiv}>
-                                <div className='searchResultForDestop'>No Result</div>
+                                <div className='searchResultForDestop'>{locale.NO_RESULT}</div>
                             </Col> 
                         :   
                             <Col>
@@ -232,17 +245,19 @@ class SearchResult extends React.Component {
                 { deviceNum !== 0 
                     && 
                         <Row className='d-flex justify-content-center mt-3'>
-                            <h4 style={style.titleText}>
+                            <h4 style={style.titleText} className='text-capitalize'>
                                 <a href="" onClick={this.handleToggleNotFound}>
-                                    {'Show' + ' ' + deviceNum + ' Devices '}{this.state.showNotFoundResult ? null : 'not' } Found 
+                                    {this.state.showNotFoundResult 
+                                        ? locale.SHOW + ' ' + deviceNum + ' ' + devicePlural + ' ' + locale.FOUND
+                                        : locale.SHOW + ' ' + deviceNum + ' ' + devicePlural + ' ' + locale.NOT_FOUND
+                                    }
                                 </a>
                             </h4>
                         </Row>
-                    
                 }
                 <ChangeStatusForm 
                     show={this.state.showEditObjectForm} 
-                    title='Report device status' 
+                    title={locale.REPORT_DEVICE_STATUS} 
                     selectedObjectData={this.state.selectedObjectData} 
                     searchKey={searchKey}
                     handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose}
@@ -253,7 +268,7 @@ class SearchResult extends React.Component {
                 />
                 <ConfirmForm 
                     show={this.state.showConfirmForm}  
-                    title='Thank you for reporting' 
+                    title={locale.THANK_YOU_FOR_REPORTING} 
                     selectedObjectData={this.state.editedObjectPackage} 
                     handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose} 
                     handleConfirmFormSubmit={this.handleConfirmFormSubmit}

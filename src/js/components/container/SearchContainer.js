@@ -1,52 +1,25 @@
 import React from 'react';
 import Searchbar from '../presentational/Searchbar';
 import { Col, Row, Nav, ListGroup} from 'react-bootstrap'
-
-import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
-
-import SearchableObjectType from '../presentational/SeachableObjectType';
 import FrequentSearch from './FrequentSearch';
 import config from '../../config';
-import Cookies from 'js-cookie'
-import LocaleContext from '../../context/LocaleContext'
-
 
 class SearchContainer extends React.Component {
 
-    constructor(){
-        super()
-        this.state = {
-            sectionIndexList:['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'],
-            isShowSectionTitle: false,
-            hasSearchKey: false,
-            isShowSearchOption: false,
-            searchKey:'',
-            sectionTitleList: [],
-            sectionIndex:'',
-            searchResult: [],
-            hasSearchableObjectData: false,
-            refreshSearchResult: config.systemAdmin.refreshSearchResult
-        }
-    
-        this.handleTouchStart = this.handleTouchStart.bind(this);
-        this.handleTouchMove = this.handleTouchMove.bind(this);
-        this.handleMouseOver = this.handleMouseOver.bind(this);
-        
-        this.getObjectType = this.getObjectType.bind(this);
+    state = {
+        sectionIndexList:['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'],
+        isShowSectionTitle: false,
+        hasSearchKey: false,
+        isShowSearchOption: false,
+        searchKey:'',
+        sectionTitleList: [],
+        sectionIndex:'',
+        searchResult: [],
+        hasSearchableObjectData: false,
+        refreshSearchResult: config.systemAdmin.refreshSearchResult
     }
 
-    // GetResultData = (searchableObjectList) =>{
-    //     var set = new Array()
-    //     for(var item of searchableObjectList){
-    //         if(!set.includes(item.type)){
-    //             set.push(item.type)
-    //         }
-            
-    //     }
-    //     return set
-    // }
-
-    componentDidUpdate(prepProps) {
+    componentDidUpdate = (prepProps) => {
         /** Refresh the search result automatically 
          *  This feature can be adjust by the user by changing the boolean value in config
         */
@@ -71,7 +44,7 @@ class SearchContainer extends React.Component {
      * Get the searchable object type. 
      * The data is retrieving from Surveillance -> MainContain -> SearchContainer
      */
-    getObjectType() {
+    getObjectType = () => {
         const titleElementStyle = {
             background: 'rgba(227, 222, 222, 0.619)',
             fontWeight: 'bold',
@@ -124,7 +97,7 @@ class SearchContainer extends React.Component {
     /**
      * Handle the cursor hover events in device that can use mouse.
      */
-    handleMouseOver(e) {
+    handleMouseOver = (e) => {
         // document.getElementById('sectionTitle').display = null;
         // document.getElementById(e.target.innerText).scrollIntoView({behavior: "instant", block: "start", inline: "nearest"})
         location.href = '#' + e.target.innerText;
@@ -137,7 +110,7 @@ class SearchContainer extends React.Component {
     /**
      * Handle the touch start events in mobile device
      */
-    handleTouchStart(e) { 
+    handleTouchStart = (e) => { 
         if (e.target.classList.contains("sectionIndexItem")) {
             location.href = '#' + sectionIndex;
         }
@@ -150,7 +123,7 @@ class SearchContainer extends React.Component {
     /**
      * Handle the touch move events in mobile device
      */
-    handleTouchMove(e) { 
+    handleTouchMove = (e) => { 
         
         const pageX = e.changedTouches[0].pageX;
         const pageY = e.changedTouches[0].pageY;
@@ -167,15 +140,7 @@ class SearchContainer extends React.Component {
         }
     }
 
-    render() {
-        /** Customized CSS of searchResult */
-        const searchOptionStyle = {
-            display: this.state.hasSearchKey ? 'none' : null,
-        }
-
-        // const { searchResult, searchKey, sectionIndexList, sectionIndex, isShowSectionTitle } = this.state;
-        const { transferSearchResultToMain } = this.props
-        
+    render() {        
         return (                   
             <div id='searchContainer' className="" onTouchMove={this.handleTouchMove}>
                 <div id='searchBar' className='d-flex justify-content-center align-items-center pt-4 pb-2'>
@@ -184,9 +149,7 @@ class SearchContainer extends React.Component {
                         getSearchKey={this.props.getSearchKey}
                         clearSearchResult={this.props.clearSearchResult}    
                     />
-                    
                 </div>
-
                 <div id='searchOption' className='pt-2'>
                     <FrequentSearch 
                         getSearchKey={this.props.getSearchKey}  

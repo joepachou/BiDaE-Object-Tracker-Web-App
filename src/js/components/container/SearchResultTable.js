@@ -236,44 +236,39 @@ export default class SearchResultTable extends React.Component {
             console.error('search Result is undefined at generateResultTableHTML, ERROR!!!!')
             return null
         }
-        
-        if(Object.keys(searchResult).length === 0){
-            return <h4 className="text-center m-3">No device</h4>
-        }else{
-
             
-            let html =      
-                <Row className="m-0 p-0 justify-content-center" style={{width:'100%'}}>
+        let html =      
+            <Row className="m-0 p-0 justify-content-center" style={{width:'100%'}}>
 
-                    {
-                        (() => {
-                            var Html = []
-                            var index = 0
+                {
+                    (() => {
+                        var Html = []
+                        var index = 0
 
-                            if(resultStyle === 'table'){
-                                for(var item in searchResult){
-                                    
-                                    var html = this.generateResultTableRowHTML(searchResult[item], index)
-                                    index ++;
-                                    Html.push(html)
-                                }
-                            }else if(resultStyle === 'list'){
-                                for(var item in searchResult){
-
-                                    var html = this.generateResultListRowHTML(searchResult[item], index)
-                                    index ++;
-                                    Html.push(html)
-                                }
+                        if(resultStyle === 'table'){
+                            for(var item in searchResult){
+                                
+                                var html = this.generateResultTableRowHTML(searchResult[item], index)
+                                index ++;
+                                Html.push(html)
                             }
-                            return Html
-                        })()
-                    }
-                </Row>
-            
-            return  html
+                        }else if(resultStyle === 'list'){
+                            for(var item in searchResult){
+
+                                var html = this.generateResultListRowHTML(searchResult[item], index)
+                                index ++;
+                                Html.push(html)
+                            }
+                        }
+                        return Html
+                    })()
+                }
+            </Row>
+        
+        return  html
             
 
-        }
+        
     }
     handleDisplayMode(){
         var locale = this.context
@@ -289,7 +284,7 @@ export default class SearchResultTable extends React.Component {
                     {
                         this.generateResultHTML(foundResult)
                     }
-                    <h5 className=" text-left  text-primary w-100 bg-transparent mx-3"> {locale.DEVICE_NOT_FOUND(notFoundResult.length || 0)}</h5>
+                    <h5 className=" text-left  text-primary w-100 bg-transparent mx-3"> {notFoundResult.length === 0 ? null : locale.DEVICE_NOT_FOUND(notFoundResult.length)}</h5>
                     {
                         this.generateResultHTML(notFoundResult)
                     }

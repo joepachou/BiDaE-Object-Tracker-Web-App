@@ -51,7 +51,7 @@ export default class MyDeviceManager extends React.Component{
             },
             postMyDeviceChange: (mode, acn) => {
                 axios.post(dataSrc.modifyMyDevice, {
-                    username: Cookies.get('user'),
+                    username: 'joechou',
                     mode: mode,
                     acn: acn
                 }).then((res) => {

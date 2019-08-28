@@ -23,12 +23,12 @@ const lbeaconTable = [
     //     Header: 'Info',
     //     columns: [
             {
-                Header: 'Status',
+                Header: 'status',
                 accessor: 'health_status',
                 width: 60,
                 style: style.column,
                 Cell: props => !props.value 
-                    ? <i className="fas fa-check-circle text-center" style={style.icon.check}></i> 
+                    ? <i className="fas fa-check-circle text-center" style={style.icon.check}></i>
                     : <i className="fas fa-times-circle" style={style.icon.times}></i>
             },
             {
@@ -37,7 +37,7 @@ const lbeaconTable = [
                 width: 330
             },
             {
-                Header: 'Description',
+                Header: 'description',
                 accessor: 'description',
                 width: 200
             },

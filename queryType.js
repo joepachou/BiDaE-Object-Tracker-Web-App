@@ -103,7 +103,7 @@ function query_editObject (formOption) {
 		formOption.mac_address, 
 		formOption.type, 
 		formOption.status, 
-		formOption.transferredLocation, 
+		formOption.transferred_location ? formOption.transferred_location.value : null, 
 		formOption.access_control_number, 
 		formOption.name,
 		formOption.monitor_type
@@ -135,7 +135,7 @@ function query_addObject (formOption) {
 	const values = [
 		formOption.type, 
 		formOption.status, 
-		formOption.transferredLocation ? formOption.transferredLocation.value : null, 
+		formOption.transferred_location ? formOption.transferred_location.value : null, 
 		formOption.access_control_number, 
 		formOption.name, 
 		formOption.mac_address, 
@@ -158,7 +158,7 @@ function query_editObjectPackage (formOption) {
 		query += `
 			Update object_table 
 			SET status = '${item.status}',
-				transferred_location = '${item.transferredLocation}'
+				transferred_location = '${item.transferred_location ? item.transferred_location.value : ' '}'
 			WHERE mac_address = '${item.mac_address}';
 		`;
 	})

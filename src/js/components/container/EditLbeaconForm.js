@@ -19,17 +19,10 @@ import * as Yup from 'yup';
   
 class EditLbeaconForm extends React.Component {
     
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            show: props.show,            
-        };
-        this.handleShow = this.handleShow.bind(this);
-        this.handleClose = this.handleClose.bind(this);
-        // this.handleSubmit = this.handleSubmit.bind(this);
-        // this.handleChange = this.handleChange.bind(this);
-    }
+    state = {
+        show: this.props.show,            
+    };
+       
 
 
     /**
@@ -37,7 +30,7 @@ class EditLbeaconForm extends React.Component {
      * The selected object data will transfer from ObjectMangentContainer to EditLbeaconForm
      */
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate = (prevProps) => {
         if (prevProps.show != this.props.show && this.props.show) {
             this.setState({
                 show: this.props.show,
@@ -50,7 +43,7 @@ class EditLbeaconForm extends React.Component {
         }
     }
   
-    handleClose() {
+    handleClose = () => {
         this.props.handleCloseForm()
         this.setState({ 
             show: false,
@@ -63,7 +56,7 @@ class EditLbeaconForm extends React.Component {
         });
     }
   
-    handleShow() {
+    handleShow = () => {
         this.setState({ 
             show: true 
         });
@@ -121,7 +114,10 @@ class EditLbeaconForm extends React.Component {
             }
         }
 
-        const { title, selectedObjectData } = this.props;
+        const { 
+            title, 
+            selectedObjectData 
+        } = this.props;
         const locale = this.context;
 
         const colProps = {
@@ -136,7 +132,12 @@ class EditLbeaconForm extends React.Component {
         }
         return (
             <Modal show={this.state.show} onHide={this.handleClose} size="md">
-                <Modal.Header closeButton className='font-weight-bold text-capitalize'>{title}</Modal.Header >
+                <Modal.Header 
+                    closeButton 
+                    className='font-weight-bold text-capitalize'
+                >
+                    {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
+                </Modal.Header >
                 <Modal.Body>
                     <Formik
                         initialValues = {{
@@ -183,18 +184,23 @@ class EditLbeaconForm extends React.Component {
                         }}
 
                         render={({ errors, status, touched, isSubmitting }) => (
-                            <Form>
+                            <Form
+                                className='text-capitalize'
+                            >
                                 <Row>
                                     <Col {...colProps.titleCol}>
-                                        UUID
+                                        {locale.texts.UUID}
                                     </Col>
                                     <Col {...colProps.inputCol} className='text-muted pb-1'>
                                         {selectedObjectData.uuid}
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col {...colProps.titleCol}>
-                                        Location
+                                    <Col 
+                                        {...colProps.titleCol} 
+                                        className='d-flex align-items-center'
+                                    >
+                                        {locale.texts.LOCATION}
                                     </Col>
                                     <Col {...colProps.inputCol}>
                                         <Field name="description" type="text" style={style.input} className={'form-control' + (errors.description && touched.description ? ' is-invalid' : '')} placeholder=''/>
@@ -203,14 +209,14 @@ class EditLbeaconForm extends React.Component {
                                 </Row>
                                 <hr/>
                                 <Row>
-                                    <Col className='font-weight-bold'>
-                                        RSSI Threshold
+                                    <Col>
+                                        {locale.texts.RSSI_THRESHOLD}
                                     </Col>
                                 </Row>
                                 <Row className="form-group">
                                     {/* <label htmlFor="username">Username</label> */}
                                     <Col {...colProps.titleCol} className='d-flex align-items-center'>
-                                        {locale.LOW}
+                                        {locale.texts.LOW}
                                     </Col>
                                     <Col {...colProps.inputCol}>
                                         <Field name="low" type="text" style={style.input} className={'form-control' + (errors.low && touched.low ? ' is-invalid' : '')} placeholder=''/>
@@ -221,7 +227,7 @@ class EditLbeaconForm extends React.Component {
                                 <Row className="form-group">
                                     {/* <label htmlFor="username">Username</label> */}
                                     <Col {...colProps.titleCol}className='d-flex align-items-center'>
-                                        {locale.MED}
+                                        {locale.texts.MED}
                                     </Col>
                                     <Col {...colProps.inputCol}>
                                         <Field name="med" type="text" style={style.input} className={'form-control' + (errors.med && touched.med ? ' is-invalid' : '')} placeholder=''/>
@@ -232,7 +238,7 @@ class EditLbeaconForm extends React.Component {
                                 <Row className="form-group">
                                     {/* <label htmlFor="username">Username</label> */}
                                     <Col {...colProps.titleCol} className='d-flex align-items-center'>
-                                        {locale.HIGH}
+                                        {locale.texts.HIGH}
                                     </Col>
                                     <Col {...colProps.inputCol}>
                                         <Field name="high" type="text" style={style.input} className={'form-control' + (errors.high && touched.high ? ' is-invalid' : '')} placeholder=''/>
@@ -241,11 +247,21 @@ class EditLbeaconForm extends React.Component {
                                 </Row>
                                 <br/>
                                 <Modal.Footer>
-                                    <Button variant="outline-secondary" onClick={this.handleClose} disabled={isSubmitting}>
-                                        Cancel
+                                    <Button 
+                                        variant="outline-secondary" 
+                                        onClick={this.handleClose} 
+                                        disabled={isSubmitting}
+                                        className='text-capitalize'
+                                    >
+                                        {locale.texts.CANCEL}
                                     </Button>
-                                    <Button type="submit" variant="primary" disabled={isSubmitting}>
-                                        Send
+                                    <Button 
+                                        type="submit" 
+                                        variant="primary" 
+                                        disabled={isSubmitting}
+                                        className='text-capitalize'
+                                    >
+                                        {locale.texts.SEND}
                                     </Button>
                                 </Modal.Footer>
                             </Form>

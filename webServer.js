@@ -49,9 +49,9 @@ app.get(/^\/page\/(.*)/, (req, res) => {
 
 app.get('/data/getObjectTable', db.getObjectTable);
 
-app.get('/data/getLbeaconTable', db.getLbeaconTable);
+app.post('/data/getLbeaconTable', db.getLbeaconTable);
 
-app.get('/data/getGatewayTable', db.getGatewayTable);
+app.post('/data/getGatewayTable', db.getGatewayTable);
 
 app.get('/data/geofenceData', db.getGeofenceData);
 

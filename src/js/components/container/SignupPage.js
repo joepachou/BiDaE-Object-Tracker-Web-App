@@ -8,16 +8,12 @@ import axios from 'axios';
 import dataSrc from '../../dataSrc';
 
 class SignupPage extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            show: false,
-            isSignin: false,
-        }
-        this.handleClose = this.handleClose.bind(this)
+    state = {
+        show: false,
+        isSignin: false,
     }
-
-    componentDidUpdate(preProps) {
+    
+    componentDidUpdate = (preProps) => {
 
         if (preProps != this.props)
         this.setState({
@@ -25,7 +21,7 @@ class SignupPage extends React.Component {
         })
     }
 
-    handleClose() {
+    handleClose = () => {
         this.props.handleSignFormClose()
         this.setState({
             show: false
@@ -49,7 +45,7 @@ class SignupPage extends React.Component {
                         <Image src={config.image.logo} rounded width={72} height={72} ></Image>
                     </Row>
                     <Row className='d-flex justify-content-center mb-2 mt-1'>
-                        <h4 className='text-capitalize'>{locale.SIGN_UP}</h4>
+                        <h4 className='text-capitalize'>{locale.texts.SIGN_UP}</h4>
                     </Row>
                     <Formik
                         initialValues = {{
@@ -60,10 +56,10 @@ class SignupPage extends React.Component {
                         validationSchema = {
                             Yup.object().shape({
                                 username: Yup.string()
-                                    .required('Username is required')
+                                    .required(locale.texts.USERNAME_IS_REQUIRED)
                                     .test(
                                         'username', 
-                                        'The username is already taken',
+                                        locale.texts.THE_USERNAME_IS_ALREADY_TAKEN,
                                         value => {
                                             return new Promise((resolve, reject) => {
                                                 axios.post(dataSrc.validateUsername, {
@@ -76,7 +72,7 @@ class SignupPage extends React.Component {
                                         });
                                     }
                                 ),
-                                password: Yup.string().required('Password is required')
+                                password: Yup.string().required(locale.texts.PASSWORD_IS_REQUIRED)
                             })
                         }
 
@@ -99,18 +95,33 @@ class SignupPage extends React.Component {
                             <Form>
                                 <div className="form-group">
                                     {/* <label htmlFor="username">Username</label> */}
-                                    <Field name="username" type="text" style={style.input} className={'form-control' + (errors.username && touched.username ? ' is-invalid' : '')} placeholder='Username'/>
+                                    <Field 
+                                        name="username" 
+                                        type="text" 
+                                        style={style.input} 
+                                        className={'form-control' + (errors.username && touched.username ? ' is-invalid' : '')} 
+                                        placeholder={locale.texts.USERNAME}
+                                    />
                                     <ErrorMessage name="username" component="div" className="invalid-feedback" />
                                 </div>
                                 <br/>
                                 <div className="form-group">
                                     {/* <label htmlFor="password">Password</label> */}
-                                    <Field name="password" type="password" className={'form-control' + (errors.password && touched.password ? ' is-invalid' : '')} placeholder='Password' />
+                                    <Field 
+                                        name="password" 
+                                        type="password" 
+                                        className={'form-control' + (errors.password && touched.password ? ' is-invalid' : '')} 
+                                        placeholder={locale.texts.PASSWORD}
+                                    />
                                     <ErrorMessage name="password" component="div" className="invalid-feedback" />
                                 </div>
                                 <br/>
                                 <div className="form-group pb-1">
-                                    <button type="submit" className="btn btn-primary btn-block text-capitalize"  disabled={isSubmitting}>{locale.SIGN_UP}</button>
+                                    <button 
+                                        type="submit" 
+                                        className="btn btn-primary btn-block text-capitalize"  
+                                        disabled={isSubmitting}>{locale.texts.SIGN_UP}
+                                    </button>
                                 </div>
                                 {status &&
                                     <div className='alert alert-danger'>{status}</div>

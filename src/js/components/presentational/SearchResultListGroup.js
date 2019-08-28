@@ -1,6 +1,7 @@
 import React from 'react'
 import { ListGroup, Row, Col } from 'react-bootstrap'
 import config from '../../config'
+import LocaleContext from '../../context/LocaleContext';
 
 const style = {
     listItem: {
@@ -32,6 +33,8 @@ const SearchResultListGroup = ({
     selection,
     disabled
 }) => {
+    const locale = React.useContext(LocaleContext);
+
     return (
         <ListGroup onSelect={handleSelectResultItem} className='searchResultListGroup'>
             {data.map((item,index) => {
@@ -53,13 +56,25 @@ const SearchResultListGroup = ({
                                 }
                             </Col>
                             <Col xs={11} sm={11} lg={11} className='text-left'>
-                                {item.type}, 
-                                ACN: xxxx-xxxx-{item.last_four_acn}, 
-                                is {item.currentPosition 
-                                    ? item.status.toLowerCase() === config.objectStatus.NORMAL
-                                        ? `near ${item.location_description}`
-                                        : item.status
-                                    : 'N/A'
+                                {item.type},
+                                &nbsp;
+                                {locale.texts.LAST_FOUR_DIGIT_OF_ACN}: {item.last_four_acn},
+                                &nbsp;
+                                {locale.abbr === 'en'
+                                    ? `${locale.texts.IS} ${locale.texts[item.status.toUpperCase()]}`
+                                    : `${locale.texts.STATUS}${locale.texts[item.status.toUpperCase()]}`
+                                },
+                                &nbsp;
+                                {item.currentPosition 
+                                    ? `${locale.texts.NEAR} ${item.location_description}`
+                                    : locale.texts.NOT_AVAILABLE
+                                }
+                                &nbsp;
+                                {item.currentPosition
+                                    ? locale.abbr === 'en'
+                                        ? item.residence_time
+                                        : `,${locale.texts.WHEN}${item.residence_time}`
+                                    : ' '
                                 }
                             </Col>
                         </Row>

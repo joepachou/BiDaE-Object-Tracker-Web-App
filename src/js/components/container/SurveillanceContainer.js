@@ -12,18 +12,15 @@ import PdfDownloadForm from './PdfDownloadForm'
 
 
 class SurveillanceContainer extends React.Component {
-    constructor(props){
-        super(props)
-        this.state = {
-            rssi: 1,
-            selectedObjectData: [],
-            showDevice: false,
-            showPdfDownloadForm: false,
-        }
-        this.handleClickButton = this.handleClickButton.bind(this)
+
+    state = {
+        rssi: 1,
+        selectedObjectData: [],
+        showDevice: false,
+        showPdfDownloadForm: false,
     }
 
-    handleClickButton(e) {
+    handleClickButton = (e) => {
         const button = e.target;
         const buttonName = button.name
         switch(buttonName.toLowerCase()) {
@@ -49,15 +46,15 @@ class SurveillanceContainer extends React.Component {
     }
 
     render(){
-        const { hasSearchKey, 
-                searchResult,
-            } = this.props;
+        const { hasSearchKey } = this.props;
 
         const style = {
             title: {
                 color: 'grey',
                 fontSize: '1rem',
-                width: '5rem'
+                maxWidth: '9rem',
+                height: '5rem',
+                lineHeight: '3rem'
             },
             // surveillanceContainer: {
             //     height: '100vh'
@@ -75,7 +72,7 @@ class SurveillanceContainer extends React.Component {
             }
         }
 
-        const locale = this.context;
+        const locale = this.context.texts;
 
         return(
             <div id="surveillanceContainer" style={style.surveillanceContainer} className='overflow-hidden'>
@@ -91,9 +88,12 @@ class SurveillanceContainer extends React.Component {
                 </div>
                 <div style={style.navBlock}>
 
-                    <Nav className='d-flex align-items-start'>
-                        <Nav.Item className='d-flex align-self-start'>
-                            <div style={style.title} className='text-wrap'>Location Accuracy</div>
+                    <Nav className='d-flex align-items-start text-capitalize'>
+                        <Nav.Item>
+                            <div style={style.title} 
+                            >
+                                {locale.LOCATION_ACCURACY}
+                            </div>
                         </Nav.Item>
                         <Nav.Item className='pt-2 mr-2'>
                             <ToggleSwitch 
@@ -104,24 +104,34 @@ class SurveillanceContainer extends React.Component {
                             />
                         </Nav.Item>
                         <Nav.Item className='mt-2'>
-                            <Button variant="outline-primary" className='mr-1 ml-2' onClick={this.handleClickButton} name='clear'>
-                                Clear
-                            </Button>
-                        </Nav.Item>
-                        <Nav.Item className='mt-2'>
-                            <Button variant="outline-primary" className='mr-1 mr-4' onClick={this.handleClickButton} name='save'>
-                                Save
+                            <Button 
+                                variant="outline-primary" 
+                                className='mr-1 ml-2 text-capitalize' 
+                                onClick={this.handleClickButton} 
+                                name='clear'
+                            >
+                                {locale.CLEAR}
                             </Button>
                         </Nav.Item>
                         <Nav.Item className='mt-2'>
                             <Button 
                                 variant="outline-primary" 
-                                className='mr-1' 
+                                className='mr-1 ml-2 text-capitalize' 
+                                onClick={this.handleClickButton} 
+                                name='save'
+                            >
+                                {locale.SAVE}
+                            </Button>
+                        </Nav.Item>
+                        <Nav.Item className='mt-2'>
+                            <Button 
+                                variant="outline-primary" 
+                                className='mr-1 text-capitalize' 
                                 onClick={this.handleClickButton} 
                                 active={this.state.showDevice}
                                 name='show devices'
                             >
-                                {this.state.showDevice ? 'Hide devices' : 'Show devices' }
+                                {this.state.showDevice ? locale.HIDE_DEVICES : locale.SHOW_DEVICES }
                             </Button>
                         </Nav.Item >
                         <div style={style.gridButton} className='mt-2 mx-3'>

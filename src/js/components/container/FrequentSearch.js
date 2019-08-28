@@ -1,28 +1,17 @@
 import React  from 'react';
 import { Col, ListGroup, Row, Button } from 'react-bootstrap';
 import LocaleContext from '../../context/LocaleContext';
-import axios from 'axios';
-import dataSrc from '../../dataSrc';
 import { connect } from 'react-redux';
 import { shouldUpdateTrackingData } from '../../action/action';
 import config from '../../config';
 import AuthenticationContext from '../../context/AuthenticationContext';
 
-
 class FrequentSearch extends React.Component {
-    
-
-    constructor(){
-        super()
-        this.state = {
-            searchKey: '',
-        }
-
-        this.handleClick = this.handleClick.bind(this);
-        this.getSearchKey = this.getSearchKey.bind(this);
+    state = {
+        searchKey: '',
     }
 
-    componentDidUpdate(prepProps) {
+    componentDidUpdate = (prepProps) => {
         if (prepProps.clearSearchResult !== this.props.clearSearchResult && !prepProps.clearSearchResult) {
             this.setState({
                 searchKey: '',
@@ -35,12 +24,12 @@ class FrequentSearch extends React.Component {
         }
     }
 
-    handleClick(e) {
+    handleClick = (e) => {
         const itemName = e.target.name.toLowerCase();
         this.getSearchKey(itemName)
     }
 
-    getSearchKey(itemName) {
+    getSearchKey = (itemName) => {
         this.props.getSearchKey(itemName)
         this.setState({
             searchKey: itemName
@@ -56,13 +45,12 @@ class FrequentSearch extends React.Component {
 
         const locale = this.context
 
-
         return (
             <AuthenticationContext.Consumer className="text-capitalize">
                 {auth => (
                     <>
                         <Row className='d-flex justify-content-center' style={style.titleText}>
-                            <h4 className='text-capitalize'>{locale.FREQUENT_SEARCH}</h4>
+                            <h4 className='text-capitalize'>{locale.texts.FREQUENT_SEARCH}</h4>
                         </Row>
                         <div className='d-inline-flex flex-column mb-3' id='frequentSearch' >
                             {auth.authenticated && auth.user.searchHistory
@@ -91,7 +79,7 @@ class FrequentSearch extends React.Component {
                                     active={this.state.searchKey === 'my devices'}
                                     name='my devices'
                                 >
-                                    {locale.MY_DEVICE}
+                                    {locale.texts.MY_DEVICE}
                                 </Button>
                             }
                                 <Button 
@@ -100,7 +88,7 @@ class FrequentSearch extends React.Component {
                                     active={this.state.searchKey === 'all devices'}
                                     name='all devices'
                                 >
-                                    {locale.ALL_DEVICE}
+                                    {locale.texts.ALL_DEVICE}
                                 </Button>
                         </div>
                     </>

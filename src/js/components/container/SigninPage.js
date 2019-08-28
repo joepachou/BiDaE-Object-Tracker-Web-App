@@ -7,18 +7,14 @@ import LocaleContext from '../../context/LocaleContext'
 import { authenticationService } from '../../authenticationService';
 
 class SigninPage extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            show: false,
-            isSignin: false,
-        }
-        this.handleClose = this.handleClose.bind(this);
-        this.handleSignupFormShowUp = this.handleSignupFormShowUp.bind(this);
-        
+
+    state = {
+        show: false,
+        isSignin: false,
     }
 
-    componentDidUpdate(preProps) {
+
+    componentDidUpdate = (preProps) => {
 
         if (preProps != this.props) {
             this.setState({
@@ -27,7 +23,7 @@ class SigninPage extends React.Component {
         }
     }
 
-    handleClose() {
+    handleClose = () => {
         this.props.handleSignFormClose()
         this.setState({
             show: false
@@ -35,7 +31,7 @@ class SigninPage extends React.Component {
     }
 
 
-    handleSignupFormShowUp() {
+    handleSignupFormShowUp = () => {
         this.props.handleSignupFormShowUp()
     }
 
@@ -48,7 +44,6 @@ class SigninPage extends React.Component {
         }
 
         const { show } = this.state;
-        const { handleSigninFormSubmit, handleSignupShowUp } = this.props;
         const locale = this.context;
 
         return (
@@ -58,7 +53,7 @@ class SigninPage extends React.Component {
                         <Image src={config.image.logo} rounded width={72} height={72} ></Image>
                     </Row>
                     <Row className='d-flex justify-content-center mb-2 mt-1'>
-                        <h4 className='text-capitalize'>{locale.SIGN_IN}</h4>
+                        <h4 className='text-capitalize'>{locale.texts.SIGN_IN}</h4>
                     </Row>
                     <Formik
                         initialValues = {{
@@ -68,8 +63,8 @@ class SigninPage extends React.Component {
 
                         validationSchema = {
                             Yup.object().shape({
-                            username: Yup.string().required('Username is required'),
-                            password: Yup.string().required('Password is required')
+                            username: Yup.string().required(locale.texts.USERNAME_IS_REQUIRED),
+                            password: Yup.string().required(locale.texts.PASSWORD_IS_REQUIRED)
                         })}
 
                         onSubmit={({ username, password }, { setStatus, setSubmitting }) => {
@@ -92,27 +87,46 @@ class SigninPage extends React.Component {
                             <Form>
                                 <div className="form-group">
                                     {/* <label htmlFor="username">Username</label> */}
-                                    <Field name="username" type="text" style={style.input} className={'form-control' + (errors.username && touched.username ? ' is-invalid' : '')} placeholder='Username'/>
+                                    <Field 
+                                        name="username" 
+                                        type="text" 
+                                        style={style.input} 
+                                        className={'form-control' + (errors.username && touched.username ? ' is-invalid' : '')} 
+                                        placeholder={locale.texts.USERNAME}
+                                    />
                                     <ErrorMessage name="username" component="div" className="invalid-feedback" />
                                 </div>
                                 <br/>
                                 <div className="form-group">
                                     {/* <label htmlFor="password">Password</label> */}
-                                    <Field name="password" type="password" className={'form-control' + (errors.password && touched.password ? ' is-invalid' : '')} placeholder='Password' />
+                                    <Field 
+                                        name="password" 
+                                        type="password" 
+                                        className={'form-control' + (errors.password && touched.password ? ' is-invalid' : '')} 
+                                        placeholder={locale.texts.PASSWORD}
+                                    />
                                     <ErrorMessage name="password" component="div" className="invalid-feedback" />
                                 </div>
                                 <br/>
                                 <div className="form-group py-1">
-                                    <button type="submit" className="btn btn-primary btn-block text-capitalize"  disabled={isSubmitting}>
-                                        {locale.SIGN_IN}
+                                    <button 
+                                        type="submit" 
+                                        className="btn btn-primary btn-block text-capitalize"  
+                                        disabled={isSubmitting}
+                                    >
+                                        {locale.texts.SIGN_IN}
                                     </button>
                                 </div>
                                 {status &&
                                     <div className={'alert alert-danger'}>{status}</div>
                                 }
                                 <div className='d-flex justify-content-center py-2'>
-                                    <button type='button' className='btn btn-link text-capitalize' onClick={this.handleSignupFormShowUp}>
-                                        {locale.SIGN_UP}
+                                    <button 
+                                        type='button' 
+                                        className='btn btn-link text-capitalize' 
+                                        onClick={this.handleSignupFormShowUp}
+                                    >
+                                        {locale.texts.SIGN_UP}
                                     </button>
                                 </div>
                             </Form>

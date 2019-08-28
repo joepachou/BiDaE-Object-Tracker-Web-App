@@ -8,7 +8,7 @@ import 'react-table/react-table.css';
 import EditLbeaconForm from './EditLbeaconForm'
 
 import axios from 'axios';
-import dataSrc from '../../../js/dataSrc';
+import dataSrc from '../../dataSrc';
 import config from '../../config';
 import LocaleContext from '../../context/LocaleContext';
 import { 
@@ -17,8 +17,7 @@ import {
     gatewayTable
 } from '../../tables';
 
-class HealthReport extends React.Component{
-
+class ScanMonitor extends React.Component{
     state = {
         lbeaconData: [],
         lbeaconColumn: [],
@@ -28,11 +27,17 @@ class HealthReport extends React.Component{
         trackingColunm: [],
         selectedRowData: {},
         isShowModal: false,
+        locale: this.context.lang
     }
 
-    componentDidUpdate = (prepProps) => {
-        if (prepProps !== this.props && this.props.objectInfo) {
-            this.processTrackingData(this.props.objectInfo)
+    componentDidUpdate = (prevProps, prevState) => {
+        if (this.context.lang !== prevState.locale) {
+            this.getLbeaconData();
+            this.getGatewayData();
+            this.getTrackingData();
+            this.setState({
+                locale: this.context.lang
+            })
         }
     }
 
@@ -50,54 +55,68 @@ class HealthReport extends React.Component{
     }
 
     getLbeaconData = () => {
-        axios.get(dataSrc.getLbeaconTable)
-            .then(res => {
-                lbeaconTable.map(field => {
-                    field.headerStyle = {
-                        textAlign: 'left',
-                    }
-                })
-                this.setState({
-                    lbeaconData: res.data.rows,
-                    lbeaconColumn: lbeaconTable
-                })
-            })
-            .catch(function (error) {
-                console.log(error);
-            })
-    }
-
-    getGatewayData = () => {
-        axios.get(dataSrc.getGatewayTable)
-            .then(res => {
-                gatewayTable.map(field => {
-                    field.headerStyle = {
-                        textAlign: 'left',
-                    }
-                })
-                this.setState({
-                    gatewayData: res.data.rows,
-                    gatewayColunm: gatewayTable
-                })
-            })
-            .catch(function (error) {
-                console.log(error);
-            })
-        }
-
-    getTrackingData = () => {
-        axios.post(dataSrc.getTrackingData,{
-            rssiThreshold: config.surveillanceMap.locationAccuracyMapToDefault[config.objectManage.objectManagementRSSIThreshold]
+        let locale = this.context
+        axios.post(dataSrc.getLbeaconTable, {
+            locale: locale.abbr
         })
         .then(res => {
-            trackingTable.map(field => {
+            let table = _.cloneDeep(lbeaconTable)
+            table.map(field => {
                 field.headerStyle = {
                     textAlign: 'left',
                 }
+                field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
+            })
+            this.setState({
+                lbeaconData: res.data.rows,
+                lbeaconColumn: table
+            })
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+    }
+
+    getGatewayData = () => {
+        let locale = this.context
+        axios.post(dataSrc.getGatewayTable, {
+            locale: locale.abbr
+        })
+        .then(res => {
+            let table = _.cloneDeep(gatewayTable)
+            table.map(field => {
+                field.headerStyle = {
+                    textAlign: 'left',
+                }
+                field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
+            })
+            this.setState({
+                gatewayData: res.data.rows,
+                gatewayColunm: table
+            })
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+    }
+
+    getTrackingData = () => {
+        let locale = this.context
+        axios.post(dataSrc.getTrackingData,{
+            rssiThreshold: config.surveillanceMap.locationAccuracyMapToDefault[config.objectManage.objectManagementRSSIThreshold],
+            locale: this.context.abbr
+        })
+        .then(res => {
+            let table = _.cloneDeep(trackingTable)
+            table.map(field => {
+                field.headerStyle = {
+                    textAlign: 'left',
+                }
+                field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })
             this.setState({
                 trackingData: res.data.rows,
-                trackingColunm: trackingTable
+                trackingColunm: table
             })
         })
     }
@@ -133,10 +152,10 @@ class HealthReport extends React.Component{
             }
         }
 
-        const locale = this.context;
+        const locale = this.context.texts;
 
         return(
-            <Container className='py-4' fluid>
+            <Container className='py-4 text-capitalize' fluid>
                 <Nav
                     activeKey="/home"
                     onSelect={selectedKey => alert(`selected ${selectedKey}`)}
@@ -189,7 +208,7 @@ class HealthReport extends React.Component{
                     </Tab>
                     <Tab 
                         eventKey="tracking_table" 
-                        title="Tracking"
+                        title={locale.TRACKING}
                     >
                         <ReactTable 
                             minRows={6} 
@@ -203,8 +222,8 @@ class HealthReport extends React.Component{
                     </Tab>
                 </Tabs>
                 <EditLbeaconForm 
-                    show = {this.state.isShowModal} 
-                    title={locale.EDIT_LBEACON}
+                    show= {this.state.isShowModal} 
+                    title={'edit lbeacon'}
                     selectedObjectData={this.state.selectedRowData} 
                     handleSubmitForm={this.handleSubmitForm}
                     handleCloseForm={this.handleCloseForm}
@@ -214,6 +233,6 @@ class HealthReport extends React.Component{
     }
 }
 
-HealthReport.contextType = LocaleContext
+ScanMonitor.contextType = LocaleContext
 
-export default HealthReport;
+export default ScanMonitor;

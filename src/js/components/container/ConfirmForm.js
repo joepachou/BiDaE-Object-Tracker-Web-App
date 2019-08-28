@@ -8,21 +8,13 @@ import { Formik, Form } from 'formik';
   
 class ConfirmForm extends React.Component {
     
-    constructor(props) {
-        super(props);
+    state = {
+        show: this.props.show,
+        isShowForm: false,
+    };
 
-        this.state = {
-            show: this.props.show,
-            isShowForm: false,
-        };
-
-
-        this.handleShow = this.handleShow.bind(this);
-        this.handleClose = this.handleClose.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-    }
   
-    handleClose(e) {
+    handleClose = (e) => {
         if(this.props.handleChangeObjectStatusFormClose) {
             this.props.handleChangeObjectStatusFormClose();
         }
@@ -31,14 +23,14 @@ class ConfirmForm extends React.Component {
         });
     }
   
-    handleShow() {
+    handleShow = () => {
         this.setState({ 
             show: true 
         });
     }
 
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate = (prevProps) => {
         if (prevProps != this.props) {
             this.setState({
                 show: this.props.show,
@@ -47,7 +39,7 @@ class ConfirmForm extends React.Component {
         }
     }
 
-    handleChange(e) {
+    handleChange = (e) => {
         const { name }  = e.target
         this.setState({
             [name]: e.target.value
@@ -71,7 +63,10 @@ class ConfirmForm extends React.Component {
             }
         }
 
-        const { title } = this.props;
+        const { 
+            title,
+            selectedObjectData
+        } = this.props;
 
         const colProps = {
             titleCol: {
@@ -84,6 +79,10 @@ class ConfirmForm extends React.Component {
             }
         }
 
+        const locale = this.context
+
+        moment.locale(locale.abbr);
+
         return (
             <>  
                 <Modal 
@@ -92,29 +91,23 @@ class ConfirmForm extends React.Component {
                     onHide={this.handleClose} 
                     size="md"
                 >
-                    <Modal.Header closeButton className='font-weight-bold'>{title}</Modal.Header >
+                    <Modal.Header 
+                        closeButton 
+                        className='font-weight-bold text-capitalize'
+                    >
+                        {title}
+                    </Modal.Header >
                     <Modal.Body>
                         <div className='modalDeviceListGroup' style={style.deviceList}>
-                            {this.props.selectedObjectData.map((item,index) => {
+                            {selectedObjectData.map((item,index) => {
                                 return (
                                     <div key={index} >
                                         {index > 0 ? <hr/> : null}
-                                        <Row noGutters={true}>
-                                            <Col xs={1} sm={1} className='d-flex align-items-center'>
-                                                {null}
-                                            </Col>
+                                        <Row noGutters={true} className='text-capitalize'>
                                             <Col>
                                                 <Row>
                                                     <Col {...colProps.titleCol}>
-                                                        Type
-                                                    </Col>
-                                                    <Col {...colProps.inputCol} className='text-muted pb-1'>
-                                                        {item.type}
-                                                    </Col>
-                                                </Row>
-                                                <Row>
-                                                    <Col {...colProps.titleCol}>
-                                                        Name
+                                                        {locale.texts.NAME}
                                                     </Col>
                                                     <Col {...colProps.inputCol} className='text-muted pb-1'>
                                                         {item.name}
@@ -122,7 +115,15 @@ class ConfirmForm extends React.Component {
                                                 </Row>
                                                 <Row>
                                                     <Col {...colProps.titleCol}>
-                                                        ACN
+                                                        {locale.texts.TYPE}
+                                                    </Col>
+                                                    <Col {...colProps.inputCol} className='text-muted pb-1'>
+                                                        {item.type}
+                                                    </Col>
+                                                </Row>
+                                                <Row>
+                                                    <Col {...colProps.titleCol}>
+                                                        {locale.texts.ACN}
                                                     </Col>
                                                     <Col {...colProps.inputCol} className='text-muted pb-1'>
                                                         {item.access_control_number}
@@ -140,9 +141,11 @@ class ConfirmForm extends React.Component {
                         <hr/>
                         <Row>
                             <Col className='d-flex justify-content-center text-capitalize'>
-                                <h5>{this.props.selectedObjectData.length > 0 && this.props.selectedObjectData[0].status}
-                                    {this.props.selectedObjectData.status === config.objectStatus.TRANSFERRED
-                                        ? '  to  ' + this.props.selectedObjectData.transferredLocation
+                                <h5>
+                                    {/* {console.log(selectedObjectData)} */}
+                                    {selectedObjectData.length > 0 && locale.texts[selectedObjectData[0].status.toUpperCase()]}
+                                    {selectedObjectData.length > 0 && selectedObjectData[0].status === config.objectStatus.TRANSFERRED
+                                        ? ' ' + locale.texts.TO + ' ' + selectedObjectData[0].transferred_location.label
                                         : null
                                     }
                                 </h5>
@@ -153,13 +156,13 @@ class ConfirmForm extends React.Component {
                                 <h6>{moment().format('LLLL')}</h6>    
                             </Col>
                         </Row>
-                        {this.props.selectedObjectData.status === config.objectStatus.RESERVE && 
+                        {selectedObjectData.status === config.objectStatus.RESERVE && 
                             <>
                                 <hr/>
                                 <Row className='d-flex justify-content-center'>
                                     <ButtonToolbar >
                                         <Button variant="outline-secondary" className='mr-2' onClick={this.handleClick}>
-                                            Delay by 10 minutes
+                                            {locale.texts.DELAY_BY}
                                         </Button>
                                     </ButtonToolbar>
                                 </Row>
@@ -173,11 +176,20 @@ class ConfirmForm extends React.Component {
                             render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
                                 <Form>
                                     <Modal.Footer>
-                                        <Button variant="outline-secondary" onClick={this.handleClose}>
-                                            Cancel
+                                        <Button 
+                                            variant="outline-secondary" 
+                                            onClick={this.handleClose}
+                                            className="text-capitalize"
+                                        >
+                                            {locale.texts.CANCEL}
                                         </Button>
-                                        <Button type="submit" className="text-capitalize" variant="primary" disabled={isSubmitting}>
-                                            Send
+                                        <Button 
+                                            type="submit" 
+                                            className="text-capitalize" 
+                                            variant="primary" 
+                                            disabled={isSubmitting}
+                                        >
+                                            {locale.texts.SEND}
                                         </Button>
                                     </Modal.Footer>
                                 </Form>

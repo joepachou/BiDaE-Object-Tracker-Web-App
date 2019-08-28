@@ -6,31 +6,18 @@ import LocaleContext from '../../context/LocaleContext';
 import tempImg from '../../../img/doppler.jpg'
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import RadioButton from '../presentational/RadioButton'
+import RadioButton from '../presentational/RadioButton';
+import RadioButtonGroup from './RadioButtonGroup';
 
-const transferredLocations = config.transferredLocation;
-
-const options = transferredLocations.map( location => {
-    let locationObj = {};
-    locationObj["value"] = location;
-    locationObj["label"] = location;
-    return locationObj
-})
 class ChangeStatusForm extends React.Component {
     
-    constructor(props) {
-        super(props);
+    state = {
+        show: this.props.show,
+        isShowForm: false,
+    };
 
-        this.state = {
-            show: this.props.show,
-            isShowForm: false,
-        };
-        this.handleShow = this.handleShow.bind(this);
-        this.handleClose = this.handleClose.bind(this);
-        this.handleClick = this.handleClick.bind(this)
-    }
   
-    handleClose(e) {
+    handleClose = (e) => {
         if(this.props.handleChangeObjectStatusFormClose) {
             this.props.handleChangeObjectStatusFormClose();
         }
@@ -39,14 +26,14 @@ class ChangeStatusForm extends React.Component {
         });
     }
   
-    handleShow() {
+    handleShow = () =>  {
         this.setState({ 
             show: true 
         });
     }
 
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate = (prevProps) => {
         if (prevProps != this.props && this.props.selectedObjectData.length !== 0) {
             this.setState({
                 show: this.props.show,
@@ -58,16 +45,14 @@ class ChangeStatusForm extends React.Component {
     //     return nextProps.selectedObjectData !== this.props.selectedObjectData
     // }
 
-    handleClick(e) {
-        const item = e.target.innerText.toLowerCase();
+    handleClick = (e) => {
+        const item = e.target.name
         switch(item) {
             case 'add device':
                 this.props.handleAdditionalButton(item);
                 break;
-            case 'remove device':
-                break;
-            case 'add notes':
-            case 'hide notes':
+            case 'add note':
+            case 'hide note':
                 this.setState({
                     showNotesControl: !this.state.showNotesControl
                 })
@@ -76,6 +61,15 @@ class ChangeStatusForm extends React.Component {
     }
 
     render() {
+
+        const locale = this.context.texts
+
+        const options = config.transferredLocation.map(location => {
+            let locationObj = {};
+            locationObj["value"] = location
+            locationObj["label"] = locale[location.toUpperCase().replace(/ /g, '_')]
+            return locationObj
+        })
 
         const style = {
             input: {
@@ -113,7 +107,16 @@ class ChangeStatusForm extends React.Component {
 
         let { title } = this.props;
         let selectedObjectData = this.props.selectedObjectData.length !== 0 ? this.props.selectedObjectData[0] : []
-        const locale = this.context
+
+        let initialValues = {
+            radioGroup: this.props.selectedObjectData.length !== 0 ? this.props.selectedObjectData[0].status : '',
+            select: this.props.selectedObjectData.length !== 0 && this.props.selectedObjectData[0].status === config.objectStatus.TRANSFERRED
+                ? { 
+                    value: selectedObjectData.transferred_location,
+                    label: locale[selectedObjectData.transferred_location.toUpperCase().replace(/ /g, '_')]
+                }
+                : '',  
+        }
 
         return (
             <>  
@@ -124,14 +127,19 @@ class ChangeStatusForm extends React.Component {
                     id='changeStatusForm' 
                     enforceFocus={false}
                 >
-                    <Modal.Header closeButton className='font-weight-bold text-capitalize'>{title}</Modal.Header >
+                    <Modal.Header 
+                        closeButton 
+                        className='font-weight-bold text-capitalize'
+                    >
+                        {title}
+                    </Modal.Header >
                     <Modal.Body>
                         <div className='modalDeviceListGroup' style={style.deviceList}>
                             {this.props.selectedObjectData.map((item,index) => {
                                 return (
                                     <div key={index} >
                                         {index > 0 ? <hr/> : null}
-                                        <Row noGutters={true}>
+                                        <Row noGutters={true}  className='text-capitalize'>
                                             {this.props.selectedObjectData.length > 1 
                                                 ? 
                                                     <Col xs={1} sm={1} className='d-flex align-items-center'>
@@ -139,19 +147,10 @@ class ChangeStatusForm extends React.Component {
                                                     </Col>
                                                 : null
                                             }
-
                                             <Col>
                                                 <Row>
                                                     <Col {...colProps.titleCol}>
-                                                        Type
-                                                    </Col>
-                                                    <Col {...colProps.inputCol} className='text-muted pb-1'>
-                                                        {item.type}
-                                                    </Col>
-                                                </Row>
-                                                <Row>
-                                                    <Col {...colProps.titleCol}>
-                                                        Name
+                                                        {locale.NAME}
                                                     </Col>
                                                     <Col {...colProps.inputCol} className='text-muted pb-1'>
                                                         {item.name}
@@ -159,7 +158,15 @@ class ChangeStatusForm extends React.Component {
                                                 </Row>
                                                 <Row>
                                                     <Col {...colProps.titleCol}>
-                                                        ACN
+                                                        {locale.TYPE}
+                                                    </Col>
+                                                    <Col {...colProps.inputCol} className='text-muted pb-1'>
+                                                        {item.type}
+                                                    </Col>
+                                                </Row>
+                                                <Row>
+                                                    <Col {...colProps.titleCol}>
+                                                        {locale.ACN}
                                                     </Col>
                                                     <Col {...colProps.inputCol} className='text-muted pb-1'>
                                                         {item.access_control_number}
@@ -175,13 +182,9 @@ class ChangeStatusForm extends React.Component {
                             })}
                         </div>
                         <hr/>
+                        {console.log('render')}
                         <Formik
-                            initialValues = {{
-                                radioGroup: this.props.selectedObjectData.length !== 0 ? this.props.selectedObjectData[0].status : '',
-                                select: this.props.selectedObjectData.length !== 0 && this.props.selectedObjectData[0].status === "Transferred" 
-                                    ? this.props.selectedObjectData[0].transferredLocation
-                                    : '',
-                            }}
+                            initialValues = {initialValues}
 
                             validationSchema = {
                                 Yup.object().shape({
@@ -201,75 +204,106 @@ class ChangeStatusForm extends React.Component {
                             render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
                                 <Form className="text-capitalize">
                                     <Row className="form-group">
-                                        <Col xs={2} sm={2} className='d-flex'>
-                                            <label htmlFor="status">{locale.STATUS}</label>
-                                        </Col>
-                                        <Col xs={10} sm={10} >
-                                            <Field
-                                                component={RadioButton}
-                                                name="radioGroup"
-                                                id={config.objectStatus.NORMAL}
-                                                label={locale.NORMAL}
-                                            />
-                                        
-                                            <Field
-                                                component={RadioButton}
-                                                name="radioGroup"
-                                                id={config.objectStatus.BROKEN}
-                                                label={locale.BROKEN}
-                                            />
+                                        <Col>  
+                                        {console.log(this.props.selectedObjectData)}
 
-                                            <Field
-                                                component={RadioButton}
-                                                name="radioGroup"
-                                                id={config.objectStatus.RESERVE}
-                                                label={locale.RESERVE}
-                                            />
+                                            <RadioButtonGroup
+                                                id="radioGroup"
+                                                label={locale.STATUS}
+                                                value={values.radioGroup}
+                                                error={errors.radioGroup}
+                                                touched={touched.radioGroup}
+                                            >
+                                                <Field
+                                                    component={RadioButton}
+                                                    name="radioGroup"
+                                                    id={config.objectStatus.NORMAL}
+                                                    label={locale.NORMAL}
+                                                />
+                                            
+                                                <Field
+                                                    component={RadioButton}
+                                                    name="radioGroup"
+                                                    id={config.objectStatus.BROKEN}
+                                                    label={locale.BROKEN}
+                                                />
 
+                                                <Field
+                                                    component={RadioButton}
+                                                    name="radioGroup"
+                                                    id={config.objectStatus.RESERVE}
+                                                    label={locale.RESERVE}
+                                                />
+                                                <Field
+                                                    component={RadioButton}
+                                                    name="radioGroup"
+                                                    id={config.objectStatus.TRANSFERRED}
+                                                    label={locale.TRANSFERRED}
+                                                />
+        
+                                                <Select
+                                                    placeholder = {locale.SELECT_LOCATION}
+                                                    name="select"
+                                                    value = {values.select}
+                                                    onChange={value => setFieldValue("select", value)}
+                                                    options={options}
+                                                    isDisabled={values.radioGroup !== config.objectStatus.TRANSFERRED}
+                                                    style={style.select}
+                                                    components={{
+                                                        IndicatorSeparator: () => null
+                                                    }}
+                                                />
+                                            </RadioButtonGroup>
                                             <Row className='no-gutters' className='d-flex align-self-center'>
-                                                <Col sm={4} className='d-flex align-self-center'>
-                                                    <Field
-                                                        component={RadioButton}
-                                                        name="radioGroup"
-                                                        id={config.objectStatus.TRANSFERRED}
-                                                        label={locale.TRANSFERRED}
-                                                    />
-                                                </Col>
-                                                <Col sm={8}>
-                                                    <Select
-                                                        placeholder = "Select Location"
-                                                        name="select"
-                                                        value = {values.select}
-                                                        onChange={value => setFieldValue("select", value)}
-                                                        options={options}
-                                                        isDisabled={values.radioGroup !== config.objectStatus.TRANSFERRED}
-                                                        style={style.select}
-                                                        components={{
-                                                            IndicatorSeparator: () => null
-                                                        }}
-                                                    />
+                                                <Col>
+                                                    {touched.radioGroup && errors.radioGroup &&
+                                                    <div style={style.errorMessage}>{errors.radioGroup}</div>}
                                                     {touched.select && errors.select &&
                                                     <div style={style.errorMessage}>{errors.select}</div>}
                                                 </Col>
-                                            </Row>                                                
+                                            </Row>  
                                         </Col>
                                     </Row>
                                     <hr/>
                                     <Row className='d-flex justify-content-center pb-3'>
                                         <ButtonToolbar >
-                                            <Button variant="outline-secondary" className='mr-2 notShowOnMobile' onClick={this.handleClick} active={this.props.showAddDevice}>
-                                                Add Device
+                                            <Button 
+                                                name='add device'
+                                                variant="outline-secondary" 
+                                                className='mr-2 notShowOnMobile text-capitalize' 
+                                                onClick={this.handleClick} 
+                                                active={this.props.showAddDevice}
+                                                name='add device'
+                                            >
+                                                {locale.ADD_DEVICE}
                                             </Button>
-                                            <Button variant="outline-secondary" className='mr-2' onClick={this.handleClick}>
-                                                {!this.state.showNotesControl ? 'Add Notes' : 'Hide Notes'}
+                                            <Button 
+                                                name='add note'
+                                                variant="outline-secondary" 
+                                                className='mr-2 text-capitalize' 
+                                                onClick={this.handleClick}
+                                            >
+                                                {!this.state.showNotesControl 
+                                                    ? locale.ADD_NOTE 
+                                                    : locale.HIDE_NOTE
+                                                }
                                             </Button>
                                         </ButtonToolbar>
                                     </Row>
                                     <Modal.Footer>
-                                        <Button variant="outline-secondary" className="text-capitalize" onClick={this.handleClose}>
+                                        <Button 
+                                            variant="outline-secondary" 
+                                            className="text-capitalize" 
+                                            onClick={this.handleClose}
+                                        >
                                             {locale.CANCEL}
                                         </Button>
-                                        <Button type="submit" className="text-capitalize" variant="primary" disabled={isSubmitting}>
+                                        <Button 
+                                            type="submit" 
+                                            className="text-capitalize" 
+                                            variant="primary" 
+                                            disabled={isSubmitting}
+                                        >
                                             {locale.SAVE}
                                         </Button>
                                     </Modal.Footer>

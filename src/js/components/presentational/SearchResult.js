@@ -243,20 +243,14 @@ class SearchResult extends React.Component {
                 // maxHeight: '500px',
                 // overflow: 'scroll'
             },
-
-            resultListGroup: {
-                maxHeight: '45vh',
-                overflow: 'hidden scroll',
-            },
             alertTextTitle: {
                 fontWeight: 1000,
                 color: 'rgba(101, 111, 121, 0.78)'
-            }
-
+            },
         }
 
         return(
-            <>
+            <div>
                 <Row className='d-flex justify-content-center' style={style.titleText}>
                     <h4 className='text-capitalize'>{locale.SEARCH_RESULT}</h4>
                 </Row>
@@ -278,14 +272,12 @@ class SearchResult extends React.Component {
                         ?   <Col className='d-flex justify-content-center font-italic font-weight-lighter' style={style.noResultDiv}>
                                 <div className='searchResultForDestop'>No Result</div>
                             </Col> 
-                            
-                        
                         :   
                             <Col className=''>
                                 <ListGroup onSelect={this.handleClickResultItem} className='searchResultListGroup'>
                                     {this.props.searchResult.filter(item => item.found).map((item,index) => {
                                         let element = 
-                                            <ListGroup.Item href={'#' + index} action style={style.listItem} className='searchResultList' eventKey={1 + ':'+ index} key={index}>
+                                            <ListGroup.Item href={'#' + index} action style={style.listItem} className='searchResultList' eventKey={1 + ':'+ index} key={index} style={{zIndex: 1060}}>
                                                 <Row>
                                                     <Col xs={1} sm={1} lg={1} className="font-weight-bold d-flex align-self-center" style={style.firstText}>{index + 1}</Col>
                                                     <Col xs={5} sm={5} lg={5} className="d-flex align-self-center justify-content-center" style={style.middleText}>{item.type}</Col>
@@ -372,7 +364,7 @@ class SearchResult extends React.Component {
                     handleConfirmFormSubmit={this.handleConfirmFormSubmit}
                     searchResult={this.props.searchResult}
                 />
-            </>
+            </div>
         )
     }
 }

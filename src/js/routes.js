@@ -1,5 +1,5 @@
 import MainContainer from "./components/container/MainContainer";
-import HealthReport from "./components/container/HealthReport";
+import DeviceMonitor from "./components/container/DeviceMonitor";
 import Geofence from "./components/container/Geofence";
 import ObjectManagementContainer from "./components/container/ObjectManagementContainer";
 import UserSettingContainer from "./components/container/UserContainer/UserSettingContainer";
@@ -11,8 +11,8 @@ const routes = [
         exact: true,
     },
     {
-        path: '/page/healthReport',
-        component: HealthReport,
+        path: '/page/deviceMonitor',
+        component: DeviceMonitor,
         exact: true,
     },
     {

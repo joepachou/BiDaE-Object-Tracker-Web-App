@@ -81,11 +81,10 @@ class PdfDownloadForm extends React.Component {
         return (
             <div>  
                 <Modal show={this.state.show}  onHide={this.handleClose} size="lg" >
-                    <Modal.Header closeButton>Print Search Result 
+                    <Modal.Header closeButton>Print Search Result
                     </Modal.Header>
                     <Modal.Body>
                         <div  style = {{width: '66%', float: 'left'}}>
-
                             {hasData 
                                 ?<QRCode
                                     value={dataSrc.pdfUrl(savePath)} 
