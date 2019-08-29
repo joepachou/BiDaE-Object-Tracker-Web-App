@@ -64,6 +64,7 @@ const tw = {
     /** Error Message */
     NAME_IS_REQUIRED: '請填入名字',
     TYPE_IS_REQUIRED: '請填入類別',
+    LOCATION_IS_REQUIRED: '請選擇地點',
     ACCESS_CONTROL_NUMBER_IS_REQUIRED: '請填入財產編號',
     MAC_ADDRESS_IS_REQUIRED: '請填入Mac address',
     STATUS_IS_REQUIRED: '請填入儀器狀態',

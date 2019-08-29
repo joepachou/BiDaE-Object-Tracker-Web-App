@@ -64,6 +64,7 @@ const en =  {
     /** Error Message */
     NAME_IS_REQUIRED: 'Name is required',
     TYPE_IS_REQUIRED: 'Type is required',
+    LOCATION_IS_REQUIRED: 'location is required',
     ACCESS_CONTROL_NUMBER_IS_REQUIRED: 'Access control number is required',
     MAC_ADDRESS_IS_REQUIRED: 'Mac address is required',
     STATUS_IS_REQUIRED: 'Status is required',

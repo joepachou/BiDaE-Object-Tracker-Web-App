@@ -62,12 +62,12 @@ class ChangeStatusForm extends React.Component {
 
     render() {
 
-        const locale = this.context.texts
+        const locale = this.context
 
         const options = config.transferredLocation.map(location => {
             let locationObj = {};
             locationObj["value"] = location
-            locationObj["label"] = locale[location.toUpperCase().replace(/ /g, '_')]
+            locationObj["label"] = locale.texts[location.toUpperCase().replace(/ /g, '_')]
             return locationObj
         })
 
@@ -113,7 +113,7 @@ class ChangeStatusForm extends React.Component {
             select: this.props.selectedObjectData.length !== 0 && this.props.selectedObjectData[0].status === config.objectStatus.TRANSFERRED
                 ? { 
                     value: selectedObjectData.transferred_location,
-                    label: locale[selectedObjectData.transferred_location.toUpperCase().replace(/ /g, '_')]
+                    label: locale.texts[selectedObjectData.transferred_location.toUpperCase().replace(/ /g, '_')]
                 }
                 : '',  
         }
@@ -150,7 +150,7 @@ class ChangeStatusForm extends React.Component {
                                             <Col>
                                                 <Row>
                                                     <Col {...colProps.titleCol}>
-                                                        {locale.NAME}
+                                                        {locale.texts.NAME}
                                                     </Col>
                                                     <Col {...colProps.inputCol} className='text-muted pb-1'>
                                                         {item.name}
@@ -158,7 +158,7 @@ class ChangeStatusForm extends React.Component {
                                                 </Row>
                                                 <Row>
                                                     <Col {...colProps.titleCol}>
-                                                        {locale.TYPE}
+                                                        {locale.texts.TYPE}
                                                     </Col>
                                                     <Col {...colProps.inputCol} className='text-muted pb-1'>
                                                         {item.type}
@@ -166,7 +166,7 @@ class ChangeStatusForm extends React.Component {
                                                 </Row>
                                                 <Row>
                                                     <Col {...colProps.titleCol}>
-                                                        {locale.ACN}
+                                                        {locale.texts.ACN}
                                                     </Col>
                                                     <Col {...colProps.inputCol} className='text-muted pb-1'>
                                                         {item.access_control_number}
@@ -182,18 +182,17 @@ class ChangeStatusForm extends React.Component {
                             })}
                         </div>
                         <hr/>
-                        {console.log('render')}
                         <Formik
                             initialValues = {initialValues}
 
                             validationSchema = {
                                 Yup.object().shape({
-                                    radioGroup: Yup.string().required('Object status is required'),
+                                    radioGroup: Yup.string().required(locale.texts.STATUS_IS_REQUIRED),
 
                                     select: Yup.string()
                                         .when('radioGroup', {
                                             is: config.objectStatus.TRANSFERRED,
-                                            then: Yup.string().required('Location is required')
+                                            then: Yup.string().required(locale.texts.LOCATION_IS_REQUIRED)
                                         })
                             })}
 
@@ -205,11 +204,9 @@ class ChangeStatusForm extends React.Component {
                                 <Form className="text-capitalize">
                                     <Row className="form-group">
                                         <Col>  
-                                        {console.log(this.props.selectedObjectData)}
-
                                             <RadioButtonGroup
                                                 id="radioGroup"
-                                                label={locale.STATUS}
+                                                label={locale.texts.STATUS}
                                                 value={values.radioGroup}
                                                 error={errors.radioGroup}
                                                 touched={touched.radioGroup}
@@ -218,31 +215,31 @@ class ChangeStatusForm extends React.Component {
                                                     component={RadioButton}
                                                     name="radioGroup"
                                                     id={config.objectStatus.NORMAL}
-                                                    label={locale.NORMAL}
+                                                    label={locale.texts.NORMAL}
                                                 />
                                             
                                                 <Field
                                                     component={RadioButton}
                                                     name="radioGroup"
                                                     id={config.objectStatus.BROKEN}
-                                                    label={locale.BROKEN}
+                                                    label={locale.texts.BROKEN}
                                                 />
 
                                                 <Field
                                                     component={RadioButton}
                                                     name="radioGroup"
                                                     id={config.objectStatus.RESERVE}
-                                                    label={locale.RESERVE}
+                                                    label={locale.texts.RESERVE}
                                                 />
                                                 <Field
                                                     component={RadioButton}
                                                     name="radioGroup"
                                                     id={config.objectStatus.TRANSFERRED}
-                                                    label={locale.TRANSFERRED}
+                                                    label={locale.texts.TRANSFERRED}
                                                 />
         
                                                 <Select
-                                                    placeholder = {locale.SELECT_LOCATION}
+                                                    placeholder = {locale.texts.SELECT_LOCATION}
                                                     name="select"
                                                     value = {values.select}
                                                     onChange={value => setFieldValue("select", value)}
@@ -275,7 +272,7 @@ class ChangeStatusForm extends React.Component {
                                                 active={this.props.showAddDevice}
                                                 name='add device'
                                             >
-                                                {locale.ADD_DEVICE}
+                                                {locale.texts.ADD_DEVICE}
                                             </Button>
                                             <Button 
                                                 name='add note'
@@ -284,8 +281,8 @@ class ChangeStatusForm extends React.Component {
                                                 onClick={this.handleClick}
                                             >
                                                 {!this.state.showNotesControl 
-                                                    ? locale.ADD_NOTE 
-                                                    : locale.HIDE_NOTE
+                                                    ? locale.texts.ADD_NOTE 
+                                                    : locale.texts.HIDE_NOTE
                                                 }
                                             </Button>
                                         </ButtonToolbar>
@@ -296,7 +293,7 @@ class ChangeStatusForm extends React.Component {
                                             className="text-capitalize" 
                                             onClick={this.handleClose}
                                         >
-                                            {locale.CANCEL}
+                                            {locale.texts.CANCEL}
                                         </Button>
                                         <Button 
                                             type="submit" 
@@ -304,7 +301,7 @@ class ChangeStatusForm extends React.Component {
                                             variant="primary" 
                                             disabled={isSubmitting}
                                         >
-                                            {locale.SAVE}
+                                            {locale.texts.SAVE}
                                         </Button>
                                     </Modal.Footer>
                                 </Form>
