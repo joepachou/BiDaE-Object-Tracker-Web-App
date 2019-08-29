@@ -123,6 +123,8 @@ const config = {
         defaultLocale: 'tw',
     },
 
+    defaultRSSIThreshold: 1,
+
     image: {
         logo: BOT_LOGO,
     },

@@ -42,7 +42,7 @@ const en =  {
     SHOW:'show',
     DEVICE: 'device',
     DEVICES: 'devices',
-
+    DOWNLOAD: 'download',
 
     /* Form Field */
     NAME: 'name',
@@ -79,6 +79,7 @@ const en =  {
     EDIT_OBJECT: 'edit object',
     REPORT_DEVICE_STATUS: 'Report device status',
     THANK_YOU_FOR_REPORTING: 'Thank you for reporting',
+    PRINT_SEARCH_RESULT: 'print search result',
 
     /* Object Status */
     STATUS: 'status',

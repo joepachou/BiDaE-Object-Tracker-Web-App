@@ -1,6 +1,9 @@
 import React from 'react';
 import Modal from 'react-bootstrap/Modal';
-import { Button}  from 'react-bootstrap';
+import { 
+    Button,
+    Row,
+}  from 'react-bootstrap';
 import Cookies from 'js-cookie'
 import LocaleContext from '../../context/LocaleContext';
 import axios from 'axios';
@@ -11,43 +14,37 @@ import QRCode from 'qrcode.react';
 // this component will send json to back end, backend will return a url, and the component generate a qrcode
 class PdfDownloadForm extends React.Component {
     
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            show: false,
-            savePath: "",
-            data: null,
-            alreadyUpdate: false,
-            hasData: false,
-            isDone: false,
-        };
-
-        this.handleClose = this.handleClose.bind(this)
-        this.PdfDownloader = this.PdfDownloader.bind(this)
-    
+    state = {
+        show: false,
+        savePath: "",
+        data: null,
+        alreadyUpdate: false,
+        hasData: false,
+        isDone: false,
     }
-    shouldComponentUpdate(nextProps, nextState) {
 
+    shouldComponentUpdate = (nextProps, nextState) => {
         if(nextProps.show || nextState.show){
             return true;
         }else{
             return true;
         }
     }
-    sendSearchResultToBackend(searchResultInfo, callBack){
-        axios.post(dataSrc.generatePDF ,searchResultInfo).then(res => {
-            callBack(res.data)
-        })
+
+    sendSearchResultToBackend = (searchResultInfo, callBack) => {
+        axios.post(dataSrc.generatePDF ,searchResultInfo)
+            .then(res => {
+                callBack(res.data)
+            })
     }
-    componentDidUpdate (preProps){
+    componentDidUpdate = (preProps) => {
         if(this.props.show && !this.state.show){
             var foundResult = [], notFoundResult = []
             for(var item of this.props.data){
                 item.found ? foundResult.push(item) : notFoundResult.push(item)
             }
             var searResultInfo = {
-                user: Cookies.get('user'),
+                user: JSON.parse(Cookies.get('user')).name,
                 foundResult: foundResult,
                 notFoundResult: notFoundResult
             }
@@ -63,7 +60,7 @@ class PdfDownloadForm extends React.Component {
             })
         }
     }
-    handleClose() {
+    handleClose = () => {
         this.props.handleClose()
         this.setState({
             show: false,
@@ -71,47 +68,59 @@ class PdfDownloadForm extends React.Component {
             isDone: false,
         })
     }
-    PdfDownloader(){
+    PdfDownloader = () => {
         window.open(this.state.savePath);
     }
 
   
     render() {
-        const {hasData, show, savePath, isDone} = this.state
-        return (
-            <div>  
-                <Modal show={this.state.show}  onHide={this.handleClose} size="lg" >
-                    <Modal.Header closeButton>Print Search Result
-                    </Modal.Header>
-                    <Modal.Body>
-                        <div  style = {{width: '66%', float: 'left'}}>
-                            {hasData 
-                                ?<QRCode
-                                    value={dataSrc.pdfUrl(savePath)} 
-                                    size={256}
-                                />
-                                : hasData 
-                                    ? <h3>Wait for a moment</h3>
-                                    : <h3>No Searh Results</h3>
-                            }
-                        </div>
-                        <div style = {{margin: '0px', width: '33%', float: 'right'}}>
-                            {hasData && isDone
+        const {
+            hasData, 
+            show, 
+            savePath, 
+            isDone
+        } = this.state
 
-                                ?<Button onClick={this.PdfDownloader}>Button</Button>
-                                : hasData 
-                                    ? <h3>Wait for a moment</h3>
-                                    : <h3>No Searh Results</h3>
-                            }
-                        </div>
-                    </Modal.Body>
-                    <Modal.Footer/>
-                </Modal>
-            </div>
+        const locale = this.context
+
+        return (
+            <Modal 
+                show={this.state.show}  
+                onHide={this.handleClose} 
+                className='text-capitalize'
+                size="sm" 
+            >
+                <Modal.Header 
+                    closeButton
+                >
+                    {locale.texts.PRINT_SEARCH_RESULT}
+                </Modal.Header>
+                <Modal.Body
+                    className='d-flex flex-column'
+                >
+                    <Row className='d-flex justify-content-center mb-2'>
+                        {hasData &&
+                            <QRCode
+                                value={dataSrc.pdfUrl(savePath)} 
+                                size={256}
+                            />
+                        }
+                    </Row>
+                    <Row className='d-flex justify-content-center'> 
+                        <Button 
+                            onClick={this.PdfDownloader}
+                            variant='outline-secondary'
+                            className='text-capitalize'
+                        >
+                            {locale.texts.DOWNLOAD}
+                        </Button>
+                    </Row>
+                </Modal.Body>
+            </Modal>
         );
     }
 }
 
-Modal.contextType = LocaleContext;
+PdfDownloadForm.contextType = LocaleContext;
   
 export default PdfDownloadForm;

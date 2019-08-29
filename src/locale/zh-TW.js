@@ -42,7 +42,7 @@ const tw = {
     SHOW:'顯示',
     DEVICES: '儀器',
     DEVICE: '儀器',
-
+    DOWNLOAD: '下載',
 
     /* Form Field */
     NAME: '名稱',
@@ -79,6 +79,7 @@ const tw = {
     EDIT_OBJECT: '編輯儀器',
     REPORT_DEVICE_STATUS: '回報儀器狀態',
     THANK_YOU_FOR_REPORTING: '謝謝您的回報',
+    PRINT_SEARCH_RESULT: '下載搜尋結果',
 
     /* Object Status */
     STATUS: '狀態',

@@ -9,21 +9,21 @@ import {
 } from '../../action/action'
 import GridButton from '../container/GridButton';
 import PdfDownloadForm from './PdfDownloadForm'
+import config from '../../config';
 
 
 class SurveillanceContainer extends React.Component {
 
     state = {
-        rssi: 1,
+        rssi: config.defaultRSSIThreshold,
         selectedObjectData: [],
         showDevice: false,
         showPdfDownloadForm: false,
     }
 
     handleClickButton = (e) => {
-        const button = e.target;
-        const buttonName = button.name
-        switch(buttonName.toLowerCase()) {
+        const buttonName = e.target.name.toLowerCase()
+        switch(buttonName) {
             case 'show devices':
                 this.setState({
                     showDevice: !this.state.showDevice
@@ -31,10 +31,12 @@ class SurveillanceContainer extends React.Component {
                 break;
             case 'clear':
                 this.props.handleClearButton();
+                break;
             case 'save':
                 this.setState({
                     showPdfDownloadForm: true,
                 })
+                break;
         }
 
     }
