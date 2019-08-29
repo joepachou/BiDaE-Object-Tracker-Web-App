@@ -6,6 +6,7 @@ const tw = {
     HOME : '首頁',
     HEALTH_REPORT: 'Health Report',
     DEVICE_MONITOR: '偵測裝置',
+    SYSTEM_STATUS: '系統狀態',
     MONITOR_MANAGEMENT: '偵測裝置管理',
     GEOFENCE: 'Geofence',
     OBJECT_MANAGEMENT: '物件管理',

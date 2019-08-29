@@ -121,10 +121,10 @@ class NavbarContainer extends React.Component {
                                     <Nav.Item><Link to="/page/geofence" className="nav-link nav-route" >{locale.texts.GEOFENCE}</Link></Nav.Item>
                                 </AccessControl>
                                 <AccessControl
-                                    permission={'route:monitorManagement'}
+                                    permission={'route:systemStatus'}
                                     renderNoAccess={() => null}
                                 >
-                                    <Nav.Item><Link to="/page/monitorManagement" className="nav-link nav-route" >{locale.texts.MONITOR_MANAGEMENT}</Link></Nav.Item>
+                                    <Nav.Item><Link to="/page/systemStatus" className="nav-link nav-route" >{locale.texts.SYSTEM_STATUS}</Link></Nav.Item>
                                 </AccessControl>
                                 <AccessControl
                                     permission={'route:objectManagement'}
