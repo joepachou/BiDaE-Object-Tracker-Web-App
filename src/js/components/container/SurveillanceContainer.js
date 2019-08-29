@@ -128,7 +128,6 @@ class SurveillanceContainer extends React.Component {
                                 variant="outline-primary" 
                                 className='mr-1 text-capitalize' 
                                 onClick={this.handleClickButton} 
-                                active={this.state.showDevice}
                                 name='show devices'
                             >
                                 {this.state.showDevice ? locale.HIDE_DEVICES : locale.SHOW_DEVICES }

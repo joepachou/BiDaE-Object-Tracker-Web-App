@@ -178,21 +178,50 @@ a:hover {
 }
 
 /* React-bootstrap button */
+.btn-outline-primary {
+    background-color: white;
+    color: rgb(0, 123, 255, 1);
+    border-color: rgb(0, 123, 255, 0.6);
+}
+
+.btn-outline-primary:hover {
+    background-color: white;
+    color: #007bff;
+}
+
+.btn-outline-primary:not(:disabled):not(.disabled):active {
+    color: rgb(0, 123, 255, 1);
+    background-color: white;
+    border-color: #007bff;
+    outline: 0;
+}
+
+.btn-outline-primary:not(:disabled):not(.disabled):active:focus, 
+.show >.btn-outline-primary.dropdown-toggle:focus {
+    box-shadow: none;
+}
+
 .btn-outline-secondary {
     border-color: rgb(224, 224, 224);
     font-weight: 500;
 }
 
+.btn-outline-secondary:not(:disabled):not(.disabled):active:focus, 
+.show >.btn-outline-primary.dropdown-toggle:focus {
+    box-shadow: none;
+}
+
 .btn-outline-secondary:hover {
-    background-color: rgb(242, 242, 242);
+    background-color: white;
     border-color: rgb(224, 224, 224);
-    color: black;
+    color: rgb(0, 0, 0, 0.6);
+    border-color: rgb(0, 0, 0, 0.5);
 }
 
 .btn-outline-secondary:not(:disabled):not(.disabled):active {
-    color: black;
-    background-color: rgb(242, 242, 242);
-    border-color: rgb(224, 224, 224);
+    color: rgb(0, 0, 0, 0.6);
+    background-color: white;
+    border-color: rgb(0, 0, 0, 0.5);
 }
 
 .btn {
