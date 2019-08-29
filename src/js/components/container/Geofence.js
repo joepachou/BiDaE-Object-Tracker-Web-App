@@ -5,54 +5,54 @@ import React from 'react';
 import { Row, Col, Container } from 'react-bootstrap';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
-
-
 import axios from 'axios';
 import dataSrc from '../../../js/dataSrc'
+import { geofenceTableColumn } from '../../tables';
+import LocaleContext from '../../context/LocaleContext';
 
 
-export default class HealthReport extends React.Component{
+class Geofence extends React.Component{
 
-    constructor(props){
-        super(props)
-        this.state = {
-            geofenceData: [],
-            geofenceColumn: [],
-
-        }
-        this.getGeofenceData = this.getGeofenceData.bind(this)
+    state = {
+        geofenceData: [],
+        geofenceColumn: [],
+        locale: this.context.lang
     }
 
-    componentDidMount(){
+    componentDidUpdate = (prevProps, prevState) => {
+        if (this.context.lang !== prevState.locale) {
+            this.getGeofenceData();
+            this.setState({
+                locale: this.context.lang
+            })
+        }
+    }
+  
+    componentDidMount = () => {
         this.getGeofenceData();
         this.getGeofenceDataInterval = setInterval(this.getGeofenceData,10000)
     }
 
-    componentWillUnmount() {
+    componentWillUnmount = () => {
         clearInterval(this.getGeofenceDataInterval);
     }
 
-    getGeofenceData(){
-        axios.get(dataSrc.geofenceData).then(res => {
-            let column = [];
-            res.data.fields.map(item => {
-                let field = {};
-                field.Header = item.name.replace(/_/g, ' ')
-                    .toLowerCase()
-                    .split(' ')
-                    .map( s => s.charAt(0).toUpperCase() + s.substring(1))
-                    .join(' '),                
-                field.accessor = item.name,
-                field.headerStyle={
+    getGeofenceData = () => {
+        let locale = this.context
+        axios.post(dataSrc.geofenceData, {
+            locale: this.context.abbr
+        })
+        .then(res => {
+            let column = _.cloneDeep(geofenceTableColumn)
+            column.map(field => {
+                field.headerStyle = {
                     textAlign: 'left',
                 }
-                column.push(field);
-                
+                field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]                    
             })
             this.setState({
                 geofenceData: res.data.rows,
                 geofenceColumn: column,
-
             })
         })
         .catch(function (error) {
@@ -69,7 +69,10 @@ export default class HealthReport extends React.Component{
             }    
         }
         return(
-            <Container fluid className="py-2">
+            <Container 
+                fluid 
+                className="py-2 text-capitalize"
+            >
                 <Row className='d-flex w-100 justify-content-around mx-0'>
                     <Col className='py-2'>
                         <ReactTable 
@@ -84,3 +87,7 @@ export default class HealthReport extends React.Component{
         )
     }
 }
+
+Geofence.contextType = LocaleContext
+
+export default Geofence;

@@ -260,10 +260,43 @@ const objectTableColumn = [
     }
 ]
 
+const geofenceTableColumn = [
+    {
+        Header: 'Mac Address',
+        accessor: 'mac_address',
+        width: 180,
+    },
+    {
+        Header: 'Type',
+        accessor: 'type',
+        width: 100,
+    },
+    {
+        Header: 'UUID',
+        accessor: 'uuid'
+    },
+    {
+        Header: 'Receive Time',
+        accessor: 'receive_time',
+        width: 200,
+    },
+    {
+        Header: 'Alert Time',
+        accessor: 'alert_time',
+        width: 200,
+    },
+    {
+        Header: 'Name',
+        accessor: 'name',
+        width: 200,
+    },
+]
+
 export { 
     trackingTableColumn,
     searchResultTableColumn,
     lbeaconTableColumn,
     gatewayTableColumn,
-    objectTableColumn
+    objectTableColumn,
+    geofenceTableColumn
 }

@@ -1,4 +1,4 @@
-import tw from '../locale/zw-TW';
+import tw from '../locale/zh-TW';
 import en from '../locale/en-US';
 import React from 'react'
 import LocaleContext from './context/LocaleContext'

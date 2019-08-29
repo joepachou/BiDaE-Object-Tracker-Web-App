@@ -53,7 +53,7 @@ app.post('/data/getLbeaconTable', db.getLbeaconTable);
 
 app.post('/data/getGatewayTable', db.getGatewayTable);
 
-app.get('/data/geofenceData', db.getGeofenceData);
+app.post('/data/geofenceData', db.getGeofenceData);
 
 app.post('/data/getTrackingData', db.getTrackingData);
 

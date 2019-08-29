@@ -148,20 +148,19 @@ const getGatewayTable = (request, response) => {
 }
 
 const getGeofenceData = (request, response) => {
-    pool.query(queryType.query_getGeofenceData, (error, results) => {
-        if (error) {
-            console.log("Get Geofence Data fails: " + error)
-        } else {
+    let { locale } = request.body
+    pool.query(queryType.query_getGeofenceData)
+        .then(res =>  {
             console.log("Get Geofence Data")
-        }
-
-        results.rows.map(item => {
-            const localLastReportTimeStamp = momentTZ(item.receive_time).tz(process.env.TZ);
-            item.receive_time = localLastReportTimeStamp.format();
+            res.rows.map(item => {
+                item.receive_time= moment(momentTZ(item.receive_time).tz(process.env.TZ)).locale(locale).format('lll');
+                item.alert_time = moment(momentTZ(item.alert_time).tz(process.env.TZ)).locale(locale).format('lll');
+            })
+            response.status(200).json(res);
         })
-        response.status(200).json(results);
-        
-    })
+        .catch(err => {
+            console.log("Get Geofence Data fails: " + error)
+        })
 }
 
 const editObject = (request, response) => {

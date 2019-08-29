@@ -127,6 +127,8 @@ const en =  {
     LOCATION_DESCRIPTION: 'location description',
     LAST_LOCATION: 'last location',
     RESIDENCE_TIME: 'residence time',
+    RECEIVE_TIME: 'receive time',
+    ALERT_TIME: 'alert time',
 
     /** User Setting */
     USERNAME: 'username',

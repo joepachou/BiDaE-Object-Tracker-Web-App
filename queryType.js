@@ -74,13 +74,9 @@ const query_getGatewayTable =
 	ORDER BY last_report_timestamp DESC`;
 
 const query_getGeofenceData = 
-	// `
-	// SELECT * FROM geo_fence_alert 
-	// WHERE receive_time > current_timestamp - INTERVAL '7 days'
-	// order by receive_time DESC 
-	// `;
 	`
-	SELECT * FROM geo_fence_alert 
+	SELECT * 
+	FROM geo_fence_alert 
 	ORDER BY receive_time DESC 
 	LIMIT 50
 	`;

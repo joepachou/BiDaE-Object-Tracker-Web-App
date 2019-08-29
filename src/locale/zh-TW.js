@@ -127,6 +127,8 @@ const tw = {
     LAST_LOCATION: '最後所在地點',
     LOCATION_DESCRIPTION: '所在地點',
     RESIDENCE_TIME: '停留時間',
+    RECEIVE_TIME: '收到時間',
+    ALERT_TIME: '警告時間',
 
     /** User Setting */
     USERNAME: '使用者名稱',
