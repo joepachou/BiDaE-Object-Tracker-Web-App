@@ -36,7 +36,10 @@ const SearchResultListGroup = ({
     const locale = React.useContext(LocaleContext);
 
     return (
-        <ListGroup onSelect={handleSelectResultItem} className='searchResultListGroup'>
+        <ListGroup 
+            onSelect={handleSelectResultItem} 
+            className='searchResultListGroup'
+        >
             {data.map((item,index) => {
                 let element = 
                     <ListGroup.Item 
@@ -58,7 +61,7 @@ const SearchResultListGroup = ({
                             <Col xs={11} sm={11} lg={11} className='text-left'>
                                 {item.type},
                                 &nbsp;
-                                {locale.texts.LAST_FOUR_DIGIT_OF_ACN}: {item.last_four_acn},
+                                {locale.texts.LAST_FOUR_DIGITS_IN_ACN}: {item.last_four_acn},
                                 &nbsp;
                                 {locale.abbr === 'en'
                                     ? `${locale.texts.IS} ${locale.texts[item.status.toUpperCase()]}`

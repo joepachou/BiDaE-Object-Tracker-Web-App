@@ -54,7 +54,7 @@ const tw = {
     ACN: '財產編號',
     LOCATION: '地點',
     RSSI_THRESHOLD: 'RSSI設定',
-    LAST_FOUR_DIGIT_OF_ACN: '產編後四碼',
+    LAST_FOUR_DIGITS_IN_ACN: '產編後四碼',
     SELECT_LOCATION: '選擇地點',
     ADD_DEVICE: '增加儀器',
     ADD_NOTE: '增加註記',
