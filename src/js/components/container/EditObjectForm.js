@@ -178,13 +178,11 @@ class EditObjectForm extends React.Component {
                                     <Field name="name" type="text" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} placeholder=''/>
                                     <ErrorMessage name="name" component="div" className="invalid-feedback" />
                                 </div>
-                                <br/>
                                 <div className="form-group">
                                     <label htmlFor="type">{locale.TYPE}*</label>
                                     <Field name="type" type="text" className={'form-control' + (errors.type && touched.type ? ' is-invalid' : '')} placeholder=''/>
                                     <ErrorMessage name="type" component="div" className="invalid-feedback" />
                                 </div>
-                                <br/>
                                 <div className="form-group">
                                     <label htmlFor="access_control_number" className='text-uppercase'>{locale.ACN}*</label>
                                     <Field 
@@ -195,7 +193,6 @@ class EditObjectForm extends React.Component {
                                     />
                                     <ErrorMessage name="access_control_number" component="div" className="invalid-feedback" />
                                 </div>
-                                <br/>
                                 <div className="form-group">
                                     <label htmlFor="mac_address">{locale.MAC_ADDRESS}*</label>
                                     <Field 

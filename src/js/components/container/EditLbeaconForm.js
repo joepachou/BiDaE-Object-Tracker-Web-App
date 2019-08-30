@@ -223,7 +223,6 @@ class EditLbeaconForm extends React.Component {
                                         <ErrorMessage name="low" component="div" className="invalid-feedback" />                                    
                                     </Col>
                                 </Row>
-                                <br/>
                                 <Row className="form-group">
                                     {/* <label htmlFor="username">Username</label> */}
                                     <Col {...colProps.titleCol}className='d-flex align-items-center'>
@@ -234,7 +233,6 @@ class EditLbeaconForm extends React.Component {
                                         <ErrorMessage name="med" component="div" className="invalid-feedback" />                                    
                                     </Col>
                                 </Row>
-                                <br/>
                                 <Row className="form-group">
                                     {/* <label htmlFor="username">Username</label> */}
                                     <Col {...colProps.titleCol} className='d-flex align-items-center'>
@@ -245,7 +243,6 @@ class EditLbeaconForm extends React.Component {
                                         <ErrorMessage name="high" component="div" className="invalid-feedback" />                                    
                                     </Col>
                                 </Row>
-                                <br/>
                                 <Modal.Footer>
                                     <Button 
                                         variant="outline-secondary" 
