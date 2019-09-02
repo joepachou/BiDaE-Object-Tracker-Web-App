@@ -161,6 +161,11 @@ const trackingTableColumn = [
         width: 60,
     },
     {
+        Header: 'Mac Address',
+        accessor: 'mac_address',
+        maxWidth: 150,
+    },
+    {
         Header: 'Name',
         accessor: 'name',
         width: 100
@@ -173,7 +178,7 @@ const trackingTableColumn = [
     {
         Header: 'Access Control Number',
         accessor: 'access_control_number',
-        width: 200
+        maxWidth: 180
     },
     {
         Header: 'Status',
