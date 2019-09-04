@@ -123,6 +123,7 @@ export default class MyDeviceManager extends React.Component{
             axios.post(dataSrc.getUserInfo, {
                 username: 'joechou'
             }).then((res) => {
+                console.log(res)
                 var myDeviceList = res.data.rows[0].mydevice
                 var allDeviceList = Object.keys(dataMap)
 
@@ -141,8 +142,9 @@ export default class MyDeviceManager extends React.Component{
 
                 this.APIforAddableList_1.setList(myDevices)
                 this.APIforAddableList_2.setList(notMyDevices)
-
-            }).catch()
+            }).catch(err => {
+                console.log(err)
+            })
         })
         .catch(function (error) {
             console.log(error);
