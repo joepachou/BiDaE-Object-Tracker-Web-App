@@ -91,7 +91,7 @@ const getTrackingData = (request, response) => {
             response.status(200).json(res)
 
         }).catch(err => {
-            console.log("Get trackingData fails : " + err)
+            console.log("Get trackingData fails: \n" + err)
         })
 }
 
@@ -206,7 +206,7 @@ const editObjectPackage = (request, response) => {
 }
 
 const signin = (request, response) => {
-    const username = request.body.username
+    const username = request.body.username.toLowerCase()
     const pwd = request.body.password
 
     pool.query(queryType.query_signin(username), (error, results) => {
@@ -259,7 +259,7 @@ const signup = (request, response) => {
     const hash = bcrypt.hashSync(password, saltRounds);
 
     const signupPackage = {
-        username: username,
+        username: username.toLowerCase(),
         password: hash,
     }
 

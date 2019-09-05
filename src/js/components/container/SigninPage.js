@@ -5,6 +5,8 @@ import * as Yup from 'yup';
 import config from '../../config';
 import LocaleContext from '../../context/LocaleContext'
 import { authenticationService } from '../../authenticationService';
+import { signin } from '../../dataSrc'
+import axios from 'axios';
 
 class SigninPage extends React.Component {
 
@@ -68,18 +70,21 @@ class SigninPage extends React.Component {
                         })}
 
                         onSubmit={({ username, password }, { setStatus, setSubmitting }) => {
-                            authenticationService.signin(username, password)
-                                .then(res => {
-                                    if (!res.data.authentication) {  
-                                        setStatus(res.data.message)
-                                        setSubmitting(false)
-                                    } else {
-                                        this.props.signin(res.data.userInfo)
-                                        this.props.handleSigninFormSubmit()
-                                    }
-                                }).catch(error => {
-                                    console.log(error)
-                                })
+                            axios.post(signin, {
+                                username,
+                                password
+                            })
+                            .then(res => {
+                                if (!res.data.authentication) {  
+                                    setStatus(res.data.message)
+                                    setSubmitting(false)
+                                } else {
+                                    this.props.signin(res.data.userInfo)
+                                    this.props.handleSigninFormSubmit()
+                                }
+                            }).catch(error => {
+                                console.log(error)
+                            })
 
                         }}
 
