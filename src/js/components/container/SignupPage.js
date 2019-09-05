@@ -39,7 +39,7 @@ class SignupPage extends React.Component {
         const { show } = this.state;
         const locale = this.context;
         return (
-            <Modal show={show} size="md" onHide={this.handleClose}>
+            <Modal show={show} size="sm" onHide={this.handleClose}>
                 <Modal.Body>
                     <Row className='d-flex justify-content-center'>
                         <Image src={config.image.logo} rounded width={72} height={72} ></Image>
@@ -104,7 +104,6 @@ class SignupPage extends React.Component {
                                     />
                                     <ErrorMessage name="username" component="div" className="invalid-feedback" />
                                 </div>
-                                <br/>
                                 <div className="form-group">
                                     {/* <label htmlFor="password">Password</label> */}
                                     <Field 
@@ -115,7 +114,6 @@ class SignupPage extends React.Component {
                                     />
                                     <ErrorMessage name="password" component="div" className="invalid-feedback" />
                                 </div>
-                                <br/>
                                 <div className="form-group pb-1">
                                     <button 
                                         type="submit" 
