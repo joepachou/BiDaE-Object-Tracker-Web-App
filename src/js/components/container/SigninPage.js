@@ -7,6 +7,8 @@ import LocaleContext from '../../context/LocaleContext'
 import { authenticationService } from '../../authenticationService';
 import { signin } from '../../dataSrc'
 import axios from 'axios';
+import RadioButtonGroup from './RadioButtonGroup';
+import RadioButton from '../presentational/RadioButton'
 
 class SigninPage extends React.Component {
 
@@ -49,8 +51,8 @@ class SigninPage extends React.Component {
         const locale = this.context;
 
         return (
-            <Modal show={show} size="md" onHide={this.handleClose}>
-                <Modal.Body>
+            <Modal show={show} size="sm" onHide={this.handleClose}>
+                <Modal.Body className='text-capitalize'>
                     <Row className='d-flex justify-content-center'>
                         <Image src={config.image.logo} rounded width={72} height={72} ></Image>
                     </Row>
@@ -60,7 +62,8 @@ class SigninPage extends React.Component {
                     <Formik
                         initialValues = {{
                             username: '',
-                            password: ''
+                            password: '',
+                            radioGroup: config.shiftOption[0]
                         }}
 
                         validationSchema = {
@@ -69,10 +72,11 @@ class SigninPage extends React.Component {
                             password: Yup.string().required(locale.texts.PASSWORD_IS_REQUIRED)
                         })}
 
-                        onSubmit={({ username, password }, { setStatus, setSubmitting }) => {
+                        onSubmit={({ username, password, radioGroup }, { setStatus, setSubmitting }) => {
                             axios.post(signin, {
                                 username,
-                                password
+                                password,
+                                shift: radioGroup, 
                             })
                             .then(res => {
                                 if (!res.data.authentication) {  
@@ -85,12 +89,11 @@ class SigninPage extends React.Component {
                             }).catch(error => {
                                 console.log(error)
                             })
-
                         }}
 
-                        render={({ errors, status, touched, isSubmitting }) => (
+                        render={({ values, errors, status, touched, isSubmitting }) => (
                             <Form>
-                                <div className="form-group">
+                                <div className="form-group text-capitalize">
                                     {/* <label htmlFor="username">Username</label> */}
                                     <Field 
                                         name="username" 
@@ -101,8 +104,7 @@ class SigninPage extends React.Component {
                                     />
                                     <ErrorMessage name="username" component="div" className="invalid-feedback" />
                                 </div>
-                                <br/>
-                                <div className="form-group">
+                                <div className="form-group text-capitalize">
                                     {/* <label htmlFor="password">Password</label> */}
                                     <Field 
                                         name="password" 
@@ -112,8 +114,27 @@ class SigninPage extends React.Component {
                                     />
                                     <ErrorMessage name="password" component="div" className="invalid-feedback" />
                                 </div>
-                                <br/>
-                                <div className="form-group py-1">
+                                <RadioButtonGroup
+                                    id="radioGroup"
+                                    label={locale.texts.SHIFT}
+                                    value={values.radioGroup}
+                                    error={errors.radioGroup}
+                                    touched={touched.radioGroup}
+                                >
+                                    {config.shiftOption.map((opt, index) => {
+                                        return (                                    
+                                            <Field
+                                                component={RadioButton}
+                                                key={index}
+                                                name="radioGroup"
+                                                id={opt}
+                                                label={locale.texts[opt.toUpperCase().replace(/ /g, '_')]}
+                                            />
+                                        )
+                                    })}
+
+                                </RadioButtonGroup>
+                                <div className="form-group pt-2">
                                     <button 
                                         type="submit" 
                                         className="btn btn-primary btn-block text-capitalize"  
@@ -125,7 +146,7 @@ class SigninPage extends React.Component {
                                 {status &&
                                     <div className={'alert alert-danger'}>{status}</div>
                                 }
-                                <div className='d-flex justify-content-center py-2'>
+                                <div className='d-flex justify-content-center'>
                                     <button 
                                         type='button' 
                                         className='btn btn-link text-capitalize' 
