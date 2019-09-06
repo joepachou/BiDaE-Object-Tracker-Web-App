@@ -276,6 +276,7 @@ const signup = (request, response) => {
             pool.query(queryType.query_insertUserRole(username, role))
                 .then(res => {
                     console.log('Sign up Success')
+                    response.status(200).json(res)
                 })
                 .catch(err => {
                     console.log(err)
@@ -426,7 +427,6 @@ const getPDFInfo = (request, response) => {
 
 const validateUsername = (request, response) => {
     let { username } = request.body
-    console.log(username)
     pool.query(queryType.query_validateUsername(username))
         .then(res => {
             let precheck = false

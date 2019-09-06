@@ -74,9 +74,10 @@ class AddUserForm extends React.Component {
                                                 'username', 
                                                 locale.texts.THE_USERNAME_IS_ALREADY_TAKEN,
                                                 value => {
+                                                    value = value.toLowerCase()
                                                     return new Promise((resolve, reject) => {
                                                         axios.post(dataSrc.validateUsername, {
-                                                            username: value.toLowerCase()
+                                                            username: value
                                                         })
                                                         .then(res => {
                                                             resolve(res.data.precheck)

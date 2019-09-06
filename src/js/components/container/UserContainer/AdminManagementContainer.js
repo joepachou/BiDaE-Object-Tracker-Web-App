@@ -17,6 +17,7 @@ import RemoveUserConfirmForm from './RemoveUserConfirmForm'
 import { userInfoTableColumn } from '../../../tables'
 import AddUserForm from '../AddUserForm';
 const Fragment = React.Fragment;
+
 class AdminManagementContainer extends React.Component{
     state = {
            data: [],
@@ -52,12 +53,12 @@ class AdminManagementContainer extends React.Component{
         axios.post(dataSrc.getUserList,{
             locale: locale.abbr 
         }).then(res => {
-            console.log(res.data.rows)
             let columns = _.cloneDeep(userInfoTableColumn)
             columns.map((field, index) => {
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
                 field.headerStyle = {
                     textAlign: 'left',
+                    textTransform: 'capitalize'
                 }
             })
             res.data.rows.map((item, index) => {
@@ -182,50 +183,50 @@ class AdminManagementContainer extends React.Component{
         const locale = this.context
         return (
             <Fragment>
-                    <ButtonToolbar>
-                        <Button 
-                            variant="outline-primary" 
-                            className='mb-1 text-capitalize'
-                            onClick={this.addUser}    
-                        >
-                            {locale.texts.ADD_USER}
-                        </Button>
-                    </ButtonToolbar>
-                    <ReactTable 
-                        data = {this.state.data} 
-                        columns = {this.state.columns} 
-                        noDataText="No Data Available"
-                        className="-highlight"
-                        style={{height:'75vh'}}
-                        getTrProps={(state, rowInfo, column, instance) => {
-                            return {
-                                onClick: (e, handleOriginal) => {
-                                    this.onClickUser(rowInfo.index)
-                                }
+                <ButtonToolbar>
+                    <Button 
+                        variant="outline-primary" 
+                        className='mb-1 text-capitalize'
+                        onClick={this.addUser}    
+                    >
+                        {locale.texts.ADD_USER}
+                    </Button>
+                </ButtonToolbar>
+                <ReactTable 
+                    data = {this.state.data} 
+                    columns = {this.state.columns} 
+                    noDataText="No Data Available"
+                    className="-highlight"
+                    style={{height:'75vh'}}
+                    getTrProps={(state, rowInfo, column, instance) => {
+                        return {
+                            onClick: (e, handleOriginal) => {
+                                this.onClickUser(rowInfo.index)
                             }
-                        }}
-                    />
-                    <ModifyUserInfo
-                        roleName = {this.state.roleName}
-                        show = {this.state.showModifyUserInfo}
-                        user = {this.state.selectedUser}
-                        userRole = {this.state.userRole}
-                        onClose = {this.onCloseModifyUserInfo}
-                        onSubmit = {this.onSubmitModifyUserInfo}
-                        removeUser={this.submitRemoveUserConfirm}
-                    />
-                    <AddUserForm
-                        roleName={this.state.roleName}
-                        show={this.state.showAddUserForm}
-                        onClose={this.onCloseAddUserForm}
-                        title={'add user'}
-                    />
-                    {/* <RemoveUserConfirmForm 
-                        show = {this.state.showRemoveUserConfirm}
-                        user = {this.state.removeCandidate}
-                        onSubmit = {this.submitRemoveUserConfirm}
-                        onClose = {this.closeRemoveUserConfirm}
-                    /> */}
+                        }
+                    }}
+                />
+                <ModifyUserInfo
+                    roleName = {this.state.roleName}
+                    show = {this.state.showModifyUserInfo}
+                    user = {this.state.selectedUser}
+                    userRole = {this.state.userRole}
+                    onClose = {this.onCloseModifyUserInfo}
+                    onSubmit = {this.onSubmitModifyUserInfo}
+                    removeUser={this.submitRemoveUserConfirm}
+                />
+                <AddUserForm
+                    roleName={this.state.roleName}
+                    show={this.state.showAddUserForm}
+                    onClose={this.onCloseAddUserForm}
+                    title={'add user'}
+                />
+                {/* <RemoveUserConfirmForm 
+                    show = {this.state.showRemoveUserConfirm}
+                    user = {this.state.removeCandidate}
+                    onSubmit = {this.submitRemoveUserConfirm}
+                    onClose = {this.closeRemoveUserConfirm}
+                /> */}
             </Fragment>
         )
     }

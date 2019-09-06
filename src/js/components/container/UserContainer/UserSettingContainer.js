@@ -56,10 +56,10 @@ class UserSettingContainer extends React.Component{
             }
         }
         return (
-            <Container fluid className='mt-5 text-capitalize' >
+            <Container fluid className='mt-5' >
                 <Row className='' noGutters>
                     <Col lg={2} style={style.sideNav}>
-                        <ListGroup variant="flush" className="border-0">
+                        <ListGroup variant="flush" className="border-0 text-capitalize">
                             <ListGroup.Item className="border-0 h5 pt-0">{locale.texts.USER_SETTING}</ListGroup.Item>
                             {this.pageList.map((page, index) => {
                                 return(
@@ -90,7 +90,9 @@ class UserSettingContainer extends React.Component{
                                     renderNoAccess={() => null}
                                 >
                                     <div className='mb-5' key={index} id={page.name.replace(/ /g, '')}>   
-                                        <h5>{locale.texts[page.name.toUpperCase().replace(/ /g, '_')]}</h5>
+                                        <h5 className='text-capitalize'>
+                                            {locale.texts[page.name.toUpperCase().replace(/ /g, '_')]}
+                                        </h5>
                                         <hr/>
                                         <Row className="w-100d-flex bg-white py-1">
                                             <Col>

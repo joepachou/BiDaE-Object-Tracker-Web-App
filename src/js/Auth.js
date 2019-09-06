@@ -27,7 +27,6 @@ class Auth extends React.Component {
         Cookies.remove('authenticated')
         Cookies.remove('user')
         window.location = '/'
-
         this.setState({
             authenticated: false,
             user: {
