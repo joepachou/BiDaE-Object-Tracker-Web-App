@@ -6,7 +6,7 @@ html,body {
     font-family: 'Noto Sans TC', sans-serif; /* "Roboto", "Helvetica", "Arial", sans-serif; /* 
     /* font-size: 1.8vh; */
     /* font-size: 18px; */
-    position: fixed;
+    /* position: fixed; */
     width: 100%;
     overscroll-behavior: auto;
     background: white;
@@ -61,10 +61,11 @@ a:hover {
 
 .list-group-item:active {
     border: none;
+    background-color: white;
 }
 
 .list-group-item.active {
-    background: rgba(227, 222, 222, 0.62);
+    background: white;
     color: black;
     border: rgba(227, 222, 222, 0.62);
 }
@@ -76,6 +77,10 @@ a:hover {
 .list-group-item.action {
     /* font-weight: 700 */
 }
+.list-group-item-action:focus, 
+.list-group-item-action:hover {
+    background-color: white;
+}
 
 
 
@@ -84,10 +89,6 @@ a:hover {
 .lang-select.dropdown-item.active {
     background-color:  rgba(179, 177, 177, 0.317);
     color: black;
-}
-
-.modal-backdrop.show {
-    opacity: .4;
 }
 
 .navbar-light .navbar-nav .nav-link {
@@ -202,7 +203,7 @@ a:hover {
 }
 
 .btn-outline-secondary {
-    border-color: rgb(224, 224, 224);
+    border: none;
     font-weight: 500;
 }
 
@@ -215,13 +216,35 @@ a:hover {
     background-color: white;
     border-color: rgb(224, 224, 224);
     color: rgb(0, 0, 0, 0.6);
-    border-color: rgb(0, 0, 0, 0.5);
 }
 
 .btn-outline-secondary:not(:disabled):not(.disabled):active {
     color: rgb(0, 0, 0, 0.6);
     background-color: white;
     border-color: rgb(0, 0, 0, 0.5);
+}
+
+.btn-outline-danger {
+    border: none;
+    border-color: rgb(220, 53, 69, 0.8);
+    color: rgb(220, 53, 69, 0.8);
+}
+
+.btn-outline-danger:hover {
+    background-color: white;
+    border-color: rgb(220, 53, 69);
+    color: rgb(220, 53, 69);
+}
+
+.btn-outline-danger:not(:disabled):not(.disabled):active {
+    color: rgb(220, 53, 69);
+    background-color: white;
+    border-color: rgb(220, 53, 69);
+}
+
+.btn-outline-danger:not(:disabled):not(.disabled):active:focus, 
+.show >.btn-outline-danger.dropdown-toggle:focus {
+    box-shadow: none;
 }
 
 .btn {
@@ -308,3 +331,8 @@ a:hover {
 .container-fluid {
     width: 80%
 }
+
+/** React Bootstrap Modal */
+.modal-body {
+    padding-bottom: 0
+} 
