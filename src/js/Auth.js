@@ -26,6 +26,8 @@ class Auth extends React.Component {
     signout = () => {
         Cookies.remove('authenticated')
         Cookies.remove('user')
+        window.location = '/'
+
         this.setState({
             authenticated: false,
             user: {
@@ -33,7 +35,6 @@ class Auth extends React.Component {
             },
             accessToken: ""
         });
-
     };
 
     async signup (username, password) {
