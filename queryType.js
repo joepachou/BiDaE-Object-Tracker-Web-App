@@ -283,9 +283,17 @@ function query_modifyUserDevices(username, mode, acn){
 	console.log(acn)
 	var text = ""
 	if(mode === 'add'){
-		text = `UPDATE user_table SET mydevice = array_append(mydevice, '${acn}') WHERE name = '${username}';`
+		text = `
+			UPDATE user_table 
+			SET mydevice = array_append(mydevice, '${acn}') 
+			WHERE name = '${username}';
+		`
 	}else if(mode === 'remove'){
-		text = `UPDATE user_table SET mydevice = array_remove(mydevice, '${acn}') WHERE name = '${username}';`
+		text = `
+			UPDATE user_table 
+			SET mydevice = array_remove(mydevice, '${acn}') 
+			WHERE name = '${username}';
+		`	
 	}else{
 		text = ""
 	}
@@ -295,7 +303,17 @@ function query_modifyUserDevices(username, mode, acn){
 }
 
 function query_getShiftChangeRecord(){
-	const query = `SELECT * FROM shift_change_record`
+	const query = `
+		SELECT 
+			shift_change_record.id,
+			shift_change_record.file_path,
+			shift_change_record.submit_timestamp,
+			user_table.name as user_name
+		FROM shift_change_record
+		
+		LEFT JOIN user_table
+		ON user_table.id = shift_change_record.user_id
+	`
 	return query
 }
 
@@ -319,6 +337,75 @@ const query_validateUsername = (username) => {
 	return query
 }
 
+const query_getUserList = () => {
+	const query = `
+		SELECT 
+			a.*, 
+			b.name AS role_type 
+		FROM user_table a 
+		INNER JOIN (
+			SELECT * 
+			FROM user_roles a 
+			INNER JOIN roles b ON a.role_id=b.id
+		) b 
+		ON a.id = b.user_id`
+	return query
+}
+
+const query_getUserRole = (username) => {
+	const query = `select name      from roles      where 
+		id=(       select role_id   from user_roles where 
+		user_id=(  select id        from user_table where name='${username}'));`
+	return query
+}
+
+const query_getRoleNameList = () => {
+	const query = `
+		select name from roles;
+	`
+	return query
+}
+
+const query_removeUser = (username) => {
+	const query = `delete from user_roles where user_id=(select id from user_table where name='${username}'); delete from user_table where name = '${username}';`
+	return query
+}
+
+const query_setUserRole = (role, username) => {
+	const query = `update user_roles
+					set role_id=(select id from roles where name='${role}')
+					where user_roles.user_id = (select id from user_table where name='${username}');
+	`
+	return query
+}
+
+const query_getEditObjectRecord = () => {
+	const query = `
+		SELECT
+			user_table.name,
+			edit_object_record.id,
+			edit_object_record.edit_time,
+			edit_object_record.notes
+		FROM edit_object_record
+
+		LEFT JOIN user_table
+		ON user_table.id = edit_object_record.edit_user_id
+
+		ORDER BY edit_object_record.edit_time DESC
+
+	`
+	return query
+}
+
+const query_setShift = (shift, username) => {
+	const query = `
+		update user_table
+		set shift='${shift}'
+		where name='${username}'
+	`
+	return query
+}
+
 module.exports = {
     query_getTrackingData,
     query_getObjectTable,
@@ -336,4 +423,11 @@ module.exports = {
 	query_modifyUserDevices,
 	query_getShiftChangeRecord,
 	query_validateUsername,
+	query_getUserList,
+	query_getUserRole,
+	query_getRoleNameList,
+	query_removeUser,
+	query_setUserRole,
+	query_getEditObjectRecord,
+	query_setShift
 }

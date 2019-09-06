@@ -56,9 +56,9 @@ const getTrackingData = (request, response) => {
                 item.residence_time =  item.found 
                     ? moment(item.last_seen_timestamp).locale(locale).from(moment(item.first_seen_timestamp)) 
                     : item.last_seen_timestamp 
-                        ? moment(item.last_seen_timestamp).local(locale).fromNow()
+                        ? moment(item.last_seen_timestamp).locale(locale).fromNow()
                         : 'N/A'
-    
+
                 /** Tag the object that is violate geofence */
                 if (moment().diff(item.geofence_violation_timestamp, 'seconds') > 300
                     || moment(item.first_seen_timestamp).diff(moment(item.geofence_violation_timestamp)) > 0) {
@@ -207,7 +207,8 @@ const editObjectPackage = (request, response) => {
 
 const signin = (request, response) => {
     const username = request.body.username.toLowerCase()
-    const pwd = request.body.password
+    const { password, shift } = request.body
+    
 
     pool.query(queryType.query_signin(username), (error, results) => {
         if (error) {
@@ -219,9 +220,8 @@ const signin = (request, response) => {
                     message: "Username or password is incorrect"
                 })
             } else {
-
                 const hash = results.rows[0].password
-                if (bcrypt.compareSync(pwd, hash)) {
+                if (bcrypt.compareSync(password, hash)) {
                     let userInfo = {}
                     let { 
                         name, 
@@ -239,6 +239,7 @@ const signin = (request, response) => {
                         authentication: true,
                         userInfo
                     })
+                    pool.query(queryType.query_setShift(shift, username))
                 } else {
                     response.json({
                         authentication: false,
@@ -410,15 +411,18 @@ const modifyUserDevices = (request, response) => {
 }
 
 const getPDFInfo = (request, response) => {
-    var query = queryType.query_getShiftChangeRecord()
-    pool.query(query, (error, results) => {
-        if (error) {
-            console.log('save pdf file fails ' + error)
-        } else {
-            response.status(200).json(results)
+    let { locale } = request.body
+    pool.query(queryType.query_getShiftChangeRecord())
+        .then(res => {
             console.log('save pdf file success')
-        }
-    })   
+            res.rows.map(item => {
+                item.submit_timestamp = moment(momentTZ(item.submit_timestamp).tz(process.env.TZ).locale(locale)).format('LLL');
+            })
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(err)
+        })
 }
 
 const validateUsername = (request, response) => {
@@ -428,6 +432,78 @@ const validateUsername = (request, response) => {
             let precheck = false
             res.rowCount === 0 ? precheck = true : precheck = false;
             response.status(200).json({precheck})
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+const getUserList = (request, response) => {
+    pool.query(queryType.query_getUserList())
+        .then(res => {
+            console.log('get user list success')
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(`get user list fail ${err}`)
+        })
+}
+
+const getUserRole = (request, response) => {
+    var { username } = request.body
+    pool.query(queryType.query_getUserRole(username))
+        .then(res => {
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(`get user role fail ${err}`)
+        })
+}
+
+const getRoleNameList = (request, response) => {
+    pool.query(queryType.query_getRoleNameList())
+        .then(res => {
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    
+}
+
+const removeUser = (request, response) => {
+    var username = request.body.username
+    pool.query(queryType.query_removeUser(username), (error, results) => {
+        if(error){
+            console.log(error)
+        }else{
+            console.log('success')
+            response.send('success')
+        }
+    })  
+}
+
+const setUserRole = (request, response) => {
+    var {role, username} = request.body
+    pool.query(queryType.query_setUserRole(role, username),(error, results) => {
+        if(error){
+            console.log(error)
+        }else{
+            // console.log(results.rows)
+            response.send('success')
+        }
+    }
+)}
+const getEditObjectRecord = (request, response) => {
+    const { locale } = request.body
+    pool.query(queryType.query_getEditObjectRecord())
+        .then(res => {
+            console.log('get edit object record')
+
+            res.rows.map(item => {
+                item.edit_time = moment(momentTZ(item.edit_time).tz(process.env.TZ).locale(locale)).format('LLL');
+            })
+            response.status(200).json(res)
         })
         .catch(err => {
             console.log(err)
@@ -452,4 +528,10 @@ module.exports = {
     modifyUserDevices,
     getPDFInfo,
     validateUsername,
+    getUserList,
+    getUserRole,
+    getRoleNameList,
+    removeUser,
+    setUserRole,
+    getEditObjectRecord
 }

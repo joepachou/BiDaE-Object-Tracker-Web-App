@@ -63,7 +63,6 @@ class SigninPage extends React.Component {
                         initialValues = {{
                             username: '',
                             password: '',
-                            radioGroup: config.shiftOption[0]
                         }}
 
                         validationSchema = {
@@ -114,9 +113,10 @@ class SigninPage extends React.Component {
                                     />
                                     <ErrorMessage name="password" component="div" className="invalid-feedback" />
                                 </div>
+                                <hr/>
                                 <RadioButtonGroup
                                     id="radioGroup"
-                                    label={locale.texts.SHIFT}
+                                    label={locale.texts.SHIFT_SELECT}
                                     value={values.radioGroup}
                                     error={errors.radioGroup}
                                     touched={touched.radioGroup}

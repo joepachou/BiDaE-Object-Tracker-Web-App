@@ -174,6 +174,11 @@ const config = {
         1: 'geofence',
         2: 'schedule geofence'
     },
+
+    shiftOption: [
+        'day shift',
+        'night shift',
+    ],
 }
 
 export default config
