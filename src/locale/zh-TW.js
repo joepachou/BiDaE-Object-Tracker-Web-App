@@ -43,6 +43,8 @@ const tw = {
     DEVICES: '儀器',
     DEVICE: '儀器',
     DOWNLOAD: '下載',
+    DELETE: '刪除',
+
 
     /* Form Field */
     NAME: '名稱',
@@ -60,6 +62,11 @@ const tw = {
     ADD_NOTE: '增加註記',
     HIDE_NOTE: '隱藏註記',
     DELAY_BY: 'delay by',
+    SHIFT: '班別',
+    DAY_SHIFT: '早班',
+    NIGHT_SHIFT: '晚班',
+    SHIFT_SELECT: '選擇班別',
+
 
     /** Error Message */
     NAME_IS_REQUIRED: '請填入名字',
@@ -80,6 +87,7 @@ const tw = {
     REPORT_DEVICE_STATUS: '回報儀器狀態',
     THANK_YOU_FOR_REPORTING: '謝謝您的回報',
     PRINT_SEARCH_RESULT: '下載搜尋結果',
+    EDIT_USER: '編輯使用者',
 
     /* Object Status */
     STATUS: '狀態',
@@ -94,21 +102,23 @@ const tw = {
     NTU_HOSPITAL_TAIPEI: '台大醫院台北總院',
 
     /** User Setting */
-    User_Setting: '帳戶設定',
-    Devices_Management: '儀器管理',
-    Shift_Record_History: '換班紀錄',
-    Edit_Object_Management: '儀器狀態更改紀錄',
+    USER_SETTING: '帳戶設定',
+    DEVICES_MANAGEMENT: '儀器管理',
+    SHIFT_CHANGE_RECORD: '換班紀錄',
+    EDIT_OBJECT_MANAGEMENT: '儀器狀態更改紀錄',
     ACCESS_RIGHT: '使用者權限',
     MY_DEVICES: '我的儀器',
     OTHER_DEVICES: '其他儀器',
-    ADMIN: 'Admin',
-    CONFIRM: 'Confirm', 
-    REMOVE_USER_CONFIRM: 'Remove User',
+    USER_MANAGER: '使用者管理',
+    ADMIN: '管理員',
+    CONFIRM: '確認', 
+    REMOVE_USER_CONFIRM: '移除使用者',
 
     /** Table Title */
     TRACKING: '物件追蹤',
 
     /** Table Field */
+    ID: 'ID',
     HEALTH_STATUS: '狀態',
     UUID: 'UUID',
     DESCRIPTION: '地點描述',
@@ -132,16 +142,33 @@ const tw = {
     RESIDENCE_TIME: '停留時間',
     RECEIVE_TIME: '收到時間',
     ALERT_TIME: '警告時間',
+    ROLES: '權限',
+    EDIT_TIME: '編輯時間',
+    NOTES: '註記',
+    NO_DATA_AVAILABE: '無資料顯示', 
+    SUBMIT_TIMESTAMP: '儲存時間',
+    USER_NAME: '人員名稱',
 
     /** User Setting */
     USERNAME: '使用者名稱',
     PASSWORD: '密碼',
 
+    /** User Roles */
+    CARE_PROVIDER: '護理人員',
+    SYSTEM_ADMIN: '系統管理員',
+
     TO: '至',
     NEAR: '鄰近',
     IS: 'is',
     WHEN: '於',
-    NOT_AVAILABLE: '無資料顯示'
+    NOT_AVAILABLE: '無資料顯示',
+
+    DEVICE_FOUND: function (length){
+        return '發現'+length.toString()+'個儀器'
+    },
+    DEVICE_NOT_FOUND: function (length){
+        return '沒發現'+length.toString()+'個儀器'
+    },
 
 }
 

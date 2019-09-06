@@ -43,6 +43,7 @@ const en =  {
     DEVICE: 'device',
     DEVICES: 'devices',
     DOWNLOAD: 'download',
+    DELETE: 'delete',
 
     /* Form Field */
     NAME: 'name',
@@ -60,6 +61,10 @@ const en =  {
     ADD_NOTE: 'add note',
     HIDE_NOTE: 'hide note',
     DELAY_BY: 'delay by',
+    SHIFT: 'shift',
+    DAY_SHIFT: 'day shift',
+    NIGHT_SHIFT: 'night shift',
+    SHIFT_SELECT: 'shift select',
 
     /** Error Message */
     NAME_IS_REQUIRED: 'Name is required',
@@ -80,6 +85,7 @@ const en =  {
     REPORT_DEVICE_STATUS: 'Report device status',
     THANK_YOU_FOR_REPORTING: 'Thank you for reporting',
     PRINT_SEARCH_RESULT: 'print search result',
+    EDIT_USER: 'edit user',
 
     /* Object Status */
     STATUS: 'status',
@@ -94,13 +100,14 @@ const en =  {
     NTU_HOSPITAL_TAIPEI: 'NTU Hospital Taipe',
 
     /** User Setting */
-    User_Setting: 'User Setting',
-    Devices_Management: 'Devices Management',
-    Shift_Record_History: 'Shift Change History',
-    Edit_Object_Management: 'Edit Object Record',
+    USER_SETTING: 'User Setting',
+    DEVICES_MANAGEMENT: 'Devices Management',
+    SHIFT_CHANGE_RECORD: 'Shift change record',
+    EDIT_OBJECT_MANAGEMENT: 'Edit Object Record',
     ACCESS_RIGHT: 'Access Right',
     MY_DEVICES: 'My Devices',
     OTHER_DEVICES: 'Other Devices',
+    USER_MANAGER: 'user manager',
     ADMIN: 'Admin',
     CONFIRM: 'Confirm', 
     REMOVE_USER_CONFIRM: 'Remove User',
@@ -109,6 +116,7 @@ const en =  {
     TRACKING: 'tracking',
 
     /** Table Field */
+    ID: 'ID',
     HEALTH_STATUS: 'status',
     UUID: 'UUID',
     DESCRIPTION: 'description',
@@ -132,16 +140,33 @@ const en =  {
     RESIDENCE_TIME: 'residence time',
     RECEIVE_TIME: 'receive time',
     ALERT_TIME: 'alert time',
+    ROLES: 'role type',
+    EDIT_TIME: 'edit time',
+    NOTES: 'notes', 
+    NO_DATA_AVAILABE: 'no data available',
+    SUBMIT_TIMESTAMP: 'submit time',
+    USER_NAME: 'user name',
 
     /** User Setting */
     USERNAME: 'username',
     PASSWORD: 'password',
 
+    /** User Roles */
+    CARE_PROVIDER: 'care provider',
+    SYSTEM_ADMIN: 'system admin',
+
     TO: 'to',
     NEAR: 'near',
     IS: 'is',
     WHEN: 'when',
-    NOT_AVAILABLE: 'N/A'
+    NOT_AVAILABLE: 'N/A',
+
+    DEVICE_FOUND: function (length){
+        return length.toString()+' devices are found'
+    },
+    DEVICE_NOT_FOUND: function (length){
+        return length.toString()+' devices are not found'
+    },
 
 }
 
