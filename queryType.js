@@ -308,6 +308,7 @@ function query_getShiftChangeRecord(){
 			shift_change_record.id,
 			shift_change_record.file_path,
 			shift_change_record.submit_timestamp,
+			shift_change_record.shift,
 			user_table.name as user_name
 		FROM shift_change_record
 		

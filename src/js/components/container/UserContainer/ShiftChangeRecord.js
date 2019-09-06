@@ -42,6 +42,12 @@ export default class ShiftChangeRecord extends React.Component{
             let columns = _.cloneDeep(shiftChangeRecordTableColumn)
             columns.map(field => {
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
+                field.headerStyle = {
+                    textAlign: 'left'
+                }
+            })
+            res.data.rows.map(item => {
+                item.shift = item.shift && locale.texts[item.shift.toUpperCase().replace(/ /g, '_')]
             })
             // this.API.setShiftChangeRecord(res.data.rows)
             this.setState({
@@ -51,15 +57,18 @@ export default class ShiftChangeRecord extends React.Component{
         })
     }
 
-    onClickFile(e){
-        var file_path = e.target.getAttribute('name')
-        var path = dataSrc.IP + '/' + file_path
-        console.log(path)
-        // window.open(path);
-    }
+    // itemLayout(item, index, name){
+    //     return <div name={name}>{index + 1} . {item.user_id}, Checked at {moment(item.submit_timestamp).format('LLLL')}</div> 
+    // }
 
-    itemLayout(item, index, name){
-        return <div name={name}>{index + 1} . {item.user_id}, Checked at {moment(item.submit_timestamp).format('LLLL')}</div> 
+    onRowClick = (state, rowInfo, column, instance) => {
+        return {
+            onClick: e => {
+                let file_path = rowInfo.original.file_path
+                let path = `${process.env.dataSrcIP}/${file_path}`
+                window.open(path);
+            }
+        }
     }
 
     render(){
@@ -72,14 +81,6 @@ export default class ShiftChangeRecord extends React.Component{
 
         const locale = this.context
 
-        const onRowClick = (state, rowInfo, column, instance) => {
-            return {
-                onClick: e => {
-                    this.onClickFile(e)
-                }
-            }
-        }
-
         return (
             <ReactTable 
                 data={this.state.data} 
@@ -87,7 +88,7 @@ export default class ShiftChangeRecord extends React.Component{
                 noDataText={locale.texts.NO_DATA_AVALIABLE}
                 className="-highlight w-100"
                 style={{height:'75vh'}}
-                getTrProps={onRowClick}
+                getTrProps={this.onRowClick}
             />
             // <ListGroup className="w-100 border-0">
             //     {this.state.record.map((record, index)=>{
