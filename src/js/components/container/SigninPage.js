@@ -63,6 +63,7 @@ class SigninPage extends React.Component {
                         initialValues = {{
                             username: '',
                             password: '',
+                            radioGroup: ''
                         }}
 
                         validationSchema = {
