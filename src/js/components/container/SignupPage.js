@@ -63,7 +63,7 @@ class SignupPage extends React.Component {
                                         value => {
                                             return new Promise((resolve, reject) => {
                                                 axios.post(dataSrc.validateUsername, {
-                                                    username: value
+                                                    username: value.toLowerCase()
                                                 })
                                                 .then(res => {
                                                     resolve(res.data.precheck)
