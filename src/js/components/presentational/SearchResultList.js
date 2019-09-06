@@ -213,7 +213,7 @@ class SearchResult extends React.Component {
                     <h4 className='text-capitalize'>{locale.SEARCH_RESULT}</h4>
                 </Row>
                 <Row className='w-100 searchResultForMobile'>
-                    <InfoPrompt data={{devices: searchResult.length}} title={title}/>
+                    <InfoPrompt data={{[devicePlural]: searchResult.length}} title={title}/>
                 </Row>
                 <Row className='searchResultListGroup'>
                     {searchResult.length === 0 
