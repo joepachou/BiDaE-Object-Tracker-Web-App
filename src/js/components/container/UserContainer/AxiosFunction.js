@@ -137,12 +137,14 @@ const AxiosFunction = {
         })
     },
     getEditObjectRecord: (Info, callBack, Option) => {
-    	axios.post(dataSrc.getEditObjectRecord, Info).then((res) => {
-    		callBack(null, res.data)
-    	}).catch(err => {
-    		console.error(err)
-        	callBack(err, null)
-    	})
+		axios.post(dataSrc.getEditObjectRecord, Info)
+			.then(res => {
+				callBack(null, res.data)
+			})
+			.catch(err => {
+				console.error(err)
+				callBack(err, null)
+			})
     }
 }
 export default AxiosFunction

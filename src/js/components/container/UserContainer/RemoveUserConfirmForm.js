@@ -5,13 +5,11 @@ import axios from 'axios';
 import Cookies from 'js-cookie'
 import LocaleContext from '../../../context/LocaleContext';
 import dataSrc from "../../../dataSrc";
-
 import AddableList from './AddableList'
-
 
 const Fragment = React.Fragment;
 
-export default class RemoveUserConfirm extends React.Component{
+class RemoveUserConfirm extends React.Component{
 
     constructor() {
         super();
@@ -68,3 +66,5 @@ export default class RemoveUserConfirm extends React.Component{
     }
 }
 RemoveUserConfirm.contextType = LocaleContext;
+
+export default RemoveUserConfirm

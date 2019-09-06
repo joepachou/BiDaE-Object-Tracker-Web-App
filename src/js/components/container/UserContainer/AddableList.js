@@ -131,10 +131,8 @@ export default class AddableList extends React.Component{
         
         return (
             <Fragment>
-                <h4>{this.state.title}</h4>
+                <h5>{this.state.title}</h5>
                 <ListGroup  variant = "flush" style={{maxHeight: '50vh', minHeight: '50vh', overflowY: 'scroll'}}>
-                    
-
                     {this.state.itemList !== null 
                         ? 
                             (() => {
@@ -150,7 +148,7 @@ export default class AddableList extends React.Component{
                                         html = (
                                         <div className="py-1 pr-2" key = {index}>
 
-                                                <input  type="text" className="form-control h4 float-left w-75 border-0" onKeyPress={this.addListByEnter}></input>
+                                                <input  type="text" className="form-control h5 float-left w-75 border-0" onKeyPress={this.addListByEnter}></input>
 
                                                 <h4 className="float-right" name="add" onClick={this.removeItem}>x</h4>
                                         </div>      

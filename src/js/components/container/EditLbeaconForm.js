@@ -247,7 +247,6 @@ class EditLbeaconForm extends React.Component {
                                     <Button 
                                         variant="outline-secondary" 
                                         onClick={this.handleClose} 
-                                        disabled={isSubmitting}
                                         className='text-capitalize'
                                     >
                                         {locale.texts.CANCEL}

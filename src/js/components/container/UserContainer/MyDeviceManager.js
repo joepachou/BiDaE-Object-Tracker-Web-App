@@ -1,16 +1,14 @@
 import React from 'react';
 import { Col, Row } from 'react-bootstrap';
-
 import axios from 'axios';
 import Cookies from 'js-cookie'
 import dataSrc from "../../../dataSrc";
-
 import AddableList from './AddableList'
-
+import LocaleContext from '../../../context/LocaleContext';
 
 const Fragment = React.Fragment;
 
-export default class MyDeviceManager extends React.Component{
+class MyDeviceManager extends React.Component{
 
     constructor() {
         super();
@@ -75,8 +73,7 @@ export default class MyDeviceManager extends React.Component{
                 }
             },
             itemLayout: (item, index) => {
-
-                return <h3 name={index}>{item.access_control_number}:<br/>{item.name}, status is {item.status}</h3>
+                return <div name={index}>{item.access_control_number}:<br/>{item.name}, status is {item.status}</div>
             }
         }
 
@@ -110,7 +107,10 @@ export default class MyDeviceManager extends React.Component{
         this.getObjectData()
     }
     getObjectData() {
-        axios.get(dataSrc.getObjectTable).then(res => {
+        let locale = this.context
+        axios.post(dataSrc.getObjectTable, {
+            locale: locale.lang
+        }).then(res => {
 
             let data = res.data.rows
             var dataMap = {}
@@ -119,11 +119,10 @@ export default class MyDeviceManager extends React.Component{
                 dataMap[item.access_control_number] = item
             }
             this.device.dataMap = dataMap
-            // get My Device
+
             axios.post(dataSrc.getUserInfo, {
-                username: 'joechou'
+                username: JSON.parse(Cookies.get('user')).name
             }).then((res) => {
-                console.log(res)
                 var myDeviceList = res.data.rows[0].mydevice
                 var allDeviceList = Object.keys(dataMap)
 
@@ -155,23 +154,26 @@ export default class MyDeviceManager extends React.Component{
     render(){
         return (
             <Fragment>
-                <Col xl={5}>
-                    <AddableList
-                        getAPI={this.getAPIfromAddableList_1}
-                    />
-                </Col>
-                <Col xl={2} className='p-5' style={{position: 'relative', top: '15%'}}>
-
-                        <i className="fas fa-angle-double-right fa-3x p-4"></i>
-
-                        <i className="fas fa-angle-double-left fa-3x p-4"></i>
-                </Col>
-                <Col xl={5}>
-                    <AddableList
-                        getAPI={this.getAPIfromAddableList_2}
-                    />
-                </Col>
+                <Row className="w-100 d-flex bg-white">
+                    <Col xl={5}>
+                        <AddableList
+                            getAPI={this.getAPIfromAddableList_1}
+                        />
+                    </Col>
+                    <Col xl={2} className='p-5' style={{position: 'relative', top: '15%'}}>
+                            <i className="fas fa-angle-double-right fa-2x"></i>
+                            <i className="fas fa-angle-double-left fa-2x"></i>
+                    </Col>
+                    <Col xl={5}>
+                        <AddableList
+                            getAPI={this.getAPIfromAddableList_2}
+                        />
+                    </Col>
+                </Row>
             </Fragment>
         )
     }
 }
+
+MyDeviceManager.contextType = LocaleContext
+export default MyDeviceManager

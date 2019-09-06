@@ -261,7 +261,7 @@ class SearchResultTable extends React.Component {
         return(
             <div>
                 <Row className='d-flex justify-content-center' style={style.titleText}>
-                    <h4 className='text-capitalize'>{locale.SEARCH_RESULT}</h4>
+                    <h4 className='text-capitalize'>{locale.text.SEARCH_RESULT}</h4>
                 </Row>
                 <Row className='w-100 searchResultForMobile' style={style.foundResultDiv}>
                     <Alert variant='secondary' className='d-flex justify-content-start'>

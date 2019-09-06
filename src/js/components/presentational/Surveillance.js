@@ -30,49 +30,36 @@ let popupOptions = {
 
 class Surveillance extends React.Component {
 
-    constructor(props){
-        super(props)
-        this.state = {
-            lbeaconsPosition: null,
-            objectInfo: [],
-            hasErrorCircle: false,
-            hasInvisibleCircle: false,       
-        }
-        this.map = null;
-        this.markersLayer = L.layerGroup();
-        this.errorCircle = L.layerGroup();
-        this.popupContent = this.popupContent.bind(this);
-
-        this.handlemenu = this.handlemenu.bind(this);
-        this.handleObjectMarkers = this.handleObjectMarkers.bind(this);
-        this.createLbeaconMarkers = this.createLbeaconMarkers.bind(this);
-        this.handleMarkerClick = this.handleMarkerClick.bind(this);
-
-        this.resizeMarkers = this.resizeMarkers.bind(this);
-        this.calculateScale = this.calculateScale.bind(this);
-
-        this.StartSetInterval = config.surveillanceMap.startInteval; 
-        this.isShownTrackingData = !true;
+    state = {
+        lbeaconsPosition: null,
+        objectInfo: [],
+        hasErrorCircle: false,
+        hasInvisibleCircle: false,       
     }
+    map = null;
+    StartSetInterval = config.surveillanceMap.startInteval; 
+    isShownTrackingData = !true;
+    markersLayer = L.layerGroup();
+    errorCircle = L.layerGroup();
 
-    componentDidMount(){
+    componentDidMount = () => {
         this.initMap();  
         this.handleObjectMarkers();
     }
 
-    componentDidUpdate(prevProps){
+    componentDidUpdate = (prevProps) => {
         this.handleObjectMarkers();
         this.createLbeaconMarkers();
     }
 
-    shouldComponentUpdate(nextProps, nextState){
+    shouldComponentUpdate = (nextProps, nextState) => {
         let isProccessedTrackingDataChange = !(_.isEqual(this.props.proccessedTrackingData, nextProps.proccessedTrackingData))
         return this.props.shouldTrackingDataUpdate && isProccessedTrackingDataChange
     }
 
     
     /** Set the search map configuration which establishs in config.js  */
-    initMap(){
+    initMap = () => {
         let map = L.map('mapid', config.surveillanceMap.mapOptions);
         
         let bounds = config.surveillanceMap.mapBound;
@@ -85,7 +72,7 @@ class Surveillance extends React.Component {
     }
 
     /** Resize the markers and errorCircles when the view is zoomend. */
-    resizeMarkers(){
+    resizeMarkers = () => {
         this.calculateScale();
         this.markersLayer.eachLayer( marker => {
             let icon = marker.options.icon;
@@ -99,7 +86,7 @@ class Surveillance extends React.Component {
     }
 
     /** Calculate the current scale for creating markers and resizing. */
-    calculateScale() {
+    calculateScale = () => {
         this.currentZoom = this.map.getZoom();
         this.minZoom = this.map.getMinZoom();
         this.zoomDiff = this.currentZoom - this.minZoom;
@@ -110,7 +97,7 @@ class Surveillance extends React.Component {
     }
 
     /** Create the lbeacon and invisibleCircle markers */
-    createLbeaconMarkers(){
+    createLbeaconMarkers = () => {
 
         /** Creat the marker of all lbeacons onto the map  */
         let lbeaconsPosition = this.state.lbeaconsPosition !== null ? Array.from(this.state.lbeaconsPosition) :[];
@@ -145,7 +132,7 @@ class Surveillance extends React.Component {
      * It will use redux's dispatch to transfer datas, including isObjectListShown and selectObjectList
      * @param e the object content of the mouse clicking. 
      */
-    handlemenu(e){
+    handlemenu = (e) => {
 
         const { objectInfo } = this.state
         const lbeacon_coorinate = Object.values(e.target._latlng).toString();
@@ -173,13 +160,12 @@ class Surveillance extends React.Component {
      * Create the popup's event.
      * Create the error circle of markers, and add into this.markersLayer.
      */
-    handleObjectMarkers(){
+    handleObjectMarkers = () => {
         let objects = _.cloneDeep(this.props.proccessedTrackingData)        
 
         /** Clear the old markerslayers. */
         this.markersLayer.clearLayers();
         this.errorCircle .clearLayers();
-
 
         /** Mark the objects onto the map  */
         this.calculateScale();
@@ -190,7 +176,6 @@ class Surveillance extends React.Component {
             fillOpacity: 0.5,
             radius: this.scalableErrorCircleRadius,
         }
-
         const iconSize = [this.scalableIconSize, this.scalableIconSize];
         
         /** Icon options for AwesomeNumberMarkers 
@@ -255,7 +240,9 @@ class Surveillance extends React.Component {
 			} else if (item.geofence_type === config.objectStatus.PERIMETER){
                 iconOption = geofencePAweIconOptions;
 			} else if (item.searched && this.props.colorPanel) {
-                iconOption = { markerColor:item.pinColor }
+                iconOption = { 
+                    iconSize,
+                    markerColor: item.pinColor }
             } else if (item.searched) {
                 iconOption = searchedObjectAweIconOptions    
             } else if (item.status !== config.objectStatus.NORMAL) {
@@ -311,12 +298,12 @@ class Surveillance extends React.Component {
         }
     }
 
-    handleMarkerClick(e) {
+    handleMarkerClick = (e) => {
         const lbPosition =  e.target.options.icon.options.currentPosition
         this.props.getSearchKey('coordinate', null, lbPosition)
     }
 
-    collectObjectsByLatLng(lbPosition) {
+    collectObjectsByLatLng = (lbPosition) => {
         let objectList = []
         this.props.proccessedTrackingData.map(item => {
             item.currentPosition && item.currentPosition.toString() === lbPosition.toString() ? objectList.push(item) : null;
@@ -329,7 +316,7 @@ class Surveillance extends React.Component {
      * @param   mac_address The mac_address of the object retrieved from DB. 
      * @param   lbeacon_coordinate The lbeacon's coordinate processed by createLbeaconCoordinate().
      */
-    macAddressToCoordinate(mac_address, lbeacon_coordinate){
+    macAddressToCoordinate = (mac_address, lbeacon_coordinate) => {
         /** Example of lbeacon_uuid: 01:1f:2d:13:5e:33 
          *                           0123456789       16
          */
@@ -350,7 +337,7 @@ class Surveillance extends React.Component {
      * @param {*} objectImg  The image of the object.
      * @param {*} imgWidth The width of the image.
      */
-    popupContent (objectsMap){
+    popupContent = (objectsMap) => {
         let currentPosition = objectsMap[0].currentPosition
         let objectList = this.collectObjectsByLatLng(currentPosition)
         /* The style sheet is right in the src/css/Surveillance.css*/
@@ -362,13 +349,27 @@ class Surveillance extends React.Component {
                     <h4 class='border-bottom pb-1 px-2'>${objectsMap[0].location_description}</h4>
                     ${objectList.filter(item => item.found).map( item =>{
                         const element =     
-                            `
-                                <div class='row popupRow mb-2 ml-1'>
-                                    <div class='col-6 popupType d-flex align-items-center'>${item.type}</div>
-                                    <div class='col-3 popupItem d-flex align-items-center'>${item.access_control_number && item.access_control_number.slice(10, 14)}</div>
-                                    <div class='col-3 popupItem d-flex align-items-center text-capitalize'>${item.geofence_type || item.status}</div>
+                        `
+                            <div class='row popupRow mb-2 ml-1 d-flex jusify-content-start'>
+                                <div class='popupType'>
+                                    ${item.type}, 
                                 </div>
-                            `
+                                <div class='popupType'>
+                                    ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}:${item.access_control_number.slice(10, 14)},
+                                </div>
+                                <div class='popupType'>
+                                    ${locale.texts[item.status.toUpperCase()]}
+                                </div>
+                            </div>
+                        `
+                        // const element =     
+                        //     `
+                        //         <div class='row popupRow mb-2 ml-1'>
+                        //             <div class='col-5 popupType d-flex align-items-center'>${item.type}</div>
+                        //             <div class='col-2 popupItem d-flex align-items-center'>${item.access_control_number.slice(10, 14)}</div>
+                        //             <div class='col-3 popupItem d-flex align-items-center text-capitalize'>${locale.texts[item.status.toUpperCase()]}</div>
+                        //         </div>
+                        //     `
                                 return element
                         }).join('')
                     }

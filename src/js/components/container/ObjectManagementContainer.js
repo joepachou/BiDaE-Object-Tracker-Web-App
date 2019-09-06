@@ -23,14 +23,14 @@ class ObjectManagementContainer extends React.Component{
         formTitle:'',
         formPath: '',
         selectAll: false,
-        locale: this.context.lang
+        locale: this.context.abbr
     }
 
     componentDidUpdate = (prevProps, prevState) => {
-        if (this.context.lang !== prevState.locale) {
+        if (this.context.abbr !== prevState.locale) {
             this.getData()
             this.setState({
-                locale: this.context.lang
+                locale: this.context.abbr
             })
         }
     }
@@ -42,7 +42,7 @@ class ObjectManagementContainer extends React.Component{
     getData = () => {
         let locale = this.context
         axios.post(dataSrc.getObjectTable, {
-            locale: locale.lang
+            locale: locale.abbr
         })
         .then(res => {
             let column = _.cloneDeep(objectTableColumn)

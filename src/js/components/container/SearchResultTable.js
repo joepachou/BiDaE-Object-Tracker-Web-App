@@ -1,24 +1,14 @@
 
 import React from 'react';
-
-
 import { Alert, Tab, ListGroup, Col, Row } from 'react-bootstrap';
-
-
 import LocaleContext from '../../context/LocaleContext'
-
 import _ from 'lodash';
-
-
-
 import config from '../../config';
-
 import Scroll from 'react-scroll'
 var scroll = Scroll.animateScroll;
- 
-
 const Fragment = React.Fragment;
-export default class SearchResultTable extends React.Component {
+
+class SearchResultTable extends React.Component {
 
     constructor(props){
 
@@ -280,11 +270,11 @@ export default class SearchResultTable extends React.Component {
 
             x = 
                 <Fragment>
-                    <h5 className=" text-left  text-primary w-100 bg-transparent mx-3"> {locale.DEVICE_FOUND(foundResult.length || 0)}</h5>
+                    <h5 className=" text-left  text-primary w-100 bg-transparent mx-3"> {locale.texts.DEVICE_FOUND(foundResult.length || 0)}</h5>
                     {
                         this.generateResultHTML(foundResult)
                     }
-                    <h5 className=" text-left  text-primary w-100 bg-transparent mx-3"> {notFoundResult.length === 0 ? null : locale.DEVICE_NOT_FOUND(notFoundResult.length)}</h5>
+                    <h5 className=" text-left  text-primary w-100 bg-transparent mx-3"> {notFoundResult.length === 0 ? null : locale.texts.DEVICE_NOT_FOUND(notFoundResult.length)}</h5>
                     {
                         this.generateResultHTML(notFoundResult)
                     }
@@ -293,7 +283,7 @@ export default class SearchResultTable extends React.Component {
         }else if(mode === 'switch'){
             x = 
                 <Fragment>
-                    <h5 className=" text-left  text-primary w-100 bg-transparent mx-3"> {foundMode === 'found'? locale.DEVICE_FOUND(foundResult.length) : locale.DEVICE_NOT_FOUND(notFoundResult.length)}</h5>
+                    <h5 className=" text-left  text-primary w-100 bg-transparent mx-3"> {foundMode === 'found'? locale.texts.DEVICE_FOUND(foundResult.length) : locale.texts.DEVICE_NOT_FOUND(notFoundResult.length)}</h5>
                     {
                         this.generateResultHTML(foundMode === 'found' ? foundResult : notFoundResult)
                     }
@@ -344,3 +334,5 @@ export default class SearchResultTable extends React.Component {
     }
 }
 SearchResultTable.contextType = LocaleContext;
+
+export default SearchResultTable

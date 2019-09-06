@@ -1,12 +1,14 @@
 import React from 'react';
 import { Col, Row, ListGroup, Modal, Button, Navbar, Nav } from 'react-bootstrap';
-
 import axios from 'axios';
 import Cookies from 'js-cookie'
 import LocaleContext from '../../../context/LocaleContext';
 import dataSrc from "../../../dataSrc";
-
 import AddableList from './AddableList'
+import RadioButtonGroup from '../RadioButtonGroup';
+import RadioButton from '../../presentational/RadioButton'
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 
 
 const Fragment = React.Fragment;
@@ -52,13 +54,14 @@ export default class ModifyUserInfo extends React.Component{
     }
     componentDidUpdate(prevProps, PrevState){        
     }
+    
     closeModifyUserInfo(){
         this.staticParameter.userRole = null
         this.API.closeUserInfo()
         this.props.onClose()        
     }
-    submitModifyUserInfo(){
-        var  role = this.staticParameter.userRole
+
+    submitModifyUserInfo(role){
         this.staticParameter.userRole = null
         this.API.closeUserInfo()
         this.props.onSubmit({
@@ -73,71 +76,79 @@ export default class ModifyUserInfo extends React.Component{
         this.setState({})
     }
 
-    roleCheckBoxHtml(role, userRole){
-
-        var name = role.name
-        let html = 
-            <div className="custom-control custom-checkbox" key={name}>
-                <input
-                    type="checkbox"
-                    className="custom-control-input"
-                    onChange={this.onSelectRoleCheck}
-                    checked = {userRole === name}
-                    name={name}
-                    id={'check' + name}
-                />
-                 <label className="custom-control-label h4" htmlFor={'check' + name}>{name}</label>
-                
-            </div>
-
-        return html
-    }
-
-
     render(){
         const {show} = this.state
-        const {userRole} = this.staticParameter
+        const { userRole } = this.staticParameter
+        const locale = this.context
         return(
             <Modal 
                 show={this.props.show}
                 onHide={this.closeModifyUserInfo}
+                className='text-capitalize'
             >
-                <Modal.Header closeButton className='font-weight-bold p-1'>
-                {
-                    // <Navbar className="w-100 p-1">
-                    //     <Nav className="w-100 p-1">
-                    //         <Col>
-                    //             <Nav.Item className="h4"></Nav.Item>
-                    //         </Col>
-                    //         <Col>
-                    //             <Nav.Item className="h4">1</Nav.Item>
-                    //         </Col>
-                    //         <Col>
-                    //             <Nav.Item className="h4">2</Nav.Item>
-                    //         </Col>
-                    //     </Nav>
-                    // </Navbar>
-                }
-                    
+                <Modal.Header closeButton className='font-weight-bold'>  
+                    {locale.texts.EDIT_USER}
                 </Modal.Header>
-                <Modal.Body className="d-block">
-                    <Row className="px-3 py-1">
-                        <h4 className="w-100">
-                            UserInfo
-                        </h4>
-                        <div className="p-2">
-                            {
-                                this.props.roleName.map((roleName) => {
-                                    return this.roleCheckBoxHtml(roleName, userRole)
-                                })
-                            }
-                        </div>
-                    </Row>
+                <Modal.Body>
+                    <Formik     
+                        initialValues = {{
+                            radioGroup: userRole
+                        }}
+
+                        onSubmit={({ radioGroup }, { setStatus, setSubmitting }) => {
+                            this.submitModifyUserInfo(radioGroup)
+                        }}    
+                        render={({ values, errors, status, touched, isSubmitting }) => (
+                            <Form>
+                                <RadioButtonGroup
+                                    id="radioGroup"
+                                    label={locale.texts.ROLES}
+                                    value={values.radioGroup}
+                                    error={errors.radioGroup}
+                                    touched={touched.radioGroup}
+                                >
+                                {this.props.roleName
+                                    .filter(roleName => roleName.name !== 'guest')
+                                    .map((roleName, index) => {
+                                        return (
+                                            <Field
+                                                component={RadioButton}
+                                                key={index}
+                                                name="radioGroup"
+                                                id={roleName.name}
+                                                label={locale.texts[roleName.name.toUpperCase()]}
+                                            />
+                                        )
+                                })}
+                                </RadioButtonGroup>
+                                    <Modal.Footer className='d-flex bd-highlight'>
+                                        <Button 
+                                            variant="outline-danger" 
+                                            onClick={this.closeModifyUserInfo}
+                                            className='text-capitalize mr-auto bd-highlight'
+                                        >
+                                            {locale.texts.DELETE}
+                                        </Button>
+                                        <Button 
+                                            variant="outline-secondary" 
+                                            onClick={this.closeModifyUserInfo}
+                                            className='text-capitalize'
+                                        >
+                                            {locale.texts.CANCEL}
+                                        </Button>
+                                        <Button 
+                                            type="submit" 
+                                            variant="primary" 
+                                            // disabled={isSubmitting}
+                                            className='text-capitalize'
+                                        >
+                                            {locale.texts.SEND}
+                                        </Button>                
+                                    </Modal.Footer>
+                            </Form>
+                        )}
+                    />           
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button className="bg-light text-primary" onClick={this.closeModifyUserInfo}>Cancel</Button>
-                    <Button onClick={this.submitModifyUserInfo}>Submit</Button>
-                </Modal.Footer>
             </Modal>
                 
         )

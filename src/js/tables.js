@@ -297,11 +297,72 @@ const geofenceTableColumn = [
     },
 ]
 
+const userInfoTableColumn = [
+    {
+        Header: 'ID',
+        accessor: 'id',
+        resizable: false,
+    },
+    {
+        Header: 'Name',
+        accessor: 'name',
+        resizable: false,
+    },
+    {
+        Header: 'Roles',
+        accessor: 'role_type',
+    },
+]
+
+const editObjectRecordTableColumn = [
+    {
+        Header: 'ID',
+        accessor: 'id',
+        resizable: false,
+        width: 50,
+    },
+    {
+        Header: 'Name',
+        accessor: 'name',
+        width: 150,
+    },
+    {
+        Header: 'edit time',
+        accessor: 'edit_time',
+    },
+    {
+        Header: 'Notes',
+        accessor: 'notes',
+    },
+]
+
+const shiftChangeRecordTableColumn = [
+    {
+        Header: 'ID',
+        accessor: 'id',
+        resizable: false,
+        width: 50,
+    },
+    {
+        Header: 'user name',
+        accessor: 'user_name',
+        width: 150,
+    },
+    {
+        Header: 'submit timestamp',
+        accessor: 'submit_timestamp',
+        width: 200,
+    }
+]
+
 export { 
     trackingTableColumn,
     searchResultTableColumn,
     lbeaconTableColumn,
     gatewayTableColumn,
     objectTableColumn,
-    geofenceTableColumn
+    geofenceTableColumn,
+    userInfoTableColumn,
+    editObjectRecordTableColumn,
+    shiftChangeRecordTableColumn
 }

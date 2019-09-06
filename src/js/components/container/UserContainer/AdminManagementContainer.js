@@ -1,105 +1,104 @@
 import React from 'react';
 import { Col, Row, ListGroup } from 'react-bootstrap';
 import ReactTable from 'react-table'
-
 import axios from 'axios';
 import Cookies from 'js-cookie'
 import LocaleContext from '../../../context/LocaleContext';
 import dataSrc from "../../../dataSrc";
-
 import AddableList from './AddableList'
 import ModifyUserInfo from './ModifyUserInfo'
 import RemoveUserConfirmForm from './RemoveUserConfirmForm'
+import { userInfoTableColumn } from '../../../tables'
 
-const Fragment = React.Fragment;
-
-export default class AdminManagementContainer extends React.Component{
-
-    constructor() {
-        super();
-        this.state = {
-           userList: [],
+class AdminManagementContainer extends React.Component{
+    state = {
+           data: [],
+           columns: [],
            selectedUser: null,
-           userRole: null
-        }
-        this.staticParamter = {
-            roleName : []
-        }
-        this.onClickUser = this.onClickUser.bind(this)
-        this.onCloseModifyUserInfo = this.onCloseModifyUserInfo.bind(this)
-        this.onSubmitModifyUserInfo = this.onSubmitModifyUserInfo.bind(this)
-        this.closeRemoveUserConfirm = this.closeRemoveUserConfirm.bind(this)
-        this.submitRemoveUserConfirm = this.submitRemoveUserConfirm.bind(this)
-
-        this.removeUser = this.removeUser.bind(this)
+           userRole: null,
+           locale: this.context.lang
+    }
+    staticParamter = {
+        roleName : []
     }
 
+    componentDidUpdate = (prevProps, prevState) => {
+        if (this.context.lang !== prevState.locale) {
+            this.getRoleNameList()
+            this.getUserList()
+            this.setState({
+                locale: this.context.lang
+            })
+        }
+    }
 
-    componentDidMount(){
+    componentDidMount = () => {
         this.getRoleNameList()
         this.getUserList()
     }
-    setUserRole(){
-        axios.post(dataSrc.setUserRole,{
 
-        }).then((res) => {
-
-        })
-    }
-    getUserList(){
-        axios.post(dataSrc.getUserList,{}).then((res) => {
-
+    getUserList = () => {
+        let locale = this.context
+        axios.post(dataSrc.getUserList,{
+        }).then(res => {
+            let columns = _.cloneDeep(userInfoTableColumn)
+            columns.map(field => {
+                field.Header = locale.texts[field.Header.toUpperCase()]
+                field.headerStyle = {
+                    textAlign: 'left',
+                }
+            })
+            res.data.rows.map(item => {
+                item.role_type = locale.texts[item.role_type.toUpperCase()]
+            })
             this.setState({
-                userList: res.data
+                data: res.data.rows,
+                columns,
             })
         })
     }
-    getUserRole(selectedUser, callBack){
-
+    getUserRole = (selectedUser, callBack) => {
         if(selectedUser){
-
             axios.post(dataSrc.getUserRole,{
                 username: selectedUser.name
             }).then((res) => {
                 var userRole = ''
                 if(res.data.length !== 0){
-                    userRole = res.data[0].name
+                    userRole = res.data.rows[0].name
                 }
                 callBack(userRole)
             })
         }
         
     }
-    getRoleNameList(){
-        axios.post(dataSrc.getRoleNameList,{}).then((res) => {
-            this.staticParamter.roleName = res.data
+    getRoleNameList = () => {
+        axios.post(dataSrc.getRoleNameList,{
+        }).then(res => {
+            this.staticParamter.roleName = res.data.rows
         })
     }
     
-    onClickUser(index){
-        this.getUserRole(this.state.userList[index], (userRole) => {
+    onClickUser = (index) => {
+        this.getUserRole(this.state.data[index], (userRole) => {
             this.setState({
                 showModifyUserInfo: true,
-                selectedUser: this.state.userList[index],
+                selectedUser: this.state.data[index],
                 userRole: userRole
             })
         })
-        
-        
     }
-    onCloseModifyUserInfo(){
+    onCloseModifyUserInfo = () => {
         this.setState({
             showModifyUserInfo: false, 
             selectedUser: null,
             userRole: null,
         })
     }
-    onSubmitModifyUserInfo(newInfo){
-
+    onSubmitModifyUserInfo = (newInfo) => {
         axios.post(dataSrc.setUserRole,{
             username: this.state.selectedUser.name,
             ...newInfo
-        }).then((res) => {
+        }).then(res => {
             this.setState({
                 showModifyUserInfo: false,
                 selectedUser: null,
@@ -107,7 +106,7 @@ export default class AdminManagementContainer extends React.Component{
             })
         })
     }
-    removeUser(e){
+    removeUser = (e) => {
         e.preventDefault()
         var username = e.target.getAttribute('name')
         this.setState({
@@ -117,8 +116,7 @@ export default class AdminManagementContainer extends React.Component{
 
         
     }
-    submitRemoveUserConfirm(){
-
+    submitRemoveUserConfirm = () => {
         axios.post(dataSrc.removeUser, {
             username: this.state.removeCandidate
         }).then((res)=>{
@@ -131,102 +129,31 @@ export default class AdminManagementContainer extends React.Component{
         })
         
     }
-    closeRemoveUserConfirm(){
+    closeRemoveUserConfirm = () => {
         this.setState({
             removeCandidate: null,
             showRemoveUserConfirm: false
         })
     }
     render(){
-        const {userList} = this.state
+        const {data} = this.state
         const {roleName} = this.staticParamter
-        const column = [
-            {
-                Header: 'No.',
-                Cell: ({row}) => {
-                    return <div className="d-flex justify-content-center w-100 h-100">{row._index}</div>
-                },
-                resizable: false,
-            },
-            {
-                Header: 'ID',
-                Cell: ({row}) => {
-                    console.log(row._original)
-                    return <div className="d-flex justify-content-center w-100 h-100">{row._original.id}</div>
-                },
-                resizable: false,
-            },
-            {
-                Header: 'Name',
-                Cell: ({row}) => {
-                    console.log(row._original)
-                    return <div className="d-flex justify-content-center w-100 h-100">{row._original.name}</div>
-                },
-                resizable: false,
-            },
-            {
-                Header: 'Roles',
-                Cell: ({row}) => {
-                    console.log(row._original)
-                    return <div className="d-flex justify-content-center w-100 h-100">{row._original.role_type}</div>
-                }
-            },
-            {
-                Header: 'Delete',
-                Cell: ({row}) => {
-                    return (
-                        <div className="d-flex justify-content-center w-100 h-100">
-                            <i 
-                                className="fa fa-2x fa-trash float-right"  
-                                aria-hidden="true" 
-                                name={row.name} 
-                                onClick={this.removeUser}
-                            />
-                        </div>
-                    )
-                },
-                resizable: false,
-            }
-        ]
-        const onRowClick = (state, rowInfo, column, instance) => {
-            return {
-                onClick: e => {
-                    this.onClickUser(rowInfo.index)
-                }
-            }
-        }
-        console.log(userList)
         return(
             <div className="w-100">
-            {
-                // <ListGroup variant="flush" className="w-100 shadow" style={{overflowY:'scroll', height: '75vh'}}>
-                //     {userList.map((user, index) => {
-                //         if(user.name){
-                //             return (
-                //                 <ListGroup.Item key={user.name} className="m-0 py-2 px-2" name={index}  action>
-                //                     <Col sm={11} className='float-left p-0'>
-                //                         <h5 name={index} onClick = {this.onClickUser} style={{color: '#212529'}}>
-                //                             {user.name}
-                //                         </h5>
-                //                     </Col>
-                //                     <Col sm={1} className='float-left p-0'>
-                //                         <i className="fa fa-2x fa-trash float-right" aria-hidden="true" name={user.name} onClick={this.removeUser}></i>
-                //                     </Col>
-                //                 </ListGroup.Item>
-                //             )
-                //         }
-                //     })}
-                // </ListGroup>
-            }
                 <ReactTable 
-                    data = {userList} 
-                    columns = {column} 
+                    data = {this.state.data} 
+                    columns = {this.state.columns} 
                     noDataText="No Data Available"
                     className="-highlight"
                     style={{height:'75vh'}}
-                    getTrProps={onRowClick}
+                    getTrProps={(state, rowInfo, column, instance) => {
+                        return {
+                            onClick: (e, handleOriginal) => {
+                                this.onClickUser(rowInfo.index)
+                            }
+                        }
+                    }}
                 />
-                
                 <ModifyUserInfo
                     roleName = {roleName}
                     show = {this.state.showModifyUserInfo}
@@ -246,3 +173,5 @@ export default class AdminManagementContainer extends React.Component{
     }
 }
 AdminManagementContainer.contextType = LocaleContext;
+
+export default AdminManagementContainer
