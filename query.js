@@ -44,7 +44,7 @@ const getTrackingData = (request, response) => {
     const locale = request.body.locale || 'en'
     pool.query(queryType.query_getTrackingData())        
         .then(res => {
-            console.log('Get tracking data!')
+            console.log('Get tracking data')
             res.rows.map(item => {
 
                 /** Tag the object that is found 
@@ -99,11 +99,11 @@ const getObjectTable = (request, response) => {
     let { locale } = request.body
     pool.query(queryType.query_getObjectTable)       
         .then(res => {
-            console.log('Get objectTable data!')
+            console.log('Get objectTable data')
             response.status(200).json(res)
         })
         .catch(err => {
-            console.log("Get data fails : " + error)
+            console.log("Get objectTable fails: " + error)
         })     
 }
 
@@ -111,7 +111,7 @@ const getLbeaconTable = (request, response) => {
     let { locale } = request.body
     pool.query(queryType.query_getLbeaconTable)
         .then(res => {
-            console.log('Get lbeaconTable data!')
+            console.log('Get lbeaconTable data')
             res.rows.map(item => {
                 let mn = moment().locale(locale)
                 item.health_status =  mn.diff(item.last_report_timestamp, 'days') < 1 ? 0 : 1 
@@ -121,7 +121,7 @@ const getLbeaconTable = (request, response) => {
 
         })
         .catch(err => {
-            console.log("Get data fails : " + err)
+            console.log("Get lbeaconTable fails: " + err)
         })        
 
 
@@ -131,7 +131,7 @@ const getGatewayTable = (request, response) => {
     let { locale } = request.body
     pool.query(queryType.query_getGatewayTable)
         .then(res => {
-            console.log('Get gatewayTable data!')
+            console.log('Get gatewayTable data')
             res.rows.map(item => {
                 let mn = moment().locale(locale)
                 item.health_status =  item.health_status === 0 && mn.diff(item.last_report_timestamp, 'days') < 1 ? 0 : 1 
@@ -142,7 +142,7 @@ const getGatewayTable = (request, response) => {
             response.status(200).json(res)
         })    
         .catch(err => {
-            console.log("Get data fails : " + err)                
+            console.log("Get data fails: " + err)                
 
         })
 }
@@ -283,7 +283,7 @@ const signup = (request, response) => {
                 })
         })
         .catch((err,res) => {
-            console.log("Signup Fails!" + err)
+            console.log("Signup Fails" + err)
         })
 }
 
@@ -291,11 +291,11 @@ const getUserInfo = (request, response) => {
     const username = request.body.username;
     pool.query(queryType.query_getUserInfo(username))
         .then(res => {
-            console.log('Get user info!')
+            console.log('Get user info')
             response.status(200).json(res)
         })
         .catch(error => {
-            console.log('Get user info Fails! error: ' + error)
+            console.log('Get user info Fails error: ' + error)
         })
     
 }
@@ -370,7 +370,7 @@ const  generatePDF = (request, response) => {
 
     var title = "Results are NOT Found "
     var lists = notFoundResult
-    var notFoundTable = lists.length !== 0 ? generateTable(title, types, lists, attributes) : '';
+    var notFoundTable = lists.length == 0 ? generateTable(title, types, lists, attributes) : '';
 
 
     
