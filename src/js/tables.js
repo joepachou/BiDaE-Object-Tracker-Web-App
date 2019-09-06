@@ -302,16 +302,30 @@ const userInfoTableColumn = [
         Header: 'ID',
         accessor: 'id',
         resizable: false,
+        width: 50,
     },
     {
         Header: 'Name',
         accessor: 'name',
         resizable: false,
+        width: 150,
     },
     {
         Header: 'Roles',
         accessor: 'role_type',
+        width: 150,
     },
+    {
+        Header: 'last visit timestamp',
+        accessor: 'last_visit_timestamp',
+        width: 250
+    },
+    {
+        Header: 'registered timestamp',
+        accessor: 'registered_timestamp',
+        width: 250,
+    },
+    
 ]
 
 const editObjectRecordTableColumn = [

@@ -179,6 +179,14 @@ const config = {
         'day shift',
         'night shift',
     ],
+
+    roles: [
+        'guest',
+        'care_provider',
+        'system_admin'
+    ],
+
+    defaultRole: 'care_provider'
 }
 
 export default config

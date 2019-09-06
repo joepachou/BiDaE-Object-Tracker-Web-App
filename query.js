@@ -239,7 +239,10 @@ const signin = (request, response) => {
                         authentication: true,
                         userInfo
                     })
+                    pool.query(queryType.query_setVisitTimestamp(username))
+                        .catch(err => console.log(err))
                     pool.query(queryType.query_setShift(shift, username))
+                        .catch(err => console.log(err))
                 } else {
                     response.json({
                         authentication: false,
@@ -254,7 +257,11 @@ const signin = (request, response) => {
 }
 
 const signup = (request, response) => {
-    const { username, password } = request.body;
+    const { 
+        username, 
+        password, 
+        role 
+    } = request.body;
     
     const saltRounds = 10;
     const hash = bcrypt.hashSync(password, saltRounds);
@@ -266,17 +273,9 @@ const signup = (request, response) => {
 
     pool.query(queryType.query_signup(signupPackage))
         .then(res => {
-            pool.query(`select id from user_table where name='${username}'`)
+            pool.query(queryType.query_insertUserRole(username, role))
                 .then(res => {
-                    let user_id = res.rows[0].id
-                    pool.query(`insert into user_roles (user_id, role_id) values(${user_id}, 2)`)
-                        .then(res => {
-                            console.log('Sign up Success')
-                            response.status(200).json(res)
-                        })
-                        .catch(err => {
-                            console.log(err)
-                        })
+                    console.log('Sign up Success')
                 })
                 .catch(err => {
                     console.log(err)
@@ -291,7 +290,7 @@ const getUserInfo = (request, response) => {
     const username = request.body.username;
     pool.query(queryType.query_getUserInfo(username))
         .then(res => {
-            console.log('Get user info Fails!')
+            console.log('Get user info!')
             response.status(200).json(res)
         })
         .catch(error => {
@@ -427,6 +426,7 @@ const getPDFInfo = (request, response) => {
 
 const validateUsername = (request, response) => {
     let { username } = request.body
+    console.log(username)
     pool.query(queryType.query_validateUsername(username))
         .then(res => {
             let precheck = false
@@ -439,9 +439,16 @@ const validateUsername = (request, response) => {
 }
 
 const getUserList = (request, response) => {
+    let { locale } = request.body
     pool.query(queryType.query_getUserList())
         .then(res => {
             console.log('get user list success')
+            res.rows.map(item => {
+                item.last_visit_timestamp = 
+                    item.last_visit_timestamp && 
+                    moment(momentTZ(item.last_visit_timestamp).tz(process.env.TZ).locale(locale)).format('LLLL');
+                item.registered_timestamp = moment(momentTZ(item.registered_timestamp).tz(process.env.TZ).locale(locale)).format('LLLL');
+            })
             response.status(200).json(res)
         })
         .catch(err => {

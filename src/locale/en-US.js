@@ -44,6 +44,7 @@ const en =  {
     DEVICES: 'devices',
     DOWNLOAD: 'download',
     DELETE: 'delete',
+    ADD_USER: 'add user',
 
     /* Form Field */
     NAME: 'name',
@@ -124,7 +125,8 @@ const en =  {
     GATEWAY_IP_ADDRESS: 'gateway IP address',
     LAST_REPORT_TIMESTAMP: 'last report timestamp',
     LAST_REPORT_TIME: 'last report time',
-    REGISTERED_TIMESTAMP: 'registered timestamp',
+    REGISTERED_TIMESTAMP: 'registered time',
+    LAST_VISIT_TIMESTAMP: 'last visit time',
     HIGH_RSSI: 'high RSSI',
     MED_RSSI: 'med RSSI',
     LOW_RSSI: 'low RSSI',

@@ -121,30 +121,30 @@ export default class ModifyUserInfo extends React.Component{
                                         )
                                 })}
                                 </RadioButtonGroup>
-                                    <Modal.Footer className='d-flex bd-highlight'>
-                                        <Button 
-                                            variant="outline-danger" 
-                                            onClick={this.closeModifyUserInfo}
-                                            className='text-capitalize mr-auto bd-highlight'
-                                        >
-                                            {locale.texts.DELETE}
-                                        </Button>
-                                        <Button 
-                                            variant="outline-secondary" 
-                                            onClick={this.closeModifyUserInfo}
-                                            className='text-capitalize'
-                                        >
-                                            {locale.texts.CANCEL}
-                                        </Button>
-                                        <Button 
-                                            type="submit" 
-                                            variant="primary" 
-                                            // disabled={isSubmitting}
-                                            className='text-capitalize'
-                                        >
-                                            {locale.texts.SEND}
-                                        </Button>                
-                                    </Modal.Footer>
+                                <Modal.Footer className='d-flex bd-highlight'>
+                                    <Button 
+                                        variant="outline-danger" 
+                                        onClick={this.props.removeUser}
+                                        className='text-capitalize mr-auto bd-highlight'
+                                    >
+                                        {locale.texts.DELETE}
+                                    </Button>
+                                    <Button 
+                                        variant="outline-secondary" 
+                                        onClick={this.closeModifyUserInfo}
+                                        className='text-capitalize'
+                                    >
+                                        {locale.texts.CANCEL}
+                                    </Button>
+                                    <Button 
+                                        type="submit" 
+                                        variant="primary" 
+                                        // disabled={isSubmitting}
+                                        className='text-capitalize'
+                                    >
+                                        {locale.texts.SEND}
+                                    </Button>                
+                                </Modal.Footer>
                             </Form>
                         )}
                     />           

@@ -194,7 +194,7 @@ function query_signin(username) {
 		LEFT JOIN roles
 		ON user_roles.role_id = roles.id
 
-		WHERE user_table.name = $1
+		WHERE user_table.name = $1;
 		
 		`;
 
@@ -213,10 +213,10 @@ function query_signup(signupPackage) {
 
 	const text = 
 		`
-		INSERT INTO user_table (name, password)
-		VALUES ($1, $2);
+		INSERT INTO user_table (name, password, registered_timestamp)
+		VALUES ($1, $2, now());
 		`;
-	const values = [signupPackage.username, signupPackage.password];
+	const values = [signupPackage.username, signupPackage.password,];
 
 	const query = {
 		text,
@@ -280,7 +280,6 @@ function query_editLbeacon (uuid, low, med, high, description) {
 }
 
 function query_modifyUserDevices(username, mode, acn){
-	console.log(acn)
 	var text = ""
 	if(mode === 'add'){
 		text = `
@@ -341,15 +340,18 @@ const query_validateUsername = (username) => {
 const query_getUserList = () => {
 	const query = `
 		SELECT 
-			a.*, 
-			b.name AS role_type 
-		FROM user_table a 
+			user_table.name, 
+			user_table.registered_timestamp,
+			user_table.last_visit_timestamp,
+			roles.name AS role_type 
+		FROM user_table  
 		INNER JOIN (
 			SELECT * 
-			FROM user_roles a 
-			INNER JOIN roles b ON a.role_id=b.id
-		) b 
-		ON a.id = b.user_id`
+			FROM user_roles
+			INNER JOIN roles ON user_roles.role_id = roles.id
+		) roles
+		ON user_table.id = roles.user_id
+	`
 	return query
 }
 
@@ -362,20 +364,41 @@ const query_getUserRole = (username) => {
 
 const query_getRoleNameList = () => {
 	const query = `
-		select name from roles;
+		SELECT 
+			name 
+		FROM roles;
 	`
 	return query
 }
 
 const query_removeUser = (username) => {
-	const query = `delete from user_roles where user_id=(select id from user_table where name='${username}'); delete from user_table where name = '${username}';`
+	const query = `
+		DELETE FROM user_roles 
+		WHERE user_id = (
+			SELECT id 
+			FROM user_table 
+			WHERE name='${username}'
+			); 
+		
+		DELETE FROM user_table 
+		WHERE name = '${username}';
+	`
 	return query
 }
 
 const query_setUserRole = (role, username) => {
-	const query = `update user_roles
-					set role_id=(select id from roles where name='${role}')
-					where user_roles.user_id = (select id from user_table where name='${username}');
+	const query = `
+		UPDATE user_roles
+		SET role_id = (
+			SELECT id 
+			FROM roles 
+			where name='${role}'
+		)
+		WHERE user_roles.user_id = (
+			SELECT id 
+			FROM user_table 
+			WHERE name='${username}'
+		);
 	`
 	return query
 }
@@ -407,6 +430,32 @@ const query_setShift = (shift, username) => {
 	return query
 }
 
+const query_setVisitTimestamp = (username) => {
+	return `
+		UPDATE user_table
+		SET last_visit_timestamp=now()
+		WHERE name='${username}';
+	`
+}
+
+const query_insertUserRole = (username, role) => {
+	return `
+		INSERT INTO user_roles (user_id, role_id)
+		VALUES (
+			(
+				SELECT id
+				FROM user_table
+				WHERE name='${username}'
+			), 
+			(
+				SELECT id 
+				FROM roles
+				WHERE name='${role}'
+			)
+		)
+	`
+}
+
 module.exports = {
     query_getTrackingData,
     query_getObjectTable,
@@ -430,5 +479,7 @@ module.exports = {
 	query_removeUser,
 	query_setUserRole,
 	query_getEditObjectRecord,
-	query_setShift
+	query_setShift,
+	query_setVisitTimestamp,
+	query_insertUserRole
 }

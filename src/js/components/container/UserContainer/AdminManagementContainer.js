@@ -1,5 +1,11 @@
 import React from 'react';
-import { Col, Row, ListGroup } from 'react-bootstrap';
+import { 
+    Col, 
+    Row, 
+    ListGroup,
+    ButtonToolbar,
+    Button
+} from 'react-bootstrap';
 import ReactTable from 'react-table'
 import axios from 'axios';
 import Cookies from 'js-cookie'
@@ -9,25 +15,29 @@ import AddableList from './AddableList'
 import ModifyUserInfo from './ModifyUserInfo'
 import RemoveUserConfirmForm from './RemoveUserConfirmForm'
 import { userInfoTableColumn } from '../../../tables'
-
+import AddUserForm from '../AddUserForm';
+const Fragment = React.Fragment;
 class AdminManagementContainer extends React.Component{
     state = {
            data: [],
            columns: [],
            selectedUser: null,
            userRole: null,
-           locale: this.context.lang
+           locale: this.context.abbr,
+           showModifyUserInfo: false,
+           showAddUserForm: false,
+           roleName: [],
     }
     staticParamter = {
         roleName : []
     }
 
     componentDidUpdate = (prevProps, prevState) => {
-        if (this.context.lang !== prevState.locale) {
+        if (this.context.abbr !== prevState.locale) {
             this.getRoleNameList()
             this.getUserList()
             this.setState({
-                locale: this.context.lang
+                locale: this.context.abbr
             })
         }
     }
@@ -40,15 +50,18 @@ class AdminManagementContainer extends React.Component{
     getUserList = () => {
         let locale = this.context
         axios.post(dataSrc.getUserList,{
+            locale: locale.abbr 
         }).then(res => {
+            console.log(res.data.rows)
             let columns = _.cloneDeep(userInfoTableColumn)
-            columns.map(field => {
-                field.Header = locale.texts[field.Header.toUpperCase()]
+            columns.map((field, index) => {
+                field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
                 field.headerStyle = {
                     textAlign: 'left',
                 }
             })
-            res.data.rows.map(item => {
+            res.data.rows.map((item, index) => {
+                item.id = index + 1
                 item.role_type = locale.texts[item.role_type.toUpperCase()]
             })
             this.setState({
@@ -71,10 +84,16 @@ class AdminManagementContainer extends React.Component{
         }
         
     }
+
     getRoleNameList = () => {
         axios.post(dataSrc.getRoleNameList,{
         }).then(res => {
-            this.staticParamter.roleName = res.data.rows
+            let rows = _.cloneDeep(res.data.rows)
+            rows.filter(item => item.name !== "guest" )
+            this.setState({
+                roleName: res.data.rows
+            })
+            // this.staticParamter.roleName = res.data.rows
         })
     }
     
@@ -87,6 +106,7 @@ class AdminManagementContainer extends React.Component{
             })
         })
     }
+
     onCloseModifyUserInfo = () => {
         this.setState({
             showModifyUserInfo: false, 
@@ -94,6 +114,7 @@ class AdminManagementContainer extends React.Component{
             userRole: null,
         })
     }
+
     onSubmitModifyUserInfo = (newInfo) => {
         axios.post(dataSrc.setUserRole,{
             username: this.state.selectedUser.name,
@@ -104,71 +125,108 @@ class AdminManagementContainer extends React.Component{
                 selectedUser: null,
                 userRole: null,
             })
-        })
-    }
-    removeUser = (e) => {
-        e.preventDefault()
-        var username = e.target.getAttribute('name')
-        this.setState({
-            removeCandidate: username,
-            showRemoveUserConfirm: true
-        })
+            setTimeout(
+                this.getUserList(),1500
+            )
 
-        
+        })
     }
+
+    // removeUser = (e) => {
+    //     e.preventDefault()
+    //     var username = e.target.getAttribute('name')
+    //     this.setState({
+    //         removeCandidate: username,
+    //         showRemoveUserConfirm: true
+    //     })
+    // }
+
     submitRemoveUserConfirm = () => {
         axios.post(dataSrc.removeUser, {
-            username: this.state.removeCandidate
+            username: this.state.selectedUser.name
         }).then((res)=>{
-
             this.setState({
-                removeCandidate: null,
-                showRemoveUserConfirm: false
+                showModifyUserInfo: false, 
+
+                // showRemoveUserConfirm: false
             });
-            this.getUserList()
+            setTimeout(
+                this.getUserList(),1000
+            )
         })
-        
     }
-    closeRemoveUserConfirm = () => {
+
+    // closeRemoveUserConfirm = () => {
+    //     this.setState({
+    //         removeCandidate: null,
+    //         showRemoveUserConfirm: false
+    //     })
+    // }
+
+    addUser = () => {
         this.setState({
-            removeCandidate: null,
-            showRemoveUserConfirm: false
+            showAddUserForm: true
         })
     }
+
+    onCloseAddUserForm = () => {
+        this.setState({
+            showAddUserForm: false
+        })
+        setTimeout(
+            this.getUserList(), 1500
+        )
+    }
+
     render(){
-        const {data} = this.state
-        const {roleName} = this.staticParamter
-        return(
-            <div className="w-100">
-                <ReactTable 
-                    data = {this.state.data} 
-                    columns = {this.state.columns} 
-                    noDataText="No Data Available"
-                    className="-highlight"
-                    style={{height:'75vh'}}
-                    getTrProps={(state, rowInfo, column, instance) => {
-                        return {
-                            onClick: (e, handleOriginal) => {
-                                this.onClickUser(rowInfo.index)
+        const locale = this.context
+        return (
+            <Fragment>
+                    <ButtonToolbar>
+                        <Button 
+                            variant="outline-primary" 
+                            className='mb-1 text-capitalize'
+                            onClick={this.addUser}    
+                        >
+                            {locale.texts.ADD_USER}
+                        </Button>
+                    </ButtonToolbar>
+                    <ReactTable 
+                        data = {this.state.data} 
+                        columns = {this.state.columns} 
+                        noDataText="No Data Available"
+                        className="-highlight"
+                        style={{height:'75vh'}}
+                        getTrProps={(state, rowInfo, column, instance) => {
+                            return {
+                                onClick: (e, handleOriginal) => {
+                                    this.onClickUser(rowInfo.index)
+                                }
                             }
-                        }
-                    }}
-                />
-                <ModifyUserInfo
-                    roleName = {roleName}
-                    show = {this.state.showModifyUserInfo}
-                    user = {this.state.selectedUser}
-                    userRole = {this.state.userRole}
-                    onClose = {this.onCloseModifyUserInfo}
-                    onSubmit = {this.onSubmitModifyUserInfo}
-                />
-                <RemoveUserConfirmForm 
-                    show = {this.state.showRemoveUserConfirm}
-                    user = {this.state.removeCandidate}
-                    onSubmit = {this.submitRemoveUserConfirm}
-                    onClose = {this.closeRemoveUserConfirm}
-                />
-            </div>
+                        }}
+                    />
+                    <ModifyUserInfo
+                        roleName = {this.state.roleName}
+                        show = {this.state.showModifyUserInfo}
+                        user = {this.state.selectedUser}
+                        userRole = {this.state.userRole}
+                        onClose = {this.onCloseModifyUserInfo}
+                        onSubmit = {this.onSubmitModifyUserInfo}
+                        removeUser={this.submitRemoveUserConfirm}
+                    />
+                    <AddUserForm
+                        roleName={this.state.roleName}
+                        show={this.state.showAddUserForm}
+                        onClose={this.onCloseAddUserForm}
+                        title={'add user'}
+                    />
+                    {/* <RemoveUserConfirmForm 
+                        show = {this.state.showRemoveUserConfirm}
+                        user = {this.state.removeCandidate}
+                        onSubmit = {this.submitRemoveUserConfirm}
+                        onClose = {this.closeRemoveUserConfirm}
+                    /> */}
+            </Fragment>
         )
     }
 }

@@ -44,6 +44,7 @@ const tw = {
     DEVICE: '儀器',
     DOWNLOAD: '下載',
     DELETE: '刪除',
+    ADD_USER: '新增使用者',
 
 
     /* Form Field */
@@ -127,6 +128,7 @@ const tw = {
     LAST_REPORT_TIMESTAMP: '最後回報時間',
     LAST_REPORT_TIME: '最後回報時間',
     REGISTERED_TIMESTAMP: '註冊時間',
+    LAST_VISIT_TIMESTAMP: '上次登入時間',
     HIGH_RSSI: '高RSSI',
     MED_RSSI: '中RSSI',
     LOW_RSSI: '低RSSI',
