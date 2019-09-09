@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { shouldUpdateTrackingData } from '../../action/action';
 import config from '../../config';
 import AuthenticationContext from '../../context/AuthenticationContext';
+import AccessControl from '../presentational/AccessControl';
 
 class FrequentSearch extends React.Component {
     state = {
@@ -72,7 +73,10 @@ class FrequentSearch extends React.Component {
                                 )
                             })}
                             &nbsp;
-                            {auth.authenticated && auth.user.myDevice &&
+                            <AccessControl
+                                permission={'user:mydevice'}
+                                renderNoAccess={() => null}
+                            >
                                 <Button
                                     variant="outline-custom"
                                     onClick={this.handleClick} 
@@ -81,7 +85,8 @@ class FrequentSearch extends React.Component {
                                 >
                                     {locale.texts.MY_DEVICE}
                                 </Button>
-                            }
+                            </AccessControl>
+                            
                                 <Button 
                                     variant="outline-custom"
                                     onClick={this.handleClick} 
