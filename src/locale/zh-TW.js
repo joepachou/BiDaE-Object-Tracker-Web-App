@@ -67,6 +67,7 @@ const tw = {
     DAY_SHIFT: '早班',
     NIGHT_SHIFT: '晚班',
     SHIFT_SELECT: '選擇班別',
+    WRITE_THE_NOTES: '填寫註記...',
 
 
     /** Error Message */

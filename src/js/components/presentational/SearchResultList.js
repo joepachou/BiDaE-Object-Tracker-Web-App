@@ -11,6 +11,7 @@ import axios from 'axios';
 import InfoPrompt from './InfoPrompt';
 import AccessControl from './AccessControl';
 import SearchResultListGroup from '../presentational/SearchResultListGroup'
+import Cookies from 'js-cookie'
 
 class SearchResult extends React.Component {
 
@@ -78,22 +79,31 @@ class SearchResult extends React.Component {
             selectedObjectData: [],
             showAddDevice: false
         })
-        // setTimeout(
-        //     function (){
-        //         this.setState({
-        //             selectedObjectData: [],
-        //         })
-        //     }.bind(this),
-        //     200
-        // )
+        setTimeout(
+            function (){
+                this.setState({
+                    selectedObjectData: [],
+                })
+            }.bind(this),
+            200
+        )
         // this.props.shouldUpdateTrackingData(true)
         this.props.highlightSearchPanel(false)
     }
 
-    handleChangeObjectStatusFormSubmit = (radioGroup, select) => {
+    handleChangeObjectStatusFormSubmit = values => {
+        // let selectedObjectData = _.cloneDeep(this.state.selectedObjectData)
+        // let editedObjectPackage = {
+        //     status: values.radioGroup.toLowerCase(),
+        //     transferred_location: values.select ? values.select: '',
+        //     notes: values.textarea,
+        //     package: [...selectedObjectData.map(item => item.mac_address)]
+        // }
+        // console.log(editedObjectPackage)
         let editedObjectPackage = _.cloneDeep(this.state.selectedObjectData).map(item => {
-            item.status = radioGroup
-            item.transferred_location = select ? select : '';
+            item.status = values.radioGroup.toLowerCase(),
+            item.transferred_location = values.select ? values.select: '';
+            item.notes = values.textarea 
             return item
         })
         this.setState({
@@ -113,8 +123,10 @@ class SearchResult extends React.Component {
 
     handleConfirmFormSubmit = (e) => {
         let { editedObjectPackage } = this.state;
+        let username = JSON.parse(Cookies.get('user')).name
         axios.post(dataSrc.editObjectPackage, {
-            formOption: editedObjectPackage
+            formOption: editedObjectPackage,
+            username,
         }).then(res => {
             setTimeout(
                 function() {
@@ -123,6 +135,7 @@ class SearchResult extends React.Component {
                         editedObjectPackage: [],
                         selection: [],
                         selectedObjectData: [],
+                        showAddDevice: false
                     })
                     // this.props.shouldUpdateTrackingData(true)
                 }

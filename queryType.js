@@ -147,32 +147,16 @@ function query_addObject (formOption) {
 	return query;
 }
 
-function query_editObjectPackage (formOption) {
-	
-	let query = '';
-	formOption.map(item => {
-		query += `
-			Update object_table 
-			SET status = '${item.status}',
-				transferred_location = '${item.transferred_location ? item.transferred_location.value : ' '}'
-			WHERE mac_address = '${item.mac_address}';
-		`;
-	})
-
-	// const text = `
-	// 	UPDATE object_table as origin 
-	// 	SET
-	// 		status = package.status,
-	// 		transferred_location = package.transferredLocation
-	// 	FROM (values
-	// 		${formOption.map()}
-	// 		()
-	// 	) as package(mac_address, status, transferredLocation)
-	// 	WHERE package.mac_address = origin.mac_address
-	
-	// `
-
-	return query
+const query_editObjectPackage = (formOption) => {
+	let item = formOption[0]
+	let text = `
+		UPDATE object_table
+		SET 
+			status = '${item.status}',
+			transferred_location = '${item.transferred_location ? item.transferred_location.value : ' '}'
+		WHERE access_control_number IN (${formOption.map(item => `'${item.access_control_number}'`)});
+	`
+	return text
 }
 
 function query_signin(username) {
@@ -456,6 +440,44 @@ const query_insertUserRole = (username, role) => {
 	`
 }
 
+const query_addEditObjectRecord = (formOption, username) => {
+	let item = formOption[0]
+	const text = `
+		INSERT INTO edit_object_record (
+			edit_user_id, 
+			edit_time, 
+			notes, 
+			new_status, 
+			new_location, 
+			edit_objects
+		)
+		VALUES (
+			(
+				SELECT id 
+				FROM user_table 
+				WHERE name = $1
+			),
+			now(),
+			$2,
+			$3,
+			'${item.transferred_location ? item.transferred_location.value : ' '}',
+			ARRAY [${formOption.map(item => `'${item.access_control_number}'`)}]
+		);
+	`
+	const values = [
+		username,
+		item.notes,
+		item.status,
+	]
+
+	const query = {
+		text, 
+		values
+	}
+	return query
+
+}
+
 module.exports = {
     query_getTrackingData,
     query_getObjectTable,
@@ -481,5 +503,6 @@ module.exports = {
 	query_getEditObjectRecord,
 	query_setShift,
 	query_setVisitTimestamp,
-	query_insertUserRole
+	query_insertUserRole,
+	query_addEditObjectRecord,
 }

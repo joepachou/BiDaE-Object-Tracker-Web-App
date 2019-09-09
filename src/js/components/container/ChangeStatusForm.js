@@ -8,6 +8,7 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import RadioButton from '../presentational/RadioButton';
 import RadioButtonGroup from './RadioButtonGroup';
+import { inherits } from 'util';
 
 class ChangeStatusForm extends React.Component {
     
@@ -91,6 +92,9 @@ class ChangeStatusForm extends React.Component {
             deviceList: {
                 maxHeight: '20rem',
                 overflow: 'hidden scroll' 
+            },
+            textarea: {
+                width: '100%'
             }
         }
 
@@ -107,16 +111,6 @@ class ChangeStatusForm extends React.Component {
 
         let { title } = this.props;
         let selectedObjectData = this.props.selectedObjectData.length !== 0 ? this.props.selectedObjectData[0] : []
-
-        let initialValues = {
-            radioGroup: this.props.selectedObjectData.length !== 0 ? this.props.selectedObjectData[0].status : '',
-            select: this.props.selectedObjectData.length !== 0 && this.props.selectedObjectData[0].status === config.objectStatus.TRANSFERRED
-                ? { 
-                    value: selectedObjectData.transferred_location,
-                    label: locale.texts[selectedObjectData.transferred_location.toUpperCase().replace(/ /g, '_')]
-                }
-                : '',  
-        }
 
         return (
             <>  
@@ -183,7 +177,16 @@ class ChangeStatusForm extends React.Component {
                         </div>
                         <hr/>
                         <Formik
-                            initialValues = {initialValues}
+                            initialValues = {{
+                                radioGroup: this.props.selectedObjectData.length !== 0 ? this.props.selectedObjectData[0].status : '',
+                                select: this.props.selectedObjectData.length !== 0 && this.props.selectedObjectData[0].status === config.objectStatus.TRANSFERRED
+                                    ? { 
+                                        value: selectedObjectData.transferred_location,
+                                        label: locale.texts[selectedObjectData.transferred_location.toUpperCase().replace(/ /g, '_')]
+                                    }
+                                    : '', 
+                                textarea: '' 
+                            }}
 
                             validationSchema = {
                                 Yup.object().shape({
@@ -196,8 +199,8 @@ class ChangeStatusForm extends React.Component {
                                         })
                             })}
 
-                            onSubmit={({ radioGroup, select }, { setStatus, setSubmitting }) => {
-                                this.props.handleChangeObjectStatusFormSubmit(radioGroup, select)
+                            onSubmit={(values, { setStatus, setSubmitting }) => {
+                                this.props.handleChangeObjectStatusFormSubmit(values)
                             }}
 
                             render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
@@ -259,6 +262,28 @@ class ChangeStatusForm extends React.Component {
                                                     <div style={style.errorMessage}>{errors.select}</div>}
                                                 </Col>
                                             </Row>  
+                                        </Col>
+                                    </Row>
+                                    <hr/>
+                                    <Row>
+                                        <Col>
+                                            <label 
+                                                htmlFor="access_control_number" 
+                                                className='text-capitalize'
+                                            >
+                                                {locale.texts.NOTES}
+                                            </label>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col>
+                                            <Field 
+                                                component='textarea'
+                                                name="textarea" 
+                                                rows={3}
+                                                placeholder={locale.texts.WRITE_THE_NOTES}
+                                                style={style.textarea}
+                                            />
                                         </Col>
                                     </Row>
                                     <hr/>

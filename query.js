@@ -194,15 +194,21 @@ const addObject = (request, response) => {
 }
 
 const editObjectPackage = (request, response) => {
-    const formOption = request.body.formOption
-    pool.query(queryType.query_editObjectPackage(formOption), (error, results) => {
-        if (error) {
-            console.log(error)
-        } else {
-            console.log('success')
-            response.status(200).json(results)
-        } 
-    })
+    const { formOption, username } = request.body
+    pool.query(queryType.query_editObjectPackage(formOption))
+        .then(res => {
+            pool.query(queryType.query_addEditObjectRecord(formOption, username))
+                .then(res => {
+                    console.log('Edit object package success')
+                    response.status(200).json(res)
+                })
+                .catch(err => {
+                    console.log('Edit object package fail ' + err)
+                })
+        })
+        .catch(err => {
+            console.log('Edit object package fail ' + err)
+        })
 }
 
 const signin = (request, response) => {
@@ -517,6 +523,7 @@ const getEditObjectRecord = (request, response) => {
         })
 }
 
+
 module.exports = {
     getTrackingData,
     getObjectTable,
@@ -540,5 +547,5 @@ module.exports = {
     getRoleNameList,
     removeUser,
     setUserRole,
-    getEditObjectRecord
+    getEditObjectRecord,
 }

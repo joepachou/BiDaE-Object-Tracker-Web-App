@@ -66,6 +66,7 @@ const en =  {
     DAY_SHIFT: 'day shift',
     NIGHT_SHIFT: 'night shift',
     SHIFT_SELECT: 'shift select',
+    WRITE_THE_NOTES: 'write some notes...',
 
     /** Error Message */
     NAME_IS_REQUIRED: 'Name is required',
