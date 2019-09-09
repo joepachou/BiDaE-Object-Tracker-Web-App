@@ -111,7 +111,6 @@ class MyDeviceManager extends React.Component{
         axios.post(dataSrc.getObjectTable, {
             locale: locale.lang
         }).then(res => {
-
             let data = res.data.rows
             var dataMap = {}
 
@@ -123,11 +122,12 @@ class MyDeviceManager extends React.Component{
             axios.post(dataSrc.getUserInfo, {
                 username: JSON.parse(Cookies.get('user')).name
             }).then((res) => {
-                var myDeviceList = res.data.rows[0].mydevice
+                var myDeviceList = res.data.rows[0].mydevice || []
                 var allDeviceList = Object.keys(dataMap)
 
                 this.device.myDeviceList = myDeviceList
                 var myDevices = {}, notMyDevices = {}
+
                 for(var acn of allDeviceList){
                     if(myDeviceList.includes(acn)){
                         myDevices[acn] = dataMap[acn]
@@ -138,7 +138,6 @@ class MyDeviceManager extends React.Component{
 
                 this.device.myDevices = myDevices
                 this.device.notMyDevices = notMyDevices
-
                 this.APIforAddableList_1.setList(myDevices)
                 this.APIforAddableList_2.setList(notMyDevices)
             }).catch(err => {
