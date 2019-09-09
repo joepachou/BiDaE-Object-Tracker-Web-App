@@ -22,7 +22,7 @@ class AdminManagementContainer extends React.Component{
     state = {
            data: [],
            columns: [],
-           selectedUser: null,
+           selectedUser: '',
            userRole: null,
            locale: this.context.abbr,
            showModifyUserInfo: false,
@@ -111,7 +111,7 @@ class AdminManagementContainer extends React.Component{
     onCloseModifyUserInfo = () => {
         this.setState({
             showModifyUserInfo: false, 
-            selectedUser: null,
+            selectedUser: '',
             userRole: null,
         })
     }
@@ -179,6 +179,14 @@ class AdminManagementContainer extends React.Component{
         )
     }
 
+    onRowClick = (state, rowInfo, column, instance) => {
+        return {
+            onClick: (e, handleOriginal) => {
+                this.onClickUser(rowInfo.index)
+            }
+        }
+    }
+
     render(){
         const locale = this.context
         return (
@@ -198,18 +206,12 @@ class AdminManagementContainer extends React.Component{
                     noDataText="No Data Available"
                     className="-highlight"
                     style={{height:'75vh'}}
-                    getTrProps={(state, rowInfo, column, instance) => {
-                        return {
-                            onClick: (e, handleOriginal) => {
-                                this.onClickUser(rowInfo.index)
-                            }
-                        }
-                    }}
+                    getTrProps={this.onRowClick}
                 />
                 <ModifyUserInfo
                     roleName = {this.state.roleName}
                     show = {this.state.showModifyUserInfo}
-                    user = {this.state.selectedUser}
+                    user={this.state.selectedUser}
                     userRole = {this.state.userRole}
                     onClose = {this.onCloseModifyUserInfo}
                     onSubmit = {this.onSubmitModifyUserInfo}

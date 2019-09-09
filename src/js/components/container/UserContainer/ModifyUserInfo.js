@@ -80,6 +80,31 @@ export default class ModifyUserInfo extends React.Component{
         const {show} = this.state
         const { userRole } = this.staticParameter
         const locale = this.context
+        const {
+            user
+        } = this.props
+
+        const colProps = {
+            titleCol: {
+                xs: 2,
+                sm: 2
+            },
+            inputCol: {
+                xs: 10,
+                sm: 10,
+            }
+        }
+
+        const style = {
+            input: {
+                // borderRadius: 0,
+                // borderBottom: '1 solid grey',
+                // borderTop: 0,
+                // borderLeft: 0,
+                // borderRight: 0,
+                
+            }
+        }
         return(
             <Modal 
                 show={this.props.show}
@@ -100,6 +125,15 @@ export default class ModifyUserInfo extends React.Component{
                         }}    
                         render={({ values, errors, status, touched, isSubmitting }) => (
                             <Form>
+                                <Row >
+                                    <Col {...colProps.titleCol}>
+                                        {locale.texts.NAME}
+                                    </Col>
+                                    <Col {...colProps.inputCol} className='text-muted pb-1 text-lowercase'>
+                                        {user.name}
+                                    </Col>
+                                </Row>
+                                <hr/>
                                 <RadioButtonGroup
                                     id="radioGroup"
                                     label={locale.texts.ROLES}

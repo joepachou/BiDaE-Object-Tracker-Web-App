@@ -8,12 +8,14 @@ import LocaleContext from '../../../context/LocaleContext';
 import { getEditObjectRecord } from "../../../dataSrc";
 import AxiosFunction from './AxiosFunction'
 import { editObjectRecordTableColumn } from '../../../tables';
+import DeleteForm from '../DeleteForm'
 
 class EditObjectManagement extends React.Component{
 
     state = {
         data: [],
         columns: [],
+        showForm: false,
         locale: this.context.abbr
     }
 
@@ -37,6 +39,7 @@ class EditObjectManagement extends React.Component{
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
                 field.headerStyle = {
                     textAlign: 'left',
+                    textTransform: 'capitalize'
                 }
             })
             res.data.rows.map((item, index) => {
@@ -62,6 +65,22 @@ class EditObjectManagement extends React.Component{
                 User {record.edit_user_id}, Edit at {moment(record.edit_time).format('LLLL')}
             </h5>
         ) 
+    }
+
+    onRowClick = (state, rowInfo, column, instance) => {
+        return {
+            onClick: e => {
+                this.setState({
+                    showForm: true
+                })
+            }
+        }
+    }
+
+    onCloseForm = () => {
+        this.setState({
+            showForm: false
+        })
     }
     // <ListGroup className="w-100 shadow" style={{overflowY:'scroll', height: '75vh'}}>
     //     {this.state.record.map((record, index)=>{
@@ -98,23 +117,23 @@ class EditObjectManagement extends React.Component{
         //         }
         //     },
         // ]
-        const onRowClick = (state, rowInfo, column, instance) => {
-            return {
-                onClick: e => {
-                    this.onClickFile(e)
-                }
-            }
-        }
         return (
-            <ReactTable 
-                data={this.state.data} 
-                columns={this.state.columns} 
-                noDataText={locale.texts.NO_DATA_AVALIABLE}
-                className="-highlight w-100"
-                style={{height:'75vh'}}
-                getTrProps={onRowClick}
-            />
-            
+            <>
+                <ReactTable 
+                    data={this.state.data} 
+                    columns={this.state.columns} 
+                    noDataText={locale.texts.NO_DATA_AVALIABLE}
+                    className="-highlight w-100"
+                    style={{height:'75vh'}}
+                    // getTrProps={this.onRowClick}
+                />
+                <DeleteForm
+                    roleName={this.state.roleName}
+                    show={this.state.showForm}
+                    onClose={this.onCloseForm}
+                    title={'edit record'}
+                />
+            </>
         )
     }
 }

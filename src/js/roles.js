@@ -18,7 +18,6 @@ const rules = {
             "route:geofence",
             "route:devicesManagement",
             "route:shiftChangeRecord",
-            "route:editObjectManagement"
         ]
     },
     system_admin: {
@@ -27,7 +26,8 @@ const rules = {
             "route:systemStatus",
             "route:geofence",
             "route:objectManagement",
-            "route:userManager"
+            "route:userManager",
+            "route:editObjectManagement",
         ]
     }
   };

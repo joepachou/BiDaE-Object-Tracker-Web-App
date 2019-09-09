@@ -338,11 +338,12 @@ const editObjectRecordTableColumn = [
     {
         Header: 'Name',
         accessor: 'name',
-        width: 150,
+        width: 100,
     },
     {
         Header: 'edit time',
         accessor: 'edit_time',
+        width: 200,
     },
     {
         Header: 'Notes',
