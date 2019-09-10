@@ -341,18 +341,13 @@ const editLbeacon = (request, response) => {
 
 
 const  generatePDF = (request, response) => {
-    let { pdfFormat, userInfo } = request.body
+    let { pdfFormat, userInfo, filePath } = request.body
     let options = {
         "format": "A4",
         "orientation": "portrait",
         "border": "1cm",
         "timeout": "120000"
     };
-
-    let fileDir = `save_file_path/`
-    let fileName = `${userInfo.name}_${userInfo.shift.replace(/ /g, '_')}_${moment().format('MMMM Do YYYY, h:mm:ss a')}.pdf`
-
-    let filePath = fileDir + fileName
 
     pool.query(queryType.query_addShiftChangeRecord(userInfo.name, filePath))
         .then(res => {
@@ -365,7 +360,6 @@ const  generatePDF = (request, response) => {
         .catch(err => {
             console.log(err)
         })
-
 }
 
 const modifyUserDevices = (request, response) => {

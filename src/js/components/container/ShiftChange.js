@@ -107,13 +107,19 @@ class ShiftChange extends React.Component {
 
     confirmShift = () => {
         let userInfo = this.props.userInfo
-        let pdfFormat = this.getPDFFormat()
+        let locale = this.context
+        let time = moment().format(config.momentTimeFormat)
+        const { foundResult, notFoundResult } = this.state.searchResult
+        let pdfFormat = config.pdfFormat(userInfo, foundResult, notFoundResult, locale, time, 'shiftChange')
+        let fileDir = config.shiftRecordFileDir
+        let fileName = `${userInfo.name}_${userInfo.shift.replace(/ /g, '_')}_${moment().format('MMMM Do YYYY, h:mm:ss a')}.pdf`
+        let filePath = `${fileDir}/${fileName}`
 
         axios.post(dataSrc.generatePDF, {
             userInfo,
             pdfFormat,
+            filePath,
         }).then(res => {
-
             this.setState({
                 fileURL: res.data
             })
@@ -131,69 +137,6 @@ class ShiftChange extends React.Component {
         // link.click();
     }
 
-    getPDFFormat = () => {
-        const locale = this.context
-        const { foundResult, notFoundResult } = this.state.searchResult
-        const hasFoundResult = foundResult.length !== 0
-        const hasNotFoundResult = notFoundResult.length !== 0
-        const { userInfo } = this.props
-        const title = this.getPDFTitle(userInfo)
-
-        let foundTitle = hasFoundResult
-            ?   `<h3 style='text-transform: capitalize; margin-bottom: 5px;'>
-                    ${locale.texts.DEVICES_IN} ${locale.texts[config.site.toUpperCase().replace(/ /g, '_')]}
-                </h3>`
-            :   '';
-        let foundData = hasFoundResult 
-            ?   foundResult.map((item, index) => {
-                    return `
-                        <div key=${index} style='text-transform: capitalize;'>
-                            ${index + 1}.${item.name}, 
-                            ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}: ${item.last_four_acn}, 
-                            ${locale.texts.NEAR}${item.location_description}
-                        </div>
-                    `
-                    
-                }).join(' ')
-            :   ''
-        let notFoundTitle = hasNotFoundResult 
-            ?   `<h3 className='mt-1' style='text-transform: capitalize; margin-bottom: 5px;'>
-                    ${locale.texts.DEVICES_NOT_IN} ${locale.texts[config.site.toUpperCase().replace(/ /g, '_')]}
-                </h3>`
-            :   '';
-        let notFoundData = hasNotFoundResult 
-            ?   notFoundResult.map((item, index) => {
-                    return `
-                        <div key=${index} style='text-transform: capitalize;'>
-                            ${index + 1}.${item.name}, 
-                            ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}: ${item.last_four_acn}, 
-                            ${locale.texts.NEAR}${item.location_description}
-                        </div>
-                    `
-                }).join(' ')
-            :   '';
-        let pdfFormat = title + foundTitle + foundData + notFoundTitle + notFoundData
-        return pdfFormat
-    }
-
-    getPDFTitle = (userInfo) => {
-        const locale = this.context
-        const nextShiftIndex = (config.shiftOption.indexOf(userInfo.shift) + 1) % config.shiftOption.length
-        const nextShift = locale.texts[config.shiftOption[nextShiftIndex].toUpperCase().replace(/ /g, '_')]
-        const thisShift = locale.texts[userInfo.shift.toUpperCase().replace(/ /g, '_')]
-        let header = `<h1 style='text-transform: capitalize;'>
-                ${locale.texts.SHIFT_CHANGE_RECORD}-${locale.texts.CONFIRM_BY}
-            </h1>`
-        let timestamp = `<div style='text-transform: capitalize;'>${locale.texts.DATE_TIME}: ${moment().format('LLL')}</div>`
-        let shift = `<div style='text-transform: capitalize;'>
-                ${locale.texts.SHIFT}: ${thisShift} ${locale.texts.SHIFT_TO} ${nextShift}
-            </div>`
-        let checkby = `<div style='text-transform: capitalize;'>
-                ${locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: ${userInfo.name}, ${thisShift}
-            </div>`
-        return header + timestamp + shift + checkby
-    }
-    
     render() {
         const { show } = this.state;
         const { userInfo } = this.props

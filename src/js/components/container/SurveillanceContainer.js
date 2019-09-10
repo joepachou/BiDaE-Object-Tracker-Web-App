@@ -10,6 +10,7 @@ import {
 import GridButton from '../container/GridButton';
 import PdfDownloadForm from './PdfDownloadForm'
 import config from '../../config';
+import AuthenticationContext from '../../context/AuthenticationContext';
 
 
 class SurveillanceContainer extends React.Component {
@@ -77,78 +78,83 @@ class SurveillanceContainer extends React.Component {
         const locale = this.context.texts;
 
         return(
-            <div id="surveillanceContainer" style={style.surveillanceContainer} className='overflow-hidden'>
-                <div style={style.mapBlock}>
-                    <Surveillance 
-                        rssi={this.state.rssi} 
-                        hasSearchKey={hasSearchKey}
-                        style={style.searchMap}
-                        colorPanel={this.props.colorPanel}
-                        proccessedTrackingData={this.props.proccessedTrackingData}
-                        getSearchKey={this.props.getSearchKey}
-                    />
-                </div>
-                <div style={style.navBlock}>
-
-                    <Nav className='d-flex align-items-start text-capitalize'>
-                        <Nav.Item>
-                            <div style={style.title} 
-                            >
-                                {locale.LOCATION_ACCURACY}
-                            </div>
-                        </Nav.Item>
-                        <Nav.Item className='pt-2 mr-2'>
-                            <ToggleSwitch 
-                                changeLocationAccuracy={this.props.changeLocationAccuracy} 
-                                leftLabel='low'
-                                defaultLabel='med' 
-                                rightLabel='high'
-                            />
-                        </Nav.Item>
-                        <Nav.Item className='mt-2'>
-                            <Button 
-                                variant="outline-primary" 
-                                className='mr-1 ml-2 text-capitalize' 
-                                onClick={this.handleClickButton} 
-                                name='clear'
-                            >
-                                {locale.CLEAR}
-                            </Button>
-                        </Nav.Item>
-                        <Nav.Item className='mt-2'>
-                            <Button 
-                                variant="outline-primary" 
-                                className='mr-1 ml-2 text-capitalize' 
-                                onClick={this.handleClickButton} 
-                                name='save'
-                            >
-                                {locale.SAVE}
-                            </Button>
-                        </Nav.Item>
-                        <Nav.Item className='mt-2'>
-                            <Button 
-                                variant="outline-primary" 
-                                className='mr-1 text-capitalize' 
-                                onClick={this.handleClickButton} 
-                                name='show devices'
-                            >
-                                {this.state.showDevice ? locale.HIDE_DEVICES : locale.SHOW_DEVICES }
-                            </Button>
-                        </Nav.Item >
-                        <div style={style.gridButton} className='mt-2 mx-3'>
-                            <GridButton
-                                clearColorPanel={this.props.clearColorPanel}
+            <AuthenticationContext.Consumer>
+                {auth => (
+                    <div id="surveillanceContainer" style={style.surveillanceContainer} className='overflow-hidden'>
+                        <div style={style.mapBlock}>
+                            <Surveillance 
+                                rssi={this.state.rssi} 
+                                hasSearchKey={hasSearchKey}
+                                style={style.searchMap}
+                                colorPanel={this.props.colorPanel}
+                                proccessedTrackingData={this.props.proccessedTrackingData}
                                 getSearchKey={this.props.getSearchKey}
                             />
                         </div>
-                    </Nav>
-                </div>
-                <PdfDownloadForm 
-                    show={this.state.showPdfDownloadForm}
-                    data={this.props.proccessedTrackingData.filter(item => item.searched)}
-                    handleClose = {this.handleClosePdfForm}
-                />
-            </div>
+                        <div style={style.navBlock}>
+
+                            <Nav className='d-flex align-items-start text-capitalize'>
+                                <Nav.Item>
+                                    <div style={style.title} 
+                                    >
+                                        {locale.LOCATION_ACCURACY}
+                                    </div>
+                                </Nav.Item>
+                                <Nav.Item className='pt-2 mr-2'>
+                                    <ToggleSwitch 
+                                        changeLocationAccuracy={this.props.changeLocationAccuracy} 
+                                        leftLabel='low'
+                                        defaultLabel='med' 
+                                        rightLabel='high'
+                                    />
+                                </Nav.Item>
+                                <Nav.Item className='mt-2'>
+                                    <Button 
+                                        variant="outline-primary" 
+                                        className='mr-1 ml-2 text-capitalize' 
+                                        onClick={this.handleClickButton} 
+                                        name='clear'
+                                    >
+                                        {locale.CLEAR}
+                                    </Button>
+                                </Nav.Item>
+                                <Nav.Item className='mt-2'>
+                                    <Button 
+                                        variant="outline-primary" 
+                                        className='mr-1 ml-2 text-capitalize' 
+                                        onClick={this.handleClickButton} 
+                                        name='save'
+                                    >
+                                        {locale.SAVE}
+                                    </Button>
+                                </Nav.Item>
+                                {/* <Nav.Item className='mt-2'>
+                                    <Button 
+                                        variant="outline-primary" 
+                                        className='mr-1 text-capitalize' 
+                                        onClick={this.handleClickButton} 
+                                        name='show devices'
+                                    >
+                                        {this.state.showDevice ? locale.HIDE_DEVICES : locale.SHOW_DEVICES }
+                                    </Button>
+                                </Nav.Item > */}
+                                <div style={style.gridButton} className='mt-2 mx-3'>
+                                    <GridButton
+                                        clearColorPanel={this.props.clearColorPanel}
+                                        getSearchKey={this.props.getSearchKey}
+                                    />
+                                </div>
+                            </Nav>
+                        </div>
+                        <PdfDownloadForm 
+                            show={this.state.showPdfDownloadForm}
+                            data={this.props.proccessedTrackingData.filter(item => item.searched)}
+                            handleClose = {this.handleClosePdfForm}
+                            userInfo={auth.user}
+                        />
+                    </div>
+                )}
+            </AuthenticationContext.Consumer>
         )
     }
 }

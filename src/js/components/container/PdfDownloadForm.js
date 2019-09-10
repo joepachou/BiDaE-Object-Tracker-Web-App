@@ -9,6 +9,8 @@ import LocaleContext from '../../context/LocaleContext';
 import axios from 'axios';
 import dataSrc from '../../dataSrc';
 import QRCode from 'qrcode.react';
+import moment from 'moment'
+import config from '../../config'
 
 // need Inputs : search Result
 // this component will send json to back end, backend will return a url, and the component generate a qrcode
@@ -36,6 +38,9 @@ class PdfDownloadForm extends React.Component {
             .then(res => {
                 callBack(res.data)
             })
+            .catch(err => {
+                console.log(err)
+            })
     }
     componentDidUpdate = (preProps) => {
         if(this.props.show && !this.state.show){
@@ -43,10 +48,20 @@ class PdfDownloadForm extends React.Component {
             for(var item of this.props.data){
                 item.found ? foundResult.push(item) : notFoundResult.push(item)
             }
+
+            let userInfo = this.props.userInfo
+            let locale = this.context
+            let time = moment().format(config.momentTimeFormat)
+            let pdfFormat = config.pdfFormat(userInfo, foundResult, notFoundResult, locale, time, 'searchResult')
+
+            let fileDir = config.searchResultFileDir
+            let fileName = `${'search_result'}_${moment().locale('en').format('MMMM Do YYYY, h:mm:ss a')}.pdf`
+            let filePath = `${fileDir}/${fileName}`
+
             var searResultInfo = {
-                user: JSON.parse(Cookies.get('user')).name,
-                foundResult: foundResult,
-                notFoundResult: notFoundResult
+                userInfo,
+                pdfFormat,
+                filePath
             }
             this.sendSearchResultToBackend(searResultInfo,(path) => {
                 this.setState({
