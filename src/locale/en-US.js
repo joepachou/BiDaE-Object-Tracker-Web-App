@@ -45,6 +45,7 @@ const en =  {
     DOWNLOAD: 'download',
     DELETE: 'delete',
     ADD_USER: 'add user',
+    EDIT_DEVICES: 'edit devices',
 
     /* Form Field */
     NAME: 'name',
@@ -64,9 +65,15 @@ const en =  {
     DELAY_BY: 'delay by',
     SHIFT: 'shift',
     DAY_SHIFT: 'day shift',
+    SWING_SHIFT: 'swing shift',
     NIGHT_SHIFT: 'night shift',
     SHIFT_SELECT: 'shift select',
     WRITE_THE_NOTES: 'write some notes...',
+    USERNAME: 'username',
+    PASSWORD: 'password',
+    DATE_TIME: 'date/time',
+    DEVICE_LOCATION_STATUS_CHECKED_BY: 'device location/status checked by',
+
 
     /** Error Message */
     NAME_IS_REQUIRED: 'Name is required',
@@ -100,6 +107,7 @@ const en =  {
     YUANLIN_CHRISTIAN_HOSPITAL: 'Yuanlin Christian Hospital',
     NTU_HOSPITAL_YUNLIN_BRANCH: 'NTU Hospital Yunlin Branch',
     NTU_HOSPITAL_TAIPEI: 'NTU Hospital Taipe',
+    NTU_HOSPITAL_YUNLIN_BRANCH_WARD_5B: 'NTU Hospital Yunlin branch ward 5B',
 
     /** User Setting */
     USER_SETTING: 'User Setting',
@@ -111,7 +119,7 @@ const en =  {
     OTHER_DEVICES: 'Other Devices',
     USER_MANAGER: 'user manager',
     ADMIN: 'Admin',
-    CONFIRM: 'Confirm', 
+    CONFIRM: 'Confirm',
     REMOVE_USER_CONFIRM: 'Remove User',
 
     /** Table Title */
@@ -149,20 +157,23 @@ const en =  {
     NO_DATA_AVAILABE: 'no data available',
     SUBMIT_TIMESTAMP: 'submit time',
     USER_NAME: 'user name',
-
-    /** User Setting */
-    USERNAME: 'username',
-    PASSWORD: 'password',
+    DEVICES_IN: 'devices in',
+    DEVICES_NOT_IN: 'devices not in',
+    CONFIRM_BY: 'confirm by',
 
     /** User Roles */
     CARE_PROVIDER: 'care provider',
     SYSTEM_ADMIN: 'system admin',
 
     TO: 'to',
+    SHIFT_TO: 'to',
     NEAR: 'near',
     IS: 'is',
     WHEN: 'when',
     NOT_AVAILABLE: 'N/A',
+    IN: 'in',
+    NOT: 'not',
+    WHOSE: "'s ",
 
     DEVICE_FOUND: function (length){
         return length.toString()+' devices are found'

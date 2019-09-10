@@ -45,6 +45,7 @@ const tw = {
     DOWNLOAD: '下載',
     DELETE: '刪除',
     ADD_USER: '新增使用者',
+    EDIT_DEVICES: '編輯儀器',
 
 
     /* Form Field */
@@ -65,9 +66,14 @@ const tw = {
     DELAY_BY: 'delay by',
     SHIFT: '班別',
     DAY_SHIFT: '早班',
+    SWING_SHIFT: '中班',
     NIGHT_SHIFT: '晚班',
     SHIFT_SELECT: '選擇班別',
     WRITE_THE_NOTES: '填寫註記...',
+    USERNAME: '使用者名稱',
+    PASSWORD: '密碼',
+    DATE_TIME: '時間',
+    DEVICE_LOCATION_STATUS_CHECKED_BY: '儀器狀態/地點確認 交接者',
 
 
     /** Error Message */
@@ -102,11 +108,13 @@ const tw = {
     YUANLIN_CHRISTIAN_HOSPITAL: '員林基督教醫院',
     NTU_HOSPITAL_YUNLIN_BRANCH: '台大醫院雲林分院',
     NTU_HOSPITAL_TAIPEI: '台大醫院台北總院',
+    NTU_HOSPITAL_YUNLIN_BRANCH_WARD_5B: '台大醫院雲林分院5B病房',
+
 
     /** User Setting */
     USER_SETTING: '帳戶設定',
     DEVICES_MANAGEMENT: '儀器管理',
-    SHIFT_CHANGE_RECORD: '換班紀錄',
+    SHIFT_CHANGE_RECORD: '交班紀錄',
     EDIT_OBJECT_MANAGEMENT: '儀器狀態更改紀錄',
     ACCESS_RIGHT: '使用者權限',
     MY_DEVICES: '我的儀器',
@@ -151,20 +159,23 @@ const tw = {
     NO_DATA_AVAILABE: '無資料顯示', 
     SUBMIT_TIMESTAMP: '儲存時間',
     USER_NAME: '人員名稱',
-
-    /** User Setting */
-    USERNAME: '使用者名稱',
-    PASSWORD: '密碼',
+    DEVICES_IN: '儀器位於',
+    DEVICES_NOT_IN: '儀器不位於',
+    CONFIRM_BY: '確認',
 
     /** User Roles */
     CARE_PROVIDER: '護理人員',
     SYSTEM_ADMIN: '系統管理員',
 
     TO: '至',
+    SHIFT_TO: '接交',
     NEAR: '鄰近',
     IS: 'is',
     WHEN: '於',
     NOT_AVAILABLE: '無資料顯示',
+    IN: '在',
+    NOT: '不',
+    WHOSE: "的",
 
     DEVICE_FOUND: function (length){
         return '發現'+length.toString()+'個儀器'

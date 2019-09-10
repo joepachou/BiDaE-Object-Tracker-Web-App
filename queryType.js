@@ -478,6 +478,26 @@ const query_addEditObjectRecord = (formOption, username) => {
 
 }
 
+const query_addShiftChangeRecord = (username, file_path) => {
+	const query = `
+		INSERT INTO shift_change_record (
+			user_id, 
+			submit_timestamp, 
+			file_path
+		)
+		VALUES (
+			(
+				SELECT id
+				FROM user_table
+				WHERE name='${username}'
+			), 
+			now(), 
+			'${file_path}'
+		);
+	`
+	return query
+}
+
 module.exports = {
     query_getTrackingData,
     query_getObjectTable,
@@ -505,4 +525,5 @@ module.exports = {
 	query_setVisitTimestamp,
 	query_insertUserRole,
 	query_addEditObjectRecord,
+	query_addShiftChangeRecord
 }

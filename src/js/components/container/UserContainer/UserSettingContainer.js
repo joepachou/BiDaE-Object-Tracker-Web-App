@@ -2,13 +2,14 @@ import React from 'react';
 import ListGroup from 'react-bootstrap/ListGroup';
 import dataSrc from "../../../dataSrc";
 import { Col, Row, Button, Nav, Container} from 'react-bootstrap';
-import MyDeviceManager from './MyDeviceManager'
 import ShiftChangeRecord from './ShiftChangeRecord'
 import AdminManagementContainer from './AdminManagementContainer'
 import EditObjectManagement from './EditObjectManagement'
 import LocaleContext from '../../../context/LocaleContext';
 import AccessControl from '../../presentational/AccessControl'
 import AuthenticationContext from '../../../context/AuthenticationContext';
+import DeviceManager from './DeviceManager'
+import MyDeviceManager from './MyDeviceManager';
 
 class UserSettingContainer extends React.Component{
     constructor() {
@@ -17,6 +18,7 @@ class UserSettingContainer extends React.Component{
             {
                 name: 'Devices Management',
                 path: 'devicesManagement',
+                // component: <DeviceManager />
                 component: <MyDeviceManager />
             },
             {

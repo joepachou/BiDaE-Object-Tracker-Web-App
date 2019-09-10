@@ -1,5 +1,12 @@
 import React, {Fragment} from 'react';
-import { Modal, Image, Row, Col } from 'react-bootstrap';
+import { 
+    Modal, 
+    Image, 
+    Row, 
+    Col,
+    Button,
+    Container
+} from 'react-bootstrap';
 import axios from 'axios';
 import dataSrc from '../../dataSrc'
 import Cookies from 'js-cookie'
@@ -9,27 +16,24 @@ import PdfDownloadForm from './PdfDownloadForm'
 import moment from 'moment'
 import AuthenticationContext from '../../context/AuthenticationContext'
 import config from '../../config';
+import LocaleContext from '../../context/LocaleContext';
+import SearchResultListGroup from '../presentational/SearchResultListGroup'
 
 
 class ShiftChange extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
+    state = {
             show: false,
-            searchResult: [],
+            searchResult: {
+                foundResult: [],
+                notFoundResult: [],
+            },
             showPdfDownloadForm: false,
             APIforTableDone: false,
         }
-        this.APIforTable = null
-        this.handleClose = this.handleClose.bind(this)
-        this.handleClosePdfForm = this.handleClosePdfForm.bind(this)
-        this.confirmShift = this.confirmShift.bind(this)
+        APIforTable = null
 
-        this.getAPIfromTable = this.getAPIfromTable.bind(this)
-        this.onClickTableItem = this.onClickTableItem.bind(this)
-    }
 
-    getAPIfromTable(API){
+    getAPIfromTable = (API) => {
         // console.log('API')
         this.APIforTable = API
 
@@ -47,11 +51,11 @@ class ShiftChange extends React.Component {
 
     }
 
-    componentDidMount() {
+    componentDidMount = () => {
         this.getTrackingData(true)
     }
 
-    componentDidUpdate(preProps) {
+    componentDidUpdate = (preProps) => {
         if (preProps != this.props){
             this.setState({
                 show: this.props.show,
@@ -59,7 +63,7 @@ class ShiftChange extends React.Component {
         }
     }
 
-    handleClose() {
+    handleClose = () => {
         this.props.handleShiftChangeRecordClose()
         this.setState({
             show: false
@@ -95,48 +99,187 @@ class ShiftChange extends React.Component {
         })
     }
 
-    handleClosePdfForm(){
+    handleClosePdfForm = () => {
         this.setState({
             showPdfDownloadForm: false
         })
     }
 
-    confirmShift(){
-        axios.post(dataSrc.generatePDF,
-            {
-                user: 'joechou', 
-                foundResult: this.state.searchResult.foundResult,
-                notFoundResult: this.state.searchResult.notFoundResult,
-            }).then(res => {
-                setTimeout(() => {
-                    this.props.handleShiftChangeRecordClose()
-                }, 3000)
-                this.setState({
-                    fileURL: res.data
-                })
-                this.refs.download.click()
+    confirmShift = () => {
+        let userInfo = this.props.userInfo
+        let pdfFormat = this.getPDFFormat()
+
+        axios.post(dataSrc.generatePDF, {
+            userInfo,
+            pdfFormat,
+        }).then(res => {
+
+            this.setState({
+                fileURL: res.data
+            })
+            this.refs.download.click()
+        }).catch(err => {
+            console.log(err)
         })
+
+        // const url = window.URL.createObjectURL(new Blob([res.data]));
+        // const fileName = res.data.split('/')[1].toString()
+        // const link = document.createElement('a');
+        // link.href = url;
+        // link.setAttribute('download', fileName);
+        // document.body.appendChild(link);
+        // link.click();
     }
 
+    getPDFFormat = () => {
+        const locale = this.context
+        const { foundResult, notFoundResult } = this.state.searchResult
+        const hasFoundResult = foundResult.length !== 0
+        const hasNotFoundResult = notFoundResult.length !== 0
+        const { userInfo } = this.props
+        const title = this.getPDFTitle(userInfo)
+
+        let foundTitle = hasFoundResult
+            ?   `<h3 style='text-transform: capitalize; margin-bottom: 5px;'>
+                    ${locale.texts.DEVICES_IN} ${locale.texts[config.site.toUpperCase().replace(/ /g, '_')]}
+                </h3>`
+            :   '';
+        let foundData = hasFoundResult 
+            ?   foundResult.map((item, index) => {
+                    return `
+                        <div key=${index} style='text-transform: capitalize;'>
+                            ${index + 1}.${item.name}, 
+                            ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}: ${item.last_four_acn}, 
+                            ${locale.texts.NEAR}${item.location_description}
+                        </div>
+                    `
+                    
+                }).join(' ')
+            :   ''
+        let notFoundTitle = hasNotFoundResult 
+            ?   `<h3 className='mt-1' style='text-transform: capitalize; margin-bottom: 5px;'>
+                    ${locale.texts.DEVICES_NOT_IN} ${locale.texts[config.site.toUpperCase().replace(/ /g, '_')]}
+                </h3>`
+            :   '';
+        let notFoundData = hasNotFoundResult 
+            ?   notFoundResult.map((item, index) => {
+                    return `
+                        <div key=${index} style='text-transform: capitalize;'>
+                            ${index + 1}.${item.name}, 
+                            ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}: ${item.last_four_acn}, 
+                            ${locale.texts.NEAR}${item.location_description}
+                        </div>
+                    `
+                }).join(' ')
+            :   '';
+        let pdfFormat = title + foundTitle + foundData + notFoundTitle + notFoundData
+        return pdfFormat
+    }
+
+    getPDFTitle = (userInfo) => {
+        const locale = this.context
+        const nextShiftIndex = (config.shiftOption.indexOf(userInfo.shift) + 1) % config.shiftOption.length
+        const nextShift = locale.texts[config.shiftOption[nextShiftIndex].toUpperCase().replace(/ /g, '_')]
+        const thisShift = locale.texts[userInfo.shift.toUpperCase().replace(/ /g, '_')]
+        let header = `<h1 style='text-transform: capitalize;'>
+                ${locale.texts.SHIFT_CHANGE_RECORD}-${locale.texts.CONFIRM_BY}
+            </h1>`
+        let timestamp = `<div style='text-transform: capitalize;'>${locale.texts.DATE_TIME}: ${moment().format('LLL')}</div>`
+        let shift = `<div style='text-transform: capitalize;'>
+                ${locale.texts.SHIFT}: ${thisShift} ${locale.texts.SHIFT_TO} ${nextShift}
+            </div>`
+        let checkby = `<div style='text-transform: capitalize;'>
+                ${locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: ${userInfo.name}, ${thisShift}
+            </div>`
+        return header + timestamp + shift + checkby
+    }
+    
     render() {
         const { show } = this.state;
+        const { userInfo } = this.props
+        const { foundResult, notFoundResult } = this.state.searchResult
+        const locale = this.context
+        const style = {
+            row: {
+                width: '100%'
+            },
+            modalBody: {
+                height: '60vh',
+                overflow: 'hidden scroll'
+            }
+        }
+        const hasFoundResult = foundResult.length !== 0;
+        const hasNotFoundResult = notFoundResult.length !== 0;
         return (
             <Fragment>
-                <Modal show={show} size="lg" style={{height: '90vh'}} onHide={this.handleClose}>
-                    <Modal.Header > 
-                        <div className="w-100 text-center text-capitalize">
-                            <h3>Checked By Joechou Day Shift</h3>
-                                <br />
-                            <h5>At {moment().format('LLLL')}</h5>
-                        </div>
+                <Modal show={show} size="md" onHide={this.handleClose}>
+                    <Modal.Header
+                        className='d-flex flex-column'
+                    >
+                        <Row>
+                            <Col className='text-capitalize'>
+                                {/* <h5>{locale.texts.SHIFT_CHANGE_RECORD}-{locale.texts.CONFIRM_BY}</h5> */}                                
+                                <h5>{userInfo.name}{locale.texts.WHOSE}{locale.texts.DEVICES}</h5>
+                            </Col>
+                        </Row>
+                        <Row style={style.row} className='text-capitalize'> 
+                            <Col>
+                                <div>{locale.texts.DATE_TIME}: {moment().format('LLL')}</div>
+                            </Col>
+                        </Row>
+                        {/* <Row style={style.row} className='text-capitalize'> 
+                            <Col>
+                                <div>{locale.texts.SHIFT}: </div>
+                            </Col>
+                        </Row>
+                        <Row style={style.row} className='text-capitalize'> 
+                            <Col>
+                                <div>{locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: </div>
+                            </Col>
+                        </Row> */}
                     </Modal.Header>
-                    <Modal.Body  style ={{padding: '0px 0px 0px 0px', marginBottom: '10px', height: '60vh', overflowY: 'hidden'}} >                       
-                        <SearchResultTable 
-                            getAPI = {this.getAPIfromTable}
-                        />
+                    <Modal.Body  
+                        style ={style.modalBody}
+                        className='text-capitalize'
+                     >                       
+                        <div>
+                            {hasFoundResult && <h6>{locale.texts.DEVICES_IN} {locale.texts[config.site.toUpperCase().replace(/ /g, '_')]}</h6>}                    
+                            {hasFoundResult && foundResult.map((item, index) => {
+                                return (
+                                    <div key={index}>
+                                        {index + 1}.{item.name}, 
+                                        {locale.texts.LAST_FOUR_DIGITS_IN_ACN}: {item.last_four_acn}, 
+                                        {locale.texts.NEAR}{item.location_description}
+                                    </div>
+                                )
+                            })}
+                        </div>
+                        <div className='my-3'>
+                            { hasNotFoundResult && <h6>{locale.texts.DEVICES_NOT_IN} {locale.texts[config.site.toUpperCase().replace(/ /g, '_')]}</h6>}
+                            { hasNotFoundResult && notFoundResult.map((item, index) => {
+                                return (
+                                    <div key={index}>
+                                        {index + 1}.{item.name}, 
+                                        {locale.texts.LAST_FOUR_DIGITS_IN_ACN}: {item.last_four_acn}, 
+                                        {locale.texts.NEAR}{item.location_description}
+                                    </div>
+                                )
+                            })}
+                        </div>
                     </Modal.Body>
-                    <Modal.Footer style={{padding: '0px 0px 0px 0px',}}>
-                        <button className = "btn btn-primary w-100 m-0 p-0" style={{height: '5vh'}} onClick = {this.confirmShift}>Confirm</button>
+                    <Modal.Footer>
+                        <Button variant="outline-secondary" className="text-capitalize" onClick={this.handleClose}>
+                            {locale.texts.CANCEL}
+                        </Button>
+                        <Button 
+                            type="submit" 
+                            className="text-capitalize" 
+                            variant="primary" 
+                            onClick = {this.confirmShift}
+                            disabled={!hasFoundResult || !hasNotFoundResult}
+                        >
+                            {locale.texts.CONFIRM}
+                        </Button>
                         <a href={this.state.fileURL} ref="download" download style={{display: 'none'}}>hi</a>
                     </Modal.Footer>
                 </Modal>
@@ -146,5 +289,5 @@ class ShiftChange extends React.Component {
     }
 }
 
-
+ShiftChange.contextType = LocaleContext
 export default ShiftChange

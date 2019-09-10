@@ -17,6 +17,8 @@ const config = {
         // map: NTUH_YUNLIN_BRANCH_MAP,
         map: map,
 
+        
+
         /* Map customization */
         mapOptions: {
             crs: L.CRS.Simple,
@@ -90,8 +92,9 @@ const config = {
         
     },
 
+    site: 'NTU Hospital Yunlin branch ward 5B',
+
     objectStatus: {
-            
         PERIMETER: 'perimeter',
         FENCE: 'fence',
         NORMAL: 'normal',
@@ -177,6 +180,7 @@ const config = {
 
     shiftOption: [
         'day shift',
+        'swing shift',
         'night shift',
     ],
 

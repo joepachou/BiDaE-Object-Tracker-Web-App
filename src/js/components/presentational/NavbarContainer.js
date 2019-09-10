@@ -148,13 +148,18 @@ class NavbarContainer extends React.Component {
                                                 <NavDropdown.Item className="lang-select">{auth.user.name}</NavDropdown.Item>
                                             </LinkContainer>
                                             <Dropdown.Divider />
-                                            <NavDropdown.Item 
-                                                className="lang-select" 
-                                                onClick={this.handleShiftChangeRecordShowUp}
+                                            <AccessControl
+                                                permission={'user:shiftChange'}
+                                                renderNoAccess={() => null}
                                             >
-                                                {locale.texts.SHIFT_CHANGE_RECORD}
-                                            </NavDropdown.Item>
-                                            <Dropdown.Divider />
+                                                <NavDropdown.Item 
+                                                    className="lang-select" 
+                                                    onClick={this.handleShiftChangeRecordShowUp}
+                                                >
+                                                    {locale.texts.SHIFT_CHANGE_RECORD}
+                                                </NavDropdown.Item>
+                                                <Dropdown.Divider />
+                                            </AccessControl>
                                             <NavDropdown.Item className="lang-select" onClick={auth.signout}>{locale.texts.SIGN_OUT}</NavDropdown.Item>
                                         </NavDropdown> 
                                         
@@ -181,6 +186,7 @@ class NavbarContainer extends React.Component {
                             show = {isShowShiftChange}
                             handleShiftChangeRecordSubmit = {this.handleShiftChangeRecordSubmit}
                             handleShiftChangeRecordClose={this.handleShiftChangeRecordClose}
+                            userInfo={auth.user}
                         />
                     </Navbar>
                 )}

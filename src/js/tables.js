@@ -375,6 +375,34 @@ const shiftChangeRecordTableColumn = [
     }
 ]
 
+const deviceManagerTableColumn = [
+    {
+        Header: 'id',
+        accessor: 'id',
+    },
+    {
+        Header: 'Name',
+        accessor: 'name'
+    },
+    {
+        Header: 'Type',
+        accessor: 'type'
+    },
+    {
+        Header: 'Access Control Number',
+        accessor: 'access_control_number'
+    },
+    {
+        Header: 'Status',
+        accessor: 'status',
+        width: 100,
+    },
+    {
+        Header: 'Transferred Location',
+        accessor: 'transferred_location'
+    }, 
+]
+
 export { 
     trackingTableColumn,
     searchResultTableColumn,
@@ -384,5 +412,7 @@ export {
     geofenceTableColumn,
     userInfoTableColumn,
     editObjectRecordTableColumn,
-    shiftChangeRecordTableColumn
+    shiftChangeRecordTableColumn,
+    deviceManagerTableColumn
+
 }

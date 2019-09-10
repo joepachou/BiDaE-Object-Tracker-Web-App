@@ -18,7 +18,8 @@ const rules = {
             "route:geofence",
             "route:devicesManagement",
             "route:shiftChangeRecord",
-            "user:mydevice"
+            "user:mydevice",
+            'user:shiftChange'
         ]
     },
     system_admin: {

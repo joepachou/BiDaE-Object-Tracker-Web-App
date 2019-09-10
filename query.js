@@ -233,12 +233,13 @@ const signin = (request, response) => {
                         name, 
                         role, 
                         mydevice, 
-                        search_history 
+                        search_history,
                     } = results.rows[0]
                     userInfo.name= name
                     userInfo.myDevice = mydevice
                     userInfo.role = role
                     userInfo.searchHistory = search_history
+                    userInfo.shift = shift
 
                     request.session.userInfo = userInfo
                     response.json({
@@ -340,70 +341,35 @@ const editLbeacon = (request, response) => {
 
 
 const  generatePDF = (request, response) => {
-    // console.log(result)
-    var {foundResult, notFoundResult, user} = request.body
-    var header = "<h1 style='text-align: center; class='text-capitalize'>" + "Checked By " + 'Joechou' +  ' Day Shift' + "</h1>"
-    var timestamp = "<h3 style='text-align: center;'>" + moment().format('LLLL') + "</h3>"
-
-    function generateTable(title, types, lists, attributes){
-        var html = "<div>"
-        html += "<h2 style='text-align: center;'>" + title + "</h2>"
-        html += "<table border='1' style='width:100%;word-break:break-word;'>";
-        html += "<tr>";
-        for(var i in types){
-            html += "<th >" + types[i] + "</th>";
-        }
-        for (var i of lists){
-            html += "<tr>";
-            for(var j of attributes){
-                html += "<td>"+ i[j] +"</td>";
-            }
-        }
-        html += "</table></div>"
-
-        return html
-    }
-
-    // foundResult to Table
-    
-    var types = ["Name", "Type", "ACN", "Location"]
-    var attributes = ["name", "type", "access_control_number", "location_description"]
-
-    var title = "Results are Found"
-    var lists = foundResult
-    var foundTable = generateTable(title, types, lists, attributes)
-
-
-    var title = "Results are NOT Found "
-    var lists = notFoundResult
-    var notFoundTable = lists.length == 0 ? generateTable(title, types, lists, attributes) : '';
-
-
-    
-    
-    var options = {
+    let { pdfFormat, userInfo } = request.body
+    let options = {
         "format": "A4",
-        "orientation": "landscape",
-        "border": {
-            "top": "0.3in",            // default is 0, units: mm, cm, in, px
-            "right": "2in",
-            "bottom": "0.3in",
-            "left": "2in"
-        },
+        "orientation": "portrait",
+        "border": "1cm",
         "timeout": "120000"
     };
-    var html = header + timestamp + foundTable + notFoundTable
-    var filePath = `save_file_path/joechou_day_shift_${moment().format('LLLL')}.pdf`
-    pdf.create(html, options).toFile(filePath, function(err, result) {
-        if (err) return console.log(err);
-        console.log("pdf create");
-        response.status(200).json(filePath)
-    });
+
+    let fileDir = `save_file_path/`
+    let fileName = `${userInfo.name}_${userInfo.shift.replace(/ /g, '_')}_${moment().format('MMMM Do YYYY, h:mm:ss a')}.pdf`
+
+    let filePath = fileDir + fileName
+
+    pool.query(queryType.query_addShiftChangeRecord(userInfo.name, filePath))
+        .then(res => {
+            pdf.create(pdfFormat, options).toFile(filePath, function(err, result) {
+                if (err) return console.log(err);
+                console.log("pdf create");
+                response.status(200).json(filePath)
+            });
+        })
+        .catch(err => {
+            console.log(err)
+        })
+
 }
 
 const modifyUserDevices = (request, response) => {
     const {username, mode, acn} = request.body
-    console.log(request.body)
     pool.query(queryType.query_modifyUserDevices(username, mode, acn), (error, results) => {
         if (error) {
             
