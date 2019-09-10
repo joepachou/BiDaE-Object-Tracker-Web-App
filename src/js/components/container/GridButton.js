@@ -110,7 +110,7 @@ class GridButton extends React.Component {
     
 
         const searchKeys = Object.keys(colorPanel)
-        this.putSearchHistory(searchKey)
+        // this.putSearchHistory(searchKey)
 
         // if (Cookies.get('userInfo')){
         //     this.putSearchHistory(searchKey)
@@ -139,56 +139,11 @@ class GridButton extends React.Component {
         // flag === false ? toPutSearchHistory.push({name: searchKey, value: 1}) : null;
         // const sortedSearchHistory = this.sortSearchHistory(toPutSearchHistory)
         // Cookies.set('searchHistory', JSON.stringify(sortedSearchHistory))
-        this.checkInSearchHistory()
+        // this.checkInSearchHistory()
         
     }
 
     checkInSearchHistory() {
-        // const searchHistory = JSON.stringify(Cookies.get('searchHistory'))
-        // const searchHistory = [
-        //     {
-        //         name: 'electric sphygmomanometer',
-        //         value: 1
-        //     },
-        //     {
-        //         name: 'monitor',
-        //         value: 3
-        //     },            
-        //     {
-        //         name: 'IV pump',
-        //         value: 5
-        //     },
-        //     {
-        //         name: 'syringe pump',
-        //         value: 10
-        //     },
-        //     {
-        //         name: 'blood warming device',
-        //         value: 4
-        //     }
-        // ]
-        const searchHistory = [
-            {
-                name: '三合一Monitor',
-                value: 1
-            },
-            {
-                name: 'IV Pump',
-                value: 3
-            },            
-            {
-                name: '烤燈',
-                value: 5
-            },
-            {
-                name: '電擊器',
-                value: 10
-            },
-            {
-                name: 'CPM',
-                value: 4
-            }
-        ]
         let username = 'joechou'
         axios.post(dataSrc.addUserSearchHistory, {
             username,
