@@ -79,11 +79,6 @@ app.post('/data/PDFInfo',db.getPDFInfo)
 
 app.post('/data/modifyMyDevice', db.modifyUserDevices)
 
-app.get('/download/com.beditech.IndoorNavigation.apk', (req, res) => {
-    const file = `${__dirname}/download/com.beditech.IndoorNavigation.apk`;
-    res.download(file); // Set disposition and send it.
-});
-
 app.post('/validation/username', db.validateUsername)
 app.post('/test/getUserList', db.getUserList)
 app.post('/test/getUserRole', db.getUserRole)
@@ -91,6 +86,15 @@ app.post('/test/getRoleNameList', db.getRoleNameList)
 app.post('/test/removeUser', db.removeUser)
 app.post('/test/setUserRole', db.setUserRole)
 app.post('/test/getEditObjectRecord', db.getEditObjectRecord)
+
+app.get('/save_file_path/:file', (req, res) =>{
+	res.sendFile(path.join(__dirname, 'save_file_path',req.params['file']));
+})
+
+app.get('/download/com.beditech.IndoorNavigation.apk', (req, res) => {
+    const file = `${__dirname}/download/com.beditech.IndoorNavigation.apk`;
+    res.download(file);
+});
 
 var privateKey = fs.readFileSync(__dirname + '/sslforfree/private.key');
 var certificate = fs.readFileSync(__dirname + '/sslforfree/certificate.crt');

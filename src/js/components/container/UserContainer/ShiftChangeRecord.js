@@ -65,7 +65,7 @@ export default class ShiftChangeRecord extends React.Component{
         return {
             onClick: e => {
                 let file_path = rowInfo.original.file_path
-                let path = `${process.env.dataSrcIP}/${file_path}`
+                let path = `http://${process.env.dataSrcIP}/${file_path}`
                 window.open(path);
             }
         }
