@@ -185,6 +185,9 @@ const config = {
     shiftRecordFileDir: 'save_file_path',
     searchResultFileDir: 'search_result_dir',
 
+    shiftRecordFileNameTimeFormat: 'MM_DD_YYYY',
+    shiftRecordPdfContentTimeFormat: 'MM/DD/YYYY',
+
     roles: [
         'guest',
         'care_provider',
@@ -193,7 +196,6 @@ const config = {
 
     defaultRole: 'care_provider', 
 
-    momentTimeFormat: 'LLL',
 
     pdfFormat: (userInfo, foundResult, notFoundResult, locale, time, option) => {
         const hasFoundResult = foundResult.length !== 0

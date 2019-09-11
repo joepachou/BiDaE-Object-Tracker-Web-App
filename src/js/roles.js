@@ -19,7 +19,8 @@ const rules = {
             "route:devicesManagement",
             "route:shiftChangeRecord",
             "user:mydevice",
-            'user:shiftChange'
+            "user:shiftChange",
+            "user:saveSearchRecord"
         ]
     },
     system_admin: {
@@ -30,6 +31,7 @@ const rules = {
             "route:objectManagement",
             "route:userManager",
             "route:editObjectManagement",
+            "user:saveSearchRecord"
         ]
     }
   };

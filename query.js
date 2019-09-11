@@ -348,17 +348,17 @@ const  generatePDF = (request, response) => {
         "border": "1cm",
         "timeout": "120000"
     };
-
     pool.query(queryType.query_addShiftChangeRecord(userInfo.name, filePath))
         .then(res => {
             pdf.create(pdfFormat, options).toFile(filePath, function(err, result) {
                 if (err) return console.log(err);
+            
                 console.log("pdf create");
                 response.status(200).json(filePath)
             });
         })
         .catch(err => {
-            console.log(err)
+            console.log(`pdf create fail: ${err}`)
         })
 }
 

@@ -11,6 +11,7 @@ import GridButton from '../container/GridButton';
 import PdfDownloadForm from './PdfDownloadForm'
 import config from '../../config';
 import AuthenticationContext from '../../context/AuthenticationContext';
+import AccessControl from '../presentational/AccessControl'
 
 
 class SurveillanceContainer extends React.Component {
@@ -118,16 +119,21 @@ class SurveillanceContainer extends React.Component {
                                         {locale.CLEAR}
                                     </Button>
                                 </Nav.Item>
-                                <Nav.Item className='mt-2'>
-                                    <Button 
-                                        variant="outline-primary" 
-                                        className='mr-1 ml-2 text-capitalize' 
-                                        onClick={this.handleClickButton} 
-                                        name='save'
-                                    >
-                                        {locale.SAVE}
-                                    </Button>
-                                </Nav.Item>
+                                <AccessControl
+                                    permission={'user:saveSearchRecord'}
+                                    renderNoAccess={() => null}
+                                >
+                                    <Nav.Item className='mt-2'>
+                                        <Button 
+                                            variant="outline-primary" 
+                                            className='mr-1 ml-2 text-capitalize' 
+                                            onClick={this.handleClickButton} 
+                                            name='save'
+                                        >
+                                            {locale.SAVE}
+                                        </Button>
+                                    </Nav.Item>
+                                </AccessControl>
                                 {/* <Nav.Item className='mt-2'>
                                     <Button 
                                         variant="outline-primary" 
@@ -137,13 +143,13 @@ class SurveillanceContainer extends React.Component {
                                     >
                                         {this.state.showDevice ? locale.HIDE_DEVICES : locale.SHOW_DEVICES }
                                     </Button>
-                                </Nav.Item > */}
+                                </Nav.Item >
                                 <div style={style.gridButton} className='mt-2 mx-3'>
                                     <GridButton
                                         clearColorPanel={this.props.clearColorPanel}
                                         getSearchKey={this.props.getSearchKey}
                                     />
-                                </div>
+                                </div> */}
                             </Nav>
                         </div>
                         <PdfDownloadForm 

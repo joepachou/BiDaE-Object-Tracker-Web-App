@@ -51,11 +51,12 @@ class PdfDownloadForm extends React.Component {
 
             let userInfo = this.props.userInfo
             let locale = this.context
-            let time = moment().format(config.momentTimeFormat)
-            let pdfFormat = config.pdfFormat(userInfo, foundResult, notFoundResult, locale, time, 'searchResult')
+            let contentTime = moment().format(config.shiftRecordPdfContentTimeFormat)
+            let fileNameTime = moment().locale('en').format(config.shiftRecordFileNameTimeFormat)
+            let pdfFormat = config.pdfFormat(userInfo, foundResult, notFoundResult, locale, contentTime, 'searchResult')
 
             let fileDir = config.searchResultFileDir
-            let fileName = `${'search_result'}_${moment().locale('en').format('MMMM Do YYYY, h:mm:ss a')}.pdf`
+            let fileName = `${'search_result'}_${fileNameTime}.pdf`
             let filePath = `${fileDir}/${fileName}`
 
             var searResultInfo = {
