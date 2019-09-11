@@ -1,4 +1,4 @@
-const dataSrcIP = process.env.dataSrcIP;
+const dataSrcIP = process.env.DATASRC_IP;
 const getTrackingData = `http://${dataSrcIP}/data/getTrackingData`;
 const getObjectTable = `http://${dataSrcIP}/data/getObjectTable`;
 const getLbeaconTable = `http://${dataSrcIP}/data/getLbeaconTable`;
