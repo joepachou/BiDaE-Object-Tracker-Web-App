@@ -130,7 +130,7 @@ export default class ModifyUserInfo extends React.Component{
                                         {locale.texts.NAME}
                                     </Col>
                                     <Col {...colProps.inputCol} className='text-muted pb-1 text-lowercase'>
-                                        {user.name}
+                                        {user ? user.name : ''}
                                     </Col>
                                 </Row>
                                 <hr/>

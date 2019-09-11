@@ -20,7 +20,8 @@ const rules = {
             "route:shiftChangeRecord",
             "user:mydevice",
             "user:shiftChange",
-            "user:saveSearchRecord"
+            "user:saveSearchRecord",
+            "route:userManager",
         ]
     },
     system_admin: {
@@ -29,7 +30,6 @@ const rules = {
             "route:systemStatus",
             "route:geofence",
             "route:objectManagement",
-            "route:userManager",
             "route:editObjectManagement",
             "user:saveSearchRecord"
         ]

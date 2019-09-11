@@ -88,7 +88,6 @@ class PdfDownloadForm extends React.Component {
         window.open(this.state.savePath);
     }
 
-  
     render() {
         const {
             hasData, 
@@ -130,6 +129,7 @@ class PdfDownloadForm extends React.Component {
                         >
                             {locale.texts.DOWNLOAD}
                         </Button>
+                        <a href={this.state.fileURL} ref="download" download style={{display: 'none'}}>hi</a>
                     </Row>
                 </Modal.Body>
             </Modal>
