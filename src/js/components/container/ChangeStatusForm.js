@@ -185,7 +185,7 @@ class ChangeStatusForm extends React.Component {
                                         label: locale.texts[selectedObjectData.transferred_location.toUpperCase().replace(/ /g, '_')]
                                     }
                                     : '', 
-                                textarea: '' 
+                                textarea: selectedObjectData.notes || ''
                             }}
 
                             validationSchema = {

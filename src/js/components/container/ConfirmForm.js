@@ -142,7 +142,6 @@ class ConfirmForm extends React.Component {
                         <Row>
                             <Col className='d-flex justify-content-center text-capitalize'>
                                 <h5>
-                                    {/* {console.log(selectedObjectData)} */}
                                     {selectedObjectData.length > 0 && locale.texts[selectedObjectData[0].status.toUpperCase()]}
                                     {selectedObjectData.length > 0 && selectedObjectData[0].status === config.objectStatus.TRANSFERRED
                                         ? ' ' + locale.texts.TO + ' ' + selectedObjectData[0].transferred_location.label

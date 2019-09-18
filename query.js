@@ -195,20 +195,26 @@ const addObject = (request, response) => {
 
 const editObjectPackage = (request, response) => {
     const { formOption, username } = request.body
-    pool.query(queryType.query_editObjectPackage(formOption))
-        .then(res => {
-            pool.query(queryType.query_addEditObjectRecord(formOption, username))
-                .then(res => {
-                    console.log('Edit object package success')
-                    response.status(200).json(res)
-                })
-                .catch(err => {
-                    console.log('Edit object package fail ' + err)
-                })
-        })
-        .catch(err => {
-            console.log('Edit object package fail ' + err)
-        })
+
+
+
+pool.query(queryType.query_addEditObjectRecord(formOption, username))
+    .then(res => {
+        const record_id = res.rows[0].id
+        pool.query(queryType.query_editObjectPackage(formOption, record_id))
+            .then(res => {
+            console.log('Edit object package success')
+            response.status(200).json(res)
+
+            })
+            .catch(err => {
+                console.log('Edit object package fail ' + err)
+            })
+    })
+    .catch(err => {
+        console.log('Edit object package fail ' + err)
+    })
+
 }
 
 const signin = (request, response) => {

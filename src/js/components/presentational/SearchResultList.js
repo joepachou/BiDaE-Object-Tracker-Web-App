@@ -110,6 +110,7 @@ class SearchResult extends React.Component {
             showEditObjectForm: false,
             editedObjectPackage,
         })
+        console.log(editedObjectPackage)
         setTimeout(
             function() {
                 this.setState({

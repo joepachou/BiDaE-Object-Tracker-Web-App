@@ -16,7 +16,8 @@ function query_getTrackingData () {
 			object_table.transferred_location,
 			object_table.access_control_number,
 			split_part(object_table.access_control_number, '-', 3) as last_four_acn,
-			lbeacon_table.description as location_description
+			lbeacon_table.description as location_description,
+			edit_object_record.notes
 
 		FROM object_summary_table
 
@@ -25,6 +26,9 @@ function query_getTrackingData () {
 
 		LEFT JOIN lbeacon_table
 		ON lbeacon_table.uuid = object_summary_table.uuid
+
+		LEFT JOIN edit_object_record
+		ON object_table.note_id = edit_object_record.id
 
 		ORDER BY object_table.type ASC, object_table.name ASC, last_four_acn ASC;
 	`
@@ -146,13 +150,14 @@ function query_addObject (formOption) {
 	return query;
 }
 
-const query_editObjectPackage = (formOption) => {
+const query_editObjectPackage = (formOption, record_id) => {
 	let item = formOption[0]
 	let text = `
 		UPDATE object_table
 		SET 
 			status = '${item.status}',
-			transferred_location = '${item.transferred_location ? item.transferred_location.value : ' '}'
+			transferred_location = '${item.transferred_location ? item.transferred_location.value : ' '}',
+			note_id = ${record_id}
 		WHERE access_control_number IN (${formOption.map(item => `'${item.access_control_number}'`)});
 	`
 	return text
@@ -461,7 +466,8 @@ const query_addEditObjectRecord = (formOption, username) => {
 			$3,
 			'${item.transferred_location ? item.transferred_location.value : ' '}',
 			ARRAY [${formOption.map(item => `'${item.access_control_number}'`)}]
-		);
+		)
+		RETURNING id;
 	`
 	const values = [
 		username,
