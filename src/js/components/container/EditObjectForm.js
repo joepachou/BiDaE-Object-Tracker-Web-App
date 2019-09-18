@@ -66,12 +66,12 @@ class EditObjectForm extends React.Component {
     }
 
     render() {
-        const locale = this.context.texts
+        const locale = this.context
 
         const options = config.transferredLocation.map(location => {
             let locationObj = {};
             locationObj["value"] = location;
-            locationObj["label"] = locale[location.toUpperCase().replace(/ /g, '_')];
+            locationObj["label"] = locale.texts[location.toUpperCase().replace(/ /g, '_')];
             return locationObj
         })
 
@@ -101,7 +101,7 @@ class EditObjectForm extends React.Component {
         return (
             <Modal show={this.state.show} onHide={this.handleClose} size='md'>
                 <Modal.Header closeButton className='font-weight-bold text-capitalize'>
-                    {locale[title.toUpperCase().replace(/ /g, '_')]}
+                    {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
                 </Modal.Header >
                 <Modal.Body>
                     <Formik                    
@@ -114,7 +114,7 @@ class EditObjectForm extends React.Component {
                             select: status.value === config.objectStatus.TRANSFERRED 
                                 ? { 
                                     value: selectedObjectData.transferred_location,
-                                    label: locale[selectedObjectData.transferred_location.toUpperCase().replace(/ /g, '_')]
+                                    label: locale.texts[selectedObjectData.transferred_location.toUpperCase().replace(/ /g, '_')]
                                 }
                                 : '',
                             checkboxGroup: selectedObjectData.length !== 0 ? selectedObjectData.monitor_type.split(',') : []
@@ -122,34 +122,34 @@ class EditObjectForm extends React.Component {
 
                         validationSchema = {
                             Yup.object().shape({
-                                name: Yup.string().required(locale.NAME_IS_REQUIRED),
-                                type: Yup.string().required(locale.TYPE_IS_REQUIRED),
+                                name: Yup.string().required(locale.texts.NAME_IS_REQUIRED),
+                                type: Yup.string().required(locale.texts.TYPE_IS_REQUIRED),
                                 access_control_number: Yup.string()
-                                    .required(locale.ACCESS_CONTROL_NUMBER_IS_REQUIRED)
+                                    .required(locale.texts.ACCESS_CONTROL_NUMBER_IS_REQUIRED)
                                     .test(
                                         'access_control_number', 
-                                        'The access control number is already used',
+                                        locale.texts.THE_ACCESS_CONTROL_NUMBER_IS_ALREADY_USED,
                                         value => {
                                             return value === selectedObjectData.access_control_number || 
                                                 !this.props.data.map(item => item.access_control_number).includes(value)
                                         }
                                     ),
                                 mac_address: Yup.string()
-                                    .required(locale.MAC_ADDRESS_IS_REQUIRED)
+                                    .required(locale.texts.MAC_ADDRESS_IS_REQUIRED)
                                     .test(
                                         'mac_address',
-                                        'The Mac Address is already used',
+                                        locale.texts.THE_MAC_ADDRESS_IS_ALREADY_USED,
                                         value => {
                                             return value === selectedObjectData.mac_address ||
                                                 !this.props.data.map(item => item.mac_address).includes(value)
                                         }
                                     ),
-                                radioGroup: Yup.string().required(locale.STATUS_IS_REQUIRED),
+                                radioGroup: Yup.string().required(locale.texts.STATUS_IS_REQUIRED),
 
                                 select: Yup.string()
                                     .when('radioGroup', {
                                         is: config.objectStatus.TRANSFERRED,
-                                        then: Yup.string().required('Location is required')
+                                        then: Yup.string().required(locale.texts.LOCATION_IS_REQUIRED)
                                     })
                         })}
 
@@ -176,17 +176,17 @@ class EditObjectForm extends React.Component {
                             {/* {console.log(values)} */}
                             {/* {console.log(this.props.selectedObjectData)} */}
                                 <div className="form-group">
-                                    <label htmlFor="name">{locale.NAME}*</label>
+                                    <label htmlFor="name">{locale.texts.NAME}*</label>
                                     <Field name="name" type="text" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} placeholder=''/>
                                     <ErrorMessage name="name" component="div" className="invalid-feedback" />
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="type">{locale.TYPE}*</label>
+                                    <label htmlFor="type">{locale.texts.TYPE}*</label>
                                     <Field name="type" type="text" className={'form-control' + (errors.type && touched.type ? ' is-invalid' : '')} placeholder=''/>
                                     <ErrorMessage name="type" component="div" className="invalid-feedback" />
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="access_control_number" className='text-uppercase'>{locale.ACN}*</label>
+                                    <label htmlFor="access_control_number" className='text-uppercase'>{locale.texts.ACN}*</label>
                                     <Field 
                                         name="access_control_number" 
                                         type="text" 
@@ -196,12 +196,12 @@ class EditObjectForm extends React.Component {
                                     <ErrorMessage name="access_control_number" component="div" className="invalid-feedback" />
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="mac_address">{locale.MAC_ADDRESS}*</label>
+                                    <label htmlFor="mac_address">{locale.texts.MAC_ADDRESS}*</label>
                                     <Field 
                                         name="mac_address" 
                                         type="text" 
                                         className={'form-control' + (errors.mac_address && touched.mac_address ? ' is-invalid' : '')} 
-                                        disabled={title.toLowerCase() === locale.EDIT_OBJECT}
+                                        disabled={title.toLowerCase() === locale.texts.EDIT_OBJECT}
                                     />
                                     <ErrorMessage name="mac_address" component="div" className="invalid-feedback" />
                                 </div>
@@ -210,7 +210,7 @@ class EditObjectForm extends React.Component {
                                     <Col>
                                         <RadioButtonGroup
                                             id="radioGroup"
-                                            label={locale.STATUS}
+                                            label={locale.texts.STATUS}
                                             value={values.radioGroup}
                                             error={errors.radioGroup}
                                             touched={touched.radioGroup}
@@ -219,25 +219,25 @@ class EditObjectForm extends React.Component {
                                                 component={RadioButton}
                                                 name="radioGroup"
                                                 id={config.objectStatus.NORMAL}
-                                                label={locale.NORMAL}
+                                                label={locale.texts.NORMAL}
                                             />
                                             <Field
                                                 component={RadioButton}
                                                 name="radioGroup"
                                                 id={config.objectStatus.BROKEN}
-                                                label={locale.BROKEN}
+                                                label={locale.texts.BROKEN}
                                             />
                                             <Field
                                                 component={RadioButton}
                                                 name="radioGroup"
                                                 id={config.objectStatus.RESERVE}
-                                                label={locale.RESERVE}
+                                                label={locale.texts.RESERVE}
                                             />
                                             <Field
                                                 component={RadioButton}
                                                 name="radioGroup"
                                                 id={config.objectStatus.TRANSFERRED}
-                                                label={locale.TRANSFERRED}
+                                                label={locale.texts.TRANSFERRED}
                                             />
                                             <Select
                                                 name = "select"
@@ -247,7 +247,7 @@ class EditObjectForm extends React.Component {
                                                 isSearchable={false}
                                                 isDisabled={values.radioGroup !== config.objectStatus.TRANSFERRED}
                                                 style={style.select}
-                                                placeholder={locale.SELECT_LOCATION}
+                                                placeholder={locale.texts.SELECT_LOCATION}
                                                 components={{
                                                     IndicatorSeparator: () => null
                                                 }}
@@ -268,7 +268,7 @@ class EditObjectForm extends React.Component {
                                     <Col>
                                         <CheckboxGroup
                                             id="checkboxGroup"
-                                            label={locale.MONITOR_TYPE}
+                                            label={locale.texts.MONITOR_TYPE}
                                             value={values.checkboxGroup}
                                             error={errors.checkboxGroup}
                                             touched={touched.checkboxGroup}
@@ -289,10 +289,10 @@ class EditObjectForm extends React.Component {
                                 </Row>
                                 <Modal.Footer>
                                     <Button variant="outline-secondary" className="text-capitalize" onClick={this.handleClose}>
-                                        {locale.CANCEL}
+                                        {locale.texts.CANCEL}
                                     </Button>
                                     <Button type="submit" className="text-capitalize" variant="primary" disabled={isSubmitting}>
-                                        {locale.SAVE}
+                                        {locale.texts.SAVE}
                                     </Button>
                                 </Modal.Footer>
                             </Form>

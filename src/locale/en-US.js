@@ -85,6 +85,8 @@ const en =  {
     USERNAME_IS_REQUIRED: 'Username is required',
     PASSWORD_IS_REQUIRED: 'Password is required',
     THE_USERNAME_IS_ALREADY_TAKEN: 'The username is already taken',
+    THE_ACCESS_CONTROL_NUMBER_IS_ALREADY_USED: 'The access control number is already used',
+    THE_MAC_ADDRESS_IS_ALREADY_USED :'The Mac Address is already used',
 
 
     /** Form Title */

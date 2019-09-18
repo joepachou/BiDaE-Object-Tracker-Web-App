@@ -86,6 +86,8 @@ const tw = {
     USERNAME_IS_REQUIRED: '請填入使用者名稱',
     PASSWORD_IS_REQUIRED: '請填入密碼',
     THE_USERNAME_IS_ALREADY_TAKEN: '使用者名稱已被使用',
+    THE_ACCESS_CONTROL_NUMBER_IS_ALREADY_USED: '財產編號已被使用',
+    THE_MAC_ADDRESS_IS_ALREADY_USED :'Mac Address已被使用',
     
 
     /** Form Title */
