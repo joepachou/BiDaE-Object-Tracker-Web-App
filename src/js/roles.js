@@ -15,7 +15,7 @@ const rules = {
     care_provider: {
         permission: [
             "form:edit",
-            "route:geofence",
+            // "route:geofence",
             "route:devicesManagement",
             "route:shiftChangeRecord",
             "user:mydevice",
@@ -28,7 +28,7 @@ const rules = {
         permission: [
             "form:edit",
             "route:systemStatus",
-            "route:geofence",
+            // "route:geofence",
             "route:objectManagement",
             "route:editObjectManagement",
             "user:saveSearchRecord"
