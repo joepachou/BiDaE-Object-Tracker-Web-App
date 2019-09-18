@@ -125,7 +125,7 @@ function query_addObject (formOption) {
 			registered_timestamp,
 			monitor_type
 		)
-		VALUES($1, $2, $3, $4, $5, $6, $7, $8)
+		VALUES($1, $2, $3, $4, $5, $6, now(), $7)
 		`;
 		
 	const values = [
@@ -135,7 +135,6 @@ function query_addObject (formOption) {
 		formOption.access_control_number, 
 		formOption.name, 
 		formOption.mac_address, 
-		formOption.registered_timestamp,
 		formOption.monitor_type
 	];
 

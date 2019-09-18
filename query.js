@@ -103,7 +103,7 @@ const getObjectTable = (request, response) => {
             response.status(200).json(res)
         })
         .catch(err => {
-            console.log("Get objectTable fails: " + error)
+            console.log("Get objectTable fails: " + err)
         })     
 }
 
