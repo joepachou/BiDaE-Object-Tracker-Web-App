@@ -99,6 +99,10 @@ a:hover {
     padding: 0.5rem 2.5rem
 }
 
+.nav-link {
+    padding: .3rem .75rem
+}
+
 .navbar-brand {
     font-size: 1.25rem;
 }
@@ -251,6 +255,7 @@ a:hover {
     font-size: 1rem;
     font-weight: 500;
     transition: none;
+    padding: .3rem .75rem;
 }
 
 .btn:focus {
@@ -337,6 +342,7 @@ a:hover {
     padding-bottom: 0
 } 
 
+/** Basic html tag */
 textarea {
     border-color: rgb(204, 204, 204);
     border-radius: 3px;
