@@ -164,6 +164,8 @@ const tw = {
     DEVICES_IN: '儀器位於',
     DEVICES_NOT_IN: '儀器不位於',
     CONFIRM_BY: '確認',
+    NEW_STATUS: '狀態紀錄',
+
 
     /** User Roles */
     CARE_PROVIDER: '護理人員',

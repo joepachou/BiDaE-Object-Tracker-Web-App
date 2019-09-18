@@ -162,6 +162,7 @@ const en =  {
     DEVICES_IN: 'devices in',
     DEVICES_NOT_IN: 'devices not in',
     CONFIRM_BY: 'confirm by',
+    NEW_STATUS: 'new status',
 
     /** User Roles */
     CARE_PROVIDER: 'care provider',

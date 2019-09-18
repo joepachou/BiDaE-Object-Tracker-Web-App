@@ -397,7 +397,8 @@ const query_getEditObjectRecord = () => {
 			user_table.name,
 			edit_object_record.id,
 			edit_object_record.edit_time,
-			edit_object_record.notes
+			edit_object_record.notes,
+			edit_object_record.new_status
 		FROM edit_object_record
 
 		LEFT JOIN user_table
@@ -405,6 +406,14 @@ const query_getEditObjectRecord = () => {
 
 		ORDER BY edit_object_record.edit_time DESC
 
+	`
+	return query
+}
+
+const query_deleteEditObjectRecord = (idPackage) => {
+	const query = `
+		DELETE FROM edit_object_record
+		WHERE id IN (${idPackage.map(item => `'${item}'`)});
 	`
 	return query
 }
@@ -526,6 +535,7 @@ module.exports = {
 	query_removeUser,
 	query_setUserRole,
 	query_getEditObjectRecord,
+	query_deleteEditObjectRecord,
 	query_setShift,
 	query_setVisitTimestamp,
 	query_insertUserRole,

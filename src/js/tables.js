@@ -329,12 +329,12 @@ const userInfoTableColumn = [
 ]
 
 const editObjectRecordTableColumn = [
-    {
-        Header: 'ID',
-        accessor: 'id',
-        resizable: false,
-        width: 50,
-    },
+    // {
+    //     Header: 'ID',
+    //     accessor: 'id',
+    //     resizable: false,
+    //     width: 50,
+    // },
     {
         Header: 'Name',
         accessor: 'name',
@@ -344,6 +344,11 @@ const editObjectRecordTableColumn = [
         Header: 'edit time',
         accessor: 'edit_time',
         width: 200,
+    },
+    {
+        Header: 'new status',
+        accessor: 'new_status',
+        width: 150,
     },
     {
         Header: 'Notes',

@@ -64,10 +64,11 @@ class UserSettingContainer extends React.Component{
                         <ListGroup variant="flush" className="border-0 text-capitalize">
                             <ListGroup.Item className="border-0 h5 pt-0">{locale.texts.USER_SETTING}</ListGroup.Item>
                             {this.pageList.map((page, index) => {
-                                return(
+                                return (
                                     <AccessControl
                                         permission={'route:'+ page.path}
                                         renderNoAccess={() => null}
+                                        key={index}
                                     >
                                         <ListGroup.Item 
                                             key={index}
@@ -90,6 +91,7 @@ class UserSettingContainer extends React.Component{
                                 <AccessControl
                                     permission={'route:'+ page.path}
                                     renderNoAccess={() => null}
+                                    key={index}
                                 >
                                     <div className='mb-5' key={index} id={page.name.replace(/ /g, '')}>   
                                         <h5 className='text-capitalize'>

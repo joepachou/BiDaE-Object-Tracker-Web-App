@@ -489,6 +489,23 @@ const getEditObjectRecord = (request, response) => {
         })
 }
 
+const deleteEditObjectRecord = (request, response) => {
+    const { idPackage } = request.body
+    pool.query(queryType.query_deleteEditObjectRecord(idPackage))
+        .then(res => {
+            pool.query(`UPDATE object_table SET note_id = null WHERE note_id IN (${idPackage.map(id => `${id}`)})`)
+                .then(res => {
+                    console.log('delete edit object record success')
+                    response.status(200).json(res)
+                })
+                .catch(err => {
+                    console.log('delete edit object record fail: ' + err)
+                })
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
 
 module.exports = {
     getTrackingData,
@@ -514,4 +531,5 @@ module.exports = {
     removeUser,
     setUserRole,
     getEditObjectRecord,
+    deleteEditObjectRecord
 }

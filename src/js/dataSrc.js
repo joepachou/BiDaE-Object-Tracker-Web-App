@@ -18,12 +18,12 @@ const generatePDF = `http://${dataSrcIP}/data/generatePDF`;
 const getPDFInfo = `http://${dataSrcIP}/data/PDFInfo`;
 const validateUsername = `http://${dataSrcIP}/validation/username`;
 const getEditObjectRecord = `http://${dataSrcIP}/test/getEditObjectRecord`
+const deleteEditObjectRecord = `http://${dataSrcIP}/test/deleteEditObjectRecord`
 const getUserList = `http://${dataSrcIP}/test/getUserList`
 const getUserRole = `http://${dataSrcIP}/test/getUserRole`
 const getRoleNameList = `http://${dataSrcIP}/test/getRoleNameList`
 const removeUser = `http://${dataSrcIP}/test/removeUser`
 const setUserRole = `http://${dataSrcIP}/test/setUserRole`
-
 
 
 const pdfUrl = function(path){
@@ -51,6 +51,7 @@ module.exports = {
     getPDFInfo,
     validateUsername,    
     getEditObjectRecord,
+    deleteEditObjectRecord,
     getUserList,
     getUserRole,
     getRoleNameList,

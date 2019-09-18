@@ -86,6 +86,7 @@ app.post('/test/getRoleNameList', db.getRoleNameList)
 app.post('/test/removeUser', db.removeUser)
 app.post('/test/setUserRole', db.setUserRole)
 app.post('/test/getEditObjectRecord', db.getEditObjectRecord)
+app.post('/test/deleteEditObjectRecord', db.deleteEditObjectRecord)
 
 app.get('/save_file_path/:file', (req, res) =>{
 	res.sendFile(path.join(__dirname, 'save_file_path',req.params['file']));

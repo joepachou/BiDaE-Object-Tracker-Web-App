@@ -31,7 +31,9 @@ const rules = {
             // "route:geofence",
             "route:objectManagement",
             "route:editObjectManagement",
-            "user:saveSearchRecord"
+            "user:saveSearchRecord",
+            "route:userManager",
+
         ]
     }
   };
