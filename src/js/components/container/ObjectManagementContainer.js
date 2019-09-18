@@ -205,8 +205,8 @@ class ObjectManagementContainer extends React.Component{
             selectType
         };
         return (
-            <Container fluid className='py-2 text-capitalize'>
-                <Row className='mt-1'>
+            <Container className='py-2 text-capitalize' fluid>
+                <Row>
                     <Col>
                         <Button variant='primary' className='text-capitalize' onClick={this.handleClickButton}>
                             {locale.texts.ADD_OBJECT}

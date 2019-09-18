@@ -161,7 +161,7 @@ class ScanMonitor extends React.Component{
         const locale = this.context.texts;
 
         return(
-            <Container className='py-4 text-capitalize' fluid>
+            <Container className='py-2 text-capitalize' fluid>
                 <Nav
                     activeKey="/home"
                     onSelect={selectedKey => alert(`selected ${selectedKey}`)}
