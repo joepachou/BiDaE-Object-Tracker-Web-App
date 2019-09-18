@@ -219,7 +219,7 @@ class ShiftChange extends React.Component {
                             className="text-capitalize" 
                             variant="primary" 
                             onClick = {this.confirmShift}
-                            disabled={!hasFoundResult || !hasNotFoundResult}
+                            disabled={!hasFoundResult && !hasNotFoundResult}
                         >
                             {locale.texts.CONFIRM}
                         </Button>
