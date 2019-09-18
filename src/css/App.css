@@ -336,3 +336,9 @@ a:hover {
 .modal-body {
     padding-bottom: 0
 } 
+
+textarea {
+    border-color: rgb(204, 204, 204);
+    border-radius: 3px;
+    padding: 5px;
+}
