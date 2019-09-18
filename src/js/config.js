@@ -172,8 +172,10 @@ const config = {
     },
 
     monitorType: {
+        // 0: 'normal',
         1: 'geofence',
-        2: 'schedule geofence'
+        2: 'panic',
+        4: 'movement',
     },
 
     shiftOption: [

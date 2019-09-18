@@ -60,7 +60,10 @@ class ObjectManagementContainer extends React.Component{
                     }
                 })
                 item.monitor_type = checkboxGroup.join(',')
-                item.status = locale.texts[item.status.toUpperCase()]
+                item.status = {
+                    lable: locale.texts[item.status.toUpperCase()],
+                    value: item.status
+                }
                 item.transferred_location = item.transferred_location 
                     ? locale.texts[item.transferred_location.toUpperCase().replace(/ /g, '_')]
                     : ''

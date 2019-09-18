@@ -248,7 +248,7 @@ const objectTableColumn = [
     },
     {
         Header: 'Status',
-        accessor: 'status',
+        accessor: 'status.lable',
         width: 100,
     },
     {

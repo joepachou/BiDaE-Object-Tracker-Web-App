@@ -94,8 +94,9 @@ class EditObjectForm extends React.Component {
         }
 
         const { title, selectedObjectData } = this.props;
-
-        
+        const { 
+            status = '',
+        } = selectedObjectData
 
         return (
             <Modal show={this.state.show} onHide={this.handleClose} size='md'>
@@ -109,8 +110,8 @@ class EditObjectForm extends React.Component {
                             type: selectedObjectData.type || '',
                             access_control_number: selectedObjectData.access_control_number || '',
                             mac_address: selectedObjectData.mac_address || '',
-                            radioGroup: selectedObjectData.status || '',
-                            select: selectedObjectData.status === config.objectStatus.TRANSFERRED 
+                            radioGroup: status.value,
+                            select: status.value === config.objectStatus.TRANSFERRED 
                                 ? { 
                                     value: selectedObjectData.transferred_location,
                                     label: locale[selectedObjectData.transferred_location.toUpperCase().replace(/ /g, '_')]
@@ -165,7 +166,6 @@ class EditObjectForm extends React.Component {
                                 transferred_location: values.radioGroup === config.objectStatus.TRANSFERRED 
                                     ? values.select
                                     : '',
-                                registered_timestamp: moment(),
                                 monitor_type: monitor_type
                             }
                             this.handleSubmit(postOption)                            
@@ -173,6 +173,8 @@ class EditObjectForm extends React.Component {
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
                             <Form className="text-capitalize">
+                            {/* {console.log(values)} */}
+                            {/* {console.log(this.props.selectedObjectData)} */}
                                 <div className="form-group">
                                     <label htmlFor="name">{locale.NAME}*</label>
                                     <Field name="name" type="text" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} placeholder=''/>
@@ -273,15 +275,15 @@ class EditObjectForm extends React.Component {
                                             onChange={setFieldValue}
                                             // onBlur={setFieldTouched}
                                         >
-                                        {Object.values(config.monitorType).map((item,index) => {
-                                            return <Field
-                                                key={index}
-                                                component={Checkbox}
-                                                name="checkboxGroup"
-                                                id={item}
-                                                label={item}
-                                            />
-                                        })}
+                                            {Object.values(config.monitorType).map((item,index) => {
+                                                return <Field
+                                                    key={index}
+                                                    component={Checkbox}
+                                                    name="checkboxGroup"
+                                                    id={item}
+                                                    label={item}
+                                                />
+                                            })}
                                         </CheckboxGroup>
                                     </Col>
                                 </Row>
