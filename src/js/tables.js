@@ -248,12 +248,12 @@ const objectTableColumn = [
     },
     {
         Header: 'Status',
-        accessor: 'status.lable',
+        accessor: 'status.label',
         width: 100,
     },
     {
         Header: 'Transferred Location',
-        accessor: 'transferred_location'
+        accessor: 'transferred_location.label'
     },
     {
         Header: 'Mac Address',

@@ -13,19 +13,10 @@ import LocaleContext from '../../context/LocaleContext';
 import axios from 'axios';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import moment from 'moment'
 import CheckboxGroup from './CheckboxGroup'
 import Checkbox from '../presentational/Checkbox'
 import RadioButtonGroup from './RadioButtonGroup'
 import RadioButton from '../presentational/RadioButton'
-import dataSrc from '../../dataSrc'
-
-const objectTypeOptions = config.surveillanceMap.objectType.map(type => {
-    let objectTypeObj = {};
-    objectTypeObj["value"] = type;
-    objectTypeObj["label"] = type;
-    return objectTypeObj
-})
 
 let monitorTypeMap = {};
 
@@ -37,7 +28,6 @@ class EditObjectForm extends React.Component {
     state = {
         show: this.props.show,
     };
-
     /**
      * EditObjectForm will update if user selects one of the object table.
      * The selected object data will transfer from ObjectMangentContainer to EditObjectForm
@@ -95,9 +85,13 @@ class EditObjectForm extends React.Component {
 
         const { title, selectedObjectData } = this.props;
         const { 
+            name,
+            type,
             status = '',
+            access_control_number,
+            mac_address,
+            transferred_location,
         } = selectedObjectData
-
         return (
             <Modal show={this.state.show} onHide={this.handleClose} size='md'>
                 <Modal.Header closeButton className='font-weight-bold text-capitalize'>
@@ -106,16 +100,13 @@ class EditObjectForm extends React.Component {
                 <Modal.Body>
                     <Formik                    
                         initialValues = {{
-                            name: selectedObjectData.name || '' ,
-                            type: selectedObjectData.type || '',
-                            access_control_number: selectedObjectData.access_control_number || '',
-                            mac_address: selectedObjectData.mac_address || '',
+                            name: name || '' ,
+                            type: type || '',
+                            access_control_number: access_control_number || '',
+                            mac_address: mac_address || '',
                             radioGroup: status.value,
                             select: status.value === config.objectStatus.TRANSFERRED 
-                                ? { 
-                                    value: selectedObjectData.transferred_location,
-                                    label: locale.texts[selectedObjectData.transferred_location.toUpperCase().replace(/ /g, '_')]
-                                }
+                                ? transferred_location
                                 : '',
                             checkboxGroup: selectedObjectData.length !== 0 ? selectedObjectData.monitor_type.split(',') : []
                         }}
@@ -173,8 +164,6 @@ class EditObjectForm extends React.Component {
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
                             <Form className="text-capitalize">
-                            {/* {console.log(values)} */}
-                            {/* {console.log(this.props.selectedObjectData)} */}
                                 <div className="form-group">
                                     <label htmlFor="name">{locale.texts.NAME}*</label>
                                     <Field name="name" type="text" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} placeholder=''/>
