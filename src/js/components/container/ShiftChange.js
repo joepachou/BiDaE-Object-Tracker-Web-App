@@ -57,6 +57,7 @@ class ShiftChange extends React.Component {
 
     componentDidUpdate = (preProps) => {
         if (preProps != this.props){
+            this.getTrackingData()
             this.setState({
                 show: this.props.show,
             })
@@ -76,23 +77,27 @@ class ShiftChange extends React.Component {
             rssiThreshold: config.surveillanceMap.locationAccuracyMapToDefault[1]
         }).then(res => {
             var data = res.data.rows
-            GetResultData('my devices', data).then(result=>{
-                var foundResult = []
-                var notFoundResult = []
-                for(var i in result){
-                    if(result[i].found){
-                        foundResult.push(result[i])
-                    }else{
-                        notFoundResult.push(result[i])
+            GetResultData('my devices', data)
+                .then(result => {
+                    var foundResult = []
+                    var notFoundResult = []
+                    for(var i in result){
+                        if(result[i].found){
+                            foundResult.push(result[i])
+                        }else{
+                            notFoundResult.push(result[i])
+                        }
                     }
-                }
-                this.setState({
-                    searchResult: {
-                        foundResult: foundResult,
-                        notFoundResult: notFoundResult,
-                    }
+                    this.setState({
+                        searchResult: {
+                            foundResult: foundResult,
+                            notFoundResult: notFoundResult,
+                        }
+                    })
+                }) 
+                .catch(err => {
+                    console.log(err)
                 })
-            }) 
         })
         .catch(error => {
             console.log(error)

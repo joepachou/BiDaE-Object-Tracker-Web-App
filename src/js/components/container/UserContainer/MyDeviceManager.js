@@ -32,29 +32,44 @@ class MyDeviceManager extends React.Component{
                 this.myDevices = myList
             },
             switchDevice: (acn) => {
+                let userInfo = JSON.parse(Cookies.get('user'))
+                let myDevice = userInfo.myDevice
 
                 if(acn in this.device.myDevices){
                     this.device.notMyDevices[acn] = this.device.dataMap[acn]
                     delete this.device.myDevices[acn] 
+                    let index = myDevice.indexOf(acn)
+                    myDevice = [...myDevice.slice(0, index), ...myDevice.slice(index + 1)]
                     this.API.postMyDeviceChange('remove', acn)
                 }else if(acn in this.device.notMyDevices){
                     this.device.myDevices[acn] = this.device.dataMap[acn]
                     delete this.device.notMyDevices[acn] 
+                    myDevice.push(acn)
                     this.API.postMyDeviceChange('add', acn)
                 }else{
                     console.error('acn is not in device list')
                 }
+                userInfo = {
+                    ...userInfo,
+                    myDevice
+                }
+                Cookies.set('user', userInfo)
+                
                 this.APIforAddableList_1.setList(this.device.myDevices)
                 this.APIforAddableList_2.setList(this.device.notMyDevices)
             },
             postMyDeviceChange: (mode, acn) => {
                 axios.post(dataSrc.modifyMyDevice, {
-                    username: 'joechou',
-                    mode: mode,
-                    acn: acn
-                }).then((res) => {
-                    console.log('success')
-                })
+                        username: 'joechou',
+                        mode: mode,
+                        acn: acn
+                    })
+                    .then((res) => {
+                        console.log('success')
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
             }
         }
 
@@ -160,8 +175,8 @@ class MyDeviceManager extends React.Component{
                         />
                     </Col>
                     <Col xl={2} className='p-5' style={{position: 'relative', top: '15%'}}>
-                            <i className="fas fa-angle-double-right fa-2x"></i>
-                            <i className="fas fa-angle-double-left fa-2x"></i>
+                        <i className="fas fa-angle-double-right fa-2x"></i>
+                        <i className="fas fa-angle-double-left fa-2x"></i>
                     </Col>
                     <Col xl={5}>
                         <AddableList
