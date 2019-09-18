@@ -3,6 +3,7 @@ import Searchbar from '../presentational/Searchbar';
 import { Col, Row, Nav, ListGroup} from 'react-bootstrap'
 import FrequentSearch from './FrequentSearch';
 import config from '../../config';
+import SearchableObjectType from '../presentational/SearchableObjectType'
 
 class SearchContainer extends React.Component {
 
@@ -142,8 +143,8 @@ class SearchContainer extends React.Component {
 
     render() {        
         return (                   
-            <div id='searchContainer' className="" onTouchMove={this.handleTouchMove}>
-                <div id='searchBar' className='d-flex justify-content-center align-items-center pt-4 pb-2'>
+            <div id='searchContainer' className="py-1" onTouchMove={this.handleTouchMove}>
+                <div id='searchBar' className='d-flex justify-content-center align-items-center pb-2'>
                     <Searchbar 
                         placeholder={this.state.searchKey}
                         getSearchKey={this.props.getSearchKey}

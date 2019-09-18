@@ -317,10 +317,9 @@ class MainContainer extends React.Component{
             <AuthenticationContext.Consumer>
                 {auth => (
                     /** "page-wrap" the default id named by react-burget-menu */
-                    <div id="page-wrap" className='mx-1' >
+                    <div id="page-wrap" className='mx-1 my-2' >
                         <Row id="mainContainer" className='d-flex w-100 justify-content-around mx-0 overflow-hidden' style={style.container}>
                             <Col sm={7} md={9} lg={9} xl={9} id='searchMap' className="pl-2 pr-1" >
-                                <br/>
                                 {this.state.hasSearchKey 
                                     ?   <InfoPrompt 
                                             data={this.state.searchResultObjectTypeMap} 
