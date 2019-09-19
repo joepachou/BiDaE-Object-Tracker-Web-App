@@ -22,6 +22,8 @@ const config = {
         /* Map customization */
         mapOptions: {
             crs: L.CRS.Simple,
+            // center: L.latLng(-2000, -4000),
+            zoom: -5,
             minZoom: -5,
             maxZoom: 0,
             zoomDelta: 0.25,

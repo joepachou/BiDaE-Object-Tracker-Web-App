@@ -133,7 +133,7 @@ class SearchableObjectType extends React.Component {
     }
 
     handleHoverEvent(e){
-        location.href = '#' + e.target.name
+        location.href = '#' + e.target.parentNode.getAttribute('name')
         this.shouldUpdate = true
         this.setState({
             IsShowSection: true,
@@ -141,8 +141,6 @@ class SearchableObjectType extends React.Component {
     }
 
     mouseClick(e){
-       
-        
         this.onSubmit(e.target.innerHTML)
         this.shouldUpdate = true
         this.setState({
@@ -176,7 +174,7 @@ class SearchableObjectType extends React.Component {
                     onMouseOver={this.handleHoverEvent} 
                     style = {{fontSize: '1rem'}}
                 >
-                    {(index % 2) ? sectionIndexList[i] : <div >&bull;</div>}
+                    {(index % 2) ? <div>{sectionIndexList[i]}</div> : <div >&bull;</div>}
                 </Nav.Link>
             ;
 
@@ -244,9 +242,8 @@ class SearchableObjectType extends React.Component {
                 overflowY: 'scroll', 
                 height: '70vh',
                 // width: '30vw',
-                zIndex: 1500,
+                // zIndex: 1500,
                 display: this.state.IsShowSection ? 'block':'none'
-
             },
             // SearchableObjectType:{
             //     position: 'relative',
@@ -262,7 +259,7 @@ class SearchableObjectType extends React.Component {
                 className="hideScrollBar mx-2 float-right" 
             >
                 {/** this section shows the layout of sectionIndexList (Alphabet List)*/}
-                <Col id="SectionIndex"  className = "float-right d-flex flex-column align-items-center" style = {{zIndex: (this.data.floatUp) ? 1070 : 1}}>
+                <Col id="SectionIndex"  className = "float-right d-flex flex-column align-items-center" style = {{zIndex: (this.data.floatUp) ? 1080 : 1}}>
                     {this.sectionIndexHTML()}  
                 </Col>
 

@@ -6,6 +6,11 @@
         font-size: 14px;
         position: static;
     }
+
+    #mainContainer {
+        /* height: 100vh; */
+    }
+
     #searchMap {
         display: none;
     }
@@ -50,6 +55,17 @@
     }
     .container-fluid {
         width: 100%
+    }
+
+    #searchContainer {
+        /* height: 100vh; */
+        /* position: relative; */
+    }
+
+    #searchPanel {
+        /* height: 100vh; */
+        /* overflow: hidden scroll; */
+        position: relative;
     }
 }
 

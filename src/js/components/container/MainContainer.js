@@ -300,10 +300,12 @@ class MainContainer extends React.Component{
                 display: this.state.hasSearchKey ? null : 'none',
                 paddingTop: 30,
             },
+            
             searchPanel: {
                 zIndex: this.state.isHighlightSearchPanel ? 1060 : 1,
                 background: 'white',
                 borderRadius: 10,
+                // height: '90vh'
             }
         }
         const locale = this.context.texts
@@ -340,7 +342,7 @@ class MainContainer extends React.Component{
                                     changeLocationAccuracy={this.changeLocationAccuracy}
                                 />
                             </Col>
-                            <Col xs={12} sm={5} md={3} lg={4} xl={4} className="w-100 px-2" style={style.searchPanel}>
+                            <Col id='searchPanel' xs={12} sm={5} md={3} lg={4} xl={4} className="w-100 px-2" style={style.searchPanel}>
                                 <SearchContainer 
                                     hasSearchKey={this.state.hasSearchKey}
                                     clearSearchResult={this.state.clearSearchResult}

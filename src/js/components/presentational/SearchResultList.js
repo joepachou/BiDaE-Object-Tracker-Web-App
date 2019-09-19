@@ -226,16 +226,16 @@ class SearchResult extends React.Component {
                 <Row className='d-flex justify-content-center' style={style.titleText}>
                     <h4 className='text-capitalize'>{locale.SEARCH_RESULT}</h4>
                 </Row>
-                <Row className='w-100 searchResultForMobile'>
+                {/* <Row className='w-100 searchResultForMobile'>
                     <InfoPrompt data={{[devicePlural]: searchResult.length}} title={title}/>
-                </Row>
+                </Row> */}
                 <Row className='searchResultListGroup'>
                     {searchResult.length === 0 
                         ?   <Col className='d-flex justify-content-center font-italic font-weight-lighter' style={style.noResultDiv}>
                                 <div className='searchResultForDestop'>{locale.NO_RESULT}</div>
                             </Col> 
                         :   
-                            <Col className='mr-4'>
+                            <Col className=''>
                                 <AccessControl
                                     permission={'form:edit'}
                                     renderNoAccess={() => (

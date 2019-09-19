@@ -44,7 +44,7 @@ const SearchResultListGroup = ({
                 let element = 
                     <ListGroup.Item 
                         href={'#' + index} 
-                        style={style.listItem} 
+                        // style={style.listItem} 
                         className='searchResultList' 
                         eventKey={item.found + ':'+ index} 
                         key={index} 
@@ -52,7 +52,7 @@ const SearchResultListGroup = ({
                         disabled={disabled}
                     >
                         <Row>
-                            <p className='px-2 d-flex justify-content-start'>
+                            <p className='px-2 d-flex justify-content-start' style={{zIndex: 1}}>
                                 {selection.indexOf(item.mac_address) >= 0 
                                     ? <i className="fas fa-check mx-1 py-1" style={style.icon}></i> 
                                     : <p className='d-inline-block mx-1'>&#9642;</p>
