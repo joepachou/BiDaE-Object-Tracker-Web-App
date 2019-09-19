@@ -33,7 +33,7 @@ class MyDeviceManager extends React.Component{
             },
             switchDevice: (acn) => {
                 let userInfo = JSON.parse(Cookies.get('user'))
-                let myDevice = userInfo.myDevice
+                let myDevice = userInfo.myDevice || []
 
                 if(acn in this.device.myDevices){
                     this.device.notMyDevices[acn] = this.device.dataMap[acn]
@@ -59,8 +59,10 @@ class MyDeviceManager extends React.Component{
                 this.APIforAddableList_2.setList(this.device.notMyDevices)
             },
             postMyDeviceChange: (mode, acn) => {
+
+                const username = JSON.parse(Cookies.get('user')).name
                 axios.post(dataSrc.modifyMyDevice, {
-                        username: 'joechou',
+                        username,
                         mode: mode,
                         acn: acn
                     })
