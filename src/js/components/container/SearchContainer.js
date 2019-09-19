@@ -184,12 +184,6 @@ class SearchContainer extends React.Component {
                             isShowSectionTitle={this.state.isShowSectionTitle}
                             clientHeight={this.state.clientHeight}
                         /> */}
-                        <SearchableObjectType
-                            floatUp = {this.props.floatUp}
-                            objectTypeList = {this.props.objectTypeList}
-                            // onSubmit={this.getSearchResult}
-                            getSearchKey={this.props.getSearchKey}
-                        />
                     {/* </Col> */}
                         {/* <SearchableObjectType
                             floatUp = {this.props.floatUp}
@@ -197,6 +191,12 @@ class SearchContainer extends React.Component {
                             onSubmit={this.getSearchResult}
                         /> */}
                 </div>
+                <SearchableObjectType
+                    floatUp = {this.props.floatUp}
+                    objectTypeList = {this.props.objectTypeList}
+                    // onSubmit={this.getSearchResult}
+                    getSearchKey={this.props.getSearchKey}
+                />
             </div>
         );
     }

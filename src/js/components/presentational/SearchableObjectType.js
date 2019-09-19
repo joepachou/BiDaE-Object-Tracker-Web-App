@@ -232,48 +232,43 @@ class SearchableObjectType extends React.Component {
 
     render() {
         var  Setting = {
-        SectionIndex: {
 
-        } ,
-        SectionListBackgroundColor:{
+            SectionIndex: {
+            } ,
+            SectionListBackgroundColor:{
 
-            backgroundColor:'rgba(240, 240, 240, 0.95)',
-        },
-        SectionList: {
-            borderRadius: '10px',
-            overflowY: 'scroll', 
-            height: '70vh',
-            width: '30vw',
-            zIndex: 1500,
-            display: this.state.IsShowSection ? 'block':'none'
+                backgroundColor:'rgba(240, 240, 240, 0.95)',
+            },
+            SectionList: {
+                borderRadius: '10px',
+                overflowY: 'scroll', 
+                height: '70vh',
+                // width: '30vw',
+                zIndex: 1500,
+                display: this.state.IsShowSection ? 'block':'none'
 
-        },
-        SearchableObjectType:{
-            position: 'absolute',
-            top: '10vh',
-            right: '1%'
-            
-        }
-
+            },
+            // SearchableObjectType:{
+            //     position: 'relative',
+            //     top: '-25vh',
+            //     right: '1%'
+                
+            // }
         }
         return(
             <div
                 id='searchableObjectType' 
                 onMouseLeave={this.mouseLeave} 
                 className="hideScrollBar mx-2 float-right" 
-                style = {{
-                    ...Setting.SearchableObjectType,
-
-                }}
             >
                 {/** this section shows the layout of sectionIndexList (Alphabet List)*/}
-                <Col id = "SectionIndex"  className = "float-right d-flex flex-column align-items-center" style = {{zIndex: (this.data.floatUp) ? 1070 : 1}}>
+                <Col id="SectionIndex"  className = "float-right d-flex flex-column align-items-center" style = {{zIndex: (this.data.floatUp) ? 1070 : 1}}>
                     {this.sectionIndexHTML()}  
                 </Col>
 
                 {/** this section shows the layout of sectionTitleList (the search results when you hover the section Index List */}
                 <div  
-                    id = "SectionList" 
+                    id="SectionList" 
                     className="hideScrollBar shadow border border-primary float-right mx-0 px-3 py-2 border-secondary" 
                     style={{
                         ...Setting.SectionListBackgroundColor,
