@@ -7,10 +7,6 @@
         position: static;
     }
 
-    #mainContainer {
-        /* height: 100vh; */
-    }
-
     #searchMap {
         display: none;
     }
@@ -57,16 +53,10 @@
         width: 100%
     }
 
-    #searchContainer {
-        /* height: 100vh; */
-        /* position: relative; */
+    #mainContainer {
+        height: 100%;
     }
 
-    #searchPanel {
-        /* height: 100vh; */
-        /* overflow: hidden scroll; */
-        position: relative;
-    }
 }
 
 /* Small devices (landscape phones, 576px and up) */

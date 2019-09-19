@@ -16,7 +16,6 @@
         top: 18vh;
         right: -1%;
     }
-
     .searchResultListGroup {
         margin-right: 4px;
     }
@@ -78,8 +77,8 @@
     }
     #searchableObjectType {
         position: absolute;
+        z-index: 1600;
         top: 10vh;
         right: -1.5%;
     }
-
 }

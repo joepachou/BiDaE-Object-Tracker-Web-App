@@ -35,7 +35,7 @@ a:hover {
 }
 
 .list-group-item {
-    padding: 0.5rem 0.5rem;
+    padding: .1rem 0.5rem;
     border: 0;
     border-radius: 0;
     /* border-bottom: 2px solid rgba(227, 222, 222, 0.62); */
