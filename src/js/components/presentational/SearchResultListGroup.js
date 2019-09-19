@@ -55,7 +55,7 @@ const SearchResultListGroup = ({
                             <p className='px-2 d-flex justify-content-start'>
                                 {selection.indexOf(item.mac_address) >= 0 
                                     ? <i className="fas fa-check mx-1 py-1" style={style.icon}></i> 
-                                    : <div className='d-inline-block mx-1'>&#9642;</div>
+                                    : <p className='d-inline-block mx-1'>&#9642;</p>
                                 }
                                 {item.type},
                                 &nbsp;
