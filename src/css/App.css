@@ -36,9 +36,10 @@ a:hover {
 
 .list-group-item {
     padding: 0.5rem 0.5rem;
-    border: none;
+    border: 0;
     border-radius: 0;
-    border-bottom: 2px solid rgba(227, 222, 222, 0.62);
+    /* border-bottom: 2px solid rgba(227, 222, 222, 0.62); */
+    border-bottom: 0
 }
 
 .list-group-item:last-child {
@@ -53,7 +54,8 @@ a:hover {
 .list-group {
     /* max-height: 700px; */
     border-radius: 0;
-    border: 2px solid rgba(227, 222, 222, 0.62);
+    /* border: 2px solid rgba(227, 222, 222, 0.62); */
+    border: 0
     /* border-left: solid 2px rgb(227, 222, 222); */
     /* border-right: solid 2px rgb(227, 222, 222); */
     /* border-color:transparent; */
@@ -304,7 +306,7 @@ button:focus {
 
 /** Search Result List Group */ 
 .searchResultListGroup {
-    max-Height: 35vh;
+    max-Height: 55vh;
     overflow: hidden scroll;
 }
 .searchResultListGroup::-webkit-scrollbar {
@@ -356,4 +358,8 @@ textarea {
 hr {
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
+}
+
+p { 
+    margin-bottom: 0;
 }

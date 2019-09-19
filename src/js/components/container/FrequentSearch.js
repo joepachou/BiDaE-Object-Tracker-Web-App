@@ -49,54 +49,49 @@ class FrequentSearch extends React.Component {
         return (
             <AuthenticationContext.Consumer className="text-capitalize">
                 {auth => (
-                    <>
-                        <Row className='d-flex justify-content-center' style={style.titleText}>
-                            <h4 className='text-capitalize'>{locale.texts.FREQUENT_SEARCH}</h4>
-                        </Row>
-                        <div className='d-inline-flex flex-column mb-3' id='frequentSearch' >
-                            {auth.authenticated && auth.user.searchHistory
-                                && auth.user.searchHistory.filter( (item,index) => {
-                                return item.name !== 'All' && index < config.userPreference.searchHistoryNumber
-                            }).map( (item, index) => {
-                                
-                                return (
-                                    <Button
-                                        variant="outline-custom"
-                                        onClick={this.handleClick} 
-                                        active={this.state.searchKey === item.name.toLowerCase()} 
-                                        key={index}
-                                        name={item.name}
-                                        className="text-capitalize"
-                                    >
-                                        {item.name}
-                                    </Button>
-                                )
-                            })}
-                            &nbsp;
-                            <AccessControl
-                                permission={'user:mydevice'}
-                                renderNoAccess={() => null}
-                            >
+                    <div className='d-inline-flex flex-column mb-3' id='frequentSearch' >
+                        {auth.authenticated && auth.user.searchHistory
+                            && auth.user.searchHistory.filter( (item,index) => {
+                            return item.name !== 'All' && index < config.userPreference.searchHistoryNumber
+                        }).map( (item, index) => {
+                            
+                            return (
                                 <Button
                                     variant="outline-custom"
                                     onClick={this.handleClick} 
-                                    active={this.state.searchKey === 'my devices'}
-                                    name='my devices'
+                                    active={this.state.searchKey === item.name.toLowerCase()} 
+                                    key={index}
+                                    name={item.name}
+                                    className="text-capitalize"
                                 >
-                                    {locale.texts.MY_DEVICE}
+                                    {item.name}
                                 </Button>
-                            </AccessControl>
-                            
-                                <Button 
-                                    variant="outline-custom"
-                                    onClick={this.handleClick} 
-                                    active={this.state.searchKey === 'all devices'}
-                                    name='all devices'
-                                >
-                                    {locale.texts.ALL_DEVICE}
-                                </Button>
-                        </div>
-                    </>
+                            )
+                        })}
+                        &nbsp;
+                        <AccessControl
+                            permission={'user:mydevice'}
+                            renderNoAccess={() => null}
+                        >
+                            <Button
+                                variant="outline-custom"
+                                onClick={this.handleClick} 
+                                active={this.state.searchKey === 'my devices'}
+                                name='my devices'
+                            >
+                                {locale.texts.MY_DEVICE}
+                            </Button>
+                        </AccessControl>
+                        
+                            <Button 
+                                variant="outline-custom"
+                                onClick={this.handleClick} 
+                                active={this.state.searchKey === 'all devices'}
+                                name='all devices'
+                            >
+                                {locale.texts.ALL_DEVICE}
+                            </Button>
+                    </div>
                 )}
             </AuthenticationContext.Consumer>
         )

@@ -52,6 +52,34 @@ const SearchResultListGroup = ({
                         disabled={disabled}
                     >
                         <Row>
+                            <p className='px-2 d-flex justify-content-start'>
+                                {selection.indexOf(item.mac_address) >= 0 
+                                    ? <i className="fas fa-check mx-1 py-1" style={style.icon}></i> 
+                                    : <div className='d-inline-block mx-1'>&#9642;</div>
+                                }
+                                {item.type},
+                                &nbsp;
+                                {locale.texts.LAST_FOUR_DIGITS_IN_ACN}: {item.last_four_acn},
+                                &nbsp;
+                                {locale.abbr === 'en'
+                                    ? `${locale.texts.IS} ${locale.texts[item.status.toUpperCase()]}`
+                                    : `${locale.texts.STATUS}${locale.texts[item.status.toUpperCase()]}`
+                                },
+                                &nbsp;
+                                {item.currentPosition 
+                                    ? `${locale.texts.NEAR} ${item.location_description}`
+                                    : locale.texts.NOT_AVAILABLE
+                                }
+                                &nbsp;
+                                {item.currentPosition
+                                    ? locale.abbr === 'en'
+                                        ? item.residence_time
+                                        : `,${locale.texts.WHEN}${item.residence_time}`
+                                    : ' '
+                                }
+                            </p>
+                        </Row>
+                        {/* <Row>
                             <Col xs={1} sm={1} lg={1} style={style.firstText}>
                                 {selection.indexOf(item.mac_address) >= 0 
                                     ? <i className="fas fa-check" style={style.icon}></i> 
@@ -80,7 +108,7 @@ const SearchResultListGroup = ({
                                     : ' '
                                 }
                             </Col>
-                        </Row>
+                        </Row> */}
                         {/* <Row>
                             <Col xs={1} sm={1} lg={1} className="font-weight-bold d-flex align-self-center" style={style.firstText}>
                                 {selection.indexOf(item.mac_address) >= 0 

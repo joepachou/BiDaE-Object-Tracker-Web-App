@@ -162,8 +162,8 @@ class SearchContainer extends React.Component {
                         clearSearchResult={this.props.clearSearchResult}    
                     />
                 </Row>
-                <Row id='searchOption' className='pt-2'>
-                    <Col md={6} sm={6} xs={6} lg={6} xl={10} className='px-0'>
+                <div id='searchOption' className='pt-2'>
+                    {/* <Col md={6} sm={6} xs={6} lg={6} xl={10} className='px-0'> */}
                         <Row className='d-flex justify-content-center' style={style.titleText}>
                             <h4 className='text-capitalize'>{locale.texts.FREQUENT_SEARCH}</h4>
                         </Row>
@@ -172,8 +172,8 @@ class SearchContainer extends React.Component {
                             clearSearchResult={this.props.clearSearchResult}   
                             hasGridButton={this.props.hasGridButton} 
                         />
-                    </Col>
-                    <Col id='searchableObjectType' md={6} sm={6} xs={6} lg={6} xl={2} className='px-0'>
+                    {/* </Col> */}
+                    {/* <Col id='searchableObjectType' md={6} sm={6} xs={6} lg={6} xl={2} className='px-0'> */}
                         {/* <SearchableObjectType 
                             sectionTitleList={this.state.sectionTitleList} 
                             sectionIndexList={this.state.sectionIndexList} 
@@ -190,13 +190,13 @@ class SearchContainer extends React.Component {
                             // onSubmit={this.getSearchResult}
                             getSearchKey={this.props.getSearchKey}
                         />
-                    </Col>
+                    {/* </Col> */}
                         {/* <SearchableObjectType
                             floatUp = {this.props.floatUp}
                             objectTypeList = {this.props.objectTypeList}
                             onSubmit={this.getSearchResult}
                         /> */}
-                </Row>
+                </div>
             </div>
         );
     }

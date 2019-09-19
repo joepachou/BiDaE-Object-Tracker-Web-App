@@ -235,7 +235,7 @@ class SearchResult extends React.Component {
                                 <div className='searchResultForDestop'>{locale.NO_RESULT}</div>
                             </Col> 
                         :   
-                            <Col>
+                            <Col className='mr-4'>
                                 <AccessControl
                                     permission={'form:edit'}
                                     renderNoAccess={() => (
