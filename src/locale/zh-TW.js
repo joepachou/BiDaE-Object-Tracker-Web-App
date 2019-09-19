@@ -128,6 +128,8 @@ const tw = {
 
     /** Table Title */
     TRACKING: '物件追蹤',
+    MY_DEVICES_LIST: '我的儀器',
+    NOT_MY_DEVICES_LIST: '其他儀器',
 
     /** Table Field */
     ID: 'ID',

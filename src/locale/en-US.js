@@ -126,6 +126,8 @@ const en =  {
 
     /** Table Title */
     TRACKING: 'tracking',
+    MY_DEVICES_LIST: 'my devices list',
+    NOT_MY_DEVICES_LIST: 'not my devices list',
 
     /** Table Field */
     ID: 'ID',

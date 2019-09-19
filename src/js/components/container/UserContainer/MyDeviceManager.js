@@ -100,21 +100,25 @@ class MyDeviceManager extends React.Component{
     }
 
     getAPIfromAddableList_1(API){
+        let locale = this.context
         const {itemLayout, validation, onClick} = this.functionForAddableList
         this.APIforAddableList_1 = API
-        this.APIforAddableList_1.setTitle("My Devices List")
+        this.APIforAddableList_1.setTitle(locale.texts.MY_DEVICES_LIST)
         this.APIforAddableList_1.setValidation(validation)
         this.APIforAddableList_1.setItemLayout(itemLayout)
         this.APIforAddableList_1.setOnClick(onClick)
     }
+
     getAPIfromAddableList_2(API){
+        let locale = this.context
         const {itemLayout, validation, onClick} = this.functionForAddableList
         this.APIforAddableList_2 = API
-        this.APIforAddableList_2.setTitle("Not My Devices List")
+        this.APIforAddableList_2.setTitle(locale.texts.NOT_MY_DEVICES_LIST)
         this.APIforAddableList_2.setValidation(validation)
         this.APIforAddableList_2.setItemLayout(itemLayout)
         this.APIforAddableList_2.setOnClick(onClick)
     }
+
     componentDidMount(){
         // if(this.props.getAPI){
         //     this.props.getAPI(this.API)
@@ -123,6 +127,7 @@ class MyDeviceManager extends React.Component{
         // }
         this.getObjectData()
     }
+
     getObjectData() {
         let locale = this.context
         axios.post(dataSrc.getObjectTable, {
@@ -176,7 +181,7 @@ class MyDeviceManager extends React.Component{
                             getAPI={this.getAPIfromAddableList_1}
                         />
                     </Col>
-                    <Col xl={2} className='p-5' style={{position: 'relative', top: '15%'}}>
+                    <Col xl={2} className='p-5 d-flex flex-column align-self-center text-center'>
                         <i className="fas fa-angle-double-right fa-2x"></i>
                         <i className="fas fa-angle-double-left fa-2x"></i>
                     </Col>
