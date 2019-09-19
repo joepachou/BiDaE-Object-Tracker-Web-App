@@ -112,7 +112,6 @@ class MainContainer extends React.Component{
         // let objectTypeList = []
         // objectTypeList = this.GetTypeKeyList(trackingData)
 
-        // console.log(objectTypeList)
         // this.setState({
         //     objectTypeList: objectTypeList
         // })
@@ -217,7 +216,6 @@ class MainContainer extends React.Component{
 
     /** Fired once the user click the item in object type list or in frequent seaerch */
     getSearchKey = (searchKey, colorPanel = null, searchValue = null) => {
-
         const searchResult = this.getResultBySearchKey(searchKey, colorPanel, searchValue)
         this.processSearchResult(searchResult, colorPanel, searchKey, searchValue)
     }
@@ -319,7 +317,7 @@ class MainContainer extends React.Component{
                     /** "page-wrap" the default id named by react-burget-menu */
                     <div id="page-wrap" className='mx-1 my-2' >
                         <Row id="mainContainer" className='d-flex w-100 justify-content-around mx-0 overflow-hidden' style={style.container}>
-                            <Col sm={7} md={9} lg={9} xl={9} id='searchMap' className="pl-2 pr-1" >
+                            <Col sm={7} md={9} lg={8} xl={8} id='searchMap' className="pl-2 pr-1" >
                                 {this.state.hasSearchKey 
                                     ?   <InfoPrompt 
                                             data={this.state.searchResultObjectTypeMap} 
@@ -342,7 +340,7 @@ class MainContainer extends React.Component{
                                     changeLocationAccuracy={this.changeLocationAccuracy}
                                 />
                             </Col>
-                            <Col xs={12} sm={5} md={3} lg={3} xl={3} className="w-100 px-2" style={style.searchPanel}>
+                            <Col xs={12} sm={5} md={3} lg={4} xl={4} className="w-100 px-2" style={style.searchPanel}>
                                 <SearchContainer 
                                     hasSearchKey={this.state.hasSearchKey}
                                     clearSearchResult={this.state.clearSearchResult}

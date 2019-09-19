@@ -3,7 +3,10 @@ import Searchbar from '../presentational/Searchbar';
 import { Col, Row, Nav, ListGroup} from 'react-bootstrap'
 import FrequentSearch from './FrequentSearch';
 import config from '../../config';
+// import SearchableObjectType from '../presentational/SearchableObjectType_1'
 import SearchableObjectType from '../presentational/SearchableObjectType'
+import LocaleContext from '../../context/LocaleContext';
+
 
 class SearchContainer extends React.Component {
 
@@ -141,25 +144,37 @@ class SearchContainer extends React.Component {
         }
     }
 
-    render() {        
+    render() {      
+        const style = {
+            titleText: {
+                color: 'rgb(80, 80, 80, 1)'
+            }, 
+        }
+
+        const locale = this.context
+        
         return (                   
             <div id='searchContainer' className="py-1" onTouchMove={this.handleTouchMove}>
-                <div id='searchBar' className='d-flex justify-content-center align-items-center pb-2'>
+                <Row id='searchBar' className='d-flex justify-content-center align-items-center pb-2'>
                     <Searchbar 
                         placeholder={this.state.searchKey}
                         getSearchKey={this.props.getSearchKey}
                         clearSearchResult={this.props.clearSearchResult}    
                     />
-                </div>
-                <div id='searchOption' className='pt-2'>
-                    <FrequentSearch 
-                        getSearchKey={this.props.getSearchKey}  
-                        clearSearchResult={this.props.clearSearchResult}   
-                        hasGridButton={this.props.hasGridButton} 
-                    />
-                    {/* <Col id='searchableObjectType' md={6} sm={6} xs={6} className='px-0'>
-                        <h6 className="font-weight-bold">{}</h6>
-                        <SearchableObjectType 
+                </Row>
+                <Row id='searchOption' className='pt-2'>
+                    <Col md={6} sm={6} xs={6} lg={6} xl={10} className='px-0'>
+                        <Row className='d-flex justify-content-center' style={style.titleText}>
+                            <h4 className='text-capitalize'>{locale.texts.FREQUENT_SEARCH}</h4>
+                        </Row>
+                        <FrequentSearch 
+                            getSearchKey={this.props.getSearchKey}  
+                            clearSearchResult={this.props.clearSearchResult}   
+                            hasGridButton={this.props.hasGridButton} 
+                        />
+                    </Col>
+                    <Col id='searchableObjectType' md={6} sm={6} xs={6} lg={6} xl={2} className='px-0'>
+                        {/* <SearchableObjectType 
                             sectionTitleList={this.state.sectionTitleList} 
                             sectionIndexList={this.state.sectionIndexList} 
                             sectionIndex={this.state.sectionIndex} 
@@ -168,18 +183,26 @@ class SearchContainer extends React.Component {
                             handleTouchMove={this.handleTouchMove} 
                             isShowSectionTitle={this.state.isShowSectionTitle}
                             clientHeight={this.state.clientHeight}
+                        /> */}
+                        <SearchableObjectType
+                            floatUp = {this.props.floatUp}
+                            objectTypeList = {this.props.objectTypeList}
+                            // onSubmit={this.getSearchResult}
+                            getSearchKey={this.props.getSearchKey}
                         />
-                    </Col> */}
-                    {/* <SearchableObjectType
-                        floatUp = {this.props.floatUp}
-                        objectTypeList = {this.props.objectTypeList}
-                        onSubmit={this.getSearchResult}
-                    /> */}
-                </div>
+                    </Col>
+                        {/* <SearchableObjectType
+                            floatUp = {this.props.floatUp}
+                            objectTypeList = {this.props.objectTypeList}
+                            onSubmit={this.getSearchResult}
+                        /> */}
+                </Row>
             </div>
         );
     }
 }
+
+SearchContainer.contextType = LocaleContext
 
 
 export default SearchContainer;

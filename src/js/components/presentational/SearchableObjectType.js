@@ -8,6 +8,8 @@ import LocaleContext from '../../context/LocaleContext';
 // import '../../../css/hideScrollBar.css'
 // import '../../../css/shadow.css'
 import '../../../css/SearchableObjectType.css'
+import axios from 'axios';
+import { getObjectTable } from '../../dataSrc'
 /*
     this class contain three two components
         1. sectionIndexList : this is the alphabet list for user to search their objects by the first letter of their type
@@ -18,16 +20,10 @@ class SearchableObjectType extends React.Component {
     constructor(){
         super()
         this.state = {
-            sectionIndexList: ['A','B', 'C', 'D','E','F','G', 'H', 'I','J','K','L', 'M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'],
-
+            sectionIndexList: ['A','B','C', 'D','E','F','G','H', 'I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'],
             IsShowSection : false,
-
-            
-            
             changeState: 0,
-
-            
-
+            firstLetterMap: [],
         }
         this.data = {
             sectionTitleData : [],
@@ -36,23 +32,22 @@ class SearchableObjectType extends React.Component {
         this.shouldUpdate = false
         this.onSubmit = null
 
-
         this.API = {
-            setObjectList : (objectList) => {
-                var firstLetterMap = new Array()
-                if(objectList.length !== 0){
-                    objectList.map((name) => {
-                        firstLetterMap[name[0]] 
-                            ? firstLetterMap[name[0]].push(name)
-                            : firstLetterMap[name[0]] = [name]
-                    })
-                }
-                this.shouldUpdate = true
+            // setObjectList : (objectList) => {
+            //     var firstLetterMap = new Array()
+            //     if(objectList.length !== 0){
+            //         objectList.map((name) => {
+            //             firstLetterMap[name[0]] 
+            //                 ? firstLetterMap[name[0]].push(name)
+            //                 : firstLetterMap[name[0]] = [name]
+            //         })
+            //     }
+            //     this.shouldUpdate = true
                 
-                this.data.sectionTitleData = firstLetterMap
-                this.setState({})
+            //     this.data.sectionTitleData = firstLetterMap
+            //     this.setState({})
                 
-            },
+            // },
             setOnSubmit : (func) => {
                 this.onSubmit = func
             },
@@ -67,26 +62,55 @@ class SearchableObjectType extends React.Component {
                 this.setState({})
             }
         }
-
         this.handleHoverEvent = this.handleHoverEvent.bind(this)
         this.mouseClick = this.mouseClick.bind(this)
         this.mouseLeave = this.mouseLeave.bind(this)
         this.sectionIndexHTML= this.sectionIndexHTML.bind(this)
-        this.sectionTitleListHTML = this.sectionTitleListHTML.bind(this)
     }
 
     
     
 
     componentDidMount(){
-        if(this.props.getAPI){
-            this.props.getAPI(this.API)
-        }else if(this.props.onSubmit){
-            this.onSubmit = this.props.onSubmit
-        }else{
-            console.error('onSubmit is empty')
+        axios.post(getObjectTable, {
+        })
+        .then(res => {
+            let objectTypeList = []
+            res.data.rows.map(item => {
+                objectTypeList.includes(item.type) ? null : objectTypeList.push(item.type)
+            })
+            let firstLetterMap = this.getObjectIndexList(objectTypeList)
+            this.setState({
+                firstLetterMap
+            })
+        })
+        .catch(err => {
+            console.log(err)
+        })
+
+        // if(this.props.getAPI){
+        //     this.props.getAPI(this.API)
+        // }else if(this.props.onSubmit){
+        //     this.onSubmit = this.props.onSubmit
+        // }else{
+        //     console.error('onSubmit is empty')
+        // }
+    }
+
+    getObjectIndexList = (objectList) => {
+        var firstLetterMap = []
+        if(objectList.length !== 0){
+            objectList.map((name) => {
+                firstLetterMap[name[0]] 
+                    ? firstLetterMap[name[0]].push(name)
+                    : firstLetterMap[name[0]] = [name]
+            })
         }
-        
+        this.shouldUpdate = true
+        return firstLetterMap
+        // this.data.sectionTitleData = firstLetterMap
+        // console.log(firstLetterMap)
+        // this.setState({})
     }
     
     shouldComponentUpdate(nextProps, nexState){
@@ -94,10 +118,10 @@ class SearchableObjectType extends React.Component {
             this.shouldUpdate = false
             return true
         }
-        if(!_.isEqual(this.props.objectTypeList, nextProps.objectTypeList) ){
-            this.API.setObjectList(nextProps.objectTypeList)
-            return true
-        }
+        // if(!_.isEqual(this.props.objectTypeList, nextProps.objectTypeList) ){
+        //     this.API.setObjectList(nextProps.objectTypeList)
+        //     return true
+        // }
         if(this.props.floatUp !== nextProps.floatUp){
             if(nextProps.floatUp){
                 this.API.floatUp()
@@ -134,8 +158,8 @@ class SearchableObjectType extends React.Component {
         })
     }
 
-    sectionIndexHTML(){
-        const {sectionIndexList} = this.state
+    sectionIndexHTML = () => {
+        const { sectionIndexList } = this.state
         var Data = [];
         let data = [];
         let index = 0;
@@ -161,31 +185,39 @@ class SearchableObjectType extends React.Component {
         return Data;
     }
 
-    sectionTitleListHTML(){
+    sectionTitleListHTML = () => {
 
         var Data = [];
         let first = []; 
-        const {sectionTitleData} = this.data
-        for(var titleData in sectionTitleData){
-            first = titleData
+        const { sectionTitleData } = this.data
 
+        for(var titleData in this.state.firstLetterMap){
+            first = titleData
             Data.push(<div id={first} key={first} className=" text-right text-dark" ><strong><h4 className="m-0">{first}</h4></strong></div>)
-            for (let i in sectionTitleData[titleData]){
-                let name = sectionTitleData[titleData][i]
+
+            for (let i in this.state.firstLetterMap[first]){
+                let name = this.state.firstLetterMap[first][i]
                 Data.push(
-                    <div key={name} name={name} className="my-0 py-0 w-100 text-right" style={{cursor: 'grab'}} onClick={this.mouseClick} >
-                            <h4 className="m-0">{name}</h4>
+                    <div key={name} name={name} className="my-0 py-0 w-100 text-right" style={{cursor: 'pointer'}} onClick={this.handleClick} >
+                        <h4 className="m-0">{name}</h4>
                     </div>
                 )
             }
-            
-        
         }       
         return Data
 
-    };
+    }
+
+    handleClick = (e) => {
+        let searchKey = e.target.innerText
+        this.props.getSearchKey(searchKey)
+        this.shouldUpdate = true
+        this.setState({
+            IsShowSection: false
+        })
+    }
+
     render() {
-        console.log('render')
         var  Setting = {
         SectionIndex: {
 
@@ -214,7 +246,7 @@ class SearchableObjectType extends React.Component {
 
         }
         return(
-            <Col md={6} sm={12} xs={12}
+            <div
                 id='searchableObjectType' 
                 onMouseLeave={this.mouseLeave} 
                 className="hideScrollBar mx-4 px-0 float-right" 
@@ -223,33 +255,23 @@ class SearchableObjectType extends React.Component {
 
                 }}
             >
-                {
-                    // this section shows the layout of sectionIndexList (Alphabet List)
-                }
+                {/** this section shows the layout of sectionIndexList (Alphabet List)*/}
                 <Col  md={4} id = "SectionIndex"  className = "float-right" style = {{zIndex: (this.data.floatUp)?1070:1}}>
-                    {
-                        this.sectionIndexHTML()
-                    }  
+                    {this.sectionIndexHTML()}  
                 </Col>
 
-                {
-                    // this section shows the layout of sectionTitleList (the search results when you hover the section Index List)
-
-                }
+                {/** this section shows the layout of sectionTitleList (the search results when you hover the section Index List */}
                 <div  
                     id = "SectionList" 
                     className="hideScrollBar shadow border border-primary float-right mx-0 px-3 py-2 border-secondary" 
                     style={{
                         ...Setting.SectionListBackgroundColor,
                         ...Setting.SectionList,
-
                     }}
                 >
-                    {
-                        this.sectionTitleListHTML(Setting)
-                    }
+                    {this.sectionTitleListHTML(Setting)}
                 </div>
-            </Col>
+            </div>
         )
             
         
