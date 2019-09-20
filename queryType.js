@@ -172,7 +172,8 @@ function query_signin(username) {
 			user_table.password,
 			roles.name as role, 
 			user_table.mydevice, 
-			user_table.search_history
+			user_table.search_history,
+			area_table.name as area
 
 		FROM user_table
 
@@ -181,6 +182,9 @@ function query_signin(username) {
 
 		LEFT JOIN roles
 		ON user_roles.role_id = roles.id
+
+		LEFT JOIN area_table
+		ON user_table.area_id = area_table.id
 
 		WHERE user_table.name = $1;
 		

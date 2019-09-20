@@ -222,30 +222,33 @@ const signin = (request, response) => {
     const { password, shift } = request.body
     
 
-    pool.query(queryType.query_signin(username), (error, results) => {
-        if (error) {
-            console.log("Login Fails: " + error)
-        } else {
-            if (results.rowCount < 1) {
+    pool.query(queryType.query_signin(username))
+        .then(res => {
+            if (res.rowCount < 1) {
                 response.json({
                     authentication: false,
                     message: "Username or password is incorrect"
                 })
             } else {
-                const hash = results.rows[0].password
+                const hash = res.rows[0].password
                 if (bcrypt.compareSync(password, hash)) {
-                    let userInfo = {}
+                    console.log(res.rows[0])
                     let { 
                         name, 
                         role, 
                         mydevice, 
                         search_history,
-                    } = results.rows[0]
-                    userInfo.name= name
-                    userInfo.myDevice = mydevice
-                    userInfo.role = role
-                    userInfo.searchHistory = search_history
-                    userInfo.shift = shift
+                        area
+                    } = res.rows[0]
+
+                    let userInfo = {
+                        name,
+                        myDevice: mydevice,
+                        role,
+                        searchHistory: search_history,
+                        shift,
+                        area
+                    }
 
                     request.session.userInfo = userInfo
                     response.json({
@@ -263,9 +266,10 @@ const signin = (request, response) => {
                     })
                 }
             }
-        }
-
-    })
+        })
+        .catch(err => {
+            console.log("Login Fails: " + err)
+        })
 
 }
 
