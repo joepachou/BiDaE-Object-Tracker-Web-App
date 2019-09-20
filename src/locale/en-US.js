@@ -12,7 +12,7 @@ const en =  {
     OBJECT_MANAGEMENT: 'object management',
 
     SEARCH_RESULT: 'search result',
-    No_RESULT: 'no result',
+    NO_RESULT: 'no result',
     FREQUENT_SEARCH: 'frequent searches',
     FOUND: 'found',
     NOT_FOUND: 'not found',

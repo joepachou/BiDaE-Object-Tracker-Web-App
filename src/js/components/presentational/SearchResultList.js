@@ -189,13 +189,13 @@ class SearchResult extends React.Component {
 
 
     render() {
-        const locale = this.context.texts;
+        const locale = this.context;
         const { searchKey } = this.props;
 
         const style = {
             noResultDiv: {
                 color: 'grey',
-                fontSize: 30,
+                fontSize: '1rem',
                 fontWeight: 300
             },
             titleText: {
@@ -216,23 +216,24 @@ class SearchResult extends React.Component {
             : this.props.searchResult.filter(item => !item.found).length
 
         let title = this.state.showNotFoundResult 
-            ? locale.NOT_FOUND
-            : locale.FOUND
+            ? locale.texts.NOT_FOUND
+            : locale.texts.FOUND
 
-        let devicePlural = deviceNum === 1 ? locale.DEVICE : locale.DEVICES
+        let devicePlural = deviceNum === 1 ? locale.texts.DEVICE : locale.texts.DEVICES
 
         return(
             <>
                 <Row className='d-flex justify-content-center' style={style.titleText}>
-                    <h4 className='text-capitalize'>{locale.SEARCH_RESULT}</h4>
+                    <h4 className='text-capitalize'>{locale.texts.SEARCH_RESULT}</h4>
                 </Row>
                 {/* <Row className='w-100 searchResultForMobile'>
                     <InfoPrompt data={{[devicePlural]: searchResult.length}} title={title}/>
                 </Row> */}
                 <Row className='searchResultListGroup'>
+                {console.log(searchResult)}
                     {searchResult.length === 0 
-                        ?   <Col className='d-flex justify-content-center font-italic font-weight-lighter' style={style.noResultDiv}>
-                                <div className='searchResultForDestop'>{locale.NO_RESULT}</div>
+                        ?   <Col className='d-flex justify-content-center font-weight-lighter' style={style.noResultDiv}>
+                                <div className='searchResultForDestop'>{locale.texts.NO_RESULT}</div>
                             </Col> 
                         :   
                             <Col className=''>
@@ -262,8 +263,8 @@ class SearchResult extends React.Component {
                             <h4 style={style.titleText} className='text-capitalize'>
                                 <a href="" onClick={this.handleToggleNotFound}>
                                     {this.state.showNotFoundResult 
-                                        ? locale.SHOW + ' ' + deviceNum + ' ' + devicePlural + ' ' + locale.FOUND
-                                        : locale.SHOW + ' ' + deviceNum + ' ' + devicePlural + ' ' + locale.NOT_FOUND
+                                        ? locale.texts.SHOW + ' ' + deviceNum + ' ' + devicePlural + ' ' + locale.texts.FOUND
+                                        : locale.texts.SHOW + ' ' + deviceNum + ' ' + devicePlural + ' ' + locale.texts.NOT_FOUND
                                     }
                                 </a>
                             </h4>
@@ -271,7 +272,7 @@ class SearchResult extends React.Component {
                 }
                 <ChangeStatusForm 
                     show={this.state.showEditObjectForm} 
-                    title={locale.REPORT_DEVICE_STATUS} 
+                    title={locale.texts.REPORT_DEVICE_STATUS} 
                     selectedObjectData={this.state.selectedObjectData} 
                     searchKey={searchKey}
                     handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose}
@@ -282,7 +283,7 @@ class SearchResult extends React.Component {
                 />
                 <ConfirmForm 
                     show={this.state.showConfirmForm}  
-                    title={locale.THANK_YOU_FOR_REPORTING} 
+                    title={locale.texts.THANK_YOU_FOR_REPORTING} 
                     selectedObjectData={this.state.editedObjectPackage} 
                     handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose} 
                     handleConfirmFormSubmit={this.handleConfirmFormSubmit}

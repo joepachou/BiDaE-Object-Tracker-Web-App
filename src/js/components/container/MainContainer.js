@@ -285,7 +285,9 @@ class MainContainer extends React.Component{
             colorPanel, 
             clearColorPanel,
             trackingData,
-            proccessedTrackingData
+            proccessedTrackingData,
+            searchResult,
+            searchResultObjectTypeMap
         } = this.state;
 
         const style = {
@@ -308,10 +310,15 @@ class MainContainer extends React.Component{
                 // height: '90vh'
             }
         }
-        const locale = this.context.texts
+        const locale = this.context
 
         let deviceNum = this.state.trackingData.filter(item => item.found).length
-        let devicePlural = deviceNum === 1 ? locale.DEVICE : locale.DEVICES
+        let devicePlural = deviceNum === 1 ? locale.texts.DEVICE : locale.texts.DEVICES
+        let data = hasSearchKey 
+            ? searchResult.length !== 0 
+                ? searchResultObjectTypeMap 
+                : {[devicePlural] : 0} 
+            : {[devicePlural]: this.state.trackingData.filter(item => item.found).length}
 
         return(
             <AuthenticationContext.Consumer>
@@ -320,18 +327,24 @@ class MainContainer extends React.Component{
                     <div id="page-wrap" className='mx-1 my-2' >
                         <Row id="mainContainer" className='d-flex w-100 justify-content-around mx-0 overflow-hidden' style={style.container}>
                             <Col sm={7} md={9} lg={8} xl={8} id='searchMap' className="pl-2 pr-1" >
-                                {this.state.hasSearchKey 
-                                    ?   <InfoPrompt 
-                                            data={this.state.searchResultObjectTypeMap} 
-                                            title={locale.FOUND} 
-                                        />                                        
+                                <InfoPrompt 
+                                    data={data}
+                                    title={locale.texts.FOUND} 
+                                />
+                                {/* {this.state.hasSearchKey 
+                                    ?   this.state.searchResult.length !== 0   
+                                        ?   <InfoPrompt 
+                                                data={this.state.searchResultObjectTypeMap} 
+                                                title={locale.texts.FOUND} 
+                                            />
+                                        :                                         
                                     :   <InfoPrompt 
                                             data={{
                                                 [devicePlural]: this.state.trackingData.filter(item => item.found).length
                                             }}
-                                            title={locale.FOUND} 
+                                            title={locale.texts.FOUND} 
                                         />
-                                }     
+                                }      */}
                                 <SurveillanceContainer 
                                     proccessedTrackingData={proccessedTrackingData.length === 0 ? trackingData : proccessedTrackingData}
                                     hasSearchKey={hasSearchKey}

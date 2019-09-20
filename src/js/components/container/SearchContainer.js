@@ -196,6 +196,7 @@ class SearchContainer extends React.Component {
                     objectTypeList = {this.props.objectTypeList}
                     // onSubmit={this.getSearchResult}
                     getSearchKey={this.props.getSearchKey}
+                    auth={this.props.auth}
                 />
             </div>
         );

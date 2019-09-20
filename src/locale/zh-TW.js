@@ -12,7 +12,7 @@ const tw = {
     OBJECT_MANAGEMENT: '物件管理',
 
     SEARCH_RESULT: '搜尋結果',
-    No_RESULT: 'no result',
+    NO_RESULT: '無搜尋結果',
     FREQUENT_SEARCH: '常用搜尋',
     FOUND: '找到',
     NOT_FOUND: '未找到',
