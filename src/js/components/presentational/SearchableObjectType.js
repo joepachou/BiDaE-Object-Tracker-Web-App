@@ -10,6 +10,7 @@ import LocaleContext from '../../context/LocaleContext';
 import '../../../css/SearchableObjectType.css'
 import axios from 'axios';
 import { getObjectTable } from '../../dataSrc'
+import Cookies from 'js-cookie'
 /*
     this class contain three two components
         1. sectionIndexList : this is the alphabet list for user to search their objects by the first letter of their type
@@ -222,10 +223,31 @@ class SearchableObjectType extends React.Component {
     handleClick = (e) => {
         let searchKey = e.target.innerText
         this.props.getSearchKey(searchKey)
+        this.addSearchHistory(searchKey)
+
         this.shouldUpdate = true
         this.setState({
             IsShowSection: false
         })
+    }
+
+    addSearchHistory(searchKey) {
+        if (!this.props.auth.authenticated) return;
+        const searchHistory = JSON.parse(Cookies.get('user')).searchHistory 
+        console.log(searchHistory)
+
+        let flag = false; 
+        const toPutSearchHistory = searchHistory.map( item => {
+            if (item.name === searchKey) {
+                item.value = item.value + 1;
+                flag = true;
+            }
+            return item
+        })
+        flag === false ? toPutSearchHistory.push({name: searchKey, value: 1}) : null;
+        const sortedSearchHistory = this.sortSearchHistory(toPutSearchHistory)
+        Cookies.set('searchHistory', JSON.stringify(sortedSearchHistory))
+        this.checkInSearchHistory()
     }
 
     render() {
@@ -252,6 +274,13 @@ class SearchableObjectType extends React.Component {
                 
             // }
         }
+
+        const style = {
+            cross: {
+                cursor: 'pointer',
+                fontSize: '1.3rem'
+            }
+        }
         return(
             <div
                 id='searchableObjectType' 
@@ -272,6 +301,13 @@ class SearchableObjectType extends React.Component {
                         ...Setting.SectionList,
                     }}
                 >
+                    <div 
+                        className='d-flex justify-content-start'
+                        style={style.cross}
+                        onClick={this.mouseLeave}
+                    >
+                        &#10005;
+                    </div>
                     {this.sectionTitleListHTML(Setting)}
                 </div>
             </div>
