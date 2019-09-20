@@ -314,16 +314,17 @@ const getUserInfo = (request, response) => {
 }
 
 const addUserSearchHistory = (request, response) => {
-    const { username, history } = request.body;
-    pool.query(queryType.query_addUserSearchHistory(username, history), (error, results) => {
-        if (error) {
-            console.log('Add user search history fails: ' + error)
-        } else {
+    let { username, searchHistory } = request.body;
+    searchHistory = JSON.stringify(searchHistory)
+    pool.query(queryType.query_addUserSearchHistory(username, searchHistory))
+        .then(res => {
             console.log('Add user searech history success')
-        }
-        response.status(200).json(results)
-    })
-
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log('Add user search history fails: ' + err)
+        })
+        
 }
 
 const editLbeacon = (request, response) => {

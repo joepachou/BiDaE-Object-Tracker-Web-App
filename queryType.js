@@ -229,14 +229,14 @@ function query_getUserInfo(username) {
 	return query
 }
 
-function query_addUserSearchHistory (username, history) {
+function query_addUserSearchHistory (username, searchHistory) {
 	const text = `
 		UPDATE user_table
 		SET search_history = $1
 		WHERE name = $2
 	`;
 
-	const values = [history, username];
+	const values = [searchHistory, username];
 
 	const query = {
 		text, 

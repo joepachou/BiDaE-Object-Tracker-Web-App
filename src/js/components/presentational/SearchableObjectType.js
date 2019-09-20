@@ -11,6 +11,9 @@ import '../../../css/SearchableObjectType.css'
 import axios from 'axios';
 import { getObjectTable } from '../../dataSrc'
 import Cookies from 'js-cookie'
+import {
+    addUserSearchHistory
+} from '../../dataSrc'
 /*
     this class contain three two components
         1. sectionIndexList : this is the alphabet list for user to search their objects by the first letter of their type
@@ -97,6 +100,10 @@ class SearchableObjectType extends React.Component {
         //     console.error('onSubmit is empty')
         // }
     }
+
+    // componentWillUnmount = () => {
+    //     console.log(123)
+    // }
 
     getObjectIndexList = (objectList) => {
         var firstLetterMap = []
@@ -223,6 +230,7 @@ class SearchableObjectType extends React.Component {
     handleClick = (e) => {
         let searchKey = e.target.innerText
         this.props.getSearchKey(searchKey)
+
         this.addSearchHistory(searchKey)
 
         this.shouldUpdate = true
@@ -232,22 +240,39 @@ class SearchableObjectType extends React.Component {
     }
 
     addSearchHistory(searchKey) {
-        if (!this.props.auth.authenticated) return;
-        const searchHistory = JSON.parse(Cookies.get('user')).searchHistory 
-        console.log(searchHistory)
-
+        let { auth } = this.props
+        if (!auth.authenticated) return;
+        const searchHistory = auth.user.searchHistory || []
         let flag = false; 
-        const toPutSearchHistory = searchHistory.map( item => {
+        const toReturnSearchHistory = searchHistory.map( item => {
             if (item.name === searchKey) {
                 item.value = item.value + 1;
                 flag = true;
             }
             return item
         })
-        flag === false ? toPutSearchHistory.push({name: searchKey, value: 1}) : null;
-        const sortedSearchHistory = this.sortSearchHistory(toPutSearchHistory)
-        Cookies.set('searchHistory', JSON.stringify(sortedSearchHistory))
-        this.checkInSearchHistory()
+        flag === false ? toReturnSearchHistory.push({name: searchKey, value: 1}) : null;
+        const sortedSearchHistory = this.sortSearchHistory(toReturnSearchHistory)
+        // auth.setSearchHistory(sortedSearchHistory)
+        this.checkInSearchHistory(auth.user.name, sortedSearchHistory)
+    }
+
+    /** Sort the user search history and limit the history number */
+    sortSearchHistory(history) {
+        let toReturn = history.sort( (a,b) => {
+            return b.value - a.value
+        })
+        return toReturn
+    }
+
+    checkInSearchHistory(username, searchHistory) {
+        axios.post(addUserSearchHistory, {
+            username,
+            searchHistory,
+        }).then(res => {
+        }).catch(err => {
+            console.log(err)
+        })
     }
 
     render() {

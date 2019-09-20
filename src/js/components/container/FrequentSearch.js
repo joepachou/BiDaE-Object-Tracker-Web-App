@@ -52,9 +52,8 @@ class FrequentSearch extends React.Component {
                     <div className='d-inline-flex flex-column mb-3' id='frequentSearch' >
                         {auth.authenticated && auth.user.searchHistory
                             && auth.user.searchHistory.filter( (item,index) => {
-                            return item.name !== 'All' && index < config.userPreference.searchHistoryNumber
+                            return index < config.userPreference.searchHistoryNumber
                         }).map( (item, index) => {
-                            
                             return (
                                 <Button
                                     variant="outline-custom"

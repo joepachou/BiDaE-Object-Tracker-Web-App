@@ -54,14 +54,25 @@ class Auth extends React.Component {
         Cookies.set(key, value)
     }
 
+    setSearchHistory = (searchHistory) => {
+        this.setState({
+            ...this.state,
+            user: {
+                ...this.state.user,
+                searchHistory,
+            }
+        })
+    } 
+
     render() {
 
         const authProviderValue = {
             ...this.state,
             signin: this.signin,
             signup: this.signup,
+            signout: this.signout,
             handleAuthentication: this.handleAuthentication,
-            signout: this.signout
+            setSearchHistory: this.setSearchHistory
         };
 
         return (
