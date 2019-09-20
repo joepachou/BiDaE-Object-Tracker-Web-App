@@ -138,6 +138,19 @@
         padding: 0;
     }
 
+    #searchPanel {
+        height: 90vh;
+    }
+
+    .searchResultListGroup {
+        /* max-Height: ; */
+        overflow: hidden auto;
+    }
+
+    #searchResult {
+        padding-right: 1.5rem
+    }
+
     /* #confirmForm {
         z-Index: 1050;
         top: 10%;

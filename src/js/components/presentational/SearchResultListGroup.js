@@ -3,48 +3,71 @@ import { ListGroup, Row, Col } from 'react-bootstrap'
 import config from '../../config'
 import LocaleContext from '../../context/LocaleContext';
 
-const style = {
-    listItem: {
-        position: 'relative',
-        zIndex: 6,
-    }, 
-    firstText: {
-        paddingLeft: 15,
-        paddingRight: 0,
-        // background: 'rgb(227, 222, 222)',
-        // height: 30,
-        // width: 30,
-    },
-    middleText: {
-        paddingLeft: 2,
-        paddingRight: 2,
-    },
-    lastText: {
-        // textAlign: 'right'
-    },
-    icon: {
-        color: '#007bff'
-    }
-}
-
 const SearchResultListGroup = ({
-    data,
-    handleSelectResultItem,
-    selection,
-    disabled
-}) => {
+        data,
+        handleSelectResultItem,
+        selection,
+        disabled,
+    }) => {
+
     const locale = React.useContext(LocaleContext);
 
+    if (document.getElementById('searchPanel')) {
+        // console.log(window.innerHeight)
+        // console.log(document.body.clientHeight)
+        // console.log(document.documentElement.clientHeight)
+        var searchPanelElementHeight = document.getElementById('searchPanel').clientHeight
+        var searchContainerElementHeight = document.getElementById('searchContainer').clientHeight
+        var factor = 0.8
+        var modifiedHeight = Math.floor((searchPanelElementHeight - searchContainerElementHeight) * factor)
+        // console.log(document.getElementById('searchPanel').offsetHeight)
+        // console.log(document.getElementById('searchContainer').offsetHeight)
+        // console.log(modifiedHeight)
+    }
+
+    const style = {
+        listItem: {
+            position: 'relative',
+            zIndex: 6,
+        }, 
+        firstText: {
+            paddingLeft: 15,
+            paddingRight: 0,
+            // background: 'rgb(227, 222, 222)',
+            // height: 30,
+            // width: 30,
+        },
+        middleText: {
+            paddingLeft: 2,
+            paddingRight: 2,
+        },
+        lastText: {
+            // textAlign: 'right'
+        },
+        icon: {
+            color: '#007bff'
+        },
+        list: {
+            wordBreak: 'keep-all',
+            // color:'red',
+            zIndex: 1
+        },
+        listGroup: {
+            maxHeight: window.innerWidth > 600 
+                ? modifiedHeight || 0
+                : ''
+        }
+    }
     return (
         <ListGroup 
             onSelect={handleSelectResultItem} 
             className='searchResultListGroup'
+            style={style.listGroup}
         >
             {data.map((item,index) => {
                 let element = 
                     <ListGroup.Item 
                         href={'#' + index} 
-                        // style={style.listItem} 
                         className='searchResultList' 
                         eventKey={item.found + ':'+ index} 
                         key={index} 
@@ -52,7 +75,10 @@ const SearchResultListGroup = ({
                         disabled={disabled}
                     >
                         <Row>
-                            <div className='px-2 d-flex justify-content-start text-left' style={{zIndex: 1}}>
+                            <div 
+                                className='d-flex justify-content-start text-left' 
+                                style={style.list}
+                            >
                                 {selection.indexOf(item.mac_address) >= 0 
                                     ? <i className="fas fa-check mx-1 py-1" style={style.icon}></i> 
                                     : <p className='d-inline-block mx-1'>&#9642;</p>

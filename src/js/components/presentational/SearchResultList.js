@@ -191,7 +191,6 @@ class SearchResult extends React.Component {
     render() {
         const locale = this.context;
         const { searchKey } = this.props;
-
         const style = {
             noResultDiv: {
                 color: 'grey',
@@ -221,16 +220,16 @@ class SearchResult extends React.Component {
 
         let devicePlural = deviceNum === 1 ? locale.texts.DEVICE : locale.texts.DEVICES
 
+
         return(
-            <>
+            <div>
                 <Row className='d-flex justify-content-center' style={style.titleText}>
-                    <h4 className='text-capitalize'>{locale.texts.SEARCH_RESULT}</h4>
+                    <h4 className='text-capitalize pl-3'>{locale.texts.SEARCH_RESULT}</h4>
                 </Row>
                 {/* <Row className='w-100 searchResultForMobile'>
                     <InfoPrompt data={{[devicePlural]: searchResult.length}} title={title}/>
                 </Row> */}
                 <Row className='searchResultListGroup'>
-                {console.log(searchResult)}
                     {searchResult.length === 0 
                         ?   <Col className='d-flex justify-content-center font-weight-lighter' style={style.noResultDiv}>
                                 <div className='searchResultForDestop'>{locale.texts.NO_RESULT}</div>
@@ -245,7 +244,8 @@ class SearchResult extends React.Component {
                                             handleSelectResultItem={this.handleSelectResultItem}
                                             selection={this.state.selection}
                                             disabled
-                                        />)
+                                        />
+                                    )
                                     }
                                 >
                                     <SearchResultListGroup 
@@ -288,7 +288,7 @@ class SearchResult extends React.Component {
                     handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose} 
                     handleConfirmFormSubmit={this.handleConfirmFormSubmit}
                 />
-            </>
+            </div>
         )
     }
 }

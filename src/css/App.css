@@ -305,10 +305,10 @@ button:focus {
 }
 
 /** Search Result List Group */ 
-.searchResultListGroup {
+/* .searchResultListGroup {
     max-Height: 55vh;
     overflow: hidden scroll;
-}
+} */
 .searchResultListGroup::-webkit-scrollbar {
     -webkit-appearance: none;
     width: 7px;

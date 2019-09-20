@@ -300,7 +300,7 @@ class MainContainer extends React.Component{
             },
             searchResultDiv: {
                 display: this.state.hasSearchKey ? null : 'none',
-                paddingTop: 30,
+                // paddingTop: 30,
             },
             
             searchPanel: {
@@ -365,7 +365,10 @@ class MainContainer extends React.Component{
                                     // objectTypeList={this.state.objectTypeList}
                                 />
                                 
-                                <div style={style.searchResultDiv} className='py-3'>
+                                <div 
+                                    id='searchResult' 
+                                    style={style.searchResultDiv} 
+                                >
                                     <SearchResultList
                                         searchResult={this.state.searchResult} 
                                         searchKey={this.state.searchKey}
