@@ -62,7 +62,7 @@ class UserSettingContainer extends React.Component{
                 <Row className='' noGutters>
                     <Col lg={2} style={style.sideNav}>
                         <ListGroup variant="flush" className="border-0 text-capitalize">
-                            <ListGroup.Item className="border-0 h5 pt-0">{locale.texts.USER_SETTING}</ListGroup.Item>
+                            <ListGroup.Item className="border-0 h5 mt-0 mb-1">{locale.texts.USER_SETTING}</ListGroup.Item>
                             {this.pageList.map((page, index) => {
                                 return (
                                     <AccessControl
@@ -73,7 +73,7 @@ class UserSettingContainer extends React.Component{
                                         <ListGroup.Item 
                                             key={index}
                                             style={style.item}
-                                            className="border-0 m-0" 
+                                            className="border-0 m-0 my-1" 
                                             href={'#' + page.name.replace(/ /g, '')}
                                             action
                                         >
