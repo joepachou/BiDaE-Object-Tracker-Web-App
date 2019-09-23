@@ -222,9 +222,9 @@ class SearchResult extends React.Component {
 
 
         return(
-            <div>
+            <div className='pl-3'>
                 <Row className='d-flex justify-content-center' style={style.titleText}>
-                    <h4 className='text-capitalize pl-3'>{locale.texts.SEARCH_RESULT}</h4>
+                    <h4 className='text-capitalize'>{locale.texts.SEARCH_RESULT}</h4>
                 </Row>
                 {/* <Row className='w-100 searchResultForMobile'>
                     <InfoPrompt data={{[devicePlural]: searchResult.length}} title={title}/>
