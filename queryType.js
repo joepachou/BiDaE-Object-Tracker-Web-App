@@ -15,9 +15,11 @@ function query_getTrackingData () {
 			object_table.status,
 			object_table.transferred_location,
 			object_table.access_control_number,
+			object_table.area_id,
 			split_part(object_table.access_control_number, '-', 3) as last_four_acn,
 			lbeacon_table.description as location_description,
-			edit_object_record.notes
+			edit_object_record.notes,
+			area_table.name as area_name
 
 		FROM object_summary_table
 
@@ -29,6 +31,10 @@ function query_getTrackingData () {
 
 		LEFT JOIN edit_object_record
 		ON object_table.note_id = edit_object_record.id
+
+		LEFT JOIN area_table
+		ON object_table.area_id = area_table.id
+
 
 		ORDER BY object_table.type ASC, object_table.name ASC, last_four_acn ASC;
 	`

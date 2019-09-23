@@ -1,5 +1,5 @@
-import map from '../img/IIS_Newbuilding_4F_reBack.png';
-// import NTUH_YUNLIN_BRANCH_MAP from '../img/NTUH_Yunlin_Branch_Map.png';
+import IIS_SINICA_FLOOR_FOUR from '../img/IIS_Newbuilding_4F_reBack.png';
+import NTUH_YUNLIN_WARD_FIVE_B_MAP from '../img/NTUH_Yunlin_Branch_Map.png';
 
 import black_pin from '../img/colorPin/Black.svg'
 import darkGrey_pin from '../img/colorPin/DarkGrey.svg';
@@ -14,10 +14,10 @@ const config = {
     surveillanceMap: {
 
         /* Surveillance map source*/
-        // map: NTUH_YUNLIN_BRANCH_MAP,
-        map: map,
-
-        
+        defaultArea: "IIS_SINICA_FLOOR_FOUR",
+        defaultMap: IIS_SINICA_FLOOR_FOUR,
+        IIS_SINICA_FLOOR_FOUR: IIS_SINICA_FLOOR_FOUR,
+        NTUH_YUNLIN_WARD_FIVE_B: NTUH_YUNLIN_WARD_FIVE_B_MAP,
 
         /* Map customization */
         mapOptions: {

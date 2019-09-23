@@ -37,6 +37,7 @@ class Surveillance extends React.Component {
         hasInvisibleCircle: false,       
     }
     map = null;
+    areaMap = null;
     StartSetInterval = config.surveillanceMap.startInteval; 
     isShownTrackingData = !true;
     markersLayer = L.layerGroup();
@@ -50,25 +51,33 @@ class Surveillance extends React.Component {
     componentDidUpdate = (prevProps) => {
         this.handleObjectMarkers();
         this.createLbeaconMarkers();
+        if (prevProps.area !== this.props.area) { 
+            this.areaMap.setUrl(config.surveillanceMap[this.props.area])
+        }
     }
 
-    shouldComponentUpdate = (nextProps, nextState) => {
-        let isProccessedTrackingDataChange = !(_.isEqual(this.props.proccessedTrackingData, nextProps.proccessedTrackingData))
-        return this.props.shouldTrackingDataUpdate && isProccessedTrackingDataChange
-    }
+    // shouldComponentUpdate = (nextProps, nextState) => {
+    //     let isProccessedTrackingDataChange = !(_.isEqual(this.props.proccessedTrackingData, nextProps.proccessedTrackingData))
+    //     return this.props.shouldTrackingDataUpdate && isProccessedTrackingDataChange
+    // }
 
     
-    /** Set the search map configuration which establishs in config.js  */
+    /** Set the search map configuration establishing in config.js  */
     initMap = () => {
+        let area = this.props.area
+        let areaMap = config.surveillanceMap[area]
         let map = L.map('mapid', config.surveillanceMap.mapOptions);
-        
+
         let bounds = config.surveillanceMap.mapBound;
-        let image = L.imageOverlay(config.surveillanceMap.map, bounds).addTo(map);
+        let image = L.imageOverlay(areaMap, bounds).addTo(map);
+        this.areaMap = image
+        map.addLayer(image)
         map.fitBounds(bounds);
         this.map = map;
 
         /** Set the map's events */
         this.map.on('zoomend', this.resizeMarkers)
+
     }
 
     /** Resize the markers and errorCircles when the view is zoomend. */

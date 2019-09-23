@@ -42,6 +42,7 @@ moment.updateLocale('en', {
 const getTrackingData = (request, response) => {
     const rssiThreshold = request.body.rssiThreshold || -65
     const locale = request.body.locale || 'en'
+    const { auth, area } = request.body
     pool.query(queryType.query_getTrackingData())        
         .then(res => {
             console.log('Get tracking data')
@@ -50,8 +51,12 @@ const getTrackingData = (request, response) => {
                 /** Tag the object that is found 
                  *  if the object's last_seen_timestamp is in the specific time period
                  *  and its rssi is below the specific rssi threshold  */
-                item.found = moment().diff(item.last_seen_timestamp, 'seconds') < 30 && item.rssi > rssiThreshold ? 1 : 0;
-    
+                let isInTheTimePeriod = moment().diff(item.last_seen_timestamp, 'seconds') < 30 && item.rssi > rssiThreshold ? 1 : 0;
+                let isTheAuthArea = auth.user.area === area ? 1 : 0;
+                let isInUserArea = auth.user.area === item.area_name ? 1 : 0;
+                item.found = isInTheTimePeriod && isTheAuthArea && isInUserArea
+
+
                 /** Set the residence time of the object */
                 item.residence_time =  item.found 
                     ? moment(item.last_seen_timestamp).locale(locale).from(moment(item.first_seen_timestamp)) 
@@ -91,7 +96,7 @@ const getTrackingData = (request, response) => {
             response.status(200).json(res)
 
         }).catch(err => {
-            console.log("Get trackingData fails: \n" + err)
+            console.log("Get trackingData fails: " + err)
         })
 }
 
@@ -232,7 +237,6 @@ const signin = (request, response) => {
             } else {
                 const hash = res.rows[0].password
                 if (bcrypt.compareSync(password, hash)) {
-                    console.log(res.rows[0])
                     let { 
                         name, 
                         role, 

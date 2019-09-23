@@ -3,12 +3,18 @@ import AuthenticationContext from './context/AuthenticationContext';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import dataSrc from './dataSrc';
+import config from './config';
+
+let defaultUser = {
+    role: "guest",
+    area: config.surveillanceMap.defaultArea
+}
 
 class Auth extends React.Component {
 
     state = {
         authenticated: Cookies.get('authenticated') ? true : false,
-        user: Cookies.get('user') ? {...JSON.parse(Cookies.get('user'))} : {role: "guest"},
+        user: Cookies.get('user') ? {...JSON.parse(Cookies.get('user'))} : defaultUser,
         accessToken: ""
     }
 
@@ -28,9 +34,7 @@ class Auth extends React.Component {
         Cookies.remove('user')
         this.setState({
             authenticated: false,
-            user: {
-              role: "guest"
-            },
+            user: defaultUser,
             accessToken: ""
         });
     };

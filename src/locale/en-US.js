@@ -46,6 +46,7 @@ const en =  {
     DELETE: 'delete',
     ADD_USER: 'add user',
     EDIT_DEVICES: 'edit devices',
+    SWITCH_AREA: 'switch area',
 
     /* Form Field */
     NAME: 'name',
@@ -179,6 +180,10 @@ const en =  {
     IN: 'in',
     NOT: 'not',
     WHOSE: "'s ",
+
+    /** Test */
+    IIS_SINICA_FLOOR_FOUR: "IIS sinica floor 4",
+    NTUH_YUNLIN_WARD_FIVE_B: "NTUH Yunlin 5B",
 
     DEVICE_FOUND: function (length){
         return length.toString()+' devices are found'

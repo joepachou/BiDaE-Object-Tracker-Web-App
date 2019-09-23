@@ -15,10 +15,13 @@ import dataSrc from '../../dataSrc'
 import LocaleContext from '../../context/LocaleContext';
 import Cookies from 'js-cookie'
 
-const myDevices = config.frequentSearchOption.MY_DEVICES;
+const myDevices = config.frequentSearchOption.MY_DEVICES ;
 const allDevices = config.frequentSearchOption.ALL_DEVICES;
 
 class MainContainer extends React.Component{
+
+    static contextType = AuthenticationContext
+
     state = {
         trackingData: [],
         proccessedTrackingData: [],
@@ -34,6 +37,8 @@ class MainContainer extends React.Component{
         rssiThreshold: window.innerWidth < 600 
             ? config.surveillanceMap.locationAccuracyMapToDefault[0]
             : config.surveillanceMap.locationAccuracyMapToDefault[1],
+        auth: this.context,
+        area: this.context.authenticated ? this.context.user.area : config.surveillanceMap.defaultArea
     }
 
     componentDidMount = () => {
@@ -46,6 +51,13 @@ class MainContainer extends React.Component{
         if (isTrackingDataChange && this.state.hasSearchKey) {
             this.handleRefreshSearchResult()
         }
+        if (!(_.isEqual(prevState.auth, this.context))) {
+            this.getTrackingData()
+            this.setState({
+                auth: this.context,
+                area: this.context.user.area 
+            })
+        } 
     }
 
     shouldComponentUpdate = (nextProps,nextState) => {
@@ -55,7 +67,11 @@ class MainContainer extends React.Component{
         let isSearchResultChange = !(_.isEqual(this.state.searchResult, nextState.searchResult))
         let isStateChange = !(_.isEqual(this.state, nextState))
         let isHighlightSearchPanelChange = !(_.isEqual(this.state.isHighlightSearchPanel, nextState.isHighlightSearchPanel))
-        let shouldUpdate = isTrackingDataChange || hasSearchKey || isSearchKeyChange || isSearchResultChange || isHighlightSearchPanelChange
+        let shouldUpdate = isTrackingDataChange || 
+                                hasSearchKey || 
+                                isSearchKeyChange || 
+                                isSearchResultChange || 
+                                isHighlightSearchPanelChange
         // console.log(shouldUpdate)
         // console.log(JSON.stringify(this.state.trackingData)[0] === JSON.stringify(nextState.trackingData)[0])
         // console.log(JSON.stringify(this.state.trackingData[1]) === JSON.stringify(nextState.trackingData[1]))
@@ -80,10 +96,20 @@ class MainContainer extends React.Component{
         })
     }
 
-    getTrackingData = () => {
+    changeArea = (area) => {
+        this.getTrackingData(area)
+        this.setState({
+            area, 
+        })
+    }
+
+    getTrackingData = (area = this.state.area) => {
+        let auth = this.context
         axios.post(dataSrc.getTrackingData,{
             rssiThreshold: this.state.rssiThreshold,
-            locale: this.context.abbr
+            locale: this.context.abbr,
+            auth,
+            area: area
         })
         .then(res => {
             const trackingData = this.handleRawTrackingData(res.data.rows)
@@ -310,80 +336,86 @@ class MainContainer extends React.Component{
                 // height: '90vh'
             }
         }
-        const locale = this.context
+        // const locale = this.context
 
-        let deviceNum = this.state.trackingData.filter(item => item.found).length
-        let devicePlural = deviceNum === 1 ? locale.texts.DEVICE : locale.texts.DEVICES
-        let data = hasSearchKey 
-            ? searchResult.length !== 0 
-                ? searchResultObjectTypeMap 
-                : {[devicePlural] : 0} 
-            : {[devicePlural]: this.state.trackingData.filter(item => item.found).length}
+        // let deviceNum = this.state.trackingData.filter(item => item.found).length
+        // let devicePlural = deviceNum === 1 ? locale.texts.DEVICE : locale.texts.DEVICES
+        // let data = hasSearchKey 
+        //     ? searchResult.length !== 0 
+        //         ? searchResultObjectTypeMap 
+        //         : {[devicePlural] : 0} 
+        //     : {[devicePlural]: this.state.trackingData.filter(item => item.found).length}
 
         return(
-            <AuthenticationContext.Consumer>
-                {auth => (
-                    /** "page-wrap" the default id named by react-burget-menu */
-                    <div id="page-wrap" className='mx-1 my-2' >
-                        <Row id="mainContainer" className='d-flex w-100 justify-content-around mx-0 overflow-hidden' style={style.container}>
-                            <Col sm={7} md={9} lg={8} xl={8} id='searchMap' className="pl-2 pr-1" >
-                                <InfoPrompt 
-                                    data={data}
-                                    title={locale.texts.FOUND} 
-                                />
-                                {/* {this.state.hasSearchKey 
-                                    ?   this.state.searchResult.length !== 0   
-                                        ?   <InfoPrompt 
-                                                data={this.state.searchResultObjectTypeMap} 
-                                                title={locale.texts.FOUND} 
-                                            />
-                                        :                                         
-                                    :   <InfoPrompt 
-                                            data={{
-                                                [devicePlural]: this.state.trackingData.filter(item => item.found).length
-                                            }}
+            <LocaleContext.Consumer>
+                {locale => (
+                    <AuthenticationContext.Consumer>
+                        {auth => (
+                            /** "page-wrap" the default id named by react-burget-menu */
+                            <div id="page-wrap" className='mx-1 my-2' >
+                                <Row id="mainContainer" className='d-flex w-100 justify-content-around mx-0 overflow-hidden' style={style.container}>
+                                    <Col sm={7} md={9} lg={8} xl={8} id='searchMap' className="pl-2 pr-1" >
+                                        {/* <InfoPrompt 
+                                            data={data}
                                             title={locale.texts.FOUND} 
+                                        /> */}
+                                        {/* {this.state.hasSearchKey 
+                                            ?   this.state.searchResult.length !== 0   
+                                                ?   <InfoPrompt 
+                                                        data={this.state.searchResultObjectTypeMap} 
+                                                        title={locale.texts.FOUND} 
+                                                    />
+                                                :                                         
+                                            :   <InfoPrompt 
+                                                    data={{
+                                                        [devicePlural]: this.state.trackingData.filter(item => item.found).length
+                                                    }}
+                                                    title={locale.texts.FOUND} 
+                                                />
+                                        }      */}
+                                        <SurveillanceContainer 
+                                            proccessedTrackingData={proccessedTrackingData.length === 0 ? trackingData : proccessedTrackingData}
+                                            hasSearchKey={hasSearchKey}
+                                            colorPanel={colorPanel}
+                                            handleClearButton={this.handleClearButton}
+                                            getSearchKey={this.getSearchKey}
+                                            clearColorPanel={clearColorPanel}
+                                            changeLocationAccuracy={this.changeLocationAccuracy}
+                                            changeArea={this.changeArea}
+                                            auth={auth}
+                                            area={this.state.area}
                                         />
-                                }      */}
-                                <SurveillanceContainer 
-                                    proccessedTrackingData={proccessedTrackingData.length === 0 ? trackingData : proccessedTrackingData}
-                                    hasSearchKey={hasSearchKey}
-                                    colorPanel={colorPanel}
-                                    handleClearButton={this.handleClearButton}
-                                    getSearchKey={this.getSearchKey}
-                                    clearColorPanel={clearColorPanel}
-                                    changeLocationAccuracy={this.changeLocationAccuracy}
-                                />
-                            </Col>
-                            <Col id='searchPanel' xs={12} sm={5} md={3} lg={4} xl={4} className="w-100 px-2" style={style.searchPanel}>
-                                <SearchContainer 
-                                    hasSearchKey={this.state.hasSearchKey}
-                                    clearSearchResult={this.state.clearSearchResult}
-                                    hasGridButton={this.state.hasGridButton}
-                                    auth={auth}
-                                    getSearchKey={this.getSearchKey}
-                                    // objectTypeList={this.state.objectTypeList}
-                                />
-                                
-                                <div 
-                                    id='searchResult' 
-                                    style={style.searchResultDiv} 
-                                >
-                                    <SearchResultList
-                                        searchResult={this.state.searchResult} 
-                                        searchKey={this.state.searchKey}
-                                        highlightSearchPanel={this.highlightSearchPanel}
-                                    />
-                                </div>
-                            </Col>
-                        </Row>
-                    </div>
+                                    </Col>
+                                    <Col id='searchPanel' xs={12} sm={5} md={3} lg={4} xl={4} className="w-100 px-2" style={style.searchPanel}>
+                                        <SearchContainer 
+                                            hasSearchKey={this.state.hasSearchKey}
+                                            clearSearchResult={this.state.clearSearchResult}
+                                            hasGridButton={this.state.hasGridButton}
+                                            auth={auth}
+                                            getSearchKey={this.getSearchKey}
+                                            // objectTypeList={this.state.objectTypeList}
+                                        />
+                                        
+                                        <div 
+                                            id='searchResult' 
+                                            style={style.searchResultDiv} 
+                                        >
+                                            <SearchResultList
+                                                searchResult={this.state.searchResult} 
+                                                searchKey={this.state.searchKey}
+                                                highlightSearchPanel={this.highlightSearchPanel}
+                                            />
+                                        </div>
+                                    </Col>
+                                </Row>
+                            </div>
+                        )}
+                    </AuthenticationContext.Consumer>
                 )}
-            </AuthenticationContext.Consumer>
+            </LocaleContext.Consumer>
         )
     }
 }
-MainContainer.contextType = LocaleContext
 
 const mapStateToProps = (state) => {
     return {

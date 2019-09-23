@@ -46,6 +46,7 @@ const tw = {
     DELETE: '刪除',
     ADD_USER: '新增使用者',
     EDIT_DEVICES: '編輯儀器',
+    SWITCH_AREA: '切換地點',
 
 
     /* Form Field */
@@ -183,6 +184,10 @@ const tw = {
     NOT: '不',
     WHOSE: "的",
 
+    /** Test */
+    IIS_SINICA_FLOOR_FOUR: "中研院4樓",
+    NTUH_YUNLIN_WARD_FIVE_B: "台大醫院雲林分院5B",
+    
     DEVICE_FOUND: function (length){
         return '發現'+length.toString()+'個儀器'
     },
