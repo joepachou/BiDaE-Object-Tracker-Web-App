@@ -21,6 +21,9 @@ import SearchResultListGroup from '../presentational/SearchResultListGroup'
 
 
 class ShiftChange extends React.Component {
+
+    static contextType = LocaleContext
+
     state = {
             show: false,
             searchResult: {
@@ -74,7 +77,8 @@ class ShiftChange extends React.Component {
 
     getTrackingData = (update) => {
         axios.post(dataSrc.getTrackingData, {
-            rssiThreshold: config.surveillanceMap.locationAccuracyMapToDefault[1]
+            rssiThreshold: config.surveillanceMap.locationAccuracyMapToDefault[1],
+            user: this.props.userInfo,
         }).then(res => {
             var data = res.data.rows
             GetResultData('my devices', data)
@@ -237,5 +241,4 @@ class ShiftChange extends React.Component {
     }
 }
 
-ShiftChange.contextType = LocaleContext
 export default ShiftChange

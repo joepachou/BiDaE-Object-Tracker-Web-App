@@ -108,7 +108,7 @@ class MainContainer extends React.Component{
         axios.post(dataSrc.getTrackingData,{
             rssiThreshold: this.state.rssiThreshold,
             locale: this.context.abbr,
-            auth,
+            user: auth.user,
             area: area
         })
         .then(res => {

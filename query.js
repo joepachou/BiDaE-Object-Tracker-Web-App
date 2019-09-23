@@ -42,7 +42,7 @@ moment.updateLocale('en', {
 const getTrackingData = (request, response) => {
     const rssiThreshold = request.body.rssiThreshold || -65
     const locale = request.body.locale || 'en'
-    const { auth, area } = request.body
+    const { user, area } = request.body
     pool.query(queryType.query_getTrackingData())        
         .then(res => {
             console.log('Get tracking data')
@@ -52,8 +52,8 @@ const getTrackingData = (request, response) => {
                  *  if the object's last_seen_timestamp is in the specific time period
                  *  and its rssi is below the specific rssi threshold  */
                 let isInTheTimePeriod = moment().diff(item.last_seen_timestamp, 'seconds') < 30 && item.rssi > rssiThreshold ? 1 : 0;
-                let isTheAuthArea = auth.user.area === area ? 1 : 0;
-                let isInUserArea = auth.user.area === item.area_name ? 1 : 0;
+                let isTheAuthArea = user.area === area ? 1 : 0;
+                let isInUserArea = user.area === item.area_name ? 1 : 0;
                 item.found = isInTheTimePeriod && isTheAuthArea && isInUserArea
 
 
