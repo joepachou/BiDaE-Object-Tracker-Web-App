@@ -14,13 +14,14 @@ import axios from 'axios';
 import dataSrc from '../../dataSrc'
 import LocaleContext from '../../context/LocaleContext';
 import Cookies from 'js-cookie'
+import { AppContext } from '../../context/AppContext'
 
 const myDevices = config.frequentSearchOption.MY_DEVICES ;
 const allDevices = config.frequentSearchOption.ALL_DEVICES;
 
 class MainContainer extends React.Component{
 
-    static contextType = AuthenticationContext
+    static contextType = AppContext
 
     state = {
         trackingData: [],
@@ -37,8 +38,8 @@ class MainContainer extends React.Component{
         rssiThreshold: window.innerWidth < 600 
             ? config.surveillanceMap.locationAccuracyMapToDefault[0]
             : config.surveillanceMap.locationAccuracyMapToDefault[1],
-        auth: this.context,
-        area: this.context.authenticated ? this.context.user.area : config.surveillanceMap.defaultArea
+        auth: this.context.auth,
+        area: this.context.auth.authenticated ? this.context.auth.user.area : config.surveillanceMap.defaultArea
     }
 
     componentDidMount = () => {
@@ -51,11 +52,11 @@ class MainContainer extends React.Component{
         if (isTrackingDataChange && this.state.hasSearchKey) {
             this.handleRefreshSearchResult()
         }
-        if (!(_.isEqual(prevState.auth, this.context))) {
+        if (!(_.isEqual(prevState.auth, this.context.auth))) {
             this.getTrackingData()
             this.setState({
-                auth: this.context,
-                area: this.context.user.area 
+                auth: this.context.auth,
+                area: this.context.auth.user.area 
             })
         } 
     }
@@ -104,10 +105,10 @@ class MainContainer extends React.Component{
     }
 
     getTrackingData = (area = this.state.area) => {
-        let auth = this.context
+        let { auth, locale } = this.context
         axios.post(dataSrc.getTrackingData,{
             rssiThreshold: this.state.rssiThreshold,
-            locale: this.context.abbr,
+            locale: locale.abbr,
             user: auth.user,
             area: area
         })
@@ -129,31 +130,12 @@ class MainContainer extends React.Component{
             const lbeaconCoordinate = item.lbeacon_uuid ? this.createLbeaconCoordinate(item.lbeacon_uuid) : null;
             item.currentPosition = lbeaconCoordinate
 
-            // if (!objectType.includes(item.type)) objectType.push(item.type)
-
             delete item.lbeacon_uuid
 
             return item
         })
-        // let objectTypeList = []
-        // objectTypeList = this.GetTypeKeyList(trackingData)
-
-        // this.setState({
-        //     objectTypeList: objectTypeList
-        // })
         return trackingData
     }
-
-    // GetTypeKeyList = (searchableObjectList) => {
-    //     var set = new Array()
-    //     for(var item of searchableObjectList){
-    //         if(!set.includes(item.type)){
-    //             set.push(item.type)
-    //         }
-            
-    //     }
-    //     return set
-    // }
 
     /** Parsing the lbeacon's location coordinate from lbeacon_uuid*/
     createLbeaconCoordinate = (lbeacon_uuid) => {
@@ -336,15 +318,15 @@ class MainContainer extends React.Component{
                 // height: '90vh'
             }
         }
-        // const locale = this.context
+        const { locale } = this.context
 
-        // let deviceNum = this.state.trackingData.filter(item => item.found).length
-        // let devicePlural = deviceNum === 1 ? locale.texts.DEVICE : locale.texts.DEVICES
-        // let data = hasSearchKey 
-        //     ? searchResult.length !== 0 
-        //         ? searchResultObjectTypeMap 
-        //         : {[devicePlural] : 0} 
-        //     : {[devicePlural]: this.state.trackingData.filter(item => item.found).length}
+        let deviceNum = this.state.trackingData.filter(item => item.found).length
+        let devicePlural = deviceNum === 1 ? locale.texts.DEVICE : locale.texts.DEVICES
+        let data = hasSearchKey 
+            ? searchResult.length !== 0 
+                ? searchResultObjectTypeMap 
+                : {[devicePlural] : 0} 
+            : {[devicePlural]: this.state.trackingData.filter(item => item.found).length}
 
         return(
             <LocaleContext.Consumer>
@@ -355,10 +337,10 @@ class MainContainer extends React.Component{
                             <div id="page-wrap" className='mx-1 my-2' >
                                 <Row id="mainContainer" className='d-flex w-100 justify-content-around mx-0 overflow-hidden' style={style.container}>
                                     <Col sm={7} md={9} lg={8} xl={8} id='searchMap' className="pl-2 pr-1" >
-                                        {/* <InfoPrompt 
+                                        <InfoPrompt 
                                             data={data}
                                             title={locale.texts.FOUND} 
-                                        /> */}
+                                        />
                                         {/* {this.state.hasSearchKey 
                                             ?   this.state.searchResult.length !== 0   
                                                 ?   <InfoPrompt 
