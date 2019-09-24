@@ -4,7 +4,6 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import config from '../../config';
 import LocaleContext from '../../context/LocaleContext'
-import { authenticationService } from '../../authenticationService';
 import { signin } from '../../dataSrc'
 import axios from 'axios';
 import RadioButtonGroup from './RadioButtonGroup';

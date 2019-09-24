@@ -4,20 +4,20 @@ import ToggleSwitch from "./ToggleSwitch";
 import { 
     Nav, 
     Button,
-    Image
+    Image,
+    ButtonToolbar
 }  from "react-bootstrap";
 import LocaleContext from "../../context/LocaleContext";
-import { connect } from "react-redux"
-import { 
-    shouldUpdateTrackingData,
-} from "../../action/action"
 import GridButton from "../container/GridButton";
 import PdfDownloadForm from "./PdfDownloadForm"
 import config from "../../config";
 import AccessControl from "../presentational/AccessControl"
+import { AppContext } from "../../context/AppContext";
 
 
 class SurveillanceContainer extends React.Component {
+
+    static contextType = AppContext
 
     state = {
         rssi: config.defaultRSSIThreshold,
@@ -29,6 +29,11 @@ class SurveillanceContainer extends React.Component {
 
     componentDidUpdate = (prevProps, prevState) => {
         if (!(_.isEqual(prevProps.auth, this.props.auth))) {
+            const [{ area }, dispatch] = this.context.stateReducer
+            dispatch({
+                type: "changeArea",
+                value: this.props.auth.user.area
+            })
             this.setState({
                 area: this.props.auth.user.area
             })
@@ -36,6 +41,7 @@ class SurveillanceContainer extends React.Component {
     }
 
     handleClickButton = (e) => {
+        const [{ area }, dispatch] = this.context.stateReducer
         const { name } = e.target
         switch(name) {
             case "show devices":
@@ -54,6 +60,10 @@ class SurveillanceContainer extends React.Component {
             case "IIS_SINICA_FLOOR_FOUR":
             case "NTUH_YUNLIN_WARD_FIVE_B":
                 this.props.changeArea(name)
+                dispatch({
+                    type:'changeArea',
+                    value: name
+                })
                 this.setState({
                     area: name
                 })
@@ -97,11 +107,31 @@ class SurveillanceContainer extends React.Component {
                 display: this.state.showDevice ? null : "none"
             }
         }
-
-        const locale = this.context.texts;
+        const { locale } = this.context;
 
         return(
             <div id="surveillanceContainer" style={style.surveillanceContainer} className="overflow-hidden">
+                <ButtonToolbar className='mb-2'>
+                    <Button 
+                        variant="outline-primary" 
+                        className="mr-1 text-capitalize" 
+                        onClick={this.handleClickButton} 
+                        name="IIS_SINICA_FLOOR_FOUR"
+                        disabled={this.state.area === "IIS_SINICA_FLOOR_FOUR"}
+                    >
+                        {locale.texts.IIS_SINICA_FLOOR_FOUR}
+                    </Button>
+
+                    <Button 
+                        variant="outline-primary" 
+                        className="mr-1 text-capitalize" 
+                        onClick={this.handleClickButton} 
+                        name="NTUH_YUNLIN_WARD_FIVE_B"
+                        disabled={this.state.area === "NTUH_YUNLIN_WARD_FIVE_B"}
+                    >
+                        {locale.texts.NTUH_YUNLIN_WARD_FIVE_B}
+                    </Button>
+                </ButtonToolbar>
                 <div style={style.mapBlock}>
                     <Surveillance 
                         rssi={this.state.rssi} 
@@ -119,7 +149,7 @@ class SurveillanceContainer extends React.Component {
                         <Nav.Item>
                             <div style={style.title} 
                             >
-                                {locale.LOCATION_ACCURACY}
+                                {locale.texts.LOCATION_ACCURACY}
                             </div>
                         </Nav.Item>
                         <Nav.Item className="pt-2 mr-2">
@@ -137,7 +167,7 @@ class SurveillanceContainer extends React.Component {
                                 onClick={this.handleClickButton} 
                                 name="clear"
                             >
-                                {locale.CLEAR}
+                                {locale.texts.CLEAR}
                             </Button>
                         </Nav.Item>
                         <AccessControl
@@ -151,33 +181,10 @@ class SurveillanceContainer extends React.Component {
                                     onClick={this.handleClickButton} 
                                     name="save"
                                 >
-                                    {locale.SAVE}
+                                    {locale.texts.SAVE}
                                 </Button>
                             </Nav.Item>
                         </AccessControl>
-                        <Nav.Item className="mt-2">
-                            <Button 
-                                variant="outline-primary" 
-                                className="mr-1 ml-2 text-capitalize" 
-                                onClick={this.handleClickButton} 
-                                name="IIS_SINICA_FLOOR_FOUR"
-                                disabled={this.state.area === "IIS_SINICA_FLOOR_FOUR"}
-                            >
-                                {locale.IIS_SINICA_FLOOR_FOUR}
-                            </Button>
-                        </Nav.Item>
-                        <Nav.Item className="mt-2">
-                            <Button 
-                                variant="outline-primary" 
-                                className="mr-1 text-capitalize" 
-                                onClick={this.handleClickButton} 
-                                name="NTUH_YUNLIN_WARD_FIVE_B"
-                                disabled={this.state.area === "NTUH_YUNLIN_WARD_FIVE_B"}
-                            >
-                                {locale.NTUH_YUNLIN_WARD_FIVE_B}
-                            </Button>
-                        </Nav.Item>
-
                         {/* <Nav.Item className="mt-2">
                             <Button 
                                 variant="outline-primary" 
@@ -185,7 +192,7 @@ class SurveillanceContainer extends React.Component {
                                 onClick={this.handleClickButton} 
                                 name="show devices"
                             >
-                                {this.state.showDevice ? locale.HIDE_DEVICES : locale.SHOW_DEVICES }
+                                {this.state.showDevice ? locale.texts.HIDE_DEVICES : locale.texts.SHOW_DEVICES }
                             </Button>
                         </Nav.Item >
                         <div style={style.gridButton} className="mt-2 mx-3">
@@ -206,12 +213,5 @@ class SurveillanceContainer extends React.Component {
         )
     }
 }
-SurveillanceContainer.contextType = LocaleContext;
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        shouldUpdateTrackingData: value => dispatch(shouldUpdateTrackingData(value)),
-    }
-}
-
-export default connect(null, mapDispatchToProps)(SurveillanceContainer)
+export default SurveillanceContainer

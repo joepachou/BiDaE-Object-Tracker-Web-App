@@ -4,7 +4,6 @@ import 'react-table/react-table.css';
 import SearchResultList from '../presentational/SearchResultList'
 import { Row, Col } from 'react-bootstrap'
 import SurveillanceContainer from './SurveillanceContainer';
-import AuthenticationContext from '../../context/AuthenticationContext';
 import { connect } from 'react-redux'
 import config from '../../config';
 import InfoPrompt from '../presentational/InfoPrompt';
@@ -12,7 +11,6 @@ import _ from 'lodash'
 import moment from 'moment'
 import axios from 'axios';
 import dataSrc from '../../dataSrc'
-import LocaleContext from '../../context/LocaleContext';
 import Cookies from 'js-cookie'
 import { AppContext } from '../../context/AppContext'
 
@@ -318,7 +316,7 @@ class MainContainer extends React.Component{
                 // height: '90vh'
             }
         }
-        const { locale } = this.context
+        const { locale, auth } = this.context
 
         let deviceNum = this.state.trackingData.filter(item => item.found).length
         let devicePlural = deviceNum === 1 ? locale.texts.DEVICE : locale.texts.DEVICES
@@ -329,72 +327,64 @@ class MainContainer extends React.Component{
             : {[devicePlural]: this.state.trackingData.filter(item => item.found).length}
 
         return(
-            <LocaleContext.Consumer>
-                {locale => (
-                    <AuthenticationContext.Consumer>
-                        {auth => (
-                            /** "page-wrap" the default id named by react-burget-menu */
-                            <div id="page-wrap" className='mx-1 my-2' >
-                                <Row id="mainContainer" className='d-flex w-100 justify-content-around mx-0 overflow-hidden' style={style.container}>
-                                    <Col sm={7} md={9} lg={8} xl={8} id='searchMap' className="pl-2 pr-1" >
-                                        <InfoPrompt 
-                                            data={data}
-                                            title={locale.texts.FOUND} 
-                                        />
-                                        {/* {this.state.hasSearchKey 
-                                            ?   this.state.searchResult.length !== 0   
-                                                ?   <InfoPrompt 
-                                                        data={this.state.searchResultObjectTypeMap} 
-                                                        title={locale.texts.FOUND} 
-                                                    />
-                                                :                                         
-                                            :   <InfoPrompt 
-                                                    data={{
-                                                        [devicePlural]: this.state.trackingData.filter(item => item.found).length
-                                                    }}
-                                                    title={locale.texts.FOUND} 
-                                                />
-                                        }      */}
-                                        <SurveillanceContainer 
-                                            proccessedTrackingData={proccessedTrackingData.length === 0 ? trackingData : proccessedTrackingData}
-                                            hasSearchKey={hasSearchKey}
-                                            colorPanel={colorPanel}
-                                            handleClearButton={this.handleClearButton}
-                                            getSearchKey={this.getSearchKey}
-                                            clearColorPanel={clearColorPanel}
-                                            changeLocationAccuracy={this.changeLocationAccuracy}
-                                            changeArea={this.changeArea}
-                                            auth={auth}
-                                            area={this.state.area}
-                                        />
-                                    </Col>
-                                    <Col id='searchPanel' xs={12} sm={5} md={3} lg={4} xl={4} className="w-100 px-2" style={style.searchPanel}>
-                                        <SearchContainer 
-                                            hasSearchKey={this.state.hasSearchKey}
-                                            clearSearchResult={this.state.clearSearchResult}
-                                            hasGridButton={this.state.hasGridButton}
-                                            auth={auth}
-                                            getSearchKey={this.getSearchKey}
-                                            // objectTypeList={this.state.objectTypeList}
-                                        />
-                                        
-                                        <div 
-                                            id='searchResult' 
-                                            style={style.searchResultDiv} 
-                                        >
-                                            <SearchResultList
-                                                searchResult={this.state.searchResult} 
-                                                searchKey={this.state.searchKey}
-                                                highlightSearchPanel={this.highlightSearchPanel}
-                                            />
-                                        </div>
-                                    </Col>
-                                </Row>
-                            </div>
-                        )}
-                    </AuthenticationContext.Consumer>
-                )}
-            </LocaleContext.Consumer>
+            /** "page-wrap" the default id named by react-burget-menu */
+            <div id="page-wrap" className='mx-1 my-2' >
+                <Row id="mainContainer" className='d-flex w-100 justify-content-around mx-0 overflow-hidden' style={style.container}>
+                    <Col sm={7} md={9} lg={8} xl={8} id='searchMap' className="pl-2 pr-1" >
+                        <InfoPrompt 
+                            data={data}
+                            title={locale.texts.FOUND} 
+                        />
+                        {/* {this.state.hasSearchKey 
+                            ?   this.state.searchResult.length !== 0   
+                                ?   <InfoPrompt 
+                                        data={this.state.searchResultObjectTypeMap} 
+                                        title={locale.texts.FOUND} 
+                                    />
+                                :                                         
+                            :   <InfoPrompt 
+                                    data={{
+                                        [devicePlural]: this.state.trackingData.filter(item => item.found).length
+                                    }}
+                                    title={locale.texts.FOUND} 
+                                />
+                        }      */}
+                        <SurveillanceContainer 
+                            proccessedTrackingData={proccessedTrackingData.length === 0 ? trackingData : proccessedTrackingData}
+                            hasSearchKey={hasSearchKey}
+                            colorPanel={colorPanel}
+                            handleClearButton={this.handleClearButton}
+                            getSearchKey={this.getSearchKey}
+                            clearColorPanel={clearColorPanel}
+                            changeLocationAccuracy={this.changeLocationAccuracy}
+                            changeArea={this.changeArea}
+                            auth={auth}
+                            area={this.state.area}
+                        />
+                    </Col>
+                    <Col id='searchPanel' xs={12} sm={5} md={3} lg={4} xl={4} className="w-100 px-2" style={style.searchPanel}>
+                        <SearchContainer 
+                            hasSearchKey={this.state.hasSearchKey}
+                            clearSearchResult={this.state.clearSearchResult}
+                            hasGridButton={this.state.hasGridButton}
+                            auth={auth}
+                            getSearchKey={this.getSearchKey}
+                            // objectTypeList={this.state.objectTypeList}
+                        />
+                        
+                        <div 
+                            id='searchResult' 
+                            style={style.searchResultDiv} 
+                        >
+                            <SearchResultList
+                                searchResult={this.state.searchResult} 
+                                searchKey={this.state.searchKey}
+                                highlightSearchPanel={this.highlightSearchPanel}
+                            />
+                        </div>
+                    </Col>
+                </Row>
+            </div>
         )
     }
 }
