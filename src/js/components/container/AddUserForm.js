@@ -70,7 +70,6 @@ class AddUserForm extends React.Component {
         }
         const { title } = this.props
         const { show } = this.state;
-
         return (
             <Modal show={show} size="sm" onHide={this.handleClose}>
                 <Modal.Header closeButton className='font-weight-bold text-capitalize'>
@@ -187,7 +186,7 @@ class AddUserForm extends React.Component {
                                         <Select
                                             placeholder = {locale.texts.SELECT_LOCATION}
                                             name="area"
-                                            value = {values.select}
+                                            value = {values.area.value}
                                             onChange={value => setFieldValue("area", value.value)}
                                             options={areaOptions}
                                             style={style.select}
