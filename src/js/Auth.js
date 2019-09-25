@@ -39,11 +39,13 @@ class Auth extends React.Component {
         });
     };
 
-    async signup (username, password, role = 'care_provider') {
+    async signup (values) {
+        let { username, password, role, area } = values 
         let result = await axios.post(dataSrc.signup, {
             username,
             password,
             role,
+            area,
         })
         return result
     }

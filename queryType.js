@@ -211,10 +211,19 @@ function query_signup(signupPackage) {
 
 	const text = 
 		`
-		INSERT INTO user_table (name, password, registered_timestamp)
-		VALUES ($1, $2, now());
+		INSERT INTO user_table (name, password, registered_timestamp, area_id)
+		VALUES (
+			$1, 
+			$2, 
+			now(),
+			(
+				SELECT id
+				FROM area_table
+				WHERE name=$3
+			)
+			);
 		`;
-	const values = [signupPackage.username, signupPackage.password,];
+	const values = [signupPackage.username, signupPackage.password, signupPackage.area];
 
 	const query = {
 		text,
@@ -522,6 +531,14 @@ const query_addShiftChangeRecord = (username, file_path) => {
 	return query
 }
 
+const query_getAreaTable = () => {
+	return `
+		SELECT 
+			name
+		FROM area_table
+	`
+}
+
 module.exports = {
     query_getTrackingData,
     query_getObjectTable,
@@ -550,5 +567,6 @@ module.exports = {
 	query_setVisitTimestamp,
 	query_insertUserRole,
 	query_addEditObjectRecord,
-	query_addShiftChangeRecord
+	query_addShiftChangeRecord,
+	query_getAreaTable
 }

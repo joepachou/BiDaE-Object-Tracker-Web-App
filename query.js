@@ -281,7 +281,8 @@ const signup = (request, response) => {
     const { 
         username, 
         password, 
-        role 
+        role,
+        area 
     } = request.body;
     
     const saltRounds = 10;
@@ -290,6 +291,7 @@ const signup = (request, response) => {
     const signupPackage = {
         username: username.toLowerCase(),
         password: hash,
+        area,
     }
 
     pool.query(queryType.query_signup(signupPackage))
@@ -516,6 +518,17 @@ const deleteEditObjectRecord = (request, response) => {
         })
 }
 
+const getAreaTable = (request, response) => {
+    pool.query(queryType.query_getAreaTable())
+        .then(res => {
+            console.log("get area table")
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log("get area table fail: "+ err)
+        })
+}
+
 module.exports = {
     getTrackingData,
     getObjectTable,
@@ -540,5 +553,6 @@ module.exports = {
     removeUser,
     setUserRole,
     getEditObjectRecord,
-    deleteEditObjectRecord
+    deleteEditObjectRecord,
+    getAreaTable
 }
