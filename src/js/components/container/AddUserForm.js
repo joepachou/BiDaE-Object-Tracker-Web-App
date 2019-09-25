@@ -179,9 +179,11 @@ class AddUserForm extends React.Component {
                                     </Col>
                                 </Row>
                                 <hr/>
-                                <Row className="form-group my-3 text-capitalize">
-                                    <Col>
+                                <Row className="form-group my-3 text-capitalize" noGutters>
+                                    <Col lg={4} className='d-flex align-items-center'>
                                         <label htmlFor="type">{locale.texts.AUTH_AREA}</label>
+                                    </Col>
+                                    <Col lg={8}>
                                         <Select
                                             placeholder = {locale.texts.SELECT_LOCATION}
                                             name="area"
