@@ -1,5 +1,11 @@
 import React from 'react';
-import { Modal, Image, Row, Col } from 'react-bootstrap';
+import { 
+    Modal, 
+    Image, 
+    Row, 
+    Col,
+    Button 
+} from 'react-bootstrap';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import config from '../../config';
@@ -134,7 +140,24 @@ class SigninPage extends React.Component {
                                     })}
 
                                 </RadioButtonGroup>
-                                <div className="form-group pt-2">
+                                <Modal.Footer>
+                                    <Button 
+                                        variant="outline-secondary" 
+                                        className="text-capitalize" 
+                                        onClick={this.handleClose}
+                                    >
+                                        {locale.texts.CANCEL}
+                                    </Button>
+                                    <Button 
+                                        type="submit" 
+                                        className="text-capitalize" 
+                                        variant="primary" 
+                                        disabled={isSubmitting}
+                                    >
+                                        {locale.texts.SIGN_IN}
+                                    </Button>
+                                </Modal.Footer>
+                                {/* <div className="form-group pt-2">
                                     <button 
                                         type="submit" 
                                         className="btn btn-primary btn-block text-capitalize"  
@@ -154,7 +177,7 @@ class SigninPage extends React.Component {
                                     >
                                         {locale.texts.SIGN_UP}
                                     </button>
-                                </div>
+                                </div> */}
                             </Form>
                         )}
                     />

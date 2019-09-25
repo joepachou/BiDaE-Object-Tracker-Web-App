@@ -178,12 +178,12 @@ class NavbarContainer extends React.Component {
                     handleSignFormClose={this.handleSignFormClose}
                     signin={auth.signin}
                 />
-                <SignupPage 
+                {/* <SignupPage 
                     show={isShowSignupForm}
                     handleSignupFormSubmit={this.handleSignupFormSubmit}
                     handleSignFormClose={this.handleSignFormClose}
                     signup={auth.signup}
-                />
+                /> */}
                 <ShiftChange 
                     show = {isShowShiftChange}
                     handleShiftChangeRecordSubmit = {this.handleShiftChangeRecordSubmit}
