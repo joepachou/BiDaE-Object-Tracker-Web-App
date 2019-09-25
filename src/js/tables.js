@@ -243,6 +243,10 @@ const objectTableColumn = [
         accessor: 'type'
     },
     {
+        Header: 'auth Area',
+        accessor: 'area_name.label'
+    },
+    {
         Header: 'Access Control Number',
         accessor: 'access_control_number'
     },

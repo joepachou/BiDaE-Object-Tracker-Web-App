@@ -170,16 +170,14 @@ const getGeofenceData = (request, response) => {
 
 const editObject = (request, response) => {
     const formOption = request.body.formOption
-    pool.query(queryType.query_editObject(formOption), (error, results) => {
-        if (error) {
-            console.log("Edit Object Fails: " + error)
-        } else {
-            console.log("Edit Object Success");
-        }
-        
-        response.status(200).json(results)
-
-    })
+    pool.query(queryType.query_editObject(formOption))
+        .then(res => {
+            console.log("Edit object success");
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log("Edit Object Fails: " + err)
+        })
 }
 
 const addObject = (request, response) => {
@@ -201,25 +199,22 @@ const addObject = (request, response) => {
 const editObjectPackage = (request, response) => {
     const { formOption, username } = request.body
 
+    pool.query(queryType.query_addEditObjectRecord(formOption, username))
+        .then(res => {
+            const record_id = res.rows[0].id
+            pool.query(queryType.query_editObjectPackage(formOption, record_id))
+                .then(res => {
+                console.log('Edit object package success')
+                response.status(200).json(res)
 
-
-pool.query(queryType.query_addEditObjectRecord(formOption, username))
-    .then(res => {
-        const record_id = res.rows[0].id
-        pool.query(queryType.query_editObjectPackage(formOption, record_id))
-            .then(res => {
-            console.log('Edit object package success')
-            response.status(200).json(res)
-
-            })
-            .catch(err => {
-                console.log('Edit object package fail ' + err)
-            })
-    })
-    .catch(err => {
-        console.log('Edit object package fail ' + err)
-    })
-
+                })
+                .catch(err => {
+                    console.log('Edit object package fail ' + err)
+                })
+        })
+        .catch(err => {
+            console.log('Edit object package fail ' + err)
+        })
 }
 
 const signin = (request, response) => {

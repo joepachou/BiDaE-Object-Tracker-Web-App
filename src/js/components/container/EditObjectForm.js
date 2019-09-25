@@ -65,6 +65,13 @@ class EditObjectForm extends React.Component {
             return locationObj
         })
 
+        const areaOptions = this.props.areaList.map(area => {
+            return {
+                value: area.name,
+                label: locale.texts[area.name.toUpperCase().replace(/ /g, '_')]
+            };
+        })
+
         const style = {
             input: {
                 borderRadius: 0,
@@ -91,6 +98,7 @@ class EditObjectForm extends React.Component {
             access_control_number,
             mac_address,
             transferred_location,
+            area_name,
         } = selectedObjectData
         return (
             <Modal show={this.state.show} onHide={this.handleClose} size='md'>
@@ -105,6 +113,7 @@ class EditObjectForm extends React.Component {
                             access_control_number: access_control_number || '',
                             mac_address: mac_address || '',
                             radioGroup: status.value,
+                            area: area_name,
                             select: status.value === config.objectStatus.TRANSFERRED 
                                 ? transferred_location
                                 : '',
@@ -141,7 +150,8 @@ class EditObjectForm extends React.Component {
                                     .when('radioGroup', {
                                         is: config.objectStatus.TRANSFERRED,
                                         then: Yup.string().required(locale.texts.LOCATION_IS_REQUIRED)
-                                    })
+                                    }),
+                                area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
                         })}
 
                         onSubmit={(values, { setStatus, setSubmitting }) => {
@@ -157,7 +167,8 @@ class EditObjectForm extends React.Component {
                                 transferred_location: values.radioGroup === config.objectStatus.TRANSFERRED 
                                     ? values.select
                                     : '',
-                                monitor_type: monitor_type
+                                monitor_type: monitor_type,
+                                area: values.area
                             }
                             this.handleSubmit(postOption)                            
                         }}
@@ -194,6 +205,31 @@ class EditObjectForm extends React.Component {
                                     />
                                     <ErrorMessage name="mac_address" component="div" className="invalid-feedback" />
                                 </div>
+                                <hr/>
+                                <Row className="form-group my-3 text-capitalize" noGutters>
+                                    <Col lg={3} className='d-flex align-items-center'>
+                                        <label htmlFor="type">{locale.texts.AUTH_AREA}</label>
+                                    </Col>
+                                    <Col lg={9}>
+                                        <Select
+                                            placeholder = {locale.texts.SELECT_LOCATION}
+                                            name="area"
+                                            value = {values.area}
+                                            onChange={value => setFieldValue("area", value)}
+                                            options={areaOptions}
+                                            style={style.select}
+                                            components={{
+                                                IndicatorSeparator: () => null
+                                            }}
+                                        />
+                                        <Row className='no-gutters' className='d-flex align-self-center'>
+                                            <Col>
+                                                {touched.area && errors.area &&
+                                                <div style={style.errorMessage}>{errors.area}</div>}
+                                            </Col>
+                                        </Row>        
+                                    </Col>                                        
+                                </Row>
                                 <hr/>
                                 <Row className="form-group my-3 text-capitalize">
                                     <Col>
@@ -276,6 +312,7 @@ class EditObjectForm extends React.Component {
                                         </CheckboxGroup>
                                     </Col>
                                 </Row>
+
                                 <Modal.Footer>
                                     <Button variant="outline-secondary" className="text-capitalize" onClick={this.handleClose}>
                                         {locale.texts.CANCEL}

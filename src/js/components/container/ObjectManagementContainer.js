@@ -1,7 +1,12 @@
 import React from 'react';
 
 /** Import Presentational Component */
-import dataSrc from "../../../js/dataSrc";
+import { 
+    getAreaTable,
+    getObjectTable,
+    editObject,
+    addObject
+} from "../../dataSrc"
 import axios from 'axios';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
@@ -20,6 +25,7 @@ class ObjectManagementContainer extends React.Component{
         isShowEdit: false,
         selection: [],
         selectedRowData: [],
+        areaList: [],
         formTitle:'',
         formPath: '',
         selectAll: false,
@@ -37,11 +43,25 @@ class ObjectManagementContainer extends React.Component{
 
     componentDidMount = () => {
         this.getData();
+        this.getAreaList();
+    }
+
+    getAreaList = () => {
+        axios.post(getAreaTable, {
+        })
+        .then(res => {
+            this.setState({
+                areaList: res.data.rows
+            })
+        })
+        .catch(err => {
+            console.log(err)
+        })
     }
 
     getData = () => {
         let locale = this.context
-        axios.post(dataSrc.getObjectTable, {
+        axios.post(getObjectTable, {
             locale: locale.abbr
         })
         .then(res => {
@@ -70,6 +90,12 @@ class ObjectManagementContainer extends React.Component{
                         label: locale.texts[item.transferred_location.toUpperCase().replace(/ /g, '_')]
                     }
                     : ''
+                item.area_name = item.area_name
+                ? {
+                    value: item.area_name,
+                    label: item.area_name ? locale.texts[item.area_name.toUpperCase()] : null,
+                }
+                : ''
             })
             this.setState({
                 data: res.data.rows,
@@ -98,7 +124,7 @@ class ObjectManagementContainer extends React.Component{
             isShowEdit: true,
             formTitle: 'add object',
             selectedRowData: [],
-            formPath: dataSrc.addObject
+            formPath: addObject
         })
     }
 
@@ -227,7 +253,7 @@ class ObjectManagementContainer extends React.Component{
                                             selectedRowData: this.state.data[rowInfo.index],
                                             isShowEdit: true,
                                             formTitle: 'edit object',
-                                            formPath: dataSrc.editObject
+                                            formPath: editObject
                                         })
                                 
                                         // IMPORTANT! React-Table uses onClick internally to trigger
@@ -279,6 +305,7 @@ class ObjectManagementContainer extends React.Component{
                     formPath={this.state.formPath}
                     handleCloseForm={this.handleCloseForm}
                     data={this.state.data}
+                    areaList={this.state.areaList}
                 />                
             </Container>
                     

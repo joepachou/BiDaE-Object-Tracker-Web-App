@@ -46,14 +46,22 @@ function query_getTrackingData () {
 const query_getObjectTable = 
 	`
 	SELECT 
-		name, 
-		type, 
-		access_control_number, 
-		status, 
-		transferred_location, 
-		mac_address,
-		monitor_type
-	FROM object_table ORDER BY name ASC
+		object_table.name, 
+		object_table.type, 
+		object_table.access_control_number, 
+		object_table.status, 
+		object_table.transferred_location, 
+		object_table.mac_address,
+		object_table.monitor_type,
+		area_table.name as area_name
+
+	FROM object_table 
+
+	LEFT JOIN area_table
+	ON area_table.id = object_table.area_id
+
+	ORDER BY object_table.name ASC
+
 	`;
 
 const query_getLbeaconTable = 
@@ -101,7 +109,12 @@ function query_editObject (formOption) {
 			transferred_location = $4,
 			access_control_number = $5,
 			name = $6,
-			monitor_type = $7
+			monitor_type = $7,
+			area_id = (
+				SELECT id
+				FROM area_table
+				WHERE name=$8
+			)
 		WHERE mac_address = $1
 		`;
 		
@@ -112,7 +125,8 @@ function query_editObject (formOption) {
 		formOption.transferred_location ? formOption.transferred_location.value : null, 
 		formOption.access_control_number, 
 		formOption.name,
-		formOption.monitor_type
+		formOption.monitor_type,
+		formOption.area.value
 	];
 
 	const query = {
