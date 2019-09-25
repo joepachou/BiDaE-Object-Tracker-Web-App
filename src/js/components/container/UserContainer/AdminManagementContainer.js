@@ -10,7 +10,14 @@ import ReactTable from 'react-table'
 import axios from 'axios';
 import Cookies from 'js-cookie'
 import LocaleContext from '../../../context/LocaleContext';
-import dataSrc from "../../../dataSrc";
+import {
+    getUserList,
+    getUserRole,
+    getRoleNameList,
+    setUserRole,
+    removeUser,
+    getAreaTable
+} from "../../../dataSrc";
 import AddableList from './AddableList'
 import ModifyUserInfo from './ModifyUserInfo'
 import RemoveUserConfirmForm from './RemoveUserConfirmForm'
@@ -28,15 +35,14 @@ class AdminManagementContainer extends React.Component{
            showModifyUserInfo: false,
            showAddUserForm: false,
            roleName: [],
-    }
-    staticParamter = {
-        roleName : []
+           areaList: []
     }
 
     componentDidUpdate = (prevProps, prevState) => {
         if (this.context.abbr !== prevState.locale) {
             this.getRoleNameList()
             this.getUserList()
+            this.getAreaList()
             this.setState({
                 locale: this.context.abbr
             })
@@ -46,11 +52,25 @@ class AdminManagementContainer extends React.Component{
     componentDidMount = () => {
         this.getRoleNameList()
         this.getUserList()
+        this.getAreaList()
+    }
+
+    getAreaList = () => {
+        axios.post(getAreaTable, {
+        })
+        .then(res => {
+            this.setState({
+                areaList: res.data.rows
+            })
+        })
+        .catch(err => {
+            console.log(err)
+        })
     }
 
     getUserList = () => {
         let locale = this.context
-        axios.post(dataSrc.getUserList,{
+        axios.post(getUserList,{
             locale: locale.abbr 
         }).then(res => {
             let columns = _.cloneDeep(userInfoTableColumn)
@@ -73,7 +93,7 @@ class AdminManagementContainer extends React.Component{
     }
     getUserRole = (selectedUser, callBack) => {
         if(selectedUser){
-            axios.post(dataSrc.getUserRole,{
+            axios.post(getUserRole,{
                 username: selectedUser.name
             }).then((res) => {
                 var userRole = ''
@@ -87,7 +107,7 @@ class AdminManagementContainer extends React.Component{
     }
 
     getRoleNameList = () => {
-        axios.post(dataSrc.getRoleNameList,{
+        axios.post(getRoleNameList,{
         }).then(res => {
             let rows = _.cloneDeep(res.data.rows)
             rows.filter(item => item.name !== "guest" )
@@ -117,7 +137,7 @@ class AdminManagementContainer extends React.Component{
     }
 
     onSubmitModifyUserInfo = (newInfo) => {
-        axios.post(dataSrc.setUserRole,{
+        axios.post(setUserRole,{
             username: this.state.selectedUser.name,
             ...newInfo
         }).then(res => {
@@ -143,7 +163,7 @@ class AdminManagementContainer extends React.Component{
     // }
 
     submitRemoveUserConfirm = () => {
-        axios.post(dataSrc.removeUser, {
+        axios.post(removeUser, {
             username: this.state.selectedUser.name
         }).then((res)=>{
             this.setState({
@@ -219,6 +239,7 @@ class AdminManagementContainer extends React.Component{
                 />
                 <AddUserForm
                     roleName={this.state.roleName}
+                    areaList={this.state.areaList}
                     show={this.state.showAddUserForm}
                     onClose={this.onCloseAddUserForm}
                     title={'add user'}

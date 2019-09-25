@@ -11,6 +11,7 @@ import {
     Form, 
     ErrorMessage 
 } from 'formik';
+import Select from 'react-select';
 import RadioButtonGroup from './RadioButtonGroup';
 import RadioButton from '../presentational/RadioButton'
 import * as Yup from 'yup';
@@ -19,9 +20,13 @@ import LocaleContext from '../../context/LocaleContext';
 import axios from 'axios';
 import dataSrc from '../../dataSrc';
 import AuthenticationContext from '../../context/AuthenticationContext';
+import { AppContext } from '../../context/AppContext'
 
 
 class AddUserForm extends React.Component {
+
+    static contextType = AppContext;
+
     state = {
         show: false,
         isSignin: false,
@@ -42,15 +47,30 @@ class AddUserForm extends React.Component {
 
     render() {
 
+        const { locale } = this.context;
+
+        const areaOptions = this.props.areaList.map(area => {
+            return {
+                value: area.name,
+                label: locale.texts[area.name.toUpperCase().replace(/ /g, '_')]
+            };
+        })
+
         const style = {
             input: {
                 padding: 10
-            }
+            },
+                        errorMessage: {
+                width: '100%',
+                marginTop: '0.25rem',
+                marginBottom: '0.25rem',
+                fontSize: '80%',
+                color: '#dc3545'
+            },
         }
         const { title } = this.props
-
         const { show } = this.state;
-        const locale = this.context;
+
         return (
             <AuthenticationContext.Consumer>
                 {auth => (
@@ -63,35 +83,38 @@ class AddUserForm extends React.Component {
                                 initialValues = {{
                                     username: '',
                                     password: '',
-                                    radioGroup: config.defaultRole
+                                    role: config.defaultRole,
+                                    area: '',
                                 }}
 
                                 validationSchema = {
                                     Yup.object().shape({
                                         username: Yup.string()
                                             .required(locale.texts.USERNAME_IS_REQUIRED)
-                                            .test(
-                                                'username', 
-                                                locale.texts.THE_USERNAME_IS_ALREADY_TAKEN,
-                                                value => {
-                                                    value = value.toLowerCase()
-                                                    return new Promise((resolve, reject) => {
+                                            .test({
+                                                name: 'username', 
+                                                message: locale.texts.THE_USERNAME_IS_ALREADY_TAKEN,
+                                                test: value => {
+                                                    return value !== undefined && new Promise((resolve, reject) => {
                                                         axios.post(dataSrc.validateUsername, {
                                                             username: value
                                                         })
                                                         .then(res => {
                                                             resolve(res.data.precheck)
-                                                        },
-                                                    );
-                                                });
-                                            }
-                                        ),
-                                        password: Yup.string().required(locale.texts.PASSWORD_IS_REQUIRED)
+                                                        })
+                                                        .catch(err => {
+                                                            console.log(err)
+                                                        })
+                                                    })
+                                                },
+                                            }),
+                                        area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
+                                        password: Yup.string().required(locale.texts.PASSWORD_IS_REQUIRED),
                                     })
                                 }
 
                                 onSubmit={(values, { setStatus, setSubmitting }) => {
-                                    auth.signup(values.username, values.password, values.radioGroup)
+                                    auth.signup(values)
                                         .then(res => {
                                             this.props.onClose()
                                         })
@@ -127,7 +150,7 @@ class AddUserForm extends React.Component {
                                         <Row className="form-group my-3 text-capitalize">
                                             <Col>
                                                 <RadioButtonGroup
-                                                    id="radioGroup"
+                                                    id="roles"
                                                     label={locale.texts.ROLES}
                                                     value={values.radioGroup}
                                                     error={errors.radioGroup}
@@ -140,7 +163,7 @@ class AddUserForm extends React.Component {
                                                             <Field
                                                                 component={RadioButton}
                                                                 key={index}
-                                                                name="radioGroup"
+                                                                name="role"
                                                                 id={roleName.name}
                                                                 label={locale.texts[roleName.name.toUpperCase()]}
                                                             />
@@ -156,6 +179,29 @@ class AddUserForm extends React.Component {
                                                     </Col>
                                                 </Row>                                                
                                             </Col>
+                                        </Row>
+                                        <hr/>
+                                        <Row className="form-group my-3 text-capitalize">
+                                            <Col>
+                                                <label htmlFor="type">{locale.texts.AUTH_AREA}</label>
+                                                <Select
+                                                    placeholder = {locale.texts.SELECT_LOCATION}
+                                                    name="area"
+                                                    value = {values.select}
+                                                    onChange={value => setFieldValue("area", value.value)}
+                                                    options={areaOptions}
+                                                    style={style.select}
+                                                    components={{
+                                                        IndicatorSeparator: () => null
+                                                    }}
+                                                />
+                                                <Row className='no-gutters' className='d-flex align-self-center'>
+                                                    <Col>
+                                                        {touched.area && errors.area &&
+                                                        <div style={style.errorMessage}>{errors.area}</div>}
+                                                    </Col>
+                                                </Row>        
+                                            </Col>                                        
                                         </Row>
                                         <Modal.Footer>
                                             <Button variant="outline-secondary" className="text-capitalize" onClick={this.handleClose}>
@@ -175,7 +221,5 @@ class AddUserForm extends React.Component {
         )
     }
 }
-
-AddUserForm.contextType = LocaleContext
 
 export default AddUserForm

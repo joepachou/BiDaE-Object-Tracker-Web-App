@@ -74,6 +74,7 @@ const en =  {
     PASSWORD: 'password',
     DATE_TIME: 'date/time',
     DEVICE_LOCATION_STATUS_CHECKED_BY: 'device location/status checked by',
+    AUTH_AREA: "auth area",
 
 
     /** Error Message */
@@ -88,7 +89,7 @@ const en =  {
     THE_USERNAME_IS_ALREADY_TAKEN: 'The username is already taken',
     THE_ACCESS_CONTROL_NUMBER_IS_ALREADY_USED: 'The access control number is already used',
     THE_MAC_ADDRESS_IS_ALREADY_USED :'The Mac Address is already used',
-
+    AREA_IS_REQUIRED: "Area is required",
 
     /** Form Title */
     EDIT_LBEACON: 'edit lbeacon',

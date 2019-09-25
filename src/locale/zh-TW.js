@@ -75,6 +75,8 @@ const tw = {
     PASSWORD: '密碼',
     DATE_TIME: '時間',
     DEVICE_LOCATION_STATUS_CHECKED_BY: '儀器狀態/地點確認 交接者',
+    AUTH_AREA: "所屬地區",
+
 
 
     /** Error Message */
@@ -89,7 +91,7 @@ const tw = {
     THE_USERNAME_IS_ALREADY_TAKEN: '使用者名稱已被使用',
     THE_ACCESS_CONTROL_NUMBER_IS_ALREADY_USED: '財產編號已被使用',
     THE_MAC_ADDRESS_IS_ALREADY_USED :'Mac Address已被使用',
-    
+    AREA_IS_REQUIRED: "請選擇地區",
 
     /** Form Title */
     EDIT_LBEACON: '編輯 lbeacon',
