@@ -45,12 +45,12 @@ const getTrackingData = (request, response) => {
     const { user, area } = request.body
     pool.query(queryType.query_getTrackingData())        
         .then(res => {
+            var count = 0
             console.log('Get tracking data')
             res.rows.map((item, index) => {
 
                 /** Tag the object that is the user's my device */
                 item.myDevice = user.myDevice && user.myDevice.includes(item.access_control_number) ? 1 : 0;
-
                 /** Tag the object that is found 
                  *  if the object's last_seen_timestamp is in the specific time period
                  *  and its rssi is below the specific rssi threshold  */
@@ -98,6 +98,7 @@ const getTrackingData = (request, response) => {
     
                 return item
             })
+            // console.log(count)
             response.status(200).json(res)
 
         }).catch(err => {

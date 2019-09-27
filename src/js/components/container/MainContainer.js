@@ -157,7 +157,6 @@ class MainContainer extends React.Component{
         duplicateSearchKey.filter(key => {
             return key !== 'all devices' || key !== 'my devices'
         })
-
         let searchResultObjectTypeMap = searchResult
             .filter(item => item.found)
             .reduce((allObjectTypes, item) => {
@@ -228,9 +227,10 @@ class MainContainer extends React.Component{
 
     getResultBySearchKey = (searchKey, colorPanel, searchValue) => {
         let searchResult = [];
+        let { auth } = this.context
         let proccessedTrackingData = _.cloneDeep(this.state.trackingData)
         if (searchKey === myDevices) {
-            const devicesAccessControlNumber = JSON.parse(Cookies.get('user')).myDevice
+            const devicesAccessControlNumber = auth.user.myDevice || []
             proccessedTrackingData.map(item => {
                 if (devicesAccessControlNumber.includes(item.access_control_number)) {
                     item.searched = true;
@@ -322,7 +322,9 @@ class MainContainer extends React.Component{
         let devicePlural = deviceNum === 1 ? locale.texts.DEVICE : locale.texts.DEVICES
         let data = hasSearchKey 
             ? searchResult.length !== 0 
-                ? searchResultObjectTypeMap 
+                ? Object.keys(searchResultObjectTypeMap).length !== 0 
+                    ? searchResultObjectTypeMap
+                    : {[devicePlural] : 0} 
                 : {[devicePlural] : 0} 
             : {[devicePlural]: this.state.trackingData.filter(item => item.found).length}
 
