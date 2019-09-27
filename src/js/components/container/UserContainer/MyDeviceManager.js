@@ -5,10 +5,13 @@ import Cookies from 'js-cookie'
 import dataSrc from "../../../dataSrc";
 import AddableList from './AddableList'
 import LocaleContext from '../../../context/LocaleContext';
+import { AppContext } from '../../../context/AppContext';
 
 const Fragment = React.Fragment;
 
 class MyDeviceManager extends React.Component{
+
+    static contextType = AppContext
 
     constructor() {
         super();
@@ -32,9 +35,9 @@ class MyDeviceManager extends React.Component{
                 this.myDevices = myList
             },
             switchDevice: (acn) => {
-                let userInfo = JSON.parse(Cookies.get('user'))
+                let { auth } = this.context;
+                let userInfo = auth.user
                 let myDevice = userInfo.myDevice || []
-
                 if(acn in this.device.myDevices){
                     this.device.notMyDevices[acn] = this.device.dataMap[acn]
                     delete this.device.myDevices[acn] 
@@ -53,14 +56,16 @@ class MyDeviceManager extends React.Component{
                     ...userInfo,
                     myDevice
                 }
-                Cookies.set('user', userInfo)
+                auth.setCookies('user', userInfo)
+                auth.setUserInfo('myDevice', myDevice)
                 
                 this.APIforAddableList_1.setList(this.device.myDevices)
                 this.APIforAddableList_2.setList(this.device.notMyDevices)
             },
-            postMyDeviceChange: (mode, acn) => {
 
-                const username = JSON.parse(Cookies.get('user')).name
+            postMyDeviceChange: (mode, acn) => {
+                let { auth } = this.context;
+                const username = auth.user.name
                 axios.post(dataSrc.modifyMyDevice, {
                         username,
                         mode: mode,
@@ -100,7 +105,7 @@ class MyDeviceManager extends React.Component{
     }
 
     getAPIfromAddableList_1(API){
-        let locale = this.context
+        let { locale } = this.context
         const {itemLayout, validation, onClick} = this.functionForAddableList
         this.APIforAddableList_1 = API
         this.APIforAddableList_1.setTitle(locale.texts.MY_DEVICES_LIST)
@@ -110,7 +115,7 @@ class MyDeviceManager extends React.Component{
     }
 
     getAPIfromAddableList_2(API){
-        let locale = this.context
+        let { locale } = this.context
         const {itemLayout, validation, onClick} = this.functionForAddableList
         this.APIforAddableList_2 = API
         this.APIforAddableList_2.setTitle(locale.texts.NOT_MY_DEVICES_LIST)
@@ -129,7 +134,7 @@ class MyDeviceManager extends React.Component{
     }
 
     getObjectData() {
-        let locale = this.context
+        let { locale } = this.context
         axios.post(dataSrc.getObjectTable, {
             locale: locale.lang
         }).then(res => {
@@ -196,5 +201,4 @@ class MyDeviceManager extends React.Component{
     }
 }
 
-MyDeviceManager.contextType = LocaleContext
 export default MyDeviceManager

@@ -70,6 +70,26 @@ class Auth extends React.Component {
         })
     } 
 
+    setMyDevice = (myDevice) => {
+        this.setState({
+            ...this.state,
+            user: {
+                ...this.state.user,
+                myDevice
+            }
+        })
+    }
+
+    setUserInfo = (status, value) =>{
+        this.setState({
+            ...this.state,
+            user: {
+                ...this.state.user,
+                [status]: value,
+            }
+        })
+    }
+
     render() {
 
         const authProviderValue = {
@@ -78,7 +98,10 @@ class Auth extends React.Component {
             signup: this.signup,
             signout: this.signout,
             handleAuthentication: this.handleAuthentication,
-            setSearchHistory: this.setSearchHistory
+            setSearchHistory: this.setSearchHistory,
+            setMyDevice: this.setMyDevice,
+            setUserInfo: this.setUserInfo,
+            setCookies: this.setCookies,
         };
 
         return (
