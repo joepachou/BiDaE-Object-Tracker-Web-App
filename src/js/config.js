@@ -1,4 +1,4 @@
-import IIS_SINICA_FLOOR_FOUR from '../img/IIS_Newbuilding_4F_reBack.png';
+import IIS_SINICA_FLOOR_FOUR_MAP from '../img/IIS_Newbuilding_4F_reBack.png';
 import NTUH_YUNLIN_WARD_FIVE_B_MAP from '../img/NTUH_Yunlin_Branch_Map.png';
 
 import black_pin from '../img/colorPin/Black.svg'
@@ -11,12 +11,17 @@ import BOT_LOGO from '../img/BOT_LOGO_RED.png';
 
 const config = {
     
+    areaOptions: {
+        1: "IIS_SINICA_FLOOR_FOUR",
+        2: "NTUH_YUNLIN_WARD_FIVE_B",
+    },
+    
     surveillanceMap: {
 
         /* Surveillance map source*/
         defaultArea: "IIS_SINICA_FLOOR_FOUR",
-        defaultMap: IIS_SINICA_FLOOR_FOUR,
-        IIS_SINICA_FLOOR_FOUR: IIS_SINICA_FLOOR_FOUR,
+        defaultMap: IIS_SINICA_FLOOR_FOUR_MAP,
+        IIS_SINICA_FLOOR_FOUR: IIS_SINICA_FLOOR_FOUR_MAP,
         NTUH_YUNLIN_WARD_FIVE_B: NTUH_YUNLIN_WARD_FIVE_B_MAP,
 
         /* Map customization */

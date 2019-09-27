@@ -7,7 +7,8 @@ import config from './config';
 
 let defaultUser = {
     role: "guest",
-    area: config.surveillanceMap.defaultArea
+    area: config.surveillanceMap.defaultArea,
+    authAreas: [config.surveillanceMap.defaultArea]
 }
 
 class Auth extends React.Component {
@@ -19,13 +20,22 @@ class Auth extends React.Component {
     }
 
     signin = (userInfo) => {
+        let authAreas = []
+        Object.keys(config.areaOptions).map(areaIndex => {
+            if (userInfo.auth_area & areaIndex) {
+                authAreas.push(config.areaOptions[areaIndex])
+            }
+        })
+        userInfo = {
+            ...userInfo,
+            authAreas
+        }
         Cookies.set('authenticated', true)
         Cookies.set('user', userInfo)
+
         this.setState({
             authenticated: true,
-            user: {
-                ...userInfo,
-            }
+            user: userInfo
         })
     };
   
@@ -91,7 +101,6 @@ class Auth extends React.Component {
     }
 
     render() {
-
         const authProviderValue = {
             ...this.state,
             signin: this.signin,

@@ -37,7 +37,7 @@ class MainContainer extends React.Component{
             ? config.surveillanceMap.locationAccuracyMapToDefault[0]
             : config.surveillanceMap.locationAccuracyMapToDefault[1],
         auth: this.context.auth,
-        area: this.context.auth.authenticated ? this.context.auth.user.area : config.surveillanceMap.defaultArea
+        area: this.context.auth.authenticated ? this.context.auth.user.authAreas[0] : config.surveillanceMap.defaultArea
     }
 
     componentDidMount = () => {
@@ -54,7 +54,7 @@ class MainContainer extends React.Component{
             this.getTrackingData()
             this.setState({
                 auth: this.context.auth,
-                area: this.context.auth.user.area 
+                area: this.context.auth.user.authAreas[0] 
             })
         } 
     }

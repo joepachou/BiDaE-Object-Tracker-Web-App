@@ -55,7 +55,7 @@ const getTrackingData = (request, response) => {
                  *  if the object's last_seen_timestamp is in the specific time period
                  *  and its rssi is below the specific rssi threshold  */
                 let isInTheTimePeriod = moment().diff(item.last_seen_timestamp, 'seconds') < 30 && item.rssi > rssiThreshold ? 1 : 0;
-                let isTheAuthArea = user.area === area ? 1 : 0;
+                let isTheAuthArea = user.authAreas.includes(area) ? 1 : 0;
                 let isInCurrentArea = area === item.area_name ? 1 : 0;
 
                 /** Set the object's found condition */
@@ -243,7 +243,7 @@ const signin = (request, response) => {
                         role, 
                         mydevice, 
                         search_history,
-                        area
+                        auth_area
                     } = res.rows[0]
 
                     let userInfo = {
@@ -252,7 +252,7 @@ const signin = (request, response) => {
                         role,
                         searchHistory: search_history,
                         shift,
-                        area
+                        auth_area
                     }
 
                     request.session.userInfo = userInfo
@@ -265,6 +265,7 @@ const signin = (request, response) => {
                     pool.query(queryType.query_setShift(shift, username))
                         .catch(err => console.log(err))
                 } else {
+                    console.log(3333)
                     response.json({
                         authentication: false,
                         message: "password is incorrect"

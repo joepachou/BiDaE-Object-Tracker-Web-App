@@ -32,10 +32,10 @@ class SurveillanceContainer extends React.Component {
             const [{ area }, dispatch] = this.context.stateReducer
             dispatch({
                 type: "changeArea",
-                value: this.props.auth.user.area
+                value: this.props.auth.user.authAreas[0]
             })
             this.setState({
-                area: this.props.auth.user.area
+                area: this.props.auth.user.authAreas[0]
             })
         }
     }
