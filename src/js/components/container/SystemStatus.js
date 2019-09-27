@@ -104,7 +104,8 @@ class ScanMonitor extends React.Component{
         let locale = this.context
         axios.post(dataSrc.getTrackingData,{
             rssiThreshold: config.surveillanceMap.locationAccuracyMapToDefault[config.objectManage.objectManagementRSSIThreshold],
-            locale: this.context.abbr
+            locale: this.context.abbr,
+            func: 'systemStatus'
         })
         .then(res => {
             let column = _.cloneDeep(trackingTableColumn)

@@ -15,7 +15,6 @@ const AppContextProvider = (props) => {
     const initialState = {
         area: auth.authenticated ? auth.user.area : config.surveillanceMap.defaultArea
     }
-    
     const reducer = (state, action) => {
         switch (action.type) {
             case 'changeArea':

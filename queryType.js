@@ -191,7 +191,7 @@ function query_signin(username) {
 			roles.name as role, 
 			user_table.mydevice, 
 			user_table.search_history,
-			user_table.auth_area
+			area_table.name as area
 
 		FROM user_table
 
@@ -200,6 +200,12 @@ function query_signin(username) {
 
 		LEFT JOIN roles
 		ON user_roles.role_id = roles.id
+
+		LEFT JOIN user_areas
+		ON user_table.id = user_areas.user_id
+
+		LEFT JOIN area_table
+		ON user_areas.area_id = area_table.id
 
 		WHERE user_table.name = $1;
 		
@@ -220,19 +226,14 @@ function query_signup(signupPackage) {
 
 	const text = 
 		`
-		INSERT INTO user_table (name, password, registered_timestamp, area_id)
+		INSERT INTO user_table (name, password, registered_timestamp)
 		VALUES (
 			$1, 
 			$2, 
-			now(),
-			(
-				SELECT id
-				FROM area_table
-				WHERE name=$3
-			)
-			);
+			now()
+		);
 		`;
-	const values = [signupPackage.username, signupPackage.password, signupPackage.area];
+	const values = [signupPackage.username, signupPackage.password];
 
 	const query = {
 		text,
@@ -395,6 +396,13 @@ const query_removeUser = (username) => {
 			FROM user_table 
 			WHERE name='${username}'
 			); 
+
+		DELETE FROM user_table 
+		WHERE user_id = (
+			SELECT id 
+			FROM user_table
+			WHERE name='${username}'
+		)
 		
 		DELETE FROM user_table 
 		WHERE name = '${username}';
@@ -463,7 +471,7 @@ const query_setVisitTimestamp = (username) => {
 	`
 }
 
-const query_insertUserRole = (username, role) => {
+const query_insertUserData = (username, role, area) => {
 	return `
 		INSERT INTO user_roles (user_id, role_id)
 		VALUES (
@@ -476,6 +484,19 @@ const query_insertUserRole = (username, role) => {
 				SELECT id 
 				FROM roles
 				WHERE name='${role}'
+			)
+		);
+		INSERT INTO user_areas (user_id, area_id)
+		VALUES (
+			(
+				SELECT id
+				FROM user_table
+				WHERE name='${username}'
+			), 
+			(
+				SELECT id 
+				FROM area_table
+				WHERE name='${area}'
 			)
 		)
 	`
@@ -574,8 +595,8 @@ module.exports = {
 	query_deleteEditObjectRecord,
 	query_setShift,
 	query_setVisitTimestamp,
-	query_insertUserRole,
+	query_insertUserData,
 	query_addEditObjectRecord,
 	query_addShiftChangeRecord,
-	query_getAreaTable
+	query_getAreaTable,
 }

@@ -42,26 +42,37 @@ moment.updateLocale('en', {
 const getTrackingData = (request, response) => {
     const rssiThreshold = request.body.rssiThreshold || -65
     const locale = request.body.locale || 'en'
-    const { user, area } = request.body
+    const { user, area, func } = request.body
     pool.query(queryType.query_getTrackingData())        
         .then(res => {
             var count = 0
             console.log('Get tracking data')
             res.rows.map((item, index) => {
 
-                /** Tag the object that is the user's my device */
-                item.myDevice = user.myDevice && user.myDevice.includes(item.access_control_number) ? 1 : 0;
                 /** Tag the object that is found 
                  *  if the object's last_seen_timestamp is in the specific time period
                  *  and its rssi is below the specific rssi threshold  */
                 let isInTheTimePeriod = moment().diff(item.last_seen_timestamp, 'seconds') < 30 && item.rssi > rssiThreshold ? 1 : 0;
-                let isTheAuthArea = user.authAreas.includes(area) ? 1 : 0;
-                let isInCurrentArea = area === item.area_name ? 1 : 0;
 
-                /** Set the object's found condition */
-                item.found = isInTheTimePeriod && isInCurrentArea && isTheAuthArea
-                item.found = item.myDevice ? isInCurrentArea ? 1 : 0 : item.found
+                switch(func) {
+                    case 'track':
 
+                        /** Tag the object that is the user's my device */
+                        item.myDevice = user.myDevice && user.myDevice.includes(item.access_control_number) ? 1 : 0;
+
+                        /** Tag the object that is found */
+                        let isTheAuthArea = user.area === area ? 1 : 0;
+                        let isInCurrentArea = area === item.area_name ? 1 : 0;
+
+                        /** Set the object's found condition */
+                        item.found = isInTheTimePeriod && isInCurrentArea && isTheAuthArea 
+                        item.found = item.myDevice ? isInCurrentArea ? 1 : 0 : item.found
+                        break;
+
+                    case 'systemStatus':
+                        item.found = isInTheTimePeriod
+                        break
+                }
 
                 /** Set the residence time of the object */
                 item.residence_time =  item.found 
@@ -243,7 +254,7 @@ const signin = (request, response) => {
                         role, 
                         mydevice, 
                         search_history,
-                        auth_area
+                        area
                     } = res.rows[0]
 
                     let userInfo = {
@@ -252,7 +263,7 @@ const signin = (request, response) => {
                         role,
                         searchHistory: search_history,
                         shift,
-                        auth_area
+                        area
                     }
 
                     request.session.userInfo = userInfo
@@ -298,7 +309,7 @@ const signup = (request, response) => {
 
     pool.query(queryType.query_signup(signupPackage))
         .then(res => {
-            pool.query(queryType.query_insertUserRole(username, role))
+            pool.query(queryType.query_insertUserData(username, role, area))
                 .then(res => {
                     console.log('Sign up Success')
                     response.status(200).json(res)

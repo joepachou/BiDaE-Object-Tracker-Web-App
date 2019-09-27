@@ -20,16 +20,17 @@ class Auth extends React.Component {
     }
 
     signin = (userInfo) => {
-        let authAreas = []
-        Object.keys(config.areaOptions).map(areaIndex => {
-            if (userInfo.auth_area & areaIndex) {
-                authAreas.push(config.areaOptions[areaIndex])
-            }
-        })
-        userInfo = {
-            ...userInfo,
-            authAreas
-        }
+        // let authAreas = []
+        // console.log(userInfo)
+        // Object.keys(config.areaOptions).map(areaIndex => {
+        //     if (userInfo.auth_area & areaIndex) {
+        //         authAreas.push(config.areaOptions[areaIndex])
+        //     }
+        // })
+        // userInfo = {
+        //     ...userInfo,
+        //     authAreas
+        // }
         Cookies.set('authenticated', true)
         Cookies.set('user', userInfo)
 
@@ -50,7 +51,13 @@ class Auth extends React.Component {
     };
 
     async signup (values) {
-        let { username, password, role, area } = values 
+        let { username, password, role, area } = values
+        // let areaOptionsIndex = {}
+        // Object.keys(config.areaOptions).map(item => {
+        //     areaOptionsIndex[config.areaOptions[item]] = item
+        // })
+        // console.log(areaOptionsIndex)
+
         let result = await axios.post(dataSrc.signup, {
             username,
             password,

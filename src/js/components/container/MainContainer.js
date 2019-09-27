@@ -11,7 +11,6 @@ import _ from 'lodash'
 import moment from 'moment'
 import axios from 'axios';
 import dataSrc from '../../dataSrc'
-import Cookies from 'js-cookie'
 import { AppContext } from '../../context/AppContext'
 
 const myDevices = config.frequentSearchOption.MY_DEVICES ;
@@ -37,7 +36,7 @@ class MainContainer extends React.Component{
             ? config.surveillanceMap.locationAccuracyMapToDefault[0]
             : config.surveillanceMap.locationAccuracyMapToDefault[1],
         auth: this.context.auth,
-        area: this.context.auth.authenticated ? this.context.auth.user.authAreas[0] : config.surveillanceMap.defaultArea
+        area: this.context.auth.authenticated ? this.context.auth.user.area : config.surveillanceMap.defaultArea
     }
 
     componentDidMount = () => {
@@ -54,7 +53,7 @@ class MainContainer extends React.Component{
             this.getTrackingData()
             this.setState({
                 auth: this.context.auth,
-                area: this.context.auth.user.authAreas[0] 
+                area: this.context.auth.user.area
             })
         } 
     }
@@ -102,13 +101,14 @@ class MainContainer extends React.Component{
         })
     }
 
-    getTrackingData = (area = this.state.area) => {
+    getTrackingData = (area = this.state.area, func) => {
         let { auth, locale } = this.context
         axios.post(dataSrc.getTrackingData,{
             rssiThreshold: this.state.rssiThreshold,
             locale: locale.abbr,
             user: auth.user,
-            area: area
+            area: area,
+            func: 'track'
         })
         .then(res => {
             const trackingData = this.handleRawTrackingData(res.data.rows)
