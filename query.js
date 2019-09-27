@@ -65,11 +65,11 @@ const getTrackingData = (request, response) => {
                         : 'N/A'
 
                 /** Tag the object that is violate geofence */
-                if (moment().diff(item.geofence_violation_timestamp, 'seconds') > 300
-                    || moment(item.first_seen_timestamp).diff(moment(item.geofence_violation_timestamp)) > 0) {
+                // if (moment().diff(item.geofence_violation_timestamp, 'seconds') > 300
+                //     || moment(item.first_seen_timestamp).diff(moment(item.geofence_violation_timestamp)) > 0) {
                         
-                    delete item.geofence_type
-                }
+                //     delete item.geofence_type
+                // }
     
                 /** Tag the object that is on sos */
                 if (moment().diff(item.panic_timestamp, 'second') < 300) {
@@ -87,7 +87,6 @@ const getTrackingData = (request, response) => {
                 /** Omit the unused field of the object */
                 delete item.first_seen_timestamp
                 delete item.last_seen_timestamp
-                delete item.geofence_violation_timestamp
                 delete item.panic_timestamp
                 delete item.rssi
     
