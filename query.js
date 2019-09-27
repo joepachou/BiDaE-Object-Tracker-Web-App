@@ -46,15 +46,21 @@ const getTrackingData = (request, response) => {
     pool.query(queryType.query_getTrackingData())        
         .then(res => {
             console.log('Get tracking data')
-            res.rows.map(item => {
+            res.rows.map((item, index) => {
+
+                /** Tag the object that is the user's my device */
+                item.myDevice = user.myDevice && user.myDevice.includes(item.access_control_number) ? 1 : 0;
 
                 /** Tag the object that is found 
                  *  if the object's last_seen_timestamp is in the specific time period
                  *  and its rssi is below the specific rssi threshold  */
                 let isInTheTimePeriod = moment().diff(item.last_seen_timestamp, 'seconds') < 30 && item.rssi > rssiThreshold ? 1 : 0;
                 let isTheAuthArea = user.area === area ? 1 : 0;
-                let isInUserArea = user.area === item.area_name ? 1 : 0;
-                item.found = isInTheTimePeriod && isTheAuthArea && isInUserArea
+                let isInCurrentArea = area === item.area_name ? 1 : 0;
+
+                /** Set the object's found condition */
+                item.found = isInTheTimePeriod && isInCurrentArea && isTheAuthArea
+                item.found = item.myDevice ? isInCurrentArea ? 1 : 0 : item.found
 
 
                 /** Set the residence time of the object */
