@@ -52,7 +52,8 @@ class Surveillance extends React.Component {
         this.handleObjectMarkers();
         this.createLbeaconMarkers();
         if (prevProps.area !== this.props.area) { 
-            this.areaMap.setUrl(config.surveillanceMap[this.props.area])
+            this.areaMap.setUrl(config.surveillanceMap.mapSelection[this.props.area].map)
+            this.areaMap.setBounds(config.surveillanceMap.mapSelection[this.props.area].mapBound)
         }
     }
 
@@ -64,11 +65,11 @@ class Surveillance extends React.Component {
     
     /** Set the search map configuration establishing in config.js  */
     initMap = () => {
-        let area = this.props.area
-        let areaMap = config.surveillanceMap[area]
-        let map = L.map('mapid', config.surveillanceMap.mapOptions);
 
-        let bounds = config.surveillanceMap.mapBound;
+        let area = config.surveillanceMap.mapSelection[this.props.area]
+        let areaMap = area.map
+        let map = L.map('mapid', config.surveillanceMap.mapOptions);
+        let bounds = area.mapBound
         let image = L.imageOverlay(areaMap, bounds).addTo(map);
         this.areaMap = image
         map.addLayer(image)

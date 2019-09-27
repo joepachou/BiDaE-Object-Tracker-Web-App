@@ -24,10 +24,21 @@ const config = {
         IIS_SINICA_FLOOR_FOUR: IIS_SINICA_FLOOR_FOUR_MAP,
         NTUH_YUNLIN_WARD_FIVE_B: NTUH_YUNLIN_WARD_FIVE_B_MAP,
 
+        mapSelection: {
+            IIS_SINICA_FLOOR_FOUR: {
+                map: IIS_SINICA_FLOOR_FOUR_MAP,
+                mapBound:[[0,0], [21130,35710]],
+            },
+            NTUH_YUNLIN_WARD_FIVE_B: {
+                map: NTUH_YUNLIN_WARD_FIVE_B_MAP,
+                mapBound:[[0,0], [45450,56160]],
+            }
+        },
+
         /* Map customization */
         mapOptions: {
             crs: L.CRS.Simple,
-            // center: L.latLng(-2000, -4000),
+            center: L.latLng(-2000, -4000),
             zoom: -5,
             minZoom: -5,
             maxZoom: 0,
