@@ -84,7 +84,7 @@ class SigninPage extends React.Component {
                                 shift: radioGroup, 
                             })
                             .then(res => {
-                                if (!res.data.authentication) {  
+                                if (!res.data.authentication) { 
                                     setStatus(res.data.message)
                                     setSubmitting(false)
                                 } else {
@@ -98,6 +98,12 @@ class SigninPage extends React.Component {
 
                         render={({ values, errors, status, touched, isSubmitting }) => (
                             <Form>
+                                {status &&
+                                    <div className={'alert alert-danger mb-2'}>
+                                        <i className="fas fa-times-circle mr-1"/>
+                                        {status}
+                                    </div>
+                                }
                                 <div className="form-group text-capitalize">
                                     {/* <label htmlFor="username">Username</label> */}
                                     <Field 
@@ -165,11 +171,8 @@ class SigninPage extends React.Component {
                                     >
                                         {locale.texts.SIGN_IN}
                                     </button>
-                                </div>
-                                {status &&
-                                    <div className={'alert alert-danger'}>{status}</div>
-                                }
-                                <div className='d-flex justify-content-center'>
+                                </div> */}
+                                {/* <div className='d-flex justify-content-center'>
                                     <button 
                                         type='button' 
                                         className='btn btn-link text-capitalize' 
