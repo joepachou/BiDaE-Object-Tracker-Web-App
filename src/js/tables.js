@@ -27,7 +27,7 @@ const lbeaconTableColumn = [
                 accessor: 'health_status',
                 width: 60,
                 style: style.column,
-                Cell: props => !props.value 
+                Cell: props => props.value 
                     ? <i className="fas fa-check-circle text-center" style={style.icon.check}></i>
                     : <i className="fas fa-times-circle" style={style.icon.times}></i>
             },
@@ -244,7 +244,7 @@ const objectTableColumn = [
     },
     {
         Header: 'auth Area',
-        accessor: 'area_name.label'
+        accessor: 'area_name'
     },
     {
         Header: 'Access Control Number',
@@ -385,10 +385,10 @@ const shiftChangeRecordTableColumn = [
 ]
 
 const deviceManagerTableColumn = [
-    {
-        Header: 'id',
-        accessor: 'id',
-    },
+    // {
+    //     Header: 'id',
+    //     accessor: 'id',
+    // },
     {
         Header: 'Name',
         accessor: 'name'

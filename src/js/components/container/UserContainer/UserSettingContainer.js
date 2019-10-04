@@ -94,9 +94,9 @@ class UserSettingContainer extends React.Component{
                                     key={index}
                                 >
                                     <div className='mb-5' key={index} id={page.name.replace(/ /g, '')}>   
-                                        <h5 className='text-capitalize'>
+                                        <h4 className='text-capitalize'>
                                             {locale.texts[page.name.toUpperCase().replace(/ /g, '_')]}
-                                        </h5>
+                                        </h4>
                                         <hr/>
                                         <Row className="w-100d-flex bg-white py-1">
                                             <Col>

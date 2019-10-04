@@ -41,26 +41,45 @@ function query_getTrackingData () {
 
 
 
-const query_getObjectTable = 
-	`
-	SELECT 
-		object_table.name, 
-		object_table.type, 
-		object_table.access_control_number, 
-		object_table.status, 
-		object_table.transferred_location, 
-		object_table.mac_address,
-		object_table.monitor_type,
-		area_table.name as area_name
+const query_getObjectTable = (area_id) => {
 
-	FROM object_table 
+	let text = '';
+	if (!area_id) {
+		text += `
+			SELECT 
+				object_table.name, 
+				object_table.type, 
+				object_table.access_control_number, 
+				object_table.status, 
+				object_table.transferred_location, 
+				object_table.mac_address,
+				object_table.monitor_type,
+				object_table.area_id
 
-	LEFT JOIN area_table
-	ON area_table.id = object_table.area_id
+			FROM object_table 
 
-	ORDER BY object_table.name ASC
+			ORDER BY object_table.name ASC	
+		`;
+	} else {
+		text +=`
+			SELECT 
+				object_table.name, 
+				object_table.type, 
+				object_table.access_control_number, 
+				object_table.status, 
+				object_table.transferred_location, 
+				object_table.mac_address,
+				object_table.monitor_type,
+				object_table.area_id
 
-	`;
+			FROM object_table 
+			WHERE object_table.area_id = ${area_id[0]}
+
+			ORDER BY object_table.name ASC	
+		`;
+	}
+	return text
+} 
 
 const query_getLbeaconTable = 
     `
@@ -191,7 +210,11 @@ function query_signin(username) {
 			roles.name as role, 
 			user_table.mydevice, 
 			user_table.search_history,
-			area_table.name as area
+			array (
+				SELECT area_id
+				FROM user_areas
+				WHERE user_areas.user_id = user_table.id
+			) as areas_id
 
 		FROM user_table
 
@@ -201,13 +224,7 @@ function query_signin(username) {
 		LEFT JOIN roles
 		ON user_roles.role_id = roles.id
 
-		LEFT JOIN user_areas
-		ON user_table.id = user_areas.user_id
-
-		LEFT JOIN area_table
-		ON user_areas.area_id = area_table.id
-
-		WHERE user_table.name = $1;
+		WHERE user_table.name = $1
 		
 		`;
 
@@ -389,6 +406,7 @@ const query_getRoleNameList = () => {
 }
 
 const query_removeUser = (username) => {
+	
 	const query = `
 		DELETE FROM user_roles 
 		WHERE user_id = (
@@ -564,6 +582,7 @@ const query_addShiftChangeRecord = (username, file_path) => {
 const query_getAreaTable = () => {
 	return `
 		SELECT 
+			id,
 			name
 		FROM area_table
 	`

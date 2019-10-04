@@ -128,11 +128,19 @@ export default class AddableList extends React.Component{
         this.API.removeItem(ACN)
     }
     render(){
+
+        const style = {
+            listGroup: {
+                // maxHeight: '50vh', 
+                // minHeight: '50vh', 
+                overflowY: 'scroll'
+            }
+        }
         
         return (
             <Fragment>
                 <h5>{this.state.title}</h5>
-                <ListGroup  variant = "flush" style={{maxHeight: '50vh', minHeight: '50vh', overflowY: 'scroll'}}>
+                <ListGroup  variant = "flush" style={style.listGroup}>
                     {this.state.itemList !== null 
                         ? 
                             (() => {

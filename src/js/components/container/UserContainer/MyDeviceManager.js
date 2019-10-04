@@ -9,6 +9,35 @@ import { AppContext } from '../../../context/AppContext';
 
 const Fragment = React.Fragment;
 
+const style = {
+    listItem: {
+        position: 'relative',
+        zIndex: 6,
+    }, 
+    firstText: {
+        paddingLeft: 15,
+        paddingRight: 0,
+        // background: 'rgb(227, 222, 222)',
+        // height: 30,
+        // width: 30,
+    },
+    middleText: {
+        paddingLeft: 2,
+        paddingRight: 2,
+    },
+    lastText: {
+        // textAlign: 'right'
+    },
+    icon: {
+        color: '#007bff'
+    },
+    list: {
+        wordBreak: 'keep-all',
+        // color:'red',
+        zIndex: 1
+    },
+}
+
 class MyDeviceManager extends React.Component{
 
     static contextType = AppContext
@@ -95,7 +124,26 @@ class MyDeviceManager extends React.Component{
                 }
             },
             itemLayout: (item, index) => {
-                return <div name={index}>{item.access_control_number}:<br/>{item.name}, status is {item.status}</div>
+                let { locale } = this.context
+                return (             
+                    <div 
+                        className='d-flex justify-content-start text-left' 
+                        style={style.list}
+                        name={item.access_control_number}
+                    >
+                        <p className='d-inline-block mx-1'>&#9642;</p>
+                        
+                        {item.type},
+                        &nbsp;
+                        {item.access_control_number},
+                        &nbsp;
+                        {locale.abbr === 'en'
+                            ? `${locale.texts.STATUS} ${locale.texts.IS} ${locale.texts[item.status.toUpperCase()]}`
+                            : `${locale.texts.STATUS}${locale.texts[item.status.toUpperCase()]}`
+                        }
+                        &nbsp;
+                    </div>
+                )
             }
         }
 
@@ -134,9 +182,10 @@ class MyDeviceManager extends React.Component{
     }
 
     getObjectData() {
-        let { locale } = this.context
+        let { locale, auth } = this.context
         axios.post(dataSrc.getObjectTable, {
-            locale: locale.lang
+            locale: locale.lang,
+            areaId: auth.user.areas_id,
         }).then(res => {
             let data = res.data.rows
             var dataMap = {}
@@ -181,16 +230,20 @@ class MyDeviceManager extends React.Component{
         return (
             <Fragment>
                 <Row className="w-100 d-flex bg-white">
-                    <Col xl={5}>
+                    <Col>
                         <AddableList
                             getAPI={this.getAPIfromAddableList_1}
                         />
                     </Col>
+                </Row>
+                {/* <Row>
                     <Col xl={2} className='p-5 d-flex flex-column align-self-center text-center'>
                         <i className="fas fa-angle-double-right fa-2x"></i>
                         <i className="fas fa-angle-double-left fa-2x"></i>
                     </Col>
-                    <Col xl={5}>
+                </Row> */}
+                <Row className='mt-2'>
+                    <Col>
                         <AddableList
                             getAPI={this.getAPIfromAddableList_2}
                         />
