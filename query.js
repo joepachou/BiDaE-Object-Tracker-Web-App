@@ -1,6 +1,6 @@
 require('dotenv').config();
+require('moment-timezone')
 const moment = require('moment');
-const momentTZ = require('moment-timezone')
 const queryType = require ('./queryType');
 const bcrypt = require('bcrypt');
 const pg = require('pg');
@@ -194,7 +194,8 @@ const getLbeaconTable = (request, response) => {
             console.log('Get lbeaconTable data')
             res.rows.map(item => {
                 item.health_status =  moment().diff(item.last_report_timestamp, 'days') < 1 ? 1 : 0 
-                item.last_report_timestamp = moment(momentTZ(item.last_report_timestamp).tz(process.env.TZ).locale(locale)).format('lll');
+                item.last_report_timestamp = moment.tz(item.last_report_timestamp, process.env.TZ).locale(locale).format('lll');
+
             })
             response.status(200).json(res)
 
@@ -212,16 +213,14 @@ const getGatewayTable = (request, response) => {
         .then(res => {
             console.log('Get gatewayTable data')
             res.rows.map(item => {
-                let mn = moment().locale(locale)
-                item.health_status =  item.health_status === 0 && mn.diff(item.last_report_timestamp, 'days') < 1 ? 0 : 1 
-                item.last_report_timestamp = moment(momentTZ(item.last_report_timestamp).tz(process.env.TZ)).locale(locale).format('lll');
-                item.registered_timestamp = moment(momentTZ(item.registered_timestamp).tz(process.env.TZ)).locale(locale).format('lll');
-
+                item.health_status =  item.health_status === 0 && moment().diff(item.last_report_timestamp, 'days') < 1 ? 0 : 1 
+                item.last_report_timestamp = moment.tz(item.last_report_timestamp, process.env.TZ).locale(locale).format('lll');
+                item.registered_timestamp = moment.tz(item.registered_timestamp, process.env.TZ).locale(locale).format('lll');
             })
             response.status(200).json(res)
         })    
         .catch(err => {
-            console.log("Get data fails: " + err)                
+            console.log("Get gatewayTable fails: " + err)                
 
         })
 }
@@ -232,13 +231,13 @@ const getGeofenceData = (request, response) => {
         .then(res =>  {
             console.log("Get Geofence Data")
             res.rows.map(item => {
-                item.receive_time= moment(momentTZ(item.receive_time).tz(process.env.TZ)).locale(locale).format('lll');
-                item.alert_time = moment(momentTZ(item.alert_time).tz(process.env.TZ)).locale(locale).format('lll');
+                item.receive_time= moment.tz(item.receive_time, process.env.TZ).locale(locale).format('lll');
+                item.alert_time = moment.tz(item.alert_time, process.env.TZ).locale(locale).format('lll');
             })
             response.status(200).json(res);
         })
         .catch(err => {
-            console.log("Get Geofence Data fails: " + error)
+            console.log("Get Geofence Data fails: " + err)
         })
 }
 
@@ -469,7 +468,7 @@ const getPDFInfo = (request, response) => {
         .then(res => {
             console.log('save pdf file success')
             res.rows.map(item => {
-                item.submit_timestamp = moment(momentTZ(item.submit_timestamp).tz(process.env.TZ).locale(locale)).format('LLL');
+                item.submit_timestamp = moment.tz(item.submit_timestamp, process.env.TZ).locale(locale).format('LLL');
             })
             response.status(200).json(res)
         })
@@ -499,8 +498,8 @@ const getUserList = (request, response) => {
             res.rows.map(item => {
                 item.last_visit_timestamp = 
                     item.last_visit_timestamp && 
-                    moment(momentTZ(item.last_visit_timestamp).tz(process.env.TZ).locale(locale)).format('LLLL');
-                item.registered_timestamp = moment(momentTZ(item.registered_timestamp).tz(process.env.TZ).locale(locale)).format('LLLL');
+                    moment.tz(item.last_visit_timestamp, process.env.TZ).locale(locale).format('LLLL');
+                item.registered_timestamp = moment.tz(item.registered_timestamp, process.env.TZ).locale(locale).format('LLLL');
             })
             response.status(200).json(res)
         })
@@ -561,7 +560,7 @@ const getEditObjectRecord = (request, response) => {
             console.log('get edit object record')
 
             res.rows.map(item => {
-                item.edit_time = moment(momentTZ(item.edit_time).tz(process.env.TZ).locale(locale)).format('LLL');
+                item.edit_time = moment.tz(item.edit_time, process.env.TZ).locale(locale).format('LLL');
             })
             response.status(200).json(res)
         })
