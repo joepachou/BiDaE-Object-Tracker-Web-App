@@ -108,29 +108,6 @@ const getTrackingData = (request, response) => {
                 /** Flag the object that satisfied the time period and rssi threshold */
                 item.found = isInTheTimePeriod && isMatchRssi 
 
-                // count++
-                // switch(func) {
-                //     case 'track':
-
-                //         /** Flag the object that is the user's my device */
-                //         item.myDevice = user.myDevice && user.myDevice.includes(item.access_control_number) ? 1 : 0;
-
-                //         /** Flag the object that is found */
-                //         // let isTheAuthArea = user.area === area ? 1 : 0;
-                //         // let isInCurrentArea = area === item.area_name ? 1 : 0;
-
-                //         /** Set the object's found condition */
-                //         // item.found = isInTheTimePeriod && isInCurrentArea && isTheAuthArea 
-                //         item.found = isInTheTimePeriod 
-
-                //         item.found = item.myDevice ? isInCurrentArea ? 1 : 0 : item.found
-                //         break;
-
-                //     case 'systemStatus':
-                //         item.found = isInTheTimePeriod
-                //         break
-                // }
-
                 /** Set the residence time of the object */
                 item.residence_time =  item.found 
                     ? moment(item.last_seen_timestamp).locale(locale).from(moment(item.first_seen_timestamp)) 
