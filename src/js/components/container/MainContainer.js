@@ -125,7 +125,10 @@ class MainContainer extends React.Component{
     }
 
     getLbeaconPosition = () => {
+        let { auth, locale } = this.context
+
         axios.post(dataSrc.getLbeaconTable, {
+            locale: locale.abbr
         })
         .then(res => {
             let lbeaconPosition = res.data.rows.reduce((activatedLbeacons, item) => {
