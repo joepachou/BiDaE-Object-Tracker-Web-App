@@ -47,6 +47,8 @@ const en =  {
     ADD_USER: 'add user',
     EDIT_DEVICES: 'edit devices',
     SWITCH_AREA: 'switch area',
+    FENCE_ON: 'fence on',
+    FENCE_OFF: 'fence off',
 
     /* Form Field */
     NAME: 'name',

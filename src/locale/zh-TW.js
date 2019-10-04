@@ -47,7 +47,8 @@ const tw = {
     ADD_USER: '新增使用者',
     EDIT_DEVICES: '編輯儀器',
     SWITCH_AREA: '切換地點',
-
+    FENCE_ON: '開啟圍籬',
+    FENCE_OFF: '關閉圍籬',
 
     /* Form Field */
     NAME: '名稱',
