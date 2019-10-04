@@ -9,20 +9,18 @@ import {
 } from 'react-bootstrap';
 import axios from 'axios';
 import dataSrc from '../../dataSrc'
-import Cookies from 'js-cookie'
 import SearchResultTable from './SearchResultTable'
 import GetResultData from './GetResultData'
 import PdfDownloadForm from './PdfDownloadForm'
 import moment from 'moment'
-import AuthenticationContext from '../../context/AuthenticationContext'
 import config from '../../config';
-import LocaleContext from '../../context/LocaleContext';
 import SearchResultListGroup from '../presentational/SearchResultListGroup'
+import { AppContext } from '../../context/AppContext'
 
 
 class ShiftChange extends React.Component {
 
-    static contextType = LocaleContext
+    static contextType = AppContext
 
     state = {
             show: false,
@@ -76,12 +74,15 @@ class ShiftChange extends React.Component {
 
 
     getTrackingData = (update) => {
+        let { locale, auth, stateReducer } = this.context
+        let [{areaId}] = stateReducer
         axios.post(dataSrc.getTrackingData, {
             rssiThreshold: config.surveillanceMap.locationAccuracyMapToDefault[1],
-            user: this.props.userInfo,
+            locale: locale.abbr,
+            user: auth.user,
+            areaId: areaId,
         }).then(res => {
-            var data = res.data.rows
-            GetResultData('my devices', data)
+            GetResultData('my devices', res.data)
                 .then(result => {
                     var foundResult = []
                     var notFoundResult = []
@@ -100,11 +101,11 @@ class ShiftChange extends React.Component {
                     })
                 }) 
                 .catch(err => {
-                    console.log(err)
+                    console.log(`get myDevice data fail: ${err}`)
                 })
         })
-        .catch(error => {
-            console.log(error)
+        .catch(err => {
+            console.log(`get tracking data fail: ${err}`)
         })
     }
 
@@ -116,7 +117,7 @@ class ShiftChange extends React.Component {
 
     confirmShift = () => {
         let userInfo = this.props.userInfo
-        let locale = this.context
+        let { locale } = this.context
         let contentTime = moment().format(config.shiftRecordPdfContentTimeFormat)
         let fileNameTime = moment().locale('en').format(config.shiftRecordFileNameTimeFormat)
         const { foundResult, notFoundResult } = this.state.searchResult
@@ -150,7 +151,7 @@ class ShiftChange extends React.Component {
         const { show } = this.state;
         const { userInfo } = this.props
         const { foundResult, notFoundResult } = this.state.searchResult
-        const locale = this.context
+        const { locale, auth } = this.context
         const style = {
             row: {
                 width: '100%'
@@ -195,7 +196,10 @@ class ShiftChange extends React.Component {
                         className='text-capitalize'
                      >                       
                         <div>
-                            {hasFoundResult && <h6>{locale.texts.DEVICES_IN} {locale.texts[config.site.toUpperCase().replace(/ /g, '_')]}</h6>}                    
+                            {hasFoundResult && <h6>{locale.texts.DEVICES_IN} {auth.user.areas_id.map(id => {
+                                return locale.texts[config.areaOptions[id]]
+                            })}
+                            </h6>}                    
                             {hasFoundResult && foundResult.map((item, index) => {
                                 return (
                                     <div key={index}>
@@ -207,7 +211,9 @@ class ShiftChange extends React.Component {
                             })}
                         </div>
                         <div className='my-3'>
-                            { hasNotFoundResult && <h6>{locale.texts.DEVICES_NOT_IN} {locale.texts[config.site.toUpperCase().replace(/ /g, '_')]}</h6>}
+                            { hasNotFoundResult && <h6>{locale.texts.DEVICES_NOT_IN} {auth.user.areas_id.map(id => {
+                                return locale.texts[config.areaOptions[id]]
+                            })}</h6>}
                             { hasNotFoundResult && notFoundResult.map((item, index) => {
                                 return (
                                     <div key={index}>
