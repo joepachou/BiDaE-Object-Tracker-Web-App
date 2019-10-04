@@ -7,8 +7,7 @@ import config from './config';
 
 let defaultUser = {
     role: "guest",
-    area: config.surveillanceMap.defaultArea,
-    authAreas: [config.surveillanceMap.defaultArea]
+    areas_id: config.defaultAreaId.toString()
 }
 
 class Auth extends React.Component {
