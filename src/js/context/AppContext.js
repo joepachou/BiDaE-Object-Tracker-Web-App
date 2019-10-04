@@ -13,14 +13,15 @@ const AppContextProvider = (props) => {
     const locale = React.useContext(LocaleContext)
 
     const initialState = {
-        area: auth.authenticated ? auth.user.area : config.surveillanceMap.defaultArea
+        areaId: auth.authenticated ? auth.user.areas_id[0] : config.defaultAreaId
     }
+
     const reducer = (state, action) => {
         switch (action.type) {
-            case 'changeArea':
+            case 'setArea':
               return {
                 ...state,
-                area: action.value
+                areaId: action.value
               };
             default:
               return state;

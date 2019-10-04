@@ -24,25 +24,28 @@ class SurveillanceContainer extends React.Component {
         selectedObjectData: [],
         showDevice: false,
         showPdfDownloadForm: false,
-        area: this.props.area
+        // areaId: this.props.areaId,
+        isOpenFence: true,
     }
+
 
     componentDidUpdate = (prevProps, prevState) => {
         if (!(_.isEqual(prevProps.auth, this.props.auth))) {
-            const [{ area }, dispatch] = this.context.stateReducer
+            const [{ areaId }, dispatch] = this.context.stateReducer
+            const { auth } = this.context
             dispatch({
-                type: "changeArea",
-                value: this.props.auth.user.area
+                type: "setArea",
+                value: auth.authenticated ? auth.user.areas_id[0] : config.defaultAreaId
             })
-            this.setState({
-                area: this.props.auth.user.area
-            })
+            // this.setState({
+            //     areaId: this.props.auth.authenticated ? this.props.auth.user.areas_id[0] : config.defaultAreaId
+            // })
         }
     }
 
     handleClickButton = (e) => {
-        const [{ area }, dispatch] = this.context.stateReducer
-        const { name } = e.target
+        const [{ areaId }, dispatch] = this.context.stateReducer
+        const { name, value } = e.target
         switch(name) {
             case "show devices":
                 this.setState({
@@ -57,15 +60,19 @@ class SurveillanceContainer extends React.Component {
                     showPdfDownloadForm: true,
                 })
                 break;
-            case "IIS_SINICA_FLOOR_FOUR":
-            case "NTUH_YUNLIN_WARD_FIVE_B":
-                this.props.changeArea(name)
+            case "setArea":
+                this.props.setArea(value)
                 dispatch({
-                    type:'changeArea',
-                    value: name
+                    type:'setArea',
+                    value,
                 })
+                // this.setState({
+                //     areaId: value
+                // })
+                break;
+            case "fence":
                 this.setState({
-                    area: name
+                    isOpenFence: !this.state.isOpenFence
                 })
                 break;
         }
@@ -107,7 +114,12 @@ class SurveillanceContainer extends React.Component {
                 display: this.state.showDevice ? null : "none"
             }
         }
-        const { locale } = this.context;
+        const { 
+            locale,
+            stateReducer
+        } = this.context;
+
+        let [{areaId}] = stateReducer
 
         return(
             <div id="surveillanceContainer" style={style.surveillanceContainer} className="overflow-hidden">
@@ -116,8 +128,9 @@ class SurveillanceContainer extends React.Component {
                         variant="outline-primary" 
                         className="mr-1 text-capitalize" 
                         onClick={this.handleClickButton} 
-                        name="IIS_SINICA_FLOOR_FOUR"
-                        disabled={this.state.area === "IIS_SINICA_FLOOR_FOUR"}
+                        name='setArea'
+                        value={1}
+                        disabled={areaId == 1}
                     >
                         {locale.texts.IIS_SINICA_FLOOR_FOUR}
                     </Button>
@@ -126,8 +139,9 @@ class SurveillanceContainer extends React.Component {
                         variant="outline-primary" 
                         className="mr-1 text-capitalize" 
                         onClick={this.handleClickButton} 
-                        name="NTUH_YUNLIN_WARD_FIVE_B"
-                        disabled={this.state.area === "NTUH_YUNLIN_WARD_FIVE_B"}
+                        name='setArea'
+                        value={3}
+                        disabled={areaId == 3}
                     >
                         {locale.texts.NTUH_YUNLIN_WARD_FIVE_B}
                     </Button>
@@ -139,9 +153,11 @@ class SurveillanceContainer extends React.Component {
                         style={style.searchMap}
                         colorPanel={this.props.colorPanel}
                         proccessedTrackingData={this.props.proccessedTrackingData}
+                        lbeaconPosition={this.props.lbeaconPosition}
                         getSearchKey={this.props.getSearchKey}
-                        area={this.props.area}
+                        areaId={areaId}
                         auth={auth}
+                        isOpenFence={this.state.isOpenFence}
                     />
                 </div>
                 <div style={style.navBlock}>
@@ -185,6 +201,16 @@ class SurveillanceContainer extends React.Component {
                                 </Button>
                             </Nav.Item>
                         </AccessControl>
+                        <Nav.Item className="mt-2">
+                            <Button 
+                                variant="warning" 
+                                className="mr-1 ml-2 text-capitalize" 
+                                onClick={this.handleClickButton} 
+                                name="fence"
+                            >
+                                {this.state.isOpenFence ? locale.texts.FENCE_OFF : locale.texts.FENCE_ON}
+                            </Button>
+                        </Nav.Item>
                         {/* <Nav.Item className="mt-2">
                             <Button 
                                 variant="outline-primary" 

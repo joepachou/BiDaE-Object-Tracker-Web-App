@@ -23,6 +23,7 @@ class MainContainer extends React.Component{
     state = {
         trackingData: [],
         proccessedTrackingData: [],
+        lbeaconPosition: [],
         hasSearchKey: false,
         searchKey: '',
         searchResult: [],
@@ -36,11 +37,12 @@ class MainContainer extends React.Component{
             ? config.surveillanceMap.locationAccuracyMapToDefault[0]
             : config.surveillanceMap.locationAccuracyMapToDefault[1],
         auth: this.context.auth,
-        area: this.context.auth.authenticated ? this.context.auth.user.area : config.surveillanceMap.defaultArea
+        // areaId: this.context.stateReducer[0].areaId
     }
 
     componentDidMount = () => {
         this.getTrackingData();
+        this.getLbeaconPosition();
         this.interval = this.props.shouldTrackingDataUpdate ? setInterval(this.getTrackingData, config.surveillanceMap.intevalTime) : null;
     }
 
@@ -53,7 +55,7 @@ class MainContainer extends React.Component{
             this.getTrackingData()
             this.setState({
                 auth: this.context.auth,
-                area: this.context.auth.user.area
+                // areaId: this.context.auth.authenticated ? this.context.auth.user.areas_id[0] : config.defaultAreaId
             })
         } 
     }
@@ -64,12 +66,14 @@ class MainContainer extends React.Component{
         let isSearchKeyChange = this.state.searchKey !== nextState.searchKey
         let isSearchResultChange = !(_.isEqual(this.state.searchResult, nextState.searchResult))
         let isStateChange = !(_.isEqual(this.state, nextState))
+        let isLbeaconDataChange = !(_.isEqual(this.state.lbeaconPosition, nextState.lbeaconPosition))
         let isHighlightSearchPanelChange = !(_.isEqual(this.state.isHighlightSearchPanel, nextState.isHighlightSearchPanel))
         let shouldUpdate = isTrackingDataChange || 
                                 hasSearchKey || 
                                 isSearchKeyChange || 
                                 isSearchResultChange || 
-                                isHighlightSearchPanelChange
+                                isHighlightSearchPanelChange || 
+                                isLbeaconDataChange
         // console.log(shouldUpdate)
         // console.log(JSON.stringify(this.state.trackingData)[0] === JSON.stringify(nextState.trackingData)[0])
         // console.log(JSON.stringify(this.state.trackingData[1]) === JSON.stringify(nextState.trackingData[1]))
@@ -94,26 +98,26 @@ class MainContainer extends React.Component{
         })
     }
 
-    changeArea = (area) => {
-        this.getTrackingData(area)
+    setArea = (areaId) => {
+        this.getTrackingData(areaId)
         this.setState({
-            area, 
+            areaId, 
         })
     }
 
-    getTrackingData = (area = this.state.area, func) => {
+    getTrackingData = (areaId = this.context.stateReducer[0].areaId, func) => {
         let { auth, locale } = this.context
         axios.post(dataSrc.getTrackingData,{
             rssiThreshold: this.state.rssiThreshold,
             locale: locale.abbr,
             user: auth.user,
-            area: area,
+            areaId: areaId,
             func: 'track'
         })
         .then(res => {
-            const trackingData = this.handleRawTrackingData(res.data.rows)
+            // const trackingData = this.handleRawTrackingData(res.data)
             this.setState({
-                trackingData,
+                trackingData: res.data
             })
         })
         .catch(error => {
@@ -122,8 +126,7 @@ class MainContainer extends React.Component{
     }
 
     handleRawTrackingData = (rawTrackingData) => {
-        const trackingData = rawTrackingData.map(item => {
-
+        return rawTrackingData.map(item => {
             /** Set the object's location in the form of lbeacon coordinate parsing by lbeacon uuid  */
             const lbeaconCoordinate = item.lbeacon_uuid ? this.createLbeaconCoordinate(item.lbeacon_uuid) : null;
             item.currentPosition = lbeaconCoordinate
@@ -132,7 +135,26 @@ class MainContainer extends React.Component{
 
             return item
         })
-        return trackingData
+    }
+
+    getLbeaconPosition = () => {
+        axios.post(dataSrc.getLbeaconTable, {
+        })
+        .then(res => {
+            let lbeaconPosition = res.data.rows.reduce((activatedLbeacons, item) => {
+                let coordinate = this.createLbeaconCoordinate(item.uuid).toString()
+                if (item.health_status && !activatedLbeacons.includes(coordinate)) {
+                    activatedLbeacons.push(coordinate)
+                }
+                return activatedLbeacons
+            }, [])
+            this.setState({
+                lbeaconPosition
+            })
+        })
+        .catch(err => {
+            console.log(err)
+        })
     }
 
     /** Parsing the lbeacon's location coordinate from lbeacon_uuid*/
@@ -359,9 +381,9 @@ class MainContainer extends React.Component{
                             getSearchKey={this.getSearchKey}
                             clearColorPanel={clearColorPanel}
                             changeLocationAccuracy={this.changeLocationAccuracy}
-                            changeArea={this.changeArea}
+                            setArea={this.setArea}
                             auth={auth}
-                            area={this.state.area}
+                            lbeaconPosition={this.state.lbeaconPosition}
                         />
                     </Col>
                     <Col id='searchPanel' xs={12} sm={5} md={3} lg={4} xl={4} className="w-100 px-2" style={style.searchPanel}>

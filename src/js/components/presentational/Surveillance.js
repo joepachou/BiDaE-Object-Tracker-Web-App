@@ -21,6 +21,7 @@ import { connect } from 'react-redux';
 import LocaleContext from '../../context/LocaleContext';
 import config from '../../config';
 import _ from 'lodash'
+import { AppContext } from '../../context/AppContext';
 
 let popupOptions = {
     minWidth: '400',
@@ -30,31 +31,47 @@ let popupOptions = {
 
 class Surveillance extends React.Component {
 
+    static contextType = AppContext
+
     state = {
         lbeaconsPosition: null,
         objectInfo: [],
         hasErrorCircle: false,
         hasInvisibleCircle: false,       
+        hasIniLbeaconPosition: false
     }
     map = null;
-    areaMap = null;
+    image = null;
     StartSetInterval = config.surveillanceMap.startInteval; 
     isShownTrackingData = !true;
     markersLayer = L.layerGroup();
     errorCircle = L.layerGroup();
+    lbeaconsPosition = L.layerGroup();
 
     componentDidMount = () => {
         this.initMap();  
-        this.handleObjectMarkers();
+        // this.handleObjectMarkers();
     }
 
     componentDidUpdate = (prevProps) => {
         this.handleObjectMarkers();
-        this.createLbeaconMarkers();
-        if (prevProps.area !== this.props.area) { 
-            this.areaMap.setUrl(config.surveillanceMap.mapSelection[this.props.area].map)
-            this.areaMap.setBounds(config.surveillanceMap.mapSelection[this.props.area].mapBound)
+        if (this.props.lbeaconPosition.length !== 0 && !this.state.hasIniLbeaconPosition && this.props.isOpenFence) {
+            this.createLbeaconMarkers()
         }
+
+        if (prevProps.areaId !== this.props.areaId) { 
+            let [{areaId}] = this.context.stateReducer
+            let areaModules =  config.areaModules
+            let areaOption = config.areaOptions[areaId]
+            let { url, bounds } = areaModules[areaOption]
+            this.image.setUrl(url)
+            this.image.setBounds(bounds)
+        }
+
+        if (this.state.hasIniLbeaconPosition && (prevProps.isOpenFence !== this.props.isOpenFence)) {
+            this.props.isOpenFence ? this.createLbeaconMarkers() : this.lbeaconsPosition.clearLayers()
+        }
+        
     }
 
     // shouldComponentUpdate = (nextProps, nextState) => {
@@ -65,15 +82,18 @@ class Surveillance extends React.Component {
     
     /** Set the search map configuration establishing in config.js  */
     initMap = () => {
+        let [{areaId}] = this.context.stateReducer
+        let areaModules =  config.areaModules
+        let areaOption = config.areaOptions[areaId]
 
-        let area = config.surveillanceMap.mapSelection[this.props.area]
-        let areaMap = area.map
+        let { url, bounds } = areaModules[areaOption]
+
         let map = L.map('mapid', config.surveillanceMap.mapOptions);
-        let bounds = area.mapBound
-        let image = L.imageOverlay(areaMap, bounds).addTo(map);
-        this.areaMap = image
+        let image = L.imageOverlay(url, bounds).addTo(map);
         map.addLayer(image)
         map.fitBounds(bounds);
+
+        this.image = image
         this.map = map;
 
         /** Set the map's events */
@@ -110,30 +130,30 @@ class Surveillance extends React.Component {
     createLbeaconMarkers = () => {
 
         /** Creat the marker of all lbeacons onto the map  */
-        let lbeaconsPosition = this.state.lbeaconsPosition !== null ? Array.from(this.state.lbeaconsPosition) :[];
-        lbeaconsPosition.map(items => {
-            let lbLatLng = items.split(",")
-            let lbeacon = L.circleMarker(lbLatLng,{
+        this.props.lbeaconPosition.map(pos => {
+            let latLng = pos.split(',')
+            let lbeacon = L.circleMarker(latLng,{
                 color: 'rgba(0, 0, 0, 0)',
-                fillColor: 'yellow',
-                fillOpacity: 0.5,
+                fillColor: 'orange',
+                fillOpacity: 0.4,
                 radius: 15,
-            }).addTo(this.map);
-
+            }).addTo(this.lbeaconsPosition);
         /** Creat the invisible Circle marker of all lbeacons onto the map */
-            let invisibleCircle = L.circleMarker(lbLatLng,{
-                color: 'rgba(0, 0, 0, 0',
-                fillColor: 'rgba(0, 76, 238, 0.995)',
-                fillOpacity: 0,
-                radius: 60,
-            }).addTo(this.map);
+            // let invisibleCircle = L.circleMarker(pos,{
+            //     color: 'rgba(0, 0, 0, 0',
+            //     fillColor: 'rgba(0, 76, 238, 0.995)',
+            //     fillOpacity: 0,
+            //     radius: 60,
+            // }).addTo(this.map);
 
-            invisibleCircle.on('mouseover', this.handlemenu)
-            invisibleCircle.on('mouseout', function() {this.closePopup();})
+            // invisibleCircle.on('mouseover', this.handlemenu)
+            // invisibleCircle.on('mouseout', function() {this.closePopup();})
         })
-        if (!this.state.hasInvisibleCircle){
+        this.lbeaconsPosition.addTo(this.map);
+
+        if (!this.state.hasIniLbeaconPosition){
             this.setState({
-                hasInvisibleCircle: true,
+                hasIniLbeaconPosition: true,
             })
         }
     }
@@ -227,7 +247,9 @@ class Surveillance extends React.Component {
         };
 
         let counter = 0;
-        objects.filter(item => item.found)
+        objects.filter(item => {
+            return item.found && item.isMatchedObject
+        })
             .map(item => {
 
             // let detectedNum = item.lbeaconDetectedNum;
@@ -252,7 +274,8 @@ class Surveillance extends React.Component {
 			} else if (item.searched && this.props.colorPanel) {
                 iconOption = { 
                     iconSize,
-                    markerColor: item.pinColor }
+                    markerColor: item.pinColor 
+                }
             } else if (item.searched) {
                 iconOption = searchedObjectAweIconOptions    
             } else if (item.status !== config.objectStatus.NORMAL) {
@@ -301,11 +324,11 @@ class Surveillance extends React.Component {
         this.markersLayer.addTo(this.map);
         this.errorCircle .addTo(this.map);
 
-        if (!this.state.hasErrorCircle) {
-            this.setState({
-                hasErrorCircle: true,
-            })
-        }
+        // if (!this.state.hasErrorCircle) {
+        //     this.setState({
+        //         hasErrorCircle: true,
+        //     })
+        // }
     }
 
     handleMarkerClick = (e) => {
@@ -316,7 +339,7 @@ class Surveillance extends React.Component {
     collectObjectsByLatLng = (lbPosition) => {
         let objectList = []
         this.props.proccessedTrackingData.map(item => {
-            item.currentPosition && item.currentPosition.toString() === lbPosition.toString() ? objectList.push(item) : null;
+            item.currentPosition && item.currentPosition.toString() === lbPosition.toString() && item.isMatchedObject ? objectList.push(item) : null;
         })
         return objectList 
     }
@@ -351,8 +374,7 @@ class Surveillance extends React.Component {
         let currentPosition = objectsMap[0].currentPosition
         let objectList = this.collectObjectsByLatLng(currentPosition)
         /* The style sheet is right in the src/css/Surveillance.css*/
-        const locale = this.context
-
+        const { locale } = this.context
         const content = 
             `
                 <div>
@@ -368,7 +390,10 @@ class Surveillance extends React.Component {
                                     ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}:${item.access_control_number.slice(10, 14)},
                                 </div>
                                 <div class='popupType'>
-                                    ${locale.texts[item.status.toUpperCase()]}
+                                    ${locale.texts[item.status.toUpperCase()]}, 
+                                </div>
+                                <div class='popupType'>
+                                    屬於${locale.texts[config.areaOptions[item.area_id]]}
                                 </div>
                             </div>
                         `
@@ -396,7 +421,6 @@ class Surveillance extends React.Component {
     }
 }
 
-Surveillance.contextType = LocaleContext;
 
 const mapDispatchToProps = (dispatch) => {
     return {

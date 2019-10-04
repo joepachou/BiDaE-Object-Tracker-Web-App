@@ -42,37 +42,94 @@ moment.updateLocale('en', {
 const getTrackingData = (request, response) => {
     const rssiThreshold = request.body.rssiThreshold || -65
     const locale = request.body.locale || 'en'
-    const { user, area, func } = request.body
+
+    /** The user's authenticated area id */
+    const userAreasId= request.body.user.areas_id
+
+    /** The UI's current area id */
+    const currentAreaId = request.body.areaId.toString()
+
+    /** If the current area id is the user's authenticated area id */
+    let isInUserSAuthArea = userAreasId.includes(currentAreaId)
+
+    // console.log(user)
     pool.query(queryType.query_getTrackingData())        
         .then(res => {
-            var count = 0
+            var counter = 0
             console.log('Get tracking data')
-            res.rows.map((item, index) => {
 
-                /** Tag the object that is found 
-                 *  if the object's last_seen_timestamp is in the specific time period
-                 *  and its rssi is below the specific rssi threshold  */
-                let isInTheTimePeriod = moment().diff(item.last_seen_timestamp, 'seconds') < 30 && item.rssi > rssiThreshold ? 1 : 0;
+            /** Filter the objects that do no belong the area */
+            const toReturn = res.rows
+            .map(item => {
 
-                switch(func) {
-                    case 'track':
+                /** Parse lbeacon uuid into three field in an array: area id, latitude, longtitude */
+                let lbeacon_coordinate = parseLbeaconCoordinate(item.lbeacon_uuid)
 
-                        /** Tag the object that is the user's my device */
-                        item.myDevice = user.myDevice && user.myDevice.includes(item.access_control_number) ? 1 : 0;
+                /** Set the lbeacon's area id from lbeacon_coordinate*/
+                let lbeacon_area_id = parseInt(lbeacon_coordinate[0])
 
-                        /** Tag the object that is found */
-                        let isTheAuthArea = user.area === area ? 1 : 0;
-                        let isInCurrentArea = area === item.area_name ? 1 : 0;
+                /** Set the object's location in the form of lbeacon coordinate parsing by lbeacon uuid  */
+                item.currentPosition = item.lbeacon_uuid ? lbeacon_coordinate.slice(1, 3) : null;
 
-                        /** Set the object's found condition */
-                        item.found = isInTheTimePeriod && isInCurrentArea && isTheAuthArea 
-                        item.found = item.myDevice ? isInCurrentArea ? 1 : 0 : item.found
-                        break;
+                /** Set the boolean if the object scanned by Lbeacon is matched the current area */
+                let isMatchedArea = lbeacon_area_id == parseInt(currentAreaId)
 
-                    case 'systemStatus':
-                        item.found = isInTheTimePeriod
-                        break
+                /** Set the boolean if the object's last_seen_timestamp is in the specific time period */
+                let isInTheTimePeriod = moment().diff(item.last_seen_timestamp, 'seconds') < 30 
+
+                /** Set the boolean if its rssi is below the specific rssi threshold  */
+                let isMatchRssi = item.rssi > rssiThreshold ? 1 : 0;
+
+                /** Set the boolean if the object belong to the user's authenticated area id */
+                let isUserSObject = userAreasId.includes(item.area_id)
+
+                /** Set the boolean if the object belong to the current area */
+                let isAreaSObject = item.area_id == parseInt(currentAreaId)
+
+                /** Filter the object if the object scanned by the current area's Lbeacon */
+                if (isMatchedArea) {
+
+                    /** Determine if the current area is the authenticated area */
+                    if (isInUserSAuthArea) {
+
+                        /** Flag the object that belongs to the current area and to the user's authenticated area,
+                         * if the current area is the authenticated area */
+                        item.isMatchedObject = isAreaSObject || isUserSObject
+                    } else {
+
+                        /** Flag the object that belongs to the user's authenticated area, 
+                         * if the current area is not the authenticated area */
+                        item.isMatchedObject = isUserSObject
+                    }
+                } else {
+                    item.isMatchedObject = false
                 }
+
+                /** Flag the object that satisfied the time period and rssi threshold */
+                item.found = isInTheTimePeriod && isMatchRssi 
+
+                // count++
+                // switch(func) {
+                //     case 'track':
+
+                //         /** Flag the object that is the user's my device */
+                //         item.myDevice = user.myDevice && user.myDevice.includes(item.access_control_number) ? 1 : 0;
+
+                //         /** Flag the object that is found */
+                //         // let isTheAuthArea = user.area === area ? 1 : 0;
+                //         // let isInCurrentArea = area === item.area_name ? 1 : 0;
+
+                //         /** Set the object's found condition */
+                //         // item.found = isInTheTimePeriod && isInCurrentArea && isTheAuthArea 
+                //         item.found = isInTheTimePeriod 
+
+                //         item.found = item.myDevice ? isInCurrentArea ? 1 : 0 : item.found
+                //         break;
+
+                //     case 'systemStatus':
+                //         item.found = isInTheTimePeriod
+                //         break
+                // }
 
                 /** Set the residence time of the object */
                 item.residence_time =  item.found 
@@ -81,19 +138,19 @@ const getTrackingData = (request, response) => {
                         ? moment(item.last_seen_timestamp).locale(locale).fromNow()
                         : 'N/A'
 
-                /** Tag the object that is violate geofence */
+                /** Flag the object that is violate geofence */
                 // if (moment().diff(item.geofence_violation_timestamp, 'seconds') > 300
                 //     || moment(item.first_seen_timestamp).diff(moment(item.geofence_violation_timestamp)) > 0) {
                         
                 //     delete item.geofence_type
                 // }
-    
-                /** Tag the object that is on sos */
+
+                /** Flag the object that is on sos */
                 if (moment().diff(item.panic_timestamp, 'second') < 300) {
                     item.panic = true
                 }
 
-                /** Tag the object's battery volumn is limiting */
+                /** Flag the object's battery volumn is limiting */
                 if (item.battery_voltage >= 27) {
                     item.battery_voltage = 3;
                 } else if (item.battery_voltage < 27 && item.battery_voltage > 0) {
@@ -106,20 +163,21 @@ const getTrackingData = (request, response) => {
                 delete item.last_seen_timestamp
                 delete item.panic_timestamp
                 delete item.rssi
-    
+
                 return item
             })
-            // console.log(count)
-            response.status(200).json(res)
+        // console.log(toReturn.length)
+        // console.log(counter)
+        response.status(200).json(toReturn)
 
-        }).catch(err => {
-            console.log("Get trackingData fails: " + err)
-        })
+    }).catch(err => {
+        console.log("Get trackingData fails: " + err)
+    })
 }
 
 const getObjectTable = (request, response) => {
-    let { locale } = request.body
-    pool.query(queryType.query_getObjectTable)       
+    let { locale, areaId } = request.body
+    pool.query(queryType.query_getObjectTable(areaId))       
         .then(res => {
             console.log('Get objectTable data')
             response.status(200).json(res)
@@ -130,13 +188,12 @@ const getObjectTable = (request, response) => {
 }
 
 const getLbeaconTable = (request, response) => {
-    let { locale } = request.body
+    let { locale } = request.body || 'en'
     pool.query(queryType.query_getLbeaconTable)
         .then(res => {
             console.log('Get lbeaconTable data')
             res.rows.map(item => {
-                let mn = moment().locale(locale)
-                item.health_status =  mn.diff(item.last_report_timestamp, 'days') < 1 ? 0 : 1 
+                item.health_status =  moment().diff(item.last_report_timestamp, 'days') < 1 ? 1 : 0 
                 item.last_report_timestamp = moment(momentTZ(item.last_report_timestamp).tz(process.env.TZ).locale(locale)).format('lll');
             })
             response.status(200).json(res)
@@ -254,7 +311,7 @@ const signin = (request, response) => {
                         role, 
                         mydevice, 
                         search_history,
-                        area
+                        areas_id
                     } = res.rows[0]
 
                     let userInfo = {
@@ -263,7 +320,7 @@ const signin = (request, response) => {
                         role,
                         searchHistory: search_history,
                         shift,
-                        area
+                        areas_id
                     }
 
                     request.session.userInfo = userInfo
@@ -540,6 +597,17 @@ const getAreaTable = (request, response) => {
         .catch(err => {
             console.log("get area table fail: "+ err)
         })
+}
+
+/** Parsing the lbeacon's location coordinate from lbeacon_uuid*/
+const parseLbeaconCoordinate = (lbeacon_uuid) => {
+    /** Example of lbeacon_uuid: 00000018-0000-0000-7310-000000004610 */
+    // console.log(lbeacon_uuid)
+    // const zz = lbeacon_uuid.slice(6,8);
+    const area_id = lbeacon_uuid.slice(0,4)
+    const xx = parseInt(lbeacon_uuid.slice(14,18) + lbeacon_uuid.slice(19,23));
+    const yy = parseInt(lbeacon_uuid.slice(-8));
+    return [area_id, yy, xx];
 }
 
 module.exports = {

@@ -11,9 +11,25 @@ import BOT_LOGO from '../img/BOT_LOGO_RED.png';
 
 const config = {
     
+    defaultAreaId: 1,
+
     areaOptions: {
         1: "IIS_SINICA_FLOOR_FOUR",
         2: "NTUH_YUNLIN_WARD_FIVE_B",
+        3: "NTUH_YUNLIN_WARD_FIVE_B",
+    },
+
+    areaModules: {
+        IIS_SINICA_FLOOR_FOUR: {
+            name: "IIS_SINICA_FLOOR_FOUR",
+            url: IIS_SINICA_FLOOR_FOUR_MAP,
+            bounds: [[0,0], [21130,35710]],
+        },
+        NTUH_YUNLIN_WARD_FIVE_B: {
+            name: "NTUH_YUNLIN_WARD_FIVE_B",
+            url: NTUH_YUNLIN_WARD_FIVE_B_MAP,
+            bounds: [[0,0], [45450,56160]],
+        }
     },
     
     surveillanceMap: {
@@ -24,13 +40,15 @@ const config = {
         IIS_SINICA_FLOOR_FOUR: IIS_SINICA_FLOOR_FOUR_MAP,
         NTUH_YUNLIN_WARD_FIVE_B: NTUH_YUNLIN_WARD_FIVE_B_MAP,
 
-        mapSelection: {
+        mapModules: {
             IIS_SINICA_FLOOR_FOUR: {
-                map: IIS_SINICA_FLOOR_FOUR_MAP,
+                name: "IIS_SINICA_FLOOR_FOUR",
+                areaMap: IIS_SINICA_FLOOR_FOUR_MAP,
                 mapBound:[[0,0], [21130,35710]],
             },
             NTUH_YUNLIN_WARD_FIVE_B: {
-                map: NTUH_YUNLIN_WARD_FIVE_B_MAP,
+                name: "NTUH_YUNLIN_WARD_FIVE_B",
+                areaMap: NTUH_YUNLIN_WARD_FIVE_B_MAP,
                 mapBound:[[0,0], [45450,56160]],
             }
         },
