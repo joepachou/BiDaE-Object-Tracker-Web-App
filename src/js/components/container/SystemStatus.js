@@ -16,8 +16,11 @@ import {
     lbeaconTableColumn,
     gatewayTableColumn
 } from '../../tables';
+import { AppContext } from '../../context/AppContext';
 
-class ScanMonitor extends React.Component{
+class SystemStatus extends React.Component{
+
+    static contextType = AppContext
     state = {
         lbeaconData: [],
         lbeaconColumn: [],
@@ -55,7 +58,7 @@ class ScanMonitor extends React.Component{
     }
 
     getLbeaconData = () => {
-        let locale = this.context
+        let { locale } = this.context
         axios.post(dataSrc.getLbeaconTable, {
             locale: locale.abbr
         })
@@ -72,13 +75,13 @@ class ScanMonitor extends React.Component{
                 lbeaconColumn: column
             })
         })
-        .catch(function (error) {
-            console.log(error);
+        .catch(err => {
+            console.log("get lbeacon data fail : " + err);
         })
     }
 
     getGatewayData = () => {
-        let locale = this.context
+        let { locale } = this.context
         axios.post(dataSrc.getGatewayTable, {
             locale: locale.abbr
         })
@@ -95,17 +98,19 @@ class ScanMonitor extends React.Component{
                 gatewayColunm: column
             })
         })
-        .catch(function (error) {
-            console.log(error);
+        .catch(err => {
+            console.log("get gateway data fail : " + err);
         })
     }
 
     getTrackingData = () => {
-        let locale = this.context
+        let { locale, auth, stateReducer } = this.context
+        let [{areaId}] = stateReducer
         axios.post(dataSrc.getTrackingData,{
             rssiThreshold: config.surveillanceMap.locationAccuracyMapToDefault[config.objectManage.objectManagementRSSIThreshold],
-            locale: this.context.abbr,
-            func: 'systemStatus'
+            locale: locale.abbr,
+            user: auth.user,
+            areaId: areaId,
         })
         .then(res => {
             let column = _.cloneDeep(trackingTableColumn)
@@ -115,16 +120,19 @@ class ScanMonitor extends React.Component{
                 }
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })
-            res.data.rows.map(item => {
+            res.data.map(item => {
                 item.status = locale.texts[item.status.toUpperCase()]
                 item.transferred_location = item.transferred_location 
                     ? locale.texts[item.transferred_location.toUpperCase().replace(/ /g, '_')]
                     : ''
             })
             this.setState({
-                trackingData: res.data.rows,
+                trackingData: res.data,
                 trackingColunm: column
             })
+        })
+        .catch(err => {
+            console.log("get tracking data fail : " + err);
         })
     }
 
@@ -159,7 +167,7 @@ class ScanMonitor extends React.Component{
             }
         }
 
-        const locale = this.context.texts;
+        const { locale } = this.context;
 
         return(
             <Container className='py-2 text-capitalize' fluid>
@@ -215,7 +223,7 @@ class ScanMonitor extends React.Component{
                     </Tab>
                     <Tab 
                         eventKey="tracking_table" 
-                        title={locale.TRACKING}
+                        title={locale.texts.TRACKING}
                     >
                         <ReactTable 
                             minRows={6} 
@@ -240,6 +248,4 @@ class ScanMonitor extends React.Component{
     }
 }
 
-ScanMonitor.contextType = LocaleContext
-
-export default ScanMonitor;
+export default SystemStatus;
