@@ -115,25 +115,12 @@ class MainContainer extends React.Component{
             func: 'track'
         })
         .then(res => {
-            // const trackingData = this.handleRawTrackingData(res.data)
             this.setState({
                 trackingData: res.data
             })
         })
         .catch(error => {
             console.log(error)
-        })
-    }
-
-    handleRawTrackingData = (rawTrackingData) => {
-        return rawTrackingData.map(item => {
-            /** Set the object's location in the form of lbeacon coordinate parsing by lbeacon uuid  */
-            const lbeaconCoordinate = item.lbeacon_uuid ? this.createLbeaconCoordinate(item.lbeacon_uuid) : null;
-            item.currentPosition = lbeaconCoordinate
-
-            delete item.lbeacon_uuid
-
-            return item
         })
     }
 
@@ -261,7 +248,7 @@ class MainContainer extends React.Component{
             })
         } else if (searchKey === allDevices) {
             searchResult = proccessedTrackingData.map(item => {
-                item.searched = true
+                item.searched = auth.user.areas_id.includes(item.area_id) ? true : false
                 return item
             })
         } else if (searchKey === 'coordinate') {
