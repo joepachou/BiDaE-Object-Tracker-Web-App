@@ -49,6 +49,7 @@ const en =  {
     SWITCH_AREA: 'switch area',
     FENCE_ON: 'fence on',
     FENCE_OFF: 'fence off',
+    CLEAR_ALERTS: 'clear alerts',
 
     /* Form Field */
     NAME: 'name',

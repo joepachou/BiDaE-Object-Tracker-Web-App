@@ -49,6 +49,7 @@ const tw = {
     SWITCH_AREA: '切換地點',
     FENCE_ON: '開啟圍籬',
     FENCE_OFF: '關閉圍籬',
+    CLEAR_ALERTS: '清除警告',
 
     /* Form Field */
     NAME: '名稱',
