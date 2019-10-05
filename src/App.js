@@ -7,6 +7,7 @@ import { renderRoutes } from 'react-router-config';
 import routes from './js/routes';
 import CombinedContext from './js/context/AppContext'
 import { ToastContainer } from 'react-toastify';
+import config from './js/config'
 import 'react-toastify/dist/ReactToastify.min.css';
 
 const App = () => {
@@ -18,15 +19,7 @@ const App = () => {
                     {renderRoutes(routes)}
                 </Switch>
             </Router>
-            <ToastContainer 
-                position="top-left"
-                autoClose={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnVisibilityChange
-                draggable
-            />
+            <ToastContainer {...config.toastProps} />
         </CombinedContext>
     );
 };

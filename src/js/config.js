@@ -128,8 +128,6 @@ const config = {
         
     },
 
-    site: 'NTU Hospital Yunlin branch ward 5B',
-
     objectStatus: {
         PERIMETER: 'perimeter',
         FENCE: 'fence',
@@ -225,6 +223,7 @@ const config = {
 
     shiftRecordFileNameTimeFormat: 'MM_DD_YYYY',
     shiftRecordPdfContentTimeFormat: 'MM/DD/YYYY',
+    geoFenceViolationTimeFormat: 'h:mm MM/DD/YYYY',
 
     roles: [
         'guest',
@@ -233,6 +232,23 @@ const config = {
     ],
 
     defaultRole: 'care_provider', 
+
+    mobileWindowWidth: 600,
+
+    objectType: {
+        0: "medicalDevice",
+        1: "inpatient"
+    },
+
+    toastProps: {
+        position: "top-left",
+        autoClose: false,
+        newestOnTop: false,
+        closeOnClick: true,
+        rtl: false,
+        pauseOnVisibilityChange: true,
+        draggable: true
+    },
 
 
     pdfFormat: (userInfo, foundResult, notFoundResult, locale, time, option) => {
