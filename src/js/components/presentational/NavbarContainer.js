@@ -89,7 +89,7 @@ class NavbarContainer extends React.Component {
             }
         }
         const { locale, auth, stateReducer } = this.context;
-        const [{ area }, dispatch] = stateReducer
+        const [{ areaId }, dispatch] = stateReducer
 
         const { 
             isShowSigninForm, 
@@ -107,7 +107,7 @@ class NavbarContainer extends React.Component {
                             width={50}
                             className="d-inline-block align-top px-1"
                         />
-                        {locale.texts[area]}
+                        {locale.texts[config.areaOptions[areaId]]}
                     </Link>
                 </Navbar.Brand>
                 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import Surveillance from "../presentational/Surveillance";
 import ToggleSwitch from "./ToggleSwitch";
 import { 
@@ -7,13 +7,12 @@ import {
     Image,
     ButtonToolbar
 }  from "react-bootstrap";
-import LocaleContext from "../../context/LocaleContext";
 import GridButton from "../container/GridButton";
 import PdfDownloadForm from "./PdfDownloadForm"
 import config from "../../config";
 import AccessControl from "../presentational/AccessControl"
 import { AppContext } from "../../context/AppContext";
-
+import AreaControl from "../presentational/AreaControl";
 
 class SurveillanceContainer extends React.Component {
 
@@ -24,8 +23,7 @@ class SurveillanceContainer extends React.Component {
         selectedObjectData: [],
         showDevice: false,
         showPdfDownloadForm: false,
-        // areaId: this.props.areaId,
-        isOpenFence: true,
+        isOpenFence: false,
     }
 
 
@@ -37,15 +35,18 @@ class SurveillanceContainer extends React.Component {
                 type: "setArea",
                 value: auth.authenticated ? auth.user.areas_id[0] : config.defaultAreaId
             })
-            // this.setState({
-            //     areaId: this.props.auth.authenticated ? this.props.auth.user.areas_id[0] : config.defaultAreaId
-            // })
+        }
+        if (this.props.geoFenceConfig.length !== 0 && !(_.isEqual(prevProps.geoFenceConfig, this.props.geoFenceConfig))) {
+            this.setState({
+                isOpenFence: this.props.geoFenceConfig[0].enable
+            })
         }
     }
 
     handleClickButton = (e) => {
-        const [{ areaId }, dispatch] = this.context.stateReducer
         const { name, value } = e.target
+        let { stateReducer } = this.context
+        let [{areaId}, dispatch] = stateReducer
         switch(name) {
             case "show devices":
                 this.setState({
@@ -62,19 +63,20 @@ class SurveillanceContainer extends React.Component {
                 break;
             case "setArea":
                 this.props.setArea(value)
-                dispatch({
-                    type:'setArea',
-                    value,
-                })
-                // this.setState({
-                //     areaId: value
-                // })
                 break;
             case "fence":
-                this.setState({
-                    isOpenFence: !this.state.isOpenFence
+                this.props.setFence(value, areaId)
+                .then(res => {
+                    this.setState({
+                        isOpenFence: !this.state.isOpenFence
+                    })
+                })
+                .catch(err => {
+                    console.log(`set fence config fail: ${err}`)
                 })
                 break;
+            case "clearAlerts":
+                this.props.clearAlerts()
         }
 
     }
@@ -154,6 +156,7 @@ class SurveillanceContainer extends React.Component {
                         colorPanel={this.props.colorPanel}
                         proccessedTrackingData={this.props.proccessedTrackingData}
                         lbeaconPosition={this.props.lbeaconPosition}
+                        geoFenceConfig={this.props.geoFenceConfig.filter(item => parseInt(item.unique_key) == areaId)}
                         getSearchKey={this.props.getSearchKey}
                         areaId={areaId}
                         auth={auth}
@@ -201,16 +204,35 @@ class SurveillanceContainer extends React.Component {
                                 </Button>
                             </Nav.Item>
                         </AccessControl>
-                        <Nav.Item className="mt-2">
-                            <Button 
-                                variant="warning" 
-                                className="mr-1 ml-2 text-capitalize" 
-                                onClick={this.handleClickButton} 
-                                name="fence"
-                            >
-                                {this.state.isOpenFence ? locale.texts.FENCE_OFF : locale.texts.FENCE_ON}
-                            </Button>
-                        </Nav.Item>
+                        {this.props.geoFenceConfig.map((item, index) => {
+                            return ( parseInt(item.unique_key) == areaId && 
+                                <Fragment
+                                    key={index}
+                                >
+                                    <Nav.Item className="mt-2">
+                                        <Button 
+                                            variant="warning" 
+                                            className="mr-1 ml-2 text-capitalize" 
+                                            onClick={this.handleClickButton} 
+                                            name="fence"
+                                            value={+!this.state.isOpenFence}
+                                        >
+                                            {this.state.isOpenFence ? locale.texts.FENCE_OFF : locale.texts.FENCE_ON}
+                                        </Button>
+                                    </Nav.Item>
+                                    <Nav.Item className="mt-2">
+                                        <Button 
+                                            variant="warning" 
+                                            className="mr-1 ml-2 text-capitalize" 
+                                            onClick={this.handleClickButton} 
+                                            name="clearAlerts"
+                                        >
+                                            {locale.texts.CLEAR_ALERTS}
+                                        </Button>
+                                    </Nav.Item>
+                                </Fragment>
+                            )
+                        })}
                         {/* <Nav.Item className="mt-2">
                             <Button 
                                 variant="outline-primary" 

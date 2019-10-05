@@ -2,7 +2,7 @@ import React from 'react';
 import SearchContainer from './SearchContainer';
 import 'react-table/react-table.css';
 import SearchResultList from '../presentational/SearchResultList'
-import { Row, Col } from 'react-bootstrap'
+import { Row, Col, Toast } from 'react-bootstrap'
 import SurveillanceContainer from './SurveillanceContainer';
 import { connect } from 'react-redux'
 import config from '../../config';
@@ -12,6 +12,9 @@ import moment from 'moment'
 import axios from 'axios';
 import dataSrc from '../../dataSrc'
 import { AppContext } from '../../context/AppContext'
+import { toast } from 'react-toastify';
+import ToastNotification from '../presentational/ToastNotification'
+
 
 const myDevices = config.frequentSearchOption.MY_DEVICES ;
 const allDevices = config.frequentSearchOption.ALL_DEVICES;
@@ -24,6 +27,8 @@ class MainContainer extends React.Component{
         trackingData: [],
         proccessedTrackingData: [],
         lbeaconPosition: [],
+        geoFenceConfig: [],
+        violatedObjects: {},
         hasSearchKey: false,
         searchKey: '',
         searchResult: [],
@@ -33,16 +38,16 @@ class MainContainer extends React.Component{
         clearSearchResult: false,
         hasGridButton: false,
         isHighlightSearchPanel: false,
-        rssiThreshold: window.innerWidth < 600 
+        rssiThreshold: window.innerWidth < config.mobileWidowWidth
             ? config.surveillanceMap.locationAccuracyMapToDefault[0]
             : config.surveillanceMap.locationAccuracyMapToDefault[1],
         auth: this.context.auth,
-        // areaId: this.context.stateReducer[0].areaId
     }
 
     componentDidMount = () => {
         this.getTrackingData();
         this.getLbeaconPosition();
+        this.getGeoFenceConfig()
         this.interval = this.props.shouldTrackingDataUpdate ? setInterval(this.getTrackingData, config.surveillanceMap.intevalTime) : null;
     }
 
@@ -58,6 +63,23 @@ class MainContainer extends React.Component{
                 // areaId: this.context.auth.authenticated ? this.context.auth.user.areas_id[0] : config.defaultAreaId
             })
         } 
+        // console.log(_.difference(["c1:0f:00:0c:7a:d7", "c1:0f:00:0e:4f:cc", "c1:a0:00:bf:3f:f7", "c1:af:00:77:6b:02", "c1:0f:00:0f:60:58"], []))
+        // console.log(_.difference(["c1:0f:00:0c:7a:d7", "c1:0f:00:0e:4f:cc", "c1:a0:00:bf:3f:f7", "c1:af:00:77:6b:02", "c1:0f:00:0f:60:58"], ["c1:af:00:77:6b:02"]))
+        // console.log(Object.keys(prevState.violatedObjects))
+        // console.log('this')
+        // console.log(Object.keys(this.state.violatedObjects))
+        // console.log(_.difference(Object.keys(prevState.violatedObjects), Object.keys(this.state.violatedObjects)))
+
+        if (_.difference(Object.keys(this.state.violatedObjects), Object.keys(prevState.violatedObjects)).length !== 0) {
+            console.log(123)
+            Object.values(this.state.violatedObjects).map(item => {
+                toast.warn(<ToastNotification data={item} />, {
+                    hideProgressBar: true,
+                    autoClose: false
+                })
+            })
+        }
+
     }
 
     shouldComponentUpdate = (nextProps,nextState) => {
@@ -67,13 +89,17 @@ class MainContainer extends React.Component{
         let isSearchResultChange = !(_.isEqual(this.state.searchResult, nextState.searchResult))
         let isStateChange = !(_.isEqual(this.state, nextState))
         let isLbeaconDataChange = !(_.isEqual(this.state.lbeaconPosition, nextState.lbeaconPosition))
+        let isGeoFenceDataChange = !(_.isEqual(this.state.geoFenceConfig, nextState.geoFenceConfig))
+        let isViolatedObjectChange = !(_.isEqual(this.state.isViolatedObjectChange, nextState.isViolatedObjectChange))
+
         let isHighlightSearchPanelChange = !(_.isEqual(this.state.isHighlightSearchPanel, nextState.isHighlightSearchPanel))
         let shouldUpdate = isTrackingDataChange || 
                                 hasSearchKey || 
                                 isSearchKeyChange || 
                                 isSearchResultChange || 
                                 isHighlightSearchPanelChange || 
-                                isLbeaconDataChange
+                                isGeoFenceDataChange ||
+                                isViolatedObjectChange
         // console.log(shouldUpdate)
         // console.log(JSON.stringify(this.state.trackingData)[0] === JSON.stringify(nextState.trackingData)[0])
         // console.log(JSON.stringify(this.state.trackingData[1]) === JSON.stringify(nextState.trackingData[1]))
@@ -98,11 +124,25 @@ class MainContainer extends React.Component{
         })
     }
 
-    setArea = (areaId) => {
-        this.getTrackingData(areaId)
+    setArea = (value) => {
+        let { stateReducer } = this.context
+        let [{areaId}, dispatch] = stateReducer
+        this.getTrackingData(value)
+        dispatch({
+            type:'setArea',
+            value,
+        })
         this.setState({
             areaId, 
         })
+    }
+
+    async setFence (value, areaId) {
+        let result = await axios.post(dataSrc.setGeoFenceConfig, {
+            value,
+            areaId,
+        })
+        return result
     }
 
     getTrackingData = (areaId = this.context.stateReducer[0].areaId, func) => {
@@ -112,11 +152,17 @@ class MainContainer extends React.Component{
             locale: locale.abbr,
             user: auth.user,
             areaId: areaId,
-            func: 'track'
         })
         .then(res => {
+            let violatedObjects = res.data.reduce((violatedObjects, item) => {
+                if (!(item.mac_address in violatedObjects) && item.isViolated) {
+                    violatedObjects[item.mac_address] = item
+                } 
+                return violatedObjects
+            }, {})
             this.setState({
-                trackingData: res.data
+                trackingData: res.data,
+                violatedObjects,
             })
         })
         .catch(error => {
@@ -145,6 +191,31 @@ class MainContainer extends React.Component{
         .catch(err => {
             console.log(err)
         })
+    }
+
+    /** Retrieve geo fence data from database */
+    getGeoFenceConfig = () => {
+        let { stateReducer } = this.context
+        let [{areaId}] = stateReducer
+        axios.post(dataSrc.getGeoFenceConfig, {
+            areaId
+        })
+        .then(res => {
+            this.setState({
+                geoFenceConfig: res.data.rows
+            })
+        })
+        .catch(err => {
+            console.log(`get geo fence data fail: ${err}`)
+        })
+    }
+
+    /** Clear the record violated object */
+    clearAlerts = () => {
+        toast.dismiss()
+        // this.setState({
+        //     violatedObjects: []
+        // })
     }
 
     /** Parsing the lbeacon's location coordinate from lbeacon_uuid*/
@@ -290,6 +361,7 @@ class MainContainer extends React.Component{
         })
         return objectList 
     }
+
     highlightSearchPanel = (boolean) => {
         this.setState({
             isHighlightSearchPanel: boolean
@@ -328,7 +400,14 @@ class MainContainer extends React.Component{
                 // height: '90vh'
             }
         }
-        const { locale, auth } = this.context
+        const { 
+            locale, 
+            auth,
+            stateReducer,
+        } = this.context
+
+        let [{areaId}] = stateReducer
+
 
         let deviceNum = this.state.trackingData.filter(item => item.found).length
         let devicePlural = deviceNum === 1 ? locale.texts.DEVICE : locale.texts.DEVICES
@@ -372,8 +451,11 @@ class MainContainer extends React.Component{
                             clearColorPanel={clearColorPanel}
                             changeLocationAccuracy={this.changeLocationAccuracy}
                             setArea={this.setArea}
+                            setFence={this.setFence}
                             auth={auth}
                             lbeaconPosition={this.state.lbeaconPosition}
+                            geoFenceConfig={this.state.geoFenceConfig.filter(item => parseInt(item.unique_key) == areaId)}
+                            clearAlerts={this.clearAlerts}
                         />
                     </Col>
                     <Col id='searchPanel' xs={12} sm={5} md={3} lg={4} xl={4} className="w-100 px-2" style={style.searchPanel}>

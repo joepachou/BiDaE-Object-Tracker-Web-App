@@ -38,7 +38,8 @@ class Surveillance extends React.Component {
         objectInfo: [],
         hasErrorCircle: false,
         hasInvisibleCircle: false,       
-        hasIniLbeaconPosition: false
+        hasIniLbeaconPosition: false,
+        hasGeoFenceMaker: false
     }
     map = null;
     image = null;
@@ -47,6 +48,7 @@ class Surveillance extends React.Component {
     markersLayer = L.layerGroup();
     errorCircle = L.layerGroup();
     lbeaconsPosition = L.layerGroup();
+    geoFenceLayer = L.layerGroup()
 
     componentDidMount = () => {
         this.initMap();  
@@ -55,21 +57,24 @@ class Surveillance extends React.Component {
 
     componentDidUpdate = (prevProps) => {
         this.handleObjectMarkers();
-        if (this.props.lbeaconPosition.length !== 0 && !this.state.hasIniLbeaconPosition && this.props.isOpenFence) {
-            this.createLbeaconMarkers()
+        // if (this.props.lbeaconPosition.length !== 0 && !this.state.hasIniLbeaconPosition && this.props.isOpenFence) {
+        //     this.createLbeaconMarkers()
+        // }
+
+        if (this.props.geoFenceConfig.length !== 0 && !this.state.hasGeoFenceMaker && this.props.isOpenFence) {
+            this.createGeoFenceMarkers()
         }
 
         if (prevProps.areaId !== this.props.areaId) { 
-            let [{areaId}] = this.context.stateReducer
-            let areaModules =  config.areaModules
-            let areaOption = config.areaOptions[areaId]
-            let { url, bounds } = areaModules[areaOption]
-            this.image.setUrl(url)
-            this.image.setBounds(bounds)
+            this.setMap()
         }
 
-        if (this.state.hasIniLbeaconPosition && (prevProps.isOpenFence !== this.props.isOpenFence)) {
-            this.props.isOpenFence ? this.createLbeaconMarkers() : this.lbeaconsPosition.clearLayers()
+        // if (this.state.hasIniLbeaconPosition && (prevProps.isOpenFence !== this.props.isOpenFence)) {
+        //     this.props.isOpenFence ? this.createLbeaconMarkers() : this.lbeaconsPosition.clearLayers()
+        // }
+
+        if (this.state.hasGeoFenceMaker && (prevProps.isOpenFence !== this.props.isOpenFence)) {
+            this.props.isOpenFence ? this.createGeoFenceMarkers() : this.geoFenceLayer.clearLayers()
         }
         
     }
@@ -115,6 +120,17 @@ class Surveillance extends React.Component {
         })
     }
 
+    /** Set the overlay image */
+    setMap = () => {
+        let [{areaId}] = this.context.stateReducer
+        let areaModules =  config.areaModules
+        let areaOption = config.areaOptions[areaId]
+        let { url, bounds } = areaModules[areaOption]
+        this.image.setUrl(url)
+        this.image.setBounds(bounds)
+        this.createGeoFenceMarkers()
+    }
+
     /** Calculate the current scale for creating markers and resizing. */
     calculateScale = () => {
         this.currentZoom = this.map.getZoom();
@@ -124,6 +140,48 @@ class Surveillance extends React.Component {
         this.resizeConst = this.zoomDiff * 30;
         this.scalableErrorCircleRadius = 200 * this.resizeFactor;
         this.scalableIconSize = config.surveillanceMap.iconOptions.iconSize + this.resizeConst
+    }
+
+    /** Create the lbeacon and invisibleCircle markers */
+    createGeoFenceMarkers = () => {        
+        this.geoFenceLayer.clearLayers()
+
+        let { stateReducer } = this.context
+        let [{areaId}] = stateReducer
+
+        /** Creat the marker of all lbeacons onto the map  */
+        this.props.geoFenceConfig.filter(item => {
+            return parseInt(item.unique_key) == areaId
+        }).map(item => {
+
+            item.fences.uuids.map(uuid => {
+                let latLng = uuid.slice(1, 3)
+                let fences = L.circleMarker(latLng,{
+                    color: 'rgba(0, 0, 0, 0)',
+                    fillColor: 'orange',
+                    fillOpacity: 0.4,
+                    radius: 25,
+                }).addTo(this.geoFenceLayer);
+            })
+
+            item.perimeters.uuids.map(uuid => {
+                let latLng = uuid.slice(1, 3)
+                let perimeters = L.circleMarker(latLng,{
+                    color: 'rgba(0, 0, 0, 0)',
+                    fillColor: 'orange',
+                    fillOpacity: 0.4,
+                    radius: 25,
+                }).addTo(this.geoFenceLayer);
+            })
+        })
+
+        this.geoFenceLayer.addTo(this.map);
+
+        if (!this.state.hasGeoFenceMaker){
+            this.setState({
+                hasGeoFenceMaker: true,
+            })
+        }
     }
 
     /** Create the lbeacon and invisibleCircle markers */
@@ -138,6 +196,7 @@ class Surveillance extends React.Component {
                 fillOpacity: 0.4,
                 radius: 15,
             }).addTo(this.lbeaconsPosition);
+
         /** Creat the invisible Circle marker of all lbeacons onto the map */
             // let invisibleCircle = L.circleMarker(pos,{
             //     color: 'rgba(0, 0, 0, 0',
@@ -150,7 +209,7 @@ class Surveillance extends React.Component {
             // invisibleCircle.on('mouseout', function() {this.closePopup();})
         })
         this.lbeaconsPosition.addTo(this.map);
-
+        // console.log(this.lbeaconsPosition)
         if (!this.state.hasIniLbeaconPosition){
             this.setState({
                 hasIniLbeaconPosition: true,
