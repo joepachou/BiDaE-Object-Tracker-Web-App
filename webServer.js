@@ -79,6 +79,12 @@ app.post('/data/PDFInfo',db.getPDFInfo)
 
 app.post('/data/modifyMyDevice', db.modifyUserDevices)
 
+app.post('/data/getAreaTable', db.getAreaTable)
+
+app.post('/data/getGeoFenceConfig', db.getGeoFenceConfig)
+
+app.post('/data/setGeoFenceConfig', db.setGeoFenceConfig)
+
 app.post('/validation/username', db.validateUsername)
 app.post('/test/getUserList', db.getUserList)
 app.post('/test/getUserRole', db.getUserRole)
@@ -87,6 +93,7 @@ app.post('/test/removeUser', db.removeUser)
 app.post('/test/setUserRole', db.setUserRole)
 app.post('/test/getEditObjectRecord', db.getEditObjectRecord)
 app.post('/test/deleteEditObjectRecord', db.deleteEditObjectRecord)
+
 app.post('/data/getAreaTable', db.getAreaTable)
 
 app.get('/save_file_path/:file', (req, res) =>{

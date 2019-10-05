@@ -122,6 +122,28 @@ const getTrackingData = (request, response) => {
                 //     delete item.geofence_type
                 // }
 
+                /** Flag the object that is violate geofence */
+                
+
+                /** Set the interval between the perimeter valid time and fence violation time */
+                let violateInterval = moment(item.geofence_violation_timestamp).diff(item.perimeter_valid_timestamp, 'seconds') 
+
+                /** Set the interval between the perimeter valie timte and now */
+                let diffFromNow = moment().diff(item.perimeter_valid_timestamp, 'seconds') < 300
+
+                /** Set the boolean if perimeter valid time is prior to fence violation time */
+                let isViolateInterval = violateInterval >= 0;
+
+                if (item.perimeter_valid_timestamp && item.geofence_violation_timestamp) {
+                    if (diffFromNow && isViolateInterval) {
+                        console.log(moment().diff(item.perimeter_valid_timestamp, 'seconds'))
+
+                        item.isViolated = true
+                    } else {
+                        item.isViolated = false
+                    }
+                }
+
                 /** Flag the object that is on sos */
                 if (moment().diff(item.panic_timestamp, 'second') < 300) {
                     item.panic = true
@@ -172,7 +194,6 @@ const getLbeaconTable = (request, response) => {
             res.rows.map(item => {
                 item.health_status =  moment().diff(item.last_report_timestamp, 'days') < 1 ? 1 : 0 
                 item.last_report_timestamp = moment.tz(item.last_report_timestamp, process.env.TZ).locale(locale).format('lll');
-
             })
             response.status(200).json(res)
 
@@ -575,7 +596,37 @@ const getAreaTable = (request, response) => {
         })
 }
 
-/** Parsing the lbeacon's location coordinate from lbeacon_uuid*/
+const getGeoFenceConfig = (request, response) => {
+    let { areaId } = request.body
+    pool.query(queryType.query_getGeoFenceConfig(areaId))
+        .then(res => {
+            res.rows.map(item => {
+                item.perimeters = parseGeoFenceConfig(item.perimeters)
+                item.fences = parseGeoFenceConfig(item.fences)
+            })
+            console.log("get geo fence config")
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(`get geo fence config fail: ${err}`)
+        })
+}
+
+
+const setGeoFenceConfig = (request, response) =>{
+    let { value, areaId } = request.body
+    pool.query(queryType.query_setGeoFenceConfig(value, areaId))
+        .then(res => {
+            console.log(`set geo fence config`)
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(`set geo fence config fail: ${err}`)
+        })
+    
+}
+
+/** Parse the lbeacon's location coordinate from lbeacon_uuid*/
 const parseLbeaconCoordinate = (lbeacon_uuid) => {
     /** Example of lbeacon_uuid: 00000018-0000-0000-7310-000000004610 */
     // console.log(lbeacon_uuid)
@@ -584,6 +635,27 @@ const parseLbeaconCoordinate = (lbeacon_uuid) => {
     const xx = parseInt(lbeacon_uuid.slice(14,18) + lbeacon_uuid.slice(19,23));
     const yy = parseInt(lbeacon_uuid.slice(-8));
     return [area_id, yy, xx];
+}
+
+const parseGeoFenceCoordinate = (uuid) => {
+    /** Example geofence uuid: 00010018000000003460000000011900 */
+    const area_id = uuid.slice(0, 4);
+    const xx = parseInt(uuid.slice(11, 20))
+    const yy = parseInt(uuid.slice(-8))
+    return [area_id, yy, xx]
+}
+
+/** Parse geo fence config */
+const parseGeoFenceConfig = (field) => {
+    let fieldParse = field.split(',')
+    let number = parseInt(fieldParse[0])
+    let uuids = fieldParse.slice(1, number + 1).map(uuid => parseGeoFenceCoordinate(uuid))
+    let rssi = fieldParse[number + 1]
+    return {
+        number,
+        uuids,
+        rssi
+    }
 }
 
 module.exports = {
@@ -611,5 +683,7 @@ module.exports = {
     setUserRole,
     getEditObjectRecord,
     deleteEditObjectRecord,
-    getAreaTable
+    getAreaTable,
+    getGeoFenceConfig,
+    setGeoFenceConfig,
 }

@@ -8,16 +8,21 @@ function query_getTrackingData () {
 			object_summary_table.panic_timestamp,
 			object_summary_table.rssi,
 			object_summary_table.battery_voltage,
+			object_summary_table.geofence_violation_timestamp,
+			object_summary_table.geofence_uuid,
+			object_summary_table.geofence_rssi,
+			object_summary_table.perimeter_valid_timestamp,
+			object_summary_table.geofence_key,
 			object_table.name,
 			object_table.type,
 			object_table.status,
 			object_table.transferred_location,
 			object_table.access_control_number,
 			object_table.area_id,
+			object_table.object_type,
 			split_part(object_table.access_control_number, '-', 3) as last_four_acn,
 			lbeacon_table.description as location_description,
-			edit_object_record.notes,
-			area_table.name as area_name
+			edit_object_record.notes
 
 		FROM object_summary_table
 
@@ -29,10 +34,6 @@ function query_getTrackingData () {
 
 		LEFT JOIN edit_object_record
 		ON object_table.note_id = edit_object_record.id
-
-		LEFT JOIN area_table
-		ON object_table.area_id = area_table.id
-
 
 		ORDER BY object_table.type ASC, object_table.name ASC, last_four_acn ASC;
 	`
@@ -588,6 +589,22 @@ const query_getAreaTable = () => {
 	`
 }
 
+const query_getGeoFenceConfig = (areaId) => {
+	return `
+		SELECT
+			*
+		FROM geo_fence_config
+	;`
+}
+
+const query_setGeoFenceConfig = (value, areaId) =>{
+	return `
+		UPDATE geo_fence_config
+		SET enable = ${value}
+		WHERE id = ${areaId}
+	`
+}
+
 module.exports = {
     query_getTrackingData,
     query_getObjectTable,
@@ -618,4 +635,6 @@ module.exports = {
 	query_addEditObjectRecord,
 	query_addShiftChangeRecord,
 	query_getAreaTable,
+	query_getGeoFenceConfig,
+	query_setGeoFenceConfig
 }

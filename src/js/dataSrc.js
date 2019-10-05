@@ -25,6 +25,9 @@ const getRoleNameList = `http://${dataSrcIP}/test/getRoleNameList`
 const removeUser = `http://${dataSrcIP}/test/removeUser`
 const setUserRole = `http://${dataSrcIP}/test/setUserRole`
 const getAreaTable = `http://${dataSrcIP}/data/getAreaTable`
+const getGeoFenceConfig = `http://${dataSrcIP}/data/getGeoFenceConfig`
+const setGeoFenceConfig = `http://${dataSrcIP}/data/setGeoFenceConfig`
+
 
 const pdfUrl = function(path){
     return `http://${dataSrcIP}/${path}`
@@ -57,5 +60,7 @@ module.exports = {
     getRoleNameList,
     removeUser,
     setUserRole,
-    getAreaTable
+    getAreaTable,
+    getGeoFenceConfig,
+    setGeoFenceConfig
 };
