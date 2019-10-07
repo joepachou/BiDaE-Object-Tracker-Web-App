@@ -249,10 +249,6 @@ class Surveillance extends React.Component {
      * Create the error circle of markers, and add into this.markersLayer.
      */
     handleObjectMarkers = () => {
-        let objects = _.cloneDeep(this.props.proccessedTrackingData)
-        let {
-            filterObjectType
-        } = this.props
 
         /** Clear the old markerslayers. */
         this.markersLayer.clearLayers();
@@ -310,9 +306,8 @@ class Surveillance extends React.Component {
         };
 
         let counter = 0;
-        objects.filter(item => {
-            return item.found && item.isMatchedObject && !filterObjectType.includes(item.object_type)
-        })
+
+        this.filterTrackingData(_.cloneDeep(this.props.proccessedTrackingData))
         .map(item => {
 
             // let detectedNum = item.lbeaconDetectedNum;
@@ -407,9 +402,16 @@ class Surveillance extends React.Component {
         this.props.getSearchKey('coordinate', null, lbPosition)
     }
 
+    /** Define what object will filter out */
+    filterTrackingData = (proccessedTrackingData) => {
+        return proccessedTrackingData.filter(item => {
+            return item.found && item.isMatchedObject && !this.props.filterObjectType.includes(item.object_type)
+        })
+    }
+
     collectObjectsByLatLng = (lbPosition) => {
         let objectList = []
-        this.props.proccessedTrackingData.map(item => {
+        this.filterTrackingData(this.props.proccessedTrackingData).map(item => {
             item.currentPosition && item.currentPosition.toString() === lbPosition.toString() && item.isMatchedObject ? objectList.push(item) : null;
         })
         return objectList 
