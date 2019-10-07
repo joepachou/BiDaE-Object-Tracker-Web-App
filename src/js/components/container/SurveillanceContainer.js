@@ -217,6 +217,7 @@ class SurveillanceContainer extends React.Component {
                                     className="mr-1 ml-2 text-capitalize" 
                                     onClick={this.handleClickButton} 
                                     name="save"
+                                    disabled={!this.props.hasSearchKey}
                                 >
                                     {locale.texts.SAVE}
                                 </Button>
