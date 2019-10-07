@@ -599,15 +599,18 @@ const checkViolateGeofence = (item) => {
     /** Set the interval between the perimeter valid time and fence violation time */
     let violateInterval = moment(item.geofence_violation_timestamp).diff(item.perimeter_valid_timestamp, 'seconds') 
 
-    /** Set the interval between the perimeter valie timte and now */
-    let diffFromNow = moment().diff(item.perimeter_valid_timestamp, 'seconds') < 300
-
     /** Set the boolean if perimeter valid time is prior to fence violation time */
     let isViolateInterval = violateInterval >= 0;
 
+    /** Set the boolean if the perimeter valud time is near now */
+    let isDiffFromNow = moment().diff(item.perimeter_valid_timestamp, 'seconds') < 300
+
+    /** Set the boolean if the perimeter time stamp is prior to first*/
+    let isInTheTimePeriod = moment(item.perimeter_valid_timestamp).diff(item.last_seen_timestamp, 'seconds') > 0
+
     /** Flag the object that is violated geo fence */
     if (item.perimeter_valid_timestamp && item.geofence_violation_timestamp) {
-        return diffFromNow && isViolateInterval ? 1 : 0
+        return isInTheTimePeriod && isDiffFromNow && isViolateInterval ? 1 : 0
     } else {
         return false
     }
