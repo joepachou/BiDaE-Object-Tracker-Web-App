@@ -164,7 +164,7 @@ class SurveillanceContainer extends React.Component {
                     />
                 </div>
                 <div style={style.navBlock}>
-                    <Nav className="d-flex align-items-start text-capitalize">
+                    <Nav className="d-flex align-items-start text-capitalize bd-highlight">
                         <Nav.Item>
                             <div style={style.title} 
                             >
@@ -209,7 +209,7 @@ class SurveillanceContainer extends React.Component {
                                 <Fragment
                                     key={index}
                                 >
-                                    <Nav.Item className="mt-2">
+                                    <Nav.Item className="mt-2 bd-highligh ml-auto">
                                         <Button 
                                             variant="warning" 
                                             className="mr-1 ml-2 text-capitalize" 
