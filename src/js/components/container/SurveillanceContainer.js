@@ -24,6 +24,7 @@ class SurveillanceContainer extends React.Component {
         showDevice: false,
         showPdfDownloadForm: false,
         isOpenFence: false,
+        filterObjectType: []
     }
 
 
@@ -77,6 +78,22 @@ class SurveillanceContainer extends React.Component {
                 break;
             case "clearAlerts":
                 this.props.clearAlerts()
+                break;
+            case "filterObjectType":
+                let filterObjectType = value.split(',').reduce((filterObjectType, number) => {   
+                    number = parseInt(number)                
+                    if (!filterObjectType.includes(number)) {
+                        filterObjectType.push(number)
+                    } else {
+                        let index = filterObjectType.indexOf(number)
+                        filterObjectType = [...filterObjectType.slice(0, index), ...filterObjectType.slice(index + 1)]
+                    }
+                    return filterObjectType
+                }, this.state.filterObjectType)
+                this.setState({
+                    filterObjectType,
+                })
+                break;
         }
 
     }
@@ -161,6 +178,7 @@ class SurveillanceContainer extends React.Component {
                         areaId={areaId}
                         auth={auth}
                         isOpenFence={this.state.isOpenFence}
+                        filterObjectType={this.state.filterObjectType}
                     />
                 </div>
                 <div style={style.navBlock}>
@@ -204,6 +222,28 @@ class SurveillanceContainer extends React.Component {
                                 </Button>
                             </Nav.Item>
                         </AccessControl>
+                        <Nav.Item className="mt-2">
+                            <Button 
+                                variant="outline-primary" 
+                                className="mr-1 ml-2 text-capitalize" 
+                                onClick={this.handleClickButton} 
+                                name="filterObjectType"
+                                value={[0]}
+                            >
+                                {this.state.filterObjectType.includes(0) ? locale.texts.SHOW_DEVICES : locale.texts.HIDE_DEVICES}
+                            </Button>
+                        </Nav.Item>
+                        <Nav.Item className="mt-2">
+                            <Button 
+                                variant="outline-primary" 
+                                className="mr-1 ml-2 text-capitalize" 
+                                onClick={this.handleClickButton} 
+                                name="filterObjectType"
+                                value={[1, 2]}
+                            >
+                                {this.state.filterObjectType.includes(1) ? locale.texts.SHOW_RESIDENTS : locale.texts.HIDE_RESIDENTS}
+                            </Button>
+                        </Nav.Item>
                         {this.props.geoFenceConfig.map((item, index) => {
                             return ( parseInt(item.unique_key) == areaId && 
                                 <Fragment

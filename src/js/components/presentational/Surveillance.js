@@ -18,7 +18,6 @@ import {
     selectObjectList,
 } from '../../action/action';
 import { connect } from 'react-redux';
-import LocaleContext from '../../context/LocaleContext';
 import config from '../../config';
 import _ from 'lodash'
 import { AppContext } from '../../context/AppContext';
@@ -92,7 +91,6 @@ class Surveillance extends React.Component {
         let areaOption = config.areaOptions[areaId]
 
         let { url, bounds } = areaModules[areaOption]
-
         let map = L.map('mapid', config.surveillanceMap.mapOptions);
         let image = L.imageOverlay(url, bounds).addTo(map);
         map.addLayer(image)
@@ -128,6 +126,7 @@ class Surveillance extends React.Component {
         let { url, bounds } = areaModules[areaOption]
         this.image.setUrl(url)
         this.image.setBounds(bounds)
+
         this.createGeoFenceMarkers()
     }
 
@@ -250,7 +249,10 @@ class Surveillance extends React.Component {
      * Create the error circle of markers, and add into this.markersLayer.
      */
     handleObjectMarkers = () => {
-        let objects = _.cloneDeep(this.props.proccessedTrackingData)        
+        let objects = _.cloneDeep(this.props.proccessedTrackingData)
+        let {
+            filterObjectType
+        } = this.props
 
         /** Clear the old markerslayers. */
         this.markersLayer.clearLayers();
@@ -273,43 +275,45 @@ class Surveillance extends React.Component {
          * 2. Add the CSS description in leafletMarker.css
         */
         const stationaryAweIconOptions = {
-            iconSize: iconSize,
             markerColor: config.surveillanceMap.iconColor.stationary,
         }
 
         const geofencePAweIconOptions = {
-            iconSize: iconSize,
             markerColor: config.surveillanceMap.iconColor.geofenceP,
             numberColor: config.surveillanceMap.iconColor.number,
         }
 
         const geofenceFAweIconOptions = {
-            iconSize: iconSize,
             markerColor: config.surveillanceMap.iconColor.geofenceF,
             numberColor: config.surveillanceMap.iconColor.number,
         }
 
         const searchedObjectAweIconOptions = {
-            iconSize: iconSize,
             markerColor: config.surveillanceMap.iconColor.searched,
             numberColor: config.surveillanceMap.iconColor.number,
         }
 
         const sosIconOptions = {
-            iconSize: iconSize,
             markerColor: config.surveillanceMap.iconColor.sos,
         };
 
         const unNormalIconOptions = {
-            iconSize: iconSize,
             markerColor: config.surveillanceMap.iconColor.unNormal,
+        };
+
+        const femaleIconOptions = {
+            markerColor: config.surveillanceMap.iconColor.female_1,
+        };
+
+        const maleIconOptions = {
+            markerColor: config.surveillanceMap.iconColor.male_1,
         };
 
         let counter = 0;
         objects.filter(item => {
-            return item.found && item.isMatchedObject
+            return item.found && item.isMatchedObject && !filterObjectType.includes(item.object_type)
         })
-            .map(item => {
+        .map(item => {
 
             // let detectedNum = item.lbeaconDetectedNum;
             let position = this.macAddressToCoordinate(item.mac_address,item.currentPosition);
@@ -324,24 +328,31 @@ class Surveillance extends React.Component {
              * then the color will be black, or grey.
              */
             let iconOption = {}
-            if (item.panic) {
-                iconOption = sosIconOptions;
-            } else if (item.geofence_type === config.objectStatus.FENCE){
-                iconOption = geofenceFAweIconOptions;
-			} else if (item.geofence_type === config.objectStatus.PERIMETER){
-                iconOption = geofencePAweIconOptions;
-			} else if (item.searched && this.props.colorPanel) {
-                iconOption = { 
-                    iconSize,
-                    markerColor: item.pinColor 
+            if (item.object_type === 0) {
+                if (item.panic) {
+                    iconOption = sosIconOptions;
+                } else if (item.geofence_type === config.objectStatus.FENCE){
+                    iconOption = geofenceFAweIconOptions;
+                } else if (item.geofence_type === config.objectStatus.PERIMETER){
+                    iconOption = geofencePAweIconOptions;
+                } else if (item.searched && this.props.colorPanel) {
+                    iconOption = { 
+                        iconSize,
+                        markerColor: item.pinColor 
+                    }
+                } else if (item.searched) {
+                    iconOption = searchedObjectAweIconOptions    
+                } else if (item.status !== config.objectStatus.NORMAL) {
+                    iconOption = unNormalIconOptions;
+                } else {
+                    iconOption = stationaryAweIconOptions;
                 }
-            } else if (item.searched) {
-                iconOption = searchedObjectAweIconOptions    
-            } else if (item.status !== config.objectStatus.NORMAL) {
-                iconOption = unNormalIconOptions;
+            } else if (item.object_type === 1) {
+                iconOption = femaleIconOptions;
             } else {
-                iconOption = stationaryAweIconOptions;
+                iconOption = maleIconOptions;
             }
+
 
             /** Show the order number on location pin if necessary */
             if (item.searched && config.surveillanceMap.iconOptions.showNumber) {
@@ -354,8 +365,9 @@ class Surveillance extends React.Component {
             /** Insert the object's mac_address to be the data when clicking the object's marker */
             iconOption = {
                 ...iconOption,
-                macAddress:item.mac_address,
-                currentPosition:item.currentPosition
+                iconSize: iconSize,
+                macAddress: item.mac_address,
+                currentPosition: item.currentPosition
             }
 
             const option = new L.AwesomeNumberMarkers (iconOption)
