@@ -172,6 +172,7 @@ const en =  {
     DEVICES_NOT_IN: 'devices not in',
     CONFIRM_BY: 'confirm by',
     NEW_STATUS: 'new status',
+    PHYSICIAN_NAME: 'physician name',
 
     /** User Roles */
     CARE_PROVIDER: 'care provider',
@@ -186,6 +187,7 @@ const en =  {
     IN: 'in',
     NOT: 'not',
     WHOSE: "'s ",
+    BELONG_TO: "belongs to",
 
     /** Test */
     IIS_SINICA_FLOOR_FOUR: "IIS sinica floor 4",

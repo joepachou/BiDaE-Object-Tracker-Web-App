@@ -174,7 +174,7 @@ const tw = {
     DEVICES_NOT_IN: '儀器不位於',
     CONFIRM_BY: '確認',
     NEW_STATUS: '狀態紀錄',
-
+    PHYSICIAN_NAME: '醫護人員姓名',
 
     /** User Roles */
     CARE_PROVIDER: '護理人員',
@@ -189,6 +189,7 @@ const tw = {
     IN: '在',
     NOT: '不',
     WHOSE: "的",
+    BELONG_TO: "屬於",
 
     /** Test */
     IIS_SINICA_FLOOR_FOUR: "中研院4樓",
