@@ -50,6 +50,8 @@ const tw = {
     FENCE_ON: '開啟圍籬',
     FENCE_OFF: '關閉圍籬',
     CLEAR_ALERTS: '清除警告',
+    SHOW_RESIDENTS: '顯示居民',
+    HIDE_RESIDENTS: '隱藏居民',
 
     /* Form Field */
     NAME: '名稱',

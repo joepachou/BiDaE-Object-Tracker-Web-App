@@ -50,6 +50,8 @@ const en =  {
     FENCE_ON: 'fence on',
     FENCE_OFF: 'fence off',
     CLEAR_ALERTS: 'clear alerts',
+    SHOW_RESIDENTS: 'show residents',
+    HIDE_RESIDENTS: 'hide residents',
 
     /* Form Field */
     NAME: 'name',
