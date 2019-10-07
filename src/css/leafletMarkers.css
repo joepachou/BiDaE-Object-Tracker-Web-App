@@ -148,3 +148,19 @@
 .awesome-number-marker-icon-orchid {
   background: url('../img/colorPin/Orchid.svg') no-repeat center/contain;
 }
+
+.awesome-number-marker-icon-female {
+  background: url('../img/peoplePin/FeMale_1.png') no-repeat center/contain;
+}
+
+.awesome-number-marker-icon-female_1 {
+  background: url('../img/peoplePin/FeMale_2.png') no-repeat center/contain;
+}
+
+.awesome-number-marker-icon-male {
+  background: url('../img/peoplePin/Male_1.png') no-repeat center/contain;
+}
+
+.awesome-number-marker-icon-male_1 {
+  background: url('../img/peoplePin/Male_2.png') no-repeat center/contain;
+}
