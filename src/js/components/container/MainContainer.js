@@ -60,20 +60,12 @@ class MainContainer extends React.Component{
             this.getTrackingData()
             this.setState({
                 auth: this.context.auth,
-                // areaId: this.context.auth.authenticated ? this.context.auth.user.areas_id[0] : config.defaultAreaId
             })
         } 
-        // console.log(_.difference(["c1:0f:00:0c:7a:d7", "c1:0f:00:0e:4f:cc", "c1:a0:00:bf:3f:f7", "c1:af:00:77:6b:02", "c1:0f:00:0f:60:58"], []))
-        // console.log(_.difference(["c1:0f:00:0c:7a:d7", "c1:0f:00:0e:4f:cc", "c1:a0:00:bf:3f:f7", "c1:af:00:77:6b:02", "c1:0f:00:0f:60:58"], ["c1:af:00:77:6b:02"]))
-        // console.log(Object.keys(prevState.violatedObjects))
-        // console.log('this')
-        // console.log(Object.keys(this.state.violatedObjects))
-        // console.log(_.difference(Object.keys(prevState.violatedObjects), Object.keys(this.state.violatedObjects)))
-
-        if (_.difference(Object.keys(this.state.violatedObjects), Object.keys(prevState.violatedObjects)).length !== 0) {
-            console.log(123)
-            Object.values(this.state.violatedObjects).map(item => {
-                toast.warn(<ToastNotification data={item} />, {
+        let newViolatedObject = Object.keys(this.state.violatedObjects).filter(item => !Object.keys(prevState.violatedObjects).includes(item))
+        if (newViolatedObject !== 0 ) {
+            newViolatedObject.map(item => {
+                toast.warn(<ToastNotification data={this.state.violatedObjects[item]} />, {
                     hideProgressBar: true,
                     autoClose: false
                 })
@@ -100,11 +92,6 @@ class MainContainer extends React.Component{
                                 isHighlightSearchPanelChange || 
                                 isGeoFenceDataChange ||
                                 isViolatedObjectChange
-        // console.log(shouldUpdate)
-        // console.log(JSON.stringify(this.state.trackingData)[0] === JSON.stringify(nextState.trackingData)[0])
-        // console.log(JSON.stringify(this.state.trackingData[1]) === JSON.stringify(nextState.trackingData[1]))
-        // console.log(JSON.stringify(this.state.trackingData[1]), JSON.stringify(nextState.trackingData[1]))
-
         return shouldUpdate
     }
 
@@ -159,7 +146,7 @@ class MainContainer extends React.Component{
                     violatedObjects[item.mac_address] = item
                 } 
                 return violatedObjects
-            }, {})
+            }, _.cloneDeep(this.state.violatedObjects))
             this.setState({
                 trackingData: res.data,
                 violatedObjects,
@@ -213,9 +200,6 @@ class MainContainer extends React.Component{
     /** Clear the record violated object */
     clearAlerts = () => {
         toast.dismiss()
-        // this.setState({
-        //     violatedObjects: []
-        // })
     }
 
     /** Parsing the lbeacon's location coordinate from lbeacon_uuid*/
@@ -422,6 +406,7 @@ class MainContainer extends React.Component{
         return(
             /** "page-wrap" the default id named by react-burget-menu */
             <div id="page-wrap" className='mx-1 my-2' >
+            {console.log(this.state.violatedObjects)}
                 <Row id="mainContainer" className='d-flex w-100 justify-content-around mx-0 overflow-hidden' style={style.container}>
                     <Col sm={7} md={9} lg={8} xl={8} id='searchMap' className="pl-2 pr-1" >
                         <InfoPrompt 

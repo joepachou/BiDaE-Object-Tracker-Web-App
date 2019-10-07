@@ -134,14 +134,9 @@ const getTrackingData = (request, response) => {
                 /** Set the boolean if perimeter valid time is prior to fence violation time */
                 let isViolateInterval = violateInterval >= 0;
 
+                /** Flag the object that is violated geo fence */
                 if (item.perimeter_valid_timestamp && item.geofence_violation_timestamp) {
-                    if (diffFromNow && isViolateInterval) {
-                        console.log(moment().diff(item.perimeter_valid_timestamp, 'seconds'))
-
-                        item.isViolated = true
-                    } else {
-                        item.isViolated = false
-                    }
+                    item.isViolated = diffFromNow && isViolateInterval ? 1 : 0
                 }
 
                 /** Flag the object that is on sos */
