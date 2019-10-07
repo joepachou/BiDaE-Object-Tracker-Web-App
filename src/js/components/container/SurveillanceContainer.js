@@ -216,13 +216,14 @@ class SurveillanceContainer extends React.Component {
                                             onClick={this.handleClickButton} 
                                             name="fence"
                                             value={+!this.state.isOpenFence}
+                                            active={!this.state.isOpenFence}
                                         >
-                                            {this.state.isOpenFence ? locale.texts.FENCE_OFF : locale.texts.FENCE_ON}
+                                            {this.state.isOpenFence ? locale.texts.FENCE_ON : locale.texts.FENCE_OFF}
                                         </Button>
                                     </Nav.Item>
                                     <Nav.Item className="mt-2">
                                         <Button 
-                                            variant="warning" 
+                                            variant="primary" 
                                             className="mr-1 ml-2 text-capitalize" 
                                             onClick={this.handleClickButton} 
                                             name="clearAlerts"
