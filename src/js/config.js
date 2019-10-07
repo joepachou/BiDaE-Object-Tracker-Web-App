@@ -56,7 +56,7 @@ const config = {
         /* Map customization */
         mapOptions: {
             crs: L.CRS.Simple,
-            center: L.latLng(-2000, -4000),
+            // center: L.latLng(-2000, -4000),
             zoom: -5,
             minZoom: -5,
             maxZoom: 0,
@@ -80,6 +80,8 @@ const config = {
             showNumber: false,
         },
 
+        
+
         iconColor: {
             stationary: 'black',
             geofenceF: 'red',
@@ -88,6 +90,10 @@ const config = {
             unNormal: 'grey',
             sos: 'sos',
             number: 'white',
+            female: 'female',
+            male: 'male',
+            female_1: 'female_1',
+            male_1: 'male_1',
 
             // ['slateblue', 'tan', 'lightyellow', 'lavender', 'orange','lightblue', 'mistyrose', 'yellowgreen', 'darkseagreen', 'orchid']
             pinColorArray: ['orchid','mistyrose', 'tan', 'lightyellow', 'lavender','lightblue', 'yellowgreen']
@@ -127,6 +133,8 @@ const config = {
 
         
     },
+
+    
 
     objectStatus: {
         PERIMETER: 'perimeter',
@@ -258,7 +266,10 @@ const config = {
 
         let foundTitle = hasFoundResult
             ?   `<h3 style='text-transform: capitalize; margin-bottom: 5px;'>
-                    ${locale.texts.DEVICES_IN} ${locale.texts[config.site.toUpperCase().replace(/ /g, '_')]}
+                    ${locale.texts.DEVICES_IN}
+                    ${userInfo.areas_id.map(id => {
+                        return locale.texts[config.areaOptions[id]]
+                    })}
                 </h3>`
             :   '';
         let foundData = hasFoundResult 
@@ -275,7 +286,10 @@ const config = {
             :   ''
         let notFoundTitle = hasNotFoundResult 
             ?   `<h3 className='mt-1' style='text-transform: capitalize; margin-bottom: 5px;'>
-                    ${locale.texts.DEVICES_NOT_IN} ${locale.texts[config.site.toUpperCase().replace(/ /g, '_')]}
+                    ${locale.texts.DEVICES_NOT_IN}
+                    ${userInfo.areas_id.map(id => {
+                        return locale.texts[config.areaOptions[id]]
+                    })}
                 </h3>`
             :   '';
         let notFoundData = hasNotFoundResult 
