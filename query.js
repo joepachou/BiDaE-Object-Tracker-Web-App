@@ -5,8 +5,6 @@ const queryType = require ('./queryType');
 const bcrypt = require('bcrypt');
 const pg = require('pg');
 const pdf = require('html-pdf');
-
-
 const config = {
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
@@ -44,66 +42,27 @@ const getTrackingData = (request, response) => {
     const locale = request.body.locale || 'en'
 
     /** The user's authenticated area id */
-    const userAreasId= request.body.user.areas_id
+    const userAuthenticatedAreaId= request.body.user.areas_id
 
     /** The UI's current area id */
     const currentAreaId = request.body.areaId.toString()
 
-    /** If the current area id is the user's authenticated area id */
-    let isInUserSAuthArea = userAreasId.includes(currentAreaId)
-
-    // console.log(user)
     pool.query(queryType.query_getTrackingData())        
         .then(res => {
-            var counter = 0
             console.log('Get tracking data')
 
             /** Filter the objects that do no belong the area */
             const toReturn = res.rows
             .map(item => {
-
-                /** Parse lbeacon uuid into three field in an array: area id, latitude, longtitude */
-                let lbeacon_coordinate = parseLbeaconCoordinate(item.lbeacon_uuid)
-
-                /** Set the lbeacon's area id from lbeacon_coordinate*/
-                let lbeacon_area_id = parseInt(lbeacon_coordinate[0])
-
-                /** Set the object's location in the form of lbeacon coordinate parsing by lbeacon uuid  */
-                item.currentPosition = item.lbeacon_uuid ? lbeacon_coordinate.slice(1, 3) : null;
-
-                /** Set the boolean if the object scanned by Lbeacon is matched the current area */
-                let isMatchedArea = lbeacon_area_id == parseInt(currentAreaId)
+                
+                /** Flag the object that belongs to the current area or to the user's authenticated area */
+                item.isMatchedObject = checkMatchedObject(item, userAuthenticatedAreaId, currentAreaId)
 
                 /** Set the boolean if the object's last_seen_timestamp is in the specific time period */
                 let isInTheTimePeriod = moment().diff(item.last_seen_timestamp, 'seconds') < 30 
 
                 /** Set the boolean if its rssi is below the specific rssi threshold  */
                 let isMatchRssi = item.rssi > rssiThreshold ? 1 : 0;
-
-                /** Set the boolean if the object belong to the user's authenticated area id */
-                let isUserSObject = userAreasId.includes(item.area_id)
-
-                /** Set the boolean if the object belong to the current area */
-                let isAreaSObject = item.area_id == parseInt(currentAreaId)
-
-                /** Filter the object if the object scanned by the current area's Lbeacon */
-                if (isMatchedArea) {
-
-                    /** Determine if the current area is the authenticated area */
-                    if (isInUserSAuthArea) {
-
-                        /** Flag the object that belongs to the current area and to the user's authenticated area,
-                         * if the current area is the authenticated area */
-                        item.isMatchedObject = isAreaSObject || isUserSObject
-                    } else {
-
-                        /** Flag the object that belongs to the user's authenticated area, 
-                         * if the current area is not the authenticated area */
-                        item.isMatchedObject = isUserSObject
-                    }
-                } else {
-                    item.isMatchedObject = false
-                }
 
                 /** Flag the object that satisfied the time period and rssi threshold */
                 item.found = isInTheTimePeriod && isMatchRssi 
@@ -113,36 +72,13 @@ const getTrackingData = (request, response) => {
                     ? moment(item.last_seen_timestamp).locale(locale).from(moment(item.first_seen_timestamp)) 
                     : item.last_seen_timestamp 
                         ? moment(item.last_seen_timestamp).locale(locale).fromNow()
-                        : 'N/A'
+                        : 'N/A'      
 
                 /** Flag the object that is violate geofence */
-                // if (moment().diff(item.geofence_violation_timestamp, 'seconds') > 300
-                //     || moment(item.first_seen_timestamp).diff(moment(item.geofence_violation_timestamp)) > 0) {
-                        
-                //     delete item.geofence_type
-                // }
-
-                /** Flag the object that is violate geofence */
-                
-
-                /** Set the interval between the perimeter valid time and fence violation time */
-                let violateInterval = moment(item.geofence_violation_timestamp).diff(item.perimeter_valid_timestamp, 'seconds') 
-
-                /** Set the interval between the perimeter valie timte and now */
-                let diffFromNow = moment().diff(item.perimeter_valid_timestamp, 'seconds') < 300
-
-                /** Set the boolean if perimeter valid time is prior to fence violation time */
-                let isViolateInterval = violateInterval >= 0;
-
-                /** Flag the object that is violated geo fence */
-                if (item.perimeter_valid_timestamp && item.geofence_violation_timestamp) {
-                    item.isViolated = diffFromNow && isViolateInterval ? 1 : 0
-                }
+                item.isViolated = checkViolateGeofence(item)
 
                 /** Flag the object that is on sos */
-                if (moment().diff(item.panic_timestamp, 'second') < 300) {
-                    item.panic = true
-                }
+                item.panic = moment().diff(item.panic_timestamp, 'second') < 300 ? 1 : 0
 
                 /** Flag the object's battery volumn is limiting */
                 if (item.battery_voltage >= 27) {
@@ -152,16 +88,20 @@ const getTrackingData = (request, response) => {
                 } else {
                     item.battery_voltage = 0
                 }
-                /** Omit the unused field of the object */
+
+                /** Delete the unused field of the object */
                 delete item.first_seen_timestamp
                 delete item.last_seen_timestamp
                 delete item.panic_timestamp
                 delete item.rssi
+                delete item.perimeter_valid_timestamp
+                delete item.geofence_violation_timestamp
+                delete item.geofence_uuid
+                delete item.lbeacon_uuid
 
                 return item
             })
-        // console.log(toReturn.length)
-        // console.log(counter)
+
         response.status(200).json(toReturn)
 
     }).catch(err => {
@@ -650,6 +590,70 @@ const parseGeoFenceConfig = (field) => {
         number,
         uuids,
         rssi
+    }
+}
+
+/** Check tracking data violate geo fence */
+const checkViolateGeofence = (item) => {
+
+    /** Set the interval between the perimeter valid time and fence violation time */
+    let violateInterval = moment(item.geofence_violation_timestamp).diff(item.perimeter_valid_timestamp, 'seconds') 
+
+    /** Set the interval between the perimeter valie timte and now */
+    let diffFromNow = moment().diff(item.perimeter_valid_timestamp, 'seconds') < 300
+
+    /** Set the boolean if perimeter valid time is prior to fence violation time */
+    let isViolateInterval = violateInterval >= 0;
+
+    /** Flag the object that is violated geo fence */
+    if (item.perimeter_valid_timestamp && item.geofence_violation_timestamp) {
+        return diffFromNow && isViolateInterval ? 1 : 0
+    } else {
+        return false
+    }
+}
+
+/** Check tracking data match the current UI area */
+const checkMatchedObject = (item, userAuthenticatedAreaId, currentAreaId) => {
+
+    /** If the current area id is the user's authenticated area id */
+    let isInUserSAuthArea = userAuthenticatedAreaId.includes(currentAreaId)
+
+    /** Parse lbeacon uuid into three field in an array: area id, latitude, longtitude */
+    let lbeacon_coordinate = parseLbeaconCoordinate(item.lbeacon_uuid)
+
+    /** Set the lbeacon's area id from lbeacon_coordinate*/
+    let lbeacon_area_id = parseInt(lbeacon_coordinate[0])
+
+    /** Set the object's location in the form of lbeacon coordinate parsing by lbeacon uuid  */
+    item.currentPosition = item.lbeacon_uuid ? lbeacon_coordinate.slice(1, 3) : null;
+
+    /** Set the boolean if the object scanned by Lbeacon is matched the current area */
+    let isMatchedArea = lbeacon_area_id == parseInt(currentAreaId)
+
+    /** Set the boolean if the object belong to the user's authenticated area id */
+    let isUserSObject = userAuthenticatedAreaId.includes(item.area_id)
+
+    /** Set the boolean if the object belong to the current area */
+    let isAreaSObject = item.area_id == parseInt(currentAreaId)
+
+    /** Filter the object if the object scanned by the current area's Lbeacon */
+    if (isMatchedArea) {
+
+        /** Determine if the current area is the authenticated area */
+        if (isInUserSAuthArea) {
+
+            /** Flag the object that belongs to the current area and to the user's authenticated area,
+             * if the current area is the authenticated area */
+            return isAreaSObject || isUserSObject
+        } else {
+
+            /** Flag the object that belongs to the user's authenticated area, 
+             * if the current area is not the authenticated area */
+            return isUserSObject
+        }
+    } else {
+        return false
     }
 }
 
