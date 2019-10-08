@@ -22,12 +22,6 @@ import config from '../../config';
 import _ from 'lodash'
 import { AppContext } from '../../context/AppContext';
 
-let popupOptions = {
-    minWidth: '400',
-    maxHeight: '300',
-    className : 'customPopup',
-}
-
 class Surveillance extends React.Component {
 
     static contextType = AppContext
@@ -234,7 +228,7 @@ class Surveillance extends React.Component {
         }
         if (objectList.length !== 0) {
             const popupContent = this.popupContent(objectList)
-            e.target.bindPopup(popupContent, popupOptions).openPopup();
+            e.target.bindPopup(popupContent, config.popupOptions).openPopup();
         }
 
         this.props.isObjectListShownProp(true);
@@ -308,18 +302,21 @@ class Surveillance extends React.Component {
         };
 
         let counter = 0;
+        let { locale } = this.context
 
         this.filterTrackingData(_.cloneDeep(this.props.proccessedTrackingData))
         .map(item => {
 
             // let detectedNum = item.lbeaconDetectedNum;
             let position = this.macAddressToCoordinate(item.mac_address,item.currentPosition);
+
             /** 
              * Set the Marker's popup 
              * popupContent (objectName, objectImg, objectImgWidth)
              * More Style sheet include in Surveillance.css
             */
-            let popupContent = this.popupContent([item])
+            let popupContent = config.getPopupContent([item], this.collectObjectsByLatLng(item.currentPosition), locale)
+
             /**
              * Create the marker, if the status of the object is not normal, 
              * then the color will be black, or grey.
@@ -368,7 +365,7 @@ class Surveillance extends React.Component {
             }
 
             const option = new L.AwesomeNumberMarkers (iconOption)
-            let marker =  L.marker(position, {icon: option}).bindPopup(popupContent, popupOptions).addTo(this.markersLayer)
+            let marker =  L.marker(position, {icon: option}).bindPopup(popupContent, config.popupOptions).addTo(this.markersLayer)
 
             /** 
              * Set the z-index offset of the searhed object so that
@@ -440,70 +437,9 @@ class Surveillance extends React.Component {
         
     }
 
-    /**
-     * The html content of popup of markers.
-     * @param {*} object The fields in object will present if only the field is add into objectInfoHash in handleTrackingData method
-     * @param {*} objectImg  The image of the object.
-     * @param {*} imgWidth The width of the image.
-     */
-    popupContent = (objectsMap) => {
-        let currentPosition = objectsMap[0].currentPosition
-        let objectList = this.collectObjectsByLatLng(currentPosition)
-        /* The style sheet is right in the src/css/Surveillance.css*/
-        const { locale } = this.context
-        const content = 
-            `
-                <div>
-                    <h4 class='border-bottom pb-1 px-2'>${objectsMap[0].location_description}</h4>
-                    ${objectList.filter(item => item.found).map( item =>{
-                        var element = ''
-                        if (item.object_type == 0) {
-                            element +=     
-                                `
-                                    <div class='row popupRow mb-2 ml-1 d-flex jusify-content-start'>
-                                        <div class='popupType'>
-                                            ${item.type}, 
-                                        </div>
-                                        <div class='popupType'>
-                                            ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}:${item.access_control_number.slice(10, 14)},
-                                        </div>
-                                        <div class='popupType'>
-                                            ${locale.texts[item.status.toUpperCase()]}, 
-                                        </div>
-                                        <div class='popupType'>
-                                            ${locale.texts.BELONG_TO} ${locale.texts[config.areaOptions[item.area_id]]}
-                                        </div>
-                                    </div>
-                                `
-                        } else {
-                            element +=     
-                                `
-                                    <div class='row popupRow mb-2 ml-1 d-flex jusify-content-start'>
-                                        <div class='popupType'>
-                                            ${item.name}, 
-                                        </div>
-                                        <div class='popupType'>
-                                            ${locale.texts.PHYSICIAN_NAME} : ${item.physician_name},
-                                        </div>
-                                        <div class='popupType'>
-                                            ${locale.texts.BELONG_TO} ${locale.texts[config.areaOptions[item.area_id]]}
-                                        </div>
-                                    </div>
-                                `
-                        }
-
-                            return element
-                        }).join('')
-                    }
-                </div>
-            `
-        return content
-    }
-
     render(){
         return(   
-            <div id='mapid'>
-            </div>
+            <div id='mapid' />
         )
     }
 }

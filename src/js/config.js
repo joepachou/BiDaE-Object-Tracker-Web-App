@@ -92,7 +92,7 @@ const config = {
             number: 'white',
             female: 'female',
             male: 'male',
-            female_1: 'female_1',
+            female_1: 'female_2',
             male_1: 'male_1',
 
             // ['slateblue', 'tan', 'lightyellow', 'lavender', 'orange','lightblue', 'mistyrose', 'yellowgreen', 'darkseagreen', 'orchid']
@@ -334,6 +334,64 @@ const config = {
 
         }
 
+    },
+    popupOptions: {
+        minWidth: '500',
+        maxHeight: '300',
+        className : 'customPopup',
+    },
+
+    /** The html content of popup of markers */
+    getPopupContent: (object, objectList, locale) => {
+
+        /* The style sheet is right in the src/css/Surveillance.css*/
+        const content = 
+            `
+                <div>
+                    <h4 class='border-bottom pb-1 px-2'>${object[0].location_description}</h4>
+                    ${objectList.map( item =>{
+                        var element = ''
+                        if (item.object_type == 0) {
+                            element +=     
+                                `
+                                    <div class='row popupRow mb-2 ml-1 d-flex jusify-content-start'>
+                                        <div class='popupType'>
+                                            ${item.type} 
+                                        </div>
+                                        <div class='popupType'>
+                                            , ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}: ${item.access_control_number.slice(10, 14)}
+                                        </div>
+                                        <div class='popupType'>
+                                            , ${locale.texts[item.status.toUpperCase()]}
+                                        </div>
+                                        <div class='popupType'>
+                                            , ${locale.texts.BELONG_TO} ${locale.texts[config.areaOptions[item.area_id]]}
+                                        </div>
+                                    </div>
+                                `
+                        } else {
+                            element +=     
+                                `
+                                    <div class='row popupRow mb-2 ml-1 d-flex jusify-content-start'>
+                                        <div class='popupType'>
+                                            ${item.name} 
+                                        </div>
+                                        <div class='popupType'>
+                                            , ${locale.texts.PHYSICIAN_NAME}: ${item.physician_name}
+                                        </div>
+                                        <div class='popupType'>
+                                            , ${locale.texts.BELONG_TO} ${locale.texts[config.areaOptions[item.area_id]]}
+                                        </div>
+                                    </div>
+                                `
+                        }
+
+                            return element
+                        }).join('')
+                    }
+                </div>
+            `
+        return content
     }
 }
 
