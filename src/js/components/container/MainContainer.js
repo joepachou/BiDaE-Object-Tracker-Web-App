@@ -305,10 +305,11 @@ class MainContainer extends React.Component{
                 }
             })
         } else if (searchKey === allDevices) {
-            searchResult = proccessedTrackingData.map(item => {
-                item.searched = auth.user.areas_id.includes(item.area_id) ? true : false
-                return item
-            })
+            searchResult = proccessedTrackingData.filter(item => item.object_type == 0)
+                .map(item => {
+                    item.searched = auth.user.areas_id.includes(item.area_id) ? true : false
+                    return item
+                })
         } else if (searchKey === 'coordinate') {
             searchResult = this.collectObjectsByLatLng(searchValue,proccessedTrackingData)
         } else if (typeof searchKey === 'object') {
@@ -401,12 +402,11 @@ class MainContainer extends React.Component{
                     ? searchResultObjectTypeMap
                     : {[devicePlural] : 0} 
                 : {[devicePlural] : 0} 
-            : {[devicePlural]: this.state.trackingData.filter(item => item.found).length}
+            : {[devicePlural]: this.state.trackingData.filter(item => item.found && item.object_type == 0).length}
 
         return(
             /** "page-wrap" the default id named by react-burget-menu */
             <div id="page-wrap" className='mx-1 my-2' >
-            {console.log(this.state.violatedObjects)}
                 <Row id="mainContainer" className='d-flex w-100 justify-content-around mx-0 overflow-hidden' style={style.container}>
                     <Col sm={7} md={9} lg={8} xl={8} id='searchMap' className="pl-2 pr-1" >
                         <InfoPrompt 

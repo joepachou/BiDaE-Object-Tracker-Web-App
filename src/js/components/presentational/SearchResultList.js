@@ -1,6 +1,10 @@
 import React from 'react';
-import { Alert, Tab, ListGroup, Col, Row, Image } from 'react-bootstrap'
-import LocaleContext from '../../context/LocaleContext';
+import { 
+    Button,
+    Col, 
+    Row, 
+    Image 
+} from 'react-bootstrap'
 import ChangeStatusForm from '../container/ChangeStatusForm';
 import ConfirmForm from '../container/ConfirmForm';
 import { connect } from 'react-redux'
@@ -11,9 +15,47 @@ import axios from 'axios';
 import InfoPrompt from './InfoPrompt';
 import AccessControl from './AccessControl';
 import SearchResultListGroup from '../presentational/SearchResultListGroup'
-import Cookies from 'js-cookie'
+import { AppContext } from '../../context/AppContext';
+import { toast } from 'react-toastify';
+
+
+const Toast = () => {
+
+    const style = {
+        column: {
+            textAlign: 'center',
+        },
+        icon: {
+            check: {
+                color: 'green',
+            },
+            times: {
+                color: 'red',
+            },
+            exclamation: {
+                color: 'orange',
+            }
+        }
+    }
+
+    return (
+        <Row>
+            <Col className='d-flex '>
+                <i className="fas fa-check " style={style.icon.check}></i>     
+            </Col>
+            <Col>
+                view report     
+            </Col>
+            <Col>
+                download report     
+            </Col> 
+        </Row>
+    )
+}
 
 class SearchResult extends React.Component {
+
+    static contextType = AppContext
 
     state = {
         showEditObjectForm: false,
@@ -110,7 +152,6 @@ class SearchResult extends React.Component {
             showEditObjectForm: false,
             editedObjectPackage,
         })
-        console.log(editedObjectPackage)
         setTimeout(
             function() {
                 this.setState({
@@ -124,7 +165,8 @@ class SearchResult extends React.Component {
 
     handleConfirmFormSubmit = (e) => {
         let { editedObjectPackage } = this.state;
-        let username = JSON.parse(Cookies.get('user')).name
+        let { auth } = this.context
+        let username = auth.user.name
         axios.post(dataSrc.editObjectPackage, {
             formOption: editedObjectPackage,
             username,
@@ -143,6 +185,10 @@ class SearchResult extends React.Component {
                 .bind(this),
                 1000
             )
+            toast(<Toast />, {
+                closeOnClick: false,
+                position: "top-right",
+            })
         }).catch( error => {
             console.log(error)
         })
@@ -189,7 +235,7 @@ class SearchResult extends React.Component {
 
 
     render() {
-        const locale = this.context;
+        const { locale } = this.context;
         const { searchKey } = this.props;
         const style = {
             noResultDiv: {
@@ -292,7 +338,6 @@ class SearchResult extends React.Component {
         )
     }
 }
-SearchResult.contextType = LocaleContext;
 
 const mapDispatchToProps = (dispatch) => {
     return {
