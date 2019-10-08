@@ -253,7 +253,7 @@ class SearchableObjectType extends React.Component {
         })
         flag === false ? toReturnSearchHistory.push({name: searchKey, value: 1}) : null;
         const sortedSearchHistory = this.sortSearchHistory(toReturnSearchHistory)
-        // auth.setSearchHistory(sortedSearchHistory)
+        auth.setSearchHistory(sortedSearchHistory)
         this.checkInSearchHistory(auth.user.name, sortedSearchHistory)
     }
 
@@ -266,10 +266,12 @@ class SearchableObjectType extends React.Component {
     }
 
     checkInSearchHistory(username, searchHistory) {
+        console.log(searchHistory)
         axios.post(addUserSearchHistory, {
             username,
             searchHistory,
         }).then(res => {
+            console.log(res)
         }).catch(err => {
             console.log(err)
         })

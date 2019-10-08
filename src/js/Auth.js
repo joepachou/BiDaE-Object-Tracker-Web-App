@@ -77,6 +77,11 @@ class Auth extends React.Component {
     }
 
     setSearchHistory = (searchHistory) => {
+        let userInfo = {
+            ...this.state.user,
+            searchHistory,
+        }
+        this.setCookies('user', userInfo)
         this.setState({
             ...this.state,
             user: {
