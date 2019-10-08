@@ -61,6 +61,7 @@ class Surveillance extends React.Component {
         // }
 
         if (this.props.geoFenceConfig.length !== 0 && !this.state.hasGeoFenceMaker && this.props.isOpenFence) {
+            console.log('what!!!')
             this.createGeoFenceMarkers()
         }
 
@@ -73,6 +74,7 @@ class Surveillance extends React.Component {
         // }
 
         if (this.state.hasGeoFenceMaker && (prevProps.isOpenFence !== this.props.isOpenFence)) {
+            console.log('reGeofence')
             this.props.isOpenFence ? this.createGeoFenceMarkers() : this.geoFenceLayer.clearLayers()
         }
         
@@ -298,11 +300,11 @@ class Surveillance extends React.Component {
         };
 
         const femaleIconOptions = {
-            markerColor: config.surveillanceMap.iconColor.female_1,
+            markerColor: config.surveillanceMap.iconColor.female,
         };
 
         const maleIconOptions = {
-            markerColor: config.surveillanceMap.iconColor.male_1,
+            markerColor: config.surveillanceMap.iconColor.male,
         };
 
         let counter = 0;
@@ -411,7 +413,8 @@ class Surveillance extends React.Component {
 
     collectObjectsByLatLng = (lbPosition) => {
         let objectList = []
-        this.filterTrackingData(this.props.proccessedTrackingData).map(item => {
+        this.filterTrackingData(this.props.proccessedTrackingData)
+        .map(item => {
             item.currentPosition && item.currentPosition.toString() === lbPosition.toString() && item.isMatchedObject ? objectList.push(item) : null;
         })
         return objectList 
@@ -453,32 +456,43 @@ class Surveillance extends React.Component {
                 <div>
                     <h4 class='border-bottom pb-1 px-2'>${objectsMap[0].location_description}</h4>
                     ${objectList.filter(item => item.found).map( item =>{
-                        const element =     
-                        `
-                            <div class='row popupRow mb-2 ml-1 d-flex jusify-content-start'>
-                                <div class='popupType'>
-                                    ${item.type}, 
-                                </div>
-                                <div class='popupType'>
-                                    ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}:${item.access_control_number.slice(10, 14)},
-                                </div>
-                                <div class='popupType'>
-                                    ${locale.texts[item.status.toUpperCase()]}, 
-                                </div>
-                                <div class='popupType'>
-                                    屬於${locale.texts[config.areaOptions[item.area_id]]}
-                                </div>
-                            </div>
-                        `
-                        // const element =     
-                        //     `
-                        //         <div class='row popupRow mb-2 ml-1'>
-                        //             <div class='col-5 popupType d-flex align-items-center'>${item.type}</div>
-                        //             <div class='col-2 popupItem d-flex align-items-center'>${item.access_control_number.slice(10, 14)}</div>
-                        //             <div class='col-3 popupItem d-flex align-items-center text-capitalize'>${locale.texts[item.status.toUpperCase()]}</div>
-                        //         </div>
-                        //     `
-                                return element
+                        var element = ''
+                        if (item.object_type == 0) {
+                            element +=     
+                                `
+                                    <div class='row popupRow mb-2 ml-1 d-flex jusify-content-start'>
+                                        <div class='popupType'>
+                                            ${item.type}, 
+                                        </div>
+                                        <div class='popupType'>
+                                            ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}:${item.access_control_number.slice(10, 14)},
+                                        </div>
+                                        <div class='popupType'>
+                                            ${locale.texts[item.status.toUpperCase()]}, 
+                                        </div>
+                                        <div class='popupType'>
+                                            ${locale.texts.BELONG_TO} ${locale.texts[config.areaOptions[item.area_id]]}
+                                        </div>
+                                    </div>
+                                `
+                        } else {
+                            element +=     
+                                `
+                                    <div class='row popupRow mb-2 ml-1 d-flex jusify-content-start'>
+                                        <div class='popupType'>
+                                            ${item.name}, 
+                                        </div>
+                                        <div class='popupType'>
+                                            ${locale.texts.PHYSICIAN_NAME} : ${item.physician_name},
+                                        </div>
+                                        <div class='popupType'>
+                                            ${locale.texts.BELONG_TO} ${locale.texts[config.areaOptions[item.area_id]]}
+                                        </div>
+                                    </div>
+                                `
+                        }
+
+                            return element
                         }).join('')
                     }
                 </div>
