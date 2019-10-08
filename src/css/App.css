@@ -221,6 +221,11 @@ a:hover {
     box-shadow: none;
 }
 
+.btn-outline-secondary:not(:disabled):not(.disabled):active:focus, 
+.show >.btn-outline-secondary.dropdown-toggle:focus {
+    box-shadow: none;
+}
+
 .btn-outline-secondary:hover {
     background-color: white;
     border-color: rgb(224, 224, 224);

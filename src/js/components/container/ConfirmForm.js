@@ -5,8 +5,11 @@ import LocaleContext from '../../context/LocaleContext';
 import moment from 'moment';
 import tempImg from '../../../img/doppler.jpg'
 import { Formik, Form } from 'formik';
+import { AppContext } from '../../context/AppContext';
   
 class ConfirmForm extends React.Component {
+
+    static contextType = AppContext
     
     state = {
         show: this.props.show,
@@ -79,9 +82,7 @@ class ConfirmForm extends React.Component {
             }
         }
 
-        const locale = this.context
-
-        moment.locale(locale.abbr);
+        const { locale } = this.context
 
         return (
             <>  
@@ -152,7 +153,7 @@ class ConfirmForm extends React.Component {
                         </Row>
                         <Row>
                             <Col className='d-flex justify-content-center'>
-                                <h6>{moment().format('LLLL')}</h6>    
+                                <h6>{moment().locale(locale.abbr).format(config.confirmFormTimeFormat)}</h6>    
                             </Col>
                         </Row>
                         {selectedObjectData.status === config.objectStatus.RESERVE && 
@@ -200,7 +201,5 @@ class ConfirmForm extends React.Component {
         );
     }
 }
-
-ConfirmForm.contextType = LocaleContext;
   
 export default ConfirmForm;
