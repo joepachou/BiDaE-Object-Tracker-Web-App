@@ -12,7 +12,8 @@ import PdfDownloadForm from "./PdfDownloadForm"
 import config from "../../config";
 import AccessControl from "../presentational/AccessControl"
 import { AppContext } from "../../context/AppContext";
-import AreaControl from "../presentational/AreaControl";
+import { toast } from 'react-toastify';
+
 
 class SurveillanceContainer extends React.Component {
 
@@ -203,6 +204,7 @@ class SurveillanceContainer extends React.Component {
                                 className="mr-1 ml-2 text-capitalize" 
                                 onClick={this.handleClickButton} 
                                 name="clear"
+                                disabled={!this.props.hasSearchKey}
                             >
                                 {locale.texts.CLEAR}
                             </Button>
@@ -230,6 +232,7 @@ class SurveillanceContainer extends React.Component {
                                 onClick={this.handleClickButton} 
                                 name="filterObjectType"
                                 value={[0]}
+                                active={this.state.filterObjectType.includes(0)}
                             >
                                 {this.state.filterObjectType.includes(0) ? locale.texts.SHOW_DEVICES : locale.texts.HIDE_DEVICES}
                             </Button>
@@ -241,6 +244,7 @@ class SurveillanceContainer extends React.Component {
                                 onClick={this.handleClickButton} 
                                 name="filterObjectType"
                                 value={[1, 2]}
+                                active={this.state.filterObjectType.includes(1)}
                             >
                                 {this.state.filterObjectType.includes(1) ? locale.texts.SHOW_RESIDENTS : locale.texts.HIDE_RESIDENTS}
                             </Button>
