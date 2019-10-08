@@ -118,7 +118,8 @@ const tw = {
     NTU_HOSPITAL_YUNLIN_BRANCH: '台大醫院雲林分院',
     NTU_HOSPITAL_TAIPEI: '台大醫院台北總院',
     NTU_HOSPITAL_YUNLIN_BRANCH_WARD_5B: '台大醫院雲林分院5B病房',
-
+    WARD_1: '病房 1',
+    WARD_2: '病房 2',
 
     /** User Setting */
     USER_SETTING: '帳戶設定',

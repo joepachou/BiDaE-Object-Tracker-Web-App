@@ -117,6 +117,8 @@ const en =  {
     NTU_HOSPITAL_YUNLIN_BRANCH: 'NTU Hospital Yunlin Branch',
     NTU_HOSPITAL_TAIPEI: 'NTU Hospital Taipe',
     NTU_HOSPITAL_YUNLIN_BRANCH_WARD_5B: 'NTU Hospital Yunlin branch ward 5B',
+    WARD_1: 'ward 1',
+    WARD_2: 'ward 2',
 
     /** User Setting */
     USER_SETTING: 'User Setting',
