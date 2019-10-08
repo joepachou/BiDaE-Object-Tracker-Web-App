@@ -196,11 +196,15 @@ a:hover {
     color: #007bff;
 }
 
-.btn-outline-primary:not(:disabled):not(.disabled):active {
+.btn-outline-primary:not(:disabled):not(.disabled):active, {
     color: rgb(0, 123, 255, 1);
     background-color: white;
     border-color: #007bff;
     outline: 0;
+}
+
+.btn-outline-primary:not(:disabled):not(.disabled).active:focus {
+    box-shadow: none;
 }
 
 .btn-outline-primary:not(:disabled):not(.disabled):active:focus, 
