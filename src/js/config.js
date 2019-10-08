@@ -240,6 +240,7 @@ const config = {
     shiftRecordPdfContentTimeFormat: 'MM/DD/YYYY',
     geoFenceViolationTimeFormat: 'h:mm MM/DD/YYYY',
     confirmFormTimeFormat: 'LLLL',
+    shiftChangeRecordTimeFormat: 'LLL',
 
     roles: [
         'guest',

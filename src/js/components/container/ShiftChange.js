@@ -177,7 +177,7 @@ class ShiftChange extends React.Component {
                         </Row>
                         <Row style={style.row} className='text-capitalize'> 
                             <Col>
-                                <div>{locale.texts.DATE_TIME}: {moment().format('LLL')}</div>
+                                <div>{locale.texts.DATE_TIME}: {moment().locale(locale.abbr).format(config.shiftChangeRecordTimeFormat)}</div>
                             </Col>
                         </Row>
                         {/* <Row style={style.row} className='text-capitalize'> 

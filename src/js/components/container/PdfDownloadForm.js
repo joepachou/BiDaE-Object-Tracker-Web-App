@@ -117,11 +117,11 @@ class PdfDownloadForm extends React.Component {
                         {hasData &&
                             <QRCode
                                 value={dataSrc.pdfUrl(savePath)} 
-                                size={256}
+                                size={128}
                             />
                         }
                     </Row>
-                    <Row className='d-flex justify-content-center'> 
+                    <Row className='d-flex justify-content-center mb-2'> 
                         <Button 
                             onClick={this.PdfDownloader}
                             variant='outline-secondary'
