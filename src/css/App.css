@@ -217,8 +217,7 @@ a:hover {
     font-weight: 500;
 }
 
-.btn-outline-secondary:not(:disabled):not(.disabled):active:focus, 
-.show >.btn-outline-primary.dropdown-toggle:focus {
+.btn-outline-secondary:not(:disabled):not(.disabled).active:focus {
     box-shadow: none;
 }
 
