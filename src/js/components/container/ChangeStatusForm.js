@@ -8,7 +8,6 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import RadioButton from '../presentational/RadioButton';
 import RadioButtonGroup from './RadioButtonGroup';
-import { inherits } from 'util';
 
 class ChangeStatusForm extends React.Component {
     
@@ -205,65 +204,70 @@ class ChangeStatusForm extends React.Component {
 
                             render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
                                 <Form className="text-capitalize">
-                                    <Row className="form-group">
-                                        <Col>  
-                                            <RadioButtonGroup
-                                                id="radioGroup"
-                                                label={locale.texts.STATUS}
-                                                value={values.radioGroup}
-                                                error={errors.radioGroup}
-                                                touched={touched.radioGroup}
-                                            >
+                                    <RadioButtonGroup
+                                        id="radioGroup"
+                                        label={locale.texts.STATUS}
+                                        value={values.radioGroup}
+                                        error={errors.radioGroup}
+                                        touched={touched.radioGroup}
+                                    >
+                                        <Row>
+                                            <Col>
                                                 <Field
                                                     component={RadioButton}
                                                     name="radioGroup"
                                                     id={config.objectStatus.NORMAL}
                                                     label={locale.texts.NORMAL}
                                                 />
-                                            
+                                            </Col>
+                                            <Col>
                                                 <Field
                                                     component={RadioButton}
                                                     name="radioGroup"
                                                     id={config.objectStatus.BROKEN}
                                                     label={locale.texts.BROKEN}
                                                 />
-
+                                            </Col>
+                                            <Col>
                                                 <Field
                                                     component={RadioButton}
                                                     name="radioGroup"
                                                     id={config.objectStatus.RESERVE}
                                                     label={locale.texts.RESERVE}
                                                 />
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col>
                                                 <Field
                                                     component={RadioButton}
                                                     name="radioGroup"
                                                     id={config.objectStatus.TRANSFERRED}
                                                     label={locale.texts.TRANSFERRED}
                                                 />
-        
-                                                <Select
-                                                    placeholder = {locale.texts.SELECT_LOCATION}
-                                                    name="select"
-                                                    value = {values.select}
-                                                    onChange={value => setFieldValue("select", value)}
-                                                    options={options}
-                                                    isDisabled={values.radioGroup !== config.objectStatus.TRANSFERRED}
-                                                    style={style.select}
-                                                    components={{
-                                                        IndicatorSeparator: () => null
-                                                    }}
-                                                />
-                                            </RadioButtonGroup>
-                                            <Row className='no-gutters' className='d-flex align-self-center'>
-                                                <Col>
-                                                    {touched.radioGroup && errors.radioGroup &&
-                                                    <div style={style.errorMessage}>{errors.radioGroup}</div>}
-                                                    {touched.select && errors.select &&
-                                                    <div style={style.errorMessage}>{errors.select}</div>}
-                                                </Col>
-                                            </Row>  
-                                        </Col>
-                                    </Row>
+                                            </Col>
+                                        </Row>
+                                        <Select
+                                            placeholder = {locale.texts.SELECT_LOCATION}
+                                            name="select"
+                                            value = {values.select}
+                                            onChange={value => setFieldValue("select", value)}
+                                            options={options}
+                                            isDisabled={values.radioGroup !== config.objectStatus.TRANSFERRED}
+                                            style={style.select}
+                                            components={{
+                                                IndicatorSeparator: () => null
+                                            }}
+                                        />
+                                        <Row className='no-gutters' className='d-flex align-self-center'>
+                                            <Col>
+                                                {touched.radioGroup && errors.radioGroup &&
+                                                <div style={style.errorMessage}>{errors.radioGroup}</div>}
+                                                {touched.select && errors.select &&
+                                                <div style={style.errorMessage}>{errors.select}</div>}
+                                            </Col>
+                                        </Row>  
+                                    </RadioButtonGroup>
                                     <hr/>
                                     <Row>
                                         <Col>
