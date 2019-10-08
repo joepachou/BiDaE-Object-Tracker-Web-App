@@ -96,8 +96,12 @@ app.post('/test/deleteEditObjectRecord', db.deleteEditObjectRecord)
 
 app.post('/data/getAreaTable', db.getAreaTable)
 
-app.get('/save_file_path/:file', (req, res) =>{
-	res.sendFile(path.join(__dirname, 'save_file_path',req.params['file']));
+app.get('/shift_record/:file', (req, res) =>{
+	res.sendFile(path.join(__dirname, 'shift_record',req.params['file']));
+})
+
+app.get('/search_result/:file', (req, res) =>{
+	res.sendFile(path.join(__dirname, 'search_result',req.params['file']));
 })
 
 app.get('/download/com.beditech.IndoorNavigation.apk', (req, res) => {

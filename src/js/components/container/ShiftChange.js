@@ -122,7 +122,7 @@ class ShiftChange extends React.Component {
         let fileNameTime = moment().locale('en').format(config.shiftRecordFileNameTimeFormat)
         const { foundResult, notFoundResult } = this.state.searchResult
         let pdfFormat = config.pdfFormat(userInfo, foundResult, notFoundResult, locale, contentTime, 'shiftChange')
-        let fileDir = config.shiftRecordFileDir
+        let fileDir = config.shiftRecordFolderPath
         let fileName = `${userInfo.name}_${userInfo.shift.replace(/ /g, '_')}_${fileNameTime}.pdf`
         let filePath = `${fileDir}/${fileName}`
         axios.post(dataSrc.generatePDF, {

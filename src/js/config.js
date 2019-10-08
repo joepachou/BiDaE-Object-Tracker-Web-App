@@ -233,8 +233,8 @@ const config = {
         'night shift',
     ],
 
-    shiftRecordFileDir: 'save_file_path',
-    searchResultFileDir: 'search_result_dir',
+    shiftRecordFolderPath: 'shift_record',
+    searchResultFolderPath: 'search_result',
 
     shiftRecordFileNameTimeFormat: 'MM_DD_YYYY',
     shiftRecordPdfContentTimeFormat: 'MM/DD/YYYY',
