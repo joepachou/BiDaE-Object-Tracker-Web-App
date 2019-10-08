@@ -158,11 +158,18 @@ const config = {
         objectManagementRSSIThreshold: 0
     },
 
-    transferredLocation: [
-        "Yuanlin Christian Hospital",
-        "NTU Hospital Yunlin branch",
-        "NTU Hospital Taipei",
-    ],
+    transferredLocation: {
+        Yuanlin_Christian_Hospital: [
+            "ward 1",
+            "ward 2",
+        ],
+        NTU_Hospital_Yunlin_branch: [
+            "NTU_Hospital_Yunlin_branch"
+        ],
+        NTU_Hospital_Taipei: [
+            "NTU_Hospital_Taipei"
+        ],
+    },
     
     locale: {
         defaultLocale: 'tw',
