@@ -367,6 +367,8 @@ const  generatePDF = (request, response) => {
         "border": "1cm",
         "timeout": "120000"
     };
+
+    /** If there are some trouble when download pdf, try npm rebuild phantomjs-prebuilt */
     pool.query(queryType.query_addShiftChangeRecord(userInfo.name, filePath))
         .then(res => {
             pdf.create(pdfFormat, options).toFile(filePath, function(err, result) {

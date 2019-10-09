@@ -169,21 +169,38 @@ class GridButton extends React.Component {
 
         const style = {
             row: {
-                width: 500,
+                // width: 500,
             }
         }
         return (
+            // <div>
+            //     {objectType.length !== 0 
+            //         ? 
+            //             <Row className='' style={style.row}>
+            //                 {Array.from(objectType).map( (item,index) => {
+            //                     return (
+            //                         <Col sm={6} md={6} lg={6} xl={6} className='px-1' key={index}>
+            //                             <div className='gridbutton' onClick={this.handleClick} key={index} name={item.toLowerCase()}>
+            //                                 {item}
+            //                             </div>
+            //                         </Col>
+            //                     )
+            //                 })}
+            //             </Row>
+            //         : null
+            //     }
+            // </div>
             <div>
                 {objectType.length !== 0 
                     ? 
                         <Row className='' style={style.row}>
                             {Array.from(objectType).map( (item,index) => {
                                 return (
-                                    <Col sm={6} md={6} lg={6} xl={6} className='px-1' key={index}>
-                                        <div className='gridbutton' onClick={this.handleClick} key={index} name={item.toLowerCase()}>
+                                    <Nav.Item className="">
+                                        <div className='gridbutton mr-2' onClick={this.handleClick} key={index} name={item.toLowerCase()}>
                                             {item}
                                         </div>
-                                    </Col>
+                                    </Nav.Item>
                                 )
                             })}
                         </Row>
