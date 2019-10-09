@@ -58,17 +58,24 @@ class EditObjectForm extends React.Component {
     render() {
         const locale = this.context
 
-        const options = config.transferredLocation.map(location => {
-            let locationObj = {};
-            locationObj["value"] = location;
-            locationObj["label"] = locale.texts[location.toUpperCase().replace(/ /g, '_')];
-            return locationObj
+        const options = Object.keys(config.transferredLocation).map(location => {
+            return {
+                value: location,
+                label: locale.texts[location.toUpperCase().replace(/ /g, '_')],
+                options: config.transferredLocation[location].map(branch => {
+                    return {
+                        value: `${location}, ${branch}`,
+                        label: locale.texts[branch.toUpperCase().replace(/ /g, '_')],
+
+                    }
+                })
+            }
         })
 
-        const areaOptions = this.props.areaList.map(area => {
+        const areaOptions = Object.values(config.areaOptions).map(area => {
             return {
                 value: area.name,
-                label: locale.texts[area.name.toUpperCase().replace(/ /g, '_')]
+                label: locale.texts[area.toUpperCase().replace(/ /g, '_')]
             };
         })
 
