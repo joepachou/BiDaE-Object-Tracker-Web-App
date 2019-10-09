@@ -57,7 +57,7 @@ class MainContainer extends React.Component{
             this.handleRefreshSearchResult()
         }
         if (!(_.isEqual(prevState.auth, this.context.auth))) {
-            this.getTrackingData()
+            this.getTrackingData(this.context.stateReducer[0].areaId)
             this.setState({
                 auth: this.context.auth,
             })
@@ -132,13 +132,14 @@ class MainContainer extends React.Component{
         return result
     }
 
-    getTrackingData = (areaId = this.context.stateReducer[0].areaId, func) => {
-        let { auth, locale } = this.context
+    getTrackingData = () => {
+        let { auth, locale, stateReducer } = this.context
+        let [{areaId}] = stateReducer
         axios.post(dataSrc.getTrackingData,{
             rssiThreshold: this.state.rssiThreshold,
             locale: locale.abbr,
             user: auth.user,
-            areaId: areaId,
+            areaId,
         })
         .then(res => {
             let violatedObjects = res.data.reduce((violatedObjects, item) => {
@@ -325,6 +326,7 @@ class MainContainer extends React.Component{
                 if (item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0
                     || item.access_control_number.slice(10,14).indexOf(searchKey) >= 0
                     || item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0) {
+
                     item.searched = true
                     searchResult.push(item)
                 }

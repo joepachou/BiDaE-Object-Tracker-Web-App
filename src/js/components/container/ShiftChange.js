@@ -80,7 +80,7 @@ class ShiftChange extends React.Component {
             rssiThreshold: config.surveillanceMap.locationAccuracyMapToDefault[1],
             locale: locale.abbr,
             user: auth.user,
-            areaId: areaId,
+            areaId,
         }).then(res => {
             GetResultData('my devices', res.data)
                 .then(result => {
