@@ -15,7 +15,6 @@ const config = {
 
     areaOptions: {
         1: "IIS_SINICA_FLOOR_FOUR",
-        2: "NTUH_YUNLIN_WARD_FIVE_B",
         3: "NTUH_YUNLIN_WARD_FIVE_B",
     },
 
@@ -28,30 +27,30 @@ const config = {
         NTUH_YUNLIN_WARD_FIVE_B: {
             name: "NTUH_YUNLIN_WARD_FIVE_B",
             url: NTUH_YUNLIN_WARD_FIVE_B_MAP,
-            bounds: [[0,0], [45450,56160]],
+            bounds: [[-5000,-5000], [21067,31928]],
         }
     },
     
     surveillanceMap: {
 
         /* Surveillance map source*/
-        defaultArea: "IIS_SINICA_FLOOR_FOUR",
-        defaultMap: IIS_SINICA_FLOOR_FOUR_MAP,
-        IIS_SINICA_FLOOR_FOUR: IIS_SINICA_FLOOR_FOUR_MAP,
-        NTUH_YUNLIN_WARD_FIVE_B: NTUH_YUNLIN_WARD_FIVE_B_MAP,
+        // defaultArea: "IIS_SINICA_FLOOR_FOUR",
+        // defaultMap: IIS_SINICA_FLOOR_FOUR_MAP,
+        // IIS_SINICA_FLOOR_FOUR: IIS_SINICA_FLOOR_FOUR_MAP,
+        // NTUH_YUNLIN_WARD_FIVE_B: NTUH_YUNLIN_WARD_FIVE_B_MAP,
 
-        mapModules: {
-            IIS_SINICA_FLOOR_FOUR: {
-                name: "IIS_SINICA_FLOOR_FOUR",
-                areaMap: IIS_SINICA_FLOOR_FOUR_MAP,
-                mapBound:[[0,0], [21130,35710]],
-            },
-            NTUH_YUNLIN_WARD_FIVE_B: {
-                name: "NTUH_YUNLIN_WARD_FIVE_B",
-                areaMap: NTUH_YUNLIN_WARD_FIVE_B_MAP,
-                mapBound:[[0,0], [45450,56160]],
-            }
-        },
+        // mapModules: {
+        //     IIS_SINICA_FLOOR_FOUR: {
+        //         name: "IIS_SINICA_FLOOR_FOUR",
+        //         areaMap: IIS_SINICA_FLOOR_FOUR_MAP,
+        //         mapBound:[[0,0], [21130,35710]],
+        //     },
+        //     NTUH_YUNLIN_WARD_FIVE_B: {
+        //         name: "NTUH_YUNLIN_WARD_FIVE_B",
+        //         areaMap: NTUH_YUNLIN_WARD_FIVE_B_MAP,
+        //         mapBound:[[0,0], [10000,10000]],
+        //     }
+        // },
 
         /* Map customization */
         mapOptions: {

@@ -55,7 +55,6 @@ class Surveillance extends React.Component {
         // }
 
         if (this.props.geoFenceConfig.length !== 0 && !this.state.hasGeoFenceMaker && this.props.isOpenFence) {
-            console.log('what!!!')
             this.createGeoFenceMarkers()
         }
 
@@ -68,7 +67,6 @@ class Surveillance extends React.Component {
         // }
 
         if (this.state.hasGeoFenceMaker && (prevProps.isOpenFence !== this.props.isOpenFence)) {
-            console.log('reGeofence')
             this.props.isOpenFence ? this.createGeoFenceMarkers() : this.geoFenceLayer.clearLayers()
         }
         
@@ -84,8 +82,7 @@ class Surveillance extends React.Component {
     initMap = () => {
         let [{areaId}] = this.context.stateReducer
         let areaModules =  config.areaModules
-        let areaOption = config.areaOptions[areaId]
-
+        let areaOption = config.areaOptions[areaId]    
         let { url, bounds } = areaModules[areaOption]
         let map = L.map('mapid', config.surveillanceMap.mapOptions);
         let image = L.imageOverlay(url, bounds).addTo(map);
@@ -122,6 +119,7 @@ class Surveillance extends React.Component {
         let { url, bounds } = areaModules[areaOption]
         this.image.setUrl(url)
         this.image.setBounds(bounds)
+        
 
         this.createGeoFenceMarkers()
     }
