@@ -219,7 +219,7 @@ class SurveillanceContainer extends React.Component {
                                     className="mr-1 ml-2 text-capitalize" 
                                     onClick={this.handleClickButton} 
                                     name="save"
-                                    disabled={!this.props.hasSearchKey}
+                                    disabled={!this.props.hasSearchKey || this.state.showPdfDownloadForm}
                                 >
                                     {locale.texts.SAVE}
                                 </Button>
@@ -249,6 +249,22 @@ class SurveillanceContainer extends React.Component {
                                 {this.state.filterObjectType.includes(1) ? locale.texts.SHOW_RESIDENTS : locale.texts.HIDE_RESIDENTS}
                             </Button>
                         </Nav.Item>
+                        {/* <Nav.Item className="mt-2">
+                            <Button 
+                                variant="outline-primary" 
+                                className="mr-1 text-capitalize" 
+                                onClick={this.handleClickButton} 
+                                name="show devices"
+                            >
+                                {this.state.showDevice ? locale.texts.HIDE_DEVICES : locale.texts.SHOW_DEVICES }
+                            </Button>
+                        </Nav.Item >
+                        <div style={style.gridButton} className="mt-2 mx-3">
+                            <GridButton
+                                clearColorPanel={this.props.clearColorPanel}
+                                getSearchKey={this.props.getSearchKey}
+                            />
+                        </div> */}
                         {this.props.geoFenceConfig.map((item, index) => {
                             return ( parseInt(item.unique_key) == areaId && 
                                 <Fragment
@@ -279,22 +295,6 @@ class SurveillanceContainer extends React.Component {
                                 </Fragment>
                             )
                         })}
-                        {/* <Nav.Item className="mt-2">
-                            <Button 
-                                variant="outline-primary" 
-                                className="mr-1 text-capitalize" 
-                                onClick={this.handleClickButton} 
-                                name="show devices"
-                            >
-                                {this.state.showDevice ? locale.texts.HIDE_DEVICES : locale.texts.SHOW_DEVICES }
-                            </Button>
-                        </Nav.Item >
-                        <div style={style.gridButton} className="mt-2 mx-3">
-                            <GridButton
-                                clearColorPanel={this.props.clearColorPanel}
-                                getSearchKey={this.props.getSearchKey}
-                            />
-                        </div> */}
                     </Nav>
                 </div>
                 <PdfDownloadForm 
