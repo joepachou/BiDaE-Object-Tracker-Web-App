@@ -99,15 +99,17 @@ class NavbarContainer extends React.Component {
 
         return (
             <Navbar id='navbar' bg="white" className="navbar sticky-top navbar-light" expand='lg' style={style.navbar}>
-                <Navbar.Brand className='px-0 mx-0'>  
-                    <Link to="/" className="nav-link nav-brand d-flex align-items-center px-0" style={style.navbarBrand}>
+                <Navbar.Brand className='px-0 mx-0 text-capitalized'>  
+                    <Link to="/" className="nav-link nav-brand d-flex align-items-center px-0 text-capitalized" style={style.navbarBrand}>
                         <Image
                             alt=""
                             src={config.image.logo}
                             width={50}
                             className="d-inline-block align-top px-1"
                         />
-                        {locale.texts[config.areaOptions[areaId]]}
+                        <div className="text-capitalize">
+                            {locale.texts[config.areaOptions[areaId]]}
+                        </div>
                     </Link>
                 </Navbar.Brand>
                 
