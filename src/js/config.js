@@ -1,5 +1,5 @@
-import IIS_SINICA_FLOOR_FOUR_MAP from '../img/map/IIS_Newbuilding_4F_reBack.png';
-import NTUH_YUNLIN_WARD_FIVE_B_MAP from '../img/map/NTUH_Yunlin_Branch_Map.png';
+import IIS_SINICA_FLOOR_FOUR_MAP from '../img/map/iis_new_building_four_floor.png';
+import NTUH_YUNLIN_WARD_FIVE_B_MAP from '../img/map/ntuh_yunlin_branch_ward_five_b.png';
 import BOT_LOGO from '../img//logo/BOT_LOGO_RED.png';
 
 const config = {
