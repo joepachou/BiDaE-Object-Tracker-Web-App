@@ -1,13 +1,6 @@
-import IIS_SINICA_FLOOR_FOUR_MAP from '../img/IIS_Newbuilding_4F_reBack.png';
-import NTUH_YUNLIN_WARD_FIVE_B_MAP from '../img/NTUH_Yunlin_Branch_Map.png';
-
-import black_pin from '../img/colorPin/Black.svg'
-import darkGrey_pin from '../img/colorPin/DarkGrey.svg';
-import sos from '../img/colorPin/sos.svg'
-import geofence_fence from '../img/geo_fence_fence.svg'
-import geofence_perimeter from '../img/geo_fence_perimeter.svg'
-import white_pin from '../img/white_pin.svg';
-import BOT_LOGO from '../img/BOT_LOGO_RED.png';
+import IIS_SINICA_FLOOR_FOUR_MAP from '../img/map/IIS_Newbuilding_4F_reBack.png';
+import NTUH_YUNLIN_WARD_FIVE_B_MAP from '../img/map/NTUH_Yunlin_Branch_Map.png';
+import BOT_LOGO from '../img//logo/BOT_LOGO_RED.png';
 
 const config = {
     
@@ -128,7 +121,7 @@ const config = {
         markerDispersity: 5,
 
         // objectTypeSet: new Set(['Bed', 'EKG Machine', 'Infusion pump', 'SONOSITE Ultrasound', 'Ultrasound', 'Bladder scanner', 'CPM'])
-        objectType: ['三合一Monitoring', 'EKG', 'IV Pump', '烤燈', '血壓血氧監視器', '電擊器', 'CPM']
+        objectType: ['三合一Monitor', 'EKG', 'IV Pump', '烤燈', '血壓血氧監視器', '電擊器', 'CPM']
 
         
     },

@@ -3,7 +3,6 @@ import { Modal, Button, Row, Col, Image, ButtonToolbar, ToggleButton} from 'reac
 import Select from 'react-select';
 import config from '../../config';
 import LocaleContext from '../../context/LocaleContext';
-import tempImg from '../../../img/doppler.jpg'
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import RadioButton from '../presentational/RadioButton';

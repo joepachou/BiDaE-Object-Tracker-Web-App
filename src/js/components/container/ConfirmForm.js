@@ -1,9 +1,7 @@
 import React from 'react';
 import { Modal, Button, Row, Col, Image, ButtonToolbar} from 'react-bootstrap'
 import config from '../../config';
-import LocaleContext from '../../context/LocaleContext';
 import moment from 'moment';
-import tempImg from '../../../img/doppler.jpg'
 import { Formik, Form } from 'formik';
 import { AppContext } from '../../context/AppContext';
   
