@@ -17,6 +17,7 @@ import CheckboxGroup from './CheckboxGroup'
 import Checkbox from '../presentational/Checkbox'
 import RadioButtonGroup from './RadioButtonGroup'
 import RadioButton from '../presentational/RadioButton'
+import { toast } from 'react-toastify';
 
 let monitorTypeMap = {};
 
@@ -74,7 +75,7 @@ class EditObjectForm extends React.Component {
 
         const areaOptions = Object.values(config.areaOptions).map(area => {
             return {
-                value: area.name,
+                value: area,
                 label: locale.texts[area.toUpperCase().replace(/ /g, '_')]
             };
         })
@@ -107,6 +108,7 @@ class EditObjectForm extends React.Component {
             transferred_location,
             area_name,
         } = selectedObjectData
+
         return (
             <Modal show={this.state.show} onHide={this.handleClose} size='md'>
                 <Modal.Header closeButton className='font-weight-bold text-capitalize'>
@@ -120,7 +122,7 @@ class EditObjectForm extends React.Component {
                             access_control_number: access_control_number || '',
                             mac_address: mac_address || '',
                             radioGroup: status.value,
-                            area: area_name,
+                            area: area_name || '',
                             select: status.value === config.objectStatus.TRANSFERRED 
                                 ? transferred_location
                                 : '',

@@ -90,7 +90,10 @@ class ObjectManagementContainer extends React.Component{
                         label: locale.texts[item.transferred_location.toUpperCase().replace(/ /g, '_')]
                     }
                     : ''
-                item.area_name = locale.texts[config.areaOptions[item.area_id]]
+                item.area_name = {
+                    value: config.areaOptions[item.area_id],
+                    label: locale.texts[config.areaOptions[item.area_id]],
+                }
             })
             this.setState({
                 data: res.data.rows,
