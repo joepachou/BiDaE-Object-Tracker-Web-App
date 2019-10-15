@@ -2,7 +2,6 @@ import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import config from '../../config';
-import { connect } from 'react-redux'
 import ReactTable from "react-table/lib/index";
 import "react-table/"
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
@@ -305,9 +304,4 @@ class AddDeviceForm extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        objectInfo: state.retrieveTrackingData.objectInfo
-    }
-}
-export default connect(mapStateToProps)(AddDeviceForm);
+export default AddDeviceForm;

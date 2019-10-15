@@ -4,6 +4,7 @@ import LocaleContext from '../context/LocaleContext'
 import Locale from '../Locale'
 import Auth from '../Auth'
 import config from '../config';
+import StateReducer from '../reducer/StateReducer'
 
 export const AppContext = React.createContext();
 
@@ -13,22 +14,11 @@ const AppContextProvider = (props) => {
     const locale = React.useContext(LocaleContext)
 
     const initialState = {
-        areaId: auth.authenticated ? auth.user.areas_id[0] : config.defaultAreaId
-    }
-
-    const reducer = (state, action) => {
-        switch (action.type) {
-            case 'setArea':
-              return {
-                ...state,
-                areaId: action.value
-              };
-            default:
-              return state;
-        }
+        areaId: auth.authenticated ? auth.user.areas_id[0] : config.defaultAreaId,
+        shouldUpdateTrackingData: true
     }
     
-    const stateReducer = React.useReducer(reducer, initialState)
+    const stateReducer = React.useReducer(StateReducer, initialState)
 
     const value = {
         auth,

@@ -4,11 +4,9 @@ import 'react-table/react-table.css';
 import SearchResultList from '../presentational/SearchResultList'
 import { Row, Col, Toast } from 'react-bootstrap'
 import SurveillanceContainer from './SurveillanceContainer';
-import { connect } from 'react-redux'
 import config from '../../config';
 import InfoPrompt from '../presentational/InfoPrompt';
 import _ from 'lodash'
-import moment from 'moment'
 import axios from 'axios';
 import dataSrc from '../../dataSrc'
 import { AppContext } from '../../context/AppContext'
@@ -42,17 +40,26 @@ class MainContainer extends React.Component{
             ? config.surveillanceMap.locationAccuracyMapToDefault[0]
             : config.surveillanceMap.locationAccuracyMapToDefault[1],
         auth: this.context.auth,
+        shouldUpdateTrackingData: true,
     }
 
     componentDidMount = () => {
         this.getTrackingData();
         this.getLbeaconPosition();
         this.getGeoFenceConfig()
-        this.interval = this.props.shouldTrackingDataUpdate ? setInterval(this.getTrackingData, config.surveillanceMap.intevalTime) : null;
+        this.interval = setInterval(this.getTrackingData, config.surveillanceMap.intevalTime)
     }
 
     componentDidUpdate = (prevProps, prevState) => {
         let isTrackingDataChange = !(_.isEqual(this.state.trackingData, prevState.trackingData))
+        let { stateReducer } = this.context
+        if (stateReducer[0].shouldUpdateTrackingData !== this.state.shouldUpdateTrackingData) {
+            let [{shouldUpdateTrackingData}] = stateReducer
+            this.interval = shouldUpdateTrackingData ? setInterval(this.getTrackingData, config.surveillanceMap.intevalTime) : clearInterval(this.interval);
+            this.setState({
+                shouldUpdateTrackingData
+            })
+        }
         if (isTrackingDataChange && this.state.hasSearchKey) {
             this.handleRefreshSearchResult()
         }
@@ -429,6 +436,7 @@ class MainContainer extends React.Component{
                                     title={locale.texts.FOUND} 
                                 />
                         }      */}
+                        {console.log('get data')}
                         <SurveillanceContainer 
                             proccessedTrackingData={proccessedTrackingData.length === 0 ? trackingData : proccessedTrackingData}
                             hasSearchKey={hasSearchKey}
@@ -472,13 +480,7 @@ class MainContainer extends React.Component{
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        shouldTrackingDataUpdate: state.retrieveTrackingData.shouldTrackingDataUpdate,
-    }
-}
-
-export default connect(mapStateToProps)(MainContainer)
+export default MainContainer
 
 
 

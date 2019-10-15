@@ -11,13 +11,6 @@ import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import '../../../css/CustomMarkerCluster.css'
 import '../../leaflet_awesome_number_markers';
-
-/** Redux related Library  */
-import { 
-    isObjectListShown,
-    selectObjectList,
-} from '../../action/action';
-import { connect } from 'react-redux';
 import config from '../../config';
 import _ from 'lodash'
 import { AppContext } from '../../context/AppContext';
@@ -443,18 +436,18 @@ class Surveillance extends React.Component {
 }
 
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        isObjectListShownProp: value => dispatch(isObjectListShown(value)),
-        selectObjectListProp: array => dispatch(selectObjectList(array)),
-    }
-}
+// const mapDispatchToProps = (dispatch) => {
+//     return {
+//         isObjectListShownProp: value => dispatch(isObjectListShown(value)),
+//         selectObjectListProp: array => dispatch(selectObjectList(array)),
+//     }
+// }
 
-const mapStateToProps = (state) => {
-    return {
-        shouldTrackingDataUpdate: state.retrieveTrackingData.shouldTrackingDataUpdate,
-    }
-}
+// const mapStateToProps = (state) => {
+//     return {
+//         shouldTrackingDataUpdate: state.retrieveTrackingData.shouldTrackingDataUpdate,
+//     }
+// }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Surveillance)
+export default Surveillance;
 

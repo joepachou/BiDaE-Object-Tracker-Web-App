@@ -1,8 +1,6 @@
 import React  from 'react';
 import { Col, ListGroup, Row, Button } from 'react-bootstrap';
 import LocaleContext from '../../context/LocaleContext';
-import { connect } from 'react-redux';
-import { shouldUpdateTrackingData } from '../../action/action';
 import config from '../../config';
 import AuthenticationContext from '../../context/AuthenticationContext';
 import AccessControl from '../presentational/AccessControl';
@@ -99,10 +97,4 @@ class FrequentSearch extends React.Component {
 
 FrequentSearch.contextType = LocaleContext;
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        shouldUpdateTrackingData: value => dispatch(shouldUpdateTrackingData(value))
-    }
-}
-
-export default connect(null, mapDispatchToProps)(FrequentSearch);
+export default FrequentSearch;

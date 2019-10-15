@@ -7,8 +7,6 @@ import {
 } from 'react-bootstrap'
 import ChangeStatusForm from '../container/ChangeStatusForm';
 import ConfirmForm from '../container/ConfirmForm';
-import { connect } from 'react-redux'
-import { shouldUpdateTrackingData } from '../../action/action';
 import dataSrc from '../../dataSrc';
 import _ from 'lodash';
 import axios from 'axios';
@@ -81,7 +79,12 @@ class SearchResult extends React.Component {
         /** The reason using array to encapture the selectedObjectData is to have the consisten data form passed into ChangeStatusForm */
         this.toggleSelection(number, isFound)
         this.props.highlightSearchPanel(true)
-
+        let { stateReducer } = this.context
+        let [{}, dispatch] = stateReducer
+        dispatch({
+            type: 'setUpdateTrackingData',
+            value: false
+        })
         // this.props.shouldUpdateTrackingData(false)
     }
 
@@ -114,6 +117,8 @@ class SearchResult extends React.Component {
     }
 
     handleChangeObjectStatusFormClose = () => {
+        let { stateReducer } = this.context
+        let [{}, dispatch] = stateReducer
         this.setState({
             showEditObjectForm: false,
             showConfirmForm: false,
@@ -129,6 +134,10 @@ class SearchResult extends React.Component {
             }.bind(this),
             200
         )
+        dispatch({
+            type: 'setUpdateTrackingData',
+            value: true
+        })
         // this.props.shouldUpdateTrackingData(true)
         this.props.highlightSearchPanel(false)
     }
@@ -272,6 +281,7 @@ class SearchResult extends React.Component {
                 <Row className='d-flex justify-content-center' style={style.titleText}>
                     <h4 className='text-capitalize'>{locale.texts.SEARCH_RESULT}</h4>
                 </Row>
+                {console.log('render list')}
                 {/* <Row className='w-100 searchResultForMobile'>
                     <InfoPrompt data={{[devicePlural]: searchResult.length}} title={title}/>
                 </Row> */}
@@ -318,7 +328,7 @@ class SearchResult extends React.Component {
                 }
                 <ChangeStatusForm 
                     show={this.state.showEditObjectForm} 
-                    title={locale.texts.REPORT_DEVICE_STATUS} 
+                    title={'report device status'} 
                     selectedObjectData={this.state.selectedObjectData} 
                     searchKey={searchKey}
                     handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose}
@@ -339,11 +349,5 @@ class SearchResult extends React.Component {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        shouldUpdateTrackingData: value => dispatch(shouldUpdateTrackingData(value))
-    }
-}
-
-export default connect(null, mapDispatchToProps)(SearchResult);
+export default SearchResult
 

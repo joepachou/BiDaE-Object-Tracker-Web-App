@@ -2,18 +2,48 @@ import React from 'react';
 import { Modal, Button, Row, Col, Image, ButtonToolbar, ToggleButton} from 'react-bootstrap'
 import Select from 'react-select';
 import config from '../../config';
-import LocaleContext from '../../context/LocaleContext';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import RadioButton from '../presentational/RadioButton';
 import RadioButtonGroup from './RadioButtonGroup';
+import { AppContext } from '../../context/AppContext';
 
 class ChangeStatusForm extends React.Component {
+
+    static contextType = AppContext
     
     state = {
         show: this.props.show,
         isShowForm: false,
     };
+
+    // shouldComponentUpdate = (nextProps) => {
+    //     // console.log(this.props.selectedObjectData, nextProps.selectedObjectData)
+    //     // console.log(_.isEqual(this.props.selectedObjectData, nextProps.selectedObjectData))
+    //     console.log(this.props.show, nextProps.show)
+    //     // if (this.props.show !== nextProps.show) {
+    //     //     console.log('yeeee')
+    //     //     return true
+    //     // }
+    //     if (_.isEqual(this.props.selectedObjectData, nextProps.selectedObjectData) && this.props.show) {
+    //         console.log('not update')
+    //         return false
+    //     }
+    //     // if (nextProps.show && nextProps.show !== this.props.show) {
+    //     //     console.log('hi')
+    //     //     return true
+    //     // }
+    //     // if (this.props.show && (_.isEqual(this.props.selectedObjectData, nextProps.selectedObjectData))) {
+    //     //     console.log(3333)
+    //     //     return false
+    //     // }
+    //     // // if (_.isEqual(nextProps, this.props)) {
+    //     // //     console.log(55555)
+    //     // //     return false
+    //     // // }
+    //     // console.log(99)
+    //     return true
+    // }
 
   
     handleClose = (e) => {
@@ -61,7 +91,7 @@ class ChangeStatusForm extends React.Component {
 
     render() {
 
-        const locale = this.context
+        const { locale } = this.context
 
         const options = Object.keys(config.transferredLocation).map(location => {
             return {
@@ -130,7 +160,7 @@ class ChangeStatusForm extends React.Component {
                         closeButton 
                         className='font-weight-bold text-capitalize'
                     >
-                        {title}
+                        {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
                     </Modal.Header >
                     <Modal.Body>
                         <div className='modalDeviceListGroup' style={style.deviceList}>
@@ -210,6 +240,7 @@ class ChangeStatusForm extends React.Component {
 
                             render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
                                 <Form className="text-capitalize">
+                                {console.log('render')}
                                     <RadioButtonGroup
                                         id="radioGroup"
                                         label={locale.texts.STATUS}
@@ -348,7 +379,5 @@ class ChangeStatusForm extends React.Component {
         );
     }
 }
-
-ChangeStatusForm.contextType = LocaleContext;
   
 export default ChangeStatusForm;
