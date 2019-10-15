@@ -152,11 +152,13 @@ const config = {
 
     transferredLocation: {
         Yuanlin_Christian_Hospital: [
-            "ward 1",
-            "ward 2",
+            "ward_1",
+            "ward_2",
         ],
         NTU_Hospital_Yunlin_branch: [
-            "NTU_Hospital_Yunlin_branch"
+            "ward_5_b",
+            "ward_5_a",
+            "nursing_home"
         ],
         NTU_Hospital_Taipei: [
             "NTU_Hospital_Taipei"
