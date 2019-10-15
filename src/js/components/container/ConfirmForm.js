@@ -82,6 +82,9 @@ class ConfirmForm extends React.Component {
 
         const { locale } = this.context
 
+        let hasSelectedObjectData = selectedObjectData[0] ? true : false;
+        let isTransferObject = hasSelectedObjectData && selectedObjectData[0].status === config.objectStatus.TRANSFERRED ? true : false;
+
         return (
             <>  
                 <Modal 
@@ -139,10 +142,12 @@ class ConfirmForm extends React.Component {
                             <Col className='d-flex justify-content-center text-capitalize'>
                                 <div className="d-flex flex-column" >
                                     <h5 className="d-flex justify-content-center">
-                                        {selectedObjectData.length > 0 && locale.texts[selectedObjectData[0].status.toUpperCase()]} {locale.texts.TO}
+                                        { hasSelectedObjectData && locale.texts[selectedObjectData[0].status.toUpperCase()]}
+                                        &nbsp;
+                                        { isTransferObject && locale.texts.TO}
                                     </h5>
 
-                                    {selectedObjectData.length > 0 && selectedObjectData[0].status === config.objectStatus.TRANSFERRED
+                                    {isTransferObject
                                         ?   <h5>
                                                 <div>{selectedObjectData[0].transferred_location.value.split(',').map(item => {
                                                             return locale.texts[item.toUpperCase().replace(/ /g, '_')]
