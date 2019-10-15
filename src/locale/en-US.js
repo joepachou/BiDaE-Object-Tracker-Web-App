@@ -119,9 +119,9 @@ const en =  {
     NTU_HOSPITAL_YUNLIN_BRANCH_WARD_5B: "NTU Hospital Yunlin branch ward 5B",
     WARD_1: "ward 1",
     WARD_2: "ward 2",
-    WARD_5_B: "ward_5_b",
-    WARD_5_A: "ward_5_a",
-    NURSING_HOME: "nursing_home",
+    WARD_5_B: "ward 5B",
+    WARD_5_A: "ward 5A",
+    NURSING_HOME: "nursing home",
 
     /** User Setting */
     USER_SETTING: "User Setting",
