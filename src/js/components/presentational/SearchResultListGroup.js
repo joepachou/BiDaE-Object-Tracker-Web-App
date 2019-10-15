@@ -1,6 +1,5 @@
 import React from 'react'
 import { ListGroup, Row, Col } from 'react-bootstrap'
-import config from '../../config'
 import LocaleContext from '../../context/LocaleContext';
 
 const SearchResultListGroup = ({
@@ -13,16 +12,10 @@ const SearchResultListGroup = ({
     const locale = React.useContext(LocaleContext);
 
     if (document.getElementById('searchPanel')) {
-        // console.log(window.innerHeight)
-        // console.log(document.body.clientHeight)
-        // console.log(document.documentElement.clientHeight)
         var searchPanelElementHeight = document.getElementById('searchPanel').clientHeight
         var searchContainerElementHeight = document.getElementById('searchContainer').clientHeight
         var factor = 0.8
         var modifiedHeight = Math.floor((searchPanelElementHeight - searchContainerElementHeight) * factor)
-        // console.log(document.getElementById('searchPanel').offsetHeight)
-        // console.log(document.getElementById('searchContainer').offsetHeight)
-        // console.log(modifiedHeight)
     }
 
     const style = {
@@ -79,10 +72,10 @@ const SearchResultListGroup = ({
                                 className='d-flex justify-content-start text-left' 
                                 style={style.list}
                             >
-                                {selection.indexOf(item.mac_address) >= 0 
-                                    ? <i className="fas fa-check mx-1 py-1" style={style.icon}></i> 
-                                    : <p className='d-inline-block mx-1'>&#9642;</p>
-                                }
+                                    {selection.indexOf(item.mac_address) >= 0 
+                                        ? <i className="fas fa-check mx-2 py-1" style={style.icon}></i> 
+                                        : <p className='d-inline-block mx-2'>&#9642;</p>
+                                    }
                                 {item.type},
                                 &nbsp;
                                 {locale.texts.LAST_FOUR_DIGITS_IN_ACN}: {item.last_four_acn},
