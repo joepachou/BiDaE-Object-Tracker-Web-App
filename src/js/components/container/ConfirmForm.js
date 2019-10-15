@@ -94,7 +94,7 @@ class ConfirmForm extends React.Component {
                         closeButton 
                         className='font-weight-bold text-capitalize'
                     >
-                        {title}
+                        {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
                     </Modal.Header >
                     <Modal.Body>
                         <div className='modalDeviceListGroup' style={style.deviceList}>

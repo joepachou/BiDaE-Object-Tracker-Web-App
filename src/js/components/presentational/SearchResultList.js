@@ -342,7 +342,7 @@ class SearchResult extends React.Component {
                 />
                 <ConfirmForm 
                     show={this.state.showConfirmForm}  
-                    title={locale.texts.THANK_YOU_FOR_REPORTING} 
+                    title={'thank you for reporting'}
                     selectedObjectData={this.state.editedObjectPackage} 
                     handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose} 
                     handleConfirmFormSubmit={this.handleConfirmFormSubmit}
