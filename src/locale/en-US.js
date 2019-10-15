@@ -115,13 +115,14 @@ const en =  {
     /** Transferred Location */
     YUANLIN_CHRISTIAN_HOSPITAL: "Yuanlin Christian Hospital",
     NTU_HOSPITAL_YUNLIN_BRANCH: "NTU Hospital Yunlin Branch",
-    NTU_HOSPITAL_TAIPEI: "NTU Hospital Taipe",
+    NTU_HOSPITAL_TAIPEI: "NTU Hospital Taipei",
     NTU_HOSPITAL_YUNLIN_BRANCH_WARD_5B: "NTU Hospital Yunlin branch ward 5B",
     WARD_1: "ward 1",
     WARD_2: "ward 2",
     WARD_5_B: "ward 5B",
     WARD_5_A: "ward 5A",
     NURSING_HOME: "nursing home",
+    EMERGENCY_ROOM: "emergency room",
 
     /** User Setting */
     USER_SETTING: "User Setting",

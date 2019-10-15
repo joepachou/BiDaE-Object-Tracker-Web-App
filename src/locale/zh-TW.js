@@ -123,6 +123,7 @@ const tw = {
     WARD_5_B: "病房 5B",
     WARD_5_A: "病房 5A",
     NURSING_HOME: "護理之家",
+    EMERGENCY_ROOM: "急症室",
 
     /** User Setting */
     USER_SETTING: "帳戶設定",
