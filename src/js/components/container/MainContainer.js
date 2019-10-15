@@ -436,7 +436,6 @@ class MainContainer extends React.Component{
                                     title={locale.texts.FOUND} 
                                 />
                         }      */}
-                        {console.log('get data')}
                         <SurveillanceContainer 
                             proccessedTrackingData={proccessedTrackingData.length === 0 ? trackingData : proccessedTrackingData}
                             hasSearchKey={hasSearchKey}

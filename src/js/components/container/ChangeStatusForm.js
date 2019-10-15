@@ -17,35 +17,6 @@ class ChangeStatusForm extends React.Component {
         isShowForm: false,
     };
 
-    // shouldComponentUpdate = (nextProps) => {
-    //     // console.log(this.props.selectedObjectData, nextProps.selectedObjectData)
-    //     // console.log(_.isEqual(this.props.selectedObjectData, nextProps.selectedObjectData))
-    //     console.log(this.props.show, nextProps.show)
-    //     // if (this.props.show !== nextProps.show) {
-    //     //     console.log('yeeee')
-    //     //     return true
-    //     // }
-    //     if (_.isEqual(this.props.selectedObjectData, nextProps.selectedObjectData) && this.props.show) {
-    //         console.log('not update')
-    //         return false
-    //     }
-    //     // if (nextProps.show && nextProps.show !== this.props.show) {
-    //     //     console.log('hi')
-    //     //     return true
-    //     // }
-    //     // if (this.props.show && (_.isEqual(this.props.selectedObjectData, nextProps.selectedObjectData))) {
-    //     //     console.log(3333)
-    //     //     return false
-    //     // }
-    //     // // if (_.isEqual(nextProps, this.props)) {
-    //     // //     console.log(55555)
-    //     // //     return false
-    //     // // }
-    //     // console.log(99)
-    //     return true
-    // }
-
-  
     handleClose = (e) => {
         if(this.props.handleChangeObjectStatusFormClose) {
             this.props.handleChangeObjectStatusFormClose();
@@ -70,9 +41,6 @@ class ChangeStatusForm extends React.Component {
             })
         }
     }
-    // shouldComponentUpdate(nextProps) {
-    //     return nextProps.selectedObjectData !== this.props.selectedObjectData
-    // }
 
     handleClick = (e) => {
         const item = e.target.name
@@ -99,7 +67,7 @@ class ChangeStatusForm extends React.Component {
                 label: locale.texts[location.toUpperCase().replace(/ /g, '_')],
                 options: config.transferredLocation[location].map(branch => {
                     return {
-                        value: `${location}, ${branch}`,
+                        value: `${location},${branch}`,
                         label: locale.texts[branch.toUpperCase().replace(/ /g, '_')],
 
                     }
@@ -146,7 +114,9 @@ class ChangeStatusForm extends React.Component {
 
         let { title } = this.props;
         let selectedObjectData = this.props.selectedObjectData.length !== 0 ? this.props.selectedObjectData[0] : []
-
+        let {
+            transferred_location = ''
+        } = selectedObjectData
         return (
             <>  
                 <Modal  
@@ -202,9 +172,6 @@ class ChangeStatusForm extends React.Component {
                                                     </Col>
                                                 </Row>
                                             </Col>
-                                            {/* <Col xs={3} sm={3} className='d-flex align-items-center'>
-                                                <Image src={tempImg} width={80}/>
-                                            </Col> */}
                                         </Row>
                                     </div>
                                 )
@@ -217,7 +184,7 @@ class ChangeStatusForm extends React.Component {
                                 select: this.props.selectedObjectData.length !== 0 && this.props.selectedObjectData[0].status === config.objectStatus.TRANSFERRED
                                     ? { 
                                         value: selectedObjectData.transferred_location,
-                                        label: locale.texts[selectedObjectData.transferred_location.toUpperCase().replace(/ /g, '_')]
+                                        label: selectedObjectData.transferred_location.toUpperCase().split(',').map(item => locale.texts[item]).join('/')
                                     }
                                     : '', 
                                 textarea: selectedObjectData.notes || ''
@@ -240,7 +207,6 @@ class ChangeStatusForm extends React.Component {
 
                             render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
                                 <Form className="text-capitalize">
-                                {console.log('render')}
                                     <RadioButtonGroup
                                         id="radioGroup"
                                         label={locale.texts.STATUS}

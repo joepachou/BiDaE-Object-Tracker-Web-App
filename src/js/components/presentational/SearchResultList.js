@@ -138,7 +138,6 @@ class SearchResult extends React.Component {
             type: 'setUpdateTrackingData',
             value: true
         })
-        // this.props.shouldUpdateTrackingData(true)
         this.props.highlightSearchPanel(false)
     }
 
@@ -174,7 +173,8 @@ class SearchResult extends React.Component {
 
     handleConfirmFormSubmit = (e) => {
         let { editedObjectPackage } = this.state;
-        let { auth } = this.context
+        let { auth, stateReducer } = this.context
+        let [{}, dispatch] = stateReducer
         let username = auth.user.name
         axios.post(dataSrc.editObjectPackage, {
             formOption: editedObjectPackage,
@@ -190,6 +190,10 @@ class SearchResult extends React.Component {
                         showAddDevice: false
                     })
                     // this.props.shouldUpdateTrackingData(true)
+                    dispatch({
+                        type: 'setUpdateTrackingData',
+                        value: true
+                    })
                 }
                 .bind(this),
                 1000
@@ -281,7 +285,6 @@ class SearchResult extends React.Component {
                 <Row className='d-flex justify-content-center' style={style.titleText}>
                     <h4 className='text-capitalize'>{locale.texts.SEARCH_RESULT}</h4>
                 </Row>
-                {console.log('render list')}
                 {/* <Row className='w-100 searchResultForMobile'>
                     <InfoPrompt data={{[devicePlural]: searchResult.length}} title={title}/>
                 </Row> */}

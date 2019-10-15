@@ -129,9 +129,6 @@ class ConfirmForm extends React.Component {
                                                     </Col>
                                                 </Row>
                                             </Col>
-                                            {/* <Col xs={3} sm={3} className='d-flex align-items-center'>
-                                                <Image src={tempImg} width={80}/>
-                                            </Col> */}
                                         </Row>
                                     </div>
                                 )
@@ -140,13 +137,21 @@ class ConfirmForm extends React.Component {
                         <hr/>
                         <Row>
                             <Col className='d-flex justify-content-center text-capitalize'>
-                                <h5>
-                                    {selectedObjectData.length > 0 && locale.texts[selectedObjectData[0].status.toUpperCase()]}
+                                <div className="d-flex flex-column" >
+                                    <h5 className="d-flex justify-content-center">
+                                        {selectedObjectData.length > 0 && locale.texts[selectedObjectData[0].status.toUpperCase()]} {locale.texts.TO}
+                                    </h5>
+
                                     {selectedObjectData.length > 0 && selectedObjectData[0].status === config.objectStatus.TRANSFERRED
-                                        ? ' ' + locale.texts.TO + ' ' + selectedObjectData[0].transferred_location.label
+                                        ?   <h5>
+                                                <div>{selectedObjectData[0].transferred_location.value.split(',').map(item => {
+                                                            return locale.texts[item.toUpperCase().replace(/ /g, '_')]
+                                                        }).join('/')}
+                                                </div>
+                                            </h5>
                                         : null
                                     }
-                                </h5>
+                                </div>
                             </Col>
                         </Row>
                         <Row>
