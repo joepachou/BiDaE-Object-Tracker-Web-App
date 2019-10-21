@@ -1,21 +1,19 @@
-/** Import React */
 import React from 'react';
 
 /** Import leaflet.js */
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-
-/** Import leaflet.markercluser library */
 import 'leaflet.markercluster';
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import '../../../css/CustomMarkerCluster.css'
 import '../../leaflet_awesome_number_markers';
-import config from '../../config';
 import _ from 'lodash'
 import { AppContext } from '../../context/AppContext';
 
-class Surveillance extends React.Component {
+
+class Map extends React.Component {
+    
 
     static contextType = AppContext
 
@@ -29,8 +27,6 @@ class Surveillance extends React.Component {
     }
     map = null;
     image = null;
-    StartSetInterval = config.surveillanceMap.startInteval; 
-    isShownTrackingData = !true;
     markersLayer = L.layerGroup();
     errorCircle = L.layerGroup();
     lbeaconsPosition = L.layerGroup();
@@ -38,7 +34,6 @@ class Surveillance extends React.Component {
 
     componentDidMount = () => {
         this.initMap();  
-        // this.handleObjectMarkers();
     }
 
     componentDidUpdate = (prevProps) => {
@@ -65,19 +60,13 @@ class Surveillance extends React.Component {
         
     }
 
-    // shouldComponentUpdate = (nextProps, nextState) => {
-    //     let isProccessedTrackingDataChange = !(_.isEqual(this.props.proccessedTrackingData, nextProps.proccessedTrackingData))
-    //     return this.props.shouldTrackingDataUpdate && isProccessedTrackingDataChange
-    // }
-
-    
     /** Set the search map configuration establishing in config.js  */
     initMap = () => {
         let [{areaId}] = this.context.stateReducer
-        let areaModules =  config.areaModules
-        let areaOption = config.areaOptions[areaId]    
+        let areaModules =  this.props.mapConfig.areaModules
+        let areaOption = this.props.mapConfig.areaOptions[areaId]    
         let { url, bounds } = areaModules[areaOption]
-        let map = L.map('mapid', config.surveillanceMap.mapOptions);
+        let map = L.map('mapid', this.props.mapConfig.mapOptions);
         let image = L.imageOverlay(url, bounds).addTo(map);
         map.addLayer(image)
         map.fitBounds(bounds);
@@ -87,7 +76,6 @@ class Surveillance extends React.Component {
 
         /** Set the map's events */
         this.map.on('zoomend', this.resizeMarkers)
-
     }
 
     /** Resize the markers and errorCircles when the view is zoomend. */
@@ -107,8 +95,8 @@ class Surveillance extends React.Component {
     /** Set the overlay image */
     setMap = () => {
         let [{areaId}] = this.context.stateReducer
-        let areaModules =  config.areaModules
-        let areaOption = config.areaOptions[areaId]
+        let areaModules =  this.props.mapConfig.areaModules
+        let areaOption = this.props.mapConfig.areaOptions[areaId]
         let { url, bounds } = areaModules[areaOption]
         this.image.setUrl(url)
         this.image.setBounds(bounds)
@@ -125,7 +113,7 @@ class Surveillance extends React.Component {
         this.resizeFactor = Math.pow(2, (this.zoomDiff));
         this.resizeConst = this.zoomDiff * 30;
         this.scalableErrorCircleRadius = 200 * this.resizeFactor;
-        this.scalableIconSize = config.surveillanceMap.iconOptions.iconSize + this.resizeConst
+        this.scalableIconSize = this.props.mapConfig.iconOptions.iconSize + this.resizeConst
     }
 
     /** Create the lbeacon and invisibleCircle markers */
@@ -135,32 +123,27 @@ class Surveillance extends React.Component {
         let { stateReducer } = this.context
         let [{areaId}] = stateReducer
 
+        let {
+            geoFenceConfig,
+            mapConfig
+        } = this.props
+
         /** Creat the marker of all lbeacons onto the map  */
-        this.props.geoFenceConfig.filter(item => {
+        geoFenceConfig.filter(item => {
             return parseInt(item.unique_key) == areaId
         }).map(item => {
-
             item.fences.uuids.map(uuid => {
                 let latLng = uuid.slice(1, 3)
-                let fences = L.circleMarker(latLng,{
-                    color: 'rgba(0, 0, 0, 0)',
-                    fillColor: 'orange',
-                    fillOpacity: 0.4,
-                    radius: 25,
-                }).addTo(this.geoFenceLayer);
+                let fences = L.circleMarker(latLng, mapConfig.geoFenceMarkerOption).addTo(this.geoFenceLayer);
             })
 
             item.perimeters.uuids.map(uuid => {
                 let latLng = uuid.slice(1, 3)
-                let perimeters = L.circleMarker(latLng,{
-                    color: 'rgba(0, 0, 0, 0)',
-                    fillColor: 'orange',
-                    fillOpacity: 0.4,
-                    radius: 25,
-                }).addTo(this.geoFenceLayer);
+                let perimeters = L.circleMarker(latLng, mapConfig.geoFenceMarkerOption).addTo(this.geoFenceLayer);
             })
         })
 
+        /** Add the new markerslayers to the map */
         this.geoFenceLayer.addTo(this.map);
 
         if (!this.state.hasGeoFenceMaker){
@@ -173,15 +156,15 @@ class Surveillance extends React.Component {
     /** Create the lbeacon and invisibleCircle markers */
     createLbeaconMarkers = () => {
 
+        let {
+            lbeaconPosition,
+            mapConfig,
+        } = this.props
+
         /** Creat the marker of all lbeacons onto the map  */
-        this.props.lbeaconPosition.map(pos => {
+        lbeaconPosition.map(pos => {
             let latLng = pos.split(',')
-            let lbeacon = L.circleMarker(latLng,{
-                color: 'rgba(0, 0, 0, 0)',
-                fillColor: 'orange',
-                fillOpacity: 0.4,
-                radius: 15,
-            }).addTo(this.lbeaconsPosition);
+            let lbeacon = L.circleMarker(latLng, mapConfig.lbeaconMarkerOption).addTo(this.lbeaconsPosition);
 
         /** Creat the invisible Circle marker of all lbeacons onto the map */
             // let invisibleCircle = L.circleMarker(pos,{
@@ -194,8 +177,10 @@ class Surveillance extends React.Component {
             // invisibleCircle.on('mouseover', this.handlemenu)
             // invisibleCircle.on('mouseout', function() {this.closePopup();})
         })
+
+        /** Add the new markerslayers to the map */
         this.lbeaconsPosition.addTo(this.map);
-        // console.log(this.lbeaconsPosition)
+
         if (!this.state.hasIniLbeaconPosition){
             this.setState({
                 hasIniLbeaconPosition: true,
@@ -219,7 +204,7 @@ class Surveillance extends React.Component {
         }
         if (objectList.length !== 0) {
             const popupContent = this.popupContent(objectList)
-            e.target.bindPopup(popupContent, config.popupOptions).openPopup();
+            e.target.bindPopup(popupContent, this.props.mapConfig.popupOptions).openPopup();
         }
 
         this.props.isObjectListShownProp(true);
@@ -236,6 +221,7 @@ class Surveillance extends React.Component {
      * Create the error circle of markers, and add into this.markersLayer.
      */
     handleObjectMarkers = () => {
+        let { locale } = this.context
 
         /** Clear the old markerslayers. */
         this.markersLayer.clearLayers();
@@ -244,136 +230,51 @@ class Surveillance extends React.Component {
         /** Mark the objects onto the map  */
         this.calculateScale();
 
-        const errorCircleOptions = {
-            color: 'rgb(0,0,0,0)',
-            fillColor: 'orange',
-            fillOpacity: 0.5,
-            radius: this.scalableErrorCircleRadius,
-        }
         const iconSize = [this.scalableIconSize, this.scalableIconSize];
         
-        /** Icon options for AwesomeNumberMarkers 
-         * The process: 
-         * 1. Add the declaration of the desired icon option
-         * 2. Add the CSS description in leafletMarker.css
-        */
-        const stationaryAweIconOptions = {
-            markerColor: config.surveillanceMap.iconColor.stationary,
-        }
-
-        const geofencePAweIconOptions = {
-            markerColor: config.surveillanceMap.iconColor.geofenceP,
-            numberColor: config.surveillanceMap.iconColor.number,
-        }
-
-        const geofenceFAweIconOptions = {
-            markerColor: config.surveillanceMap.iconColor.geofenceF,
-            numberColor: config.surveillanceMap.iconColor.number,
-        }
-
-        const searchedObjectAweIconOptions = {
-            markerColor: config.surveillanceMap.iconColor.searched,
-            numberColor: config.surveillanceMap.iconColor.number,
-        }
-
-        const sosIconOptions = {
-            markerColor: config.surveillanceMap.iconColor.sos,
-        };
-
-        const unNormalIconOptions = {
-            markerColor: config.surveillanceMap.iconColor.unNormal,
-        };
-
-        const femaleIconOptions = {
-            markerColor: config.surveillanceMap.iconColor.female,
-        };
-
-        const maleIconOptions = {
-            markerColor: config.surveillanceMap.iconColor.male,
-        };
-
         let counter = 0;
-        let { locale } = this.context
 
         this.filterTrackingData(_.cloneDeep(this.props.proccessedTrackingData))
         .map(item => {
 
-            // let detectedNum = item.lbeaconDetectedNum;
             let position = this.macAddressToCoordinate(item.mac_address,item.currentPosition);
 
-            /** 
-             * Set the Marker's popup 
+            /** Set the Marker's popup 
              * popupContent (objectName, objectImg, objectImgWidth)
-             * More Style sheet include in Surveillance.css
-            */
-            let popupContent = config.getPopupContent([item], this.collectObjectsByLatLng(item.currentPosition), locale)
+             * More Style sheet include in Map.css */
+            let popupContent = this.props.mapConfig.getPopupContent([item], this.collectObjectsByLatLng(item.currentPosition), locale)
 
-            /**
-             * Create the marker, if the status of the object is not normal, 
-             * then the color will be black, or grey.
-             */
-            let iconOption = {}
-            if (item.object_type === 0) {
-                if (item.panic) {
-                    iconOption = sosIconOptions;
-                } else if (item.geofence_type === config.objectStatus.FENCE){
-                    iconOption = geofenceFAweIconOptions;
-                } else if (item.geofence_type === config.objectStatus.PERIMETER){
-                    iconOption = geofencePAweIconOptions;
-                } else if (item.searched && this.props.colorPanel) {
-                    iconOption = { 
-                        iconSize,
-                        markerColor: item.pinColor 
-                    }
-                } else if (item.searched) {
-                    iconOption = searchedObjectAweIconOptions    
-                } else if (item.status !== config.objectStatus.NORMAL) {
-                    iconOption = unNormalIconOptions;
-                } else {
-                    iconOption = stationaryAweIconOptions;
-                }
-            } else if (item.object_type === 1) {
-                iconOption = femaleIconOptions;
-            } else {
-                iconOption = maleIconOptions;
-            }
+            /** Set the icon option*/
+            item.iconOption = {
 
+                /** Set the pin color */
+                markerColor: this.props.mapConfig.getIconColor(item, this.props.colorPanel),
 
-            /** Show the order number on location pin if necessary */
-            if (item.searched && config.surveillanceMap.iconOptions.showNumber) {
-                iconOption = {
-                    ...iconOption,
-                    number: ++counter
-                }
-            }
+                /** Set the pin size */
+                iconSize,
 
-            /** Insert the object's mac_address to be the data when clicking the object's marker */
-            iconOption = {
-                ...iconOption,
-                iconSize: iconSize,
+                /** Insert the object's mac_address to be the data when clicking the object's marker */
                 macAddress: item.mac_address,
-                currentPosition: item.currentPosition
+                currentPosition: item.currentPosition,
+
+                /** Show the ordered on location pin */
+                number: this.props.mapConfig.iconOptions.showNumber && item.searched ? ++counter : '',
+
+                /** Set the color of ordered number */
+                numberColor: this.props.mapConfig.iconColor.number,
             }
 
-            const option = new L.AwesomeNumberMarkers (iconOption)
-            let marker =  L.marker(position, {icon: option}).bindPopup(popupContent, config.popupOptions).addTo(this.markersLayer)
+            const option = new L.AwesomeNumberMarkers (item.iconOption)
+            let marker =  L.marker(position, {icon: option}).bindPopup(popupContent, this.props.mapConfig.popupOptions).addTo(this.markersLayer)
 
-            /** 
-             * Set the z-index offset of the searhed object so that
-             * the searched object icon will be on top of all others 
-             */
+            /** Set the z-index offset of the searhed object so that
+             * the searched object icon will be on top of all others */
             if (item.searched) marker.setZIndexOffset(1000);
         
             /** Set the marker's event. */
             marker.on('mouseover', function () { this.openPopup(); })
             marker.on('click', this.handleMarkerClick);
             marker.on('mouseout', function () { this.closePopup(); })
-            
-
-            /** Set the error circles of the markers. */
-            // if (detectedNum > 1 &&item.moving_status === 'stationary') {
-            //     let errorCircle = L.circleMarker(position ,errorCircleOptions).addTo(this.errorCircle);
-            // }
         })
 
         /** Add the new markerslayers to the map */
@@ -387,12 +288,13 @@ class Surveillance extends React.Component {
         // }
     }
 
+    /** Fire when clicing marker */
     handleMarkerClick = (e) => {
         const lbPosition =  e.target.options.icon.options.currentPosition
         this.props.getSearchKey('coordinate', null, lbPosition)
     }
 
-    /** Define what object will filter out */
+    /** Filter out undesired tracking data */
     filterTrackingData = (proccessedTrackingData) => {
         return proccessedTrackingData.filter(item => {
             return item.found && item.isMatchedObject && !this.props.filterObjectType.includes(item.object_type)
@@ -408,46 +310,30 @@ class Surveillance extends React.Component {
         return objectList 
     }
 
-    /**
-     * Retrieve the object's offset from object's mac_address.
+    /** Retrieve the object's offset from object's mac_address.
      * @param   mac_address The mac_address of the object retrieved from DB. 
-     * @param   lbeacon_coordinate The lbeacon's coordinate processed by createLbeaconCoordinate().
-     */
+     * @param   lbeacon_coordinate The lbeacon's coordinate processed by createLbeaconCoordinate().*/
     macAddressToCoordinate = (mac_address, lbeacon_coordinate) => {
+
         /** Example of lbeacon_uuid: 01:1f:2d:13:5e:33 
          *                           0123456789       16
          */
         const xx = mac_address.slice(12,14);
         const yy = mac_address.slice(15,17);
-        const multiplier = config.surveillanceMap.markerDispersity; // 1m = 100cm = 1000mm, multipler = 1000/16*16 = 3
+        const multiplier = this.props.mapConfig.markerDispersity; // 1m = 100cm = 1000mm, multipler = 1000/16*16 = 3
 		const origin_x = lbeacon_coordinate[1] - parseInt(80, 16) * multiplier ; 
 		const origin_y = lbeacon_coordinate[0] - parseInt(80, 16) * multiplier ;
 		const xxx = origin_x + parseInt(xx, 16) * multiplier;
         const yyy = origin_y + parseInt(yy, 16) * multiplier;
         return [yyy, xxx];
-        
     }
 
     render(){
         return(   
-            <div id='mapid' />
+            <div id='mapid' style={{}}/>
         )
     }
 }
 
-
-// const mapDispatchToProps = (dispatch) => {
-//     return {
-//         isObjectListShownProp: value => dispatch(isObjectListShown(value)),
-//         selectObjectListProp: array => dispatch(selectObjectList(array)),
-//     }
-// }
-
-// const mapStateToProps = (state) => {
-//     return {
-//         shouldTrackingDataUpdate: state.retrieveTrackingData.shouldTrackingDataUpdate,
-//     }
-// }
-
-export default Surveillance;
+export default Map;
 

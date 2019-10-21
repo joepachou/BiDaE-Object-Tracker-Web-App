@@ -1,10 +1,9 @@
 import React, { Fragment } from "react";
-import Surveillance from "../presentational/Surveillance";
+import Map from "../presentational/Map";
 import ToggleSwitch from "./ToggleSwitch";
 import { 
     Nav, 
     Button,
-    Image,
     ButtonToolbar
 }  from "react-bootstrap";
 import GridButton from "../container/GridButton";
@@ -12,7 +11,6 @@ import PdfDownloadForm from "./PdfDownloadForm"
 import config from "../../config";
 import AccessControl from "../presentational/AccessControl"
 import { AppContext } from "../../context/AppContext";
-import { toast } from 'react-toastify';
 
 
 class SurveillanceContainer extends React.Component {
@@ -20,7 +18,6 @@ class SurveillanceContainer extends React.Component {
     static contextType = AppContext
 
     state = {
-        rssi: config.defaultRSSIThreshold,
         selectedObjectData: [],
         showDevice: false,
         showPdfDownloadForm: false,
@@ -126,7 +123,7 @@ class SurveillanceContainer extends React.Component {
                 height: "40%"
             }, 
             mapBlock: {
-                height: "60%",
+                // height: "60%",
                 border: "solid 2px rgba(227, 222, 222, 0.619)",
                 padding: "5px",
             },
@@ -167,19 +164,17 @@ class SurveillanceContainer extends React.Component {
                     </Button>
                 </ButtonToolbar>
                 <div style={style.mapBlock}>
-                    <Surveillance 
-                        rssi={this.state.rssi} 
+                    <Map 
                         hasSearchKey={hasSearchKey}
-                        style={style.searchMap}
                         colorPanel={this.props.colorPanel}
                         proccessedTrackingData={this.props.proccessedTrackingData}
                         lbeaconPosition={this.props.lbeaconPosition}
                         geoFenceConfig={this.props.geoFenceConfig.filter(item => parseInt(item.unique_key) == areaId)}
                         getSearchKey={this.props.getSearchKey}
                         areaId={areaId}
-                        auth={auth}
                         isOpenFence={this.state.isOpenFence}
                         filterObjectType={this.state.filterObjectType}
+                        mapConfig={config.mapConfig}
                     />
                 </div>
                 <div style={style.navBlock}>
@@ -263,6 +258,7 @@ class SurveillanceContainer extends React.Component {
                             <GridButton
                                 clearColorPanel={this.props.clearColorPanel}
                                 getSearchKey={this.props.getSearchKey}
+                                mapConfig={config.mapConfig}
                             />
                         </div> */}
                         {this.props.geoFenceConfig.map((item, index) => {
