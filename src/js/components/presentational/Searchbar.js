@@ -52,13 +52,13 @@ class Searchbar extends React.Component {
         const locale = this.context;
 
         return (            
-            <Form className="d-flex" style={style.form}>
-                <Form.Group className='flex-grow-1 '>
+            <Form className="d-flex justify-content-around" style={style.form}>
+                <Form.Group className='flex-grow-1 mb-0'>
                     <Form.Control 
                         id='searchbarText' 
                         type='text' 
                         style={style.input} 
-                        className='border-0 pl-3 w-100' 
+                        className='border-0 pl-3 w-100 pb-0' 
                         value={value} 
                         onChange={this.handleChange}
                     />
