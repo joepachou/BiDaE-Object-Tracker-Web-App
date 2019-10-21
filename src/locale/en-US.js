@@ -84,6 +84,17 @@ const en =  {
     DEVICE_LOCATION_STATUS_CHECKED_BY: "device location/status checked by",
     AUTH_AREA: "auth area",
 
+    /** Form Title */
+    EDIT_LBEACON: "edit lbeacon",
+    ADD_OBJECT: "add object",
+    EDIT_OBJECT: "edit object",
+    REPORT_DEVICE_STATUS: "Report device status",
+    THANK_YOU_FOR_REPORTING: "Thank you for reporting",
+    PRINT_SEARCH_RESULT: "print search result",
+    EDIT_USER: "edit user",
+    REQUEST_FOR_DEVICE_REPARIE: "Request for device repair",
+    BROKENDEVICE_LIST: "broken device list",
+    WHOSE_DEVICES: "'s devices",
 
     /** Error Message */
     NAME_IS_REQUIRED: "Name is required",
@@ -98,17 +109,6 @@ const en =  {
     THE_ACCESS_CONTROL_NUMBER_IS_ALREADY_USED: "The access control number is already used",
     THE_MAC_ADDRESS_IS_ALREADY_USED :"The Mac Address is already used",
     AREA_IS_REQUIRED: "Area is required",
-
-    /** Form Title */
-    EDIT_LBEACON: "edit lbeacon",
-    ADD_OBJECT: "add object",
-    EDIT_OBJECT: "edit object",
-    REPORT_DEVICE_STATUS: "Report device status",
-    THANK_YOU_FOR_REPORTING: "Thank you for reporting",
-    PRINT_SEARCH_RESULT: "print search result",
-    EDIT_USER: "edit user",
-    REQUEST_FOR_DEVICE_REPARIE: "Request for device repair",
-    BROKENDEVICE_LIST: "broken device list",
 
     /* Object Status */
     STATUS: "status",

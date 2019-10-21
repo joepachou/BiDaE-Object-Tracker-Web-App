@@ -84,7 +84,17 @@ const tw = {
     DEVICE_LOCATION_STATUS_CHECKED_BY: "儀器狀態/地點確認 交接者",
     AUTH_AREA: "所屬地區",
 
-
+    /** Form Title */
+    EDIT_LBEACON: "編輯 lbeacon",
+    ADD_OBJECT: "增加儀器",
+    EDIT_OBJECT: "編輯儀器",
+    REPORT_DEVICE_STATUS: "回報儀器狀態",
+    THANK_YOU_FOR_REPORTING: "謝謝您的回報",
+    PRINT_SEARCH_RESULT: "下載搜尋結果",
+    EDIT_USER: "編輯使用者",
+    REQUEST_FOR_DEVICE_REPARIE: "報修單",
+    BROKENDEVICE_LIST: "報修儀器列表",
+    WHOSE_DEVICES: "的儀器",
 
     /** Error Message */
     NAME_IS_REQUIRED: "請填入名字",
@@ -99,17 +109,6 @@ const tw = {
     THE_ACCESS_CONTROL_NUMBER_IS_ALREADY_USED: "財產編號已被使用",
     THE_MAC_ADDRESS_IS_ALREADY_USED :"Mac Address已被使用",
     AREA_IS_REQUIRED: "請選擇地區",
-
-    /** Form Title */
-    EDIT_LBEACON: "編輯 lbeacon",
-    ADD_OBJECT: "增加儀器",
-    EDIT_OBJECT: "編輯儀器",
-    REPORT_DEVICE_STATUS: "回報儀器狀態",
-    THANK_YOU_FOR_REPORTING: "謝謝您的回報",
-    PRINT_SEARCH_RESULT: "下載搜尋結果",
-    EDIT_USER: "編輯使用者",
-    REQUEST_FOR_DEVICE_REPARIE: "報修單",
-    BROKENDEVICE_LIST: "報修儀器列表",
 
     /* Object Status */
     STATUS: "狀態",
