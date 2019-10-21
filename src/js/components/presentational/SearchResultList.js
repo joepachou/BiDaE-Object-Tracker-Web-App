@@ -324,8 +324,6 @@ class SearchResult extends React.Component {
                                         <SearchResultListGroup 
                                             data={searchResult}
                                             selection={this.state.selection}
-                                            disabled
-                                            action={false}
                                         />
                                     )
                                     }
@@ -372,11 +370,11 @@ class SearchResult extends React.Component {
                     handleConfirmFormSubmit={this.handleConfirmFormSubmit}
                     showDownloadPdfRequest={this.state.showDownloadPdfRequest}
                 />
-                <DownloadPdfRequestForm
+                {/* <DownloadPdfRequestForm
                     show={this.state.showDownloadPdfRequest} 
                     pdfPath={this.state.pdfPath}
                     close={this.handleFormClose}
-                />
+                /> */}
             </div>
         )
     }
