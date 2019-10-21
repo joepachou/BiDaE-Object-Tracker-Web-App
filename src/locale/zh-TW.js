@@ -10,12 +10,13 @@ const tw = {
     MONITOR_MANAGEMENT: "偵測裝置管理",
     GEOFENCE: "Geofence",
     OBJECT_MANAGEMENT: "物件管理",
-
     SEARCH_RESULT: "搜尋結果",
     NO_RESULT: "無搜尋結果",
     FREQUENT_SEARCH: "常用搜尋",
     FOUND: "找到",
     NOT_FOUND: "未找到",
+    OBJECT_TYPE: "儀器類別",
+
 
 
     /* Location accuracy */

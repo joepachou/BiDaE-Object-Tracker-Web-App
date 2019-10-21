@@ -10,12 +10,12 @@ const en =  {
     MONITOR_MANAGEMENT: "monitor management",
     GEOFENCE: "geofence",
     OBJECT_MANAGEMENT: "object management",
-
     SEARCH_RESULT: "search results",
     NO_RESULT: "no result",
     FREQUENT_SEARCH: "frequent searches",
     FOUND: "found",
     NOT_FOUND: "not found",
+    OBJECT_TYPE: "object types",
 
 
     /* Location accuracy */
