@@ -52,6 +52,9 @@ const en =  {
     CLEAR_ALERTS: "clear alerts",
     SHOW_RESIDENTS: "show residents",
     HIDE_RESIDENTS: "hide residents",
+    VIEW_REPORT: "view report",
+    DOWNLOAD_REPORT: "download report",
+    CLOSE: "close",
 
     /* Form Field */
     NAME: "name",
@@ -104,6 +107,8 @@ const en =  {
     THANK_YOU_FOR_REPORTING: "Thank you for reporting",
     PRINT_SEARCH_RESULT: "print search result",
     EDIT_USER: "edit user",
+    REQUEST_FOR_DEVICE_REPARIE: "Request for device repair",
+    BROKENDEVICE_LIST: "broken device list",
 
     /* Object Status */
     STATUS: "status",
@@ -156,7 +161,7 @@ const en =  {
     HIGH_RSSI: "high RSSI",
     MED_RSSI: "med RSSI",
     LOW_RSSI: "low RSSI",
-    NOTE: "note",
+    NOTE: "notes",
     BATTERY_VOLTAGE: "batter voltage",
     BATTERY: "battery",
     PANIC: "panic",

@@ -47,11 +47,14 @@ const tw = {
     ADD_USER: "新增使用者",
     EDIT_DEVICES: "編輯儀器",
     SWITCH_AREA: "切換地點",
-    FENCE_ON: "開啟圍籬",
-    FENCE_OFF: "關閉圍籬",
+    FENCE_ON: "圍籬已開啟",
+    FENCE_OFF: "圍籬已關閉",
     CLEAR_ALERTS: "清除警告",
     SHOW_RESIDENTS: "顯示居民",
     HIDE_RESIDENTS: "隱藏居民",
+    VIEW_REPORT: "檢視報告",
+    DOWNLOAD_REPORT: "下載報告",
+    CLOSE: "關閉",
 
     /* Form Field */
     NAME: "名稱",
@@ -105,6 +108,8 @@ const tw = {
     THANK_YOU_FOR_REPORTING: "謝謝您的回報",
     PRINT_SEARCH_RESULT: "下載搜尋結果",
     EDIT_USER: "編輯使用者",
+    REQUEST_FOR_DEVICE_REPARIE: "報修單",
+    BROKENDEVICE_LIST: "報修儀器列表",
 
     /* Object Status */
     STATUS: "狀態",
