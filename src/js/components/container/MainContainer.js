@@ -13,7 +13,6 @@ import { AppContext } from '../../context/AppContext'
 import { toast } from 'react-toastify';
 import ToastNotification from '../presentational/ToastNotification'
 
-
 const myDevices = config.frequentSearchOption.MY_DEVICES ;
 const allDevices = config.frequentSearchOption.ALL_DEVICES;
 
@@ -375,12 +374,16 @@ class MainContainer extends React.Component{
         } = this.state;
 
         const style = {
-            container: {
+            pageWrap: {
+                overflow: "hidden hidden",
+            },
 
+            container: {
                 /** The height: 100vh will cause the page can only have 100vh height.
                  * In other word, if the seaerch result is too long and have to scroll down, the page cannot scroll down
                  */
                 // height: '100vh'
+                
             },
             searchResultDiv: {
                 display: this.state.hasSearchKey ? null : 'none',
@@ -415,7 +418,7 @@ class MainContainer extends React.Component{
 
         return(
             /** "page-wrap" the default id named by react-burget-menu */
-            <div id="page-wrap" className='mx-1 my-2' >
+            <div id="page-wrap" className='mx-1 my-2 overflow-hidden' style={style.pageWrap} >
                 <Row id="mainContainer" className='d-flex w-100 justify-content-around mx-0 overflow-hidden' style={style.container}>
                     <Col sm={7} md={9} lg={8} xl={8} id='searchMap' className="pl-2 pr-1" >
                         <InfoPrompt 
@@ -459,9 +462,7 @@ class MainContainer extends React.Component{
                             hasGridButton={this.state.hasGridButton}
                             auth={auth}
                             getSearchKey={this.getSearchKey}
-                            // objectTypeList={this.state.objectTypeList}
-                        />
-                        
+                        />                        
                         <div 
                             id='searchResult' 
                             style={style.searchResultDiv} 

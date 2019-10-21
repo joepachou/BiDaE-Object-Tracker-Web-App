@@ -1,11 +1,13 @@
 import React  from 'react';
 import { Col, ListGroup, Row, Button } from 'react-bootstrap';
-import LocaleContext from '../../context/LocaleContext';
 import config from '../../config';
-import AuthenticationContext from '../../context/AuthenticationContext';
 import AccessControl from '../presentational/AccessControl';
+import { AppContext } from '../../context/AppContext';
 
 class FrequentSearch extends React.Component {
+
+    static contextType = AppContext
+
     state = {
         searchKey: '',
     }
@@ -36,65 +38,64 @@ class FrequentSearch extends React.Component {
     }
 
     render() {
+        const { locale, auth } = this.context
+
         const style = {
-            titleText: {
-                color: 'rgb(80, 80, 80, 1)'
-            }, 
+            list: {
+                maxHeight: "40vh",
+                overflow: "hidden scroll"
+            }
         }
 
-        const locale = this.context
-
         return (
-            <AuthenticationContext.Consumer className="text-capitalize">
-                {auth => (
-                    <div className='d-inline-flex flex-column mb-3' id='frequentSearch' >
-                        {auth.authenticated && auth.user.searchHistory
-                            && auth.user.searchHistory.filter( (item,index) => {
-                            return index < config.userPreference.searchHistoryNumber
-                        }).map( (item, index) => {
-                            return (
-                                <Button
-                                    variant="outline-custom"
-                                    onClick={this.handleClick} 
-                                    active={this.state.searchKey === item.name.toLowerCase()} 
-                                    key={index}
-                                    name={item.name}
-                                    className="text-capitalize"
-                                >
-                                    {item.name}
-                                </Button>
-                            )
-                        })}
-                        &nbsp;
-                        <AccessControl
-                            permission={'user:mydevice'}
-                            renderNoAccess={() => null}
-                        >
+            <div className='d-inline-flex flex-column mb-3' id='frequentSearch' >
+                <h4 className='text-capitalize'>{locale.texts.FREQUENT_SEARCH}</h4>
+                <div style={style.list}>
+                    {auth.authenticated && auth.user.searchHistory
+                        && auth.user.searchHistory.filter( (item,index) => {
+                        return index < config.userPreference.searchHistoryNumber
+                    }).map( (item, index) => {
+                        return (
                             <Button
                                 variant="outline-custom"
                                 onClick={this.handleClick} 
-                                active={this.state.searchKey === 'my devices'}
-                                name='my devices'
+                                active={this.state.searchKey === item.name.toLowerCase()} 
+                                key={index}
+                                name={item.name}
+                                className="text-capitalize"
                             >
-                                {locale.texts.MY_DEVICE}
+                                {item.name}
                             </Button>
-                        </AccessControl>
-                        
-                            <Button 
-                                variant="outline-custom"
-                                onClick={this.handleClick} 
-                                active={this.state.searchKey === 'all devices'}
-                                name='all devices'
-                            >
-                                {locale.texts.ALL_DEVICE}
-                            </Button>
-                    </div>
-                )}
-            </AuthenticationContext.Consumer>
+                        )
+                    })}
+                    <br/>
+                    <br/>
+                    <AccessControl
+                        permission={'user:mydevice'}
+                        renderNoAccess={() => null}
+                    >
+                        <Button
+                            variant="outline-custom"
+                            onClick={this.handleClick} 
+                            active={this.state.searchKey === 'my devices'}
+                            name='my devices'
+                        >
+                            {locale.texts.MY_DEVICE}
+                        </Button>
+                    </AccessControl>
+                
+                    <Button 
+                        variant="outline-custom"
+                        onClick={this.handleClick} 
+                        active={this.state.searchKey === 'all devices'}
+                        name='all devices'
+                    >
+                        {locale.texts.ALL_DEVICE}
+                    </Button>
+                </div>
+            </div>
         )
     }
 }
-
-FrequentSearch.contextType = LocaleContext;
 
 export default FrequentSearch;

@@ -6,9 +6,15 @@ import config from '../../config';
 // import SearchableObjectType from '../presentational/SearchableObjectType_1'
 import SearchableObjectType from '../presentational/SearchableObjectType'
 import LocaleContext from '../../context/LocaleContext';
+import ObjectTypeList from './ObjectTypeList'
+import axios from 'axios';
+import { getObjectTable } from '../../dataSrc'
+import { AppContext } from '../../context/AppContext';
 
 
 class SearchContainer extends React.Component {
+
+    static contextType = AppContext
 
     state = {
         sectionIndexList:['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'],
@@ -20,7 +26,11 @@ class SearchContainer extends React.Component {
         sectionIndex:'',
         searchResult: [],
         hasSearchableObjectData: false,
-        refreshSearchResult: config.systemAdmin.refreshSearchResult
+        objectTypeList: [],        
+    }
+
+    componentDidMount = () => {
+        this.getObjectType()
     }
 
     componentDidUpdate = (prepProps) => {
@@ -49,51 +59,68 @@ class SearchContainer extends React.Component {
      * The data is retrieving from Surveillance -> MainContain -> SearchContainer
      */
     getObjectType = () => {
-        const titleElementStyle = {
-            background: 'rgba(227, 222, 222, 0.619)',
-            fontWeight: 'bold',
-            fontSize: 10,
-            padding: 5,
-        }
 
-        const itemElementStyle = {
-            padding: 5
-        }
-        
-
-        /** Creat a set that stands for the unique object in this searching area */
-        const { searchableObjectData } = this.props;
-        
-        let objectTypeSet = new Set();
-        let objectTypeMap = new Map();
-        
-        for (let object in searchableObjectData) {
-            objectTypeSet.add(searchableObjectData[object].type)
-        }
-
-        /** Creat the titleList by inserting the item in the objectTypeSet
-         *  Also, create the character title element
-         */
-        let sectionTitleList = [];
-        let groupLetter = '';
-        let elementIndex = 0;
-
-        Array.from(objectTypeSet).map( item => {
-            // let currentLetter = item.toUpperCase().slice(0,1);
-            let currentLetter = item ? item.toUpperCase().charAt(0) : item;
-            if(!(groupLetter === currentLetter)) {
-                groupLetter = currentLetter;
-                let titleElement = <a id={groupLetter} key={elementIndex} className='titleElementStyle'><ListGroup.Item style={titleElementStyle}>{groupLetter}</ListGroup.Item></a>;
-                sectionTitleList.push(titleElement)
-                elementIndex++;
-            }
-            let itemElement = <a onClick={this.props.getSearchKey} key={elementIndex}><ListGroup.Item action style={itemElementStyle} >{item}</ListGroup.Item></a>;
-            sectionTitleList.push(itemElement);
-            elementIndex++;
+        axios.post(getObjectTable, {
         })
-        this.setState({
-            sectionTitleList: sectionTitleList,
+        .then(res => {
+            let objectTypeList = res.data.rows.reduce((objectTypeList, item) => {
+                if (!objectTypeList.includes(item.type)) {
+                    objectTypeList.push(item.type)
+                }
+                return objectTypeList
+            }, [])
+            this.setState({
+                objectTypeList
+            })
         })
+        .catch(err => {
+            console.log(err)
+        })
+        // const titleElementStyle = {
+        //     background: 'rgba(227, 222, 222, 0.619)',
+        //     fontWeight: 'bold',
+        //     fontSize: 10,
+        //     padding: 5,
+        // }
+
+        // const itemElementStyle = {
+        //     padding: 5
+        // }
+        
+
+        // /** Creat a set that stands for the unique object in this searching area */
+        // const { searchableObjectData } = this.props;
+        
+        // let objectTypeSet = new Set();
+        // let objectTypeMap = new Map();
+        
+        // for (let object in searchableObjectData) {
+        //     objectTypeSet.add(searchableObjectData[object].type)
+        // }
+
+        // /** Creat the titleList by inserting the item in the objectTypeSet
+        //  *  Also, create the character title element
+        //  */
+        // let sectionTitleList = [];
+        // let groupLetter = '';
+        // let elementIndex = 0;
+
+        // Array.from(objectTypeSet).map( item => {
+        //     // let currentLetter = item.toUpperCase().slice(0,1);
+        //     let currentLetter = item ? item.toUpperCase().charAt(0) : item;
+        //     if(!(groupLetter === currentLetter)) {
+        //         groupLetter = currentLetter;
+        //         let titleElement = <a id={groupLetter} key={elementIndex} className='titleElementStyle'><ListGroup.Item style={titleElementStyle}>{groupLetter}</ListGroup.Item></a>;
+        //         sectionTitleList.push(titleElement)
+        //         elementIndex++;
+        //     }
+        //     let itemElement = <a onClick={this.props.getSearchKey} key={elementIndex}><ListGroup.Item action style={itemElementStyle} >{item}</ListGroup.Item></a>;
+        //     sectionTitleList.push(itemElement);
+        //     elementIndex++;
+        // })
+        // this.setState({
+        //     sectionTitleList: sectionTitleList,
+        // })
     }
 
  
@@ -146,15 +173,15 @@ class SearchContainer extends React.Component {
 
     render() {      
         const style = {
-            titleText: {
-                color: 'rgb(80, 80, 80, 1)'
-            }, 
+        //     titleText: {
+        //         color: 'rgb(80, 80, 80, 1)'
+        //     }, 
         }
 
-        const locale = this.context
+        const { locale } = this.context
         
         return (                   
-            <div id='searchContainer' className="py-1" onTouchMove={this.handleTouchMove}>
+            <div id='searchContainer' className="py-1 m-1" onTouchMove={this.handleTouchMove}>
                 <Row id='searchBar' className='d-flex justify-content-center align-items-center pb-2'>
                     <Searchbar 
                         placeholder={this.state.searchKey}
@@ -162,17 +189,24 @@ class SearchContainer extends React.Component {
                         clearSearchResult={this.props.clearSearchResult}    
                     />
                 </Row>
-                <div id='searchOption' className='pt-2'>
-                    {/* <Col md={6} sm={6} xs={6} lg={6} xl={10} className='px-0'> */}
-                        <Row className='d-flex justify-content-center' style={style.titleText}>
-                            <h4 className='text-capitalize'>{locale.texts.FREQUENT_SEARCH}</h4>
-                        </Row>
-                        <FrequentSearch 
-                            getSearchKey={this.props.getSearchKey}  
-                            clearSearchResult={this.props.clearSearchResult}   
-                            hasGridButton={this.props.hasGridButton} 
-                        />
-                    {/* </Col> */}
+                <div id='searchOption' className="pt-2">
+                    <Row>
+                        <Col md={6} sm={6} xs={6} lg={6} xl={6} className='px-0'>
+                            <FrequentSearch 
+                                getSearchKey={this.props.getSearchKey}  
+                                clearSearchResult={this.props.clearSearchResult}   
+                                hasGridButton={this.props.hasGridButton} 
+                            />
+                        </Col>
+                        <Col md={6} sm={6} xs={6} lg={6} xl={6} className='px-0'>
+                            <ObjectTypeList
+                                getSearchKey={this.props.getSearchKey}  
+                                clearSearchResult={this.props.clearSearchResult}   
+                                hasGridButton={this.props.hasGridButton} 
+                                objectTypeList={this.state.objectTypeList}
+                            />                            
+                        </Col>
+                    </Row>
                     {/* <Col id='searchableObjectType' md={6} sm={6} xs={6} lg={6} xl={2} className='px-0'> */}
                         {/* <SearchableObjectType 
                             sectionTitleList={this.state.sectionTitleList} 
@@ -185,25 +219,17 @@ class SearchContainer extends React.Component {
                             clientHeight={this.state.clientHeight}
                         /> */}
                     {/* </Col> */}
-                        {/* <SearchableObjectType
-                            floatUp = {this.props.floatUp}
-                            objectTypeList = {this.props.objectTypeList}
-                            onSubmit={this.getSearchResult}
-                        /> */}
                 </div>
-                <SearchableObjectType
+                {/* <SearchableObjectType
                     floatUp = {this.props.floatUp}
                     objectTypeList = {this.props.objectTypeList}
                     // onSubmit={this.getSearchResult}
                     getSearchKey={this.props.getSearchKey}
                     auth={this.props.auth}
-                />
+                /> */}
             </div>
         );
     }
 }
-
-SearchContainer.contextType = LocaleContext
-
 
 export default SearchContainer;
