@@ -169,6 +169,7 @@ const config = {
     geoFenceViolationTimeFormat: "h:mm MM/DD/YYYY",
     confirmFormTimeFormat: "LLLL",
     shiftChangeRecordTimeFormat: "LLL",
+    pdfFileContentTimeFormat: "LLL",
     pdfFileNameTimeFormat: "MM_DD_YYYY",
 
     roles: [
