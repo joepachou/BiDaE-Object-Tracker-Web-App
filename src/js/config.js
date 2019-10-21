@@ -315,7 +315,7 @@ const config = {
     getPdfFormat: (userInfo, foundResult, notFoundResult, locale, time, option) => {
         const hasFoundResult = foundResult.length !== 0
         const hasNotFoundResult = notFoundResult.length !== 0
-        // const title = config.getPDFTitle(userInfo, locale, time, option)
+        const title = config.getPDFTitle(userInfo, locale, time, option)
 
         let foundTitle = hasFoundResult
             ?   `<h3 style="text-transform: capitalize; margin-bottom: 5px; font-weight: bold">
@@ -368,9 +368,12 @@ const config = {
                 const nextShiftIndex = (config.shiftOption.indexOf(userInfo.shift) + 1) % config.shiftOption.length
                 const nextShift = locale.texts[config.shiftOption[nextShiftIndex].toUpperCase().replace(/ /g, "_")]
                 const thisShift = locale.texts[userInfo.shift.toUpperCase().replace(/ /g, "_")]
+                // header = `<h1 style="text-transform: capitalize;">
+                //         ${locale.texts.SHIFT_CHANGE_RECORD}-${locale.texts.CONFIRM_BY}
+                //     </h1>`
                 header = `<h1 style="text-transform: capitalize;">
-                        ${locale.texts.SHIFT_CHANGE_RECORD}-${locale.texts.CONFIRM_BY}
-                    </h1>`
+                    ${locale.texts.SHIFT_CHANGE_RECORD}
+                </h1>`
                 let shift = `<div style="text-transform: capitalize;">
                         ${locale.texts.SHIFT}: ${thisShift} ${locale.texts.SHIFT_TO} ${nextShift}
                     </div>`

@@ -28,6 +28,7 @@ class ShiftChange extends React.Component {
                 foundResult: [],
                 notFoundResult: [],
             },
+            fileURL: '',
             showPdfDownloadForm: false,
             APIforTableDone: false,
         }
@@ -118,7 +119,7 @@ class ShiftChange extends React.Component {
     confirmShift = () => {
         let userInfo = this.props.userInfo
         let { locale } = this.context
-        let contentTime = moment().format(config.shiftRecordPdfContentTimeFormat)
+        let contentTime = moment().locale(locale.abbr).format(config.shiftChangeRecordTimeFormat)
         let fileNameTime = moment().locale('en').format(config.shiftRecordFileNameTimeFormat)
         const { foundResult, notFoundResult } = this.state.searchResult
         let pdfFormat = config.pdfFormat(userInfo, foundResult, notFoundResult, locale, contentTime, 'shiftChange')
@@ -172,7 +173,7 @@ class ShiftChange extends React.Component {
                         <Row>
                             <Col className='text-capitalize'>
                                 {/* <h5>{locale.texts.SHIFT_CHANGE_RECORD}-{locale.texts.CONFIRM_BY}</h5> */}                                
-                                <h5>{userInfo.name}{locale.texts.WHOSE}{locale.texts.DEVICES}</h5>
+                                <h5>{userInfo.name}{locale.texts.WHOSE_DEVICES}</h5>
                             </Col>
                         </Row>
                         <Row style={style.row} className='text-capitalize'> 
