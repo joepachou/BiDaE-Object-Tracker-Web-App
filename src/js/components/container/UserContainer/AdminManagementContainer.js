@@ -15,7 +15,7 @@ import {
     getUserRole,
     getRoleNameList,
     setUserRole,
-    removeUser,
+    deleteUser,
     getAreaTable
 } from "../../../dataSrc";
 import AddableList from './AddableList'
@@ -153,7 +153,7 @@ class AdminManagementContainer extends React.Component{
         })
     }
 
-    // removeUser = (e) => {
+    // deleteUser = (e) => {
     //     e.preventDefault()
     //     var username = e.target.getAttribute('name')
     //     this.setState({
@@ -162,8 +162,8 @@ class AdminManagementContainer extends React.Component{
     //     })
     // }
 
-    submitRemoveUserConfirm = () => {
-        axios.post(removeUser, {
+    submitDeleteUserForm = () => {
+        axios.post(deleteUser, {
             username: this.state.selectedUser.name
         }).then((res)=>{
             this.setState({
@@ -174,6 +174,8 @@ class AdminManagementContainer extends React.Component{
             setTimeout(
                 this.getUserList(),1000
             )
+        }).catch(err => {
+            console.log(`delete user fail! ${err}`)
         })
     }
 
@@ -235,7 +237,7 @@ class AdminManagementContainer extends React.Component{
                     userRole = {this.state.userRole}
                     onClose = {this.onCloseModifyUserInfo}
                     onSubmit = {this.onSubmitModifyUserInfo}
-                    removeUser={this.submitRemoveUserConfirm}
+                    deleteUser={this.submitDeleteUserForm}
                 />
                 <AddUserForm
                     roleName={this.state.roleName}
@@ -247,7 +249,7 @@ class AdminManagementContainer extends React.Component{
                 {/* <RemoveUserConfirmForm 
                     show = {this.state.showRemoveUserConfirm}
                     user = {this.state.removeCandidate}
-                    onSubmit = {this.submitRemoveUserConfirm}
+                    onSubmit = {this.submitDeleteUserForm}
                     onClose = {this.closeRemoveUserConfirm}
                 /> */}
             </Fragment>

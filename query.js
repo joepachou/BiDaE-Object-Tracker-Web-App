@@ -203,16 +203,20 @@ const addObject = (request, response) => {
 }
 
 const editObjectPackage = (request, response) => {
-    const { formOption, username } = request.body
+    const { formOption, username, pdfPackage } = request.body
 
     pool.query(queryType.query_addEditObjectRecord(formOption, username))
         .then(res => {
             const record_id = res.rows[0].id
             pool.query(queryType.query_editObjectPackage(formOption, record_id))
                 .then(res => {
-                console.log('Edit object package success')
-                response.status(200).json(res)
-
+                    console.log('Edit object package success')
+                    pdf.create(pdfPackage.pdf, pdfPackage.options).toFile(pdfPackage.path, function(err, result) {
+                        if (err) return console.log(err);
+                    
+                        console.log("pdf create");
+                        response.status(200).json(pdfPackage.path)
+                    });
                 })
                 .catch(err => {
                     console.log('Edit object package fail ' + err)
@@ -465,16 +469,16 @@ const getRoleNameList = (request, response) => {
     
 }
 
-const removeUser = (request, response) => {
+const deleteUser = (request, response) => {
     var username = request.body.username
-    pool.query(queryType.query_removeUser(username), (error, results) => {
-        if(error){
-            console.log(error)
-        }else{
-            console.log('success')
-            response.send('success')
-        }
-    })  
+    pool.query(queryType.query_deleteUser(username))
+        .then(res => {
+            console.log('delete user success')
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(`delete user failer ${err}`)
+        })  
 }
 
 const setUserRole = (request, response) => {
@@ -683,7 +687,7 @@ module.exports = {
     getUserList,
     getUserRole,
     getRoleNameList,
-    removeUser,
+    deleteUser,
     setUserRole,
     getEditObjectRecord,
     deleteEditObjectRecord,

@@ -22,7 +22,7 @@ const deleteEditObjectRecord = `http://${dataSrcIP}/test/deleteEditObjectRecord`
 const getUserList = `http://${dataSrcIP}/test/getUserList`
 const getUserRole = `http://${dataSrcIP}/test/getUserRole`
 const getRoleNameList = `http://${dataSrcIP}/test/getRoleNameList`
-const removeUser = `http://${dataSrcIP}/test/removeUser`
+const deleteUser = `http://${dataSrcIP}/test/deleteUser`
 const setUserRole = `http://${dataSrcIP}/test/setUserRole`
 const getAreaTable = `http://${dataSrcIP}/data/getAreaTable`
 const getGeoFenceConfig = `http://${dataSrcIP}/data/getGeoFenceConfig`
@@ -58,7 +58,7 @@ module.exports = {
     getUserList,
     getUserRole,
     getRoleNameList,
-    removeUser,
+    deleteUser,
     setUserRole,
     getAreaTable,
     getGeoFenceConfig,

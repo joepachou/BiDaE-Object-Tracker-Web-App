@@ -158,7 +158,7 @@ export default class ModifyUserInfo extends React.Component{
                                 <Modal.Footer className='d-flex bd-highlight'>
                                     <Button 
                                         variant="outline-danger" 
-                                        onClick={this.props.removeUser}
+                                        onClick={this.props.deleteUser}
                                         className='text-capitalize mr-auto bd-highlight'
                                     >
                                         {locale.texts.DELETE}

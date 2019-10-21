@@ -410,7 +410,7 @@ const query_getRoleNameList = () => {
 	return query
 }
 
-const query_removeUser = (username) => {
+const query_deleteUser = (username) => {
 	
 	const query = `
 		DELETE FROM user_roles 
@@ -418,17 +418,14 @@ const query_removeUser = (username) => {
 			SELECT id 
 			FROM user_table 
 			WHERE name='${username}'
-			); 
+		); 
 
 		DELETE FROM user_table 
-		WHERE user_id = (
+		WHERE id = (
 			SELECT id 
 			FROM user_table
 			WHERE name='${username}'
-		)
-		
-		DELETE FROM user_table 
-		WHERE name = '${username}';
+		);
 	`
 	return query
 }
@@ -629,7 +626,7 @@ module.exports = {
 	query_getUserList,
 	query_getUserRole,
 	query_getRoleNameList,
-	query_removeUser,
+	query_deleteUser,
 	query_setUserRole,
 	query_getEditObjectRecord,
 	query_deleteEditObjectRecord,
