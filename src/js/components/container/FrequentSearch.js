@@ -48,9 +48,9 @@ class FrequentSearch extends React.Component {
         }
 
         return (
-            <div className='d-inline-flex flex-column mb-3' id='frequentSearch' >
+            <div id='frequentSearch' >
                 <h4 className='text-capitalize'>{locale.texts.FREQUENT_SEARCH}</h4>
-                <div style={style.list}>
+                <div style={style.list} className="d-inline-flex flex-column justify-content-center">
                     {auth.authenticated && auth.user.searchHistory
                         && auth.user.searchHistory.filter( (item,index) => {
                         return index < config.userPreference.searchHistoryNumber
@@ -59,7 +59,7 @@ class FrequentSearch extends React.Component {
                             <Button
                                 variant="outline-custom"
                                 onClick={this.handleClick} 
-                                active={this.state.searchKey === item.name.toLowerCase()} 
+                                // active={this.state.searchKey === item.name.toLowerCase()} 
                                 key={index}
                                 name={item.name}
                                 className="text-capitalize"
@@ -68,8 +68,7 @@ class FrequentSearch extends React.Component {
                             </Button>
                         )
                     })}
-                    <br/>
-                    <br/>
+                    &nbsp;
                     <AccessControl
                         permission={'user:mydevice'}
                         renderNoAccess={() => null}
@@ -77,7 +76,7 @@ class FrequentSearch extends React.Component {
                         <Button
                             variant="outline-custom"
                             onClick={this.handleClick} 
-                            active={this.state.searchKey === 'my devices'}
+                            // active={this.state.searchKey === 'my devices'}
                             name='my devices'
                         >
                             {locale.texts.MY_DEVICE}
@@ -87,7 +86,7 @@ class FrequentSearch extends React.Component {
                     <Button 
                         variant="outline-custom"
                         onClick={this.handleClick} 
-                        active={this.state.searchKey === 'all devices'}
+                        // active={this.state.searchKey === 'all devices'}
                         name='all devices'
                     >
                         {locale.texts.ALL_DEVICE}

@@ -51,15 +51,15 @@ class ObjectTypeList extends React.Component {
         const { locale, auth } = this.context
 
         return (
-            <div className='d-inline-flex flex-column mb-3 justify-content-center' id='objectTypeList' >
+            <div id='objectTypeList' >
                 <h4 className='text-capitalize'>{locale.texts.OBJECT_TYPE}</h4>
-                <div style={style.list}>
+                <div style={style.list} className="d-inline-flex flex-column justify-content-center">
                     {this.props.objectTypeList.map((item, index) => {
                         return (
                             <Button
                                 variant="outline-custom"
                                 onClick={this.handleClick} 
-                                active={this.state.searchKey === item.toLowerCase()} 
+                                // active={this.state.searchKey === item.toLowerCase()} 
                                 key={index}
                                 name={item}
                                 className="text-capitalize"
