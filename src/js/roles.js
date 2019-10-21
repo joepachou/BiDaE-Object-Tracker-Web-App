@@ -14,21 +14,19 @@ const rules = {
     },
     care_provider: {
         permission: [
-            "form:edit",
-            // "route:geofence",
+            // "form:edit",
             "route:devicesManagement",
             "route:shiftChangeRecord",
             "user:mydevice",
             "user:shiftChange",
             "user:saveSearchRecord",
-            "route:userManager",
+            // "route:userManager",
         ]
     },
     system_admin: {
         permission: [
-            "form:edit",
+            // "form:edit",
             "route:systemStatus",
-            // "route:geofence",
             "route:objectManagement",
             "route:editObjectManagement",
             "user:mydevice",

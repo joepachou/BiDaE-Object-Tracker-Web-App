@@ -7,7 +7,8 @@ const SearchResultListGroup = ({
         handleSelectResultItem,
         selection,
         disabled,
-    }) => {
+        action
+}) => {
 
     const locale = React.useContext(LocaleContext);
 
@@ -42,7 +43,6 @@ const SearchResultListGroup = ({
         },
         list: {
             wordBreak: 'keep-all',
-            // color:'red',
             zIndex: 1
         },
         listGroup: {
@@ -64,8 +64,8 @@ const SearchResultListGroup = ({
                         className='searchResultList' 
                         eventKey={item.found + ':'+ index} 
                         key={index} 
-                        action
-                        disabled={disabled}
+                        action={action}
+                        active
                     >
                         <Row>
                             <div 

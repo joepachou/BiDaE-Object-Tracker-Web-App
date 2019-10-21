@@ -3,7 +3,7 @@ import {
     Button,
     Col, 
     Row, 
-    Image 
+    Image,
 } from 'react-bootstrap'
 import ChangeStatusForm from '../container/ChangeStatusForm';
 import ConfirmForm from '../container/ConfirmForm';
@@ -15,6 +15,9 @@ import AccessControl from './AccessControl';
 import SearchResultListGroup from '../presentational/SearchResultListGroup'
 import { AppContext } from '../../context/AppContext';
 import { toast } from 'react-toastify';
+import DownloadPdfRequestForm from '../container/DownloadPdfRequestForm'
+import moment from 'moment'
+import config from '../../config'
 
 
 const Toast = () => {
@@ -63,12 +66,7 @@ class SearchResult extends React.Component {
         selection: [],
         editedObjectPackage: [],
         showAddDevice: false,
-    }
-
-    componentDidUpdate = (prevProps) => {
-        if (prevProps.searchKey !== this.props.searchKey) {
-            
-        }
+        showDownloadPdfRequest: false,
     }
 
     handleSelectResultItem = (eventKey) => {
@@ -85,7 +83,6 @@ class SearchResult extends React.Component {
             type: 'setUpdateTrackingData',
             value: false
         })
-        // this.props.shouldUpdateTrackingData(false)
     }
 
     toggleSelection = (number, isFound) => {
@@ -153,7 +150,7 @@ class SearchResult extends React.Component {
         let editedObjectPackage = _.cloneDeep(this.state.selectedObjectData).map(item => {
             item.status = values.radioGroup.toLowerCase(),
             item.transferred_location = values.select ? values.select: '';
-            item.notes = values.textarea 
+            item.notes = values.notes
             return item
         })
         this.setState({
@@ -176,20 +173,24 @@ class SearchResult extends React.Component {
         let { auth, stateReducer } = this.context
         let [{}, dispatch] = stateReducer
         let username = auth.user.name
+        let shouldCreatePdf = config.statusToCreatePdf.includes(editedObjectPackage[0].status)
+        let pdfPackage = shouldCreatePdf && this.createPdfPackage()
         axios.post(dataSrc.editObjectPackage, {
             formOption: editedObjectPackage,
             username,
+            pdfPackage
         }).then(res => {
             setTimeout(
                 function() {
                     this.setState ({
-                        showConfirmForm: false,
-                        editedObjectPackage: [],
-                        selection: [],
-                        selectedObjectData: [],
-                        showAddDevice: false
+                        showConfirmForm: shouldCreatePdf,
+                        // editedObjectPackage: [],
+                        // selection: [],
+                        // selectedObjectData: [],
+                        showAddDevice: false,
+                        showDownloadPdfRequest: shouldCreatePdf,
+                        pdfPath: shouldCreatePdf && pdfPackage.path
                     })
-                    // this.props.shouldUpdateTrackingData(true)
                     dispatch({
                         type: 'setUpdateTrackingData',
                         value: true
@@ -198,10 +199,10 @@ class SearchResult extends React.Component {
                 .bind(this),
                 1000
             )
-            toast(<Toast />, {
-                closeOnClick: false,
-                position: "top-right",
-            })
+            // toast(<Toast />, {
+            //     closeOnClick: false,
+            //     position: "top-right",
+            // })
         }).catch( error => {
             console.log(error)
         })
@@ -212,6 +213,13 @@ class SearchResult extends React.Component {
         this.setState({ 
             showNotFoundResult: !this.state.showNotFoundResult 
         })
+    }
+
+    /** Create the content of pdf */
+    createPdfPackage = () => {
+        let { locale, auth } = this.context
+        let pdfPackage = config.getPdfPackage('editObject', auth.user, this.state.editedObjectPackage, locale)
+        return pdfPackage
     }
 
     handleAdditionalButton = (text) => {
@@ -245,6 +253,13 @@ class SearchResult extends React.Component {
         })
     }
 
+    handleFormClose = () =>{
+        this.setState({
+            showDownloadPdfRequest: false,
+            showConfirmForm: false
+        })
+    }
+
 
 
     render() {
@@ -263,6 +278,14 @@ class SearchResult extends React.Component {
                 fontWeight: 1000,
                 color: 'rgba(101, 111, 121, 0.78)'
             },
+            downloadPdfRequest: {
+                zIndex: 3000,
+                top: '30%',
+                // left: '-10%',
+                right: 'auto',
+                bottom: 'auto',
+                padding: 0,
+            }
         }
 
         let searchResult = this.state.showNotFoundResult 
@@ -300,9 +323,9 @@ class SearchResult extends React.Component {
                                     renderNoAccess={() => (
                                         <SearchResultListGroup 
                                             data={searchResult}
-                                            handleSelectResultItem={this.handleSelectResultItem}
                                             selection={this.state.selection}
                                             disabled
+                                            action={false}
                                         />
                                     )
                                     }
@@ -311,6 +334,7 @@ class SearchResult extends React.Component {
                                         data={searchResult}
                                         handleSelectResultItem={this.handleSelectResultItem}
                                         selection={this.state.selection}
+                                        action
                                     />
                                 </AccessControl>
                             </Col>
@@ -346,6 +370,12 @@ class SearchResult extends React.Component {
                     selectedObjectData={this.state.editedObjectPackage} 
                     handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose} 
                     handleConfirmFormSubmit={this.handleConfirmFormSubmit}
+                    showDownloadPdfRequest={this.state.showDownloadPdfRequest}
+                />
+                <DownloadPdfRequestForm
+                    show={this.state.showDownloadPdfRequest} 
+                    pdfPath={this.state.pdfPath}
+                    close={this.handleFormClose}
                 />
             </div>
         )
