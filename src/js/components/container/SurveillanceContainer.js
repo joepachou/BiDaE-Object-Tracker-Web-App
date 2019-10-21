@@ -140,29 +140,34 @@ class SurveillanceContainer extends React.Component {
 
         return(
             <div id="surveillanceContainer" style={style.surveillanceContainer} className="overflow-hidden">
-                <ButtonToolbar className='mb-2'>
-                    <Button 
-                        variant="outline-primary" 
-                        className="mr-1 text-capitalize" 
-                        onClick={this.handleClickButton} 
-                        name='setArea'
-                        value={1}
-                        disabled={areaId == 1}
-                    >
-                        {locale.texts.IIS_SINICA_FLOOR_FOUR}
-                    </Button>
+                <AccessControl
+                    permission={"user:toggleArea"}
+                    renderNoAccess={() => null}
+                >
+                    <ButtonToolbar className='mb-2'>
+                        <Button 
+                            variant="outline-primary" 
+                            className="mr-1 text-capitalize" 
+                            onClick={this.handleClickButton} 
+                            name='setArea'
+                            value={1}
+                            disabled={areaId == 1}
+                        >
+                            {locale.texts.IIS_SINICA_FLOOR_FOUR}
+                        </Button>
 
-                    <Button 
-                        variant="outline-primary" 
-                        className="mr-1 text-capitalize" 
-                        onClick={this.handleClickButton} 
-                        name='setArea'
-                        value={3}
-                        disabled={areaId == 3}
-                    >
-                        {locale.texts.NTUH_YUNLIN_WARD_FIVE_B}
-                    </Button>
-                </ButtonToolbar>
+                        <Button 
+                            variant="outline-primary" 
+                            className="mr-1 text-capitalize" 
+                            onClick={this.handleClickButton} 
+                            name='setArea'
+                            value={3}
+                            disabled={areaId == 3}
+                        >
+                            {locale.texts.NTUH_YUNLIN_WARD_FIVE_B}
+                        </Button>
+                    </ButtonToolbar>
+                </AccessControl>
                 <div style={style.mapBlock}>
                     <Map 
                         hasSearchKey={hasSearchKey}
@@ -220,30 +225,40 @@ class SurveillanceContainer extends React.Component {
                                 </Button>
                             </Nav.Item>
                         </AccessControl>
-                        <Nav.Item className="mt-2">
-                            <Button 
-                                variant="outline-primary" 
-                                className="mr-1 ml-2 text-capitalize" 
-                                onClick={this.handleClickButton} 
-                                name="filterObjectType"
-                                value={[0]}
-                                active={this.state.filterObjectType.includes(0)}
-                            >
-                                {this.state.filterObjectType.includes(0) ? locale.texts.SHOW_DEVICES : locale.texts.HIDE_DEVICES}
-                            </Button>
-                        </Nav.Item>
-                        <Nav.Item className="mt-2">
-                            <Button 
-                                variant="outline-primary" 
-                                className="mr-1 ml-2 text-capitalize" 
-                                onClick={this.handleClickButton} 
-                                name="filterObjectType"
-                                value={[1, 2]}
-                                active={this.state.filterObjectType.includes(1)}
-                            >
-                                {this.state.filterObjectType.includes(1) ? locale.texts.SHOW_RESIDENTS : locale.texts.HIDE_RESIDENTS}
-                            </Button>
-                        </Nav.Item>
+                        <AccessControl
+                            permission={"user:toggleShowDevices"}
+                            renderNoAccess={() => null}
+                        >
+                            <Nav.Item className="mt-2">
+                                <Button 
+                                    variant="primary" 
+                                    className="mr-1 ml-2 text-capitalize" 
+                                    onClick={this.handleClickButton} 
+                                    name="filterObjectType"
+                                    value={[0]}
+                                    active={this.state.filterObjectType.includes(0)}
+                                >
+                                    {this.state.filterObjectType.includes(0) ? locale.texts.SHOW_DEVICES : locale.texts.HIDE_DEVICES}
+                                </Button>
+                            </Nav.Item>
+                        </AccessControl>
+                        <AccessControl
+                            permission={"user:toggleShowResidents"}
+                            renderNoAccess={() => null}
+                        >
+                            <Nav.Item className="mt-2">
+                                <Button 
+                                    variant="primary" 
+                                    className="mr-1 ml-2 text-capitalize" 
+                                    onClick={this.handleClickButton} 
+                                    name="filterObjectType"
+                                    value={[1, 2]}
+                                    active={this.state.filterObjectType.includes(1)}
+                                >
+                                    {this.state.filterObjectType.includes(1) ? locale.texts.SHOW_RESIDENTS : locale.texts.HIDE_RESIDENTS}
+                                </Button>
+                            </Nav.Item>
+                        </AccessControl>
                         {/* <Nav.Item className="mt-2">
                             <Button 
                                 variant="outline-primary" 
@@ -280,7 +295,7 @@ class SurveillanceContainer extends React.Component {
                                     </Nav.Item>
                                     <Nav.Item className="mt-2">
                                         <Button 
-                                            variant="primary" 
+                                            variant="outline-primary" 
                                             className="mr-1 ml-2 text-capitalize" 
                                             onClick={this.handleClickButton} 
                                             name="clearAlerts"

@@ -21,18 +21,22 @@ const rules = {
             "user:shiftChange",
             "user:saveSearchRecord",
             // "route:userManager",
+            // "user:toggleArea",
+            // "user:toggleShowDevices",
+            // "user:toggleShowResidents"
         ]
     },
     system_admin: {
         permission: [
             // "form:edit",
-            "route:systemStatus",
+            // "route:systemStatus",
             "route:objectManagement",
             "route:editObjectManagement",
             "user:mydevice",
             "user:saveSearchRecord",
             "route:userManager",
-
+            // "user:toggleArea",
+            // "user:toggleShowResidents",
         ]
     }
   };
