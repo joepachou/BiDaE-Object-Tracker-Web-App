@@ -5,7 +5,7 @@ import moment from 'moment'
 
 const config = {
     
-    defaultAreaId: 1,
+    defaultAreaId: 3,
 
     areaOptions: {
         1: "IIS_SINICA_FLOOR_FOUR",

@@ -202,7 +202,7 @@ const tw = {
 
     /** Test */
     IIS_SINICA_FLOOR_FOUR: "中研院4樓",
-    NTUH_YUNLIN_WARD_FIVE_B: "台大醫院雲林分院5B",
+    NTUH_YUNLIN_WARD_FIVE_B: "雲林台大醫院5B病房",
     
     DEVICE_FOUND: function (length){
         return "發現"+length.toString()+"個儀器"
