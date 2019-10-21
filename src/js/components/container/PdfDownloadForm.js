@@ -11,10 +11,13 @@ import dataSrc from '../../dataSrc';
 import QRCode from 'qrcode.react';
 import moment from 'moment'
 import config from '../../config'
+import { AppContext } from '../../context/AppContext';
 
 // need Inputs : search Result
 // this component will send json to back end, backend will return a url, and the component generate a qrcode
 class PdfDownloadForm extends React.Component {
+
+    static contextType = AppContext
     
     state = {
         show: false,
@@ -50,9 +53,9 @@ class PdfDownloadForm extends React.Component {
             }
 
             let userInfo = this.props.userInfo
-            let locale = this.context
-            let contentTime = moment().format(config.shiftRecordPdfContentTimeFormat)
-            let fileNameTime = moment().locale('en').format(config.shiftRecordFileNameTimeFormat)
+            let { locale } = this.context
+            let contentTime = moment().locale(locale.abbr).format(config.pdfFileContentTimeFormat)
+            let fileNameTime = moment().locale('en').format(config.pdfFileNameTimeFormat)
             let pdfFormat = config.pdfFormat(userInfo, foundResult, notFoundResult, locale, contentTime, 'searchResult')
 
             let fileDir = config.searchResultFolderPath
@@ -96,7 +99,7 @@ class PdfDownloadForm extends React.Component {
             isDone
         } = this.state
 
-        const locale = this.context
+        const { locale } = this.context
 
         return (
             <Modal 
@@ -129,14 +132,12 @@ class PdfDownloadForm extends React.Component {
                         >
                             {locale.texts.DOWNLOAD}
                         </Button>
-                        <a href={this.state.fileURL} ref="download" download style={{display: 'none'}}>hi</a>
+                        <a ref="download" download style={{display: 'none'}}>hi</a>
                     </Row>
                 </Modal.Body>
             </Modal>
         );
     }
 }
-
-PdfDownloadForm.contextType = LocaleContext;
   
 export default PdfDownloadForm;
