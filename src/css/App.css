@@ -185,6 +185,7 @@ a:hover {
 }
 
 /* React-bootstrap button */
+/** React Bootstrap button variant outline-primary */
 .btn-outline-primary {
     background-color: white;
     color: rgb(0, 123, 255, 1);
@@ -194,6 +195,11 @@ a:hover {
 .btn-outline-primary:hover {
     background-color: white;
     color: #007bff;
+}
+
+.btn-outline-primary.disabled,
+.btn-outline-primary:disabled {
+    border-color: inherit
 }
 
 .btn-outline-primary:not(:disabled):not(.disabled):active, {
@@ -212,6 +218,14 @@ a:hover {
     box-shadow: none;
 }
 
+.btn-outline-primary:not(:disabled):not(.disabled).active, 
+.btn-outline-primary:not(:disabled):not(.disabled):active, 
+.show>.btn-outline-primary.dropdown-toggle {
+    background-color: white;
+    color: rgb(0, 123, 255, 1);
+}
+
+/** React Bootstrap button variant outline-secondary */
 .btn-outline-secondary {
     border: none;
     font-weight: 500;
@@ -229,7 +243,7 @@ a:hover {
 .btn-outline-secondary:hover {
     background-color: white;
     border-color: rgb(224, 224, 224);
-    color: rgb(0, 0, 0, 0.6);
+    color: rgb(0, 0, 0, 0.75);
 }
 
 .btn-outline-secondary:not(:disabled):not(.disabled):active {
@@ -238,6 +252,7 @@ a:hover {
     border-color: rgb(0, 0, 0, 0.5);
 }
 
+/** React Bootstrap button variant outline-danger */
 .btn-outline-danger {
     border: none;
     border-color: rgb(220, 53, 69, 0.8);
@@ -261,26 +276,11 @@ a:hover {
     box-shadow: none;
 }
 
-.btn {
-    font-size: 1rem;
-    font-weight: 500;
-    transition: none;
-    padding: .3rem .75rem;
-}
-
-.btn:focus {
-    box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0)
-}
-
-button:focus {
-    outline: 0;
-}
-
+/** React Bootstrap button variant outline-custom */
 .btn-outline-custom {
     margin: 0 0px;
     min-width: 168px;
 }
-
 
 .btn-outline-custom.active {
     border: 0;
@@ -303,9 +303,17 @@ button:focus {
     font-size: 18px;
 }
 
-.btn-outline-grid {
-    border-color: red;
+/** React Bootstrap button variant primary */
+.btn-primary:not(:disabled):not(.disabled).active:focus {
+    box-shadow: none;
 }
+
+.btn-primary:not(:disabled):not(.disabled):active:focus, 
+.show >.btn-primary.dropdown-toggle:focus {
+    box-shadow: none;
+}
+
+/** React Bootstrap button variant warning */
 
 .btn-warning:not(:disabled):not(.disabled).active {
     color: white;
@@ -318,6 +326,26 @@ button:focus {
 .btn-warning:not(:disabled):not(.disabled).active:focus {
     box-shadow: none;
 }
+
+.btn-outline-grid {
+    border-color: red;
+}
+
+.btn {
+    font-size: 1rem;
+    font-weight: 500;
+    transition: none;
+    padding: .3rem .75rem;
+}
+
+.btn:focus {
+    box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0)
+}
+
+button:focus {
+    outline: 0;
+}
+
 
 /* SearchResult style sheet for mobile*/
 .searchResultForMobile {
@@ -367,6 +395,10 @@ button:focus {
 .modal-body {
     padding-bottom: 0
 } 
+
+.modal-backdrop {
+    z-index: 1050;
+}
 
 /** Basic html tag */
 textarea {
