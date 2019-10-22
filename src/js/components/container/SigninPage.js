@@ -68,7 +68,7 @@ class SigninPage extends React.Component {
                         initialValues = {{
                             username: '',
                             password: '',
-                            radioGroup: config.shiftOption[0]
+                            // radioGroup: config.shiftOption[0]
                         }}
 
                         validationSchema = {
@@ -81,7 +81,7 @@ class SigninPage extends React.Component {
                             axios.post(signin, {
                                 username,
                                 password,
-                                shift: radioGroup, 
+                                // shift: radioGroup, 
                             })
                             .then(res => {
                                 if (!res.data.authentication) { 
@@ -125,7 +125,7 @@ class SigninPage extends React.Component {
                                     />
                                     <ErrorMessage name="password" component="div" className="invalid-feedback" />
                                 </div>
-                                <hr/>
+                                {/* <hr/>
                                 <RadioButtonGroup
                                     id="radioGroup"
                                     label={locale.texts.SHIFT_SELECT}
@@ -145,7 +145,7 @@ class SigninPage extends React.Component {
                                         )
                                     })}
 
-                                </RadioButtonGroup>
+                                </RadioButtonGroup> */}
                                 <Modal.Footer>
                                     <Button 
                                         variant="outline-secondary" 
@@ -163,24 +163,6 @@ class SigninPage extends React.Component {
                                         {locale.texts.SIGN_IN}
                                     </Button>
                                 </Modal.Footer>
-                                {/* <div className="form-group pt-2">
-                                    <button 
-                                        type="submit" 
-                                        className="btn btn-primary btn-block text-capitalize"  
-                                        disabled={isSubmitting}
-                                    >
-                                        {locale.texts.SIGN_IN}
-                                    </button>
-                                </div> */}
-                                {/* <div className='d-flex justify-content-center'>
-                                    <button 
-                                        type='button' 
-                                        className='btn btn-link text-capitalize' 
-                                        onClick={this.handleSignupFormShowUp}
-                                    >
-                                        {locale.texts.SIGN_UP}
-                                    </button>
-                                </div> */}
                             </Form>
                         )}
                     />
@@ -188,8 +170,6 @@ class SigninPage extends React.Component {
             </Modal>
         )
     }
-
-
 }
 
 SigninPage.contextType = LocaleContext;

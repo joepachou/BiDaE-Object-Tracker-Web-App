@@ -248,14 +248,25 @@ function query_signup(signupPackage) {
 
 	const text = 
 		`
-		INSERT INTO user_table (name, password, registered_timestamp)
+		INSERT INTO user_table 
+			(
+				name, 
+				password,
+				shift,
+				registered_timestamp
+			)
 		VALUES (
 			$1, 
 			$2, 
+			$3,
 			now()
 		);
 		`;
-	const values = [signupPackage.username, signupPackage.password];
+	const values = [
+		signupPackage.username, 
+		signupPackage.password,
+		signupPackage.shiftSelect,
+	];
 
 	const query = {
 		text,
@@ -382,6 +393,7 @@ const query_getUserList = () => {
 			user_table.name, 
 			user_table.registered_timestamp,
 			user_table.last_visit_timestamp,
+			user_table.shift,
 			roles.name AS role_type 
 		FROM user_table  
 		INNER JOIN (
@@ -390,6 +402,7 @@ const query_getUserList = () => {
 			INNER JOIN roles ON user_roles.role_id = roles.id
 		) roles
 		ON user_table.id = roles.user_id
+		ORDER BY user_table.name DESC
 	`
 	return query
 }
@@ -430,19 +443,22 @@ const query_deleteUser = (username) => {
 	return query
 }
 
-const query_setUserRole = (role, username) => {
+const query_setUserRole = (username, roleSelect, shiftSelect) => {
 	const query = `
 		UPDATE user_roles
 		SET role_id = (
 			SELECT id 
 			FROM roles 
-			where name='${role}'
+			where name='${roleSelect}'
 		)
 		WHERE user_roles.user_id = (
 			SELECT id 
 			FROM user_table 
 			WHERE name='${username}'
 		);
+		UPDATE user_table
+		SET shift = '${shiftSelect.value}'
+		WHERE name = '${username}';
 	`
 	return query
 }
@@ -491,7 +507,7 @@ const query_setVisitTimestamp = (username) => {
 	`
 }
 
-const query_insertUserData = (username, role, area) => {
+const query_insertUserData = (username, role, areaSelect) => {
 	return `
 		INSERT INTO user_roles (user_id, role_id)
 		VALUES (
@@ -516,7 +532,7 @@ const query_insertUserData = (username, role, area) => {
 			(
 				SELECT id 
 				FROM area_table
-				WHERE name='${area}'
+				WHERE name='${areaSelect}'
 			)
 		)
 	`

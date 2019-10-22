@@ -288,7 +288,8 @@ const signup = (request, response) => {
         username, 
         password, 
         role,
-        area 
+        areaSelect,
+        shiftSelect
     } = request.body;
     
     const saltRounds = 10;
@@ -297,12 +298,12 @@ const signup = (request, response) => {
     const signupPackage = {
         username: username.toLowerCase(),
         password: hash,
-        area,
+        shiftSelect
     }
 
     pool.query(queryType.query_signup(signupPackage))
         .then(res => {
-            pool.query(queryType.query_insertUserData(username, role, area))
+            pool.query(queryType.query_insertUserData(username, role, areaSelect))
                 .then(res => {
                     console.log('Sign up Success')
                     response.status(200).json(res)
@@ -482,16 +483,22 @@ const deleteUser = (request, response) => {
 }
 
 const setUserRole = (request, response) => {
-    var {role, username} = request.body
-    pool.query(queryType.query_setUserRole(role, username),(error, results) => {
-        if(error){
-            console.log(error)
-        }else{
-            // console.log(results.rows)
-            response.send('success')
-        }
-    }
-)}
+    var {
+        username,
+        roleSelect,
+        shiftSelect
+    } = request.body
+    console.log(request.body)
+    pool.query(queryType.query_setUserRole(username, roleSelect, shiftSelect))
+        .then(res => {
+            console.log(`set user success`)
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(`set user fail ${err}`)
+        })
+}
+
 const getEditObjectRecord = (request, response) => {
     const { locale } = request.body
     pool.query(queryType.query_getEditObjectRecord())

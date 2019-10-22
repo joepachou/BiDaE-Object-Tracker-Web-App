@@ -1,15 +1,12 @@
 import React from 'react';
 import { Col, Row, ListGroup, Modal, Button, Navbar, Nav } from 'react-bootstrap';
-import axios from 'axios';
-import Cookies from 'js-cookie'
 import LocaleContext from '../../../context/LocaleContext';
-import dataSrc from "../../../dataSrc";
-import AddableList from './AddableList'
 import RadioButtonGroup from '../RadioButtonGroup';
 import RadioButton from '../../presentational/RadioButton'
 import { Formik, Field, Form, ErrorMessage } from 'formik';
+import Select from 'react-select'
 import * as Yup from 'yup';
-
+import config from '../../../config'
 
 const Fragment = React.Fragment;
 
@@ -61,12 +58,10 @@ export default class ModifyUserInfo extends React.Component{
         this.props.onClose()        
     }
 
-    submitModifyUserInfo(role){
+    submitModifyUserInfo(values){
         this.staticParameter.userRole = null
         this.API.closeUserInfo()
-        this.props.onSubmit({
-            role: role,
-        })
+        this.props.onSubmit(values)
     }
 
     onSelectRoleCheck(e){
@@ -77,12 +72,21 @@ export default class ModifyUserInfo extends React.Component{
     }
 
     render(){
-        const {show} = this.state
+        const {
+            show
+        } = this.state
         const { userRole } = this.staticParameter
         const locale = this.context
         const {
             user
         } = this.props
+
+        const shiftOptions = config.shiftOption.map(name => {
+            return {
+                value: name,
+                label: locale.texts[name.toUpperCase().replace(/ /g, '_')]
+            }
+        })
 
         const colProps = {
             titleCol: {
@@ -117,13 +121,14 @@ export default class ModifyUserInfo extends React.Component{
                 <Modal.Body>
                     <Formik     
                         initialValues = {{
-                            radioGroup: userRole
+                            roleSelect: userRole,
+                            shiftSelect: user ? user.shift : null
                         }}
 
-                        onSubmit={({ radioGroup }, { setStatus, setSubmitting }) => {
-                            this.submitModifyUserInfo(radioGroup)
+                        onSubmit={(values, { setStatus, setSubmitting }) => {
+                            this.submitModifyUserInfo(values)
                         }}    
-                        render={({ values, errors, status, touched, isSubmitting }) => (
+                        render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
                             <Form>
                                 <Row >
                                     <Col {...colProps.titleCol}>
@@ -135,11 +140,11 @@ export default class ModifyUserInfo extends React.Component{
                                 </Row>
                                 <hr/>
                                 <RadioButtonGroup
-                                    id="radioGroup"
+                                    id="roleSelect"
                                     label={locale.texts.ROLES}
-                                    value={values.radioGroup}
-                                    error={errors.radioGroup}
-                                    touched={touched.radioGroup}
+                                    value={values.roleSelect}
+                                    error={errors.roleSelect}
+                                    touched={touched.roleSelect}
                                 >
                                 {this.props.roleName
                                     .filter(roleName => roleName.name !== 'guest')
@@ -148,13 +153,38 @@ export default class ModifyUserInfo extends React.Component{
                                             <Field
                                                 component={RadioButton}
                                                 key={index}
-                                                name="radioGroup"
+                                                name="roleSelect"
                                                 id={roleName.name}
                                                 label={locale.texts[roleName.name.toUpperCase()]}
                                             />
                                         )
                                 })}
                                 </RadioButtonGroup>
+                                <hr/>
+                                <Row className="form-group my-3 text-capitalize" noGutters>
+                                    <Col lg={3} className='d-flex align-items-center'>
+                                        <label htmlFor="type">{locale.texts.SELECT_SHIFT}</label>
+                                    </Col>
+                                    <Col lg={9}>
+                                        <Select
+                                            placeholder = {locale.texts.SELECT_SHIFT}
+                                            name="shiftSelect"
+                                            value={values.shiftSelect}
+                                            onChange={value => setFieldValue("shiftSelect", value)}
+                                            options={shiftOptions}
+                                            style={style.select}
+                                            components={{
+                                                IndicatorSeparator: () => null
+                                            }}
+                                        />
+                                        <Row className='no-gutters' className='d-flex align-self-center'>
+                                            <Col>
+                                                {touched.area && errors.area &&
+                                                <div style={style.errorMessage}>{errors.area}</div>}
+                                            </Col>
+                                        </Row>        
+                                    </Col>                                        
+                                </Row>
                                 <Modal.Footer className='d-flex bd-highlight'>
                                     <Button 
                                         variant="outline-danger" 
@@ -173,7 +203,7 @@ export default class ModifyUserInfo extends React.Component{
                                     <Button 
                                         type="submit" 
                                         variant="primary" 
-                                        // disabled={isSubmitting}
+                                        disabled={isSubmitting}
                                         className='text-capitalize'
                                     >
                                         {locale.texts.SEND}

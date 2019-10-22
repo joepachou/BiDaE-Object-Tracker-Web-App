@@ -20,7 +20,6 @@ import {
 } from "../../../dataSrc";
 import AddableList from './AddableList'
 import ModifyUserInfo from './ModifyUserInfo'
-import RemoveUserConfirmForm from './RemoveUserConfirmForm'
 import { userInfoTableColumn } from '../../../tables'
 import AddUserForm from '../AddUserForm';
 const Fragment = React.Fragment;
@@ -42,7 +41,7 @@ class AdminManagementContainer extends React.Component{
         if (this.context.abbr !== prevState.locale) {
             this.getRoleNameList()
             this.getUserList()
-            this.getAreaList()
+            // this.getAreaList()
             this.setState({
                 locale: this.context.abbr
             })
@@ -52,21 +51,22 @@ class AdminManagementContainer extends React.Component{
     componentDidMount = () => {
         this.getRoleNameList()
         this.getUserList()
-        this.getAreaList()
+        // this.getAreaList()
     }
 
-    getAreaList = () => {
-        axios.post(getAreaTable, {
-        })
-        .then(res => {
-            this.setState({
-                areaList: res.data.rows
-            })
-        })
-        .catch(err => {
-            console.log(err)
-        })
-    }
+    // getAreaList = () => {
+    //     axios.post(getAreaTable, {
+    //     })
+    //     .then(res => {
+    //         console.log(res)
+    //         this.setState({
+    //             areaList: res.data.rows
+    //         })
+    //     })
+    //     .catch(err => {
+    //         console.log(err)
+    //     })
+    // }
 
     getUserList = () => {
         let locale = this.context
@@ -84,6 +84,10 @@ class AdminManagementContainer extends React.Component{
             res.data.rows.map((item, index) => {
                 item.id = index + 1
                 item.role_type = locale.texts[item.role_type.toUpperCase()]
+                item.shift = {
+                    value: item.shift, 
+                    label: locale.texts[item.shift.toUpperCase().replace(/ /g, '_')]
+                }
             })
             this.setState({
                 data: res.data.rows,
@@ -241,17 +245,11 @@ class AdminManagementContainer extends React.Component{
                 />
                 <AddUserForm
                     roleName={this.state.roleName}
-                    areaList={this.state.areaList}
+                    // areaList={this.state.areaList}
                     show={this.state.showAddUserForm}
                     onClose={this.onCloseAddUserForm}
                     title={'add user'}
                 />
-                {/* <RemoveUserConfirmForm 
-                    show = {this.state.showRemoveUserConfirm}
-                    user = {this.state.removeCandidate}
-                    onSubmit = {this.submitDeleteUserForm}
-                    onClose = {this.closeRemoveUserConfirm}
-                /> */}
             </Fragment>
         )
     }

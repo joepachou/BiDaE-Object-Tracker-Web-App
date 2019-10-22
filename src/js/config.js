@@ -8,16 +8,16 @@ const config = {
     defaultAreaId: 3,
 
     areaOptions: {
-        1: "IIS_SINICA_FLOOR_FOUR",
+        // 1: "IIS_SINICA_FLOOR_FOUR",
         3: "NTUH_YUNLIN_WARD_FIVE_B",
     },
 
     areaModules: {
-        IIS_SINICA_FLOOR_FOUR: {
-            name: "IIS_SINICA_FLOOR_FOUR",
-            url: IIS_SINICA_FLOOR_FOUR_MAP,
-            bounds: [[0,0], [21130,35710]],
-        },
+        // IIS_SINICA_FLOOR_FOUR: {
+        //     name: "IIS_SINICA_FLOOR_FOUR",
+        //     url: IIS_SINICA_FLOOR_FOUR_MAP,
+        //     bounds: [[0,0], [21130,35710]],
+        // },
         NTUH_YUNLIN_WARD_FIVE_B: {
             name: "NTUH_YUNLIN_WARD_FIVE_B",
             url: NTUH_YUNLIN_WARD_FIVE_B_MAP,

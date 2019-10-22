@@ -49,11 +49,17 @@ class AddUserForm extends React.Component {
 
         const { locale, auth } = this.context;
 
-        const areaOptions = this.props.areaList.map(area => {
+        const areaOptions = Object.values(config.areaOptions).map(name => {
             return {
-                value: area.name,
-                label: locale.texts[area.name.toUpperCase().replace(/ /g, '_')]
+                value: name,
+                label: locale.texts[name.toUpperCase().replace(/ /g, '_')]
             };
+        })
+        const shiftOptions = config.shiftOption.map(name => {
+            return {
+                value: name,
+                label: locale.texts[name.toUpperCase().replace(/ /g, '_')]
+            }
         })
 
         const style = {
@@ -81,7 +87,8 @@ class AddUserForm extends React.Component {
                             username: '',
                             password: '',
                             role: config.defaultRole,
-                            area: '',
+                            areaSelect: '',
+                            shiftSelect: '',
                         }}
 
                         validationSchema = {
@@ -105,7 +112,7 @@ class AddUserForm extends React.Component {
                                             })
                                         },
                                     }),
-                                area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
+                                areaSelect: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
                                 password: Yup.string().required(locale.texts.PASSWORD_IS_REQUIRED),
                             })
                         }
@@ -184,11 +191,36 @@ class AddUserForm extends React.Component {
                                     </Col>
                                     <Col lg={8}>
                                         <Select
-                                            placeholder = {locale.texts.SELECT_LOCATION}
-                                            name="area"
-                                            value = {values.area.value}
-                                            onChange={value => setFieldValue("area", value.value)}
+                                            placeholder = {locale.texts.SELECT_AREA}
+                                            name="areaSelect"
+                                            value = {values.areaSelect.value}
+                                            onChange={value => setFieldValue("areaSelect", value.value)}
                                             options={areaOptions}
+                                            style={style.select}
+                                            components={{
+                                                IndicatorSeparator: () => null
+                                            }}
+                                        />     
+                                    </Col>                                        
+                                </Row>
+                                <Row className='no-gutters' className='d-flex align-self-center'>
+                                            <Col>
+                                                {touched.areaSelect && errors.areaSelect &&
+                                                <div style={style.errorMessage}>{errors.areaSelect}</div>}
+                                            </Col>
+                                        </Row>   
+                                <hr/>
+                                <Row className="form-group my-3 text-capitalize" noGutters>
+                                    <Col lg={4} className='d-flex align-items-center'>
+                                        <label htmlFor="type">{locale.texts.SELECT_SHIFT}</label>
+                                    </Col>
+                                    <Col lg={8}>
+                                        <Select
+                                            placeholder = {locale.texts.SELECT_SHIFT}
+                                            name="shiftSelect"
+                                            value = {values.shiftSelect.value}
+                                            onChange={value => setFieldValue("shiftSelect", value.value)}
+                                            options={shiftOptions}
                                             style={style.select}
                                             components={{
                                                 IndicatorSeparator: () => null
