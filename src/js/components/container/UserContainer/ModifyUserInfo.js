@@ -122,7 +122,7 @@ export default class ModifyUserInfo extends React.Component{
                     <Formik     
                         initialValues = {{
                             roleSelect: userRole,
-                            shiftSelect: user ? user.shift : null
+                            shiftSelect: user ? user.shift : ''
                         }}
 
                         onSubmit={(values, { setStatus, setSubmitting }) => {
@@ -165,6 +165,7 @@ export default class ModifyUserInfo extends React.Component{
                                     <Col lg={3} className='d-flex align-items-center'>
                                         <label htmlFor="type">{locale.texts.SELECT_SHIFT}</label>
                                     </Col>
+                                    {console.log(values.shiftSelect)}
                                     <Col lg={9}>
                                         <Select
                                             placeholder = {locale.texts.SELECT_SHIFT}

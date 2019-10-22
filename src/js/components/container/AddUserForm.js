@@ -200,15 +200,15 @@ class AddUserForm extends React.Component {
                                             components={{
                                                 IndicatorSeparator: () => null
                                             }}
-                                        />     
-                                    </Col>                                        
-                                </Row>
-                                <Row className='no-gutters' className='d-flex align-self-center'>
+                                        />
+                                        <Row className='no-gutters' className='d-flex align-self-center'>
                                             <Col>
                                                 {touched.areaSelect && errors.areaSelect &&
                                                 <div style={style.errorMessage}>{errors.areaSelect}</div>}
                                             </Col>
-                                        </Row>   
+                                        </Row>        
+                                    </Col>                                        
+                                </Row>
                                 <hr/>
                                 <Row className="form-group my-3 text-capitalize" noGutters>
                                     <Col lg={4} className='d-flex align-items-center'>

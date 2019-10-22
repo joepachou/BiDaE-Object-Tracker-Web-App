@@ -50,7 +50,13 @@ class Auth extends React.Component {
     };
 
     async signup (values) {
-        let { username, password, role, area } = values
+        let { 
+            username, 
+            password, 
+            role, 
+            areaSelect, 
+            shiftSelect = ''
+        } = values
         // let areaOptionsIndex = {}
         // Object.keys(config.areaOptions).map(item => {
         //     areaOptionsIndex[config.areaOptions[item]] = item
@@ -61,7 +67,8 @@ class Auth extends React.Component {
             username,
             password,
             role,
-            area,
+            areaSelect,
+            shiftSelect
         })
         return result
     }

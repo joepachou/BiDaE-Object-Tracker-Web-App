@@ -488,7 +488,6 @@ const setUserRole = (request, response) => {
         roleSelect,
         shiftSelect
     } = request.body
-    console.log(request.body)
     pool.query(queryType.query_setUserRole(username, roleSelect, shiftSelect))
         .then(res => {
             console.log(`set user success`)

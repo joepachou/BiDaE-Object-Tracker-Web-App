@@ -84,10 +84,10 @@ class AdminManagementContainer extends React.Component{
             res.data.rows.map((item, index) => {
                 item.id = index + 1
                 item.role_type = locale.texts[item.role_type.toUpperCase()]
-                item.shift = {
+                item.shift = item.shift ? {
                     value: item.shift, 
                     label: locale.texts[item.shift.toUpperCase().replace(/ /g, '_')]
-                }
+                } : ''
             })
             this.setState({
                 data: res.data.rows,
@@ -141,7 +141,7 @@ class AdminManagementContainer extends React.Component{
     }
 
     onSubmitModifyUserInfo = (newInfo) => {
-        axios.post(setUserRole,{
+        axios.post(setUserRole, {
             username: this.state.selectedUser.name,
             ...newInfo
         }).then(res => {
