@@ -7,23 +7,23 @@ const config = {
     
     defaultAreaId: 3,
 
-    areaOptions: {
-        // 1: "IIS_SINICA_FLOOR_FOUR",
-        3: "NTUH_YUNLIN_WARD_FIVE_B",
-    },
+    // areaOptions: {
+    //     // 1: "IIS_SINICA_FLOOR_FOUR",
+    //     3: "NTUH_YUNLIN_WARD_FIVE_B",
+    // },
 
-    areaModules: {
-        // IIS_SINICA_FLOOR_FOUR: {
-        //     name: "IIS_SINICA_FLOOR_FOUR",
-        //     url: IIS_SINICA_FLOOR_FOUR_MAP,
-        //     bounds: [[0,0], [21130,35710]],
-        // },
-        NTUH_YUNLIN_WARD_FIVE_B: {
-            name: "NTUH_YUNLIN_WARD_FIVE_B",
-            url: NTUH_YUNLIN_WARD_FIVE_B_MAP,
-            bounds: [[-5000,-5000], [21067,31928]],
-        }
-    },
+    // areaModules: {
+    //     // IIS_SINICA_FLOOR_FOUR: {
+    //     //     name: "IIS_SINICA_FLOOR_FOUR",
+    //     //     url: IIS_SINICA_FLOOR_FOUR_MAP,
+    //     //     bounds: [[0,0], [21130,35710]],
+    //     // },
+    //     NTUH_YUNLIN_WARD_FIVE_B: {
+    //         name: "NTUH_YUNLIN_WARD_FIVE_B",
+    //         url: NTUH_YUNLIN_WARD_FIVE_B_MAP,
+    //         bounds: [[-5000,-5000], [21067,31928]],
+    //     }
+    // },
     
     surveillanceMap: {
 
@@ -211,7 +211,7 @@ const config = {
             ?   `<h3 style="text-transform: capitalize; margin-bottom: 5px; font-weight: bold">
                     ${locale.texts.DEVICES_IN}
                     ${userInfo.areas_id.map(id => {
-                        return locale.texts[config.areaOptions[id]]
+                        return locale.texts[config.mapConfig.areaOptions[id]]
                     })}
                 </h3>`
             :   "";
@@ -231,7 +231,7 @@ const config = {
             ?   `<h3 className="mt-1" style="text-transform: capitalize; margin-bottom: 5px; font-weight: bold">
                     ${locale.texts.DEVICES_NOT_IN}
                     ${userInfo.areas_id.map(id => {
-                        return locale.texts[config.areaOptions[id]]
+                        return locale.texts[config.mapConfig.areaOptions[id]]
                     })}
                 </h3>`
             :   "";
@@ -322,7 +322,7 @@ const config = {
             ?   `<h3 style="text-transform: capitalize; margin-bottom: 5px; font-weight: bold">
                     ${locale.texts.DEVICES_IN}
                     ${userInfo.areas_id.map(id => {
-                        return locale.texts[config.areaOptions[id]]
+                        return locale.texts[config.mapConfig.areaOptions[id]]
                     })}
                 </h3>`
             :   "";
@@ -342,7 +342,7 @@ const config = {
             ?   `<h3 className="mt-1" style="text-transform: capitalize; margin-bottom: 5px; font-weight: bold">
                     ${locale.texts.DEVICES_NOT_IN}
                     ${userInfo.areas_id.map(id => {
-                        return locale.texts[config.areaOptions[id]]
+                        return locale.texts[config.mapConfig.areaOptions[id]]
                     })}
                 </h3>`
             :   "";
@@ -449,7 +449,7 @@ const config = {
             crs: L.CRS.Simple,
             // center: L.latLng(-2000, -4000),
             zoom: -5,
-            minZoom: -5,
+            minZoom: -6,
             maxZoom: 0,
             zoomDelta: 0.25,
             zoomSnap: 0,
@@ -463,7 +463,7 @@ const config = {
 
         /** Set the icon option */
         iconOptions: {
-            iconSize: 50,
+            iconSize: 30,
             showNumber: false,
         },
 
@@ -536,17 +536,17 @@ const config = {
         },
         
         areaOptions: {
-            1: "IIS_SINICA_FLOOR_FOUR",
+            // 1: "IIS_SINICA_FLOOR_FOUR",
             3: "NTUH_YUNLIN_WARD_FIVE_B",
         },
     
         areaModules: {
 
-            IIS_SINICA_FLOOR_FOUR: {
-                name: "IIS_SINICA_FLOOR_FOUR",
-                url: IIS_SINICA_FLOOR_FOUR_MAP,
-                bounds: [[0,0], [21130,35710]],
-            },
+            // IIS_SINICA_FLOOR_FOUR: {
+            //     name: "IIS_SINICA_FLOOR_FOUR",
+            //     url: IIS_SINICA_FLOOR_FOUR_MAP,
+            //     bounds: [[0,0], [21130,35710]],
+            // },
 
             NTUH_YUNLIN_WARD_FIVE_B: {
                 name: "NTUH_YUNLIN_WARD_FIVE_B",
@@ -614,7 +614,7 @@ const config = {
                                         , ${locale.texts[item.status.toUpperCase()]}
                                     </div>
                                     <div class="popupType">
-                                        , ${locale.texts.BELONG_TO} ${locale.texts[config.areaOptions[item.area_id]]}
+                                        , ${locale.texts.BELONG_TO} ${locale.texts[config.mapConfig.areaOptions[item.area_id]]}
                                     </div>
                                 </div>`
                         } else {
@@ -627,7 +627,7 @@ const config = {
                                             , ${locale.texts.PHYSICIAN_NAME}: ${item.physician_name}
                                         </div>
                                         <div class="popupType">
-                                            , ${locale.texts.BELONG_TO} ${locale.texts[config.areaOptions[item.area_id]]}
+                                            , ${locale.texts.BELONG_TO} ${locale.texts[config.mapConfig.areaOptions[item.area_id]]}
                                         </div>
                                 </div>`
                         }

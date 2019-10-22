@@ -91,8 +91,8 @@ class ObjectManagementContainer extends React.Component{
                     }
                     : ''
                 item.area_name = {
-                    value: config.areaOptions[item.area_id],
-                    label: locale.texts[config.areaOptions[item.area_id]],
+                    value: config.mapConfig.areaOptions[item.area_id],
+                    label: locale.texts[config.mapConfig.areaOptions[item.area_id]],
                 }
             })
             this.setState({

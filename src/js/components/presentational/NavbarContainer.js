@@ -108,7 +108,7 @@ class NavbarContainer extends React.Component {
                             className="d-inline-block align-top px-1"
                         />
                         <div className="text-capitalize">
-                            {locale.texts[config.areaOptions[areaId]]}
+                            {locale.texts[config.mapConfig.areaOptions[areaId]]}
                         </div>
                     </Link>
                 </Navbar.Brand>

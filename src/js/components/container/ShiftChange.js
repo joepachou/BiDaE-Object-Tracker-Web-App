@@ -203,7 +203,7 @@ class ShiftChange extends React.Component {
                      >                       
                         <div>
                             {hasFoundResult && <h6>{locale.texts.DEVICES_IN} {auth.user.areas_id.map(id => {
-                                return locale.texts[config.areaOptions[id]]
+                                return locale.texts[config.mapConfig.areaOptions[id]]
                             })}
                             </h6>}                    
                             {hasFoundResult && foundResult.map((item, index) => {
@@ -218,7 +218,7 @@ class ShiftChange extends React.Component {
                         </div>
                         <div className='my-3'>
                             { hasNotFoundResult && <h6>{locale.texts.DEVICES_NOT_IN} {auth.user.areas_id.map(id => {
-                                return locale.texts[config.areaOptions[id]]
+                                return locale.texts[config.mapConfig.areaOptions[id]]
                             })}</h6>}
                             { hasNotFoundResult && notFoundResult.map((item, index) => {
                                 return (

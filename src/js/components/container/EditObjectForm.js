@@ -73,7 +73,7 @@ class EditObjectForm extends React.Component {
             }
         })
 
-        const areaOptions = Object.values(config.areaOptions).map(area => {
+        const areaOptions = Object.values(config.mapConfig.areaOptions).map(area => {
             return {
                 value: area,
                 label: locale.texts[area.toUpperCase().replace(/ /g, '_')]
