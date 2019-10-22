@@ -1,22 +1,19 @@
-import Cookies from 'js-cookie'
-
 import axios from 'axios';
-
 import dataSrc from '../../dataSrc';
 import 'babel-polyfill'
 
 // e is the event parameter
 // searchableObjectList is the found data list
 // viaMethod is the components call this function, such as frequent search and searchableObjectType
-export default async function GetResultData(SearchKey, searchableObjectList){
+export default async function GetResultData(SearchKey, searchableObjectList, user){
 	// console.log(searchableObjectList)
     var searchResult = []
 	if(typeof SearchKey === 'string'){
 		if(SearchKey === 'my devices'){
             await axios.post(dataSrc.getUserInfo, {
-                username: 'joechou'
+                username: user.name
             }).then( res => {
-                var mydevice = new Set(res.data.rows[0].mydevice);
+				var mydevice = new Set(res.data.rows[0].mydevice);
                 for(var i in searchableObjectList){
                     if(mydevice.has(searchableObjectList[i].access_control_number)){
                         searchResult.push(searchableObjectList[i])

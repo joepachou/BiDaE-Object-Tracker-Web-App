@@ -100,8 +100,7 @@ class MyDeviceManager extends React.Component{
                         mode: mode,
                         acn: acn
                     })
-                    .then((res) => {
-                        console.log('success')
+                    .then(res => {
                     })
                     .catch(err => {
                         console.log(err)

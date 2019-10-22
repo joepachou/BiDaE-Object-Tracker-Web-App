@@ -75,7 +75,11 @@ class ShiftChange extends React.Component {
 
 
     getTrackingData = (update) => {
-        let { locale, auth, stateReducer } = this.context
+        let { 
+            locale, 
+            auth, 
+            stateReducer 
+        } = this.context
         let [{areaId}] = stateReducer
         axios.post(dataSrc.getTrackingData, {
             rssiThreshold: config.surveillanceMap.locationAccuracyMapToDefault[1],
@@ -83,7 +87,7 @@ class ShiftChange extends React.Component {
             user: auth.user,
             areaId,
         }).then(res => {
-            GetResultData('my devices', res.data)
+            GetResultData('my devices', res.data, auth.user)
                 .then(result => {
                     var foundResult = []
                     var notFoundResult = []
@@ -94,6 +98,7 @@ class ShiftChange extends React.Component {
                             notFoundResult.push(result[i])
                         }
                     }
+                    
                     this.setState({
                         searchResult: {
                             foundResult: foundResult,
