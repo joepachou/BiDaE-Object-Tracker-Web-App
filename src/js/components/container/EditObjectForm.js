@@ -221,7 +221,7 @@ class EditObjectForm extends React.Component {
                                     </Col>
                                     <Col lg={9}>
                                         <Select
-                                            placeholder = {locale.texts.SELECT_LOCATION}
+                                            placeholder = {locale.texts.SELECT_AREA}
                                             name="area"
                                             value = {values.area}
                                             onChange={value => setFieldValue("area", value)}
