@@ -67,7 +67,6 @@ const en =  {
     LOCATION: "location",
     RSSI_THRESHOLD: "RSSI threshold",
     LAST_FOUR_DIGITS_IN_ACN: "last 4 digits in ACN",
-    SELECT_LOCATION: "select location",
     ADD_DEVICE: "add device",
     ADD_NOTE: "add note",
     HIDE_NOTE: "hide note",
@@ -76,7 +75,8 @@ const en =  {
     DAY_SHIFT: "day shift",
     SWING_SHIFT: "swing shift",
     NIGHT_SHIFT: "night shift",
-    SHIFT_SELECT: "shift select",
+    SELECT_SHIFT: "select shift",
+    SELECT_AREA: "select location",
     WRITE_THE_NOTES: "write some notes...",
     USERNAME: "username",
     PASSWORD: "password",
@@ -202,7 +202,7 @@ const en =  {
 
     /** Test */
     IIS_SINICA_FLOOR_FOUR: "IIS sinica floor 4",
-    NTUH_YUNLIN_WARD_FIVE_B: "NTUH Yunlin 5B",
+    NTUH_YUNLIN_WARD_FIVE_B: "ward 5B",
 
     DEVICE_FOUND: function (length){
         return length.toString()+" devices are found"

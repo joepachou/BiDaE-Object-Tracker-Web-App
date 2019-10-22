@@ -68,7 +68,6 @@ const tw = {
     LOCATION: "地點",
     RSSI_THRESHOLD: "RSSI設定",
     LAST_FOUR_DIGITS_IN_ACN: "產編後四碼",
-    SELECT_LOCATION: "選擇地點",
     ADD_DEVICE: "增加儀器",
     ADD_NOTE: "增加註記",
     HIDE_NOTE: "隱藏註記",
@@ -77,7 +76,8 @@ const tw = {
     DAY_SHIFT: "早班",
     SWING_SHIFT: "中班",
     NIGHT_SHIFT: "晚班",
-    SHIFT_SELECT: "選擇班別",
+    SELECT_SHIFT: "選擇班別",
+    SELECT_AREA: "選擇地點",
     WRITE_THE_NOTES: "填寫註記...",
     USERNAME: "使用者名稱",
     PASSWORD: "密碼",
@@ -204,6 +204,7 @@ const tw = {
     /** Test */
     IIS_SINICA_FLOOR_FOUR: "中研院4樓",
     NTUH_YUNLIN_WARD_FIVE_B: "雲林台大醫院5B病房",
+    NTUH_YUNLIN_WARD_FIVE_B: "5B病房",
     
     DEVICE_FOUND: function (length){
         return "發現"+length.toString()+"個儀器"
