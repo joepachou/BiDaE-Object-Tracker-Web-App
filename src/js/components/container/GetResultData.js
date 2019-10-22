@@ -10,19 +10,14 @@ export default async function GetResultData(SearchKey, searchableObjectList, use
     var searchResult = []
 	if(typeof SearchKey === 'string'){
 		if(SearchKey === 'my devices'){
-            await axios.post(dataSrc.getUserInfo, {
-                username: user.name
-            }).then( res => {
-				var mydevice = new Set(res.data.rows[0].mydevice);
-                for(var i in searchableObjectList){
-                    if(mydevice.has(searchableObjectList[i].access_control_number)){
-                        searchResult.push(searchableObjectList[i])
-                    }
-                }
-            }).catch(error => {
-                console.log(error)
-            })
-		}else{
+			let mydevice = user.myDevice || []
+			searchableObjectList.map(item => {
+				if (mydevice.includes(item.access_control_number)) {
+					searchResult.push(item)
+				}	
+			})
+
+		} else {
 			if(SearchKey === 'all devices'){
 
 				for(var i in searchableObjectList){
