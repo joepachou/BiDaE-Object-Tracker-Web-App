@@ -199,8 +199,13 @@ class ShiftChange extends React.Component {
                     </Modal.Header>
                     <Modal.Body  
                         style ={style.modalBody}
-                        className='text-capitalize'
-                     >                       
+                        className='text-capitalize pt-0'
+                     >        
+                        {!hasFoundResult && !hasNotFoundResult && 
+                            <div className="d-flex justify-content-center">
+                                <p className="font-italic ">{locale.texts.NOT_ASSIGNED_TO_ANY_DEVICES}</p>
+                            </div>
+                        }               
                         <div>
                             {hasFoundResult && <h6>{locale.texts.DEVICES_IN} {auth.user.areas_id.map(id => {
                                 return locale.texts[config.mapConfig.areaOptions[id]]
