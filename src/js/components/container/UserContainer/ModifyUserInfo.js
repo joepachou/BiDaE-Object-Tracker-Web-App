@@ -165,7 +165,6 @@ export default class ModifyUserInfo extends React.Component{
                                     <Col lg={3} className='d-flex align-items-center'>
                                         <label htmlFor="type">{locale.texts.SELECT_SHIFT}</label>
                                     </Col>
-                                    {console.log(values.shiftSelect)}
                                     <Col lg={9}>
                                         <Select
                                             placeholder = {locale.texts.SELECT_SHIFT}
