@@ -135,6 +135,17 @@ class NavbarContainer extends React.Component {
                         >
                             <Nav.Item><Link to="/page/objectManagement" className="nav-link nav-route" >{locale.texts.OBJECT_MANAGEMENT}</Link></Nav.Item>
                         </AccessControl>
+                        <AccessControl
+                            permission={'user:shiftChange'}
+                            renderNoAccess={() => null}
+                        >
+                            <Nav.Item
+                                className="nav-link nav-route" 
+                                onClick={this.handleShiftChangeRecordShowUp}
+                            >
+                                {locale.texts.SHIFT_CHANGE_RECORD}
+                            </Nav.Item>
+                        </AccessControl>
                     </Nav>
                     <Nav className='text-capitalize'>
                         <Nav.Item 
@@ -151,7 +162,7 @@ class NavbarContainer extends React.Component {
                                         <NavDropdown.Item className="lang-select">{auth.user.name}</NavDropdown.Item>
                                     </LinkContainer>
                                     <Dropdown.Divider />
-                                    <AccessControl
+                                    {/* <AccessControl
                                         permission={'user:shiftChange'}
                                         renderNoAccess={() => null}
                                     >
@@ -162,7 +173,7 @@ class NavbarContainer extends React.Component {
                                             {locale.texts.SHIFT_CHANGE_RECORD}
                                         </NavDropdown.Item>
                                         <Dropdown.Divider />
-                                    </AccessControl>
+                                    </AccessControl> */}
                                     <LinkContainer to="/" className="bg-white">
                                         <NavDropdown.Item className="lang-select" onClick={auth.signout}>{locale.texts.SIGN_OUT}</NavDropdown.Item>
                                     </LinkContainer>
