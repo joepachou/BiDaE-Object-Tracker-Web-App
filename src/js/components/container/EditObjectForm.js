@@ -65,7 +65,7 @@ class EditObjectForm extends React.Component {
                 label: locale.texts[location.toUpperCase().replace(/ /g, '_')],
                 options: config.transferredLocation[location].map(branch => {
                     return {
-                        value: `${location}, ${branch}`,
+                        value: `${location},${branch}`,
                         label: locale.texts[branch.toUpperCase().replace(/ /g, '_')],
 
                     }

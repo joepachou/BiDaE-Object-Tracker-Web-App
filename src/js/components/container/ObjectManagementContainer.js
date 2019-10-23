@@ -87,7 +87,10 @@ class ObjectManagementContainer extends React.Component{
                 item.transferred_location = item.transferred_location 
                     ? {
                         value: item.transferred_location,
-                        label: locale.texts[item.transferred_location.toUpperCase().replace(/ /g, '_')]
+                        label: locale.texts[item.transferred_location.toUpperCase().replace(/ /g, '_')],
+                        label: item.transferred_location.toUpperCase().split(',').map(item => {
+                            return locale.texts[item]
+                        }).join()
                     }
                     : ''
                 item.area_name = {
