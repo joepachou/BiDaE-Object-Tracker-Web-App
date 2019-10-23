@@ -16,7 +16,7 @@ const rules = {
         permission: [
             // "form:edit",
             "route:devicesManagement",
-            "route:shiftChangeRecord",
+            // "route:shiftChangeRecord",
             "user:mydevice",
             "user:shiftChange",
             "user:saveSearchRecord",
@@ -31,11 +31,13 @@ const rules = {
             // "form:edit",
             // "route:systemStatus",
             "route:objectManagement",
-            "route:editObjectManagement",
+            // "route:editObjectManagement",
             "user:mydevice",
             "user:saveSearchRecord",
             "route:userManager",
+            "route:shiftChangeRecord",
             // "user:toggleArea",
+            // "user:toggleShowDevices",
             // "user:toggleShowResidents",
         ]
     }
