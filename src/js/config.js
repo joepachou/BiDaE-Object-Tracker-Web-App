@@ -615,7 +615,7 @@ const config = {
                                     <div class="popupType text-capitalize">
                                         ${item.status !== "normal" 
                                             ? `, ${locale.texts[item.status.toUpperCase()]}`
-                                            : ''
+                                            : `, ${locale.texts.BEING_HERE} ${item.residence_time}`
                                         }
                                     </div>
                                 </div>`
