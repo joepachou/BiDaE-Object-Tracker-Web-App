@@ -22,11 +22,6 @@ class UserSettingContainer extends React.Component{
                 component: <MyDeviceManager />
             },
             {
-                name: 'Shift Change Record',
-                path: 'shiftChangeRecord',
-                component: <ShiftChangeRecord />
-            },
-            {
                 name: 'User Manager',
                 path: 'userManager',
                 component: <AdminManagementContainer />
@@ -35,7 +30,12 @@ class UserSettingContainer extends React.Component{
                 name: 'Edit Object Management',
                 path: 'editObjectManagement',
                 component: <EditObjectManagement />
-            }
+            },
+            {
+                name: 'Shift Change Record',
+                path: 'shiftChangeRecord',
+                component: <ShiftChangeRecord />
+            },
         ]
     }
     // sideNavMouseOver(e){
