@@ -115,7 +115,8 @@ class AddUserForm extends React.Component {
                                                 })
                                             })
                                         },
-                                    }),
+                                    })
+                                    .max(100),
                                 areaSelect: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
                                 password: Yup.string().required(locale.texts.PASSWORD_IS_REQUIRED),
                             })
