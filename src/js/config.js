@@ -65,6 +65,8 @@ const config = {
         TRANSFERRED: "transferred",   
     },
 
+    ACNOmitsymbol: 'xxxxxx',
+
     objectManage: {
 
         /* The definition of the time period that the object is not scanned by lbeacon
@@ -608,7 +610,7 @@ const config = {
                                         ${item.type} 
                                     </div>
                                     <div class="popupType">
-                                        , ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}: ${item.access_control_number.slice(10, 14)}
+                                        , ${locale.texts.ACCESS_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn}
                                     </div>
                                     <div class="popupType">
                                         , ${locale.texts[item.status.toUpperCase()]}

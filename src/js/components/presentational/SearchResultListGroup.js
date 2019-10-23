@@ -1,6 +1,7 @@
 import React from 'react'
 import { ListGroup, Row, Col } from 'react-bootstrap'
 import LocaleContext from '../../context/LocaleContext';
+import config from '../../config';
 
 const SearchResultListGroup = ({
         data,
@@ -80,7 +81,7 @@ const SearchResultListGroup = ({
                                     }
                                 {item.type},
                                 &nbsp;
-                                {locale.texts.ACCESS_CONTROL_NUMBER} : x....x{item.last_four_acn},
+                                {locale.texts.ACCESS_CONTROL_NUMBER} : {config.ACNOmitsymbol}{item.last_four_acn},
                                
                                 {item.status.toUpperCase() !== 'NORMAL' ? locale.abbr === 'en'  
                                     
