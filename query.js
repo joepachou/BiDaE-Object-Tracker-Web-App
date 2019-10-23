@@ -296,11 +296,10 @@ const signup = (request, response) => {
     const hash = bcrypt.hashSync(password, saltRounds);
 
     const signupPackage = {
-        username: username.toLowerCase(),
+        username,
         password: hash,
         shiftSelect
     }
-
     pool.query(queryType.query_signup(signupPackage))
         .then(res => {
             pool.query(queryType.query_insertUserData(username, role, areaSelect))

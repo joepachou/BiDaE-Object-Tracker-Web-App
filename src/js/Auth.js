@@ -48,7 +48,7 @@ class Auth extends React.Component {
         } = values
 
         let result = await axios.post(dataSrc.signup, {
-            username,
+            username: username.toLowerCase(),
             password,
             role,
             areaSelect,
