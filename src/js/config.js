@@ -612,7 +612,7 @@ const config = {
                                     <div class="popupType ">
                                         , ${locale.texts.ACCESS_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn}
                                     </div>
-                                    <div class="popupType text-capitalize">
+                                    <div class="popupType">
                                         ${item.status !== "normal" 
                                             ? `, ${locale.texts[item.status.toUpperCase()]}`
                                             : `, ${locale.texts.BEING_HERE} ${item.residence_time}`
