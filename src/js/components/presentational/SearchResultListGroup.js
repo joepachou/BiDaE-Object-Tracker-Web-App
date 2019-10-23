@@ -81,28 +81,29 @@ const SearchResultListGroup = ({
                                     }
                                 {item.type},
                                 &nbsp;
-                                {locale.texts.ACCESS_CONTROL_NUMBER} : {config.ACNOmitsymbol}{item.last_four_acn},
+                                {locale.texts.ACCESS_CONTROL_NUMBER} : {config.ACNOmitsymbol}{item.last_four_acn}
                                
                                 {item.status.toUpperCase() !== 'NORMAL' ? locale.abbr === 'en'  
                                     
-                                    ? `${locale.texts[item.status.toUpperCase()]} ,`  
-                                    : `${locale.texts[item.status.toUpperCase()]} ,`  
+                                    ? `, ${locale.texts[item.status.toUpperCase()]}`  
+                                    : `, ${locale.texts[item.status.toUpperCase()]}`  
                                    
                                  : null 
                                 }
                             
                                 {item.currentPosition 
-                                    ? `${locale.texts.NEAR} ${item.location_description}` 
+                                    ? `, ${locale.texts.NEAR} ${item.location_description}` 
                                     
                                     : locale.texts.NOT_AVAILABLE
                                 }   
                                 &nbsp;
-                               
                                 {item.currentPosition
-                                    ? locale.abbr === 'en'
-                                        ? item.residence_time
-                                        : `,${locale.texts.WHEN} ${item.residence_time.substring(0, item.residence_time.length-1)}`
-                                    : ' '
+                                    ? item.status.toUpperCase() === 'NORMAL'
+                                        ? locale.abbr === 'en'
+                                            ? `, ${item.residence_time} `
+                                            : `, ${locale.texts.WHEN} ${item.residence_time.substring(0, item.residence_time.length-1)}`
+                                        : ''
+                                    : ''
                                 }
                             </div>
                         </Row>
