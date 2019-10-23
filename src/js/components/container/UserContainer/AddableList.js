@@ -143,7 +143,7 @@ export default class AddableList extends React.Component{
         return (
             <Fragment>
                 {/* <h5>{this.state.title}</h5> */}
-                <ListGroup  variant = "flush" style={style.listGroup}>
+                <ListGroup className="addableList" variant = "flush" style={style.listGroup}>
                     {this.state.itemList !== null 
                         ? 
                             (() => {
