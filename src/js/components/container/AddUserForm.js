@@ -105,7 +105,7 @@ class AddUserForm extends React.Component {
                                         test: value => {
                                             return value !== undefined && new Promise((resolve, reject) => {
                                                 axios.post(dataSrc.validateUsername, {
-                                                    username: value
+                                                    username: value.toLowerCase()
                                                 })
                                                 .then(res => {
                                                     resolve(res.data.precheck)
