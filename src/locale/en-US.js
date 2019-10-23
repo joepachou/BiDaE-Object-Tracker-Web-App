@@ -16,7 +16,8 @@ const en =  {
     FOUND: "found",
     NOT_FOUND: "not found",
     OBJECT_TYPE: "object types",
-
+    disable:"disable",
+    count : "records",
 
     /* Location accuracy */
     LOCATION_ACCURACY: "Location Accuracy",

@@ -16,8 +16,8 @@ const tw = {
     FOUND: "找到",
     NOT_FOUND: "未找到",
     OBJECT_TYPE: "儀器類別",
-
-
+    disable:"收起",
+    count : "筆",
 
     /* Location accuracy */
     LOCATION_ACCURACY: "位置精準度",
