@@ -49,7 +49,7 @@ class AddUserForm extends React.Component {
 
         const { locale, auth } = this.context;
 
-        const areaOptions = Object.values(config.areaOptions).map(name => {
+        const areaOptions = Object.values(config.mapConfig.areaOptions).map(name => {
             return {
                 value: name,
                 label: locale.texts[name.toUpperCase().replace(/ /g, '_')]
