@@ -360,12 +360,12 @@ const editObjectRecordTableColumn = [
 ]
 
 const shiftChangeRecordTableColumn = [
-    {
-        Header: "ID",
-        accessor: "id",
-        resizable: false,
-        width: 50,
-    },
+    // {
+    //     Header: "ID",
+    //     accessor: "id",
+    //     resizable: false,
+    //     width: 50,
+    // },
     {
         Header: "user name",
         accessor: "user_name",
