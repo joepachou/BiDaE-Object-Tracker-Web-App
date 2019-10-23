@@ -274,7 +274,7 @@ class Map extends React.Component {
             /** Set the marker's event. */
             marker.on('mouseover', function () { this.openPopup(); })
             marker.on('click', this.handleMarkerClick);
-            marker.on('mouseout', function () { this.closePopup(); })
+            // marker.on('mouseout', function () { this.closePopup(); })
         })
 
         /** Add the new markerslayers to the map */

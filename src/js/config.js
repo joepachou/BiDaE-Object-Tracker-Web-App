@@ -613,9 +613,6 @@ const config = {
                                     <div class="popupType">
                                         , ${locale.texts[item.status.toUpperCase()]}
                                     </div>
-                                    <div class="popupType">
-                                        , ${locale.texts.BELONG_TO} ${locale.texts[config.mapConfig.areaOptions[item.area_id]]}
-                                    </div>
                                 </div>`
                         } else {
                             element += `     
@@ -625,9 +622,6 @@ const config = {
                                         </div>
                                         <div class="popupType">
                                             , ${locale.texts.PHYSICIAN_NAME}: ${item.physician_name}
-                                        </div>
-                                        <div class="popupType">
-                                            , ${locale.texts.BELONG_TO} ${locale.texts[config.mapConfig.areaOptions[item.area_id]]}
                                         </div>
                                 </div>`
                         }
