@@ -80,12 +80,12 @@ const SearchResultListGroup = ({
                                     }
                                 {item.type},
                                 &nbsp;
-                                {locale.texts.LAST_FOUR_DIGITS_IN_ACN}: {'x...x'}{item.last_four_acn},
+                                {locale.texts.ACCESS_CONTROL_NUMBER} : x....x{item.last_four_acn},
                                
                                 {item.status.toUpperCase() !== 'NORMAL' ? locale.abbr === 'en'  
                                     
-                                    ? `${locale.texts.IS} ${locale.texts[item.status.toUpperCase()]} ,`  
-                                    : `${locale.texts.STATUS}${locale.texts[item.status.toUpperCase()]} ,`  
+                                    ? `${locale.texts[item.status.toUpperCase()]} ,`  
+                                    : `${locale.texts[item.status.toUpperCase()]} ,`  
                                    
                                  : null 
                                 }
