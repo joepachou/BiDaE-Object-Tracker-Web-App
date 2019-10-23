@@ -57,6 +57,7 @@ const tw = {
     DOWNLOAD_REPORT: "下載報告",
     CLOSE: "關閉",
     SHOW_DEVICES_NOT_FOUND: "顯示未找到的儀器",
+    SHOW_DEVICES_FOUND: "顯示找到的儀器",
 
     /* Form Field */
     NAME: "名稱",
@@ -117,9 +118,9 @@ const tw = {
     /* Object Status */
     STATUS: "狀態",
     NORMAL: "正常",
-    BROKEN: "損壞",
-    TRANSFERRED: "轉移",
-    RESERVE: "預定",
+    BROKEN: "已報修",
+    TRANSFERRED: "已轉移",
+    RESERVE: "已預定",
 
     /** Transferred Location */
     YUANLIN_CHRISTIAN_HOSPITAL: "員林基督教醫院",
@@ -197,7 +198,7 @@ const tw = {
     SHIFT_TO: "接交",
     NEAR: "鄰近",
     IS: "is",
-    WHEN: "於",
+    WHEN: "已",
     NOT_AVAILABLE: "無資料顯示",
     IN: "在",
     NOT: "不",

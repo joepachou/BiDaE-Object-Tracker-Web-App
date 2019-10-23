@@ -57,6 +57,7 @@ const en =  {
     DOWNLOAD_REPORT: "download report",
     CLOSE: "close",
     SHOW_DEVICES_NOT_FOUND: "show devices not found",
+    SHOW_DEVICES_FOUND: "show devices found",
 
     /* Form Field */
     NAME: "name",
