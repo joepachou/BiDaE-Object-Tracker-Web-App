@@ -7,6 +7,11 @@
 .customPopup .leaflet-popup-content-wrapper {
     font-size: 30px;   
 }
+.customPopup .leaflet-popup-scrolled {
+    overflow: hidden scroll;
+    border-bottom: 0;
+    border-top: 0;
+}
 
 .leaflet-popup-content {
     padding: 0;

@@ -599,7 +599,9 @@ const config = {
 
             /* The style sheet is right in the src/css/Surveillance.css*/
             const content = `
-                <div>
+                <div 
+                    style="over-flow: hidden scroll;"
+                >
                     <h4 class="border-bottom pb-1 px-2">${object[0].location_description}</h4>
                     ${objectList.map( item =>{
                         var element = ""

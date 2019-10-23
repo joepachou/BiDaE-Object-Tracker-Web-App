@@ -5,7 +5,7 @@ import '../css/App.css'
 import '../css/ObjectListMenu.css'
 
 /** Surveillance Component customized css */
-import '../css/Surveillance.css'
+import '../css/Leaflet.css'
 
 /** RWD customized css */
 import '../css/RWD.css'
