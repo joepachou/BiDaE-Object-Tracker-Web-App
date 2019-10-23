@@ -199,7 +199,7 @@ class ShiftChange extends React.Component {
                     </Modal.Header>
                     <Modal.Body  
                         style ={style.modalBody}
-                        className='text-capitalize pt-0'
+                        className='text-capitalize pt-2'
                      >        
                         {!hasFoundResult && !hasNotFoundResult && 
                             <div className="d-flex justify-content-center">
