@@ -3,6 +3,8 @@ import { Col, ListGroup, Row, Button } from 'react-bootstrap';
 import config from '../../config';
 import AccessControl from '../presentational/AccessControl';
 import { AppContext } from '../../context/AppContext';
+import axios from 'axios'
+import { addUserSearchHistory } from '../../dataSrc'
 
 class ObjectTypeList extends React.Component {
 
@@ -28,12 +30,50 @@ class ObjectTypeList extends React.Component {
     handleClick = (e) => {
         const itemName = e.target.name.toLowerCase();
         this.getSearchKey(itemName)
+        this.addSearchHistory(itemName)
+
     }
 
     getSearchKey = (itemName) => {
         this.props.getSearchKey(itemName)
         this.setState({
             searchKey: itemName
+        })
+    }
+
+    addSearchHistory(searchKey) {
+        let { auth } = this.context
+        if (!auth.authenticated) return;
+        const searchHistory = auth.user.searchHistory || []
+        let flag = false; 
+        const toReturnSearchHistory = searchHistory.map( item => {
+            if (item.name === searchKey) {
+                item.value = item.value + 1;
+                flag = true;
+            }
+            return item
+        })
+        flag === false ? toReturnSearchHistory.push({name: searchKey, value: 1}) : null;
+        const sortedSearchHistory = this.sortSearchHistory(toReturnSearchHistory)
+        auth.setSearchHistory(sortedSearchHistory)
+        this.checkInSearchHistory(auth.user.name, sortedSearchHistory)
+    }
+
+    /** Sort the user search history and limit the history number */
+    sortSearchHistory(history) {
+        let toReturn = history.sort( (a,b) => {
+            return b.value - a.value
+        })
+        return toReturn
+    }
+
+    checkInSearchHistory(username, searchHistory) {
+        axios.post(addUserSearchHistory, {
+            username,
+            searchHistory,
+        }).then(res => {
+        }).catch(err => {
+            console.log(err)
         })
     }
 
