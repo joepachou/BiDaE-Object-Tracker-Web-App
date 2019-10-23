@@ -67,6 +67,7 @@ class SearchResult extends React.Component {
         editedObjectPackage: [],
         showAddDevice: false,
         showDownloadPdfRequest: false,
+        notResultFlag : false,
     }
 
     handleSelectResultItem = (eventKey) => {
@@ -210,9 +211,9 @@ class SearchResult extends React.Component {
 
     handleToggleNotFound = (e) => {
         e.preventDefault()
-        this.setState({ 
-            showNotFoundResult: !this.state.showNotFoundResult 
-        })
+        this.setState({ 
+                        notResultFlag : !this.state.notResultFlag 
+                    })
     }
 
     /** Create the content of pdf */
@@ -288,9 +289,8 @@ class SearchResult extends React.Component {
             }
         }
 
-        let searchResult = this.state.showNotFoundResult 
-            ? this.props.searchResult.filter(item => !item.found) 
-            : this.props.searchResult.filter(item => item.found)
+        let searchResult =this.props.searchResult.filter(item => item.found)
+         let NoSearchResutl = this.props.searchResult.filter(item => !item.found) 
 
         let deviceNum = this.state.showNotFoundResult
             ? this.props.searchResult.filter(item => item.found).length
@@ -306,7 +306,7 @@ class SearchResult extends React.Component {
         return(
             <div className='pl-3'>
                 <Row className='d-flex justify-content-center' style={style.titleText}>
-                    <h4 className='text-capitalize'>{locale.texts.SEARCH_RESULT}</h4>
+                    <h4 className='text-capitalize'>{searchResult.length} {locale.texts.count} {locale.texts.SEARCH_RESULT}</h4>
                 </Row>
                 {/* <Row className='w-100 searchResultForMobile'>
                     <InfoPrompt data={{[devicePlural]: searchResult.length}} title={title}/>
@@ -343,14 +343,31 @@ class SearchResult extends React.Component {
                         <Row className='d-flex justify-content-center mt-3'>
                             <h4 style={style.titleText} className='text-capitalize'>
                                 <a href="" onClick={this.handleToggleNotFound}>
-                                    {this.state.showNotFoundResult 
-                                        ? locale.texts.SHOW + ' ' + deviceNum + ' ' + devicePlural + ' ' + locale.texts.FOUND
-                                        : locale.texts.SHOW + ' ' + deviceNum + ' ' + devicePlural + ' ' + locale.texts.NOT_FOUND
-                                    }
+                                {this.state.notResultFlag 
+                                        ? locale.texts.disable + ' ' + deviceNum + ' ' + devicePlural + ' ' + locale.texts.NOT_FOUND
+                                        : locale.texts.SHOW + ' ' + deviceNum + ' ' + devicePlural + ' ' + locale.texts.NOT_FOUND
+                                    }
+
                                 </a>
                             </h4>
                         </Row>
                 }
+                {this.state.notResultFlag
+                   ? 
+
+                     <SearchResultListGroup 
+                        data={NoSearchResutl}
+                        handleSelectResultItem={this.handleSelectResultItem}
+                        selection={this.state.selection}
+                        action
+/>
+
+                   : null
+                } 
+              
+                
+
+
                 <ChangeStatusForm 
                     show={this.state.showEditObjectForm} 
                     title={'report device status'} 

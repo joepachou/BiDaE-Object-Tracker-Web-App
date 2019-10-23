@@ -131,7 +131,7 @@ class ShiftChange extends React.Component {
         let fileDir = config.shiftRecordFolderPath
         let fileName = `${userInfo.name}_${userInfo.shift.replace(/ /g, '_')}_${fileNameTime}.pdf`
         let filePath = `${fileDir}/${fileName}`
-        axios.post(dataSrc.generatePDF, {
+        axios.post(dataSrc.addShiftChangeRecord, {
             userInfo,
             pdfFormat,
             filePath,
@@ -199,8 +199,13 @@ class ShiftChange extends React.Component {
                     </Modal.Header>
                     <Modal.Body  
                         style ={style.modalBody}
-                        className='text-capitalize'
-                     >                       
+                        className='text-capitalize pt-2'
+                     >        
+                        {!hasFoundResult && !hasNotFoundResult && 
+                            <div className="d-flex justify-content-center">
+                                <p className="font-italic ">{locale.texts.NOT_ASSIGNED_TO_ANY_DEVICES}</p>
+                            </div>
+                        }               
                         <div>
                             {hasFoundResult && <h6>{locale.texts.DEVICES_IN} {auth.user.areas_id.map(id => {
                                 return locale.texts[config.mapConfig.areaOptions[id]]

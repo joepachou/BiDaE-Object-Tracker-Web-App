@@ -11,7 +11,7 @@ const SearchResultListGroup = ({
 }) => {
 
     const locale = React.useContext(LocaleContext);
-
+   
     if (document.getElementById('searchPanel')) {
         var searchPanelElementHeight = document.getElementById('searchPanel').clientHeight
         var searchContainerElementHeight = document.getElementById('searchContainer').clientHeight
@@ -67,6 +67,8 @@ const SearchResultListGroup = ({
                         action={action}
                         active
                     >
+                
+                   
                         <Row>
                             <div 
                                 className='d-flex justify-content-start text-left' 
@@ -78,22 +80,28 @@ const SearchResultListGroup = ({
                                     }
                                 {item.type},
                                 &nbsp;
-                                {locale.texts.LAST_FOUR_DIGITS_IN_ACN}: {item.last_four_acn},
-                                &nbsp;
-                                {locale.abbr === 'en'
-                                    ? `${locale.texts.IS} ${locale.texts[item.status.toUpperCase()]}`
-                                    : `${locale.texts.STATUS}${locale.texts[item.status.toUpperCase()]}`
-                                },
-                                &nbsp;
-                                {item.currentPosition 
-                                    ? `${locale.texts.NEAR} ${item.location_description}`
-                                    : locale.texts.NOT_AVAILABLE
+                                {locale.texts.LAST_FOUR_DIGITS_IN_ACN}: {'x...x'}{item.last_four_acn},
+                               
+                                {item.status.toUpperCase() !== 'NORMAL' ? locale.abbr === 'en'  
+                                    
+                                    ? `${locale.texts.IS} ${locale.texts[item.status.toUpperCase()]} ,`  
+                                    : `${locale.texts.STATUS}${locale.texts[item.status.toUpperCase()]} ,`  
+                                   
+                                 : null 
                                 }
+                            
+                                {item.currentPosition 
+                                    ? `${locale.texts.NEAR} ${item.location_description}` 
+                                    
+                                    : locale.texts.NOT_AVAILABLE
+                                }   
                                 &nbsp;
+                               
                                 {item.currentPosition
+                                   
                                     ? locale.abbr === 'en'
-                                        ? item.residence_time
-                                        : `,${locale.texts.WHEN}${item.residence_time}`
+                                        ? item.residence_time.substring(0, item.residence_time.length-1)
+                                        : `,${locale.texts.WHEN}${item.residence_time.substring(0, item.residence_time.length-1)}`
                                     : ' '
                                 }
                             </div>

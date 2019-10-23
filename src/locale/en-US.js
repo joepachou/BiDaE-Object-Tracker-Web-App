@@ -16,7 +16,8 @@ const en =  {
     FOUND: "found",
     NOT_FOUND: "not found",
     OBJECT_TYPE: "object types",
-
+    disable:"disable",
+    count : "records",
 
     /* Location accuracy */
     LOCATION_ACCURACY: "Location Accuracy",
@@ -111,6 +112,7 @@ const en =  {
     THE_ACCESS_CONTROL_NUMBER_IS_ALREADY_USED: "The access control number is already used",
     THE_MAC_ADDRESS_IS_ALREADY_USED :"The Mac Address is already used",
     AREA_IS_REQUIRED: "Area is required",
+    NOT_ASSIGNED_TO_ANY_DEVICES: "Not assigned to any devices",
 
     /* Object Status */
     STATUS: "status",

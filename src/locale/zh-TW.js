@@ -16,8 +16,8 @@ const tw = {
     FOUND: "找到",
     NOT_FOUND: "未找到",
     OBJECT_TYPE: "儀器類別",
-
-
+    disable:"收起",
+    count : "筆",
 
     /* Location accuracy */
     LOCATION_ACCURACY: "位置精準度",
@@ -112,6 +112,7 @@ const tw = {
     THE_ACCESS_CONTROL_NUMBER_IS_ALREADY_USED: "財產編號已被使用",
     THE_MAC_ADDRESS_IS_ALREADY_USED :"Mac Address已被使用",
     AREA_IS_REQUIRED: "請選擇地區",
+    NOT_ASSIGNED_TO_ANY_DEVICES: "尚未指定任何儀器",
 
     /* Object Status */
     STATUS: "狀態",
