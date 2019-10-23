@@ -126,7 +126,7 @@
         height: 65px;
     }
     #mapid {
-        height: 70vh;
+        height: 75vh;
     } 
 
     #changeStatusForm {
@@ -149,6 +149,15 @@
 
     #searchResult {
         padding-right: 1.5rem
+    }
+
+    #downloadPdfRequest {
+        z-Index: 1050;
+        top: 10%;
+        /* left: -10%; */
+        right: auto;
+        bottom: auto;
+        padding: 0;
     }
 
     /* #confirmForm {
