@@ -89,7 +89,7 @@ class AddUserForm extends React.Component {
                         initialValues = {{
                             username: '',
                             password: '',
-                            roles: [config.defaultRole],
+                            role: config.defaultRole,
                             areaSelect: '',
                             shiftSelect: '',
 
@@ -193,7 +193,7 @@ class AddUserForm extends React.Component {
                                 <Row className="form-group my-3 text-capitalize">
                                     <Col>
                                         <RadioButtonGroup
-                                            id="roles"
+                                            id="role"
                                             label={locale.texts.ROLES}
                                             value={values.radioGroup}
                                             error={errors.radioGroup}
