@@ -244,7 +244,7 @@ class MyDeviceManager extends React.Component{
                         <i className="fas fa-angle-double-left fa-2x"></i>
                     </Col>
                 </Row> */}
-                <Row className='mt-2'>
+                <Row className='w-100 d-flex bg-white'>
                     <Col>
                         <h5 className="text-capitalize">{locale.texts.NOT_MY_DEVICES_LIST}</h5>
                         <AddableList

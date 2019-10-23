@@ -134,6 +134,9 @@ export default class AddableList extends React.Component{
                 // maxHeight: '50vh', 
                 // minHeight: '50vh', 
                 overflowY: 'scroll'
+            },
+            item: {
+                cursor: "pointer",
             }
         }
         
@@ -161,10 +164,17 @@ export default class AddableList extends React.Component{
                                         </div>      
                                     )}else{
                                         html = (
-                                        <ListGroup.Item key = {index} onClick={this.onClick} name={index} action>
-                                            {this.itemLayout(item, index)}
-                                        </ListGroup.Item>
-                                    )}
+                                            <ListGroup.Item 
+                                                key = {index} 
+                                                onClick={this.onClick} 
+                                                name={index} 
+                                                action 
+                                                style={style.item} 
+                                            >
+                                                {this.itemLayout(item, index)}
+                                            </ListGroup.Item>
+                                        )
+                                    }
                                     Html.push(html)
                                 }
                                 return Html
