@@ -247,7 +247,8 @@ const signin = (request, response) => {
                         role, 
                         mydevice, 
                         search_history,
-                        areas_id
+                        areas_id,
+                        shift,
                     } = res.rows[0]
 
                     let userInfo = {
@@ -266,10 +267,9 @@ const signin = (request, response) => {
                     })
                     pool.query(queryType.query_setVisitTimestamp(username))
                         .catch(err => console.log(err))
-                    pool.query(queryType.query_setShift(shift, username))
-                        .catch(err => console.log(err))
+                    // pool.query(queryType.query_setShift(shift, username))
+                    //     .catch(err => console.log(err))
                 } else {
-                    console.log(3333)
                     response.json({
                         authentication: false,
                         message: "password is incorrect"

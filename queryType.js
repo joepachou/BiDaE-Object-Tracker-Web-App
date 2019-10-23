@@ -215,6 +215,7 @@ function query_signin(username) {
 			roles.name as role, 
 			user_table.mydevice, 
 			user_table.search_history,
+			user_table.shift,
 			array (
 				SELECT area_id
 				FROM user_areas
