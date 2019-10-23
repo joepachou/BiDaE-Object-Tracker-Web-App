@@ -13,14 +13,13 @@ import {
 } from 'formik';
 import Select from 'react-select';
 import RadioButtonGroup from './RadioButtonGroup';
+import RadioButton from '../presentational/RadioButton'
 import CheckBoxGroup from './CheckboxGroup';
 import CheckBox from '../presentational/Checkbox';
 import * as Yup from 'yup';
 import config from '../../config';
-import LocaleContext from '../../context/LocaleContext';
 import axios from 'axios';
 import dataSrc from '../../dataSrc';
-import AuthenticationContext from '../../context/AuthenticationContext';
 import { AppContext } from '../../context/AppContext'
 
 
@@ -156,7 +155,7 @@ class AddUserForm extends React.Component {
                                     <ErrorMessage name="password" component="div" className="invalid-feedback" />
                                 </div>
                                 <hr/>
-                                <Row className="form-group my-3 text-capitalize">
+                                {/* <Row className="form-group my-3 text-capitalize">
                                     <Col>
                                         <CheckBoxGroup
                                             id="roles"
@@ -181,7 +180,39 @@ class AddUserForm extends React.Component {
                                                     )
                                             })}
                                         </CheckBoxGroup>
-                                        {console.log(values)}                                        
+                                        <Row className='no-gutters' className='d-flex align-self-center'>
+                                            <Col>
+                                                {touched.radioGroup && errors.radioGroup &&
+                                                <div style={style.errorMessage}>{errors.radioGroup}</div>}
+                                                {touched.select && errors.select &&
+                                                <div style={style.errorMessage}>{errors.select}</div>}
+                                            </Col>
+                                        </Row>                                                
+                                    </Col>
+                                </Row> */}
+                                <Row className="form-group my-3 text-capitalize">
+                                    <Col>
+                                        <RadioButtonGroup
+                                            id="roles"
+                                            label={locale.texts.ROLES}
+                                            value={values.radioGroup}
+                                            error={errors.radioGroup}
+                                            touched={touched.radioGroup}
+                                        >
+                                        {this.props.roleName
+                                            .filter(roleName => roleName.name !== 'guest')
+                                            .map((roleName, index) => {
+                                                return (
+                                                    <Field
+                                                        component={RadioButton}
+                                                        key={index}
+                                                        name="role"
+                                                        id={roleName.name}
+                                                        label={locale.texts[roleName.name.toUpperCase()]}
+                                                    />
+                                                )
+                                        })}
+                                        </RadioButtonGroup>
                                         <Row className='no-gutters' className='d-flex align-self-center'>
                                             <Col>
                                                 {touched.radioGroup && errors.radioGroup &&
