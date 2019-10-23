@@ -56,6 +56,7 @@ const tw = {
     VIEW_REPORT: "檢視報告",
     DOWNLOAD_REPORT: "下載報告",
     CLOSE: "關閉",
+    SHOW_DEVICES_NOT_FOUND: "顯示未找到的儀器",
 
     /* Form Field */
     NAME: "名稱",
