@@ -40,14 +40,14 @@ export default class AddableList extends React.Component{
         }
 
         this.API = {
-            setTitle: (title) => {
-                this.setState({
-                    title: title
-                })
-            },
-            getTitle: (title) => {
-                return this.state.title
-            },
+            // setTitle: (title) => {
+            //     this.setState({
+            //         title: title
+            //     })
+            // },
+            // getTitle: (title) => {
+            //     return this.state.title
+            // },
             getItem: () => {
                 return this.state.itemList
             },
@@ -139,7 +139,7 @@ export default class AddableList extends React.Component{
         
         return (
             <Fragment>
-                <h5>{this.state.title}</h5>
+                {/* <h5>{this.state.title}</h5> */}
                 <ListGroup  variant = "flush" style={style.listGroup}>
                     {this.state.itemList !== null 
                         ? 
@@ -155,7 +155,6 @@ export default class AddableList extends React.Component{
                                     if(item === 'add'){
                                         html = (
                                         <div className="py-1 pr-2" key = {index}>
-
                                                 <input  type="text" className="form-control h5 float-left w-75 border-0" onKeyPress={this.addListByEnter}></input>
 
                                                 <h4 className="float-right" name="add" onClick={this.removeItem}>x</h4>

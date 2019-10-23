@@ -134,12 +134,13 @@ class MyDeviceManager extends React.Component{
                         
                         {item.type},
                         &nbsp;
-                        {item.access_control_number},
-                        &nbsp;
-                        {locale.abbr === 'en'
-                            ? `${locale.texts.STATUS} ${locale.texts.IS} ${locale.texts[item.status.toUpperCase()]}`
-                            : `${locale.texts.STATUS}${locale.texts[item.status.toUpperCase()]}`
-                        }
+                        {item.access_control_number}
+                        <p className='d-inline-block mx-1 text-capitalize'>
+                            {item.status !== 'normal'
+                                ? `, ${locale.texts[item.status.toUpperCase()]}`
+                                : ''
+                            }                        
+                        </p>
                         &nbsp;
                     </div>
                 )
@@ -155,7 +156,6 @@ class MyDeviceManager extends React.Component{
         let { locale } = this.context
         const {itemLayout, validation, onClick} = this.functionForAddableList
         this.APIforAddableList_1 = API
-        this.APIforAddableList_1.setTitle(locale.texts.MY_DEVICES_LIST)
         this.APIforAddableList_1.setValidation(validation)
         this.APIforAddableList_1.setItemLayout(itemLayout)
         this.APIforAddableList_1.setOnClick(onClick)
@@ -165,7 +165,7 @@ class MyDeviceManager extends React.Component{
         let { locale } = this.context
         const {itemLayout, validation, onClick} = this.functionForAddableList
         this.APIforAddableList_2 = API
-        this.APIforAddableList_2.setTitle(locale.texts.NOT_MY_DEVICES_LIST)
+        // this.APIforAddableList_2.setTitle(locale.texts.NOT_MY_DEVICES_LIST)
         this.APIforAddableList_2.setValidation(validation)
         this.APIforAddableList_2.setItemLayout(itemLayout)
         this.APIforAddableList_2.setOnClick(onClick)
@@ -226,10 +226,13 @@ class MyDeviceManager extends React.Component{
     
     
     render(){
+
+        const { locale } = this.context
         return (
             <Fragment>
                 <Row className="w-100 d-flex bg-white">
                     <Col>
+                        <h5 className="text-capitalize">{locale.texts.MY_DEVICES_LIST}</h5>
                         <AddableList
                             getAPI={this.getAPIfromAddableList_1}
                         />
@@ -243,6 +246,7 @@ class MyDeviceManager extends React.Component{
                 </Row> */}
                 <Row className='mt-2'>
                     <Col>
+                        <h5 className="text-capitalize">{locale.texts.NOT_MY_DEVICES_LIST}</h5>
                         <AddableList
                             getAPI={this.getAPIfromAddableList_2}
                         />
