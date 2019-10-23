@@ -204,6 +204,7 @@ const tw = {
     NOT: "不",
     WHOSE: "的",
     BELONG_TO: "屬於",
+    BEING_HERE: "已",
 
     /** Test */
     IIS_SINICA_FLOOR_FOUR: "中研院4樓",
