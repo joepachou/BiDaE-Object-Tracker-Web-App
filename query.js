@@ -362,30 +362,45 @@ const editLbeacon = (request, response) => {
     })
 }
 
+let pdfOptions = {
+    "format": "A4",
+    "orientation": "portrait",
+    "border": "1cm",
+    "timeout": "120000"
+};
 
-
-const  generatePDF = (request, response) => {
+const generatePDF = (request, response) => {
     let { pdfFormat, userInfo, filePath } = request.body
-    let options = {
-        "format": "A4",
-        "orientation": "portrait",
-        "border": "1cm",
-        "timeout": "120000"
-    };
+
+    /** If there are some trouble when download pdf, try npm rebuild phantomjs-prebuilt */
+    pdf.create(pdfFormat, pdfOptions).toFile(filePath, function(err, result) {
+        if (err) return console.log(err);
+    
+        console.log("pdf create");
+        response.status(200).json(filePath)
+    });
+}
+
+const addShiftChangeRecord = (request, response) => {
+    let { pdfFormat, userInfo, filePath } = request.body
 
     /** If there are some trouble when download pdf, try npm rebuild phantomjs-prebuilt */
     pool.query(queryType.query_addShiftChangeRecord(userInfo.name, filePath))
         .then(res => {
-            pdf.create(pdfFormat, options).toFile(filePath, function(err, result) {
+            
+            /** If there are some trouble when download pdf, try npm rebuild phantomjs-prebuilt */
+            pdf.create(pdfFormat, pdfOptions).toFile(filePath, function(err, result) {
                 if (err) return console.log(err);
             
                 console.log("pdf create");
                 response.status(200).json(filePath)
             });
+
         })
         .catch(err => {
             console.log(`pdf create fail: ${err}`)
         })
+
 }
 
 const modifyUserDevices = (request, response) => {
@@ -700,4 +715,5 @@ module.exports = {
     getAreaTable,
     getGeoFenceConfig,
     setGeoFenceConfig,
+    addShiftChangeRecord
 }

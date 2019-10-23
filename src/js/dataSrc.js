@@ -27,6 +27,8 @@ const setUserRole = `http://${dataSrcIP}/test/setUserRole`
 const getAreaTable = `http://${dataSrcIP}/data/getAreaTable`
 const getGeoFenceConfig = `http://${dataSrcIP}/data/getGeoFenceConfig`
 const setGeoFenceConfig = `http://${dataSrcIP}/data/setGeoFenceConfig`
+const addShiftChangeRecord = `http://${dataSrcIP}/data/addShiftChangeRecord`
+
 
 
 const pdfUrl = function(path){
@@ -62,5 +64,6 @@ module.exports = {
     setUserRole,
     getAreaTable,
     getGeoFenceConfig,
-    setGeoFenceConfig
+    setGeoFenceConfig,
+    addShiftChangeRecord
 };

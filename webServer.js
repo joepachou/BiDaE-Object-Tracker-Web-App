@@ -93,6 +93,7 @@ app.post('/test/deleteUser', db.deleteUser)
 app.post('/test/setUserRole', db.setUserRole)
 app.post('/test/getEditObjectRecord', db.getEditObjectRecord)
 app.post('/test/deleteEditObjectRecord', db.deleteEditObjectRecord)
+app.post('/data/addShiftChangeRecord', db.addShiftChangeRecord)
 
 app.post('/data/getAreaTable', db.getAreaTable)
 
