@@ -13,6 +13,11 @@
     border-top: 0;
 }
 
+.customPopup .leaflet-container a.leaflet-popup-close-button {
+    width: 100px;
+    font: 40px/30px Tahoma, Verdana, sans-serif
+}
+
 .leaflet-popup-content {
     padding: 0;
 }

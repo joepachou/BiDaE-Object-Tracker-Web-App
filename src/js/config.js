@@ -599,23 +599,24 @@ const config = {
 
             /* The style sheet is right in the src/css/Surveillance.css*/
             const content = `
-                <div 
-                    style="over-flow: hidden scroll;"
-                >
+                <div>
                     <h4 class="border-bottom pb-1 px-2">${object[0].location_description}</h4>
                     ${objectList.map( item =>{
                         var element = ""
                         if (item.object_type == 0) {
                             element += ` 
                                 <div class="row popupRow mb-2 ml-1 d-flex jusify-content-start">
-                                    <div class="popupType">
+                                    <div class="popupType text-capitalize">
                                         ${item.type} 
                                     </div>
-                                    <div class="popupType">
+                                    <div class="popupType ">
                                         , ${locale.texts.ACCESS_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn}
                                     </div>
-                                    <div class="popupType">
-                                        , ${locale.texts[item.status.toUpperCase()]}
+                                    <div class="popupType text-capitalize">
+                                        ${item.status !== "normal" 
+                                            ? `, ${locale.texts[item.status.toUpperCase()]}`
+                                            : ''
+                                        }
                                     </div>
                                 </div>`
                         } else {
