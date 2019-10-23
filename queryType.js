@@ -578,10 +578,11 @@ const query_addEditObjectRecord = (formOption, username) => {
 
 }
 
-const query_addShiftChangeRecord = (username, file_path) => {
+const query_addShiftChangeRecord = (userInfo, file_path) => {
 	const query = `
 		INSERT INTO shift_change_record (
 			user_id, 
+			shift,
 			submit_timestamp, 
 			file_path
 		)
@@ -589,8 +590,9 @@ const query_addShiftChangeRecord = (username, file_path) => {
 			(
 				SELECT id
 				FROM user_table
-				WHERE name='${username}'
+				WHERE name='${userInfo.name}'
 			), 
+			'${userInfo.shift}',
 			now(), 
 			'${file_path}'
 		);

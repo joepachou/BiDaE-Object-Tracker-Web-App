@@ -385,7 +385,7 @@ const addShiftChangeRecord = (request, response) => {
     let { pdfFormat, userInfo, filePath } = request.body
 
     /** If there are some trouble when download pdf, try npm rebuild phantomjs-prebuilt */
-    pool.query(queryType.query_addShiftChangeRecord(userInfo.name, filePath))
+    pool.query(queryType.query_addShiftChangeRecord(userInfo, filePath))
         .then(res => {
             
             /** If there are some trouble when download pdf, try npm rebuild phantomjs-prebuilt */
