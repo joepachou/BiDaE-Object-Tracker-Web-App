@@ -526,15 +526,15 @@ const config = {
 
         /** Set the schema to select the color pin */
         getIconColor: (item, hasColorPanel) => {
-            if (item.object_type === 0) {
+            if (item.object_type == 0) {
                 if (item.panic) return config.mapConfig.iconColor.sos
                 else if (item.searched && hasColorPanel) return item.pinColor
                 else if (item.searched) return config.mapConfig.iconColor.searched
                 else if (item.status !== config.mapConfig.objectStatus.NORMAL) return config.mapConfig.iconColor.unNormal
                 else return config.mapConfig.iconColor.normal
             } 
-            else if (item.object_type === 1) return config.mapConfig.iconColor.female
-            else if (item.object_type === 2) return config.mapConfig.iconColor.male
+            else if (item.object_type == 1) return config.mapConfig.iconColor.female
+            else if (item.object_type == 2) return config.mapConfig.iconColor.male
         },
         
         areaOptions: {
