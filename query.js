@@ -288,7 +288,7 @@ const signup = (request, response) => {
         username, 
         password, 
         role,
-        areaSelect,
+        area_id,
         shiftSelect
     } = request.body;
     
@@ -302,7 +302,7 @@ const signup = (request, response) => {
     }
     pool.query(queryType.query_signup(signupPackage))
         .then(res => {
-            pool.query(queryType.query_insertUserData(username, role, areaSelect))
+            pool.query(queryType.query_insertUserData(username, role, area_id))
                 .then(res => {
                     console.log('Sign up Success')
                     response.status(200).json(res)

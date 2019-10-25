@@ -51,7 +51,7 @@ class Auth extends React.Component {
             username: username.toLowerCase(),
             password,
             role,
-            areaSelect,
+            area_id: config.mapConfig.areaModules[areaSelect].id,
             shiftSelect
         })
         return result

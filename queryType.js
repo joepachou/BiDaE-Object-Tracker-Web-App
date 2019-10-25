@@ -508,7 +508,7 @@ const query_setVisitTimestamp = (username) => {
 	`
 }
 
-const query_insertUserData = (username, role, areaSelect) => {
+const query_insertUserData = (username, role, area_id) => {
 	return `
 		INSERT INTO user_roles (user_id, role_id)
 		VALUES (
@@ -530,11 +530,7 @@ const query_insertUserData = (username, role, areaSelect) => {
 				FROM user_table
 				WHERE name='${username}'
 			), 
-			(
-				SELECT id 
-				FROM area_table
-				WHERE name='${areaSelect}'
-			)
+			${area_id}
 		)
 	`
 }
