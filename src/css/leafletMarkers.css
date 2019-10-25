@@ -60,8 +60,10 @@
 }
 
 .awesome-number-marker-icon-blue {
-  background: url('../img/colorPin/DarkBlue.svg') no-repeat center/contain;
+  /* background: url('../img/colorPin/DarkBlue.svg') no-repeat center/contain; */
   /* background-position: -108px 0; */
+  background: url('../img/colorPin/DarkBlue_Without_Dot.png') no-repeat center/contain;
+
 }
 
 .awesome-number-marker-icon-darkblue {

@@ -7,7 +7,7 @@ import 'leaflet.markercluster';
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import '../../../css/CustomMarkerCluster.css'
-import '../../leaflet_awesome_number_markers';
+import '../../helper/leaflet_awesome_number_markers';
 import _ from 'lodash'
 import { AppContext } from '../../context/AppContext';
 
@@ -84,6 +84,7 @@ class Map extends React.Component {
         this.markersLayer.eachLayer( marker => {
             let icon = marker.options.icon;
             icon.options.iconSize = [this.scalableIconSize, this.scalableIconSize]
+            icon.options.numberSize = this.scalableNumberSize
             marker.setIcon(icon);
         })
 
@@ -111,9 +112,10 @@ class Map extends React.Component {
         this.minZoom = this.map.getMinZoom();
         this.zoomDiff = this.currentZoom - this.minZoom;
         this.resizeFactor = Math.pow(2, (this.zoomDiff));
-        this.resizeConst = this.zoomDiff * 30;
+        this.resizeConst = Math.floor(this.zoomDiff * 30);
         this.scalableErrorCircleRadius = 200 * this.resizeFactor;
         this.scalableIconSize = this.props.mapConfig.iconOptions.iconSize + this.resizeConst
+        this.scalableNumberSize = Math.floor(this.scalableIconSize / 3);
     }
 
     /** Create the lbeacon and invisibleCircle markers */
@@ -231,7 +233,9 @@ class Map extends React.Component {
         this.calculateScale();
 
         const iconSize = [this.scalableIconSize, this.scalableIconSize];
-        
+        const numberSize = this.scalableNumberSize;
+        // console.log(iconSize)
+        // console.log(numberSize)
         let counter = 0;
 
         this.filterTrackingData(_.cloneDeep(this.props.proccessedTrackingData))
@@ -262,6 +266,8 @@ class Map extends React.Component {
 
                 /** Set the color of ordered number */
                 numberColor: this.props.mapConfig.iconColor.number,
+
+                numberSize,
             }
 
             const option = new L.AwesomeNumberMarkers (item.iconOption)

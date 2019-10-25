@@ -466,7 +466,7 @@ const config = {
         /** Set the icon option */
         iconOptions: {
             iconSize: 30,
-            showNumber: false,
+            showNumber: !false,
         },
 
         /** Set the representation of color pin 
