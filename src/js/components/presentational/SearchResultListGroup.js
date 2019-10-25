@@ -88,26 +88,19 @@ const SearchResultListGroup = ({
                                 {item.type},
                                 &nbsp;
                                 {locale.texts.ACCESS_CONTROL_NUMBER} : {config.ACNOmitsymbol}{item.last_four_acn}
-                               
-                                {item.status.toUpperCase() !== 'NORMAL' ? locale.abbr === 'en'  
-                                    
-                                    ? `, ${locale.texts[item.status.toUpperCase()]}`  
-                                    : `, ${locale.texts[item.status.toUpperCase()]}`  
-                                   
-                                 : null 
-                                }
                             
                                 {item.currentPosition 
                                     ? `, ${locale.texts.NEAR} ${item.location_description}` 
-                                    
                                     : locale.texts.NOT_AVAILABLE
                                 }   
                                 &nbsp;
+                                {item.status.toUpperCase() === 'NORMAL' 
+                                    ? null  
+                                    : `, ${locale.texts[item.status.toUpperCase()]}`  
+                                }
                                 {item.currentPosition
                                     ? item.status.toUpperCase() === 'NORMAL'
-                                        ? locale.abbr === 'en'
-                                            ? `, ${item.residence_time} `
-                                            : `, ${item.residence_time}`
+                                        ? `, ${item.residence_time} `
                                         : ''
                                     : ''
                                 }
