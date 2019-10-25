@@ -195,7 +195,7 @@ const tw = {
     SYSTEM_ADMIN: "系統管理員",
 
     TO: "至",
-    SHIFT_TO: "接交",
+    SHIFT_TO: "交接給",
     NEAR: "鄰近",
     IS: "is",
     WHEN: "已",
