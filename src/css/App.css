@@ -403,6 +403,20 @@ p {
     margin-bottom: 0;
 }
 
+
+/** title style sheet e.g freqent search, object type*/
+.title {
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+/** .search result list group style sheet*/ 
+.searchResultListGroup {
+    /* max-Height: 55vh; */
+    overflow: hidden scroll;
+}
+
+/** scroll bar customize */
 /** .search option custom scroll bar style */
 .searchOption::-webkit-scrollbar {
     -webkit-appearance: none;
@@ -425,11 +439,6 @@ p {
     -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
 }
 
-/** .search result list group style sheet*/ 
-.searchResultListGroup {
-    /* max-Height: 55vh; */
-    overflow: hidden scroll;
-}
 .searchResultListGroup::-webkit-scrollbar {
     -webkit-appearance: none;
     width: 7px;
@@ -440,8 +449,14 @@ p {
     -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
 }
 
-/** title style sheet e.g freqent search, object type*/
-.title {
-    font-size: 1.25rem;
-    font-weight: 500;
+.customPopup .leaflet-container .leaflet-popup-scrolled::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, .5);
+    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+}
+
+.customPopup .leaflet-container .leaflet-popup-scrolled::-webkit-scrollbar {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, .5);
+    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
 }

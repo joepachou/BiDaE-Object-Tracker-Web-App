@@ -608,10 +608,10 @@ const config = {
                             element += ` 
                                 <div class="row popupRow mb-2 ml-1 d-flex jusify-content-start">
                                     <div class="popupType text-capitalize">
-                                        ${config.mapConfig.iconOptions.showNumber ? index + 1 + '. ' : ''} 
+                                        ${config.mapConfig.iconOptions.showNumber ? `${index + 1}`: ''} 
                                     </div>
                                     <div class="popupType text-capitalize">
-                                        ${item.type} 
+                                       . ${item.type}
                                     </div>
                                     <div class="popupType ">
                                         , ${locale.texts.ACCESS_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn}
