@@ -107,7 +107,7 @@ const SearchResultListGroup = ({
                                     ? item.status.toUpperCase() === 'NORMAL'
                                         ? locale.abbr === 'en'
                                             ? `, ${item.residence_time} `
-                                            : `, ${locale.texts.WHEN} ${item.residence_time.substring(0, item.residence_time.length-1)}`
+                                            : `, ${item.residence_time}`
                                         : ''
                                     : ''
                                 }

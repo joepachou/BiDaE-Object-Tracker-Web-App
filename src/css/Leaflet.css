@@ -18,14 +18,16 @@
     font: 40px/30px Tahoma, Verdana, sans-serif
 }
 
-.leaflet-popup-content {
+.customPopup .leaflet-popup-content {
     padding: 0;
+    word-break: break-all;
 }
 
 .customPopup .contentBox {
     display: flex;
     flex-direction:row;
     justify-content:space-between;
+    word-break: break-all;
 }
 
 .customPopup .contentBox {

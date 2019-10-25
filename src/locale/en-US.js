@@ -204,7 +204,7 @@ const en =  {
     NOT: "not",
     WHOSE: "'s",
     BELONG_TO: "belongs to",
-    BEING_HERE: "being here",
+    // BEING_HERE: "being here",
 
     /** Test */
     IIS_SINICA_FLOOR_FOUR: "IIS sinica floor 4",

@@ -603,10 +603,10 @@ const config = {
                 <div>
                     <h4 class="border-bottom pb-1 px-2">${object[0].location_description}</h4>
                     ${objectList.map((item, index) =>{
-                        var element = ""
+                        var element = `<div class="row popupRow mb-2 mx-2 d-flex jusify-content-start">`
                         if (item.object_type == 0) {
-                            element += ` 
-                                <div class="row popupRow mb-2 ml-1 d-flex jusify-content-start">
+                            element += 
+                                ` 
                                     <div class="popupType text-capitalize">
                                         ${config.mapConfig.iconOptions.showNumber ? `${index + 1}`: ''} 
                                     </div>
@@ -619,21 +619,22 @@ const config = {
                                     <div class="popupType">
                                         ${item.status !== "normal" 
                                             ? `, ${locale.texts[item.status.toUpperCase()]}`
-                                            : `, ${locale.texts.BEING_HERE} ${item.residence_time}`
+                                            : `, ${item.residence_time}`
                                         }
                                     </div>
-                                </div>`
+                                `
                         } else {
-                            element += `     
-                                <div class="row popupRow mb-2 ml-1 d-flex jusify-content-start">
-                                        <div class="popupType">
-                                            ${item.name} 
-                                        </div>
-                                        <div class="popupType">
-                                            , ${locale.texts.PHYSICIAN_NAME}: ${item.physician_name}
-                                        </div>
-                                </div>`
+                            element += 
+                                `     
+                                    <div class="popupType">
+                                        ${item.name} 
+                                    </div>
+                                    <div class="popupType">
+                                        , ${locale.texts.PHYSICIAN_NAME}: ${item.physician_name}
+                                    </div>
+                                `
                         }
+                        element += `</div>`
                             return element
                         }).join("")
                     }
