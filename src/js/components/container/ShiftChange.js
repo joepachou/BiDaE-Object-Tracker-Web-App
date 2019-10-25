@@ -199,6 +199,7 @@ class ShiftChange extends React.Component {
                     </Modal.Header>
                     <Modal.Body  
                         style ={style.modalBody}
+                        id="shiftChange"
                         className='text-capitalize pt-2'
                      >        
                         {!hasFoundResult && !hasNotFoundResult && 
