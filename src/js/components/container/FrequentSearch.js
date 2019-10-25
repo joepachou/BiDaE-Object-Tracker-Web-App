@@ -49,7 +49,7 @@ class FrequentSearch extends React.Component {
 
         return (
             <div id='frequentSearch' >
-                <h4 className='text-capitalize'>{locale.texts.FREQUENT_SEARCH}</h4>
+                <div className='text-capitalize title'>{locale.texts.FREQUENT_SEARCH}</div>
                 <div style={style.list} className="d-inline-flex flex-column justify-content-center searchOption">
                     {auth.authenticated && auth.user.searchHistory.filter( (item,index) => {
                         return index < config.userPreference.searchHistoryNumber

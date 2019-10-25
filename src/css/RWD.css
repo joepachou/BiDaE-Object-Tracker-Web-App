@@ -22,6 +22,7 @@
     .searchResultListGroup {
         max-Height: none;
         overflow: hidden auto;
+        margin: 0 5px 0 5px;
     }
 
     #navbar {
@@ -142,14 +143,14 @@
         height: 90vh;
     }
 
-    .searchResultListGroup {
-        /* max-Height: ; */
+    /* .searchResultListGroup {
+        max-Height: 
         overflow: hidden scroll;
-    }
+    } */
 
-    #searchResult {
+    /* #searchResult {
         padding-right: 1rem
-    }
+    } */
 
     #downloadPdfRequest {
         z-Index: 1050;

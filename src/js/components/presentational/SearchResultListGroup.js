@@ -44,29 +44,33 @@ const SearchResultListGroup = ({
         },
         list: {
             wordBreak: 'keep-all',
-            zIndex: 1
+            zIndex: 1,
+            overFlow: 'hidden scroll'
+        },
+        test: {
+            overFlow: 'hidden scroll'
         },
         listGroup: {
             maxHeight: window.innerWidth > 600 
                 ? modifiedHeight || 0
-                : ''
+                : '',
         }
     }
     return (
         <ListGroup 
             onSelect={handleSelectResultItem} 
-            className='searchResultListGroup'
             style={style.listGroup}
         >
             {data.map((item,index) => {
                 let element = 
                     <ListGroup.Item 
                         href={'#' + index} 
-                        className='searchResultList' 
+                        // className='searchResultList' 
                         eventKey={item.found + ':'+ index} 
                         key={index} 
                         action={action}
                         active
+                        style={style.test}
                     >
                 
                    

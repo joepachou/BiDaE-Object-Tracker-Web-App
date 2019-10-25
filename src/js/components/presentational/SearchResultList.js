@@ -304,20 +304,20 @@ class SearchResult extends React.Component {
 
 
         return(
-            <div className='pl-3'>
+            <div>
                 <Row className='d-flex justify-content-center' style={style.titleText}>
                     <h4 className='text-capitalize'>{locale.texts.SEARCH_RESULT}</h4>
                 </Row>
                 {/* <Row className='w-100 searchResultForMobile'>
                     <InfoPrompt data={{[devicePlural]: searchResult.length}} title={title}/>
                 </Row> */}
-                <Row className='searchResultListGroup'>
+                <Row>
                     {searchResult.length === 0 
                         ?   <Col className='d-flex justify-content-center font-weight-lighter' style={style.noResultDiv}>
                                 <div className='searchResultForDestop'>{locale.texts.NO_RESULT}</div>
                             </Col> 
                         :   
-                            <Col className=''>
+                            <Col className="searchResultListGroup mx-2">
                                 <AccessControl
                                     permission={'form:edit'}
                                     renderNoAccess={() => (

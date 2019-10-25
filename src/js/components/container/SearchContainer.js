@@ -181,7 +181,7 @@ class SearchContainer extends React.Component {
         const { locale } = this.context
         
         return (                   
-            <div id='searchContainer' className="py-1 m-1" onTouchMove={this.handleTouchMove}>
+            <div id='searchContainer' className="py-1" onTouchMove={this.handleTouchMove}>
                 <Row id='searchBar' className='d-flex justify-content-center align-items-center pb-2'>
                     <Searchbar 
                         placeholder={this.state.searchKey}

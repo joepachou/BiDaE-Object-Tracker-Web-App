@@ -92,7 +92,7 @@ class ObjectTypeList extends React.Component {
 
         return (
             <div id='objectTypeList' >
-                <h4 className='text-capitalize'>{locale.texts.OBJECT_TYPE}</h4>
+                <div className='text-capitalize title'>{locale.texts.OBJECT_TYPE}</div>
                 <div style={style.list} className="d-inline-flex flex-column justify-content-center searchOption">
                     {this.props.objectTypeList.map((item, index) => {
                         return (
