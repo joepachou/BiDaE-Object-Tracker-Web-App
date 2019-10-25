@@ -177,7 +177,7 @@ class EditObjectForm extends React.Component {
                                     ? values.select
                                     : '',
                                 monitor_type: monitor_type,
-                                area: values.area
+                                area_id: config.mapConfig.areaModules[values.area.value].id
                             }
                             this.handleSubmit(postOption)                            
                         }}

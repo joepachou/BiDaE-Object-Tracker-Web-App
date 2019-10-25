@@ -132,11 +132,7 @@ function query_editObject (formOption) {
 			access_control_number = $5,
 			name = $6,
 			monitor_type = $7,
-			area_id = (
-				SELECT id
-				FROM area_table
-				WHERE name=$8
-			)
+			area_id = $8
 		WHERE mac_address = $1
 		`;
 		
@@ -148,7 +144,7 @@ function query_editObject (formOption) {
 		formOption.access_control_number, 
 		formOption.name,
 		formOption.monitor_type,
-		formOption.area.value
+		formOption.area_id
 	];
 
 	const query = {
@@ -167,11 +163,13 @@ function query_addObject (formOption) {
 			status, 
 			transferred_location, 
 			access_control_number, 
-			name, mac_address, 
+			name, 
+			mac_address, 
 			registered_timestamp,
-			monitor_type
+			monitor_type,
+			area_id
 		)
-		VALUES($1, $2, $3, $4, $5, $6, now(), $7)
+		VALUES($1, $2, $3, $4, $5, $6, now(), $7, $8)
 		`;
 		
 	const values = [
@@ -181,7 +179,8 @@ function query_addObject (formOption) {
 		formOption.access_control_number, 
 		formOption.name, 
 		formOption.mac_address, 
-		formOption.monitor_type
+		formOption.monitor_type,
+		formOption.area_id
 	];
 
 	const query = {
