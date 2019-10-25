@@ -353,20 +353,6 @@ button:focus {
     display: none
 }
 
-/** Search Result List Group */ 
-/* .searchResultListGroup {
-    max-Height: 55vh;
-    overflow: hidden scroll;
-} */
-.searchResultListGroup::-webkit-scrollbar {
-    -webkit-appearance: none;
-    width: 7px;
-}
-.searchResultListGroup::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: rgba(0, 0, 0, .5);
-    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
-}
 
 /* React-table */
 .ReactTable .rt-thead .rt-tr {
@@ -417,7 +403,7 @@ p {
     margin-bottom: 0;
 }
 
-/**  */
+/** .search option custom scroll bar style */
 .searchOption::-webkit-scrollbar {
     -webkit-appearance: none;
     width: 7px;
@@ -428,12 +414,27 @@ p {
     -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
 }
 
-/**  */
+/** .addable list custom scroll bar style */
 .addableList::-webkit-scrollbar {
     -webkit-appearance: none;
     width: 7px;
 }
 .addableList::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, .5);
+    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+}
+
+/** .search result list group style sheet*/ 
+/* .searchResultListGroup {
+    max-Height: 55vh;
+    overflow: hidden scroll;
+} */
+.searchResultListGroup::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+}
+.searchResultListGroup::-webkit-scrollbar-thumb {
     border-radius: 4px;
     background-color: rgba(0, 0, 0, .5);
     -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);

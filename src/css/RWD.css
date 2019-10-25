@@ -144,11 +144,11 @@
 
     .searchResultListGroup {
         /* max-Height: ; */
-        overflow: hidden auto;
+        overflow: hidden scroll;
     }
 
     #searchResult {
-        padding-right: 1.5rem
+        padding-right: 1rem
     }
 
     #downloadPdfRequest {
