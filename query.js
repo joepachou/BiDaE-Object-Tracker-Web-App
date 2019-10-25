@@ -105,7 +105,7 @@ const getTrackingData = (request, response) => {
         response.status(200).json(toReturn)
 
     }).catch(err => {
-        console.log("Get trackingData fails: " + err)
+        console.log("Get tracking data fails: " + err)
     })
 }
 
@@ -649,10 +649,10 @@ const checkMatchedObject = (item, userAuthenticatedAreaId, currentAreaId) => {
     let isInUserSAuthArea = userAuthenticatedAreaId.includes(currentAreaId)
 
     /** Parse lbeacon uuid into three field in an array: area id, latitude, longtitude */
-    let lbeacon_coordinate = parseLbeaconCoordinate(item.lbeacon_uuid)
+    let lbeacon_coordinate = item.lbeacon_uuid ? parseLbeaconCoordinate(item.lbeacon_uuid) : null;
 
     /** Set the lbeacon's area id from lbeacon_coordinate*/
-    let lbeacon_area_id = parseInt(lbeacon_coordinate[0])
+    let lbeacon_area_id = item.lbeacon_uuid ? parseInt(lbeacon_coordinate[0]) : null;
 
     /** Set the object's location in the form of lbeacon coordinate parsing by lbeacon uuid  */
     item.currentPosition = item.lbeacon_uuid ? lbeacon_coordinate.slice(1, 3) : null;
