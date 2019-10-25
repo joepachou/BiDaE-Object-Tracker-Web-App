@@ -77,7 +77,9 @@ const SearchResultListGroup = ({
                             >
                                     {selection.indexOf(item.mac_address) >= 0 
                                         ? <i className="fas fa-check mx-2 py-1" style={style.icon}></i> 
-                                        : <p className='d-inline-block mx-2'>&#9642;</p>
+                                        : config.mapConfig.iconOptions.showNumber
+                                            ?   <p className='d-inline-block mx-2'>{index + 1}.</p>
+                                            :   <p className='d-inline-block mx-2'>&#9642;</p>
                                     }
                                 {item.type},
                                 &nbsp;

@@ -602,11 +602,14 @@ const config = {
             const content = `
                 <div>
                     <h4 class="border-bottom pb-1 px-2">${object[0].location_description}</h4>
-                    ${objectList.map( item =>{
+                    ${objectList.map((item, index) =>{
                         var element = ""
                         if (item.object_type == 0) {
                             element += ` 
                                 <div class="row popupRow mb-2 ml-1 d-flex jusify-content-start">
+                                    <div class="popupType text-capitalize">
+                                        ${config.mapConfig.iconOptions.showNumber ? index + 1 + '. ' : ''} 
+                                    </div>
                                     <div class="popupType text-capitalize">
                                         ${item.type} 
                                     </div>

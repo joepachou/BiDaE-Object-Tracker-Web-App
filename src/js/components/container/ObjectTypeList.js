@@ -28,7 +28,7 @@ class ObjectTypeList extends React.Component {
     }
 
     handleClick = (e) => {
-        const itemName = e.target.name.toLowerCase();
+        const itemName = e.target.name;
         this.getSearchKey(itemName)
         this.addSearchHistory(itemName)
 
