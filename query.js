@@ -37,6 +37,12 @@ moment.updateLocale('en', {
     }
 });
 
+moment.updateLocale('zh-tw', {
+    relativeTime : {
+        future: "%s",
+    }
+});
+
 const getTrackingData = (request, response) => {
     const rssiThreshold = request.body.rssiThreshold || -65
     const locale = request.body.locale || 'en'
