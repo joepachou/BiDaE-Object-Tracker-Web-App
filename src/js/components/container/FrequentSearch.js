@@ -51,8 +51,9 @@ class FrequentSearch extends React.Component {
             <div id='frequentSearch' >
                 <div className='text-capitalize title'>{locale.texts.FREQUENT_SEARCH}</div>
                 <div style={style.list} className="d-inline-flex flex-column justify-content-center searchOption">
-                    {auth.authenticated && auth.user.searchHistory.filter( (item,index) => {
-                        return index < config.userPreference.searchHistoryNumber
+                    {auth.authenticated && auth.user.searchHistory &&
+                        auth.user.searchHistory.filter( (item,index) => {
+                            return index < config.userPreference.searchHistoryNumber
                     }).map( (item, index) => {
                         return (
                             <Button
