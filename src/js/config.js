@@ -210,8 +210,8 @@ const config = {
         const title = config.getPDFTitle(userInfo, locale, time, option)
 
         let foundTitle = hasFoundResult
-            ?   `<h3 style="text-transform: capitalize; margin-bottom: 5px; font-weight: bold">
-                    ${locale.texts.DEVICES_IN}
+            ?   `<h3 style="text-transform: capitalize; margin-bottom: 10px; font-weight: bold">
+                    ${locale.texts.DEVICES_FOUND_IN}
                     ${userInfo.areas_id.map(id => {
                         return locale.texts[config.mapConfig.areaOptions[id]]
                     })}
@@ -220,9 +220,9 @@ const config = {
         let foundData = hasFoundResult 
             ?   foundResult.map((item, index) => {
                     return `
-                        <div key=${index} style="text-transform: capitalize; margin: 10px;">
+                        <div key=${index} style="margin-bottom: 5px;">
                             ${index + 1}.${item.name}, 
-                            ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}: ${item.last_four_acn}, 
+                            ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn}, 
                             ${locale.texts.NEAR}${item.location_description}
                         </div>
                     `
@@ -230,8 +230,8 @@ const config = {
                 }).join(" ")
             :   ""
         let notFoundTitle = hasNotFoundResult 
-            ?   `<h3 className="mt-1" style="text-transform: capitalize; margin-bottom: 5px; font-weight: bold">
-                    ${locale.texts.DEVICES_NOT_IN}
+            ?   `<h3 className="mt-1" style="text-transform: capitalize; margin-bottom: 10px; font-weight: bold">
+                    ${locale.texts.DEVICES_NOT_FOUND_IN}
                     ${userInfo.areas_id.map(id => {
                         return locale.texts[config.mapConfig.areaOptions[id]]
                     })}
@@ -240,9 +240,9 @@ const config = {
         let notFoundData = hasNotFoundResult 
             ?   notFoundResult.map((item, index) => {
                     return `
-                        <div key=${index} style="text-transform: capitalize; margin: 10px;">
+                        <div key=${index} style="margin-bottom: 5px;">
                             ${index + 1}.${item.name}, 
-                            ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}: ${item.last_four_acn}, 
+                            ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn}, 
                             ${locale.texts.NEAR}${item.location_description}
                         </div>
                     `
@@ -322,7 +322,7 @@ const config = {
 
         let foundTitle = hasFoundResult
             ?   `<h3 style="text-transform: capitalize; margin-bottom: 5px; font-weight: bold">
-                    ${locale.texts.DEVICES_IN}
+                    ${locale.texts.DEVICES_FOUND_IN}
                     ${userInfo.areas_id.map(id => {
                         return locale.texts[config.mapConfig.areaOptions[id]]
                     })}
@@ -342,7 +342,7 @@ const config = {
             :   ""
         let notFoundTitle = hasNotFoundResult 
             ?   `<h3 className="mt-1" style="text-transform: capitalize; margin-bottom: 5px; font-weight: bold">
-                    ${locale.texts.DEVICES_NOT_IN}
+                    ${locale.texts.DEVICES_NOT_FOUND_IN}
                     ${userInfo.areas_id.map(id => {
                         return locale.texts[config.mapConfig.areaOptions[id]]
                     })}

@@ -186,9 +186,9 @@ class ShiftChange extends React.Component {
                                 <div>{locale.texts.DATE_TIME}: {moment().locale(locale.abbr).format(config.shiftChangeRecordTimeFormat)}</div>
                             </Col>
                         </Row>
-                        <Row style={style.row} className='text-capitalize'> 
+                        <Row style={style.row} className='text-capitalize'>
                             <Col>
-                                <div>{locale.texts.SHIFT}: {locale.texts[auth.user.shift]} </div>
+                                <div>{locale.texts.SHIFT}: {locale.texts[auth.user.shift.toUpperCase().replace(/ /g, '_')]} </div>
                             </Col>
                         </Row>
                         {/* <Row style={style.row} className='text-capitalize'> 
@@ -200,21 +200,24 @@ class ShiftChange extends React.Component {
                     <Modal.Body  
                         style ={style.modalBody}
                         id="shiftChange"
-                        className='text-capitalize pt-2'
+                        className='pt-1'
                      >        
                         {!hasFoundResult && !hasNotFoundResult && 
                             <div className="d-flex justify-content-center">
                                 <p className="font-italic ">{locale.texts.NOT_ASSIGNED_TO_ANY_DEVICES}</p>
                             </div>
-                        }               
+                        }     
+
                         <div>
-                            {hasFoundResult && <h6>{locale.texts.DEVICES_IN} {auth.user.areas_id.map(id => {
-                                return locale.texts[config.mapConfig.areaOptions[id]]
-                            })}
+                            {hasFoundResult && 
+
+                            <h6 className="text-capitalize">{locale.texts.DEVICES_FOUND_IN} {auth.user.areas_id.map(id => {
+                                    return locale.texts[config.mapConfig.areaOptions[id]]
+                                })}
                             </h6>}                    
                             {hasFoundResult && foundResult.map((item, index) => {
                                 return (
-                                    <div key={index}>
+                                    <div key={index} className="pb-1">
                                         {index + 1}.{item.name}, 
                                         {locale.texts.LAST_FOUR_DIGITS_IN_ACN}: {item.last_four_acn}, 
                                         {locale.texts.NEAR}{item.location_description}
@@ -222,15 +225,18 @@ class ShiftChange extends React.Component {
                                 )
                             })}
                         </div>
-                        <div className='my-3'>
-                            { hasNotFoundResult && <h6>{locale.texts.DEVICES_NOT_IN} {auth.user.areas_id.map(id => {
-                                return locale.texts[config.mapConfig.areaOptions[id]]
-                            })}</h6>}
+                        <div className='my-2'>
+                            { hasNotFoundResult && 
+                            
+                            <h6 className="text-capitalize"> {locale.texts.DEVICES_NOT_FOUND_IN} {auth.user.areas_id.map(id => {
+                                    return locale.texts[config.mapConfig.areaOptions[id]]
+                                })}
+                            </h6>}
                             { hasNotFoundResult && notFoundResult.map((item, index) => {
                                 return (
-                                    <div key={index}>
+                                    <div key={index} className="pb-1">
                                         {index + 1}.{item.name}, 
-                                        {locale.texts.LAST_FOUR_DIGITS_IN_ACN}: {item.last_four_acn}, 
+                                        {locale.texts.ASSET_CONTROL_NUMBER}: {config.ACNOmitsymbol}{item.last_four_acn},
                                         {locale.texts.NEAR}{item.location_description}
                                     </div>
                                 )
