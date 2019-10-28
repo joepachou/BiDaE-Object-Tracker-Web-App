@@ -288,29 +288,24 @@ class SearchResult extends React.Component {
             }
         }
 
-        let searchResult = this.state.showNotFoundResult 
-            ? this.props.searchResult.filter(item => !item.found) 
-            : this.props.searchResult.filter(item => item.found)
+        let foundResult = this.props.searchResult.filter(item => item.found)
+        let notFoundResult = this.props.searchResult.filter(item => !item.found)
 
-        let deviceNum = this.state.showNotFoundResult
-            ? this.props.searchResult.filter(item => item.found).length
-            : this.props.searchResult.filter(item => !item.found).length
+        let searchResult = this.state.showNotFoundResult 
+            ? notFoundResult
+            : foundResult
 
         let title = this.state.showNotFoundResult 
-            ? locale.texts.NOT_FOUND
-            : locale.texts.FOUND
+            ? locale.texts.DEVICES_NOT_FOUND
+            : locale.texts.DEVICES_FOUND
 
-        let devicePlural = deviceNum === 1 ? locale.texts.DEVICE : locale.texts.DEVICES
 
 
         return(
             <div>
                 <Row className='d-flex justify-content-center' style={style.titleText}>
                     <h4 className='text-capitalize'>
-                        {this.state.showNotFoundResult 
-                            ? locale.texts.DEVICES_NOT_FOUND
-                            : locale.texts.DEVICES_FOUND
-                        }
+                        {title}
                     </h4>
                 </Row>
                 {/* <Row className='w-100 searchResultForMobile'>
