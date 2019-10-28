@@ -137,7 +137,7 @@ class EditObjectForm extends React.Component {
                                     .required(locale.texts.ASSET_CONTROL_NUMBER_IS_REQUIRED)
                                     .test(
                                         'asset_control_number', 
-                                        locale.texts.THE_ASSET_NUMBER_IS_ALREADY_USED,
+                                        locale.texts.THE_ASSET_CONTROL_NUMBER_IS_ALREADY_USED,
                                         value => {
                                             return value === selectedObjectData.asset_control_number || 
                                                 !this.props.data.map(item => item.asset_control_number).includes(value)

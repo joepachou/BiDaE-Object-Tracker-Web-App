@@ -176,7 +176,7 @@ const trackingTableColumn = [
         width: 150
     },
     {
-        Header: "Access Control Number",
+        Header: "Asset Control Number",
         accessor: "asset_control_number",
         maxWidth: 180
     },
@@ -247,7 +247,7 @@ const objectTableColumn = [
         accessor: "area_name.label"
     },
     {
-        Header: "Access Control Number",
+        Header: "Asset Control Number",
         accessor: "asset_control_number"
     },
     {
