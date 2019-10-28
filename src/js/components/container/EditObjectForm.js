@@ -152,6 +152,15 @@ class EditObjectForm extends React.Component {
                                             return value === selectedObjectData.mac_address ||
                                                 !this.props.data.map(item => item.mac_address).includes(value)
                                         }
+                                    ).test(
+                                        'mac_address',
+                                        locale.texts.THE_MAC_ADDRESS_FORM_IS_WRONG,
+                                        value => {
+                                            var pattern = new RegExp("^[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}$");
+                                            //console.log(value)
+                                            if( value.match(pattern)) return true
+                                            return false
+                                        }
                                     ),
                                 radioGroup: Yup.string().required(locale.texts.STATUS_IS_REQUIRED),
 

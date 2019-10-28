@@ -114,6 +114,7 @@ const en =  {
     THE_USERNAME_IS_ALREADY_TAKEN: "The username is already taken",
     THE_ASSET_CONTROL_NUMBER_IS_ALREADY_USED: "The asset ID is already used",
     THE_MAC_ADDRESS_IS_ALREADY_USED :"The Mac Address is already used",
+    THE_MAC_ADDRESS_FORM_IS_WRONG: "The Mac Address' form is wrong",     
     AREA_IS_REQUIRED: "Area is required",
     NOT_ASSIGNED_TO_ANY_DEVICES: "Not assigned to any devices",
 
