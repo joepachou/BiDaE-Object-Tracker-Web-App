@@ -188,7 +188,7 @@ class ShiftChange extends React.Component {
                         </Row>
                         <Row style={style.row} className='text-capitalize'>
                             <Col>
-                                <div>{locale.texts.SHIFT}: {locale.texts[auth.user.shift.toUpperCase().replace(/ /g, '_')]} </div>
+                                <div>{locale.texts.SHIFT}: {auth.user.shift ? locale.texts[auth.user.shift.toUpperCase().replace(/ /g, '_')] : ''} </div>
                             </Col>
                         </Row>
                         {/* <Row style={style.row} className='text-capitalize'> 
