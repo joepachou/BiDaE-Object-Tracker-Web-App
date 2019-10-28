@@ -206,6 +206,7 @@ const en =  {
     NOT: "not",
     WHOSE: "'s",
     BELONG_TO: "belongs to",
+    WAS: "was",
     // BEING_HERE: "being here",
 
     /** Test */

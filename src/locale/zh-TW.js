@@ -206,6 +206,7 @@ const tw = {
     NOT: "不",
     WHOSE: "的",
     BELONG_TO: "屬於",
+    WAS: "曾",
     BEING_HERE: "已",
 
     /** Test */

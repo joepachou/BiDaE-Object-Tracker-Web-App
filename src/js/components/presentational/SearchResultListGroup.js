@@ -3,6 +3,69 @@ import { ListGroup, Row, Col } from 'react-bootstrap'
 import LocaleContext from '../../context/LocaleContext';
 import config from '../../config';
 
+
+const getDescription = (item, locale) => {
+    let foundDeviceDescription = 
+        item.found === 1
+            ?   `
+                ${item.type},
+                
+                ${locale.texts.ASSET_CONTROL_NUMBER} : ${config.ACNOmitsymbol}${item.last_four_acn}
+                
+                ${item.currentPosition 
+                    ? locale.abbr == 'en' 
+                        ? `, ${locale.texts.NEAR} ${item.location_description}` 
+                        : `, ${locale.texts.NEAR}${item.location_description}` 
+                    : `, ${locale.texts.NOT_AVAILABLE} `
+                }   
+                ${item.status.toUpperCase() === 'NORMAL' 
+                    ? ''  
+                    : `, ${locale.texts[item.status.toUpperCase()]}`
+                }
+                ${item.currentPosition  
+                    ? item.status.toUpperCase() === 'NORMAL'
+                        ? `, ${item.residence_time} `
+                        : ''
+                    : ''
+                }   
+            `
+            :   `
+                ${item.type},
+
+                ${locale.texts.ASSET_CONTROL_NUMBER} : ${config.ACNOmitsymbol}${item.last_four_acn}
+                
+                ${getSubDescription(item, locale)}
+
+                ${item.status.toUpperCase() === 'NORMAL' 
+                    ? ''  
+                    : `, ${locale.texts[item.status.toUpperCase()]}`
+                } 
+            ` 
+    return foundDeviceDescription
+}
+
+const getSubDescription = (item, locale) => {
+    let toReturn = 
+        locale.abbr == 'en'
+            ?   `
+                ${item.currentPosition  
+                    ? item.status.toUpperCase() === 'NORMAL'
+                        ? `, ${locale.texts.WAS} ${locale.texts.NEAR} ${item.location_description} ${item.residence_time}`
+                        : ''
+                    : `, ${locale.texts.NOT_AVAILABLE}`
+                } 
+            `
+            :   `                 
+                ${item.currentPosition  
+                    ? item.status.toUpperCase() === 'NORMAL'
+                        ? `, ${item.residence_time}${locale.texts.WAS}${locale.texts.NEAR}${item.location_description}`
+                        : ''
+                    : `, ${locale.texts.NOT_AVAILABLE}`
+                } 
+            `
+    return toReturn
+}
+
 const SearchResultListGroup = ({
         data,
         handleSelectResultItem,
@@ -47,15 +110,18 @@ const SearchResultListGroup = ({
             zIndex: 1,
             overFlow: 'hidden scroll'
         },
-        test: {
-            overFlow: 'hidden scroll'
-        },
+        // test: {
+        //     overFlow: 'hidden scroll'
+        // },
         listGroup: {
             maxHeight: window.innerWidth > 600 
                 ? modifiedHeight || 0
                 : '',
         }
     }
+
+
+
     return (
         <ListGroup 
             onSelect={handleSelectResultItem} 
@@ -70,41 +136,41 @@ const SearchResultListGroup = ({
                         key={index} 
                         action={action}
                         active
-                        style={style.test}
+                        // style={style.test}
                     >
-                
-                   
                         <Row>
                             <div 
                                 className='d-inline-flex justify-content-start text-left' 
                                 style={style.list}
-                            >
-                                
+                            >   
                                 {selection.indexOf(item.mac_address) >= 0 
                                     ? <i className="fas fa-check mx-2 py-1" style={style.icon}></i> 
                                     : config.mapConfig.iconOptions.showNumber
                                         ?   <p className='d-inline-block mx-2'>{index + 1}.</p>
                                         :   <p className='d-inline-block mx-2'>&#9642;</p>
                                 }
-                                {item.type},
+                                {/* {item.type},
                                 &nbsp;
                                 {locale.texts.ASSET_CONTROL_NUMBER} : {config.ACNOmitsymbol}{item.last_four_acn}
-                            
+                                
                                 {item.currentPosition 
-                                    ? `, ${locale.texts.NEAR} ${item.location_description}` 
-                                    : locale.texts.NOT_AVAILABLE
+                                    ? locale.abbr == 'en' 
+                                        ? `, ${locale.texts.NEAR} ${item.location_description}` 
+                                        : `, ${locale.texts.NEAR}${item.location_description}` 
+                                    : `, ${locale.texts.NOT_AVAILABLE} `
                                 }   
                                 &nbsp;
                                 {item.status.toUpperCase() === 'NORMAL' 
                                     ? null  
                                     : `, ${locale.texts[item.status.toUpperCase()]}`  
                                 }
-                                {item.currentPosition
+                                {item.currentPosition  
                                     ? item.status.toUpperCase() === 'NORMAL'
                                         ? `, ${item.residence_time} `
                                         : ''
                                     : ''
-                                }
+                                } */}
+                                {getDescription(item, locale, selection, index)}
                             </div>
                         </Row>
                         {/* <Row>
