@@ -17,10 +17,10 @@ function query_getTrackingData () {
 			object_table.type,
 			object_table.status,
 			object_table.transferred_location,
-			object_table.access_control_number,
+			object_table.asset_control_number,
 			object_table.area_id,
 			object_table.object_type,
-			split_part(object_table.access_control_number, '-', 3) as last_four_acn,
+			split_part(object_table.asset_control_number, '-', 3) as last_four_acn,
 			lbeacon_table.description as location_description,
 			edit_object_record.notes,
 			user_table.name as physician_name
@@ -54,7 +54,7 @@ const query_getObjectTable = (area_id) => {
 			SELECT 
 				object_table.name, 
 				object_table.type, 
-				object_table.access_control_number, 
+				object_table.asset_control_number, 
 				object_table.status, 
 				object_table.transferred_location, 
 				object_table.mac_address,
@@ -70,7 +70,7 @@ const query_getObjectTable = (area_id) => {
 			SELECT 
 				object_table.name, 
 				object_table.type, 
-				object_table.access_control_number, 
+				object_table.asset_control_number, 
 				object_table.status, 
 				object_table.transferred_location, 
 				object_table.mac_address,
@@ -129,7 +129,7 @@ function query_editObject (formOption) {
 		SET type = $2,
 			status = $3,
 			transferred_location = $4,
-			access_control_number = $5,
+			asset_control_number = $5,
 			name = $6,
 			monitor_type = $7,
 			area_id = $8
@@ -141,7 +141,7 @@ function query_editObject (formOption) {
 		formOption.type, 
 		formOption.status, 
 		formOption.transferred_location ? formOption.transferred_location.value : null, 
-		formOption.access_control_number, 
+		formOption.asset_control_number, 
 		formOption.name,
 		formOption.monitor_type,
 		formOption.area_id
@@ -162,7 +162,7 @@ function query_addObject (formOption) {
 			type, 
 			status, 
 			transferred_location, 
-			access_control_number, 
+			asset_control_number, 
 			name, 
 			mac_address, 
 			registered_timestamp,
@@ -176,7 +176,7 @@ function query_addObject (formOption) {
 		formOption.type, 
 		formOption.status, 
 		formOption.transferred_location ? formOption.transferred_location.value : null, 
-		formOption.access_control_number, 
+		formOption.asset_control_number, 
 		formOption.name, 
 		formOption.mac_address, 
 		formOption.monitor_type,
@@ -199,7 +199,7 @@ const query_editObjectPackage = (formOption, record_id) => {
 			status = '${item.status}',
 			transferred_location = '${item.transferred_location ? item.transferred_location.value : ' '}',
 			note_id = ${record_id}
-		WHERE access_control_number IN (${formOption.map(item => `'${item.access_control_number}'`)});
+		WHERE asset_control_number IN (${formOption.map(item => `'${item.asset_control_number}'`)});
 	`
 	return text
 }
@@ -555,7 +555,7 @@ const query_addEditObjectRecord = (formOption, username) => {
 			$2,
 			$3,
 			'${item.transferred_location ? item.transferred_location.value : ' '}',
-			ARRAY [${formOption.map(item => `'${item.access_control_number}'`)}]
+			ARRAY [${formOption.map(item => `'${item.asset_control_number}'`)}]
 		)
 		RETURNING id;
 	`

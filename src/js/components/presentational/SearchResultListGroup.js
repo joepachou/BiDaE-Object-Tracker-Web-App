@@ -76,18 +76,19 @@ const SearchResultListGroup = ({
                    
                         <Row>
                             <div 
-                                className='d-flex justify-content-start text-left' 
+                                className='d-inline-flex justify-content-start text-left' 
                                 style={style.list}
                             >
-                                    {selection.indexOf(item.mac_address) >= 0 
-                                        ? <i className="fas fa-check mx-2 py-1" style={style.icon}></i> 
-                                        : config.mapConfig.iconOptions.showNumber
-                                            ?   <p className='d-inline-block mx-2'>{index + 1}.</p>
-                                            :   <p className='d-inline-block mx-2'>&#9642;</p>
-                                    }
+                                
+                                {selection.indexOf(item.mac_address) >= 0 
+                                    ? <i className="fas fa-check mx-2 py-1" style={style.icon}></i> 
+                                    : config.mapConfig.iconOptions.showNumber
+                                        ?   <p className='d-inline-block mx-2'>{index + 1}.</p>
+                                        :   <p className='d-inline-block mx-2'>&#9642;</p>
+                                }
                                 {item.type},
                                 &nbsp;
-                                {locale.texts.ACCESS_CONTROL_NUMBER} : {config.ACNOmitsymbol}{item.last_four_acn}
+                                {locale.texts.ASSET_CONTROL_NUMBER} : {config.ACNOmitsymbol}{item.last_four_acn}
                             
                                 {item.currentPosition 
                                     ? `, ${locale.texts.NEAR} ${item.location_description}` 

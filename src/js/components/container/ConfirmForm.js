@@ -128,7 +128,7 @@ class ConfirmForm extends React.Component {
                                                         {locale.texts.ACN}
                                                     </Col>
                                                     <Col {...colProps.inputCol} className='text-muted pb-1'>
-                                                        {item.access_control_number}
+                                                        {item.asset_control_number}
                                                     </Col>
                                                 </Row>
                                             </Col>

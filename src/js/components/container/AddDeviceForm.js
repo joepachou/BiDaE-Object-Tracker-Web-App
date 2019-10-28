@@ -101,7 +101,7 @@ class AddDeviceForm extends React.Component {
         //     console.log(err)
         // })
         let data = this.props.searchResult.filter(item => {
-            return item.access_control_number !== this.props.selectedObjectData.access_control_number
+            return item.asset_control_number !== this.props.selectedObjectData.asset_control_number
         }).map((item, index) => {
             return {
                 ...item,
@@ -118,7 +118,7 @@ class AddDeviceForm extends React.Component {
         Object.keys(fieldArray).filter( item => {
             return item === 'location_description' ||
                     item === 'name' || 
-                    item === 'access_control_number' 
+                    item === 'asset_control_number' 
         }).map(item => {
 
             let field = {};

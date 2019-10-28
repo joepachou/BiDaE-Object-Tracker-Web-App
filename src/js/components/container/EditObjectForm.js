@@ -103,7 +103,7 @@ class EditObjectForm extends React.Component {
             name,
             type,
             status = '',
-            access_control_number,
+            asset_control_number,
             mac_address,
             transferred_location,
             area_name,
@@ -119,7 +119,7 @@ class EditObjectForm extends React.Component {
                         initialValues = {{
                             name: name || '' ,
                             type: type || '',
-                            access_control_number: access_control_number || '',
+                            asset_control_number: asset_control_number || '',
                             mac_address: mac_address || '',
                             radioGroup: status.value,
                             area: area_name || '',
@@ -133,14 +133,14 @@ class EditObjectForm extends React.Component {
                             Yup.object().shape({
                                 name: Yup.string().required(locale.texts.NAME_IS_REQUIRED),
                                 type: Yup.string().required(locale.texts.TYPE_IS_REQUIRED),
-                                access_control_number: Yup.string()
-                                    .required(locale.texts.ACCESS_CONTROL_NUMBER_IS_REQUIRED)
+                                asset_control_number: Yup.string()
+                                    .required(locale.texts.ASSET_CONTROL_NUMBER_IS_REQUIRED)
                                     .test(
-                                        'access_control_number', 
-                                        locale.texts.THE_ACCESS_CONTROL_NUMBER_IS_ALREADY_USED,
+                                        'asset_control_number', 
+                                        locale.texts.THE_asset_control_NUMBER_IS_ALREADY_USED,
                                         value => {
-                                            return value === selectedObjectData.access_control_number || 
-                                                !this.props.data.map(item => item.access_control_number).includes(value)
+                                            return value === selectedObjectData.asset_control_number || 
+                                                !this.props.data.map(item => item.asset_control_number).includes(value)
                                         }
                                     ),
                                 mac_address: Yup.string()
@@ -195,14 +195,14 @@ class EditObjectForm extends React.Component {
                                     <ErrorMessage name="type" component="div" className="invalid-feedback" />
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="access_control_number" className='text-uppercase'>{locale.texts.ACN}*</label>
+                                    <label htmlFor="asset_control_number" className='text-uppercase'>{locale.texts.ACN}*</label>
                                     <Field 
-                                        name="access_control_number" 
+                                        name="asset_control_number" 
                                         type="text" 
-                                        className={'form-control' + (errors.access_control_number && touched.access_control_number ? ' is-invalid' : '')} 
+                                        className={'form-control' + (errors.asset_control_number && touched.asset_control_number ? ' is-invalid' : '')} 
                                         placeholder=''
                                     />
-                                    <ErrorMessage name="access_control_number" component="div" className="invalid-feedback" />
+                                    <ErrorMessage name="asset_control_number" component="div" className="invalid-feedback" />
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="mac_address">{locale.texts.MAC_ADDRESS}*</label>

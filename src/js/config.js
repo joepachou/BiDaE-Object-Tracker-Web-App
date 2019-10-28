@@ -614,7 +614,7 @@ const config = {
                                        . ${item.type}
                                     </div>
                                     <div class="popupType ">
-                                        , ${locale.texts.ACCESS_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn}
+                                        , ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn}
                                     </div>
                                     <div class="popupType">
                                         ${item.status !== "normal" 

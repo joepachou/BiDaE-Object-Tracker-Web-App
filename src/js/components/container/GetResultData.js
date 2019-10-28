@@ -12,7 +12,7 @@ export default async function GetResultData(SearchKey, searchableObjectList, use
 		if(SearchKey === 'my devices'){
 			let mydevice = user.myDevice || []
 			searchableObjectList.map(item => {
-				if (mydevice.includes(item.access_control_number)) {
+				if (mydevice.includes(item.asset_control_number)) {
 					searchResult.push(item)
 				}	
 			})

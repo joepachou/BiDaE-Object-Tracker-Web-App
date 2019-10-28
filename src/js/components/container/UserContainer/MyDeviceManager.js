@@ -128,13 +128,13 @@ class MyDeviceManager extends React.Component{
                     <div 
                         className='d-flex justify-content-start text-left' 
                         style={style.list}
-                        name={item.access_control_number}
+                        name={item.asset_control_number}
                     >
                         <p className='d-inline-block mx-1'>&#9642;</p>
                         
                         {item.type},
                         &nbsp;
-                        {item.access_control_number}
+                        {item.asset_control_number}
                         <p className='d-inline-block mx-1 text-capitalize'>
                             {item.status !== 'normal'
                                 ? `, ${locale.texts[item.status.toUpperCase()]}`
@@ -190,7 +190,7 @@ class MyDeviceManager extends React.Component{
             var dataMap = {}
 
             for(var item of data){
-                dataMap[item.access_control_number] = item
+                dataMap[item.asset_control_number] = item
             }
             this.device.dataMap = dataMap
 

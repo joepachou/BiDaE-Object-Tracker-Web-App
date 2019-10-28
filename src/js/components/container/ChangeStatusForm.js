@@ -168,7 +168,7 @@ class ChangeStatusForm extends React.Component {
                                                         {locale.texts.ACN}
                                                     </Col>
                                                     <Col {...colProps.inputCol} className='text-muted pb-1'>
-                                                        {item.access_control_number}
+                                                        {item.asset_control_number}
                                                     </Col>
                                                 </Row>
                                             </Col>
@@ -275,7 +275,7 @@ class ChangeStatusForm extends React.Component {
                                     <Row>
                                         <Col>
                                             <label 
-                                                htmlFor="access_control_number" 
+                                                htmlFor="asset_control_number" 
                                                 className='text-capitalize'
                                             >
                                                 {locale.texts.NOTES}

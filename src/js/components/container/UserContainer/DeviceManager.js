@@ -49,7 +49,7 @@ class DeviceManager extends React.Component{
             let { myDevice } = auth.user
             let data = []
             res.data.rows.map((item, index) => {
-                myDevice.includes(item.access_control_number) ? data.push(item) : null;
+                myDevice.includes(item.asset_control_number) ? data.push(item) : null;
             })
             let columns = _.cloneDeep(deviceManagerTableColumn)
             columns.map(field => {

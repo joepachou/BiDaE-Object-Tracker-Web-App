@@ -306,7 +306,7 @@ class MainContainer extends React.Component{
         if (searchKey === myDevices) {
             const devicesAccessControlNumber = auth.user.myDevice || []
             proccessedTrackingData.map(item => {
-                if (devicesAccessControlNumber.includes(item.access_control_number)) {
+                if (devicesAccessControlNumber.includes(item.asset_control_number)) {
                     item.searched = true;
                     searchResult.push(item)
                 }
@@ -330,7 +330,7 @@ class MainContainer extends React.Component{
         } else {
             proccessedTrackingData.map(item => {
                 if (item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0
-                    || item.access_control_number.slice(10,14).indexOf(searchKey) >= 0
+                    || item.asset_control_number.slice(10,14).indexOf(searchKey) >= 0
                     || item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0) {
 
                     item.searched = true

@@ -177,7 +177,7 @@ const trackingTableColumn = [
     },
     {
         Header: "Access Control Number",
-        accessor: "access_control_number",
+        accessor: "asset_control_number",
         maxWidth: 180
     },
     {
@@ -248,7 +248,7 @@ const objectTableColumn = [
     },
     {
         Header: "Access Control Number",
-        accessor: "access_control_number"
+        accessor: "asset_control_number"
     },
     {
         Header: "Status",
@@ -398,7 +398,7 @@ const deviceManagerTableColumn = [
     },
     {
         Header: "Access Control Number",
-        accessor: "access_control_number"
+        accessor: "asset_control_number"
     },
     {
         Header: "Status",

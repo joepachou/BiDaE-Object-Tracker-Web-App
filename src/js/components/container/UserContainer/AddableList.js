@@ -153,7 +153,7 @@ export default class AddableList extends React.Component{
 
                                 for(var acn of acnList){
                                     var html = []
-                                    var item = itemList[acn], index = item.access_control_number
+                                    var item = itemList[acn], index = item.asset_control_number
 
                                     if(item === 'add'){
                                         html = (
