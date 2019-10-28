@@ -156,8 +156,8 @@ class EditObjectForm extends React.Component {
                                         'mac_address',
                                         locale.texts.THE_MAC_ADDRESS_FORM_IS_WRONG,
                                         value => {
+                                            if (value == undefined) return false
                                             var pattern = new RegExp("^[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}$");
-                                            //console.log(value)
                                             if( value.match(pattern)) return true
                                             return false
                                         }
