@@ -167,9 +167,10 @@ function query_addObject (formOption) {
 			mac_address, 
 			registered_timestamp,
 			monitor_type,
-			area_id
+			area_id,
+			object_type
 		)
-		VALUES($1, $2, $3, $4, $5, $6, now(), $7, $8)
+		VALUES($1, $2, $3, $4, $5, $6, now(), $7, $8, 0)
 		`;
 		
 	const values = [
