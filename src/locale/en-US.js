@@ -25,9 +25,11 @@ const en =  {
     MED: "med",
     HIGH: "high",
 
-    /* Frequent Search */
+    /* List title */
     ALL_DEVICE: "All Devices",
     MY_DEVICE: "My Devices",
+    DEVICES_FOUND: "devices found",
+    DEVICES_NOT_FOUND: "devices not found",
 
     /* Button */
     CLEAR : "clear",
