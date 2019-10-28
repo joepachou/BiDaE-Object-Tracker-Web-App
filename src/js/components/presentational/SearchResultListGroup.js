@@ -99,14 +99,12 @@ const SearchResultListGroup = ({
                                     ? null  
                                     : `, ${locale.texts[item.status.toUpperCase()]}`  
                                 }
-                                <p style={{display: 'inline'}}>
                                 {item.currentPosition
                                     ? item.status.toUpperCase() === 'NORMAL'
                                         ? `, ${item.residence_time} `
                                         : ''
                                     : ''
                                 }
-                                </p>
                             </div>
                         </Row>
                         {/* <Row>
