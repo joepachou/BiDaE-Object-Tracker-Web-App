@@ -16,6 +16,7 @@ import LocaleContext from '../../context/LocaleContext.js';
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
 import config from '../../config'
 import { objectTableColumn } from '../../tables'
+import EditPatientForm from './EditPatientForm'
 const SelectTable = selecTableHOC(ReactTable);
 
 class ObjectManagementContainer extends React.Component{
@@ -23,6 +24,7 @@ class ObjectManagementContainer extends React.Component{
         column:[],
         data:[],
         isShowEdit: false,
+        isPatientShowEdit: false,
         selection: [],
         selectedRowData: [],
         areaList: [],
@@ -111,12 +113,14 @@ class ObjectManagementContainer extends React.Component{
     handleModalForm = () => {
         this.setState({
             isShowEdit: true,
+            isPatientShowEdit: true,
         })
     }
 
     handleCloseForm = () => {
         this.setState({
             isShowEdit: false,
+            isPatientShowEdit: false,
         })
     }
 
@@ -132,7 +136,8 @@ class ObjectManagementContainer extends React.Component{
     handleSubmitForm = () => {
         setTimeout(this.getData, 500) 
         this.setState({
-            isShowEdit: false
+            isShowEdit: false,
+            isPatientShowEdit: false,
         })
     }
 
@@ -210,10 +215,17 @@ class ObjectManagementContainer extends React.Component{
         return this.state.selection.includes(key);
     };
 
-
+    handlePatientClick = (e) => {
+        this.setState({
+            isPatientShowEdit: true, 
+            // selectedRowData: [],
+            // formPath: addObject
+            formTitle: 'add inpatient',
+        })
+    }
 
     render(){
-        const { isShowEdit, selectedRowData } = this.state
+        const { isShowEdit, selectedRowData,isPatientShowEdit } = this.state
         const locale = this.context
 
         const { selectAll, selectType } = this.state;
@@ -238,8 +250,46 @@ class ObjectManagementContainer extends React.Component{
                         <Button variant='primary' className='text-capitalize' onClick={this.handleClickButton}>
                             {locale.texts.ADD_OBJECT}
                         </Button>
+                        {'     '}
+
+                    {/* 新增病人 */}
+                        <Button variant='primary' className='text-capitalize' onClick={this.handlePatientClick}>
+                            {locale.texts.ADD_INPATIENT}
+                        </Button>
+
+
+
                     </Col>
                 </Row>
+
+
+                <EditObjectForm 
+                    show = {isShowEdit} 
+                    title= {this.state.formTitle} 
+                    selectedObjectData={selectedRowData || null} 
+                    handleSubmitForm={this.handleSubmitForm}
+                    formPath={this.state.formPath}
+                    handleCloseForm={this.handleCloseForm}
+                    data={this.state.data}
+                    areaList={this.state.areaList}
+                />  
+
+                <EditPatientForm
+                    show = {isPatientShowEdit} 
+                    title= {this.state.formTitle} 
+                    selectedObjectData={selectedRowData || null} 
+                    handleSubmitForm={this.handleSubmitForm}
+                    formPath={this.state.formPath}
+                    handleCloseForm={this.handleCloseForm}
+                    data={this.state.data}
+                    areaList={this.state.areaList}
+                />  
+
+
+
+               {/*  isShowEdit = true 才會進表單 */}
+
+               
                 <Row className='d-flex w-100 justify-content-around'>
                     <Col className='py-2'>
                         <ReactTable 
@@ -253,6 +303,7 @@ class ObjectManagementContainer extends React.Component{
                                         this.setState({
                                             selectedRowData: this.state.data[rowInfo.index],
                                             isShowEdit: true,
+                                            isPatientShowEdit: true,
                                             formTitle: 'edit object',
                                             formPath: editObject
                                         })
@@ -298,16 +349,7 @@ class ObjectManagementContainer extends React.Component{
                         /> */}
                     </Col>
                 </Row>      
-                <EditObjectForm 
-                    show = {isShowEdit} 
-                    title= {this.state.formTitle} 
-                    selectedObjectData={selectedRowData || null} 
-                    handleSubmitForm={this.handleSubmitForm}
-                    formPath={this.state.formPath}
-                    handleCloseForm={this.handleCloseForm}
-                    data={this.state.data}
-                    areaList={this.state.areaList}
-                />                
+                            
             </Container>
                     
         )

@@ -18,6 +18,15 @@ const tw = {
     OBJECT_TYPE: "儀器類別",
     disable:"收起",
     count : "筆",
+    LAST_KNOWN_LOCATION:"最後位置",
+    MOVING:"移動中",
+    STATIONARY:"穩定中",
+    POSITION:"位置狀態",
+    POSITION_UNDEFINE:"選擇狀態",
+    ROOM_NUMBER:"病房編號",
+    ATTENDING_PHYSICIAN:"負責醫生",
+    BATTERY_ALERT:"電池更換提示",
+    PICTURE:"相關圖片",
 
     /* Location accuracy */
     LOCATION_ACCURACY: "位置精準度",
@@ -48,6 +57,7 @@ const tw = {
     DOWNLOAD: "下載",
     DELETE: "刪除",
     ADD_USER: "新增使用者",
+    ADD_INPATIENT:"新增病人",
     EDIT_DEVICES: "編輯儀器",
     SWITCH_AREA: "切換地點",
     FENCE_ON: "圍籬已開啟",

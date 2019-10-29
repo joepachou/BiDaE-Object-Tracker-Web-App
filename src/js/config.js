@@ -2,7 +2,7 @@ import IIS_SINICA_FLOOR_FOUR_MAP from "../img/map/iis_new_building_four_floor.pn
 import NTUH_YUNLIN_WARD_FIVE_B_MAP from "../img/map/ntuh_yunlin_branch_ward_five_b.png";
 import BOT_LOGO from "../img//logo/BOT_LOGO_RED.png";
 import moment from 'moment'
-
+import patientP from "../img//logo/pic.png"
 const config = {
     
     defaultAreaId: 3,
@@ -103,6 +103,11 @@ const config = {
 
     image: {
         logo: BOT_LOGO,
+    },
+
+    patientPicture:
+    {
+       logo :  patientP,
     },
 
     companyName: "BeDITech",

@@ -1,16 +1,10 @@
-/**
- * EditObjectForm is the Modal in ObjectManagementContainer.
- * To increase the input in this form, please add the following code
- * 1. Creat the state of the desired input name in constructor and the html content in render function
- * 2. Add the corresponding terms in handleSubmit and handleChange
- * 3. Modify the query_editObject function in queryType
- */
+
 import React from 'react';
-import { Modal, Button, Row, Col } from 'react-bootstrap';
+import { Modal, Image,Button, Row, Col } from 'react-bootstrap';
 import Select from 'react-select';
 import config from '../../config';
 import LocaleContext from '../../context/LocaleContext';
-import axios from 'axios';
+// import axios from 'axios';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import CheckboxGroup from './CheckboxGroup'
@@ -25,14 +19,12 @@ Object.keys(config.monitorType).forEach(key => {
     monitorTypeMap[config.monitorType[key]] = key
 })
   
-class EditObjectForm extends React.Component {
+class EditPatientForm extends React.Component {
     state = {
         show: this.props.show,
     };
-    /**
-     * EditObjectForm will update if user selects one of the object table.
-     * The selected object data will transfer from ObjectMangentContainer to EditObjectForm
-     */
+
+
     componentDidUpdate = (prevProps) => {
         if (!(_.isEqual(prevProps, this.props))) {
             this.setState({
@@ -45,16 +37,16 @@ class EditObjectForm extends React.Component {
         this.props.handleCloseForm()
     }
 
-    handleSubmit = (postOption) => {
-        const path = this.props.formPath
-        axios.post(path, {
-            formOption: postOption
-        }).then(res => {
-            setTimeout(this.props.handleSubmitForm(),1000)
-        }).catch( error => {
-            console.log(error)
-        })
-    }
+    // handleSubmit = (postOption) => {
+    //     const path = this.props.formPath
+    //     axios.post(path, {
+    //         formOption: postOption
+    //     }).then(res => {
+    //         setTimeout(this.props.handleSubmitForm(),1000)
+    //     }).catch( error => {
+    //         console.log(error)
+    //     })
+    // }
 
     render() {
         const locale = this.context
@@ -73,12 +65,18 @@ class EditObjectForm extends React.Component {
             }
         })
 
+     
         const areaOptions = Object.values(config.mapConfig.areaOptions).map(area => {
             return {
                 value: area,
                 label: locale.texts[area.toUpperCase().replace(/ /g, '_')]
             };
         })
+
+
+
+
+
 
         const style = {
             input: {
@@ -97,6 +95,11 @@ class EditObjectForm extends React.Component {
                 color: '#dc3545'
             },
         }
+
+        var patientPosition = [
+            { value: 'one', label: locale.texts.MOVING },
+            { value: 'two', label: locale.texts.STATIONARY }
+        ];
 
         const { title, selectedObjectData } = this.props;
         const { 
@@ -193,48 +196,14 @@ class EditObjectForm extends React.Component {
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
                             <Form className="text-capitalize">
-                                <div className="form-group">
-                                    <label htmlFor="name">{locale.texts.NAME}*</label>
-                                    <Field name="name" type="text" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} placeholder=''/>
-                                    <ErrorMessage name="name" component="div" className="invalid-feedback" />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="type">{locale.texts.TYPE}*</label>
-                                    <Field name="type" type="text" className={'form-control' + (errors.type && touched.type ? ' is-invalid' : '')} placeholder=''/>
-                                    <ErrorMessage name="type" component="div" className="invalid-feedback" />
-                                </div>
-
-
-                                {/* <div className="form-group">
-                                    <label htmlFor="asset_control_number" className='text-uppercase'>{locale.texts.ACN}*</label>
-                                    <Field 
-                                        name="asset_control_number" 
-                                        type="text" 
-                                        className={'form-control' + (errors.asset_control_number && touched.asset_control_number ? ' is-invalid' : '')} 
-                                        placeholder=''
-                                    />
-                                    <ErrorMessage name="asset_control_number" component="div" className="invalid-feedback" />
-                                </div> */}
-
-
-                                
-                                <div className="form-group">
-                                    <label htmlFor="mac_address">{locale.texts.MAC_ADDRESS}*</label>
-                                    <Field 
-                                        name="mac_address" 
-                                        type="text" 
-                                        className={'form-control' + (errors.mac_address && touched.mac_address ? ' is-invalid' : '')} 
-                                        disabled={title.toLowerCase() === locale.texts.EDIT_OBJECT}
-                                    />
-                                    <ErrorMessage name="mac_address" component="div" className="invalid-feedback" />
-                                </div>
-                                <hr/>
+                           
+                            
                                 <Row className="form-group my-3 text-capitalize" noGutters>
                                     <Col lg={3} className='d-flex align-items-center'>
                                         <label htmlFor="type">{locale.texts.AUTH_AREA}</label>
                                     </Col>
                                     <Col lg={9}>
-                                        <Select
+                                <Select
                                             placeholder = {locale.texts.SELECT_AREA}
                                             name="area"
                                             value = {values.area}
@@ -244,21 +213,98 @@ class EditObjectForm extends React.Component {
                                             components={{
                                                 IndicatorSeparator: () => null
                                             }}
+                                />
+                                    </Col>
+                                </Row>
+
+
+                                <Row className="form-group my-3 text-capitalize" noGutters>
+                                    <Col lg={3} className='d-flex align-items-center'>
+                                        <label htmlFor="type">{locale.texts.POSITION}</label>
+                                    </Col>
+
+
+                                    <Col lg={9}>
+                                        <Select
+                                            placeholder = {locale.texts.POSITION_UNDEFINE}
+                                            name="patientPositionName"
+                                            value = {values.area.patientPositionName}
+                                            onChange={value => setFieldValue("patientPositionName", value)}
+                                            options = {patientPosition}
+                                            style={style.select}
+                                            components={{
+                                                IndicatorSeparator: () => null
+                                            }}
                                         />
+
+
                                         <Row className='no-gutters' className='d-flex align-self-center'>
                                             <Col>
                                                 {touched.area && errors.area &&
                                                 <div style={style.errorMessage}>{errors.area}</div>}
                                             </Col>
                                         </Row>        
-                                    </Col>                                        
+                                    </Col> 
+                                       
                                 </Row>
-                                <hr/>
+
+    <hr/>
+                                <div className="form-group">
+                                    <label htmlFor="type">{locale.texts.LAST_KNOWN_LOCATION}*</label>
+                                    <Field name="type" type="text" className={'form-control' + (errors.type && touched.type ? ' is-invalid' : '')} placeholder=''/>
+                                    <ErrorMessage name="type" component="div" className="invalid-feedback" />
+                                </div>
+
+                             
+
+
+
+
+                                <div className="form-group">
+                                    <label htmlFor="name">{locale.texts.NAME}*</label>
+                                    <Field name="name" type="text" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} placeholder=''/>
+                                    <ErrorMessage name="name" component="div" className="invalid-feedback" />
+                                </div>
+
+
+                                <div className="form-group">
+                                    <label htmlFor="roomNumber">{locale.texts.ROOM_NUMBER}*</label>
+                                    <Field name="roomNumber" type="text" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} placeholder=''/>
+                                    <ErrorMessage name="roomNumber" component="div" className="invalid-feedback" />
+                                </div>
+
+                                <div className="form-group">
+                                    <label htmlFor="attendingPhysician">{locale.texts.ATTENDING_PHYSICIAN}*</label>
+                                    <Field name="attendingPhysician" type="text" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} placeholder=''/>
+                                    <ErrorMessage name="attendingPhysician" component="div" className="invalid-feedback" />
+                                </div>
+
+                                <div className="form-group">
+                                    <label htmlFor="patientStatus">{locale.texts.STATUS}*</label>
+                                    <Field name="patientStatus" type="text" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} placeholder=''/>
+                                    <ErrorMessage name="patientStatus" component="div" className="invalid-feedback" />
+                                </div>
+
+                                <div className="form-group">
+                                    <label htmlFor="patientStatus">{locale.texts.PICTURE}</label>
+                                </div>
+
+                                <Image src={config.patientPicture.logo} rounded width={470} height={200} ></Image>
+
+<hr/>
+
+
+
+
+
+
+
+
                                 <Row className="form-group my-3 text-capitalize">
                                     <Col>
                                         <RadioButtonGroup
                                             id="radioGroup"
-                                            label={locale.texts.STATUS}
+                                            label={locale.texts.BATTERY_ALERT}
                                             value={values.radioGroup}
                                             error={errors.radioGroup}
                                             touched={touched.radioGroup}
@@ -281,25 +327,7 @@ class EditObjectForm extends React.Component {
                                                 id={config.objectStatus.RESERVE}
                                                 label={locale.texts.RESERVE}
                                             />
-                                            <Field
-                                                component={RadioButton}
-                                                name="radioGroup"
-                                                id={config.objectStatus.TRANSFERRED}
-                                                label={locale.texts.TRANSFERRED}
-                                            />
-                                            <Select
-                                                name = "select"
-                                                value = {values.select}
-                                                onChange={value => setFieldValue("select", value)}
-                                                options={options}
-                                                isSearchable={false}
-                                                isDisabled={values.radioGroup !== config.objectStatus.TRANSFERRED}
-                                                style={style.select}
-                                                placeholder={locale.texts.SELECT_LOCATION}
-                                                components={{
-                                                    IndicatorSeparator: () => null
-                                                }}
-                                            />
+                                            
                                         </RadioButtonGroup>
                                         <Row className='no-gutters' className='d-flex align-self-center'>
                                             <Col>
@@ -312,29 +340,13 @@ class EditObjectForm extends React.Component {
                                     </Col>
                                 </Row>
                                 <hr/>
-                                <Row className="form-group my-3 text-capitalize">
-                                    <Col>
-                                        <CheckboxGroup
-                                            id="checkboxGroup"
-                                            label={locale.texts.MONITOR_TYPE}
-                                            value={values.checkboxGroup}
-                                            error={errors.checkboxGroup}
-                                            touched={touched.checkboxGroup}
-                                            onChange={setFieldValue}
-                                            // onBlur={setFieldTouched}
-                                        >
-                                            {Object.values(config.monitorType).map((item,index) => {
-                                                return <Field
-                                                    key={index}
-                                                    component={Checkbox}
-                                                    name="checkboxGroup"
-                                                    id={item}
-                                                    label={item}
-                                                />
-                                            })}
-                                        </CheckboxGroup>
-                                    </Col>
-                                </Row>
+
+
+                                <Col lg={3} className='text-capitalize'>
+                                        <label htmlFor="type">{'UUID' + '+' + 'MAC_Address:'}</label>
+                                </Col>
+
+
 
                                 <Modal.Footer>
                                     <Button variant="outline-secondary" className="text-capitalize" onClick={this.handleClose}>
@@ -353,6 +365,6 @@ class EditObjectForm extends React.Component {
     }
 }
 
-EditObjectForm.contextType = LocaleContext;
+EditPatientForm.contextType = LocaleContext;
   
-export default EditObjectForm;
+export default EditPatientForm;

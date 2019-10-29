@@ -18,6 +18,15 @@ const en =  {
     OBJECT_TYPE: "object types",
     disable:"disable",
     count : "records",
+    LAST_KNOWN_LOCATION:"Last known location",
+    MOVING:"Moving",
+    STATIONARY:"Stationary",
+    POSITION:"POSITION",
+    POSITION_UNDEFINE:"Select position status",
+    ROOM_NUMBER:"Room Number",
+    ATTENDING_PHYSICIAN:"attending physician",
+    BATTERY_ALERT:"battery replacement alert",
+    PICTURE:"Picture",
 
     /* Location accuracy */
     LOCATION_ACCURACY: "Location Accuracy",
@@ -48,6 +57,7 @@ const en =  {
     DOWNLOAD: "download",
     DELETE: "delete",
     ADD_USER: "add user",
+    ADD_INPATIENT:"add inpatient",
     EDIT_DEVICES: "edit devices",
     SWITCH_AREA: "switch area",
     FENCE_ON: "fence on",
