@@ -109,7 +109,9 @@ const tw = {
     PRINT_SEARCH_RESULT: "下載搜尋結果",
     EDIT_USER: "編輯使用者",
     REQUEST_FOR_DEVICE_REPARIE: "報修單",
-    BROKENDEVICE_LIST: "報修儀器列表",
+    DEVICE_TRANSFER_RECORD: "轉移單",
+    BROKEN_DEVICE_LIST: "報修儀器列表",
+    TRANSFERRED_DEVICE_LIST: "轉移儀器列表",
     WHOSE_DEVICES: "的儀器",
 
     /** Error Message */

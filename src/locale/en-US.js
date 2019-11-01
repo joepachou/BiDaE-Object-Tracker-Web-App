@@ -109,7 +109,9 @@ const en =  {
     PRINT_SEARCH_RESULT: "print search result",
     EDIT_USER: "edit user",
     REQUEST_FOR_DEVICE_REPARIE: "Request for device repair",
-    BROKENDEVICE_LIST: "broken device list",
+    DEVICE_TRANSFER_RECORD: "device transfer record",
+    BROKEN_DEVICE_LIST: "broken device list",
+    TRANSFERRED_DEVICE_LIST: "transferred device list",
     WHOSE_DEVICES: "'s devices",
 
     /** Error Message */
