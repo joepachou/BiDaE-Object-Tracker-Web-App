@@ -166,7 +166,8 @@ const config = {
     searchResultFolderPath: "search_result",
 
     folderPath: {
-        editObject: "edit_object_record",
+        broken: "edit_object_record",
+        transferred: "edit_object_record",
         shiftChange: "shift_record",
         searchResult: "search_result"
     },
@@ -209,246 +210,214 @@ const config = {
         "transferred"
     ],
 
-    pdfFormat: (userInfo, foundResult, notFoundResult, locale, time, option) => {
-        const hasFoundResult = foundResult.length !== 0
-        const hasNotFoundResult = notFoundResult.length !== 0
-        const title = config.getPDFTitle(userInfo, locale, time, option)
-
-        let foundTitle = hasFoundResult
-            ?   `<h3 style="text-transform: capitalize; margin-bottom: 10px; font-weight: bold">
-                    ${locale.texts.DEVICES_FOUND_IN}
-                    ${userInfo.areas_id.map(id => {
-                        return locale.texts[config.mapConfig.areaOptions[id]]
-                    })}
-                </h3>`
-            :   "";
-        let foundData = hasFoundResult 
-            ?   foundResult.map((item, index) => {
-                    return `
-                        <div key=${index} style="margin-bottom: 5px;">
-                            ${index + 1}.${item.name}, 
-                            ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn}, 
-                            ${locale.texts.NEAR}${item.location_description}
-                        </div>
-                    `
-                    
-                }).join(" ")
-            :   ""
-        let notFoundTitle = hasNotFoundResult 
-            ?   `<h3 className="mt-1" style="text-transform: capitalize; margin-bottom: 10px; font-weight: bold">
-                    ${locale.texts.DEVICES_NOT_FOUND_IN}
-                    ${userInfo.areas_id.map(id => {
-                        return locale.texts[config.mapConfig.areaOptions[id]]
-                    })}
-                </h3>`
-            :   "";
-        let notFoundData = hasNotFoundResult 
-            ?   notFoundResult.map((item, index) => {
-                    return `
-                        <div key=${index} style="margin-bottom: 5px;">
-                            ${index + 1}.${item.name}, 
-                            ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn}, 
-                            ${locale.texts.NEAR}${item.location_description}
-                        </div>
-                    `
-                }).join(" ")
-            :   "";
-        let pdfFormat = title + foundTitle + foundData + notFoundTitle + notFoundData
-        return pdfFormat
-    },
-
-    /** g */
+    /** Create pdf package, including header, body and the pdf path
+     * options include shiftChange, searchResult, broken report, transffered report
+     */
     getPdfPackage: (option, user, data, locale) => {
-        const header = config.getPdfHeader(user, locale, null, option,)
-        const body = config.getPdfBody[option](data, locale)
-        const path = config.getPdfPath(option)
+        const header = config.pdfFormat.getHeader(user, locale, option)
+        const body = config.pdfFormat.getBody[option](data, locale, user)
+        const path = config.pdfFormat.getPath(option, user)
         const pdf = header + body
 
         return {
             pdf,
             path,
-            options: config.pdfOptions
+            options: config.pdfFormat.pdfOptions
         }
     },
 
-    /** The pdf option setting in html-pdf */
-    pdfOptions: {
-        "format": "A4",
-        "orientation": "portrait",
-        "border": "1cm",
-        "timeout": "120000"
-    },
-
-    getPdfPath: (option) =>{
-        let fileDir = config.folderPath[option]
-        let fileName = `${fileDir}_${moment().format(config.pdfFileNameTimeFormat)}.pdf`
-        let filePath = `${fileDir}/${fileName}`
-        return filePath
-    },
-
-    pdfFileName: {
-        editObject: () => {
-            return ``
+    /** Pdf format config */
+    pdfFormat: {
+        getHeader: (user, locale, option) => {
+            let title = config.pdfFormat.getTitle(option, locale)
+            let timestamp = config.pdfFormat.getTimeStamp(locale)
+            let titleInfo = config.pdfFormat.getSubTitle[option](locale, user)
+            return title + timestamp + titleInfo
         },
-
-    },
-
-    getPdfBody: {
-        editObject: (data, locale) => {
-            let title = `
-                <h3 style="text-transform: capitalize; margin-bottom: 5px; font-weight: bold">
-                    ${locale.texts.BROKENDEVICE_LIST}
-                </h3>
+    
+        getTitle: (option, locale) => {
+            return `
+                <h1 style="text-transform: capitalize;">
+                    ${locale.texts[config.pdfFormat.pdfTitle[option]]}
+                </h1>
             `
-            
-            let list = data.map((item, index) => {
+        },
+    
+        getTimeStamp: (locale) => {
+            return `
+                <div style="text-transform: capitalize;">
+                    ${locale.texts.DATE_TIME}: ${moment().locale(locale.abbr).format('LLL')}
+                </div>
+            `
+        },
+    
+        pdfTitle: {
+            broken: "REQUEST_FOR_DEVICE_REPARIE",
+            transferred: "DEVICE_TRANSFER_RECORD",
+            shiftChange: "SHIFT_CHANGE_RECORD",
+            searchResult: "SEARCH_RESULT",
+        },
+    
+
+        getPath: (option, user) =>{
+            let fileDir = config.folderPath[option]
+            let fileName = config.pdfFormat.getFileName[option](user, option)
+            let filePath = `${fileDir}/${fileName}`
+    
+            return filePath
+        },
+    
+        getFileName: {
+            broken: (user, option) => {
+                return `${option}_report_${moment().format(config.pdfFileNameTimeFormat)}.pdf`
+            },
+            transferred: (user, option) => {
+                return `${option}_report_${moment().format(config.pdfFileNameTimeFormat)}.pdf`
+            },
+            shiftChange: (user) => {
+                return `${user.name}_${user.shift.replace(/ /g, '_')}_${moment().format(config.pdfFileNameTimeFormat)}.pdf`
+            },
+            searchResult: (user, option) => {
+                return `${option}_${moment().format(config.pdfFileNameTimeFormat)}.pdf`
+            },
+        },
+    
+        getBody: {
+            broken: (data, locale) => {
+                let title = config.pdfFormat.getBodyItem.getBodyTitle("broken device list", locale)
+                let list = config.pdfFormat.getBodyItem.getDataContent(data, locale)
+                let notes = config.pdfFormat.getBodyItem.getNotes(data)
+                return title + list + notes
+            },
+            transferred: (data, locale) => {
+                let title = config.pdfFormat.getBodyItem.getBodyTitle("transferred device list", locale)
+                let list = config.pdfFormat.getBodyItem.getDataContent(data, locale)
+                let notes = config.pdfFormat.getBodyItem.getNotes(data)
+                return title + list + notes
+            },
+            shiftChange: (data, locale, user) => {
+                let foundTitle = config.pdfFormat.getBodyItem.getBodyTitle(
+                    "devices found in", 
+                    locale, 
+                    user, 
+                    data.foundResult.length !== 0
+                )
+                let foundResultList = config.pdfFormat.getBodyItem.getDataContent(data.foundResult, locale)
+                let notFoundTitle = config.pdfFormat.getBodyItem.getBodyTitle(
+                    "devices not found in", 
+                    locale, 
+                    user, 
+                    data.notFoundResult.length !== 0
+                )
+                let notFoundResultList = config.pdfFormat.getBodyItem.getDataContent(data.notFoundResult, locale)
+                return foundTitle + foundResultList + notFoundTitle + notFoundResultList
+            },
+            searchResult: (data, locale, user) => {
+                let foundTitle = config.pdfFormat.getBodyItem.getBodyTitle(
+                    "devices found in", 
+                    locale, 
+                    user, 
+                    data.foundResult.length !== 0
+                )
+                let foundResultList = config.pdfFormat.getBodyItem.getDataContent(data.foundResult, locale)
+                let notFoundTitle = config.pdfFormat.getBodyItem.getBodyTitle(
+                    "devices not found in", 
+                    locale, 
+                    user, 
+                    data.notFoundResult.length !== 0
+                )
+                let notFoundResultList = config.pdfFormat.getBodyItem.getDataContent(data.notFoundResult, locale)
+                return foundTitle + foundResultList + notFoundTitle + notFoundResultList
+            },
+        },
+        getBodyItem: {
+    
+            getBodyTitle: (title, locale, user, hasTitle = true) => {
+                return hasTitle 
+                    ?   `
+                        <h3 style="text-transform: capitalize; margin-bottom: 5px; font-weight: bold">
+                            ${locale.texts[title.toUpperCase().replace(/ /g, '_')]}
+                            ${user 
+                                ?   user.areas_id.map(id => {
+                                        return locale.texts[config.mapConfig.areaOptions[id]]
+                                    })
+                                : ''
+                            }
+                        </h3>
+                    `
+                    : ``;
+            },
+    
+            getDataContent: (data, locale) => {
+                return data.map((item, index) => {
+                    return `
+                        <div key=${index} style="text-transform: capitalize; margin: 10px;">
+                            ${index + 1}.${item.name}, 
+                            ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}: ${item.last_four_acn}, 
+                            ${locale.texts.NEAR}${item.location_description}
+                        </div>
+                    `
+                }).join(" ")
+            },
+    
+            getNotes: (data) => {
                 return `
-                    <div key=${index} style="text-transform: capitalize; margin: 10px;">
-                        ${index + 1}.${item.name}, 
-                        ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}: ${item.last_four_acn}, 
-                        ${locale.texts.NEAR}${item.location_description}
-                    </div>
+                    <h3 style="text-transform: capitalize; margin-bottom: 5px; font-weight: bold">
+                        ${data[0].notes ? `${locale.texts.NOTE}: ${data[0].notes}` : ''}
+                    </h3>
                 `
-            }).join(" ")
-
-            let notes = `
-                <h3 style="text-transform: capitalize; margin-bottom: 5px; font-weight: bold">
-                    ${data[0].notes ? `${locale.texts.NOTE}: ${data[0].notes}` : ''}
-                </h3>
-            `
-            return title + list + notes
-        }
-    },
-
-    getPdfFormat: (userInfo, foundResult, notFoundResult, locale, time, option) => {
-        const hasFoundResult = foundResult.length !== 0
-        const hasNotFoundResult = notFoundResult.length !== 0
-        const title = config.getPDFTitle(userInfo, locale, time, option)
-
-        let foundTitle = hasFoundResult
-            ?   `<h3 style="text-transform: capitalize; margin-bottom: 5px; font-weight: bold">
-                    ${locale.texts.DEVICES_FOUND_IN}
-                    ${userInfo.areas_id.map(id => {
-                        return locale.texts[config.mapConfig.areaOptions[id]]
-                    })}
-                </h3>`
-            :   "";
-        let foundData = hasFoundResult 
-            ?   foundResult.map((item, index) => {
-                    return `
-                        <div key=${index} style="text-transform: capitalize; margin: 10px;">
-                            ${index + 1}.${item.name}, 
-                            ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}: ${item.last_four_acn}, 
-                            ${locale.texts.NEAR}${item.location_description}
-                        </div>
-                    `
-                    
-                }).join(" ")
-            :   ""
-        let notFoundTitle = hasNotFoundResult 
-            ?   `<h3 className="mt-1" style="text-transform: capitalize; margin-bottom: 5px; font-weight: bold">
-                    ${locale.texts.DEVICES_NOT_FOUND_IN}
-                    ${userInfo.areas_id.map(id => {
-                        return locale.texts[config.mapConfig.areaOptions[id]]
-                    })}
-                </h3>`
-            :   "";
-        let notFoundData = hasNotFoundResult 
-            ?   notFoundResult.map((item, index) => {
-                    return `
-                        <div key=${index} style="text-transform: capitalize; margin: 10px;">
-                            ${index + 1}.${item.name}, 
-                            ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}: ${item.last_four_acn}, 
-                            ${locale.texts.NEAR}${item.location_description}
-                        </div>
-                    `
-                }).join(" ")
-            :   "";
-        let pdfFormat = title + foundTitle + foundData + notFoundTitle + notFoundData
-        return pdfFormat
-    },
-
-    getPDFTitle: (userInfo, locale, time, option) => {
-        let timestamp = `<div style="text-transform: capitalize;">${locale.texts.DATE_TIME}: ${time}</div>`
-        let header;
-        switch(option) {
-            case "shiftChange":
-                const nextShiftIndex = (config.shiftOption.indexOf(userInfo.shift) + 1) % config.shiftOption.length
+            }
+        },
+    
+        getSubTitle: {
+            shiftChange: (locale, user) => {
+                const nextShiftIndex = (config.shiftOption.indexOf(user.shift) + 1) % config.shiftOption.length
                 const nextShift = locale.texts[config.shiftOption[nextShiftIndex].toUpperCase().replace(/ /g, "_")]
-                const thisShift = locale.texts[userInfo.shift.toUpperCase().replace(/ /g, "_")]
-                // header = `<h1 style="text-transform: capitalize;">
-                //         ${locale.texts.SHIFT_CHANGE_RECORD}-${locale.texts.CONFIRM_BY}
-                //     </h1>`
-                header = `<h1 style="text-transform: capitalize;">
-                    ${locale.texts.SHIFT_CHANGE_RECORD}
-                </h1>`
+                const thisShift = locale.texts[user.shift.toUpperCase().replace(/ /g, "_")]
                 let shift = `<div style="text-transform: capitalize;">
                         ${locale.texts.SHIFT}: ${thisShift} ${locale.texts.SHIFT_TO} ${nextShift}
                     </div>`
                 let checkby = `<div style="text-transform: capitalize;">
-                        ${locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: ${userInfo.name}, ${thisShift}
+                        ${locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: ${user.name}, ${thisShift}
                     </div>`
-                return header + timestamp + shift + checkby
-            case "searchResult":
-                header = `<h1 style="text-transform: capitalize;">
-                        ${locale.texts.SEARCH_RESULT}
-                    </h1>`
-                return header + timestamp
-            case "editObject":
-                header = `<h1 style="text-transform: capitalize;">
-                        ${locale.texts.REQUEST_FOR_DEVICE_REPARIE}
-                    </h1>`
-                return header
-        }
-
-    },
-
-    getPdfHeader: (user, locale, time, option) => {
-        let title = `<h1 style="text-transform: capitalize;">
-            ${locale.texts[config.pdfTitle[option]]}
-        </h1>
-        `
-        let timestamp = `
-            <div style="text-transform: capitalize;">
-                ${locale.texts.DATE_TIME}: ${moment().locale(locale.abbr).format('LLL')}
-            </div>
-        `
-
-        let titleInfo = config.pdfTitleInfo[option](locale, user)
-        return title + timestamp + titleInfo
-
-    },
-
-    pdfTitleInfo: {
-        shiftChange: (locale, user) => {
-            const nextShiftIndex = (config.shiftOption.indexOf(user.shift) + 1) % config.shiftOption.length
-            const nextShift = locale.texts[config.shiftOption[nextShiftIndex].toUpperCase().replace(/ /g, "_")]
-            const thisShift = locale.texts[user.shift.toUpperCase().replace(/ /g, "_")]
-            let shift = `<div style="text-transform: capitalize;">
-                    ${locale.texts.SHIFT}: ${thisShift} ${locale.texts.SHIFT_TO} ${nextShift}
-                </div>`
-            let checkby = `<div style="text-transform: capitalize;">
-                    ${locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: ${user.name}, ${thisShift}
-                </div>`
-            return shift + checkby
-        },
-        searchResult: (locale) => {
-
-        },
-        editObject: (locale, user) => {
-            let info = `<div style="text-transform: capitalize;">
-                    ${locale.texts.USERNAME}: ${user.name}
-                </div>`
-            return info
-        }
-    },
-
+                return shift + checkby
+            },
     
-    pdfTitle: {
-        editObject: "REQUEST_FOR_DEVICE_REPARIE"
+            searchResult: (locale, user) => {
+                let username = config.pdfFormat.getSubTitleInfo.username(locale, user)
+                return username
+            },
+            broken: (locale, user) => {
+                let username = config.pdfFormat.getSubTitleInfo.username(locale, user)
+                return username
+            },
+            transferred: (locale, user) => {
+                let username = config.pdfFormat.getSubTitleInfo.username(locale, user)
+                return username
+            }
+        },
+    
+        getSubTitleInfo: {
+            username: (locale, user) => {
+                return `
+                    <div style="text-transform: capitalize;">
+                        ${locale.texts.USERNAME}: ${user.name}
+                    </div>
+                `
+            },
+        },
+
+        /** The pdf option setting in html-pdf */
+        pdfOptions: {
+            "format": "A4",
+            "orientation": "portrait",
+            "border": "1cm",
+            "timeout": "12000"
+        },
     },
 
-    /** Set the map option.
+
+    /** Map configuration.
      *  Refer leaflet.js for more option setting https://leafletjs.com/reference-1.5.0.html
      */
     mapConfig: {

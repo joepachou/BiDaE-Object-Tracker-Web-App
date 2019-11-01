@@ -170,11 +170,15 @@ class SearchResult extends React.Component {
 
     handleConfirmFormSubmit = (e) => {
         let { editedObjectPackage } = this.state;
-        let { auth, stateReducer } = this.context
+        let { locale, auth, stateReducer } = this.context
         let [{}, dispatch] = stateReducer
         let username = auth.user.name
         let shouldCreatePdf = config.statusToCreatePdf.includes(editedObjectPackage[0].status)
-        let pdfPackage = shouldCreatePdf && this.createPdfPackage()
+        let status = editedObjectPackage[0].status
+
+        /** Create the pdf package, including pdf, pdf setting and path */
+        let pdfPackage = shouldCreatePdf && config.getPdfPackage(status, auth.user, this.state.editedObjectPackage, locale)
+        
         axios.post(dataSrc.editObjectPackage, {
             formOption: editedObjectPackage,
             username,
@@ -199,10 +203,6 @@ class SearchResult extends React.Component {
                 .bind(this),
                 1000
             )
-            // toast(<Toast />, {
-            //     closeOnClick: false,
-            //     position: "top-right",
-            // })
         }).catch( error => {
             console.log(error)
         })
@@ -213,13 +213,6 @@ class SearchResult extends React.Component {
         this.setState({ 
             showNotFoundResult: !this.state.showNotFoundResult 
         })
-    }
-
-    /** Create the content of pdf */
-    createPdfPackage = () => {
-        let { locale, auth } = this.context
-        let pdfPackage = config.getPdfPackage('editObject', auth.user, this.state.editedObjectPackage, locale)
-        return pdfPackage
     }
 
     handleAdditionalButton = (text) => {
@@ -371,11 +364,11 @@ class SearchResult extends React.Component {
                     handleConfirmFormSubmit={this.handleConfirmFormSubmit}
                     showDownloadPdfRequest={this.state.showDownloadPdfRequest}
                 />
-                {/* <DownloadPdfRequestForm
+                <DownloadPdfRequestForm
                     show={this.state.showDownloadPdfRequest} 
                     pdfPath={this.state.pdfPath}
                     close={this.handleFormClose}
-                /> */}
+                />
             </div>
         )
     }

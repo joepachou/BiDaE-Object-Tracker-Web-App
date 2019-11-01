@@ -214,13 +214,17 @@ const editObjectPackage = (request, response) => {
     pool.query(queryType.query_addEditObjectRecord(formOption, username))
         .then(res => {
             const record_id = res.rows[0].id
+            console.log('Add edited object record success')
+
             pool.query(queryType.query_editObjectPackage(formOption, record_id))
                 .then(res => {
                     console.log('Edit object package success')
+                    console.log(pdfPackage.pdf)
+
                     pdf.create(pdfPackage.pdf, pdfPackage.options).toFile(pdfPackage.path, function(err, result) {
                         if (err) return console.log(err);
                     
-                        console.log("pdf create");
+                        console.log("pdf create success");
                         response.status(200).json(pdfPackage.path)
                     });
                 })
@@ -367,40 +371,32 @@ const editLbeacon = (request, response) => {
     })
 }
 
-let pdfOptions = {
-    "format": "A4",
-    "orientation": "portrait",
-    "border": "1cm",
-    "timeout": "120000"
-};
-
 const generatePDF = (request, response) => {
-    let { pdfFormat, userInfo, filePath } = request.body
+    let { pdfPackage } = request.body
 
     /** If there are some trouble when download pdf, try npm rebuild phantomjs-prebuilt */
-    pdf.create(pdfFormat, pdfOptions).toFile(filePath, function(err, result) {
+    pdf.create(pdfPackage.pdf, pdfPackage.options).toFile(pdfPackage.path, function(err, result) {
         if (err) return console.log(err);
     
         console.log("pdf create");
-        response.status(200).json(filePath)
+        response.status(200).json(pdfPackage.path)
     });
 }
 
 const addShiftChangeRecord = (request, response) => {
-    let { pdfFormat, userInfo, filePath } = request.body
+    let { userInfo, filePath, pdfPackage } = request.body
 
     /** If there are some trouble when download pdf, try npm rebuild phantomjs-prebuilt */
     pool.query(queryType.query_addShiftChangeRecord(userInfo, filePath))
         .then(res => {
-            
-            /** If there are some trouble when download pdf, try npm rebuild phantomjs-prebuilt */
-            pdf.create(pdfFormat, pdfOptions).toFile(filePath, function(err, result) {
+
+             /** If there are some trouble when download pdf, try npm rebuild phantomjs-prebuilt */
+            pdf.create(pdfPackage.pdf, pdfPackage.options).toFile(pdfPackage.path, function(err, result) {
                 if (err) return console.log(err);
             
                 console.log("pdf create");
-                response.status(200).json(filePath)
+                response.status(200).json(pdfPackage.path)
             });
-
         })
         .catch(err => {
             console.log(`pdf create fail: ${err}`)

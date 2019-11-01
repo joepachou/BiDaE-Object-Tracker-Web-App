@@ -28,7 +28,7 @@ class ShiftChange extends React.Component {
                 foundResult: [],
                 notFoundResult: [],
             },
-            fileURL: '',
+            fileUrl: '',
             showPdfDownloadForm: false,
             APIforTableDone: false,
         }
@@ -122,22 +122,15 @@ class ShiftChange extends React.Component {
     }
 
     confirmShift = () => {
-        let userInfo = this.props.userInfo
-        let { locale } = this.context
-        let contentTime = moment().locale(locale.abbr).format(config.shiftChangeRecordTimeFormat)
-        let fileNameTime = moment().locale('en').format(config.shiftRecordFileNameTimeFormat)
-        const { foundResult, notFoundResult } = this.state.searchResult
-        let pdfFormat = config.pdfFormat(userInfo, foundResult, notFoundResult, locale, contentTime, 'shiftChange')
-        let fileDir = config.shiftRecordFolderPath
-        let fileName = `${userInfo.name}_${userInfo.shift.replace(/ /g, '_')}_${fileNameTime}.pdf`
-        let filePath = `${fileDir}/${fileName}`
+        let { locale, auth } = this.context    
+        let pdfPackage = config.getPdfPackage('shiftChange', auth.user, this.state.searchResult ,locale)
+
         axios.post(dataSrc.addShiftChangeRecord, {
-            userInfo,
-            pdfFormat,
-            filePath,
+            userInfo: auth.user,
+            pdfPackage,
         }).then(res => {
             this.setState({
-                fileURL: res.data
+                fileUrl: pdfPackage.path
             })
             this.refs.download.click()
         }).catch(err => {
@@ -256,7 +249,7 @@ class ShiftChange extends React.Component {
                         >
                             {locale.texts.CONFIRM}
                         </Button>
-                        <a href={this.state.fileURL} ref="download" download style={{display: 'none'}}>hi</a>
+                        <a href={this.state.fileUrl} ref="download" download style={{display: 'none'}}>hi</a>
                     </Modal.Footer>
                 </Modal>
             </Fragment>
