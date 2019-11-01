@@ -75,6 +75,14 @@ class FrequentSearch extends React.Component {
                     >
                         <Button
                             variant="outline-custom"
+                            onClick={this.handleClick}
+                            name = 'my patient'
+                        >
+                            {locale.texts.MY_PATIENT}
+                        </Button>
+
+                        <Button
+                            variant="outline-custom"
                             onClick={this.handleClick} 
                             // active={this.state.searchKey === 'my devices'}
                             name='my devices'
@@ -82,7 +90,14 @@ class FrequentSearch extends React.Component {
                             {locale.texts.MY_DEVICE}
                         </Button>
                     </AccessControl>
-                
+                    <Button 
+                        variant="outline-custom"
+                        onClick={this.handleClick} 
+                        // active={this.state.searchKey === 'all devices'}
+                        name='all patient'
+                    >
+                        {locale.texts.ALL_PATIENT}
+                    </Button>
                     <Button 
                         variant="outline-custom"
                         onClick={this.handleClick} 

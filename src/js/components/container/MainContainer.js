@@ -15,6 +15,8 @@ import ToastNotification from '../presentational/ToastNotification'
 
 const myDevices = config.frequentSearchOption.MY_DEVICES ;
 const allDevices = config.frequentSearchOption.ALL_DEVICES;
+const myPatient = config.frequentSearchOption.MY_PATIENT;
+const allPatient = config.frequentSearchOption.ALL_PATIENT;
 
 class MainContainer extends React.Component{
 
@@ -317,7 +319,21 @@ class MainContainer extends React.Component{
                     item.searched = auth.user.areas_id.includes(item.area_id) ? true : false
                     return item
                 })
-        } else if (searchKey === 'coordinate') {
+        } else if (searchKey === myPatient){
+            const devicesAccessControlNumber = auth.user.myDevice || []
+            proccessedTrackingData.map(item => {
+                if (devicesAccessControlNumber.includes(item.asset_control_number)) {
+                    item.searched = true;
+                    searchResult.push(item)
+                }
+            })
+        } else if (searchKey === allPatient){
+            searchResult = proccessedTrackingData.filter(item => item.object_type != 0)
+            .map(item => {
+                item.searched = auth.user.areas_id.includes(item.area_id) ? true : false
+                return item
+            })
+        }else if (searchKey === 'coordinate') {
             searchResult = this.collectObjectsByLatLng(searchValue,proccessedTrackingData)
         } else if (typeof searchKey === 'object') {
             proccessedTrackingData.map(item => {

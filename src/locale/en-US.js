@@ -36,7 +36,9 @@ const en =  {
 
     /* List title */
     ALL_DEVICE: "All Devices",
+    ALL_PATIENT: "All patient",
     MY_DEVICE: "My Devices",
+    MY_PATIENT: "My patient",
     DEVICES_FOUND: "devices found",
     DEVICES_NOT_FOUND: "devices not found",
 
