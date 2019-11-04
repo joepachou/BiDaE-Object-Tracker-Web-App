@@ -213,9 +213,9 @@ const config = {
     /** Create pdf package, including header, body and the pdf path
      * options include shiftChange, searchResult, broken report, transffered report
      */
-    getPdfPackage: (option, user, data, locale) => {
+    getPdfPackage: (option, user, data, locale, location) => {
         const header = config.pdfFormat.getHeader(user, locale, option)
-        const body = config.pdfFormat.getBody[option](data, locale, user)
+        const body = config.pdfFormat.getBody[option](data, locale, user, location)
         const path = config.pdfFormat.getPath(option, user)
         const pdf = header + body
 
@@ -290,40 +290,46 @@ const config = {
                 return title + list + notes
             },
             transferred: (data, locale) => {
-                let title = config.pdfFormat.getBodyItem.getBodyTitle("transferred device list", locale)
+                // console.log(data[0].transferred_location.value.split(','))
+                let area = data[0].transferred_location.label
+                let signature_title = config.pdfFormat.getBodyItem.getBodyTitle("transferred to", locale, area)
+                let list_title = config.pdfFormat.getBodyItem.getBodyTitle("transferred device list", locale)
+                let signature = config.pdfFormat.getBodyItem.getSignature(locale)
                 let list = config.pdfFormat.getBodyItem.getDataContent(data, locale)
                 let notes = config.pdfFormat.getBodyItem.getNotes(data)
-                return title + list + notes
+                return signature_title + signature + list_title + list + notes
             },
             shiftChange: (data, locale, user) => {
+                let area =  locale.texts[config.mapConfig.areaOptions[parseInt(user.areas_id[0])]]
                 let foundTitle = config.pdfFormat.getBodyItem.getBodyTitle(
                     "devices found in", 
                     locale, 
-                    user, 
+                    area,
                     data.foundResult.length !== 0
                 )
                 let foundResultList = config.pdfFormat.getBodyItem.getDataContent(data.foundResult, locale)
                 let notFoundTitle = config.pdfFormat.getBodyItem.getBodyTitle(
                     "devices not found in", 
                     locale, 
-                    user, 
+                    area,
                     data.notFoundResult.length !== 0
                 )
                 let notFoundResultList = config.pdfFormat.getBodyItem.getDataContent(data.notFoundResult, locale)
                 return foundTitle + foundResultList + notFoundTitle + notFoundResultList
             },
-            searchResult: (data, locale, user) => {
+            searchResult: (data, locale, user, location) => {
+                let area =  locale.texts[config.mapConfig.areaOptions[parseInt(user.areas_id[0])]]
                 let foundTitle = config.pdfFormat.getBodyItem.getBodyTitle(
                     "devices found in", 
                     locale, 
-                    user, 
+                    area, 
                     data.foundResult.length !== 0
                 )
                 let foundResultList = config.pdfFormat.getBodyItem.getDataContent(data.foundResult, locale)
                 let notFoundTitle = config.pdfFormat.getBodyItem.getBodyTitle(
                     "devices not found in", 
                     locale, 
-                    user, 
+                    area,
                     data.notFoundResult.length !== 0
                 )
                 let notFoundResultList = config.pdfFormat.getBodyItem.getDataContent(data.notFoundResult, locale)
@@ -331,18 +337,12 @@ const config = {
             },
         },
         getBodyItem: {
-    
-            getBodyTitle: (title, locale, user, hasTitle = true) => {
+            getBodyTitle: (title, locale, area, hasTitle = true) => {
                 return hasTitle 
                     ?   `
                         <h3 style="text-transform: capitalize; margin-bottom: 5px; font-weight: bold">
                             ${locale.texts[title.toUpperCase().replace(/ /g, '_')]}
-                            ${user 
-                                ?   user.areas_id.map(id => {
-                                        return locale.texts[config.mapConfig.areaOptions[id]]
-                                    })
-                                : ''
-                            }
+                            ${area ? area : ''}
                         </h3>
                     `
                     : ``;
@@ -365,6 +365,49 @@ const config = {
                     <h3 style="text-transform: capitalize; margin-bottom: 5px; font-weight: bold">
                         ${data[0].notes ? `${locale.texts.NOTE}: ${data[0].notes}` : ''}
                     </h3>
+                `
+            },
+
+            getSignature: (locale) => {
+                return `
+                    <div style="text-transform: capitalize; margin: 10px width: 200px;">
+                        <div style="text-transform: capitalize; margin: 10px width: 100%;">
+                            <p style="display: inline">${locale.texts.RECEIVER_ID}:</p>
+                            <input 
+                                style="
+                                    width: 100%; 
+                                    border-bottom: 1px solid black; 
+                                    border-top: 0;
+                                    border-left: 0;
+                                    border-right: 0;
+                                    display: inline-block"
+                            />
+                        </div>
+                        <div style="text-transform: capitalize; margin: 10px width: 100%;">
+                            <p style="display: inline">${locale.texts.RECEIVER_NAME}:</p>
+                            <input 
+                                style="
+                                    width: 100%; 
+                                    border-bottom: 1px solid black; 
+                                    border-top: 0;
+                                    border-left: 0;
+                                    border-right: 0;
+                                    display: inline-block"
+                            />   
+                        </div>
+                        <div style="text-transform: capitalize; margin: 10px width: 100%;">
+                            <p style="display: inline">${locale.texts.RECEIVER_SIGNATURE}:</p>
+                            <input 
+                                style="
+                                    width: 100%; 
+                                    border-bottom: 1px solid black; 
+                                    border-top: 0;
+                                    border-left: 0;
+                                    border-right: 0;
+                                    display: inline-block"
+                            />                  
+                        </div>
+                    </div>
                 `
             }
         },
