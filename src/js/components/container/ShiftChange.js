@@ -123,7 +123,7 @@ class ShiftChange extends React.Component {
 
     confirmShift = () => {
         let { locale, auth } = this.context    
-        let pdfPackage = config.getPdfPackage('shiftChange', auth.user, this.state.searchResult ,locale)
+        let pdfPackage = config.getPdfPackage('shiftChange', auth.user, this.state.searchResult ,locale, )
 
         axios.post(dataSrc.addShiftChangeRecord, {
             userInfo: auth.user,
@@ -207,7 +207,7 @@ class ShiftChange extends React.Component {
                             <h6 className="text-capitalize">{locale.texts.DEVICES_FOUND_IN} {auth.user.areas_id.map(id => {
                                     return locale.texts[config.mapConfig.areaOptions[id]]
                                 })}
-                            </h6>}                    
+                            </h6>}     
                             {hasFoundResult && foundResult.map((item, index) => {
                                 return (
                                     <div key={index} className="pb-1">

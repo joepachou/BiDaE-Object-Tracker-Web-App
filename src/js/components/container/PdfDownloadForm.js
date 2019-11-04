@@ -55,8 +55,9 @@ class PdfDownloadForm extends React.Component {
                 item.found ? data.foundResult.push(item) : data.notFoundResult.push(item)
             }
 
-            let { locale, auth } = this.context
-            let pdfPackage = config.getPdfPackage('searchResult', auth.user, data, locale)
+            let { locale, auth, stateReducer } = this.context
+            let [{areaId}] = stateReducer
+            let pdfPackage = config.getPdfPackage('searchResult', auth.user, data, locale, areaId)
 
             var searResultInfo = {
                 userInfo: auth.user,
