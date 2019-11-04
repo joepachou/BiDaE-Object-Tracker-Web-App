@@ -99,6 +99,9 @@ const en =  {
     DATE_TIME: "date/time",
     DEVICE_LOCATION_STATUS_CHECKED_BY: "device location/status checked by",
     AUTH_AREA: "auth area",
+    RECEIVER_ID: "receiver ID",
+    RECEIVER_NAME: "receiver name",
+    RECEIVER_SIGNATURE: "receiver signature",
 
     /** Form Title */
     EDIT_LBEACON: "edit lbeacon",
@@ -113,6 +116,7 @@ const en =  {
     BROKEN_DEVICE_LIST: "broken device list",
     TRANSFERRED_DEVICE_LIST: "transferred device list",
     WHOSE_DEVICES: "'s devices",
+    TRANSFERRED_TO: "transferred to",
 
     /** Error Message */
     NAME_IS_REQUIRED: "Name is required",

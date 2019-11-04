@@ -99,6 +99,9 @@ const tw = {
     DATE_TIME: "時間",
     DEVICE_LOCATION_STATUS_CHECKED_BY: "儀器狀態/地點確認 交接者",
     AUTH_AREA: "所屬地區",
+    RECEIVER_ID: "接收者ID",
+    RECEIVER_NAME: "接收者姓名",
+    RECEIVER_SIGNATURE: "接收者簽名",
 
     /** Form Title */
     EDIT_LBEACON: "編輯 lbeacon",
@@ -113,6 +116,7 @@ const tw = {
     BROKEN_DEVICE_LIST: "報修儀器列表",
     TRANSFERRED_DEVICE_LIST: "轉移儀器列表",
     WHOSE_DEVICES: "的儀器",
+    TRANSFERRED_TO: "轉移至",
 
     /** Error Message */
     NAME_IS_REQUIRED: "請填入名字",
