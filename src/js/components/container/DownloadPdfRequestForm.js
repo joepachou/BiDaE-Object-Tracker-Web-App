@@ -89,8 +89,8 @@ class DownloadPdfRequestForm extends React.Component {
                 zIndex: 3000,
                 // top: '20%',
                 // left: '-10%',
-                right: 'auto',
-                bottom: 'auto',
+                // right: 'auto',
+                // bottom: 'auto',
                 padding: 0,
             },
             icon: {
