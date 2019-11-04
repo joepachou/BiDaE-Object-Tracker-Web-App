@@ -219,14 +219,16 @@ const editObjectPackage = (request, response) => {
             pool.query(queryType.query_editObjectPackage(formOption, record_id))
                 .then(res => {
                     console.log('Edit object package success')
-                    console.log(pdfPackage.pdf)
-
-                    pdf.create(pdfPackage.pdf, pdfPackage.options).toFile(pdfPackage.path, function(err, result) {
-                        if (err) return console.log(err);
-                    
-                        console.log("pdf create success");
-                        response.status(200).json(pdfPackage.path)
-                    });
+                    if (pdfPackage) {
+                        pdf.create(pdfPackage.pdf, pdfPackage.options).toFile(pdfPackage.path, function(err, result) {
+                            if (err) return console.log(err);
+                        
+                            console.log("pdf create success");
+                            response.status(200).json(pdfPackage.path)
+                        });
+                    } else {
+                        response.status(200).json()
+                    }
                 })
                 .catch(err => {
                     console.log('Edit object package fail ' + err)
