@@ -192,6 +192,61 @@ function query_addObject (formOption) {
 	return query;
 }
 
+
+
+
+
+
+
+
+
+
+function query_addPatient (formOption) {
+	const text = 
+		`
+		INSERT INTO object_table (
+			physician_id,
+			asset_control_number, 
+			mac_address,
+			registered_timestamp
+		)
+		VALUES($1,$2,$3,now())
+		`;
+		
+	const values = [
+		formOption.patientName, 
+		formOption.asset_number,
+		formOption.mac_address, 
+	];
+
+	const query = {
+		text,
+		values
+	};
+
+	return query;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const query_editObjectPackage = (formOption, record_id) => {
 	let item = formOption[0]
 	let text = `
@@ -629,6 +684,7 @@ module.exports = {
 	query_getGeofenceData,
 	query_editObject,
 	query_addObject,
+	query_addPatient,
 	query_editObjectPackage,
 	query_signin,
 	query_signup,

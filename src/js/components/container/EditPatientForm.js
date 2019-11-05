@@ -1,17 +1,12 @@
 
 import React from 'react';
-import { Modal, Image,Button, Row, Col } from 'react-bootstrap';
+import { Modal, Button, Row, Col } from 'react-bootstrap';
 import Select from 'react-select';
 import config from '../../config';
 import LocaleContext from '../../context/LocaleContext';
-// import axios from 'axios';
+import axios from 'axios';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import CheckboxGroup from './CheckboxGroup'
-import Checkbox from '../presentational/Checkbox'
-import RadioButtonGroup from './RadioButtonGroup'
-import RadioButton from '../presentational/RadioButton'
-import { toast } from 'react-toastify';
 
 let monitorTypeMap = {};
 
@@ -37,16 +32,19 @@ class EditPatientForm extends React.Component {
         this.props.handleCloseForm()
     }
 
-    // handleSubmit = (postOption) => {
-    //     const path = this.props.formPath
-    //     axios.post(path, {
-    //         formOption: postOption
-    //     }).then(res => {
-    //         setTimeout(this.props.handleSubmitForm(),1000)
-    //     }).catch( error => {
-    //         console.log(error)
-    //     })
-    // }
+
+    
+    handleSubmit = (postOption) => {
+        const path = this.props.formPath
+        console.log(postOption)
+        axios.post(path, {
+            formOption: postOption
+        }).then(res => {
+            setTimeout(this.props.handleSubmitForm(),1000)
+        }).catch( error => {
+            console.log(error)
+        })
+    }
 
     render() {
         const locale = this.context
@@ -59,7 +57,6 @@ class EditPatientForm extends React.Component {
                     return {
                         value: `${location},${branch}`,
                         label: locale.texts[branch.toUpperCase().replace(/ /g, '_')],
-
                     }
                 })
             }
@@ -102,14 +99,13 @@ class EditPatientForm extends React.Component {
         ];
 
         const { title, selectedObjectData } = this.props;
+
         const { 
-            name,
-            type,
-            status = '',
-            asset_control_number,
+            patientName,
+            roomNumber,
+            attendingPhysician,
             mac_address,
-            transferred_location,
-            area_name,
+            asset_number,
         } = selectedObjectData
 
         return (
@@ -118,34 +114,35 @@ class EditPatientForm extends React.Component {
                     {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
                 </Modal.Header >
                 <Modal.Body>
+
+
+
+
+
+
+
+
+                
                     <Formik                    
-                        initialValues = {{
-                            name: name || '' ,
-                            type: type || '',
-                            asset_control_number: asset_control_number || '',
-                            mac_address: mac_address || '',
-                            radioGroup: status.value,
-                            area: area_name || '',
-                            select: status.value === config.objectStatus.TRANSFERRED 
-                                ? transferred_location
-                                : '',
-                            checkboxGroup: selectedObjectData.length !== 0 ? selectedObjectData.monitor_type.split(',') : []
+                       
+
+                       initialValues = {{
+                        patientName: patientName || '' ,
+                        roomNumber: roomNumber || '',
+                        attendingPhysician: attendingPhysician || '',
+                        mac_address: mac_address || '',
+                        asset_number: asset_number || '',    
                         }}
+
+
 
                         validationSchema = {
                             Yup.object().shape({
-                                name: Yup.string().required(locale.texts.NAME_IS_REQUIRED),
-                                type: Yup.string().required(locale.texts.TYPE_IS_REQUIRED),
-                                asset_control_number: Yup.string()
-                                    .required(locale.texts.ASSET_CONTROL_NUMBER_IS_REQUIRED)
-                                    .test(
-                                        'asset_control_number', 
-                                        locale.texts.THE_ASSET_CONTROL_NUMBER_IS_ALREADY_USED,
-                                        value => {
-                                            return value === selectedObjectData.asset_control_number || 
-                                                !this.props.data.map(item => item.asset_control_number).includes(value)
-                                        }
-                                    ),
+                                patientName: Yup.string().required(locale.texts.NAME_IS_REQUIRED),
+                                roomNumber: Yup.string().required('馬的給我填'),
+                                attendingPhysician: Yup.string().required('馬的給我填'),
+                                asset_number: Yup.string().required('馬的給我填'),
+
                                 mac_address: Yup.string()
                                     .required(locale.texts.MAC_ADDRESS_IS_REQUIRED)
                                     .test(
@@ -159,45 +156,50 @@ class EditPatientForm extends React.Component {
                                         'mac_address',
                                         locale.texts.THE_MAC_ADDRESS_FORM_IS_WRONG,
                                         value => {
+                                            if (value == undefined) return false
                                             var pattern = new RegExp("^[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}$");
-                                            //console.log(value)
                                             if( value.match(pattern)) return true
                                             return false
                                         }
                                     ),
-                                radioGroup: Yup.string().required(locale.texts.STATUS_IS_REQUIRED),
-
-                                select: Yup.string()
-                                    .when('radioGroup', {
-                                        is: config.objectStatus.TRANSFERRED,
-                                        then: Yup.string().required(locale.texts.LOCATION_IS_REQUIRED)
-                                    }),
-                                area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
+                                    
                         })}
 
+
                         onSubmit={(values, { setStatus, setSubmitting }) => {
-                            let monitor_type = values.checkboxGroup
-                                    .filter(item => item)
-                                    .reduce((sum, item) => {
-                                        sum += parseInt(monitorTypeMap[item])
-                                        return sum
-                                    },0)
                             const postOption = {
                                 ...values,
-                                status: values.radioGroup,
-                                transferred_location: values.radioGroup === config.objectStatus.TRANSFERRED 
-                                    ? values.select
-                                    : '',
-                                monitor_type: monitor_type,
-                                area_id: config.mapConfig.areaModules[values.area.value].id
                             }
                             this.handleSubmit(postOption)                            
                         }}
 
-                        render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (  
                             <Form className="text-capitalize">
-                           
-                            
                                 <Row className="form-group my-3 text-capitalize" noGutters>
                                     <Col lg={3} className='d-flex align-items-center'>
                                         <label htmlFor="type">{locale.texts.AUTH_AREA}</label>
@@ -216,28 +218,8 @@ class EditPatientForm extends React.Component {
                                 />
                                     </Col>
                                 </Row>
-
-
                                 <Row className="form-group my-3 text-capitalize" noGutters>
-                                    <Col lg={3} className='d-flex align-items-center'>
-                                        <label htmlFor="type">{locale.texts.POSITION}</label>
-                                    </Col>
-
-
-                                    <Col lg={9}>
-                                        <Select
-                                            placeholder = {locale.texts.POSITION_UNDEFINE}
-                                            name="patientPositionName"
-                                            value = {values.area.patientPositionName}
-                                            onChange={value => setFieldValue("patientPositionName", value)}
-                                            options = {patientPosition}
-                                            style={style.select}
-                                            components={{
-                                                IndicatorSeparator: () => null
-                                            }}
-                                        />
-
-
+                                   <Col lg={9}>
                                         <Row className='no-gutters' className='d-flex align-self-center'>
                                             <Col>
                                                 {touched.area && errors.area &&
@@ -247,60 +229,54 @@ class EditPatientForm extends React.Component {
                                     </Col> 
                                        
                                 </Row>
-
-    <hr/>
-                                <div className="form-group">
-                                    <label htmlFor="type">{locale.texts.LAST_KNOWN_LOCATION}*</label>
-                                    <Field name="type" type="text" className={'form-control' + (errors.type && touched.type ? ' is-invalid' : '')} placeholder=''/>
-                                    <ErrorMessage name="type" component="div" className="invalid-feedback" />
-                                </div>
-
-                             
-
-
+                                <hr/>
+                          
 
 
                                 <div className="form-group">
-                                    <label htmlFor="name">{locale.texts.NAME}*</label>
-                                    <Field name="name" type="text" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} placeholder=''/>
-                                    <ErrorMessage name="name" component="div" className="invalid-feedback" />
+                                    <label htmlFor="patientName">{locale.texts.NAME}*</label>
+                                    <Field name="patientName" type="text" className={'form-control' + (errors.patientName && touched.patientName ? ' is-invalid' : '')} placeholder=''/>
+                                    <ErrorMessage name="patientName" component="div" className="invalid-feedback" />
                                 </div>
 
 
                                 <div className="form-group">
                                     <label htmlFor="roomNumber">{locale.texts.ROOM_NUMBER}*</label>
-                                    <Field name="roomNumber" type="text" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} placeholder=''/>
+                                    <Field name="roomNumber" type="text" className={'form-control' + (errors.roomNumber && touched.roomNumber ? ' is-invalid' : '')} placeholder=''/>
                                     <ErrorMessage name="roomNumber" component="div" className="invalid-feedback" />
                                 </div>
 
                                 <div className="form-group">
                                     <label htmlFor="attendingPhysician">{locale.texts.ATTENDING_PHYSICIAN}*</label>
-                                    <Field name="attendingPhysician" type="text" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} placeholder=''/>
+                                    <Field name="attendingPhysician" type="text" className={'form-control' + (errors.attendingPhysician && touched.attendingPhysician ? ' is-invalid' : '')} placeholder=''/>
                                     <ErrorMessage name="attendingPhysician" component="div" className="invalid-feedback" />
                                 </div>
 
                                 <div className="form-group">
-                                    <label htmlFor="patientStatus">{locale.texts.STATUS}*</label>
-                                    <Field name="patientStatus" type="text" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} placeholder=''/>
-                                    <ErrorMessage name="patientStatus" component="div" className="invalid-feedback" />
+                                    <label htmlFor="mac_address">{locale.texts.MAC_ADDRESS}*</label>
+                                    <Field name="mac_address" type="text" className={'form-control' + (errors.mac_address && touched.mac_address ? ' is-invalid' : '')} placeholder=''/>
+                                    <ErrorMessage name="mac_address" component="div" className="invalid-feedback" />
                                 </div>
+
+
+                                <div className="form-group">
+                                    <label htmlFor="asset_number">{locale.texts.ASSET_CONTROL_NUMBER_IS_REQUIRED}*</label>
+                                    <Field name="asset_number" type="text" className={'form-control' + (errors.asset_number && touched.asset_number ? ' is-invalid' : '')} placeholder=''/>
+                                    <ErrorMessage name="asset_number" component="div" className="invalid-feedback" />
+                                </div>
+
+
 
                                 <div className="form-group">
                                     <label htmlFor="patientStatus">{locale.texts.PICTURE}</label>
                                 </div>
 
-                                <Image src={config.patientPicture.logo} rounded width={470} height={200} ></Image>
+                                {/* <Image src={config.patientPicture.logo} rounded width={470} height={200} ></Image> */}
 
 <hr/>
 
-
-
-
-
-
-
-
-                                <Row className="form-group my-3 text-capitalize">
+{/* 電池 */}
+                                {/* <Row className="form-group my-3 text-capitalize">
                                     <Col>
                                         <RadioButtonGroup
                                             id="radioGroup"
@@ -312,22 +288,15 @@ class EditPatientForm extends React.Component {
                                             <Field
                                                 component={RadioButton}
                                                 name="radioGroup"
-                                                id={config.objectStatus.NORMAL}
+                                                id={config.patientStatus.BATTERY_NORMAL}
                                                 label={locale.texts.NORMAL}
                                             />
                                             <Field
                                                 component={RadioButton}
                                                 name="radioGroup"
-                                                id={config.objectStatus.BROKEN}
-                                                label={locale.texts.BROKEN}
+                                                id={config.patientStatus.BATTERY_CHANGE}
+                                                label={locale.texts.BATTERY_CHANGE}
                                             />
-                                            <Field
-                                                component={RadioButton}
-                                                name="radioGroup"
-                                                id={config.objectStatus.RESERVE}
-                                                label={locale.texts.RESERVE}
-                                            />
-                                            
                                         </RadioButtonGroup>
                                         <Row className='no-gutters' className='d-flex align-self-center'>
                                             <Col>
@@ -339,7 +308,7 @@ class EditPatientForm extends React.Component {
                                         </Row>                                                
                                     </Col>
                                 </Row>
-                                <hr/>
+                                <hr/> */}
 
 
                                 <Col lg={3} className='text-capitalize'>
@@ -347,10 +316,11 @@ class EditPatientForm extends React.Component {
                                 </Col>
 
 
-
                                 <Modal.Footer>
                                     <Button variant="outline-secondary" className="text-capitalize" onClick={this.handleClose}>
                                         {locale.texts.CANCEL}
+                                    
+
                                     </Button>
                                     <Button type="submit" className="text-capitalize" variant="primary" disabled={isSubmitting}>
                                         {locale.texts.SAVE}
