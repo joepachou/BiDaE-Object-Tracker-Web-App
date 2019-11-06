@@ -10,7 +10,7 @@ import AccessControl from '../../presentational/AccessControl'
 import AuthenticationContext from '../../../context/AuthenticationContext';
 import DeviceManager from './DeviceManager'
 import MyDeviceManager from './MyDeviceManager';
-
+import MyPatientManager from './MyPatientManager';
 class UserSettingContainer extends React.Component{
     constructor() {
         super();
@@ -20,6 +20,11 @@ class UserSettingContainer extends React.Component{
                 path: 'devicesManagement',
                 // component: <DeviceManager />
                 component: <MyDeviceManager />
+            },
+            {
+                name: 'Patient Management',
+                path: 'patientManagement',
+                component: <MyPatientManager />
             },
             {
                 name: 'User Manager',

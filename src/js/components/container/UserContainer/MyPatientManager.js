@@ -38,7 +38,7 @@ const style = {
     },
 }
 
-class MyDeviceManager extends React.Component{
+class MyPatientManager extends React.Component{
 
     static contextType = AppContext
 
@@ -111,6 +111,7 @@ class MyDeviceManager extends React.Component{
         this.functionForAddableList = {
             onClick: (e) => {
                 var acn = e.target.getAttribute('name')
+                console.log(acn)
                 this.API.switchDevice(acn)
             },
             validation: (string) => {
@@ -132,7 +133,7 @@ class MyDeviceManager extends React.Component{
                     >
                         <p className='d-inline-block mx-1'>&#9642;</p>
                         
-                        {item.type},
+                        {item.name},
                         &nbsp;
                         {item.asset_control_number}
                         <p className='d-inline-block mx-1 text-capitalize'>
@@ -188,9 +189,8 @@ class MyDeviceManager extends React.Component{
         }).then(res => {
             let data = res.data.rows
             var dataMap = {}
-
             for(var item of data){
-                if(item.object_type == 0)
+                if(item.object_type == 1 || item.object_type == 2)
                     dataMap[item.asset_control_number] = item
             }
             this.device.dataMap = dataMap
@@ -233,7 +233,7 @@ class MyDeviceManager extends React.Component{
             <Fragment>
                 <Row className="w-100 d-flex bg-white">
                     <Col>
-                        <h5 className="text-capitalize">{locale.texts.MY_DEVICES_LIST}</h5>
+                        <h5 className="text-capitalize">{locale.texts.MY_PATIENT_LIST}</h5>
                         <AddableList
                             getAPI={this.getAPIfromAddableList_1}
                         />
@@ -247,7 +247,7 @@ class MyDeviceManager extends React.Component{
                 </Row> */}
                 <Row className='w-100 d-flex bg-white'>
                     <Col>
-                        <h5 className="text-capitalize">{locale.texts.NOT_MY_DEVICES_LIST}</h5>
+                        <h5 className="text-capitalize">{locale.texts.NOT_MY_PATIENT_LIST}</h5>
                         <AddableList
                             getAPI={this.getAPIfromAddableList_2}
                         />
@@ -258,4 +258,4 @@ class MyDeviceManager extends React.Component{
     }
 }
 
-export default MyDeviceManager
+export default MyPatientManager

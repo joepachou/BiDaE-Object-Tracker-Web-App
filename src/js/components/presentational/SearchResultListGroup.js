@@ -5,7 +5,7 @@ import config from '../../config';
 
 
 const getDescription = (item, locale) => {
-    if(item.object_type === 0){
+    if(item.object_type == 0){
         let foundDeviceDescription = 
             item.found === 1
                 ?   `
@@ -44,7 +44,6 @@ const getDescription = (item, locale) => {
                 `
         return foundDeviceDescription
     }else{
-        console.log(item)
         let foundDeviceDescription = 
             `
                 ${item.name},
@@ -245,4 +244,4 @@ const SearchResultListGroup = ({
     )
 }
 
-export default SearchResultListGroup;
+export default SearchResultListGroup

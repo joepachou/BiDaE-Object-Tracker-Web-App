@@ -59,7 +59,8 @@ const query_getObjectTable = (area_id) => {
 				object_table.transferred_location, 
 				object_table.mac_address,
 				object_table.monitor_type,
-				object_table.area_id
+				object_table.area_id,
+				object_table.object_type
 
 			FROM object_table 
 
@@ -75,7 +76,8 @@ const query_getObjectTable = (area_id) => {
 				object_table.transferred_location, 
 				object_table.mac_address,
 				object_table.monitor_type,
-				object_table.area_id
+				object_table.area_id,
+				object_table.object_type
 
 			FROM object_table 
 			WHERE object_table.area_id = ${area_id[0]}
