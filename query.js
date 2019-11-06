@@ -127,6 +127,20 @@ const getObjectTable = (request, response) => {
         })     
 }
 
+
+const getPatientTable = (request, response) => {
+    let { locale, areaId } = request.body
+    pool.query(queryType.query_getPatientTable(areaId))       
+        .then(res => {
+            console.log('Get getPatientTable data')
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log("Get getPatientTable fails: " + err)
+        })     
+}
+
+
 const getLbeaconTable = (request, response) => {
     let { locale } = request.body || 'en'
     pool.query(queryType.query_getLbeaconTable)
@@ -192,6 +206,23 @@ const editObject = (request, response) => {
         })
 }
 
+
+const editPatient = (request, response) => {
+    const formOption = request.body.formOption
+    console.log('***')
+    console.log(formOption)
+    pool.query(queryType.query_editPatient(formOption))
+        .then(res => {
+            console.log("Edit editPatient success");
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log("Edit editPatient Fails: " + err)
+        })
+}
+
+
+
 const addObject = (request, response) => {
     const formOption = request.body.formOption
     pool.query(queryType.query_addObject(formOption))
@@ -213,11 +244,11 @@ const addPatient = (request, response) => {
     const formOption = request.body.formOption
     pool.query(queryType.query_addPatient(formOption))
         .then(res => {
-            console.log("Add Object Success");
+            console.log("Add Patient Success");
             response.status(200).json(res)
         })
         .catch(err => {
-            console.log("Add Object Fails: " + err)
+            console.log("Add Patient Fails: " + err)
             response.status(500).json({
                 message:'not good'
             })
@@ -712,10 +743,12 @@ const checkMatchedObject = (item, userAuthenticatedAreaId, currentAreaId) => {
 module.exports = {
     getTrackingData,
     getObjectTable,
+    getPatientTable,
     getLbeaconTable,
     getGatewayTable,
     getGeofenceData,
     editObject,
+    editPatient,
     addObject,
     addPatient,
     editObjectPackage,

@@ -24,10 +24,13 @@ const en =  {
     POSITION:"POSITION",
     POSITION_UNDEFINE:"Select position status",
     ROOM_NUMBER:"Room Number",
-    ATTENDING_PHYSICIAN:"attending physician",
+    PATIENT_NUMBER:"Patient Number",
+    ATTENDING_PHYSICIAN:"attending physician ID",
     BATTERY_ALERT:"battery replacement alert",
     PICTURE:"Picture",
     BATTERY_CHANGE:"need change",
+    DEVICE_FORM:"Device Form",
+    PATIENT_FORM:"Patient Form",
 
     /* Location accuracy */
     LOCATION_ACCURACY: "Location Accuracy",
@@ -112,6 +115,7 @@ const en =  {
     EDIT_LBEACON: "edit lbeacon",
     ADD_OBJECT: "add object",
     EDIT_OBJECT: "edit object",
+    EDIT_PATIENT: "edit patient",
     REPORT_DEVICE_STATUS: "Report device status",
     THANK_YOU_FOR_REPORTING: "Thank you for reporting",
     PRINT_SEARCH_RESULT: "print search result",
@@ -125,6 +129,8 @@ const en =  {
 
     /** Error Message */
     NAME_IS_REQUIRED: "Name is required",
+    ROOMNUMBER_IS_REQUIRED: "Room Number is required",
+    ATTENDING_IS_REQUIRED: "Attending Physician is required",
     TYPE_IS_REQUIRED: "Type is required",
     LOCATION_IS_REQUIRED: "location is required",
     ASSET_CONTROL_NUMBER_IS_REQUIRED: "asset ID is required",

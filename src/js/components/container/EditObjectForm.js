@@ -171,7 +171,7 @@ class EditObjectForm extends React.Component {
                                     }),
                                 area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
                         })}
-
+                       
                         onSubmit={(values, { setStatus, setSubmitting }) => {
                             let monitor_type = values.checkboxGroup
                                     .filter(item => item)
