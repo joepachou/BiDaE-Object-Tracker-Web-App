@@ -1,11 +1,13 @@
 const dataSrcIP = process.env.DATASRC_IP;
 const getTrackingData = `http://${dataSrcIP}/data/getTrackingData`;
 const getObjectTable = `http://${dataSrcIP}/data/getObjectTable`;
+const getPatientTable = `http://${dataSrcIP}/data/getPatientTable`;
 const getLbeaconTable = `http://${dataSrcIP}/data/getLbeaconTable`;
 const getGatewayTable = `http://${dataSrcIP}/data/getGatewayTable`;
 const searchResult = `http://${dataSrcIP}/data/searchResult`;
 const geofenceData = `http://${dataSrcIP}/data/geofenceData`;
 const editObject = `http://${dataSrcIP}/data/editObject`;
+const editPatient = `http://${dataSrcIP}/data/editPatient`;
 const addObject = `http://${dataSrcIP}/data/addObject`;
 const addPatient= `http://${dataSrcIP}/data/addPatient`;
 
@@ -39,11 +41,13 @@ const pdfUrl = function(path){
 module.exports = {
     getTrackingData,
     getObjectTable,
+    getPatientTable,
     getLbeaconTable,
     getGatewayTable,
     searchResult,
     geofenceData,
     editObject,
+    editPatient,
     addObject,
     addPatient,
     editObjectPackage,

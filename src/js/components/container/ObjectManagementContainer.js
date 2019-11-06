@@ -4,7 +4,9 @@ import React from 'react';
 import { 
     getAreaTable,
     getObjectTable,
+    getPatientTable,
     editObject,
+    editPatient,
     addObject,
     addPatient
 } from "../../dataSrc"
@@ -17,27 +19,37 @@ import LocaleContext from '../../context/LocaleContext.js';
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
 import config from '../../config'
 import { objectTableColumn } from '../../tables'
+import { patientTableColumn } from '../../tables'
 import EditPatientForm from './EditPatientForm'
+
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+
 const SelectTable = selecTableHOC(ReactTable);
 
 class ObjectManagementContainer extends React.Component{
     state = {
         column:[],
+        columnPatient:[],
         data:[],
+        dataPatient:[],
         isShowEdit: false,
         isPatientShowEdit: false,
         selection: [],
         selectedRowData: [],
+        selectedRowData_Patient: [],
         areaList: [],
         formTitle:'',
         formPath: '',
         selectAll: false,
-        locale: this.context.abbr
+        locale: this.context.abbr,
+        tabIndex:0,
     }
 
     componentDidUpdate = (prevProps, prevState) => {
         if (this.context.abbr !== prevState.locale) {
             this.getData()
+            this.getDataPatient()
             this.setState({
                 locale: this.context.abbr
             })
@@ -46,6 +58,7 @@ class ObjectManagementContainer extends React.Component{
 
     componentDidMount = () => {
         this.getData();
+        this.getDataPatient();
         this.getAreaList();
     }
 
@@ -62,6 +75,47 @@ class ObjectManagementContainer extends React.Component{
         })
     }
 
+
+    getDataPatient = () => {
+        let locale = this.context
+
+        axios.post(getPatientTable, {
+            locale: locale.abbr
+        })
+        .then(res => {
+        let columnPatient = _.cloneDeep(patientTableColumn)
+        columnPatient.map(field => {
+            field.headerStyle = {
+                textAlign: 'left',
+            }
+            field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
+        })
+        
+
+
+        res.data.rows.map(item => {
+            item.area_name = {
+                value: config.mapConfig.areaOptions[item.area_id],
+                label: locale.texts[config.mapConfig.areaOptions[item.area_id]],
+            }
+        })
+        
+
+
+
+        this.setState({
+            dataPatient: res.data.rows,
+            columnPatient: columnPatient,
+        })
+        })
+        .catch(err => {
+            console.log(err);
+        })
+      
+    }
+
+
+    
     getData = () => {
         let locale = this.context
         axios.post(getObjectTable, {
@@ -69,6 +123,7 @@ class ObjectManagementContainer extends React.Component{
         })
         .then(res => {
             let column = _.cloneDeep(objectTableColumn)
+            
             column.map(field => {
                 field.headerStyle = {
                     textAlign: 'left',
@@ -102,6 +157,7 @@ class ObjectManagementContainer extends React.Component{
                     label: locale.texts[config.mapConfig.areaOptions[item.area_id]],
                 }
             })
+            
             this.setState({
                 data: res.data.rows,
                 column: column,
@@ -111,6 +167,14 @@ class ObjectManagementContainer extends React.Component{
             console.log(err);
         })
     }
+
+
+
+
+
+
+
+
 
     handleModalForm = () => {
         this.setState({
@@ -131,12 +195,14 @@ class ObjectManagementContainer extends React.Component{
             isShowEdit: true,
             formTitle: 'add object',
             selectedRowData: [],
+            selectedRowData_Patient:[],
             formPath: addObject
         })
     }
 
     handleSubmitForm = () => {
         setTimeout(this.getData, 500) 
+        setTimeout(this.getDataPatient, 500) 
         this.setState({
             isShowEdit: false,
             isPatientShowEdit: false,
@@ -221,13 +287,14 @@ class ObjectManagementContainer extends React.Component{
         this.setState({
             isPatientShowEdit: true, 
             selectedRowData: [],
+            selectedRowData_Patient:[],
             formTitle: 'add inpatient',
             formPath: addPatient
         })
     }
 
     render(){
-        const { isShowEdit, selectedRowData,isPatientShowEdit } = this.state
+        const { isShowEdit, selectedRowData,selectedRowData_Patient,isPatientShowEdit } = this.state
         const locale = this.context
 
         const { selectAll, selectType } = this.state;
@@ -245,33 +312,111 @@ class ObjectManagementContainer extends React.Component{
             toggleSelection,
             selectType
         };
+
+
+
+
+
         return (
             <Container className='py-2 text-capitalize' fluid>
+
                 <Row>
                     <Col>
                         <Button variant='primary' className='text-capitalize' onClick={this.handleClickButton}>
                             {locale.texts.ADD_OBJECT}
                         </Button>
                         {'     '}
-
                     {/* 新增病人 */}
                         <Button variant='primary' className='text-capitalize' onClick={this.handlePatientClick}>
                             {locale.texts.ADD_INPATIENT}
                         </Button>
-
-                     
-
                     </Col>
                 </Row>
-                
+
+                <br/>
+
+
+
+
+                {/* tabs */}
+                <Tabs selectedIndex={this.state.tabIndex} onSelect={tabIndex => this.setState({ tabIndex })}>
+                <TabList>
+                <Tab>{locale.texts.DEVICE_FORM}</Tab>
+                <Tab>{locale.texts.PATIENT_FORM}</Tab>
+                </TabList>
+
+                <TabPanel>  
+                <ReactTable 
+                            data = {this.state.data} 
+                            columns = {this.state.column} 
+                            noDataText="No Data Available"
+                            className="-highlight"
+                            getTrProps={(state, rowInfo, column, instance) => {
+                                return {
+                                    onClick: (e, handleOriginal) => {
+                                        this.setState({
+                                            selectedRowData: this.state.data[rowInfo.index],
+                                            isShowEdit: true,
+                                            isPatientShowEdit: false,
+                                            formTitle: 'edit object',
+                                            formPath: editObject
+                                        })
+                                console.log(e)
+                                        // IMPORTANT! React-Table uses onClick internally to trigger
+                                        // events like expanding SubComponents and pivots.
+                                        // By default a custom 'onClick' handler will override this functionality.
+                                        // If you want to fire the original onClick handler, call the
+                                        // 'handleOriginal' function.
+                                        if (handleOriginal) {
+                                            handleOriginal()
+                                        }
+                                    }
+                                }
+                            }}
+                        />
+                </TabPanel>
+                <TabPanel>
+               
+                <ReactTable 
+                            data = {this.state.dataPatient} 
+                            columns = {this.state.columnPatient} 
+                            noDataText="No Data Available"
+                            className="-highlight"
+                           
+                            getTrProps={(state, rowInfo, column, instance) => {
+                                return {
+                               
+                                    onClick: (e, handleOriginal) => {
+                                        this.setState({
+                                            selectedRowData_Patient: this.state.dataPatient[rowInfo.index],
+                                             isShowEdit: false,
+                                             isPatientShowEdit: true,
+                                             formTitle: 'edit patient',
+                                             formPath: editPatient
+                                        })
+
+
+                                        if (handleOriginal) {
+                                            handleOriginal()
+                                        }
+                                     }
+                              }
+                            }}
+                        />
+                </TabPanel>
+                </Tabs>
+
+{console.log('==')}
+{console.log(this.state.dataPatient)}
+
                 <EditPatientForm
                     show = {isPatientShowEdit} 
                     title= {this.state.formTitle} 
-                    selectedObjectData={selectedRowData || null} 
+                    selectedObjectData={selectedRowData_Patient || null} 
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={this.state.formPath}
                     handleCloseForm={this.handleCloseForm}
-                    data={this.state.data}
+                    data={this.state.dataPatient}
                     areaList={this.state.areaList}
                 />  
 
@@ -295,34 +440,11 @@ class ObjectManagementContainer extends React.Component{
                
                 <Row className='d-flex w-100 justify-content-around'>
                     <Col className='py-2'>
-                        <ReactTable 
-                            data = {this.state.data} 
-                            columns = {this.state.column} 
-                            noDataText="No Data Available"
-                            className="-highlight"
-                            getTrProps={(state, rowInfo, column, instance) => {
-                                return {
-                                    onClick: (e, handleOriginal) => {
-                                        this.setState({
-                                            selectedRowData: this.state.data[rowInfo.index],
-                                            isShowEdit: true,
-                                            isPatientShowEdit: true,
-                                            formTitle: 'edit object',
-                                            formPath: editObject
-                                        })
-                                console.log(e)
-                                        // IMPORTANT! React-Table uses onClick internally to trigger
-                                        // events like expanding SubComponents and pivots.
-                                        // By default a custom 'onClick' handler will override this functionality.
-                                        // If you want to fire the original onClick handler, call the
-                                        // 'handleOriginal' function.
-                                        if (handleOriginal) {
-                                            handleOriginal()
-                                        }
-                                    }
-                                }
-                            }}
-                        />
+
+                        <br/>
+                        
+
+
                         {/* <SelectTable
                             keyField='id'
                             data={this.state.data}
@@ -351,8 +473,7 @@ class ObjectManagementContainer extends React.Component{
                             }}
                         /> */}
                     </Col>
-                </Row>      
-                            
+                </Row>            
             </Container>
                     
         )
