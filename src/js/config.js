@@ -147,7 +147,9 @@ patientStatus:{
 
     frequentSearchOption: {
         MY_DEVICES: "my devices",
-        ALL_DEVICES: "all devices"
+        ALL_DEVICES: "all devices",
+        MY_PATIENT: "my patient",
+        ALL_PATIENT: "all patient"
     },
 
     searchResult:{
@@ -609,48 +611,61 @@ patientStatus:{
 
         /** Set the html content of popup of markers */
         getPopupContent: (object, objectList, locale) => {
-
+            var indexNumberForPatient = 0
+            var indexNumberForDevice = 0
             /* The style sheet is right in the src/css/Surveillance.css*/
             const content = `
                 <div>
                     <h4 class="border-bottom pb-1 px-2">${object[0].location_description}</h4>
-                    ${objectList.map((item, index) =>{
-                        var element = `<div class="row popupRow mb-2 mx-2 d-flex jusify-content-start">`
-                        if (item.object_type == 0) {
-                            element += 
-                                ` 
-                                    <div class="popupType text-capitalize">
-                                        ${config.mapConfig.iconOptions.showNumber ? `${index + 1}`: ''} 
-                                    </div>
-                                    <div class="popupType text-capitalize">
-                                       . ${item.type}
-                                    </div>
-                                    <div class="popupType ">
-                                        , ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn}
-                                    </div>
-                                    <div class="popupType">
-                                        ${item.status !== "normal" 
-                                            ? `, ${locale.texts[item.status.toUpperCase()]}`
-                                            : `, ${item.residence_time}`
-                                        }
-                                    </div>
+                    <h5>病人</h5>
+                    ${
+                        objectList.map((item, index) =>{
+                            var element = `<div class="row popupRow mb-2 mx-2 d-flex jusify-content-start">`
+                            if (item.object_type != 0) {
+                                element +=
                                 `
-                        } else {
-                            element += 
-                                `     
-                                    <div class="popupType">
-                                        ${item.name} 
-                                    </div>
-                                    <div class="popupType">
-                                        , ${locale.texts.PHYSICIAN_NAME}: ${item.physician_name}
-                                    </div>
+                                <div class="popupType text-capitalize">
+                                    ${config.mapConfig.iconOptions.showNumber ? `${++indexNumberForPatient}`: ''} 
+                                </div>     
+                                <div class="popupType">
+                                    . ${item.name} 
+                                </div>
+                                <div class="popupType">
+                                    , ${locale.texts.PHYSICIAN_NAME}: ${item.physician_name}
+                                </div>
                                 `
-                        }
+                            }
                         element += `</div>`
-                            return element
+                        return element
                         }).join("")
                     }
-                </div> `
+                    <h5>儀器</h5>
+                    ${objectList.map((item, index) => {
+                        var element = '<div class="row popupRow mb-2 mx-2 d-flex jusify-content-start">'
+                        if(item.object_type == 0){
+                            element +=                                ` 
+                            <div class="popupType text-capitalize">
+                                ${config.mapConfig.iconOptions.showNumber ? `${++indexNumberForDevice}`: ''} 
+                            </div>
+                            <div class="popupType text-capitalize">
+                               . ${item.type}
+                            </div>
+                            <div class="popupType ">
+                                , ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn}
+                            </div>
+                            <div class="popupType">
+                                ${item.status !== "normal" 
+                                    ? `, ${locale.texts[item.status.toUpperCase()]}`
+                                    : `, ${item.residence_time}`
+                                }
+                            </div>
+                        `
+                        }
+                        element += `</div>`
+                        return element
+                    }).join("")
+                    }
+                </div>` 
             return content
         },
 

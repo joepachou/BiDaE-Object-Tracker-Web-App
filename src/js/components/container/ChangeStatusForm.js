@@ -294,6 +294,8 @@ class ChangeStatusForm extends React.Component {
                                         </Col>
                                     </Row>
                                     <hr/>
+
+                                    
                                     <Row className='d-flex justify-content-center pb-2'>
                                         <ButtonToolbar >
                                             <Button 
@@ -306,6 +308,7 @@ class ChangeStatusForm extends React.Component {
                                             >
                                                 {locale.texts.ADD_DEVICE}
                                             </Button>
+
                                             {/* <Button 
                                                 name='add note'
                                                 variant="outline-secondary" 
@@ -319,6 +322,14 @@ class ChangeStatusForm extends React.Component {
                                             </Button> */}
                                         </ButtonToolbar>
                                     </Row>
+
+
+                                    
+
++
+
+
+
                                     <Modal.Footer>
                                         <Button 
                                             variant="outline-secondary" 
