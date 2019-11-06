@@ -259,7 +259,7 @@ class ObjectManagementContainer extends React.Component{
                             {locale.texts.ADD_INPATIENT}
                         </Button>
 
-
+                     
 
                     </Col>
                 </Row>
@@ -310,7 +310,7 @@ class ObjectManagementContainer extends React.Component{
                                             formTitle: 'edit object',
                                             formPath: editObject
                                         })
-                                
+                                console.log(e)
                                         // IMPORTANT! React-Table uses onClick internally to trigger
                                         // events like expanding SubComponents and pivots.
                                         // By default a custom 'onClick' handler will override this functionality.
