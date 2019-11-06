@@ -27,6 +27,7 @@ const en =  {
     ATTENDING_PHYSICIAN:"attending physician",
     BATTERY_ALERT:"battery replacement alert",
     PICTURE:"Picture",
+    BATTERY_CHANGE:"need change",
 
     /* Location accuracy */
     LOCATION_ACCURACY: "Location Accuracy",

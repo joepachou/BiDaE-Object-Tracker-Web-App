@@ -5,7 +5,8 @@ import {
     getAreaTable,
     getObjectTable,
     editObject,
-    addObject
+    addObject,
+    addPatient
 } from "../../dataSrc"
 import axios from 'axios';
 import ReactTable from 'react-table';
@@ -84,7 +85,8 @@ class ObjectManagementContainer extends React.Component{
                 item.monitor_type = checkboxGroup.join(',')
                 item.status = {
                     value: item.status,
-                    label: locale.texts[item.status.toUpperCase()],
+                    // label: locale.texts[item.status.toUpperCase()],
+                    label: locale.texts[item.status],
                 }
                 item.transferred_location = item.transferred_location 
                     ? {
@@ -218,9 +220,9 @@ class ObjectManagementContainer extends React.Component{
     handlePatientClick = (e) => {
         this.setState({
             isPatientShowEdit: true, 
-            // selectedRowData: [],
-            // formPath: addObject
+            selectedRowData: [],
             formTitle: 'add inpatient',
+            formPath: addPatient
         })
     }
 
@@ -257,11 +259,21 @@ class ObjectManagementContainer extends React.Component{
                             {locale.texts.ADD_INPATIENT}
                         </Button>
 
-
+                     
 
                     </Col>
                 </Row>
-
+                
+                <EditPatientForm
+                    show = {isPatientShowEdit} 
+                    title= {this.state.formTitle} 
+                    selectedObjectData={selectedRowData || null} 
+                    handleSubmitForm={this.handleSubmitForm}
+                    formPath={this.state.formPath}
+                    handleCloseForm={this.handleCloseForm}
+                    data={this.state.data}
+                    areaList={this.state.areaList}
+                />  
 
                 <EditObjectForm 
                     show = {isShowEdit} 
@@ -274,16 +286,7 @@ class ObjectManagementContainer extends React.Component{
                     areaList={this.state.areaList}
                 />  
 
-                <EditPatientForm
-                    show = {isPatientShowEdit} 
-                    title= {this.state.formTitle} 
-                    selectedObjectData={selectedRowData || null} 
-                    handleSubmitForm={this.handleSubmitForm}
-                    formPath={this.state.formPath}
-                    handleCloseForm={this.handleCloseForm}
-                    data={this.state.data}
-                    areaList={this.state.areaList}
-                />  
+             
 
 
 
@@ -307,7 +310,7 @@ class ObjectManagementContainer extends React.Component{
                                             formTitle: 'edit object',
                                             formPath: editObject
                                         })
-                                
+                                console.log(e)
                                         // IMPORTANT! React-Table uses onClick internally to trigger
                                         // events like expanding SubComponents and pivots.
                                         // By default a custom 'onClick' handler will override this functionality.

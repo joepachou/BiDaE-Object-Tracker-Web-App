@@ -63,7 +63,14 @@ const config = {
         BROKEN: "broken",
         RESERVE: "reserve",
         TRANSFERRED: "transferred",   
+   
     },
+
+patientStatus:{
+     BATTERY_CHANGE:"Change",
+     BATTERY_NORMAL:"Normal",
+},
+
 
     ACNOmitsymbol: 'xxxxxx',
 

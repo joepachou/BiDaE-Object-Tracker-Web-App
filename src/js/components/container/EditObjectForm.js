@@ -205,7 +205,7 @@ class EditObjectForm extends React.Component {
                                 </div>
 
 
-                                {/* <div className="form-group">
+                                <div className="form-group">
                                     <label htmlFor="asset_control_number" className='text-uppercase'>{locale.texts.ACN}*</label>
                                     <Field 
                                         name="asset_control_number" 
@@ -214,7 +214,7 @@ class EditObjectForm extends React.Component {
                                         placeholder=''
                                     />
                                     <ErrorMessage name="asset_control_number" component="div" className="invalid-feedback" />
-                                </div> */}
+                                </div>
 
 
                                 
