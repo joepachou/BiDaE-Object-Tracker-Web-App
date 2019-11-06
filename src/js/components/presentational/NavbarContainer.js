@@ -4,11 +4,11 @@ import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom"
 import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Nav, NavDropdown, Image, Dropdown  } from 'react-bootstrap'
 import SigninPage from '../container/SigninPage';
-import SignupPage from '../container/SignupPage';
 import config from '../../config';
 import AccessControl from './AccessControl';
 import ShiftChange from '../container/ShiftChange'
 import { AppContext } from '../../context/AppContext';
+import Select from 'react-select';
 
 class NavbarContainer extends React.Component {
 
@@ -16,8 +16,15 @@ class NavbarContainer extends React.Component {
 
     state = {
         isShowSigninForm: false,
-        isShowSignupForm: false,
         isShowShiftChange: false,
+        selectedArea: {
+            value: config.mapConfig.areaOptions[this.context.auth.user.areas_id[0]],
+            label: this.context.locale.texts[config.mapConfig.areaOptions[this.context.auth.user.areas_id[0]]],
+        }
+
+    }
+
+    componentDidUpdate = () => {
     }
 
     handleSigninFormShowUp = () => {
@@ -86,6 +93,30 @@ class NavbarContainer extends React.Component {
             },
             navbarBrand: {
                 color: 'black'
+            },
+            select: {
+                border: 0,
+            },
+            customStyles: {
+
+                option: (provided, state) => ({
+                  ...provided,
+                //   borderBottom: '1px dotted pink',
+                //   color: state.isSelected ? 'red' : 'blue',
+                //   padding: 20,
+                }),
+
+                control: () => ({
+                  // none of react-select's styles are passed to <Control />
+                  width: 200,
+                }),
+                
+                singleValue: (provided, state) => {
+                  const opacity = state.isDisabled ? 0.5 : 1;
+                  const transition = 'opacity 300ms';
+              
+                  return { ...provided, opacity, transition };
+                }
             }
         }
         const { locale, auth, stateReducer } = this.context;
@@ -93,9 +124,15 @@ class NavbarContainer extends React.Component {
 
         const { 
             isShowSigninForm, 
-            isShowSignupForm,
             isShowShiftChange
         } = this.state;
+
+        const options = Object.values(config.mapConfig.areaOptions).map(area => {
+            return {
+                value: area,
+                label: locale.texts[area.toUpperCase().replace(/ /g, '_')],
+            }
+        })
 
         return (
             <Navbar id='navbar' bg="white" className="navbar sticky-top navbar-light" expand='lg' style={style.navbar}>
@@ -107,9 +144,33 @@ class NavbarContainer extends React.Component {
                             width={50}
                             className="d-inline-block align-top px-1"
                         />
-                        <div className="text-capitalize">
+                        {/* <div className="text-capitalize">
                             {locale.texts[config.mapConfig.areaOptions[areaId]]}
-                        </div>
+                        </div> */}
+                        <Select
+                            placeholder = {locale.texts.SELECT_LOCATION}
+                            name="select"
+                            value = {this.state.selectedArea}
+                            onChange={value => {
+                                let { stateReducer } = this.context
+                                let [{}, dispatch] = stateReducer
+                                dispatch({
+                                    type:'setArea',
+                                    value: config.mapConfig.areaModules[value.value].id
+                                })
+                                this.setState({
+                                    selectedArea: value
+                                })
+                            }}
+                            options={options}
+                            // isDisabled={values.radioGroup !== config.objectStatus.TRANSFERRED}
+                            styles={style.customStyles}
+                            isSearchable={false}
+                            components={{
+                                IndicatorSeparator: () => null,
+                                DropdownIndicator:() => null
+                            }}
+                        />
                     </Link>
                 </Navbar.Brand>
                 

@@ -564,17 +564,18 @@ patientStatus:{
         },
         
         areaOptions: {
-            // 1: "IIS_SINICA_FLOOR_FOUR",
+            1: "IIS_SINICA_FLOOR_FOUR",
             3: "NTUH_YUNLIN_WARD_FIVE_B",
         },
     
         areaModules: {
 
-            // IIS_SINICA_FLOOR_FOUR: {
-            //     name: "IIS_SINICA_FLOOR_FOUR",
-            //     url: IIS_SINICA_FLOOR_FOUR_MAP,
-            //     bounds: [[0,0], [21130,35710]],
-            // },
+            IIS_SINICA_FLOOR_FOUR: {
+                id: 1,
+                name: "IIS_SINICA_FLOOR_FOUR",
+                url: IIS_SINICA_FLOOR_FOUR_MAP,
+                bounds: [[0,0], [21130,35710]],
+            },
 
             NTUH_YUNLIN_WARD_FIVE_B: {
                 id: 3,

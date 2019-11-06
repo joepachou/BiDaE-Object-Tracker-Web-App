@@ -119,18 +119,18 @@ class MainContainer extends React.Component{
         })
     }
 
-    setArea = (value) => {
-        let { stateReducer } = this.context
-        let [{areaId}, dispatch] = stateReducer
-        this.getTrackingData(value)
-        dispatch({
-            type:'setArea',
-            value,
-        })
-        this.setState({
-            areaId, 
-        })
-    }
+    // setArea = (value) => {
+    //     let { stateReducer } = this.context
+    //     let [{areaId}, dispatch] = stateReducer
+    //     this.getTrackingData(value)
+    //     dispatch({
+    //         type:'setArea',
+    //         value,
+    //     })
+    //     this.setState({
+    //         areaId, 
+    //     })
+    // }
 
     async setFence (value, areaId) {
         let result = await axios.post(dataSrc.setGeoFenceConfig, {
@@ -463,7 +463,7 @@ class MainContainer extends React.Component{
                             getSearchKey={this.getSearchKey}
                             clearColorPanel={clearColorPanel}
                             changeLocationAccuracy={this.changeLocationAccuracy}
-                            setArea={this.setArea}
+                            // setArea={this.setArea}
                             setFence={this.setFence}
                             auth={auth}
                             lbeaconPosition={this.state.lbeaconPosition}

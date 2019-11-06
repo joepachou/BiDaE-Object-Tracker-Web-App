@@ -140,7 +140,7 @@ class SurveillanceContainer extends React.Component {
 
         return(
             <div id="surveillanceContainer" style={style.surveillanceContainer} className="overflow-hidden">
-                <AccessControl
+                {/* <AccessControl
                     permission={"user:toggleArea"}
                     renderNoAccess={() => null}
                 >
@@ -167,7 +167,7 @@ class SurveillanceContainer extends React.Component {
                             {locale.texts.NTUH_YUNLIN_WARD_FIVE_B}
                         </Button>
                     </ButtonToolbar>
-                </AccessControl>
+                </AccessControl> */}
                 <div style={style.mapBlock}>
                     <Map 
                         hasSearchKey={hasSearchKey}
