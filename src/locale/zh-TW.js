@@ -36,7 +36,9 @@ const tw = {
     
     /* Frequent Search */
     ALL_DEVICE: "全部儀器",
+    ALL_PATIENT: "全部病人",
     MY_DEVICE: "我的儀器",
+    MY_PATIENT: "我的病人",
     DEVICES_FOUND: "找到的儀器",
     DEVICES_NOT_FOUND: "未找到的儀器",
 
