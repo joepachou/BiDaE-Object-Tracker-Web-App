@@ -208,6 +208,25 @@ const addObject = (request, response) => {
     
 }
 
+
+const addPatient = (request, response) => {
+    const formOption = request.body.formOption
+    pool.query(queryType.query_addPatient(formOption))
+        .then(res => {
+            console.log("Add Object Success");
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log("Add Object Fails: " + err)
+            response.status(500).json({
+                message:'not good'
+            })
+        })
+    
+}
+
+
+
 const editObjectPackage = (request, response) => {
     const { formOption, username, pdfPackage } = request.body
 
@@ -700,6 +719,7 @@ module.exports = {
     getGeofenceData,
     editObject,
     addObject,
+    addPatient,
     editObjectPackage,
     signin,
     signup,

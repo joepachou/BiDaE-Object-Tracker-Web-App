@@ -61,6 +61,8 @@ app.post('/data/editObject', db.editObject);
 
 app.post('/data/addObject', db.addObject);
 
+app.post('/data/addPatient', db.addPatient);
+
 app.post('/data/editObjectPackage', db.editObjectPackage)
 
 app.post('/user/signin', db.signin)

@@ -7,6 +7,8 @@ const searchResult = `http://${dataSrcIP}/data/searchResult`;
 const geofenceData = `http://${dataSrcIP}/data/geofenceData`;
 const editObject = `http://${dataSrcIP}/data/editObject`;
 const addObject = `http://${dataSrcIP}/data/addObject`;
+const addPatient= `http://${dataSrcIP}/data/addPatient`;
+
 const editObjectPackage = `http://${dataSrcIP}/data/editObjectPackage`;
 const signin = `http://${dataSrcIP}/user/signin`;
 const signup = `http://${dataSrcIP}/user/signup`;
@@ -30,7 +32,6 @@ const setGeoFenceConfig = `http://${dataSrcIP}/data/setGeoFenceConfig`
 const addShiftChangeRecord = `http://${dataSrcIP}/data/addShiftChangeRecord`
 
 
-
 const pdfUrl = function(path){
     return `http://${dataSrcIP}/${path}`
 }
@@ -44,6 +45,7 @@ module.exports = {
     geofenceData,
     editObject,
     addObject,
+    addPatient,
     editObjectPackage,
     signin,
     signup,

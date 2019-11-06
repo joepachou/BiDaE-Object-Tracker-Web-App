@@ -27,6 +27,7 @@ const tw = {
     ATTENDING_PHYSICIAN:"負責醫生",
     BATTERY_ALERT:"電池更換提示",
     PICTURE:"相關圖片",
+    BATTERY_CHANGE:"需更換",
 
     /* Location accuracy */
     LOCATION_ACCURACY: "位置精準度",
