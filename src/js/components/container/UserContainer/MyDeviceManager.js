@@ -190,7 +190,8 @@ class MyDeviceManager extends React.Component{
             var dataMap = {}
 
             for(var item of data){
-                dataMap[item.asset_control_number] = item
+                if(item.object_type == 0)
+                    dataMap[item.asset_control_number] = item
             }
             this.device.dataMap = dataMap
 

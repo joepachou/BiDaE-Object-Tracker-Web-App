@@ -41,8 +41,10 @@ const en =  {
     MY_DEVICE: "My Devices",
     MY_PATIENT: "My patient",
     DEVICES_FOUND: "devices found",
+    PATIENT_FOUND: "patient found",
     DEVICES_NOT_FOUND: "devices not found",
-
+    PATIENT_NOT_FOUND: "patient not found",
+    
     /* Button */
     CLEAR : "clear",
     SAVE : "save",
@@ -159,6 +161,7 @@ const en =  {
     /** User Setting */
     USER_SETTING: "User Setting",
     DEVICES_MANAGEMENT: "Devices Management",
+    PATIENT_MANAGEMENT: "Patient Management",
     SHIFT_CHANGE_RECORD: "Shift change record",
     EDIT_OBJECT_MANAGEMENT: "Edit Object Record",
     ACCESS_RIGHT: "Access Right",
@@ -172,8 +175,10 @@ const en =  {
     /** Table Title */
     TRACKING: "tracking",
     MY_DEVICES_LIST: "my devices list",
+    MY_PATIENT_LIST: "my patient list",
     NOT_MY_DEVICES_LIST: "not my devices list",
-
+    NOT_MY_PATIENT_LIST: "not my patient list",
+    
     /** Table Field */
     ID: "ID",
     HEALTH_STATUS: "status",

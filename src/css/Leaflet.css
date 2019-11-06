@@ -17,10 +17,10 @@
     width: 100px;
     font: 40px/30px Tahoma, Verdana, sans-serif
 }
-
+ 
 .customPopup .leaflet-popup-content {
     padding: 0;
-    word-break: break-all;
+    /* word-break: break-all; */
 }
 
 .customPopup .contentBox {

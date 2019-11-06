@@ -244,4 +244,4 @@ const SearchResultListGroup = ({
     )
 }
 
-export default SearchResultListGroup;
+export default SearchResultListGroup

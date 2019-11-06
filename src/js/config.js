@@ -613,16 +613,23 @@ const config = {
             var indexNumberForPatient = 0
             var indexNumberForDevice = 0
             /* The style sheet is right in the src/css/Surveillance.css*/
+            var PatientTotalNumber = 0;
+            var DeviceTotalNumber = 0;
+
+            objectList.map((item,index) => {
+                if (item.object_type != 0) PatientTotalNumber ++;
+                else DeviceTotalNumber ++;   
+            })
             const content = `
                 <div>
                     <h4 class="border-bottom pb-1 px-2">${object[0].location_description}</h4>
-                    <h5>病人</h5>
+                    ${PatientTotalNumber ? `<h5>病人</h5>`: ``}         
                     ${
                         objectList.map((item, index) =>{
                             var element = `<div class="row popupRow mb-2 mx-2 d-flex jusify-content-start">`
                             if (item.object_type != 0) {
                                 element +=
-                                `
+                             `
                                 <div class="popupType text-capitalize">
                                     ${config.mapConfig.iconOptions.showNumber ? `${++indexNumberForPatient}`: ''} 
                                 </div>     
@@ -638,12 +645,12 @@ const config = {
                         return element
                         }).join("")
                     }
-                    <h5>儀器</h5>
+                    ${DeviceTotalNumber ? `<h5>儀器</h5>` : ``}
                     ${objectList.map((item, index) => {
-                        var element = '<div class="row popupRow mb-2 mx-2 d-flex jusify-content-start">'
+                        var element = `<div class="row popupRow mb-2 mx-2 d-flex jusify-content-start">`
                         if(item.object_type == 0){
                             element +=                                ` 
-                            <div class="popupType text-capitalize">
+                            <div class="popupType text-capitalize" style={{backgroundColor:"red"}}>
                                 ${config.mapConfig.iconOptions.showNumber ? `${++indexNumberForDevice}`: ''} 
                             </div>
                             <div class="popupType text-capitalize">
