@@ -44,7 +44,6 @@ const getDescription = (item, locale) => {
                 `
         return foundDeviceDescription
     }else{
-        console.log(item)
         let foundDeviceDescription = 
             `
                 ${item.name},
