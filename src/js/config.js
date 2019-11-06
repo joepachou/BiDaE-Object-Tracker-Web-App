@@ -1,29 +1,11 @@
 import IIS_SINICA_FLOOR_FOUR_MAP from "../img/map/iis_new_building_four_floor.png";
 import NTUH_YUNLIN_WARD_FIVE_B_MAP from "../img/map/ntuh_yunlin_branch_ward_five_b.png";
+import NURSING_HOME_MAP from "../img/map/nursing_house.png"
 import BOT_LOGO from "../img//logo/BOT_LOGO_RED.png";
 import moment from 'moment'
 import patientP from "../img//logo/pic.png"
 const config = {
     
-    defaultAreaId: 3,
-
-    // areaOptions: {
-    //     // 1: "IIS_SINICA_FLOOR_FOUR",
-    //     3: "NTUH_YUNLIN_WARD_FIVE_B",
-    // },
-
-    // areaModules: {
-    //     // IIS_SINICA_FLOOR_FOUR: {
-    //     //     name: "IIS_SINICA_FLOOR_FOUR",
-    //     //     url: IIS_SINICA_FLOOR_FOUR_MAP,
-    //     //     bounds: [[0,0], [21130,35710]],
-    //     // },
-    //     NTUH_YUNLIN_WARD_FIVE_B: {
-    //         name: "NTUH_YUNLIN_WARD_FIVE_B",
-    //         url: NTUH_YUNLIN_WARD_FIVE_B_MAP,
-    //         bounds: [[-5000,-5000], [21067,31928]],
-    //     }
-    // },
     
     surveillanceMap: {
 
@@ -49,12 +31,8 @@ const config = {
 
 
         // objectTypeSet: new Set(["Bed", "EKG Machine", "Infusion pump", "SONOSITE Ultrasound", "Ultrasound", "Bladder scanner", "CPM"])
-        objectType: ["三合一Monitor", "EKG", "IV Pump", "烤燈", "血壓血氧監視器", "電擊器", "CPM"]
-
-        
+        // objectType: ["三合一Monitor", "EKG", "IV Pump", "烤燈", "血壓血氧監視器", "電擊器", "CPM"]
     },
-
-    
 
     objectStatus: {
         PERIMETER: "perimeter",
@@ -63,13 +41,12 @@ const config = {
         BROKEN: "broken",
         RESERVE: "reserve",
         TRANSFERRED: "transferred",   
-   
     },
 
-patientStatus:{
-     BATTERY_CHANGE:"Change",
-     BATTERY_NORMAL:"Normal",
-},
+    patientStatus:{
+        BATTERY_CHANGE:"Change",
+        BATTERY_NORMAL:"Normal",
+    },
 
 
     ACNOmitsymbol: 'xxxxxx',
@@ -562,10 +539,13 @@ patientStatus:{
             else if (item.object_type == 1) return config.mapConfig.iconColor.female
             else if (item.object_type == 2) return config.mapConfig.iconColor.male
         },
+
+        defaultAreaId: 4,
         
         areaOptions: {
             1: "IIS_SINICA_FLOOR_FOUR",
             3: "NTUH_YUNLIN_WARD_FIVE_B",
+            4: "NURSING_HOME",
         },
     
         areaModules: {
@@ -582,7 +562,13 @@ patientStatus:{
                 name: "NTUH_YUNLIN_WARD_FIVE_B",
                 url: NTUH_YUNLIN_WARD_FIVE_B_MAP,
                 bounds: [[-5000,-5000], [21067,31928]],
-            }
+            },
+            NURSING_HOME: {
+                id: 4,
+                name: "NURSING_HOME",
+                url: NURSING_HOME_MAP,
+                bounds: [[0,0], [20000,45000]],
+            },
         },
 
         /* For test. To start object tracking*/
