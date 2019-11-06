@@ -5,7 +5,7 @@ import config from '../../config';
 
 
 const getDescription = (item, locale) => {
-    if(item.object_type === 0){
+    if(item.object_type == 0){
         let foundDeviceDescription = 
             item.found === 1
                 ?   `
