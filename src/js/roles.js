@@ -16,6 +16,7 @@ const rules = {
         permission: [
             // "form:edit",
             "route:devicesManagement",
+            "route:patientManagement",
             // "route:shiftChangeRecord",
             "user:mydevice",
             "user:shiftChange",

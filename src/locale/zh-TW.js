@@ -40,8 +40,10 @@ const tw = {
     MY_DEVICE: "我的儀器",
     MY_PATIENT: "我的病人",
     DEVICES_FOUND: "找到的儀器",
+    PATIENT_FOUND: "找到的病人",
     DEVICES_NOT_FOUND: "未找到的儀器",
-
+    PATIENT_NOT_FOUND: "未找到的病人",
+    
     /* Button */
     CLEAR : "清除",
     SAVE : "儲存",
@@ -152,6 +154,7 @@ const tw = {
     /** User Setting */
     USER_SETTING: "帳戶設定",
     DEVICES_MANAGEMENT: "儀器管理",
+    PATIENT_MANAGEMENT: "病人管理",
     SHIFT_CHANGE_RECORD: "交班紀錄",
     EDIT_OBJECT_MANAGEMENT: "儀器狀態更改紀錄",
     ACCESS_RIGHT: "使用者權限",
@@ -165,7 +168,9 @@ const tw = {
     /** Table Title */
     TRACKING: "物件追蹤",
     MY_DEVICES_LIST: "我的儀器",
+    MY_PATIENT_LIST: "我的病人",
     NOT_MY_DEVICES_LIST: "其他儀器",
+    NOT_MY_PATIENT_LIST: "其他病人",
 
     /** Table Field */
     ID: "ID",
