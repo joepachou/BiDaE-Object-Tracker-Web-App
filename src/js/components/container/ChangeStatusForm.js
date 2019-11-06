@@ -98,6 +98,9 @@ class ChangeStatusForm extends React.Component {
             },
             textarea: {
                 width: '100%'
+            },
+            crossIcom: {
+                cursor: "pointer"
             }
         }
 
@@ -142,7 +145,12 @@ class ChangeStatusForm extends React.Component {
                                             {this.props.selectedObjectData.length > 1 
                                                 ? 
                                                     <Col xs={1} sm={1} className='d-flex align-items-center'>
-                                                        <i className="fas fa-times" onClick={this.props.handleRemoveButton} name={item.mac_address}></i> 
+                                                        <i 
+                                                            className="fas fa-times" 
+                                                            onClick={this.props.handleRemoveButton} 
+                                                            name={item.mac_address}
+                                                            style={style.crossIcom}
+                                                        /> 
                                                     </Col>
                                                 : null
                                             }
