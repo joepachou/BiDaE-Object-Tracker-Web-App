@@ -303,7 +303,11 @@ class Map extends React.Component {
     /** Filter out undesired tracking data */
     filterTrackingData = (proccessedTrackingData) => {
         return proccessedTrackingData.filter(item => {
-            return item.found && item.isMatchedObject && !this.props.filterObjectType.includes(item.object_type)
+            return (
+                item.found && 
+                item.isMatchedObject && 
+                !this.props.filterObjectType.includes(parseInt(item.object_type))
+            )
         })
     }
 
