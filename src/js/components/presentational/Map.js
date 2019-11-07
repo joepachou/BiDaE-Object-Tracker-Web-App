@@ -43,6 +43,7 @@ class Map extends React.Component {
         // }
 
         if (this.props.geoFenceConfig.length !== 0 && !this.state.hasGeoFenceMaker && this.props.isOpenFence) {
+            console.log("what's this")
             this.createGeoFenceMarkers()
         }
 
@@ -55,9 +56,9 @@ class Map extends React.Component {
         // }
 
         if (this.state.hasGeoFenceMaker && (prevProps.isOpenFence !== this.props.isOpenFence)) {
+            console.log(`fence ${this.props.isOpenFence}`)
             this.props.isOpenFence ? this.createGeoFenceMarkers() : this.geoFenceLayer.clearLayers()
         }
-        
     }
 
     /** Set the search map configuration establishing in config.js  */
@@ -121,7 +122,7 @@ class Map extends React.Component {
     /** Create the lbeacon and invisibleCircle markers */
     createGeoFenceMarkers = () => {        
         this.geoFenceLayer.clearLayers()
-
+        console.log('create geofence marker')
         let { stateReducer } = this.context
         let [{areaId}] = stateReducer
 

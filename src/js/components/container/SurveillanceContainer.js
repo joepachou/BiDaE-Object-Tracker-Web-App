@@ -27,14 +27,14 @@ class SurveillanceContainer extends React.Component {
 
 
     componentDidUpdate = (prevProps, prevState) => {
-        if (!(_.isEqual(prevProps.auth, this.props.auth))) {
-            const [{ areaId }, dispatch] = this.context.stateReducer
-            const { auth } = this.context
-            dispatch({
-                type: "setArea",
-                value: auth.authenticated ? auth.user.areas_id[0] : config.defaultAreaId
-            })
-        }
+        // if (!(_.isEqual(prevProps.auth, this.props.auth))) {
+        //     const [{ areaId }, dispatch] = this.context.stateReducer
+        //     const { auth } = this.context
+        //     dispatch({
+        //         type: "setArea",
+        //         value: auth.authenticated ? auth.user.areas_id[0] : config.defaultAreaId
+        //     })
+        // }
         if (this.props.geoFenceConfig.length !== 0 && !(_.isEqual(prevProps.geoFenceConfig, this.props.geoFenceConfig))) {
             this.setState({
                 isOpenFence: this.props.geoFenceConfig[0].enable
@@ -60,9 +60,9 @@ class SurveillanceContainer extends React.Component {
                     showPdfDownloadForm: true,
                 })
                 break;
-            case "setArea":
-                this.props.setArea(value)
-                break;
+            // case "setArea":
+            //     this.props.setArea(value)
+            //     break;
             case "fence":
                 this.props.setFence(value, areaId)
                 .then(res => {

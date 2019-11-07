@@ -17,14 +17,22 @@ class NavbarContainer extends React.Component {
     state = {
         isShowSigninForm: false,
         isShowShiftChange: false,
-        selectedArea: {
-            value: config.mapConfig.areaOptions[this.context.auth.user.areas_id[0]],
-            label: this.context.locale.texts[config.mapConfig.areaOptions[this.context.auth.user.areas_id[0]]],
-        }
-
+        auth: {}
     }
 
-    componentDidUpdate = () => {
+    componentDidUpdate = (prevProps, prevState) => {
+        let { auth } = this.context
+        if (!(_.isEqual(prevState.auth, auth))) {
+            const [{ areaId }, dispatch] = this.context.stateReducer
+            const { auth } = this.context
+            dispatch({
+                type: "setArea",
+                value: auth.authenticated ? auth.user.areas_id[0] : config.mapConfig.defaultAreaId
+            })
+            this.setState({
+                auth,
+            })
+        }
     }
 
     handleSigninFormShowUp = () => {
@@ -100,22 +108,23 @@ class NavbarContainer extends React.Component {
             customStyles: {
 
                 option: (provided, state) => ({
-                  ...provided,
+                    ...provided,
                 //   borderBottom: '1px dotted pink',
                 //   color: state.isSelected ? 'red' : 'blue',
-                //   padding: 20,
+                    padding: '0.5rem',
+                    fontSize: '1rem'
                 }),
 
                 control: () => ({
                   // none of react-select's styles are passed to <Control />
-                  width: 200,
+                    width: 200,
                 }),
                 
                 singleValue: (provided, state) => {
-                  const opacity = state.isDisabled ? 0.5 : 1;
-                  const transition = 'opacity 300ms';
-              
-                  return { ...provided, opacity, transition };
+                    const opacity = state.isDisabled ? 0.5 : 1;
+                    const transition = 'opacity 300ms';
+                
+                    return { ...provided, opacity, transition };
                 }
             }
         }
@@ -134,10 +143,15 @@ class NavbarContainer extends React.Component {
             }
         })
 
+        let selectedArea = {
+            value: config.mapConfig.areaOptions[areaId],
+            label: this.context.locale.texts[config.mapConfig.areaOptions[areaId]],
+        }
+
         return (
             <Navbar id='navbar' bg="white" className="navbar sticky-top navbar-light" expand='lg' style={style.navbar}>
                 <Navbar.Brand className='px-0 mx-0 text-capitalized'>  
-                    <Link to="/" className="nav-link nav-brand d-flex align-items-center px-0 text-capitalized" style={style.navbarBrand}>
+                    <Nav.Item className="nav-link nav-brand d-flex align-items-center px-0 text-capitalized" style={style.navbarBrand}>
                         <Image
                             alt=""
                             src={config.image.logo}
@@ -150,16 +164,13 @@ class NavbarContainer extends React.Component {
                         <Select
                             placeholder = {locale.texts.SELECT_LOCATION}
                             name="select"
-                            value = {this.state.selectedArea}
+                            value = {selectedArea}
                             onChange={value => {
                                 let { stateReducer } = this.context
                                 let [{}, dispatch] = stateReducer
                                 dispatch({
                                     type:'setArea',
                                     value: config.mapConfig.areaModules[value.value].id
-                                })
-                                this.setState({
-                                    selectedArea: value
                                 })
                             }}
                             options={options}
@@ -171,7 +182,7 @@ class NavbarContainer extends React.Component {
                                 DropdownIndicator:() => null
                             }}
                         />
-                    </Link>
+                    </Nav.Item>
                 </Navbar.Brand>
                 
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />

@@ -75,11 +75,29 @@ class MainContainer extends React.Component{
             newViolatedObject.map(item => {
                 toast.warn(<ToastNotification data={this.state.violatedObjects[item]} />, {
                     hideProgressBar: true,
-                    autoClose: false
+                    autoClose: false,
+                    onClose: this.onCloseToast
                 })
             })
         }
+    }
 
+    onCloseToast = (toast) => {
+        let mac_address = toast.data ? toast.data.mac_address : toast.mac_address
+        axios.post(dataSrc.checkoutViolation, {
+            mac_address,
+        })
+        .then(res => {
+        })
+        .catch(err => {
+            console.log(`checkout violation fail: ${err}`)
+        })
+    }
+
+    /** Clear the record violated object */
+    clearAlerts = () => {
+        Object.values(this.state.violatedObjects).map(item => this.onCloseToast(item))
+        toast.dismiss()
     }
 
     shouldComponentUpdate = (nextProps,nextState) => {
@@ -204,11 +222,6 @@ class MainContainer extends React.Component{
         .catch(err => {
             console.log(`get geo fence data fail: ${err}`)
         })
-    }
-
-    /** Clear the record violated object */
-    clearAlerts = () => {
-        toast.dismiss()
     }
 
     /** Parsing the lbeacon's location coordinate from lbeacon_uuid*/
