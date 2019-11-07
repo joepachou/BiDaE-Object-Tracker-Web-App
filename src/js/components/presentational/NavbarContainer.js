@@ -117,7 +117,7 @@ class NavbarContainer extends React.Component {
 
                 control: () => ({
                   // none of react-select's styles are passed to <Control />
-                    width: 200,
+                    width: 230,
                 }),
                 
                 singleValue: (provided, state) => {
