@@ -1,6 +1,7 @@
 import IIS_SINICA_FLOOR_FOUR_MAP from "../img/map/iis_new_building_four_floor.png";
 import NTUH_YUNLIN_WARD_FIVE_B_MAP from "../img/map/ntuh_yunlin_branch_ward_five_b.png";
 import NURSING_HOME_MAP from "../img/map/nursing_house.png"
+import YUANLIN_CHRISTIAN_HOSPITAL_MAP from "../img/map/yuanlin_christian_hospital.png"
 import BOT_LOGO from "../img//logo/BOT_LOGO_RED.png";
 import moment from 'moment'
 import patientP from "../img//logo/pic.png"
@@ -546,6 +547,7 @@ const config = {
             1: "IIS_SINICA_FLOOR_FOUR",
             3: "NTUH_YUNLIN_WARD_FIVE_B",
             4: "NURSING_HOME",
+            5: "YUANLIN_CHRISTIAN_HOSPITAL"
         },
     
         areaModules: {
@@ -569,6 +571,14 @@ const config = {
                 url: NURSING_HOME_MAP,
                 bounds: [[0,0], [20000,45000]],
             },
+            
+            YUANLIN_CHRISTIAN_HOSPITAL: {
+                id: 5,
+                name: "YUANLIN_CHRISTIAN_HOSPITAL",
+                url: YUANLIN_CHRISTIAN_HOSPITAL_MAP,
+                bounds: [[0,0], [21000,27000]],
+            }
+
         },
 
         /* For test. To start object tracking*/
