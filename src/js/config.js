@@ -550,33 +550,33 @@ const config = {
         defaultAreaId: 5,
         
         areaOptions: {
-            1: "IIS_SINICA_FLOOR_FOUR",
-            3: "NTUH_YUNLIN_WARD_FIVE_B",
-            4: "NURSING_HOME",
+            // 1: "IIS_SINICA_FLOOR_FOUR",
+            // 3: "NTUH_YUNLIN_WARD_FIVE_B",
+            // 4: "NURSING_HOME",
             5: "YUANLIN_CHRISTIAN_HOSPITAL"
         },
     
         areaModules: {
 
-            IIS_SINICA_FLOOR_FOUR: {
-                id: 1,
-                name: "IIS_SINICA_FLOOR_FOUR",
-                url: IIS_SINICA_FLOOR_FOUR_MAP,
-                bounds: [[0,0], [21130,35710]],
-            },
+            // IIS_SINICA_FLOOR_FOUR: {
+            //     id: 1,
+            //     name: "IIS_SINICA_FLOOR_FOUR",
+            //     url: IIS_SINICA_FLOOR_FOUR_MAP,
+            //     bounds: [[0,0], [21130,35710]],
+            // },
 
-            NTUH_YUNLIN_WARD_FIVE_B: {
-                id: 3,
-                name: "NTUH_YUNLIN_WARD_FIVE_B",
-                url: NTUH_YUNLIN_WARD_FIVE_B_MAP,
-                bounds: [[-5000,-5000], [21067,31928]],
-            },
-            NURSING_HOME: {
-                id: 4,
-                name: "NURSING_HOME",
-                url: NURSING_HOME_MAP,
-                bounds: [[0,0], [20000,45000]],
-            },
+            // NTUH_YUNLIN_WARD_FIVE_B: {
+            //     id: 3,
+            //     name: "NTUH_YUNLIN_WARD_FIVE_B",
+            //     url: NTUH_YUNLIN_WARD_FIVE_B_MAP,
+            //     bounds: [[-5000,-5000], [21067,31928]],
+            // },
+            // NURSING_HOME: {
+            //     id: 4,
+            //     name: "NURSING_HOME",
+            //     url: NURSING_HOME_MAP,
+            //     bounds: [[0,0], [20000,45000]],
+            // },
             
             YUANLIN_CHRISTIAN_HOSPITAL: {
                 id: 5,
