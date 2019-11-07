@@ -78,6 +78,8 @@ const en =  {
     CLOSE: "close",
     SHOW_DEVICES_NOT_FOUND: "show devices not found",
     SHOW_DEVICES_FOUND: "show devices found",
+    SHOW_PATIENTS_NOT_FOUND: "show patients not found",
+    SHOW_PATIENTS_FOUND: "show patients found",
 
     /* Form Field */
     NAME: "name",
