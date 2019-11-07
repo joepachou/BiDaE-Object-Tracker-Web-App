@@ -110,7 +110,7 @@ a:hover {
 }
 
 .navbar-brand:hover {
-    font-weight: 700;
+    /* font-weight: 700; */
 }
 
 .navbar-light .navbar-toggler {
@@ -386,6 +386,11 @@ button:focus {
 .modal-backdrop {
     z-index: 1050;
 }
+
+/** react-select */
+/* .css-yk16xz-control {
+    border: 0;
+} */
 
 /** Basic html tag */
 textarea {
