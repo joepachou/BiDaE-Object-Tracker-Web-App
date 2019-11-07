@@ -168,14 +168,6 @@ class ObjectManagementContainer extends React.Component{
         })
     }
 
-
-
-
-
-
-
-
-
     handleModalForm = () => {
         this.setState({
             isShowEdit: true,
@@ -345,8 +337,9 @@ class ObjectManagementContainer extends React.Component{
                 <Tab>{locale.texts.PATIENT_FORM}</Tab>
                 </TabList>
 
-                <TabPanel>  
+                <TabPanel> 
                 <ReactTable 
+          
                             data = {this.state.data} 
                             columns = {this.state.column} 
                             noDataText="No Data Available"

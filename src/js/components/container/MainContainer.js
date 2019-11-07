@@ -333,13 +333,7 @@ class MainContainer extends React.Component{
                     return item
                 })
         } else if (searchKey === myPatient){
-            const devicesAccessControlNumber = auth.user.myDevice || []
-            proccessedTrackingData.map(item => {
-                if (devicesAccessControlNumber.includes(item.asset_control_number)) {
-                    item.searched = true;
-                    searchResult.push(item)
-                }
-            })
+            searchResult = proccessedTrackingData.filter(item => (item.object_type != 0 && item.physician_id == auth.user.id))
         } else if (searchKey === allPatient){
             searchResult = proccessedTrackingData.filter(item => item.object_type != 0)
             .map(item => {

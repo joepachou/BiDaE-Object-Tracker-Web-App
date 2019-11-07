@@ -142,6 +142,7 @@ const tw = {
     THE_ASSET_CONTROL_NUMBER_IS_ALREADY_USED: "財產編號已被使用",
     THE_MAC_ADDRESS_IS_ALREADY_USED :"Mac Address已被使用",
     THE_MAC_ADDRESS_FORM_IS_WRONG: "Mac Address 形式錯誤",
+    THE_ATTENDINGPHYSICIAN_IS_WRONG: "醫生編號 必須是數字",  
     AREA_IS_REQUIRED: "請選擇地區",
     NOT_ASSIGNED_TO_ANY_DEVICES: "尚未指定任何儀器",
 

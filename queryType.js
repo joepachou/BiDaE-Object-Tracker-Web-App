@@ -20,6 +20,7 @@ function query_getTrackingData () {
 			object_table.asset_control_number,
 			object_table.area_id,
 			object_table.object_type,
+			object_table.physician_id,
 			split_part(object_table.asset_control_number, '-', 3) as last_four_acn,
 			lbeacon_table.description as location_description,
 			edit_object_record.notes,
@@ -112,10 +113,10 @@ const query_getPatientTable = (area_id) => {
 		text += `
 			SELECT 
 				object_table.name, 
-				object_table.physician_id,
+				object_table.id,
 				object_table.area_id,
 				object_table.room_number, 
-				object_table.id,
+				object_table.physician_id,
 				object_table.mac_address
 			FROM object_table 
 
@@ -129,10 +130,10 @@ const query_getPatientTable = (area_id) => {
 		   
 			SELECT 
 				object_table.name, 
-				object_table.physician_id,
+				object_table.id,
 				object_table.area_id, 
 				object_table.room_number, 
-				object_table.id,
+				object_table.physician_id,
 				object_table.mac_address
 			FROM object_table 
 
@@ -293,9 +294,10 @@ function query_addPatient (formOption) {
 			physician_id,
 			area_id,
 			mac_address, 
+			type,
 			registered_timestamp
 		)
-		VALUES($1,$2,$3,$4,$5,now())
+		VALUES($1,$2,$3,$4,$5,'Patient',now())
 		`;
 		
 	const values = [
@@ -358,6 +360,7 @@ function query_signin(username) {
 			user_table.mydevice, 
 			user_table.search_history,
 			user_table.shift,
+			user_table.id,
 			array (
 				SELECT area_id
 				FROM user_areas
