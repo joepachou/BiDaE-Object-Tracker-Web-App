@@ -541,44 +541,43 @@ const config = {
             else if (item.object_type == 2) return config.mapConfig.iconColor.male
         },
 
-        defaultAreaId: 1,
+        defaultAreaId: 5,
         
         areaOptions: {
-            1: "IIS_SINICA_FLOOR_FOUR",
-            3: "NTUH_YUNLIN_WARD_FIVE_B",
-            4: "NURSING_HOME",
+            // 1: "IIS_SINICA_FLOOR_FOUR",
+            // 3: "NTUH_YUNLIN_WARD_FIVE_B",
+            // 4: "NURSING_HOME",
             5: "YUANLIN_CHRISTIAN_HOSPITAL"
         },
     
         areaModules: {
 
-            IIS_SINICA_FLOOR_FOUR: {
-                id: 1,
-                name: "IIS_SINICA_FLOOR_FOUR",
-                url: IIS_SINICA_FLOOR_FOUR_MAP,
-                bounds: [[0,0], [21130,35710]],
-            },
+            // IIS_SINICA_FLOOR_FOUR: {
+            //     id: 1,
+            //     name: "IIS_SINICA_FLOOR_FOUR",
+            //     url: IIS_SINICA_FLOOR_FOUR_MAP,
+            //     bounds: [[0,0], [21130,35710]],
+            // },
 
-            NTUH_YUNLIN_WARD_FIVE_B: {
-                id: 3,
-                name: "NTUH_YUNLIN_WARD_FIVE_B",
-                url: NTUH_YUNLIN_WARD_FIVE_B_MAP,
-                bounds: [[-5000,-5000], [21067,31928]],
-            },
-            NURSING_HOME: {
-                id: 4,
-                name: "NURSING_HOME",
-                url: NURSING_HOME_MAP,
-                bounds: [[0,0], [20000,45000]],
-            },
+            // NTUH_YUNLIN_WARD_FIVE_B: {
+            //     id: 3,
+            //     name: "NTUH_YUNLIN_WARD_FIVE_B",
+            //     url: NTUH_YUNLIN_WARD_FIVE_B_MAP,
+            //     bounds: [[-5000,-5000], [21067,31928]],
+            // },
+            // NURSING_HOME: {
+            //     id: 4,
+            //     name: "NURSING_HOME",
+            //     url: NURSING_HOME_MAP,
+            //     bounds: [[0,0], [20000,45000]],
+            // },
             
             YUANLIN_CHRISTIAN_HOSPITAL: {
                 id: 5,
                 name: "YUANLIN_CHRISTIAN_HOSPITAL",
                 url: YUANLIN_CHRISTIAN_HOSPITAL_MAP,
-                bounds: [[0,0], [21000,27000]],
+                bounds: [[4000,-3000], [25000,30000]],
             }
-
         },
 
         /* For test. To start object tracking*/
@@ -633,29 +632,6 @@ const config = {
             const content = `
                 <div>
                     <h4 class="border-bottom pb-1 px-2">${object[0].location_description}</h4>
-                    ${PatientTotalNumber ? `<h5>病人</h5>`: ``}         
-                    ${
-                        objectList.map((item, index) =>{
-                            var element = `<div class="row popupRow mb-2 mx-2 d-flex jusify-content-start">`
-                            if (item.object_type != 0) {
-                                element +=
-                             `
-                                <div class="popupType text-capitalize">
-                                    ${config.mapConfig.iconOptions.showNumber ? `${++indexNumberForPatient}`: ''} 
-                                </div>     
-                                <div class="popupType">
-                                    . ${item.name} 
-                                </div>
-                                <div class="popupType">
-                                    , ${locale.texts.PHYSICIAN_NAME}: ${item.physician_name}
-                                </div>
-                                `
-                            }
-                        element += `</div>`
-                        return element
-                        }).join("")
-                    }
-                    ${DeviceTotalNumber ? `<h5>儀器</h5>` : ``}
                     ${objectList.map((item, index) => {
                         var element = `<div class="row popupRow mb-2 mx-2 d-flex jusify-content-start">`
                         if(item.object_type == 0){

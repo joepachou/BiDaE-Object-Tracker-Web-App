@@ -43,7 +43,7 @@ class Map extends React.Component {
         // }
 
         if (this.props.geoFenceConfig.length !== 0 && !this.state.hasGeoFenceMaker && this.props.isOpenFence) {
-            console.log("what's this")
+            // console.log("what's this")
             this.createGeoFenceMarkers()
         }
 
@@ -56,7 +56,7 @@ class Map extends React.Component {
         // }
 
         if (this.state.hasGeoFenceMaker && (prevProps.isOpenFence !== this.props.isOpenFence)) {
-            console.log(`fence ${this.props.isOpenFence}`)
+            // console.log(`fence ${this.props.isOpenFence}`)
             this.props.isOpenFence ? this.createGeoFenceMarkers() : this.geoFenceLayer.clearLayers()
         }
     }
@@ -122,7 +122,7 @@ class Map extends React.Component {
     /** Create the lbeacon and invisibleCircle markers */
     createGeoFenceMarkers = () => {        
         this.geoFenceLayer.clearLayers()
-        console.log('create geofence marker')
+        // console.log('create geofence marker')
         let { stateReducer } = this.context
         let [{areaId}] = stateReducer
 
@@ -235,8 +235,6 @@ class Map extends React.Component {
 
         const iconSize = [this.scalableIconSize, this.scalableIconSize];
         const numberSize = this.scalableNumberSize;
-        // console.log(iconSize)
-        // console.log(numberSize)
         let counter = 0;
 
         this.filterTrackingData(_.cloneDeep(this.props.proccessedTrackingData))

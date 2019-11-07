@@ -3,13 +3,11 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom";
 import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Nav, NavDropdown, Image, Dropdown  } from 'react-bootstrap'
-// import SigninPage from '../container/SigninPage';
+import SigninPage from '../container/SigninPage';
 import config from '../../config';
 import AccessControl from './AccessControl';
 import ShiftChange from '../container/ShiftChange'
-import { AppContext } from '../../context/AppContext'
-import SigninPage, { sendUserAuthencation } from 'bedis-signin'
-import dataSrc from '../../dataSrc'
+import { AppContext } from '../../context/AppContext';
 import Select from 'react-select';
 
 class NavbarContainer extends React.Component {
@@ -58,15 +56,7 @@ class NavbarContainer extends React.Component {
         )
     }
 
-    handleSigninFormSubmit = (username, password) => {
-        const {auth } = this.context
-        sendUserAuthencation(dataSrc.signin, username, password, (i, userInfo) => {
-            console.log(userInfo)
-            if(i === 0){
-                // console.log('confirm')
-                auth.signin(userInfo)
-            }
-        })
+    handleSigninFormSubmit = () => {
         this.setState({
             isShowSigninForm: false,
         })
@@ -267,12 +257,11 @@ class NavbarContainer extends React.Component {
                 </Navbar.Collapse>
 
                 <SigninPage 
-                    locale = {locale}
-                    title = {'SIGN_IN'}
-                    logo = {config.image.logo}
-                    show = {isShowSigninForm}
+                    show={isShowSigninForm}
                     handleSigninFormSubmit={this.handleSigninFormSubmit}
-                    handleSigninFormClose = {this.handleSigninFormClose}
+                    handleSignupFormShowUp={this.handleSignupFormShowUp}
+                    handleSignFormClose={this.handleSignFormClose}
+                    signin={auth.signin}
                 />
                 <ShiftChange 
                     show = {isShowShiftChange}

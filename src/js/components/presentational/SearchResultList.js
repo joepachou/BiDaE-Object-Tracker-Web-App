@@ -343,7 +343,13 @@ class SearchResult extends React.Component {
                         size="lg"
                         disabled={false}
                     >
-                        {this.state.showNotFoundResult 
+                        {(this.props.searchKey == "my patient" || this.props.searchKey == "all patient") 
+                            ?
+                            this.state.showNotFoundResult
+                            ? locale.texts.SHOW_PATIENTS_FOUND
+                            :locale.texts.SHOW_PATIENTS_NOT_FOUND
+                            :
+                            this.state.showNotFoundResult 
                             ? locale.texts.SHOW_DEVICES_FOUND
                             : locale.texts.SHOW_DEVICES_NOT_FOUND
                         }
