@@ -241,7 +241,7 @@ const patientTableColumn = [
     },
     {
         Header: "patient Number",
-        accessor: "physician_id"
+        accessor: "id"
     },
     {
         Header: "auth Area",
@@ -253,7 +253,7 @@ const patientTableColumn = [
     },
     {
         Header: "attending Physician",
-        accessor: "id"
+        accessor: "physician_id"
     },
     {
         Header: "Mac Address",

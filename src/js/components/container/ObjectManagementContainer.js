@@ -293,6 +293,12 @@ class ObjectManagementContainer extends React.Component{
         })
     }
 
+
+    keyUpHandler(refName, e) {
+        console.log('123135');
+        // prints either LoginInput or PwdInput
+    }
+
     render(){
         const { isShowEdit, selectedRowData,selectedRowData_Patient,isPatientShowEdit } = this.state
         const locale = this.context
@@ -345,8 +351,9 @@ class ObjectManagementContainer extends React.Component{
                 <Tab>{locale.texts.PATIENT_FORM}</Tab>
                 </TabList>
 
-                <TabPanel>  
+                <TabPanel> 
                 <ReactTable 
+          
                             data = {this.state.data} 
                             columns = {this.state.column} 
                             noDataText="No Data Available"
@@ -394,7 +401,7 @@ class ObjectManagementContainer extends React.Component{
                                              formTitle: 'edit patient',
                                              formPath: editPatient
                                         })
-
+                                        this.keyUpHandler()
 
                                         if (handleOriginal) {
                                             handleOriginal()
@@ -405,9 +412,6 @@ class ObjectManagementContainer extends React.Component{
                         />
                 </TabPanel>
                 </Tabs>
-
-{console.log('==')}
-{console.log(this.state.dataPatient)}
 
                 <EditPatientForm
                     show = {isPatientShowEdit} 
