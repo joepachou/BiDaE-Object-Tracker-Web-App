@@ -233,6 +233,37 @@ const searchResultTableColumn = [
     },
 ]
 
+const patientTableColumn = [
+    //accessor要對到抓下來資料的名字
+    {
+        Header: "Name",
+        accessor: "name"
+    },
+    {
+        Header: "patient Number",
+        accessor: "physician_id"
+    },
+    {
+        Header: "auth Area",
+        accessor: "area_name.label"
+    },
+    {
+        Header: "room Number",
+        accessor: "room_number"
+    },
+    {
+        Header: "attending Physician",
+        accessor: "id"
+    },
+    {
+        Header: "Mac Address",
+        accessor: "mac_address",
+    }
+
+]
+
+
+
 const objectTableColumn = [
     {
         Header: "Name",
@@ -417,6 +448,7 @@ export {
     lbeaconTableColumn,
     gatewayTableColumn,
     objectTableColumn,
+    patientTableColumn,
     geofenceTableColumn,
     userInfoTableColumn,
     editObjectRecordTableColumn,

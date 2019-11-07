@@ -89,6 +89,50 @@ const query_getObjectTable = (area_id) => {
 	return text
 } 
 
+
+// WHERE object_table.object_type = '2'
+const query_getPatientTable = (area_id) => {
+
+	let text = '';
+	if (!area_id) {
+		text += `
+			SELECT 
+				object_table.name, 
+				object_table.physician_id,
+				object_table.area_id,
+				object_table.room_number, 
+				object_table.id,
+				object_table.mac_address
+			FROM object_table 
+
+			WHERE object_table.physician_id > 0
+
+			ORDER BY object_table.name ASC	
+		`;
+	} else {
+		
+		text +=`
+		   
+			SELECT 
+				object_table.name, 
+				object_table.physician_id,
+				object_table.area_id, 
+				object_table.room_number, 
+				object_table.id,
+				object_table.mac_address
+			FROM object_table 
+
+			WHERE object_table.area_id = ${area_id[0]}
+
+			ORDER BY object_table.name ASC	
+		`;
+	}
+	return text
+} 
+
+
+
+
 const query_getLbeaconTable = 
     `
 	SELECT 
@@ -158,6 +202,28 @@ function query_editObject (formOption) {
 	return query;
 }
 
+
+
+function query_editPatient (formOption) {
+
+
+
+
+	const query = {
+		text,
+		values
+	};
+
+	return query;
+}
+
+
+
+
+
+
+
+
 function query_addObject (formOption) {
 	const text = 
 		`
@@ -208,18 +274,22 @@ function query_addPatient (formOption) {
 	const text = 
 		`
 		INSERT INTO object_table (
+			name,
+			room_number,
 			physician_id,
-			asset_control_number, 
-			mac_address,
+			area_id,
+			mac_address, 
 			registered_timestamp
 		)
-		VALUES($1,$2,$3,now())
+		VALUES($1,$2,$3,$4,$5,now())
 		`;
 		
 	const values = [
-		formOption.patientName, 
-		formOption.asset_number,
-		formOption.mac_address, 
+		formOption.patientName,
+		formOption.roomNumber,
+		formOption.attendingPhysician,
+		formOption.area_id,
+		formOption.mac_address
 	];
 
 	const query = {
@@ -682,11 +752,13 @@ const query_setGeoFenceConfig = (value, areaId) =>{
 
 module.exports = {
     query_getTrackingData,
-    query_getObjectTable,
+	query_getObjectTable,
+	query_getPatientTable,
     query_getLbeaconTable,
 	query_getGatewayTable,
 	query_getGeofenceData,
 	query_editObject,
+	query_editPatient,
 	query_addObject,
 	query_addPatient,
 	query_editObjectPackage,

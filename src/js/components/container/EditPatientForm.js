@@ -36,7 +36,6 @@ class EditPatientForm extends React.Component {
     
     handleSubmit = (postOption) => {
         const path = this.props.formPath
-        console.log(postOption)
         axios.post(path, {
             formOption: postOption
         }).then(res => {
@@ -101,11 +100,12 @@ class EditPatientForm extends React.Component {
         const { title, selectedObjectData } = this.props;
 
         const { 
-            patientName,
-            roomNumber,
-            attendingPhysician,
+            name,
+            physician_id,
+            area_name,
+            room_number,
+            id,
             mac_address,
-            asset_number,
         } = selectedObjectData
 
         return (
@@ -114,35 +114,28 @@ class EditPatientForm extends React.Component {
                     {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
                 </Modal.Header >
                 <Modal.Body>
+               
+                    <Formik              
 
-
-
-
-
-
-
-
-                
-                    <Formik                    
                        
 
                        initialValues = {{
-                        patientName: patientName || '' ,
-                        roomNumber: roomNumber || '',
-                        attendingPhysician: attendingPhysician || '',
+                        area: area_name || '',
+                        patientName: name || '' ,
+                        roomNumber: room_number || '',
+                        attendingPhysician: id || '',
                         mac_address: mac_address || '',
-                        asset_number: asset_number || '',    
+                    
                         }}
-
-
-
+                       
                         validationSchema = {
+                            
                             Yup.object().shape({
+                                
                                 patientName: Yup.string().required(locale.texts.NAME_IS_REQUIRED),
-                                roomNumber: Yup.string().required('馬的給我填'),
-                                attendingPhysician: Yup.string().required('馬的給我填'),
-                                asset_number: Yup.string().required('馬的給我填'),
-
+                                roomNumber: Yup.string().required(locale.texts.ROOMNUMBER_IS_REQUIRED),
+                                attendingPhysician: Yup.string().required(locale.texts.ATTENDING_IS_REQUIRED),
+                                area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
                                 mac_address: Yup.string()
                                     .required(locale.texts.MAC_ADDRESS_IS_REQUIRED)
                                     .test(
@@ -162,44 +155,22 @@ class EditPatientForm extends React.Component {
                                             return false
                                         }
                                     ),
-                                    
                         })}
 
+                  
 
                         onSubmit={(values, { setStatus, setSubmitting }) => {
                             const postOption = {
                                 ...values,
+                                area_id: config.mapConfig.areaModules[values.area.value].id
                             }
                             this.handleSubmit(postOption)                            
                         }}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (  
                             <Form className="text-capitalize">
+                       
                                 <Row className="form-group my-3 text-capitalize" noGutters>
                                     <Col lg={3} className='d-flex align-items-center'>
                                         <label htmlFor="type">{locale.texts.AUTH_AREA}</label>
@@ -254,18 +225,14 @@ class EditPatientForm extends React.Component {
 
                                 <div className="form-group">
                                     <label htmlFor="mac_address">{locale.texts.MAC_ADDRESS}*</label>
-                                    <Field name="mac_address" type="text" className={'form-control' + (errors.mac_address && touched.mac_address ? ' is-invalid' : '')} placeholder=''/>
+                                    <Field 
+                                        name="mac_address" 
+                                        type="text" 
+                                        className={'form-control' + (errors.mac_address && touched.mac_address ? ' is-invalid' : '')} 
+                                        disabled={title.toLowerCase() === locale.texts.EDIT_OBJECT}
+                                    />
                                     <ErrorMessage name="mac_address" component="div" className="invalid-feedback" />
                                 </div>
-
-
-                                <div className="form-group">
-                                    <label htmlFor="asset_number">{locale.texts.ASSET_CONTROL_NUMBER_IS_REQUIRED}*</label>
-                                    <Field name="asset_number" type="text" className={'form-control' + (errors.asset_number && touched.asset_number ? ' is-invalid' : '')} placeholder=''/>
-                                    <ErrorMessage name="asset_number" component="div" className="invalid-feedback" />
-                                </div>
-
-
 
                                 <div className="form-group">
                                     <label htmlFor="patientStatus">{locale.texts.PICTURE}</label>

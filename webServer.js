@@ -49,6 +49,8 @@ app.get(/^\/page\/(.*)/, (req, res) => {
 
 app.post('/data/getObjectTable', db.getObjectTable);
 
+app.post('/data/getPatientTable', db.getPatientTable);
+
 app.post('/data/getLbeaconTable', db.getLbeaconTable);
 
 app.post('/data/getGatewayTable', db.getGatewayTable);
@@ -58,6 +60,8 @@ app.post('/data/geofenceData', db.getGeofenceData);
 app.post('/data/getTrackingData', db.getTrackingData);
 
 app.post('/data/editObject', db.editObject);
+
+app.post('/data/editPatient', db.editPatient);
 
 app.post('/data/addObject', db.addObject);
 

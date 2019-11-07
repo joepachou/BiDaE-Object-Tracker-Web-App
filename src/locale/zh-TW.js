@@ -24,10 +24,13 @@ const tw = {
     POSITION:"位置狀態",
     POSITION_UNDEFINE:"選擇狀態",
     ROOM_NUMBER:"病房編號",
-    ATTENDING_PHYSICIAN:"負責醫生",
+    ATTENDING_PHYSICIAN:"醫生編號",
     BATTERY_ALERT:"電池更換提示",
     PICTURE:"相關圖片",
     BATTERY_CHANGE:"需更換",
+    PATIENT_NUMBER:"病人編號",
+    DEVICE_FORM:"設備列表",
+    PATIENT_FORM:"病人列表",
 
     /* Location accuracy */
     LOCATION_ACCURACY: "位置精準度",
@@ -64,6 +67,7 @@ const tw = {
     ADD_USER: "新增使用者",
     ADD_INPATIENT:"新增病人",
     EDIT_DEVICES: "編輯儀器",
+    EDIT_PATIENT: "編輯病人資料",
     SWITCH_AREA: "切換地點",
     FENCE_ON: "圍籬已開啟",
     FENCE_OFF: "圍籬已關閉",
@@ -119,6 +123,8 @@ const tw = {
 
     /** Error Message */
     NAME_IS_REQUIRED: "請填入名字",
+    ROOMNUMBER_IS_REQUIRED: "請輸入病房編號",
+    ATTENDING_IS_REQUIRED: "請輸入負責醫生",
     TYPE_IS_REQUIRED: "請填入類別",
     LOCATION_IS_REQUIRED: "請選擇地點",
     ASSET_CONTROL_NUMBER_IS_REQUIRED: "請填入財產編號",
