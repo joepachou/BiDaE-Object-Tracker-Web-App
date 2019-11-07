@@ -290,12 +290,12 @@ class SearchResult extends React.Component {
             : foundResult
 
         let title = this.state.showNotFoundResult 
-            ? (this.props.searchKey === "my devices" || this.props.searchKey === "all devices")
-                ? locale.texts.DEVICES_NOT_FOUND
-                : locale.texts.PATIENT_NOT_FOUND
-            : (this.props.searchKey === "my devices" || this.props.searchKey === "all devices")
-                ? locale.texts.DEVICES_FOUND
-                : locale.texts.PATIENT_FOUND
+            ? (this.props.searchKey === "my patient" || this.props.searchKey === "all patient")
+                ? locale.texts.PATIENT_NOT_FOUND
+                : locale.texts.DEVICES_NOT_FOUND
+            : (this.props.searchKey === "my patient" || this.props.searchKey === "all patient")
+                ? locale.texts.PATIENT_FOUND
+                : locale.texts.DEVICES_FOUND
 
 
         return(
