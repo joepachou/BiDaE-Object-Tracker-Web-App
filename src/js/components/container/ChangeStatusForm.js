@@ -69,7 +69,6 @@ class ChangeStatusForm extends React.Component {
                     return {
                         value: `${location},${branch}`,
                         label: locale.texts[branch.toUpperCase().replace(/ /g, '_')],
-
                     }
                 })
             }
@@ -330,14 +329,6 @@ class ChangeStatusForm extends React.Component {
                                             </Button> */}
                                         </ButtonToolbar>
                                     </Row>
-
-
-                                    
-
-+
-
-
-
                                     <Modal.Footer>
                                         <Button 
                                             variant="outline-secondary" 
