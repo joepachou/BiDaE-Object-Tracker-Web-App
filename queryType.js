@@ -97,10 +97,10 @@ const query_getPatientTable = (area_id) => {
 		text += `
 			SELECT 
 				object_table.name, 
-				object_table.physician_id,
+				object_table.id,
 				object_table.area_id,
 				object_table.room_number, 
-				object_table.id,
+				object_table.physician_id,
 				object_table.mac_address
 			FROM object_table 
 
@@ -114,10 +114,10 @@ const query_getPatientTable = (area_id) => {
 		   
 			SELECT 
 				object_table.name, 
-				object_table.physician_id,
+				object_table.id,
 				object_table.area_id, 
 				object_table.room_number, 
-				object_table.id,
+				object_table.physician_id,
 				object_table.mac_address
 			FROM object_table 
 
@@ -278,9 +278,10 @@ function query_addPatient (formOption) {
 			physician_id,
 			area_id,
 			mac_address, 
+			type,
 			registered_timestamp
 		)
-		VALUES($1,$2,$3,$4,$5,now())
+		VALUES($1,$2,$3,$4,$5,'Patient',now())
 		`;
 		
 	const values = [

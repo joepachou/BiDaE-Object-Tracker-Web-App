@@ -114,7 +114,7 @@ class EditPatientForm extends React.Component {
                     {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
                 </Modal.Header >
                 <Modal.Body>
-               
+              
                     <Formik              
 
                        
@@ -125,7 +125,7 @@ class EditPatientForm extends React.Component {
                         roomNumber: room_number || '',
                         attendingPhysician: id || '',
                         mac_address: mac_address || '',
-                    
+                   
                         }}
                        
                         validationSchema = {
@@ -134,8 +134,22 @@ class EditPatientForm extends React.Component {
                                 
                                 patientName: Yup.string().required(locale.texts.NAME_IS_REQUIRED),
                                 roomNumber: Yup.string().required(locale.texts.ROOMNUMBER_IS_REQUIRED),
-                                attendingPhysician: Yup.string().required(locale.texts.ATTENDING_IS_REQUIRED),
+                               
+                                attendingPhysician: Yup.string()
+                                .required(locale.texts.ATTENDING_IS_REQUIRED)
+                                .test(
+                                        'attendingPhysician',
+                                        locale.texts.THE_ATTENDINGPHYSICIAN_IS_WRONG,
+                                        value => {
+                                            if( isNaN(value) == false) return true
+                                            if (isNaN(value) == true) return false
+                                        }
+                                    ),
+
+                               
                                 area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
+                          
+
                                 mac_address: Yup.string()
                                     .required(locale.texts.MAC_ADDRESS_IS_REQUIRED)
                                     .test(
@@ -160,6 +174,7 @@ class EditPatientForm extends React.Component {
                   
 
                         onSubmit={(values, { setStatus, setSubmitting }) => {
+                      
                             const postOption = {
                                 ...values,
                                 area_id: config.mapConfig.areaModules[values.area.value].id
@@ -170,7 +185,6 @@ class EditPatientForm extends React.Component {
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (  
                             <Form className="text-capitalize">
-                       
                                 <Row className="form-group my-3 text-capitalize" noGutters>
                                     <Col lg={3} className='d-flex align-items-center'>
                                         <label htmlFor="type">{locale.texts.AUTH_AREA}</label>
