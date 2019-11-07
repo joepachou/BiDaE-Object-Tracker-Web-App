@@ -33,6 +33,7 @@ const getGeoFenceConfig = `http://${dataSrcIP}/data/getGeoFenceConfig`
 const setGeoFenceConfig = `http://${dataSrcIP}/data/setGeoFenceConfig`
 const addShiftChangeRecord = `http://${dataSrcIP}/data/addShiftChangeRecord`
 const checkoutViolation = `http://${dataSrcIP}/data/checkoutViolation`
+const confirmValidation = `http://${dataSrcIP}/data/confirmValidation`
 
 
 const pdfUrl = function(path){
@@ -73,5 +74,6 @@ module.exports = {
     getGeoFenceConfig,
     setGeoFenceConfig,
     addShiftChangeRecord,
-    checkoutViolation
+    checkoutViolation,
+    confirmValidation
 };

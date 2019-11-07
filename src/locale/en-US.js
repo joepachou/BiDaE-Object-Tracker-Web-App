@@ -128,6 +128,9 @@ const en =  {
     TRANSFERRED_DEVICE_LIST: "transferred device list",
     WHOSE_DEVICES: "'s devices",
     TRANSFERRED_TO: "transferred to",
+    PLEASE_ENTER_ID_AND_PASSWORD: "please enter ID and password",
+    CHECKED_BY: "checked by",
+    CONFIRMED_BY: "confirmed by",
 
     /** Error Message */
     NAME_IS_REQUIRED: "Name is required",

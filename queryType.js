@@ -777,6 +777,35 @@ const query_checkoutViolation = (mac_address) => {
 	`
 }
 
+const query_confirmValidation = (username) => {
+	let text = `
+		SELECT 
+			user_table.name, 
+			user_table.password,
+			roles.name as role
+
+		FROM user_table
+
+		LEFT JOIN user_roles
+		ON user_roles.user_id = user_table.id
+
+		LEFT JOIN roles
+		ON user_roles.role_id = roles.id
+
+		WHERE user_table.name = $1;
+	`
+
+	const values = [username];
+
+	const query = {
+		text,
+		values
+	};
+
+	return query;
+
+}
+
 module.exports = {
     query_getTrackingData,
 	query_getObjectTable,
@@ -812,5 +841,6 @@ module.exports = {
 	query_getAreaTable,
 	query_getGeoFenceConfig,
 	query_setGeoFenceConfig,
-	query_checkoutViolation
+	query_checkoutViolation,
+	query_confirmValidation
 }

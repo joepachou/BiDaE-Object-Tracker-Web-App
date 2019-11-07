@@ -16,6 +16,7 @@ import moment from 'moment'
 import config from '../../config';
 import SearchResultListGroup from '../presentational/SearchResultListGroup'
 import { AppContext } from '../../context/AppContext'
+import GeneralConfirmForm from '../container/GeneralConfirmForm'
 
 
 class ShiftChange extends React.Component {
@@ -23,15 +24,16 @@ class ShiftChange extends React.Component {
     static contextType = AppContext
 
     state = {
-            show: false,
-            searchResult: {
-                foundResult: [],
-                notFoundResult: [],
-            },
-            fileUrl: '',
-            showPdfDownloadForm: false,
-            APIforTableDone: false,
-        }
+        show: false,
+        searchResult: {
+            foundResult: [],
+            notFoundResult: [],
+        },
+        fileUrl: '',
+        showPdfDownloadForm: false,
+        APIforTableDone: false,
+        isShowConfirmForm: false
+    }
         APIforTable = null
 
 
@@ -122,28 +124,34 @@ class ShiftChange extends React.Component {
     }
 
     confirmShift = () => {
-        let { locale, auth } = this.context    
-        let pdfPackage = config.getPdfPackage('shiftChange', auth.user, this.state.searchResult ,locale, )
+        this.setState({
+            isShowConfirmForm: true
+        })
+    }
+
+    handleConfirmFormSubmit = (name) => {
+        let { locale, auth } = this.context   
+
+        let pdfPackage = config.getPdfPackage('shiftChange', auth.user, this.state.searchResult ,locale,'', name)
 
         axios.post(dataSrc.addShiftChangeRecord, {
             userInfo: auth.user,
             pdfPackage,
         }).then(res => {
             this.setState({
-                fileUrl: pdfPackage.path
+                fileUrl: pdfPackage.path,
+                isShowConfirmForm: false
             })
             this.refs.download.click()
         }).catch(err => {
             console.log(err)
         })
+    }
 
-        // const url = window.URL.createObjectURL(new Blob([res.data]));
-        // const fileName = res.data.split('/')[1].toString()
-        // const link = document.createElement('a');
-        // link.href = url;
-        // link.setAttribute('download', fileName);
-        // document.body.appendChild(link);
-        // link.click();
+    handleSignFormClose = () => {
+        this.setState({
+            isShowConfirmForm: false
+        })
     }
 
     render() {
@@ -170,8 +178,9 @@ class ShiftChange extends React.Component {
                     >
                         <Row>
                             <Col className='text-capitalize'>
-                                {/* <h5>{locale.texts.SHIFT_CHANGE_RECORD}-{locale.texts.CONFIRM_BY}</h5> */}                                
-                                <h5>{userInfo.name}{locale.texts.WHOSE_DEVICES}</h5>
+                                <h5>{locale.texts.SHIFT_CHANGE_RECORD}</h5>                                
+                                {/* <h5>{locale.texts.CHECKED_BY} {userInfo.name} {locale.texts.WHOSE_DEVICES}</h5> */}
+                                {/* <h5>{locale.texts.CHECKED_BY} {userInfo.name} </h5> */}
                             </Col>
                         </Row>
                         <Row style={style.row} className='text-capitalize'> 
@@ -179,11 +188,13 @@ class ShiftChange extends React.Component {
                                 <div>{locale.texts.DATE_TIME}: {moment().locale(locale.abbr).format(config.shiftChangeRecordTimeFormat)}</div>
                             </Col>
                         </Row>
-                        {/* <Row style={style.row} className='text-capitalize'>
+                        <Row style={style.row} className='text-capitalize'>
                             <Col>
-                                <div>{locale.texts.SHIFT}: {auth.user.shift ? locale.texts[auth.user.shift.toUpperCase().replace(/ /g, '_')] : ''} </div>
+                                <div>{locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: {auth.user.name}, {auth.user.shift ? locale.texts[auth.user.shift.toUpperCase().replace(/ /g, '_')] : ''}</div>
+
+                                {/* <div>{locale.texts.SHIFT}: {auth.user.shift ? locale.texts[auth.user.shift.toUpperCase().replace(/ /g, '_')] : ''} </div> */}
                             </Col>
-                        </Row> */}
+                        </Row>
                         {/* <Row style={style.row} className='text-capitalize'> 
                             <Col>
                                 <div>{locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: </div>
@@ -252,6 +263,13 @@ class ShiftChange extends React.Component {
                         <a href={this.state.fileUrl} ref="download" download style={{display: 'none'}}>hi</a>
                     </Modal.Footer>
                 </Modal>
+                <GeneralConfirmForm
+                    show={this.state.isShowConfirmForm}
+                    handleConfirmFormSubmit={this.handleConfirmFormSubmit}
+                    // handleSignupFormShowUp={this.handleSignupFormShowUp}
+                    onClose={this.handleSignFormClose}
+                    signin={auth.signin}
+                />
             </Fragment>
 
         )

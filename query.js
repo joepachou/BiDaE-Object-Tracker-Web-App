@@ -323,7 +323,7 @@ const signin = (request, response) => {
                         id,
                         areas_id
                     }
-                    
+
                     request.session.userInfo = userInfo
                     response.json({
                         authentication: true,
@@ -344,7 +344,6 @@ const signin = (request, response) => {
         .catch(err => {
             console.log("Login Fails: " + err)
         })
-
 }
 
 const signup = (request, response) => {
@@ -654,6 +653,53 @@ const checkoutViolation = (request, response) => {
         })
 }
 
+const confirmValidation = (request, response) => {
+
+    let { username, password } = request.body
+
+    pool.query(queryType.query_confirmValidation(username))
+        .then(res => {
+
+            if (res.rowCount < 1) {
+                response.json({
+                    confirmation: false,
+                    message: "Incorrect"
+                })
+            } else {
+                const hash = res.rows[0].password
+                
+                if (bcrypt.compareSync(password, hash)) {
+                    let { 
+                        name, 
+                        role, 
+                        id
+                    } = res.rows[0]
+
+                    let userInfo = {
+                        name,
+                        role,
+                        id,
+                    }
+
+                    request.session.userInfo = userInfo
+
+                    console.log('confirm validation')
+                    response.json({
+                        confirmation: true,
+                    })
+                } else {
+                    response.json({
+                        confirmation: false,
+                        message: "password is incorrect"
+                    })
+                }
+            }
+        })
+        .catch(err => {
+            console.log(`confirm validation fail: ${err}`)
+        })
+}
+
 /** Parse the lbeacon's location coordinate from lbeacon_uuid*/
 const parseLbeaconCoordinate = (lbeacon_uuid) => {
     /** Example of lbeacon_uuid: 00000018-0000-0000-7310-000000004610 */
@@ -757,7 +803,6 @@ const checkMatchedObject = (item, userAuthenticatedAreaId, currentAreaId) => {
 }
 
 
-
 module.exports = {
     getTrackingData,
     getObjectTable,
@@ -790,5 +835,6 @@ module.exports = {
     getGeoFenceConfig,
     setGeoFenceConfig,
     addShiftChangeRecord,
-    checkoutViolation
+    checkoutViolation,
+    confirmValidation
 }

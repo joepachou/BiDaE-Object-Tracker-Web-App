@@ -200,8 +200,8 @@ const config = {
     /** Create pdf package, including header, body and the pdf path
      * options include shiftChange, searchResult, broken report, transffered report
      */
-    getPdfPackage: (option, user, data, locale, location) => {
-        const header = config.pdfFormat.getHeader(user, locale, option)
+    getPdfPackage: (option, user, data, locale, location, name) => {
+        const header = config.pdfFormat.getHeader(user, locale, option, name)
         const body = config.pdfFormat.getBody[option](data, locale, user, location)
         const path = config.pdfFormat.getPath(option, user)
         const pdf = header + body
@@ -215,10 +215,10 @@ const config = {
 
     /** Pdf format config */
     pdfFormat: {
-        getHeader: (user, locale, option) => {
+        getHeader: (user, locale, option, name) => {
             let title = config.pdfFormat.getTitle(option, locale)
             let timestamp = config.pdfFormat.getTimeStamp(locale)
-            let titleInfo = config.pdfFormat.getSubTitle[option](locale, user)
+            let titleInfo = config.pdfFormat.getSubTitle[option](locale, user, name)
             return title + timestamp + titleInfo
         },
     
@@ -400,17 +400,23 @@ const config = {
         },
     
         getSubTitle: {
-            shiftChange: (locale, user) => {
-                const nextShiftIndex = (config.shiftOption.indexOf(user.shift) + 1) % config.shiftOption.length
+            shiftChange: (locale, user, name) => {
+                const nextShiftIndex = (config.shiftOption.indexOf(user.shift) + 2) % config.shiftOption.length
                 const nextShift = locale.texts[config.shiftOption[nextShiftIndex].toUpperCase().replace(/ /g, "_")]
                 const thisShift = locale.texts[user.shift.toUpperCase().replace(/ /g, "_")]
                 let shift = `<div style="text-transform: capitalize;">
-                        ${locale.texts.SHIFT}: ${thisShift} ${locale.texts.SHIFT_TO} ${nextShift}
+                        ${locale.texts.SHIFT}: ${nextShift} ${locale.texts.SHIFT_TO} ${thisShift}
                     </div>`
+                let confirmedBy = `<div style="text-transform: capitalize;">
+                    ${locale.abbr == 'en' 
+                        ? `${locale.texts.CONFIRMED_BY} ${name}`
+                        : `${locale.texts.CONFIRMED_BY}:${name}`
+                    }
+                </div>`
                 let checkby = `<div style="text-transform: capitalize;">
                         ${locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: ${user.name}, ${thisShift}
                     </div>`
-                return ''
+                return confirmedBy + shift + checkby
             },
     
             searchResult: (locale, user) => {
@@ -544,39 +550,39 @@ const config = {
         defaultAreaId: 5,
         
         areaOptions: {
-            // 1: "IIS_SINICA_FLOOR_FOUR",
-            // 3: "NTUH_YUNLIN_WARD_FIVE_B",
-            // 4: "NURSING_HOME",
+            1: "IIS_SINICA_FLOOR_FOUR",
+            3: "NTUH_YUNLIN_WARD_FIVE_B",
+            4: "NURSING_HOME",
             5: "YUANLIN_CHRISTIAN_HOSPITAL"
         },
     
         areaModules: {
 
-            // IIS_SINICA_FLOOR_FOUR: {
-            //     id: 1,
-            //     name: "IIS_SINICA_FLOOR_FOUR",
-            //     url: IIS_SINICA_FLOOR_FOUR_MAP,
-            //     bounds: [[0,0], [21130,35710]],
-            // },
+            IIS_SINICA_FLOOR_FOUR: {
+                id: 1,
+                name: "IIS_SINICA_FLOOR_FOUR",
+                url: IIS_SINICA_FLOOR_FOUR_MAP,
+                bounds: [[0,0], [21130,35710]],
+            },
 
-            // NTUH_YUNLIN_WARD_FIVE_B: {
-            //     id: 3,
-            //     name: "NTUH_YUNLIN_WARD_FIVE_B",
-            //     url: NTUH_YUNLIN_WARD_FIVE_B_MAP,
-            //     bounds: [[-5000,-5000], [21067,31928]],
-            // },
-            // NURSING_HOME: {
-            //     id: 4,
-            //     name: "NURSING_HOME",
-            //     url: NURSING_HOME_MAP,
-            //     bounds: [[0,0], [20000,45000]],
-            // },
+            NTUH_YUNLIN_WARD_FIVE_B: {
+                id: 3,
+                name: "NTUH_YUNLIN_WARD_FIVE_B",
+                url: NTUH_YUNLIN_WARD_FIVE_B_MAP,
+                bounds: [[-5000,-5000], [21067,31928]],
+            },
+            NURSING_HOME: {
+                id: 4,
+                name: "NURSING_HOME",
+                url: NURSING_HOME_MAP,
+                bounds: [[0,0], [20000,45000]],
+            },
             
             YUANLIN_CHRISTIAN_HOSPITAL: {
                 id: 5,
                 name: "YUANLIN_CHRISTIAN_HOSPITAL",
                 url: YUANLIN_CHRISTIAN_HOSPITAL_MAP,
-                bounds: [[4000,-3000], [25000,30000]],
+                bounds: [[3000,-3000], [24000,30000]],
             }
         },
 
@@ -609,7 +615,7 @@ const config = {
         },
 
         /* Set the Marker dispersity that can be any positive number */
-        markerDispersity: 5,
+        markerDispersity: 13,
 
         popupOptions: {
             minWidth: "500",

@@ -130,6 +130,10 @@ const tw = {
     TRANSFERRED_DEVICE_LIST: "轉移儀器列表",
     WHOSE_DEVICES: "的儀器",
     TRANSFERRED_TO: "轉移至",
+    PLEASE_ENTER_ID_AND_PASSWORD: "請輸入ID及密碼",
+    CHECKED_BY: "確認",
+    CONFIRMED_BY: "審核",
+
 
     /** Error Message */
     NAME_IS_REQUIRED: "請填入名字",
