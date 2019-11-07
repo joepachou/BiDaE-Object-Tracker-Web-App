@@ -32,6 +32,7 @@ const getAreaTable = `http://${dataSrcIP}/data/getAreaTable`
 const getGeoFenceConfig = `http://${dataSrcIP}/data/getGeoFenceConfig`
 const setGeoFenceConfig = `http://${dataSrcIP}/data/setGeoFenceConfig`
 const addShiftChangeRecord = `http://${dataSrcIP}/data/addShiftChangeRecord`
+const checkoutViolation = `http://${dataSrcIP}/data/checkoutViolation`
 
 
 const pdfUrl = function(path){
@@ -71,5 +72,6 @@ module.exports = {
     getAreaTable,
     getGeoFenceConfig,
     setGeoFenceConfig,
-    addShiftChangeRecord
+    addShiftChangeRecord,
+    checkoutViolation
 };

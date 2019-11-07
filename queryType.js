@@ -23,7 +23,8 @@ function query_getTrackingData () {
 			split_part(object_table.asset_control_number, '-', 3) as last_four_acn,
 			lbeacon_table.description as location_description,
 			edit_object_record.notes,
-			user_table.name as physician_name
+			user_table.name as physician_name,
+			notification.violation_timestamp
 
 		FROM object_summary_table
 
@@ -39,7 +40,21 @@ function query_getTrackingData () {
 		LEFT JOIN user_table
 		ON user_table.id = object_table.physician_id
 
-		ORDER BY object_table.type ASC, object_table.name ASC, last_four_acn ASC;
+		LEFT JOIN (
+			SELECT 
+				mac_address,
+				MIN(violation_timestamp) as violation_timestamp
+			FROM (
+				SELECT 
+					mac_address,
+					violation_timestamp
+				FROM notification_table
+				WHERE 
+					web_processed is null
+			)	as temp
+			GROUP BY mac_address
+		) as notification
+		ON notification.mac_address = object_summary_table.mac_address;
 	`
 	return query;
 }
@@ -748,6 +763,17 @@ const query_setGeoFenceConfig = (value, areaId) =>{
 	`
 }
 
+const query_checkoutViolation = (mac_address) => {
+	return `
+		UPDATE notification_table
+		SET web_processed = 1
+		WHERE (
+			mac_address = '${mac_address}'
+			AND violation_timestamp < NOW()
+		) 	
+	`
+}
+
 module.exports = {
     query_getTrackingData,
 	query_getObjectTable,
@@ -782,5 +808,6 @@ module.exports = {
 	query_addShiftChangeRecord,
 	query_getAreaTable,
 	query_getGeoFenceConfig,
-	query_setGeoFenceConfig
+	query_setGeoFenceConfig,
+	query_checkoutViolation
 }

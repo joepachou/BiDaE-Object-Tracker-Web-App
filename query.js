@@ -638,7 +638,18 @@ const setGeoFenceConfig = (request, response) =>{
         .catch(err => {
             console.log(`set geo fence config fail: ${err}`)
         })
-    
+}
+
+const checkoutViolation = (request, response) => {
+    let { mac_address } = request.body
+    pool.query(queryType.query_checkoutViolation(mac_address))
+        .then(res => {
+            console.log(`checkout violation`)
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(`checkout violation fail: ${err}`)
+        })
 }
 
 /** Parse the lbeacon's location coordinate from lbeacon_uuid*/
@@ -676,25 +687,28 @@ const parseGeoFenceConfig = (field) => {
 /** Check tracking data violate geo fence */
 const checkViolateGeofence = (item) => {
 
-    /** Set the interval between the perimeter valid time and fence violation time */
-    let violateInterval = moment(item.geofence_violation_timestamp).diff(item.perimeter_valid_timestamp, 'seconds') 
+    // /** Set the interval between the perimeter valid time and fence violation time */
+    // let violateInterval = moment(item.geofence_violation_timestamp).diff(item.perimeter_valid_timestamp, 'seconds') 
 
-    /** Set the boolean if perimeter valid time is prior to fence violation time */
-    let isViolateInterval = violateInterval >= 0;
+    // /** Set the boolean if perimeter valid time is prior to fence violation time */
+    // let isViolateInterval = violateInterval >= 0;
 
-    /** Set the boolean if the perimeter valud time is near now */
-    let isDiffFromNow = moment().diff(item.perimeter_valid_timestamp, 'seconds') < 300
+    // /** Set the boolean if the perimeter valud time is near now */
+    // let isDiffFromNow = moment().diff(item.perimeter_valid_timestamp, 'seconds') < 300
 
-    /** Set the boolean if the perimeter time stamp is prior to first*/
-    let isInTheTimePeriod = moment(item.perimeter_valid_timestamp).diff(item.last_seen_timestamp, 'seconds') > 0
+    // /** Set the boolean if the perimeter time stamp is prior to first*/
+    // let isInTheTimePeriod = moment(item.perimeter_valid_timestamp).diff(item.last_seen_timestamp, 'seconds') > 0
 
-    /** Flag the object that is violated geo fence */
-    if (item.perimeter_valid_timestamp && item.geofence_violation_timestamp) {
-        return isInTheTimePeriod && isDiffFromNow && isViolateInterval ? 1 : 0
-    } else {
-        return false
-    }
+    // /** Flag the object that is violated geo fence */
+    // if (item.perimeter_valid_timestamp && item.geofence_violation_timestamp) {
+    //     return isInTheTimePeriod && isDiffFromNow && isViolateInterval ? 1 : 0
+    // } else {
+    //     return false
+    // }
+
+    return item.violation_timestamp
 }
+
 
 /** Check tracking data match the current UI area */
 const checkMatchedObject = (item, userAuthenticatedAreaId, currentAreaId) => {
@@ -740,6 +754,8 @@ const checkMatchedObject = (item, userAuthenticatedAreaId, currentAreaId) => {
     }
 }
 
+
+
 module.exports = {
     getTrackingData,
     getObjectTable,
@@ -771,5 +787,6 @@ module.exports = {
     getAreaTable,
     getGeoFenceConfig,
     setGeoFenceConfig,
-    addShiftChangeRecord
+    addShiftChangeRecord,
+    checkoutViolation
 }
