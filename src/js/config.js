@@ -410,7 +410,7 @@ const config = {
                 let checkby = `<div style="text-transform: capitalize;">
                         ${locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: ${user.name}, ${thisShift}
                     </div>`
-                return shift + checkby
+                return ''
             },
     
             searchResult: (locale, user) => {
