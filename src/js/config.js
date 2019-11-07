@@ -182,7 +182,7 @@ const config = {
     },
 
     toastProps: {
-        position: "top-left",
+        position: "top-right",
         autoClose: false,
         newestOnTop: false,
         closeOnClick: true,
@@ -540,7 +540,7 @@ const config = {
             else if (item.object_type == 2) return config.mapConfig.iconColor.male
         },
 
-        defaultAreaId: 4,
+        defaultAreaId: 1,
         
         areaOptions: {
             1: "IIS_SINICA_FLOOR_FOUR",
