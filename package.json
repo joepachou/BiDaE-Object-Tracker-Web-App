@@ -45,6 +45,7 @@
     "@emotion/core": "^10.0.10",
     "babel-polyfill": "^6.26.0",
     "bcrypt": "^3.0.6",
+    "bedis-signin": "^1.1.5",
     "body-scroll-lock": "^2.6.1",
     "bootstrap": "^4.3.1",
     "connect-pg-simple": "^6.0.1",
