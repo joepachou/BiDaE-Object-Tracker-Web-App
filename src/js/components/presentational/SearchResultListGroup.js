@@ -2,7 +2,7 @@ import React from 'react'
 import { ListGroup, Row, Col } from 'react-bootstrap'
 import LocaleContext from '../../context/LocaleContext';
 import config from '../../config';
-
+import { AppContext } from '../../context/AppContext'
 
 const getDescription = (item, locale) => {
     if(item.object_type == 0){
@@ -129,8 +129,6 @@ const SearchResultListGroup = ({
                 : '',
         }
     }
-
-
 
     return (
         <ListGroup 

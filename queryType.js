@@ -20,6 +20,7 @@ function query_getTrackingData () {
 			object_table.asset_control_number,
 			object_table.area_id,
 			object_table.object_type,
+			object_table.physician_id,
 			split_part(object_table.asset_control_number, '-', 3) as last_four_acn,
 			lbeacon_table.description as location_description,
 			edit_object_record.notes,
@@ -273,6 +274,7 @@ function query_signin(username) {
 			user_table.mydevice, 
 			user_table.search_history,
 			user_table.shift,
+			user_table.id,
 			array (
 				SELECT area_id
 				FROM user_areas

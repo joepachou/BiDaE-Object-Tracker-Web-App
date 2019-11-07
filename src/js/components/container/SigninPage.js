@@ -88,6 +88,7 @@ class SigninPage extends React.Component {
                                     setStatus(res.data.message)
                                     setSubmitting(false)
                                 } else {
+                                    console.log(res.data.userInfo)
                                     this.props.signin(res.data.userInfo)
                                     this.props.handleSigninFormSubmit()
                                 }

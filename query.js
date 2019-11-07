@@ -274,6 +274,7 @@ const signin = (request, response) => {
                         search_history,
                         areas_id,
                         shift,
+                        id
                     } = res.rows[0]
 
                     let userInfo = {
@@ -282,9 +283,10 @@ const signin = (request, response) => {
                         role,
                         searchHistory: search_history,
                         shift,
+                        id,
                         areas_id
                     }
-
+                    
                     request.session.userInfo = userInfo
                     response.json({
                         authentication: true,
