@@ -163,6 +163,9 @@ const tw = {
 
     /** Transferred Location */
     YUANLIN_CHRISTIAN_HOSPITAL: "員林基督教醫院",
+    YUNLIN_CHRISTIAN_HOSPITAL: "雲林基督教醫院",
+    PINGTUNG_CHRISTIAN_HOSPITAL: "屏東基督教醫院",
+    CHANGHUA_CHRISTIAN_HOSPITAL: "彰化基督教醫院總院",
     NTU_HOSPITAL_YUNLIN_BRANCH: "台大醫院雲林分院",
     NTU_HOSPITAL_TAIPEI: "台大醫院台北總院",
     NTU_HOSPITAL_YUNLIN_BRANCH_WARD_5B: "台大醫院雲林分院5B病房",

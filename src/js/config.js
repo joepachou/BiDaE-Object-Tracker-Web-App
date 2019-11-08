@@ -76,13 +76,29 @@ const config = {
             "ICU",
             "OP"
         ],
-        NTU_Hospital_Yunlin_branch: [
-            "ward_5b",
-            "ward_5a",
-            "nursing_home"
+        // NTU_Hospital_Yunlin_branch: [
+        //     "ward_5b",
+        //     "ward_5a",
+        //     "nursing_home"
+        // ],
+        // NTU_Hospital_Taipei: [
+        //     "emergency_room"
+        // ],
+        Yunlin_Christian_Hospital: [
+            "ward_5A",
+            "ward_5B",
+            "ICU",
+            "OP"
         ],
-        NTU_Hospital_Taipei: [
-            "emergency_room"
+        // Pingtung_Christian_Hospital: [
+        //     "ward_7A",
+        //     "ward_7B",
+        //     "ICU",
+        // ],
+        CHANGHUA_Christian_Hospital: [
+            "ward_7A",
+            "ward_7B",
+            "ICU",
         ],
     },
     

@@ -159,6 +159,9 @@ const en =  {
   
     /** Transferred Location */
     YUANLIN_CHRISTIAN_HOSPITAL: "Yuanlin Christian Hospital",
+    YUNLIN_CHRISTIAN_HOSPITAL: "Yunlin Christian Hospital",
+    PINGTUNG_CHRISTIAN_HOSPITAL: "Pingtung Christian Hospital",
+    CHANGHUA_CHRISTIAN_HOSPITAL: "Changhua Christian Hospital",
     NTU_HOSPITAL_YUNLIN_BRANCH: "NTU Hospital Yunlin Branch",
     NTU_HOSPITAL_TAIPEI: "NTU Hospital Taipei",
     NTU_HOSPITAL_YUNLIN_BRANCH_WARD_5B: "NTU Hospital Yunlin branch ward 5B",
