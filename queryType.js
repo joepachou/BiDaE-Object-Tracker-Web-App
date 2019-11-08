@@ -512,6 +512,9 @@ function query_getShiftChangeRecord(){
 		
 		LEFT JOIN user_table
 		ON user_table.id = shift_change_record.user_id
+
+		ORDER BY shift_change_record.submit_timestamp DESC;
+
 	`
 	return query
 }
