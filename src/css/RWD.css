@@ -58,6 +58,13 @@
         height: 100%;
     }
 
+    #downloadPdfRequest {
+        top: 50%;
+        /* left: -10%; */
+        /* right: auto; */
+        bottom: auto;
+    }
+
 }
 
 /* Small devices (landscape phones, 576px and up) */
