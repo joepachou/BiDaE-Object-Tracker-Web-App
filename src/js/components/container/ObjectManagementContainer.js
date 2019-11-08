@@ -141,7 +141,7 @@ class ObjectManagementContainer extends React.Component{
                 item.status = {
                     value: item.status,
                     // label: locale.texts[item.status.toUpperCase()],
-                    label: locale.texts[item.status],
+                    label: locale.texts[item.status.toUpperCase()],
                 }
                 item.transferred_location = item.transferred_location 
                     ? {
@@ -328,8 +328,6 @@ class ObjectManagementContainer extends React.Component{
                 <br/>
 
 
-
-
                 {/* tabs */}
                 <Tabs selectedIndex={this.state.tabIndex} onSelect={tabIndex => this.setState({ tabIndex })}>
                 <TabList>
@@ -339,7 +337,7 @@ class ObjectManagementContainer extends React.Component{
 
                 <TabPanel> 
                 <ReactTable 
-          
+        
                             data = {this.state.data} 
                             columns = {this.state.column} 
                             noDataText="No Data Available"
