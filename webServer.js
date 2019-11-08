@@ -113,6 +113,10 @@ app.get('/search_result/:file', (req, res) =>{
 	res.sendFile(path.join(__dirname, 'search_result',req.params['file']));
 })
 
+app.get('/edit_object_record/:file', (req, res) =>{
+	res.sendFile(path.join(__dirname, 'edit_object_record',req.params['file']));
+})
+
 app.get('/download/com.beditech.IndoorNavigation.apk', (req, res) => {
     const file = `${__dirname}/download/com.beditech.IndoorNavigation.apk`;
     res.download(file);
