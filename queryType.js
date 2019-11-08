@@ -55,7 +55,10 @@ function query_getTrackingData () {
 			)	as temp
 			GROUP BY mac_address
 		) as notification
-		ON notification.mac_address = object_summary_table.mac_address;
+
+		ON notification.mac_address = object_summary_table.mac_address
+
+		ORDER BY object_table.type, object_table.mac_address DESC;
 	`
 	return query;
 }
