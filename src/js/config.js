@@ -67,12 +67,18 @@ const config = {
 
     transferredLocation: {
         Yuanlin_Christian_Hospital: [
-            "ward_1",
-            "ward_2",
+            "ward_7A",
+            "ward_7B",
+            "ward_6A",
+            "ward_6B",
+            "ward_5A",
+            "ward_5B",
+            "ICU",
+            "OP"
         ],
         NTU_Hospital_Yunlin_branch: [
-            "ward_5_b",
-            "ward_5_a",
+            "ward_5b",
+            "ward_5a",
             "nursing_home"
         ],
         NTU_Hospital_Taipei: [
@@ -410,7 +416,7 @@ const config = {
                 let confirmedBy = `<div style="text-transform: capitalize;">
                     ${locale.abbr == 'en' 
                         ? `${locale.texts.CONFIRMED_BY} ${name}`
-                        : `${locale.texts.CONFIRMED_BY}:${name}`
+                        : `${locale.texts.CONFIRMED_BY}: ${name}`
                     }
                 </div>`
                 let checkby = `<div style="text-transform: capitalize;">
