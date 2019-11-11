@@ -257,8 +257,8 @@ const en =  {
     /** Test */
     IIS_SINICA_FOURTH_FLOOR: "IIS sinica floor 4",
     NTUH_YUNLIN_WARD_FIVE_B: "ward 5B",
-    VETERAN_HOME_FIRST_FLOOR: "veteran home first floor",
-    VETERAN_HOME_THIRD_FLOOR: "veteran home third floor",
+    VETERAN_HOME_FIRST_FLOOR: "veteran home floor 1",
+    VETERAN_HOME_THIRD_FLOOR: "veteran home floor 3",
 
     DEVICE_FOUND: function (length){
         return length.toString()+" devices are found"
