@@ -17,6 +17,7 @@ const rules = {
             "form:edit",
             "route:devicesManagement",
             "route:patientManagement",
+            // "route:objectManagement",
             // "route:shiftChangeRecord",
             "user:mydevice",
             "user:shiftChange",
@@ -30,7 +31,7 @@ const rules = {
     system_admin: {
         permission: [
             "form:edit",
-            // "route:systemStatus",
+            "route:systemStatus",
             "route:objectManagement",
             // "route:editObjectManagement",
             "user:mydevice",
