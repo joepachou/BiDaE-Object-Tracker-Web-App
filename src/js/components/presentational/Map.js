@@ -10,6 +10,8 @@ import '../../../css/CustomMarkerCluster.css'
 import '../../helper/leaflet_awesome_number_markers';
 import _ from 'lodash'
 import { AppContext } from '../../context/AppContext';
+import axios from 'axios';
+import dataSrc from '../../dataSrc'
 
 
 class Map extends React.Component {
@@ -43,7 +45,6 @@ class Map extends React.Component {
         // }
 
         if (this.props.geoFenceConfig.length !== 0 && !this.state.hasGeoFenceMaker && this.props.isOpenFence) {
-            // console.log("what's this")
             this.createGeoFenceMarkers()
         }
 
@@ -56,7 +57,6 @@ class Map extends React.Component {
         // }
 
         if (this.state.hasGeoFenceMaker && (prevProps.isOpenFence !== this.props.isOpenFence)) {
-            // console.log(`fence ${this.props.isOpenFence}`)
             this.props.isOpenFence ? this.createGeoFenceMarkers() : this.geoFenceLayer.clearLayers()
         }
     }
@@ -120,8 +120,11 @@ class Map extends React.Component {
     }
 
     /** Create the lbeacon and invisibleCircle markers */
-    createGeoFenceMarkers = () => {        
+    createGeoFenceMarkers = () => {     
+
         this.geoFenceLayer.clearLayers()
+
+
         // console.log('create geofence marker')
         let { stateReducer } = this.context
         let [{areaId}] = stateReducer
@@ -130,22 +133,30 @@ class Map extends React.Component {
             geoFenceConfig,
             mapConfig
         } = this.props
-
+        
         /** Creat the marker of all lbeacons onto the map  */
-        geoFenceConfig.filter(item => {
-            return parseInt(item.unique_key) == areaId
-        }).map(item => {
-            item.fences.uuids.map(uuid => {
-                let latLng = uuid.slice(1, 3)
-                let fences = L.circleMarker(latLng, mapConfig.geoFenceMarkerOption).addTo(this.geoFenceLayer);
-            })
-
-            item.perimeters.uuids.map(uuid => {
-                let latLng = uuid.slice(1, 3)
-                let perimeters = L.circleMarker(latLng, mapConfig.geoFenceMarkerOption).addTo(this.geoFenceLayer);
+        axios.post(dataSrc.getGeoFenceConfig, {
+            areaId
+        })
+        .then(res => {
+            res.data.rows.filter(item => {
+                return parseInt(item.unique_key) == areaId && item.enable == 1
+            }).map(item => {
+                item.fences.uuids.map(uuid => {
+                    let latLng = uuid.slice(1, 3)
+                    let fences = L.circleMarker(latLng, mapConfig.geoFenceMarkerOption).addTo(this.geoFenceLayer);
+                })
+    
+                item.perimeters.uuids.map(uuid => {
+                    let latLng = uuid.slice(1, 3)
+                    let perimeters = L.circleMarker(latLng, mapConfig.geoFenceMarkerOption).addTo(this.geoFenceLayer);
+                })
             })
         })
-
+        .catch(err => {
+            console.log(`get geo fence data fail: ${err}`)
+        })
+        
         /** Add the new markerslayers to the map */
         this.geoFenceLayer.addTo(this.map);
 
