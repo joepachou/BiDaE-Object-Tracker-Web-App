@@ -165,6 +165,7 @@ class NavbarContainer extends React.Component {
                             placeholder = {locale.texts.SELECT_LOCATION}
                             name="select"
                             value = {selectedArea}
+                            className="text-capitalize"
                             onChange={value => {
                                 let { stateReducer } = this.context
                                 let [{areaId}, dispatch] = stateReducer
