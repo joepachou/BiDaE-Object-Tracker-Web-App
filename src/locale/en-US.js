@@ -157,7 +157,7 @@ const en =  {
     TRANSFERRED: "transferred",
     RESERVE: "reserve",
   
-    /** Transferred Location */
+    /** Area and Transferred Location */
     YUANLIN_CHRISTIAN_HOSPITAL: "Yuanlin Christian Hospital",
     YUNLIN_CHRISTIAN_HOSPITAL: "Yunlin Christian Hospital",
     PINGTUNG_CHRISTIAN_HOSPITAL: "Pingtung Christian Hospital",
@@ -255,8 +255,10 @@ const en =  {
     // BEING_HERE: "being here",
 
     /** Test */
-    IIS_SINICA_FLOOR_FOUR: "IIS sinica floor 4",
+    IIS_SINICA_FOURTH_FLOOR: "IIS sinica floor 4",
     NTUH_YUNLIN_WARD_FIVE_B: "ward 5B",
+    VETERAN_HOME_FIRST_FLOOR: "veteran_home_first_floor",
+    VETERAN_HOME_THIRD_FLOOR: "veteran_home_third_floor",
 
     DEVICE_FOUND: function (length){
         return length.toString()+" devices are found"

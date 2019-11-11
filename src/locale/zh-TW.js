@@ -161,7 +161,7 @@ const tw = {
     TRANSFERRED: "已轉移",
     RESERVE: "已預定",
 
-    /** Transferred Location */
+    /** Area and Transferred Location */
     YUANLIN_CHRISTIAN_HOSPITAL: "員林基督教醫院",
     YUNLIN_CHRISTIAN_HOSPITAL: "雲林基督教醫院",
     PINGTUNG_CHRISTIAN_HOSPITAL: "屏東基督教醫院",
@@ -259,9 +259,11 @@ const tw = {
     BEING_HERE: "已",
 
     /** Test */
-    IIS_SINICA_FLOOR_FOUR: "中研院4樓",
+    IIS_SINICA_FOURTH_FLOOR: "中研院4樓",
     NTUH_YUNLIN_WARD_FIVE_B: "雲林台大醫院5B病房",
     NTUH_YUNLIN_WARD_FIVE_B: "5B病房",
+    VETERAN_HOME_FIRST_FLOOR: "農民之家1樓",
+    VETERAN_HOME_THIRD_FLOOR: "農民之家3樓",
     
     DEVICE_FOUND: function (length){
         return "發現"+length.toString()+"個儀器"
