@@ -57,7 +57,7 @@ class DownloadPdfRequestForm extends React.Component {
                 break;
             case "downloadReport":
                 var link = document.createElement('a');
-                link.href = `http://localhost:8080/${this.props.pdfPath}`;
+                link.href = `http://${process.env.DATASRC_IP}/${this.props.pdfPath}`;
                 link.download = "";
                 link.click();
                 break;
