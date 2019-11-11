@@ -615,14 +615,14 @@ const config = {
                 id: 6,
                 name: "VETERAN_HOME_FIRST_FLOOR",
                 url: VETERAN_HOME_FIRST_FLOOR_MAP,
-                bounds: [[3000,-3000], [24000,30000]],
+                bounds: [[0,0], [21000,26000]],
             },
 
             VETERAN_HOME_THIRD_FLOOR: {
                 id: 7,
                 name: "VETERAN_HOME_THIRD_FLOOR",
                 url: VETERAN_HOME_THIRD_FLOOR_MAP,
-                bounds: [[3000,-3000], [24000,30000]],
+                bounds: [[0,0], [21000,26000]],
             },
         },
 

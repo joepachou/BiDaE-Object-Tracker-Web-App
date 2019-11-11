@@ -102,7 +102,7 @@ class Map extends React.Component {
         let { url, bounds } = areaModules[areaOption]
         this.image.setUrl(url)
         this.image.setBounds(bounds)
-        
+        this.map.fitBounds(bounds)        
 
         this.createGeoFenceMarkers()
     }
