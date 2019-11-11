@@ -17,7 +17,7 @@ class NavbarContainer extends React.Component {
     state = {
         isShowSigninForm: false,
         isShowShiftChange: false,
-        auth: {}
+        auth: this.context.auth
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -167,9 +167,9 @@ class NavbarContainer extends React.Component {
                             value = {selectedArea}
                             onChange={value => {
                                 let { stateReducer } = this.context
-                                let [{}, dispatch] = stateReducer
+                                let [{areaId}, dispatch] = stateReducer
                                 dispatch({
-                                    type:'setArea',
+                                    type: 'setArea',
                                     value: config.mapConfig.areaModules[value.value].id
                                 })
                             }}
