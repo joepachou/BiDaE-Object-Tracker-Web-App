@@ -105,12 +105,12 @@ const gatewayTableColumn = [
                 width: 150
             },
             {
-                Header: "Last Report Time",
+                Header: "Last Report Timestamp",
                 accessor: "last_report_timestamp",
                 width: 200,
             },
             {
-                Header: "Registered Time",
+                Header: "Registered Timestamp",
                 accessor: "registered_timestamp",
                 width: 200,
             },

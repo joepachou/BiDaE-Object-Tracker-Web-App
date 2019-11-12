@@ -83,7 +83,7 @@ const query_getObjectTable = (area_id) => {
 
 			FROM object_table 
 
-			ORDER BY object_table.name ASC	
+			ORDER BY object_table.type DESC	
 		`;
 	} else {
 		text +=`
@@ -101,7 +101,7 @@ const query_getObjectTable = (area_id) => {
 			FROM object_table 
 			WHERE object_table.area_id = ${area_id[0]}
 
-			ORDER BY object_table.name ASC	
+			ORDER BY object_table.type DESC
 		`;
 	}
 	return text
@@ -346,7 +346,8 @@ const query_editObjectPackage = (formOption, record_id) => {
 		SET 
 			status = '${item.status}',
 			transferred_location = '${item.transferred_location ? item.transferred_location.value : ' '}',
-			note_id = ${record_id}
+			note_id = ${record_id},
+			reserved_timestamp = ${item.status == 'reserve' ? 'now()' : null}
 		WHERE asset_control_number IN (${formOption.map(item => `'${item.asset_control_number}'`)});
 	`
 	return text
@@ -578,12 +579,20 @@ const query_getRoleNameList = () => {
 const query_deleteUser = (username) => {
 	
 	const query = `
+		
 		DELETE FROM user_roles 
 		WHERE user_id = (
 			SELECT id 
 			FROM user_table 
 			WHERE name='${username}'
 		); 
+
+		DELETE FROM user_areas
+		WHERE user_id = (
+			SELECT id
+			FROM user_table
+			WHERE name='${username}'
+		);
 
 		DELETE FROM user_table 
 		WHERE id = (
