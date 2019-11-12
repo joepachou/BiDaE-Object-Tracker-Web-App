@@ -98,7 +98,7 @@ const tw = {
     ADD_DEVICE: "增加儀器",
     ADD_NOTE: "增加註記",
     HIDE_NOTE: "隱藏註記",
-    DELAY_BY: "delay by",
+    DELAY_BY: "延後",
     SHIFT: "班別",
     DAY_SHIFT: "白班",
     SWING_SHIFT: "小夜班",
@@ -257,13 +257,17 @@ const tw = {
     BELONG_TO: "屬於",
     WAS: "曾",
     BEING_HERE: "已",
+    FROM: "",
+    MINUTES: "分鐘",
+
+
 
     /** Test */
     IIS_SINICA_FOURTH_FLOOR: "中研院4樓",
     NTUH_YUNLIN_WARD_FIVE_B: "雲林台大醫院5B病房",
     NTUH_YUNLIN_WARD_FIVE_B: "5B病房",
-    VETERAN_HOME_FIRST_FLOOR: "農民之家1樓",
-    VETERAN_HOME_THIRD_FLOOR: "農民之家3樓",
+    VETERAN_HOME_FIRST_FLOOR: "榮民之家1樓",
+    VETERAN_HOME_THIRD_FLOOR: "榮民之家3樓",
     
     DEVICE_FOUND: function (length){
         return "發現"+length.toString()+"個儀器"

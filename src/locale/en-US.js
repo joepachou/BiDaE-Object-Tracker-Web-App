@@ -252,6 +252,8 @@ const en =  {
     WHOSE: "'s",
     BELONG_TO: "belongs to",
     WAS: "was",
+    FROM: "from",
+    MINUTES: "minutes",
     // BEING_HERE: "being here",
 
     /** Test */
