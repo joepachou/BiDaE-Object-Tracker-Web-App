@@ -22,7 +22,7 @@ const config = {
         /* Tracking object Rssi filter */
         locationAccuracyMapToDefault: {
             0: -100,
-            1: -60,
+            1: -70,
             2: -50,
         },
 
