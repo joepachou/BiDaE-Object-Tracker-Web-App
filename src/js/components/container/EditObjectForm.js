@@ -142,6 +142,14 @@ class EditObjectForm extends React.Component {
                                             return value === selectedObjectData.asset_control_number || 
                                                 !this.props.data.map(item => item.asset_control_number).includes(value)
                                         }
+                                    )
+                                    .test(
+                                        'asset_control_number', 
+                                        locale.texts.THE_ASSET_CONTROL_NUMBER_IS_ALREADY_USED,
+                                        value => {
+                                            return value === selectedObjectData.asset_control_number || 
+                                                !this.props.dataPatient.map(item => item.asset_control_number).includes(value)
+                                        }
                                     ),
                                 mac_address: Yup.string()
                                     .required(locale.texts.MAC_ADDRESS_IS_REQUIRED)
@@ -150,7 +158,7 @@ class EditObjectForm extends React.Component {
                                         locale.texts.THE_MAC_ADDRESS_IS_ALREADY_USED,
                                         value => {
                                             return value === selectedObjectData.mac_address ||
-                                                !this.props.data.map(item => item.mac_address).includes(value)
+                                                !this.props.data.map(item => item.mac_address.toUpperCase().replace(/:/g, '')).includes(value.toUpperCase().replace(/:/g, ''))
                                         }
                                     ).test(
                                         'mac_address',

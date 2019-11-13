@@ -31,7 +31,10 @@ const tw = {
     PATIENT_NUMBER:"病人編號",
     DEVICE_FORM:"設備列表",
     PATIENT_FORM:"病人列表",
-
+    PATIENT_GENDER:"性別",
+    CHOOSE_GENDER:"選擇性別",
+    MALE:'男',
+    FEMALE:'女',
     /* Location accuracy */
     LOCATION_ACCURACY: "位置精準度",
     LOW: "低",
@@ -115,7 +118,7 @@ const tw = {
     RECEIVER_ID: "接收者ID",
     RECEIVER_NAME: "接收者姓名",
     RECEIVER_SIGNATURE: "接收者簽名",
-
+   
     /** Form Title */
     EDIT_LBEACON: "編輯 lbeacon",
     ADD_OBJECT: "增加儀器",
@@ -136,7 +139,9 @@ const tw = {
 
 
     /** Error Message */
+    GENDER_IS_REQUIRED: "請選擇性別",
     NAME_IS_REQUIRED: "請填入名字",
+    NUMBER_IS_REQUIRED:"請輸入病人編號",
     ROOMNUMBER_IS_REQUIRED: "請輸入病房編號",
     ATTENDING_IS_REQUIRED: "請輸入負責醫生",
     TYPE_IS_REQUIRED: "請填入類別",
@@ -149,6 +154,7 @@ const tw = {
     THE_USERNAME_IS_ALREADY_TAKEN: "使用者名稱已被使用",
     THE_ASSET_CONTROL_NUMBER_IS_ALREADY_USED: "財產編號已被使用",
     THE_MAC_ADDRESS_IS_ALREADY_USED :"Mac Address已被使用",
+    THE_Patient_Number_IS_ALREADY_USED :"病人編號已被使用",
     THE_MAC_ADDRESS_FORM_IS_WRONG: "Mac Address 形式錯誤",
     THE_ATTENDINGPHYSICIAN_IS_WRONG: "醫生編號 必須是數字",  
     AREA_IS_REQUIRED: "請選擇地區",
@@ -276,6 +282,11 @@ const tw = {
         return "沒發現"+length.toString()+"個儀器"
     },
 
+    genderSelect :[
+        "機器",
+        "男",
+        "女"
+    ],
 }
 
 export default tw;

@@ -31,7 +31,10 @@ const en =  {
     BATTERY_CHANGE:"need change",
     DEVICE_FORM:"Device Form",
     PATIENT_FORM:"Patient Form",
-
+    PATIENT_GENDER:"Gender",
+    CHOOSE_GENDER:"Choose gender",
+    MALE:'Male',
+    FEMALE:'Female',
     /* Location accuracy */
     LOCATION_ACCURACY: "Location Accuracy",
     LOW: "low",
@@ -133,7 +136,9 @@ const en =  {
     CONFIRMED_BY: "confirmed by",
 
     /** Error Message */
+    GENDER_IS_REQUIRED: "Gender is required",
     NAME_IS_REQUIRED: "Name is required",
+    NUMBER_IS_REQUIRED:"Number is required",
     ROOMNUMBER_IS_REQUIRED: "Room Number is required",
     ATTENDING_IS_REQUIRED: "Attending Physician is required",
     TYPE_IS_REQUIRED: "Type is required",
@@ -143,6 +148,7 @@ const en =  {
     STATUS_IS_REQUIRED: "Status is required",
     USERNAME_IS_REQUIRED: "Username is required",
     PASSWORD_IS_REQUIRED: "Password is required",
+    THE_Patient_Number_IS_ALREADY_USED :"The patient number is already used",
     THE_USERNAME_IS_ALREADY_TAKEN: "The username is already taken",
     THE_ASSET_CONTROL_NUMBER_IS_ALREADY_USED: "The asset ID is already used",
     THE_MAC_ADDRESS_IS_ALREADY_USED :"The Mac Address is already used",
@@ -269,6 +275,11 @@ const en =  {
         return length.toString()+" devices are not found"
     },
 
+    genderSelect :[
+        "machine",
+        "male",
+        "female"
+    ],
 }
 
 export default en;

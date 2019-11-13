@@ -78,11 +78,12 @@ class ObjectManagementContainer extends React.Component{
 
     getDataPatient = () => {
         let locale = this.context
-
         axios.post(getPatientTable, {
             locale: locale.abbr
         })
         .then(res => {
+         {console.log('test')}
+         {console.log(res.data.rows)}
         let columnPatient = _.cloneDeep(patientTableColumn)
         columnPatient.map(field => {
             field.headerStyle = {
@@ -91,19 +92,22 @@ class ObjectManagementContainer extends React.Component{
             field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
         })
         
-
+      
 
         res.data.rows.map(item => {
             item.area_name = {
                 value: config.mapConfig.areaOptions[item.area_id],
                 label: locale.texts[config.mapConfig.areaOptions[item.area_id]],
             }
+            item.object_type = locale.texts.genderSelect[item.object_type]
         })
         
 
 
+ 
 
         this.setState({
+           
             dataPatient: res.data.rows,
             columnPatient: columnPatient,
         })
@@ -366,7 +370,6 @@ class ObjectManagementContainer extends React.Component{
                         />
                 </TabPanel>
                 <TabPanel>
-               
                 <ReactTable 
                             data = {this.state.dataPatient} 
                             columns = {this.state.columnPatient} 
@@ -403,6 +406,7 @@ class ObjectManagementContainer extends React.Component{
                     formPath={this.state.formPath}
                     handleCloseForm={this.handleCloseForm}
                     data={this.state.dataPatient}
+                    objectData = {this.state.data}
                     areaList={this.state.areaList}
                 />  
 
@@ -414,6 +418,7 @@ class ObjectManagementContainer extends React.Component{
                     formPath={this.state.formPath}
                     handleCloseForm={this.handleCloseForm}
                     data={this.state.data}
+                    dataPatient = {this.state.dataPatient}
                     areaList={this.state.areaList}
                 />  
 
