@@ -40,9 +40,9 @@ const en =  {
 
     /* List title */
     ALL_DEVICE: "All Devices",
-    ALL_PATIENT: "All patient",
+    ALL_PATIENT: "All patients",
     MY_DEVICE: "My Devices",
-    MY_PATIENT: "My patient",
+    MY_PATIENT: "My patients",
     DEVICES_FOUND: "devices found",
     PATIENT_FOUND: "patient found",
     DEVICES_NOT_FOUND: "devices not found",
