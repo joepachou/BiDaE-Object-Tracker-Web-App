@@ -83,15 +83,10 @@ class ObjectTypeList extends React.Component {
                 color: 'rgb(80, 80, 80, 1)'
             }, 
             list: {
-                // minHeight: "20vh",
-                maxHeight: "40vh",
+                maxHeight: this.props.maxHeigh,
                 overflow: "hidden scroll",
-                // position: "absolute",
-                // top: '0%',
             },
-            // container: {
-            //     position: 'relative'
-            // }
+
         }
 
         const { locale, auth } = this.context

@@ -196,6 +196,7 @@ class SearchContainer extends React.Component {
                                 getSearchKey={this.props.getSearchKey}  
                                 clearSearchResult={this.props.clearSearchResult}   
                                 hasGridButton={this.props.hasGridButton} 
+                                maxHeigh={config.searchResultProportion}
                             />
                         </Col>
                         <Col md={6} sm={6} xs={6} lg={6} xl={6} className='px-0'>
@@ -204,6 +205,7 @@ class SearchContainer extends React.Component {
                                 clearSearchResult={this.props.clearSearchResult}   
                                 hasGridButton={this.props.hasGridButton} 
                                 objectTypeList={this.state.objectTypeList}
+                                maxHeigh={config.searchResultProportion}
                             />                            
                         </Col>
                     </Row>

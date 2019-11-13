@@ -42,7 +42,7 @@ class FrequentSearch extends React.Component {
 
         const style = {
             list: {
-                maxHeight: "40vh",
+                maxHeight: this.props.maxHeigh,
                 overflow: "hidden scroll"
             }
         }

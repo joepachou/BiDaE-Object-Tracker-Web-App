@@ -46,6 +46,12 @@ const config = {
         TRANSFERRED: "transferred",   
     },
 
+    /** Reserved Object interval time in minutes */
+    reservedInterval: 30,
+
+    /** Extend object reserved time in minutes  */
+    reservedDelayTime: 10,
+
     patientStatus:{
         BATTERY_CHANGE:"Change",
         BATTERY_NORMAL:"Normal",
@@ -159,6 +165,8 @@ const config = {
         style: "list",
         displayMode: "showAll",
     },
+
+    searchResultProportion: '32vh',
 
     monitorType: {
         // 0: "normal",
