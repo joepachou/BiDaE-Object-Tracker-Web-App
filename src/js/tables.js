@@ -240,8 +240,13 @@ const patientTableColumn = [
         accessor: "name"
     },
     {
+        Header: "PATIENT_GENDER",
+        accessor: "object_type"
+    },
+    
+    {
         Header: "patient Number",
-        accessor: "id"
+        accessor: "asset_control_number"
     },
     {
         Header: "auth Area",

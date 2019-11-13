@@ -66,7 +66,7 @@ function query_getTrackingData () {
 
 
 const query_getObjectTable = (area_id) => {
-
+// WHERE object_table.area_id = ${area_id[0]}
 	let text = '';
 	if (!area_id) {
 		text += `
@@ -82,7 +82,7 @@ const query_getObjectTable = (area_id) => {
 				object_table.object_type
 
 			FROM object_table 
-
+			WHERE object_table.object_type = 0
 			ORDER BY object_table.name ASC	
 		`;
 	} else {
@@ -99,7 +99,7 @@ const query_getObjectTable = (area_id) => {
 				object_table.object_type
 
 			FROM object_table 
-			WHERE object_table.area_id = ${area_id[0]}
+			WHERE object_table.object_type = 0
 
 			ORDER BY object_table.name ASC	
 		`;
@@ -120,10 +120,12 @@ const query_getPatientTable = (area_id) => {
 				object_table.area_id,
 				object_table.room_number, 
 				object_table.physician_id,
-				object_table.mac_address
+				object_table.mac_address,
+				object_table.asset_control_number,
+				object_table.object_type
 			FROM object_table 
 
-			WHERE object_table.physician_id > 0
+			WHERE object_table.object_type != 0
 
 			ORDER BY object_table.name ASC	
 		`;
@@ -137,10 +139,12 @@ const query_getPatientTable = (area_id) => {
 				object_table.area_id, 
 				object_table.room_number, 
 				object_table.physician_id,
-				object_table.mac_address
+				object_table.mac_address,
+				object_table.asset_control_number,
+				object_table.object_type
 			FROM object_table 
 
-			WHERE object_table.area_id = ${area_id[0]}
+			WHERE object_table.object_type != 0
 
 			ORDER BY object_table.name ASC	
 		`;
@@ -224,7 +228,27 @@ function query_editObject (formOption) {
 
 function query_editPatient (formOption) {
 
-
+	const text = 
+		`
+		Update object_table 
+		SET area_id = $1,
+			object_type = $2,
+			name = $3,
+			asset_control_number = $4,
+			room_number = $5,
+			physician_id = $6
+		WHERE mac_address = $7
+		`;
+		
+	const values = [
+		formOption.area_id, 
+		formOption.gender_id, 
+		formOption.patientName, 
+		formOption.patientNumber, 
+		formOption.roomNumber,
+		formOption.attendingPhysician,
+		formOption.mac_address
+	];
 
 
 	const query = {
@@ -297,10 +321,13 @@ function query_addPatient (formOption) {
 			physician_id,
 			area_id,
 			mac_address, 
+			object_type,
+			asset_control_number,
+			status,
 			type,
 			registered_timestamp
 		)
-		VALUES($1,$2,$3,$4,$5,'Patient',now())
+		VALUES($1,$2,$3,$4,$5,$6,$7,'default','Patient',now())
 		`;
 		
 	const values = [
@@ -308,7 +335,9 @@ function query_addPatient (formOption) {
 		formOption.roomNumber,
 		formOption.attendingPhysician,
 		formOption.area_id,
-		formOption.mac_address
+		formOption.mac_address,
+		formOption.gender_id,
+		formOption.patientNumber
 	];
 
 	const query = {

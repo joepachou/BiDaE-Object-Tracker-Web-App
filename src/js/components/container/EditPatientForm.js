@@ -7,7 +7,8 @@ import LocaleContext from '../../context/LocaleContext';
 import axios from 'axios';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-
+import RadioButtonGroup from './RadioButtonGroup'
+import RadioButton from '../presentational/RadioButton'
 let monitorTypeMap = {};
 
 Object.keys(config.monitorType).forEach(key => {
@@ -71,8 +72,13 @@ class EditPatientForm extends React.Component {
 
 
 
-
-
+        
+        
+        const genderOptions = [
+            { value: 'MAN', label: locale.texts.MALE},
+            { value: 'GIRL', label: locale.texts.FEMALE },
+          ]
+       
 
         const style = {
             input: {
@@ -97,6 +103,8 @@ class EditPatientForm extends React.Component {
             { value: 'two', label: locale.texts.STATIONARY }
         ];
 
+       
+
         const { title, selectedObjectData } = this.props;
 
         const { 
@@ -106,6 +114,9 @@ class EditPatientForm extends React.Component {
             room_number,
             id,
             mac_address,
+            patientNumber,
+            asset_control_number,
+            object_type
         } = selectedObjectData
 
         return (
@@ -123,14 +134,33 @@ class EditPatientForm extends React.Component {
                         area: area_name || '',
                         patientName: name || '' ,
                         roomNumber: room_number || '',
-                        attendingPhysician: id || '',
+                        attendingPhysician: physician_id || '',
                         mac_address: mac_address || '',
-                   
+                        
+                        patientNumber:asset_control_number|| '',
+
+
+
+                        gender :  object_type === locale.texts.MALE ?
+                        
+                         genderOptions[0] 
+                        
+                        : object_type === locale.texts.FEMALE ?
+
+                          genderOptions[1]
+
+                          :''
+
                         }}
+
+
+
+
                        
                         validationSchema = {
                             
                             Yup.object().shape({
+                               
                                 
                                 patientName: Yup.string().required(locale.texts.NAME_IS_REQUIRED),
                                 roomNumber: Yup.string().required(locale.texts.ROOMNUMBER_IS_REQUIRED),
@@ -146,9 +176,29 @@ class EditPatientForm extends React.Component {
                                         }
                                     ),
 
-                               
                                 area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
-                          
+                                gender: Yup.string().required(locale.texts.GENDER_IS_REQUIRED),
+                                
+                                patientNumber: Yup.string()
+                                .required(locale.texts.NUMBER_IS_REQUIRED)
+                                .test(
+                                    'patientNumber',
+                                    locale.texts.THE_Patient_Number_IS_ALREADY_USED,
+                                        value => {
+                                            return value === selectedObjectData.asset_control_number ||
+                                                !this.props.data.map(item => item.asset_control_number).includes(value)
+                                    }
+                                )
+                                .test(
+                                    'patientNumber',
+                                    locale.texts.THE_Patient_Number_IS_ALREADY_USED,
+                                        value => {
+                                            return value === selectedObjectData.asset_control_number ||
+                                                !this.props.objectData.map(item => item.asset_control_number).includes(value)
+                                    }
+                                )
+                                ,
+
 
                                 mac_address: Yup.string()
                                     .required(locale.texts.MAC_ADDRESS_IS_REQUIRED)
@@ -157,7 +207,7 @@ class EditPatientForm extends React.Component {
                                         locale.texts.THE_MAC_ADDRESS_IS_ALREADY_USED,
                                         value => {
                                             return value === selectedObjectData.mac_address ||
-                                                !this.props.data.map(item => item.mac_address).includes(value)
+                                                !this.props.data.map(item => item.mac_address.toUpperCase().replace(/:/g, '')).includes(value.toUpperCase().replace(/:/g, ''))
                                         }
                                     ).test(
                                         'mac_address',
@@ -174,10 +224,10 @@ class EditPatientForm extends React.Component {
                   
 
                         onSubmit={(values, { setStatus, setSubmitting }) => {
-                      
                             const postOption = {
                                 ...values,
-                                area_id: config.mapConfig.areaModules[values.area.value].id
+                                area_id: config.mapConfig.areaModules[values.area.value].id,
+                                gender_id : config.mapConfig.gender[values.gender.value].id
                             }
                             this.handleSubmit(postOption)                            
                         }}
@@ -185,8 +235,9 @@ class EditPatientForm extends React.Component {
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (  
                             <Form className="text-capitalize">
+
                                 <Row className="form-group my-3 text-capitalize" noGutters>
-                                    <Col lg={3} className='d-flex align-items-center'>
+                                    <Col lg={3}ƒƒ className='d-flex align-items-center'>
                                         <label htmlFor="type">{locale.texts.AUTH_AREA}</label>
                                     </Col>
                                     <Col lg={9}>
@@ -214,6 +265,43 @@ class EditPatientForm extends React.Component {
                                     </Col> 
                                        
                                 </Row>
+
+
+
+
+
+                                <Row className="form-group my-3 text-capitalize" noGutters>
+                                    <Col lg={3} className='d-flex align-items-center'>
+                                        <label htmlFor="type">{locale.texts.PATIENT_GENDER}</label>
+                                    </Col>
+                                    <Col lg={9}>
+                                <Select 
+                                placeholder = {locale.texts.CHOOSE_GENDER}
+                                name ="gender"
+                                onChange={this.change} 
+                                onChange={value => setFieldValue("gender", value)}
+                                value={values.gender}
+                                options={genderOptions}
+                                />
+                                    </Col> 
+                                </Row>
+                                {/* 要有下面這段，沒填的時候才會有紅字報錯 */}
+                                <Row className="form-group my-3 text-capitalize" noGutters>
+                                   <Col lg={9}>
+                                        <Row className='no-gutters' className='d-flex align-self-center'>
+                                            <Col>
+                                                {touched.gender && errors.gender &&
+                                                <div style={style.errorMessage}>{errors.gender}</div>}
+                                            </Col>
+                                        </Row>        
+                                    </Col> 
+                                       
+                                </Row>
+
+
+
+
+
                                 <hr/>
                           
 
@@ -224,6 +312,12 @@ class EditPatientForm extends React.Component {
                                     <ErrorMessage name="patientName" component="div" className="invalid-feedback" />
                                 </div>
 
+                                <div className="form-group">
+                                    <label htmlFor="patientNumber">{locale.texts.PATIENT_NUMBER}*</label>
+                                    <Field name="patientNumber" type="text" className={'form-control' + (errors.patientNumber && touched.patientNumber ? ' is-invalid' : '')} placeholder=''/>
+                                    <ErrorMessage name="patientNumber" component="div" className="invalid-feedback" />
+                                </div>
+                                
 
                                 <div className="form-group">
                                     <label htmlFor="roomNumber">{locale.texts.ROOM_NUMBER}*</label>
@@ -248,54 +342,13 @@ class EditPatientForm extends React.Component {
                                     <ErrorMessage name="mac_address" component="div" className="invalid-feedback" />
                                 </div>
 
-                                <div className="form-group">
-                                    <label htmlFor="patientStatus">{locale.texts.PICTURE}</label>
-                                </div>
-
+                              
                                 {/* <Image src={config.patientPicture.logo} rounded width={470} height={200} ></Image> */}
 
 <hr/>
 
-{/* 電池 */}
-                                {/* <Row className="form-group my-3 text-capitalize">
-                                    <Col>
-                                        <RadioButtonGroup
-                                            id="radioGroup"
-                                            label={locale.texts.BATTERY_ALERT}
-                                            value={values.radioGroup}
-                                            error={errors.radioGroup}
-                                            touched={touched.radioGroup}
-                                        >
-                                            <Field
-                                                component={RadioButton}
-                                                name="radioGroup"
-                                                id={config.patientStatus.BATTERY_NORMAL}
-                                                label={locale.texts.NORMAL}
-                                            />
-                                            <Field
-                                                component={RadioButton}
-                                                name="radioGroup"
-                                                id={config.patientStatus.BATTERY_CHANGE}
-                                                label={locale.texts.BATTERY_CHANGE}
-                                            />
-                                        </RadioButtonGroup>
-                                        <Row className='no-gutters' className='d-flex align-self-center'>
-                                            <Col>
-                                                {touched.radioGroup && errors.radioGroup &&
-                                                <div style={style.errorMessage}>{errors.radioGroup}</div>}
-                                                {touched.select && errors.select &&
-                                                <div style={style.errorMessage}>{errors.select}</div>}
-                                            </Col>
-                                        </Row>                                                
-                                    </Col>
-                                </Row>
-                                <hr/> */}
 
-
-                                <Col lg={3} className='text-capitalize'>
-                                        <label htmlFor="type">{'UUID' + '+' + 'MAC_Address:'}</label>
-                                </Col>
-
+     
 
                                 <Modal.Footer>
                                     <Button variant="outline-secondary" className="text-capitalize" onClick={this.handleClose}>
