@@ -226,11 +226,12 @@ class MainContainer extends React.Component{
 
     /** Parsing the lbeacon's location coordinate from lbeacon_uuid*/
     createLbeaconCoordinate = (lbeacon_uuid) => {
+
         /** Example of lbeacon_uuid: 00000018-0000-0000-7310-000000004610 */
-        const zz = lbeacon_uuid.slice(6,8);
+        const zz = lbeacon_uuid.slice(0,4);
         const xx = parseInt(lbeacon_uuid.slice(14,18) + lbeacon_uuid.slice(19,23));
         const yy = parseInt(lbeacon_uuid.slice(-8));
-        return [yy, xx];
+        return [yy, xx, zz];
     }
 
     /** Transfer the search result, not found list and color panel from SearchContainer, GridButton to MainContainer 
@@ -341,7 +342,7 @@ class MainContainer extends React.Component{
                 return item
             })
         }else if (searchKey === 'coordinate') {
-            searchResult = this.collectObjectsByLatLng(searchValue,proccessedTrackingData)
+            searchResult = this.collectObjectsByLatLng(searchValue, proccessedTrackingData)
         } else if (typeof searchKey === 'object') {
             proccessedTrackingData.map(item => {
                 if (searchKey.includes(item.type)) {
@@ -370,7 +371,10 @@ class MainContainer extends React.Component{
     collectObjectsByLatLng = (lbPosition, proccessedTrackingData) => {
         let objectList = []
         proccessedTrackingData.map(item => {
-            if (item.currentPosition && item.currentPosition.toString() === lbPosition.toString()) {
+            if (item.currentPosition && 
+                item.currentPosition.toString() === lbPosition.toString() &&
+                item.area_id == lbPosition[2]    
+            ) {
                 item.searched = true;
                 objectList.push(item);
             }
