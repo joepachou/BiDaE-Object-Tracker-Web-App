@@ -247,6 +247,7 @@ class MainContainer extends React.Component{
         duplicateSearchKey.filter(key => {
             return key !== 'all devices' || key !== 'my devices'
         })
+
         let searchResultObjectTypeMap = searchResult
             .filter(item => item.found)
             .reduce((allObjectTypes, item) => {
@@ -260,8 +261,10 @@ class MainContainer extends React.Component{
                 }
                 return allObjectTypes
         }, {})
+        // console.log(searchResultObjectTypeMap)
 
         duplicateSearchKey.map(key => searchResultObjectTypeMap[key] = 0)
+
         if(colorPanel) {
             this.setState({
                 hasSearchKey: Object.keys(colorPanel).length === 0 ? false : true,
@@ -341,7 +344,7 @@ class MainContainer extends React.Component{
                 item.searched = auth.user.areas_id.includes(item.area_id) ? true : false
                 return item
             })
-        }else if (searchKey === 'coordinate') {
+        } else if (searchKey === 'coordinate') {
             searchResult = this.collectObjectsByLatLng(searchValue, proccessedTrackingData)
         } else if (typeof searchKey === 'object') {
             proccessedTrackingData.map(item => {
@@ -397,7 +400,8 @@ class MainContainer extends React.Component{
             trackingData,
             proccessedTrackingData,
             searchResult,
-            searchResultObjectTypeMap
+            searchResultObjectTypeMap,
+            searchKey
         } = this.state;
 
         const style = {
@@ -449,7 +453,8 @@ class MainContainer extends React.Component{
                 <Row id="mainContainer" className='d-flex w-100 justify-content-around mx-0 overflow-hidden' style={style.container}>
                     <Col sm={7} md={9} lg={8} xl={8} id='searchMap' className="pl-2 pr-1" >
                         <InfoPrompt 
-                            data={data}
+                            searchKey={searchKey}
+                            searchResult={searchResult}
                             title={locale.texts.FOUND} 
                         />
                         {/* {this.state.hasSearchKey 

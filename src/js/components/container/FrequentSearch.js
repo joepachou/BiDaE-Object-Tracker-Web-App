@@ -62,7 +62,6 @@ class FrequentSearch extends React.Component {
                                 // active={this.state.searchKey === item.name.toLowerCase()} 
                                 key={index}
                                 name={item.name}
-                                className="text-capitalize"
                             >
                                 {item.name}
                             </Button>
@@ -76,35 +75,39 @@ class FrequentSearch extends React.Component {
                         <Button
                             variant="outline-custom"
                             onClick={this.handleClick}
-                            name = 'my patient'
+                            className="text-capitalize"
+                            name = 'my patients'
                         >
-                            {locale.texts.MY_PATIENT}
+                            {locale.texts.MY_PATIENTS}
                         </Button>
 
                         <Button
                             variant="outline-custom"
                             onClick={this.handleClick} 
+                            className="text-capitalize"
                             // active={this.state.searchKey === 'my devices'}
                             name='my devices'
                         >
-                            {locale.texts.MY_DEVICE}
+                            {locale.texts.MY_DEVICES}
                         </Button>
                     </AccessControl>
                     <Button 
                         variant="outline-custom"
-                        onClick={this.handleClick} 
+                        onClick={this.handleClick}
+                        className="text-capitalize" 
                         // active={this.state.searchKey === 'all devices'}
-                        name='all patient'
+                        name='all patients'
                     >
-                        {locale.texts.ALL_PATIENT}
+                        {locale.texts.ALL_PATIENTS}
                     </Button>
                     <Button 
                         variant="outline-custom"
                         onClick={this.handleClick} 
                         // active={this.state.searchKey === 'all devices'}
                         name='all devices'
+                        className="text-capitalize"
                     >
-                        {locale.texts.ALL_DEVICE}
+                        {locale.texts.ALL_DEVICES}
                     </Button>
                 </div>
             </div>
