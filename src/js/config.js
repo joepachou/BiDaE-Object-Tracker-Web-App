@@ -156,8 +156,8 @@ const config = {
     frequentSearchOption: {
         MY_DEVICES: "my devices",
         ALL_DEVICES: "all devices",
-        MY_PATIENT: "my patient",
-        ALL_PATIENT: "all patient"
+        MY_PATIENTS: "my patients",
+        ALL_PATIENTS: "all patients"
     },
 
     searchResult:{

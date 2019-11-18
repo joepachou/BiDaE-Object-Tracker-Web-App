@@ -12,11 +12,14 @@ import dataSrc from '../../dataSrc'
 import { AppContext } from '../../context/AppContext'
 import { toast } from 'react-toastify';
 import ToastNotification from '../presentational/ToastNotification'
+import SearchButtonToolBar from "./SearchButtonToolBar"
 
-const myDevices = config.frequentSearchOption.MY_DEVICES ;
-const allDevices = config.frequentSearchOption.ALL_DEVICES;
-const myPatient = config.frequentSearchOption.MY_PATIENT;
-const allPatient = config.frequentSearchOption.ALL_PATIENT;
+const {
+    ALL_DEVICES,
+    MY_DEVICES,
+    ALL_PATIENTS,
+    MY_PATIENTS,
+} = config.frequentSearchOption
 
 class MainContainer extends React.Component{
 
@@ -261,7 +264,6 @@ class MainContainer extends React.Component{
                 }
                 return allObjectTypes
         }, {})
-        // console.log(searchResultObjectTypeMap)
 
         duplicateSearchKey.map(key => searchResultObjectTypeMap[key] = 0)
 
@@ -303,6 +305,7 @@ class MainContainer extends React.Component{
         this.clearGridButtonBGColor();
         this.setState({
             hasSearchKey: false,
+            searchKey: '',
             searchResult: [],
             colorPanel: null,
             clearColorPanel: true,
@@ -322,7 +325,7 @@ class MainContainer extends React.Component{
         let searchResult = [];
         let { auth } = this.context
         let proccessedTrackingData = _.cloneDeep(this.state.trackingData)
-        if (searchKey === myDevices) {
+        if (searchKey === MY_DEVICES) {
             const devicesAccessControlNumber = auth.user.myDevice || []
             proccessedTrackingData.map(item => {
                 if (devicesAccessControlNumber.includes(item.asset_control_number)) {
@@ -330,15 +333,17 @@ class MainContainer extends React.Component{
                     searchResult.push(item)
                 }
             })
-        } else if (searchKey === allDevices) {
+        } else if (searchKey === ALL_DEVICES) {
             searchResult = proccessedTrackingData.filter(item => item.object_type == 0)
                 .map(item => {
-                    item.searched = auth.user.areas_id.includes(item.area_id) ? true : false
+                    if (auth.user.areas_id.includes(item.area_id)) {
+                        item.searchedType = 0
+                    }
                     return item
                 })
-        } else if (searchKey === myPatient){
+        } else if (searchKey === MY_PATIENTS){
             searchResult = proccessedTrackingData.filter(item => (item.object_type != 0 && item.physician_id == auth.user.id))
-        } else if (searchKey === allPatient){
+        } else if (searchKey === ALL_PATIENTS){
             searchResult = proccessedTrackingData.filter(item => item.object_type != 0)
             .map(item => {
                 item.searched = auth.user.areas_id.includes(item.area_id) ? true : false
@@ -350,17 +355,20 @@ class MainContainer extends React.Component{
             proccessedTrackingData.map(item => {
                 if (searchKey.includes(item.type)) {
                     item.searched = true;
+                    item.searchedType = -1;
                     item.pinColor = colorPanel[item.type];
                     searchResult.push(item)
                 } 
             })
         } else {
             proccessedTrackingData.map(item => {
-                if (item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0
+                if (item.object_type == 0 && (item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0
                     || item.asset_control_number.slice(10,14).indexOf(searchKey) >= 0
-                    || item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0) {
+                    || item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0) 
+                ) {
 
                     item.searched = true
+                    item.searchedType = -1;
                     searchResult.push(item)
                 }
             })
@@ -379,6 +387,7 @@ class MainContainer extends React.Component{
                 item.area_id == lbPosition[2]    
             ) {
                 item.searched = true;
+                item.searchedType = -1;
                 objectList.push(item);
             }
         })
@@ -439,13 +448,13 @@ class MainContainer extends React.Component{
 
         let deviceNum = this.state.trackingData.filter(item => item.found).length
         let devicePlural = deviceNum === 1 ? locale.texts.DEVICE : locale.texts.DEVICES
-        let data = hasSearchKey 
-            ? searchResult.length !== 0 
-                ? Object.keys(searchResultObjectTypeMap).length !== 0 
-                    ? searchResultObjectTypeMap
-                    : {[devicePlural] : 0} 
-                : {[devicePlural] : 0} 
-            : {[devicePlural]: this.state.trackingData.filter(item => item.found && item.object_type == 0).length}
+        // let data = hasSearchKey 
+        //     ? searchResult.length !== 0 
+        //         ? Object.keys(searchResultObjectTypeMap).length !== 0 
+        //             ? searchResultObjectTypeMap
+        //             : {[devicePlural] : 0} 
+        //         : {[devicePlural] : 0} 
+        //     : {[devicePlural]: this.state.trackingData.filter(item => item.found && item.object_type == 0).length}
 
         return(
             /** "page-wrap" the default id named by react-burget-menu */
@@ -485,6 +494,7 @@ class MainContainer extends React.Component{
                             lbeaconPosition={this.state.lbeaconPosition}
                             geoFenceConfig={this.state.geoFenceConfig.filter(item => parseInt(item.unique_key) == areaId)}
                             clearAlerts={this.clearAlerts}
+                            searchKey={this.state.searchKey}
                         />
                     </Col>
                     <Col id='searchPanel' xs={12} sm={5} md={3} lg={4} xl={4} className="w-100 px-2" style={style.searchPanel}>
