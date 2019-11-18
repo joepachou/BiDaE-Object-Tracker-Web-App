@@ -42,14 +42,14 @@ const en =  {
     HIGH: "high",
 
     /* List title */
-    ALL_DEVICE: "All Devices",
-    ALL_PATIENT: "All patients",
-    MY_DEVICE: "My Devices",
-    MY_PATIENT: "My patients",
+    ALL_DEVICES: "All devices",
+    ALL_PATIENTS: "All patients",
+    MY_DEVICES: "My devices",
+    MY_PATIENTS: "My patients",
     DEVICES_FOUND: "devices found",
-    PATIENT_FOUND: "patient found",
+    PATIENTS_FOUND: "patient found",
     DEVICES_NOT_FOUND: "devices not found",
-    PATIENT_NOT_FOUND: "patient not found",
+    PATIENTS_NOT_FOUND: "patient not found",
     
     /* Button */
     CLEAR : "clear",

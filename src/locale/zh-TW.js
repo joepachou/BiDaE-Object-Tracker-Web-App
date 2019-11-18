@@ -42,14 +42,14 @@ const tw = {
     HIGH: "高", 
     
     /* Frequent Search */
-    ALL_DEVICE: "全部儀器",
-    ALL_PATIENT: "全部病人",
-    MY_DEVICE: "我的儀器",
-    MY_PATIENT: "我的病人",
+    ALL_DEVICES: "全部儀器",
+    ALL_PATIENTS: "全部病人",
+    MY_DEVICES: "我的儀器",
+    MY_PATIENTS: "我的病人",
     DEVICES_FOUND: "找到的儀器",
-    PATIENT_FOUND: "找到的病人",
+    PATIENTS_FOUND: "找到的病人",
     DEVICES_NOT_FOUND: "未找到的儀器",
-    PATIENT_NOT_FOUND: "未找到的病人",
+    PATIENTS_NOT_FOUND: "未找到的病人",
     
     /* Button */
     CLEAR : "清除",
