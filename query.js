@@ -601,6 +601,26 @@ const deleteEditObjectRecord = (request, response) => {
         })
 }
 
+
+
+
+const deleteShiftChangeRecord = (request, response) => {
+    const { idPackage } = request.body
+    pool.query(queryType.query_deleteShiftChangeRecord(idPackage))
+    .then(res => {
+                console.log('delete shift change record success')
+                response.status(200).json(res)
+    })
+    .catch(err => {
+        console.log(err)
+    })
+}
+
+
+
+
+
+
 const getAreaTable = (request, response) => {
     pool.query(queryType.query_getAreaTable())
         .then(res => {
@@ -831,6 +851,7 @@ module.exports = {
     setUserRole,
     getEditObjectRecord,
     deleteEditObjectRecord,
+    deleteShiftChangeRecord,
     getAreaTable,
     getGeoFenceConfig,
     setGeoFenceConfig,
