@@ -23,6 +23,7 @@ const getPDFInfo = `http://${dataSrcIP}/data/PDFInfo`;
 const validateUsername = `http://${dataSrcIP}/validation/username`;
 const getEditObjectRecord = `http://${dataSrcIP}/test/getEditObjectRecord`
 const deleteEditObjectRecord = `http://${dataSrcIP}/test/deleteEditObjectRecord`
+const deleteShiftChangeRecord = `http://${dataSrcIP}/test/deleteShiftChangeRecord`
 const getUserList = `http://${dataSrcIP}/test/getUserList`
 const getUserRole = `http://${dataSrcIP}/test/getUserRole`
 const getRoleNameList = `http://${dataSrcIP}/test/getRoleNameList`
@@ -65,6 +66,7 @@ module.exports = {
     validateUsername,    
     getEditObjectRecord,
     deleteEditObjectRecord,
+    deleteShiftChangeRecord,
     getUserList,
     getUserRole,
     getRoleNameList,

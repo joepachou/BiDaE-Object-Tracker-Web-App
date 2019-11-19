@@ -3,6 +3,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import dataSrc from "../../../dataSrc";
 import { Col, Row, Button, Nav, Container} from 'react-bootstrap';
 import ShiftChangeRecord from './ShiftChangeRecord'
+import ShiftChangeRecord2 from './ShiftChangeRecord2'
 import AdminManagementContainer from './AdminManagementContainer'
 import EditObjectManagement from './EditObjectManagement'
 import LocaleContext from '../../../context/LocaleContext';
@@ -39,7 +40,7 @@ class UserSettingContainer extends React.Component{
             {
                 name: 'Shift Change Record',
                 path: 'shiftChangeRecord',
-                component: <ShiftChangeRecord />
+                component: <ShiftChangeRecord2 />
             },
         ]
     }

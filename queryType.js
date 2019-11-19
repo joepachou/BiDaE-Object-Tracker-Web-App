@@ -680,6 +680,33 @@ const query_deleteEditObjectRecord = (idPackage) => {
 	return query
 }
 
+
+const query_deleteShiftChangeRecord = (idPackage) => {
+	const query = `
+		DELETE FROM shift_change_record
+		WHERE id IN (${idPackage.map(item => `'${item}'`)});
+	`
+	return query
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const query_setShift = (shift, username) => {
 	const query = `
 		update user_table
@@ -877,6 +904,7 @@ module.exports = {
 	query_setUserRole,
 	query_getEditObjectRecord,
 	query_deleteEditObjectRecord,
+	query_deleteShiftChangeRecord,
 	query_setShift,
 	query_setVisitTimestamp,
 	query_insertUserData,

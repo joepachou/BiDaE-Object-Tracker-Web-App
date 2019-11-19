@@ -58,6 +58,13 @@ const config = {
     },
 
 
+    gender:{
+        GENDER:"Gender",
+        MAN:"man",
+        GIRL:"girl",
+    },
+
+
     ACNOmitsymbol: 'xxxxxx',
 
     objectManage: {
@@ -204,6 +211,7 @@ const config = {
         "care_provider",
         "system_admin"
     ],
+
 
     defaultRole: "care_provider", 
 
@@ -580,7 +588,18 @@ const config = {
         },
 
         defaultAreaId: 1,
+    
         
+        gender: {
+           MAN: {
+                id: 2,
+            },
+            GIRL:{
+                id: 1,
+            }
+        },
+
+
         areaOptions: {
             1: "IIS_SINICA_FOURTH_FLOOR",
             3: "NTUH_YUNLIN_WARD_FIVE_B",
@@ -633,6 +652,19 @@ const config = {
                 bounds: [[0,0], [21000,26000]],
             },
         },
+
+        gender: {
+
+            MAN: {
+                id: 1,
+            },
+
+            GIRL: {
+                id: 2,
+            },
+            
+        },
+
 
         /* For test. To start object tracking*/
         startInteval: true,

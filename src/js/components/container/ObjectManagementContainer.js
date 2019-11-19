@@ -82,8 +82,6 @@ class ObjectManagementContainer extends React.Component{
             locale: locale.abbr
         })
         .then(res => {
-         {console.log('test')}
-         {console.log(res.data.rows)}
         let columnPatient = _.cloneDeep(patientTableColumn)
         columnPatient.map(field => {
             field.headerStyle = {
