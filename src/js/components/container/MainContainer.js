@@ -466,20 +466,6 @@ class MainContainer extends React.Component{
                             searchResult={searchResult}
                             title={locale.texts.FOUND} 
                         />
-                        {/* {this.state.hasSearchKey 
-                            ?   this.state.searchResult.length !== 0   
-                                ?   <InfoPrompt 
-                                        data={this.state.searchResultObjectTypeMap} 
-                                        title={locale.texts.FOUND} 
-                                    />
-                                :                                         
-                            :   <InfoPrompt 
-                                    data={{
-                                        [devicePlural]: this.state.trackingData.filter(item => item.found).length
-                                    }}
-                                    title={locale.texts.FOUND} 
-                                />
-                        }      */}
                         <SurveillanceContainer 
                             proccessedTrackingData={proccessedTrackingData.length === 0 ? trackingData : proccessedTrackingData}
                             hasSearchKey={hasSearchKey}
@@ -488,7 +474,6 @@ class MainContainer extends React.Component{
                             getSearchKey={this.getSearchKey}
                             clearColorPanel={clearColorPanel}
                             changeLocationAccuracy={this.changeLocationAccuracy}
-                            // setArea={this.setArea}
                             setFence={this.setFence}
                             auth={auth}
                             lbeaconPosition={this.state.lbeaconPosition}

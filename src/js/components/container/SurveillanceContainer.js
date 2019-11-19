@@ -57,7 +57,7 @@ class SurveillanceContainer extends React.Component {
                 searchedObjectType,
                 showObjects
             })
-        } else if (prevProps.searchKey !== this.props.searchKey && this.props.searchKey != "all devices") {
+        } else if (prevProps.searchKey !== this.props.searchKey && this.props.searchKey) {
             if (searchedObjectType.includes(-1)) return 
             else { 
                 searchedObjectType.push(-1)
@@ -246,9 +246,9 @@ class SurveillanceContainer extends React.Component {
                                         this.state.searchedObjectType.includes(0))
                                     }
                                 >
-                                    {(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) 
-                                        ? locale.texts.HIDE_DEVICES 
-                                        : locale.texts.SHOW_DEVICES 
+                                    {!(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) 
+                                        ?   locale.texts.SHOW_DEVICES 
+                                        :   locale.texts.HIDE_DEVICES 
                                     }
                                 </Button>
                             </Nav.Item>
@@ -270,9 +270,9 @@ class SurveillanceContainer extends React.Component {
                                         this.state.searchedObjectType.includes(2))
                                     }
                                 >
-                                    {(this.state.showObjects.includes(1) || this.state.showObjects.includes(2)) 
-                                        ? locale.texts.HIDE_RESIDENTS 
-                                        : locale.texts.SHOW_RESIDENTS
+                                    {!(this.state.showObjects.includes(1) || this.state.showObjects.includes(2)) 
+                                        ?   locale.texts.SHOW_RESIDENTS
+                                        :   locale.texts.HIDE_RESIDENTS 
                                     }
                                 </Button>
                             </Nav.Item>

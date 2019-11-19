@@ -10,7 +10,7 @@ const style = {
     },
     alertTextTitle: {
         fontSize: '1.2rem',
-        fontWeight: 1000,
+        fontWeight: 500,
         color: 'rgba(101, 111, 121, 0.78)',
     }
 }
@@ -30,7 +30,7 @@ const InfoPrompt = ({
                 className='text-capitalize mr-2' 
                 style={style.alertTextTitle}
             >
-                {searchKey ? title : "請選擇"}
+                {searchKey ? title : locale.texts.PLEASE_SELECT_SEARCH_OBJECT}
             </div>
             <div 
                 className="mr-1"
