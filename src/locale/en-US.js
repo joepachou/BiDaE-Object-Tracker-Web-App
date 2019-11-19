@@ -50,6 +50,7 @@ const en =  {
     PATIENTS_FOUND: "patient found",
     DEVICES_NOT_FOUND: "devices not found",
     PATIENTS_NOT_FOUND: "patient not found",
+    PLEASE_SELECT_SEARCH_OBJECT: "please select search object",
     
     /* Button */
     CLEAR : "clear",

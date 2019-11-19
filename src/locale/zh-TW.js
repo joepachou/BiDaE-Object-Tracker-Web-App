@@ -41,7 +41,7 @@ const tw = {
     MED: "中",
     HIGH: "高", 
     
-    /* Frequent Search */
+    /* List title */
     ALL_DEVICES: "全部儀器",
     ALL_PATIENTS: "全部病人",
     MY_DEVICES: "我的儀器",
@@ -50,6 +50,8 @@ const tw = {
     PATIENTS_FOUND: "找到的病人",
     DEVICES_NOT_FOUND: "未找到的儀器",
     PATIENTS_NOT_FOUND: "未找到的病人",
+    PLEASE_SELECT_SEARCH_OBJECT: "請選擇搜尋物件",
+
     
     /* Button */
     CLEAR : "清除",
