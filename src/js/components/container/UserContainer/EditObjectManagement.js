@@ -160,7 +160,6 @@ class EditObjectManagement extends React.Component{
             // it does not exist so add it
             selection.push(key);
         }
-        {console.log('selection')}
         {console.log(selection)}
         // update the state
         this.setState({ 

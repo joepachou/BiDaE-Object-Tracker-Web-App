@@ -72,22 +72,22 @@ class EditObjectManagement extends React.Component{
             currentRecords.forEach(item => {
                 if (item._original) {
                 selection.push(item._original.id);
-                 console.log(item)
                 }
             });
         }
-        console.log(selectAll)
-        console.log(selection)
+      
        
         this.setState({ selectAll, selection });
     };
 
     toggleSelection = (key, shift, row) => {
+       
+        if(key != 999){
         let selection = [...this.state.selection];
         const selectThis = this.state.selectThis ? false : true;
 
         key = typeof key === 'number' ? key : parseInt(key.split('-')[1])
-        const keyIndex = selection.indexOf(key);
+        const keyIndex = selection.indexOf(key.toString());
         if (keyIndex >= 0) {
             selection = [
             ...selection.slice(0, keyIndex),
@@ -96,13 +96,14 @@ class EditObjectManagement extends React.Component{
             
         } else {
          
-            selection.push(key);
+            selection.push(key.toString());
         }
-        {console.log('選了:' + selection  + ',目前選的index是' +key)}
-        console.log(selectThis)
-        console.log(selection)
  
         this.setState({ selectThis, selection });
+        }
+
+      
+        
 
     };
 
@@ -111,17 +112,36 @@ class EditObjectManagement extends React.Component{
     };
 
     deleteRecord = () => {
+
+
         let idPackage = []
-        // this.state.selection.map( item => {
-        //     idPackage.push(parseInt(this.state.data[item - 1].id))
-        // })
-      
+       
+
+        var deleteArray = [];
+        var deleteCount = 0;
+
+        this.state.data.map (item => {
+          
+            this.state.selection.map(itemSelect => {
+                itemSelect === item.id 
+                ? 
     
-        this.state.selection.map( item => {
-              console.log(this.state.data)
-            console.log(item)
-            idPackage.push(parseInt(this.state.data[item - 1].id))
+                 deleteArray.push(deleteCount.toString())
+                : 
+                null          
+            })
+                 deleteCount +=1
         })
+
+        // console.log(deleteArray)
+        // console.log(this.state.data)
+        deleteArray.map( item => {
+        this.state.data[item] === undefined ?
+              null
+            :
+            idPackage.push(parseInt(this.state.data[item].id))
+        })
+
         axios.post(deleteShiftChangeRecord, {
             idPackage
         })
@@ -231,6 +251,7 @@ class EditObjectManagement extends React.Component{
                                     if (handleOriginal) {
                                         handleOriginal()
                                     }
+                                    window.open(`http://${process.env.DATASRC_IP}/${rowInfo.original.file_path}`);
                                 
                             //開pdf的功能看有沒有要
                             //  window.open(`http://${process.env.DATASRC_IP}/${rowInfo.original.file_path}`);

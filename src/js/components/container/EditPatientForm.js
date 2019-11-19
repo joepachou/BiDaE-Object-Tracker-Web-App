@@ -221,7 +221,6 @@ class EditPatientForm extends React.Component {
                                     ),
                         })}
 
-                  
 
                         onSubmit={(values, { setStatus, setSubmitting }) => {
                             const postOption = {
