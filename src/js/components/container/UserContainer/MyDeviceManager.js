@@ -226,7 +226,7 @@ class MyDeviceManager extends React.Component{
     }
     
     
-    render(){
+    render() {
 
         const { locale } = this.context
         return (

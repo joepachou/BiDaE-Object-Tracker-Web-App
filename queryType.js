@@ -123,8 +123,13 @@ const query_getPatientTable = (area_id) => {
 				object_table.physician_id,
 				object_table.mac_address,
 				object_table.asset_control_number,
-				object_table.object_type
+				object_table.object_type,
+				user_table.name as physician_name
+
 			FROM object_table 
+
+			LEFT JOIN user_table
+			ON user_table.id = object_table.physician_id
 
 			WHERE object_table.object_type != 0
 
@@ -140,8 +145,12 @@ const query_getPatientTable = (area_id) => {
 				object_table.physician_id,
 				object_table.mac_address,
 				object_table.asset_control_number,
-				object_table.object_type
+				object_table.object_type,
+				user_table.name as physician_name
 			FROM object_table 
+
+			LEFT JOIN user_table
+			ON user_table.id = object_table.physician_id
 
 			WHERE object_table.object_type != 0
 
@@ -223,9 +232,7 @@ function query_editObject (formOption) {
 
 
 function query_editPatient (formOption) {
-
-	const text = 
-		`
+	const text = `
 		Update object_table 
 		SET area_id = $1,
 			object_type = $2,
@@ -234,7 +241,7 @@ function query_editPatient (formOption) {
 			room_number = $5,
 			physician_id = $6
 		WHERE mac_address = $7
-		`;
+	`;
 		
 	const values = [
 		formOption.area_id, 
@@ -242,7 +249,7 @@ function query_editPatient (formOption) {
 		formOption.patientName, 
 		formOption.patientNumber, 
 		formOption.roomNumber,
-		formOption.attendingPhysician,
+		formOption.physician,
 		formOption.mac_address
 	];
 
@@ -567,7 +574,8 @@ const query_validateUsername = (username) => {
 
 const query_getUserList = () => {
 	const query = `
-		SELECT 
+		SELECT
+			user_table.id,
 			user_table.name, 
 			user_table.registered_timestamp,
 			user_table.last_visit_timestamp,
