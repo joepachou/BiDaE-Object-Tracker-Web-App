@@ -327,14 +327,18 @@ class MainContainer extends React.Component{
         let proccessedTrackingData = _.cloneDeep(this.state.trackingData)
         if (searchKey === MY_DEVICES) {
             const devicesAccessControlNumber = auth.user.myDevice || []
-            proccessedTrackingData.map(item => {
-                if (devicesAccessControlNumber.includes(item.asset_control_number)) {
-                    item.searched = true;
-                    searchResult.push(item)
-                }
-            })
+            proccessedTrackingData
+                .filter(item => item.object_type == 0)
+                .map(item => {
+                    if (devicesAccessControlNumber.includes(item.asset_control_number)) {
+                        item.searched = true;
+                        item.searchedType = -1;
+                        searchResult.push(item)
+                    }
+                })
         } else if (searchKey === ALL_DEVICES) {
-            searchResult = proccessedTrackingData.filter(item => item.object_type == 0)
+            searchResult = proccessedTrackingData
+                .filter(item => item.object_type == 0)
                 .map(item => {
                     if (auth.user.areas_id.includes(item.area_id)) {
                         item.searchedType = 0
@@ -342,13 +346,29 @@ class MainContainer extends React.Component{
                     return item
                 })
         } else if (searchKey === MY_PATIENTS){
-            searchResult = proccessedTrackingData.filter(item => (item.object_type != 0 && item.physician_id == auth.user.id))
-        } else if (searchKey === ALL_PATIENTS){
-            searchResult = proccessedTrackingData.filter(item => item.object_type != 0)
-            .map(item => {
-                item.searched = auth.user.areas_id.includes(item.area_id) ? true : false
-                return item
-            })
+            const devicesAccessControlNumber = auth.user.myDevice || []
+
+            proccessedTrackingData
+                .filter(item => item.object_type != 0)
+                .map(item => {
+                    if (devicesAccessControlNumber.includes(item.asset_control_number)) {
+                        // console.log(item.asset_control_number)
+                        item.searched = true;
+                        // item.searched = auth.user.areas_id.includes(item.area_id) ? true : false
+                        item.searchedType = -2;
+                        searchResult.push(item)
+                    }
+                })
+
+        } else if (searchKey === ALL_PATIENTS) {
+
+            searchResult = proccessedTrackingData
+                .filter(item => item.object_type != 0)
+                .map(item => {
+                    // item.searched = auth.user.areas_id.includes(item.area_id) ? true : false
+                    return item
+                })
+
         } else if (searchKey === 'coordinate') {
             searchResult = this.collectObjectsByLatLng(searchValue, proccessedTrackingData)
         } else if (typeof searchKey === 'object') {
@@ -373,6 +393,7 @@ class MainContainer extends React.Component{
                 }
             })
         }
+
         this.setState({
             proccessedTrackingData
         })

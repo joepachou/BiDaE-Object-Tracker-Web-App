@@ -5,53 +5,65 @@ import config from '../../config';
 import { AppContext } from '../../context/AppContext'
 
 const getDescription = (item, locale) => {
-    if(item.object_type == 0){
-        let foundDeviceDescription = 
-            item.found === 1
-                ?   `
-                    ${item.type},
-                    
-                    ${locale.texts.ASSET_CONTROL_NUMBER} : ${config.ACNOmitsymbol}${item.last_four_acn}
-                    
-                    ${item.currentPosition 
-                        ? locale.abbr == 'en' 
-                            ? `, ${locale.texts.NEAR} ${item.location_description}` 
-                            : `, ${locale.texts.NEAR}${item.location_description}` 
-                        : `, ${locale.texts.NOT_AVAILABLE} `
-                    }   
-                    ${item.status.toUpperCase() === 'NORMAL' 
-                        ? ''  
-                        : `, ${locale.texts[item.status.toUpperCase()]}`
-                    }
-                    ${item.currentPosition  
-                        ? item.status.toUpperCase() === 'NORMAL'
-                            ? `, ${item.residence_time} `
+    var foundDeviceDescription = ``;
+    switch(item.object_type) {
+
+        case '0':
+            foundDeviceDescription += 
+                item.found === 1
+                    ?   `
+                        ${item.type},
+                        
+                        ${locale.texts.ASSET_CONTROL_NUMBER} : ${config.ACNOmitsymbol}${item.last_four_acn}
+                        
+                        ${item.currentPosition 
+                            ? locale.abbr == 'en' 
+                                ? `, ${locale.texts.NEAR} ${item.location_description}` 
+                                : `, ${locale.texts.NEAR}${item.location_description}` 
+                            : `, ${locale.texts.NOT_AVAILABLE} `
+                        }   
+                        ${item.status.toUpperCase() === 'NORMAL' 
+                            ? ''  
+                            : `, ${locale.texts[item.status.toUpperCase()]}`
+                        }
+                        ${item.currentPosition  
+                            ? item.status.toUpperCase() === 'NORMAL'
+                                ? `, ${item.residence_time} `
+                                : ''
                             : ''
-                        : ''
-                    }   
-                `
-                :   `
-                    ${item.type},
+                        }   
+                    `
+                    :   `
+                        ${item.type},
 
-                    ${locale.texts.ASSET_CONTROL_NUMBER} : ${config.ACNOmitsymbol}${item.last_four_acn}
-                    
-                    ${getSubDescription(item, locale)}
+                        ${locale.texts.ASSET_CONTROL_NUMBER} : ${config.ACNOmitsymbol}${item.last_four_acn}
+                        
+                        ${getSubDescription(item, locale)}
 
-                    ${item.status.toUpperCase() === 'NORMAL' 
-                        ? ''  
-                        : `, ${locale.texts[item.status.toUpperCase()]}`
-                    } 
-                `
-        return foundDeviceDescription
-    }else{
-        let foundDeviceDescription = 
-            `
-                ${item.name},
+                        ${item.status.toUpperCase() === 'NORMAL' 
+                            ? ''  
+                            : `, ${locale.texts[item.status.toUpperCase()]}`
+                        } 
+                    `
+            break;
+        case '1':
+        case '2':
 
-                ${locale.texts.PHYSICIAN_NAME} : ${item.physician_name}
-            `    
-        return foundDeviceDescription
+        foundDeviceDescription += `
+            ${item.name},
+            ${locale.texts.PHYSICIAN_NAME} : ${item.physician_name},
+            ${item.currentPosition 
+                ? locale.abbr == 'en' 
+                    ? `, ${locale.texts.NEAR} ${item.location_description}` 
+                    : `, ${locale.texts.NEAR}${item.location_description}` 
+                : `, ${locale.texts.NOT_AVAILABLE} `
+            },
+            ${item.residence_time} 
+
+        `    
+        break;
     } 
+    return foundDeviceDescription
 }
 
 const getSubDescription = (item, locale) => {
@@ -157,27 +169,6 @@ const SearchResultListGroup = ({
                                         ?   <p className='d-inline-block mx-2'>{index + 1}.</p>
                                         :   <p className='d-inline-block mx-2'>&#9642;</p>
                                 }
-                                {/* {item.type},
-                                &nbsp;
-                                {locale.texts.ASSET_CONTROL_NUMBER} : {config.ACNOmitsymbol}{item.last_four_acn}
-                                
-                                {item.currentPosition 
-                                    ? locale.abbr == 'en' 
-                                        ? `, ${locale.texts.NEAR} ${item.location_description}` 
-                                        : `, ${locale.texts.NEAR}${item.location_description}` 
-                                    : `, ${locale.texts.NOT_AVAILABLE} `
-                                }   
-                                &nbsp;
-                                {item.status.toUpperCase() === 'NORMAL' 
-                                    ? null  
-                                    : `, ${locale.texts[item.status.toUpperCase()]}`  
-                                }
-                                {item.currentPosition  
-                                    ? item.status.toUpperCase() === 'NORMAL'
-                                        ? `, ${item.residence_time} `
-                                        : ''
-                                    : ''
-                                } */}
                                 {getDescription(item, locale, selection, index)}
                             </div>
                         </Row>

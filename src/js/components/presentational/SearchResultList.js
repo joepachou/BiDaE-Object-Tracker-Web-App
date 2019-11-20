@@ -309,6 +309,7 @@ class SearchResult extends React.Component {
                     <InfoPrompt data={{[devicePlural]: searchResult.length}} title={title}/>
                 </Row> */}
                 <Row>
+                   
                     {searchResult.length === 0 
                         ?   <Col className='d-flex justify-content-center font-weight-lighter' style={style.noResultDiv}>
                                 <div className='searchResultForDestop'>{locale.texts.NO_RESULT}</div>
@@ -325,12 +326,18 @@ class SearchResult extends React.Component {
                                     )
                                     }
                                 >
-                                    <SearchResultListGroup 
-                                        data={searchResult}
-                                        handleSelectResultItem={this.handleSelectResultItem}
-                                        selection={this.state.selection}
-                                        action
-                                    />
+                                {searchResult[0].object_type == 0 
+                                    ?   <SearchResultListGroup 
+                                            data={searchResult}
+                                            handleSelectResultItem={this.handleSelectResultItem}
+                                            selection={this.state.selection}
+                                            action
+                                        />
+                                    :   <SearchResultListGroup 
+                                            data={searchResult}
+                                            selection={this.state.selection}
+                                        />
+                                }
                                 </AccessControl>
                             </Col>
                     }

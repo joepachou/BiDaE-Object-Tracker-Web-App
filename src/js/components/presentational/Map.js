@@ -247,7 +247,7 @@ class Map extends React.Component {
         const iconSize = [this.scalableIconSize, this.scalableIconSize];
         const numberSize = this.scalableNumberSize;
         let counter = 0;
-
+        
         this.filterTrackingData(_.cloneDeep(this.props.proccessedTrackingData))
         .map(item => {
 
@@ -293,7 +293,7 @@ class Map extends React.Component {
         
             /** Set the marker's event. */
             marker.on('mouseover', function () { this.openPopup(); })
-            marker.on('click', this.handleMarkerClick);
+            // marker.on('click', this.handleMarkerClick);
             // marker.on('mouseout', function () { this.closePopup(); })
         })
 

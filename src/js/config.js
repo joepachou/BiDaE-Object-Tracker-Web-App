@@ -144,8 +144,8 @@ const config = {
 
     healthReport: {
         startInteval: false,
-        pollLbeaconTabelIntevalTime: 60000,
-        pollGatewayTableIntevalTime: 60000,
+        pollLbeaconTabelIntevalTime: 5000,
+        pollGatewayTableIntevalTime: 5000,
     },
 
     userPreference: {
@@ -583,20 +583,20 @@ const config = {
                 else if (item.status !== config.mapConfig.objectStatus.NORMAL) return config.mapConfig.iconColor.unNormal
                 else return config.mapConfig.iconColor.normal
             } 
-            else if (item.object_type == 1) return config.mapConfig.iconColor.female
-            else if (item.object_type == 2) return config.mapConfig.iconColor.male
+            else if (item.object_type == 1) return config.mapConfig.iconColor.male
+            else if (item.object_type == 2) return config.mapConfig.iconColor.female
         },
 
         defaultAreaId: 1,
     
         
         gender: {
-           MAN: {
-                id: 2,
+            MAN: {
+                id: 1,
             },
             GIRL:{
-                id: 1,
-            }
+                id: 2,
+            },
         },
 
 
@@ -652,19 +652,6 @@ const config = {
                 bounds: [[0,0], [21000,26000]],
             },
         },
-
-        gender: {
-
-            MAN: {
-                id: 1,
-            },
-
-            GIRL: {
-                id: 2,
-            },
-            
-        },
-
 
         /* For test. To start object tracking*/
         startInteval: true,
@@ -748,6 +735,9 @@ const config = {
                                     </div>
                                     <div class="popupType">
                                         , ${locale.texts.PHYSICIAN_NAME}: ${item.physician_name}
+                                    </div>
+                                    <div class="popupType">
+                                        , ${item.residence_time}
                                     </div>
                                 `
                         }
