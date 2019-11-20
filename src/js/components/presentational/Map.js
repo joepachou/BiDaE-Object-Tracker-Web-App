@@ -272,7 +272,11 @@ class Map extends React.Component {
                 currentPosition: item.currentPosition,
 
                 /** Show the ordered on location pin */
-                number: this.props.mapConfig.iconOptions.showNumber && item.searched ? ++counter : '',
+                number: this.props.mapConfig.iconOptions.showNumber && 
+                        // this.props.mapConfig.isObjectShowNumber.includes(item.searchedObjectType) && 
+                        item.searched 
+                        ? ++counter 
+                        : '',
 
                 /** Set the color of ordered number */
                 numberColor: this.props.mapConfig.iconColor.number,
@@ -316,7 +320,9 @@ class Map extends React.Component {
             return (
                 item.found && 
                 item.isMatchedObject && 
-                !this.props.filterObjectType.includes(parseInt(item.object_type))
+                (   this.props.searchedObjectType.includes(parseInt(item.object_type)) ||
+                    this.props.searchedObjectType.includes(parseInt(item.searchedType))
+                )
             )
         })
     }

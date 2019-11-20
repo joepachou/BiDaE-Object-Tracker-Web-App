@@ -159,9 +159,6 @@ class EditLbeaconForm extends React.Component {
                         onSubmit={({ low, med, high, description }, { setStatus, setSubmitting }) => {
                             let lbeaconSettingPackage = {
                                 uuid: this.props.selectedObjectData.uuid,
-                                low_rssi: low,
-                                med_rssi: med,
-                                high_rssi: high,
                                 description,
                             }
 
@@ -195,7 +192,7 @@ class EditLbeaconForm extends React.Component {
                                         {selectedObjectData.uuid}
                                     </Col>
                                 </Row>
-                                <Row>
+                                <Row className="my-3">
                                     <Col 
                                         {...colProps.titleCol} 
                                         className='d-flex align-items-center'
@@ -205,42 +202,6 @@ class EditLbeaconForm extends React.Component {
                                     <Col {...colProps.inputCol}>
                                         <Field name="description" type="text" style={style.input} className={'form-control' + (errors.description && touched.description ? ' is-invalid' : '')} placeholder=''/>
                                         <ErrorMessage name="description" component="div" className="invalid-feedback" />                                    
-                                    </Col>
-                                </Row>
-                                <hr/>
-                                <Row>
-                                    <Col>
-                                        {locale.texts.RSSI_THRESHOLD}
-                                    </Col>
-                                </Row>
-                                <Row className="form-group">
-                                    {/* <label htmlFor="username">Username</label> */}
-                                    <Col {...colProps.titleCol} className='d-flex align-items-center'>
-                                        {locale.texts.LOW}
-                                    </Col>
-                                    <Col {...colProps.inputCol}>
-                                        <Field name="low" type="text" style={style.input} className={'form-control' + (errors.low && touched.low ? ' is-invalid' : '')} placeholder=''/>
-                                        <ErrorMessage name="low" component="div" className="invalid-feedback" />                                    
-                                    </Col>
-                                </Row>
-                                <Row className="form-group">
-                                    {/* <label htmlFor="username">Username</label> */}
-                                    <Col {...colProps.titleCol}className='d-flex align-items-center'>
-                                        {locale.texts.MED}
-                                    </Col>
-                                    <Col {...colProps.inputCol}>
-                                        <Field name="med" type="text" style={style.input} className={'form-control' + (errors.med && touched.med ? ' is-invalid' : '')} placeholder=''/>
-                                        <ErrorMessage name="med" component="div" className="invalid-feedback" />                                    
-                                    </Col>
-                                </Row>
-                                <Row className="form-group">
-                                    {/* <label htmlFor="username">Username</label> */}
-                                    <Col {...colProps.titleCol} className='d-flex align-items-center'>
-                                        {locale.texts.HIGH}
-                                    </Col>
-                                    <Col {...colProps.inputCol}>
-                                        <Field name="high" type="text" style={style.input} className={'form-control' + (errors.high && touched.high ? ' is-invalid' : '')} placeholder=''/>
-                                        <ErrorMessage name="high" component="div" className="invalid-feedback" />                                    
                                     </Col>
                                 </Row>
                                 <Modal.Footer>

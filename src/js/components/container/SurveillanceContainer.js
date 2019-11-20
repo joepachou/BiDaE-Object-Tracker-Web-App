@@ -4,7 +4,6 @@ import ToggleSwitch from "./ToggleSwitch";
 import { 
     Nav, 
     Button,
-    ButtonToolbar
 }  from "react-bootstrap";
 import GridButton from "../container/GridButton";
 import PdfDownloadForm from "./PdfDownloadForm"
@@ -19,25 +18,54 @@ class SurveillanceContainer extends React.Component {
 
     state = {
         selectedObjectData: [],
-        showDevice: false,
+        // showDevice: false,
         showPdfDownloadForm: false,
         isOpenFence: false,
-        filterObjectType: []
+        searchedObjectType: [],
+        showObjects: [],
     }
 
 
     componentDidUpdate = (prevProps, prevState) => {
-        // if (!(_.isEqual(prevProps.auth, this.props.auth))) {
-        //     const [{ areaId }, dispatch] = this.context.stateReducer
-        //     const { auth } = this.context
-        //     dispatch({
-        //         type: "setArea",
-        //         value: auth.authenticated ? auth.user.areas_id[0] : config.defaultAreaId
-        //     })
-        // }
         if (this.props.geoFenceConfig.length !== 0 && !(_.isEqual(prevProps.geoFenceConfig, this.props.geoFenceConfig))) {
             this.setState({
                 isOpenFence: this.props.geoFenceConfig[0].enable
+            })
+        }
+        var searchedObjectType = this.state.searchedObjectType
+        var showObjects = this.state.showObjects
+
+        if (prevProps.searchKey !== this.props.searchKey && this.props.searchKey == "all devices") {
+            if (searchedObjectType.includes(0)) return 
+            else {
+                searchedObjectType.push(0)
+                showObjects.push(0)
+            }
+            this.setState({
+                searchedObjectType,
+                showObjects,
+            })
+        }  else if (prevProps.searchKey !== this.props.searchKey && this.props.searchKey == "all patients") {
+            if (searchedObjectType.includes(1) || searchedObjectType.includes(2)) return 
+            else { 
+                searchedObjectType.push(1)
+                searchedObjectType.push(2)
+                showObjects.push(1)
+                showObjects.push(2)
+            }
+            this.setState({
+                searchedObjectType,
+                showObjects
+            })
+        } else if (prevProps.searchKey !== this.props.searchKey && this.props.searchKey) {
+            if (searchedObjectType.includes(-1)) return 
+            else { 
+                searchedObjectType.push(-1)
+                showObjects.push(-1)
+            }
+            this.setState({
+                searchedObjectType,
+                showObjects
             })
         }
     }
@@ -47,22 +75,23 @@ class SurveillanceContainer extends React.Component {
         let { stateReducer } = this.context
         let [{areaId}, dispatch] = stateReducer
         switch(name) {
-            case "show devices":
-                this.setState({
-                    showDevice: !this.state.showDevice
-                })
-                break;
+            // case "show devices":
+            //     this.setState({
+            //         showDevice: !this.state.showDevice
+            //     })
+            //     break;
             case "clear":
                 this.props.handleClearButton();
+                this.setState({
+                    searchedObjectType: [],
+                    showObjects: []
+                })
                 break;
             case "save":
                 this.setState({
                     showPdfDownloadForm: true,
                 })
                 break;
-            // case "setArea":
-            //     this.props.setArea(value)
-            //     break;
             case "fence":
                 this.props.setFence(value, areaId)
                 .then(res => {
@@ -77,19 +106,23 @@ class SurveillanceContainer extends React.Component {
             case "clearAlerts":
                 this.props.clearAlerts()
                 break;
-            case "filterObjectType":
-                let filterObjectType = value.split(',').reduce((filterObjectType, number) => {   
+            case "searchedObjectType":
+
+                let showObjects = value.split(',').reduce((showObjects, number) => {   
                     number = parseInt(number)                
-                    if (!filterObjectType.includes(number)) {
-                        filterObjectType.push(number)
+                    if (!this.state.searchedObjectType.includes(number)) return showObjects
+                    else if (this.state.showObjects.includes(number)) {
+                        let index = showObjects.indexOf(number)
+                        showObjects = [...showObjects.slice(0, index), ...showObjects.slice(index + 1)]
                     } else {
-                        let index = filterObjectType.indexOf(number)
-                        filterObjectType = [...filterObjectType.slice(0, index), ...filterObjectType.slice(index + 1)]
+                        showObjects.push(number)
                     }
-                    return filterObjectType
-                }, this.state.filterObjectType)
+                    return showObjects
+
+                }, this.state.showObjects)
+
                 this.setState({
-                    filterObjectType,
+                    showObjects
                 })
                 break;
         }
@@ -120,16 +153,16 @@ class SurveillanceContainer extends React.Component {
             //     height: "100vh"
             // },
             navBlock: {
-                height: "40%"
+                // height: "40%"
             }, 
             mapBlock: {
                 // height: "60%",
                 border: "solid 2px rgba(227, 222, 222, 0.619)",
                 padding: "5px",
             },
-            gridButton: {
-                display: this.state.showDevice ? null : "none"
-            }
+            // gridButton: {
+            //     display: this.state.showDevice ? null : "none"
+            // }
         }
         const { 
             locale,
@@ -137,37 +170,8 @@ class SurveillanceContainer extends React.Component {
         } = this.context;
 
         let [{areaId}] = stateReducer
-
         return(
             <div id="surveillanceContainer" style={style.surveillanceContainer} className="overflow-hidden">
-                {/* <AccessControl
-                    permission={"user:toggleArea"}
-                    renderNoAccess={() => null}
-                >
-                    <ButtonToolbar className='mb-2'>
-                        <Button 
-                            variant="outline-primary" 
-                            className="mr-1 text-capitalize" 
-                            onClick={this.handleClickButton} 
-                            name='setArea'
-                            value={1}
-                            disabled={areaId == 1}
-                        >
-                            {locale.texts.IIS_SINICA_FLOOR_FOUR}
-                        </Button>
-
-                        <Button 
-                            variant="outline-primary" 
-                            className="mr-1 text-capitalize" 
-                            onClick={this.handleClickButton} 
-                            name='setArea'
-                            value={3}
-                            disabled={areaId == 3}
-                        >
-                            {locale.texts.NTUH_YUNLIN_WARD_FIVE_B}
-                        </Button>
-                    </ButtonToolbar>
-                </AccessControl> */}
                 <div style={style.mapBlock}>
                     <Map 
                         hasSearchKey={hasSearchKey}
@@ -178,7 +182,7 @@ class SurveillanceContainer extends React.Component {
                         getSearchKey={this.props.getSearchKey}
                         areaId={areaId}
                         isOpenFence={this.state.isOpenFence}
-                        filterObjectType={this.state.filterObjectType}
+                        searchedObjectType={this.state.showObjects}
                         mapConfig={config.mapConfig}
                     />
                 </div>
@@ -234,11 +238,18 @@ class SurveillanceContainer extends React.Component {
                                     variant="primary" 
                                     className="mr-1 ml-2 text-capitalize" 
                                     onClick={this.handleClickButton} 
-                                    name="filterObjectType"
-                                    value={[0]}
-                                    active={this.state.filterObjectType.includes(0)}
+                                    name="searchedObjectType"
+                                    value={[-1, 0]}
+                                    active={(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) }
+                                    disabled={
+                                        !(this.state.searchedObjectType.includes(-1) ||
+                                        this.state.searchedObjectType.includes(0))
+                                    }
                                 >
-                                    {this.state.filterObjectType.includes(0) ? locale.texts.SHOW_DEVICES : locale.texts.HIDE_DEVICES}
+                                    {!(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) 
+                                        ?   locale.texts.SHOW_DEVICES 
+                                        :   locale.texts.HIDE_DEVICES 
+                                    }
                                 </Button>
                             </Nav.Item>
                         </AccessControl>
@@ -251,11 +262,18 @@ class SurveillanceContainer extends React.Component {
                                     variant="primary" 
                                     className="mr-1 ml-2 text-capitalize" 
                                     onClick={this.handleClickButton} 
-                                    name="filterObjectType"
+                                    name="searchedObjectType"
                                     value={[1, 2]}
-                                    active={this.state.filterObjectType.includes(1)}
+                                    active={(this.state.showObjects.includes(1) || this.state.showObjects.includes(2))}
+                                    disabled={
+                                        !(this.state.searchedObjectType.includes(1) ||
+                                        this.state.searchedObjectType.includes(2))
+                                    }
                                 >
-                                    {this.state.filterObjectType.includes(1) ? locale.texts.SHOW_RESIDENTS : locale.texts.HIDE_RESIDENTS}
+                                    {!(this.state.showObjects.includes(1) || this.state.showObjects.includes(2)) 
+                                        ?   locale.texts.SHOW_RESIDENTS
+                                        :   locale.texts.HIDE_RESIDENTS 
+                                    }
                                 </Button>
                             </Nav.Item>
                         </AccessControl>

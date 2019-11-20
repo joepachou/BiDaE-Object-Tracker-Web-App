@@ -61,21 +61,7 @@ const lbeaconTableColumn = [
     // {
     //     Header: "RSSI Threshold",
     //     columns: [
-            {
-                Header: "High",
-                accessor: "high_rssi",
-                maxWidth: 50
-            },
-            {
-                Header: "Med",
-                accessor: "med_rssi",
-                maxWidth: 50
-            },
-            {
-                Header: "Low",
-                accessor: "low_rssi",
-                maxWidth: 50,
-            },
+
     //     ]
     // }
     // {
@@ -105,12 +91,12 @@ const gatewayTableColumn = [
                 width: 150
             },
             {
-                Header: "Last Report Time",
+                Header: "Last Report Timestamp",
                 accessor: "last_report_timestamp",
                 width: 200,
             },
             {
-                Header: "Registered Time",
+                Header: "Registered Timestamp",
                 accessor: "registered_timestamp",
                 width: 200,
             },

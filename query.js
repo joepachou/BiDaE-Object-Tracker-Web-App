@@ -87,9 +87,9 @@ const getTrackingData = (request, response) => {
                 item.panic = moment().diff(item.panic_timestamp, 'second') < 300 ? 1 : 0
 
                 /** Flag the object's battery volumn is limiting */
-                if (item.battery_voltage >= 27) {
+                if (item.battery_voltage >= 27 && item.found) {
                     item.battery_voltage = 3;
-                } else if (item.battery_voltage < 27 && item.battery_voltage > 0) {
+                } else if (item.battery_voltage < 27 && item.battery_voltage > 0 && item.found) {
                     item.battery_voltage = 2;
                 } else {
                     item.battery_voltage = 0
@@ -209,8 +209,6 @@ const editObject = (request, response) => {
 
 const editPatient = (request, response) => {
     const formOption = request.body.formOption
-    console.log('***')
-    console.log(formOption)
     pool.query(queryType.query_editPatient(formOption))
         .then(res => {
             console.log("Edit editPatient success");
@@ -748,10 +746,10 @@ const parseLbeaconCoordinate = (lbeacon_uuid) => {
     /** Example of lbeacon_uuid: 00000018-0000-0000-7310-000000004610 */
     // console.log(lbeacon_uuid)
     // const zz = lbeacon_uuid.slice(6,8);
-    const area_id = lbeacon_uuid.slice(0,4)
+    const area_id = parseInt(lbeacon_uuid.slice(0,4))
     const xx = parseInt(lbeacon_uuid.slice(14,18) + lbeacon_uuid.slice(19,23));
     const yy = parseInt(lbeacon_uuid.slice(-8));
-    return [area_id, yy, xx];
+    return [yy, xx, area_id];
 }
 
 const parseGeoFenceCoordinate = (uuid) => {
@@ -811,10 +809,10 @@ const checkMatchedObject = (item, userAuthenticatedAreaId, currentAreaId) => {
     let lbeacon_coordinate = item.lbeacon_uuid ? parseLbeaconCoordinate(item.lbeacon_uuid) : null;
 
     /** Set the lbeacon's area id from lbeacon_coordinate*/
-    let lbeacon_area_id = item.lbeacon_uuid ? parseInt(lbeacon_coordinate[0]) : null;
+    let lbeacon_area_id = item.lbeacon_uuid ? lbeacon_coordinate[2] : null;
 
     /** Set the object's location in the form of lbeacon coordinate parsing by lbeacon uuid  */
-    item.currentPosition = item.lbeacon_uuid ? lbeacon_coordinate.slice(1, 3) : null;
+    item.currentPosition = item.lbeacon_uuid ? lbeacon_coordinate : null;
 
     /** Set the boolean if the object scanned by Lbeacon is matched the current area */
     let isMatchedArea = lbeacon_area_id == parseInt(currentAreaId)
