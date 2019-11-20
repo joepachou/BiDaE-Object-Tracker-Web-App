@@ -209,6 +209,15 @@ class EditPatientForm extends React.Component {
                                             return value === selectedObjectData.mac_address ||
                                                 !this.props.data.map(item => item.mac_address.toUpperCase().replace(/:/g, '')).includes(value.toUpperCase().replace(/:/g, ''))
                                         }
+                                        
+                                    ).test(
+                                        'mac_address',
+                                        locale.texts.THE_MAC_ADDRESS_IS_ALREADY_USED,
+                                        value => {
+                                            return value === selectedObjectData.mac_address ||
+                                                !this.props.objectData.map(item => item.mac_address.toUpperCase().replace(/:/g, '')).includes(value.toUpperCase().replace(/:/g, ''))
+                                        }
+                                        
                                     ).test(
                                         'mac_address',
                                         locale.texts.THE_MAC_ADDRESS_FORM_IS_WRONG,

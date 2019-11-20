@@ -52,6 +52,7 @@ module.exports = {
     searchResult,
     geofenceData,
     editObject,
+    deletePatient,
     editPatient,
     addObject,
     addPatient,

@@ -300,6 +300,7 @@ class ObjectManagementContainer extends React.Component{
             :
             idPackage.push(parseInt(this.state.dataPatient[item].id))
         })
+        console.log(idPackage)
         axios.post(deletePatient, {
             idPackage
         })
@@ -486,7 +487,6 @@ class ObjectManagementContainer extends React.Component{
                         variant="outline-primary" 
                         className='mb-1 text-capitalize mr-2'
                         onClick={this.handleClickButton}
-                        handleSubmitForm={this.handleSubmitForm}
                     >
                          {locale.texts.ADD_OBJECT}
                          
@@ -495,7 +495,6 @@ class ObjectManagementContainer extends React.Component{
                         variant="outline-primary" 
                         className='mb-1 text-capitalize'
                         onClick={this.deleteRecordDevice}    
-                        handleSubmitForm={this.handleSubmitForm}
                     >
                         {locale.texts.DELECT_DEVICE}
                     </Button>
@@ -541,7 +540,6 @@ class ObjectManagementContainer extends React.Component{
                         variant="outline-primary" 
                         className='mb-1 text-capitalize mr-2'
                         onClick={this.handlePatientClick}
-                        handleSubmitForm={this.handleSubmitForm}
                     >
                          {locale.texts.ADD_INPATIENT}
                          
@@ -550,7 +548,6 @@ class ObjectManagementContainer extends React.Component{
                         variant="outline-primary" 
                         className='mb-1 text-capitalize'
                         onClick={this.deleteRecordPatient}    
-                        handleSubmitForm={this.handleSubmitForm}
                     >
                         {locale.texts.DELETE}
                     </Button>
