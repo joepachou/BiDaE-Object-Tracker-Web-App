@@ -49,18 +49,25 @@ class EditPatientForm extends React.Component {
     render() {
         const locale = this.context
 
-        const options = Object.keys(config.transferredLocation).map(location => {
-            return {
-                value: location,
-                label: locale.texts[location.toUpperCase().replace(/ /g, '_')],
-                options: config.transferredLocation[location].map(branch => {
-                    return {
-                        value: `${location},${branch}`,
-                        label: locale.texts[branch.toUpperCase().replace(/ /g, '_')],
-                    }
-                })
-            }
-        })
+
+        const { 
+            title, 
+            selectedObjectData,
+            physicianList = []
+        } = this.props;
+
+        const { 
+            name,
+            physician_id,
+            area_name,
+            room_number,
+            id,
+            mac_address,
+            patientNumber,
+            asset_control_number,
+            object_type,
+            physician_name
+        } = selectedObjectData
 
      
         const areaOptions = Object.values(config.mapConfig.areaOptions).map(area => {
@@ -70,15 +77,16 @@ class EditPatientForm extends React.Component {
             };
         })
 
-
-
-        
-        
         const genderOptions = [
-            { value: 'MAN', label: locale.texts.MALE},
-            { value: 'GIRL', label: locale.texts.FEMALE },
-          ]
-       
+            { 
+                value: 'MAN', 
+                label: locale.texts.MALE
+            },
+            { 
+                value: 'GIRL', 
+                label: locale.texts.FEMALE 
+            },
+        ]
 
         const style = {
             input: {
@@ -98,26 +106,13 @@ class EditPatientForm extends React.Component {
             },
         }
 
-        var patientPosition = [
-            { value: 'one', label: locale.texts.MOVING },
-            { value: 'two', label: locale.texts.STATIONARY }
-        ];
 
-       
-
-        const { title, selectedObjectData } = this.props;
-
-        const { 
-            name,
-            physician_id,
-            area_name,
-            room_number,
-            id,
-            mac_address,
-            patientNumber,
-            asset_control_number,
-            object_type
-        } = selectedObjectData
+        let physicianListOptions = physicianList.map(user => {
+            return {
+                value: user.id,
+                label: user.name
+            }
+        }) 
 
         return (
             <Modal show={this.state.show} onHide={this.handleClose} size='md'>
@@ -125,37 +120,28 @@ class EditPatientForm extends React.Component {
                     {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
                 </Modal.Header >
                 <Modal.Body>
-              
                     <Formik              
+                        initialValues = {{
+                            area: area_name || '',
+                            patientName: name || '' ,
+                            roomNumber: room_number || '',
+                            physician: physician_name 
+                                ? {
+                                    value: physician_name,
+                                    label: physician_name
+                                }
+                                : null,
+                            mac_address: mac_address || '',
+                            patientNumber:asset_control_number|| '',
+                            gender :  object_type === locale.texts.MALE ?
+                                genderOptions[0] 
+                                
+                                : object_type === locale.texts.FEMALE ?
 
-                       
+                                genderOptions[1]
 
-                       initialValues = {{
-                        area: area_name || '',
-                        patientName: name || '' ,
-                        roomNumber: room_number || '',
-                        attendingPhysician: physician_id || '',
-                        mac_address: mac_address || '',
-                        
-                        patientNumber:asset_control_number|| '',
-
-
-
-                        gender :  object_type === locale.texts.MALE ?
-                        
-                         genderOptions[0] 
-                        
-                        : object_type === locale.texts.FEMALE ?
-
-                          genderOptions[1]
-
-                          :''
-
-                        }}
-
-
-
-
+                                :''
+                            }}
                        
                         validationSchema = {
                             
@@ -165,16 +151,16 @@ class EditPatientForm extends React.Component {
                                 patientName: Yup.string().required(locale.texts.NAME_IS_REQUIRED),
                                 roomNumber: Yup.string().required(locale.texts.ROOMNUMBER_IS_REQUIRED),
                                
-                                attendingPhysician: Yup.string()
-                                .required(locale.texts.ATTENDING_IS_REQUIRED)
-                                .test(
-                                        'attendingPhysician',
-                                        locale.texts.THE_ATTENDINGPHYSICIAN_IS_WRONG,
-                                        value => {
-                                            if( isNaN(value) == false) return true
-                                            if (isNaN(value) == true) return false
-                                        }
-                                    ),
+                                // physician: Yup.string()
+                                // .required(locale.texts.ATTENDING_IS_REQUIRED)
+                                // .test(
+                                //         'physician',
+                                //         locale.texts.THE_ATTENDINGPHYSICIAN_IS_WRONG,
+                                //         value => {
+                                //             if( isNaN(value) == false) return true
+                                //             if (isNaN(value) == true) return false
+                                //         }
+                                //     ),
 
                                 area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
                                 gender: Yup.string().required(locale.texts.GENDER_IS_REQUIRED),
@@ -235,7 +221,8 @@ class EditPatientForm extends React.Component {
                             const postOption = {
                                 ...values,
                                 area_id: config.mapConfig.areaModules[values.area.value].id,
-                                gender_id : config.mapConfig.gender[values.gender.value].id
+                                gender_id : config.mapConfig.gender[values.gender.value].id,
+                                physician: values.physician.value
                             }
                             this.handleSubmit(postOption)                            
                         }}
@@ -243,77 +230,6 @@ class EditPatientForm extends React.Component {
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (  
                             <Form className="text-capitalize">
-
-                                <Row className="form-group my-3 text-capitalize" noGutters>
-                                    <Col lg={3}ƒƒ className='d-flex align-items-center'>
-                                        <label htmlFor="type">{locale.texts.AUTH_AREA}</label>
-                                    </Col>
-                                    <Col lg={9}>
-                                <Select
-                                            placeholder = {locale.texts.SELECT_AREA}
-                                            name="area"
-                                            value = {values.area}
-                                            onChange={value => setFieldValue("area", value)}
-                                            options={areaOptions}
-                                            style={style.select}
-                                            components={{
-                                                IndicatorSeparator: () => null
-                                            }}
-                                />
-                                    </Col>
-                                </Row>
-                                <Row className="form-group my-3 text-capitalize" noGutters>
-                                   <Col lg={9}>
-                                        <Row className='no-gutters' className='d-flex align-self-center'>
-                                            <Col>
-                                                {touched.area && errors.area &&
-                                                <div style={style.errorMessage}>{errors.area}</div>}
-                                            </Col>
-                                        </Row>        
-                                    </Col> 
-                                       
-                                </Row>
-
-
-
-
-
-                                <Row className="form-group my-3 text-capitalize" noGutters>
-                                    <Col lg={3} className='d-flex align-items-center'>
-                                        <label htmlFor="type">{locale.texts.PATIENT_GENDER}</label>
-                                    </Col>
-                                    <Col lg={9}>
-                                <Select 
-                                placeholder = {locale.texts.CHOOSE_GENDER}
-                                name ="gender"
-                                onChange={this.change} 
-                                onChange={value => setFieldValue("gender", value)}
-                                value={values.gender}
-                                options={genderOptions}
-                                />
-                                    </Col> 
-                                </Row>
-                                {/* 要有下面這段，沒填的時候才會有紅字報錯 */}
-                                <Row className="form-group my-3 text-capitalize" noGutters>
-                                   <Col lg={9}>
-                                        <Row className='no-gutters' className='d-flex align-self-center'>
-                                            <Col>
-                                                {touched.gender && errors.gender &&
-                                                <div style={style.errorMessage}>{errors.gender}</div>}
-                                            </Col>
-                                        </Row>        
-                                    </Col> 
-                                       
-                                </Row>
-
-
-
-
-
-                                <hr/>
-                          
-
-
                                 <div className="form-group">
                                     <label htmlFor="patientName">{locale.texts.NAME}*</label>
                                     <Field name="patientName" type="text" className={'form-control' + (errors.patientName && touched.patientName ? ' is-invalid' : '')} placeholder=''/>
@@ -332,13 +248,6 @@ class EditPatientForm extends React.Component {
                                     <Field name="roomNumber" type="text" className={'form-control' + (errors.roomNumber && touched.roomNumber ? ' is-invalid' : '')} placeholder=''/>
                                     <ErrorMessage name="roomNumber" component="div" className="invalid-feedback" />
                                 </div>
-
-                                <div className="form-group">
-                                    <label htmlFor="attendingPhysician">{locale.texts.ATTENDING_PHYSICIAN}*</label>
-                                    <Field name="attendingPhysician" type="text" className={'form-control' + (errors.attendingPhysician && touched.attendingPhysician ? ' is-invalid' : '')} placeholder=''/>
-                                    <ErrorMessage name="attendingPhysician" component="div" className="invalid-feedback" />
-                                </div>
-
                                 <div className="form-group">
                                     <label htmlFor="mac_address">{locale.texts.MAC_ADDRESS}*</label>
                                     <Field 
@@ -349,20 +258,95 @@ class EditPatientForm extends React.Component {
                                     />
                                     <ErrorMessage name="mac_address" component="div" className="invalid-feedback" />
                                 </div>
-
-                              
-                                {/* <Image src={config.patientPicture.logo} rounded width={470} height={200} ></Image> */}
-
-<hr/>
-
-
-     
-
+                                <hr/>
+                                <Row className="text-capitalize" noGutters>
+                                    <Col lg={3} className='d-flex align-items-center'>
+                                        <label htmlFor="physician">{locale.texts.ATTENDING_PHYSICIAN}*</label>
+                                    </Col>
+                                    <Col lg={9}>
+                                        <Select
+                                            placeholder = {locale.texts.SELECT_PHYSICIAN}
+                                            name="physician"
+                                            value = {values.physician}
+                                            onChange={value => setFieldValue("physician", value)}
+                                            options={physicianListOptions}
+                                            style={style.select}
+                                            components={{
+                                                IndicatorSeparator: () => null
+                                            }}
+                                        />
+                                    </Col>
+                                </Row>
+                                <Row className="text-capitalize" noGutters>
+                                   <Col lg={9}>
+                                        <Row className='no-gutters' className='d-flex align-self-center'>
+                                            <Col>
+                                                {touched.physician && errors.physician &&
+                                                <div style={style.errorMessage}>{errors.physician}</div>}
+                                            </Col>
+                                        </Row>        
+                                    </Col> 
+                                </Row>
+                                <hr/>
+                                <Row className="text-capitalize" noGutters>
+                                    <Col lg={3} className='d-flex align-items-center'>
+                                        <label htmlFor="type">{locale.texts.AUTH_AREA}</label>
+                                    </Col>
+                                    <Col lg={9}>
+                                        <Select
+                                            placeholder = {locale.texts.SELECT_AREA}
+                                            name="area"
+                                            value = {values.area}
+                                            onChange={value => setFieldValue("area", value)}
+                                            options={areaOptions}
+                                            style={style.select}
+                                            components={{
+                                                IndicatorSeparator: () => null
+                                            }}
+                                        />
+                                    </Col>
+                                </Row>
+                                <Row className="text-capitalize" noGutters>
+                                   <Col lg={9}>
+                                        <Row className='no-gutters' className='d-flex align-self-center'>
+                                            <Col>
+                                                {touched.area && errors.area &&
+                                                <div style={style.errorMessage}>{errors.area}</div>}
+                                            </Col>
+                                        </Row>        
+                                    </Col> 
+                                </Row>
+                                <hr/>
+                                <Row className="text-capitalize" noGutters>
+                                    <Col lg={3} className='d-flex align-items-center'>
+                                        <label htmlFor="type">{locale.texts.PATIENT_GENDER}</label>
+                                    </Col>
+                                    <Col lg={9}>
+                                        <Select 
+                                            placeholder = {locale.texts.CHOOSE_GENDER}
+                                            name ="gender"
+                                            onChange={this.change} 
+                                            onChange={value => setFieldValue("gender", value)}
+                                            value={values.gender}
+                                            options={genderOptions}
+                                        />
+                                    </Col> 
+                                </Row>
+                                {/* 要有下面這段，沒填的時候才會有紅字報錯 */}
+                                <Row className="text-capitalize mb-1" noGutters>
+                                   <Col lg={9}>
+                                        <Row className='no-gutters' className='d-flex align-self-center'>
+                                            <Col>
+                                                {touched.gender && errors.gender &&
+                                                <div style={style.errorMessage}>{errors.gender}</div>}
+                                            </Col>
+                                        </Row>        
+                                    </Col> 
+                                       
+                                </Row>
                                 <Modal.Footer>
                                     <Button variant="outline-secondary" className="text-capitalize" onClick={this.handleClose}>
                                         {locale.texts.CANCEL}
-                                    
-
                                     </Button>
                                     <Button type="submit" className="text-capitalize" variant="primary" disabled={isSubmitting}>
                                         {locale.texts.SAVE}

@@ -223,13 +223,14 @@ const patientTableColumn = [
     //accessor要對到抓下來資料的名字
     {
         Header: "Name",
-        accessor: "name"
+        accessor: "name",
+        width: 150
     },
     {
         Header: "PATIENT_GENDER",
-        accessor: "object_type"
+        accessor: "object_type",
+        width: 100,
     },
-    
     {
         Header: "patient Number",
         accessor: "asset_control_number"
@@ -244,7 +245,7 @@ const patientTableColumn = [
     },
     {
         Header: "attending Physician",
-        accessor: "physician_id"
+        accessor: "physician_name"
     },
     {
         Header: "Mac Address",

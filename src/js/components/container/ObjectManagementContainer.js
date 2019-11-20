@@ -11,6 +11,7 @@ import {
     addPatient,
     deletePatient,
     deleteDevice,
+    getUserList,
 } from "../../dataSrc"
 import axios from 'axios';
 import ReactTable from 'react-table';
@@ -25,10 +26,13 @@ import { patientTableColumn } from '../../tables'
 import EditPatientForm from './EditPatientForm'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
+import { AppContext } from '../../context/AppContext';
 
 const SelectTable = selecTableHOC(ReactTable);
 
 class ObjectManagementContainer extends React.Component{
+    static contextType = AppContext
+
     state = {
         column:[],
         columnPatient:[],
@@ -43,17 +47,17 @@ class ObjectManagementContainer extends React.Component{
         formTitle:'',
         formPath: '',
         selectAll: false,
-        locale: this.context.abbr,
+        locale: this.context.locale.abbr,
         tabIndex:0,
         deleteFlag:0
     }
 
     componentDidUpdate = (prevProps, prevState) => {
-        if (this.context.abbr !== prevState.locale) {
+        if (this.context.locale.abbr !== prevState.locale) {
             this.getData()
             this.getDataPatient()
             this.setState({
-                locale: this.context.abbr
+                locale: this.context.locale.abbr
             })
         }
     }
@@ -62,6 +66,26 @@ class ObjectManagementContainer extends React.Component{
         this.getData();
         this.getDataPatient();
         this.getAreaList();
+        this.getUserList();
+    }
+
+    getUserList = () => {
+        let { locale } = this.context
+
+        axios.post(getUserList, {
+            locale: locale.abbr 
+        })
+        .then(res => {
+            let physicianList = res.data.rows.filter(user => {
+                return user.role_type == "care_provider"
+            })
+            this.setState({
+                physicianList,
+            })
+        })
+        .catch(err => {
+            console.log(err)
+        })
     }
 
     getAreaList = () => {
@@ -80,38 +104,32 @@ class ObjectManagementContainer extends React.Component{
 
     getDataPatient = () => {
        
-        let locale = this.context
+        let { locale } = this.context
+
         axios.post(getPatientTable, {
             locale: locale.abbr
         })
         .then(res => {
-        let columnPatient = _.cloneDeep(patientTableColumn)
-        columnPatient.map(field => {
-            field.headerStyle = {
-                textAlign: 'left',
-            }
-            field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
-        })
-        
-      
+            let columnPatient = _.cloneDeep(patientTableColumn)
 
-        res.data.rows.map(item => {
-            item.area_name = {
-                value: config.mapConfig.areaOptions[item.area_id],
-                label: locale.texts[config.mapConfig.areaOptions[item.area_id]],
-            }
-            item.object_type = locale.texts.genderSelect[item.object_type]
-        })
-        
-
-
- 
-
-        this.setState({
-           
-            dataPatient: res.data.rows,
-            columnPatient: columnPatient,
-        })
+            columnPatient.map(field => {
+                field.headerStyle = {
+                    textAlign: 'left',
+                }
+                field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
+            })
+            res.data.rows.map(item => {
+                item.area_name = {
+                    value: config.mapConfig.areaOptions[item.area_id],
+                    label: locale.texts[config.mapConfig.areaOptions[item.area_id]],
+                }
+                item.object_type = locale.texts.genderSelect[item.object_type]
+            })
+            
+            this.setState({ 
+                dataPatient: res.data.rows,
+                columnPatient: columnPatient,
+            })
         })
         .catch(err => {
             console.log(err);
@@ -122,7 +140,7 @@ class ObjectManagementContainer extends React.Component{
 
     
     getData = () => {
-        let locale = this.context
+        let { locale } = this.context
         axios.post(getObjectTable, {
             locale: locale.abbr
         })
@@ -420,7 +438,7 @@ class ObjectManagementContainer extends React.Component{
 
     render(){
         const { isShowEdit, selectedRowData,selectedRowData_Patient,isPatientShowEdit } = this.state
-        const locale = this.context
+        const { locale } = this.context
 
         const { selectAll, selectType } = this.state;
 
@@ -441,34 +459,8 @@ class ObjectManagementContainer extends React.Component{
 
 
         return (
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
             <Container className='py-2 text-capitalize' fluid>
-
-             
-
-
-
-
-
-
-
-
-
                 <br/>
-
 
                 {/* tabs */}
                 <Tabs selectedIndex={this.state.tabIndex} onSelect={tabIndex => this.setState({ tabIndex })}>
@@ -478,10 +470,6 @@ class ObjectManagementContainer extends React.Component{
                 </TabList>
 
                 <TabPanel> 
-
-
-               
-
                     <ButtonToolbar>
                     <Button 
                         variant="outline-primary" 
@@ -598,6 +586,7 @@ class ObjectManagementContainer extends React.Component{
                     data={this.state.dataPatient}
                     objectData = {this.state.data}
                     areaList={this.state.areaList}
+                    physicianList={this.state.physicianList}
                 />  
 
                 <EditObjectForm 
@@ -632,5 +621,4 @@ class ObjectManagementContainer extends React.Component{
     }
 }
 
-ObjectManagementContainer.contextType = LocaleContext
 export default ObjectManagementContainer
