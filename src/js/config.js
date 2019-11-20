@@ -22,7 +22,7 @@ const config = {
         /* Tracking object Rssi filter */
         locationAccuracyMapToDefault: {
             0: -100,
-            1: -60,
+            1: -70,
             2: -50,
         },
 
@@ -45,6 +45,12 @@ const config = {
         RESERVE: "reserve",
         TRANSFERRED: "transferred",   
     },
+
+    /** Reserved Object interval time in minutes */
+    reservedInterval: 30,
+
+    /** Extend object reserved time in minutes  */
+    reservedDelayTime: 10,
 
     patientStatus:{
         BATTERY_CHANGE:"Change",
@@ -157,8 +163,8 @@ const config = {
     frequentSearchOption: {
         MY_DEVICES: "my devices",
         ALL_DEVICES: "all devices",
-        MY_PATIENT: "my patient",
-        ALL_PATIENT: "all patient"
+        MY_PATIENTS: "my patients",
+        ALL_PATIENTS: "all patients"
     },
 
     searchResult:{
@@ -167,7 +173,7 @@ const config = {
         displayMode: "showAll",
     },
 
-  
+    searchResultProportion: '32vh',
 
     monitorType: {
         // 0: "normal",
@@ -586,10 +592,10 @@ const config = {
         
         gender: {
            MAN: {
-                id: 1,
+                id: 2,
             },
             GIRL:{
-                id: 2,
+                id: 1,
             }
         },
 
@@ -695,6 +701,7 @@ const config = {
             minWidth: "500",
             maxHeight: "300",
             className : "customPopup",
+            showNumber: false
         },
 
         /** Set the html content of popup of markers */
@@ -709,18 +716,19 @@ const config = {
                 if (item.object_type != 0) PatientTotalNumber ++;
                 else DeviceTotalNumber ++;   
             })
+            
             const content = `
                 <div>
                     <h4 class="border-bottom pb-1 px-2">${object[0].location_description}</h4>
                     ${objectList.map((item, index) => {
                         var element = `<div class="row popupRow mb-2 mx-2 d-flex jusify-content-start">`
+                        element += config.mapConfig.popupOptions.showNumber
+                            ?   `<div class="popupType text-capitalize">${index + 1}.</div>`
+                            :   `<div class="popupType text-capitalize">&#9642;  </div>`
                         if(item.object_type == 0){
                             element +=                                ` 
-                            <div class="popupType text-capitalize" style={{backgroundColor:"red"}}>
-                                ${config.mapConfig.iconOptions.showNumber ? `${++indexNumberForDevice}`: ''} 
-                            </div>
                             <div class="popupType text-capitalize">
-                               . ${item.type}
+                               ${item.type}
                             </div>
                             <div class="popupType ">
                                 , ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn}
@@ -732,6 +740,16 @@ const config = {
                                 }
                             </div>
                         `
+                        } else {
+                            element += 
+                                `     
+                                    <div class="popupType">
+                                        ${item.name} 
+                                    </div>
+                                    <div class="popupType">
+                                        , ${locale.texts.PHYSICIAN_NAME}: ${item.physician_name}
+                                    </div>
+                                `
                         }
                         element += `</div>`
                         return element

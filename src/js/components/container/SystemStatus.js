@@ -30,16 +30,17 @@ class SystemStatus extends React.Component{
         trackingColunm: [],
         selectedRowData: {},
         isShowModal: false,
-        locale: this.context.lang
+        locale: this.context.locale.lang
     }
 
     componentDidUpdate = (prevProps, prevState) => {
-        if (this.context.lang !== prevState.locale) {
+        let { locale } = this.context
+        if (locale.lang !== prevState.locale) {
             this.getLbeaconData();
             this.getGatewayData();
             this.getTrackingData();
             this.setState({
-                locale: this.context.lang
+                locale: locale.lang
             })
         }
     }

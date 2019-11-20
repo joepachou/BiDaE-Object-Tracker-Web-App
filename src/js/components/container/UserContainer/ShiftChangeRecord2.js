@@ -82,7 +82,7 @@ class EditObjectManagement extends React.Component{
 
     toggleSelection = (key, shift, row) => {
        
-        if(key != 999){
+        if(key != 999){  //多的
         let selection = [...this.state.selection];
         const selectThis = this.state.selectThis ? false : true;
 

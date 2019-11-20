@@ -65,8 +65,8 @@ function query_getTrackingData () {
 
 
 
-const query_getObjectTable = (area_id) => {
-// WHERE object_table.area_id = ${area_id[0]}
+const query_getObjectTable = (area_id, ) => {
+
 	let text = '';
 	if (!area_id) {
 		text += `
@@ -79,8 +79,8 @@ const query_getObjectTable = (area_id) => {
 				object_table.mac_address,
 				object_table.monitor_type,
 				object_table.area_id,
-				object_table.object_type
-
+				object_table.object_type,
+				object_table.id
 			FROM object_table 
 			WHERE object_table.object_type = 0
 			ORDER BY object_table.name ASC	
@@ -96,12 +96,13 @@ const query_getObjectTable = (area_id) => {
 				object_table.mac_address,
 				object_table.monitor_type,
 				object_table.area_id,
-				object_table.object_type
+				object_table.object_type,
+				object_table.id
 
 			FROM object_table 
 			WHERE object_table.object_type = 0
 
-			ORDER BY object_table.name ASC	
+			ORDER BY object_table.type DESC
 		`;
 	}
 	return text
@@ -130,9 +131,7 @@ const query_getPatientTable = (area_id) => {
 			ORDER BY object_table.name ASC	
 		`;
 	} else {
-		
 		text +=`
-		   
 			SELECT 
 				object_table.name, 
 				object_table.id,
@@ -159,9 +158,6 @@ const query_getLbeaconTable =
     `
 	SELECT 
 		uuid, 
-		low_rssi, 
-		med_rssi, 
-		high_rssi, 
 		description, 
 		ip_address, 
 		health_status, 
@@ -375,7 +371,8 @@ const query_editObjectPackage = (formOption, record_id) => {
 		SET 
 			status = '${item.status}',
 			transferred_location = '${item.transferred_location ? item.transferred_location.value : ' '}',
-			note_id = ${record_id}
+			note_id = ${record_id},
+			reserved_timestamp = ${item.status == 'reserve' ? 'now()' : null}
 		WHERE asset_control_number IN (${formOption.map(item => `'${item.asset_control_number}'`)});
 	`
 	return text
@@ -607,12 +604,20 @@ const query_getRoleNameList = () => {
 const query_deleteUser = (username) => {
 	
 	const query = `
+		
 		DELETE FROM user_roles 
 		WHERE user_id = (
 			SELECT id 
 			FROM user_table 
 			WHERE name='${username}'
 		); 
+
+		DELETE FROM user_areas
+		WHERE user_id = (
+			SELECT id
+			FROM user_table
+			WHERE name='${username}'
+		);
 
 		DELETE FROM user_table 
 		WHERE id = (
@@ -682,8 +687,21 @@ const query_deleteShiftChangeRecord = (idPackage) => {
 
 
 
+const query_deletePatient = (idPackage) => {
+	const query = `
+		DELETE FROM object_table
+		WHERE id IN (${idPackage.map(item => `'${item}'`)});
+	`
+	return query
+}
 
-
+const query_deleteDevice = (idPackage) => {
+	const query = `
+		DELETE FROM object_table
+		WHERE id IN (${idPackage.map(item => `'${item}'`)});
+	`
+	return query
+}
 
 
 
@@ -896,6 +914,8 @@ module.exports = {
 	query_getEditObjectRecord,
 	query_deleteEditObjectRecord,
 	query_deleteShiftChangeRecord,
+	query_deletePatient,
+	query_deleteDevice,
 	query_setShift,
 	query_setVisitTimestamp,
 	query_insertUserData,

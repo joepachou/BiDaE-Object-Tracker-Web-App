@@ -83,17 +83,17 @@ class ObjectTypeList extends React.Component {
                 color: 'rgb(80, 80, 80, 1)'
             }, 
             list: {
-                maxHeight: "400px",
-                overflow: "scroll"
-            }
+                maxHeight: this.props.maxHeigh,
+                overflow: "hidden scroll",
+            },
         }
 
         const { locale, auth } = this.context
   
         return (
-            <div id='objectTypeList' >
+            <div id='objectTypeList' style={style.container} >
                 <div className='text-capitalize title'>{locale.texts.OBJECT_TYPE}</div>
-                <div style={style.list} className="d-inline-flex flex-column justify-content-center searchOption">
+                <div style={style.list} className="d-inline-flex flex-column searchOption">
                     {this.props.objectTypeList.map((item, index) => {
                         return ( 
                             <Button

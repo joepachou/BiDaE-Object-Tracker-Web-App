@@ -45,14 +45,15 @@ const en =  {
     HIGH: "high",
 
     /* List title */
-    ALL_DEVICE: "All Devices",
-    ALL_PATIENT: "All patient",
-    MY_DEVICE: "My Devices",
-    MY_PATIENT: "My patient",
+    ALL_DEVICES: "All devices",
+    ALL_PATIENTS: "All patients",
+    MY_DEVICES: "My devices",
+    MY_PATIENTS: "My patients",
     DEVICES_FOUND: "devices found",
-    PATIENT_FOUND: "patient found",
+    PATIENTS_FOUND: "patient found",
     DEVICES_NOT_FOUND: "devices not found",
-    PATIENT_NOT_FOUND: "patient not found",
+    PATIENTS_NOT_FOUND: "patient not found",
+    PLEASE_SELECT_SEARCH_OBJECT: "please select search object",
     
     /* Button */
     CLEAR : "clear",
@@ -72,6 +73,8 @@ const en =  {
     DELETE: "delete",
     ADD_USER: "add user",
     ADD_INPATIENT:"add inpatient",
+    DELECT_INPATIENT:"delect inpatient",
+    DELECT_DEVICE:"delect device",
     EDIT_DEVICES: "edit devices",
     SWITCH_AREA: "switch area",
     FENCE_ON: "fence on",

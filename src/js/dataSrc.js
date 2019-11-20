@@ -24,6 +24,8 @@ const validateUsername = `http://${dataSrcIP}/validation/username`;
 const getEditObjectRecord = `http://${dataSrcIP}/test/getEditObjectRecord`
 const deleteEditObjectRecord = `http://${dataSrcIP}/test/deleteEditObjectRecord`
 const deleteShiftChangeRecord = `http://${dataSrcIP}/test/deleteShiftChangeRecord`
+const deletePatient = `http://${dataSrcIP}/test/deletePatient`
+const deleteDevice = `http://${dataSrcIP}/test/deleteDevice`
 const getUserList = `http://${dataSrcIP}/test/getUserList`
 const getUserRole = `http://${dataSrcIP}/test/getUserRole`
 const getRoleNameList = `http://${dataSrcIP}/test/getRoleNameList`
@@ -50,6 +52,7 @@ module.exports = {
     searchResult,
     geofenceData,
     editObject,
+    deletePatient,
     editPatient,
     addObject,
     addPatient,
@@ -62,6 +65,7 @@ module.exports = {
     pdfUrl,
     generatePDF,
     modifyMyDevice,
+    deleteDevice,
     getPDFInfo,
     validateUsername,    
     getEditObjectRecord,

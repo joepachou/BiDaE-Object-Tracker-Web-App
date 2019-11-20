@@ -290,11 +290,11 @@ class SearchResult extends React.Component {
             : foundResult
 
         let title = this.state.showNotFoundResult 
-            ? (this.props.searchKey === "my patient" || this.props.searchKey === "all patient")
-                ? locale.texts.PATIENT_NOT_FOUND
+            ? (this.props.searchKey === "my patients" || this.props.searchKey === "all patients")
+                ? locale.texts.PATIENTS_NOT_FOUND
                 : locale.texts.DEVICES_NOT_FOUND
-            : (this.props.searchKey === "my patient" || this.props.searchKey === "all patient")
-                ? locale.texts.PATIENT_FOUND
+            : (this.props.searchKey === "my patients" || this.props.searchKey === "all patients")
+                ? locale.texts.PATIENTS_FOUND
                 : locale.texts.DEVICES_FOUND
 
 
@@ -343,7 +343,7 @@ class SearchResult extends React.Component {
                         size="lg"
                         disabled={false}
                     >
-                        {(this.props.searchKey == "my patient" || this.props.searchKey == "all patient") 
+                        {(this.props.searchKey == "my patients" || this.props.searchKey == "all patients") 
                             ?
                             this.state.showNotFoundResult
                             ? locale.texts.SHOW_PATIENTS_FOUND
