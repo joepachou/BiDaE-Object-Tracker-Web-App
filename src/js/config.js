@@ -587,7 +587,7 @@ const config = {
             else if (item.object_type == 2) return config.mapConfig.iconColor.female
         },
 
-        defaultAreaId: 1,
+        defaultAreaId: 3,
     
         
         gender: {
@@ -601,28 +601,30 @@ const config = {
 
 
         areaOptions: {
-            1: "IIS_SINICA_FOURTH_FLOOR",
+            // 1: "IIS_SINICA_FOURTH_FLOOR",
             3: "NTUH_YUNLIN_WARD_FIVE_B",
             4: "NURSING_HOME",
-            5: "YUANLIN_CHRISTIAN_HOSPITAL",
-            6: "VETERAN_HOME_FIRST_FLOOR",
-            7: "VETERAN_HOME_THIRD_FLOOR",
+            // 5: "YUANLIN_CHRISTIAN_HOSPITAL",
+            // 6: "VETERAN_HOME_FIRST_FLOOR",
+            // 7: "VETERAN_HOME_THIRD_FLOOR",
         },
     
         areaModules: {
 
-            IIS_SINICA_FOURTH_FLOOR: {
-                id: 1,
-                name: "IIS_SINICA_FOURTH_FLOOR",
-                url: IIS_SINICA_FOURTH_FLOORTH_MAP,
-                bounds: [[0,0], [21130,35710]],
-            },
+            // IIS_SINICA_FOURTH_FLOOR: {
+            //     id: 1,
+            //     name: "IIS_SINICA_FOURTH_FLOOR",
+            //     url: IIS_SINICA_FOURTH_FLOORTH_MAP,
+            //     bounds: [[0,0], [21130,35710]],
+            // },
 
             NTUH_YUNLIN_WARD_FIVE_B: {
                 id: 3,
                 name: "NTUH_YUNLIN_WARD_FIVE_B",
                 url: NTUH_YUNLIN_WARD_FIVE_B_MAP,
-                bounds: [[-5000,-5000], [21067,31928]],
+                // bounds: [[-5000,-5000], [21067,31928]],
+                bounds: [[0, 0], [26067,36928]],
+
             },
             NURSING_HOME: {
                 id: 4,
@@ -631,26 +633,26 @@ const config = {
                 bounds: [[0,0], [20000,45000]],
             },
             
-            YUANLIN_CHRISTIAN_HOSPITAL: {
-                id: 5,
-                name: "YUANLIN_CHRISTIAN_HOSPITAL",
-                url: YUANLIN_CHRISTIAN_HOSPITAL_MAP,
-                bounds: [[3000,-3000], [24000,30000]],
-            },
+            // YUANLIN_CHRISTIAN_HOSPITAL: {
+            //     id: 5,
+            //     name: "YUANLIN_CHRISTIAN_HOSPITAL",
+            //     url: YUANLIN_CHRISTIAN_HOSPITAL_MAP,
+            //     bounds: [[3000,-3000], [24000,30000]],
+            // },
 
-            VETERAN_HOME_FIRST_FLOOR: {
-                id: 6,
-                name: "VETERAN_HOME_FIRST_FLOOR",
-                url: VETERAN_HOME_FIRST_FLOOR_MAP,
-                bounds: [[0,0], [21000,26000]],
-            },
+            // VETERAN_HOME_FIRST_FLOOR: {
+            //     id: 6,
+            //     name: "VETERAN_HOME_FIRST_FLOOR",
+            //     url: VETERAN_HOME_FIRST_FLOOR_MAP,
+            //     bounds: [[0,0], [21000,26000]],
+            // },
 
-            VETERAN_HOME_THIRD_FLOOR: {
-                id: 7,
-                name: "VETERAN_HOME_THIRD_FLOOR",
-                url: VETERAN_HOME_THIRD_FLOOR_MAP,
-                bounds: [[0,0], [21000,26000]],
-            },
+            // VETERAN_HOME_THIRD_FLOOR: {
+            //     id: 7,
+            //     name: "VETERAN_HOME_THIRD_FLOOR",
+            //     url: VETERAN_HOME_THIRD_FLOOR_MAP,
+            //     bounds: [[0,0], [21000,26000]],
+            // },
         },
 
         /* For test. To start object tracking*/
