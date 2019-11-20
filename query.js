@@ -617,8 +617,31 @@ const deleteShiftChangeRecord = (request, response) => {
 }
 
 
+const deletePatient = (request, response) => {
+    const { idPackage } = request.body
+    pool.query(queryType.query_deletePatient(idPackage))
+    .then(res => {
+                console.log('deletePatient change record success')
+                response.status(200).json(res)
+    })
+    .catch(err => {
+        console.log(err)
+    })
+}
 
 
+
+const deleteDevice = (request, response) => {
+    const { idPackage } = request.body
+    pool.query(queryType.query_deleteDevice(idPackage))
+    .then(res => {
+                console.log('deleteDevice change record success')
+                response.status(200).json(res)
+    })
+    .catch(err => {
+        console.log(err)
+    })
+}
 
 
 const getAreaTable = (request, response) => {
@@ -852,6 +875,8 @@ module.exports = {
     getEditObjectRecord,
     deleteEditObjectRecord,
     deleteShiftChangeRecord,
+    deletePatient,
+    deleteDevice,
     getAreaTable,
     getGeoFenceConfig,
     setGeoFenceConfig,
