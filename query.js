@@ -87,9 +87,9 @@ const getTrackingData = (request, response) => {
                 item.panic = moment().diff(item.panic_timestamp, 'second') < 300 ? 1 : 0
 
                 /** Flag the object's battery volumn is limiting */
-                if (item.battery_voltage >= 27) {
+                if (item.battery_voltage >= 27 && item.found) {
                     item.battery_voltage = 3;
-                } else if (item.battery_voltage < 27 && item.battery_voltage > 0) {
+                } else if (item.battery_voltage < 27 && item.battery_voltage > 0 && item.found) {
                     item.battery_voltage = 2;
                 } else {
                     item.battery_voltage = 0
@@ -209,8 +209,6 @@ const editObject = (request, response) => {
 
 const editPatient = (request, response) => {
     const formOption = request.body.formOption
-    console.log('***')
-    console.log(formOption)
     pool.query(queryType.query_editPatient(formOption))
         .then(res => {
             console.log("Edit editPatient success");
