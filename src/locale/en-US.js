@@ -69,6 +69,8 @@ const en =  {
     DELETE: "delete",
     ADD_USER: "add user",
     ADD_INPATIENT:"add inpatient",
+    DELECT_INPATIENT:"delect inpatient",
+    DELECT_DEVICE:"delect device",
     EDIT_DEVICES: "edit devices",
     SWITCH_AREA: "switch area",
     FENCE_ON: "fence on",
