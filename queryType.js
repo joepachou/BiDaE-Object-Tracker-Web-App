@@ -65,8 +65,8 @@ function query_getTrackingData () {
 
 
 
-const query_getObjectTable = (area_id) => {
-// WHERE object_table.area_id = ${area_id[0]}
+const query_getObjectTable = (area_id, ) => {
+
 	let text = '';
 	if (!area_id) {
 		text += `
@@ -130,9 +130,7 @@ const query_getPatientTable = (area_id) => {
 			ORDER BY object_table.name ASC	
 		`;
 	} else {
-		
 		text +=`
-		   
 			SELECT 
 				object_table.name, 
 				object_table.id,
@@ -159,9 +157,6 @@ const query_getLbeaconTable =
     `
 	SELECT 
 		uuid, 
-		low_rssi, 
-		med_rssi, 
-		high_rssi, 
 		description, 
 		ip_address, 
 		health_status, 

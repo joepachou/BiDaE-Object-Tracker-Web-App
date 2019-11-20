@@ -61,21 +61,7 @@ const lbeaconTableColumn = [
     // {
     //     Header: "RSSI Threshold",
     //     columns: [
-            {
-                Header: "High",
-                accessor: "high_rssi",
-                maxWidth: 50
-            },
-            {
-                Header: "Med",
-                accessor: "med_rssi",
-                maxWidth: 50
-            },
-            {
-                Header: "Low",
-                accessor: "low_rssi",
-                maxWidth: 50,
-            },
+
     //     ]
     // }
     // {
