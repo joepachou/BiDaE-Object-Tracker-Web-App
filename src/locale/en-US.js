@@ -109,6 +109,7 @@ const en =  {
     SELECT_SHIFT: "select shift",
     SELECT_AREA: "select area",
     SELECT_LOCATION: "select location",
+    SELECT_PHYSICIAN: "select physician",
     WRITE_THE_NOTES: "write some notes...",
     USERNAME: "username",
     PASSWORD: "password",
