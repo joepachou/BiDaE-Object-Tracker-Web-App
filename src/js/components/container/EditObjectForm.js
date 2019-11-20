@@ -162,6 +162,14 @@ class EditObjectForm extends React.Component {
                                         }
                                     ).test(
                                         'mac_address',
+                                        locale.texts.THE_MAC_ADDRESS_IS_ALREADY_USED,
+                                        value => {
+                                            return value === selectedObjectData.mac_address ||
+                                                !this.props.dataPatient.map(item => item.mac_address.toUpperCase().replace(/:/g, '')).includes(value.toUpperCase().replace(/:/g, ''))
+                                        }
+                                        
+                                    ).test(
+                                        'mac_address',
                                         locale.texts.THE_MAC_ADDRESS_FORM_IS_WRONG,
                                         value => {
                                             if (value == undefined) return false

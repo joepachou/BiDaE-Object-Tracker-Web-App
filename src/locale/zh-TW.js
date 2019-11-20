@@ -71,6 +71,8 @@ const tw = {
     DELETE: "刪除",
     ADD_USER: "新增使用者",
     ADD_INPATIENT:"新增病人",
+    DELECT_INPATIENT:"刪除病人",
+    DELECT_DEVICE:"刪除儀器",
     EDIT_DEVICES: "編輯儀器",
     EDIT_PATIENT: "編輯病人資料",
     SWITCH_AREA: "切換地點",

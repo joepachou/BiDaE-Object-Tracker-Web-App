@@ -79,8 +79,8 @@ const query_getObjectTable = (area_id, ) => {
 				object_table.mac_address,
 				object_table.monitor_type,
 				object_table.area_id,
-				object_table.object_type
-
+				object_table.object_type,
+				object_table.id
 			FROM object_table 
 			WHERE object_table.object_type = 0
 			ORDER BY object_table.name ASC	
@@ -96,7 +96,8 @@ const query_getObjectTable = (area_id, ) => {
 				object_table.mac_address,
 				object_table.monitor_type,
 				object_table.area_id,
-				object_table.object_type
+				object_table.object_type,
+				object_table.id
 
 			FROM object_table 
 			WHERE object_table.object_type = 0
@@ -686,8 +687,21 @@ const query_deleteShiftChangeRecord = (idPackage) => {
 
 
 
+const query_deletePatient = (idPackage) => {
+	const query = `
+		DELETE FROM object_table
+		WHERE id IN (${idPackage.map(item => `'${item}'`)});
+	`
+	return query
+}
 
-
+const query_deleteDevice = (idPackage) => {
+	const query = `
+		DELETE FROM object_table
+		WHERE id IN (${idPackage.map(item => `'${item}'`)});
+	`
+	return query
+}
 
 
 
@@ -900,6 +914,8 @@ module.exports = {
 	query_getEditObjectRecord,
 	query_deleteEditObjectRecord,
 	query_deleteShiftChangeRecord,
+	query_deletePatient,
+	query_deleteDevice,
 	query_setShift,
 	query_setVisitTimestamp,
 	query_insertUserData,
