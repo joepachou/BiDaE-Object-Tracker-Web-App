@@ -35,6 +35,9 @@ const en =  {
     CHOOSE_GENDER:"Choose gender",
     MALE:'Male',
     FEMALE:'Female',
+    PATIENT: 'patient',
+    DEVICES: 'devices',
+
     /* Location accuracy */
     LOCATION_ACCURACY: "Location Accuracy",
     LOW: "low",
