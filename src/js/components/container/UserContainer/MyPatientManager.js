@@ -111,7 +111,6 @@ class MyPatientManager extends React.Component{
         this.functionForAddableList = {
             onClick: (e) => {
                 var acn = e.target.getAttribute('name')
-                console.log(acn)
                 this.API.switchDevice(acn)
             },
             validation: (string) => {
@@ -132,11 +131,14 @@ class MyPatientManager extends React.Component{
                         name={item.asset_control_number}
                     >
                         <p className='d-inline-block mx-1'>&#9642;</p>
-                        
                         {item.name},
                         &nbsp;
+<<<<<<< HEAD
                         {item.asset_control_number}
 
+=======
+                            {item.asset_control_number}
+>>>>>>> fb65795f3164f610e46d202b5eaad551e0e353be
                         &nbsp;
                     </div>
                 )
@@ -178,12 +180,17 @@ class MyPatientManager extends React.Component{
 
     getObjectData() {
         let { locale, auth } = this.context
+<<<<<<< HEAD
+=======
+
+>>>>>>> fb65795f3164f610e46d202b5eaad551e0e353be
         axios.post(dataSrc.getPatientTable, {
             locale: locale.lang,
             areaId: auth.user.areas_id,
         }).then(res => {
             let data = res.data.rows
             var dataMap = {}
+
             for(var item of data){
                 if(item.object_type == 1 || item.object_type == 2)
                     dataMap[item.asset_control_number] = item

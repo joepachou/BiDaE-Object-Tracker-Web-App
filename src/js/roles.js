@@ -42,6 +42,21 @@ const rules = {
             "user:toggleShowDevices",
             "user:toggleShowResidents",
         ]
+    },
+    dev: {
+        permission: [
+            "form:edit",
+            "route:systemStatus",
+            "route:objectManagement",
+            // "route:editObjectManagement",
+            "user:mydevice",
+            "user:saveSearchRecord",
+            "route:userManager",
+            "route:shiftChangeRecord",
+            // "user:toggleArea",
+            "user:toggleShowDevices",
+            "user:toggleShowResidents",
+        ]
     }
   };
   

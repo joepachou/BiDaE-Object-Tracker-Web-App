@@ -149,12 +149,12 @@ const trackingTableColumn = [
     {
         Header: "Mac Address",
         accessor: "mac_address",
-        maxWidth: 150,
+        width: 150,
     },
     {
         Header: "Name",
         accessor: "name",
-        width: 100
+        width: 150
     },
     {
         Header: "Type",
@@ -164,7 +164,7 @@ const trackingTableColumn = [
     {
         Header: "Asset Control Number",
         accessor: "asset_control_number",
-        maxWidth: 180
+        width: 140
     },
     {
         Header: "Status",
@@ -174,17 +174,17 @@ const trackingTableColumn = [
     {
         Header: "Transferred Location",
         accessor: "transferred_location",
-        width: 230
+        width: 180
     },
     {
         Header: "Last Location",
         accessor: "location_description",
-        width: 200
+        width: 180
     },
     {
         Header: "Residence Time",
         accessor: "residence_time",
-        width: 150,
+        width: 100,
     },
 ]
 
@@ -223,13 +223,14 @@ const patientTableColumn = [
     //accessor要對到抓下來資料的名字
     {
         Header: "Name",
-        accessor: "name"
+        accessor: "name",
+        width: 150
     },
     {
         Header: "PATIENT_GENDER",
-        accessor: "object_type"
+        accessor: "object_type",
+        width: 100,
     },
-    
     {
         Header: "patient Number",
         accessor: "asset_control_number"
@@ -244,7 +245,7 @@ const patientTableColumn = [
     },
     {
         Header: "attending Physician",
-        accessor: "physician_id"
+        accessor: "physician_name"
     },
     {
         Header: "Mac Address",
