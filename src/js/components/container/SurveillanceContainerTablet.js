@@ -18,7 +18,6 @@ import QRcodeContainer from "./QRcode";
 import { isNullOrUndefined } from "util";
 import InfoPromptForTablet from '../presentational/InfoPromptForTablet';
 
-
 class SurveillanceContainerTablet extends React.Component {
 
     static contextType = AppContext
@@ -59,6 +58,23 @@ class SurveillanceContainerTablet extends React.Component {
                 searchedObjectType.push(2)
                 showObjects.push(1)
                 showObjects.push(2)
+            }
+            this.setState({
+                searchedObjectType,
+                showObjects
+            })
+        } else if (prevProps.searchKey !== this.props.searchKey && this.props.searchKey == "my patients") {
+            if (searchedObjectType.includes(1) || 
+                searchedObjectType.includes(2) || 
+                searchedObjectType.includes(-2)
+            ) return 
+            else { 
+                searchedObjectType.push(1)
+                searchedObjectType.push(2)
+                searchedObjectType.push(-2)
+                showObjects.push(1)
+                showObjects.push(2)
+                showObjects.push(-2)
             }
             this.setState({
                 searchedObjectType,
@@ -221,123 +237,147 @@ class SurveillanceContainerTablet extends React.Component {
                                 />
                             </div>
                         </div>
-                            <div style={style.navBlock}>
-                                <Nav className="d-flex align-items-start text-capitalize bd-highlight">
-                                    <Nav.Item>
-                                        <div style={style.title} 
+                        <div style={style.navBlock}>
+                            <Nav className="d-flex align-items-start text-capitalize bd-highlight">
+                                <Nav.Item>
+                                <div style={style.title}>
+                                    {locale.texts.LOCATION_ACCURACY}
+                                </div>
+                                </Nav.Item>
+                                <Nav.Item className="pt-2 mr-2">
+                                    <ToggleSwitch 
+                                        changeLocationAccuracy={this.props.changeLocationAccuracy} 
+                                        leftLabel="low"
+                                        defaultLabel="med" 
+                                        rightLabel="high"
+                                    />
+                                </Nav.Item>
+                                <Nav.Item className="mt-2">
+                                    <Button 
+                                        variant="outline-primary" 
+                                        className="mr-1 ml-2 text-capitalize" 
+                                        onClick={this.handleClickButton} 
+                                        name="clear"
+                                        disabled={!this.props.hasSearchKey}
+                                    >
+                                        {locale.texts.CLEAR}
+                                    </Button>
+                                </Nav.Item>
+                                <AccessControl
+                                    permission={"user:saveSearchRecord"}
+                                    renderNoAccess={() => null}
+                                >
+                                    <Nav.Item className="mt-2">
+                                        <Button 
+                                            variant="outline-primary" 
+                                            className="mr-1 ml-2 text-capitalize" 
+                                            onClick={this.handleClickButton} 
+                                            name="save"
+                                            disabled={!this.props.hasSearchKey || this.state.showPdfDownloadForm}
                                         >
-                                            {locale.texts.LOCATION_ACCURACY}
-                                        </div>
+                                            {locale.texts.SAVE}
+                                        </Button>
                                     </Nav.Item>
-                                    <Nav.Item className="pt-2 mr-2">
-                                        <ToggleSwitch 
-                                            changeLocationAccuracy={this.props.changeLocationAccuracy} 
-                                            leftLabel="low"
-                                            defaultLabel="med" 
-                                            rightLabel="high"
-                                        />
+                                </AccessControl>
+                                <AccessControl
+                                    permission={"user:toggleShowDevices"}
+                                    renderNoAccess={() => null}
+                                >
+                                    <Nav.Item className="mt-2">
+                                        <Button 
+                                            variant="primary" 
+                                            className="mr-1 ml-2 text-capitalize" 
+                                            onClick={this.handleClickButton} 
+                                            name="searchedObjectType"
+                                            value={[-1, 0]}
+                                            active={(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) }
+                                            disabled={
+                                                !(this.state.searchedObjectType.includes(-1) ||
+                                                this.state.searchedObjectType.includes(0))
+                                            }
+                                        >
+                                            {!(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) 
+                                                ?   locale.texts.SHOW_DEVICES 
+                                                :   locale.texts.HIDE_DEVICES 
+                                            }
+                                        </Button>
+                                    </Nav.Item>
+                                </AccessControl>
+                                <AccessControl
+                                    permission={"user:toggleShowResidents"}
+                                    renderNoAccess={() => null}
+                                >
+                            <Nav.Item className="mt-2">
+                                <Button 
+                                    variant="primary" 
+                                    className="mr-1 ml-2 text-capitalize" 
+                                    onClick={this.handleClickButton} 
+                                    name="searchedObjectType"
+                                    value={[-2, 1, 2]}
+                                    active={(this.state.showObjects.includes(1) || this.state.showObjects.includes(2))}
+                                    disabled={
+                                        !(this.state.searchedObjectType.includes(1) ||
+                                        this.state.searchedObjectType.includes(2))
+                                    }
+                                >
+                                    {!(this.state.showObjects.includes(1) || this.state.showObjects.includes(2)) 
+                                        ?   locale.texts.SHOW_RESIDENTS
+                                        :   locale.texts.HIDE_RESIDENTS 
+                                    }
+                                </Button>
+                            </Nav.Item>
+                        </AccessControl>
+                        {/* <Nav.Item className="mt-2">
+                            <Button 
+                                variant="outline-primary" 
+                                className="mr-1 text-capitalize" 
+                                onClick={this.handleClickButton} 
+                                name="show devices"
+                            >
+                                {this.state.showDevice ? locale.texts.HIDE_DEVICES : locale.texts.SHOW_DEVICES }
+                            </Button>
+                        </Nav.Item >
+                        <div style={style.gridButton} className="mt-2 mx-3">
+                            <GridButton
+                                clearColorPanel={this.props.clearColorPanel}
+                                getSearchKey={this.props.getSearchKey}
+                                mapConfig={config.mapConfig}
+                            />
+                        </div> */}
+                        {this.props.geoFenceConfig.map((item, index) => {
+                            return ( parseInt(item.unique_key) == areaId && 
+                                <Fragment
+                                    key={index}
+                                >
+                                    <Nav.Item className="mt-2 bd-highligh ml-auto">
+                                        <Button 
+                                            variant="warning" 
+                                            className="mr-1 ml-2 text-capitalize" 
+                                            onClick={this.handleClickButton} 
+                                            name="fence"
+                                            value={+!this.state.isOpenFence}
+                                            active={!this.state.isOpenFence}
+                                        >
+                                            {this.state.isOpenFence ? locale.texts.FENCE_ON : locale.texts.FENCE_OFF}
+                                        </Button>
                                     </Nav.Item>
                                     <Nav.Item className="mt-2">
                                         <Button 
                                             variant="outline-primary" 
                                             className="mr-1 ml-2 text-capitalize" 
                                             onClick={this.handleClickButton} 
-                                            name="clear"
-                                            disabled={!this.props.hasSearchKey}
-                                            size="sm"
+                                            name="clearAlerts"
                                         >
-                                            {locale.texts.CLEAR}
+                                            {locale.texts.CLEAR_ALERTS}
                                         </Button>
                                     </Nav.Item>
-                                    <AccessControl
-                                        permission={"user:saveSearchRecord"}
-                                        renderNoAccess={() => null}
-                                    >
-                                        <Nav.Item className="mt-2">
-                                            <Button 
-                                                variant="outline-primary" 
-                                                className="mr-1 ml-2 text-capitalize" 
-                                                onClick={this.handleClickButton} 
-                                                name="save"
-                                                disabled={!this.props.hasSearchKey || this.state.showPdfDownloadForm}
-                                                size="button"
-                                            >
-                                                {locale.texts.SAVE}
-                                            </Button>
-                                        </Nav.Item>
-                                    </AccessControl>
-                                    <AccessControl
-                                        permission={"user:toggleShowDevices"}
-                                        renderNoAccess={() => null}
-                                    >
-                                        <Nav.Item className="mt-2">
-                                            <Button 
-                                                variant="primary" 
-                                                className="mr-1 ml-2 text-capitalize" 
-                                                onClick={this.handleClickButton} 
-                                                name="filterObjectType"
-                                                value={[0]}
-                                                active={this.state.filterObjectType.includes(0)}
-                                                size="sm"
-                                            >
-                                                {this.state.filterObjectType.includes(0) ? locale.texts.SHOW_DEVICES : locale.texts.HIDE_DEVICES}
-                                            </Button>
-                                        </Nav.Item>
-                                    </AccessControl>
-                                    <AccessControl
-                                        permission={"user:toggleShowResidents"}
-                                        renderNoAccess={() => null}
-                                    >
-                                        <Nav.Item className="mt-2">
-                                            <Button 
-                                                variant="primary" 
-                                                className="mr-1 ml-2 text-capitalize" 
-                                                onClick={this.handleClickButton} 
-                                                name="filterObjectType"
-                                                value={[1, 2]}
-                                                active={this.state.filterObjectType.includes(1)}
-                                                size="sm"
-                                            >
-                                                {this.state.filterObjectType.includes(1) ? locale.texts.SHOW_RESIDENTS : locale.texts.HIDE_RESIDENTS}
-                                            </Button>
-                                        </Nav.Item>
-                                    </AccessControl>
-                                    {this.props.geoFenceConfig.map((item, index) => {
-                                        return ( parseInt(item.unique_key) == areaId && 
-                                            <Fragment
-                                                key={index}
-                                            >
-                                                <Nav.Item className="mt-2 bd-highligh ml-auto">
-                                                    <Button 
-                                                        variant="warning" 
-                                                        className="mr-1 ml-2 text-capitalize" 
-                                                        onClick={this.handleClickButton} 
-                                                        name="fence"
-                                                        value={+!this.state.isOpenFence}
-                                                        active={!this.state.isOpenFence}
-                                                        size="sm"
-                                                    >
-                                                        {this.state.isOpenFence ? locale.texts.FENCE_ON : locale.texts.FENCE_OFF}
-                                                    </Button>
-                                                </Nav.Item>
-                                                <Nav.Item className="mt-2">
-                                                    <Button 
-                                                        variant="outline-primary" 
-                                                        className="mr-1 ml-2 text-capitalize" 
-                                                        onClick={this.handleClickButton} 
-                                                        name="clearAlerts"
-                                                    >
-                                                        {locale.texts.CLEAR_ALERTS}
-                                                    </Button>
-                                                </Nav.Item>
-                                            </Fragment>
-                                        )
-                                    })}
-                                </Nav>
-                            </div>
+                                </Fragment>
+                            )
+                        })}
+                    </Nav>
+                    </div></div>
                         </div>
                     </div>         
-            </div>
         )
     }
 }
