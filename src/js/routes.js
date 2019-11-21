@@ -1,4 +1,4 @@
-import MainContainer from "./components/container/MainContainer";
+import Main from "./Main";
 import SystemStatus from "./components/container/SystemStatus";
 import Geofence from "./components/container/Geofence";
 import ObjectManagementContainer from "./components/container/ObjectManagementContainer";
@@ -7,7 +7,7 @@ import UserSettingContainer from "./components/container/UserContainer/UserSetti
 const routes = [
     {
         path: '/',
-        component: MainContainer,
+        component: Main,
         exact: true,
     },
     {

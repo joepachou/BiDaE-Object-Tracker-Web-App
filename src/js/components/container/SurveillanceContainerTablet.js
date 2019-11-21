@@ -1,18 +1,24 @@
-import React, { Fragment } from "react";
+import React, {Fragment} from "react";
 import Map from "../presentational/Map";
 import ToggleSwitch from "./ToggleSwitch";
 import { 
     Nav, 
     Button,
+    Image,
+    Row,
+    ButtonToolbar
 }  from "react-bootstrap";
+import LocaleContext from "../../context/LocaleContext";
 import GridButton from "../container/GridButton";
 import PdfDownloadForm from "./PdfDownloadForm"
 import config from "../../config";
 import AccessControl from "../presentational/AccessControl"
 import { AppContext } from "../../context/AppContext";
+import QRcodeContainer from "./QRcode";
+import { isNullOrUndefined } from "util";
+import InfoPromptForTablet from '../presentational/InfoPromptForTablet';
 
-
-class SurveillanceContainer extends React.Component {
+class SurveillanceContainerTablet extends React.Component {
 
     static contextType = AppContext
 
@@ -169,17 +175,28 @@ class SurveillanceContainer extends React.Component {
             // surveillanceContainer: {
             //     height: "100vh"
             // },
-            navBlock: {
-                // height: "40%"
+            MapAndQrcode: {
+              height: "40vh",
+              //border: "solid"
+            },
+            qrBlock: {
+                //border: "solid",
+                flex: 1
             }, 
             mapBlock: {
-                // height: "60%",
                 border: "solid 2px rgba(227, 222, 222, 0.619)",
                 padding: "5px",
+                flex: 4,
             },
-            // gridButton: {
-            //     display: this.state.showDevice ? null : "none"
-            // }
+            navBlock: {
+                //height: "40vh",
+            },
+            searchResult: {
+
+            },
+            gridButton: {
+                display: this.state.showDevice ? null : "none"
+            }
         }
         const { 
             locale,
@@ -187,93 +204,109 @@ class SurveillanceContainer extends React.Component {
         } = this.context;
 
         let [{areaId}] = stateReducer
+        
         return(
-            <div id="surveillanceContainer" style={style.surveillanceContainer} className="overflow-hidden">
-                <div style={style.mapBlock}>
-                    <Map 
-                        hasSearchKey={hasSearchKey}
-                        colorPanel={this.props.colorPanel}
-                        proccessedTrackingData={this.props.proccessedTrackingData}
-                        lbeaconPosition={this.props.lbeaconPosition}
-                        geoFenceConfig={this.props.geoFenceConfig.filter(item => parseInt(item.unique_key) == areaId)}
-                        getSearchKey={this.props.getSearchKey}
-                        areaId={areaId}
-                        isOpenFence={this.state.isOpenFence}
-                        searchedObjectType={this.state.showObjects}
-                        mapConfig={config.mapConfig}
-                    />
-                </div>
-                <div style={style.navBlock}>
-                    <Nav className="d-flex align-items-start text-capitalize bd-highlight">
-                        <Nav.Item>
-                            <div style={style.title} 
-                            >
-                                {locale.texts.LOCATION_ACCURACY}
+            <div id="surveillanceContainer" className="w-100 h-100 d-flex flex-column">
+                <div className="d-flex w-100 h-100 flex-column">
+                    <div>
+                        <div className="w-100 d-flex flex-row" style={style.MapAndQrcode}>
+                            <div style={style.qrBlock}>
+                                <QRcodeContainer
+                                    data={this.props.proccessedTrackingData.filter(item => item.searched)}
+                                    userInfo={auth.user}
+                                /> 
+                                <InfoPromptForTablet 
+                                    data={this.props.data}
+                                    searchKey={this.props.searchKey}
+                                    title={locale.texts.FOUND}
+                                    searchResultLength={this.props.searchResult.length} 
+                                />
                             </div>
-                        </Nav.Item>
-                        <Nav.Item className="pt-2 mr-2">
-                            <ToggleSwitch 
-                                changeLocationAccuracy={this.props.changeLocationAccuracy} 
-                                leftLabel="low"
-                                defaultLabel="med" 
-                                rightLabel="high"
-                            />
-                        </Nav.Item>
-                        <Nav.Item className="mt-2">
-                            <Button 
-                                variant="outline-primary" 
-                                className="mr-1 ml-2 text-capitalize" 
-                                onClick={this.handleClickButton} 
-                                name="clear"
-                                disabled={!this.props.hasSearchKey}
-                            >
-                                {locale.texts.CLEAR}
-                            </Button>
-                        </Nav.Item>
-                        <AccessControl
-                            permission={"user:saveSearchRecord"}
-                            renderNoAccess={() => null}
-                        >
-                            <Nav.Item className="mt-2">
-                                <Button 
-                                    variant="outline-primary" 
-                                    className="mr-1 ml-2 text-capitalize" 
-                                    onClick={this.handleClickButton} 
-                                    name="save"
-                                    disabled={!this.props.hasSearchKey || this.state.showPdfDownloadForm}
+                            <div style={style.mapBlock}>
+                                <Map
+                                    hasSearchKey={hasSearchKey}
+                                    colorPanel={this.props.colorPanel}
+                                    proccessedTrackingData={this.props.proccessedTrackingData}
+                                    lbeaconPosition={this.props.lbeaconPosition}
+                                    geoFenceConfig={this.props.geoFenceConfig.filter(item => parseInt(item.unique_key) == areaId)}
+                                    getSearchKey={this.props.getSearchKey}
+                                    areaId={areaId}
+                                    isOpenFence={this.state.isOpenFence}
+                                    searchedObjectType={this.state.showObjects}
+                                    mapConfig={config.mapConfig}
+                                />
+                            </div>
+                        </div>
+                        <div style={style.navBlock}>
+                            <Nav className="d-flex align-items-start text-capitalize bd-highlight">
+                                <Nav.Item>
+                                <div style={style.title}>
+                                    {locale.texts.LOCATION_ACCURACY}
+                                </div>
+                                </Nav.Item>
+                                <Nav.Item className="pt-2 mr-2">
+                                    <ToggleSwitch 
+                                        changeLocationAccuracy={this.props.changeLocationAccuracy} 
+                                        leftLabel="low"
+                                        defaultLabel="med" 
+                                        rightLabel="high"
+                                    />
+                                </Nav.Item>
+                                <Nav.Item className="mt-2">
+                                    <Button 
+                                        variant="outline-primary" 
+                                        className="mr-1 ml-2 text-capitalize" 
+                                        onClick={this.handleClickButton} 
+                                        name="clear"
+                                        disabled={!this.props.hasSearchKey}
+                                    >
+                                        {locale.texts.CLEAR}
+                                    </Button>
+                                </Nav.Item>
+                                <AccessControl
+                                    permission={"user:saveSearchRecord"}
+                                    renderNoAccess={() => null}
                                 >
-                                    {locale.texts.SAVE}
-                                </Button>
-                            </Nav.Item>
-                        </AccessControl>
-                        <AccessControl
-                            permission={"user:toggleShowDevices"}
-                            renderNoAccess={() => null}
-                        >
-                            <Nav.Item className="mt-2">
-                                <Button 
-                                    variant="primary" 
-                                    className="mr-1 ml-2 text-capitalize" 
-                                    onClick={this.handleClickButton} 
-                                    name="searchedObjectType"
-                                    value={[-1, 0]}
-                                    active={(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) }
-                                    disabled={
-                                        !(this.state.searchedObjectType.includes(-1) ||
-                                        this.state.searchedObjectType.includes(0))
-                                    }
+                                    <Nav.Item className="mt-2">
+                                        <Button 
+                                            variant="outline-primary" 
+                                            className="mr-1 ml-2 text-capitalize" 
+                                            onClick={this.handleClickButton} 
+                                            name="save"
+                                            disabled={!this.props.hasSearchKey || this.state.showPdfDownloadForm}
+                                        >
+                                            {locale.texts.SAVE}
+                                        </Button>
+                                    </Nav.Item>
+                                </AccessControl>
+                                <AccessControl
+                                    permission={"user:toggleShowDevices"}
+                                    renderNoAccess={() => null}
                                 >
-                                    {!(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) 
-                                        ?   locale.texts.SHOW_DEVICES 
-                                        :   locale.texts.HIDE_DEVICES 
-                                    }
-                                </Button>
-                            </Nav.Item>
-                        </AccessControl>
-                        <AccessControl
-                            permission={"user:toggleShowResidents"}
-                            renderNoAccess={() => null}
-                        >
+                                    <Nav.Item className="mt-2">
+                                        <Button 
+                                            variant="primary" 
+                                            className="mr-1 ml-2 text-capitalize" 
+                                            onClick={this.handleClickButton} 
+                                            name="searchedObjectType"
+                                            value={[-1, 0]}
+                                            active={(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) }
+                                            disabled={
+                                                !(this.state.searchedObjectType.includes(-1) ||
+                                                this.state.searchedObjectType.includes(0))
+                                            }
+                                        >
+                                            {!(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) 
+                                                ?   locale.texts.SHOW_DEVICES 
+                                                :   locale.texts.HIDE_DEVICES 
+                                            }
+                                        </Button>
+                                    </Nav.Item>
+                                </AccessControl>
+                                <AccessControl
+                                    permission={"user:toggleShowResidents"}
+                                    renderNoAccess={() => null}
+                                >
                             <Nav.Item className="mt-2">
                                 <Button 
                                     variant="primary" 
@@ -342,16 +375,11 @@ class SurveillanceContainer extends React.Component {
                             )
                         })}
                     </Nav>
-                </div>
-                <PdfDownloadForm 
-                    show={this.state.showPdfDownloadForm}
-                    data={this.props.proccessedTrackingData.filter(item => item.searched)}
-                    handleClose = {this.handleClosePdfForm}
-                    userInfo={auth.user}
-                />
-            </div>
+                    </div></div>
+                        </div>
+                    </div>         
         )
     }
 }
 
-export default SurveillanceContainer
+export default SurveillanceContainerTablet

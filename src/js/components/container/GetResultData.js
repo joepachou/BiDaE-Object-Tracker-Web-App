@@ -11,12 +11,13 @@ export default async function GetResultData(SearchKey, searchableObjectList, use
 	if(typeof SearchKey === 'string'){
 		if(SearchKey === 'my devices'){
 			let mydevice = user.myDevice || []
-			searchableObjectList.map(item => {
-				if (mydevice.includes(item.asset_control_number)) {
-					searchResult.push(item)
-				}	
-			})
-
+			searchableObjectList
+				.filter(item => item.object_type == 0)
+				.map(item => {
+					if (mydevice.includes(item.asset_control_number)) {
+						searchResult.push(item)
+					}	
+				})
 		} else {
 			if(SearchKey === 'all devices'){
 

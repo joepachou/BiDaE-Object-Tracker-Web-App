@@ -144,8 +144,8 @@ const config = {
 
     healthReport: {
         startInteval: false,
-        pollLbeaconTabelIntevalTime: 60000,
-        pollGatewayTableIntevalTime: 60000,
+        pollLbeaconTabelIntevalTime: 5000,
+        pollGatewayTableIntevalTime: 5000,
     },
 
     userPreference: {
@@ -583,20 +583,20 @@ const config = {
                 else if (item.status !== config.mapConfig.objectStatus.NORMAL) return config.mapConfig.iconColor.unNormal
                 else return config.mapConfig.iconColor.normal
             } 
-            else if (item.object_type == 1) return config.mapConfig.iconColor.female
-            else if (item.object_type == 2) return config.mapConfig.iconColor.male
+            else if (item.object_type == 1) return config.mapConfig.iconColor.male
+            else if (item.object_type == 2) return config.mapConfig.iconColor.female
         },
 
-        defaultAreaId: 1,
+        defaultAreaId: 3,
     
         
         gender: {
-           MAN: {
-                id: 2,
+            MAN: {
+                id: 1,
             },
             GIRL:{
-                id: 1,
-            }
+                id: 2,
+            },
         },
 
 
@@ -622,7 +622,9 @@ const config = {
                 id: 3,
                 name: "NTUH_YUNLIN_WARD_FIVE_B",
                 url: NTUH_YUNLIN_WARD_FIVE_B_MAP,
-                bounds: [[-5000,-5000], [21067,31928]],
+                // bounds: [[-5000,-5000], [21067,31928]],
+                bounds: [[0, 0], [26067,36928]],
+
             },
             NURSING_HOME: {
                 id: 4,
@@ -635,7 +637,9 @@ const config = {
                 id: 5,
                 name: "YUANLIN_CHRISTIAN_HOSPITAL",
                 url: YUANLIN_CHRISTIAN_HOSPITAL_MAP,
-                bounds: [[3000,-3000], [24000,30000]],
+                // bounds: [[3000,-3000], [24000,30000]],
+                bounds: [[0, 0], [27000,27000]],
+
             },
 
             VETERAN_HOME_FIRST_FLOOR: {
@@ -652,19 +656,6 @@ const config = {
                 bounds: [[0,0], [21000,26000]],
             },
         },
-
-        gender: {
-
-            MAN: {
-                id: 1,
-            },
-
-            GIRL: {
-                id: 2,
-            },
-            
-        },
-
 
         /* For test. To start object tracking*/
         startInteval: true,
@@ -748,6 +739,9 @@ const config = {
                                     </div>
                                     <div class="popupType">
                                         , ${locale.texts.PHYSICIAN_NAME}: ${item.physician_name}
+                                    </div>
+                                    <div class="popupType">
+                                        , ${item.residence_time}
                                     </div>
                                 `
                         }

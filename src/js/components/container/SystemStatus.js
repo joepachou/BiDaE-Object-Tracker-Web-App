@@ -6,10 +6,16 @@ import { Row, Col, Container, Tabs, Tab, Nav, Button, ButtonToolbar } from 'reac
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import EditLbeaconForm from './EditLbeaconForm'
-
+import selecTableHOC from 'react-table/lib/hoc/selectTable';
 import axios from 'axios';
 import dataSrc from '../../dataSrc';
 import config from '../../config';
+import { 
+    deleteLBeacon,
+    deleteGateway
+} from "../../dataSrc"
+
+
 import LocaleContext from '../../context/LocaleContext';
 import { 
     trackingTableColumn,
@@ -18,6 +24,7 @@ import {
 } from '../../tables';
 import { AppContext } from '../../context/AppContext';
 
+const SelectTable = selecTableHOC(ReactTable);
 class SystemStatus extends React.Component{
 
     static contextType = AppContext
@@ -28,9 +35,12 @@ class SystemStatus extends React.Component{
         gatewayColunm: [],
         trackingData: [],
         trackingColunm: [],
+        selection: [],
         selectedRowData: {},
         isShowModal: false,
-        locale: this.context.locale.lang
+        toggleAllFlag:0,
+        tabIndex:'',
+        locale: this.context.locale.lang,
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -138,13 +148,11 @@ class SystemStatus extends React.Component{
     }
 
     handleSubmitForm = () => {
+        setTimeout(this.getLbeaconData(), 500) 
+        setTimeout(this.getGatewayData(), 500) 
         this.setState({
             isShowModal: false
         })
-        setInterval(
-            this.getLbeaconData()
-            ,1000
-        )
     }
 
     handleCloseForm = () => {
@@ -153,6 +161,147 @@ class SystemStatus extends React.Component{
         })
     }
     
+
+
+
+
+            //  selectTable
+
+            toggleSelection = (key, shift, row) => {
+                let selection = [...this.state.selection];
+                key = key.split('-')[1] ? key.split('-')[1] : key
+                const keyIndex = selection.indexOf(key);
+            
+                if (keyIndex >= 0) {
+                    selection = [
+                    ...selection.slice(0, keyIndex),
+                    ...selection.slice(keyIndex + 1)
+                    ];
+                } else {
+                    selection.push(key);
+                }
+                this.setState({ 
+                    selection 
+                });
+            };
+
+            toggleAll = () => {
+                const selectAll = this.state.selectAll ? false : true;
+                const selection = [];
+                if (selectAll) {
+
+                    if(this.state.tabIndex == 'lbeacon_table')
+                    {
+                    this.state.lbeaconData.map (item => {
+                        selection.push(item.id);
+                    })
+
+                    }else{
+                       this.state.gatewayData.map (item => {
+                            selection.push(item.id);
+                        })
+    
+                    }
+                // console.log('toggleAllFlag:    '  + this.state.tabIndex )
+                //     const wrappedInstance = this.selectTable.getWrappedInstance();
+                //     const currentRecords = wrappedInstance.getResolvedState().sortedData;
+                //      console.log(currentRecords)
+                //     currentRecords.forEach(item => {
+                //         selection.push(item._original.id);
+                //     });
+
+                   
+                }
+
+                this.setState({ selectAll, selection });
+                
+
+            };
+
+            isSelected = (key) => {
+
+                return this.state.selection.includes(key);
+            };
+
+            deleteRecord = () => {
+                let idPackage = []
+                var deleteArray = [];
+                var deleteCount = 0;
+                this.state.lbeaconData.map (item => {
+                
+                    this.state.selection.map(itemSelect => {
+                        itemSelect === item.id
+                        ? 
+                        deleteArray.push(deleteCount.toString())
+                        : 
+                        null          
+                    })
+                        deleteCount +=1
+                })
+            
+                deleteArray.map( item => {
+                    this.state.lbeaconData[item] === undefined ?
+                        null
+                        :
+                        idPackage.push(parseInt(this.state.lbeaconData[item].id))
+                    })
+                    axios.post(deleteLBeacon, {
+                        idPackage
+                    })
+                    .then(res => {
+                        this.setState({
+                            selection: [],
+                            selectAll: false,
+                        })
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+
+                    this.handleSubmitForm()
+
+            }
+
+            deleteRecordGateway = () => {
+                let idPackage = []
+                var deleteArray = [];
+                var deleteCount = 0;
+                this.state.gatewayData.map (item => {
+                
+                    this.state.selection.map(itemSelect => {
+                        itemSelect === item.id
+                        ? 
+                        deleteArray.push(deleteCount.toString())
+                        : 
+                        null          
+                    })
+                        deleteCount +=1
+                })
+            
+                deleteArray.map( item => {
+                    this.state.gatewayData[item] === undefined ?
+                        null
+                        :
+                        idPackage.push(parseInt(this.state.gatewayData[item].id))
+                    })
+                    axios.post(deleteGateway, {
+                        idPackage
+                    })
+                    .then(res => {
+                        this.setState({
+                            selection: [],
+                            selectAll: false,
+                        })
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+
+                    this.handleSubmitForm()
+
+            }
+
+
     render(){
 
         const style = {
@@ -169,6 +318,25 @@ class SystemStatus extends React.Component{
         }
 
         const { locale } = this.context;
+        const { isShowEdit, selectedRowData,selectedRowData_Patient,isPatientShowEdit } = this.state
+    
+
+        const { selectAll, selectType } = this.state;
+
+        const {
+            toggleSelection,
+            toggleAll,
+            isSelected,
+        } = this;
+
+        const extraProps = {
+            selectAll,
+            isSelected,
+            toggleAll,
+            toggleSelection,
+            selectType
+        };
+
 
         return(
             <Container className='py-2 text-capitalize' fluid>
@@ -177,42 +345,91 @@ class SystemStatus extends React.Component{
                     onSelect={selectedKey => alert(`selected ${selectedKey}`)}
                 >
                 </Nav>
-                <Tabs defaultActiveKey="lbeacon_table" transition={false} variant="pills" className='mb-1'>
+                <Tabs defaultActiveKey="lbeacon_table" transition={false} variant="pills" onSelect={tabIndex => this.setState({ tabIndex })} className='mb-1'>
                     <Tab 
                         eventKey="lbeacon_table" 
                         title="LBeacon" 
                     > 
-                        <ReactTable 
-                            style={style.reactTable} 
-                            data={this.state.lbeaconData} 
-                            columns={this.state.lbeaconColumn}
-                            defaultPageSize={15}
-                            className="-highlight"
-                            getTrProps={(state, rowInfo, column, instance) => {
-                                return {
-                                    onClick: (e, handleOriginal) => {
+
+                    <Button 
+                        variant="outline-primary" 
+                        className='mb-1 text-capitalize mr-2'
+                        onClick={this.deleteRecord}
+                    >
+                         {locale.texts.DELECT_LBEACON}
+                    </Button>
+
+                    <SelectTable
+                        keyField='id'
+                        data={this.state.lbeaconData}
+                        columns={this.state.lbeaconColumn}
+                        ref={r => (this.selectTable = r)}
+                        className="-highlight"
+                         style={{height:'75vh'}}
+                        {...extraProps}
+                        getTrProps={(state, rowInfo, column, instance) => {
+                           
+                            return {
+                                onClick: (e, handleOriginal) => {
+                                    
                                         this.setState({
                                             selectedRowData: rowInfo.original,
                                             isShowModal: true,
                                         })
-                                
-                                        // IMPORTANT! React-Table uses onClick internally to trigger
-                                        // events like expanding SubComponents and pivots.
-                                        // By default a custom 'onClick' handler will override this functionality.
-                                        // If you want to fire the original onClick handler, call the
-                                        // 'handleOriginal' function.
+                                        let id = (rowInfo.index+1).toString()
+                                        this.toggleSelection(id)
                                         if (handleOriginal) {
                                             handleOriginal()
                                         }
-                                    }
-                                }
-                            }}
-                        />
+                                     }
+                            }
+                        }
+                        }
+                    />
                     </Tab>
+
+
+
                     <Tab 
                         eventKey="gateway_table" 
                         title="Gateway"
                     >
+                     <Button 
+                        variant="outline-primary" 
+                        className='mb-1 text-capitalize mr-2'
+                        onClick={this.deleteRecordGateway}
+                    >
+                           {locale.texts.DELECT_GATEWAY}
+                    </Button>
+
+                        <SelectTable
+                            keyField='id'
+                            data={this.state.gatewayData} 
+                            columns={this.state.gatewayColunm}
+                            ref={r => (this.selectTable = r)}
+                            className="-highlight"
+                            style={{height:'75vh'}}
+                            {...extraProps}
+                            getTrProps={(state, rowInfo, column, instance) => {
+                            
+                                return {
+                                    onClick: (e, handleOriginal) => {
+                                        
+                                            this.setState({
+                                                selectedRowData: rowInfo.original,
+                                                isShowModal: true,
+                                            })
+                                            // let id = (rowInfo.index+1).toString()
+                                            // this.toggleSelection(id)
+                                            if (handleOriginal) {
+                                                handleOriginal()
+                                            }
+                                        }
+                                }
+                            }
+                            }
+                        />
+{/* 
                         <ReactTable 
                             style={style.reactTable} 
                             data={this.state.gatewayData} 
@@ -220,8 +437,14 @@ class SystemStatus extends React.Component{
                             defaultPageSize={15} 
                             resizable={true}
                             freezeWhenExpanded={false}
-                        />
+                        /> */}
+
                     </Tab>
+
+
+
+
+
                     <Tab 
                         eventKey="tracking_table" 
                         title={locale.texts.TRACKING}

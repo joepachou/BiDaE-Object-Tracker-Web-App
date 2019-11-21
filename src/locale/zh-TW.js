@@ -115,6 +115,7 @@ const tw = {
     SELECT_SHIFT: "選擇班別",
     SELECT_AREA: "選擇地區",
     SELECT_LOCATION: "選擇地點",
+    SELECT_PHYSICIAN: "選擇醫師",
     WRITE_THE_NOTES: "填寫註記...",
     USERNAME: "使用者名稱",
     PASSWORD: "密碼",
@@ -214,7 +215,9 @@ const tw = {
     MY_PATIENT_LIST: "我的病人",
     NOT_MY_DEVICES_LIST: "其他儀器",
     NOT_MY_PATIENT_LIST: "其他病人",
-
+    PATIENT: "病人",
+    DEVICES: "儀器",
+    
     /** Table Field */
     ID: "ID",
     HEALTH_STATUS: "狀態",

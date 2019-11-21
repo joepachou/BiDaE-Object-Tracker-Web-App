@@ -35,6 +35,9 @@ const en =  {
     CHOOSE_GENDER:"Choose gender",
     MALE:'Male',
     FEMALE:'Female',
+    PATIENT: 'patient',
+    DEVICES: 'devices',
+
     /* Location accuracy */
     LOCATION_ACCURACY: "Location Accuracy",
     LOW: "low",
@@ -111,6 +114,7 @@ const en =  {
     SELECT_SHIFT: "select shift",
     SELECT_AREA: "select area",
     SELECT_LOCATION: "select location",
+    SELECT_PHYSICIAN: "select physician",
     WRITE_THE_NOTES: "write some notes...",
     USERNAME: "username",
     PASSWORD: "password",
