@@ -250,6 +250,10 @@ const patientTableColumn = [
     {
         Header: "Mac Address",
         accessor: "mac_address",
+    },
+    {
+        Header: "Monitor Type",
+        accessor: "monitor_type"
     }
 
 ]

@@ -124,6 +124,7 @@ const query_getPatientTable = (area_id) => {
 				object_table.mac_address,
 				object_table.asset_control_number,
 				object_table.object_type,
+				object_table.monitor_type,
 				user_table.name as physician_name
 
 			FROM object_table 
@@ -146,6 +147,7 @@ const query_getPatientTable = (area_id) => {
 				object_table.mac_address,
 				object_table.asset_control_number,
 				object_table.object_type,
+				object_table.monitor_type,
 				user_table.name as physician_name
 			FROM object_table 
 
@@ -239,7 +241,12 @@ function query_editPatient (formOption) {
 			name = $3,
 			asset_control_number = $4,
 			room_number = $5,
-			physician_id = $6
+			physician_id = (
+				SELECT id 
+				FROM user_table 
+				WHERE name = $6
+			),
+			monitor_type = $8
 		WHERE mac_address = $7
 	`;
 		
@@ -250,7 +257,8 @@ function query_editPatient (formOption) {
 		formOption.patientNumber, 
 		formOption.roomNumber,
 		formOption.physician,
-		formOption.mac_address
+		formOption.mac_address,
+		formOption.monitor_type
 	];
 
 

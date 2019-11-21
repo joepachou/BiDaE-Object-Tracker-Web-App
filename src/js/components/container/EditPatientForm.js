@@ -7,6 +7,8 @@ import LocaleContext from '../../context/LocaleContext';
 import axios from 'axios';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import CheckboxGroup from './CheckboxGroup'
+import Checkbox from '../presentational/Checkbox'
 import RadioButtonGroup from './RadioButtonGroup'
 import RadioButton from '../presentational/RadioButton'
 let monitorTypeMap = {};
@@ -66,7 +68,8 @@ class EditPatientForm extends React.Component {
             patientNumber,
             asset_control_number,
             object_type,
-            physician_name
+            physician_name,
+            monitor_type = []
         } = selectedObjectData
 
      
@@ -133,15 +136,16 @@ class EditPatientForm extends React.Component {
                                 : null,
                             mac_address: mac_address || '',
                             patientNumber:asset_control_number|| '',
-                            gender :  object_type === locale.texts.MALE ?
-                                genderOptions[0] 
-                                
-                                : object_type === locale.texts.FEMALE ?
+                            gender :  object_type === locale.texts.MALE 
+                                ?   genderOptions[0] 
+                                :   object_type === locale.texts.FEMALE ?
 
                                 genderOptions[1]
 
-                                :''
-                            }}
+                                :'',
+                            monitorType: selectedObjectData.length !== 0 ? monitor_type.split(',') : []
+
+                        }}
                        
                         validationSchema = {
                             
@@ -218,11 +222,19 @@ class EditPatientForm extends React.Component {
 
 
                         onSubmit={(values, { setStatus, setSubmitting }) => {
+                            let monitor_type = values.monitorType
+                            .filter(item => item)
+                            .reduce((sum, item) => {
+                                sum += parseInt(monitorTypeMap[item])
+                                return sum
+                            },0)
+
                             const postOption = {
                                 ...values,
                                 area_id: config.mapConfig.areaModules[values.area.value].id,
                                 gender_id : config.mapConfig.gender[values.gender.value].id,
-                                physician: values.physician.value
+                                physician: values.physician.value,
+                                monitor_type, 
                             }
                             this.handleSubmit(postOption)                            
                         }}
@@ -343,6 +355,30 @@ class EditPatientForm extends React.Component {
                                         </Row>        
                                     </Col> 
                                        
+                                </Row>
+                                <hr/>
+                                <Row className="form-group my-3 text-capitalize">
+                                    <Col>
+                                        <CheckboxGroup
+                                            id="monitorType"
+                                            label={locale.texts.MONITOR_TYPE}
+                                            value={values.monitorType}
+                                            error={errors.monitorType}
+                                            touched={touched.monitorType}
+                                            onChange={setFieldValue}
+                                            // onBlur={setFieldTouched}
+                                        >
+                                            {Object.values(config.monitorType).map((item,index) => {
+                                                return <Field
+                                                    key={index}
+                                                    component={Checkbox}
+                                                    name="checkboxGroup"
+                                                    id={item}
+                                                    label={item}
+                                                />
+                                            })}
+                                        </CheckboxGroup>
+                                    </Col>
                                 </Row>
                                 <Modal.Footer>
                                     <Button variant="outline-secondary" className="text-capitalize" onClick={this.handleClose}>

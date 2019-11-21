@@ -44,7 +44,7 @@ class ObjectManagementContainer extends React.Component{
         selectedRowData: [],
         selectedRowData_Patient: [],
         areaList: [],
-        formTitle:'',
+        formTitle: '',
         formPath: '',
         selectAll: false,
         locale: this.context.locale.abbr,
@@ -119,6 +119,9 @@ class ObjectManagementContainer extends React.Component{
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })
             res.data.rows.map(item => {
+
+                item.monitor_type = this.getMonitorTypeArray(item).join(',')
+                
                 item.area_name = {
                     value: config.mapConfig.areaOptions[item.area_id],
                     label: locale.texts[config.mapConfig.areaOptions[item.area_id]],
@@ -137,8 +140,15 @@ class ObjectManagementContainer extends React.Component{
       
     }
 
+    getMonitorTypeArray = (item) => {
+        return Object.keys(config.monitorType).reduce((checkboxGroup, index) => {
+            if (item.monitor_type & index) {
+                checkboxGroup.push(config.monitorType[index])
+            }
+            return checkboxGroup
+        }, [])
+    }
 
-    
     getData = () => {
         let { locale } = this.context
         axios.post(getObjectTable, {
@@ -154,16 +164,11 @@ class ObjectManagementContainer extends React.Component{
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })
             res.data.rows.map(item => {
-                let checkboxGroup = []
-                Object.keys(config.monitorType).map(index => {
-                    if (item.monitor_type & index) {
-                        checkboxGroup.push(config.monitorType[index])
-                    }
-                })
-                item.monitor_type = checkboxGroup.join(',')
+
+                item.monitor_type = this.getMonitorTypeArray(item).join(',')
+
                 item.status = {
                     value: item.status,
-                    // label: locale.texts[item.status.toUpperCase()],
                     label: locale.texts[item.status.toUpperCase()],
                 }
                 item.transferred_location = item.transferred_location 
@@ -215,7 +220,6 @@ class ObjectManagementContainer extends React.Component{
         })
     }
 
-
     handleSubmitForm = () => {
         setTimeout(this.getData, 500) 
         setTimeout(this.getDataPatient, 500) 
@@ -225,31 +229,14 @@ class ObjectManagementContainer extends React.Component{
         })
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    getMonitorTypeGroup = () => {
+        return Object.keys(config.monitorType).map((checkboxGroup, index) => {
+            if (item.monitor_type & index) {
+                checkboxGroup.push(config.monitorType[index])
+            }
+            return checkboxGroup
+        }, [])
+    }
 
     toggleSelection = (key, shift, row) => {
         let selection = [...this.state.selection];
@@ -385,37 +372,6 @@ class ObjectManagementContainer extends React.Component{
 
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     handlePatientClick = (e) => {
         this.setState({
             isPatientShowEdit: true, 
@@ -431,10 +387,6 @@ class ObjectManagementContainer extends React.Component{
         
         })
     }
-
-
-   
-
 
     render(){
         const { isShowEdit, selectedRowData,selectedRowData_Patient,isPatientShowEdit } = this.state
@@ -518,30 +470,27 @@ class ObjectManagementContainer extends React.Component{
                     />
                 </TabPanel>
 
-
-
-
                 <TabPanel>
 
-                <ButtonToolbar>
-                    <Button 
-                        variant="outline-primary" 
-                        className='mb-1 text-capitalize mr-2'
-                        onClick={this.handlePatientClick}
-                    >
-                         {locale.texts.ADD_INPATIENT}
-                         
-                    </Button>
-                    <Button 
-                        variant="outline-primary" 
-                        className='mb-1 text-capitalize'
-                        onClick={this.deleteRecordPatient}    
-                    >
-                        {locale.texts.DELETE}
-                    </Button>
-                </ButtonToolbar>
+                    <ButtonToolbar>
+                        <Button 
+                            variant="outline-primary" 
+                            className='mb-1 text-capitalize mr-2'
+                            onClick={this.handlePatientClick}
+                        >
+                            {locale.texts.ADD_INPATIENT}
+                            
+                        </Button>
+                        <Button 
+                            variant="outline-primary" 
+                            className='mb-1 text-capitalize'
+                            onClick={this.deleteRecordPatient}    
+                        >
+                            {locale.texts.DELETE}
+                        </Button>
+                    </ButtonToolbar>
 
-                <SelectTable
+                    <SelectTable
                         keyField='name'
                         data={this.state.dataPatient}
                         columns={this.state.columnPatient}
@@ -550,28 +499,25 @@ class ObjectManagementContainer extends React.Component{
                         style={{height:'75vh'}}
                         {...extraProps}
                         getTrProps={(state, rowInfo, column, instance) => {
-                           
+                        
                             return {
                                 onClick: (e, handleOriginal) => {
-                                        this.setState({
-                                            selectedRowData_Patient: this.state.dataPatient[rowInfo.index],
-                                             isShowEdit: false,
-                                             isPatientShowEdit: true,
-                                             formTitle: 'edit patient',
-                                             formPath: editPatient,
-                                        })
-                                        let id = (rowInfo.index+1).toString()
-                                        this.toggleSelection(id)
-                                        if (handleOriginal) {
-                                            handleOriginal()
-                                        }
-                                     }
+                                    this.setState({
+                                        selectedRowData_Patient: this.state.dataPatient[rowInfo.index],
+                                        isShowEdit: false,
+                                        isPatientShowEdit: true,
+                                        formTitle: 'edit patient',
+                                        formPath: editPatient,
+                                    })
+                                    let id = (rowInfo.index+1).toString()
+                                    this.toggleSelection(id)
+                                    if (handleOriginal) {
+                                        handleOriginal()
+                                    }
+                                }
                             }
-                        }
-                        }
+                        }}
                     />
-
-
 
                 </TabPanel>
                 </Tabs>
@@ -599,24 +545,8 @@ class ObjectManagementContainer extends React.Component{
                     data={this.state.data}
                     dataPatient = {this.state.dataPatient}
                     areaList={this.state.areaList}
-                />  
-
-             
-
-
-
-               {/*  isShowEdit = true 才會進表單 */}
-
-               
-                <Row className='d-flex w-100 justify-content-around'>
-                    <Col className='py-2'>
-
-                        <br/>
-                    
-                    </Col>
-                </Row>            
+                />             
             </Container>
-                    
         )
     }
 }
