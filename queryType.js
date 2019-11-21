@@ -25,7 +25,8 @@ function query_getTrackingData () {
 			lbeacon_table.description as location_description,
 			edit_object_record.notes,
 			user_table.name as physician_name,
-			notification.violation_timestamp
+			notification.violation_timestamp,
+			notification.monitor_type
 
 		FROM object_summary_table
 
@@ -44,16 +45,18 @@ function query_getTrackingData () {
 		LEFT JOIN (
 			SELECT 
 				mac_address,
+				monitor_type,
 				MIN(violation_timestamp) as violation_timestamp
 			FROM (
 				SELECT 
 					mac_address,
+					monitor_type,
 					violation_timestamp
 				FROM notification_table
 				WHERE 
 					web_processed is null
 			)	as temp
-			GROUP BY mac_address
+			GROUP BY mac_address, monitor_type
 		) as notification
 
 		ON notification.mac_address = object_summary_table.mac_address

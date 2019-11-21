@@ -180,6 +180,7 @@ const config = {
         1: "geofence",
         2: "panic",
         4: "movement",
+        8: "location",
     },
 
     shiftOption: [

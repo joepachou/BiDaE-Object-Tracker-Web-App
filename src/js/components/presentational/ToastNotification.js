@@ -8,9 +8,10 @@ const ToastNotification = ({
 }) => {
 
     const { locale }= React.useContext(AppContext);
+    
     return (
         <div>
-            {data.name} {data.location_description} {moment(data.geofence_violation_timestamp).format(config.geoFenceViolationTimeFormat)}
+            {data.name} {data.location_description} {moment(data.violation_timestamp).format(config.geoFenceViolationTimeFormat)}
         </div>
     )
 }

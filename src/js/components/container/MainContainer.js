@@ -74,14 +74,38 @@ class MainContainer extends React.Component{
             })
         } 
         let newViolatedObject = Object.keys(this.state.violatedObjects).filter(item => !Object.keys(prevState.violatedObjects).includes(item))
-        if (newViolatedObject !== 0 ) {
+
+        if (newViolatedObject.length !== 0 ) {
             newViolatedObject.map(item => {
-                toast.warn(<ToastNotification data={this.state.violatedObjects[item]} />, {
+                console.log(item)
+                this.getToastNotification(this.state.violatedObjects[item])
+            })
+        }
+    }
+
+    getToastNotification = (item) => {
+        switch(item.monitor_type) {
+            case 1:
+                toast.warn(<ToastNotification data={item} />, {
                     hideProgressBar: true,
                     autoClose: false,
                     onClose: this.onCloseToast
                 })
-            })
+            break;
+            case 4:
+                toast.error(<ToastNotification data={item} />, {
+                    hideProgressBar: true,
+                    autoClose: false,
+                    onClose: this.onCloseToast
+                })
+            break;
+            case 8:
+                toast.error(<ToastNotification data={item} />, {
+                    hideProgressBar: true,
+                    autoClose: false,
+                    onClose: this.onCloseToast
+                })
+            break;
         }
     }
 
@@ -397,7 +421,6 @@ class MainContainer extends React.Component{
         this.setState({
             proccessedTrackingData
         })
-        console.log(searchResult)
         return searchResult
     }
 

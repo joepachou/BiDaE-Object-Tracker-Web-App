@@ -81,7 +81,7 @@ const getTrackingData = (request, response) => {
                         : 'N/A'      
 
                 /** Flag the object that is violate geofence */
-                item.isViolated = checkViolateGeofence(item)
+                item.isViolated = item.monitor_type ? 1 : 0;
 
                 /** Flag the object that is on sos */
                 item.panic = moment().diff(item.panic_timestamp, 'second') < 300 ? 1 : 0
@@ -774,7 +774,7 @@ const parseGeoFenceConfig = (field) => {
 }
 
 /** Check tracking data violate geo fence */
-const checkViolateGeofence = (item) => {
+const checkViolate = (item) => {
 
     // /** Set the interval between the perimeter valid time and fence violation time */
     // let violateInterval = moment(item.geofence_violation_timestamp).diff(item.perimeter_valid_timestamp, 'seconds') 
