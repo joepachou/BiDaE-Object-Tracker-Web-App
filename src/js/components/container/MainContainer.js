@@ -327,10 +327,12 @@ class MainContainer extends React.Component{
         let proccessedTrackingData = _.cloneDeep(this.state.trackingData)
         if (searchKey === MY_DEVICES) {
             const devicesAccessControlNumber = auth.user.myDevice || []
-            proccessedTrackingData.map(item => {
+            //console.log(devicesAccessControlNumber)
+            proccessedTrackingData.filter(item => item.object_type == 0).map(item => {
                 if (devicesAccessControlNumber.includes(item.asset_control_number)) {
                     item.searched = true;
                     searchResult.push(item)
+                    console.log(searchResult)
                 }
             })
         } else if (searchKey === ALL_DEVICES) {
@@ -376,6 +378,7 @@ class MainContainer extends React.Component{
         this.setState({
             proccessedTrackingData
         })
+        console.log(searchResult)
         return searchResult
     }
 
@@ -455,7 +458,7 @@ class MainContainer extends React.Component{
         //             : {[devicePlural] : 0} 
         //         : {[devicePlural] : 0} 
         //     : {[devicePlural]: this.state.trackingData.filter(item => item.found && item.object_type == 0).length}
-
+        //console.log(searchResult)
         return(
             /** "page-wrap" the default id named by react-burget-menu */
             <div id="page-wrap" className='mx-1 my-2 overflow-hidden' style={style.pageWrap} >

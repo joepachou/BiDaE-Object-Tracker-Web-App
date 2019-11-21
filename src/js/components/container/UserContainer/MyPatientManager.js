@@ -136,12 +136,7 @@ class MyPatientManager extends React.Component{
                         {item.name},
                         &nbsp;
                         {item.asset_control_number}
-                        <p className='d-inline-block mx-1 text-capitalize'>
-                            {item.status !== 'normal'
-                                ? `, ${locale.texts[item.status.toUpperCase()]}`
-                                : ''
-                            }                        
-                        </p>
+
                         &nbsp;
                     </div>
                 )
@@ -183,7 +178,7 @@ class MyPatientManager extends React.Component{
 
     getObjectData() {
         let { locale, auth } = this.context
-        axios.post(dataSrc.getObjectTable, {
+        axios.post(dataSrc.getPatientTable, {
             locale: locale.lang,
             areaId: auth.user.areas_id,
         }).then(res => {
