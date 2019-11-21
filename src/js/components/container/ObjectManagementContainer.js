@@ -349,7 +349,6 @@ class ObjectManagementContainer extends React.Component{
             :
             idPackage.push(parseInt(this.state.data[item].id))
         })
-
         axios.post(deleteDevice, {
             idPackage
         })
@@ -366,38 +365,6 @@ class ObjectManagementContainer extends React.Component{
         this.handleSubmitForm()
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     handlePatientClick = (e) => {
         this.setState({
             isPatientShowEdit: true, 
@@ -413,10 +380,6 @@ class ObjectManagementContainer extends React.Component{
         
         })
     }
-
-
-   
-
 
     render(){
         const { isShowEdit, selectedRowData,selectedRowData_Patient,isPatientShowEdit } = this.state
@@ -442,30 +405,7 @@ class ObjectManagementContainer extends React.Component{
 
         return (
 
-
-
-
-    
-
-
-
-
-
-
-
-
-
             <Container className='py-2 text-capitalize' fluid>
-
-             
-
-
-
-
-
-
-
-
 
                 <br/>
 
@@ -478,10 +418,6 @@ class ObjectManagementContainer extends React.Component{
                 </TabList>
 
                 <TabPanel> 
-
-
-               
-
                     <ButtonToolbar>
                     <Button 
                         variant="outline-primary" 
@@ -534,7 +470,6 @@ class ObjectManagementContainer extends React.Component{
 
 
                 <TabPanel>
-
                 <ButtonToolbar>
                     <Button 
                         variant="outline-primary" 
@@ -587,7 +522,6 @@ class ObjectManagementContainer extends React.Component{
 
                 </TabPanel>
                 </Tabs>
-
                 <EditPatientForm
                     show = {isPatientShowEdit} 
                     title= {this.state.formTitle} 
@@ -612,13 +546,7 @@ class ObjectManagementContainer extends React.Component{
                     areaList={this.state.areaList}
                 />  
 
-             
-
-
-
                {/*  isShowEdit = true 才會進表單 */}
-
-               
                 <Row className='d-flex w-100 justify-content-around'>
                     <Col className='py-2'>
 

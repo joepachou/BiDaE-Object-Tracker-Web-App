@@ -162,7 +162,8 @@ const query_getLbeaconTable =
 		ip_address, 
 		health_status, 
 		gateway_ip_address, 
-		last_report_timestamp 
+		last_report_timestamp,
+		id
 	FROM lbeacon_table 
 	ORDER BY last_report_timestamp DESC
 	`;
@@ -173,7 +174,8 @@ const query_getGatewayTable =
 		ip_address, 
 		health_status, 
 		last_report_timestamp,
-		registered_timestamp 
+		registered_timestamp,
+		id
 	FROM 
 		gateway_table 
 	ORDER BY last_report_timestamp DESC`;
@@ -707,10 +709,22 @@ const query_deleteDevice = (idPackage) => {
 
 
 
+const query_deleteLBeacon = (idPackage) => {
+	const query = `
+		DELETE FROM lbeacon_table
+		WHERE id = (${idPackage.map(item => `'${item}'`)});
+	`
+	return query
+}
 
 
-
-
+const query_deleteGateway = (idPackage) => {
+	const query = `
+		DELETE FROM gateway_table
+		WHERE id = (${idPackage.map(item => `'${item}'`)});
+	`
+	return query
+}
 
 
 
@@ -917,6 +931,8 @@ module.exports = {
 	query_deletePatient,
 	query_deleteDevice,
 	query_setShift,
+	query_deleteLBeacon,
+	query_deleteGateway,
 	query_setVisitTimestamp,
 	query_insertUserData,
 	query_addEditObjectRecord,

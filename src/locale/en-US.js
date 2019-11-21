@@ -68,6 +68,8 @@ const en =  {
     DEVICES: "devices",
     DOWNLOAD: "download",
     DELETE: "delete",
+    DELECT_LBEACON:"Delete LBeacon",
+    DELECT_GATEWAY:"Delete Gateway",
     ADD_USER: "add user",
     ADD_INPATIENT:"add inpatient",
     DELECT_INPATIENT:"delect inpatient",

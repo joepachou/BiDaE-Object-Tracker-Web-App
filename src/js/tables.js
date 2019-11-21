@@ -56,6 +56,13 @@ const lbeaconTableColumn = [
                 accessor: "last_report_timestamp",
                 width: 200,
             },
+
+            {
+                Header: "Note",
+                accessor: "note",
+                width: 250,
+            },
+           
     //     ]
     // },
     // {
@@ -75,6 +82,9 @@ const gatewayTableColumn = [
     // {
     //     Header: "Info",
     //     columns: [
+
+
+    //原本是60 150 200 200 200
             {
                 Header: "Status",
                 accessor: "health_status",
@@ -88,22 +98,22 @@ const gatewayTableColumn = [
             {
                 Header: "IP Address",
                 accessor: "ip_address",
-                width: 150
+                width: 250
             },
             {
                 Header: "Last Report Timestamp",
                 accessor: "last_report_timestamp",
-                width: 200,
+                width: 300,
             },
             {
                 Header: "Registered Timestamp",
                 accessor: "registered_timestamp",
-                width: 200,
+                width: 300,
             },
             {
                 Header: "Note",
                 accessor: "note",
-                width: 200,
+                width: 250,
             },
     //     ]
     // },

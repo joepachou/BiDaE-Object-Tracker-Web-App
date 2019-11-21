@@ -73,6 +73,8 @@ const tw = {
     ADD_INPATIENT:"新增病人",
     DELECT_INPATIENT:"刪除病人",
     DELECT_DEVICE:"刪除儀器",
+    DELECT_LBEACON:"刪除LBeacon",
+    DELECT_GATEWAY:"刪除Gateway",
     EDIT_DEVICES: "編輯儀器",
     EDIT_PATIENT: "編輯病人資料",
     SWITCH_AREA: "切換地點",
