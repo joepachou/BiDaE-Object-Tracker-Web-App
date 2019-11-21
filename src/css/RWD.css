@@ -103,7 +103,7 @@
     } */
 
     #mapid {
-        height: 45vh;
+        height: 30vh;
     } 
     #searchbar {
         min-width: 200;
@@ -122,7 +122,7 @@
     }
 
     #mapid {
-        height: 50vh;
+        height: 40vh;
     } 
 
 }

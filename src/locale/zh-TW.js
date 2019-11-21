@@ -213,7 +213,9 @@ const tw = {
     MY_PATIENT_LIST: "我的病人",
     NOT_MY_DEVICES_LIST: "其他儀器",
     NOT_MY_PATIENT_LIST: "其他病人",
-
+    PATIENT: "病人",
+    DEVICES: "儀器",
+    
     /** Table Field */
     ID: "ID",
     HEALTH_STATUS: "狀態",
