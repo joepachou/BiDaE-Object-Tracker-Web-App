@@ -41,6 +41,7 @@ const rules = {
             // "user:toggleArea",
             "user:toggleShowDevices",
             "user:toggleShowResidents",
+            "route:monitorSetting"
         ]
     },
     dev: {
