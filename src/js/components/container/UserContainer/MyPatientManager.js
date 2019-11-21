@@ -133,12 +133,7 @@ class MyPatientManager extends React.Component{
                         <p className='d-inline-block mx-1'>&#9642;</p>
                         {item.name},
                         &nbsp;
-<<<<<<< HEAD
                         {item.asset_control_number}
-
-=======
-                            {item.asset_control_number}
->>>>>>> fb65795f3164f610e46d202b5eaad551e0e353be
                         &nbsp;
                     </div>
                 )
@@ -180,10 +175,6 @@ class MyPatientManager extends React.Component{
 
     getObjectData() {
         let { locale, auth } = this.context
-<<<<<<< HEAD
-=======
-
->>>>>>> fb65795f3164f610e46d202b5eaad551e0e353be
         axios.post(dataSrc.getPatientTable, {
             locale: locale.lang,
             areaId: auth.user.areas_id,

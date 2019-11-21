@@ -327,16 +327,6 @@ class MainContainer extends React.Component{
         let proccessedTrackingData = _.cloneDeep(this.state.trackingData)
         if (searchKey === MY_DEVICES) {
             const devicesAccessControlNumber = auth.user.myDevice || []
-<<<<<<< HEAD
-            //console.log(devicesAccessControlNumber)
-            proccessedTrackingData.filter(item => item.object_type == 0).map(item => {
-                if (devicesAccessControlNumber.includes(item.asset_control_number)) {
-                    item.searched = true;
-                    searchResult.push(item)
-                    console.log(searchResult)
-                }
-            })
-=======
             proccessedTrackingData
                 .filter(item => item.object_type == 0)
                 .map(item => {
@@ -346,7 +336,6 @@ class MainContainer extends React.Component{
                         searchResult.push(item)
                     }
                 })
->>>>>>> fb65795f3164f610e46d202b5eaad551e0e353be
         } else if (searchKey === ALL_DEVICES) {
             searchResult = proccessedTrackingData
                 .filter(item => item.object_type == 0)
