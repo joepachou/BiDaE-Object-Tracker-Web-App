@@ -354,7 +354,6 @@ class ObjectManagementContainer extends React.Component{
             :
             idPackage.push(parseInt(this.state.data[item].id))
         })
-
         axios.post(deleteDevice, {
             idPackage
         })
@@ -411,7 +410,11 @@ class ObjectManagementContainer extends React.Component{
 
 
         return (
+
+
             <Container className='py-2 text-capitalize' fluid>
+
+
                 <br/>
 
                 {/* tabs */}
@@ -472,25 +475,25 @@ class ObjectManagementContainer extends React.Component{
 
                 <TabPanel>
 
-                    <ButtonToolbar>
-                        <Button 
-                            variant="outline-primary" 
-                            className='mb-1 text-capitalize mr-2'
-                            onClick={this.handlePatientClick}
-                        >
-                            {locale.texts.ADD_INPATIENT}
-                            
-                        </Button>
-                        <Button 
-                            variant="outline-primary" 
-                            className='mb-1 text-capitalize'
-                            onClick={this.deleteRecordPatient}    
-                        >
-                            {locale.texts.DELETE}
-                        </Button>
-                    </ButtonToolbar>
+                <ButtonToolbar>
+                    <Button 
+                        variant="outline-primary" 
+                        className='mb-1 text-capitalize mr-2'
+                        onClick={this.handlePatientClick}
+                    >
+                         {locale.texts.ADD_INPATIENT}
+                         
+                    </Button>
+                    <Button 
+                        variant="outline-primary" 
+                        className='mb-1 text-capitalize'
+                        onClick={this.deleteRecordPatient}    
+                    >
+                        {locale.texts.DELETE}
+                    </Button>
+                </ButtonToolbar>
 
-                    <SelectTable
+                <SelectTable
                         keyField='name'
                         data={this.state.dataPatient}
                         columns={this.state.columnPatient}
@@ -521,7 +524,6 @@ class ObjectManagementContainer extends React.Component{
 
                 </TabPanel>
                 </Tabs>
-
                 <EditPatientForm
                     show = {isPatientShowEdit} 
                     title= {this.state.formTitle} 
@@ -545,7 +547,7 @@ class ObjectManagementContainer extends React.Component{
                     data={this.state.data}
                     dataPatient = {this.state.dataPatient}
                     areaList={this.state.areaList}
-                />             
+                />
             </Container>
         )
     }
