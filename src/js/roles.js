@@ -33,7 +33,7 @@ const rules = {
             "form:edit",
             "route:systemStatus",
             "route:objectManagement",
-            // "route:editObjectManagement",
+            "route:editObjectManagement",
             "user:mydevice",
             "user:saveSearchRecord",
             "route:userManager",
