@@ -12,13 +12,13 @@ import {
     deletePatient,
     deleteDevice,
     getUserList,
+    getLbeaconTable
 } from "../../dataSrc"
 import axios from 'axios';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import { Col, Row, Button, Nav, Container,ButtonToolbar} from 'react-bootstrap';
 import EditObjectForm from './EditObjectForm'
-import LocaleContext from '../../context/LocaleContext.js';
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
 import config from '../../config'
 import { objectTableColumn } from '../../tables'
@@ -48,8 +48,9 @@ class ObjectManagementContainer extends React.Component{
         formPath: '',
         selectAll: false,
         locale: this.context.locale.abbr,
-        tabIndex:0,
-        deleteFlag:0
+        tabIndex:1,
+        deleteFlag:0,
+        roomOptions: {}
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -67,6 +68,7 @@ class ObjectManagementContainer extends React.Component{
         this.getDataPatient();
         this.getAreaList();
         this.getUserList();
+        this.getLbeaconData();
     }
 
     getUserList = () => {
@@ -193,6 +195,30 @@ class ObjectManagementContainer extends React.Component{
         })
         .catch(err => {
             console.log(err);
+        })
+    }
+
+    getLbeaconData = () => {
+        let { locale } = this.context
+        axios.post(getLbeaconTable, {
+            locale: locale.abbr
+        })
+        .then(res => {
+            let roomOptions = []
+            res.data.rows.map(item => {
+                if (item.room) {
+                    roomOptions.push({
+                        value: item.id,
+                        label: item.room
+                    })
+                }
+            })
+            this.setState({
+                roomOptions,
+            })
+        })
+        .catch(err => {
+            console.log("get lbeacon data fail : " + err);
         })
     }
 
@@ -410,8 +436,6 @@ class ObjectManagementContainer extends React.Component{
 
 
         return (
-
-
             <Container className='py-2 text-capitalize' fluid>
 
 
@@ -535,6 +559,7 @@ class ObjectManagementContainer extends React.Component{
                     objectData = {this.state.data}
                     areaList={this.state.areaList}
                     physicianList={this.state.physicianList}
+                    roomOptions={this.state.roomOptions}
                 />  
 
                 <EditObjectForm 

@@ -69,9 +69,9 @@ class EditPatientForm extends React.Component {
             asset_control_number,
             object_type,
             physician_name,
-            monitor_type = []
+            monitor_type = [],
+            room
         } = selectedObjectData
-
      
         const areaOptions = Object.values(config.mapConfig.areaOptions).map(area => {
             return {
@@ -108,8 +108,6 @@ class EditPatientForm extends React.Component {
                 color: '#dc3545'
             },
         }
-
-
         let physicianListOptions = physicianList.map(user => {
             return {
                 value: user.id,
@@ -127,7 +125,7 @@ class EditPatientForm extends React.Component {
                         initialValues = {{
                             area: area_name || '',
                             patientName: name || '' ,
-                            roomNumber: room_number || '',
+                            // roomNumber: room_number || '',
                             physician: physician_name 
                                 ? {
                                     value: physician_name,
@@ -143,7 +141,13 @@ class EditPatientForm extends React.Component {
                                 genderOptions[1]
 
                                 :'',
-                            monitorType: selectedObjectData.length !== 0 ? monitor_type.split(',') : []
+                            monitorType: selectedObjectData.length !== 0 ? monitor_type.split(',') : [],
+                            room: room 
+                                ? {
+                                    value: room,
+                                    label: room
+                                }
+                                : null
 
                         }}
                        
@@ -153,7 +157,7 @@ class EditPatientForm extends React.Component {
                                
                                 
                                 patientName: Yup.string().required(locale.texts.NAME_IS_REQUIRED),
-                                roomNumber: Yup.string().required(locale.texts.ROOMNUMBER_IS_REQUIRED),
+                                // roomNumber: Yup.string().required(locale.texts.ROOMNUMBER_IS_REQUIRED),
                                
                                 // physician: Yup.string()
                                 // .required(locale.texts.ATTENDING_IS_REQUIRED)
@@ -233,8 +237,9 @@ class EditPatientForm extends React.Component {
                                 ...values,
                                 area_id: config.mapConfig.areaModules[values.area.value].id,
                                 gender_id : config.mapConfig.gender[values.gender.value].id,
-                                physician: values.physician.value,
+                                physician: values.physician ? values.physician.value : '',
                                 monitor_type, 
+                                room: values.room ? values.room.label : '',
                             }
                             this.handleSubmit(postOption)                            
                         }}
@@ -254,12 +259,12 @@ class EditPatientForm extends React.Component {
                                     <ErrorMessage name="patientNumber" component="div" className="invalid-feedback" />
                                 </div>
                                 
-
+{/* 
                                 <div className="form-group">
                                     <label htmlFor="roomNumber">{locale.texts.ROOM_NUMBER}*</label>
                                     <Field name="roomNumber" type="text" className={'form-control' + (errors.roomNumber && touched.roomNumber ? ' is-invalid' : '')} placeholder=''/>
                                     <ErrorMessage name="roomNumber" component="div" className="invalid-feedback" />
-                                </div>
+                                </div> */}
                                 <div className="form-group">
                                     <label htmlFor="mac_address">{locale.texts.MAC_ADDRESS}*</label>
                                     <Field 
@@ -341,16 +346,36 @@ class EditPatientForm extends React.Component {
                                             onChange={value => setFieldValue("gender", value)}
                                             value={values.gender}
                                             options={genderOptions}
+                                            components={{
+                                                IndicatorSeparator: () => null
+                                            }}
                                         />
                                     </Col> 
                                 </Row>
-                                {/* 要有下面這段，沒填的時候才會有紅字報錯 */}
+                                <hr/>
+                                <Row className="text-capitalize" noGutters>
+                                    <Col lg={3} className='d-flex align-items-center'>
+                                        <label htmlFor="type">{locale.texts.ROOM}</label>
+                                    </Col>
+                                    <Col lg={9}>
+                                        <Select 
+                                            placeholder = {locale.texts.SELECT_ROOM}
+                                            name ="room"
+                                            onChange={value => setFieldValue("room", value)}
+                                            value={values.room}
+                                            options={this.props.roomOptions}
+                                            components={{
+                                                IndicatorSeparator: () => null
+                                            }}
+                                        />
+                                    </Col> 
+                                </Row>
                                 <Row className="text-capitalize mb-1" noGutters>
                                    <Col lg={9}>
                                         <Row className='no-gutters' className='d-flex align-self-center'>
                                             <Col>
-                                                {touched.gender && errors.gender &&
-                                                <div style={style.errorMessage}>{errors.gender}</div>}
+                                                {touched.room && errors.room &&
+                                                <div style={style.errorMessage}>{errors.room}</div>}
                                             </Col>
                                         </Row>        
                                     </Col> 
