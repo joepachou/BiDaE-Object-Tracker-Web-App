@@ -331,7 +331,6 @@ class ObjectManagementContainer extends React.Component{
             :
             idPackage.push(parseInt(this.state.dataPatient[item].id))
         })
-        console.log(idPackage)
         axios.post(deletePatient, {
             idPackage
         })

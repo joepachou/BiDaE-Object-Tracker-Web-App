@@ -2,7 +2,7 @@
 import React from 'react';
 
 /** Import Components */
-import { Row, Col, Container, Tabs, Tab, Nav, Button, ButtonToolbar } from 'react-bootstrap';
+import { Row, Col, Container,  Nav, Button, ButtonToolbar } from 'react-bootstrap';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import EditLbeaconForm from './EditLbeaconForm'
@@ -21,7 +21,7 @@ import {
     gatewayTableColumn
 } from '../../tables';
 import { AppContext } from '../../context/AppContext';
-
+import {Tabs, Tab,TabList, TabPanel } from 'react-tabs';
 const SelectTable = selecTableHOC(ReactTable);
 class SystemStatus extends React.Component{
 
@@ -37,7 +37,7 @@ class SystemStatus extends React.Component{
         selectedRowData: {},
         isShowModal: false,
         toggleAllFlag:0,
-        tabIndex:'',
+        tabIndex:0,
         locale: this.context.locale.lang,
     }
 
@@ -188,13 +188,13 @@ class SystemStatus extends React.Component{
                 const selection = [];
                 if (selectAll) {
 
-                    if(this.state.tabIndex == 'lbeacon_table')
+                    if(this.state.tabIndex == '0')
                     {
                     this.state.lbeaconData.map (item => {
                         selection.push(item.id);
                     })
 
-                    }else{
+                    }else if (this.state.tabIndex == '1') {
                        this.state.gatewayData.map (item => {
                             selection.push(item.id);
                         })
@@ -282,6 +282,8 @@ class SystemStatus extends React.Component{
                         :
                         idPackage.push(parseInt(this.state.gatewayData[item].id))
                     })
+
+           
                     axios.post(deleteGateway, {
                         idPackage
                     })
@@ -338,26 +340,34 @@ class SystemStatus extends React.Component{
 
         return(
             <Container className='py-2 text-capitalize' fluid>
+             <br/>
                 <Nav
                     activeKey="/home"
                     onSelect={selectedKey => alert(`selected ${selectedKey}`)}
                 >
                 </Nav>
-                <Tabs defaultActiveKey="lbeacon_table" transition={false} variant="pills" onSelect={tabIndex => this.setState({ tabIndex })} className='mb-1'>
-                    <Tab 
-                        eventKey="lbeacon_table" 
-                        title="LBeacon" 
-                    > 
+                <Tabs defaultActiveKey="lbeacon_table" transition={false} variant="pills" onSelect=
+                {tabIndex => this.setState({ tabIndex })} className='mb-1'>
 
-                    <Button 
+
+                <TabList>
+                <Tab>{'LBeacon'}</Tab>
+                <Tab>{'Gateway'}</Tab>
+                <Tab>{locale.texts.TRACKING}</Tab>
+                </TabList>
+
+                <TabPanel>
+                <ButtonToolbar>
+                <Button 
                         variant="outline-primary" 
                         className='mb-1 text-capitalize mr-2'
                         onClick={this.deleteRecord}
                     >
                          {locale.texts.DELECT_LBEACON}
                     </Button>
+                </ButtonToolbar>
 
-                    <SelectTable
+                <SelectTable
                         keyField='id'
                         data={this.state.lbeaconData}
                         columns={this.state.lbeaconColumn}
@@ -384,23 +394,21 @@ class SystemStatus extends React.Component{
                         }
                         }
                     />
-                    </Tab>
+                </TabPanel> 
 
 
-
-                    <Tab 
-                        eventKey="gateway_table" 
-                        title="Gateway"
-                    >
-                     <Button 
+                <TabPanel>
+                <ButtonToolbar>
+                <Button 
                         variant="outline-primary" 
                         className='mb-1 text-capitalize mr-2'
                         onClick={this.deleteRecordGateway}
                     >
                            {locale.texts.DELECT_GATEWAY}
                     </Button>
+                </ButtonToolbar>
 
-                        <SelectTable
+                <SelectTable
                             keyField='id'
                             data={this.state.gatewayData} 
                             columns={this.state.gatewayColunm}
@@ -415,7 +423,6 @@ class SystemStatus extends React.Component{
                                         
                                             this.setState({
                                                 selectedRowData: rowInfo.original,
-                                                isShowModal: true,
                                             })
                                             // let id = (rowInfo.index+1).toString()
                                             // this.toggleSelection(id)
@@ -427,27 +434,10 @@ class SystemStatus extends React.Component{
                             }
                             }
                         />
-{/* 
-                        <ReactTable 
-                            style={style.reactTable} 
-                            data={this.state.gatewayData} 
-                            columns={this.state.gatewayColunm}
-                            defaultPageSize={15} 
-                            resizable={true}
-                            freezeWhenExpanded={false}
-                        /> */}
+                </TabPanel> 
 
-                    </Tab>
-
-
-
-
-
-                    <Tab 
-                        eventKey="tracking_table" 
-                        title={locale.texts.TRACKING}
-                    >
-                        <ReactTable 
+                <TabPanel>
+                    <ReactTable 
                             minRows={6} 
                             defaultPageSize={15} 
                             data={this.state.trackingData} 
@@ -456,7 +446,15 @@ class SystemStatus extends React.Component{
                             resizable={true}
                             freezeWhenExpanded={false}
                         />
-                    </Tab>
+                </TabPanel>
+
+
+
+
+{/* 
+                    <TabPanel>
+
+                    </TabPanel> */}
                 </Tabs>
                 <EditLbeaconForm 
                     show= {this.state.isShowModal} 
