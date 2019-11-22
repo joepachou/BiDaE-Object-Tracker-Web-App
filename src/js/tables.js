@@ -14,6 +14,9 @@ const style = {
         },
         exclamation: {
             color: "orange",
+        },
+        circle: {
+            color: "orange",
         }
     }
 }
@@ -32,6 +35,15 @@ const lbeaconTableColumn = [
                     : <i className="fas fa-times-circle" style={style.icon.times}></i>
             },
             {
+                Header: "danger area",
+                accessor: "danger_area",
+                width: 60,
+                style: style.column,
+                Cell: props => props.value 
+                    ? <i className="fas fa-circle" style={style.icon.circle}></i>
+                    : null
+            },
+            {
                 Header: "UUID",
                 accessor: "uuid",
                 width: 330
@@ -40,6 +52,11 @@ const lbeaconTableColumn = [
                 Header: "description",
                 accessor: "description",
                 width: 200
+            },
+            {
+                Header: "room",
+                accessor: "room",
+                width: 100,
             },
             {
                 Header: "IP Address",
@@ -56,13 +73,11 @@ const lbeaconTableColumn = [
                 accessor: "last_report_timestamp",
                 width: 200,
             },
-
             {
                 Header: "Note",
                 accessor: "note",
                 width: 250,
             },
-           
     //     ]
     // },
     // {
@@ -239,19 +254,26 @@ const patientTableColumn = [
     {
         Header: "PATIENT_GENDER",
         accessor: "object_type",
-        width: 100,
+        width: 50,
     },
     {
         Header: "patient Number",
-        accessor: "asset_control_number"
+        accessor: "asset_control_number",
+        width: 100,
     },
     {
         Header: "auth Area",
         accessor: "area_name.label"
     },
+    // {
+    //     Header: "room Number",
+    //     accessor: "room_number",
+    //     width: 100,
+    // },
     {
-        Header: "room Number",
-        accessor: "room_number"
+        Header: "room",
+        accessor: "room",
+        width: 100,
     },
     {
         Header: "attending Physician",
@@ -264,8 +286,7 @@ const patientTableColumn = [
     {
         Header: "Monitor Type",
         accessor: "monitor_type"
-    }
-
+    },
 ]
 
 
