@@ -228,29 +228,6 @@ class ObjectManagementContainer extends React.Component{
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     toggleSelection = (key, shift, row) => {
         let selection = [...this.state.selection];
         key = key.split('-')[1] ? key.split('-')[1] : key
@@ -318,7 +295,6 @@ class ObjectManagementContainer extends React.Component{
             :
             idPackage.push(parseInt(this.state.dataPatient[item].id))
         })
-        console.log(idPackage)
         axios.post(deletePatient, {
             idPackage
         })
