@@ -57,6 +57,7 @@ class MainContainer extends React.Component{
     componentDidUpdate = (prevProps, prevState) => {
         let isTrackingDataChange = !(_.isEqual(this.state.trackingData, prevState.trackingData))
         let { stateReducer } = this.context
+        let [{violatedObjects}] = stateReducer
         if (stateReducer[0].shouldUpdateTrackingData !== this.state.shouldUpdateTrackingData) {
             let [{shouldUpdateTrackingData}] = stateReducer
             this.interval = shouldUpdateTrackingData ? setInterval(this.getTrackingData, config.surveillanceMap.intevalTime) : clearInterval(this.interval);
@@ -73,11 +74,11 @@ class MainContainer extends React.Component{
                 auth: this.context.auth,
             })
         } 
+        // console.log(violatedObjects)
         let newViolatedObject = Object.keys(this.state.violatedObjects).filter(item => !Object.keys(prevState.violatedObjects).includes(item))
-
+        // console.log(newViolatedObject)
         if (newViolatedObject.length !== 0 ) {
             newViolatedObject.map(item => {
-                console.log(item)
                 this.getToastNotification(this.state.violatedObjects[item])
             })
         }
@@ -100,7 +101,7 @@ class MainContainer extends React.Component{
                 })
             break;
             case 8:
-                toast.error(<ToastNotification data={item} />, {
+                toast.info(<ToastNotification data={item} />, {
                     hideProgressBar: true,
                     autoClose: false,
                     onClose: this.onCloseToast
@@ -187,7 +188,8 @@ class MainContainer extends React.Component{
 
     getTrackingData = () => {
         let { auth, locale, stateReducer } = this.context
-        let [{areaId}] = stateReducer
+        let [{areaId, violatedObjects}, dispatch] = stateReducer
+        
         axios.post(dataSrc.getTrackingData,{
             rssiThreshold: this.state.rssiThreshold,
             locale: locale.abbr,
@@ -195,15 +197,28 @@ class MainContainer extends React.Component{
             areaId,
         })
         .then(res => {
+            
             let violatedObjects = res.data.reduce((violatedObjects, item) => {
                 if (!(item.mac_address in violatedObjects) && item.isViolated) {
                     violatedObjects[item.mac_address] = item
                 } 
                 return violatedObjects
             }, _.cloneDeep(this.state.violatedObjects))
+
+            // let test = res.data.reduce((violatedObjects, item) => {
+            //     if (!(item.mac_address in violatedObjects) && item.isViolated) {
+            //         violatedObjects[item.mac_address] = item
+            //     } 
+            //     return violatedObjects
+            // }, violatedObjects)
+
+            // dispatch({
+            //     type:'setViolatedObjects',
+            //     value: test
+            // })
             this.setState({
                 trackingData: res.data,
-                violatedObjects,
+                violatedObjects
             })
         })
         .catch(error => {
