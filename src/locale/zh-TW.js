@@ -116,6 +116,7 @@ const tw = {
     SELECT_AREA: "選擇地區",
     SELECT_LOCATION: "選擇地點",
     SELECT_PHYSICIAN: "選擇醫師",
+    SELECT_ROOM: "選擇房號",
     WRITE_THE_NOTES: "填寫註記...",
     USERNAME: "使用者名稱",
     PASSWORD: "密碼",
@@ -125,6 +126,8 @@ const tw = {
     RECEIVER_ID: "接收者ID",
     RECEIVER_NAME: "接收者姓名",
     RECEIVER_SIGNATURE: "接收者簽名",
+    ENABLE: "開啟",
+    DISABLE: "關閉",
    
     /** Form Title */
     EDIT_LBEACON: "編輯 lbeacon",
@@ -201,6 +204,7 @@ const tw = {
     PATIENT_MANAGEMENT: "病人管理",
     SHIFT_CHANGE_RECORD: "交班紀錄",
     EDIT_OBJECT_MANAGEMENT: "儀器狀態更改紀錄",
+    MONITOR_SETTING: "監控設定",
     ACCESS_RIGHT: "使用者權限",
     MY_DEVICES: "我的儀器",
     OTHER_DEVICES: "其他儀器",
@@ -255,6 +259,8 @@ const tw = {
     CONFIRM_BY: "確認",
     NEW_STATUS: "狀態紀錄",
     PHYSICIAN_NAME: "醫護人員姓名",
+    DANGER_AREA: "警戒區",
+    ROOM: "房號",
 
     /** User Roles */
     CARE_PROVIDER: "護理人員",
@@ -275,7 +281,9 @@ const tw = {
     FROM: "",
     MINUTES: "分鐘",
 
-
+    /** Fence related setting */
+    RESIDENT_MOVEMENT_MONITOR: "居民移動監控",
+    RESIDENT_LOCATION_MONITOR: "居民位置監控",
 
     /** Test */
     IIS_SINICA_FOURTH_FLOOR: "中研院4樓",

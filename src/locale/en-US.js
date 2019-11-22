@@ -115,6 +115,7 @@ const en =  {
     SELECT_AREA: "select area",
     SELECT_LOCATION: "select location",
     SELECT_PHYSICIAN: "select physician",
+    SELECT_ROOM: "select room",
     WRITE_THE_NOTES: "write some notes...",
     USERNAME: "username",
     PASSWORD: "password",
@@ -124,6 +125,8 @@ const en =  {
     RECEIVER_ID: "receiver ID",
     RECEIVER_NAME: "receiver name",
     RECEIVER_SIGNATURE: "receiver signature",
+    ENABLE: "enable",
+    DISABLE: "disable",
 
     /** Form Title */
     EDIT_LBEACON: "edit lbeacon",
@@ -199,6 +202,7 @@ const en =  {
     PATIENT_MANAGEMENT: "Patient Management",
     SHIFT_CHANGE_RECORD: "Shift change record",
     EDIT_OBJECT_MANAGEMENT: "Edit Object Record",
+    MONITOR_SETTING: "monitor setting",
     ACCESS_RIGHT: "Access Right",
     MY_DEVICES: "My Devices",
     OTHER_DEVICES: "Other Devices",
@@ -251,6 +255,8 @@ const en =  {
     CONFIRM_BY: "confirm by",
     NEW_STATUS: "new status",
     PHYSICIAN_NAME: "physician name",
+    DANGER_AREA: "danger area",
+    ROOM: "room",
 
     /** User Roles */
     CARE_PROVIDER: "care provider",
@@ -270,6 +276,10 @@ const en =  {
     FROM: "from",
     MINUTES: "minutes",
     // BEING_HERE: "being here",
+
+    /** Fence related setting */
+    RESIDENT_MOVEMENT_MONITOR: "resident movement monitor",
+    RESIDENT_LOCATION_MONITOR: "resident location monitor",
 
     /** Test */
     IIS_SINICA_FOURTH_FLOOR: "IIS sinica floor 4",
