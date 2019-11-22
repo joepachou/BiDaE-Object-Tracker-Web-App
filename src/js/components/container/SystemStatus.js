@@ -15,8 +15,6 @@ import {
     deleteGateway
 } from "../../dataSrc"
 
-
-import LocaleContext from '../../context/LocaleContext';
 import { 
     trackingTableColumn,
     lbeaconTableColumn,

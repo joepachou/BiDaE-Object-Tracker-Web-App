@@ -387,7 +387,6 @@ const getUserInfo = (request, response) => {
         .catch(error => {
             console.log('Get user info Fails error: ' + error)
         })
-    
 }
 
 const addUserSearchHistory = (request, response) => {
@@ -401,25 +400,19 @@ const addUserSearchHistory = (request, response) => {
         .catch(err => {
             console.log('Add user search history fails: ' + err)
         })
-        
 }
 
 const editLbeacon = (request, response) => {
-    const low = request.body.formOption.low_rssi || null
-    const med = request.body.formOption.med_rssi || null
-    const high = request.body.formOption.high_rssi || null
-    const uuid = request.body.formOption.uuid
-    const description = request.body.formOption.description
-
-
-    pool.query(queryType.query_editLbeacon(uuid, low, med, high, description), (error, results) => {
-        if (error) {
-            console.log('Edit lbeacon fails ' + error)
-        } else {
+    const { formOption } = request.body    
+    pool.query(queryType.query_editLbeacon(formOption))
+        .then(res => {
             console.log('Edit lbeacon success')
-        }
-        response.status(200).json(results)
-    })
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log('Edit lbeacon fails ' + err)
+        })
+
 }
 
 const generatePDF = (request, response) => {
@@ -875,36 +868,36 @@ module.exports = {
     getLbeaconTable,
     getGatewayTable,
     getGeofenceData,
-    editObject,
-    editPatient,
-    addObject,
-    addPatient,
-    editObjectPackage,
-    signin,
-    signup,
-    getUserInfo,
-    addUserSearchHistory,
-    editLbeacon,
-    generatePDF,
-    modifyUserDevices,
-    getPDFInfo,
-    validateUsername,
     getUserList,
     getUserRole,
     getRoleNameList,
-    deleteUser,
-    setUserRole,
+    getAreaTable,
+    getGeoFenceConfig,
+    getUserInfo,
+    getPDFInfo,
     getEditObjectRecord,
+    addShiftChangeRecord,
+    addUserSearchHistory,
+    addObject,
+    addPatient,
+    editObject,
+    editPatient,
+    editLbeacon,
+    editObjectPackage,
     deleteEditObjectRecord,
     deleteShiftChangeRecord,
     deletePatient,
     deleteDevice,
     deleteLBeacon,
     deleteGateway,
-    getAreaTable,
-    getGeoFenceConfig,
+    deleteUser,
+    signin,
+    signup,
+    generatePDF,
+    modifyUserDevices,
+    validateUsername,
+    setUserRole,
     setGeoFenceConfig,
-    addShiftChangeRecord,
     checkoutViolation,
     confirmValidation
 }

@@ -83,7 +83,8 @@ const query_getObjectTable = (area_id, ) => {
 				object_table.monitor_type,
 				object_table.area_id,
 				object_table.object_type,
-				object_table.id
+				object_table.id,
+				object_table.room
 			FROM object_table 
 			WHERE object_table.object_type = 0
 			ORDER BY object_table.name ASC	
@@ -100,7 +101,8 @@ const query_getObjectTable = (area_id, ) => {
 				object_table.monitor_type,
 				object_table.area_id,
 				object_table.object_type,
-				object_table.id
+				object_table.id,
+				object_table.room
 
 			FROM object_table 
 			WHERE object_table.object_type = 0
@@ -128,7 +130,8 @@ const query_getPatientTable = (area_id) => {
 				object_table.asset_control_number,
 				object_table.object_type,
 				object_table.monitor_type,
-				user_table.name as physician_name
+				user_table.name as physician_name,
+				object_table.room
 
 			FROM object_table 
 
@@ -151,7 +154,9 @@ const query_getPatientTable = (area_id) => {
 				object_table.asset_control_number,
 				object_table.object_type,
 				object_table.monitor_type,
-				user_table.name as physician_name
+				user_table.name as physician_name,
+				object_table.room
+
 			FROM object_table 
 
 			LEFT JOIN user_table
@@ -171,14 +176,16 @@ const query_getPatientTable = (area_id) => {
 const query_getLbeaconTable = 
     `
 	SELECT 
+		id,
 		uuid, 
 		description, 
 		ip_address, 
 		health_status, 
 		gateway_ip_address, 
 		last_report_timestamp,
-		id
-	FROM lbeacon_table 
+		danger_area,
+		room
+	FROM lbeacon_table
 	ORDER BY last_report_timestamp DESC
 	`;
 
@@ -251,7 +258,8 @@ function query_editPatient (formOption) {
 				FROM user_table 
 				WHERE name = $6
 			),
-			monitor_type = $8
+			monitor_type = $8,
+			room = $9
 		WHERE mac_address = $7
 	`;
 		
@@ -263,7 +271,8 @@ function query_editPatient (formOption) {
 		formOption.roomNumber,
 		formOption.physician,
 		formOption.mac_address,
-		formOption.monitor_type
+		formOption.monitor_type,
+		formOption.room
 	];
 
 
@@ -503,18 +512,24 @@ function query_addUserSearchHistory (username, searchHistory) {
 	return query
 }
 
-function query_editLbeacon (uuid, low, med, high, description) {
+function query_editLbeacon (formOption) {
 	const text =
 		`
 		UPDATE lbeacon_table
-		SET low_rssi = $1,
-			med_rssi = $2,
-			high_rssi = $3,
-			description = $5
-		WHERE uuid = $4
+		SET 
+			description = $2,
+			danger_area = $3,
+			room = $4
+
+		WHERE uuid = $1
 	`;
 
-	const values = [low, med, high, uuid, description]
+	const values = [
+		formOption.uuid,
+		formOption.description,
+		formOption.danger_area,
+		formOption.room
+	]
 
 	const query = {
 		text, 
