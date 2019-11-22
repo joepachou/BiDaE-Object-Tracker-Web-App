@@ -425,7 +425,6 @@ class SystemStatus extends React.Component{
                                         
                                             this.setState({
                                                 selectedRowData: rowInfo.original,
-                                                isShowModal: true,
                                             })
                                             // let id = (rowInfo.index+1).toString()
                                             // this.toggleSelection(id)
