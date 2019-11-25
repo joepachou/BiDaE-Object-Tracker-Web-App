@@ -1,7 +1,7 @@
 import React from 'react';
 import SearchContainer from './SearchContainer';
 import 'react-table/react-table.css';
-import SearchResultList from '../presentational/SearchResultList'
+import SearchResultListForTablet from '../presentational/SearchResultListForTablet'
 import { Row, Col, Toast } from 'react-bootstrap'
 import SurveillanceContainerTablet from './SurveillanceContainerTablet';
 import config from '../../config';
@@ -399,7 +399,6 @@ class MainContainerForTablet extends React.Component{
 
         const style = {
             container: {
-                //border : "solid",
             },
             searchResultDiv: {
                 display: this.state.hasSearchKey ? null : 'none',
@@ -408,8 +407,7 @@ class MainContainerForTablet extends React.Component{
             
             /** left area*/
             MapAndResult:{
-                flex: 7,
-                maxHeight: "50vh"
+                flex: 7
             },
 
             /** right area */
@@ -419,14 +417,14 @@ class MainContainerForTablet extends React.Component{
                 background: 'white',
                 borderRadius: 10,
                 //border : "solid",
-                // height: '90vh'
+                height: '90vh'
             },
 
             /** left down area */
             searchResultList: {
                 display: this.state.hasSearchKey ? null : 'none',
-                flex: 10,
-                //border : "solid",
+                height: "40vh",
+                border : "solid",
             },
 
             /** left up area */
@@ -452,11 +450,10 @@ class MainContainerForTablet extends React.Component{
 
         return(
             /** "page-wrap" the default id named by react-burget-menu */
-            <div id="page-wrap" className='d-flex flex-column h-100 w-100 mx-1 my-2'>
+            <div id="page-wrap" className='d-flex flex-column w-100' style={{height: "90vh"}}>
                 <div id="mainContainer" className='d-flex flex-row h-100 w-100' style={style.container}>
                     {/** left area of row */}
-                    <div className='d-flex flex-column' sm={7} md={9} lg={8} xl={8} id='searchMap' style={style.MapAndResult}>
-                        
+                    <div className='d-flex flex-column' id='searchMap' style={style.MapAndResult}>
                         {/** including QR code and map */}
                         <div className="d-flex" style={style.MapAndQrcode}>
                             <SurveillanceContainerTablet 
@@ -480,9 +477,8 @@ class MainContainerForTablet extends React.Component{
                         </div>
 
                         {/** includeing search result */}                    
-                        <div id="serchResultListDiv" className="d-flex" style={style.searchResultList}>
-                                <SearchResultList
-                                    className="scrollbar scrollbar-primacy"
+                        <div id="serchResult" className="d-flex" style={style.searchResultList}>
+                                <SearchResultListForTablet
                                     searchResult={this.state.searchResult} 
                                     searchKey={this.state.searchKey}
                                     highlightSearchPanel={this.highlightSearchPanel}
@@ -491,7 +487,7 @@ class MainContainerForTablet extends React.Component{
                     </div>
 
                     {/** right area of row */}
-                    <div id='searchPanel' xs={12} sm={5} md={3} lg={4} xl={4} className="h-100" style={style.searchPanel}>
+                    <div id='searchPanel' className="h-100" style={style.searchPanel}>
                         <SearchContainerForTablet 
                             hasSearchKey={this.state.hasSearchKey}
                             clearSearchResult={this.state.clearSearchResult}

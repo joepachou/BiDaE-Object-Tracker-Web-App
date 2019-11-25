@@ -55,7 +55,7 @@
     }
 
     #mainContainer {
-        height: 100%;
+        
     }
 
     #downloadPdfRequest {
@@ -112,7 +112,7 @@
   }
 
 /* Large devices (desktops, 992px and up) */
-@media (min-width: 992px) and (max-width: 1199.98px) {
+@media (min-width: 800px) and (max-width: 1600px) {
     html, body {
         font-size: 16px;
     }
@@ -128,7 +128,7 @@
 }
 
 /* Extra large devices (large desktops, 1200px and up) */
-@media (min-width: 1200px) {
+@media (min-width: 1600px) {
     
     #navbar {
         height: 65px;

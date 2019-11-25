@@ -168,15 +168,12 @@ class SurveillanceContainerTablet extends React.Component {
             title: {
                 color: "grey",
                 fontSize: "1rem",
-                maxWidth: "9rem",
-                height: "5rem",
-                lineHeight: "3rem"
             },
             // surveillanceContainer: {
             //     height: "100vh"
             // },
             MapAndQrcode: {
-              height: "40vh",
+              height: "42vh",
               //border: "solid"
             },
             qrBlock: {
@@ -189,13 +186,15 @@ class SurveillanceContainerTablet extends React.Component {
                 flex: 4,
             },
             navBlock: {
-                //height: "40vh",
             },
             searchResult: {
 
             },
             gridButton: {
                 display: this.state.showDevice ? null : "none"
+            },
+            button: {
+                fontSize: "0.8rem"
             }
         }
         const { 
@@ -209,18 +208,23 @@ class SurveillanceContainerTablet extends React.Component {
             <div id="surveillanceContainer" className="w-100 h-100 d-flex flex-column">
                 <div className="d-flex w-100 h-100 flex-column">
                     <div>
-                        <div className="w-100 d-flex flex-row" style={style.MapAndQrcode}>
-                            <div style={style.qrBlock}>
-                                <QRcodeContainer
-                                    data={this.props.proccessedTrackingData.filter(item => item.searched)}
-                                    userInfo={auth.user}
-                                /> 
-                                <InfoPromptForTablet 
-                                    data={this.props.data}
-                                    searchKey={this.props.searchKey}
-                                    title={locale.texts.FOUND}
-                                    searchResultLength={this.props.searchResult.length} 
-                                />
+                        <div className="w-100 d-flex flex-row align-items justify-content" style={style.MapAndQrcode}>
+                            <div style={style.qrBlock} className="d-flex flex-column align-items">
+                                <div>
+                                    <QRcodeContainer
+                                        data={this.props.proccessedTrackingData.filter(item => item.searched)}
+                                        userInfo={auth.user}
+                                    /> 
+                                    <InfoPromptForTablet 
+                                        data={this.props.data}
+                                        searchKey={this.props.searchKey}
+                                        title={locale.texts.FOUND}
+                                        searchResultLength={this.props.searchResult.length} 
+                                    />
+                                </div>
+                                <div style={style.title} className="mt-auto">
+                                    {locale.texts.LOCATION_ACCURACY}
+                                </div>
                             </div>
                             <div style={style.mapBlock}>
                                 <Map
@@ -237,12 +241,9 @@ class SurveillanceContainerTablet extends React.Component {
                                 />
                             </div>
                         </div>
-                        <div style={style.navBlock}>
+                        <div style={style.button}>
                             <Nav className="d-flex align-items-start text-capitalize bd-highlight">
                                 <Nav.Item>
-                                <div style={style.title}>
-                                    {locale.texts.LOCATION_ACCURACY}
-                                </div>
                                 </Nav.Item>
                                 <Nav.Item className="pt-2 mr-2">
                                     <ToggleSwitch 
@@ -259,8 +260,11 @@ class SurveillanceContainerTablet extends React.Component {
                                         onClick={this.handleClickButton} 
                                         name="clear"
                                         disabled={!this.props.hasSearchKey}
+                                        
                                     >
-                                        {locale.texts.CLEAR}
+                                        <div style={style.button}>
+                                            {locale.texts.CLEAR}
+                                        </div>
                                     </Button>
                                 </Nav.Item>
                                 <AccessControl
@@ -275,7 +279,9 @@ class SurveillanceContainerTablet extends React.Component {
                                             name="save"
                                             disabled={!this.props.hasSearchKey || this.state.showPdfDownloadForm}
                                         >
-                                            {locale.texts.SAVE}
+                                            <div style={style.button}>
+                                                {locale.texts.SAVE}
+                                            </div>
                                         </Button>
                                     </Nav.Item>
                                 </AccessControl>
@@ -296,10 +302,12 @@ class SurveillanceContainerTablet extends React.Component {
                                                 this.state.searchedObjectType.includes(0))
                                             }
                                         >
-                                            {!(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) 
-                                                ?   locale.texts.SHOW_DEVICES 
-                                                :   locale.texts.HIDE_DEVICES 
-                                            }
+                                            <div style={style.button}>
+                                                {!(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) 
+                                                    ?   locale.texts.SHOW_DEVICES 
+                                                    :   locale.texts.HIDE_DEVICES 
+                                                }
+                                            </div>
                                         </Button>
                                     </Nav.Item>
                                 </AccessControl>
@@ -320,10 +328,12 @@ class SurveillanceContainerTablet extends React.Component {
                                         this.state.searchedObjectType.includes(2))
                                     }
                                 >
-                                    {!(this.state.showObjects.includes(1) || this.state.showObjects.includes(2)) 
-                                        ?   locale.texts.SHOW_RESIDENTS
-                                        :   locale.texts.HIDE_RESIDENTS 
-                                    }
+                                    <div style={style.button}>
+                                        {!(this.state.showObjects.includes(1) || this.state.showObjects.includes(2)) 
+                                            ?   locale.texts.SHOW_RESIDENTS
+                                            :   locale.texts.HIDE_RESIDENTS 
+                                        }
+                                    </div>
                                 </Button>
                             </Nav.Item>
                         </AccessControl>
@@ -349,7 +359,7 @@ class SurveillanceContainerTablet extends React.Component {
                                 <Fragment
                                     key={index}
                                 >
-                                    <Nav.Item className="mt-2 bd-highligh ml-auto">
+                                    <Nav.Item className="mt-2 bd-highligh">
                                         <Button 
                                             variant="warning" 
                                             className="mr-1 ml-2 text-capitalize" 
@@ -358,7 +368,9 @@ class SurveillanceContainerTablet extends React.Component {
                                             value={+!this.state.isOpenFence}
                                             active={!this.state.isOpenFence}
                                         >
+                                        <div style={style.button}>
                                             {this.state.isOpenFence ? locale.texts.FENCE_ON : locale.texts.FENCE_OFF}
+                                        </div>
                                         </Button>
                                     </Nav.Item>
                                     <Nav.Item className="mt-2">
@@ -368,7 +380,9 @@ class SurveillanceContainerTablet extends React.Component {
                                             onClick={this.handleClickButton} 
                                             name="clearAlerts"
                                         >
-                                            {locale.texts.CLEAR_ALERTS}
+                                            <div style={style.button}>
+                                                {locale.texts.CLEAR_ALERTS}
+                                            </div>
                                         </Button>
                                     </Nav.Item>
                                 </Fragment>
