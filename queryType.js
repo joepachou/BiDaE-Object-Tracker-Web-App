@@ -2,6 +2,7 @@ function query_getTrackingData () {
 	const query = `
 		SELECT 
 			object_table.mac_address,
+			object_summary_table.id,
 			object_summary_table.uuid as lbeacon_uuid,
 			object_summary_table.first_seen_timestamp,
 			object_summary_table.last_seen_timestamp,
@@ -25,8 +26,7 @@ function query_getTrackingData () {
 			lbeacon_table.description as location_description,
 			edit_object_record.notes,
 			user_table.name as physician_name,
-			notification.violation_timestamp,
-			notification.monitor_type
+			notification.json_agg as notification
 
 		FROM object_summary_table
 
@@ -45,20 +45,28 @@ function query_getTrackingData () {
 		LEFT JOIN (
 			SELECT 
 				mac_address,
-				monitor_type,
-				MIN(violation_timestamp) as violation_timestamp
+				json_agg(json_build_object(
+						'type', monitor_type, 
+						'time', violation_timestamp)
+					)
 			FROM (
 				SELECT 
 					mac_address,
 					monitor_type,
-					violation_timestamp
-				FROM notification_table
-				WHERE 
-					web_processed is null
-			)	as temp
-			GROUP BY mac_address, monitor_type
+					MIN(violation_timestamp) as violation_timestamp
+				FROM (
+					SELECT 
+						mac_address,
+						monitor_type,
+						violation_timestamp
+					FROM notification_table
+					WHERE 
+						web_processed is null
+				)	as tmp_1
+				GROUP BY mac_address, monitor_type
+			) as tmp_2
+			GROUP BY mac_address
 		) as notification
-
 		ON notification.mac_address = object_summary_table.mac_address
 
 		ORDER BY object_table.type, object_table.mac_address DESC;
@@ -894,12 +902,13 @@ const query_setGeoFenceConfig = (value, areaId) =>{
 	`
 }
 
-const query_checkoutViolation = (mac_address) => {
+const query_checkoutViolation = (mac_address, monitor_type) => {
 	return `
 		UPDATE notification_table
 		SET web_processed = 1
 		WHERE (
 			mac_address = '${mac_address}'
+			AND monitor_type = ${monitor_type}
 			AND violation_timestamp < NOW()
 		) 	
 	`

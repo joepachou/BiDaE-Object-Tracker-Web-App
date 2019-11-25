@@ -4,14 +4,14 @@ import moment from 'moment'
 import config from '../../config'
 
 const ToastNotification = ({
-    data
+    data,
+    time,
+    type
 }) => {
-
     const { locale }= React.useContext(AppContext);
-    
     return (
         <div>
-            {data.name} {data.location_description} {moment(data.violation_timestamp).format(config.geoFenceViolationTimeFormat)}
+            {data.name} {config.monitorType[type]} {data.location_description} {moment(time).format(config.geoFenceViolationTimeFormat)}
         </div>
     )
 }

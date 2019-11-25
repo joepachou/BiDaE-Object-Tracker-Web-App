@@ -233,6 +233,13 @@ const config = {
         draggable: true
     },
 
+    toastMonitorMap: {
+        1: "warn",
+        2: "info",
+        4: "error",
+        8: "info",
+    },
+
     statusToCreatePdf: [
         "broken",
         "transferred"
