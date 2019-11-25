@@ -122,7 +122,7 @@ class ObjectManagementContainer extends React.Component{
             })
             res.data.rows.map(item => {
 
-                item.monitor_type = this.getMonitorTypeArray(item).join(',')
+                item.monitor_type = this.getMonitorTypeArray(item).join('/')
                 
                 item.area_name = {
                     value: config.mapConfig.areaOptions[item.area_id],
@@ -167,7 +167,7 @@ class ObjectManagementContainer extends React.Component{
             })
             res.data.rows.map(item => {
 
-                item.monitor_type = this.getMonitorTypeArray(item).join(',')
+                item.monitor_type = this.getMonitorTypeArray(item).join('/')
 
                 item.status = {
                     value: item.status,

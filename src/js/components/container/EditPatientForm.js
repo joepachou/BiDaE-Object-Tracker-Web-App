@@ -141,7 +141,7 @@ class EditPatientForm extends React.Component {
                                 genderOptions[1]
 
                                 :'',
-                            monitorType: selectedObjectData.length !== 0 ? monitor_type.split(',') : [],
+                            monitorType: selectedObjectData.length !== 0 ? monitor_type.split('/') : [],
                             room: room 
                                 ? {
                                     value: room,

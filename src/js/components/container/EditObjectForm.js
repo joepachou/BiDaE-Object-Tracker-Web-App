@@ -126,7 +126,7 @@ class EditObjectForm extends React.Component {
                             select: status.value === config.objectStatus.TRANSFERRED 
                                 ? transferred_location
                                 : '',
-                            checkboxGroup: selectedObjectData.length !== 0 ? selectedObjectData.monitor_type.split(',') : []
+                            checkboxGroup: selectedObjectData.length !== 0 ? selectedObjectData.monitor_type.split('/') : []
                         }}
 
                         validationSchema = {
