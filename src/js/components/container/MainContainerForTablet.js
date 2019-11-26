@@ -14,10 +14,12 @@ import { toast } from 'react-toastify';
 import ToastNotification from '../presentational/ToastNotification'
 import SearchContainerForTablet from './SearchContainerForTablet';
 
-const myDevices = config.frequentSearchOption.MY_DEVICES ;
-const allDevices = config.frequentSearchOption.ALL_DEVICES;
-const myPatient = config.frequentSearchOption.MY_PATIENT;
-const allPatient = config.frequentSearchOption.ALL_PATIENT;
+const {
+    ALL_DEVICES,
+    MY_DEVICES,
+    ALL_PATIENTS,
+    MY_PATIENTS,
+} = config.frequentSearchOption
 
 class MainContainerForTablet extends React.Component{
 
@@ -55,6 +57,7 @@ class MainContainerForTablet extends React.Component{
     componentDidUpdate = (prevProps, prevState) => {
         let isTrackingDataChange = !(_.isEqual(this.state.trackingData, prevState.trackingData))
         let { stateReducer } = this.context
+        let [{violatedObjects}] = stateReducer
         if (stateReducer[0].shouldUpdateTrackingData !== this.state.shouldUpdateTrackingData) {
             let [{shouldUpdateTrackingData}] = stateReducer
             this.interval = shouldUpdateTrackingData ? setInterval(this.getTrackingData, config.surveillanceMap.intevalTime) : clearInterval(this.interval);
@@ -71,15 +74,39 @@ class MainContainerForTablet extends React.Component{
                 auth: this.context.auth,
             })
         } 
+        // console.log(violatedObjects)
         let newViolatedObject = Object.keys(this.state.violatedObjects).filter(item => !Object.keys(prevState.violatedObjects).includes(item))
-        if (newViolatedObject !== 0 ) {
+        // console.log(newViolatedObject)
+        if (newViolatedObject.length !== 0 ) {
             newViolatedObject.map(item => {
-                toast.warn(<ToastNotification data={this.state.violatedObjects[item]} />, {
+                this.getToastNotification(this.state.violatedObjects[item])
+            })
+        }
+    }
+
+    getToastNotification = (item) => {
+        switch(item.monitor_type) {
+            case 1:
+                toast.warn(<ToastNotification data={item} />, {
                     hideProgressBar: true,
                     autoClose: false,
                     onClose: this.onCloseToast
                 })
-            })
+            break;
+            case 4:
+                toast.error(<ToastNotification data={item} />, {
+                    hideProgressBar: true,
+                    autoClose: false,
+                    onClose: this.onCloseToast
+                })
+            break;
+            case 8:
+                toast.info(<ToastNotification data={item} />, {
+                    hideProgressBar: true,
+                    autoClose: false,
+                    onClose: this.onCloseToast
+                })
+            break;
         }
     }
 
@@ -161,7 +188,8 @@ class MainContainerForTablet extends React.Component{
 
     getTrackingData = () => {
         let { auth, locale, stateReducer } = this.context
-        let [{areaId}] = stateReducer
+        let [{areaId, violatedObjects}, dispatch] = stateReducer
+        
         axios.post(dataSrc.getTrackingData,{
             rssiThreshold: this.state.rssiThreshold,
             locale: locale.abbr,
@@ -169,15 +197,28 @@ class MainContainerForTablet extends React.Component{
             areaId,
         })
         .then(res => {
+            
             let violatedObjects = res.data.reduce((violatedObjects, item) => {
                 if (!(item.mac_address in violatedObjects) && item.isViolated) {
                     violatedObjects[item.mac_address] = item
                 } 
                 return violatedObjects
             }, _.cloneDeep(this.state.violatedObjects))
+
+            // let test = res.data.reduce((violatedObjects, item) => {
+            //     if (!(item.mac_address in violatedObjects) && item.isViolated) {
+            //         violatedObjects[item.mac_address] = item
+            //     } 
+            //     return violatedObjects
+            // }, violatedObjects)
+
+            // dispatch({
+            //     type:'setViolatedObjects',
+            //     value: test
+            // })
             this.setState({
                 trackingData: res.data,
-                violatedObjects,
+                violatedObjects
             })
         })
         .catch(error => {
@@ -227,11 +268,12 @@ class MainContainerForTablet extends React.Component{
 
     /** Parsing the lbeacon's location coordinate from lbeacon_uuid*/
     createLbeaconCoordinate = (lbeacon_uuid) => {
+
         /** Example of lbeacon_uuid: 00000018-0000-0000-7310-000000004610 */
-        const zz = lbeacon_uuid.slice(6,8);
+        const zz = lbeacon_uuid.slice(0,4);
         const xx = parseInt(lbeacon_uuid.slice(14,18) + lbeacon_uuid.slice(19,23));
         const yy = parseInt(lbeacon_uuid.slice(-8));
-        return [yy, xx];
+        return [yy, xx, zz];
     }
 
     /** Transfer the search result, not found list and color panel from SearchContainer, GridButton to MainContainer 
@@ -247,6 +289,7 @@ class MainContainerForTablet extends React.Component{
         duplicateSearchKey.filter(key => {
             return key !== 'all devices' || key !== 'my devices'
         })
+
         let searchResultObjectTypeMap = searchResult
             .filter(item => item.found)
             .reduce((allObjectTypes, item) => {
@@ -262,6 +305,7 @@ class MainContainerForTablet extends React.Component{
         }, {})
 
         duplicateSearchKey.map(key => searchResultObjectTypeMap[key] = 0)
+
         if(colorPanel) {
             this.setState({
                 hasSearchKey: Object.keys(colorPanel).length === 0 ? false : true,
@@ -300,6 +344,7 @@ class MainContainerForTablet extends React.Component{
         this.clearGridButtonBGColor();
         this.setState({
             hasSearchKey: false,
+            searchKey: '',
             searchResult: [],
             colorPanel: null,
             clearColorPanel: true,
@@ -319,49 +364,75 @@ class MainContainerForTablet extends React.Component{
         let searchResult = [];
         let { auth } = this.context
         let proccessedTrackingData = _.cloneDeep(this.state.trackingData)
-        if (searchKey === myDevices) {
+        if (searchKey === MY_DEVICES) {
             const devicesAccessControlNumber = auth.user.myDevice || []
-            proccessedTrackingData.map(item => {
-                if (devicesAccessControlNumber.includes(item.asset_control_number)) {
-                    item.searched = true;
-                    searchResult.push(item)
-                }
-            })
-        } else if (searchKey === allDevices) {
-            searchResult = proccessedTrackingData.filter(item => item.object_type == 0)
+            proccessedTrackingData
+                .filter(item => item.object_type == 0)
                 .map(item => {
-                    item.searched = auth.user.areas_id.includes(item.area_id) ? true : false
+                    if (devicesAccessControlNumber.includes(item.asset_control_number)) {
+                        item.searched = true;
+                        item.searchedType = -1;
+                        searchResult.push(item)
+                    }
+                })
+        } else if (searchKey === ALL_DEVICES) {
+            searchResult = proccessedTrackingData
+                .filter(item => item.object_type == 0)
+                .map(item => {
+                    if (auth.user.areas_id.includes(item.area_id)) {
+                        item.searchedType = 0
+                    }
                     return item
                 })
-        } else if (searchKey === myPatient){
-            searchResult = proccessedTrackingData.filter(item => (item.object_type != 0 && item.physician_id == auth.user.id))
-        } else if (searchKey === allPatient){
-            searchResult = proccessedTrackingData.filter(item => item.object_type != 0)
-            .map(item => {
-                item.searched = auth.user.areas_id.includes(item.area_id) ? true : false
-                return item
-            })
-        }else if (searchKey === 'coordinate') {
-            searchResult = this.collectObjectsByLatLng(searchValue,proccessedTrackingData)
+        } else if (searchKey === MY_PATIENTS){
+            const devicesAccessControlNumber = auth.user.myDevice || []
+
+            proccessedTrackingData
+                .filter(item => item.object_type != 0)
+                .map(item => {
+                    if (devicesAccessControlNumber.includes(item.asset_control_number)) {
+                        // console.log(item.asset_control_number)
+                        item.searched = true;
+                        // item.searched = auth.user.areas_id.includes(item.area_id) ? true : false
+                        item.searchedType = -2;
+                        searchResult.push(item)
+                    }
+                })
+
+        } else if (searchKey === ALL_PATIENTS) {
+
+            searchResult = proccessedTrackingData
+                .filter(item => item.object_type != 0)
+                .map(item => {
+                    // item.searched = auth.user.areas_id.includes(item.area_id) ? true : false
+                    return item
+                })
+
+        } else if (searchKey === 'coordinate') {
+            searchResult = this.collectObjectsByLatLng(searchValue, proccessedTrackingData)
         } else if (typeof searchKey === 'object') {
             proccessedTrackingData.map(item => {
                 if (searchKey.includes(item.type)) {
                     item.searched = true;
+                    item.searchedType = -1;
                     item.pinColor = colorPanel[item.type];
                     searchResult.push(item)
                 } 
             })
         } else {
             proccessedTrackingData.map(item => {
-                if (item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0
+                if (item.object_type == 0 && (item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0
                     || item.asset_control_number.slice(10,14).indexOf(searchKey) >= 0
-                    || item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0) {
+                    || item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0) 
+                ) {
 
                     item.searched = true
+                    item.searchedType = -1;
                     searchResult.push(item)
                 }
             })
         }
+
         this.setState({
             proccessedTrackingData
         })
@@ -371,8 +442,12 @@ class MainContainerForTablet extends React.Component{
     collectObjectsByLatLng = (lbPosition, proccessedTrackingData) => {
         let objectList = []
         proccessedTrackingData.map(item => {
-            if (item.currentPosition && item.currentPosition.toString() === lbPosition.toString()) {
+            if (item.currentPosition && 
+                item.currentPosition.toString() === lbPosition.toString() &&
+                item.area_id == lbPosition[2]    
+            ) {
                 item.searched = true;
+                item.searchedType = -1;
                 objectList.push(item);
             }
         })
@@ -384,7 +459,6 @@ class MainContainerForTablet extends React.Component{
             isHighlightSearchPanel: boolean
         })
     }
-    
     render(){
 
         const { 

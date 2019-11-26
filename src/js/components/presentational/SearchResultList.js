@@ -257,13 +257,13 @@ class SearchResult extends React.Component {
 
 
     render() {
+        //console.log(this.props.searchResult)
         const { locale } = this.context;
         const { searchKey } = this.props;
         const style = {
             noResultDiv: {
                 color: 'grey',
                 fontSize: '1rem',
-                fontWeight: 300
             },
             titleText: {
                 color: 'rgb(80, 80, 80, 0.9)',
@@ -315,12 +315,12 @@ class SearchResult extends React.Component {
                                 <div className='searchResultForDestop'>{locale.texts.NO_RESULT}</div>
                             </Col> 
                         :   
-                            <Col className="searchResultListGroup mx-2 d-flex justify-content-center">
+                            <Col className="searchResultListGroup d-flex justify-content-center">
                                 <AccessControl
                                     permission={'form:edit'}
                                     renderNoAccess={() => (
                                         <SearchResultListGroup 
-                                            data={searchResult}
+                                            data={this.props.searchResult}
                                             selection={this.state.selection}
                                         />
                                     )
@@ -328,13 +328,13 @@ class SearchResult extends React.Component {
                                 >
                                 {searchResult[0].object_type == 0 
                                     ?   <SearchResultListGroup 
-                                            data={searchResult}
+                                            data={this.props.searchResult}
                                             handleSelectResultItem={this.handleSelectResultItem}
                                             selection={this.state.selection}
                                             action
                                         />
                                     :   <SearchResultListGroup 
-                                            data={searchResult}
+                                            data={this.props.searchResult}
                                             selection={this.state.selection}
                                         />
                                 }

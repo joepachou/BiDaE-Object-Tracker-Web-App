@@ -10,7 +10,7 @@ import {
 }  from "react-bootstrap";
 import LocaleContext from "../../context/LocaleContext";
 import GridButton from "../container/GridButton";
-import PdfDownloadForm from "./PdfDownloadForm"
+import PdfDownloadFormForTablet from "./PdfDownloadFormForTablet"
 import config from "../../config";
 import AccessControl from "../presentational/AccessControl"
 import { AppContext } from "../../context/AppContext";
@@ -242,79 +242,70 @@ class SurveillanceContainerTablet extends React.Component {
                             </div>
                         </div>
                         <div style={style.button}>
-                            <Nav className="d-flex align-items-start text-capitalize bd-highlight">
-                                <Nav.Item>
-                                </Nav.Item>
-                                <Nav.Item className="pt-2 mr-2">
-                                    <ToggleSwitch 
-                                        changeLocationAccuracy={this.props.changeLocationAccuracy} 
-                                        leftLabel="low"
-                                        defaultLabel="med" 
-                                        rightLabel="high"
-                                    />
-                                </Nav.Item>
-                                <Nav.Item className="mt-2">
-                                    <Button 
-                                        variant="outline-primary" 
-                                        className="mr-1 ml-2 text-capitalize" 
-                                        onClick={this.handleClickButton} 
-                                        name="clear"
-                                        disabled={!this.props.hasSearchKey}
-                                        
-                                    >
-                                        <div style={style.button}>
-                                            {locale.texts.CLEAR}
-                                        </div>
-                                    </Button>
-                                </Nav.Item>
-                                <AccessControl
-                                    permission={"user:saveSearchRecord"}
-                                    renderNoAccess={() => null}
+                        <Nav className="d-flex align-items-start text-capitalize bd-highlight">
+                        <Nav.Item className="pt-2 mr-2">
+                            <ToggleSwitch 
+                                changeLocationAccuracy={this.props.changeLocationAccuracy} 
+                                leftLabel="low"
+                                defaultLabel="med" 
+                                rightLabel="high"
+                            />
+                        </Nav.Item>
+                        <Nav.Item className="mt-2">
+                            <Button 
+                                variant="outline-primary" 
+                                className="mr-1 ml-2 text-capitalize" 
+                                onClick={this.handleClickButton} 
+                                name="clear"
+                                disabled={!this.props.hasSearchKey}
+                            >
+                                {locale.texts.CLEAR}
+                            </Button>
+                        </Nav.Item>
+                        <AccessControl
+                            permission={"user:saveSearchRecord"}
+                            renderNoAccess={() => null}
+                        >
+                            <Nav.Item className="mt-2">
+                                <Button 
+                                    variant="outline-primary" 
+                                    className="mr-1 ml-2 text-capitalize" 
+                                    onClick={this.handleClickButton} 
+                                    name="save"
+                                    disabled={!this.props.hasSearchKey || this.state.showPdfDownloadForm}
                                 >
-                                    <Nav.Item className="mt-2">
-                                        <Button 
-                                            variant="outline-primary" 
-                                            className="mr-1 ml-2 text-capitalize" 
-                                            onClick={this.handleClickButton} 
-                                            name="save"
-                                            disabled={!this.props.hasSearchKey || this.state.showPdfDownloadForm}
-                                        >
-                                            <div style={style.button}>
-                                                {locale.texts.SAVE}
-                                            </div>
-                                        </Button>
-                                    </Nav.Item>
-                                </AccessControl>
-                                <AccessControl
-                                    permission={"user:toggleShowDevices"}
-                                    renderNoAccess={() => null}
+                                    {locale.texts.SAVE}
+                                </Button>
+                            </Nav.Item>
+                        </AccessControl>
+                        <AccessControl
+                            permission={"user:toggleShowDevices"}
+                            renderNoAccess={() => null}
+                        >
+                            <Nav.Item className="mt-2">
+                                <Button 
+                                    variant="primary" 
+                                    className="mr-1 ml-2 text-capitalize" 
+                                    onClick={this.handleClickButton} 
+                                    name="searchedObjectType"
+                                    value={[-1, 0]}
+                                    active={(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) }
+                                    disabled={
+                                        !(this.state.searchedObjectType.includes(-1) ||
+                                        this.state.searchedObjectType.includes(0))
+                                    }
                                 >
-                                    <Nav.Item className="mt-2">
-                                        <Button 
-                                            variant="primary" 
-                                            className="mr-1 ml-2 text-capitalize" 
-                                            onClick={this.handleClickButton} 
-                                            name="searchedObjectType"
-                                            value={[-1, 0]}
-                                            active={(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) }
-                                            disabled={
-                                                !(this.state.searchedObjectType.includes(-1) ||
-                                                this.state.searchedObjectType.includes(0))
-                                            }
-                                        >
-                                            <div style={style.button}>
-                                                {!(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) 
-                                                    ?   locale.texts.SHOW_DEVICES 
-                                                    :   locale.texts.HIDE_DEVICES 
-                                                }
-                                            </div>
-                                        </Button>
-                                    </Nav.Item>
-                                </AccessControl>
-                                <AccessControl
-                                    permission={"user:toggleShowResidents"}
-                                    renderNoAccess={() => null}
-                                >
+                                    {!(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) 
+                                        ?   locale.texts.SHOW_DEVICES 
+                                        :   locale.texts.HIDE_DEVICES 
+                                    }
+                                </Button>
+                            </Nav.Item>
+                        </AccessControl>
+                        <AccessControl
+                            permission={"user:toggleShowResidents"}
+                            renderNoAccess={() => null}
+                        >
                             <Nav.Item className="mt-2">
                                 <Button 
                                     variant="primary" 
@@ -328,12 +319,10 @@ class SurveillanceContainerTablet extends React.Component {
                                         this.state.searchedObjectType.includes(2))
                                     }
                                 >
-                                    <div style={style.button}>
-                                        {!(this.state.showObjects.includes(1) || this.state.showObjects.includes(2)) 
-                                            ?   locale.texts.SHOW_RESIDENTS
-                                            :   locale.texts.HIDE_RESIDENTS 
-                                        }
-                                    </div>
+                                    {!(this.state.showObjects.includes(1) || this.state.showObjects.includes(2)) 
+                                        ?   locale.texts.SHOW_RESIDENTS
+                                        :   locale.texts.HIDE_RESIDENTS 
+                                    }
                                 </Button>
                             </Nav.Item>
                         </AccessControl>
@@ -359,7 +348,7 @@ class SurveillanceContainerTablet extends React.Component {
                                 <Fragment
                                     key={index}
                                 >
-                                    <Nav.Item className="mt-2 bd-highligh">
+                                    <Nav.Item className="mt-2 bd-highligh ml-auto">
                                         <Button 
                                             variant="warning" 
                                             className="mr-1 ml-2 text-capitalize" 
@@ -368,9 +357,7 @@ class SurveillanceContainerTablet extends React.Component {
                                             value={+!this.state.isOpenFence}
                                             active={!this.state.isOpenFence}
                                         >
-                                        <div style={style.button}>
                                             {this.state.isOpenFence ? locale.texts.FENCE_ON : locale.texts.FENCE_OFF}
-                                        </div>
                                         </Button>
                                     </Nav.Item>
                                     <Nav.Item className="mt-2">
@@ -380,18 +367,23 @@ class SurveillanceContainerTablet extends React.Component {
                                             onClick={this.handleClickButton} 
                                             name="clearAlerts"
                                         >
-                                            <div style={style.button}>
-                                                {locale.texts.CLEAR_ALERTS}
-                                            </div>
+                                            {locale.texts.CLEAR_ALERTS}
                                         </Button>
                                     </Nav.Item>
                                 </Fragment>
                             )
                         })}
                     </Nav>
-                    </div></div>
-                        </div>
-                    </div>         
+                    </div>
+                    <PdfDownloadFormForTablet 
+                        show={this.state.showPdfDownloadForm}
+                        data={this.props.proccessedTrackingData.filter(item => item.searched)}
+                        handleClose = {this.handleClosePdfForm}
+                        userInfo={auth.user}
+                    />
+                    </div>
+                </div>
+            </div>         
         )
     }
 }
