@@ -107,7 +107,7 @@ app.post('/test/deleteGateway', db.deleteGateway)
 app.post('/data/addShiftChangeRecord', db.addShiftChangeRecord)
 app.post('/data/checkoutViolation', db.checkoutViolation)
 app.post('/data/confirmValidation', db.confirmValidation)
-
+app.post('/data/backendSearch', db.backendSearch)
 app.post('/data/getAreaTable', db.getAreaTable)
 
 app.get('/shift_record/:file', (req, res) =>{

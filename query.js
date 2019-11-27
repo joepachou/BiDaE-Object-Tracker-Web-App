@@ -860,6 +860,49 @@ const checkMatchedObject = (item, userAuthenticatedAreaId, currentAreaId) => {
     }
 }
 
+// #######################################################
+// backend search
+/*
+    format: {
+        keyType: 'location' or 'name' or 'all devices' or 'acn last 4' or 'type',
+        keyWord: {uuid for 'location'} 
+            or {substring of name for 'name'} 
+            or {substring of type for 'type'} 
+            or { xx for 'all devices' }
+    }
+*/
+const backendSearch = (request, response) => {
+    
+    const {keyType, keyWord, mac_address} = request.body
+    var query = queryType.query_backendSearch(keyType, keyWord, mac_address)
+    pool.query(query, (err, res) => {
+        if(err){
+            console.log(err)
+        }else{
+            var mac_addresses = res.rows.map((mac) => {
+                return mac.mac_address
+            })
+            query = queryType.query_backendSearch_writeQueue(keyType, keyWord, mac_addresses)
+            pool.query(query, (err, res) => {
+                if(err){
+                    console.log(err)
+                }else{
+                    response.send(mac_addresses)
+                }
+                
+            })        
+        }
+        
+    })
+
+}
+
+const getBackendSearchQueue = (request, response) => {
+    var query = queryType.query_getBackendSearchQueue()
+    pool.query(query, (err, res) => {
+        response.send(res.rows)
+    })
+}
 
 module.exports = {
     getTrackingData,
@@ -899,5 +942,7 @@ module.exports = {
     setUserRole,
     setGeoFenceConfig,
     checkoutViolation,
-    confirmValidation
+    confirmValidation,
+    backendSearch,
+    getBackendSearchQueue
 }
