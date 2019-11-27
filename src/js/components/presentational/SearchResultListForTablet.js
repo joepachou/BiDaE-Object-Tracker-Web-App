@@ -12,7 +12,7 @@ import _ from 'lodash';
 import axios from 'axios';
 import InfoPrompt from './InfoPrompt';
 import AccessControl from './AccessControl';
-import SearchResultListGroup from '../presentational/SearchResultListGroup'
+import SearchResultListGroup from './SearchResultListGroup'
 import { AppContext } from '../../context/AppContext';
 import { toast } from 'react-toastify';
 import DownloadPdfRequestForm from '../container/DownloadPdfRequestForm'
@@ -54,7 +54,7 @@ const Toast = () => {
     )
 }
 
-class SearchResult extends React.Component {
+class SearchResultListForTablet extends React.Component {
 
     static contextType = AppContext
 
@@ -315,7 +315,7 @@ class SearchResult extends React.Component {
                                 <div className='searchResultForDestop'>{locale.texts.NO_RESULT}</div>
                             </Col> 
                         :   
-                            <Col className="searchResultListGroup d-flex justify-content-center">
+                            <Col className="searchResultListGroupForTablet d-flex justify-content-center">
                                 <AccessControl
                                     permission={'form:edit'}
                                     renderNoAccess={() => (
@@ -326,19 +326,18 @@ class SearchResult extends React.Component {
                                     )
                                     }
                                 >
-                                    <SearchResultListGroup 
-                                        data={searchResult}
-                                        handleSelectResultItem={searchResult[0].object_type == 0 
-                                            ? this.handleSelectResultItem
-                                            : null
-                                        }
-                                        selection={this.state.selection}
-                                        action={searchResult[0].object_type == 0
-                                            ? true
-                                            : false
-                                        }
-                                    />
-
+                                {searchResult[0].object_type == 0 
+                                    ?   <SearchResultListGroup 
+                                            data={this.props.searchResult}
+                                            handleSelectResultItem={this.handleSelectResultItem}
+                                            selection={this.state.selection}
+                                            action
+                                        />
+                                    :   <SearchResultListGroup 
+                                            data={this.props.searchResult}
+                                            selection={this.state.selection}
+                                        />
+                                }
                                 </AccessControl>
                             </Col>
                     }
@@ -392,4 +391,4 @@ class SearchResult extends React.Component {
     }
 }
 
-export default SearchResult
+export default SearchResultListForTablet

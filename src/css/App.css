@@ -418,8 +418,13 @@ p {
 
 /** .search result list group style sheet*/ 
 .searchResultListGroup {
-    /* max-Height: 55vh; */
-    overflow: hidden scroll;
+    max-Height: 35vh; 
+    overflow: scroll;
+}
+
+.searchResultListGroupForTablet {
+    height: 28vh; 
+    overflow: scroll;
 }
 
 /** scroll bar customize */

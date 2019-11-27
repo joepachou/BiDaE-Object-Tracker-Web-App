@@ -42,15 +42,15 @@ class ObjectTypeListForTablet extends React.Component {
 
         const style = {
             list: {
-                maxHeight: "40vh",
+                maxHeight: "50vh",
                 overflow: "hidden scroll"
             }
         }
 
         return (
-            <div id='objectTypeList' >
+            <div id='objectTypeList' className='d-inline-flex flex-column'>
                 <div className='text-capitalize title'>{locale.texts.OBJECT_TYPE}</div>
-                <div style={style.list} className="d-inline-flex flex-column justify-content-center searchOption">
+                <div style={style.list} className="d-inline-flex flex-column searchOption">
                     {this.props.objectTypeList.map((item, index) => {
                         return ( 
                             <Button
@@ -66,6 +66,10 @@ class ObjectTypeListForTablet extends React.Component {
                         )
                     })}
                     &nbsp;
+                </div>
+                
+                <div className='d-inline-flex flex-column'>
+                &nbsp;
                     <AccessControl
                         permission={'user:mydevice'}
                         renderNoAccess={() => null}
@@ -73,9 +77,10 @@ class ObjectTypeListForTablet extends React.Component {
                         <Button
                             variant="outline-custom"
                             onClick={this.handleClick}
-                            name = 'my patient'
+                            name = 'my patients'
+                            className="text-capitalize"
                         >
-                            {locale.texts.MY_PATIENT}
+                            {locale.texts.MY_PATIENTS}
                         </Button>
 
                         <Button
@@ -83,25 +88,28 @@ class ObjectTypeListForTablet extends React.Component {
                             onClick={this.handleClick} 
                             // active={this.state.searchKey === 'my devices'}
                             name='my devices'
+                            className="text-capitalize"
                         >
-                            {locale.texts.MY_DEVICE}
+                            {locale.texts.MY_DEVICES}
                         </Button>
                     </AccessControl>
                     <Button 
                         variant="outline-custom"
                         onClick={this.handleClick} 
                         // active={this.state.searchKey === 'all devices'}
-                        name='all patient'
+                        name='all patients'
+                        className="text-capitalize"
                     >
-                        {locale.texts.ALL_PATIENT}
+                        {locale.texts.ALL_PATIENTS}
                     </Button>
                     <Button 
                         variant="outline-custom"
                         onClick={this.handleClick} 
                         // active={this.state.searchKey === 'all devices'}
                         name='all devices'
+                        className="text-capitalize"
                     >
-                        {locale.texts.ALL_DEVICE}
+                        {locale.texts.ALL_DEVICES}
                     </Button>
                 </div>
             </div>

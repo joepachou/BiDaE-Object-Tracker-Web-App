@@ -10,7 +10,7 @@ import {
 }  from "react-bootstrap";
 import LocaleContext from "../../context/LocaleContext";
 import GridButton from "../container/GridButton";
-import PdfDownloadForm from "./PdfDownloadForm"
+import PdfDownloadFormForTablet from "./PdfDownloadFormForTablet"
 import config from "../../config";
 import AccessControl from "../presentational/AccessControl"
 import { AppContext } from "../../context/AppContext";
@@ -168,15 +168,12 @@ class SurveillanceContainerTablet extends React.Component {
             title: {
                 color: "grey",
                 fontSize: "1rem",
-                maxWidth: "9rem",
-                height: "5rem",
-                lineHeight: "3rem"
             },
             // surveillanceContainer: {
             //     height: "100vh"
             // },
             MapAndQrcode: {
-              height: "40vh",
+              height: "42vh",
               //border: "solid"
             },
             qrBlock: {
@@ -189,13 +186,15 @@ class SurveillanceContainerTablet extends React.Component {
                 flex: 4,
             },
             navBlock: {
-                //height: "40vh",
             },
             searchResult: {
 
             },
             gridButton: {
                 display: this.state.showDevice ? null : "none"
+            },
+            button: {
+                fontSize: "0.8rem"
             }
         }
         const { 
@@ -209,18 +208,23 @@ class SurveillanceContainerTablet extends React.Component {
             <div id="surveillanceContainer" className="w-100 h-100 d-flex flex-column">
                 <div className="d-flex w-100 h-100 flex-column">
                     <div>
-                        <div className="w-100 d-flex flex-row" style={style.MapAndQrcode}>
-                            <div style={style.qrBlock}>
-                                <QRcodeContainer
-                                    data={this.props.proccessedTrackingData.filter(item => item.searched)}
-                                    userInfo={auth.user}
-                                /> 
-                                <InfoPromptForTablet 
-                                    data={this.props.data}
-                                    searchKey={this.props.searchKey}
-                                    title={locale.texts.FOUND}
-                                    searchResultLength={this.props.searchResult.length} 
-                                />
+                        <div className="w-100 d-flex flex-row align-items justify-content" style={style.MapAndQrcode}>
+                            <div style={style.qrBlock} className="d-flex flex-column align-items">
+                                <div>
+                                    <QRcodeContainer
+                                        data={this.props.proccessedTrackingData.filter(item => item.searched)}
+                                        userInfo={auth.user}
+                                    /> 
+                                    <InfoPromptForTablet 
+                                        data={this.props.data}
+                                        searchKey={this.props.searchKey}
+                                        title={locale.texts.FOUND}
+                                        searchResultLength={this.props.searchResult.length} 
+                                    />
+                                </div>
+                                <div style={style.title} className="mt-auto">
+                                    {locale.texts.LOCATION_ACCURACY}
+                                </div>
                             </div>
                             <div style={style.mapBlock}>
                                 <Map
@@ -237,76 +241,71 @@ class SurveillanceContainerTablet extends React.Component {
                                 />
                             </div>
                         </div>
-                        <div style={style.navBlock}>
-                            <Nav className="d-flex align-items-start text-capitalize bd-highlight">
-                                <Nav.Item>
-                                <div style={style.title}>
-                                    {locale.texts.LOCATION_ACCURACY}
-                                </div>
-                                </Nav.Item>
-                                <Nav.Item className="pt-2 mr-2">
-                                    <ToggleSwitch 
-                                        changeLocationAccuracy={this.props.changeLocationAccuracy} 
-                                        leftLabel="low"
-                                        defaultLabel="med" 
-                                        rightLabel="high"
-                                    />
-                                </Nav.Item>
-                                <Nav.Item className="mt-2">
-                                    <Button 
-                                        variant="outline-primary" 
-                                        className="mr-1 ml-2 text-capitalize" 
-                                        onClick={this.handleClickButton} 
-                                        name="clear"
-                                        disabled={!this.props.hasSearchKey}
-                                    >
-                                        {locale.texts.CLEAR}
-                                    </Button>
-                                </Nav.Item>
-                                <AccessControl
-                                    permission={"user:saveSearchRecord"}
-                                    renderNoAccess={() => null}
+                        <div style={style.button}>
+                        <Nav className="d-flex align-items-start text-capitalize bd-highlight">
+                        <Nav.Item className="pt-2 mr-2">
+                            <ToggleSwitch 
+                                changeLocationAccuracy={this.props.changeLocationAccuracy} 
+                                leftLabel="low"
+                                defaultLabel="med" 
+                                rightLabel="high"
+                            />
+                        </Nav.Item>
+                        <Nav.Item className="mt-2">
+                            <Button 
+                                variant="outline-primary" 
+                                className="mr-1 ml-2 text-capitalize" 
+                                onClick={this.handleClickButton} 
+                                name="clear"
+                                disabled={!this.props.hasSearchKey}
+                            >
+                                {locale.texts.CLEAR}
+                            </Button>
+                        </Nav.Item>
+                        <AccessControl
+                            permission={"user:saveSearchRecord"}
+                            renderNoAccess={() => null}
+                        >
+                            <Nav.Item className="mt-2">
+                                <Button 
+                                    variant="outline-primary" 
+                                    className="mr-1 ml-2 text-capitalize" 
+                                    onClick={this.handleClickButton} 
+                                    name="save"
+                                    disabled={!this.props.hasSearchKey || this.state.showPdfDownloadForm}
                                 >
-                                    <Nav.Item className="mt-2">
-                                        <Button 
-                                            variant="outline-primary" 
-                                            className="mr-1 ml-2 text-capitalize" 
-                                            onClick={this.handleClickButton} 
-                                            name="save"
-                                            disabled={!this.props.hasSearchKey || this.state.showPdfDownloadForm}
-                                        >
-                                            {locale.texts.SAVE}
-                                        </Button>
-                                    </Nav.Item>
-                                </AccessControl>
-                                <AccessControl
-                                    permission={"user:toggleShowDevices"}
-                                    renderNoAccess={() => null}
+                                    {locale.texts.SAVE}
+                                </Button>
+                            </Nav.Item>
+                        </AccessControl>
+                        <AccessControl
+                            permission={"user:toggleShowDevices"}
+                            renderNoAccess={() => null}
+                        >
+                            <Nav.Item className="mt-2">
+                                <Button 
+                                    variant="primary" 
+                                    className="mr-1 ml-2 text-capitalize" 
+                                    onClick={this.handleClickButton} 
+                                    name="searchedObjectType"
+                                    value={[-1, 0]}
+                                    active={(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) }
+                                    disabled={
+                                        !(this.state.searchedObjectType.includes(-1) ||
+                                        this.state.searchedObjectType.includes(0))
+                                    }
                                 >
-                                    <Nav.Item className="mt-2">
-                                        <Button 
-                                            variant="primary" 
-                                            className="mr-1 ml-2 text-capitalize" 
-                                            onClick={this.handleClickButton} 
-                                            name="searchedObjectType"
-                                            value={[-1, 0]}
-                                            active={(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) }
-                                            disabled={
-                                                !(this.state.searchedObjectType.includes(-1) ||
-                                                this.state.searchedObjectType.includes(0))
-                                            }
-                                        >
-                                            {!(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) 
-                                                ?   locale.texts.SHOW_DEVICES 
-                                                :   locale.texts.HIDE_DEVICES 
-                                            }
-                                        </Button>
-                                    </Nav.Item>
-                                </AccessControl>
-                                <AccessControl
-                                    permission={"user:toggleShowResidents"}
-                                    renderNoAccess={() => null}
-                                >
+                                    {!(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) 
+                                        ?   locale.texts.SHOW_DEVICES 
+                                        :   locale.texts.HIDE_DEVICES 
+                                    }
+                                </Button>
+                            </Nav.Item>
+                        </AccessControl>
+                        <AccessControl
+                            permission={"user:toggleShowResidents"}
+                            renderNoAccess={() => null}
+                        >
                             <Nav.Item className="mt-2">
                                 <Button 
                                     variant="primary" 
@@ -375,9 +374,16 @@ class SurveillanceContainerTablet extends React.Component {
                             )
                         })}
                     </Nav>
-                    </div></div>
-                        </div>
-                    </div>         
+                    </div>
+                    <PdfDownloadFormForTablet 
+                        show={this.state.showPdfDownloadForm}
+                        data={this.props.proccessedTrackingData.filter(item => item.searched)}
+                        handleClose = {this.handleClosePdfForm}
+                        userInfo={auth.user}
+                    />
+                    </div>
+                </div>
+            </div>         
         )
     }
 }
