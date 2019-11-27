@@ -18,8 +18,20 @@ const style = {
         circle: {
             color: "orange",
         }
+    },
+    battery:{
+        full: {
+            color: "green",
+        },
+        half: {
+            color: "orange",
+        },
+        empty: {
+            color: "red",
+        }
     }
 }
+
 
 const lbeaconTableColumn = [
     // {
@@ -140,6 +152,11 @@ const gatewayTableColumn = [
 
 ]
 
+// props.value === 3 && <i class="fas fa-battery-full" style={style.icon.check}></i> ||
+// props.value === 2 && <i class="fas fa-battery-half" style={style.icon.exclamation}></i> ||
+// props.value === 1 && <i class="fas fa-battery-quarter" style={style.icon.exclamation}></i> ||
+// props.value === 0 && <i class="fas fa-charging-station" style={style.icon.exclamation}></i>
+
 const trackingTableColumn = [
     {
         Header: "Found",
@@ -156,8 +173,9 @@ const trackingTableColumn = [
         style: style.column,
         width: 70,
         Cell: props => 
-            props.value === 3 && <i className="fas fa-check-circle text-center" style={style.icon.check}></i> ||
-            props.value === 2 && <i className="fas fa-exclamation-circle text-center" style={style.icon.exclamation}></i>
+            props.value === 3 && <i  className="fas fa-battery-full" style={style.battery.full}></i> ||
+            props.value === 2 && <i className="fas fa-battery-half" style={style.battery.half}></i> ||
+            props.value === 1 && <i className="fas fa-battery-empty" style={style.battery.empty}></i>
     },
     {
         Header: "Panic",
