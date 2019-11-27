@@ -961,6 +961,162 @@ const query_setMonitorConfig = (configPackage) => {
 	`
 }
 
+function query_backendSearch(keyType, keyWord){
+	var query 	= null
+	var text 	= null
+	var values 	= null
+	switch(keyType){
+		case 'location' :
+			text = `SELECT mac_address FROM object_summary_table WHERE uuid = $1`
+			values = [keyWord]
+			query = {
+				text,
+				values
+			}
+			break;
+////////////////////////////////////////////////////////
+		case 'name' :
+			text = `
+				SELECT 
+					mac_address
+				FROM 
+					object_summary_table 
+				WHERE 
+					mac_address 
+				in 
+					(
+						SELECT mac_address FROM object_table WHERE POSITION( lower($1) IN lower(name)) > 0
+					)
+			`
+			values = [keyWord]
+			query = {
+				text,
+				values
+			}
+			break;
+////////////////////////////////////////////////////////
+		case 'type' :
+			text = `
+				SELECT 
+					mac_address
+				FROM 
+					object_summary_table 
+				WHERE 
+					mac_address 
+				in 
+					(
+						SELECT 
+							mac_address 
+						FROM 
+							object_table 
+						WHERE 
+							POSITION( lower($1) IN lower(type)) > 0
+					)
+			`
+			values = [keyWord]
+			query = {
+				text,
+				values
+			}
+			break;
+		case 'all devices':
+			text = `SELECT mac_address FROM object_summary_table WHERE true`
+			values = []
+			query = {
+				text,
+				values
+			}
+			break
+////////////////////////////////////////////////////////
+		case 'acn last 4':
+			text = `
+				SELECT 
+					mac_address
+				FROM 
+					object_summary_table 
+				WHERE 
+					mac_address 
+				in 
+					(
+						SELECT mac_address FROM object_table WHERE POSITION( lower($1) IN lower( right(access_control_number, 4) )) > 0
+					)
+			`
+			values = [keyWord]
+			query = {
+				text,
+				values
+			}
+			break
+////////////////////////////////////////////////////////
+		case 'all attributes':
+			text = `
+				SELECT 
+					mac_address
+				FROM 
+					object_summary_table 
+				WHERE 
+					mac_address 
+				in 
+					(
+						SELECT mac_address FROM object_table WHERE POSITION( lower($1) IN lower( right(asset_control_number, 4) )) > 0
+					
+					UNION
+					
+						SELECT 
+							mac_address 
+						FROM 
+							object_table 
+						WHERE 
+							POSITION( lower($1) IN lower(type)) > 0
+					
+					UNION
+					
+						SELECT mac_address FROM object_table WHERE POSITION( lower($1) IN lower(name)) > 0
+					)
+			`
+			values = [keyWord]
+			query = {
+				text,
+				values
+			}
+			break
+	}
+	console.log(query)
+	return query
+}
+
+function query_backendSearch_writeQueue(keyType, keyWord, mac_addresses){
+	var text = 
+		`
+			INSERT INTO 
+				search_result_queue(query_time, key_type, key_word, result_mac_address)
+			VALUES
+				(now(), $1, $2, ARRAY['${mac_addresses.join('\',\'')}'])
+		`
+	values = [keyType, keyWord]
+	query = {
+		text,
+		values
+	}
+	console.log(text)
+	return query
+}
+
+function query_getBackendSearchQueue(){
+	var query = 
+		`
+			SELECT 
+				*
+			FROM
+				search_result_queue
+			ORDER BY
+				query_time DESC
+			LIMIT 5
+		`
+	
+	return query
+}
+
 module.exports = {
     query_getTrackingData,
 	query_getObjectTable,
@@ -1004,5 +1160,9 @@ module.exports = {
 	query_getGeoFenceConfig,
 	query_setGeoFenceConfig,
 	query_checkoutViolation,
-	query_confirmValidation
+	query_confirmValidation,
+	query_backendSearch,
+	query_backendSearch_writeQueue,
+	query_getBackendSearchQueue,
 }
+

@@ -12,6 +12,7 @@ import dataSrc from '../../dataSrc'
 import { AppContext } from '../../context/AppContext'
 import { toast } from 'react-toastify';
 import ToastNotification from '../presentational/ToastNotification'
+import SearchResult from '../presentational/SearchResultList';
 
 
 const {
@@ -33,6 +34,7 @@ class MainContainer extends React.Component{
         violatedObjects: {},
         hasSearchKey: false,
         searchKey: '',
+        lastsearchKey: '',
         searchResult: [],
         colorPanel: null,
         clearColorPanel: false,
@@ -323,6 +325,7 @@ class MainContainer extends React.Component{
         this.setState({
             hasSearchKey: false,
             searchKey: '',
+            lastsearchKey: '',
             searchResult: [],
             colorPanel: null,
             clearColorPanel: true,
@@ -378,7 +381,6 @@ class MainContainer extends React.Component{
                 })
 
         } else if (searchKey === ALL_PATIENTS) {
-
             searchResult = proccessedTrackingData
                 .filter(item => item.object_type != 0)
                 .map(item => {
@@ -389,6 +391,7 @@ class MainContainer extends React.Component{
         } else if (searchKey === 'coordinate') {
             searchResult = this.collectObjectsByLatLng(searchValue, proccessedTrackingData)
         } else if (typeof searchKey === 'object') {
+            console.log('good')
             proccessedTrackingData.map(item => {
                 if (searchKey.includes(item.type)) {
                     item.searched = true;
@@ -397,7 +400,17 @@ class MainContainer extends React.Component{
                     searchResult.push(item)
                 } 
             })
+
+            let searchResultMac = [];
+            console.log(SearchResult);
+            searchResult.map(item => {
+                searchResultMac.push(item.mac_address)
+            })
+            console.log(searchResultMac);
         } else {
+            
+            let searchResultMac = [];
+
             proccessedTrackingData.map(item => {
                 if (item.object_type == 0 && (item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0
                     || item.asset_control_number.slice(10,14).indexOf(searchKey) >= 0
@@ -407,8 +420,28 @@ class MainContainer extends React.Component{
                     item.searched = true
                     item.searchedType = -1;
                     searchResult.push(item)
+                    searchResultMac.push(item.mac_address)
                 }
             })
+
+            //console.log(searchResultMac)
+            if(this.state.lastsearchKey != searchKey){
+                axios.post(dataSrc.backendSearch,{
+                    keyType : 'all attributes',
+                    keyWord : searchKey,
+                    mac_address : searchResultMac
+                })
+                .then(res => {
+                    console.log(res)
+                })
+                .catch(err =>{
+                    console.log(err)
+                })
+                this.setState({
+                    lastsearchKey: searchKey
+                })
+            }
+            //console.log('here')
         }
 
         this.setState({

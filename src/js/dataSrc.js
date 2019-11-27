@@ -41,9 +41,7 @@ const checkoutViolation = `http://${dataSrcIP}/data/checkoutViolation`
 const confirmValidation = `http://${dataSrcIP}/data/confirmValidation`
 const getMonitorConfig = `http://${dataSrcIP}/data/getMonitorConfig`
 const setMonitorConfig = `http://${dataSrcIP}/data/setMonitorConfig`
-
-
-
+const backendSearch = `http://${dataSrcIP}/data/backendSearch`
 
 const pdfUrl = function(path){
     return `http://${dataSrcIP}/${path}`
@@ -91,5 +89,6 @@ module.exports = {
     addShiftChangeRecord,
     checkoutViolation,
     confirmValidation,
-    setMonitorConfig
-}
+    setMonitorConfig,
+    backendSearch
+};

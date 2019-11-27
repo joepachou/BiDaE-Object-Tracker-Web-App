@@ -33,6 +33,7 @@ class MainContainerForTablet extends React.Component{
         violatedObjects: {},
         hasSearchKey: false,
         searchKey: '',
+        lastsearchKey: '',
         searchResult: [],
         colorPanel: null,
         clearColorPanel: false,
@@ -420,6 +421,7 @@ class MainContainerForTablet extends React.Component{
                 } 
             })
         } else {
+            let searchResultMac = [];
             proccessedTrackingData.map(item => {
                 if (item.object_type == 0 && (item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0
                     || item.asset_control_number.slice(10,14).indexOf(searchKey) >= 0
@@ -429,8 +431,26 @@ class MainContainerForTablet extends React.Component{
                     item.searched = true
                     item.searchedType = -1;
                     searchResult.push(item)
+                    searechResultMac.push(item.mac_address)
                 }
             })
+            //console.log(searchResultMac)
+            if(this.state.lastsearchKey != searchKey){
+                axios.post(dataSrc.backendSearch,{
+                    keyType : 'all attributes',
+                    keyWord : searchKey,
+                    mac_address : searchResultMac
+                })
+                .then(res => {
+                    console.log(res)
+                })
+                .catch(err =>{
+                    console.log(err)
+                })
+                this.setState({
+                    lastsearchKey: searchKey
+                })
+            }
         }
 
         this.setState({
