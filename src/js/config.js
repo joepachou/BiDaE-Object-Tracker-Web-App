@@ -4,6 +4,7 @@ import NURSING_HOME_MAP from "../img/map/nursing_home.png"
 import YUANLIN_CHRISTIAN_HOSPITAL_MAP from "../img/map/yuanlin_christian_hospital.png"
 import VETERAN_HOME_FIRST_FLOOR_MAP from "../img/map/veteran_home_first_floor.png"
 import VETERAN_HOME_THIRD_FLOOR_MAP from "../img/map/veteran_home_third_floor.png"
+import NTUH_MAP from "../img/map/ntuh_map.png"
 import BOT_LOGO from "../img//logo/BOT_LOGO_RED.png";
 import moment from 'moment'
 import patientP from "../img//logo/pic.png"
@@ -181,6 +182,19 @@ const config = {
         2: "panic",
         4: "movement",
         8: "location",
+    },
+
+    monitorSettingType: {
+        RESIDENT_MOVEMENT_MONITOR: "resident movement monitor",
+        RESIDENT_LOCATION_MONITOR: "resident location monitor",
+        RESIDENT_LONG_STAY_IN_DANGER: "resident long stay in danger",
+        RESIDENT_NOT_STAY_ROOM: "resident not stay room",
+    },
+
+    monitorSettingUrlMap: {
+        "resident movement monitor": "movement_config",
+        "resident long stay in danger": "location_long_stay_in_danger_config",
+        "resident not stay room": "location_not_stay_room_config"
     },
 
     shiftOption: [
@@ -610,6 +624,7 @@ const config = {
 
         areaOptions: {
             1: "IIS_SINICA_FOURTH_FLOOR",
+            2: "NTUH",
             3: "NTUH_YUNLIN_WARD_FIVE_B",
             4: "NURSING_HOME",
             5: "YUANLIN_CHRISTIAN_HOSPITAL",
@@ -623,6 +638,13 @@ const config = {
                 id: 1,
                 name: "IIS_SINICA_FOURTH_FLOOR",
                 url: IIS_SINICA_FOURTH_FLOORTH_MAP,
+                bounds: [[0,0], [21130,35710]],
+            },
+
+            NTUH: {
+                id: 2,
+                name: "NTUH",
+                url: NTUH_MAP,
                 bounds: [[0,0], [21130,35710]],
             },
 

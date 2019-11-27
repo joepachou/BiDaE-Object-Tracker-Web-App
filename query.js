@@ -99,9 +99,6 @@ const getTrackingData = (request, response) => {
                 delete item.last_seen_timestamp
                 delete item.panic_timestamp
                 delete item.rssi
-                delete item.perimeter_valid_timestamp
-                delete item.geofence_violation_timestamp
-                delete item.geofence_uuid
                 delete item.lbeacon_uuid
                 delete item.monitor_type
 
@@ -761,6 +758,36 @@ const confirmValidation = (request, response) => {
         })
 }
 
+const getMonitorConfig = (request, response) => {
+    let {
+        type
+    } = request.body
+    pool.query(queryType.query_getMonitorConfig(type))
+        .then(res => {
+            console.log(`get ${type}`)
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(`get ${type} fail: ${err}`)
+        })
+}
+
+const setMonitorConfig = (request, response) => {
+    let {
+        configPackage
+    } = request.body
+    pool.query(queryType.query_setMonitorConfig(configPackage))
+        .then(res => {
+            console.log(`set monitor config`)
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(`set monitor config fail: ${err}`)
+        })
+}
+
+
+
 /** Parse the lbeacon's location coordinate from lbeacon_uuid*/
 const parseLbeaconCoordinate = (lbeacon_uuid) => {
     /** Example of lbeacon_uuid: 00000018-0000-0000-7310-000000004610 */
@@ -879,6 +906,7 @@ module.exports = {
     getUserInfo,
     getPDFInfo,
     getEditObjectRecord,
+    getMonitorConfig,
     addShiftChangeRecord,
     addUserSearchHistory,
     addObject,
@@ -901,6 +929,7 @@ module.exports = {
     validateUsername,
     setUserRole,
     setGeoFenceConfig,
+    setMonitorConfig,
     checkoutViolation,
     confirmValidation
 }

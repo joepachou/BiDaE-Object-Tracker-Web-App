@@ -39,6 +39,10 @@ const setGeoFenceConfig = `http://${dataSrcIP}/data/setGeoFenceConfig`
 const addShiftChangeRecord = `http://${dataSrcIP}/data/addShiftChangeRecord`
 const checkoutViolation = `http://${dataSrcIP}/data/checkoutViolation`
 const confirmValidation = `http://${dataSrcIP}/data/confirmValidation`
+const getMonitorConfig = `http://${dataSrcIP}/data/getMonitorConfig`
+const setMonitorConfig = `http://${dataSrcIP}/data/setMonitorConfig`
+
+
 
 
 const pdfUrl = function(path){
@@ -51,6 +55,7 @@ module.exports = {
     getPatientTable,
     getLbeaconTable,
     getGatewayTable,
+    getMonitorConfig,
     searchResult,
     geofenceData,
     editObject,
@@ -85,5 +90,6 @@ module.exports = {
     setGeoFenceConfig,
     addShiftChangeRecord,
     checkoutViolation,
-    confirmValidation
-};
+    confirmValidation,
+    setMonitorConfig
+}

@@ -107,6 +107,8 @@ app.post('/test/deleteGateway', db.deleteGateway)
 app.post('/data/addShiftChangeRecord', db.addShiftChangeRecord)
 app.post('/data/checkoutViolation', db.checkoutViolation)
 app.post('/data/confirmValidation', db.confirmValidation)
+app.post('/data/getMonitorConfig', db.getMonitorConfig)
+app.post('/data/setMonitorConfig', db.setMonitorConfig)
 
 app.post('/data/getAreaTable', db.getAreaTable)
 

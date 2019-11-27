@@ -9,11 +9,6 @@ function query_getTrackingData () {
 			object_summary_table.panic_timestamp,
 			object_summary_table.rssi,
 			object_summary_table.battery_voltage,
-			object_summary_table.geofence_violation_timestamp,
-			object_summary_table.geofence_uuid,
-			object_summary_table.geofence_rssi,
-			object_summary_table.perimeter_valid_timestamp,
-			object_summary_table.geofence_key,
 			object_table.name,
 			object_table.type,
 			object_table.status,
@@ -943,6 +938,29 @@ const query_confirmValidation = (username) => {
 
 }
 
+const query_getMonitorConfig = (type) => {
+	return `
+		SELECT 
+			id, 
+			area_id,
+			enable,
+			start_time,
+			end_time
+		FROM ${type}
+	`
+}
+
+const query_setMonitorConfig = (configPackage) => {
+	return `
+		UPDATE movement_config
+		SET 
+			start_time = '${configPackage.start_time}',
+			end_time = '${configPackage.end_time}',
+			enable = '${configPackage.enable}'
+		WHERE 1 = 1;
+	`
+}
+
 module.exports = {
     query_getTrackingData,
 	query_getObjectTable,
@@ -950,6 +968,8 @@ module.exports = {
     query_getLbeaconTable,
 	query_getGatewayTable,
 	query_getGeofenceData,
+	query_getMonitorConfig,
+	query_setMonitorConfig,
 	query_editObject,
 	query_editPatient,
 	query_addObject,
