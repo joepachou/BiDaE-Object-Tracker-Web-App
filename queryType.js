@@ -6,7 +6,7 @@ function query_getTrackingData () {
 			object_summary_table.uuid as lbeacon_uuid,
 			object_summary_table.first_seen_timestamp,
 			object_summary_table.last_seen_timestamp,
-			object_summary_table.panic_timestamp,
+			object_summary_table.panic_violation_timestamp,
 			object_summary_table.rssi,
 			object_summary_table.battery_voltage,
 			object_table.name,
@@ -954,8 +954,8 @@ const query_setMonitorConfig = (configPackage) => {
 	return `
 		UPDATE movement_config
 		SET 
-			start_time = '${configPackage.start_time}',
-			end_time = '${configPackage.end_time}',
+			start_time = '${configPackage.startTime}',
+			end_time = '${configPackage.endTime}',
 			enable = '${configPackage.enable}'
 		WHERE 1 = 1;
 	`

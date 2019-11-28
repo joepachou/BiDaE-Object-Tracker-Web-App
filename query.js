@@ -83,7 +83,7 @@ const getTrackingData = (request, response) => {
                 item.isViolated = item.notification ? 1 : 0;
 
                 /** Flag the object that is on sos */
-                item.panic = moment().diff(item.panic_timestamp, 'second') < 300 ? 1 : 0
+                item.panic = moment().diff(item.panic_violation_timestamp, 'second') < 300 ? 1 : 0
 
                 /** Flag the object's battery volumn is limiting */
                 if (item.battery_voltage >= 27 && item.found) {
@@ -97,7 +97,7 @@ const getTrackingData = (request, response) => {
                 /** Delete the unused field of the object */
                 delete item.first_seen_timestamp
                 delete item.last_seen_timestamp
-                delete item.panic_timestamp
+                delete item.panic_violation_timestamp
                 delete item.rssi
                 delete item.lbeacon_uuid
                 delete item.monitor_type
