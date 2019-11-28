@@ -42,6 +42,7 @@ const confirmValidation = `http://${dataSrcIP}/data/confirmValidation`
 const getMonitorConfig = `http://${dataSrcIP}/data/getMonitorConfig`
 const setMonitorConfig = `http://${dataSrcIP}/data/setMonitorConfig`
 const backendSearch = `http://${dataSrcIP}/data/backendSearch`
+const getSearchQueue = `http://${dataSrcIP}/data/getSearchQueue`
 
 const pdfUrl = function(path){
     return `http://${dataSrcIP}/${path}`
@@ -90,5 +91,6 @@ module.exports = {
     checkoutViolation,
     confirmValidation,
     setMonitorConfig,
-    backendSearch
+    backendSearch,
+    getSearchQueue
 };
