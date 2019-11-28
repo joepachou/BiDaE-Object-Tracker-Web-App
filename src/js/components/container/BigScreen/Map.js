@@ -263,7 +263,7 @@ class Map extends React.Component {
         }
     }
 
-    createLegendJSX = (imageSize = "15px", fontSize = "15px", legendWidth = "150px") => {
+    createLegendJSX = (imageSize = "25px", fontSize = "15px", legendWidth = "250px") => {
         // pinImage is imported
         var {legendDescriptor, proccessedTrackingData} = this.props
         var pins;
@@ -285,10 +285,10 @@ class Map extends React.Component {
                                     return parseInt(item.area_id) === parseInt(this.props.areaId) && item.found && item.object_type == 0
                                 }).length
                             return(
-                                <div className="text-left" key = {index}>
+                                <div className="text-left" key = {index} style = {{width: '100%', height: '80px'}}>
 
-                                    <img src = {pins[index]} className = "m-2" width={imageSize}></img>
-                                    {description.text} : {count} 個
+                                    <img src = {pins[index]} className = "m-2 float-left" width={imageSize}></img>
+                                    <strong><h6 className="" style={{lineHeight: '200%', fontWeight:'bold'}}>{description.text} : {count} 個</h6></strong>
                                 </div>
                             )             
                         })

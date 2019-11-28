@@ -234,11 +234,11 @@ class MainContainer extends React.Component{
 
                 // used for legend, with text description and image icon
                 var trackingData = this.addSearchedIndex(rawTrackingData, queue)
-
+                console.log(queue)
                 var legendDescriptor = queue.map((queue1, index) => {
                     return {
                         text: queue1.key_word,
-                        pinColor: config.bigScreenConfig.iconColor.pinColorArray[index], 
+                        pinColor: config.bigScreenConfig.iconColor.pinColorArray[queue1.id%5],
                         itemCount:  this.countItemsInQueue(trackingData, index)
                     }    
                 })
