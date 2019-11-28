@@ -42,7 +42,7 @@ const Main =()=>{
             )
         }else{
             return(
-                <p>手機</p>
+                <MainContainer />
             )
         }
 }

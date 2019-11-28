@@ -346,6 +346,7 @@ class MainContainerForTablet extends React.Component{
         this.setState({
             hasSearchKey: false,
             searchKey: '',
+            lastsearchKey: '',
             searchResult: [],
             colorPanel: null,
             clearColorPanel: true,
@@ -401,7 +402,6 @@ class MainContainerForTablet extends React.Component{
                 })
 
         } else if (searchKey === ALL_PATIENTS) {
-
             searchResult = proccessedTrackingData
                 .filter(item => item.object_type != 0)
                 .map(item => {
@@ -412,6 +412,7 @@ class MainContainerForTablet extends React.Component{
         } else if (searchKey === 'coordinate') {
             searchResult = this.collectObjectsByLatLng(searchValue, proccessedTrackingData)
         } else if (typeof searchKey === 'object') {
+            console.log('good')
             proccessedTrackingData.map(item => {
                 if (searchKey.includes(item.type)) {
                     item.searched = true;
@@ -420,8 +421,17 @@ class MainContainerForTablet extends React.Component{
                     searchResult.push(item)
                 } 
             })
-        } else {
+
             let searchResultMac = [];
+            console.log(SearchResult);
+            searchResult.map(item => {
+                searchResultMac.push(item.mac_address)
+            })
+            console.log(searchResultMac);
+        } else {
+            
+            let searchResultMac = [];
+
             proccessedTrackingData.map(item => {
                 if (item.object_type == 0 && (item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0
                     || item.asset_control_number.slice(10,14).indexOf(searchKey) >= 0
@@ -431,9 +441,10 @@ class MainContainerForTablet extends React.Component{
                     item.searched = true
                     item.searchedType = -1;
                     searchResult.push(item)
-                    searechResultMac.push(item.mac_address)
+                    searchResultMac.push(item.mac_address)
                 }
             })
+
             //console.log(searchResultMac)
             if(this.state.lastsearchKey != searchKey){
                 axios.post(dataSrc.backendSearch,{
@@ -451,6 +462,7 @@ class MainContainerForTablet extends React.Component{
                     lastsearchKey: searchKey
                 })
             }
+            //console.log('here')
         }
 
         this.setState({
