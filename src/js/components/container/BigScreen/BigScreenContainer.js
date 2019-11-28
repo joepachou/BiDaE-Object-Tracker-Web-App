@@ -208,6 +208,15 @@ class MainContainer extends React.Component{
         return trackingData
     } 
 
+    countItemsInQueue = (data, index) => {
+        
+        var count = data.filter(item => {
+            return item.searched == index + 1
+        }).length
+        // console.log(count)
+        return count
+    }
+
     getTrackingData = () => {
         let { auth, locale, stateReducer } = this.context
         let [{areaId}] = stateReducer
@@ -224,15 +233,18 @@ class MainContainer extends React.Component{
                 const queue = searchQueue.data
 
                 // used for legend, with text description and image icon
+                var trackingData = this.addSearchedIndex(rawTrackingData, queue)
+
                 var legendDescriptor = queue.map((queue1, index) => {
                     return {
-                        text: `keyType: ${queue1.key_type}, keyWord: ${queue1.key_word}`,
-                        pinColor: config.bigScreenConfig.iconColor.pinColorArray[index]
+                        text: queue1.key_word,
+                        pinColor: config.bigScreenConfig.iconColor.pinColorArray[index], 
+                        itemCount:  this.countItemsInQueue(trackingData, index)
                     }    
                 })
 
                 // add the attribute "searched" in item to check whether it has searched in the search history list
-                var trackingData = this.addSearchedIndex(rawTrackingData, queue)
+                
 
                 
 
@@ -439,7 +451,7 @@ class MainContainer extends React.Component{
         } else if (searchKey === 'coordinate') {
             searchResult = this.collectObjectsByLatLng(searchValue, proccessedTrackingData)
         } else if (typeof searchKey === 'object') {
-            console.log('good')
+            // console.log('good')
             proccessedTrackingData.map(item => {
                 if (searchKey.includes(item.type)) {
                     item.searched = true;
@@ -479,7 +491,7 @@ class MainContainer extends React.Component{
                     mac_address : searchResultMac
                 })
                 .then(res => {
-                    console.log(res)
+                    // console.log(res)
                 })
                 .catch(err =>{
                     console.log(err)
@@ -530,7 +542,7 @@ class MainContainer extends React.Component{
             searchResultObjectTypeMap,
             searchKey
         } = this.state;
-        console.log(proccessedTrackingData)
+        // console.log(proccessedTrackingData)
         const style = {
             pageWrap: {
                 overflow: "hidden hidden",

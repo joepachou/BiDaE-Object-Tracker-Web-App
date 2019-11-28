@@ -24,7 +24,7 @@ import PdfDownloadForm from "../PdfDownloadForm"
 import config from "../../../config";
 import AccessControl from "../../presentational/AccessControl"
 import { AppContext } from "../../../context/AppContext";
-import  pinImage from "./pinImage"
+
 
 
 class SurveillanceContainer extends React.Component {
@@ -167,35 +167,7 @@ class SurveillanceContainer extends React.Component {
         })
     }
 
-    createLegendJSX = (imageSize = "15px", fontSize = "15px", legendWidth = "300px") => {
-        // pinImage is imported
-        var {legendDescriptor} = this.props
-        var pins;
-
-        try{
-            pins = legendDescriptor.map( description => { return pinImage[description.pinColor] })
-        }catch{ null }
-
-        var jsx = legendDescriptor ? 
-            (
-                <div className="bg-light" style={{width: legendWidth}}>
-                    <h5><strong>SEARCH_RESULT(記得加locale)</strong></h5>
-                    {
-                        legendDescriptor.map((description, index) => {
-                            return(
-                                <div className="text-left" key = {index}>
-
-                                    <img src = {pins[index]} className = "m-2" width={imageSize}></img>
-                                    {description.text}
-                                </div>
-                            )             
-                        })
-                    }
-                </div>   
-            )
-            : null
-        return jsx
-    }
+    
 
     render(){
         const { 
@@ -232,7 +204,7 @@ class SurveillanceContainer extends React.Component {
         } = this.context;
 
         let [{areaId}] = stateReducer
-        console.log(areaId)
+        // console.log(areaId)
         return(
             <div id="surveillanceContainer" style={style.surveillanceContainer} className="overflow-hidden">
                 <div style={style.mapBlock}>
@@ -247,7 +219,7 @@ class SurveillanceContainer extends React.Component {
                         isOpenFence={this.state.isOpenFence}
                         filterObjectType={this.state.filterObjectType}
                         mapConfig={config.bigScreenConfig}
-                        LegendJSX = {this.createLegendJSX()}
+                        legendDescriptor = {this.props.legendDescriptor}
                     />
                 </div>
             </div>

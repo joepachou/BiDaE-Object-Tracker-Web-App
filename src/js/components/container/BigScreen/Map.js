@@ -28,7 +28,7 @@ import _ from 'lodash'
 import { AppContext } from '../../../context/AppContext';
 import axios from 'axios';
 import dataSrc from '../../../dataSrc'
-import blackImg from '../../../../img/colorPin/Black.png'
+import  pinImage from "./pinImage"
 
 class Map extends React.Component {
     
@@ -93,7 +93,7 @@ class Map extends React.Component {
 
         /** Set the map's events */
         this.map.on('zoomend', this.resizeMarkers)
-        this.createLegend(this.props.LegendJSX)
+        this.createLegend(this.createLegendJSX())
     }
 
     /** Resize the markers and errorCircles when the view is zoomend. */
@@ -135,6 +135,9 @@ class Map extends React.Component {
         this.scalableIconSize = this.props.mapConfig.iconOptions.iconSize + this.resizeConst
         this.scalableNumberSize = Math.floor(this.scalableIconSize / 3);
     }
+
+
+    
 
     /** Create the lbeacon and invisibleCircle markers */
     createGeoFenceMarkers = () => {     
@@ -260,6 +263,41 @@ class Map extends React.Component {
         }
     }
 
+    createLegendJSX = (imageSize = "15px", fontSize = "15px", legendWidth = "150px") => {
+        // pinImage is imported
+        var {legendDescriptor, proccessedTrackingData} = this.props
+        var pins;
+
+        try{
+            pins = legendDescriptor.map( description => { return pinImage[description.pinColor] })
+        }catch{ null }
+
+        var jsx = legendDescriptor ? 
+            (
+                <div className="bg-light" style={{width: legendWidth}}>
+                    {
+                        legendDescriptor.map((description, index) => {
+                            var count = proccessedTrackingData
+                                .filter(item => {
+                                    return item.currentPosition && item.searched == index + 1
+                                })
+                                .filter(item => {
+                                    return parseInt(item.area_id) === parseInt(this.props.areaId) && item.found && item.object_type == 0
+                                }).length
+                            return(
+                                <div className="text-left" key = {index}>
+
+                                    <img src = {pins[index]} className = "m-2" width={imageSize}></img>
+                                    {description.text} : {count} 個
+                                </div>
+                            )             
+                        })
+                    }
+                </div>   
+            )
+            : null
+        return jsx
+    }
     /**
      * When handleTrackingData() is executed, handleObjectMarkes() will be called. That is, 
      * once the component is updated, handleObjectMarkers() will be executed.
@@ -282,7 +320,7 @@ class Map extends React.Component {
         const iconSize = [this.scalableIconSize, this.scalableIconSize];
         const numberSize = this.scalableNumberSize;
         let counter = 0;
-        console.log(this.props.proccessedTrackingData)
+        // console.log(this.props.proccessedTrackingData)
         this.props.proccessedTrackingData
         .filter(item => {
             return item.currentPosition
@@ -342,7 +380,7 @@ class Map extends React.Component {
         /** Add the new markerslayers to the map */
         this.markersLayer.addTo(this.map);
         this.errorCircle .addTo(this.map);
-        this.createLegend(this.props.LegendJSX);
+        this.createLegend(this.createLegendJSX());
 
         // if (!this.state.hasErrorCircle) {
         //     this.setState({
@@ -403,7 +441,7 @@ class Map extends React.Component {
             const yyy = origin_y + parseInt(yy, 16) * multiplier;
             return [yyy, xxx];
         }else{
-            console.log('hi')
+            // console.log('hi')
             return null
         }
         
