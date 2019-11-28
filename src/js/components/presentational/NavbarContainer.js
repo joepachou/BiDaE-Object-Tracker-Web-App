@@ -219,8 +219,12 @@ class NavbarContainer extends React.Component {
                                 {locale.texts.SHIFT_CHANGE_RECORD}
                             </Nav.Item>
                         </AccessControl>
-
-                        <Nav.Item><Link to="/page/bigScreen" className="nav-link nav-route" >{locale.texts.BIG_SCREEN}</Link></Nav.Item>
+                        <AccessControl
+                            permission={'route:bigScreen'}
+                            renderNoAccess={() => null}
+                        >
+                            <Nav.Item><Link to="/page/bigScreen" className="nav-link nav-route" >{locale.texts.BIG_SCREEN}</Link></Nav.Item>
+                        </AccessControl>
 
                     </Nav>
                     <Nav className='text-capitalize'>
