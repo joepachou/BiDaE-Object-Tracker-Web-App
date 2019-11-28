@@ -63,6 +63,8 @@ const en =  {
     SIGN_IN: "sign in",
     SIGN_UP: "sign up",
     SIGN_OUT: "sign out",
+    ON: "on",
+    OFF: "off",
     SHIFT_CHANGE_RECORD: "shift change record",
     SHOW_DEVICES: "show devices",
     HIDE_DEVICES: "hide devices",
@@ -127,6 +129,9 @@ const en =  {
     RECEIVER_SIGNATURE: "receiver signature",
     ENABLE: "enable",
     DISABLE: "disable",
+    ENABLE_START_TIME: "start time",
+    ENABLE_END_TIME: "end time",
+
 
     /** Form Title */
     EDIT_LBEACON: "edit lbeacon",
@@ -146,6 +151,10 @@ const en =  {
     PLEASE_ENTER_ID_AND_PASSWORD: "please enter ID and password",
     CHECKED_BY: "checked by",
     CONFIRMED_BY: "confirmed by",
+    RESIDENT_MOVEMENT_MONITOR: "resident movement monitor",
+    RESIDENT_LOCATION_MONITOR: "resident location monitor",
+    RESIDENT_LONG_STAY_IN_DANGER: "resident long stay",
+    RESIDENT_NOT_STAY_ROOM: "resident not stay room",
 
     /** Error Message */
     GENDER_IS_REQUIRED: "Gender is required",
@@ -277,15 +286,12 @@ const en =  {
     MINUTES: "minutes",
     // BEING_HERE: "being here",
 
-    /** Fence related setting */
-    RESIDENT_MOVEMENT_MONITOR: "resident movement monitor",
-    RESIDENT_LOCATION_MONITOR: "resident location monitor",
-
     /** Test */
     IIS_SINICA_FOURTH_FLOOR: "IIS sinica floor 4",
     NTUH_YUNLIN_WARD_FIVE_B: "ward 5B",
     VETERAN_HOME_FIRST_FLOOR: "veteran home floor 1",
     VETERAN_HOME_THIRD_FLOOR: "veteran home floor 3",
+    NTUH_EMERGENCY_ROOM: "emergency room",
 
     DEVICE_FOUND: function (length){
         return length.toString()+" devices are found"

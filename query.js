@@ -60,7 +60,6 @@ const getTrackingData = (request, response) => {
             /** Filter the objects that do no belong the area */
             const toReturn = res.rows
             .map(item => {
-                
                 /** Flag the object that belongs to the current area or to the user's authenticated area */
                 item.isMatchedObject = checkMatchedObject(item, userAuthenticatedAreaId, currentAreaId)
 
@@ -81,10 +80,10 @@ const getTrackingData = (request, response) => {
                         : 'N/A'      
 
                 /** Flag the object that is violate geofence */
-                item.isViolated = item.monitor_type ? 1 : 0;
+                item.isViolated = item.notification ? 1 : 0;
 
                 /** Flag the object that is on sos */
-                item.panic = moment().diff(item.panic_timestamp, 'second') < 300 ? 1 : 0
+                item.panic = moment().diff(item.panic_violation_timestamp, 'second') < 300 ? 1 : 0
 
                 /** Flag the object's battery volumn is limiting */
                 if (item.battery_voltage >= 27 && item.found) {
@@ -98,12 +97,10 @@ const getTrackingData = (request, response) => {
                 /** Delete the unused field of the object */
                 delete item.first_seen_timestamp
                 delete item.last_seen_timestamp
-                delete item.panic_timestamp
+                delete item.panic_violation_timestamp
                 delete item.rssi
-                delete item.perimeter_valid_timestamp
-                delete item.geofence_violation_timestamp
-                delete item.geofence_uuid
                 delete item.lbeacon_uuid
+                delete item.monitor_type
 
                 return item
             })
@@ -700,8 +697,11 @@ const setGeoFenceConfig = (request, response) =>{
 }
 
 const checkoutViolation = (request, response) => {
-    let { mac_address } = request.body
-    pool.query(queryType.query_checkoutViolation(mac_address))
+    let { 
+        mac_address,
+        monitor_type
+    } = request.body
+    pool.query(queryType.query_checkoutViolation(mac_address, monitor_type))
         .then(res => {
             console.log(`checkout violation`)
             response.status(200).json(res)
@@ -757,6 +757,36 @@ const confirmValidation = (request, response) => {
             console.log(`confirm validation fail: ${err}`)
         })
 }
+
+const getMonitorConfig = (request, response) => {
+    let {
+        type
+    } = request.body
+    pool.query(queryType.query_getMonitorConfig(type))
+        .then(res => {
+            console.log(`get ${type}`)
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(`get ${type} fail: ${err}`)
+        })
+}
+
+const setMonitorConfig = (request, response) => {
+    let {
+        configPackage
+    } = request.body
+    pool.query(queryType.query_setMonitorConfig(configPackage))
+        .then(res => {
+            console.log(`set monitor config`)
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(`set monitor config fail: ${err}`)
+        })
+}
+
+
 
 /** Parse the lbeacon's location coordinate from lbeacon_uuid*/
 const parseLbeaconCoordinate = (lbeacon_uuid) => {
@@ -919,6 +949,7 @@ module.exports = {
     getUserInfo,
     getPDFInfo,
     getEditObjectRecord,
+    getMonitorConfig,
     addShiftChangeRecord,
     addUserSearchHistory,
     addObject,
@@ -941,6 +972,7 @@ module.exports = {
     validateUsername,
     setUserRole,
     setGeoFenceConfig,
+    setMonitorConfig,
     checkoutViolation,
     confirmValidation,
     backendSearch,

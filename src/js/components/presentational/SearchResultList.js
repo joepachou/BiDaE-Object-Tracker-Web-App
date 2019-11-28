@@ -326,18 +326,19 @@ class SearchResult extends React.Component {
                                     )
                                     }
                                 >
-                                {searchResult[0].object_type == 0 
-                                    ?   <SearchResultListGroup 
-                                            data={this.props.searchResult}
-                                            handleSelectResultItem={this.handleSelectResultItem}
-                                            selection={this.state.selection}
-                                            action
-                                        />
-                                    :   <SearchResultListGroup 
-                                            data={this.props.searchResult}
-                                            selection={this.state.selection}
-                                        />
-                                }
+                                    <SearchResultListGroup 
+                                        data={searchResult}
+                                        handleSelectResultItem={searchResult[0].object_type == 0 
+                                            ? this.handleSelectResultItem
+                                            : null
+                                        }
+                                        selection={this.state.selection}
+                                        action={searchResult[0].object_type == 0
+                                            ? true
+                                            : false
+                                        }
+                                    />
+
                                 </AccessControl>
                             </Col>
                     }

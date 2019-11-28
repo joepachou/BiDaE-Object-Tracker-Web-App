@@ -2,17 +2,13 @@ function query_getTrackingData () {
 	const query = `
 		SELECT 
 			object_table.mac_address,
+			object_summary_table.id,
 			object_summary_table.uuid as lbeacon_uuid,
 			object_summary_table.first_seen_timestamp,
 			object_summary_table.last_seen_timestamp,
-			object_summary_table.panic_timestamp,
+			object_summary_table.panic_violation_timestamp,
 			object_summary_table.rssi,
 			object_summary_table.battery_voltage,
-			object_summary_table.geofence_violation_timestamp,
-			object_summary_table.geofence_uuid,
-			object_summary_table.geofence_rssi,
-			object_summary_table.perimeter_valid_timestamp,
-			object_summary_table.geofence_key,
 			object_table.name,
 			object_table.type,
 			object_table.status,
@@ -25,8 +21,7 @@ function query_getTrackingData () {
 			lbeacon_table.description as location_description,
 			edit_object_record.notes,
 			user_table.name as physician_name,
-			notification.violation_timestamp,
-			notification.monitor_type
+			notification.json_agg as notification
 
 		FROM object_summary_table
 
@@ -45,20 +40,28 @@ function query_getTrackingData () {
 		LEFT JOIN (
 			SELECT 
 				mac_address,
-				monitor_type,
-				MIN(violation_timestamp) as violation_timestamp
+				json_agg(json_build_object(
+						'type', monitor_type, 
+						'time', violation_timestamp)
+					)
 			FROM (
 				SELECT 
 					mac_address,
 					monitor_type,
-					violation_timestamp
-				FROM notification_table
-				WHERE 
-					web_processed is null
-			)	as temp
-			GROUP BY mac_address, monitor_type
+					MIN(violation_timestamp) as violation_timestamp
+				FROM (
+					SELECT 
+						mac_address,
+						monitor_type,
+						violation_timestamp
+					FROM notification_table
+					WHERE 
+						web_processed is null
+				)	as tmp_1
+				GROUP BY mac_address, monitor_type
+			) as tmp_2
+			GROUP BY mac_address
 		) as notification
-
 		ON notification.mac_address = object_summary_table.mac_address
 
 		ORDER BY object_table.type, object_table.mac_address DESC;
@@ -746,7 +749,7 @@ const query_deleteDevice = (idPackage) => {
 const query_deleteLBeacon = (idPackage) => {
 	const query = `
 		DELETE FROM lbeacon_table
-		WHERE id = (${idPackage.map(item => `'${item}'`)});
+		WHERE id IN (${idPackage.map(item => `'${item}'`)});
 	`
 	return query
 }
@@ -755,7 +758,7 @@ const query_deleteLBeacon = (idPackage) => {
 const query_deleteGateway = (idPackage) => {
 	const query = `
 		DELETE FROM gateway_table
-		WHERE id = (${idPackage.map(item => `'${item}'`)});
+		WHERE id IN (${idPackage.map(item => `'${item}'`)});
 	`
 	return query
 }
@@ -894,12 +897,13 @@ const query_setGeoFenceConfig = (value, areaId) =>{
 	`
 }
 
-const query_checkoutViolation = (mac_address) => {
+const query_checkoutViolation = (mac_address, monitor_type) => {
 	return `
 		UPDATE notification_table
 		SET web_processed = 1
 		WHERE (
 			mac_address = '${mac_address}'
+			AND monitor_type = ${monitor_type}
 			AND violation_timestamp < NOW()
 		) 	
 	`
@@ -932,6 +936,29 @@ const query_confirmValidation = (username) => {
 
 	return query;
 
+}
+
+const query_getMonitorConfig = (type) => {
+	return `
+		SELECT 
+			id, 
+			area_id,
+			enable,
+			start_time,
+			end_time
+		FROM ${type}
+	`
+}
+
+const query_setMonitorConfig = (configPackage) => {
+	return `
+		UPDATE movement_config
+		SET 
+			start_time = '${configPackage.startTime}',
+			end_time = '${configPackage.endTime}',
+			enable = '${configPackage.enable}'
+		WHERE 1 = 1;
+	`
 }
 
 function query_backendSearch(keyType, keyWord){
@@ -1097,6 +1124,8 @@ module.exports = {
     query_getLbeaconTable,
 	query_getGatewayTable,
 	query_getGeofenceData,
+	query_getMonitorConfig,
+	query_setMonitorConfig,
 	query_editObject,
 	query_editPatient,
 	query_addObject,

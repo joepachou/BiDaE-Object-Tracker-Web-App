@@ -530,7 +530,6 @@ class MainContainerForTablet extends React.Component{
             searchResultList: {
                 display: this.state.hasSearchKey ? null : 'none',
                 height: "40vh",
-                border : "solid",
             },
 
             /** left up area */

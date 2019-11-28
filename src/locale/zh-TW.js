@@ -61,6 +61,8 @@ const tw = {
     SIGN_IN: "登入",
     SIGN_UP: "註冊",
     SIGN_OUT: "登出",
+    ON: "開啟",
+    OFF: "關閉",
     SHIFT_CHANGE_RECORD: "交接記錄",
     SHOW_DEVICES: "顯示儀器",
     HIDE_DEVICES: "隱藏儀器",
@@ -128,6 +130,8 @@ const tw = {
     RECEIVER_SIGNATURE: "接收者簽名",
     ENABLE: "開啟",
     DISABLE: "關閉",
+    ENABLE_START_TIME: "啟動時間",
+    ENABLE_END_TIME: "結束時間",
    
     /** Form Title */
     EDIT_LBEACON: "編輯 lbeacon",
@@ -146,7 +150,10 @@ const tw = {
     PLEASE_ENTER_ID_AND_PASSWORD: "請輸入ID及密碼",
     CHECKED_BY: "確認",
     CONFIRMED_BY: "審核",
-
+    RESIDENT_MOVEMENT_MONITOR: "移動監控",
+    RESIDENT_LOCATION_MONITOR: "位置監控",
+    RESIDENT_LONG_STAY_IN_DANGER: "久留監控",
+    RESIDENT_NOT_STAY_ROOM: "房間監控",
 
     /** Error Message */
     GENDER_IS_REQUIRED: "請選擇性別",
@@ -281,16 +288,14 @@ const tw = {
     FROM: "",
     MINUTES: "分鐘",
 
-    /** Fence related setting */
-    RESIDENT_MOVEMENT_MONITOR: "居民移動監控",
-    RESIDENT_LOCATION_MONITOR: "居民位置監控",
-
     /** Test */
     IIS_SINICA_FOURTH_FLOOR: "中研院4樓",
     NTUH_YUNLIN_WARD_FIVE_B: "雲林台大醫院5B病房",
     NTUH_YUNLIN_WARD_FIVE_B: "5B病房",
     VETERAN_HOME_FIRST_FLOOR: "榮民之家1樓",
     VETERAN_HOME_THIRD_FLOOR: "榮民之家3樓",
+    NTUH_EMERGENCY_ROOM: "急症室",
+
     
     DEVICE_FOUND: function (length){
         return "發現"+length.toString()+"個儀器"

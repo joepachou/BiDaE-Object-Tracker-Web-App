@@ -76,9 +76,8 @@ class MainContainer extends React.Component{
                 auth: this.context.auth,
             })
         } 
-        // console.log(violatedObjects)
+
         let newViolatedObject = Object.keys(this.state.violatedObjects).filter(item => !Object.keys(prevState.violatedObjects).includes(item))
-        // console.log(newViolatedObject)
         if (newViolatedObject.length !== 0 ) {
             newViolatedObject.map(item => {
                 this.getToastNotification(this.state.violatedObjects[item])
@@ -87,35 +86,29 @@ class MainContainer extends React.Component{
     }
 
     getToastNotification = (item) => {
-        switch(item.monitor_type) {
-            case 1:
-                toast.warn(<ToastNotification data={item} />, {
-                    hideProgressBar: true,
-                    autoClose: false,
-                    onClose: this.onCloseToast
-                })
-            break;
-            case 4:
-                toast.error(<ToastNotification data={item} />, {
-                    hideProgressBar: true,
-                    autoClose: false,
-                    onClose: this.onCloseToast
-                })
-            break;
-            case 8:
-                toast.info(<ToastNotification data={item} />, {
-                    hideProgressBar: true,
-                    autoClose: false,
-                    onClose: this.onCloseToast
-                })
-            break;
-        }
+        item.notification.map(event => {
+            if (event.type == 2) return 
+            let toastId = `${item.id}:${event.type}`
+            let toastOptions = {
+                hideProgressBar: true,
+                autoClose: false,
+                onClose: this.onCloseToast,
+                toastId
+            }
+            this.getToastType(event.type, item, toastOptions, event.time)  
+        })
+    }
+
+    getToastType = (type, data, option, time) => {
+        return toast[config.toastMonitorMap[type]](<ToastNotification data={data} time={time} type={type}/>, option)
     }
 
     onCloseToast = (toast) => {
-        let mac_address = toast.data ? toast.data.mac_address : toast.mac_address
+        let mac_address = toast.data ? toast.data.mac_address : toast.mac_address;
+        let monitor_type = toast.type
         axios.post(dataSrc.checkoutViolation, {
             mac_address,
+            monitor_type
         })
         .then(res => {
         })
@@ -126,7 +119,16 @@ class MainContainer extends React.Component{
 
     /** Clear the record violated object */
     clearAlerts = () => {
-        Object.values(this.state.violatedObjects).map(item => this.onCloseToast(item))
+        Object.values(this.state.violatedObjects).map(item => {
+            item.notification.map(event => {
+                let dismissedObj = {
+                    mac_address: item.mac_address,
+                    type: event.type
+                }
+
+                this.onCloseToast(dismissedObj)
+            })
+        })
         toast.dismiss()
     }
 
@@ -167,19 +169,6 @@ class MainContainer extends React.Component{
         })
     }
 
-    // setArea = (value) => {
-    //     let { stateReducer } = this.context
-    //     let [{areaId}, dispatch] = stateReducer
-    //     this.getTrackingData(value)
-    //     dispatch({
-    //         type:'setArea',
-    //         value,
-    //     })
-    //     this.setState({
-    //         areaId, 
-    //     })
-    // }
-
     async setFence (value, areaId) {
         let result = await axios.post(dataSrc.setGeoFenceConfig, {
             value,
@@ -199,7 +188,7 @@ class MainContainer extends React.Component{
             areaId,
         })
         .then(res => {
-            
+
             let violatedObjects = res.data.reduce((violatedObjects, item) => {
                 if (!(item.mac_address in violatedObjects) && item.isViolated) {
                     violatedObjects[item.mac_address] = item
@@ -207,20 +196,9 @@ class MainContainer extends React.Component{
                 return violatedObjects
             }, _.cloneDeep(this.state.violatedObjects))
 
-            // let test = res.data.reduce((violatedObjects, item) => {
-            //     if (!(item.mac_address in violatedObjects) && item.isViolated) {
-            //         violatedObjects[item.mac_address] = item
-            //     } 
-            //     return violatedObjects
-            // }, violatedObjects)
-
-            // dispatch({
-            //     type:'setViolatedObjects',
-            //     value: test
-            // })
             this.setState({
                 trackingData: res.data,
-                violatedObjects
+                violatedObjects,
             })
         })
         .catch(error => {
@@ -549,10 +527,10 @@ class MainContainer extends React.Component{
         //         : {[devicePlural] : 0} 
         //     : {[devicePlural]: this.state.trackingData.filter(item => item.found && item.object_type == 0).length}
         //console.log(searchResult)
-        return(
+        return (
             /** "page-wrap" the default id named by react-burget-menu */
             <div id="page-wrap" className='mx-1 my-2 overflow-hidden' style={style.pageWrap} >
-                <Row id="mainContainer" className='d-flex w-100 justify-content-around mx-0 overflow-hidden' style={style.container}>
+                <Row id="mainContainer" className='d-flex w-100 justify-content-around mx-0' style={style.container}>
                     <Col sm={7} md={9} lg={8} xl={8} id='searchMap' className="pl-2 pr-1" >
                         <InfoPrompt 
                             searchKey={searchKey}

@@ -92,22 +92,43 @@ app.post('/data/getGeoFenceConfig', db.getGeoFenceConfig)
 app.post('/data/setGeoFenceConfig', db.setGeoFenceConfig)
 
 app.post('/validation/username', db.validateUsername)
+
 app.post('/test/getUserList', db.getUserList)
+
 app.post('/test/getUserRole', db.getUserRole)
+
 app.post('/test/getRoleNameList', db.getRoleNameList)
+
 app.post('/test/deleteUser', db.deleteUser)
+
 app.post('/test/setUserRole', db.setUserRole)
+
 app.post('/test/getEditObjectRecord', db.getEditObjectRecord)
+
 app.post('/test/deleteEditObjectRecord', db.deleteEditObjectRecord)
+
 app.post('/test/deleteShiftChangeRecord', db.deleteShiftChangeRecord)
+
 app.post('/test/deletePatient', db.deletePatient)
+
 app.post('/test/deleteDevice', db.deleteDevice)
+
 app.post('/test/deleteLBeacon', db.deleteLBeacon)
+
 app.post('/test/deleteGateway', db.deleteGateway)
+
 app.post('/data/addShiftChangeRecord', db.addShiftChangeRecord)
+
 app.post('/data/checkoutViolation', db.checkoutViolation)
+
 app.post('/data/confirmValidation', db.confirmValidation)
+
+app.post('/data/getMonitorConfig', db.getMonitorConfig)
+
+app.post('/data/setMonitorConfig', db.setMonitorConfig)
+
 app.post('/data/backendSearch', db.backendSearch)
+
 app.post('/data/getAreaTable', db.getAreaTable)
 
 app.get('/shift_record/:file', (req, res) =>{

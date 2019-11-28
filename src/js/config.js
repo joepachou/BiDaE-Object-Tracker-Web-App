@@ -4,6 +4,7 @@ import NURSING_HOME_MAP from "../img/map/nursing_home.png"
 import YUANLIN_CHRISTIAN_HOSPITAL_MAP from "../img/map/yuanlin_christian_hospital.png"
 import VETERAN_HOME_FIRST_FLOOR_MAP from "../img/map/veteran_home_first_floor.png"
 import VETERAN_HOME_THIRD_FLOOR_MAP from "../img/map/veteran_home_third_floor.png"
+import NTUH_MAP from "../img/map/ntuh_map.png"
 import BOT_LOGO from "../img//logo/BOT_LOGO_RED.png";
 import moment from 'moment'
 import patientP from "../img//logo/pic.png"
@@ -183,6 +184,19 @@ const config = {
         8: "location",
     },
 
+    monitorSettingType: {
+        RESIDENT_MOVEMENT_MONITOR: "resident movement monitor",
+        RESIDENT_LOCATION_MONITOR: "resident location monitor",
+        RESIDENT_LONG_STAY_IN_DANGER: "resident long stay in danger",
+        RESIDENT_NOT_STAY_ROOM: "resident not stay room",
+    },
+
+    monitorSettingUrlMap: {
+        "resident movement monitor": "movement_config",
+        "resident long stay in danger": "location_long_stay_in_danger_config",
+        "resident not stay room": "location_not_stay_room_config"
+    },
+
     shiftOption: [
         "day shift",
         "swing shift",
@@ -231,6 +245,13 @@ const config = {
         rtl: false,
         pauseOnVisibilityChange: true,
         draggable: true
+    },
+
+    toastMonitorMap: {
+        1: "warn",
+        2: "info",
+        4: "error",
+        8: "info",
     },
 
     statusToCreatePdf: [
@@ -602,7 +623,8 @@ const config = {
 
 
         areaOptions: {
-            1: "IIS_SINICA_FOURTH_FLOOR",
+            2: "IIS_SINICA_FOURTH_FLOOR",
+            1: "NTUH_EMERGENCY_ROOM",
             3: "NTUH_YUNLIN_WARD_FIVE_B",
             4: "NURSING_HOME",
             5: "YUANLIN_CHRISTIAN_HOSPITAL",
@@ -613,9 +635,16 @@ const config = {
         areaModules: {
 
             IIS_SINICA_FOURTH_FLOOR: {
-                id: 1,
+                id: 2,
                 name: "IIS_SINICA_FOURTH_FLOOR",
                 url: IIS_SINICA_FOURTH_FLOORTH_MAP,
+                bounds: [[0,0], [21130,35710]],
+            },
+
+            NTUH_EMERGENCY_ROOM: {
+                id: 1,
+                name: "NTUH",
+                url: NTUH_MAP,
                 bounds: [[0,0], [21130,35710]],
             },
 
