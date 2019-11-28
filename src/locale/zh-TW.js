@@ -10,6 +10,7 @@ const tw = {
     MONITOR_MANAGEMENT: "偵測裝置管理",
     GEOFENCE: "Geofence",
     OBJECT_MANAGEMENT: "物件管理",
+    BIG_SCREEN: "大螢幕",
     SEARCH_RESULT: "搜尋結果",
     NO_RESULT: "無搜尋結果",
     FREQUENT_SEARCH: "常用搜尋",
