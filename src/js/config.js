@@ -651,7 +651,6 @@ const config = {
                 id: 3,
                 name: "NTUH_YUNLIN_WARD_FIVE_B",
                 url: NTUH_YUNLIN_WARD_FIVE_B_MAP,
-                // bounds: [[-5000,-5000], [21067,31928]],
                 bounds: [[0, 0], [26067,36928]],
 
             },
@@ -666,7 +665,6 @@ const config = {
                 id: 5,
                 name: "YUANLIN_CHRISTIAN_HOSPITAL",
                 url: YUANLIN_CHRISTIAN_HOSPITAL_MAP,
-                // bounds: [[3000,-3000], [24000,30000]],
                 bounds: [[0, 0], [27000,27000]],
 
             },
