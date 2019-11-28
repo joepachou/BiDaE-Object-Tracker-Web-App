@@ -346,8 +346,11 @@ class SystemStatus extends React.Component{
                     onSelect={selectedKey => alert(`selected ${selectedKey}`)}
                 >
                 </Nav>
-                <Tabs defaultActiveKey="lbeacon_table" transition={false} variant="pills" onSelect=
-                {tabIndex => this.setState({ tabIndex })} className='mb-1'>
+                <Tabs 
+                    variant="pills" 
+                    onSelect={tabIndex => this.setState({ tabIndex })} 
+                    className='mb-1'
+                >
 
 
                 <TabList>
