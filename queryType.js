@@ -746,7 +746,7 @@ const query_deleteDevice = (idPackage) => {
 const query_deleteLBeacon = (idPackage) => {
 	const query = `
 		DELETE FROM lbeacon_table
-		WHERE id = (${idPackage.map(item => `'${item}'`)});
+		WHERE id IN (${idPackage.map(item => `'${item}'`)});
 	`
 	return query
 }
@@ -755,7 +755,7 @@ const query_deleteLBeacon = (idPackage) => {
 const query_deleteGateway = (idPackage) => {
 	const query = `
 		DELETE FROM gateway_table
-		WHERE id = (${idPackage.map(item => `'${item}'`)});
+		WHERE id IN (${idPackage.map(item => `'${item}'`)});
 	`
 	return query
 }
