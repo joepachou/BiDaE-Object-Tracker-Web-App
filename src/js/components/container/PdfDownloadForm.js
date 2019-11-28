@@ -96,7 +96,7 @@ class PdfDownloadForm extends React.Component {
         } = this.state
 
         const { locale } = this.context
-
+        //console.log(this.state.data)
         return (
             <Modal 
                 show={this.state.show}  

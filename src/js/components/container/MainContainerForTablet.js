@@ -412,7 +412,7 @@ class MainContainerForTablet extends React.Component{
         } else if (searchKey === 'coordinate') {
             searchResult = this.collectObjectsByLatLng(searchValue, proccessedTrackingData)
         } else if (typeof searchKey === 'object') {
-            console.log('good')
+            //console.log('good')
             proccessedTrackingData.map(item => {
                 if (searchKey.includes(item.type)) {
                     item.searched = true;
@@ -423,11 +423,11 @@ class MainContainerForTablet extends React.Component{
             })
 
             let searchResultMac = [];
-            console.log(SearchResult);
+            //console.log(SearchResult);
             searchResult.map(item => {
                 searchResultMac.push(item.mac_address)
             })
-            console.log(searchResultMac);
+            //console.log(searchResultMac);
         } else {
             
             let searchResultMac = [];

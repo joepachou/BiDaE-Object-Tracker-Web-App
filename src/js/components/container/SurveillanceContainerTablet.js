@@ -203,7 +203,7 @@ class SurveillanceContainerTablet extends React.Component {
         } = this.context;
 
         let [{areaId}] = stateReducer
-        
+        //console.log(this.props.proccessedTrackingData)
         return(
             <div id="surveillanceContainer" className="w-100 h-100 d-flex flex-column">
                 <div className="d-flex w-100 h-100 flex-column">
@@ -214,6 +214,7 @@ class SurveillanceContainerTablet extends React.Component {
                                     <QRcodeContainer
                                         data={this.props.proccessedTrackingData.filter(item => item.searched)}
                                         userInfo={auth.user}
+                                        searchKey={this.props.searchKey}
                                     /> 
                                     <InfoPromptForTablet 
                                         data={this.props.data}

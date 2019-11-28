@@ -44,6 +44,7 @@ class PdfDownloadFormForTablet extends React.Component {
             })
     }
     componentDidUpdate = (preProps) => {
+        //console.log(this.state.savePath)
         if(this.props.show && !this.state.show){
 
             let data = { 
@@ -58,7 +59,7 @@ class PdfDownloadFormForTablet extends React.Component {
             let { locale, auth, stateReducer } = this.context
             let [{areaId}] = stateReducer
             let pdfPackage = config.getPdfPackage('searchResult', auth.user, data, locale, areaId)
-
+            console.log('here')
             var searResultInfo = {
                 userInfo: auth.user,
                 pdfPackage,
@@ -94,7 +95,7 @@ class PdfDownloadFormForTablet extends React.Component {
             savePath, 
             isDone
         } = this.state
-
+        console.log(this.state.savePath)
         const { locale } = this.context
 
         return (
