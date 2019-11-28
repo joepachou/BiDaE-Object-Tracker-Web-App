@@ -32,7 +32,6 @@ const Main =()=>{
         const device = useRWD();
 
         if( device === "PC" ){
-            console.log(window.innerWidth)
             return (
                 <MainContainer />
             )
