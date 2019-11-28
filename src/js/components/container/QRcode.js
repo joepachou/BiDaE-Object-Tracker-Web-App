@@ -24,6 +24,7 @@ class QRCodeContainer extends React.Component {
         alreadyUpdate: false,
         hasData: false,
         isDone: false,
+        searchKey: "",
     }
 
     shouldComponentUpdate = (nextProps, nextState) => {
@@ -43,8 +44,10 @@ class QRCodeContainer extends React.Component {
                 console.log(err)
             })
     }
-    componentDidUpdate = (preProps) => {
-        if(this.props.show && !this.state.show){
+    componentWillUpdate = (preProps) => {
+
+        if(this.props.searchKey != this.state.searchKey){
+            
             let data = { 
                 foundResult: [], 
                 notFoundResult: [] 
@@ -57,7 +60,7 @@ class QRCodeContainer extends React.Component {
             let { locale, auth, stateReducer } = this.context
             let [{areaId}] = stateReducer
             let pdfPackage = config.getPdfPackage('searchResult', auth.user, data, locale, areaId)
-
+            //console.log(foundResult)
             var searResultInfo = {
                 userInfo: auth.user,
                 pdfPackage,
@@ -66,7 +69,7 @@ class QRCodeContainer extends React.Component {
                 this.setState({
                     savePath : path,
                     data: this.props.data,
-                    show: this.props.show,
+                    searchKey: this.props.searchKey,
                     alreadyUpdate: true,
                     isDone: true,
                     hasData: true
@@ -98,7 +101,8 @@ class QRCodeContainer extends React.Component {
 
         //var clientHeight = document.getElementById('qrcode').offsetHeight;
 
-        console.log(this.state.data)
+        console.log(this.state.savePath)
+
         return (
             <div id = 'qrcode' style={style.QRcodeDiv}>
                 <QRCode
