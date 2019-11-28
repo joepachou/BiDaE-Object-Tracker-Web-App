@@ -3,6 +3,7 @@ import SystemStatus from "./components/container/SystemStatus";
 import Geofence from "./components/container/Geofence";
 import ObjectManagementContainer from "./components/container/ObjectManagementContainer";
 import UserSettingContainer from "./components/container/UserContainer/UserSettingContainer";
+import BigScreenContainer from "./components/container/BigScreen/BigScreenContainer";
 
 const routes = [
     {
@@ -28,6 +29,11 @@ const routes = [
     {
         path: '/page/userSetting',
         component: UserSettingContainer,
+        exact: true,
+    },
+    {
+        path: '/page/bigScreen',
+        component: BigScreenContainer,
         exact: true,
     },
 ];

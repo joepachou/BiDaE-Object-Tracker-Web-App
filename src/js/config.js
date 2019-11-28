@@ -782,6 +782,275 @@ const config = {
             return content
         },
 
+    },
+    bigScreenConfig:{
+        mapOptions: {
+            crs: L.CRS.Simple,
+            // center: L.latLng(-2000, -4000),
+            zoom: -5,
+            minZoom: -6,
+            maxZoom: 0,
+            zoomDelta: 0.25,
+            zoomSnap: 0,
+            zoomControl: false,
+            attributionControl: false,
+            dragging: false,
+            doubleClickZoom: false,
+            scrollWheelZoom: false
+        },
+
+
+        /** Set the icon option */
+        iconOptions: {
+            iconSize: 30,
+            showNumber: false,
+        },
+
+        /** Set the representation of color pin 
+         * Icon options for AwesomeNumberMarkers 
+         * The process: 
+         * 1. Add the declaration of the desired icon option
+         * 2. Add the CSS description in leafletMarker.css */
+        iconColorList: [
+            "black",
+            "red",
+            "orange",
+            "blue",
+            "grey",
+            "white",
+            "orchid",
+            "mistyrose",
+            "tan",
+            "lightyello",
+            "lavender",
+            "lightblue",
+            "yellowgreen",
+            "sos",
+            "female",
+            "male"
+        ],
+
+        iconColor: {
+            normal: "black",
+            geofenceF: "red",
+            geofenceP: "orange",
+            searched: "blue",
+            unNormal: "grey",
+            sos: "sos",
+            number: "white",
+            female: "female",
+            male: "male",
+            female_1: "female_2",
+            male_1: "male_1",
+
+            // ["slateblue", "tan", "lightyellow", "lavender", "orange","lightblue", "mistyrose", "yellowgreen", "darkseagreen", "orchid"]
+            pinColorArray: ["orchid","mistyrose", "tan", "lightyellow", "lavender","lightblue", "yellowgreen"]
+        },
+
+        geoFenceMarkerOption: {
+            color: 'rgba(0, 0, 0, 0)',
+            fillColor: 'orange',
+            fillOpacity: 0.4,
+            radius: 25,
+        },
+
+        lbeaconMarkerOption: {
+            color: 'rgba(0, 0, 0, 0)',
+            fillColor: 'orange',
+            fillOpacity: 0.4,
+            radius: 15,
+        },
+
+        /** Set the schema to select the color pin */
+        getIconColor: (item, hasColorPanel) => {
+            var searchQueueIndex = item.searched
+            if (searchQueueIndex > config.mapConfig.iconColor.pinColorArray.length){
+                console.error('searched queue index too much, plz add more pinColor in "config.mapConfig.iconColor.pinColorArray"')
+            }else{
+                if(searchQueueIndex === -1){
+                    return config.mapConfig.iconColor.normal
+                }else{
+                    return config.mapConfig.iconColor.pinColorArray[searchQueueIndex - 1]
+                }
+            }
+
+        },
+
+        defaultAreaId: 3,
+    
+        
+        gender: {
+            MAN: {
+                id: 1,
+            },
+            GIRL:{
+                id: 2,
+            },
+        },
+
+
+        areaOptions: {
+            2: "IIS_SINICA_FOURTH_FLOOR",
+            1: "NTUH_EMERGENCY_ROOM",
+            3: "NTUH_YUNLIN_WARD_FIVE_B",
+            4: "NURSING_HOME",
+            5: "YUANLIN_CHRISTIAN_HOSPITAL",
+            6: "VETERAN_HOME_FIRST_FLOOR",
+            7: "VETERAN_HOME_THIRD_FLOOR",
+        },
+    
+        areaModules: {
+
+            IIS_SINICA_FOURTH_FLOOR: {
+                id: 2,
+                name: "IIS_SINICA_FOURTH_FLOOR",
+                url: IIS_SINICA_FOURTH_FLOORTH_MAP,
+                bounds: [[0,0], [21130,35710]],
+            },
+
+            NTUH_EMERGENCY_ROOM: {
+
+                id: 1,
+                name: "NTUH",
+                url: NTUH_MAP,
+                bounds: [[0,0], [21130,35710]],
+            },
+
+            NTUH_YUNLIN_WARD_FIVE_B: {
+                id: 3,
+                name: "NTUH_YUNLIN_WARD_FIVE_B",
+                url: NTUH_YUNLIN_WARD_FIVE_B_MAP,
+                // bounds: [[-5000,-5000], [21067,31928]],
+                bounds: [[0, 0], [26067,36928]],
+
+            },
+            NURSING_HOME: {
+                id: 4,
+                name: "NURSING_HOME",
+                url: NURSING_HOME_MAP,
+                bounds: [[0,0], [20000,45000]],
+            },
+            
+            YUANLIN_CHRISTIAN_HOSPITAL: {
+                id: 5,
+                name: "YUANLIN_CHRISTIAN_HOSPITAL",
+                url: YUANLIN_CHRISTIAN_HOSPITAL_MAP,
+                // bounds: [[3000,-3000], [24000,30000]],
+                bounds: [[0, 0], [27000,27000]],
+
+            },
+
+            VETERAN_HOME_FIRST_FLOOR: {
+                id: 6,
+                name: "VETERAN_HOME_FIRST_FLOOR",
+                url: VETERAN_HOME_FIRST_FLOOR_MAP,
+                bounds: [[0,0], [21000,26000]],
+            },
+
+            VETERAN_HOME_THIRD_FLOOR: {
+                id: 7,
+                name: "VETERAN_HOME_THIRD_FLOOR",
+                url: VETERAN_HOME_THIRD_FLOOR_MAP,
+                bounds: [[0,0], [21000,26000]],
+            },
+        },
+
+        /* For test. To start object tracking*/
+        startInteval: true,
+
+        /* Set the tracking query inteval time(ms) */
+        intevalTime: 1000,
+
+        objectStatus: {
+            PERIMETER: "perimeter",
+            FENCE: "fence",
+            NORMAL: "normal",
+            BROKEN: "broken",
+            RESERVE: "reserve",
+            TRANSFERRED: "transferred",   
+        },
+        
+        /* Set the rssi threshold */
+        locationAccuracyMapToDefault: {
+            0: -100,
+            1: -60,
+            2: -50,
+        },
+
+        locationAccuracyMapToDB: {
+            0: "low_rssi",
+            1: "med_rssi",
+            2: "high_rssi",
+        },
+
+        /* Set the Marker dispersity that can be any positive number */
+        markerDispersity: 13,
+
+        popupOptions: {
+            minWidth: "500",
+            maxHeight: "300",
+            className : "customPopup",
+            showNumber: false
+        },
+
+        /** Set the html content of popup of markers */
+        getPopupContent: (object, objectList, locale) => {
+            var indexNumberForPatient = 0
+            var indexNumberForDevice = 0
+            /* The style sheet is right in the src/css/Surveillance.css*/
+            var PatientTotalNumber = 0;
+            var DeviceTotalNumber = 0;
+
+            objectList.map((item,index) => {
+                if (item.object_type != 0) PatientTotalNumber ++;
+                else DeviceTotalNumber ++;   
+            })
+            
+            const content = `
+                <div>
+                    <h4 class="border-bottom pb-1 px-2">${object[0].location_description}</h4>
+                    ${objectList.map((item, index) => {
+                        var element = `<div class="row popupRow mb-2 mx-2 d-flex jusify-content-start">`
+                        element += config.mapConfig.popupOptions.showNumber
+                            ?   `<div class="popupType text-capitalize">${index + 1}.</div>`
+                            :   `<div class="popupType text-capitalize">&#9642;  </div>`
+                        if(item.object_type == 0){
+                            element +=                                ` 
+                            <div class="popupType text-capitalize">
+                               ${item.type}
+                            </div>
+                            <div class="popupType ">
+                                , ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn}
+                            </div>
+                            <div class="popupType">
+                                ${item.status !== "normal" 
+                                    ? `, ${locale.texts[item.status.toUpperCase()]}`
+                                    : `, ${item.residence_time}`
+                                }
+                            </div>
+                        `
+                        } else {
+                            element += 
+                                `     
+                                    <div class="popupType">
+                                        ${item.name} 
+                                    </div>
+                                    <div class="popupType">
+                                        , ${locale.texts.PHYSICIAN_NAME}: ${item.physician_name}
+                                    </div>
+                                    <div class="popupType">
+                                        , ${item.residence_time}
+                                    </div>
+                                `
+                        }
+                        element += `</div>`
+                        return element
+                    }).join("")
+                    }
+                </div>` 
+            return content
+        },
+
     }
 }
 

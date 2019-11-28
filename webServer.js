@@ -129,6 +129,8 @@ app.post('/data/setMonitorConfig', db.setMonitorConfig)
 
 app.post('/data/backendSearch', db.backendSearch)
 
+app.post('/data/getSearchQueue', db.getBackendSearchQueue)
+
 app.post('/data/getAreaTable', db.getAreaTable)
 
 app.get('/shift_record/:file', (req, res) =>{
