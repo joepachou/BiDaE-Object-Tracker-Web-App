@@ -294,7 +294,7 @@ const tw = {
     NTUH_YUNLIN_WARD_FIVE_B: "5B病房",
     VETERAN_HOME_FIRST_FLOOR: "榮民之家1樓",
     VETERAN_HOME_THIRD_FLOOR: "榮民之家3樓",
-    NTUH_EMERGENCY_ROOM: "急症室",
+    NTUH_EMERGENCY_ROOM: "急診室",
 
     
     DEVICE_FOUND: function (length){
