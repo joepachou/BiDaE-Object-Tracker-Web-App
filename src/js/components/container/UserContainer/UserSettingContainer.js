@@ -8,10 +8,11 @@ import AdminManagementContainer from './AdminManagementContainer'
 import EditObjectManagement from './EditObjectManagement'
 import LocaleContext from '../../../context/LocaleContext';
 import AccessControl from '../../presentational/AccessControl'
-import AuthenticationContext from '../../../context/AuthenticationContext';
 import DeviceManager from './DeviceManager'
 import MyDeviceManager from './MyDeviceManager';
 import MyPatientManager from './MyPatientManager';
+import MonitorSetting from "./MonitorSetting"
+
 class UserSettingContainer extends React.Component{
     constructor() {
         super();
@@ -42,6 +43,11 @@ class UserSettingContainer extends React.Component{
                 path: 'shiftChangeRecord',
                 component: <ShiftChangeRecord2 />
             },
+            {
+                name: "Monitor Setting",
+                path: "monitorSetting",
+                component: <MonitorSetting />
+            }
         ]
     }
     // sideNavMouseOver(e){
