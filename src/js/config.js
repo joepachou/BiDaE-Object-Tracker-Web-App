@@ -888,8 +888,8 @@ const config = {
 
 
         areaOptions: {
-            2: "IIS_SINICA_FOURTH_FLOOR",
             1: "NTUH_EMERGENCY_ROOM",
+            2: "IIS_SINICA_FOURTH_FLOOR",
             3: "NTUH_YUNLIN_WARD_FIVE_B",
             4: "NURSING_HOME",
             5: "YUANLIN_CHRISTIAN_HOSPITAL",
@@ -899,18 +899,18 @@ const config = {
     
         areaModules: {
 
-            IIS_SINICA_FOURTH_FLOOR: {
-                id: 2,
-                name: "IIS_SINICA_FOURTH_FLOOR",
-                url: IIS_SINICA_FOURTH_FLOORTH_MAP,
-                bounds: [[0,0], [21130,35710]],
-            },
-
             NTUH_EMERGENCY_ROOM: {
 
                 id: 1,
                 name: "NTUH",
                 url: NTUH_MAP,
+                bounds: [[0,0], [33659,56214]],
+            },
+
+            IIS_SINICA_FOURTH_FLOOR: {
+                id: 2,
+                name: "IIS_SINICA_FOURTH_FLOOR",
+                url: IIS_SINICA_FOURTH_FLOORTH_MAP,
                 bounds: [[0,0], [21130,35710]],
             },
 
