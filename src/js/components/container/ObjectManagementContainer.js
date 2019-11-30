@@ -66,7 +66,7 @@ class ObjectManagementContainer extends React.Component{
     componentDidMount = () => {
         this.getData();
         this.getDataPatient();
-        this.getAreaList();
+        // this.getAreaList();
         this.getUserList();
         this.getLbeaconData();
     }
@@ -90,18 +90,19 @@ class ObjectManagementContainer extends React.Component{
         })
     }
 
-    getAreaList = () => {
-        axios.post(getAreaTable, {
-        })
-        .then(res => {
-            this.setState({
-                areaList: res.data.rows
-            })
-        })
-        .catch(err => {
-            console.log(err)
-        })
-    }
+    // getAreaList = () => {
+    //     axios.post(getAreaTable, {
+    //     })
+    //     .then(res => {
+    //         console.log(res.data.rows)
+    //         this.setState({
+    //             areaList: res.data.rows
+    //         })
+    //     })
+    //     .catch(err => {
+    //         console.log(err)
+    //     })
+    // }
 
 
     getDataPatient = () => {
@@ -556,7 +557,7 @@ class ObjectManagementContainer extends React.Component{
                     handleCloseForm={this.handleCloseForm}
                     data={this.state.dataPatient}
                     objectData = {this.state.data}
-                    areaList={this.state.areaList}
+                    // areaList={this.state.areaList}
                     physicianList={this.state.physicianList}
                     roomOptions={this.state.roomOptions}
                 />  
@@ -570,7 +571,7 @@ class ObjectManagementContainer extends React.Component{
                     handleCloseForm={this.handleCloseForm}
                     data={this.state.data}
                     dataPatient = {this.state.dataPatient}
-                    areaList={this.state.areaList}
+                    // areaList={this.state.areaList}
                 />
             </Container>
         )
