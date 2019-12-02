@@ -8,6 +8,8 @@ import NTUH_MAP from "../img/map/ntuh_map.png"
 import BOT_LOGO from "../img//logo/BOT_LOGO_RED.png";
 import moment from 'moment'
 import patientP from "../img//logo/pic.png"
+
+
 const config = {
     
     
@@ -278,6 +280,8 @@ const config = {
     /** Pdf format config */
     pdfFormat: {
         getHeader: (user, locale, option, name) => {
+            console.log(config)
+
             let title = config.pdfFormat.getTitle(option, locale)
             let timestamp = config.pdfFormat.getTimeStamp(locale)
             let titleInfo = config.pdfFormat.getSubTitle[option](locale, user, name)
@@ -609,7 +613,7 @@ const config = {
             else if (item.object_type == 2) return config.mapConfig.iconColor.female
         },
 
-        defaultAreaId: 3,
+        defaultAreaId: process.env.DEFAULT_AREA_ID,
     
         
         gender: {
@@ -621,8 +625,7 @@ const config = {
             },
         },
 
-
-        areaOptions: {
+        BOTDefaultAreas: {
             1: "NTUH_EMERGENCY_ROOM",
             2: "IIS_SINICA_FOURTH_FLOOR",
             3: "NTUH_YUNLIN_WARD_FIVE_B",
@@ -631,6 +634,32 @@ const config = {
             6: "VETERAN_HOME_FIRST_FLOOR",
             7: "VETERAN_HOME_THIRD_FLOOR",
         },
+
+
+        areaOptions: process.env.SITES_GROUP
+            .split(',')
+            .reduce((res, item) => {
+                res[item] = {
+                    1: "NTUH_EMERGENCY_ROOM",
+                    2: "IIS_SINICA_FOURTH_FLOOR",
+                    3: "NTUH_YUNLIN_WARD_FIVE_B",
+                    4: "NURSING_HOME",
+                    5: "YUANLIN_CHRISTIAN_HOSPITAL",
+                    6: "VETERAN_HOME_FIRST_FLOOR",
+                    7: "VETERAN_HOME_THIRD_FLOOR",
+                }[item]
+                return res
+            }, {}),
+
+        // areaOptions: {
+        //         1: "NTUH_EMERGENCY_ROOM",
+        //         2: "IIS_SINICA_FOURTH_FLOOR",
+        //         3: "NTUH_YUNLIN_WARD_FIVE_B",
+        //         4: "NURSING_HOME",
+        //         5: "YUANLIN_CHRISTIAN_HOSPITAL",
+        //         6: "VETERAN_HOME_FIRST_FLOOR",
+        //         7: "VETERAN_HOME_THIRD_FLOOR",
+        // },
     
         areaModules: {
             NTUH_EMERGENCY_ROOM: {
@@ -781,7 +810,8 @@ const config = {
         },
 
     },
-    bigScreenConfig:{
+    
+    bigScreenConfig: {
         mapOptions: {
             crs: L.CRS.Simple,
             // center: L.latLng(-2000, -4000),
@@ -886,16 +916,28 @@ const config = {
             },
         },
 
+        // BOTDefaultAreas: {
+        //     1: "NTUH_EMERGENCY_ROOM",
+        //     2: "IIS_SINICA_FOURTH_FLOOR",
+        //     3: "NTUH_YUNLIN_WARD_FIVE_B",
+        //     4: "NURSING_HOME",
+        //     5: "YUANLIN_CHRISTIAN_HOSPITAL",
+        //     6: "VETERAN_HOME_FIRST_FLOOR",
+        //     7: "VETERAN_HOME_THIRD_FLOOR",
+        // },
 
-        areaOptions: {
-            1: "NTUH_EMERGENCY_ROOM",
-            2: "IIS_SINICA_FOURTH_FLOOR",
-            3: "NTUH_YUNLIN_WARD_FIVE_B",
-            4: "NURSING_HOME",
-            5: "YUANLIN_CHRISTIAN_HOSPITAL",
-            6: "VETERAN_HOME_FIRST_FLOOR",
-            7: "VETERAN_HOME_THIRD_FLOOR",
-        },
+
+
+        // areaOptions: Object.keys(config.BOTDefaultAreas)
+        //     .filter(item => {
+        //         return process.env.SITES_GROUP.includes(parseInt(item))
+        //     })
+        //     .reduce((res, item) => {
+        //         return res[item] = config.BOTDefaultAreas[item]
+        //     }, {}
+        // ),
+
+        
     
         areaModules: {
 
