@@ -5,12 +5,9 @@ import {
     Col, 
     Container
 } from "react-bootstrap"
-import TimePicker from 'react-bootstrap-time-picker';
 import Switcher from "../Switcher";
-import TimePickerWrap from "../TimePickerWrap"
 import axios from "axios"
 import dataSrc from "../../../dataSrc"
-import moment from "moment"
 import config from "../../../config"
 import DateTimePicker from '../DateTimePicker';
 

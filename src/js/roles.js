@@ -19,7 +19,7 @@ const rules = {
             "route:patientManagement",
             // "route:systemStatus",
             // "route:objectManagement",
-            "route:bigScreen",
+            // "route:bigScreen",
             // "route:shiftChangeRecord",
             "user:mydevice",
             "user:shiftChange",
@@ -43,7 +43,7 @@ const rules = {
             // "user:toggleArea",
             "user:toggleShowDevices",
             "user:toggleShowResidents",
-            "route:monitorSetting"
+            // "route:monitorSetting"
         ]
     },
     dev: {
