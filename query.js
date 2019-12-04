@@ -778,7 +778,7 @@ const setMonitorConfig = (request, response) => {
     } = request.body
     pool.query(queryType.query_setMonitorConfig(configPackage))
         .then(res => {
-            console.log(`set monitor config`)
+            console.log(`set ${configPackage.type}`)
             response.status(200).json(res)
         })
         .catch(err => {
@@ -934,6 +934,11 @@ const getBackendSearchQueue = (request, response) => {
     })
 }
 
+const addBulkObject = (request, response) => {
+    console.log(request.files)
+
+}
+
 module.exports = {
     getTrackingData,
     getObjectTable,
@@ -954,6 +959,7 @@ module.exports = {
     addUserSearchHistory,
     addObject,
     addPatient,
+    addBulkObject,
     editObject,
     editPatient,
     editLbeacon,

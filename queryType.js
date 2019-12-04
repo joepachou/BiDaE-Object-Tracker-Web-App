@@ -952,7 +952,7 @@ const query_getMonitorConfig = (type) => {
 
 const query_setMonitorConfig = (configPackage) => {
 	return `
-		UPDATE movement_config
+		UPDATE ${configPackage.type}
 		SET 
 			start_time = '${configPackage.startTime}',
 			end_time = '${configPackage.endTime}',
@@ -1117,6 +1117,10 @@ function query_getBackendSearchQueue(){
 	return query
 }
 
+const query_addBulkObject = () => {
+	
+}
+
 module.exports = {
     query_getTrackingData,
 	query_getObjectTable,
@@ -1164,5 +1168,6 @@ module.exports = {
 	query_backendSearch,
 	query_backendSearch_writeQueue,
 	query_getBackendSearchQueue,
+	query_addBulkObject,
 }
 
