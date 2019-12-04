@@ -10,6 +10,7 @@ const en =  {
     MONITOR_MANAGEMENT: "monitor management",
     GEOFENCE: "geofence",
     OBJECT_MANAGEMENT: "object management",
+    BIG_SCREEN: "big screen",
     SEARCH_RESULT: "search results",
     NO_RESULT: "no result",
     FREQUENT_SEARCH: "frequent searches",
@@ -93,6 +94,7 @@ const en =  {
     SHOW_DEVICES_FOUND: "show devices found",
     SHOW_PATIENTS_NOT_FOUND: "show patients not found",
     SHOW_PATIENTS_FOUND: "show patients found",
+    ASSOCIATE: "associate",
 
     /* Form Field */
     NAME: "name",

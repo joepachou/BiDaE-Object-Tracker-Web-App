@@ -928,14 +928,20 @@ const config = {
 
 
 
-        // areaOptions: Object.keys(config.BOTDefaultAreas)
-        //     .filter(item => {
-        //         return process.env.SITES_GROUP.includes(parseInt(item))
-        //     })
-        //     .reduce((res, item) => {
-        //         return res[item] = config.BOTDefaultAreas[item]
-        //     }, {}
-        // ),
+        areaOptions: process.env.SITES_GROUP
+            .split(',')
+            .reduce((res, item) => {
+                res[item] = {
+                    1: "NTUH_EMERGENCY_ROOM",
+                    2: "IIS_SINICA_FOURTH_FLOOR",
+                    3: "NTUH_YUNLIN_WARD_FIVE_B",
+                    4: "NURSING_HOME",
+                    5: "YUANLIN_CHRISTIAN_HOSPITAL",
+                    6: "VETERAN_HOME_FIRST_FLOOR",
+                    7: "VETERAN_HOME_THIRD_FLOOR",
+                }[item]
+                return res
+            }, {}),
 
         
     
