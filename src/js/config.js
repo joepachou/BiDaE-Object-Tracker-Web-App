@@ -583,7 +583,7 @@ const config = {
             male_1: "male_1",
 
             // ["slateblue", "tan", "lightyellow", "lavender", "orange","lightblue", "mistyrose", "yellowgreen", "darkseagreen", "orchid"]
-            pinColorArray: ["orchid","mistyrose", "tan", "lightyellow", "lavender","lightblue", "yellowgreen"]
+            pinColorArray: ["orchid", "tan", "lightyellow", "lavender","lightblue", "yellowgreen"]
         },
 
         geoFenceMarkerOption: {
@@ -814,7 +814,7 @@ const config = {
     bigScreenConfig: {
         mapOptions: {
             crs: L.CRS.Simple,
-            // center: L.latLng(-2000, -4000),
+            center: L.latLng(200, 400),
             zoom: -5,
             minZoom: -6,
             maxZoom: 0,
@@ -872,7 +872,7 @@ const config = {
             male_1: "male_1",
 
             // ["slateblue", "tan", "lightyellow", "lavender", "orange","lightblue", "mistyrose", "yellowgreen", "darkseagreen", "orchid"]
-            pinColorArray: ["orchid","mistyrose", "tan", "lightyellow", "lavender","lightblue", "yellowgreen"]
+            pinColorArray: ["orchid", "tan", "lightyellow", "lavender","lightblue", "yellowgreen"]
         },
 
         geoFenceMarkerOption: {
