@@ -10,10 +10,15 @@ const fs = require('fs');
 const http = require('http');
 const https = require('https');
 const session = require('express-session')
+const formidable = require('formidable');
+const cors = require('cors');
+const parse = require('csv-parse')
+
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true,}));
 app.use(express.static(path.join(__dirname,'dist')));
+app.use(cors())
 
 app.use(session({
     secret: 'super_hound',
@@ -29,7 +34,6 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
-
 
 app.get('/', (req,res) => {
     console.log(123)
@@ -132,6 +136,8 @@ app.post('/data/backendSearch', db.backendSearch)
 app.post('/data/getSearchQueue', db.getBackendSearchQueue)
 
 app.post('/data/getAreaTable', db.getAreaTable)
+
+app.post('/data/addBulkObject', db.addBulkObject)
 
 app.get('/shift_record/:file', (req, res) =>{
 	res.sendFile(path.join(__dirname, 'shift_record',req.params['file']));

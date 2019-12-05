@@ -77,6 +77,7 @@ const query_getObjectTable = (area_id, ) => {
 	if (!area_id) {
 		text += `
 			SELECT 
+				object_table.id,
 				object_table.name, 
 				object_table.type, 
 				object_table.asset_control_number, 
@@ -95,6 +96,7 @@ const query_getObjectTable = (area_id, ) => {
 	} else {
 		text +=`
 			SELECT 
+				object_table.id,
 				object_table.name, 
 				object_table.type, 
 				object_table.asset_control_number, 
@@ -223,19 +225,21 @@ function query_editObject (formOption) {
 			asset_control_number = $5,
 			name = $6,
 			monitor_type = $7,
-			area_id = $8
-		WHERE mac_address = $1
+			area_id = $8,
+			mac_address = $9
+		WHERE id = $1
 		`;
 		
 	const values = [
-		formOption.mac_address, 
+		formOption.id, 
 		formOption.type, 
 		formOption.status, 
 		formOption.transferred_location ? formOption.transferred_location.value : null, 
 		formOption.asset_control_number, 
 		formOption.name,
 		formOption.monitor_type,
-		formOption.area_id
+		formOption.area_id,
+		formOption.mac_address,
 	];
 
 	const query = {
@@ -286,13 +290,6 @@ function query_editPatient (formOption) {
 
 	return query;
 }
-
-
-
-
-
-
-
 
 function query_addObject (formOption) {
 	const text = 
@@ -1117,8 +1114,31 @@ function query_getBackendSearchQueue(){
 	return query
 }
 
-const query_addBulkObject = () => {
-	
+const query_addBulkObject = (jsonObj) => {
+	let text =  `
+		INSERT INTO object_table (
+			name,
+			type,
+			mac_address,
+			asset_control_number,
+			registered_timestamp,
+			object_type,
+			status
+		)
+		VALUES ${jsonObj.map((item, index) => {
+			return `(
+				'${item.name}',
+				'${item.type}',
+				'c2:00:00:00:00:0${index}',
+				'${item.asset_control_number}',
+				now(),
+				0,
+				'normal'
+			)`
+		})}
+	`
+	console.log(text)
+	return text	
 }
 
 module.exports = {
