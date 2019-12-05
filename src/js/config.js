@@ -167,7 +167,8 @@ const config = {
         MY_DEVICES: "my devices",
         ALL_DEVICES: "all devices",
         MY_PATIENTS: "my patients",
-        ALL_PATIENTS: "all patients"
+        ALL_PATIENTS: "all patients",
+        OBJECTS: "objects"
     },
 
     searchResult:{
