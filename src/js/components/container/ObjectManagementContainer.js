@@ -237,7 +237,7 @@ class ObjectManagementContainer extends React.Component{
                 })
                 break;
             case "associate object":
-            console.log(e.target.name)
+            // console.log(e.target.name)
 
                 // this.setState({
                 //     isShowEdit: true,
