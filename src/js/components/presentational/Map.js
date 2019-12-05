@@ -64,10 +64,18 @@ class Map extends React.Component {
     /** Set the search map configuration establishing in config.js  */
     initMap = () => {
         let [{areaId}] = this.context.stateReducer
-        let areaModules =  this.props.mapConfig.areaModules
-        let areaOption = this.props.mapConfig.areaOptions[areaId]    
+        let { 
+            areaModules,
+            areaOptions,
+            defaultAreaId,
+            mapOptions
+        } = this.props.mapConfig
+
+        /** Error handler of the user's auth area does not include the group of sites */
+        let areaOption = areaOptions[areaId] || areaOptions[defaultAreaId] || Object.values(areaOptions)[0]
+
         let { url, bounds } = areaModules[areaOption]
-        let map = L.map('mapid', this.props.mapConfig.mapOptions);
+        let map = L.map('mapid', mapOptions);
         let image = L.imageOverlay(url, bounds).addTo(map);
         map.addLayer(image)
         map.fitBounds(bounds);
@@ -97,8 +105,17 @@ class Map extends React.Component {
     /** Set the overlay image */
     setMap = () => {
         let [{areaId}] = this.context.stateReducer
-        let areaModules =  this.props.mapConfig.areaModules
-        let areaOption = this.props.mapConfig.areaOptions[areaId]
+
+        let { 
+            areaModules,
+            areaOptions,
+            defaultAreaId,
+            mapOptions
+        } = this.props.mapConfig
+
+        /** Error handler of the user's auth area does not include the group of sites */
+        let areaOption = areaOptions[areaId] || areaOptions[defaultAreaId] || Object.values(areaOptions)[0]
+
         let { url, bounds } = areaModules[areaOption]
         this.image.setUrl(url)
         this.image.setBounds(bounds)
