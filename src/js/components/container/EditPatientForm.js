@@ -232,7 +232,6 @@ class EditPatientForm extends React.Component {
                                 sum += parseInt(monitorTypeMap[item])
                                 return sum
                             },0)
-
                             const postOption = {
                                 ...values,
                                 area_id: config.mapConfig.areaModules[values.area.value].id,

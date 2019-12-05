@@ -292,6 +292,7 @@ function query_editPatient (formOption) {
 }
 
 function query_addObject (formOption) {
+
 	const text = 
 		`
 		INSERT INTO object_table (
@@ -319,6 +320,7 @@ function query_addObject (formOption) {
 		formOption.monitor_type,
 		formOption.area_id
 	];
+
 
 	const query = {
 		text,
@@ -350,9 +352,10 @@ function query_addPatient (formOption) {
 			asset_control_number,
 			status,
 			type,
-			registered_timestamp
+			registered_timestamp,
+			monitor_type
 		)
-		VALUES($1,$2,$3,$4,$5,$6,$7,'default','Patient',now())
+		VALUES($1,$2,$3,$4,$5,$6,$7,'default','Patient',now(), $8)
 		`;
 		
 	const values = [
@@ -362,7 +365,8 @@ function query_addPatient (formOption) {
 		formOption.area_id,
 		formOption.mac_address,
 		formOption.gender_id,
-		formOption.patientNumber
+		formOption.patientNumber,
+		formOption.monitor_type
 	];
 
 	const query = {
