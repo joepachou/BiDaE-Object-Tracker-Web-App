@@ -892,6 +892,8 @@ const checkMatchedObject = (item, userAuthenticatedAreaId, currentAreaId) => {
             or { xx for 'all devices' }
     }
 */
+
+
 const backendSearch = (request, response) => {
     
     const {keyType, keyWord, mac_address} = request.body
@@ -903,21 +905,52 @@ const backendSearch = (request, response) => {
             var mac_addresses = res.rows.map((mac) => {
                 return mac.mac_address
             })
-            query = queryType.query_backendSearch_writeQueue(keyType, keyWord, mac_addresses)
-            pool.query(query, (err, res) => {
+            pool.query({
+                text: `DELETE FROM search_result_queue where (key_type = $1 AND key_word = $2)`,
+                values: [keyType, keyWord]
+            }, (err, res) => {
                 if(err){
+                    console.log('delete same name')
                     console.log(err)
                 }else{
-                    response.send(mac_addresses)
+                    pool.query(`DELETE FROM search_result_queue WHERE id NOT IN (SELECT id FROM search_result_queue ORDER BY query_time desc LIMIT 4)`, (err, res) => {
+                        if(err){
+                            console.log('delete exceed')
+                            console.log(err)
+
+                        }else{
+                            pool.query(`SELECT pin_color_index FROM search_result_queue GROUP BY pin_color_index`, (err, res) => {
+                                // console.log(res.rows)
+                                var usedIndex = res.rows.map(i => {
+                                    return i['pin_color_index']
+                                })
+                                var avail = [0, 1, 2, 3, 4].filter(function(i) {return usedIndex.indexOf(i) < 0;});
+                                // console.log(avail)
+                                if(err){
+                                    console.log(err)
+                                }else{
+                                    pool.query(queryType.query_backendSearch_writeQueue(keyType, keyWord, mac_addresses, avail[0]), (err, res) => {
+                                        if(err){
+                                            console.log(err)
+                                        }else{
+                                            response.send(mac_addresses)
+                                        } 
+                                    })        
+                                }
+                            })
+                            
+                        }
+                    })
+                        
                 }
                 
-            })        
+                
+            })
         }
         
     })
 
 }
-
 const getBackendSearchQueue = (request, response) => {
     var query = queryType.query_getBackendSearchQueue()
     pool.query(query, (err, res) => {

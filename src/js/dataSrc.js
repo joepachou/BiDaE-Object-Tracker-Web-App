@@ -44,6 +44,7 @@ const setMonitorConfig = `http://${dataSrcIP}/data/setMonitorConfig`
 const backendSearch = `http://${dataSrcIP}/data/backendSearch`
 const getSearchQueue = `http://${dataSrcIP}/data/getSearchQueue`
 const addBulkObject = `http://${dataSrcIP}/data/addBulkObject`
+const pinImage = `http://${dataSrcIP}/image/pinImage`
 
 const pdfUrl = function(path){
     return `http://${dataSrcIP}/${path}`
@@ -94,5 +95,6 @@ module.exports = {
     confirmValidation,
     setMonitorConfig,
     backendSearch,
-    getSearchQueue
+    getSearchQueue, 
+    pinImage
 };

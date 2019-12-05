@@ -1081,21 +1081,27 @@ function query_backendSearch(keyType, keyWord){
 	console.log(query)
 	return query
 }
+function query_deleteSameNameSearchQueue(keyType, keyWord){
 
-function query_backendSearch_writeQueue(keyType, keyWord, mac_addresses){
+	var text = `DELETE FROM search_result_queue where (key_type = '${keyType}' AND key_word = '${keyWord}') 
+	OR 
+		id NOT IN (SELECT id FROM search_result_queue ORDER BY query_time desc LIMIT 5) RETURNING *;`
+	// console.log(text)
+	return text
+}
+function query_backendSearch_writeQueue(keyType, keyWord, mac_addresses, pin_color_index){
 	var text = 
 		`
 			INSERT INTO 
-				search_result_queue(query_time, key_type, key_word, result_mac_address)
-			VALUES
-				(now(), $1, $2, ARRAY['${mac_addresses.join('\',\'')}'])
+				search_result_queue(query_time, key_type, key_word, result_mac_address, pin_color_index) VALUES
+				(now(), $1, $2, ARRAY['${mac_addresses.join('\',\'')}'], $3);
 		`
-	values = [keyType, keyWord]
+	values =  [keyType, keyWord, pin_color_index]
 	query = {
 		text,
 		values
 	}
-	console.log(text)
+	
 	return query
 }
 
@@ -1113,6 +1119,7 @@ function query_getBackendSearchQueue(){
 	
 	return query
 }
+
 
 const query_addBulkObject = (jsonObj) => {
 	let text =  `
@@ -1140,6 +1147,7 @@ const query_addBulkObject = (jsonObj) => {
 	console.log(text)
 	return text	
 }
+
 
 module.exports = {
     query_getTrackingData,
@@ -1187,7 +1195,6 @@ module.exports = {
 	query_confirmValidation,
 	query_backendSearch,
 	query_backendSearch_writeQueue,
+	query_deleteSameNameSearchQueue,
 	query_getBackendSearchQueue,
-	query_addBulkObject,
 }
-
