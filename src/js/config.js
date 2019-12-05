@@ -280,8 +280,6 @@ const config = {
     /** Pdf format config */
     pdfFormat: {
         getHeader: (user, locale, option, name) => {
-            console.log(config)
-
             let title = config.pdfFormat.getTitle(option, locale)
             let timestamp = config.pdfFormat.getTimeStamp(locale)
             let titleInfo = config.pdfFormat.getSubTitle[option](locale, user, name)

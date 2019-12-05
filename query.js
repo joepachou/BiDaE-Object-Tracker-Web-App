@@ -5,6 +5,7 @@ const queryType = require ('./queryType');
 const bcrypt = require('bcrypt');
 const pg = require('pg');
 const pdf = require('html-pdf');
+const csv =require('csvtojson')
 const config = {
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
@@ -13,6 +14,19 @@ const config = {
     port: process.env.DB_PORT,
 }
 const pool = new pg.Pool(config)
+
+const multer  = require('multer')
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads')
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname )
+    }
+})
+
+const upload = multer({ storage: storage }).single('file')
 
 moment.updateLocale('en', {
     relativeTime : Object
@@ -820,32 +834,6 @@ const parseGeoFenceConfig = (field) => {
     }
 }
 
-/** Check tracking data violate geo fence */
-const checkViolate = (item) => {
-
-    // /** Set the interval between the perimeter valid time and fence violation time */
-    // let violateInterval = moment(item.geofence_violation_timestamp).diff(item.perimeter_valid_timestamp, 'seconds') 
-
-    // /** Set the boolean if perimeter valid time is prior to fence violation time */
-    // let isViolateInterval = violateInterval >= 0;
-
-    // /** Set the boolean if the perimeter valud time is near now */
-    // let isDiffFromNow = moment().diff(item.perimeter_valid_timestamp, 'seconds') < 300
-
-    // /** Set the boolean if the perimeter time stamp is prior to first*/
-    // let isInTheTimePeriod = moment(item.perimeter_valid_timestamp).diff(item.last_seen_timestamp, 'seconds') > 0
-
-    // /** Flag the object that is violated geo fence */
-    // if (item.perimeter_valid_timestamp && item.geofence_violation_timestamp) {
-    //     return isInTheTimePeriod && isDiffFromNow && isViolateInterval ? 1 : 0
-    // } else {
-    //     return false
-    // }
-
-    return item.violation_timestamp
-}
-
-
 /** Check tracking data match the current UI area */
 const checkMatchedObject = (item, userAuthenticatedAreaId, currentAreaId) => {
 
@@ -967,9 +955,29 @@ const getBackendSearchQueue = (request, response) => {
     })
 }
 
-const addBulkObject = (request, response) => {
-    console.log(request.files)
+const addBulkObject = (req, res) => {
 
+    upload(req, res, (err) => {
+        if (err instanceof multer.MulterError) {
+            return res.status(500).json(err)
+        } else if (err) {
+            return res.status(500).json(err)
+        }
+        const csvFilePath = req.file.path
+        csv()
+        .fromFile(csvFilePath)
+        .then((jsonObj) => {
+            pool.query(queryType.query_addBulkObject(jsonObj))
+                .then(res => {
+                    console.log(res)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        })
+        return res.status(200).send(req.file)
+    })
+    
 }
 
 module.exports = {

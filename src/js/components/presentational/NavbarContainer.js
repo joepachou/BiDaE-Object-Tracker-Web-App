@@ -136,6 +136,11 @@ class NavbarContainer extends React.Component {
             isShowShiftChange
         } = this.state;
 
+        const {
+            areaOptions,
+            defaultAreaId,
+        } = config.mapConfig
+
         const options = Object.values(config.mapConfig.areaOptions).map(area => {
             return {
                 value: area,
@@ -144,8 +149,10 @@ class NavbarContainer extends React.Component {
         })
 
         let selectedArea = {
-            value: config.mapConfig.areaOptions[areaId],
-            label: this.context.locale.texts[config.mapConfig.areaOptions[areaId]],
+            value: areaOptions[areaId] || areaOptions[defaultAreaId] || Object.values(areaOptions)[0],
+            label: this.context.locale.texts[areaOptions[areaId]] || 
+                this.context.locale.texts[areaOptions[defaultAreaId]] || 
+                this.context.locale.texts[Object.values(areaOptions)[0]]
         }
 
         return (
@@ -158,13 +165,11 @@ class NavbarContainer extends React.Component {
                             width={50}
                             className="d-inline-block align-top px-1"
                         />
-                        {/* <div className="text-capitalize">
-                            {locale.texts[config.mapConfig.areaOptions[areaId]]}
-                        </div> */}
                         <Select
                             placeholder = {locale.texts.SELECT_LOCATION}
                             name="select"
                             value = {selectedArea}
+                            options={options}
                             className="text-capitalize"
                             onChange={value => {
                                 let { stateReducer } = this.context
@@ -174,8 +179,6 @@ class NavbarContainer extends React.Component {
                                     value: config.mapConfig.areaModules[value.value].id
                                 })
                             }}
-                            options={options}
-                            // isDisabled={values.radioGroup !== config.objectStatus.TRANSFERRED}
                             styles={style.customStyles}
                             isSearchable={false}
                             components={{
