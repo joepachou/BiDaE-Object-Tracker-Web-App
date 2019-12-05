@@ -14,6 +14,8 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { AppContext } from '../../context/AppContext';
 import dataSrc from "../../dataSrc"
 import * as d3 from "d3";
+import XLSX from "xlsx";
+import InputFiles from "react-input-files";
 
   
 class AddAllForm extends React.Component {
@@ -43,19 +45,71 @@ class AddAllForm extends React.Component {
     handleSubmit = (values) => {
         let formData = new FormData();
         formData.append("file", values.file)
-        axios.post(dataSrc.addBulkObject, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        })
-        .then(res => {
-            this.handleClose() 
-            this.handleSubmit()
-        })
-        .catch(err => {
-            console.log(err)
-        })
+        console.log(formData)
+        // axios.post(dataSrc.addBulkObject, formData, {
+        //     headers: {
+        //         'Content-Type': 'multipart/form-data'
+        //     }
+        // })
+        // .then(res => {
+        //     this.handleClose() 
+        //     this.handleSubmit()
+        // })
+        // .catch(err => {
+        //     console.log(err)
+        // })
     }
+
+
+
+    onImportExcel = files => {
+        // 獲取上傳的文件對象
+        //const { files } = file.target; // 通過FileReader對象讀取文件
+        const fileReader = new FileReader();
+        //console.log(fileReader);
+        for (let index = 0; index < files.length; index++) {
+            fileReader.name = files[index].name;
+        }
+        fileReader.onload = event => {
+            try {
+                // 判斷上傳檔案的類型 可接受的附檔名
+                const validExts = new Array(".xlsx", ".xls");
+                const fileExt = event.target.name;
+    
+                if (fileExt == null) {
+                    throw "檔案為空值";
+                }
+    
+                const fileExtlastof = fileExt.substring(fileExt.lastIndexOf("."));
+                if (validExts.indexOf(fileExtlastof) == -1) {
+                    throw "檔案類型錯誤，可接受的副檔名有：" + validExts.toString();
+                }
+    
+                const { result } = event.target; // 以二進制流方式讀取得到整份excel表格對象
+                const workbook = XLSX.read(result, { type: "binary" });
+                let data = []; // 存儲獲取到的數據 // 遍歷每張工作表進行讀取（這裡默認只讀取第一張表）
+                for (const sheet in workbook.Sheets) {
+                    if (workbook.Sheets.hasOwnProperty(sheet)) {
+                        // 利用 sheet_to_json 方法將 excel 轉成 json 數據
+                        data = data.concat(
+                            XLSX.utils.sheet_to_json(workbook.Sheets[sheet])
+                        ); // break; // 如果只取第一張表，就取消註釋這行
+                    }
+                }
+                console.log(data);
+            } catch (e) {
+                // 這裡可以拋出文件類型錯誤不正確的相關提示
+                alert(e);
+                //console.log("文件類型不正確");
+                return;
+            }
+        }; // 以二進制方式打開文件
+        fileReader.readAsBinaryString(files[0]);
+    };
+
+
+
+
 
     render() {
         const { locale } = this.context
@@ -70,7 +124,7 @@ class AddAllForm extends React.Component {
                 <Modal.Header 
                     closeButton
                 >
-                    {locale.texts.PRINT_SEARCH_RESULT}
+                  {'只吃.xls跟.xlsx 別亂傳'}
                 </Modal.Header>
                 <Modal.Body>
                     <Formik     
@@ -83,16 +137,16 @@ class AddAllForm extends React.Component {
                         }}    
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
                             <Form>
-                                <label htmlFor="file">File upload</label>
-                                <input 
-                                    id="file" 
-                                    name="file" 
-                                    type="file" 
-                                    className="form-control" 
-                                    onChange={(event) => {
-                                        setFieldValue("file", event.currentTarget.files[0]);
-                                    }} 
-                                />
+                              
+
+                                
+                                <InputFiles accept=".xlsx, .xls" onChange={this.onImportExcel}>
+                                    <button className="btn btn-primary">
+                                    Upload
+                                    </button>
+                                </InputFiles>
+
+
 
                                 <Modal.Footer className='d-flex bd-highlight'>
                                     <Button 

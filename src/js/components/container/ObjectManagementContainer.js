@@ -302,10 +302,22 @@ class ObjectManagementContainer extends React.Component{
                 })
                 break;
             case "associate object":
+
                 this.setState({
                     isShowBind: true,
                 })
                 
+
+            // console.log(e.target.name)
+
+                // this.setState({
+                //     isShowEdit: true,
+                //     formTitle: name,
+                //     selectedRowData: [],
+                //     selectedRowData_Patient:[],
+                //     formPath: addObject
+                // })
+
                 break;
             case "delete object":
                 this.deleteRecordDevice();

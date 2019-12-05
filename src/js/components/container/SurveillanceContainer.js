@@ -18,11 +18,11 @@ class SurveillanceContainer extends React.Component {
 
     state = {
         selectedObjectData: [],
-        // showDevice: false,
         showPdfDownloadForm: false,
         isOpenFence: false,
         searchedObjectType: [],
         showObjects: [],
+        auth: this.context.auth,
     }
 
 
@@ -34,6 +34,14 @@ class SurveillanceContainer extends React.Component {
         }
         var searchedObjectType = this.state.searchedObjectType
         var showObjects = this.state.showObjects
+        
+        if (!(_.isEqual(prevState.auth, this.context.auth))) {
+            this.setState({
+                auth: this.context.auth,
+                searchedObjectType: [],
+                showObjects: [],
+            })
+        } 
 
         if (prevProps.searchKey !== this.props.searchKey && this.props.searchKey == "all devices") {
             if (searchedObjectType.includes(0)) return 

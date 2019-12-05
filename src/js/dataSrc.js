@@ -45,11 +45,16 @@ const getMonitorConfig = `http://${dataSrcIP}/data/getMonitorConfig`
 const setMonitorConfig = `http://${dataSrcIP}/data/setMonitorConfig`
 const backendSearch = `http://${dataSrcIP}/data/backendSearch`
 const getSearchQueue = `http://${dataSrcIP}/data/getSearchQueue`
+
 const objectImport = `http://${dataSrcIP}/data/objectImport`
 
 
 
 
+
+
+const addBulkObject = `http://${dataSrcIP}/data/addBulkObject`
+const pinImage = `http://${dataSrcIP}/image/pinImage`
 
 
 const pdfUrl = function(path){
@@ -104,5 +109,6 @@ module.exports = {
     confirmValidation,
     setMonitorConfig,
     backendSearch,
-    getSearchQueue
+    getSearchQueue, 
+    pinImage
 };

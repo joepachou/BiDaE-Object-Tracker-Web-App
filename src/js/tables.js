@@ -390,11 +390,6 @@ const userInfoTableColumn = [
         width: 150,
     },
     {
-        Header: "shift",
-        accessor: "shift.label",
-        width: 100
-    },
-    {
         Header: "last visit timestamp",
         accessor: "last_visit_timestamp",
         width: 250

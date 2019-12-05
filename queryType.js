@@ -394,6 +394,7 @@ function query_editPatient (formOption) {
 
 
 function query_addObject (formOption) {
+
 	const text = 
 		`
 		INSERT INTO object_table (
@@ -421,6 +422,7 @@ function query_addObject (formOption) {
 		formOption.monitor_type,
 		formOption.area_id
 	];
+
 
 	const query = {
 		text,
@@ -452,9 +454,10 @@ function query_addPatient (formOption) {
 			asset_control_number,
 			status,
 			type,
-			registered_timestamp
+			registered_timestamp,
+			monitor_type
 		)
-		VALUES($1,$2,$3,$4,$5,$6,$7,'default','Patient',now())
+		VALUES($1,$2,$3,$4,$5,$6,$7,'default','Patient',now(), $8)
 		`;
 		
 	const values = [
@@ -464,7 +467,8 @@ function query_addPatient (formOption) {
 		formOption.area_id,
 		formOption.mac_address,
 		formOption.gender_id,
-		formOption.patientNumber
+		formOption.patientNumber,
+		formOption.monitor_type
 	];
 
 	const query = {
@@ -519,7 +523,6 @@ function query_signin(username) {
 			roles.name as role, 
 			user_table.mydevice, 
 			user_table.search_history,
-			user_table.shift,
 			user_table.id,
 			array (
 				SELECT area_id
@@ -558,7 +561,6 @@ function query_signup(signupPackage) {
 			(
 				name, 
 				password,
-				shift,
 				registered_timestamp
 			)
 		VALUES (
@@ -571,7 +573,6 @@ function query_signup(signupPackage) {
 	const values = [
 		signupPackage.username, 
 		signupPackage.password,
-		signupPackage.shiftSelect,
 	];
 
 	const query = {
@@ -709,7 +710,6 @@ const query_getUserList = () => {
 			user_table.name, 
 			user_table.registered_timestamp,
 			user_table.last_visit_timestamp,
-			user_table.shift,
 			roles.name AS role_type 
 		FROM user_table  
 		INNER JOIN (
@@ -1183,21 +1183,27 @@ function query_backendSearch(keyType, keyWord){
 	console.log(query)
 	return query
 }
+function query_deleteSameNameSearchQueue(keyType, keyWord){
 
-function query_backendSearch_writeQueue(keyType, keyWord, mac_addresses){
+	var text = `DELETE FROM search_result_queue where (key_type = '${keyType}' AND key_word = '${keyWord}') 
+	OR 
+		id NOT IN (SELECT id FROM search_result_queue ORDER BY query_time desc LIMIT 5) RETURNING *;`
+	// console.log(text)
+	return text
+}
+function query_backendSearch_writeQueue(keyType, keyWord, mac_addresses, pin_color_index){
 	var text = 
 		`
 			INSERT INTO 
-				search_result_queue(query_time, key_type, key_word, result_mac_address)
-			VALUES
-				(now(), $1, $2, ARRAY['${mac_addresses.join('\',\'')}'])
+				search_result_queue(query_time, key_type, key_word, result_mac_address, pin_color_index) VALUES
+				(now(), $1, $2, ARRAY['${mac_addresses.join('\',\'')}'], $3);
 		`
-	values = [keyType, keyWord]
+	values =  [keyType, keyWord, pin_color_index]
 	query = {
 		text,
 		values
 	}
-	console.log(text)
+	
 	return query
 }
 
@@ -1215,6 +1221,7 @@ function query_getBackendSearchQueue(){
 	
 	return query
 }
+
 
 const query_addBulkObject = (jsonObj) => {
 	let text =  `
@@ -1239,6 +1246,7 @@ const query_addBulkObject = (jsonObj) => {
 	console.log(text)
 	return text	
 }
+
 
 module.exports = {
     query_getTrackingData,
@@ -1287,9 +1295,12 @@ module.exports = {
 	query_confirmValidation,
 	query_backendSearch,
 	query_backendSearch_writeQueue,
+	query_deleteSameNameSearchQueue,
 	query_getBackendSearchQueue,
 	query_addBulkObject,
 	query_editImportData,
 	query_getImportData,
 }
+
+
 

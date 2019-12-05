@@ -19,41 +19,6 @@ import DownloadPdfRequestForm from '../container/DownloadPdfRequestForm'
 import moment from 'moment'
 import config from '../../config'
 
-
-const Toast = () => {
-
-    const style = {
-        column: {
-            textAlign: 'center',
-        },
-        icon: {
-            check: {
-                color: 'green',
-            },
-            times: {
-                color: 'red',
-            },
-            exclamation: {
-                color: 'orange',
-            }
-        }
-    }
-
-    return (
-        <Row>
-            <Col className='d-flex '>
-                <i className="fas fa-check " style={style.icon.check}></i>     
-            </Col>
-            <Col>
-                view report     
-            </Col>
-            <Col>
-                download report     
-            </Col> 
-        </Row>
-    )
-}
-
 class SearchResult extends React.Component {
 
     static contextType = AppContext
@@ -68,6 +33,14 @@ class SearchResult extends React.Component {
         editedObjectPackage: [],
         showAddDevice: false,
         showDownloadPdfRequest: false,
+    }
+
+    componentDidUpdate = (prevProps, prevState) => {
+        if (!(_.isEqual(prevProps.searchKey, this.props.searchKey))) {
+            this.setState({
+                showNotFoundResult: false
+            })
+        } 
     }
 
     handleSelectResultItem = (eventKey) => {
@@ -254,10 +227,7 @@ class SearchResult extends React.Component {
         })
     }
 
-
-
     render() {
-        //console.log(this.props.searchResult)
         const { locale } = this.context;
         const { searchKey } = this.props;
         const style = {

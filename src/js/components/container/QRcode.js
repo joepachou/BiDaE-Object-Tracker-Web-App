@@ -101,7 +101,7 @@ class QRCodeContainer extends React.Component {
 
         //var clientHeight = document.getElementById('qrcode').offsetHeight;
 
-        console.log(this.state.savePath)
+        //console.log(this.state.savePath)
 
         return (
             <div id = 'qrcode' style={style.QRcodeDiv}>

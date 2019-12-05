@@ -86,8 +86,6 @@ class Map extends React.Component {
         let map = L.map('mapid', this.props.mapConfig.mapOptions);
         let image = L.imageOverlay(url, bounds).addTo(map);
         map.addLayer(image)
-        map.fitBounds(bounds);
-
         this.image = image
         this.map = map;
 
@@ -117,6 +115,7 @@ class Map extends React.Component {
         let areaModules =  this.props.mapConfig.areaModules
         let areaOption = this.props.mapConfig.areaOptions[areaId]
         let { url, bounds } = areaModules[areaOption]
+        // console.log(url)
         this.image.setUrl(url)
         this.image.setBounds(bounds)
         this.map.fitBounds(bounds)        
@@ -267,7 +266,6 @@ class Map extends React.Component {
         // pinImage is imported
         var {legendDescriptor, proccessedTrackingData} = this.props
         var pins;
-
         try{
             pins = legendDescriptor.map( description => { return pinImage[description.pinColor] })
         }catch{ null }
@@ -286,7 +284,6 @@ class Map extends React.Component {
                                 }).length
                             return(
                                 <div className="text-left" key = {index} style = {{width: '100%', height: '80px'}}>
-
                                     <img src = {pins[index]} className = "m-2 float-left" width={imageSize}></img>
                                     <strong><h6 className="" style={{lineHeight: '200%', fontWeight:'bold'}}>{description.text} : {count} 個</h6></strong>
                                 </div>
@@ -337,7 +334,6 @@ class Map extends React.Component {
              * popupContent (objectName, objectImg, objectImgWidth)
              * More Style sheet include in Map.css */
             let popupContent = this.props.mapConfig.getPopupContent([item], this.collectObjectsByLatLng(item.currentPosition), locale)
-
             /** Set the icon option*/
             item.iconOption = {
 
