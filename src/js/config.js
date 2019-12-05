@@ -891,17 +891,12 @@ const config = {
 
         /** Set the schema to select the color pin */
         getIconColor: (item, hasColorPanel) => {
-            var searchQueueIndex = item.searched
-            if (searchQueueIndex > config.mapConfig.iconColor.pinColorArray.length){
-                console.error('searched queue index too much, plz add more pinColor in "config.mapConfig.iconColor.pinColorArray"')
+            console.log(item)
+            if(item.pinColor == -1){
+                return config.mapConfig.iconColor.normal
             }else{
-                if(searchQueueIndex === -1){
-                    return config.mapConfig.iconColor.normal
-                }else{
-                    return config.mapConfig.iconColor.pinColorArray[searchQueueIndex - 1]
-                }
+                return config.mapConfig.iconColor.pinColorArray[item.pinColor]
             }
-
         },
 
         defaultAreaId: 3,

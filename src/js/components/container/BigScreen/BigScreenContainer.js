@@ -194,6 +194,7 @@ class MainContainer extends React.Component{
             trackingData = trackingData.map(item =>{
                 if(addresses.includes(item.mac_address)){
                     item.searched = parseInt(i) + 1
+                    item.pinColor = queue[i].pin_color_index
                 }
                 return item
             } )
@@ -201,6 +202,7 @@ class MainContainer extends React.Component{
         trackingData = trackingData.map(item => {
             if(item.searched === undefined){
                 item.searched = -1
+                item.pinColor = -1
             }
             return item
         })
