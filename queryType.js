@@ -421,7 +421,6 @@ function query_signin(username) {
 			roles.name as role, 
 			user_table.mydevice, 
 			user_table.search_history,
-			user_table.shift,
 			user_table.id,
 			array (
 				SELECT area_id
@@ -460,7 +459,6 @@ function query_signup(signupPackage) {
 			(
 				name, 
 				password,
-				shift,
 				registered_timestamp
 			)
 		VALUES (
@@ -473,7 +471,6 @@ function query_signup(signupPackage) {
 	const values = [
 		signupPackage.username, 
 		signupPackage.password,
-		signupPackage.shiftSelect,
 	];
 
 	const query = {
@@ -611,7 +608,6 @@ const query_getUserList = () => {
 			user_table.name, 
 			user_table.registered_timestamp,
 			user_table.last_visit_timestamp,
-			user_table.shift,
 			roles.name AS role_type 
 		FROM user_table  
 		INNER JOIN (

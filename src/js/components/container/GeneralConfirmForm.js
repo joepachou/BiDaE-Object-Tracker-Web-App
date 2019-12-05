@@ -87,6 +87,7 @@ class GeneralConfirmForm extends React.Component {
                                 password,
                             })
                             .then(res => {
+                                console.log(res.data.confirmation)
                                 if (!res.data.confirmation) { 
                                     setStatus(res.data.message)
                                     setSubmitting(false)

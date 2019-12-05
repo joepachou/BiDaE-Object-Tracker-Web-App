@@ -236,7 +236,7 @@ class MainContainer extends React.Component{
 
                 // used for legend, with text description and image icon
                 var trackingData = this.addSearchedIndex(rawTrackingData, queue)
-                console.log(queue)
+                // console.log(queue)
                 var legendDescriptor = queue.map((queue1, index) => {
                     return {
                         text: queue1.key_word,

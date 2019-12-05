@@ -214,6 +214,8 @@ class AdminManagementContainer extends React.Component{
     }
 
     render(){
+        console.log(this.state.data)
+        console.log(this.state.columns)
         const locale = this.context
         return (
             <Fragment>
