@@ -77,6 +77,7 @@ const query_getObjectTable = (area_id, ) => {
 	if (!area_id) {
 		text += `
 			SELECT 
+				object_table.id,
 				object_table.name, 
 				object_table.type, 
 				object_table.asset_control_number, 
@@ -95,6 +96,7 @@ const query_getObjectTable = (area_id, ) => {
 	} else {
 		text +=`
 			SELECT 
+				object_table.id,
 				object_table.name, 
 				object_table.type, 
 				object_table.asset_control_number, 
@@ -223,19 +225,21 @@ function query_editObject (formOption) {
 			asset_control_number = $5,
 			name = $6,
 			monitor_type = $7,
-			area_id = $8
-		WHERE mac_address = $1
+			area_id = $8,
+			mac_address = $9
+		WHERE id = $1
 		`;
 		
 	const values = [
-		formOption.mac_address, 
+		formOption.id, 
 		formOption.type, 
 		formOption.status, 
 		formOption.transferred_location ? formOption.transferred_location.value : null, 
 		formOption.asset_control_number, 
 		formOption.name,
 		formOption.monitor_type,
-		formOption.area_id
+		formOption.area_id,
+		formOption.mac_address,
 	];
 
 	const query = {
@@ -286,13 +290,6 @@ function query_editPatient (formOption) {
 
 	return query;
 }
-
-
-
-
-
-
-
 
 function query_addObject (formOption) {
 	const text = 
@@ -952,7 +949,7 @@ const query_getMonitorConfig = (type) => {
 
 const query_setMonitorConfig = (configPackage) => {
 	return `
-		UPDATE movement_config
+		UPDATE ${configPackage.type}
 		SET 
 			start_time = '${configPackage.startTime}',
 			end_time = '${configPackage.endTime}',
@@ -1084,21 +1081,27 @@ function query_backendSearch(keyType, keyWord){
 	console.log(query)
 	return query
 }
+function query_deleteSameNameSearchQueue(keyType, keyWord){
 
-function query_backendSearch_writeQueue(keyType, keyWord, mac_addresses){
+	var text = `DELETE FROM search_result_queue where (key_type = '${keyType}' AND key_word = '${keyWord}') 
+	OR 
+		id NOT IN (SELECT id FROM search_result_queue ORDER BY query_time desc LIMIT 5) RETURNING *;`
+	// console.log(text)
+	return text
+}
+function query_backendSearch_writeQueue(keyType, keyWord, mac_addresses, pin_color_index){
 	var text = 
 		`
 			INSERT INTO 
-				search_result_queue(query_time, key_type, key_word, result_mac_address)
-			VALUES
-				(now(), $1, $2, ARRAY['${mac_addresses.join('\',\'')}'])
+				search_result_queue(query_time, key_type, key_word, result_mac_address, pin_color_index) VALUES
+				(now(), $1, $2, ARRAY['${mac_addresses.join('\',\'')}'], $3);
 		`
-	values = [keyType, keyWord]
+	values =  [keyType, keyWord, pin_color_index]
 	query = {
 		text,
 		values
 	}
-	console.log(text)
+	
 	return query
 }
 
@@ -1116,6 +1119,35 @@ function query_getBackendSearchQueue(){
 	
 	return query
 }
+
+
+const query_addBulkObject = (jsonObj) => {
+	let text =  `
+		INSERT INTO object_table (
+			name,
+			type,
+			mac_address,
+			asset_control_number,
+			registered_timestamp,
+			object_type,
+			status
+		)
+		VALUES ${jsonObj.map((item, index) => {
+			return `(
+				'${item.name}',
+				'${item.type}',
+				'c2:00:00:00:00:0${index}',
+				'${item.asset_control_number}',
+				now(),
+				0,
+				'normal'
+			)`
+		})}
+	`
+	console.log(text)
+	return text	
+}
+
 
 module.exports = {
     query_getTrackingData,
@@ -1163,6 +1195,6 @@ module.exports = {
 	query_confirmValidation,
 	query_backendSearch,
 	query_backendSearch_writeQueue,
+	query_deleteSameNameSearchQueue,
 	query_getBackendSearchQueue,
 }
-

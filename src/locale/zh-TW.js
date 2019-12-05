@@ -93,7 +93,7 @@ const tw = {
     SHOW_DEVICES_FOUND: "顯示找到的儀器",
     SHOW_PATIENTS_NOT_FOUND: "顯示未找到的病人",
     SHOW_PATIENTS_FOUND: "顯示找到的病人",
-
+    ASSOCIATE: "連結",
 
 
     /* Form Field */

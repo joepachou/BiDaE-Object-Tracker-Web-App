@@ -74,6 +74,9 @@ class MainContainer extends React.Component{
             this.getTrackingData(this.context.stateReducer[0].areaId)
             this.setState({
                 auth: this.context.auth,
+                searchResult: [],
+                searchKey: '',
+                hasSearchKey: false
             })
         } 
 
@@ -391,7 +394,6 @@ class MainContainer extends React.Component{
         } else if (searchKey === 'coordinate') {
             searchResult = this.collectObjectsByLatLng(searchValue, proccessedTrackingData)
         } else if (typeof searchKey === 'object') {
-            console.log('good')
             proccessedTrackingData.map(item => {
                 if (searchKey.includes(item.type)) {
                     item.searched = true;
@@ -402,11 +404,9 @@ class MainContainer extends React.Component{
             })
 
             let searchResultMac = [];
-            console.log(SearchResult);
             searchResult.map(item => {
                 searchResultMac.push(item.mac_address)
             })
-            console.log(searchResultMac);
         } else {
             
             let searchResultMac = [];

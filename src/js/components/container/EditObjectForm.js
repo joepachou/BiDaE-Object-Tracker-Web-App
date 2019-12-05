@@ -100,6 +100,7 @@ class EditObjectForm extends React.Component {
 
         const { title, selectedObjectData } = this.props;
         const { 
+            id,
             name,
             type,
             status = '',
@@ -108,7 +109,6 @@ class EditObjectForm extends React.Component {
             transferred_location,
             area_name,
         } = selectedObjectData
-
         return (
             <Modal show={this.state.show} onHide={this.handleClose} size='md'>
                 <Modal.Header closeButton className='font-weight-bold text-capitalize'>
@@ -196,6 +196,7 @@ class EditObjectForm extends React.Component {
                                         return sum
                                     },0)
                             const postOption = {
+                                id,
                                 ...values,
                                 status: values.radioGroup,
                                 transferred_location: values.radioGroup === config.objectStatus.TRANSFERRED 
@@ -207,7 +208,7 @@ class EditObjectForm extends React.Component {
                             this.handleSubmit(postOption)                            
                         }}
 
-                        render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
+                        render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm }) => (
                             <Form className="text-capitalize">
                                 <div className="form-group">
                                     <label htmlFor="name">{locale.texts.NAME}*</label>
@@ -356,7 +357,13 @@ class EditObjectForm extends React.Component {
                                     <Button variant="outline-secondary" className="text-capitalize" onClick={this.handleClose}>
                                         {locale.texts.CANCEL}
                                     </Button>
-                                    <Button type="submit" className="text-capitalize" variant="primary" disabled={isSubmitting}>
+                                    <Button 
+                                        type="button" 
+                                        className="text-capitalize" 
+                                        variant="primary" 
+                                        disabled={isSubmitting}
+                                        onClick={submitForm}
+                                    >
                                         {locale.texts.SAVE}
                                     </Button>
                                 </Modal.Footer>

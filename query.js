@@ -5,6 +5,7 @@ const queryType = require ('./queryType');
 const bcrypt = require('bcrypt');
 const pg = require('pg');
 const pdf = require('html-pdf');
+const csv =require('csvtojson')
 const config = {
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
@@ -13,6 +14,19 @@ const config = {
     port: process.env.DB_PORT,
 }
 const pool = new pg.Pool(config)
+
+const multer  = require('multer')
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads')
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname )
+    }
+})
+
+const upload = multer({ storage: storage }).single('file')
 
 moment.updateLocale('en', {
     relativeTime : Object
@@ -778,7 +792,7 @@ const setMonitorConfig = (request, response) => {
     } = request.body
     pool.query(queryType.query_setMonitorConfig(configPackage))
         .then(res => {
-            console.log(`set monitor config`)
+            console.log(`set ${configPackage.type}`)
             response.status(200).json(res)
         })
         .catch(err => {
@@ -819,32 +833,6 @@ const parseGeoFenceConfig = (field) => {
         rssi
     }
 }
-
-/** Check tracking data violate geo fence */
-const checkViolate = (item) => {
-
-    // /** Set the interval between the perimeter valid time and fence violation time */
-    // let violateInterval = moment(item.geofence_violation_timestamp).diff(item.perimeter_valid_timestamp, 'seconds') 
-
-    // /** Set the boolean if perimeter valid time is prior to fence violation time */
-    // let isViolateInterval = violateInterval >= 0;
-
-    // /** Set the boolean if the perimeter valud time is near now */
-    // let isDiffFromNow = moment().diff(item.perimeter_valid_timestamp, 'seconds') < 300
-
-    // /** Set the boolean if the perimeter time stamp is prior to first*/
-    // let isInTheTimePeriod = moment(item.perimeter_valid_timestamp).diff(item.last_seen_timestamp, 'seconds') > 0
-
-    // /** Flag the object that is violated geo fence */
-    // if (item.perimeter_valid_timestamp && item.geofence_violation_timestamp) {
-    //     return isInTheTimePeriod && isDiffFromNow && isViolateInterval ? 1 : 0
-    // } else {
-    //     return false
-    // }
-
-    return item.violation_timestamp
-}
-
 
 /** Check tracking data match the current UI area */
 const checkMatchedObject = (item, userAuthenticatedAreaId, currentAreaId) => {
@@ -901,6 +889,8 @@ const checkMatchedObject = (item, userAuthenticatedAreaId, currentAreaId) => {
             or { xx for 'all devices' }
     }
 */
+
+
 const backendSearch = (request, response) => {
     
     const {keyType, keyWord, mac_address} = request.body
@@ -912,26 +902,82 @@ const backendSearch = (request, response) => {
             var mac_addresses = res.rows.map((mac) => {
                 return mac.mac_address
             })
-            query = queryType.query_backendSearch_writeQueue(keyType, keyWord, mac_addresses)
-            pool.query(query, (err, res) => {
+            pool.query({
+                text: `DELETE FROM search_result_queue where (key_type = $1 AND key_word = $2)`,
+                values: [keyType, keyWord]
+            }, (err, res) => {
                 if(err){
+                    console.log('delete same name')
                     console.log(err)
                 }else{
-                    response.send(mac_addresses)
+                    pool.query(`DELETE FROM search_result_queue WHERE id NOT IN (SELECT id FROM search_result_queue ORDER BY query_time desc LIMIT 4)`, (err, res) => {
+                        if(err){
+                            console.log('delete exceed')
+                            console.log(err)
+
+                        }else{
+                            pool.query(`SELECT pin_color_index FROM search_result_queue GROUP BY pin_color_index`, (err, res) => {
+                                // console.log(res.rows)
+                                var usedIndex = res.rows.map(i => {
+                                    return i['pin_color_index']
+                                })
+                                var avail = [0, 1, 2, 3, 4].filter(function(i) {return usedIndex.indexOf(i) < 0;});
+                                // console.log(avail)
+                                if(err){
+                                    console.log(err)
+                                }else{
+                                    pool.query(queryType.query_backendSearch_writeQueue(keyType, keyWord, mac_addresses, avail[0]), (err, res) => {
+                                        if(err){
+                                            console.log(err)
+                                        }else{
+                                            response.send(mac_addresses)
+                                        } 
+                                    })        
+                                }
+                            })
+                            
+                        }
+                    })
+                        
                 }
                 
-            })        
+                
+            })
         }
         
     })
 
 }
-
 const getBackendSearchQueue = (request, response) => {
     var query = queryType.query_getBackendSearchQueue()
     pool.query(query, (err, res) => {
         response.send(res.rows)
     })
+}
+
+const addBulkObject = (req, res) => {
+
+    upload(req, res, (err) => {
+        if (err instanceof multer.MulterError) {
+            return res.status(500).json(err)
+        } else if (err) {
+            return res.status(500).json(err)
+        }
+        const csvFilePath = req.file.path
+        csv()
+        .fromFile(csvFilePath)
+        .then((jsonObj) => {
+            pool.query(queryType.query_addBulkObject(jsonObj))
+                .then(res => {
+                    console.log(res)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        })
+        return res.status(200).send(req.file)
+    })
+    
 }
 
 module.exports = {
@@ -954,6 +1000,7 @@ module.exports = {
     addUserSearchHistory,
     addObject,
     addPatient,
+    addBulkObject,
     editObject,
     editPatient,
     editLbeacon,

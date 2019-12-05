@@ -8,6 +8,8 @@ import NTUH_MAP from "../img/map/ntuh_map.png"
 import BOT_LOGO from "../img//logo/BOT_LOGO_RED.png";
 import moment from 'moment'
 import patientP from "../img//logo/pic.png"
+
+
 const config = {
     
     
@@ -579,7 +581,7 @@ const config = {
             male_1: "male_1",
 
             // ["slateblue", "tan", "lightyellow", "lavender", "orange","lightblue", "mistyrose", "yellowgreen", "darkseagreen", "orchid"]
-            pinColorArray: ["orchid","mistyrose", "tan", "lightyellow", "lavender","lightblue", "yellowgreen"]
+            pinColorArray: ["orchid", "tan", "lightyellow", "lavender","lightblue", "yellowgreen"]
         },
 
         geoFenceMarkerOption: {
@@ -609,7 +611,7 @@ const config = {
             else if (item.object_type == 2) return config.mapConfig.iconColor.female
         },
 
-        defaultAreaId: 3,
+        defaultAreaId: process.env.DEFAULT_AREA_ID,
     
         
         gender: {
@@ -621,8 +623,7 @@ const config = {
             },
         },
 
-
-        areaOptions: {
+        BOTDefaultAreas: {
             1: "NTUH_EMERGENCY_ROOM",
             2: "IIS_SINICA_FOURTH_FLOOR",
             3: "NTUH_YUNLIN_WARD_FIVE_B",
@@ -631,6 +632,32 @@ const config = {
             6: "VETERAN_HOME_FIRST_FLOOR",
             7: "VETERAN_HOME_THIRD_FLOOR",
         },
+
+
+        areaOptions: process.env.SITES_GROUP
+            .split(',')
+            .reduce((res, item) => {
+                res[item] = {
+                    1: "NTUH_EMERGENCY_ROOM",
+                    2: "IIS_SINICA_FOURTH_FLOOR",
+                    3: "NTUH_YUNLIN_WARD_FIVE_B",
+                    4: "NURSING_HOME",
+                    5: "YUANLIN_CHRISTIAN_HOSPITAL",
+                    6: "VETERAN_HOME_FIRST_FLOOR",
+                    7: "VETERAN_HOME_THIRD_FLOOR",
+                }[item]
+                return res
+            }, {}),
+
+        // areaOptions: {
+        //         1: "NTUH_EMERGENCY_ROOM",
+        //         2: "IIS_SINICA_FOURTH_FLOOR",
+        //         3: "NTUH_YUNLIN_WARD_FIVE_B",
+        //         4: "NURSING_HOME",
+        //         5: "YUANLIN_CHRISTIAN_HOSPITAL",
+        //         6: "VETERAN_HOME_FIRST_FLOOR",
+        //         7: "VETERAN_HOME_THIRD_FLOOR",
+        // },
     
         areaModules: {
             NTUH_EMERGENCY_ROOM: {
@@ -781,11 +808,12 @@ const config = {
         },
 
     },
-    bigScreenConfig:{
+    
+    bigScreenConfig: {
         mapOptions: {
             crs: L.CRS.Simple,
-            // center: L.latLng(-2000, -4000),
-            zoom: -5,
+            center: L.latLng(17000, 18000),
+            zoom: -5.7,
             minZoom: -6,
             maxZoom: 0,
             zoomDelta: 0.25,
@@ -842,7 +870,7 @@ const config = {
             male_1: "male_1",
 
             // ["slateblue", "tan", "lightyellow", "lavender", "orange","lightblue", "mistyrose", "yellowgreen", "darkseagreen", "orchid"]
-            pinColorArray: ["orchid","mistyrose", "tan", "lightyellow", "lavender","lightblue", "yellowgreen"]
+            pinColorArray: ["orchid", "tan", "lightyellow", "lavender","lightblue", "yellowgreen"]
         },
 
         geoFenceMarkerOption: {
@@ -861,17 +889,12 @@ const config = {
 
         /** Set the schema to select the color pin */
         getIconColor: (item, hasColorPanel) => {
-            var searchQueueIndex = item.searched
-            if (searchQueueIndex > config.mapConfig.iconColor.pinColorArray.length){
-                console.error('searched queue index too much, plz add more pinColor in "config.mapConfig.iconColor.pinColorArray"')
+            console.log(item)
+            if(item.pinColor == -1){
+                return config.mapConfig.iconColor.normal
             }else{
-                if(searchQueueIndex === -1){
-                    return config.mapConfig.iconColor.normal
-                }else{
-                    return config.mapConfig.iconColor.pinColorArray[searchQueueIndex - 1]
-                }
+                return config.mapConfig.iconColor.pinColorArray[item.pinColor]
             }
-
         },
 
         defaultAreaId: 3,
@@ -886,31 +909,49 @@ const config = {
             },
         },
 
+        // BOTDefaultAreas: {
+        //     1: "NTUH_EMERGENCY_ROOM",
+        //     2: "IIS_SINICA_FOURTH_FLOOR",
+        //     3: "NTUH_YUNLIN_WARD_FIVE_B",
+        //     4: "NURSING_HOME",
+        //     5: "YUANLIN_CHRISTIAN_HOSPITAL",
+        //     6: "VETERAN_HOME_FIRST_FLOOR",
+        //     7: "VETERAN_HOME_THIRD_FLOOR",
+        // },
 
-        areaOptions: {
-            2: "IIS_SINICA_FOURTH_FLOOR",
-            1: "NTUH_EMERGENCY_ROOM",
-            3: "NTUH_YUNLIN_WARD_FIVE_B",
-            4: "NURSING_HOME",
-            5: "YUANLIN_CHRISTIAN_HOSPITAL",
-            6: "VETERAN_HOME_FIRST_FLOOR",
-            7: "VETERAN_HOME_THIRD_FLOOR",
-        },
+
+
+        areaOptions: process.env.SITES_GROUP
+            .split(',')
+            .reduce((res, item) => {
+                res[item] = {
+                    1: "NTUH_EMERGENCY_ROOM",
+                    2: "IIS_SINICA_FOURTH_FLOOR",
+                    3: "NTUH_YUNLIN_WARD_FIVE_B",
+                    4: "NURSING_HOME",
+                    5: "YUANLIN_CHRISTIAN_HOSPITAL",
+                    6: "VETERAN_HOME_FIRST_FLOOR",
+                    7: "VETERAN_HOME_THIRD_FLOOR",
+                }[item]
+                return res
+            }, {}),
+
+        
     
         areaModules: {
-
-            IIS_SINICA_FOURTH_FLOOR: {
-                id: 2,
-                name: "IIS_SINICA_FOURTH_FLOOR",
-                url: IIS_SINICA_FOURTH_FLOORTH_MAP,
-                bounds: [[0,0], [21130,35710]],
-            },
 
             NTUH_EMERGENCY_ROOM: {
 
                 id: 1,
                 name: "NTUH",
                 url: NTUH_MAP,
+                bounds: [[0,0], [33659,56214]],
+            },
+
+            IIS_SINICA_FOURTH_FLOOR: {
+                id: 2,
+                name: "IIS_SINICA_FOURTH_FLOOR",
+                url: IIS_SINICA_FOURTH_FLOORTH_MAP,
                 bounds: [[0,0], [21130,35710]],
             },
 

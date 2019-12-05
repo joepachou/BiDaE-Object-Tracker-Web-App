@@ -43,6 +43,8 @@ const getMonitorConfig = `http://${dataSrcIP}/data/getMonitorConfig`
 const setMonitorConfig = `http://${dataSrcIP}/data/setMonitorConfig`
 const backendSearch = `http://${dataSrcIP}/data/backendSearch`
 const getSearchQueue = `http://${dataSrcIP}/data/getSearchQueue`
+const addBulkObject = `http://${dataSrcIP}/data/addBulkObject`
+const pinImage = `http://${dataSrcIP}/image/pinImage`
 
 const pdfUrl = function(path){
     return `http://${dataSrcIP}/${path}`
@@ -62,6 +64,7 @@ module.exports = {
     editPatient,
     addObject,
     addPatient,
+    addBulkObject,
     editObjectPackage,
     signin,
     signup,
@@ -92,5 +95,6 @@ module.exports = {
     confirmValidation,
     setMonitorConfig,
     backendSearch,
-    getSearchQueue
+    getSearchQueue, 
+    pinImage
 };
