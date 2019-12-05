@@ -10,7 +10,9 @@ const editObject = `http://${dataSrcIP}/data/editObject`;
 const editPatient = `http://${dataSrcIP}/data/editPatient`;
 const addObject = `http://${dataSrcIP}/data/addObject`;
 const addPatient= `http://${dataSrcIP}/data/addPatient`;
-
+const getImportTable = `http://${dataSrcIP}/data/getImportTable`;
+const getImportData = `http://${dataSrcIP}/data/getImportData`;
+const editImportData = `http://${dataSrcIP}/data/editImportData`;
 const editObjectPackage = `http://${dataSrcIP}/data/editObjectPackage`;
 const signin = `http://${dataSrcIP}/user/signin`;
 const signup = `http://${dataSrcIP}/user/signup`;
@@ -43,7 +45,12 @@ const getMonitorConfig = `http://${dataSrcIP}/data/getMonitorConfig`
 const setMonitorConfig = `http://${dataSrcIP}/data/setMonitorConfig`
 const backendSearch = `http://${dataSrcIP}/data/backendSearch`
 const getSearchQueue = `http://${dataSrcIP}/data/getSearchQueue`
-const addBulkObject = `http://${dataSrcIP}/data/addBulkObject`
+const objectImport = `http://${dataSrcIP}/data/objectImport`
+
+
+
+
+
 
 const pdfUrl = function(path){
     return `http://${dataSrcIP}/${path}`
@@ -51,8 +58,11 @@ const pdfUrl = function(path){
 
 module.exports = {
     getTrackingData,
+    getImportData,
+    editImportData,
     getObjectTable,
     getPatientTable,
+    getImportTable,
     getLbeaconTable,
     getGatewayTable,
     getMonitorConfig,
@@ -63,11 +73,11 @@ module.exports = {
     editPatient,
     addObject,
     addPatient,
-    addBulkObject,
     editObjectPackage,
     signin,
     signup,
     getUserInfo,
+    objectImport,
     addUserSearchHistory,
     editLbeacon,
     pdfUrl,

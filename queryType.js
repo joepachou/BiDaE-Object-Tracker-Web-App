@@ -175,6 +175,73 @@ const query_getPatientTable = (area_id) => {
 	return text
 } 
 
+const query_getImportTable = () => {
+
+	let text = '';
+	
+		text +=`
+			SELECT 
+				object_import_table.name, 
+				object_import_table.asset_control_number,
+				object_import_table.type,
+				object_import_table.mac_address
+
+			FROM object_import_table 
+
+
+			ORDER BY object_import_table.asset_control_number ASC	
+		`;
+	
+	return text
+} 
+
+
+
+function query_editImportData (formOption) {
+	const text =
+		`
+		UPDATE object_import_table
+		SET 
+			mac_address = $2
+		WHERE asset_control_number = $1
+	`;
+
+	const values = [
+		formOption[0],
+		formOption[1]
+	]
+
+	const query = {
+		text, 
+		values
+	};
+
+	return query
+}
+
+
+function query_getImportData(formOption){
+	let text = '';
+	text +=`
+	SELECT 
+		object_import_table.name, 
+		object_import_table.type,
+		object_import_table.bindflag,
+		object_import_table.mac_address
+	FROM object_import_table
+
+	WHERE object_import_table.asset_control_number = $1
+	
+	`;
+
+const values = [formOption];
+
+const query = {
+	text,
+	values
+};
+return query;
+}
 
 
 
@@ -215,32 +282,64 @@ const query_getGeofenceData =
 	`;
 	
 
-function query_editObject (formOption) {
-	const text = 
-		`
+function query_objectImport (idPackage) {
+
+	let text =  `
+		INSERT INTO object_import_table (
+			name,
+			type,
+			asset_control_number,
+			bindflag
+		)
+		VALUES ${idPackage.map((item) => {
+			return `(
+				'${item.name}',
+				'${item.type}',
+				'${item.asset_control_number}',
+				0
+			)`
+		})}
+	`
+	console.log(text)
+	return text	
+
+
+	
+
+}
+
+
+
+function query_editPatient (formOption) {
+	const text = `
 		Update object_table 
-		SET type = $2,
-			status = $3,
-			transferred_location = $4,
-			asset_control_number = $5,
-			name = $6,
-			monitor_type = $7,
-			area_id = $8,
-			mac_address = $9
-		WHERE id = $1
-		`;
+		SET area_id = $1,
+			object_type = $2,
+			name = $3,
+			asset_control_number = $4,
+			room_number = $5,
+			physician_id = (
+				SELECT id 
+				FROM user_table 
+				WHERE name = $6
+			),
+			monitor_type = $8,
+			room = $9
+		WHERE mac_address = $7
+	`;
 		
 	const values = [
-		formOption.id, 
-		formOption.type, 
-		formOption.status, 
-		formOption.transferred_location ? formOption.transferred_location.value : null, 
-		formOption.asset_control_number, 
-		formOption.name,
-		formOption.monitor_type,
-		formOption.area_id,
+		formOption.area_id, 
+		formOption.gender_id, 
+		formOption.patientName, 
+		formOption.patientNumber, 
+		formOption.roomNumber,
+		formOption.physician,
 		formOption.mac_address,
+		formOption.monitor_type,
+		formOption.room
 	];
+
 
 	const query = {
 		text,
@@ -290,6 +389,9 @@ function query_editPatient (formOption) {
 
 	return query;
 }
+
+
+
 
 function query_addObject (formOption) {
 	const text = 
@@ -693,7 +795,7 @@ const query_getEditObjectRecord = () => {
 			edit_object_record.edit_time,
 			edit_object_record.notes,
 			edit_object_record.new_status
-		FROM edit_object_record
+		FROM object_import_table
 
 		LEFT JOIN user_table
 		ON user_table.id = edit_object_record.edit_user_id
@@ -1116,14 +1218,11 @@ function query_getBackendSearchQueue(){
 
 const query_addBulkObject = (jsonObj) => {
 	let text =  `
-		INSERT INTO object_table (
+		INSERT INTO object_import_table (
 			name,
 			type,
-			mac_address,
 			asset_control_number,
-			registered_timestamp,
-			object_type,
-			status
+			bindflag,
 		)
 		VALUES ${jsonObj.map((item, index) => {
 			return `(
@@ -1145,13 +1244,14 @@ module.exports = {
     query_getTrackingData,
 	query_getObjectTable,
 	query_getPatientTable,
+	query_getImportTable,
     query_getLbeaconTable,
 	query_getGatewayTable,
 	query_getGeofenceData,
 	query_getMonitorConfig,
 	query_setMonitorConfig,
-	query_editObject,
 	query_editPatient,
+	query_objectImport,
 	query_addObject,
 	query_addPatient,
 	query_editObjectPackage,
@@ -1189,5 +1289,7 @@ module.exports = {
 	query_backendSearch_writeQueue,
 	query_getBackendSearchQueue,
 	query_addBulkObject,
+	query_editImportData,
+	query_getImportData,
 }
 

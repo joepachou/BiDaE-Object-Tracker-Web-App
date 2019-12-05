@@ -55,6 +55,12 @@ app.post('/data/getObjectTable', db.getObjectTable);
 
 app.post('/data/getPatientTable', db.getPatientTable);
 
+app.post('/data/getImportTable', db.getImportTable);
+
+app.post('/data/getImportData', db.getImportData);
+
+app.post('/data/editImportData', db.editImportData);
+
 app.post('/data/getLbeaconTable', db.getLbeaconTable);
 
 app.post('/data/getGatewayTable', db.getGatewayTable);
@@ -66,6 +72,8 @@ app.post('/data/getTrackingData', db.getTrackingData);
 app.post('/data/editObject', db.editObject);
 
 app.post('/data/editPatient', db.editPatient);
+
+app.post('/data/objectImport', db.objectImport);
 
 app.post('/data/addObject', db.addObject);
 
