@@ -812,8 +812,8 @@ const config = {
     bigScreenConfig: {
         mapOptions: {
             crs: L.CRS.Simple,
-            center: L.latLng(200, 400),
-            zoom: -5,
+            center: L.latLng(17000, 18000),
+            zoom: -5.7,
             minZoom: -6,
             maxZoom: 0,
             zoomDelta: 0.25,

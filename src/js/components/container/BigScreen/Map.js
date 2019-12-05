@@ -86,8 +86,6 @@ class Map extends React.Component {
         let map = L.map('mapid', this.props.mapConfig.mapOptions);
         let image = L.imageOverlay(url, bounds).addTo(map);
         map.addLayer(image)
-        map.fitBounds(bounds);
-
         this.image = image
         this.map = map;
 
@@ -117,6 +115,7 @@ class Map extends React.Component {
         let areaModules =  this.props.mapConfig.areaModules
         let areaOption = this.props.mapConfig.areaOptions[areaId]
         let { url, bounds } = areaModules[areaOption]
+        // console.log(url)
         this.image.setUrl(url)
         this.image.setBounds(bounds)
         this.map.fitBounds(bounds)        
@@ -335,7 +334,6 @@ class Map extends React.Component {
              * popupContent (objectName, objectImg, objectImgWidth)
              * More Style sheet include in Map.css */
             let popupContent = this.props.mapConfig.getPopupContent([item], this.collectObjectsByLatLng(item.currentPosition), locale)
-            console.log(this.props.mapConfig.getIconColor(item, this.props.colorPanel))
             /** Set the icon option*/
             item.iconOption = {
 
