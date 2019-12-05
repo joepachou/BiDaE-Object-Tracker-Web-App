@@ -59,7 +59,7 @@ class PdfDownloadFormForTablet extends React.Component {
             let { locale, auth, stateReducer } = this.context
             let [{areaId}] = stateReducer
             let pdfPackage = config.getPdfPackage('searchResult', auth.user, data, locale, areaId)
-            console.log('here')
+            //console.log('here')
             var searResultInfo = {
                 userInfo: auth.user,
                 pdfPackage,
@@ -95,7 +95,7 @@ class PdfDownloadFormForTablet extends React.Component {
             savePath, 
             isDone
         } = this.state
-        console.log(this.state.savePath)
+        //console.log(this.state.savePath)
         const { locale } = this.context
 
         return (
