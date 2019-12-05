@@ -36,7 +36,6 @@ app.use(function(req, res, next) {
 });
 
 app.get('/', (req,res) => {
-    console.log(123)
     if (req.session.userInfo) {
         res.write('views: ' + req.session.userInfo + req.sessionID)
         res.end()
@@ -46,6 +45,9 @@ app.get('/', (req,res) => {
     }
 })
 
+app.get('/image/pinImage/:pinImage', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src','img','colorPin',req.params['pinImage']));
+})
 
 app.get(/^\/page\/(.*)/, (req, res) => {
     res.sendFile(path.join(__dirname, 'dist','index.html'));
