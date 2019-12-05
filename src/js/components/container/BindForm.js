@@ -47,11 +47,12 @@ class BindForm extends React.Component {
 
     handleSubmit = (postOption) => {
 
-         var pattern = new RegExp("^[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}$");
-            if( this.state.mac_address.match(pattern)) 
-            {
+        
                     if (this.state.showDetail){
-                        let formOption = []
+                        var pattern = new RegExp("^[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}$");
+                        if( this.state.mac_address.match(pattern)) 
+                        {
+               let formOption = []
                         formOption.push(this.state.inputValue)
                         formOption.push(this.state.mac_address)
                         console.log(formOption)
@@ -63,17 +64,19 @@ class BindForm extends React.Component {
                             }).catch( error => {
                                 console.log(error)
                             })
+                    } 
+                else{
+                    setTimeout(this.props.handleSubmitForm(),1000)
+                    alert("連結失敗，MAC格式錯誤");
+                } 
+        
                     }
                     else{
                         setTimeout(this.props.handleSubmitForm(),1000)
                         alert("連結失敗，表裡沒有這個ASN");
                     }    
-            } 
-            else{
-                setTimeout(this.props.handleSubmitForm(),1000)
-                alert("連結失敗，MAC格式錯誤");
-            } 
-        
+
+                  
 
          this.setState({
                 inputValue:'',
