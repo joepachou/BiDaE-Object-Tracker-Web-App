@@ -78,7 +78,7 @@ const getTrackingData = (request, response) => {
                 item.isMatchedObject = checkMatchedObject(item, userAuthenticatedAreaId, currentAreaId)
 
                 /** Set the boolean if the object's last_seen_timestamp is in the specific time period */
-                let isInTheTimePeriod = moment().diff(item.last_seen_timestamp, 'seconds') < 30 
+                let isInTheTimePeriod = moment().diff(item.last_seen_timestamp, 'seconds') < 30
 
                 /** Set the boolean if its rssi is below the specific rssi threshold  */
                 let isMatchRssi = item.rssi > rssiThreshold ? 1 : 0;

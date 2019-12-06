@@ -52,6 +52,8 @@ const tw = {
     PATIENTS_FOUND: "找到的病人",
     DEVICES_NOT_FOUND: "未找到的儀器",
     PATIENTS_NOT_FOUND: "未找到的病人",
+    SEARCH_RESULTS_FOUND: "找到的搜尋結果",
+    SEARCH_RESULTS_NOT_FOUND: "未找到的搜尋結果",
     PLEASE_SELECT_SEARCH_OBJECT: "請選擇搜尋物件",
 
     
@@ -94,6 +96,8 @@ const tw = {
     SHOW_DEVICES_FOUND: "顯示找到的儀器",
     SHOW_PATIENTS_NOT_FOUND: "顯示未找到的病人",
     SHOW_PATIENTS_FOUND: "顯示找到的病人",
+    SHOW_SEARCH_RESULTS_FOUND: "顯示找到的搜尋結果",
+    SHOW_SEARCH_RESULTS_NOT_FOUND: "顯示未找到的搜尋結果",
     ASSOCIATE: "連結",
 
 
