@@ -2,16 +2,15 @@ import React from 'react'
 import { useState, useEffect} from 'react'
 import MainContainer from './components/container/MainContainer'
 import MainContainerForTablet from './components/container/MainContainerForTablet'
-import { deviceType} from 'react-device-detect'
+import { isBrowswer, isTablet} from 'react-device-detect'
 
 const useRWD=()=>{
     const [device,setDevice] = useState("PC");
 
     const handleRWD=()=>{
-        console.log(deviceType)
-        if( window.innerWidth > 1500){
+        if( isBrowswer){
             setDevice("PC");
-        }else if( window.innerWidth > 800){
+        }else if( isTablet){
             setDevice("TABLET");
         }else{
             setDevice("MOBILE");
