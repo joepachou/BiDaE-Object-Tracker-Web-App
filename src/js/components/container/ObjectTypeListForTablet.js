@@ -43,7 +43,11 @@ class ObjectTypeListForTablet extends React.Component {
         const style = {
             list: {
                 maxHeight: "50vh",
-                overflow: "hidden scroll"
+                overflow: "hidden scroll",
+            },
+            button: {
+                //border: 'solid',
+                padding: "0.1rem"
             }
         }
 
@@ -60,6 +64,7 @@ class ObjectTypeListForTablet extends React.Component {
                                 key={index}
                                 name={item}
                                 className="text-capitalize"
+                                style={style.button}
                             >
                                 {item}
                             </Button>
