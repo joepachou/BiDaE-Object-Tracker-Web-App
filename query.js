@@ -74,6 +74,7 @@ const getTrackingData = (request, response) => {
 
             /** Filter the objects that do no belong the area */
             const toReturn = res.rows
+            .filter(item => item.mac_address)
             .map((item, index) => {
 
                 /** Flag the object that belongs to the current area or to the user's authenticated area */

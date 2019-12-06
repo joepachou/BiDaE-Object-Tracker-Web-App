@@ -310,10 +310,10 @@ class Map extends React.Component {
         
             /** Set the marker's event. */
             marker.on('mouseover', function () { this.openPopup(); })
-            // marker.on('click', this.handleMarkerClick);
+            marker.on('click', this.handleMarkerClick);
             // marker.on('mouseout', function () { this.closePopup(); })
-        })
 
+        })
         /** Add the new markerslayers to the map */
         this.markersLayer.addTo(this.map);
         this.errorCircle .addTo(this.map);
@@ -328,7 +328,7 @@ class Map extends React.Component {
     /** Fire when clicing marker */
     handleMarkerClick = (e) => {
         const lbPosition =  e.target.options.icon.options.currentPosition
-        this.props.getSearchKey('coordinate', null, lbPosition)
+        this.props.getSearchKey('objects', null, lbPosition)
     }
 
     /** Filter out undesired tracking data */

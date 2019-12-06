@@ -66,16 +66,9 @@ class SurveillanceContainer extends React.Component {
                 showObjects
             })
         } else if (prevProps.searchKey !== this.props.searchKey && this.props.searchKey == "my patients") {
-            if (searchedObjectType.includes(1) || 
-                searchedObjectType.includes(2) || 
-                searchedObjectType.includes(-2)
-            ) return 
+            if ( searchedObjectType.includes(-2)) return 
             else { 
-                searchedObjectType.push(1)
-                searchedObjectType.push(2)
                 searchedObjectType.push(-2)
-                showObjects.push(1)
-                showObjects.push(2)
                 showObjects.push(-2)
             }
             this.setState({
@@ -160,6 +153,18 @@ class SurveillanceContainer extends React.Component {
         })
     }
 
+    getSearchKey = (searchKey, colorPanel, searchValue) => {
+        let markerClickPackage = {}
+        this.props.proccessedTrackingData.map(item => {
+            console.log(item.searchedType)
+            console.log(this.state.showObjects)
+            if (this.state.showObjects.includes(item.searchedType)) {
+                markerClickPackage[item.mac_address] = item
+            }
+        })
+        this.props.getSearchKey(searchKey, colorPanel, searchValue, markerClickPackage)
+    }
+
     render(){
         const { 
             hasSearchKey,
@@ -195,6 +200,7 @@ class SurveillanceContainer extends React.Component {
         } = this.context;
 
         let [{areaId}] = stateReducer
+
         return(
             <div id="surveillanceContainer" style={style.surveillanceContainer} className="overflow-hidden">
                 <div style={style.mapBlock}>
@@ -204,7 +210,7 @@ class SurveillanceContainer extends React.Component {
                         proccessedTrackingData={this.props.proccessedTrackingData}
                         lbeaconPosition={this.props.lbeaconPosition}
                         geoFenceConfig={this.props.geoFenceConfig.filter(item => parseInt(item.unique_key) == areaId)}
-                        getSearchKey={this.props.getSearchKey}
+                        getSearchKey={this.getSearchKey}
                         areaId={areaId}
                         isOpenFence={this.state.isOpenFence}
                         searchedObjectType={this.state.showObjects}
