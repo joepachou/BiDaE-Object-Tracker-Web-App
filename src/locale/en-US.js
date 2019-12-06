@@ -50,6 +50,7 @@ const en =  {
     ALL_PATIENTS: "All patients",
     MY_DEVICES: "My devices",
     MY_PATIENTS: "My patients",
+    OBJECTS: "objects",
     DEVICES_FOUND: "devices found",
     PATIENTS_FOUND: "patient found",
     DEVICES_NOT_FOUND: "devices not found",

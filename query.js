@@ -359,6 +359,7 @@ const signin = (request, response) => {
     pool.query(queryType.query_signin(username))
         .then(res => {
             if (res.rowCount < 1) {
+                console.log(`Sign in fail: username or password is incorrect`)
                 response.json({
                     authentication: false,
                     message: "Username or password is incorrect"
@@ -395,7 +396,9 @@ const signin = (request, response) => {
                         .catch(err => console.log(err))
                     // pool.query(queryType.query_setShift(shift, username))
                     //     .catch(err => console.log(err))
+                    console.log(`Sign in success: ${name}`)
                 } else {
+                    console.log(`Sign in fail: password is incorrect`)
                     response.json({
                         authentication: false,
                         message: "password is incorrect"
