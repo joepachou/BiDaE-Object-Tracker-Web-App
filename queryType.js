@@ -67,7 +67,7 @@ function query_getTrackingData () {
 		ORDER BY 
 			object_table.type, 
 			object_table.asset_control_number,
-			object_table.mac_address,
+			object_table.mac_address
 			DESC;
 	`
 	return query;
@@ -1184,7 +1184,6 @@ function query_backendSearch(keyType, keyWord){
 			}
 			break
 	}
-	console.log(query)
 	return query
 }
 function query_deleteSameNameSearchQueue(keyType, keyWord){

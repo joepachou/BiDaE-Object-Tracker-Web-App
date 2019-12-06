@@ -67,13 +67,15 @@ const getTrackingData = (request, response) => {
     /** The UI's current area id */
     const currentAreaId = request.body.areaId.toString()
 
+    let counter = 0
     pool.query(queryType.query_getTrackingData())        
         .then(res => {
             console.log('Get tracking data')
 
             /** Filter the objects that do no belong the area */
             const toReturn = res.rows
-            .map(item => {
+            .map((item, index) => {
+
                 /** Flag the object that belongs to the current area or to the user's authenticated area */
                 item.isMatchedObject = checkMatchedObject(item, userAuthenticatedAreaId, currentAreaId)
 
@@ -86,6 +88,7 @@ const getTrackingData = (request, response) => {
                 /** Flag the object that satisfied the time period and rssi threshold */
                 item.found = isInTheTimePeriod && isMatchRssi 
 
+                item.id = item.found ? ++counter : ""
                 /** Set the residence time of the object */
                 item.residence_time =  item.found 
                     ? moment(item.last_seen_timestamp).locale(locale).from(moment(item.first_seen_timestamp)) 
