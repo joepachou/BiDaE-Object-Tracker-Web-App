@@ -34,8 +34,8 @@ import XLSX from "xlsx";
 import InputFiles from "react-input-files";
 import BindForm from './BindForm'
 import EditImportTable from './EditImportTable'
-
 const SelectTable = selecTableHOC(ReactTable);
+
 
 class ObjectManagementContainer extends React.Component{
     static contextType = AppContext
@@ -63,7 +63,7 @@ class ObjectManagementContainer extends React.Component{
         dataImport:[],
         isShowBind:false,
         isShowEditImportTable:false,
-        dataImportThis:[]
+        dataImportThis:[],
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -83,6 +83,9 @@ class ObjectManagementContainer extends React.Component{
         this.getDataImport()
         this.getUserList();
         this.getLbeaconData();
+
+
+          
     }
 
     getUserList = () => {
@@ -340,6 +343,7 @@ class ObjectManagementContainer extends React.Component{
         }
 
     }
+
 
     handleSubmitForm = () => {
         setTimeout(this.getData, 500) 
@@ -608,7 +612,7 @@ class ObjectManagementContainer extends React.Component{
                 <br/>
                 <Tabs selectedIndex={this.state.tabIndex} onSelect={tabIndex => this.setState({ tabIndex })}>
                     <TabList>
-                         <Tab>{locale.texts.TOTAL_DATA}</Tab>
+                        <Tab>{locale.texts.TOTAL_DATA}</Tab>
                         <Tab>{locale.texts.DEVICE_FORM}</Tab>
                         <Tab>{locale.texts.PATIENT_FORM}</Tab>
                     </TabList>
@@ -627,12 +631,11 @@ class ObjectManagementContainer extends React.Component{
                          
                         <InputFiles accept=".xlsx, .xls" onChange={this.onImportExcel}>
                             <button 
-                            className="btn btn-primary"
+                            className="btn btn-primary mr-2 mb-1"
                             >
                             {locale.texts.IMPORT_OBJECT}
                             </button>
                         </InputFiles>
-
 
                     </ButtonToolbar>
                     <SelectTable

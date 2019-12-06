@@ -423,8 +423,7 @@ const signin = (request, response) => {
             }
         })
         .catch(err => {
-            console.log("Login Fails: " + err)
-        })
+            console.log("Login Fails: " + err)       })
 }
 
 const signup = (request, response) => {

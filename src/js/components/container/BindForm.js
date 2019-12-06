@@ -20,6 +20,27 @@ import {
     editImportData
 } from "../../dataSrc"
 
+import FadeIn from "react-fade-in";
+import Lottie from "react-lottie";
+import * as preloader from "./preloader.json";
+import * as success from "./success.json";
+const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: preloader.default,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice"
+    }
+  };
+  const defaultOptions2 = {
+    loop: true,
+    autoplay: true,
+    animationData: success.default,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice"
+    }
+  };
+
 
 class BindForm extends React.Component {
     state = {
@@ -29,7 +50,9 @@ class BindForm extends React.Component {
         objectName:'',
         objectType:'',
         mac_address:'',
-        alertText:''
+        alertText:'',
+        ISuxTest:false,
+        ISuxTest_success:false
     };
     
 
@@ -59,7 +82,7 @@ class BindForm extends React.Component {
                         var pattern = new RegExp("^[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}$");
                         if( this.state.mac_address.match(pattern)) 
                         {
-               let formOption = []
+                        let formOption = []
                         formOption.push(this.state.inputValue)
                         formOption.push(this.state.mac_address)
                         formOption.push(this.state.objectName)
@@ -68,31 +91,27 @@ class BindForm extends React.Component {
                             {
                                 formOption
                             }).then(res => {
-                                setTimeout(this.props.handleSubmitForm(),1000)
+                                this.UXtest()
                             }).catch( error => {
                                 console.log(error)
                             })
-                    } 
+                        } 
                 else{
                     setTimeout(this.props.handleSubmitForm(),1000)
                     alert("連結失敗，MAC格式錯誤");
+                    this.handleClose()
                 } 
         
                     }
                     else{
                         setTimeout(this.props.handleSubmitForm(),1000)
                         alert("連結失敗，表裡沒有這個ASN");
+                        this.handleClose()
                     }    
 
                   
 
-         this.setState({
-                inputValue:'',
-                showDetail : false,
-                objectName:'',
-                objectType:'',
-                mac_address:''
-        })
+      
     }
 
     handleMacAddress(event){
@@ -141,7 +160,20 @@ class BindForm extends React.Component {
     
     }
 
-   
+    UXtest = () => {
+        this.setState({ISuxTest: true}) 
+        setTimeout(function() 
+        { 
+            this.setState({ISuxTest: false})
+            this.setState({ISuxTest_success: true}) 
+            setTimeout(function() { 
+                this.setState({ISuxTest_success: false})
+                this.props.handleSubmitForm()
+                this.handleClose()
+            }.bind(this),1000)
+        }.bind(this), 1000)
+    
+    }
 
 
     render() {
@@ -155,7 +187,6 @@ class BindForm extends React.Component {
                     return {
                         value: `${location},${branch}`,
                         label: locale.texts[branch.toUpperCase().replace(/ /g, '_')],
-
                     }
                 })
             }
@@ -277,7 +308,8 @@ class BindForm extends React.Component {
                                      
                                      <small 
                                      id="CheckboxIDsmall" 
-                                     className="form-text text-muted" >
+                                     className="form-text text-muted"
+                                      >
                                      {locale.texts.ACN_VERIFICATION}   
                                      <input 
                                      type="checkbox" 
@@ -332,6 +364,24 @@ class BindForm extends React.Component {
                                 )}
                              </div>
 
+                             <FadeIn>
+                            <div className="d-flex justify-content-center align-items-center">
+                            {this.state.ISuxTest ? (
+                                <Lottie options={defaultOptions} height={120} width={120} /> 
+                            ) : (
+                                null
+                             )}
+                            </div>
+                        </FadeIn>
+                        <FadeIn>
+                            <div className="d-flex justify-content-center align-items-center">
+                            {this.state.ISuxTest_success ? (
+                                <Lottie options={defaultOptions2} height={120} width={120} /> 
+                            ) : (
+                                null
+                             )}
+                            </div>
+                        </FadeIn>
 
 
 
