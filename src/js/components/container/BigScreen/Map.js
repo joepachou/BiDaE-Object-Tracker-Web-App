@@ -52,6 +52,7 @@ class Map extends React.Component {
 
     componentDidMount = () => {
         this.initMap();  
+        this.setMap();
     }
 
     componentDidUpdate = (prevProps) => {
