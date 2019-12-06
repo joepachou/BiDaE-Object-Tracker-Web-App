@@ -2,46 +2,21 @@ import React from 'react'
 import { useState, useEffect} from 'react'
 import MainContainer from './components/container/MainContainer'
 import MainContainerForTablet from './components/container/MainContainerForTablet'
-
-const useRWD=()=>{
-    const [device,setDevice] = useState("PC");
-
-    const handleRWD=()=>{
-        if( window.innerWidth > 1500){
-            setDevice("PC");
-        }else if( window.innerWidth > 800){
-            setDevice("TABLET");
-        }else{
-            setDevice("MOBILE");
-        }
-    }
-
-    useEffect(()=>{
-        window.addEventListener('resize',handleRWD);
-        handleRWD();
-        return(()=>{
-            window.removeEventListener('resize',handleRWD);
-        }) 
-    },[]);
-
-    return device;
-} 
+import { isBrowser, isTablet} from 'react-device-detect'
 
 const Main =()=>{
 
-        const device = useRWD();
-
-        if( device === "PC" ){
+        if( isBrowser){
             return (
                 <MainContainer />
             )
-        }else if( device === "TABLET"){
+        }else if( isTablet){
             return(
                 <MainContainerForTablet />
             )
         }else{
             return(
-                <MainContainer />
+                <p>手機版本，努力中</p>
             )
         }
 }

@@ -67,18 +67,21 @@ const getTrackingData = (request, response) => {
     /** The UI's current area id */
     const currentAreaId = request.body.areaId.toString()
 
+    let counter = 0
     pool.query(queryType.query_getTrackingData())        
         .then(res => {
             console.log('Get tracking data')
 
             /** Filter the objects that do no belong the area */
             const toReturn = res.rows
-            .map(item => {
+            .filter(item => item.mac_address)
+            .map((item, index) => {
+
                 /** Flag the object that belongs to the current area or to the user's authenticated area */
                 item.isMatchedObject = checkMatchedObject(item, userAuthenticatedAreaId, currentAreaId)
 
                 /** Set the boolean if the object's last_seen_timestamp is in the specific time period */
-                let isInTheTimePeriod = moment().diff(item.last_seen_timestamp, 'seconds') < 30 
+                let isInTheTimePeriod = moment().diff(item.last_seen_timestamp, 'seconds') < 30
 
                 /** Set the boolean if its rssi is below the specific rssi threshold  */
                 let isMatchRssi = item.rssi > rssiThreshold ? 1 : 0;
@@ -86,6 +89,7 @@ const getTrackingData = (request, response) => {
                 /** Flag the object that satisfied the time period and rssi threshold */
                 item.found = isInTheTimePeriod && isMatchRssi 
 
+                item.id = item.found ? ++counter : ""
                 /** Set the residence time of the object */
                 item.residence_time =  item.found 
                     ? moment(item.last_seen_timestamp).locale(locale).from(moment(item.first_seen_timestamp)) 
@@ -371,6 +375,7 @@ const signin = (request, response) => {
     pool.query(queryType.query_signin(username))
         .then(res => {
             if (res.rowCount < 1) {
+                console.log(`Sign in fail: username or password is incorrect`)
                 response.json({
                     authentication: false,
                     message: "Username or password is incorrect"
@@ -407,7 +412,9 @@ const signin = (request, response) => {
                         .catch(err => console.log(err))
                     // pool.query(queryType.query_setShift(shift, username))
                     //     .catch(err => console.log(err))
+                    console.log(`Sign in success: ${name}`)
                 } else {
+                    console.log(`Sign in fail: password is incorrect`)
                     response.json({
                         authentication: false,
                         message: "password is incorrect"

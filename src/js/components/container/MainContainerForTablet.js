@@ -513,7 +513,8 @@ class MainContainerForTablet extends React.Component{
             
             /** left area*/
             MapAndResult:{
-                flex: 7
+                flex: 7,
+                //border: "solid"
             },
 
             /** right area */
@@ -529,12 +530,14 @@ class MainContainerForTablet extends React.Component{
             /** left down area */
             searchResultList: {
                 display: this.state.hasSearchKey ? null : 'none',
-                height: "40vh",
+                //border: "solid",
+                maxHeight: "40vh",
+                justifyContent: "center"
             },
 
             /** left up area */
             MapAndQrcode: {
-                flex:11,
+                maxHeight: "50vh",
                 //border : "solid",
             }
         }

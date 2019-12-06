@@ -36,7 +36,7 @@
     "react-leaflet": "^2.2.0",
     "react-scroll": "^1.7.12",
     "style-loader": "^0.23.1",
-    "webpack": "^4.30.0",
+    "webpack": "^4.41.2",
     "webpack-cli": "^3.2.1",
     "webpack-dev-server": "^3.1.14"
   },
@@ -78,6 +78,7 @@
     "react-bootstrap-table-next": "^3.1.0",
     "react-bootstrap-time-picker": "^2.0.1",
     "react-burger-menu": "^2.6.4",
+    "react-device-detect": "^1.11.14",
     "react-grid-system": "^4.4.5",
     "react-input-files": "^1.2.0",
     "react-keyboard-event-handler": "^1.5.2",

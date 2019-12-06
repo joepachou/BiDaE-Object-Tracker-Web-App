@@ -13,6 +13,7 @@ const session = require('express-session')
 const formidable = require('formidable');
 const cors = require('cors');
 const parse = require('csv-parse')
+const csv =require('csvtojson')
 
 
 app.use(bodyParser.json())
@@ -172,6 +173,12 @@ var privateKey = fs.readFileSync(__dirname + '/sslforfree/private.key');
 var certificate = fs.readFileSync(__dirname + '/sslforfree/certificate.crt');
 var ca_bundle = fs.readFileSync(__dirname + '/sslforfree/ca_bundle.crt');
 
+// var credentials = {
+//     key: fs.readFileSync('./server.key'),
+//     // ca: [fs.readFileSync('./server.cert')],
+//     cert: fs.readFileSync('./server.cert')
+//   };
+
 var credentials = { 
     key: privateKey, 
     cert: certificate, 
@@ -181,9 +188,10 @@ var credentials = {
 const httpsServer = https.createServer(credentials, app);
 const httpServer = http.createServer(app);
 
-httpServer.listen(httpPort, () =>{
-    console.log(`HTTP Server running on port ${httpPort}`)
-})
+// httpServer.listen(httpPort, () =>{
+//     console.log(`HTTP Server running on port ${httpPort}`)
+// })
+
 httpsServer.listen(httpsPort, () => {
     console.log(`HTTPS Server running on PORT ${httpsPort}`)
 })

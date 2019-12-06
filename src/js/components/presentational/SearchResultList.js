@@ -259,13 +259,19 @@ class SearchResult extends React.Component {
             ? notFoundResult
             : foundResult
 
+        // let title = this.state.showNotFoundResult 
+        //     ? (this.props.searchKey === "my patients" || this.props.searchKey === "all patients")
+        //         ? locale.texts.PATIENTS_NOT_FOUND
+        //         : locale.texts.DEVICES_NOT_FOUND
+        //     : (this.props.searchKey === "my patients" || this.props.searchKey === "all patients")
+        //         ? locale.texts.PATIENTS_FOUND
+        //         : locale.texts.DEVICES_FOUND
+
         let title = this.state.showNotFoundResult 
-            ? (this.props.searchKey === "my patients" || this.props.searchKey === "all patients")
-                ? locale.texts.PATIENTS_NOT_FOUND
-                : locale.texts.DEVICES_NOT_FOUND
-            : (this.props.searchKey === "my patients" || this.props.searchKey === "all patients")
-                ? locale.texts.PATIENTS_FOUND
-                : locale.texts.DEVICES_FOUND
+        ? locale.texts.SEARCH_RESULTS_NOT_FOUND
+        : locale.texts.SEARCH_RESULTS_FOUND
+        // ? '未找到的結果'
+        // : '找到的結果'
 
 
         return(
@@ -321,7 +327,7 @@ class SearchResult extends React.Component {
                         size="lg"
                         disabled={false}
                     >
-                        {(this.props.searchKey == "my patients" || this.props.searchKey == "all patients") 
+                        {/* {(this.props.searchKey == "my patients" || this.props.searchKey == "all patients") 
                             ?
                             this.state.showNotFoundResult
                             ? locale.texts.SHOW_PATIENTS_FOUND
@@ -330,7 +336,12 @@ class SearchResult extends React.Component {
                             this.state.showNotFoundResult 
                             ? locale.texts.SHOW_DEVICES_FOUND
                             : locale.texts.SHOW_DEVICES_NOT_FOUND
+                        } */}
+                        {this.state.showNotFoundResult
+                            ? locale.texts.SHOW_SEARCH_RESULTS_FOUND
+                            : locale.texts.SHOW_SEARCH_RESULTS_NOT_FOUND
                         }
+
                     </Button>
                 </Row>
                 <ChangeStatusForm 
