@@ -13,6 +13,7 @@ const addPatient= `http://${dataSrcIP}/data/addPatient`;
 const getImportTable = `http://${dataSrcIP}/data/getImportTable`;
 const getImportData = `http://${dataSrcIP}/data/getImportData`;
 const editImportData = `http://${dataSrcIP}/data/editImportData`;
+const cleanImportData = `http://${dataSrcIP}/data/cleanImportData`;
 const editObjectPackage = `http://${dataSrcIP}/data/editObjectPackage`;
 const signin = `http://${dataSrcIP}/user/signin`;
 const signup = `http://${dataSrcIP}/user/signup`;
@@ -65,6 +66,7 @@ module.exports = {
     getTrackingData,
     getImportData,
     editImportData,
+    cleanImportData,
     getObjectTable,
     getPatientTable,
     getImportTable,

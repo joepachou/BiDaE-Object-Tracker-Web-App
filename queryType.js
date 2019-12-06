@@ -185,8 +185,7 @@ const query_getImportTable = () => {
 				object_import_table.asset_control_number,
 				object_import_table.type,
 				object_import_table.mac_address
-
-			FROM object_import_table 
+			FROM object_import_table
 
 
 			ORDER BY object_import_table.asset_control_number ASC	
@@ -197,7 +196,53 @@ const query_getImportTable = () => {
 
 
 
+// INSERT INTO object_table
+// (
+// 	asset_control_number,
+// 	mac_address,
+// 	name,
+// 	type,
+// 	registered_timestamp,
+// 	status,
+// 	object_type
+// )
+// VALUES(
+// 	'${formOption[0]}',
+// 	'${formOption[1]}',
+// 	'${formOption[2]}',
+// 	'${formOption[3]}',
+// 	now(),
+// 	'normal',
+// 	0
+// )
+
+
 function query_editImportData (formOption) {
+	const test = `
+		UPDATE object_import_table
+		SET 
+			mac_address = '${formOption[1]}'
+		WHERE asset_control_number = '${formOption[0]}';
+	`
+	console.log(test)
+	;
+
+	// const values = [
+	// 	formOption[0],
+	// 	formOption[1],
+	// 	formOption[2],
+	// 	formOption[3]
+	// ]
+
+	// const query = {
+	// 	text, 
+	// 	values
+	// };
+
+	return test
+}
+
+function query_cleanImportData (formOption) {
 	const text =
 		`
 		UPDATE object_import_table
@@ -207,8 +252,8 @@ function query_editImportData (formOption) {
 	`;
 
 	const values = [
-		formOption[0],
-		formOption[1]
+		formOption,
+		''
 	]
 
 	const query = {
@@ -226,7 +271,6 @@ function query_getImportData(formOption){
 	SELECT 
 		object_import_table.name, 
 		object_import_table.type,
-		object_import_table.bindflag,
 		object_import_table.mac_address
 	FROM object_import_table
 
@@ -288,17 +332,15 @@ function query_objectImport (idPackage) {
 		INSERT INTO object_import_table (
 			name,
 			type,
-			asset_control_number,
-			bindflag
+			asset_control_number
 		)
 		VALUES ${idPackage.map((item) => {
 			return `(
 				'${item.name}',
 				'${item.type}',
-				'${item.asset_control_number}',
-				0
+				'${item.asset_control_number}'
 			)`
-		})}
+		})};
 	`
 	console.log(text)
 	return text	
@@ -1299,6 +1341,7 @@ module.exports = {
 	query_getBackendSearchQueue,
 	query_addBulkObject,
 	query_editImportData,
+	query_cleanImportData,
 	query_getImportData,
 }
 

@@ -25,11 +25,11 @@ class BindForm extends React.Component {
     state = {
         show: this.props.show,
         inputValue:'',
-        showDetail : false,
+        showDetail : '',
         objectName:'',
         objectType:'',
         mac_address:'',
-        alertText:'',
+        alertText:''
     };
     
 
@@ -42,20 +42,28 @@ class BindForm extends React.Component {
     }
   
     handleClose = () => {
+        this.setState({
+            inputValue:'',
+            showDetail : false,
+            objectName:'',
+            objectType:'',
+            mac_address:''
+    })
         this.props.handleCloseForm()
     }
 
     handleSubmit = (postOption) => {
 
         
-                    if (this.state.showDetail){
+                if (this.state.showDetail){
                         var pattern = new RegExp("^[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}$");
                         if( this.state.mac_address.match(pattern)) 
                         {
                let formOption = []
                         formOption.push(this.state.inputValue)
                         formOption.push(this.state.mac_address)
-                        console.log(formOption)
+                        formOption.push(this.state.objectName)
+                        formOption.push(this.state.objectType)
                         axios.post(editImportData, 
                             {
                                 formOption
@@ -92,13 +100,13 @@ class BindForm extends React.Component {
     }
 
 
-    updateInput(event){
+
+    updateInput = (event) => {
      this.setState({inputValue : event.target.value })
         setTimeout(() => {
             this.handleChange()   
          }, 500);
     }
-
 
     handleChange(){
     //   console.log(this.state.inputValue)
@@ -109,8 +117,10 @@ class BindForm extends React.Component {
               this.setState({showDetail : true}) 
     })
 
-
        
+   
+
+
    this.state.showDetail ?
         axios.post(getImportData, {
                 formOption: this.state.inputValue
@@ -131,7 +141,7 @@ class BindForm extends React.Component {
     
     }
 
-
+   
 
 
     render() {
@@ -179,7 +189,7 @@ class BindForm extends React.Component {
         const { title, selectedObjectData } = this.props;
         const { 
             name,
-            type
+            type,
         } = selectedObjectData
 
 
@@ -187,20 +197,58 @@ class BindForm extends React.Component {
         return (
             <Modal show={this.state.show} onHide={this.handleClose} size='md'>
                 <Modal.Header closeButton className='font-weight-bold text-capitalize'>
-                    {'好強好帥'}
+                    {locale.texts.BINDING_SETTING}
                 </Modal.Header >
                 <Modal.Body>
                     <Formik                    
                         initialValues = {{
-                            asset_control_number: this.state.inputValue
+                           ASN:''
                         }}
 
 
                         validationSchema = {
-                        //     Yup.object().shape({
-                        //         asset_control_number: Yup.string().required(locale.texts.ASSET_CONTROL_NUMBER_IS_REQUIRED)
-                        // })
-                        null
+                            Yup.object().shape({
+                                ASN: Yup.string().required(locale.texts.ASSET_CONTROL_NUMBER_IS_REQUIRED)
+                                .test(
+                                    'ASN', 
+                                    "ＡＳＮ未在列表上" ,
+                                    value => {
+                                        let temp = []
+                                        this.props.data.map(item => {
+                                            temp.push(item.asset_control_number)
+                                        })
+                                    
+                                        if (temp.includes(value)) {
+                                            this.setState({
+                                                    showDetail : true,
+                                                    inputValue : value
+                                            }) 
+                                         {console.log(this.state.inputValue)}
+                                            setTimeout(() => {
+                                            axios.post(getImportData, {
+                                                    formOption: this.state.inputValue
+                                                }).then(res => {
+                                                    res.data.rows.map(item => {
+                                                        this.setState({
+                                                            objectName: item.name,
+                                                            objectType: item.type,
+                                                        }) 
+                                                    })
+                                                
+                                                }).catch( error => {
+                                                    console.log(error)
+                                                })
+                                            }, 500);
+                                            return  true
+                                        } 
+                                        this.setState({ showDetail : false })
+                                        return false
+  
+                                        // return value === selectedObjectData.asset_control_number || 
+                                        //     !this.props.data.map(item => item.asset_control_number).includes(value)
+                                    }
+                                )
+                        })
                         }
 
 
@@ -214,19 +262,35 @@ class BindForm extends React.Component {
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm }) => (
                             <Form className="text-capitalize">
-                         
-
+                         <div className="form-group">
                                    <Field 
                                     type="text"
-                                    name="asset_control_number"
+                                    name="ASN"
                                     placeholder="Asset control number" 
                                     className={'form-control' + (errors.asset_control_number && touched.asset_control_number ? ' is-invalid' : '')} 
-                                    value={this.state.inputValue}
-                                     onChange={this.updateInput.bind(this)}
+                                    // value={this.state.inputValue}
+                                    // onChange={this.updateInput()}
                                     />
-                                      <ErrorMessage name="asset_control_number" component="div" className="invalid-feedback" />
-                            
+                                      <ErrorMessage name="ASN" component="div" className="invalid-feedback" />
+                                      
+                                      
                                      
+                                     <small 
+                                     id="CheckboxIDsmall" 
+                                     className="form-text text-muted" >
+                                     {locale.texts.ACN_VERIFICATION}   
+                                     <input 
+                                     type="checkbox" 
+                                     disabled={true} 
+                                     checked={this.state.showDetail}
+                                     
+                                     />
+                                     {console.log(errors)}
+                                     </small>
+                                
+                                  
+
+                        </div>
 
                                 {/* { console.log(this.state.inputValue)}
                                 {console.log(this.props.data)} */}
@@ -235,7 +299,7 @@ class BindForm extends React.Component {
                              <div className="form-group">
                                 {this.state.showDetail ? (
                                     <div className="form-group">
-                                       <small id="TextIDsmall" className="form-text text-muted">你要的名稱.</small>
+                                       <small id="TextIDsmall" className="form-text text-muted">{locale.texts.NAME}</small>
                                         <input type="readOnly" className="form-control" id="TextID" placeholder="名稱" disabled = {true}  value={this.state.objectName} ></input>  
                                     </div>
                                 ) : (
@@ -246,8 +310,8 @@ class BindForm extends React.Component {
                              <div className="form-group">
                                 {this.state.showDetail ? (
                                     <div className="form-group">
-                                       <small id="TextTypesmall" className="form-text text-muted">你要的類型.</small>
-                                        <input type="readOnly" className="form-control" id="TextType" placeholder="類型" disabled = {true} value={this.state.objectType}></input>  
+                                       <small id="TextTypesmall" className="form-text text-muted">{locale.texts.TYPE}</small>
+                                        <input type="readOnly" className="form-control" id="TextType" placeholder="類型" disabled = {true}  value={this.state.objectType}></input>  
                                     </div>
                                 ) : (
                                   null
@@ -260,7 +324,7 @@ class BindForm extends React.Component {
                              <div className="form-group">
                                 {this.state.showDetail ? (
                                     <div className="form-group">
-                                       <small id="inputMacAddresssmall" className="form-text text-muted">要綁定哪個mac_address?</small>
+                                       <small id="inputMacAddresssmall" className="form-text text-muted">{locale.texts.BIND_MAC_ADDRESS}</small>
                                         <input type="text" className="form-control" id="MacAddress" placeholder="mac_address" value={this.state.mac_address}  onChange={this.handleMacAddress.bind(this)}></input>  
                                     </div>
                                 ) : (
@@ -269,8 +333,8 @@ class BindForm extends React.Component {
                              </div>
 
 
-              
-               
+
+
                                 <Modal.Footer>
                                     <Button variant="outline-secondary" className="text-capitalize" onClick={this.handleClose}>
                                         {locale.texts.CANCEL}

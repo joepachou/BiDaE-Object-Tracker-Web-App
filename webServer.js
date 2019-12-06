@@ -63,6 +63,8 @@ app.post('/data/getImportData', db.getImportData);
 
 app.post('/data/editImportData', db.editImportData);
 
+app.post('/data/cleanImportData', db.cleanImportData);
+
 app.post('/data/getLbeaconTable', db.getLbeaconTable);
 
 app.post('/data/getGatewayTable', db.getGatewayTable);

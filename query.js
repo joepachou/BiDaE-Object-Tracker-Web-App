@@ -190,6 +190,18 @@ const editImportData = (request, response) => {
         })     
 }
 
+const cleanImportData = (request, response) => {
+    let { locale, areaId } = request.body
+    const formOption = request.body.formOption
+    pool.query(queryType.query_cleanImportData(formOption))       
+        .then(res => {
+            console.log('clean ImportData data')
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log("clean ImportData fails: " + err)
+        })     
+}
 
 
 const getLbeaconTable = (request, response) => {
@@ -271,7 +283,7 @@ const editPatient = (request, response) => {
 }
 
 const objectImport = (request, response) => {
-    const idPackage = request.body.data
+    const idPackage = request.body.newData
        pool.query(queryType.query_objectImport(idPackage))
         .then(res => {
             console.log("Import objectImport success");
@@ -1040,6 +1052,7 @@ module.exports = {
     getImportTable,
     getImportData,
     editImportData,
+    cleanImportData,
     getLbeaconTable,
     getGatewayTable,
     getGeofenceData,

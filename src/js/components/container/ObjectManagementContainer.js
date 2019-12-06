@@ -33,6 +33,8 @@ import AddAllForm from './AddAllForm';
 import XLSX from "xlsx";
 import InputFiles from "react-input-files";
 import BindForm from './BindForm'
+import EditImportTable from './EditImportTable'
+
 const SelectTable = selecTableHOC(ReactTable);
 
 class ObjectManagementContainer extends React.Component{
@@ -49,6 +51,7 @@ class ObjectManagementContainer extends React.Component{
         selection: [],
         selectedRowData: [],
         selectedRowData_Patient: [],
+        selectedRowData_Import: [],
         areaList: [],
         formTitle: '',
         formPath: '',
@@ -59,6 +62,8 @@ class ObjectManagementContainer extends React.Component{
         roomOptions: {},
         dataImport:[],
         isShowBind:false,
+        isShowEditImportTable:false,
+        dataImportThis:[]
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -277,6 +282,7 @@ class ObjectManagementContainer extends React.Component{
             isShowEdit: true,
             isPatientShowEdit: true,
             isShowBind:true,
+            isShowEditImportTable:true
         })
     }
 
@@ -285,7 +291,8 @@ class ObjectManagementContainer extends React.Component{
             isShowEdit: false,
             isPatientShowEdit: false,
             isShowAddAll: false,
-            isShowBind:false
+            isShowBind:false,
+            isShowEditImportTable:false
         })
     }
 
@@ -298,6 +305,7 @@ class ObjectManagementContainer extends React.Component{
                     formTitle: name,
                     selectedRowData: [],
                     selectedRowData_Patient:[],
+                    selectedRowData_Import:[],
                     formPath: addObject
                 })
                 break;
@@ -340,7 +348,8 @@ class ObjectManagementContainer extends React.Component{
         this.setState({
             isShowEdit: false,
             isPatientShowEdit: false,
-            isShowBind:false
+            isShowBind:false,
+            isShowEditImportTable:false
         })
     }
 
@@ -481,6 +490,7 @@ class ObjectManagementContainer extends React.Component{
             isPatientShowEdit: true, 
             selectedRowData: [],
             selectedRowData_Patient:[],
+            selectedRowData_Import:[],
             formTitle: 'add inpatient',
             formPath: addPatient
         })
@@ -494,12 +504,13 @@ class ObjectManagementContainer extends React.Component{
         for (let index = 0; index < files.length; index++) {
             fileReader.name = files[index].name;
         }
+      
         fileReader.onload = event => {
             try {
                 // 判斷上傳檔案的類型 可接受的附檔名
                 const validExts = new Array(".xlsx", ".xls");
                 const fileExt = event.target.name;
-    
+     
                 if (fileExt == null) {
                     throw "檔案為空值";
                 }
@@ -508,7 +519,7 @@ class ObjectManagementContainer extends React.Component{
                 if (validExts.indexOf(fileExtlastof) == -1) {
                     throw "檔案類型錯誤，可接受的副檔名有：" + validExts.toString();
                 }
-    
+  
                 const { result } = event.target; // 以二進制流方式讀取得到整份excel表格對象
                 const workbook = XLSX.read(result, { type: "binary" });
                 let data = []; // 存儲獲取到的數據 // 遍歷每張工作表進行讀取（這裡默認只讀取第一張表）
@@ -521,17 +532,32 @@ class ObjectManagementContainer extends React.Component{
                     }
                 }
                 this.setState({
-                    dataImport: data
+                    dataImportThis: data
                 })
 
-                // 覆蓋到後端
+                
+
+                // ＩＭＰＯＲＴ時把ＡＣＮ重複的擋掉
+                let newData = []
+                let reapetFlag = false;
+                data.map(importData =>{
+                    reapetFlag = false;
+                    this.state.dataImport.map(dataOrigin=>{
+                       importData.asset_control_number === dataOrigin.asset_control_number ? reapetFlag=true : null
+                    })
+                    reapetFlag ? null : newData.push(importData)
+                })
+                //沒被擋掉的存到newData後輸出
+
+             
+             
              let { locale } = this.context
                 axios.post(objectImport, {
                     locale: locale.abbr ,
-                    data
+                    newData
                 })
                 .then(res => {
-
+                    this.handleSubmitForm()
                 })
                 .catch(err => {
                     console.log(err)
@@ -554,10 +580,12 @@ class ObjectManagementContainer extends React.Component{
             isShowEdit, 
             selectedRowData,
             selectedRowData_Patient,
+            selectedRowData_Import,
             isPatientShowEdit,
             selectAll,
             selectType,
             isShowBind,
+            isShowEditImportTable,
         } = this.state
         const { locale } = this.context
 
@@ -580,18 +608,10 @@ class ObjectManagementContainer extends React.Component{
                 <br/>
                 <Tabs selectedIndex={this.state.tabIndex} onSelect={tabIndex => this.setState({ tabIndex })}>
                     <TabList>
-                         <Tab>{'超強新功能'}</Tab>
+                         <Tab>{locale.texts.TOTAL_DATA}</Tab>
                         <Tab>{locale.texts.DEVICE_FORM}</Tab>
                         <Tab>{locale.texts.PATIENT_FORM}</Tab>
                     </TabList>
-
-
-
-
-
-
-
-
 
 
                     <TabPanel> 
@@ -609,7 +629,7 @@ class ObjectManagementContainer extends React.Component{
                             <button 
                             className="btn btn-primary"
                             >
-                            {'匯入'}
+                            {locale.texts.IMPORT_OBJECT}
                             </button>
                         </InputFiles>
 
@@ -628,7 +648,8 @@ class ObjectManagementContainer extends React.Component{
                                 return {
                                     onClick: (e, handleOriginal) => {
                                             this.setState({
-                                                
+                                                isShowEditImportTable : true,
+                                                selectedRowData_Import: this.state.dataImport[rowInfo.index],
                                             })
                                             // let id = (rowInfo.index+1).toString()
                                             // this.toggleSelection(id)
@@ -641,36 +662,6 @@ class ObjectManagementContainer extends React.Component{
                             }
                         />
                 </TabPanel>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -693,6 +684,25 @@ class ObjectManagementContainer extends React.Component{
                         >
                             {locale.texts.DELECT_DEVICE}
                         </Button>
+{/* 
+                        <Button 
+                            variant="outline-primary" 
+                            className='text-capitalize mr-2 mb-1'
+                            name="associate object"
+                            onClick={this.handleClickButton}
+                        >
+                            {locale.texts.ASSOCIATE}
+                        </Button>
+                         
+                        <InputFiles accept=".xlsx, .xls" onChange={this.onImportExcel}>
+                            <button 
+                            className="btn btn-primary"
+                            >
+                            {locale.texts.IMPORT_OBJECT}
+                            </button>
+                        </InputFiles> */}
+
+
                     </ButtonToolbar>
                     <SelectTable
                             keyField='name'
@@ -772,6 +782,8 @@ class ObjectManagementContainer extends React.Component{
                         />
                     </TabPanel>
                 </Tabs>
+
+
                 <EditPatientForm
                     show = {isPatientShowEdit} 
                     title= {this.state.formTitle} 
@@ -798,13 +810,22 @@ class ObjectManagementContainer extends React.Component{
                 <BindForm
                     show = {isShowBind} 
                     title=  {this.state.formTitle} 
-                    selectedObjectData={selectedRowData || null} 
+                    selectedObjectData={selectedRowData_Import || null} 
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={this.state.formPath}
                     handleCloseForm={this.handleCloseForm}
                     data={this.state.dataImport}
                 />
 
+                <EditImportTable
+                    show = {isShowEditImportTable} 
+                    title=  {this.state.formTitle} 
+                    selectedObjectData={selectedRowData_Import || null} 
+                    handleSubmitForm={this.handleSubmitForm}
+                    formPath={this.state.formPath}
+                    handleCloseForm={this.handleCloseForm}
+                    data={this.state.dataImport}
+                />
             </Container>
         )
     }

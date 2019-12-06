@@ -36,6 +36,8 @@ const tw = {
     CHOOSE_GENDER:"選擇性別",
     MALE:'男',
     FEMALE:'女',
+    SCAN_TAG:"請掃描TAG",
+
     /* Location accuracy */
     LOCATION_ACCURACY: "位置精準度",
     LOW: "低",
@@ -52,8 +54,9 @@ const tw = {
     DEVICES_NOT_FOUND: "未找到的儀器",
     PATIENTS_NOT_FOUND: "未找到的病人",
     PLEASE_SELECT_SEARCH_OBJECT: "請選擇搜尋物件",
+    BIND_MAC_ADDRESS:"綁定哪個Mac_Address?",
+    TOTAL_DATA:"匯入資料",
 
-    
     /* Button */
     CLEAR : "清除",
     SAVE : "儲存",
@@ -94,7 +97,10 @@ const tw = {
     SHOW_PATIENTS_NOT_FOUND: "顯示未找到的病人",
     SHOW_PATIENTS_FOUND: "顯示找到的病人",
     ASSOCIATE: "連結",
-
+    IMPORT_OBJECT:"匯入",
+    ACN_VERIFICATION:"ACN驗證",
+    BINDING_SETTING:"綁定設定",
+    BINDING_DELETE:"取消綁定",
 
     /* Form Field */
     NAME: "名稱",

@@ -38,6 +38,7 @@ const en =  {
     FEMALE:'Female',
     PATIENT: 'patient',
     DEVICES: 'devices',
+    SCAN_TAG:"Please Scan TAG",
 
     /* Location accuracy */
     LOCATION_ACCURACY: "Location Accuracy",
@@ -55,7 +56,9 @@ const en =  {
     DEVICES_NOT_FOUND: "devices not found",
     PATIENTS_NOT_FOUND: "patient not found",
     PLEASE_SELECT_SEARCH_OBJECT: "please select search object",
-    
+    BIND_MAC_ADDRESS:"Enter the mac_address for binding",
+    TOTAL_DATA:"total data in object_import_table",
+
     /* Button */
     CLEAR : "clear",
     SAVE : "save",
@@ -95,6 +98,10 @@ const en =  {
     SHOW_PATIENTS_NOT_FOUND: "show patients not found",
     SHOW_PATIENTS_FOUND: "show patients found",
     ASSOCIATE: "associate",
+    IMPORT_OBJECT:"Import Excel",
+    ACN_VERIFICATION:"ACN Verification",
+    BINDING_SETTING:"Binding Setting",
+    BINDING_DELETE:"Binding Delete",
 
     /* Form Field */
     NAME: "name",
