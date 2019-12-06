@@ -18,7 +18,6 @@ import SearchResultListGroup from '../presentational/SearchResultListGroup'
 import { AppContext } from '../../context/AppContext'
 import GeneralConfirmForm from '../container/GeneralConfirmForm'
 
-
 class ShiftChange extends React.Component {
 
     static contextType = AppContext
@@ -133,15 +132,16 @@ class ShiftChange extends React.Component {
         let { locale, auth } = this.context   
 
         let pdfPackage = config.getPdfPackage('shiftChange', auth.user, this.state.searchResult ,locale,'', name)
-
         axios.post(dataSrc.addShiftChangeRecord, {
             userInfo: auth.user,
             pdfPackage,
         }).then(res => {
+
             this.setState({
                 fileUrl: pdfPackage.path,
                 isShowConfirmForm: false
             })
+
             this.refs.download.click()
         }).catch(err => {
             console.log(err)
@@ -156,6 +156,7 @@ class ShiftChange extends React.Component {
 
     render() {
         const { show } = this.state;
+
         const { userInfo } = this.props
         const { foundResult, notFoundResult } = this.state.searchResult
         const { locale, auth } = this.context
@@ -168,6 +169,7 @@ class ShiftChange extends React.Component {
                 overflow: 'hidden scroll'
             }
         }
+        const nowTime = moment().locale(locale.abbr)
         const hasFoundResult = foundResult.length !== 0;
         const hasNotFoundResult = notFoundResult.length !== 0;
         return (
@@ -185,12 +187,21 @@ class ShiftChange extends React.Component {
                         </Row>
                         <Row style={style.row} className='text-capitalize'> 
                             <Col>
-                                <div>{locale.texts.DATE_TIME}: {moment().locale(locale.abbr).format(config.shiftChangeRecordTimeFormat)}</div>
+                                <div>{locale.texts.DATE_TIME}: {nowTime.format(config.shiftChangeRecordTimeFormat)}</div>
                             </Col>
                         </Row>
                         <Row style={style.row} className='text-capitalize'>
                             <Col>
-                                <div>{locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: {auth.user.name}, {auth.user.shift ? locale.texts[auth.user.shift.toUpperCase().replace(/ /g, '_')] : ''}</div>
+                                <div>{locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: {auth.user.name}</div>
+
+                                {/* <div>{locale.texts.SHIFT}: {auth.user.shift ? locale.texts[auth.user.shift.toUpperCase().replace(/ /g, '_')] : ''} </div> */}
+                            </Col>
+                        </Row>
+                        <Row style={style.row} className='text-capitalize'>
+                            <Col>
+                                <div>班別(記得加locale): {
+                                    config.getShift(locale.abbr)
+                                 }</div>
 
                                 {/* <div>{locale.texts.SHIFT}: {auth.user.shift ? locale.texts[auth.user.shift.toUpperCase().replace(/ /g, '_')] : ''} </div> */}
                             </Col>
@@ -260,7 +271,8 @@ class ShiftChange extends React.Component {
                         >
                             {locale.texts.CONFIRM}
                         </Button>
-                        <a href={this.state.fileUrl} ref="download" download style={{display: 'none'}}>hi</a>
+                        {console.log('download link 要記得改唷 Shift Change.js')}
+                        <a href={'http://localhost:3000/'+this.state.fileUrl} ref="download" download style={{display: 'none'}}>hi</a>
                     </Modal.Footer>
                 </Modal>
                 <GeneralConfirmForm

@@ -10,6 +10,7 @@ import moment from 'moment'
 import patientP from "../img//logo/pic.png"
 
 
+
 const config = {
     
     
@@ -278,6 +279,16 @@ const config = {
         }
     },
 
+    getShift: (abbr) => {
+        const hour = moment().locale(abbr).hours()
+        if (hour < 17 && hour > 8){
+            return config.shiftOption[0]
+        }else if(hour < 24 && hour > 17){
+            return config.shiftOption[1]
+        }else{
+            return config.shiftOption[2]
+        }
+    },
     /** Pdf format config */
     pdfFormat: {
         getHeader: (user, locale, option, name) => {
@@ -327,7 +338,8 @@ const config = {
                 return `${option}_report_${moment().format(config.pdfFileNameTimeFormat)}.pdf`
             },
             shiftChange: (user) => {
-                return `${user.name}_${user.shift.replace(/ /g, '_')}_${moment().format(config.pdfFileNameTimeFormat)}.pdf`
+                // return `${user.name}_${config.getShift().replace(/ /g, '_')}_${moment().format(config.pdfFileNameTimeFormat)}.pdf`
+                return `${user.name}_${moment().format(config.pdfFileNameTimeFormat)}.pdf`
             },
             searchResult: (user, option) => {
                 return `${option}_${moment().format(config.pdfFileNameTimeFormat)}.pdf`
@@ -466,9 +478,10 @@ const config = {
     
         getSubTitle: {
             shiftChange: (locale, user, name) => {
-                const nextShiftIndex = (config.shiftOption.indexOf(user.shift) + 2) % config.shiftOption.length
+                const nextShiftIndex = (config.shiftOption.indexOf(config.getShift(locale.abbr)) + 2) % config.shiftOption.length
+
                 const nextShift = locale.texts[config.shiftOption[nextShiftIndex].toUpperCase().replace(/ /g, "_")]
-                const thisShift = locale.texts[user.shift.toUpperCase().replace(/ /g, "_")]
+                const thisShift = locale.texts[config.getShift(locale.abbr).toUpperCase().replace(/ /g, "_")]
                 let shift = `<div style="text-transform: capitalize;">
                         ${locale.texts.SHIFT}: ${nextShift} ${locale.texts.SHIFT_TO} ${thisShift}
                     </div>`
@@ -890,7 +903,7 @@ const config = {
 
         /** Set the schema to select the color pin */
         getIconColor: (item, hasColorPanel) => {
-            console.log(item)
+
             if(item.pinColor == -1){
                 return config.mapConfig.iconColor.normal
             }else{

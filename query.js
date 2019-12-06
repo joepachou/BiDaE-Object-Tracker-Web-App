@@ -151,6 +151,46 @@ const getPatientTable = (request, response) => {
         })     
 }
 
+const getImportTable = (request, response) => {
+    let { locale, areaId } = request.body
+    pool.query(queryType.query_getImportTable())       
+        .then(res => {
+            console.log('Get getImportTable data')
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log("Get getImportTable fails: " + err)
+        })     
+}
+
+const getImportData = (request, response) => {
+    let { locale, areaId } = request.body
+    const formOption = request.body.formOption
+    pool.query(queryType.query_getImportData(formOption))       
+        .then(res => {
+            console.log('Get getImportData data')
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log("Get getImportData fails: " + err)
+        })     
+}
+
+
+const editImportData = (request, response) => {
+    let { locale, areaId } = request.body
+    const formOption = request.body.formOption
+    pool.query(queryType.query_editImportData(formOption))       
+        .then(res => {
+            console.log('edit ImportData data')
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log("edit ImportDataf ails: " + err)
+        })     
+}
+
+
 
 const getLbeaconTable = (request, response) => {
     let { locale } = request.body || 'en'
@@ -230,6 +270,19 @@ const editPatient = (request, response) => {
         })
 }
 
+const objectImport = (request, response) => {
+    const idPackage = request.body.data
+       pool.query(queryType.query_objectImport(idPackage))
+        .then(res => {
+            console.log("Import objectImport success");
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log("Import objectImport Fails: " + err)
+        })   
+
+
+}
 
 
 const addObject = (request, response) => {
@@ -987,6 +1040,9 @@ module.exports = {
     getTrackingData,
     getObjectTable,
     getPatientTable,
+    getImportTable,
+    getImportData,
+    editImportData,
     getLbeaconTable,
     getGatewayTable,
     getGeofenceData,
@@ -1006,6 +1062,7 @@ module.exports = {
     addBulkObject,
     editObject,
     editPatient,
+    objectImport,
     editLbeacon,
     editObjectPackage,
     deleteEditObjectRecord,
