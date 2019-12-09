@@ -7,8 +7,8 @@ const httpsPort = process.env.HTTPS_PORT || 443;
 const db = require('./query')
 const path = require('path');
 const fs = require('fs');
-const http = require('https');
-const https = require('http');
+const http = require('http');
+const https = require('https');
 const session = require('express-session')
 const formidable = require('formidable');
 const cors = require('cors');
@@ -19,7 +19,7 @@ const csv =require('csvtojson')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true,}));
 app.use(express.static(path.join(__dirname,'dist')));
-app.use(cors())
+// app.use(cors())
 
 app.use(session({
     secret: 'super_hound',
@@ -36,19 +36,19 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.get('/', (req,res) => {
-    if (req.session.userInfo) {
-        res.write('views: ' + req.session.userInfo + req.sessionID)
-        res.end()
-    } else {
-        req.session.userInfo = 'joechou'
-        res.end('welcome to the session demo. refresh!')
-    }
-})
+// app.get('/', (req,res) => {
+//     if (req.session.userInfo) {
+//         res.write('views: ' + req.session.userInfo + req.sessionID)
+//         res.end()
+//     } else {
+//         req.session.userInfo = 'joechou'
+//         res.end('welcome to the session demo. refresh!')
+//     }
+// })
 
-app.get('/image/pinImage/:pinImage', (req, res) => {
-    res.sendFile(path.join(__dirname, 'src','img','colorPin',req.params['pinImage']));
-})
+// app.get('/image/pinImage/:pinImage', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'src','img','colorPin',req.params['pinImage']));
+// })
 
 app.get(/^\/page\/(.*)/, (req, res) => {
     res.sendFile(path.join(__dirname, 'dist','index.html'));
@@ -188,9 +188,9 @@ var credentials = {
 const httpsServer = https.createServer(credentials, app);
 const httpServer = http.createServer(app);
 
-// httpServer.listen(httpPort, () =>{
-//     console.log(`HTTP Server running on port ${httpPort}`)
-// })
+httpServer.listen(httpPort, () =>{
+    console.log(`HTTP Server running on port ${httpPort}`)
+})
 
 httpsServer.listen(httpsPort, () => {
     console.log(`HTTPS Server running on PORT ${httpsPort}`)
