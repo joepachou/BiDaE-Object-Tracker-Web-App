@@ -279,6 +279,9 @@ class SearchResultListForTablet extends React.Component {
                 right: 'auto',
                 bottom: 'auto',
                 padding: 0,
+            },
+            list: {
+                //maxHeight: "28vh"
             }
         }
 
@@ -315,7 +318,7 @@ class SearchResultListForTablet extends React.Component {
                                 <div className='searchResultForDestop'>{locale.texts.NO_RESULT}</div>
                             </Col> 
                         :   
-                            <Col className="searchResultListGroupForTablet d-flex justify-content-center">
+                            <div className="searchResultListGroupForTablet d-flex justify-content-center" style={style.list}>
                                 <AccessControl
                                     permission={'form:edit'}
                                     renderNoAccess={() => (
@@ -339,7 +342,7 @@ class SearchResultListForTablet extends React.Component {
                                         />
                                 }
                                 </AccessControl>
-                            </Col>
+                            </div>
                     }
                 </Row>
                 <Row className='d-flex justify-content-center mt-3'>
