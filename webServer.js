@@ -46,9 +46,9 @@ app.use(function(req, res, next) {
 //     }
 // })
 
-// app.get('/image/pinImage/:pinImage', (req, res) => {
-//     res.sendFile(path.join(__dirname, 'src','img','colorPin',req.params['pinImage']));
-// })
+app.get('/image/pinImage/:pinImage', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src','img','colorPin',req.params['pinImage']));
+})
 
 app.get(/^\/page\/(.*)/, (req, res) => {
     res.sendFile(path.join(__dirname, 'dist','index.html'));
