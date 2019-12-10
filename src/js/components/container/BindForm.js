@@ -99,6 +99,7 @@ class BindForm extends React.Component {
                 else{
                     setTimeout(this.props.handleSubmitForm(),1000)
                     alert("連結失敗，MAC格式錯誤");
+                    this.props.handleCloseForm()
                     this.handleClose()
                 } 
         
@@ -106,6 +107,7 @@ class BindForm extends React.Component {
                     else{
                         setTimeout(this.props.handleSubmitForm(),1000)
                         alert("連結失敗，表裡沒有這個ASN");
+                        this.props.handleCloseForm()
                         this.handleClose()
                     }    
 

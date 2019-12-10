@@ -356,6 +356,43 @@ function query_objectImport (idPackage) {
 
 
 
+function query_editObject (formOption) {
+	const text = `
+		Update object_table 
+		SET name = $5,
+			registered_timestamp = now(),
+			transferred_location = $7,
+			type = $6,
+			asset_control_number = $2,
+			monitor_type = $4,
+			area_id = $1,
+			object_type = 0,
+			status  =  $8
+		WHERE mac_address = $3
+	`;
+		
+	const values = [
+		formOption.area_id, 
+		formOption.asset_control_number, 
+		formOption.mac_address,
+		formOption.monitor_type,
+		formOption.name,
+		formOption.type,
+		formOption.transferred_location.value,
+		formOption.status
+	];
+
+
+	const query = {
+		text,
+		values
+	};
+
+	return query;
+}
+
+
+
 function query_editPatient (formOption) {
 	const text = `
 		Update object_table 
@@ -1346,6 +1383,7 @@ module.exports = {
 	query_editImportData,
 	query_cleanImportData,
 	query_getImportData,
+	query_editObject
 }
 
 

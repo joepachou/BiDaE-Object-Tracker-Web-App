@@ -561,12 +561,12 @@ class ObjectManagementContainer extends React.Component{
                     newData
                 })
                 .then(res => {
-                    this.handleSubmitForm()
                 })
                 .catch(err => {
                     console.log(err)
+                    
                 })
-
+            this.handleSubmitForm()
 
             } catch (e) {
                 // 這裡可以拋出文件類型錯誤不正確的相關提示
