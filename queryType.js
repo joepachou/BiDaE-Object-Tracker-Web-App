@@ -66,8 +66,7 @@ function query_getTrackingData () {
 
 		ORDER BY 
 			object_table.type, 
-			object_table.asset_control_number,
-			object_table.mac_address
+			object_table.asset_control_number
 			DESC;
 	`
 	return query;
@@ -346,46 +345,35 @@ function query_objectImport (idPackage) {
 			)`
 		})};
 	`
-	console.log(text)
 	return text	
-
-
-	
-
 }
 
-
-
-function query_editPatient (formOption) {
-	const text = `
+function query_editObject (formOption) {
+	const text = 
+		`
 		Update object_table 
-		SET area_id = $1,
-			object_type = $2,
-			name = $3,
-			asset_control_number = $4,
-			room_number = $5,
-			physician_id = (
-				SELECT id 
-				FROM user_table 
-				WHERE name = $6
-			),
-			monitor_type = $8,
-			room = $9
-		WHERE mac_address = $7
-	`;
+		SET type = $2,
+			status = $3,
+			transferred_location = $4,
+			asset_control_number = $5,
+			name = $6,
+			monitor_type = $7,
+			area_id = $8,
+			mac_address = $9
+		WHERE id = $1
+		`;
 		
 	const values = [
-		formOption.area_id, 
-		formOption.gender_id, 
-		formOption.patientName, 
-		formOption.patientNumber, 
-		formOption.roomNumber,
-		formOption.physician,
-		formOption.mac_address,
+		formOption.id, 
+		formOption.type, 
+		formOption.status, 
+		formOption.transferred_location ? formOption.transferred_location.value : null, 
+		formOption.asset_control_number, 
+		formOption.name,
 		formOption.monitor_type,
-		formOption.room
+		formOption.area_id,
+		formOption.mac_address,
 	];
-
 
 	const query = {
 		text,
@@ -612,7 +600,6 @@ function query_signup(signupPackage) {
 		VALUES (
 			$1, 
 			$2, 
-			$3,
 			now()
 		);
 		`;
@@ -1226,6 +1213,7 @@ function query_backendSearch(keyType, keyWord){
 			}
 			break
 	}
+	console.log(query)
 	return query
 }
 function query_deleteSameNameSearchQueue(keyType, keyWord){
@@ -1304,6 +1292,7 @@ module.exports = {
 	query_getMonitorConfig,
 	query_setMonitorConfig,
 	query_editPatient,
+	query_editObject,
 	query_objectImport,
 	query_addObject,
 	query_addPatient,

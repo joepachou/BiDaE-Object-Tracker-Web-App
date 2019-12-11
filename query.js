@@ -447,15 +447,15 @@ const signup = (request, response) => {
         .then(res => {
             pool.query(queryType.query_insertUserData(username, role, area_id))
                 .then(res => {
-                    console.log('Sign up Success')
+                    console.log('sign up success')
                     response.status(200).json(res)
                 })
                 .catch(err => {
                     console.log(err)
                 })
         })
-        .catch((err,res) => {
-            console.log("Signup Fails" + err)
+        .catch(err => {
+            console.log("signup fails" + err)
         })
 }
 
