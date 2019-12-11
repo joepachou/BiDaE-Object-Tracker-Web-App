@@ -3,3 +3,6 @@
 node_modules/
 sslforfree/*
 uploads/
+edit_object_record/
+shift_record/
+search_result/
