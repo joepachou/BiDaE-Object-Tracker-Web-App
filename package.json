@@ -11,7 +11,7 @@
     "fetch": "git fetch --all",
     "reset": "git reset --hard origin/master",
     "git": "npm run fetch && npm run reset",
-    "production": "npm run build && npm install --produciton && npm install bcrypt && npm run server"
+    "production": "npm install && npm run build && npm run server"
   },
   "keywords": [],
   "author": "",
