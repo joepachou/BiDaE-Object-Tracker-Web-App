@@ -12,47 +12,12 @@ import _ from 'lodash';
 import axios from 'axios';
 import InfoPrompt from './InfoPrompt';
 import AccessControl from './AccessControl';
-import SearchResultListGroup from './SearchResultListGroup'
+import SearchResultListGroup from '../presentational/SearchResultListGroup'
 import { AppContext } from '../../context/AppContext';
 import { toast } from 'react-toastify';
 import DownloadPdfRequestForm from '../container/DownloadPdfRequestForm'
 import moment from 'moment'
 import config from '../../config'
-
-
-const Toast = () => {
-
-    const style = {
-        column: {
-            textAlign: 'center',
-        },
-        icon: {
-            check: {
-                color: 'green',
-            },
-            times: {
-                color: 'red',
-            },
-            exclamation: {
-                color: 'orange',
-            }
-        }
-    }
-
-    return (
-        <Row>
-            <Col className='d-flex '>
-                <i className="fas fa-check " style={style.icon.check}></i>     
-            </Col>
-            <Col>
-                view report     
-            </Col>
-            <Col>
-                download report     
-            </Col> 
-        </Row>
-    )
-}
 
 class SearchResultListForTablet extends React.Component {
 
@@ -68,6 +33,14 @@ class SearchResultListForTablet extends React.Component {
         editedObjectPackage: [],
         showAddDevice: false,
         showDownloadPdfRequest: false,
+    }
+
+    componentDidUpdate = (prevProps, prevState) => {
+        if (!(_.isEqual(prevProps.searchKey, this.props.searchKey))) {
+            this.setState({
+                showNotFoundResult: false
+            })
+        } 
     }
 
     handleSelectResultItem = (eventKey) => {
@@ -254,10 +227,7 @@ class SearchResultListForTablet extends React.Component {
         })
     }
 
-
-
     render() {
-        //console.log(this.props.searchResult)
         const { locale } = this.context;
         const { searchKey } = this.props;
         const style = {
@@ -279,9 +249,6 @@ class SearchResultListForTablet extends React.Component {
                 right: 'auto',
                 bottom: 'auto',
                 padding: 0,
-            },
-            list: {
-                //maxHeight: "28vh"
             }
         }
 
@@ -292,13 +259,19 @@ class SearchResultListForTablet extends React.Component {
             ? notFoundResult
             : foundResult
 
+        // let title = this.state.showNotFoundResult 
+        //     ? (this.props.searchKey === "my patients" || this.props.searchKey === "all patients")
+        //         ? locale.texts.PATIENTS_NOT_FOUND
+        //         : locale.texts.DEVICES_NOT_FOUND
+        //     : (this.props.searchKey === "my patients" || this.props.searchKey === "all patients")
+        //         ? locale.texts.PATIENTS_FOUND
+        //         : locale.texts.DEVICES_FOUND
+
         let title = this.state.showNotFoundResult 
-            ? (this.props.searchKey === "my patients" || this.props.searchKey === "all patients")
-                ? locale.texts.PATIENTS_NOT_FOUND
-                : locale.texts.DEVICES_NOT_FOUND
-            : (this.props.searchKey === "my patients" || this.props.searchKey === "all patients")
-                ? locale.texts.PATIENTS_FOUND
-                : locale.texts.DEVICES_FOUND
+        ? locale.texts.SEARCH_RESULTS_NOT_FOUND
+        : locale.texts.SEARCH_RESULTS_FOUND
+        // ? '未找到的結果'
+        // : '找到的結果'
 
 
         return(
@@ -318,7 +291,7 @@ class SearchResultListForTablet extends React.Component {
                                 <div className='searchResultForDestop'>{locale.texts.NO_RESULT}</div>
                             </Col> 
                         :   
-                            <div className="searchResultListGroupForTablet d-flex justify-content-center" style={style.list}>
+                            <Col className="searchResultListGroup d-flex justify-content-center">
                                 <AccessControl
                                     permission={'form:edit'}
                                     renderNoAccess={() => (
@@ -329,20 +302,21 @@ class SearchResultListForTablet extends React.Component {
                                     )
                                     }
                                 >
-                                {searchResult[0].object_type == 0 
-                                    ?   <SearchResultListGroup 
-                                            data={this.props.searchResult}
-                                            handleSelectResultItem={this.handleSelectResultItem}
-                                            selection={this.state.selection}
-                                            action
-                                        />
-                                    :   <SearchResultListGroup 
-                                            data={this.props.searchResult}
-                                            selection={this.state.selection}
-                                        />
-                                }
+                                    <SearchResultListGroup 
+                                        data={searchResult}
+                                        handleSelectResultItem={searchResult[0].object_type == 0 
+                                            ? this.handleSelectResultItem
+                                            : null
+                                        }
+                                        selection={this.state.selection}
+                                        action={searchResult[0].object_type == 0
+                                            ? true
+                                            : false
+                                        }
+                                    />
+
                                 </AccessControl>
-                            </div>
+                            </Col>
                     }
                 </Row>
                 <Row className='d-flex justify-content-center mt-3'>
@@ -353,7 +327,7 @@ class SearchResultListForTablet extends React.Component {
                         size="lg"
                         disabled={false}
                     >
-                        {(this.props.searchKey == "my patients" || this.props.searchKey == "all patients") 
+                        {/* {(this.props.searchKey == "my patients" || this.props.searchKey == "all patients") 
                             ?
                             this.state.showNotFoundResult
                             ? locale.texts.SHOW_PATIENTS_FOUND
@@ -362,7 +336,12 @@ class SearchResultListForTablet extends React.Component {
                             this.state.showNotFoundResult 
                             ? locale.texts.SHOW_DEVICES_FOUND
                             : locale.texts.SHOW_DEVICES_NOT_FOUND
+                        } */}
+                        {this.state.showNotFoundResult
+                            ? locale.texts.SHOW_SEARCH_RESULTS_FOUND
+                            : locale.texts.SHOW_SEARCH_RESULTS_NOT_FOUND
                         }
+
                     </Button>
                 </Row>
                 <ChangeStatusForm 

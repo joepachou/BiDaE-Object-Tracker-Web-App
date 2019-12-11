@@ -2,6 +2,7 @@ import React from 'react';
 import SearchContainer from './SearchContainer';
 import 'react-table/react-table.css';
 import SearchResultListForTablet from '../presentational/SearchResultListForTablet'
+import SearchResult from '../presentational/SearchResultList'
 import { Row, Col, Toast } from 'react-bootstrap'
 import SurveillanceContainerTablet from './SurveillanceContainerTablet';
 import config from '../../config';
@@ -586,11 +587,11 @@ class MainContainerForTablet extends React.Component{
 
                         {/** includeing search result */}                    
                         <div id="serchResult" className="d-flex" style={style.searchResultList}>
-                                <SearchResultListForTablet
-                                    searchResult={this.state.searchResult} 
-                                    searchKey={this.state.searchKey}
-                                    highlightSearchPanel={this.highlightSearchPanel}
-                                />
+                        <SearchResult
+                                searchResult={this.state.searchResult} 
+                                searchKey={this.state.searchKey}
+                                highlightSearchPanel={this.highlightSearchPanel}
+                            />
                         </div>
                     </div>
 
