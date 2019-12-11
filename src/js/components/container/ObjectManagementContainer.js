@@ -15,6 +15,7 @@ import {
     getLbeaconTable,
     objectImport,
     getImportTable,
+    deleteImportData
 } from "../../dataSrc"
 import axios from 'axios';
 import ReactTable from 'react-table';
@@ -318,6 +319,7 @@ class ObjectManagementContainer extends React.Component{
                     isShowBind: true,
                 })
                 
+          
 
             // console.log(e.target.name)
 
@@ -333,16 +335,62 @@ class ObjectManagementContainer extends React.Component{
             case "delete object":
                 this.deleteRecordDevice();
                 break;
+
             case "add all":
                 this.setState({
                     formTitle: name,
                     formPath: addObject
                 })
-                
                 break;
+
+
+             case "delete import data":
+                    this.deleteRecordImport();
+                 break;  
         }
 
     }
+
+
+    deleteRecordImport = () => {
+        let idPackage = []
+        var deleteArray = [];
+        var deleteCount = 0;
+        
+        this.state.dataImport.map (item => {
+         
+            this.state.selection.map(itemSelect => {
+                
+                itemSelect === item.name
+                ? 
+                 deleteArray.push(deleteCount.toString()) 
+                : 
+                null          
+            })
+                 deleteCount +=1
+        })
+        deleteArray.map( item => {
+            this.state.dataImport[item] === undefined ?
+                null
+                :
+                idPackage.push(parseInt(this.state.dataImport[item].id))
+            })
+        axios.post(deleteImportData, {
+            idPackage
+        })
+        .then(res => {
+            this.setState({
+                selection: [],
+                selectAll: false,
+            })
+        })
+        .catch(err => {
+            console.log(err)
+        })
+
+        this.handleSubmitForm()
+    }
+
 
 
     handleSubmitForm = () => {
@@ -544,18 +592,31 @@ class ObjectManagementContainer extends React.Component{
                 // ＩＭＰＯＲＴ時把ＡＣＮ重複的擋掉
                 let newData = []
                 let reapetFlag = false;
+                let DataNameIsNull = '';
+                let ReapeName = '';
+
                 data.map(importData =>{
                     reapetFlag = false;
                     this.state.dataImport.map(dataOrigin=>{
                        importData.asset_control_number === dataOrigin.asset_control_number ? reapetFlag=true : null
+                       importData.asset_control_number == dataOrigin.asset_control_number ? reapetFlag=true : null
                     })
-                    reapetFlag ? null : newData.push(importData)
+                   if( reapetFlag == false) {
+                       if(importData.asset_control_number !=undefined ){
+                             newData.push(importData) 
+                       }else{
+                           DataNameIsNull += importData.name + ','
+                       }
+                    }else{
+                        ReapeName += importData.name   + ','
+                    }
                 })
-                //沒被擋掉的存到newData後輸出
 
-             
-             
-             let { locale } = this.context
+                DataNameIsNull!='' ? alert('ASN必須不等於空:' + DataNameIsNull) : null 
+                ReapeName!='' ?    alert(ReapeName + '的ASN與其他筆資料重複')  : null
+                //沒被擋掉的存到newData後輸出
+            
+                 let { locale } = this.context
                 axios.post(objectImport, {
                     locale: locale.abbr ,
                     newData
@@ -574,8 +635,8 @@ class ObjectManagementContainer extends React.Component{
                 //console.log("文件類型不正確");
                 return;
             }
-        }; // 以二進制方式打開文件
         fileReader.readAsBinaryString(files[0]);
+        }; // 以二進制方式打開文件
     };
 
 
@@ -637,6 +698,14 @@ class ObjectManagementContainer extends React.Component{
                             </button>
                         </InputFiles>
 
+                        <Button 
+                            variant="outline-primary" 
+                            className='text-capitalize mr-2 mb-1'
+                            name="delete import data"
+                            onClick={this.handleClickButton}
+                        >
+                            {locale.texts.DELETE}
+                        </Button>
                     </ButtonToolbar>
                     <SelectTable
                             keyField='name'

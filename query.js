@@ -732,7 +732,7 @@ const deleteDevice = (request, response) => {
     const { idPackage } = request.body
     pool.query(queryType.query_deleteDevice(idPackage))
     .then(res => {
-                console.log('deleteDevice change record success')
+                console.log('delete Device success')
                 response.status(200).json(res)
     })
     .catch(err => {
@@ -740,6 +740,17 @@ const deleteDevice = (request, response) => {
     })
 }
 
+const deleteImportData = (request, response) => {
+    const { idPackage } = request.body
+    pool.query(queryType.query_deleteImportData(idPackage))
+    .then(res => {
+                console.log('delete ImportData success')
+                response.status(200).json(res)
+    })
+    .catch(err => {
+        console.log(err)
+    })
+}
 
 const getAreaTable = (request, response) => {
     pool.query(queryType.query_getAreaTable())
@@ -1085,6 +1096,7 @@ module.exports = {
     deleteShiftChangeRecord,
     deletePatient,
     deleteDevice,
+    deleteImportData,
     deleteLBeacon,
     deleteGateway,
     deleteUser,

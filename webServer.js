@@ -130,6 +130,8 @@ app.post('/test/deletePatient', db.deletePatient)
 
 app.post('/test/deleteDevice', db.deleteDevice)
 
+app.post('/test/deleteImportData', db.deleteImportData)
+
 app.post('/test/deleteLBeacon', db.deleteLBeacon)
 
 app.post('/test/deleteGateway', db.deleteGateway)

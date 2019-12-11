@@ -29,6 +29,7 @@ const deleteEditObjectRecord = `http://${dataSrcIP}/test/deleteEditObjectRecord`
 const deleteShiftChangeRecord = `http://${dataSrcIP}/test/deleteShiftChangeRecord`
 const deletePatient = `http://${dataSrcIP}/test/deletePatient`
 const deleteDevice = `http://${dataSrcIP}/test/deleteDevice`
+const deleteImportData = `http://${dataSrcIP}/test/deleteImportData`
 const deleteLBeacon= `http://${dataSrcIP}/test/deleteLBeacon`
 const deleteGateway= `http://${dataSrcIP}/test/deleteGateway`
 const getUserList = `http://${dataSrcIP}/test/getUserList`
@@ -91,6 +92,7 @@ module.exports = {
     generatePDF,
     modifyMyDevice,
     deleteDevice,
+    deleteImportData,
     deleteLBeacon,
     deleteGateway,
     getPDFInfo,
