@@ -635,8 +635,9 @@ class ObjectManagementContainer extends React.Component{
                 //console.log("文件類型不正確");
                 return;
             }
-        fileReader.readAsBinaryString(files[0]);
+       
         }; // 以二進制方式打開文件
+         fileReader.readAsBinaryString(files[0]);
     };
 
 
@@ -681,6 +682,15 @@ class ObjectManagementContainer extends React.Component{
 
                     <TabPanel> 
                     <ButtonToolbar>
+
+                      <InputFiles accept=".xlsx, .xls" onChange={this.onImportExcel}>
+                            <Button 
+                             variant="outline-primary" 
+                            className="btn btn-primary mr-2 mb-1"
+                            >
+                            {locale.texts.IMPORT_OBJECT}
+                            </Button>
+                        </InputFiles>
                         <Button 
                             variant="outline-primary" 
                             className='text-capitalize mr-2 mb-1'
@@ -690,13 +700,7 @@ class ObjectManagementContainer extends React.Component{
                             {locale.texts.ASSOCIATE}
                         </Button>
                          
-                        <InputFiles accept=".xlsx, .xls" onChange={this.onImportExcel}>
-                            <button 
-                            className="btn btn-primary mr-2 mb-1"
-                            >
-                            {locale.texts.IMPORT_OBJECT}
-                            </button>
-                        </InputFiles>
+                      
 
                         <Button 
                             variant="outline-primary" 
