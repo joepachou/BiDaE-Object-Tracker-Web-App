@@ -187,7 +187,8 @@ const query_getImportTable = () => {
 				object_import_table.name, 
 				object_import_table.asset_control_number,
 				object_import_table.type,
-				object_import_table.mac_address
+				object_import_table.mac_address,
+				object_import_table.id
 			FROM object_import_table
 
 
@@ -874,6 +875,13 @@ const query_deleteDevice = (idPackage) => {
 	return query
 }
 
+const query_deleteImportData = (idPackage) => {
+	const query = `
+		DELETE FROM object_import_table
+		WHERE id IN (${idPackage.map(item => `'${item}'`)});
+	`
+	return query
+}
 
 
 
@@ -1315,6 +1323,7 @@ module.exports = {
 	query_deleteShiftChangeRecord,
 	query_deletePatient,
 	query_deleteDevice,
+	query_deleteImportData,
 	query_setShift,
 	query_deleteLBeacon,
 	query_deleteGateway,
@@ -1335,6 +1344,7 @@ module.exports = {
 	query_editImportData,
 	query_cleanImportData,
 	query_getImportData,
+	query_editObject
 }
 
 

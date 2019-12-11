@@ -51,6 +51,9 @@ class EditImportTable extends React.Component {
                 })
         }else{
             alert("ＴＡＧ與產品編號不符");
+            this.setState({
+                scanValue: ''
+            })
         }
      
 
