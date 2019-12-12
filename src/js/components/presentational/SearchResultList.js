@@ -254,7 +254,7 @@ class SearchResult extends React.Component {
 
         let foundResult = this.props.searchResult.filter(item => item.found)
         let notFoundResult = this.props.searchResult.filter(item => !item.found)
-
+        console.log(foundResult.length)
         let searchResult = this.state.showNotFoundResult 
             ? notFoundResult
             : foundResult
@@ -296,7 +296,7 @@ class SearchResult extends React.Component {
                                     permission={'form:edit'}
                                     renderNoAccess={() => (
                                         <SearchResultListGroup 
-                                            data={this.props.searchResult}
+                                            data={searchResult}
                                             selection={this.state.selection}
                                         />
                                     )

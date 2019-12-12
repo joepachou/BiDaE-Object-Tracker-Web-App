@@ -267,7 +267,6 @@ class Map extends React.Component {
         
         this.filterTrackingData(_.cloneDeep(this.props.proccessedTrackingData))
         .map(item => {
-
             let position = this.macAddressToCoordinate(item.mac_address,item.currentPosition);
 
             /** Set the Marker's popup 
