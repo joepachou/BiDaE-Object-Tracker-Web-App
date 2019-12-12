@@ -278,11 +278,11 @@ const editPatient = (request, response) => {
     const formOption = request.body.formOption
     pool.query(queryType.query_editPatient(formOption))
         .then(res => {
-            console.log("Edit editPatient success");
+            console.log("edit Patient success");
             response.status(200).json(res)
         })
         .catch(err => {
-            console.log("Edit editPatient Fails: " + err)
+            console.log("edit Patient Fails: " + err)
         })
 }
 
@@ -290,11 +290,11 @@ const objectImport = (request, response) => {
     const idPackage = request.body.newData
        pool.query(queryType.query_objectImport(idPackage))
         .then(res => {
-            console.log("Import objectImport success");
+            console.log("import objects success");
             response.status(200).json(res)
         })
         .catch(err => {
-            console.log("Import objectImport Fails: " + err)
+            console.log("import objects Fails: " + err)
         })   
 
 

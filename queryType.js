@@ -132,7 +132,6 @@ const query_getPatientTable = (area_id) => {
 				object_table.name, 
 				object_table.id,
 				object_table.area_id,
-				object_table.room_number, 
 				object_table.physician_id,
 				object_table.mac_address,
 				object_table.asset_control_number,
@@ -156,7 +155,6 @@ const query_getPatientTable = (area_id) => {
 				object_table.name, 
 				object_table.id,
 				object_table.area_id, 
-				object_table.room_number, 
 				object_table.physician_id,
 				object_table.mac_address,
 				object_table.asset_control_number,
@@ -187,7 +185,6 @@ const query_getImportTable = () => {
 				object_import_table.name, 
 				object_import_table.asset_control_number,
 				object_import_table.type,
-				object_import_table.mac_address,
 				object_import_table.id
 			FROM object_import_table
 
@@ -393,14 +390,13 @@ function query_editPatient (formOption) {
 			object_type = $2,
 			name = $3,
 			asset_control_number = $4,
-			room_number = $5,
+			room = $5,
 			physician_id = (
 				SELECT id 
 				FROM user_table 
 				WHERE name = $6
 			),
 			monitor_type = $8,
-			room = $9
 		WHERE mac_address = $7
 	`;
 		
@@ -409,11 +405,10 @@ function query_editPatient (formOption) {
 		formOption.gender_id, 
 		formOption.patientName, 
 		formOption.patientNumber, 
-		formOption.roomNumber,
+		formOption.room,
 		formOption.physician,
 		formOption.mac_address,
 		formOption.monitor_type,
-		formOption.room
 	];
 
 
@@ -481,7 +476,6 @@ function query_addPatient (formOption) {
 		`
 		INSERT INTO object_table (
 			name,
-			room_number,
 			physician_id,
 			area_id,
 			mac_address, 
