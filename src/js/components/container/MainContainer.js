@@ -552,6 +552,7 @@ class MainContainer extends React.Component{
                             searchKey={searchKey}
                             searchResult={searchResult}
                             title={locale.texts.FOUND} 
+                            title2={locale.texts.NOT_FOUND}
                         />
                         <SurveillanceContainer 
                             proccessedTrackingData={proccessedTrackingData.length === 0 ? trackingData : proccessedTrackingData}
