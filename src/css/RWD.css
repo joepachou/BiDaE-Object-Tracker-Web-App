@@ -25,6 +25,10 @@
         margin: 0 5px 0 5px;
     }
 
+    .searchResultListGroupForTablet {
+        overflow: hidden auto;
+    }
+
     #navbar {
         /* height: 5vh !important; */
         font-size: 0.78rem;
