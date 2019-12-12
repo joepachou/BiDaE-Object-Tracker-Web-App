@@ -254,7 +254,6 @@ class SearchResult extends React.Component {
 
         let foundResult = this.props.searchResult.filter(item => item.found)
         let notFoundResult = this.props.searchResult.filter(item => !item.found)
-        console.log(foundResult.length)
         let searchResult = this.state.showNotFoundResult 
             ? notFoundResult
             : foundResult
