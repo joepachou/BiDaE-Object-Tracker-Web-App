@@ -291,7 +291,7 @@ class SearchResultListForTablet extends React.Component {
                                 <div className='searchResultForDestop'>{locale.texts.NO_RESULT}</div>
                             </Col> 
                         :   
-                            <Col className="searchResultListGroup d-flex justify-content-center">
+                            <Col className="searchResultListGroupForTablet d-flex justify-content-center">
                                 <AccessControl
                                     permission={'form:edit'}
                                     renderNoAccess={() => (
