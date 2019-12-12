@@ -136,9 +136,9 @@ const SearchResultListGroup = ({
         //     overFlow: 'hidden scroll'
         // },
         listGroup: {
-            maxHeight: window.innerWidth > 600 
-                ? modifiedHeight || 0
-                : '',
+            // maxHeight: window.innerWidth > 600 
+            //     ? modifiedHeight || 0
+            //     : '',
         }
     }
 
