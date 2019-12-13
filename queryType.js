@@ -66,11 +66,33 @@ function query_getTrackingData () {
 
 		ORDER BY 
 			object_table.type, 
-			object_table.asset_control_number,
+			object_table.asset_control_number
 			DESC;
 	`
 	return query;
 }
+
+
+const query_getImportDataFromBinding = () => {
+
+	let text = '';
+	
+		text +=`
+			SELECT 
+				object_import_table.name, 
+				object_import_table.asset_control_number,
+				object_import_table.type,
+				object_import_table.id,
+				object_import_table.bindflag,
+				object_import_table.mac_address
+			FROM object_import_table
+			Where object_import_table.bindflag = 'Already Binding'
+
+			ORDER BY object_import_table.asset_control_number ASC	
+		`;
+	
+	return text
+} 
 
 
 
@@ -94,7 +116,10 @@ const query_getObjectTable = (area_id, ) => {
 				object_table.room
 			FROM object_table 
 			WHERE object_table.object_type = 0
-			ORDER BY object_table.name ASC	
+
+	
+
+			ORDER BY object_table.name ASC;
 		`;
 	} else {
 		text +=`
@@ -114,10 +139,29 @@ const query_getObjectTable = (area_id, ) => {
 
 			FROM object_table 
 			WHERE object_table.object_type = 0
-
-			ORDER BY object_table.type DESC
+					
+			ORDER BY object_table.type DESC;
 		`;
 	}
+
+	text +=`
+		SELECT 
+			object_import_table.name, 
+			object_import_table.asset_control_number,
+			object_import_table.type,
+			object_import_table.id,
+			object_import_table.bindflag,
+			object_import_table.mac_address
+		FROM object_import_table
+		Where object_import_table.bindflag = 'Already Binding'
+
+		ORDER BY object_import_table.asset_control_number ASC	
+	`;
+
+
+
+
+
 	return text
 } 
 
@@ -185,7 +229,9 @@ const query_getImportTable = () => {
 				object_import_table.name, 
 				object_import_table.asset_control_number,
 				object_import_table.type,
-				object_import_table.id
+				object_import_table.id,
+				object_import_table.bindflag,
+				object_import_table.mac_address
 			FROM object_import_table
 
 
@@ -194,6 +240,8 @@ const query_getImportTable = () => {
 	
 	return text
 } 
+
+
 
 
 
@@ -222,10 +270,10 @@ function query_editImportData (formOption) {
 	const test = `
 		UPDATE object_import_table
 		SET 
-			mac_address = '${formOption[1]}'
+			mac_address = '${formOption[1]}',
+			bindflag = '${formOption[4]}'
 		WHERE asset_control_number = '${formOption[0]}';
 	`
-	console.log(test)
 	;
 
 	// const values = [
@@ -240,7 +288,8 @@ function query_editImportData (formOption) {
 	// 	values
 	// };
 
-	return test
+	return test;
+
 }
 
 function query_cleanImportData (formOption) {
@@ -248,13 +297,15 @@ function query_cleanImportData (formOption) {
 		`
 		UPDATE object_import_table
 		SET 
-			mac_address = $2
+			mac_address = $2,
+			bindflag = $3
 		WHERE asset_control_number = $1
 	`;
 
 	const values = [
 		formOption,
-		''
+		'',
+		'No Binding'
 	]
 
 	const query = {
@@ -333,13 +384,15 @@ function query_objectImport (idPackage) {
 		INSERT INTO object_import_table (
 			name,
 			type,
-			asset_control_number
+			asset_control_number,
+			bindflag
 		)
 		VALUES ${idPackage.map((item) => {
 			return `(
 				'${item.name}',
 				'${item.type}',
-				'${item.asset_control_number}'
+				'${item.asset_control_number}',
+				'No Binding'
 			)`
 		})};
 	`
@@ -486,13 +539,11 @@ function query_addPatient (formOption) {
 			registered_timestamp,
 			monitor_type
 		)
-		VALUES($1,$2,$3,$4,$5,$6,$7,'default','Patient',now(), $8)
+		VALUES($1,$2,$3,$4,$5,$6,'default','Patient',now(),$7)
 		`;
-		
 	const values = [
 		formOption.patientName,
-		formOption.roomNumber,
-		formOption.attendingPhysician,
+		formOption.physician,
 		formOption.area_id,
 		formOption.mac_address,
 		formOption.gender_id,
