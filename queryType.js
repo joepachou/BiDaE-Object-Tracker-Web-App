@@ -66,7 +66,7 @@ function query_getTrackingData () {
 
 		ORDER BY 
 			object_table.type, 
-			object_table.asset_control_number
+			object_table.asset_control_number,
 			DESC;
 	`
 	return query;
