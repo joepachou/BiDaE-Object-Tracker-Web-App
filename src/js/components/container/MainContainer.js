@@ -365,15 +365,18 @@ class MainContainer extends React.Component{
                     }
                 })
         } else if (searchKey === ALL_DEVICES) {
-
+            // console.log(auth.user.areas_id)
             searchResult = proccessedTrackingData
                 .filter(item => item.object_type == 0)
                 .map(item => {
+
                     if (auth.user.areas_id.includes(item.area_id)) {
                         item.searchedType = 0
+                        // console.log('hi')
                     }
                     return item
                 })
+            // console.log(searchResult)
 
         } else if (searchKey === MY_PATIENTS){
             const devicesAccessControlNumber = auth.user.myDevice || []
@@ -422,7 +425,11 @@ class MainContainer extends React.Component{
 
             proccessedTrackingData.map(item => {
                 if (item.object_type == 0 && (item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0
-                    || item.asset_control_number.slice(10,14).indexOf(searchKey) >= 0
+                    // fix 4.7.3
+                    || item.asset_control_number.slice(10,14) == searchKey
+                    // original
+                    // || item.asset_control_number.slice(10,14).indexOf(searchKey) >= 0
+                    // 
                     || item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0) 
                 ) {
 
@@ -544,6 +551,7 @@ class MainContainer extends React.Component{
                             searchKey={searchKey}
                             searchResult={searchResult}
                             title={locale.texts.FOUND} 
+                            title2={locale.texts.NOT_FOUND}
                         />
                         <SurveillanceContainer 
                             proccessedTrackingData={proccessedTrackingData.length === 0 ? trackingData : proccessedTrackingData}

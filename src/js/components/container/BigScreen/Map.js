@@ -93,6 +93,7 @@ class Map extends React.Component {
         /** Set the map's events */
         this.map.on('zoomend', this.resizeMarkers)
         this.createLegend(this.createLegendJSX())
+
     }
 
     /** Resize the markers and errorCircles when the view is zoomend. */
@@ -336,6 +337,7 @@ class Map extends React.Component {
              * More Style sheet include in Map.css */
             let popupContent = this.props.mapConfig.getPopupContent([item], this.collectObjectsByLatLng(item.currentPosition), locale)
             /** Set the icon option*/
+
             item.iconOption = {
 
                 /** Set the pin color */

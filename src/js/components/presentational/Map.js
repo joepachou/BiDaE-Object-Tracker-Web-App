@@ -29,6 +29,9 @@ class Map extends React.Component {
     errorCircle = L.layerGroup();
     lbeaconsPosition = L.layerGroup();
     geoFenceLayer = L.layerGroup()
+    currentZoom = 0
+    prevZoom = 0
+    pin_shift_scale = [0, -150]
 
     componentDidMount = () => {
         this.initMap();  
@@ -78,19 +81,28 @@ class Map extends React.Component {
 
         this.image = image
         this.map = map;
-
+        this.originalZoom = this.map.getZoom()
+        this.currentZoom = this.map.getZoom();
+        this.prevZoom = this.map.getZoom();
         /** Set the map's events */
         this.map.on('zoomend', this.resizeMarkers)
     }
 
     /** Resize the markers and errorCircles when the view is zoomend. */
     resizeMarkers = () => {
+        this.prevZoom = this.currentZoom
+        this.currentZoom = this.map.getZoom();
         this.calculateScale();
         this.markersLayer.eachLayer( marker => {
             let icon = marker.options.icon;
+
             icon.options.iconSize = [this.scalableIconSize, this.scalableIconSize]
             icon.options.numberSize = this.scalableNumberSize
+            var pos = marker.getLatLng()
+            marker.setLatLng([pos.lat - this.prevZoom * this.pin_shift_scale[0] + this.currentZoom* this.pin_shift_scale[0], pos.lng - this.pin_shift_scale[1]* this.prevZoom + this.currentZoom* this.pin_shift_scale[1]])
             marker.setIcon(icon);
+
+            
         })
 
         this.errorCircle.eachLayer( circle => {
@@ -122,7 +134,7 @@ class Map extends React.Component {
 
     /** Calculate the current scale for creating markers and resizing. */
     calculateScale = () => {
-        this.currentZoom = this.map.getZoom();
+        
         this.minZoom = this.map.getMinZoom();
         this.zoomDiff = this.currentZoom - this.minZoom;
         this.resizeFactor = Math.pow(2, (this.zoomDiff));
@@ -248,14 +260,16 @@ class Map extends React.Component {
      * Create the error circle of markers, and add into this.markersLayer.
      */
     handleObjectMarkers = () => {
+        console.log('update')
         let { locale } = this.context
 
         /** Clear the old markerslayers. */
+        this.prevZoom = this.originalZoom;
         this.markersLayer.clearLayers();
         this.errorCircle .clearLayers();
 
         /** Mark the objects onto the map  */
-        this.calculateScale();
+        // this.calculateScale();
 
         const iconSize = [this.scalableIconSize, this.scalableIconSize];
         const numberSize = this.scalableNumberSize;
@@ -263,7 +277,7 @@ class Map extends React.Component {
         
         this.filterTrackingData(_.cloneDeep(this.props.proccessedTrackingData))
         .map(item => {
-
+            // console.log(item)
             let position = this.macAddressToCoordinate(item.mac_address,item.currentPosition);
 
             /** Set the Marker's popup 
@@ -298,7 +312,11 @@ class Map extends React.Component {
             }
 
             const option = new L.AwesomeNumberMarkers (item.iconOption)
-            let marker =  L.marker(position, {icon: option}).bindPopup(popupContent, this.props.mapConfig.popupOptions).addTo(this.markersLayer)
+            let marker =  L.marker(position, {icon: option}).bindPopup(popupContent, this.props.mapConfig.popupOptions)
+            // console.log(item.iconOption.currentPosition[0])
+            var pos = marker.getLatLng()
+            marker.setLatLng([pos.lat - this.prevZoom * this.pin_shift_scale[0] + this.currentZoom* this.pin_shift_scale[0], pos.lng - this.pin_shift_scale[1]* this.prevZoom + this.currentZoom* this.pin_shift_scale[1]])
+            marker.addTo(this.markersLayer)
 
             /** Set the z-index offset of the searhed object so that
              * the searched object icon will be on top of all others */

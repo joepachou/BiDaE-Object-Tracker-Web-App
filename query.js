@@ -63,7 +63,6 @@ const getTrackingData = (request, response) => {
 
     /** The user's authenticated area id */
     const userAuthenticatedAreaId= request.body.user.areas_id
-
     /** The UI's current area id */
     const currentAreaId = request.body.areaId.toString()
 

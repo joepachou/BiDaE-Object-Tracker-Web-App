@@ -587,7 +587,7 @@ class MainContainerForTablet extends React.Component{
 
                         {/** includeing search result */}                    
                         <div id="serchResult" className="d-flex" style={style.searchResultList}>
-                        <SearchResult
+                        <SearchResultListForTablet
                                 searchResult={this.state.searchResult} 
                                 searchKey={this.state.searchKey}
                                 highlightSearchPanel={this.highlightSearchPanel}
