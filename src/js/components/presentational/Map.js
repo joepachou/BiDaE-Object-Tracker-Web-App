@@ -260,7 +260,6 @@ class Map extends React.Component {
      * Create the error circle of markers, and add into this.markersLayer.
      */
     handleObjectMarkers = () => {
-        console.log('update')
         let { locale } = this.context
 
         /** Clear the old markerslayers. */

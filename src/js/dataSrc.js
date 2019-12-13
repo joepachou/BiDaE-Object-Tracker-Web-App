@@ -1,6 +1,5 @@
 const dataSrcIP = process.env.DATASRC_IP;
 const protocol = process.env.PROTOCOL;
-console.log(protocol)
 const getTrackingData = `${protocol}://${dataSrcIP}/data/getTrackingData`;
 const getObjectTable = `${protocol}://${dataSrcIP}/data/getObjectTable`;
 const getPatientTable = `${protocol}://${dataSrcIP}/data/getPatientTable`;

@@ -23,7 +23,6 @@ const InfoPrompt = ({
     const appContext = React.useContext(AppContext);
     const { locale } = appContext
     const frequentSearchItem = Object.values(config.frequentSearchOption)
-    console.log(title)
     return (
         <Alert variant='secondary' className='d-flex justify-content-start'>
             <div 
