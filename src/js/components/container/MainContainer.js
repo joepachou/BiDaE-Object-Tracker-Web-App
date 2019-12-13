@@ -185,7 +185,6 @@ class MainContainer extends React.Component{
     getTrackingData = () => {
         let { auth, locale, stateReducer } = this.context
         let [{areaId, violatedObjects}, dispatch] = stateReducer
-        
         axios.post(dataSrc.getTrackingData,{
             rssiThreshold: this.state.rssiThreshold,
             locale: locale.abbr,

@@ -273,7 +273,6 @@ class SearchResult extends React.Component {
         // ? '未找到的結果'
         // : '找到的結果'
 
-
         return(
             <div>
                 <Row className='d-flex justify-content-center' style={style.titleText}>
@@ -296,7 +295,7 @@ class SearchResult extends React.Component {
                                     permission={'form:edit'}
                                     renderNoAccess={() => (
                                         <SearchResultListGroup 
-                                            data={this.props.searchResult}
+                                            data={searchResult}
                                             selection={this.state.selection}
                                         />
                                     )
