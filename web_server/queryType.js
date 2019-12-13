@@ -1215,7 +1215,6 @@ function query_backendSearch(keyType, keyWord){
 			}
 			break
 	}
-	console.log(query)
 	return query
 }
 function query_deleteSameNameSearchQueue(keyType, keyWord){
@@ -1223,7 +1222,6 @@ function query_deleteSameNameSearchQueue(keyType, keyWord){
 	var text = `DELETE FROM search_result_queue where (key_type = '${keyType}' AND key_word = '${keyWord}') 
 	OR 
 		id NOT IN (SELECT id FROM search_result_queue ORDER BY query_time desc LIMIT 5) RETURNING *;`
-	// console.log(text)
 	return text
 }
 function query_backendSearch_writeQueue(keyType, keyWord, mac_addresses, pin_color_index){

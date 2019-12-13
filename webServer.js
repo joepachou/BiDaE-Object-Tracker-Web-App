@@ -4,10 +4,10 @@ const app = express()
 const bodyParser = require('body-parser')
 const httpPort = process.env.HTTP_PORT || 80;
 const httpsPort = process.env.HTTPS_PORT || 443;
-const db = require('./query')
+const db = require('./web_server/query')
 const path = require('path');
-const fs = require('fs');
-const http = require('http');
+const fs = require('fs')
+const http = require('http');;
 const https = require('https');
 const session = require('express-session')
 const formidable = require('formidable');
@@ -154,16 +154,16 @@ app.post('/data/getAreaTable', db.getAreaTable)
 
 app.post('/data/addBulkObject', db.addBulkObject)
 
-app.get('/shift_record/:file', (req, res) =>{
-	res.sendFile(path.join(__dirname, 'shift_record',req.params['file']));
+app.get('/record/shift_record/:file', (req, res) =>{
+	res.sendFile(path.join(__dirname, 'record/shift_record',req.params['file']));
 })
 
-app.get('/search_result/:file', (req, res) =>{
-	res.sendFile(path.join(__dirname, 'search_result',req.params['file']));
+app.get('/record//search_result/:file', (req, res) =>{
+	res.sendFile(path.join(__dirname, 'record/search_result',req.params['file']));
 })
 
-app.get('/edit_object_record/:file', (req, res) =>{
-	res.sendFile(path.join(__dirname, 'edit_object_record',req.params['file']));
+app.get('/record//edit_object_record/:file', (req, res) =>{
+	res.sendFile(path.join(__dirname, 'record/edit_object_record',req.params['file']));
 })
 
 app.get('/download/com.beditech.IndoorNavigation.apk', (req, res) => {
@@ -195,9 +195,9 @@ var credentials = {
 const httpsServer = https.createServer(credentials, app);
 const httpServer = http.createServer(app);
 
-// httpServer.listen(httpPort, () =>{
-//     console.log(`HTTP Server running on port ${httpPort}`)
-// })
+httpServer.listen(httpPort, () =>{
+    console.log(`HTTP Server running on port ${httpPort}`)
+})
 
 httpsServer.listen(httpsPort, () => {
     console.log(`HTTPS Server running on PORT ${httpsPort}`)
