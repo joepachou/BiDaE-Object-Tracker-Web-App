@@ -18,12 +18,12 @@ const style = {
 const InfoPrompt = ({
     searchKey,
     searchResult,
-    title
+    title, title2
 }) => {
     const appContext = React.useContext(AppContext);
     const { locale } = appContext
     const frequentSearchItem = Object.values(config.frequentSearchOption)
-
+    console.log(title)
     return (
         <Alert variant='secondary' className='d-flex justify-content-start'>
             <div 
@@ -47,6 +47,35 @@ const InfoPrompt = ({
                     :   ""
                 }
             </div>
+        {/*
+            fix bug 4.3
+        */}
+            <div style={{width: '100px'}}>
+            </div>
+            <div 
+                className='text-capitalize mr-2' 
+                style={style.alertTextTitle}
+            >
+                {searchKey ? title2 : ''}
+            </div>
+            <div 
+                className="mr-1"
+                style={style.alertText}
+            >
+                {searchKey ? searchResult.filter(item => !item.found).length : ""}
+            </div>
+
+            <div >
+                {searchKey 
+                    ?   frequentSearchItem.includes(searchKey)
+                        ?   locale.texts[searchKey.toUpperCase().replace(/ /g, '_')]
+                        :   searchKey
+                    :   ""
+                }
+            </div>
+        {/*
+            fix bug 4.3
+        */}
         </Alert>
     )
 
