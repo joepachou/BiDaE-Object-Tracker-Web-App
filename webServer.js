@@ -14,6 +14,11 @@ const formidable = require('formidable');
 const cors = require('cors');
 const parse = require('csv-parse')
 const csv =require('csvtojson')
+const {
+    PRIVATE_KEY,
+    CERTIFICATE,
+    CA_BUNDLE
+} = process.env
 
 
 app.use(bodyParser.json())
@@ -154,23 +159,22 @@ app.post('/data/getAreaTable', db.getAreaTable)
 
 app.post('/data/addBulkObject', db.addBulkObject)
 
-app.get('/record/shift_record/:file', (req, res) =>{
-	res.sendFile(path.join(__dirname, 'record/shift_record',req.params['file']));
+app.get(`${process.env.DEFAULT_FOLDER}/shift_record/:file`, (req, res) =>{
+	res.sendFile(path.join(__dirname, `${process.env.DEFAULT_FOLDER}/shift_record`,req.params['file']));
 })
 
-app.get('/record//search_result/:file', (req, res) =>{
-	res.sendFile(path.join(__dirname, 'record/search_result',req.params['file']));
+app.get(`${process.env.DEFAULT_FOLDER}/search_result/:file`, (req, res) =>{
+	res.sendFile(path.join(__dirname, `${process.env.DEFAULT_FOLDER}/search_result`,req.params['file']));
 })
 
-app.get('/record//edit_object_record/:file', (req, res) =>{
-	res.sendFile(path.join(__dirname, 'record/edit_object_record',req.params['file']));
+app.get(`${process.env.DEFAULT_FOLDER}/edit_object_record/:file`, (req, res) =>{
+	res.sendFile(path.join(__dirname, `${process.env.DEFAULT_FOLDER}/edit_object_record`,req.params['file']));
 })
 
 app.get('/download/com.beditech.IndoorNavigation.apk', (req, res) => {
     const file = `${__dirname}/download/com.beditech.IndoorNavigation.apk`;
     res.download(file);
 });
-
 
 
 /** privatekey name: private.key
@@ -181,25 +185,25 @@ app.get('/download/com.beditech.IndoorNavigation.apk', (req, res) => {
 /** Create self-signed certificate  
  *  >> openssl req -nodes -new -x509 -keyout private.key -out certificate.cert */
 
-var privateKey = fs.readFileSync(__dirname + '/sslforfree/private.key');
-// var certificate = fs.readFileSync(__dirname + '/sslforfree/certificate.crt');
-var certificate = fs.readFileSync(__dirname + '/sslforfree/certificate.cert');
-// var ca_bundle = fs.readFileSync(__dirname + '/sslforfree/ca_bundle.crt');
+var privateKey = PRIVATE_KEY ? fs.readFileSync(__dirname + `/ssl/${PRIVATE_KEY}`) : null
+var certificate = CERTIFICATE ? fs.readFileSync(__dirname + `/ssl/${CERTIFICATE}`) : null
+var ca_bundle = CA_BUNDLE ? fs.readFileSync(__dirname + `/ssl/${CA_BUNDLE}`) : null
 
-var credentials = { 
+var credentials = CA_BUNDLE ? { 
     key: privateKey, 
-    cert: certificate, 
-    // ca: ca_bundle 
-};
+    cert: certificate,
+    ca: ca_bundle
+} : null
 
-const httpsServer = https.createServer(credentials, app);
+const httpsServer = https.createServer(credentials, app)
 const httpServer = http.createServer(app);
 
+/** Enable HTTP server */
 httpServer.listen(httpPort, () =>{
     console.log(`HTTP Server running on port ${httpPort}`)
 })
 
-httpsServer.listen(httpsPort, () => {
+/** Enable HTTPS server */
+PRIVATE_KEY ? httpsServer.listen(httpsPort, () => {
     console.log(`HTTPS Server running on PORT ${httpsPort}`)
-})
-
+}) : null
