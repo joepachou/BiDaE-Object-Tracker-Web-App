@@ -1,5 +1,4 @@
 *.env
-.DS_Store
+*.DS_Store
 node_modules/
-sslforfree/*
-record/
+default_folder/
