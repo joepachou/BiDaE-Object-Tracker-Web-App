@@ -31,8 +31,7 @@ module.exports = {
                 exclude: /node_modules/,
                 use: {
                     loader: "babel-loader"
-                }
-                
+                },                
             },
             {
                 test: /\.html$/,
@@ -43,10 +42,12 @@ module.exports = {
                 ]
             },
             {
-                test: /\.(png|jpg|gif|svg|jpeg)$/,
+                // test: /\.(png|jpg|gif|svg|jpeg)$/,
+                // test: /\.(png|jpe|jpg|woff|woff2|eot|ttf|svg|jpeg)(\?.*$|$)/,
+                test: /\.(eot|woff|woff2|ttf|svg|png|jpe?g|gif)(\?\S*)?$/,
                 use: [
                 {
-                    loader: 'file-loader',
+                    loader: 'file-loader?limit=100000&name=[name].[ext]',
                     options: {},
                 },
                 ],

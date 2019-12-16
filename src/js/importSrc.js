@@ -41,6 +41,9 @@ import "../../node_modules/leaflet.markercluster/dist/MarkerCluster.css"
 
 import "../../node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css"
 
+/** font awesome related source */
+import "../../node_modules/@fortawesome/fontawesome-free/css/all.css"
+
 
 
 
