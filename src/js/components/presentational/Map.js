@@ -39,9 +39,9 @@ class Map extends React.Component {
 
     componentDidUpdate = (prevProps) => {
         this.handleObjectMarkers();
-        // if (this.props.lbeaconPosition.length !== 0 && !this.state.hasIniLbeaconPosition && this.props.isOpenFence) {
-        //     this.createLbeaconMarkers()
-        // }
+        if (this.props.lbeaconPosition.length !== 0 && !this.state.hasIniLbeaconPosition && process.env.IS_LBEACON_MARKER) {
+            this.createLbeaconMarkers()
+        }
 
         if (this.props.geoFenceConfig.length !== 0 && !this.state.hasGeoFenceMaker && this.props.isOpenFence) {
             this.createGeoFenceMarkers()
@@ -202,6 +202,7 @@ class Map extends React.Component {
 
         /** Creat the marker of all lbeacons onto the map  */
         lbeaconPosition.map(pos => {
+            console.log(lbeaconPosition)
             let latLng = pos.split(',')
             let lbeacon = L.circleMarker(latLng, mapConfig.lbeaconMarkerOption).addTo(this.lbeaconsPosition);
 
