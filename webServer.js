@@ -189,7 +189,7 @@ var privateKey = PRIVATE_KEY ? fs.readFileSync(__dirname + `/ssl/${PRIVATE_KEY}`
 var certificate = CERTIFICATE ? fs.readFileSync(__dirname + `/ssl/${CERTIFICATE}`) : null
 var ca_bundle = CA_BUNDLE ? fs.readFileSync(__dirname + `/ssl/${CA_BUNDLE}`) : null
 
-var credentials = CA_BUNDLE ? { 
+var credentials = PRIVATE_KEY ? { 
     key: privateKey, 
     cert: certificate,
     ca: ca_bundle
