@@ -39,7 +39,7 @@ class Map extends React.Component {
 
     componentDidUpdate = (prevProps) => {
         this.handleObjectMarkers();
-        if (process.env.IS_LBEACON_MARK && this.props.lbeaconPosition.length !== 0 && !this.state.hasIniLbeaconPosition) {
+        if (JSON.parse(process.env.IS_LBEACON_MARK) && this.props.lbeaconPosition.length !== 0 && !this.state.hasIniLbeaconPosition) {
             this.createLbeaconMarkers()
         }
 
