@@ -102,7 +102,6 @@ class ObjectTypeList extends React.Component {
                                 // active={this.state.searchKey === item.toLowerCase()} 
                                 key={index}
                                 name={item}
-                                className="text-capitalize"
                             >
                                 {item}
                             </Button>
