@@ -460,7 +460,6 @@ class MainContainer extends React.Component{
         this.setState({
             proccessedTrackingData
         })
-        console.log(searchResult)
         return searchResult
     }
 
