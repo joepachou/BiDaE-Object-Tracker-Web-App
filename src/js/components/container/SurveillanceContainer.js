@@ -359,7 +359,7 @@ class SurveillanceContainer extends React.Component {
                 </div>
                 <PdfDownloadForm 
                     show={this.state.showPdfDownloadForm}
-                    data={this.props.proccessedTrackingData.filter(item => item.searched)}
+                    data={this.props.searchResult}
                     handleClose = {this.handleClosePdfForm}
                     userInfo={auth.user}
                 />

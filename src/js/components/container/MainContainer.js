@@ -557,6 +557,7 @@ class MainContainer extends React.Component{
                             proccessedTrackingData={proccessedTrackingData.length === 0 ? trackingData : proccessedTrackingData}
                             hasSearchKey={hasSearchKey}
                             colorPanel={colorPanel}
+                            searchResult={this.state.searchResult}
                             handleClearButton={this.handleClearButton}
                             getSearchKey={this.getSearchKey}
                             clearColorPanel={clearColorPanel}
