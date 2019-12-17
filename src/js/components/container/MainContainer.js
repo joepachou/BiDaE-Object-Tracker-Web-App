@@ -46,7 +46,7 @@ class MainContainer extends React.Component{
         rssiThreshold: window.innerWidth < config.mobileWidowWidth
             ? config.surveillanceMap.locationAccuracyMapToDefault[0]
             : config.surveillanceMap.locationAccuracyMapToDefault[1],
-        auth: this.context.auth,
+        authenticated: this.context.auth.authenticated,
         shouldUpdateTrackingData: true,
         markerClickPackage: {}
     }
@@ -72,10 +72,10 @@ class MainContainer extends React.Component{
         if (isTrackingDataChange && this.state.hasSearchKey) {
             this.handleRefreshSearchResult()
         }
-        if (!(_.isEqual(prevState.auth, this.context.auth))) {
+        if (!(_.isEqual(prevState.authenticated, this.context.auth.authenticated))) {
             this.getTrackingData(this.context.stateReducer[0].areaId)
             this.setState({
-                auth: this.context.auth,
+                authenticated: this.context.auth.authenticated,
                 searchResult: [],
                 searchKey: '',
                 hasSearchKey: false
@@ -289,7 +289,7 @@ class MainContainer extends React.Component{
         }, {})
 
         duplicateSearchKey.map(key => searchResultObjectTypeMap[key] = 0)
-
+        
         if(colorPanel) {
             this.setState({
                 hasSearchKey: Object.keys(colorPanel).length === 0 ? false : true,
@@ -460,6 +460,7 @@ class MainContainer extends React.Component{
         this.setState({
             proccessedTrackingData
         })
+        console.log(searchResult)
         return searchResult
     }
 
