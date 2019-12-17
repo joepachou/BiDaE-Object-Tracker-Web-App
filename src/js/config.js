@@ -211,10 +211,10 @@ const config = {
     searchResultFolderPath: "search_result",
 
     folderPath: {
-        broken: "edit_object_record",
-        transferred: "edit_object_record",
-        shiftChange: "shift_record",
-        searchResult: "search_result"
+        broken: `${process.env.DEFAULT_FOLDER}/edit_object_record`,
+        transferred: `${process.env.DEFAULT_FOLDER}/edit_object_record`,
+        shiftChange: `${process.env.DEFAULT_FOLDER}/shift_record`,
+        searchResult: `${process.env.DEFAULT_FOLDER}/search_result`
     },
 
     shiftRecordFileNameTimeFormat: "MM_DD_YYYY",
@@ -922,18 +922,6 @@ const config = {
                 id: 2,
             },
         },
-
-        // BOTDefaultAreas: {
-        //     1: "NTUH_EMERGENCY_ROOM",
-        //     2: "IIS_SINICA_FOURTH_FLOOR",
-        //     3: "NTUH_YUNLIN_WARD_FIVE_B",
-        //     4: "NURSING_HOME",
-        //     5: "YUANLIN_CHRISTIAN_HOSPITAL",
-        //     6: "VETERAN_HOME_FIRST_FLOOR",
-        //     7: "VETERAN_HOME_THIRD_FLOOR",
-        // },
-
-
 
         areaOptions: process.env.SITES_GROUP
             .split(',')

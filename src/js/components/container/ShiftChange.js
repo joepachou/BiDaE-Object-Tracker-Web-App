@@ -196,7 +196,7 @@ class ShiftChange extends React.Component {
                         <Row style={style.row} className='text-capitalize'>
                             <Col>
                                 <div>
-                                    {locale.texts.SHIFT}: {config.getShift(locale.abbr)}
+                                    {locale.texts.SHIFT}: {locale.texts[config.getShift(locale.abbr).toUpperCase().replace(/ /g, '_')]}
                                  </div>
 
                                 {/* <div>{locale.texts.SHIFT}: {auth.user.shift ? locale.texts[auth.user.shift.toUpperCase().replace(/ /g, '_')] : ''} </div> */}
@@ -267,7 +267,7 @@ class ShiftChange extends React.Component {
                         >
                             {locale.texts.CONFIRM}
                         </Button>
-                        <a href={`${dataSrc.domain}/${this.state.fileUrl}`} ref="download" download style={{display: 'none'}}>hi</a>
+                        <a href={`/${this.state.fileUrl}`} ref="download" download style={{display: 'none'}}>hi</a>
                     </Modal.Footer>
                 </Modal>
                 <GeneralConfirmForm

@@ -159,15 +159,15 @@ app.post('/data/getAreaTable', db.getAreaTable)
 
 app.post('/data/addBulkObject', db.addBulkObject)
 
-app.get(`${process.env.DEFAULT_FOLDER}/shift_record/:file`, (req, res) =>{
+app.get(`/${process.env.DEFAULT_FOLDER}/shift_record/:file`, (req, res) =>{
 	res.sendFile(path.join(__dirname, `${process.env.DEFAULT_FOLDER}/shift_record`,req.params['file']));
 })
 
-app.get(`${process.env.DEFAULT_FOLDER}/search_result/:file`, (req, res) =>{
+app.get(`/${process.env.DEFAULT_FOLDER}/search_result/:file`, (req, res) =>{
 	res.sendFile(path.join(__dirname, `${process.env.DEFAULT_FOLDER}/search_result`,req.params['file']));
 })
 
-app.get(`${process.env.DEFAULT_FOLDER}/edit_object_record/:file`, (req, res) =>{
+app.get(`/${process.env.DEFAULT_FOLDER}/edit_object_record/:file`, (req, res) =>{
 	res.sendFile(path.join(__dirname, `${process.env.DEFAULT_FOLDER}/edit_object_record`,req.params['file']));
 })
 
@@ -183,7 +183,9 @@ app.get('/download/com.beditech.IndoorNavigation.apk', (req, res) => {
  */
 
 /** Create self-signed certificate  
- *  >> openssl req -nodes -new -x509 -keyout private.key -out certificate.cert */
+ *  >> openssl req -nodes -new -x509 -keyout private.key -out certificate.cert 
+ * If it is window os, please refer to https://tecadmin.net/install-openssl-on-windows/ install openssl 
+ * and set the environment variables*/
 
 var privateKey = PRIVATE_KEY ? fs.readFileSync(__dirname + `/ssl/${PRIVATE_KEY}`) : null
 var certificate = CERTIFICATE ? fs.readFileSync(__dirname + `/ssl/${CERTIFICATE}`) : null
