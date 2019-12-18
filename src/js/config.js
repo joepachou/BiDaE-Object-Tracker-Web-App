@@ -640,7 +640,7 @@ const config = {
                 id: 1,
                 name: "NTUH",
                 url: NTUH_MAP,
-                bounds: [[0,0], [33659,56214]],
+                bounds: [[-250,700], [33409,56814]],
             },
 
             IIS_SINICA_FOURTH_FLOOR: {
