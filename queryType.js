@@ -94,7 +94,30 @@ const query_getImportDataFromBinding = () => {
 	return text
 } 
 
+const query_getObjectTable_fromImport = () => {
+	let text = '';
+	
+		text +=`
+			SELECT 
+				import_table.name, 
+				import_table.asset_control_number,
+				import_table.type,
+				import_table.id,
+				import_table.bindflag,
+				import_table.mac_address,
+				import_table.area_id,
+				import_table.status,
+				import_table.transferred_location,
+				import_table.monitor_type
+			FROM import_table
+			WHERE import_table.bindflag = 'Already Binding'
 
+
+			ORDER BY import_table.asset_control_number ASC	
+		`;
+	
+	return text
+}
 
 const query_getObjectTable = (area_id, ) => {
 
@@ -146,16 +169,20 @@ const query_getObjectTable = (area_id, ) => {
 
 	text +=`
 		SELECT 
-			object_import_table.name, 
-			object_import_table.asset_control_number,
-			object_import_table.type,
-			object_import_table.id,
-			object_import_table.bindflag,
-			object_import_table.mac_address
-		FROM object_import_table
-		Where object_import_table.bindflag = 'Already Binding'
+			import_table.name, 
+			import_table.asset_control_number,
+			import_table.type,
+			import_table.id,
+			import_table.bindflag,
+			import_table.mac_address,
+			import_table.area_id,
+			import_table.status,
+			import_table.transferred_location,
+			import_table.monitor_type
+		FROM import_table
+		Where import_table.bindflag = 'Already Binding'
 
-		ORDER BY object_import_table.asset_control_number ASC	
+		ORDER BY import_table.asset_control_number ASC	
 	`;
 
 
@@ -226,16 +253,20 @@ const query_getImportTable = () => {
 	
 		text +=`
 			SELECT 
-				object_import_table.name, 
-				object_import_table.asset_control_number,
-				object_import_table.type,
-				object_import_table.id,
-				object_import_table.bindflag,
-				object_import_table.mac_address
-			FROM object_import_table
+				import_table.name, 
+				import_table.asset_control_number,
+				import_table.type,
+				import_table.id,
+				import_table.bindflag,
+				import_table.mac_address,
+				import_table.area_id,
+				import_table.status,
+				import_table.transferred_location,
+				import_table.monitor_type
+			FROM import_table
 
 
-			ORDER BY object_import_table.asset_control_number ASC	
+			ORDER BY import_table.bindflag DESC	
 		`;
 	
 	return text
@@ -268,7 +299,7 @@ const query_getImportTable = () => {
 
 function query_editImportData (formOption) {
 	const test = `
-		UPDATE object_import_table
+		UPDATE import_table
 		SET 
 			mac_address = '${formOption[1]}',
 			bindflag = '${formOption[4]}'
@@ -292,14 +323,14 @@ function query_editImportData (formOption) {
 
 }
 
-function query_cleanImportData (formOption) {
+function query_cleanBinding(formOption) {
 	const text =
 		`
-		UPDATE object_import_table
+		UPDATE import_table
 		SET 
 			mac_address = $2,
 			bindflag = $3
-		WHERE asset_control_number = $1
+		WHERE id = $1
 	`;
 
 	const values = [
@@ -314,6 +345,8 @@ function query_cleanImportData (formOption) {
 	};
 
 	return query
+
+
 }
 
 
@@ -321,12 +354,12 @@ function query_getImportData(formOption){
 	let text = '';
 	text +=`
 	SELECT 
-		object_import_table.name, 
-		object_import_table.type,
-		object_import_table.mac_address
-	FROM object_import_table
+		import_table.name, 
+		import_table.type,
+		import_table.mac_address
+	FROM import_table
 
-	WHERE object_import_table.asset_control_number = $1
+	WHERE import_table.asset_control_number = $1
 	
 	`;
 
@@ -381,41 +414,77 @@ const query_getGeofenceData =
 function query_objectImport (idPackage) {
 
 	let text =  `
-		INSERT INTO object_import_table (
+		INSERT INTO import_table (
 			name,
 			type,
 			asset_control_number,
-			bindflag
+			bindflag,
+			status
 		)
 		VALUES ${idPackage.map((item) => {
 			return `(
 				'${item.name}',
 				'${item.type}',
 				'${item.asset_control_number}',
-				'No Binding'
+				'No Binding',
+				'normal'
 			)`
 		})};
 	`
 	return text	
 }
 
-function query_editObject (formOption) {
-	const text = 
+
+function query_editImport (formOption) {
+	console.log(formOption)
+	const text =
 		`
-		Update object_table 
-		SET type = $2,
-			status = $3,
-			transferred_location = $4,
-			asset_control_number = $5,
-			name = $6,
-			monitor_type = $7,
-			area_id = $8,
-			mac_address = $9
-		WHERE id = $1
+		Update import_table 
+		SET type = $1,
+			name = $2,
+			mac_address = $3,
+			area_id = $5,
+			status = $6,
+			transferred_location = $7,
+			monitor_type = $8
+		WHERE asset_control_number = $4
 		`;
 		
 	const values = [
-		formOption.id, 
+		formOption.type, 
+		formOption.name,
+		formOption.mac_address,
+		formOption.asset_control_number,
+		formOption.area_id,
+		formOption.status,
+		formOption.transferred_location,
+		formOption.monitor_type
+	];
+
+	const query = {
+		text,
+		values
+	};
+
+	return query;
+}
+
+
+function query_editObject (formOption) {
+	let text = 
+		`
+		Update object_table 
+		SET type = $1,
+			status = $2,
+			transferred_location = $3,
+			asset_control_number = $4,
+			name = $5,
+			monitor_type = $6,
+			area_id = $7,
+			mac_address = $8
+		WHERE asset_control_number = $4
+		`
+	const values = [
 		formOption.type, 
 		formOption.status, 
 		formOption.transferred_location ? formOption.transferred_location.value : null, 
@@ -477,10 +546,10 @@ function query_editPatient (formOption) {
 
 
 function query_addObject (formOption) {
-
+	console.log(formOption)
 	const text = 
 		`
-		INSERT INTO object_table (
+		INSERT INTO import_table (
 			type, 
 			status, 
 			transferred_location, 
@@ -490,9 +559,10 @@ function query_addObject (formOption) {
 			registered_timestamp,
 			monitor_type,
 			area_id,
-			object_type
+			object_type,
+			bindflag
 		)
-		VALUES($1, $2, $3, $4, $5, $6, now(), $7, $8, 0)
+		VALUES($1, $2, $3, $4, $5, $6, now(), $7, $8, 0,'Already Binding')
 		`;
 		
 	const values = [
@@ -922,7 +992,7 @@ const query_deleteDevice = (idPackage) => {
 
 const query_deleteImportData = (idPackage) => {
 	const query = `
-		DELETE FROM object_import_table
+		DELETE FROM import_table
 		WHERE id IN (${idPackage.map(item => `'${item}'`)});
 	`
 	return query
@@ -1311,7 +1381,7 @@ function query_getBackendSearchQueue(){
 
 const query_addBulkObject = (jsonObj) => {
 	let text =  `
-		INSERT INTO object_import_table (
+		INSERT INTO import_table (
 			name,
 			type,
 			asset_control_number,
@@ -1337,6 +1407,7 @@ const query_addBulkObject = (jsonObj) => {
 module.exports = {
     query_getTrackingData,
 	query_getObjectTable,
+	query_getObjectTable_fromImport,
 	query_getPatientTable,
 	query_getImportTable,
     query_getLbeaconTable,
@@ -1346,6 +1417,7 @@ module.exports = {
 	query_setMonitorConfig,
 	query_editPatient,
 	query_editObject,
+	query_editImport,
 	query_objectImport,
 	query_addObject,
 	query_addPatient,
@@ -1387,7 +1459,7 @@ module.exports = {
 	query_getBackendSearchQueue,
 	query_addBulkObject,
 	query_editImportData,
-	query_cleanImportData,
+	query_cleanBinding,
 	query_getImportData,
 	query_editObject
 }

@@ -193,17 +193,23 @@ const editImportData = (request, response) => {
         })     
 }
 
-const cleanImportData = (request, response) => {
+const cleanBinding = (request, response) => {
     let { locale, areaId } = request.body
     const formOption = request.body.formOption
-    pool.query(queryType.query_cleanImportData(formOption))       
+    console.log('gggggg')
+    console.log(formOption)
+    formOption.map( item => {
+       pool.query(queryType.query_cleanBinding(item))       
         .then(res => {
-            console.log('clean ImportData data')
+            console.log('clean Binding')
             response.status(200).json(res)
         })
         .catch(err => {
-            console.log("clean ImportData fails: " + err)
-        })     
+            console.log("clean Binding fails: " + err)
+        })      
+    })
+        
+    
 }
 
 
@@ -271,6 +277,32 @@ const editObject = (request, response) => {
             console.log("Edit Object Fails: " + err)
         })
 }
+
+const editImport = (request, response) => {
+    const formOption = request.body.formOption
+    pool.query(queryType.query_editImport(formOption))
+        .then(res => {
+            console.log("Edit Import success");
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log("Edit Import Fails: " + err)
+        })
+}
+
+
+const getObjectTable_fromImport = (request, response) => {
+    const idPackage = request.body.newData
+        pool.query(queryType.query_getObjectTable_fromImport(idPackage))
+        .then(res => {
+            console.log("getObjectTable_fromImport success");
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log("getObjectTable_fromImport Fails: " + err)
+        })   
+}
+    
 
 
 const editPatient = (request, response) => {
@@ -741,14 +773,15 @@ const deleteDevice = (request, response) => {
 
 const deleteImportData = (request, response) => {
     const { idPackage } = request.body
-    pool.query(queryType.query_deleteImportData(idPackage))
-    .then(res => {
-                console.log('delete ImportData success')
-                response.status(200).json(res)
-    })
-    .catch(err => {
-        console.log(err)
-    })
+
+        pool.query(queryType.query_deleteImportData(idPackage))
+        .then(res => {
+                    console.log('delete ImportData success')
+                    response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(err)
+        })
 }
 
 const getAreaTable = (request, response) => {
@@ -1068,7 +1101,7 @@ module.exports = {
     getImportTable,
     getImportData,
     editImportData,
-    cleanImportData,
+    cleanBinding,
     getLbeaconTable,
     getGatewayTable,
     getGeofenceData,
@@ -1087,6 +1120,7 @@ module.exports = {
     addPatient,
     addBulkObject,
     editObject,
+    editImport,
     editPatient,
     objectImport,
     editLbeacon,
@@ -1110,5 +1144,6 @@ module.exports = {
     checkoutViolation,
     confirmValidation,
     backendSearch,
-    getBackendSearchQueue
+    getBackendSearchQueue,
+    getObjectTable_fromImport
 }

@@ -87,6 +87,7 @@ class BindForm extends React.Component {
                         formOption.push(this.state.mac_address)
                         formOption.push(this.state.objectName)
                         formOption.push(this.state.objectType)
+                        formOption.push('Already Binding')
                         axios.post(editImportData, 
                             {
                                 formOption
@@ -256,7 +257,7 @@ class BindForm extends React.Component {
                                                     showDetail : true,
                                                     inputValue : value
                                             }) 
-                                         {console.log(this.state.inputValue)}
+                                       
                                             setTimeout(() => {
                                             axios.post(getImportData, {
                                                     formOption: this.state.inputValue

@@ -56,6 +56,8 @@ app.get(/^\/page\/(.*)/, (req, res) => {
 
 app.post('/data/getObjectTable', db.getObjectTable);
 
+app.post('/data/getObjectTable_fromImport', db.getObjectTable_fromImport);
+
 app.post('/data/getPatientTable', db.getPatientTable);
 
 app.post('/data/getImportTable', db.getImportTable);
@@ -64,7 +66,7 @@ app.post('/data/getImportData', db.getImportData);
 
 app.post('/data/editImportData', db.editImportData);
 
-app.post('/data/cleanImportData', db.cleanImportData);
+app.post('/data/cleanBinding', db.cleanBinding);
 
 app.post('/data/getLbeaconTable', db.getLbeaconTable);
 
@@ -75,6 +77,9 @@ app.post('/data/geofenceData', db.getGeofenceData);
 app.post('/data/getTrackingData', db.getTrackingData);
 
 app.post('/data/editObject', db.editObject);
+
+app.post('/data/editImport', db.editImport);
+
 
 app.post('/data/editPatient', db.editPatient);
 
@@ -181,25 +186,25 @@ app.get('/download/com.beditech.IndoorNavigation.apk', (req, res) => {
 /** Create self-signed certificate  
  *  >> openssl req -nodes -new -x509 -keyout private.key -out certificate.cert */
 
-var privateKey = fs.readFileSync(__dirname + '/sslforfree/private.key');
-// var certificate = fs.readFileSync(__dirname + '/sslforfree/certificate.crt');
-var certificate = fs.readFileSync(__dirname + '/sslforfree/certificate.cert');
-// var ca_bundle = fs.readFileSync(__dirname + '/sslforfree/ca_bundle.crt');
+// var privateKey = fs.readFileSync(__dirname + '/sslforfree/private.key');
+// // var certificate = fs.readFileSync(__dirname + '/sslforfree/certificate.crt');
+// var certificate = fs.readFileSync(__dirname + '/sslforfree/certificate.cert');
+// // var ca_bundle = fs.readFileSync(__dirname + '/sslforfree/ca_bundle.crt');
 
-var credentials = { 
-    key: privateKey, 
-    cert: certificate, 
-    // ca: ca_bundle 
-};
+// var credentials = { 
+//     key: privateKey, 
+//     cert: certificate, 
+//     // ca: ca_bundle 
+// };
 
-const httpsServer = https.createServer(credentials, app);
+// const httpsServer = https.createServer(credentials, app);
 const httpServer = http.createServer(app);
 
-// httpServer.listen(httpPort, () =>{
-//     console.log(`HTTP Server running on port ${httpPort}`)
-// })
-
-httpsServer.listen(httpsPort, () => {
-    console.log(`HTTPS Server running on PORT ${httpsPort}`)
+httpServer.listen(httpPort, () =>{
+    console.log(`HTTP Server running on port ${httpPort}`)
 })
+
+// httpsServer.listen(httpsPort, () => {
+//     console.log(`HTTPS Server running on PORT ${httpsPort}`)
+// })
 
