@@ -52,6 +52,7 @@ const getSearchQueue = `${protocol}://${dataSrcIP}/data/getSearchQueue`
 const objectImport = `${protocol}://${dataSrcIP}/data/objectImport`
 const addBulkObject = `${protocol}://${dataSrcIP}/data/addBulkObject`
 const pinImage = `${protocol}://${dataSrcIP}/image/pinImage`
+const getTransferredLocation = `${protocol}://${dataSrcIP}/data/getTransferredLocation`
 
 const pdfUrl = function(path){
     return `${protocol}://${dataSrcIP}/${path}`
@@ -69,6 +70,7 @@ module.exports = {
     getLbeaconTable,
     getGatewayTable,
     getMonitorConfig,
+    getTransferredLocation,
     searchResult,
     geofenceData,
     editObject,

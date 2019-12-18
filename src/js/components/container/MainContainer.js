@@ -568,6 +568,7 @@ class MainContainer extends React.Component{
                             geoFenceConfig={this.state.geoFenceConfig.filter(item => parseInt(item.unique_key) == areaId)}
                             clearAlerts={this.clearAlerts}
                             searchKey={this.state.searchKey}
+                            authenticated={this.state.authenticated}
                         />
                     </Col>
                     <Col id='searchPanel' xs={12} sm={5} md={3} lg={4} xl={4} className="w-100 px-2" style={style.searchPanel}>

@@ -83,43 +83,6 @@ const config = {
 
         objectManagementRSSIThreshold: 0
     },
-
-    transferredLocation: {
-        Yuanlin_Christian_Hospital: [
-            "ward_7A",
-            "ward_7B",
-            "ward_6A",
-            "ward_6B",
-            "ward_5A",
-            "ward_5B",
-            "ICU",
-            "OP"
-        ],
-        // NTU_Hospital_Yunlin_branch: [
-        //     "ward_5b",
-        //     "ward_5a",
-        //     "nursing_home"
-        // ],
-        // NTU_Hospital_Taipei: [
-        //     "emergency_room"
-        // ],
-        Yunlin_Christian_Hospital: [
-            "ward_5A",
-            "ward_5B",
-            "ICU",
-            "OP"
-        ],
-        // Pingtung_Christian_Hospital: [
-        //     "ward_7A",
-        //     "ward_7B",
-        //     "ICU",
-        // ],
-        CHANGHUA_Christian_Hospital: [
-            "ward_7A",
-            "ward_7B",
-            "ICU",
-        ],
-    },
     
     locale: {
         defaultLocale: "tw",
@@ -223,7 +186,7 @@ const config = {
     confirmFormTimeFormat: "LLLL",
     shiftChangeRecordTimeFormat: "LLL",
     pdfFileContentTimeFormat: "LLL",
-    pdfFileNameTimeFormat: "MM_DD_YYYY",
+    pdfFileNameTimeFormat: "YYYY-MM-Do_hh_mm_ss",
 
     roles: [
         "guest",
@@ -338,7 +301,6 @@ const config = {
                 return `${option}_report_${moment().format(config.pdfFileNameTimeFormat)}.pdf`
             },
             shiftChange: (user) => {
-                // return `${user.name}_${config.getShift().replace(/ /g, '_')}_${moment().format(config.pdfFileNameTimeFormat)}.pdf`
                 return `${user.name}_${moment().format(config.pdfFileNameTimeFormat)}.pdf`
             },
             searchResult: (user, option) => {
