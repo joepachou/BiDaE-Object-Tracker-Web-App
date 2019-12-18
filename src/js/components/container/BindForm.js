@@ -181,43 +181,6 @@ class BindForm extends React.Component {
     render() {
         const locale = this.context
 
-        const options = Object.keys(config.transferredLocation).map(location => {
-            return {
-                value: location,
-                label: locale.texts[location.toUpperCase().replace(/ /g, '_')],
-                options: config.transferredLocation[location].map(branch => {
-                    return {
-                        value: `${location},${branch}`,
-                        label: locale.texts[branch.toUpperCase().replace(/ /g, '_')],
-                    }
-                })
-            }
-        })
-
-        const areaOptions = Object.values(config.mapConfig.areaOptions).map(area => {
-            return {
-                value: area,
-                label: locale.texts[area.toUpperCase().replace(/ /g, '_')]
-            };
-        })
-
-        const style = {
-            input: {
-                borderRadius: 0,
-                borderBottom: '1 solid grey',
-                borderTop: 0,
-                borderLeft: 0,
-                borderRight: 0,
-                
-            },
-            errorMessage: {
-                width: '100%',
-                marginTop: '0.25rem',
-                marginBottom: '0.25rem',
-                fontSize: '80%',
-                color: '#dc3545'
-            },
-        }
 
         const { title, selectedObjectData } = this.props;
         const { 
