@@ -3,19 +3,21 @@ const protocol = process.env.PROTOCOL;
 const domain = `${protocol}://${dataSrcIP}`;
 const getTrackingData = `${protocol}://${dataSrcIP}/data/getTrackingData`;
 const getObjectTable = `${protocol}://${dataSrcIP}/data/getObjectTable`;
+const getObjectTable_fromImport = `${protocol}://${dataSrcIP}/data/getObjectTable_fromImport`;
 const getPatientTable = `${protocol}://${dataSrcIP}/data/getPatientTable`;
 const getLbeaconTable = `${protocol}://${dataSrcIP}/data/getLbeaconTable`;
 const getGatewayTable = `${protocol}://${dataSrcIP}/data/getGatewayTable`;
 const searchResult = `${protocol}://${dataSrcIP}/data/searchResult`;
 const geofenceData = `${protocol}://${dataSrcIP}/data/geofenceData`;
 const editObject = `${protocol}://${dataSrcIP}/data/editObject`;
+const editImport = `${protocol}://${dataSrcIP}/data/editImport`;
 const editPatient = `${protocol}://${dataSrcIP}/data/editPatient`;
 const addObject = `${protocol}://${dataSrcIP}/data/addObject`;
 const addPatient= `${protocol}://${dataSrcIP}/data/addPatient`;
 const getImportTable = `${protocol}://${dataSrcIP}/data/getImportTable`;
 const getImportData = `${protocol}://${dataSrcIP}/data/getImportData`;
 const editImportData = `${protocol}://${dataSrcIP}/data/editImportData`;
-const cleanImportData = `${protocol}://${dataSrcIP}/data/cleanImportData`;
+const cleanBinding = `${protocol}://${dataSrcIP}/data/cleanBinding`;
 const editObjectPackage = `${protocol}://${dataSrcIP}/data/editObjectPackage`;
 const signin = `${protocol}://${dataSrcIP}/user/signin`;
 const signup = `${protocol}://${dataSrcIP}/user/signup`;
@@ -63,7 +65,8 @@ module.exports = {
     getTrackingData,
     getImportData,
     editImportData,
-    cleanImportData,
+    editImport,
+    cleanBinding,
     getObjectTable,
     getPatientTable,
     getImportTable,
@@ -111,5 +114,6 @@ module.exports = {
     setMonitorConfig,
     backendSearch,
     getSearchQueue, 
+    getObjectTable_fromImport,
     pinImage
 };

@@ -78,6 +78,8 @@ app.get(/^\/page\/(.*)/, (req, res) => {
 
 app.post('/data/getObjectTable', db.getObjectTable);
 
+app.post('/data/getObjectTable_fromImport', db.getObjectTable_fromImport);
+
 app.post('/data/getPatientTable', db.getPatientTable);
 
 app.post('/data/getImportTable', db.getImportTable);
@@ -86,7 +88,7 @@ app.post('/data/getImportData', db.getImportData);
 
 app.post('/data/editImportData', db.editImportData);
 
-app.post('/data/cleanImportData', db.cleanImportData);
+app.post('/data/cleanBinding', db.cleanBinding);
 
 app.post('/data/getLbeaconTable', db.getLbeaconTable);
 
@@ -97,6 +99,9 @@ app.post('/data/geofenceData', db.getGeofenceData);
 app.post('/data/getTrackingData', db.getTrackingData);
 
 app.post('/data/editObject', db.editObject);
+
+app.post('/data/editImport', db.editImport);
+
 
 app.post('/data/editPatient', db.editPatient);
 
@@ -229,6 +234,7 @@ const httpsServer = https.createServer(credentials, app)
 const httpServer = http.createServer(app);
 
 /** Enable HTTP server */
+
 httpServer.listen(httpPort, () =>{
     console.log(`HTTP Server running on port ${httpPort}`)
 })
@@ -237,3 +243,4 @@ httpServer.listen(httpPort, () =>{
 PRIVATE_KEY ? httpsServer.listen(httpsPort, () => {
     console.log(`HTTPS Server running on PORT ${httpsPort}`)
 }) : null
+

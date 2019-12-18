@@ -18,15 +18,20 @@ import Checkbox from '../presentational/Checkbox'
 import RadioButtonGroup from './RadioButtonGroup'
 import RadioButton from '../presentational/RadioButton'
 import { toast } from 'react-toastify';
+
+import { isNull } from 'util';
+import { editImport } from '../../dataSrc'
+
 import { AppContext } from '../../context/AppContext';
 import dataSrc from '../../dataSrc'
+
 
 let monitorTypeMap = {};
 
 Object.keys(config.monitorType).forEach(key => {
     monitorTypeMap[config.monitorType[key]] = key
 })
-  
+
 class EditObjectForm extends React.Component {
 
     static contextType = AppContext
@@ -60,14 +65,17 @@ class EditObjectForm extends React.Component {
 
     handleSubmit = (postOption) => {
         const path = this.props.formPath
-        axios.post(path, {
+          axios.post(path, {
             formOption: postOption
         }).then(res => {
-            setTimeout(this.props.handleSubmitForm(),1000)
+           
         }).catch( error => {
             console.log(error)
         })
+        this.props.handleSubmitForm()
     }
+        
+
 
     getTransferredLocation = () => {
         let { locale } = this.context
@@ -93,6 +101,7 @@ class EditObjectForm extends React.Component {
             })
         })
     }
+
 
     render() {
         const { locale } = this.context
@@ -159,12 +168,14 @@ class EditObjectForm extends React.Component {
                             type: type || '',
                             asset_control_number: asset_control_number || '',
                             mac_address: mac_address || '',
-                            radioGroup: status.value,
+                            radioGroup: status.value ,
                             area: area_name || '',
                             select: status.value === config.objectStatus.TRANSFERRED 
                                 ? transferred_location
                                 : '',
-                            checkboxGroup: selectedObjectData.length !== 0 ? selectedObjectData.monitor_type.split('/') : []
+                            checkboxGroup: selectedObjectData.length !== 0 ? 
+                             selectedObjectData.monitor_type == 0 ? null: selectedObjectData.monitor_type.split('/') 
+                            : []
                         }}
 
                         validationSchema = {
@@ -227,12 +238,19 @@ class EditObjectForm extends React.Component {
                         })}
                        
                         onSubmit={(values, { setStatus, setSubmitting }) => {
-                            let monitor_type = values.checkboxGroup
+                            let monitor_type  = 0
+                        if ( isNull(values.checkboxGroup)){
+
+                        }else{
+                            monitor_type = values.checkboxGroup
                                     .filter(item => item)
                                     .reduce((sum, item) => {
                                         sum += parseInt(monitorTypeMap[item])
                                         return sum
-                                    },0)
+                                    },0)      
+                        }
+                                  
+                        
                             const postOption = {
                                 id,
                                 ...values,
@@ -240,8 +258,8 @@ class EditObjectForm extends React.Component {
                                 transferred_location: values.radioGroup === config.objectStatus.TRANSFERRED 
                                     ? values.select
                                     : '',
-                                monitor_type: monitor_type,
-                                area_id: config.mapConfig.areaModules[values.area.value].id
+                                monitor_type: monitor_type || 0,
+                                area_id: config.mapConfig.areaModules[values.area.value].id || 0
                             }
                             while(postOption.type[postOption.type.length-1] == " "){
                                 postOption.type = postOption.type.substring(0,postOption.type.length-1);       
@@ -379,7 +397,7 @@ class EditObjectForm extends React.Component {
                                         <CheckboxGroup
                                             id="checkboxGroup"
                                             label={locale.texts.MONITOR_TYPE}
-                                            value={values.checkboxGroup}
+                                            value={values.checkboxGroup || ''}
                                             error={errors.checkboxGroup}
                                             touched={touched.checkboxGroup}
                                             onChange={setFieldValue}

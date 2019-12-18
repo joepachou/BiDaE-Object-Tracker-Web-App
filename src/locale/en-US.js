@@ -145,7 +145,7 @@ const en =  {
     DISABLE: "disable",
     ENABLE_START_TIME: "start time",
     ENABLE_END_TIME: "end time",
-
+    BINDFLAG:"Binding Status",
 
     /** Form Title */
     EDIT_LBEACON: "edit lbeacon",

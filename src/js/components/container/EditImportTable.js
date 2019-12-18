@@ -9,7 +9,7 @@ import * as Yup from 'yup';
 
 import { 
     cleanImportData,
-    getImportTable
+    deleteImportData
 } from "../../dataSrc"
 
 class EditImportTable extends React.Component {
@@ -41,9 +41,10 @@ class EditImportTable extends React.Component {
     handleSubmit = (postOption) => {
 
         if (this.state.scanValue == this.props.selectedObjectData.asset_control_number){
-            axios.post(cleanImportData, 
+          
+            axios.post(deleteImportData, 
                 {
-                    formOption: this.props.selectedObjectData.asset_control_number
+                    idPackage: this.props.selectedObjectData.id
                 }).then(res => {
                         setTimeout(this.props.handleSubmitForm(),500)
                 }).catch( error => {

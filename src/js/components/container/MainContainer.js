@@ -90,6 +90,27 @@ class MainContainer extends React.Component{
         }
     }
 
+    shouldComponentUpdate = (nextProps,nextState) => {
+        let isTrackingDataChange = !(_.isEqual(this.state.trackingData, nextState.trackingData))
+        let hasSearchKey = nextState.hasSearchKey !== this.state.hasSearchKey
+        let isSearchKeyChange = this.state.searchKey !== nextState.searchKey
+        let isSearchResultChange = !(_.isEqual(this.state.searchResult, nextState.searchResult))
+        let isStateChange = !(_.isEqual(this.state, nextState))
+        let isLbeaconDataChange = !(_.isEqual(this.state.lbeaconPosition, nextState.lbeaconPosition))
+        let isGeoFenceDataChange = !(_.isEqual(this.state.geoFenceConfig, nextState.geoFenceConfig))
+        let isViolatedObjectChange = !(_.isEqual(this.state.isViolatedObjectChange, nextState.isViolatedObjectChange))
+
+        let isHighlightSearchPanelChange = !(_.isEqual(this.state.isHighlightSearchPanel, nextState.isHighlightSearchPanel))
+        let shouldUpdate = isTrackingDataChange || 
+                                hasSearchKey || 
+                                isSearchKeyChange || 
+                                isSearchResultChange || 
+                                isHighlightSearchPanelChange || 
+                                isGeoFenceDataChange ||
+                                isViolatedObjectChange
+        return shouldUpdate
+    }
+
     getToastNotification = (item) => {
         item.notification.map(event => {
             if (event.type == 2) return 
@@ -135,27 +156,6 @@ class MainContainer extends React.Component{
             })
         })
         toast.dismiss()
-    }
-
-    shouldComponentUpdate = (nextProps,nextState) => {
-        let isTrackingDataChange = !(_.isEqual(this.state.trackingData, nextState.trackingData))
-        let hasSearchKey = nextState.hasSearchKey !== this.state.hasSearchKey
-        let isSearchKeyChange = this.state.searchKey !== nextState.searchKey
-        let isSearchResultChange = !(_.isEqual(this.state.searchResult, nextState.searchResult))
-        let isStateChange = !(_.isEqual(this.state, nextState))
-        let isLbeaconDataChange = !(_.isEqual(this.state.lbeaconPosition, nextState.lbeaconPosition))
-        let isGeoFenceDataChange = !(_.isEqual(this.state.geoFenceConfig, nextState.geoFenceConfig))
-        let isViolatedObjectChange = !(_.isEqual(this.state.isViolatedObjectChange, nextState.isViolatedObjectChange))
-
-        let isHighlightSearchPanelChange = !(_.isEqual(this.state.isHighlightSearchPanel, nextState.isHighlightSearchPanel))
-        let shouldUpdate = isTrackingDataChange || 
-                                hasSearchKey || 
-                                isSearchKeyChange || 
-                                isSearchResultChange || 
-                                isHighlightSearchPanelChange || 
-                                isGeoFenceDataChange ||
-                                isViolatedObjectChange
-        return shouldUpdate
     }
 
     componentWillUnmount = () => {
@@ -342,7 +342,7 @@ class MainContainer extends React.Component{
     }
 
     /** Fired once the user click the item in object type list or in frequent seaerch */
-    getSearchKey = (searchKey, colorPanel = null, searchValue = null, markerClickPackage) => {
+    getSearchKey = (searchKey, colorPanel = null, searchValue = null, markerClickPackage = {}) => {
         const searchResult = this.getResultBySearchKey(searchKey, colorPanel, searchValue, markerClickPackage)
         this.processSearchResult(searchResult, colorPanel, searchKey, searchValue, markerClickPackage)
     }
@@ -365,18 +365,14 @@ class MainContainer extends React.Component{
                     }
                 })
         } else if (searchKey === ALL_DEVICES) {
-            // console.log(auth.user.areas_id)
             searchResult = proccessedTrackingData
                 .filter(item => item.object_type == 0)
                 .map(item => {
-
                     if (auth.user.areas_id.includes(item.area_id)) {
                         item.searchedType = 0
-                        // console.log('hi')
                     }
                     return item
                 })
-            // console.log(searchResult)
 
         } else if (searchKey === MY_PATIENTS){
             const devicesAccessControlNumber = auth.user.myDevice || []
@@ -468,13 +464,11 @@ class MainContainer extends React.Component{
         proccessedTrackingData
         .filter(item => {
             return item.currentPosition && 
-                item.currentPosition.toString() === lbPosition.toString() &&
-                item.area_id == lbPosition[2] 
-                // Object.keys(markerClickPackage).includes(item.mac_address)
+                item.currentPosition.toString() === lbPosition.toString()
         })
         .map(item => {
             item.searched = true;
-            item.searchedType = markerClickPackage[item.mac_address].searchedType
+            // item.searchedType = markerClickPackage[item.mac_address].searchedType
             objectList.push(item);            
         })
         return objectList 
@@ -534,14 +528,6 @@ class MainContainer extends React.Component{
 
         let deviceNum = this.state.trackingData.filter(item => item.found).length
         let devicePlural = deviceNum === 1 ? locale.texts.DEVICE : locale.texts.DEVICES
-        // let data = hasSearchKey 
-        //     ? searchResult.length !== 0 
-        //         ? Object.keys(searchResultObjectTypeMap).length !== 0 
-        //             ? searchResultObjectTypeMap
-        //             : {[devicePlural] : 0} 
-        //         : {[devicePlural] : 0} 
-        //     : {[devicePlural]: this.state.trackingData.filter(item => item.found && item.object_type == 0).length}
-        //console.log(searchResult)
         return (
             /** "page-wrap" the default id named by react-burget-menu */
             <div id="page-wrap" className='mx-1 my-2 overflow-hidden' style={style.pageWrap} >
