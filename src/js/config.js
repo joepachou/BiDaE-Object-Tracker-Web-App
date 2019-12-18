@@ -83,43 +83,6 @@ const config = {
 
         objectManagementRSSIThreshold: 0
     },
-
-    transferredLocation: {
-        Yuanlin_Christian_Hospital: [
-            "ward_7A",
-            "ward_7B",
-            "ward_6A",
-            "ward_6B",
-            "ward_5A",
-            "ward_5B",
-            "ICU",
-            "OP"
-        ],
-        // NTU_Hospital_Yunlin_branch: [
-        //     "ward_5b",
-        //     "ward_5a",
-        //     "nursing_home"
-        // ],
-        // NTU_Hospital_Taipei: [
-        //     "emergency_room"
-        // ],
-        Yunlin_Christian_Hospital: [
-            "ward_5A",
-            "ward_5B",
-            "ICU",
-            "OP"
-        ],
-        // Pingtung_Christian_Hospital: [
-        //     "ward_7A",
-        //     "ward_7B",
-        //     "ICU",
-        // ],
-        CHANGHUA_Christian_Hospital: [
-            "ward_7A",
-            "ward_7B",
-            "ICU",
-        ],
-    },
     
     locale: {
         defaultLocale: "tw",

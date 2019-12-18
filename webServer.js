@@ -12,7 +12,7 @@ const https = require('https');
 const session = require('express-session')
 const formidable = require('formidable');
 const cors = require('cors');
-const parse = require('csv-parse')
+// const csv = require('csv-parse')
 const csv =require('csvtojson')
 const {
     PRIVATE_KEY,
@@ -50,6 +50,23 @@ app.use(function(req, res, next) {
 //         res.end('welcome to the session demo. refresh!')
 //     }
 // })
+// fs.createReadStream('transferred_location.csv')
+// .pipe(csv())
+// .on('data', function(data){
+//     try {
+//         console.log(data)
+//     }
+//     catch(err) {
+//         console.log(err)
+//     }
+// })
+
+// csv()
+// .fromFile('transferred_location.csv')
+// .then( jsonObj => {
+//     console.log(jsonObj)
+// })
+
 
 app.get('/image/pinImage/:pinImage', (req, res) => {
     res.sendFile(path.join(__dirname, 'src','img','colorPin',req.params['pinImage']));
@@ -158,6 +175,17 @@ app.post('/data/getSearchQueue', db.getBackendSearchQueue)
 app.post('/data/getAreaTable', db.getAreaTable)
 
 app.post('/data/addBulkObject', db.addBulkObject)
+
+app.get('/data/getTransferredLocation', (req, res) => {
+    csv()
+    .fromFile('transferred_location.csv')
+    .then(jsonObj => {
+        res.status(200).json(jsonObj)
+    })
+    .catch(err => {
+        console.log(`get tranferred location data error: ${err}`)
+    })
+})
 
 app.get(`/${process.env.DEFAULT_FOLDER}/shift_record/:file`, (req, res) =>{
 	res.sendFile(path.join(__dirname, `${process.env.DEFAULT_FOLDER}/shift_record`,req.params['file']));
