@@ -201,6 +201,7 @@ class Map extends React.Component {
         } = this.props
 
         /** Creat the marker of all lbeacons onto the map  */
+
         lbeaconPosition.map(pos => {
             console.log(lbeaconPosition)
             let latLng = pos.split(',')
