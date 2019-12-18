@@ -144,6 +144,7 @@ const tw = {
     DISABLE: "關閉",
     ENABLE_START_TIME: "啟動時間",
     ENABLE_END_TIME: "結束時間",
+    BINDFLAG:"綁定狀態",
    
     /** Form Title */
     EDIT_LBEACON: "編輯 lbeacon",

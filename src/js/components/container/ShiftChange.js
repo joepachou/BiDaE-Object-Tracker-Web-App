@@ -9,12 +9,9 @@ import {
 } from 'react-bootstrap';
 import axios from 'axios';
 import dataSrc from '../../dataSrc'
-import SearchResultTable from './SearchResultTable'
 import GetResultData from './GetResultData'
-import PdfDownloadForm from './PdfDownloadForm'
 import moment from 'moment'
 import config from '../../config';
-import SearchResultListGroup from '../presentational/SearchResultListGroup'
 import { AppContext } from '../../context/AppContext'
 import GeneralConfirmForm from '../container/GeneralConfirmForm'
 
@@ -136,7 +133,6 @@ class ShiftChange extends React.Component {
             userInfo: auth.user,
             pdfPackage,
         }).then(res => {
-
             this.setState({
                 fileUrl: pdfPackage.path,
                 isShowConfirmForm: false
@@ -199,9 +195,9 @@ class ShiftChange extends React.Component {
                         </Row>
                         <Row style={style.row} className='text-capitalize'>
                             <Col>
-                                <div>班別(記得加locale): {
-                                    config.getShift(locale.abbr)
-                                 }</div>
+                                <div>
+                                    {locale.texts.SHIFT}: {locale.texts[config.getShift(locale.abbr).toUpperCase().replace(/ /g, '_')]}
+                                 </div>
 
                                 {/* <div>{locale.texts.SHIFT}: {auth.user.shift ? locale.texts[auth.user.shift.toUpperCase().replace(/ /g, '_')] : ''} </div> */}
                             </Col>
@@ -271,8 +267,7 @@ class ShiftChange extends React.Component {
                         >
                             {locale.texts.CONFIRM}
                         </Button>
-                        {console.log('download link 要記得改唷 Shift Change.js')}
-                        <a href={'http://localhost:3000/'+this.state.fileUrl} ref="download" download style={{display: 'none'}}>hi</a>
+                        <a href={`/${this.state.fileUrl}`} ref="download" download style={{display: 'none'}}>hi</a>
                     </Modal.Footer>
                 </Modal>
                 <GeneralConfirmForm

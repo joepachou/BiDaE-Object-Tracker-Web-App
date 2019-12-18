@@ -46,7 +46,7 @@ class MainContainer extends React.Component{
         rssiThreshold: window.innerWidth < config.mobileWidowWidth
             ? config.surveillanceMap.locationAccuracyMapToDefault[0]
             : config.surveillanceMap.locationAccuracyMapToDefault[1],
-        auth: this.context.auth,
+        authenticated: this.context.auth.authenticated,
         shouldUpdateTrackingData: true,
         markerClickPackage: {}
     }
@@ -72,10 +72,10 @@ class MainContainer extends React.Component{
         if (isTrackingDataChange && this.state.hasSearchKey) {
             this.handleRefreshSearchResult()
         }
-        if (!(_.isEqual(prevState.auth, this.context.auth))) {
+        if (!(_.isEqual(prevState.authenticated, this.context.auth.authenticated))) {
             this.getTrackingData(this.context.stateReducer[0].areaId)
             this.setState({
-                auth: this.context.auth,
+                authenticated: this.context.auth.authenticated,
                 searchResult: [],
                 searchKey: '',
                 hasSearchKey: false
@@ -185,7 +185,6 @@ class MainContainer extends React.Component{
     getTrackingData = () => {
         let { auth, locale, stateReducer } = this.context
         let [{areaId, violatedObjects}, dispatch] = stateReducer
-        
         axios.post(dataSrc.getTrackingData,{
             rssiThreshold: this.state.rssiThreshold,
             locale: locale.abbr,
@@ -290,7 +289,7 @@ class MainContainer extends React.Component{
         }, {})
 
         duplicateSearchKey.map(key => searchResultObjectTypeMap[key] = 0)
-
+        
         if(colorPanel) {
             this.setState({
                 hasSearchKey: Object.keys(colorPanel).length === 0 ? false : true,
@@ -558,6 +557,7 @@ class MainContainer extends React.Component{
                             proccessedTrackingData={proccessedTrackingData.length === 0 ? trackingData : proccessedTrackingData}
                             hasSearchKey={hasSearchKey}
                             colorPanel={colorPanel}
+                            searchResult={this.state.searchResult}
                             handleClearButton={this.handleClearButton}
                             getSearchKey={this.getSearchKey}
                             clearColorPanel={clearColorPanel}
@@ -568,6 +568,7 @@ class MainContainer extends React.Component{
                             geoFenceConfig={this.state.geoFenceConfig.filter(item => parseInt(item.unique_key) == areaId)}
                             clearAlerts={this.clearAlerts}
                             searchKey={this.state.searchKey}
+                            authenticated={this.state.authenticated}
                         />
                     </Col>
                     <Col id='searchPanel' xs={12} sm={5} md={3} lg={4} xl={4} className="w-100 px-2" style={style.searchPanel}>

@@ -23,7 +23,6 @@ const InfoPrompt = ({
     const appContext = React.useContext(AppContext);
     const { locale } = appContext
     const frequentSearchItem = Object.values(config.frequentSearchOption)
-    console.log(title)
     return (
         <Alert variant='secondary' className='d-flex justify-content-start'>
             <div 
@@ -50,7 +49,7 @@ const InfoPrompt = ({
         {/*
             fix bug 4.3
         */}
-            <div style={{width: '100px'}}>
+            {/* <div style={{width: '100px'}}>
             </div>
             <div 
                 className='text-capitalize mr-2' 
@@ -72,7 +71,7 @@ const InfoPrompt = ({
                         :   searchKey
                     :   ""
                 }
-            </div>
+            </div> */}
         {/*
             fix bug 4.3
         */}

@@ -105,7 +105,6 @@ class FrequentSearch extends React.Component {
                         onClick={this.handleClick} 
                         // active={this.state.searchKey === 'all devices'}
                         name='all devices'
-                        className="text-capitalize"
                     >
                         {locale.texts.ALL_DEVICES}
                     </Button>

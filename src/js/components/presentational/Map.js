@@ -2,11 +2,7 @@ import React from 'react';
 
 /** Import leaflet.js */
 import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
 import 'leaflet.markercluster';
-import 'leaflet.markercluster/dist/MarkerCluster.css'
-import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
-import '../../../css/CustomMarkerCluster.css'
 import '../../helper/leaflet_awesome_number_markers';
 import _ from 'lodash'
 import { AppContext } from '../../context/AppContext';
@@ -43,9 +39,9 @@ class Map extends React.Component {
 
     componentDidUpdate = (prevProps) => {
         this.handleObjectMarkers();
-        // if (this.props.lbeaconPosition.length !== 0 && !this.state.hasIniLbeaconPosition && this.props.isOpenFence) {
-        //     this.createLbeaconMarkers()
-        // }
+        if (JSON.parse(process.env.IS_LBEACON_MARK) && this.props.lbeaconPosition.length !== 0 && !this.state.hasIniLbeaconPosition) {
+            this.createLbeaconMarkers()
+        }
 
         if (this.props.geoFenceConfig.length !== 0 && !this.state.hasGeoFenceMaker && this.props.isOpenFence) {
             this.createGeoFenceMarkers()
@@ -205,7 +201,9 @@ class Map extends React.Component {
         } = this.props
 
         /** Creat the marker of all lbeacons onto the map  */
+
         lbeaconPosition.map(pos => {
+            console.log(lbeaconPosition)
             let latLng = pos.split(',')
             let lbeacon = L.circleMarker(latLng, mapConfig.lbeaconMarkerOption).addTo(this.lbeaconsPosition);
 
@@ -264,7 +262,6 @@ class Map extends React.Component {
      * Create the error circle of markers, and add into this.markersLayer.
      */
     handleObjectMarkers = () => {
-        console.log('update')
         let { locale } = this.context
 
         /** Clear the old markerslayers. */
@@ -273,12 +270,12 @@ class Map extends React.Component {
         this.errorCircle .clearLayers();
 
         /** Mark the objects onto the map  */
-        // this.calculateScale();
+        this.calculateScale();
 
         const iconSize = [this.scalableIconSize, this.scalableIconSize];
         const numberSize = this.scalableNumberSize;
         let counter = 0;
-        
+
         this.filterTrackingData(_.cloneDeep(this.props.proccessedTrackingData))
         .map(item => {
             // console.log(item)

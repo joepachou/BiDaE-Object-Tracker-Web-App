@@ -52,6 +52,9 @@ class GeneralConfirmForm extends React.Component {
         const style = {
             input: {
                 padding: 10
+            },
+            modal: {
+                top: '10%',
             }
         }
 
@@ -59,7 +62,12 @@ class GeneralConfirmForm extends React.Component {
         const { locale } = this.context;
 
         return (
-            <Modal show={show} size="sm" onHide={this.handleClose}>
+            <Modal 
+                show={show} 
+                size="sm" 
+                onHide={this.handleClose}
+                style={style.modal}
+            >
                 <Modal.Body className='text-capitalize'>
                     {/* <Row className='d-flex justify-content-center'>
                         <Image src={config.image.logo} rounded width={72} height={72} ></Image>

@@ -1,6 +1,6 @@
 const dataSrcIP = process.env.DATASRC_IP;
 const protocol = process.env.PROTOCOL;
-console.log(protocol)
+const domain = `${protocol}://${dataSrcIP}`;
 const getTrackingData = `${protocol}://${dataSrcIP}/data/getTrackingData`;
 const getObjectTable = `${protocol}://${dataSrcIP}/data/getObjectTable`;
 const getObjectTable_fromImport = `${protocol}://${dataSrcIP}/data/getObjectTable_fromImport`;
@@ -54,13 +54,14 @@ const getSearchQueue = `${protocol}://${dataSrcIP}/data/getSearchQueue`
 const objectImport = `${protocol}://${dataSrcIP}/data/objectImport`
 const addBulkObject = `${protocol}://${dataSrcIP}/data/addBulkObject`
 const pinImage = `${protocol}://${dataSrcIP}/image/pinImage`
-
+const getTransferredLocation = `${protocol}://${dataSrcIP}/data/getTransferredLocation`
 
 const pdfUrl = function(path){
     return `${protocol}://${dataSrcIP}/${path}`
 }
 
 module.exports = {
+    domain,
     getTrackingData,
     getImportData,
     editImportData,
@@ -72,6 +73,7 @@ module.exports = {
     getLbeaconTable,
     getGatewayTable,
     getMonitorConfig,
+    getTransferredLocation,
     searchResult,
     geofenceData,
     editObject,

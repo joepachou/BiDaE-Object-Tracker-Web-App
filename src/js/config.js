@@ -83,43 +83,6 @@ const config = {
 
         objectManagementRSSIThreshold: 0
     },
-
-    transferredLocation: {
-        Yuanlin_Christian_Hospital: [
-            "ward_7A",
-            "ward_7B",
-            "ward_6A",
-            "ward_6B",
-            "ward_5A",
-            "ward_5B",
-            "ICU",
-            "OP"
-        ],
-        // NTU_Hospital_Yunlin_branch: [
-        //     "ward_5b",
-        //     "ward_5a",
-        //     "nursing_home"
-        // ],
-        // NTU_Hospital_Taipei: [
-        //     "emergency_room"
-        // ],
-        Yunlin_Christian_Hospital: [
-            "ward_5A",
-            "ward_5B",
-            "ICU",
-            "OP"
-        ],
-        // Pingtung_Christian_Hospital: [
-        //     "ward_7A",
-        //     "ward_7B",
-        //     "ICU",
-        // ],
-        CHANGHUA_Christian_Hospital: [
-            "ward_7A",
-            "ward_7B",
-            "ICU",
-        ],
-    },
     
     locale: {
         defaultLocale: "tw",
@@ -211,10 +174,10 @@ const config = {
     searchResultFolderPath: "search_result",
 
     folderPath: {
-        broken: "edit_object_record",
-        transferred: "edit_object_record",
-        shiftChange: "shift_record",
-        searchResult: "search_result"
+        broken: `${process.env.DEFAULT_FOLDER}/edit_object_record`,
+        transferred: `${process.env.DEFAULT_FOLDER}/edit_object_record`,
+        shiftChange: `${process.env.DEFAULT_FOLDER}/shift_record`,
+        searchResult: `${process.env.DEFAULT_FOLDER}/search_result`
     },
 
     shiftRecordFileNameTimeFormat: "MM_DD_YYYY",
@@ -223,7 +186,7 @@ const config = {
     confirmFormTimeFormat: "LLLL",
     shiftChangeRecordTimeFormat: "LLL",
     pdfFileContentTimeFormat: "LLL",
-    pdfFileNameTimeFormat: "MM_DD_YYYY",
+    pdfFileNameTimeFormat: "YYYY-MM-Do_hh_mm_ss",
 
     roles: [
         "guest",
@@ -338,7 +301,6 @@ const config = {
                 return `${option}_report_${moment().format(config.pdfFileNameTimeFormat)}.pdf`
             },
             shiftChange: (user) => {
-                // return `${user.name}_${config.getShift().replace(/ /g, '_')}_${moment().format(config.pdfFileNameTimeFormat)}.pdf`
                 return `${user.name}_${moment().format(config.pdfFileNameTimeFormat)}.pdf`
             },
             searchResult: (user, option) => {
@@ -678,7 +640,7 @@ const config = {
                 id: 1,
                 name: "NTUH",
                 url: NTUH_MAP,
-                bounds: [[0,0], [33659,56214]],
+                bounds: [[-250,700], [33409,56814]],
             },
 
             IIS_SINICA_FOURTH_FLOOR: {
@@ -922,18 +884,6 @@ const config = {
                 id: 2,
             },
         },
-
-        // BOTDefaultAreas: {
-        //     1: "NTUH_EMERGENCY_ROOM",
-        //     2: "IIS_SINICA_FOURTH_FLOOR",
-        //     3: "NTUH_YUNLIN_WARD_FIVE_B",
-        //     4: "NURSING_HOME",
-        //     5: "YUANLIN_CHRISTIAN_HOSPITAL",
-        //     6: "VETERAN_HOME_FIRST_FLOOR",
-        //     7: "VETERAN_HOME_THIRD_FLOOR",
-        // },
-
-
 
         areaOptions: process.env.SITES_GROUP
             .split(',')

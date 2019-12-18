@@ -5,6 +5,7 @@ import moment from 'moment';
 import { Formik, Form } from 'formik';
 import { AppContext } from '../../context/AppContext';
 import { Container } from 'react-grid-system';
+import dataSrc from '../../dataSrc'
   
 class DownloadPdfRequestForm extends React.Component {
 
@@ -57,7 +58,7 @@ class DownloadPdfRequestForm extends React.Component {
                 break;
             case "downloadReport":
                 var link = document.createElement('a');
-                link.href = `http://${process.env.DATASRC_IP}/${this.props.pdfPath}`;
+                link.href = `/${this.props.pdfPath}`;
                 link.download = "";
                 link.click();
                 break;

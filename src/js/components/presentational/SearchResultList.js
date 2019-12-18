@@ -272,7 +272,6 @@ class SearchResult extends React.Component {
         // ? '未找到的結果'
         // : '找到的結果'
 
-
         return(
             <div>
                 <Row className='d-flex justify-content-center' style={style.titleText}>

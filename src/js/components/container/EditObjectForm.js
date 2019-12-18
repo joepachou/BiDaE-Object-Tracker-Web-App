@@ -18,8 +18,14 @@ import Checkbox from '../presentational/Checkbox'
 import RadioButtonGroup from './RadioButtonGroup'
 import RadioButton from '../presentational/RadioButton'
 import { toast } from 'react-toastify';
+
 import { isNull } from 'util';
 import { editImport } from '../../dataSrc'
+
+import { AppContext } from '../../context/AppContext';
+import dataSrc from '../../dataSrc'
+
+
 let monitorTypeMap = {};
 
 Object.keys(config.monitorType).forEach(key => {
@@ -27,9 +33,20 @@ Object.keys(config.monitorType).forEach(key => {
 })
 
 class EditObjectForm extends React.Component {
+
+    static contextType = AppContext
+
     state = {
         show: this.props.show,
+        transferredLocationOptions: []
+
     };
+
+    componentDidMount = () => {
+        this.getTransferredLocation();
+     }
+
+    
     /**
      * EditObjectForm will update if user selects one of the object table.
      * The selected object data will transfer from ObjectMangentContainer to EditObjectForm
@@ -59,23 +76,49 @@ class EditObjectForm extends React.Component {
     }
         
 
-        
-    render() {
-        const locale = this.context
 
-        const options = Object.keys(config.transferredLocation).map(location => {
-            return {
-                value: location,
-                label: locale.texts[location.toUpperCase().replace(/ /g, '_')],
-                options: config.transferredLocation[location].map(branch => {
-                    return {
-                        value: `${location},${branch}`,
-                        label: locale.texts[branch.toUpperCase().replace(/ /g, '_')],
+    getTransferredLocation = () => {
+        let { locale } = this.context
+        axios.get(dataSrc.getTransferredLocation)
+        .then(res => {
+            const transferredLocationOptions = res.data.map(loc => {
+                return {          
+                    value: loc.transferred_location,
+                    label: locale.texts[loc.transferred_location.toUpperCase().replace(/ /g, '_')],
+                    options: Object.values(loc)
+                        .filter((item, index) => index > 0)
+                        .map(branch => {
+                            return {
+                                value: `${loc.transferred_location},${branch}`,
+                                label: locale.texts[branch.toUpperCase().replace(/ /g, '_')],
+                            }
+                    })
+                }
 
-                    }
-                })
-            }
+            })
+            this.setState({
+                transferredLocationOptions
+            })
         })
+    }
+
+
+    render() {
+        const { locale } = this.context
+
+        // const options = Object.keys(config.transferredLocation).map(location => {
+        //     return {
+        //         value: location,
+        //         label: locale.texts[location.toUpperCase().replace(/ /g, '_')],
+        //         options: config.transferredLocation[location].map(branch => {
+        //             return {
+        //                 value: `${location},${branch}`,
+        //                 label: locale.texts[branch.toUpperCase().replace(/ /g, '_')],
+
+        //             }
+        //         })
+        //     }
+        // })
 
         const areaOptions = Object.values(config.mapConfig.areaOptions).map(area => {
             return {
@@ -321,7 +364,7 @@ class EditObjectForm extends React.Component {
                                                 name = "select"
                                                 value = {values.select}
                                                 onChange={value => setFieldValue("select", value)}
-                                                options={options}
+                                                options={this.state.transferredLocationOptions}
                                                 isSearchable={false}
                                                 isDisabled={values.radioGroup !== config.objectStatus.TRANSFERRED}
                                                 style={style.select}
@@ -388,7 +431,5 @@ class EditObjectForm extends React.Component {
         );
     }
 }
-
-EditObjectForm.contextType = LocaleContext;
   
 export default EditObjectForm;

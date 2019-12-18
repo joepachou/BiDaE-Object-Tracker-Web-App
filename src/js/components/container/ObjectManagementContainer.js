@@ -7,6 +7,7 @@ import {
     getPatientTable,
     editObject,
     editPatient,
+    editImport,
     addObject,
     addPatient,
     deletePatient,
@@ -15,7 +16,9 @@ import {
     getLbeaconTable,
     objectImport,
     getImportTable,
-    deleteImportData
+    deleteImportData,
+    getObjectTable_fromImport,
+    cleanBinding
 } from "../../dataSrc"
 import axios from 'axios';
 import ReactTable from 'react-table';
@@ -26,6 +29,7 @@ import selecTableHOC from 'react-table/lib/hoc/selectTable';
 import config from '../../config'
 import { objectTableColumn } from '../../tables'
 import { patientTableColumn } from '../../tables'
+import { importTableColumn } from '../../tables'
 import EditPatientForm from './EditPatientForm'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
@@ -43,6 +47,7 @@ class ObjectManagementContainer extends React.Component{
 
     state = {
         column:[],
+        columnImport:[],
         columnPatient:[],
         data:[],
         dataPatient:[],
@@ -151,44 +156,41 @@ class ObjectManagementContainer extends React.Component{
             locale: locale.abbr
         })
         .then(res => {
-            let column = _.cloneDeep(objectTableColumn)
+            let columnImport = _.cloneDeep(importTableColumn)
          
-            column.map(field => {
+            columnImport.map(field => {
                 field.headerStyle = {
                     textAlign: 'left',
                 }
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })
 
-         
             res.data.rows.map(item => {
+                item.monitor_type = this.getMonitorTypeArray(item).join('/')
 
-                // item.monitor_type = this.getMonitorTypeArray(item).join('/')
-
-                // item.status = {
-                //     value: item.status,
-                //     label: item.status ? locale.texts[item.status.toUpperCase()] : null,
-                // }
-                // item.transferred_location = item.transferred_location 
-                //     ? {
-                //         value: item.transferred_location,
-                //         label: locale.texts[item.transferred_location.toUpperCase().replace(/ /g, '_')],
-                //         label: item.transferred_location.toUpperCase().split(',').map(item => {
-                //             return locale.texts[item]
-                //         }).join()
-                //     }
-                //     : ''
-                // item.area_name = {
-                //     value: config.mapConfig.areaOptions[item.area_id],
-                //     label: locale.texts[config.mapConfig.areaOptions[item.area_id]],
-                // }
+                item.status = {
+                    value: item.status,
+                    label: item.status ? locale.texts[item.status.toUpperCase()] : null,
+                }
+                item.transferred_location = item.transferred_location 
+                    ? {
+                        value: item.transferred_location,
+                        label: locale.texts[item.transferred_location.toUpperCase().replace(/ /g, '_')],
+                        label: item.transferred_location.toUpperCase().split(',').map(item => {
+                            return locale.texts[item]
+                        }).join()
+                    }
+                    : ''
+                item.area_name = {
+                    value: config.mapConfig.areaOptions[item.area_id],
+                    label: locale.texts[config.mapConfig.areaOptions[item.area_id]],
+                }
             })
             
             this.setState({
                 dataImport: res.data.rows,
-                column: column,
+                columnImport: columnImport,
             })
-           
         })
 
 
@@ -212,20 +214,24 @@ class ObjectManagementContainer extends React.Component{
 
     getData = () => {
         let { locale } = this.context
-        axios.post(getObjectTable, {
+        let totalArray = [];
+        
+
+        axios.post(getObjectTable_fromImport, {
             locale: locale.abbr
         })
         .then(res => {
             let column = _.cloneDeep(objectTableColumn)
-            
             column.map(field => {
                 field.headerStyle = {
                     textAlign: 'left',
                 }
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })
-            res.data.rows.map(item => {
+        
 
+            res.data.rows.map(item => {
+                totalArray.push(item)
                 item.monitor_type = this.getMonitorTypeArray(item).join('/')
 
                 item.status = {
@@ -251,10 +257,14 @@ class ObjectManagementContainer extends React.Component{
                 data: res.data.rows,
                 column: column,
             })
+
+
         })
         .catch(err => {
             console.log(err);
         })
+
+
     }
 
     getLbeaconData = () => {
@@ -318,8 +328,8 @@ class ObjectManagementContainer extends React.Component{
                 this.setState({
                     isShowBind: true,
                 })
-                
-          
+                break;
+            
 
             // console.log(e.target.name)
 
@@ -352,31 +362,35 @@ class ObjectManagementContainer extends React.Component{
     }
 
 
+    deleteBinding = () => {
+        let { locale } = this.context
+        axios.post(cleanBinding, {
+            locale: locale.abbr,
+            formOption:this.state.selection
+        })
+        .then(res => {
+            this.setState({
+                selection: [],
+                selectAll: false,
+            })
+        })
+        .catch(err => {
+            console.log("clean Binding fail : " + err);
+        })
+    
+        this.handleSubmitForm()
+    }
+
+
+
     deleteRecordImport = () => {
         let idPackage = []
         var deleteArray = [];
         var deleteCount = 0;
-        
-        this.state.dataImport.map (item => {
-         
-            this.state.selection.map(itemSelect => {
-                
-                itemSelect === item.name
-                ? 
-                 deleteArray.push(deleteCount.toString()) 
-                : 
-                null          
-            })
-                 deleteCount +=1
-        })
-        deleteArray.map( item => {
-            this.state.dataImport[item] === undefined ?
-                null
-                :
-                idPackage.push(parseInt(this.state.dataImport[item].id))
-            })
+    
+     
         axios.post(deleteImportData, {
-            idPackage
+           idPackage: this.state.selection
         })
         .then(res => {
             this.setState({
@@ -418,14 +432,12 @@ class ObjectManagementContainer extends React.Component{
         let selection = [...this.state.selection];
         key = key.split('-')[1] ? key.split('-')[1] : key
         const keyIndex = selection.indexOf(key);
-
         if (keyIndex >= 0) {
             selection = [
             ...selection.slice(0, keyIndex),
             ...selection.slice(keyIndex + 1)
             ];
         } else {
-
             selection.push(key);
         }
         this.setState({ 
@@ -438,14 +450,17 @@ class ObjectManagementContainer extends React.Component{
         const selection = [];
         if (selectAll) {
             const wrappedInstance = this.selectTable.getWrappedInstance();
-            const currentRecords = wrappedInstance.getResolvedState().sortedData;
-          
+            const currentRecords = wrappedInstance.props.data
+            // const currentRecords = wrappedInstance.getResolvedState().sortedData;
+           
             currentRecords.forEach(item => {
-
-                selection.push(item.name);
+                selection.push(item.id);
             });
         }
+         
         this.setState({ selectAll, selection });
+
+  
     };
 
     isSelected = (key) => {
@@ -612,10 +627,12 @@ class ObjectManagementContainer extends React.Component{
                     }
                 })
 
+
+
                 DataNameIsNull!='' ? alert('ASN必須不等於空:' + DataNameIsNull) : null 
                 ReapeName!='' ?    alert(ReapeName + '的ASN與其他筆資料重複')  : null
                 //沒被擋掉的存到newData後輸出
-            
+        
                  let { locale } = this.context
                 axios.post(objectImport, {
                     locale: locale.abbr ,
@@ -686,20 +703,11 @@ class ObjectManagementContainer extends React.Component{
                       <InputFiles accept=".xlsx, .xls" onChange={this.onImportExcel}>
                             <Button 
                              variant="outline-primary" 
-                            className="btn btn-primary mr-2 mb-1"
+                             className="btn btn-primary mr-2 mb-1"
                             >
                             {locale.texts.IMPORT_OBJECT}
                             </Button>
                         </InputFiles>
-                        <Button 
-                            variant="outline-primary" 
-                            className='text-capitalize mr-2 mb-1'
-                            name="associate object"
-                            onClick={this.handleClickButton}
-                        >
-                            {locale.texts.ASSOCIATE}
-                        </Button>
-                         
                       
 
                         <Button 
@@ -712,9 +720,9 @@ class ObjectManagementContainer extends React.Component{
                         </Button>
                     </ButtonToolbar>
                     <SelectTable
-                            keyField='name'
+                            keyField='id'
                             data={this.state.dataImport}
-                            columns={this.state.column}
+                            columns={this.state.columnImport}
                             ref={r => (this.selectTable = r)}
                             className="-highlight"
                             style={{height:'75vh'}}
@@ -723,10 +731,6 @@ class ObjectManagementContainer extends React.Component{
                             
                                 return {
                                     onClick: (e, handleOriginal) => {
-                                            this.setState({
-                                                isShowEditImportTable : true,
-                                                selectedRowData_Import: this.state.dataImport[rowInfo.index],
-                                            })
                                             // let id = (rowInfo.index+1).toString()
                                             // this.toggleSelection(id)
                                             if (handleOriginal) {
@@ -743,6 +747,15 @@ class ObjectManagementContainer extends React.Component{
 
                 <TabPanel>
                     <ButtonToolbar>
+                         <Button 
+                            variant="outline-primary" 
+                            className='text-capitalize mr-2 mb-1'
+                            name="associate object"
+                            onClick={this.handleClickButton}
+                        >
+                            {locale.texts.ASSOCIATE}
+                        </Button>
+                         
                         <Button 
                             variant="outline-primary" 
                             className='text-capitalize mr-2 mb-1'
@@ -755,10 +768,10 @@ class ObjectManagementContainer extends React.Component{
                         <Button 
                             variant="outline-primary" 
                             className='text-capitalize mr-2 mb-1'
-                            name="delete object"
-                            onClick={this.handleClickButton}
+                            name="delete binding"
+                            onClick={this.deleteBinding}
                         >
-                            {locale.texts.DELECT_DEVICE}
+                            {locale.texts.BINDING_DELETE}
                         </Button>
 {/* 
                         <Button 
@@ -781,7 +794,7 @@ class ObjectManagementContainer extends React.Component{
 
                     </ButtonToolbar>
                     <SelectTable
-                            keyField='name'
+                            keyField='id'
                             data={this.state.data}
                             columns={this.state.column}
                             ref={r => (this.selectTable = r)}
@@ -797,7 +810,7 @@ class ObjectManagementContainer extends React.Component{
                                                 isShowEdit: true,
                                                 isPatientShowEdit: false,
                                                 formTitle: 'edit object',
-                                                formPath: editObject,
+                                                formPath: editImport,
                                             })
                                             let id = (rowInfo.index+1).toString()
                                             this.toggleSelection(id)
@@ -810,6 +823,7 @@ class ObjectManagementContainer extends React.Component{
                             }
                         />
                 </TabPanel>
+                
                 <TabPanel>
                     <ButtonToolbar>
                         <Button 

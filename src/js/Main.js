@@ -16,7 +16,8 @@ const Main =()=>{
             )
         }else{
             return(
-                <p>手機版本，努力中</p>
+                //<p>手機版本，努力中</p>
+                <MainContainer />
             )
         }
 }

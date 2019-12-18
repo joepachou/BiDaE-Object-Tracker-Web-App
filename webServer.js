@@ -4,16 +4,21 @@ const app = express()
 const bodyParser = require('body-parser')
 const httpPort = process.env.HTTP_PORT || 80;
 const httpsPort = process.env.HTTPS_PORT || 443;
-const db = require('./query')
+const db = require('./web_server/query')
 const path = require('path');
-const fs = require('fs');
-const http = require('http');
+const fs = require('fs')
+const http = require('http');;
 const https = require('https');
 const session = require('express-session')
 const formidable = require('formidable');
 const cors = require('cors');
-const parse = require('csv-parse')
+// const csv = require('csv-parse')
 const csv =require('csvtojson')
+const {
+    PRIVATE_KEY,
+    CERTIFICATE,
+    CA_BUNDLE
+} = process.env
 
 
 app.use(bodyParser.json())
@@ -45,6 +50,23 @@ app.use(function(req, res, next) {
 //         res.end('welcome to the session demo. refresh!')
 //     }
 // })
+// fs.createReadStream('transferred_location.csv')
+// .pipe(csv())
+// .on('data', function(data){
+//     try {
+//         console.log(data)
+//     }
+//     catch(err) {
+//         console.log(err)
+//     }
+// })
+
+// csv()
+// .fromFile('transferred_location.csv')
+// .then( jsonObj => {
+//     console.log(jsonObj)
+// })
+
 
 app.get('/image/pinImage/:pinImage', (req, res) => {
     res.sendFile(path.join(__dirname, 'src','img','colorPin',req.params['pinImage']));
@@ -159,16 +181,27 @@ app.post('/data/getAreaTable', db.getAreaTable)
 
 app.post('/data/addBulkObject', db.addBulkObject)
 
-app.get('/shift_record/:file', (req, res) =>{
-	res.sendFile(path.join(__dirname, 'shift_record',req.params['file']));
+app.get('/data/getTransferredLocation', (req, res) => {
+    csv()
+    .fromFile('transferred_location.csv')
+    .then(jsonObj => {
+        res.status(200).json(jsonObj)
+    })
+    .catch(err => {
+        console.log(`get tranferred location data error: ${err}`)
+    })
 })
 
-app.get('/search_result/:file', (req, res) =>{
-	res.sendFile(path.join(__dirname, 'search_result',req.params['file']));
+app.get(`/${process.env.DEFAULT_FOLDER}/shift_record/:file`, (req, res) =>{
+	res.sendFile(path.join(__dirname, `${process.env.DEFAULT_FOLDER}/shift_record`,req.params['file']));
 })
 
-app.get('/edit_object_record/:file', (req, res) =>{
-	res.sendFile(path.join(__dirname, 'edit_object_record',req.params['file']));
+app.get(`/${process.env.DEFAULT_FOLDER}/search_result/:file`, (req, res) =>{
+	res.sendFile(path.join(__dirname, `${process.env.DEFAULT_FOLDER}/search_result`,req.params['file']));
+})
+
+app.get(`/${process.env.DEFAULT_FOLDER}/edit_object_record/:file`, (req, res) =>{
+	res.sendFile(path.join(__dirname, `${process.env.DEFAULT_FOLDER}/edit_object_record`,req.params['file']));
 })
 
 app.get('/download/com.beditech.IndoorNavigation.apk', (req, res) => {
@@ -177,14 +210,16 @@ app.get('/download/com.beditech.IndoorNavigation.apk', (req, res) => {
 });
 
 
-
 /** privatekey name: private.key
  *  certificate name: certificate.cert or certificate.crt
  *  ca_bundle name: ca.bundle.crt
  */
 
 /** Create self-signed certificate  
- *  >> openssl req -nodes -new -x509 -keyout private.key -out certificate.cert */
+ *  >> openssl req -nodes -new -x509 -keyout private.key -out certificate.cert 
+ * If it is window os, please refer to https://tecadmin.net/install-openssl-on-windows/ install openssl 
+ * and set the environment variables*/
+
 
 // var privateKey = fs.readFileSync(__dirname + '/sslforfree/private.key');
 // // var certificate = fs.readFileSync(__dirname + '/sslforfree/certificate.crt');
@@ -200,11 +235,33 @@ app.get('/download/com.beditech.IndoorNavigation.apk', (req, res) => {
 // const httpsServer = https.createServer(credentials, app);
 const httpServer = http.createServer(app);
 
+var privateKey = PRIVATE_KEY ? fs.readFileSync(__dirname + `/ssl/${PRIVATE_KEY}`) : null
+var certificate = CERTIFICATE ? fs.readFileSync(__dirname + `/ssl/${CERTIFICATE}`) : null
+var ca_bundle = CA_BUNDLE ? fs.readFileSync(__dirname + `/ssl/${CA_BUNDLE}`) : null
+
+var credentials = PRIVATE_KEY ? { 
+    key: privateKey, 
+    cert: certificate,
+    ca: ca_bundle
+} : null
+
+const httpsServer = https.createServer(credentials, app)
+const httpServer = http.createServer(app);
+
+/** Enable HTTP server */
+
 httpServer.listen(httpPort, () =>{
     console.log(`HTTP Server running on port ${httpPort}`)
 })
 
+
 // httpsServer.listen(httpsPort, () => {
 //     console.log(`HTTPS Server running on PORT ${httpsPort}`)
 // })
+
+
+/** Enable HTTPS server */
+PRIVATE_KEY ? httpsServer.listen(httpsPort, () => {
+    console.log(`HTTPS Server running on PORT ${httpsPort}`)
+}) : null
 

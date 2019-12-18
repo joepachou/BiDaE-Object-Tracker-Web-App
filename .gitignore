@@ -1,8 +1,4 @@
 *.env
-.DS_Store
+*.DS_Store
 node_modules/
-sslforfree/*
-uploads/
-edit_object_record/
-shift_record/
-search_result/
+default_folder/

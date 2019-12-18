@@ -309,6 +309,34 @@ const patientTableColumn = [
 
 
 
+
+
+const importTableColumn = [
+    {
+        Header: "Name",
+        accessor: "name"
+    },
+    {
+        Header: "Type",
+        accessor: "type"
+    },
+    {
+        Header: "Asset Control Number",
+        accessor: "asset_control_number"
+    },
+     {
+        Header: "BindFlag",
+        accessor: "bindflag"
+    },
+    {
+        Header: "Mac Address",
+        accessor: "mac_address",
+    },
+   
+]
+
+
+
 const objectTableColumn = [
     {
         Header: "Name",
@@ -488,6 +516,7 @@ export {
     lbeaconTableColumn,
     gatewayTableColumn,
     objectTableColumn,
+    importTableColumn,
     patientTableColumn,
     geofenceTableColumn,
     userInfoTableColumn,

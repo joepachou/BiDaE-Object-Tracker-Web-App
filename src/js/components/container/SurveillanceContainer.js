@@ -22,7 +22,6 @@ class SurveillanceContainer extends React.Component {
         isOpenFence: false,
         searchedObjectType: [],
         showObjects: [],
-        auth: this.context.auth,
     }
 
 
@@ -35,9 +34,8 @@ class SurveillanceContainer extends React.Component {
         var searchedObjectType = this.state.searchedObjectType
         var showObjects = this.state.showObjects
         
-        if (!(_.isEqual(prevState.auth, this.context.auth))) {
+        if (!(_.isEqual(prevProps.authenticated, this.props.authenticated))) {
             this.setState({
-                auth: this.context.auth,
                 searchedObjectType: [],
                 showObjects: [],
             })
@@ -168,7 +166,6 @@ class SurveillanceContainer extends React.Component {
     render(){
         const { 
             hasSearchKey,
-            auth
         } = this.props;
 
         const style = {
@@ -196,7 +193,8 @@ class SurveillanceContainer extends React.Component {
         }
         const { 
             locale,
-            stateReducer
+            stateReducer,
+            auth
         } = this.context;
 
         let [{areaId}] = stateReducer
@@ -359,7 +357,7 @@ class SurveillanceContainer extends React.Component {
                 </div>
                 <PdfDownloadForm 
                     show={this.state.showPdfDownloadForm}
-                    data={this.props.proccessedTrackingData.filter(item => item.searched)}
+                    data={this.props.searchResult}
                     handleClose = {this.handleClosePdfForm}
                     userInfo={auth.user}
                 />
