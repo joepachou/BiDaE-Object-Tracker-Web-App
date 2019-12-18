@@ -269,12 +269,12 @@ class Map extends React.Component {
         this.errorCircle .clearLayers();
 
         /** Mark the objects onto the map  */
-        // this.calculateScale();
+        this.calculateScale();
 
         const iconSize = [this.scalableIconSize, this.scalableIconSize];
         const numberSize = this.scalableNumberSize;
         let counter = 0;
-        
+
         this.filterTrackingData(_.cloneDeep(this.props.proccessedTrackingData))
         .map(item => {
             // console.log(item)
