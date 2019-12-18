@@ -223,7 +223,7 @@ const config = {
     confirmFormTimeFormat: "LLLL",
     shiftChangeRecordTimeFormat: "LLL",
     pdfFileContentTimeFormat: "LLL",
-    pdfFileNameTimeFormat: "MM_DD_YYYY",
+    pdfFileNameTimeFormat: "YYYY-MM-Do_hh_mm_ss",
 
     roles: [
         "guest",
@@ -338,7 +338,6 @@ const config = {
                 return `${option}_report_${moment().format(config.pdfFileNameTimeFormat)}.pdf`
             },
             shiftChange: (user) => {
-                // return `${user.name}_${config.getShift().replace(/ /g, '_')}_${moment().format(config.pdfFileNameTimeFormat)}.pdf`
                 return `${user.name}_${moment().format(config.pdfFileNameTimeFormat)}.pdf`
             },
             searchResult: (user, option) => {
