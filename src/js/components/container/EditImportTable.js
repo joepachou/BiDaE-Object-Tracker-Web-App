@@ -115,7 +115,6 @@ class EditImportTable extends React.Component {
                                     placeholder="Asset control number" 
                                     className={'form-control' + (errors.ASN && touched.ASN ? ' is-invalid' : '')} 
                                     value={selectedObjectData.asset_control_number}
-                                    disabled = {true}
                                     />
                                       <ErrorMessage name="ASN" component="div" className="invalid-feedback" />
                         </div>
@@ -126,7 +125,7 @@ class EditImportTable extends React.Component {
                                     name="MAC_Address"
                                     placeholder="MAC_Address" 
                                     className={'form-control' + (errors.MAC_Address && touched.MAC_Address ? ' is-invalid' : '')} 
-                                    value={selectedObjectData.mac_address || 'null'}
+                                    value={selectedObjectData.mac_address || ''}
                                     disabled = {true}
                                     />
                                       <ErrorMessage name="MAC_Address" component="div" className="invalid-feedback" />
@@ -135,7 +134,7 @@ class EditImportTable extends React.Component {
                         <hr/>
 
 
-                        <div className="form-group">
+                        {/* <div className="form-group">
                                    <Field 
                                     type="text"
                                     name="MAC_Address_Check"
@@ -145,7 +144,7 @@ class EditImportTable extends React.Component {
                                     onChange={this.updateInput}
                                     />
                                       <ErrorMessage name="MAC_Address_Check" component="div" className="invalid-feedback" />
-                        </div>
+                        </div> */}
 
                                 <Modal.Footer>
                                     <Button variant="outline-secondary" className="text-capitalize" onClick={this.handleClose}>

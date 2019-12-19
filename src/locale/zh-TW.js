@@ -101,7 +101,7 @@ const tw = {
     SHOW_PATIENTS_FOUND: "顯示找到的病人",
     SHOW_SEARCH_RESULTS_FOUND: "顯示找到的搜尋結果",
     SHOW_SEARCH_RESULTS_NOT_FOUND: "顯示未找到的搜尋結果",
-    ASSOCIATE: "連結",
+    ASSOCIATE: "綁定設定",
     IMPORT_OBJECT:"匯入",
     ACN_VERIFICATION:"ACN驗證",
     BINDING_SETTING:"綁定設定",
