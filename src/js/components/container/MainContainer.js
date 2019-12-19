@@ -422,7 +422,7 @@ class MainContainer extends React.Component{
             proccessedTrackingData.map(item => {
                 if (item.object_type == 0 && (item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0
                     // fix 4.7.3
-                    || item.asset_control_number.slice(10,14) == searchKey
+                    || item.asset_control_number.indexOf(searchKey) >= 0
                     // original
                     // || item.asset_control_number.slice(10,14).indexOf(searchKey) >= 0
                     // 

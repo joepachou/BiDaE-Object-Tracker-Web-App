@@ -445,7 +445,7 @@ class MainContainerForTablet extends React.Component{
 
             proccessedTrackingData.map(item => {
                 if (item.object_type == 0 && (item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0
-                    || item.asset_control_number.slice(10,14).indexOf(searchKey) >= 0
+                    || item.asset_control_number.indexOf(searchKey) >= 0
                     || item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0) 
                 ) {
 
