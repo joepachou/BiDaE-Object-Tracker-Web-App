@@ -39,6 +39,7 @@ import XLSX from "xlsx";
 import InputFiles from "react-input-files";
 import BindForm from './BindForm'
 import EditImportTable from './EditImportTable'
+import AccessControl from '../presentational/AccessControl'
 const SelectTable = selecTableHOC(ReactTable);
 
 
@@ -314,6 +315,7 @@ class ObjectManagementContainer extends React.Component{
         let { name } = e.target
         switch(name) {
             case "add object": 
+        
                 this.setState({
                     isShowEdit: true,
                     formTitle: name,
@@ -359,6 +361,13 @@ class ObjectManagementContainer extends React.Component{
                  break;  
         }
 
+    }
+
+    deleteBind= () => {
+        this.setState({
+          isShowEditImportTable:true
+          // selectedRowData_Import:
+       })
     }
 
 
@@ -691,58 +700,23 @@ class ObjectManagementContainer extends React.Component{
                 <br/>
                 <Tabs selectedIndex={this.state.tabIndex} onSelect={tabIndex => this.setState({ tabIndex })}>
                     <TabList>
-                        <Tab>{locale.texts.TOTAL_DATA}</Tab>
+                       
                         <Tab>{locale.texts.DEVICE_FORM}</Tab>
                         <Tab>{locale.texts.PATIENT_FORM}</Tab>
+
+                          <AccessControl
+                            permission={"user:importTable"}
+                            renderNoAccess={() => null}
+                        >
+                        <Tab>
+                        {locale.texts.TOTAL_DATA}
+                        </Tab>
+                       </AccessControl>
+     
                     </TabList>
 
 
-                    <TabPanel> 
-                    <ButtonToolbar>
-
-                      <InputFiles accept=".xlsx, .xls" onChange={this.onImportExcel}>
-                            <Button 
-                             variant="outline-primary" 
-                             className="btn btn-primary mr-2 mb-1"
-                            >
-                            {locale.texts.IMPORT_OBJECT}
-                            </Button>
-                        </InputFiles>
-                      
-
-                        <Button 
-                            variant="outline-primary" 
-                            className='text-capitalize mr-2 mb-1'
-                            name="delete import data"
-                            onClick={this.handleClickButton}
-                        >
-                            {locale.texts.DELETE}
-                        </Button>
-                    </ButtonToolbar>
-                    <SelectTable
-                            keyField='id'
-                            data={this.state.dataImport}
-                            columns={this.state.columnImport}
-                            ref={r => (this.selectTable = r)}
-                            className="-highlight"
-                            style={{height:'75vh'}}
-                            {...extraProps}
-                            getTrProps={(state, rowInfo, column, instance) => {
-                            
-                                return {
-                                    onClick: (e, handleOriginal) => {
-                                            // let id = (rowInfo.index+1).toString()
-                                            // this.toggleSelection(id)
-                                            if (handleOriginal) {
-                                                handleOriginal()
-                                            }
-                                        }
-                                }
-                            }
-                            }
-                        />
-                </TabPanel>
-
+            
 
 
                 <TabPanel>
@@ -755,16 +729,7 @@ class ObjectManagementContainer extends React.Component{
                         >
                             {locale.texts.ASSOCIATE}
                         </Button>
-                         
-                        <Button 
-                            variant="outline-primary" 
-                            className='text-capitalize mr-2 mb-1'
-                            name="add object"
-                            onClick={this.handleClickButton}
-                        >
-                            {locale.texts.ADD_OBJECT}
-                            
-                        </Button>
+                     
                         <Button 
                             variant="outline-primary" 
                             className='text-capitalize mr-2 mb-1'
@@ -773,7 +738,27 @@ class ObjectManagementContainer extends React.Component{
                         >
                             {locale.texts.BINDING_DELETE}
                         </Button>
-{/* 
+                            
+                        <Button 
+                            variant="outline-primary" 
+                            className='text-capitalize mr-2 mb-1'
+                            name="add object"
+                            onClick={this.handleClickButton}
+                        >
+                            {locale.texts.ADD_OBJECT}
+                        </Button>
+
+                         
+                        {/* <Button 
+                            variant="outline-primary" 
+                            className='text-capitalize mr-2 mb-1'
+                            name="delete bind"
+                            onClick={this.deleteBind}
+                        >
+                            {'取消綁定：2'}
+                        </Button> */}
+
+                        {/* 
                         <Button 
                             variant="outline-primary" 
                             className='text-capitalize mr-2 mb-1'
@@ -873,6 +858,57 @@ class ObjectManagementContainer extends React.Component{
                     </TabPanel>
                 </Tabs>
 
+                <TabPanel> 
+                    <AccessControl
+                            permission={"user:importTable"}
+                            renderNoAccess={() => null}
+                        >
+                    <ButtonToolbar>
+
+                      <InputFiles accept=".xlsx, .xls" onChange={this.onImportExcel}>
+                            <Button 
+                             variant="outline-primary" 
+                             className="btn btn-primary mr-2 mb-1"
+                            >
+                            {locale.texts.IMPORT_OBJECT}
+                            </Button>
+                        </InputFiles>
+                      
+
+                        <Button 
+                            variant="outline-primary" 
+                            className='text-capitalize mr-2 mb-1'
+                            name="delete import data"
+                            onClick={this.handleClickButton}
+                        >
+                            {locale.texts.DELETE}
+                        </Button>
+                    </ButtonToolbar>
+                    <SelectTable
+                            keyField='id'
+                            data={this.state.dataImport}
+                            columns={this.state.columnImport}
+                            ref={r => (this.selectTable = r)}
+                            className="-highlight"
+                            style={{height:'75vh'}}
+                            {...extraProps}
+                            getTrProps={(state, rowInfo, column, instance) => {
+                            
+                                return {
+                                    onClick: (e, handleOriginal) => {
+                                            // let id = (rowInfo.index+1).toString()
+                                            // this.toggleSelection(id)
+                                           
+                                            if (handleOriginal) {
+                                                handleOriginal()
+                                            }
+                                        }
+                                }
+                            }
+                            }
+                        />
+                            </AccessControl>
+                </TabPanel>
 
                 <EditPatientForm
                     show = {isPatientShowEdit} 
@@ -886,6 +922,7 @@ class ObjectManagementContainer extends React.Component{
                     physicianList={this.state.physicianList}
                     roomOptions={this.state.roomOptions}
                 />  
+       
                 <EditObjectForm 
                     show = {isShowEdit} 
                     title= {this.state.formTitle} 
