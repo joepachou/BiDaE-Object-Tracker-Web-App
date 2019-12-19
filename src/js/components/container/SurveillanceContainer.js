@@ -151,17 +151,17 @@ class SurveillanceContainer extends React.Component {
         })
     }
 
-    getSearchKey = (searchKey, colorPanel, searchValue) => {
-        let markerClickPackage = {}
-        this.props.proccessedTrackingData.map(item => {
-            console.log(item.searchedType)
-            console.log(this.state.showObjects)
-            if (this.state.showObjects.includes(item.searchedType)) {
-                markerClickPackage[item.mac_address] = item
-            }
-        })
-        this.props.getSearchKey(searchKey, colorPanel, searchValue, markerClickPackage)
-    }
+    // getSearchKey = (searchKey, colorPanel, searchValue) => {
+    //     let markerClickPackage = {}
+    //     this.props.proccessedTrackingData.map(item => {
+    //         if (this.state.showObjects.includes(item.searchedType)) {
+    //             markerClickPackage[item.mac_address] = item
+    //         }
+    //     })
+
+
+    //     this.props.getSearchKey(searchKey, colorPanel, searchValue, markerClickPackage)
+    // }
 
     render(){
         const { 
@@ -208,7 +208,7 @@ class SurveillanceContainer extends React.Component {
                         proccessedTrackingData={this.props.proccessedTrackingData}
                         lbeaconPosition={this.props.lbeaconPosition}
                         geoFenceConfig={this.props.geoFenceConfig.filter(item => parseInt(item.unique_key) == areaId)}
-                        getSearchKey={this.getSearchKey}
+                        getSearchKey={this.props.getSearchKey}
                         areaId={areaId}
                         isOpenFence={this.state.isOpenFence}
                         searchedObjectType={this.state.showObjects}

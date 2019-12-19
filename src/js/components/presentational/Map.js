@@ -39,6 +39,7 @@ class Map extends React.Component {
 
     componentDidUpdate = (prevProps) => {
         this.handleObjectMarkers();
+
         if (JSON.parse(process.env.IS_LBEACON_MARK) && this.props.lbeaconPosition.length !== 0 && !this.state.hasIniLbeaconPosition) {
             this.createLbeaconMarkers()
         }
@@ -343,7 +344,7 @@ class Map extends React.Component {
     /** Fire when clicing marker */
     handleMarkerClick = (e) => {
         const lbPosition =  e.target.options.icon.options.currentPosition
-        this.props.getSearchKey('objects', null, lbPosition)
+        this.props.getSearchKey('objects', null, lbPosition, )
     }
 
     /** Filter out undesired tracking data */

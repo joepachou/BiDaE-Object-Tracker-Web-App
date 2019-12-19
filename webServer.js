@@ -220,21 +220,6 @@ app.get('/download/com.beditech.IndoorNavigation.apk', (req, res) => {
  * If it is window os, please refer to https://tecadmin.net/install-openssl-on-windows/ install openssl 
  * and set the environment variables*/
 
-
-// var privateKey = fs.readFileSync(__dirname + '/sslforfree/private.key');
-// // var certificate = fs.readFileSync(__dirname + '/sslforfree/certificate.crt');
-// var certificate = fs.readFileSync(__dirname + '/sslforfree/certificate.cert');
-// // var ca_bundle = fs.readFileSync(__dirname + '/sslforfree/ca_bundle.crt');
-
-// var credentials = { 
-//     key: privateKey, 
-//     cert: certificate, 
-//     // ca: ca_bundle 
-// };
-
-// const httpsServer = https.createServer(credentials, app);
-const httpServer = http.createServer(app);
-
 var privateKey = PRIVATE_KEY ? fs.readFileSync(__dirname + `/ssl/${PRIVATE_KEY}`) : null
 var certificate = CERTIFICATE ? fs.readFileSync(__dirname + `/ssl/${CERTIFICATE}`) : null
 var ca_bundle = CA_BUNDLE ? fs.readFileSync(__dirname + `/ssl/${CA_BUNDLE}`) : null
@@ -253,12 +238,6 @@ const httpsServer = https.createServer(credentials, app)
 httpServer.listen(httpPort, () =>{
     console.log(`HTTP Server running on port ${httpPort}`)
 })
-
-
-// httpsServer.listen(httpsPort, () => {
-//     console.log(`HTTPS Server running on PORT ${httpsPort}`)
-// })
-
 
 /** Enable HTTPS server */
 PRIVATE_KEY ? httpsServer.listen(httpsPort, () => {
