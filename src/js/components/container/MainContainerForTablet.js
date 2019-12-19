@@ -48,6 +48,8 @@ class MainContainerForTablet extends React.Component{
         auth: this.context.auth,
         shouldUpdateTrackingData: true,
     }
+    prev_search = false
+    curr_search = false
 
     componentDidMount = () => {
         this.getTrackingData();
@@ -57,6 +59,7 @@ class MainContainerForTablet extends React.Component{
     }
 
     componentDidUpdate = (prevProps, prevState) => {
+        this.prev_search = this.curr_search
         let isTrackingDataChange = !(_.isEqual(this.state.trackingData, prevState.trackingData))
         let { stateReducer } = this.context
         let [{violatedObjects}] = stateReducer
@@ -78,7 +81,7 @@ class MainContainerForTablet extends React.Component{
         } 
         // console.log(violatedObjects)
         let newViolatedObject = Object.keys(this.state.violatedObjects).filter(item => !Object.keys(prevState.violatedObjects).includes(item))
-        // console.log(newViolatedObject)
+
         if (newViolatedObject.length !== 0 ) {
             newViolatedObject.map(item => {
                 this.getToastNotification(this.state.violatedObjects[item])
@@ -139,7 +142,10 @@ class MainContainerForTablet extends React.Component{
         let isLbeaconDataChange = !(_.isEqual(this.state.lbeaconPosition, nextState.lbeaconPosition))
         let isGeoFenceDataChange = !(_.isEqual(this.state.geoFenceConfig, nextState.geoFenceConfig))
         let isViolatedObjectChange = !(_.isEqual(this.state.isViolatedObjectChange, nextState.isViolatedObjectChange))
+        let isSearched = this.prev_search ^ this.curr_search
 
+        
+        
         let isHighlightSearchPanelChange = !(_.isEqual(this.state.isHighlightSearchPanel, nextState.isHighlightSearchPanel))
         let shouldUpdate = isTrackingDataChange || 
                                 hasSearchKey || 
@@ -147,7 +153,8 @@ class MainContainerForTablet extends React.Component{
                                 isSearchResultChange || 
                                 isHighlightSearchPanelChange || 
                                 isGeoFenceDataChange ||
-                                isViolatedObjectChange
+                                isViolatedObjectChange || 
+                                isSearched
         return shouldUpdate
     }
 
@@ -157,7 +164,7 @@ class MainContainerForTablet extends React.Component{
 
     handleRefreshSearchResult = () => {
         let { searchKey, colorPanel, searchValue } = this.state
-        this.getSearchKey(searchKey, colorPanel, searchValue)
+        this.getResultBySearchKey(searchKey, colorPanel, searchValue)
     }
 
     changeLocationAccuracy = (locationAccuracy) => {
@@ -359,11 +366,14 @@ class MainContainerForTablet extends React.Component{
 
     /** Fired once the user click the item in object type list or in frequent seaerch */
     getSearchKey = (searchKey, colorPanel = null, searchValue = null) => {
+        this.prev_search = this.curr_search
+        this.curr_search = !this.curr_search
         const searchResult = this.getResultBySearchKey(searchKey, colorPanel, searchValue)
         this.processSearchResult(searchResult, colorPanel, searchKey, searchValue)
     }
 
     getResultBySearchKey = (searchKey, colorPanel, searchValue) => {
+
         let searchResult = [];
         let { auth } = this.context
         let proccessedTrackingData = _.cloneDeep(this.state.trackingData)
@@ -465,7 +475,6 @@ class MainContainerForTablet extends React.Component{
             }
             //console.log('here')
         }
-
         this.setState({
             proccessedTrackingData
         })
@@ -493,7 +502,6 @@ class MainContainerForTablet extends React.Component{
         })
     }
     render(){
-
         const { 
             hasSearchKey,
             colorPanel, 
@@ -557,6 +565,7 @@ class MainContainerForTablet extends React.Component{
                 : {[devicePlural] : 0} 
             : {[devicePlural]: this.state.trackingData.filter(item => item.found).length}
 
+
         return(
             /** "page-wrap" the default id named by react-burget-menu */
             <div id="page-wrap" className='d-flex flex-column w-100' style={{height: "90vh"}}>
@@ -582,6 +591,7 @@ class MainContainerForTablet extends React.Component{
                                 data={data}
                                 searchResult={this.state.searchResult}
                                 searchKey={this.state.searchKey}
+                                isSearched = {this.curr_search ^ this.prev_search}
                             />
                         </div>
 
