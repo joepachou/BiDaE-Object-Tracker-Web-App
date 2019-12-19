@@ -918,7 +918,7 @@ const query_getEditObjectRecord = () => {
 			edit_object_record.edit_time,
 			edit_object_record.notes,
 			edit_object_record.new_status
-		FROM object_import_table
+		FROM edit_object_record
 
 		LEFT JOIN user_table
 		ON user_table.id = edit_object_record.edit_user_id

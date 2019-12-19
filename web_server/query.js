@@ -579,7 +579,7 @@ const getPDFInfo = (request, response) => {
     let { locale } = request.body
     pool.query(queryType.query_getShiftChangeRecord())
         .then(res => {
-            console.log('save pdf file success')
+            console.log('get shift change record success')
             res.rows.map(item => {
                 item.submit_timestamp = moment.tz(item.submit_timestamp, process.env.TZ).locale(locale).format('LLL');
             })
