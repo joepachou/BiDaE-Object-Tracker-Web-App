@@ -261,6 +261,13 @@ class EditObjectForm extends React.Component {
                                 monitor_type: monitor_type || 0,
                                 area_id: config.mapConfig.areaModules[values.area.value].id || 0
                             }
+                            while(postOption.type[postOption.type.length-1] == " "){
+                                postOption.type = postOption.type.substring(0,postOption.type.length-1);       
+                            }
+                            while(postOption.name[postOption.name.length-1] == " "){
+                                postOption.name = postOption.name.substring(0,postOption.name.length-1);       
+                            }
+                            console.log(postOption.type + "121312313213")
                             this.handleSubmit(postOption)                            
                         }}
 
