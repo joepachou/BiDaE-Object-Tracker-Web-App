@@ -59,6 +59,11 @@ class MainContainerForTablet extends React.Component{
     }
 
     componentDidUpdate = (prevProps, prevState) => {
+        
+        if (this.prev_search ^ this.curr_search){
+            this.prev_search = this.curr_search
+            this.forceUpdate()
+        }
         this.prev_search = this.curr_search
         let isTrackingDataChange = !(_.isEqual(this.state.trackingData, prevState.trackingData))
         let { stateReducer } = this.context
@@ -564,7 +569,7 @@ class MainContainerForTablet extends React.Component{
                     : {[devicePlural] : 0} 
                 : {[devicePlural] : 0} 
             : {[devicePlural]: this.state.trackingData.filter(item => item.found).length}
-
+        let isSearched = this.prev_search ^ this.curr_search
 
         return(
             /** "page-wrap" the default id named by react-burget-menu */
@@ -591,7 +596,7 @@ class MainContainerForTablet extends React.Component{
                                 data={data}
                                 searchResult={this.state.searchResult}
                                 searchKey={this.state.searchKey}
-                                isSearched = {this.curr_search ^ this.prev_search}
+                                isSearched = {isSearched}
                             />
                         </div>
 
