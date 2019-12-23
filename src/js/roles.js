@@ -18,7 +18,7 @@ const rules = {
             "route:devicesManagement",
             "route:patientManagement",
             // "route:systemStatus",
-            "route:objectManagement",
+            // "route:objectManagement",
             "route:bigScreen",
             // "route:shiftChangeRecord",
             "user:mydevice",
@@ -27,7 +27,9 @@ const rules = {
             // "route:userManager",
             // "user:toggleArea",
             "user:toggleShowDevices",
-            "user:toggleShowResidents"
+            "user:toggleShowResidents",
+            "route:monitorSetting"
+
         ]
     },
     system_admin: {
@@ -43,7 +45,7 @@ const rules = {
             // "user:toggleArea",
             "user:toggleShowDevices",
             "user:toggleShowResidents",
-            // "route:monitorSetting"
+            "route:monitorSetting"
         ]
     },
     dev: {
@@ -51,7 +53,7 @@ const rules = {
             "form:edit",
             "route:systemStatus",
             "route:objectManagement",
-            // "route:editObjectManagement",
+            "route:editObjectManagement",
             "user:mydevice",
             "user:saveSearchRecord",
             "route:userManager",

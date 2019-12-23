@@ -19,22 +19,17 @@ class MonitorSetting extends React.Component{
             }
         }
         return (
-            <Container style={style.container} className="px-0 text-capitalize">
+            <div style={style.container} className="px-0 text-capitalize">
                 <MonitorSettingBlock
                     title={config.monitorSettingType.RESIDENT_MOVEMENT_MONITOR}
                 />
-                <hr />
                 <MonitorSettingBlock
                     title={config.monitorSettingType.RESIDENT_LONG_STAY_IN_DANGER}
                 />
-                <hr />
                 <MonitorSettingBlock
                     title={config.monitorSettingType.RESIDENT_NOT_STAY_ROOM}
-                    name="what's"
                 />
-                <hr />
-               
-            </Container>
+            </div>
         )
 
     }
