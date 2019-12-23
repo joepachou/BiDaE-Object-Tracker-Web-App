@@ -11,12 +11,17 @@ import AccessControl from '../../presentational/AccessControl'
 import DeviceManager from './DeviceManager'
 import MyDeviceManager from './MyDeviceManager';
 import MyPatientManager from './MyPatientManager';
-import MonitorSetting from "./MonitorSetting"
-
+import MonitorSetting from "./MonitorSetting";
+import UserProfile from "./UserProfile";
 class UserSettingContainer extends React.Component{
     constructor() {
         super();
         this.pageList = [
+            {
+                name: 'User Profile',
+                path: 'userProfile',
+                component: <UserProfile />
+            },
             {
                 name: 'Devices Management',
                 path: 'devicesManagement',

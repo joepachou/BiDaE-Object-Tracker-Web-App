@@ -17,6 +17,7 @@ const rules = {
             "form:edit",
             "route:devicesManagement",
             "route:patientManagement",
+            "route:userProfile",
             // "route:systemStatus",
             "route:objectManagement",
             "route:bigScreen",
