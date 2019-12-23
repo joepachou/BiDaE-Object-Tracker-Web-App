@@ -231,10 +231,10 @@ var credentials = PRIVATE_KEY ? {
 } : null
 
 const httpsServer = https.createServer(credentials, app)
+const httpServer = http.createServer(app);
 
 
 /** Enable HTTP server */
-
 httpServer.listen(httpPort, () =>{
     console.log(`HTTP Server running on port ${httpPort}`)
 })
