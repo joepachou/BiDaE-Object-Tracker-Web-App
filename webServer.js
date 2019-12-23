@@ -233,8 +233,8 @@ var credentials = PRIVATE_KEY ? {
 const httpsServer = https.createServer(credentials, app)
 const httpServer = http.createServer(app);
 
-/** Enable HTTP server */
 
+/** Enable HTTP server */
 httpServer.listen(httpPort, () =>{
     console.log(`HTTP Server running on port ${httpPort}`)
 })

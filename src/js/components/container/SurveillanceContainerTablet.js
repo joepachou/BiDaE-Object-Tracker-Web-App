@@ -40,7 +40,6 @@ class SurveillanceContainerTablet extends React.Component {
         }
         var searchedObjectType = this.state.searchedObjectType
         var showObjects = this.state.showObjects
-
         if (prevProps.searchKey !== this.props.searchKey && this.props.searchKey == "all devices") {
             if (searchedObjectType.includes(0)) return 
             else {
@@ -203,6 +202,7 @@ class SurveillanceContainerTablet extends React.Component {
         } = this.context;
 
         let [{areaId}] = stateReducer
+
         //console.log(this.props.proccessedTrackingData)
         return(
             <div id="surveillanceContainer" className="w-100 h-100 d-flex flex-column">
@@ -215,6 +215,7 @@ class SurveillanceContainerTablet extends React.Component {
                                         data={this.props.proccessedTrackingData.filter(item => item.searched)}
                                         userInfo={auth.user}
                                         searchKey={this.props.searchKey}
+                                        isSearched = {this.props.isSearched}
                                     /> 
                                     <InfoPromptForTablet 
                                         data={this.props.data}
@@ -378,7 +379,7 @@ class SurveillanceContainerTablet extends React.Component {
                     </div>
                     <PdfDownloadFormForTablet 
                         show={this.state.showPdfDownloadForm}
-                        data={this.props.proccessedTrackingData.filter(item => item.searched)}
+                        data={this.props.searchResult}
                         handleClose = {this.handleClosePdfForm}
                         userInfo={auth.user}
                     />

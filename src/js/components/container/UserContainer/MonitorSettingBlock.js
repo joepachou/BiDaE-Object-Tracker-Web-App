@@ -3,7 +3,6 @@ import { AppContext } from '../../../context/AppContext';
 import { 
     Row, 
     Col, 
-    Container
 } from "react-bootstrap"
 import Switcher from "../Switcher";
 import axios from "axios"
@@ -16,35 +15,23 @@ class MonitorSettingBlock extends React.Component{
     static contextType = AppContext
 
     state = {
-        time: 0,
-        startTime: "15",
-        endTime : "0",
-        enable: 0,
-        type: config.monitorSettingUrlMap[this.props.title]
+        type: config.monitorSettingUrlMap[this.props.title],
+        data: []
     }
 
     componentDidMount = () => {
-
+        let { auth } = this.context
         axios.post(dataSrc.getMonitorConfig, {
-            type: config.monitorSettingUrlMap[this.props.title]
+            type: config.monitorSettingUrlMap[this.props.title],
+            areasId: auth.user.areas_id
         })
         .then(res => {
-            let { 
-                enable,
-                start_time,
-                end_time
-            } = res.data.rows[0]
-
-            // start_time = moment(start_time, 'HH:mm:ss').format('HH:mm')
-            // end_time = moment(end_time, 'HH:mm:ss').format('HH:mm')
-
-            start_time = `${start_time.split(':')[0]}:00`
-            end_time = `${end_time.split(':')[0]}:00`
-
+            let data = res.data.reduce((toReturn, item) => {
+                toReturn[item.id] = item
+                return toReturn
+            }, {})
             this.setState({
-                enable,
-                startTime: start_time,
-                endTime: end_time
+                data,
             })
         })
         .catch(err => {
@@ -53,19 +40,31 @@ class MonitorSettingBlock extends React.Component{
     }
 
 
-    handleTimeChange = (time, name) => {
-        let configPackage = {
-            ...this.state,
-            startTime: name == 'start' ? time.value : this.state.startTime,
-            endTime: name == 'end' ? time.value : this.state.endTime,
+    handleTimeChange = (time, name, id) => {
+
+        let endTime = name == 'end' ? time.value : this.state.data[id].end_time;
+        let startTime = name == 'start' ? time.value : this.state.data[id].start_time;
+        if (name == 'start' && endTime.split(':')[0] <= startTime.split(':')[0]) {
+            endTime = [parseInt(startTime.split(':')[0]) + 1, endTime.split(':')[1]].join(':')
         }
-        this.setState(configPackage);
+
+        let monitorConfigPackage = {
+            type: config.monitorSettingUrlMap[this.props.title],
+            ...this.state.data[id],
+            start_time: startTime,
+            end_time: endTime
+        }
 
         axios.post(dataSrc.setMonitorConfig, {
-            configPackage
+            monitorConfigPackage
         })
         .then(res => {
-            this.setState(configPackage);
+            this.setState({
+                data: {
+                    ...this.state.data,
+                    [id]: monitorConfigPackage
+                }
+            })
         })
         .catch(err => { 
             console.log(err)
@@ -73,25 +72,25 @@ class MonitorSettingBlock extends React.Component{
     }
     
     handleSwitcherChange = (e) => {
-
         let target = e.target
-        let configPackage = {
-            ...this.state,
-            enable: target.value
+        let id = target.id.split(':')[1]
+
+        let monitorConfigPackage = {
+            type: config.monitorSettingUrlMap[this.props.title],
+            ...this.state.data[id],
+            enable: parseInt(target.value)
         }
 
-        this.setState({
-            enable: target.value
-        })
-
         axios.post(dataSrc.setMonitorConfig, {
-            configPackage
+            monitorConfigPackage
         })
         .then(res => {
-            this.setState({ 
-                enable: target.value
-            });
-
+            this.setState({
+                data: {
+                    ...this.state.data,
+                    [id]: monitorConfigPackage
+                }
+            })
         })
         .catch(err => { 
             console.log(err)
@@ -103,6 +102,18 @@ class MonitorSettingBlock extends React.Component{
         let style = {
             container: {
                 minHeight: "100vh"
+            },
+            title: {
+                fontWeight: 600,
+                fontSize: '1.3rem',
+            },
+            subTitle: {
+                color: "#6c757d",
+                fontWeight: 500,
+                fontSize: '1.2rem',
+            },
+            hr: {
+                width: "95%"
             }
         }
         let {
@@ -110,82 +121,110 @@ class MonitorSettingBlock extends React.Component{
         } = this.props
         let { locale } = this.context
 
-        let adjustedStartTime = parseInt(this.state.startTime.split(':')[0]) + 1
-
         return (
-            <Row className="my-3">
-                <Col xl={9}>
-                    <h5>
-                        {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
-                    </h5>
-                    <Row 
-                        className="my-4"
-                        noGutters
-                    >
-                        <Col
-                            className="d-flex justify-content-around"
-                            xl={6}
-                        >
-                            <Col 
-                                className="d-flex align-items-center justify-content-center px-0"                                
-                                xl={4}
-                            >
-                                <div>                                
-                                    {locale.texts.ENABLE_START_TIME}:
-                                </div>
-                            </Col>
-                            <Col 
-                                className=""                                
-                                xl={8}
-                            >
-                                <DateTimePicker
-                                    value={this.state.startTime}
-                                    getValue={this.handleTimeChange}
-                                    name="start"
-                                    start="0"
-                                    end="23"
-                                />
+            <div>
+                {Object.keys(this.state.data).length !== 0 
+                    ?   <>
+                            <Row className="my-3">
+                                <Col>
+                                    <div style={style.title}>
+                                        {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
+                                    </div>
+                                </Col>
+                            </Row>
+                            {Object.values(this.state.data).map((item,index) => {
+                                return  (
+                                    <div key={index}>
+                                        {index > 0 && <hr style={style.hr}/>}
+                                        <Row
+                                            className="mx-4"
+                                        >
+                                            <Col xl={9}>
+                                                <div style={style.subTitle}>
+                                                    {config.mapConfig.areaOptions[item.area_id] 
+                                                        ?   locale.texts[config.mapConfig.areaOptions[item.area_id]]
+                                                        :   null
+                                                    }
+                                                </div>
+                                                <Row 
+                                                    className="my-3"
+                                                    noGutters
+                                                >
+                                                    <Col
+                                                        className="d-flex justify-content-around"
+                                                        xl={6}
+                                                    >
+                                                        <Col 
+                                                            className="d-flex align-items-center justify-content-start px-0"                                
+                                                            xl={3}
+                                                        >
+                                                            <div>                                
+                                                                {locale.texts.ENABLE_START_TIME}:
+                                                            </div>
+                                                        </Col>
+                                                        <Col 
+                                                            className=""                                
+                                                            xl={9}
+                                                        >
+                                                            <DateTimePicker
+                                                                id={item.id}
+                                                                value={item.start_time}
+                                                                getValue={this.handleTimeChange}
+                                                                name="start"
+                                                                start="0"
+                                                                end="23"
+                                                            />
 
-                            </Col>
-                        </Col>
-                        <Col
-                            className="d-flex justify-content-around"
-                            xl={6}
-                        >
-                            <Col 
-                                className="d-flex align-items-center justify-content-center px-0"                                
-                                xl={4}
-                            >
-                                <div>                                
-                                    {locale.texts.ENABLE_END_TIME}:
-                                </div>
-                            </Col>
-                            <Col 
-                                className=""                                
-                                xl={8}
-                            >
-                                <DateTimePicker
-                                    value={this.state.endTime}
-                                    getValue={this.handleTimeChange}
-                                    name="end"
-                                    start={adjustedStartTime}
-                                    end="24"
-                                />
-                            </Col>
-                        </Col>
-                    </Row>
-                </Col>
-                <Col xl={3} className="d-flex justify-content-end">
-                    <Switcher
-                        leftLabel="on"
-                        rightLabel="off"
-                        onChange={this.handleSwitcherChange}
-                        status={this.state.enable}
-                        title={this.props.title}
-                        id={this.props.title}
-                    />
-                </Col>
-            </Row>
+                                                        </Col>
+                                                    </Col>
+                                                    <Col
+                                                        className="d-flex justify-content-around"
+                                                        xl={6}
+                                                    >
+                                                        <Col 
+                                                            className="d-flex align-items-center justify-content-start px-0"                                
+                                                            xl={3}
+                                                        >
+                                                            <div>                                
+                                                                {locale.texts.ENABLE_END_TIME}:
+                                                            </div>
+                                                        </Col>
+                                                        <Col 
+                                                            className=""                                
+                                                            xl={9}
+                                                        >
+                                                            <DateTimePicker
+                                                                id={item.id}
+                                                                value={item.end_time}
+                                                                getValue={this.handleTimeChange}
+                                                                name="end"
+                                                                start={parseInt(item.start_time.split(':')[0]) + 1}
+                                                                end="24"
+                                                            />
+                                                        </Col>
+                                                    </Col>
+                                                </Row>
+                                            </Col>
+                                            <Col xl={3} className="d-flex justify-content-end">
+                                                <Switcher
+                                                    leftLabel="on"
+                                                    rightLabel="off"
+                                                    onChange={this.handleSwitcherChange}
+                                                    status={item.enable}
+                                                    title={this.props.title}
+                                                    subId={item.id}
+                                                />
+                                            </Col>
+
+                                        </Row>
+                                    </div>
+                                )
+                            })}
+                            <hr />
+                        </>
+                    :   null
+                }
+            </div>
         )
     }
 }

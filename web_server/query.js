@@ -579,7 +579,7 @@ const getPDFInfo = (request, response) => {
     let { locale } = request.body
     pool.query(queryType.query_getShiftChangeRecord())
         .then(res => {
-            console.log('save pdf file success')
+            console.log('get shift change record success')
             res.rows.map(item => {
                 item.submit_timestamp = moment.tz(item.submit_timestamp, process.env.TZ).locale(locale).format('LLL');
             })
@@ -888,12 +888,28 @@ const confirmValidation = (request, response) => {
 
 const getMonitorConfig = (request, response) => {
     let {
-        type
+        type,
+        areasId
     } = request.body
-    pool.query(queryType.query_getMonitorConfig(type))
+
+    let sitesGroup = process.env.SITES_GROUP.split(',')
+
+    pool.query(queryType.query_getMonitorConfig(type, sitesGroup))
         .then(res => {
             console.log(`get ${type}`)
-            response.status(200).json(res)
+
+            let toReturn = res.rows
+            .filter(item => {
+                return areasId.includes(item.area_id)
+            })
+            .map(item => {
+                // item.start_time = moment(item.start_time, "hh:mm:ss").format("hh:mm")
+                // item.end_time = moment(item.end_time, "hh:mm:ss").format("hh:mm")
+                item.start_time = item.start_time.split(':').filter((item,index) => index < 2).join(':')
+                item.end_time = item.end_time.split(':').filter((item,index) => index < 2).join(':')
+                return item
+            })
+            response.status(200).json(toReturn)
         })
         .catch(err => {
             console.log(`get ${type} fail: ${err}`)
@@ -902,11 +918,11 @@ const getMonitorConfig = (request, response) => {
 
 const setMonitorConfig = (request, response) => {
     let {
-        configPackage
+        monitorConfigPackage,
     } = request.body
-    pool.query(queryType.query_setMonitorConfig(configPackage))
+    pool.query(queryType.query_setMonitorConfig(monitorConfigPackage))
         .then(res => {
-            console.log(`set ${configPackage.type}`)
+            console.log(`set ${monitorConfigPackage.type}`)
             response.status(200).json(res)
         })
         .catch(err => {

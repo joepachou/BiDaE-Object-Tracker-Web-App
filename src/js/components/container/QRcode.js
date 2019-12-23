@@ -45,8 +45,7 @@ class QRCodeContainer extends React.Component {
             })
     }
     componentWillUpdate = (preProps) => {
-
-        if(this.props.searchKey != this.state.searchKey){
+        if(this.props.isSearched){
             
             let data = { 
                 foundResult: [], 
@@ -86,6 +85,7 @@ class QRCodeContainer extends React.Component {
         })
     }
     PdfDownloader = () => {
+
         window.open(this.state.savePath);
     }
 

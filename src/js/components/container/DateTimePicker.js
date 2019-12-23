@@ -15,7 +15,8 @@ class DateTimePicker extends React.Component {
     }
 
     onChange = (value) => {
-        this.props.getValue(value, this.props.name)
+        let id = this.props.id
+        this.props.getValue(value, this.props.name, id)
         this.setState({
             time: value
         })
