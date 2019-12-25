@@ -373,6 +373,7 @@ class ObjectManagementContainer extends React.Component{
 
     deleteBinding = () => {
         let { locale } = this.context
+       
         axios.post(cleanBinding, {
             locale: locale.abbr,
             formOption:this.state.selection
