@@ -40,6 +40,7 @@ import XLSX from "xlsx";
 import InputFiles from "react-input-files";
 import BindForm from './BindForm'
 import EditImportTable from './EditImportTable'
+import AccessControl from '../presentational/AccessControl'
 const SelectTable = selecTableHOC(ReactTable);
 
 
@@ -705,11 +706,12 @@ class ObjectManagementContainer extends React.Component{
                         <Tab>{locale.texts.DEVICE_FORM}</Tab>
                         <Tab>{locale.texts.PATIENT_FORM}</Tab>
 
-                         
-                        <Tab>
-                        {locale.texts.TOTAL_DATA}
-                        </Tab>
-     
+                        <AccessControl
+                            permission={"user:importTable"}
+                            renderNoAccess={() => null}
+                        >
+                            <Tab>{locale.texts.TOTAL_DATA}</Tab>
+                        </AccessControl>
                     </TabList>
 
 
@@ -917,17 +919,7 @@ class ObjectManagementContainer extends React.Component{
                             }
                         />
                 </TabPanel>
-
-
-
-
                 </Tabs>
-
-
-
-
-
-              
                 <EditPatientForm
                     show = {isPatientShowEdit} 
                     title= {this.state.formTitle} 
