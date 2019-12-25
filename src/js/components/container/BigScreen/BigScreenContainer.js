@@ -65,7 +65,7 @@ class MainContainer extends React.Component{
         this.getTrackingData();
         this.getLbeaconPosition();
         this.getGeoFenceConfig()
-        this.interval = setInterval(this.getTrackingData, config.surveillanceMap.intevalTime)
+        this.interval = setInterval(this.getTrackingData, config.mapConfig.intervalTime)
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -74,7 +74,7 @@ class MainContainer extends React.Component{
         let [{violatedObjects}] = stateReducer
         if (stateReducer[0].shouldUpdateTrackingData !== this.state.shouldUpdateTrackingData) {
             let [{shouldUpdateTrackingData}] = stateReducer
-            this.interval = shouldUpdateTrackingData ? setInterval(this.getTrackingData, config.surveillanceMap.intevalTime) : clearInterval(this.interval);
+            this.interval = shouldUpdateTrackingData ? setInterval(this.getTrackingData, config.mapConfig.intervalTime) : clearInterval(this.interval);
             this.setState({
                 shouldUpdateTrackingData
             })

@@ -11,23 +11,6 @@ import patientP from "../img//logo/pic.png"
 
 const config = {
     
-    
-    surveillanceMap: {
-
-
-        /* For test. To start object tracking*/
-        startInteval: true,
-
-        /* Object tracking query inteval */
-        intevalTime: 1000,
-        
-        /* Tracking object Rssi filter */
-
-
-        // objectTypeSet: new Set(["Bed", "EKG Machine", "Infusion pump", "SONOSITE Ultrasound", "Ultrasound", "Bladder scanner", "CPM"])
-        // objectType: ["三合一Monitor", "EKG", "IV Pump", "烤燈", "血壓血氧監視器", "電擊器", "CPM"]
-    },
-
     objectStatus: {
         PERIMETER: "perimeter",
         FENCE: "fence",
@@ -487,8 +470,8 @@ const config = {
         mapOptions: {
             crs: L.CRS.Simple,
             // center: L.latLng(-2000, -4000),
-            zoom: -5,
-            minZoom: -10,
+            zoom: -6,
+            minZoom: -7,
             maxZoom: 0,
             zoomDelta: 0.25,
             zoomSnap: 0,
@@ -502,7 +485,7 @@ const config = {
 
         /** Set the icon option */
         iconOptions: {
-            iconSize: 30,
+            iconSize: 22,
             showNumber: !false,
         },
 
@@ -656,7 +639,7 @@ const config = {
         startInteval: true,
 
         /* Set the tracking query inteval time(ms) */
-        intevalTime: 1000,
+        intervalTime: process.env.OBJECT_TRACKING_INTERVAL_TIME_IN_MILLI_SEC,
 
         objectStatus: {
             PERIMETER: "perimeter",
@@ -922,11 +905,9 @@ const config = {
             },
         },
 
-        /* For test. To start object tracking*/
-        startInteval: true,
-
         /* Set the tracking query inteval time(ms) */
-        intevalTime: 1000,
+        intervalTime: process.env.OBJECT_TRACKING_INTERVAL_TIME_IN_MILLI_SEC,
+
 
         objectStatus: {
             PERIMETER: "perimeter",
