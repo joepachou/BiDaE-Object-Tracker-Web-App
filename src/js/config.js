@@ -824,10 +824,10 @@ const config = {
         defaultAreaId: process.env.DEFAULT_AREA_ID,
     
         gender: {
-            MAN: {
+            Male: {
                 id: 1,
             },
-            GIRL:{
+            Female:{
                 id: 2,
             },
         },

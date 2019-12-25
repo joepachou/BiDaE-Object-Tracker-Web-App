@@ -295,7 +295,7 @@ const patientTableColumn = [
     },
     {
         Header: "attending Physician",
-        accessor: "physician_name"
+        accessor: "physician_id"
     },
     {
         Header: "Mac Address",
