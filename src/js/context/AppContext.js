@@ -14,7 +14,8 @@ const AppContextProvider = (props) => {
     const locale = React.useContext(LocaleContext)
 
     const initialState = {
-        areaId: auth.authenticated ? auth.user.areas_id[0] : config.mapConfig.defaultAreaId,
+        // areaId: auth.authenticated ? auth.user.areas_id[0] : config.mapConfig.defaultAreaId,
+        areaId: config.mapConfig.defaultAreaId,
         shouldUpdateTrackingData: true
     }
     

@@ -65,8 +65,8 @@ const getTrackingData = (request, response) => {
     const userAuthenticatedAreaId= request.body.user.areas_id
     /** The UI's current area id */
     const currentAreaId = request.body.areaId.toString()
-
     let counter = 0
+
     pool.query(queryType.query_getTrackingData())        
         .then(res => {
             console.log('Get tracking data')
