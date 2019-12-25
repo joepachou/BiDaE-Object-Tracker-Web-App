@@ -167,26 +167,6 @@ const query_getObjectTable = (area_id, ) => {
 		`;
 	}
 
-	text +=`
-		SELECT 
-			import_table.name, 
-			import_table.asset_control_number,
-			import_table.type,
-			import_table.id,
-			import_table.bindflag,
-			import_table.mac_address,
-			import_table.area_id,
-			import_table.status,
-			import_table.transferred_location,
-			import_table.monitor_type
-		FROM import_table
-		Where import_table.bindflag = 'Already Binding'
-
-		ORDER BY import_table.asset_control_number ASC	
-	`;
-
-
-
 
 
 	return text
