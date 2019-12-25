@@ -112,6 +112,7 @@ const query_getObjectTable_fromImport = () => {
 			FROM import_table
 			WHERE import_table.bindflag = 'Already Binding'
 
+
 			ORDER BY import_table.asset_control_number ASC	
 		`;
 	
@@ -139,6 +140,8 @@ const query_getObjectTable = (area_id, ) => {
 			FROM object_table 
 			WHERE object_table.object_type = 0
 
+	
+
 			ORDER BY object_table.name ASC;
 		`;
 	} else {
@@ -156,12 +159,35 @@ const query_getObjectTable = (area_id, ) => {
 				object_table.object_type,
 				object_table.id,
 				object_table.room
+
 			FROM object_table 
 			WHERE object_table.object_type = 0
 					
 			ORDER BY object_table.type DESC;
 		`;
 	}
+
+	text +=`
+		SELECT 
+			import_table.name, 
+			import_table.asset_control_number,
+			import_table.type,
+			import_table.id,
+			import_table.bindflag,
+			import_table.mac_address,
+			import_table.area_id,
+			import_table.status,
+			import_table.transferred_location,
+			import_table.monitor_type
+		FROM import_table
+		Where import_table.bindflag = 'Already Binding'
+
+		ORDER BY import_table.asset_control_number ASC	
+	`;
+
+
+
+
 
 	return text
 } 
@@ -174,48 +200,38 @@ const query_getPatientTable = (area_id) => {
 	if (!area_id) {
 		text += `
 			SELECT 
-				object_table.name, 
-				object_table.id,
-				object_table.area_id,
-				object_table.physician_id,
-				object_table.mac_address,
-				object_table.asset_control_number,
-				object_table.object_type,
-				object_table.monitor_type,
-				user_table.name as physician_name,
-				object_table.room
+				import_table.name, 
+				import_table.id,
+				import_table.area_id,
+				import_table.physician_id,
+				import_table.mac_address,
+				import_table.asset_control_number,
+				import_table.object_type,
+				import_table.monitor_type,
+				import_table.room
+			FROM import_table 
 
-			FROM object_table 
+			WHERE import_table.object_type != '0'
 
-			LEFT JOIN user_table
-			ON user_table.id = object_table.physician_id
-
-			WHERE object_table.object_type != 0
-
-			ORDER BY object_table.name ASC	
+			ORDER BY import_table.name ASC	
 		`;
 	} else {
 		text +=`
 			SELECT 
-				object_table.name, 
-				object_table.id,
-				object_table.area_id, 
-				object_table.physician_id,
-				object_table.mac_address,
-				object_table.asset_control_number,
-				object_table.object_type,
-				object_table.monitor_type,
-				user_table.name as physician_name,
-				object_table.room
+			import_table.name, 
+				import_table.id,
+				import_table.area_id,
+				import_table.physician_id,
+				import_table.mac_address,
+				import_table.asset_control_number,
+				import_table.object_type,
+				import_table.monitor_type,
+				import_table.room
 
-			FROM object_table 
+			FROM import_table 
+			WHERE import_table.object_type != '0'
 
-			LEFT JOIN user_table
-			ON user_table.id = object_table.physician_id
-
-			WHERE object_table.object_type != 0
-
-			ORDER BY object_table.name ASC	
+			ORDER BY import_table.name ASC	
 		`;
 	}
 	return text
@@ -480,31 +496,28 @@ function query_editObject (formOption) {
 
 
 function query_editPatient (formOption) {
+
 	const text = `
-		Update object_table 
-		SET area_id = $1,
-			object_type = $2,
-			name = $3,
-			asset_control_number = $4,
-			room = $5,
-			physician_id = (
-				SELECT id 
-				FROM user_table 
-				WHERE name = $6
-			),
-			monitor_type = $8,
-		WHERE mac_address = $7
+		Update import_table 
+		SET name = $1,
+			mac_address = $2,
+			physician_id = $4,
+			area_id = $5,
+			object_type = $6,
+			room_number = $7,
+			type = $8
+		WHERE asset_control_number = $3
 	`;
 		
 	const values = [
-		formOption.area_id, 
-		formOption.gender_id, 
-		formOption.patientName, 
-		formOption.patientNumber, 
-		formOption.room,
-		formOption.physician,
+		formOption.name,
 		formOption.mac_address,
-		formOption.monitor_type,
+		formOption.asset_control_number,
+		formOption.physician,
+		formOption.area_id,
+		formOption.gender_id,
+		formOption.room,
+		formOption.monitor_type
 	];
 
 
@@ -569,29 +582,31 @@ function query_addObject (formOption) {
 
 
 function query_addPatient (formOption) {
+	console.log('goddamn')
 	const text = 
 		`
-		INSERT INTO object_table (
+		INSERT INTO import_table (
 			name,
+			mac_address, 
+			asset_control_number,
 			physician_id,
 			area_id,
-			mac_address, 
 			object_type,
-			asset_control_number,
-			status,
+			room_number,
+			monitor_type,
 			type,
-			registered_timestamp,
-			monitor_type
+			registered_timestamp
 		)
-		VALUES($1,$2,$3,$4,$5,$6,'default','Patient',now(),$7)
+		VALUES($1,$2,$3,$4,$5,$6,$7,$8,'Patient',now())
 		`;
 	const values = [
-		formOption.patientName,
+		formOption.name,
+		formOption.mac_address,
+		formOption.asset_control_number,
 		formOption.physician,
 		formOption.area_id,
-		formOption.mac_address,
 		formOption.gender_id,
-		formOption.patientNumber,
+		formOption.room,
 		formOption.monitor_type
 	];
 
@@ -826,6 +841,7 @@ const query_validateUsername = (username) => {
 	return query
 }
 
+
 const query_getUserList = () => {
 	const query = `
 		SELECT
@@ -950,7 +966,7 @@ const query_deleteShiftChangeRecord = (idPackage) => {
 
 const query_deletePatient = (idPackage) => {
 	const query = `
-		DELETE FROM object_table
+		DELETE FROM import_table
 		WHERE id IN (${idPackage.map(item => `'${item}'`)});
 	`
 	return query
@@ -1310,6 +1326,7 @@ function query_backendSearch(keyType, keyWord){
 			}
 			break
 	}
+	console.log(query)
 	return query
 }
 function query_deleteSameNameSearchQueue(keyType, keyWord){
@@ -1317,6 +1334,7 @@ function query_deleteSameNameSearchQueue(keyType, keyWord){
 	var text = `DELETE FROM search_result_queue where (key_type = '${keyType}' AND key_word = '${keyWord}') 
 	OR 
 		id NOT IN (SELECT id FROM search_result_queue ORDER BY query_time desc LIMIT 5) RETURNING *;`
+	// console.log(text)
 	return text
 }
 function query_backendSearch_writeQueue(keyType, keyWord, mac_addresses, pin_color_index){

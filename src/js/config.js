@@ -877,10 +877,10 @@ const config = {
     
         
         gender: {
-            MAN: {
+            Male: {
                 id: 1,
             },
-            GIRL:{
+            Female:{
                 id: 2,
             },
         },

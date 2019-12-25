@@ -350,13 +350,17 @@ const addObject = (request, response) => {
 
 
 const addPatient = (request, response) => {
+
     const formOption = request.body.formOption
+ 
+    
     pool.query(queryType.query_addPatient(formOption))
         .then(res => {
             console.log("Add Patient Success");
             response.status(200).json(res)
         })
         .catch(err => {
+ 
             console.log("Add Patient Fails: " + err)
             response.status(500).json({
                 message:'not good'
@@ -602,6 +606,7 @@ const validateUsername = (request, response) => {
             console.log(err)
         })
 }
+
 
 const getUserList = (request, response) => {
     let { locale } = request.body

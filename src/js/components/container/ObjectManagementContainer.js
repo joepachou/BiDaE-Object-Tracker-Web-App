@@ -18,7 +18,8 @@ import {
     getImportTable,
     deleteImportData,
     getObjectTable_fromImport,
-    cleanBinding
+    cleanBinding,
+    getUser_ID_Name
 } from "../../dataSrc"
 import axios from 'axios';
 import ReactTable from 'react-table';
@@ -39,7 +40,6 @@ import XLSX from "xlsx";
 import InputFiles from "react-input-files";
 import BindForm from './BindForm'
 import EditImportTable from './EditImportTable'
-import AccessControl from '../presentational/AccessControl'
 const SelectTable = selecTableHOC(ReactTable);
 
 
@@ -71,6 +71,7 @@ class ObjectManagementContainer extends React.Component{
         isShowBind:false,
         isShowEditImportTable:false,
         dataImportThis:[],
+        physicianName:''
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -90,9 +91,6 @@ class ObjectManagementContainer extends React.Component{
         this.getDataImport()
         this.getUserList();
         this.getLbeaconData();
-
-
-          
     }
 
     getUserList = () => {
@@ -113,6 +111,8 @@ class ObjectManagementContainer extends React.Component{
             console.log(err)
         })
     }
+
+
 
     getDataPatient = () => {
         let { locale } = this.context
@@ -144,6 +144,7 @@ class ObjectManagementContainer extends React.Component{
                 dataPatient: res.data.rows,
                 columnPatient: columnPatient,
             })
+
         })
         .catch(err => {
             console.log(err);
@@ -326,7 +327,6 @@ class ObjectManagementContainer extends React.Component{
                 })
                 break;
             case "associate object":
-
                 this.setState({
                     isShowBind: true,
                 })
@@ -568,7 +568,8 @@ class ObjectManagementContainer extends React.Component{
             selectedRowData_Patient:[],
             selectedRowData_Import:[],
             formTitle: 'add inpatient',
-            formPath: addPatient
+            formPath: addPatient,
+            physicianName:''
         })
     }
 
@@ -704,14 +705,10 @@ class ObjectManagementContainer extends React.Component{
                         <Tab>{locale.texts.DEVICE_FORM}</Tab>
                         <Tab>{locale.texts.PATIENT_FORM}</Tab>
 
-                          <AccessControl
-                            permission={"user:importTable"}
-                            renderNoAccess={() => null}
-                        >
+                         
                         <Tab>
                         {locale.texts.TOTAL_DATA}
                         </Tab>
-                       </AccessControl>
      
                     </TabList>
 
@@ -839,6 +836,10 @@ class ObjectManagementContainer extends React.Component{
                             
                                 return {
                                     onClick: (e, handleOriginal) => {
+
+                                        
+                                       
+
                                         this.setState({
                                             selectedRowData_Patient: this.state.dataPatient[rowInfo.index],
                                             isShowEdit: false,
@@ -851,20 +852,28 @@ class ObjectManagementContainer extends React.Component{
                                         if (handleOriginal) {
                                             handleOriginal()
                                         }
+
+                                        this.state.physicianList.map(item => {
+                                             item.id == this.state.dataPatient[rowInfo.index].physician_id ?
+                                             
+                                             this.setState({
+                                                physicianName:item.name
+                                        })
+                                             : null
+                                        })
+
+                                       
                                     }
                                 }
                             }}
                         />
                     </TabPanel>
-                </Tabs>
 
-                <TabPanel> 
-                    <AccessControl
-                            permission={"user:importTable"}
-                            renderNoAccess={() => null}
-                        >
+
+
+
+                     <TabPanel> 
                     <ButtonToolbar>
-
                       <InputFiles accept=".xlsx, .xls" onChange={this.onImportExcel}>
                             <Button 
                              variant="outline-primary" 
@@ -873,8 +882,6 @@ class ObjectManagementContainer extends React.Component{
                             {locale.texts.IMPORT_OBJECT}
                             </Button>
                         </InputFiles>
-                      
-
                         <Button 
                             variant="outline-primary" 
                             className='text-capitalize mr-2 mb-1'
@@ -883,6 +890,7 @@ class ObjectManagementContainer extends React.Component{
                         >
                             {locale.texts.DELETE}
                         </Button>
+
                     </ButtonToolbar>
                     <SelectTable
                             keyField='id'
@@ -892,6 +900,7 @@ class ObjectManagementContainer extends React.Component{
                             className="-highlight"
                             style={{height:'75vh'}}
                             {...extraProps}
+                        
                             getTrProps={(state, rowInfo, column, instance) => {
                             
                                 return {
@@ -907,9 +916,18 @@ class ObjectManagementContainer extends React.Component{
                             }
                             }
                         />
-                            </AccessControl>
                 </TabPanel>
 
+
+
+
+                </Tabs>
+
+
+
+
+
+              
                 <EditPatientForm
                     show = {isPatientShowEdit} 
                     title= {this.state.formTitle} 
@@ -921,6 +939,7 @@ class ObjectManagementContainer extends React.Component{
                     objectData = {this.state.data}
                     physicianList={this.state.physicianList}
                     roomOptions={this.state.roomOptions}
+                    physicianName = {this.state.physicianName}
                 />  
        
                 <EditObjectForm 
