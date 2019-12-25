@@ -410,7 +410,6 @@ function query_objectImport (idPackage) {
 
 
 function query_editImport (formOption) {
-	console.log(formOption)
 	const text =
 		`
 		Update import_table 
@@ -520,7 +519,6 @@ function query_editPatient (formOption) {
 
 
 function query_addObject (formOption) {
-	console.log(formOption)
 	const text = 
 		`
 		INSERT INTO import_table (
