@@ -9,8 +9,6 @@ import BOT_LOGO from "../img//logo/BOT_LOGO_RED.png";
 import moment from 'moment'
 import patientP from "../img//logo/pic.png"
 
-
-
 const config = {
     
     
@@ -24,17 +22,6 @@ const config = {
         intevalTime: 1000,
         
         /* Tracking object Rssi filter */
-        locationAccuracyMapToDefault: {
-            0: -100,
-            1: -70,
-            2: -50,
-        },
-
-        locationAccuracyMapToDB: {
-            0: "low_rssi",
-            1: "med_rssi",
-            2: "high_rssi",
-        },
 
 
         // objectTypeSet: new Set(["Bed", "EKG Machine", "Infusion pump", "SONOSITE Ultrasound", "Ultrasound", "Bladder scanner", "CPM"])
@@ -589,7 +576,6 @@ const config = {
 
         defaultAreaId: process.env.DEFAULT_AREA_ID,
     
-        
         gender: {
             MAN: {
                 id: 1,
@@ -598,17 +584,6 @@ const config = {
                 id: 2,
             },
         },
-
-        BOTDefaultAreas: {
-            1: "NTUH_EMERGENCY_ROOM",
-            2: "IIS_SINICA_FOURTH_FLOOR",
-            3: "NTUH_YUNLIN_WARD_FIVE_B",
-            4: "NURSING_HOME",
-            5: "YUANLIN_CHRISTIAN_HOSPITAL",
-            6: "VETERAN_HOME_FIRST_FLOOR",
-            7: "VETERAN_HOME_THIRD_FLOOR",
-        },
-
 
         areaOptions: process.env.SITES_GROUP
             .split(',')
@@ -624,16 +599,6 @@ const config = {
                 }[item]
                 return res
             }, {}),
-
-        // areaOptions: {
-        //         1: "NTUH_EMERGENCY_ROOM",
-        //         2: "IIS_SINICA_FOURTH_FLOOR",
-        //         3: "NTUH_YUNLIN_WARD_FIVE_B",
-        //         4: "NURSING_HOME",
-        //         5: "YUANLIN_CHRISTIAN_HOSPITAL",
-        //         6: "VETERAN_HOME_FIRST_FLOOR",
-        //         7: "VETERAN_HOME_THIRD_FLOOR",
-        // },
     
         areaModules: {
             NTUH_EMERGENCY_ROOM: {
@@ -704,9 +669,9 @@ const config = {
         
         /* Set the rssi threshold */
         locationAccuracyMapToDefault: {
-            0: -100,
-            1: -60,
-            2: -50,
+            0: process.env.LOCATION_ACCURACY_LOW,
+            1: process.env.LOCATION_ACCURACY_MED,
+            2: process.env.LOCATION_ACCURACY_HIGH
         },
 
         locationAccuracyMapToDB: {
@@ -873,9 +838,8 @@ const config = {
             }
         },
 
-        defaultAreaId: 3,
+        defaultAreaId: process.env.DEFAULT_AREA_ID,
     
-        
         gender: {
             MAN: {
                 id: 1,
@@ -975,9 +939,9 @@ const config = {
         
         /* Set the rssi threshold */
         locationAccuracyMapToDefault: {
-            0: -100,
-            1: -60,
-            2: -50,
+            0: process.env.LOCATION_ACCURACY_LOW,
+            1: process.env.LOCATION_ACCURACY_MED,
+            2: process.env.LOCATION_ACCURACY_HIGH
         },
 
         locationAccuracyMapToDB: {

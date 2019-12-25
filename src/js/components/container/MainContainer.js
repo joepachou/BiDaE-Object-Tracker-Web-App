@@ -44,8 +44,8 @@ class MainContainer extends React.Component{
         hasGridButton: false,
         isHighlightSearchPanel: false,
         rssiThreshold: window.innerWidth < config.mobileWidowWidth
-            ? config.surveillanceMap.locationAccuracyMapToDefault[0]
-            : config.surveillanceMap.locationAccuracyMapToDefault[1],
+            ? config.mapConfig.locationAccuracyMapToDefault[0]
+            : config.mapConfig.locationAccuracyMapToDefault[1],
         authenticated: this.context.auth.authenticated,
         shouldUpdateTrackingData: true,
         markerClickPackage: {}
@@ -168,7 +168,7 @@ class MainContainer extends React.Component{
     }
 
     changeLocationAccuracy = (locationAccuracy) => {
-        const rssiThreshold = config.surveillanceMap.locationAccuracyMapToDefault[locationAccuracy]
+        const rssiThreshold = config.mapConfig.locationAccuracyMapToDefault[locationAccuracy]
         this.setState({
             rssiThreshold
         })

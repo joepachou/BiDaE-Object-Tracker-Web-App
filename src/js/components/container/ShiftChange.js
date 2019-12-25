@@ -80,7 +80,7 @@ class ShiftChange extends React.Component {
         } = this.context
         let [{areaId}] = stateReducer
         axios.post(dataSrc.getTrackingData, {
-            rssiThreshold: config.surveillanceMap.locationAccuracyMapToDefault[1],
+            rssiThreshold: config.mapConfig.locationAccuracyMapToDefault[1],
             locale: locale.abbr,
             user: auth.user,
             areaId,

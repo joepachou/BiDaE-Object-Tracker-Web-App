@@ -55,8 +55,8 @@ class MainContainer extends React.Component{
         hasGridButton: false,
         isHighlightSearchPanel: false,
         rssiThreshold: window.innerWidth < config.mobileWidowWidth
-            ? config.surveillanceMap.locationAccuracyMapToDefault[0]
-            : config.surveillanceMap.locationAccuracyMapToDefault[1],
+            ? config.mapConfig.locationAccuracyMapToDefault[0]
+            : config.mapConfig.locationAccuracyMapToDefault[1],
         auth: this.context.auth,
         shouldUpdateTrackingData: true,
     }

@@ -116,7 +116,7 @@ class SystemStatus extends React.Component{
         let { locale, auth, stateReducer } = this.context
         let [{areaId}] = stateReducer
         axios.post(dataSrc.getTrackingData,{
-            rssiThreshold: config.surveillanceMap.locationAccuracyMapToDefault[config.objectManage.objectManagementRSSIThreshold],
+            rssiThreshold: config.mapConfig.locationAccuracyMapToDefault[config.objectManage.objectManagementRSSIThreshold],
             locale: locale.abbr,
             user: auth.user,
             areaId: areaId,
