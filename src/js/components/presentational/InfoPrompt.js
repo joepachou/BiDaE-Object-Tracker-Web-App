@@ -40,12 +40,32 @@ const InfoPrompt = ({
 
             <div >
                 {searchKey 
-                    ?   frequentSearchItem.includes(searchKey)
-                        ?   locale.texts[searchKey.toUpperCase().replace(/ /g, '_')]
-                        :   searchKey
+                    ?   
+                        locale.texts.OBJECTS
                     :   ""
                 }
             </div>
+            {/* <div style={{width: '50px'}}></div>
+            <div 
+                className='text-capitalize mr-2' 
+                style={style.alertTextTitle}
+            >
+                {searchKey ? title2 : ""}
+            </div>
+            <div 
+                className="mr-1"
+                style={style.alertText}
+            >
+                {searchKey ? searchResult.filter(item => !item.found).length : ""}
+            </div>
+
+            <div >
+                {searchKey 
+                    ?   
+                        locale.texts.OBJECTS
+                    :   ""
+                }
+            </div> */}
         {/*
             fix bug 4.3
         */}

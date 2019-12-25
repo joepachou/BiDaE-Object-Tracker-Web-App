@@ -82,6 +82,7 @@
     "react-device-detect": "^1.11.14",
     "react-fade-in": "^0.1.6",
     "react-grid-system": "^4.4.5",
+    "react-images-upload": "^1.2.7",
     "react-input-files": "^1.2.0",
     "react-keyboard-event-handler": "^1.5.2",
     "react-loading": "^2.0.3",

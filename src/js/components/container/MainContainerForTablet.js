@@ -43,8 +43,8 @@ class MainContainerForTablet extends React.Component{
         hasGridButton: false,
         isHighlightSearchPanel: false,
         rssiThreshold: window.innerWidth < config.mobileWidowWidth
-            ? config.surveillanceMap.locationAccuracyMapToDefault[0]
-            : config.surveillanceMap.locationAccuracyMapToDefault[1],
+            ? config.mapConfig.locationAccuracyMapToDefault[0]
+            : config.mapConfig.locationAccuracyMapToDefault[1],
         auth: this.context.auth,
         shouldUpdateTrackingData: true,
     }
@@ -55,17 +55,22 @@ class MainContainerForTablet extends React.Component{
         this.getTrackingData();
         this.getLbeaconPosition();
         this.getGeoFenceConfig()
-        this.interval = setInterval(this.getTrackingData, config.surveillanceMap.intevalTime)
+        this.interval = setInterval(this.getTrackingData, config.mapConfig.intervalTime)
     }
 
     componentDidUpdate = (prevProps, prevState) => {
+        
+        if (this.prev_search ^ this.curr_search){
+            this.prev_search = this.curr_search
+            this.forceUpdate()
+        }
         this.prev_search = this.curr_search
         let isTrackingDataChange = !(_.isEqual(this.state.trackingData, prevState.trackingData))
         let { stateReducer } = this.context
         let [{violatedObjects}] = stateReducer
         if (stateReducer[0].shouldUpdateTrackingData !== this.state.shouldUpdateTrackingData) {
             let [{shouldUpdateTrackingData}] = stateReducer
-            this.interval = shouldUpdateTrackingData ? setInterval(this.getTrackingData, config.surveillanceMap.intevalTime) : clearInterval(this.interval);
+            this.interval = shouldUpdateTrackingData ? setInterval(this.getTrackingData, config.mapConfig.intervalTime) : clearInterval(this.interval);
             this.setState({
                 shouldUpdateTrackingData
             })
@@ -564,7 +569,7 @@ class MainContainerForTablet extends React.Component{
                     : {[devicePlural] : 0} 
                 : {[devicePlural] : 0} 
             : {[devicePlural]: this.state.trackingData.filter(item => item.found).length}
-
+        let isSearched = this.prev_search ^ this.curr_search
 
         return(
             /** "page-wrap" the default id named by react-burget-menu */
@@ -591,7 +596,7 @@ class MainContainerForTablet extends React.Component{
                                 data={data}
                                 searchResult={this.state.searchResult}
                                 searchKey={this.state.searchKey}
-                                isSearched = {this.curr_search ^ this.prev_search}
+                                isSearched = {isSearched}
                             />
                         </div>
 

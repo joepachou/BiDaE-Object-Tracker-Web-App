@@ -934,7 +934,7 @@ const query_getEditObjectRecord = () => {
 			edit_object_record.edit_time,
 			edit_object_record.notes,
 			edit_object_record.new_status
-		FROM object_import_table
+		FROM edit_object_record
 
 		LEFT JOIN user_table
 		ON user_table.id = edit_object_record.edit_user_id
@@ -1183,8 +1183,8 @@ const query_confirmValidation = (username) => {
 
 }
 
-const query_getMonitorConfig = (type) => {
-	return `
+const query_getMonitorConfig = (type, sitesGroup) => {
+	let text =  `
 		SELECT 
 			id, 
 			area_id,
@@ -1192,17 +1192,19 @@ const query_getMonitorConfig = (type) => {
 			start_time,
 			end_time
 		FROM ${type}
+		WHERE area_id IN (${sitesGroup.map(item => item)});
 	`
+	return text
 }
 
-const query_setMonitorConfig = (configPackage) => {
+const query_setMonitorConfig = (monitorConfigPackage) => {
 	return `
-		UPDATE ${configPackage.type}
+		UPDATE ${monitorConfigPackage.type}
 		SET 
-			start_time = '${configPackage.startTime}',
-			end_time = '${configPackage.endTime}',
-			enable = '${configPackage.enable}'
-		WHERE 1 = 1;
+			start_time = '${monitorConfigPackage.start_time}',
+			end_time = '${monitorConfigPackage.end_time}',
+			enable = '${monitorConfigPackage.enable}'
+		WHERE id = ${monitorConfigPackage.id};
 	`
 }
 

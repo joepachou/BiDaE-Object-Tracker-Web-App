@@ -45,7 +45,6 @@ class QRCodeContainer extends React.Component {
             })
     }
     componentWillUpdate = (preProps) => {
-        console.log(this.props.isSearched)
         if(this.props.isSearched){
             
             let data = { 

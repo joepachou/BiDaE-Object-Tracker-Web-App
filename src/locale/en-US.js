@@ -223,6 +223,7 @@ const en =  {
     USER_SETTING: "User Setting",
     DEVICES_MANAGEMENT: "Devices Management",
     PATIENT_MANAGEMENT: "Patient Management",
+    USER_PROFILE: "User Profile",
     SHIFT_CHANGE_RECORD: "Shift change record",
     EDIT_OBJECT_MANAGEMENT: "Edit Object Record",
     MONITOR_SETTING: "monitor setting",

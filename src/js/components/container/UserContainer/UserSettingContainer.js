@@ -11,12 +11,17 @@ import AccessControl from '../../presentational/AccessControl'
 import DeviceManager from './DeviceManager'
 import MyDeviceManager from './MyDeviceManager';
 import MyPatientManager from './MyPatientManager';
-import MonitorSetting from "./MonitorSetting"
-
+import MonitorSetting from "./MonitorSetting";
+import UserProfile from "./UserProfile";
 class UserSettingContainer extends React.Component{
     constructor() {
         super();
         this.pageList = [
+            {
+                name: 'User Profile',
+                path: 'userProfile',
+                component: <UserProfile />
+            },
             {
                 name: 'Devices Management',
                 path: 'devicesManagement',
@@ -59,11 +64,9 @@ class UserSettingContainer extends React.Component{
     render(){
         const locale = this.context
         const style = {
-            item: {
-                // fontSize: '1.2rem'
-            },
-            sideNav: {
-                // position: 'fixed',
+            title: {
+                fontSize: '1.6rem',
+                fontWeight: 600,
             },
             component: {
                 position: 'relative'
@@ -106,9 +109,9 @@ class UserSettingContainer extends React.Component{
                                     key={index}
                                 >
                                     <div className='mb-5' key={index} id={page.name.replace(/ /g, '')}>   
-                                        <h4 className='text-capitalize'>
+                                        <div style={style.title} className='text-capitalize'>
                                             {locale.texts[page.name.toUpperCase().replace(/ /g, '_')]}
-                                        </h4>
+                                        </div>
                                         <hr/>
                                         <Row className="w-100d-flex bg-white py-1">
                                             <Col>
