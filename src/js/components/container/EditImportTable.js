@@ -39,7 +39,8 @@ class EditImportTable extends React.Component {
 
 
     handleSubmit = (postOption) => {
-
+        console.log(this.state.scanValue )
+        console.log(this.props.selectedObjectData.asset_control_number)
         if (this.state.scanValue == this.props.selectedObjectData.asset_control_number){
           
             axios.post(deleteImportData, 

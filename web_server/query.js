@@ -65,8 +65,8 @@ const getTrackingData = (request, response) => {
     const userAuthenticatedAreaId= request.body.user.areas_id
     /** The UI's current area id */
     const currentAreaId = request.body.areaId.toString()
-
     let counter = 0
+
     pool.query(queryType.query_getTrackingData())        
         .then(res => {
             console.log('Get tracking data')
@@ -80,7 +80,8 @@ const getTrackingData = (request, response) => {
                 item.isMatchedObject = checkMatchedObject(item, userAuthenticatedAreaId, currentAreaId)
 
                 /** Set the boolean if the object's last_seen_timestamp is in the specific time period */
-                let isInTheTimePeriod = moment().diff(item.last_seen_timestamp, 'seconds') < 30
+                let isInTheTimePeriod = moment().diff(item.last_seen_timestamp, 'seconds') 
+                    < process.env.OBJECT_FOUND_TIME_INTERVAL_IN_SEC;
 
                 /** Set the boolean if its rssi is below the specific rssi threshold  */
                 let isMatchRssi = item.rssi > rssiThreshold ? 1 : 0;
@@ -100,12 +101,14 @@ const getTrackingData = (request, response) => {
                 item.isViolated = item.notification ? 1 : 0;
 
                 /** Flag the object that is on sos */
-                item.panic = moment().diff(item.panic_violation_timestamp, 'second') < 300 ? 1 : 0
+                item.panic = moment().diff(item.panic_violation_timestamp, 'second') 
+                    < process.env.PANIC_TIME_INTERVAL_IN_SEC ? 1 : 0
 
                 /** Flag the object's battery volumn is limiting */
-                if (item.battery_voltage >= 27 && item.found) {
-                    item.battery_voltage = 3;
-                } else if (item.battery_voltage < 27 && item.battery_voltage > 0 && item.found) {
+                if (item.battery_voltage >= process.env.BATTER_VOLTAGE_INDICATOR                    
+                    && item.found) {
+                        item.battery_voltage = 3;
+                } else if (item.battery_voltage < process.env.BATTER_VOLTAGE_INDICATOR && item.battery_voltage > 0 && item.found) {
                     item.battery_voltage = 2;
                 } else {
                     item.battery_voltage = 0
@@ -350,13 +353,17 @@ const addObject = (request, response) => {
 
 
 const addPatient = (request, response) => {
+
     const formOption = request.body.formOption
+ 
+    
     pool.query(queryType.query_addPatient(formOption))
         .then(res => {
             console.log("Add Patient Success");
             response.status(200).json(res)
         })
         .catch(err => {
+ 
             console.log("Add Patient Fails: " + err)
             response.status(500).json({
                 message:'not good'
@@ -602,6 +609,7 @@ const validateUsername = (request, response) => {
             console.log(err)
         })
 }
+
 
 const getUserList = (request, response) => {
     let { locale } = request.body

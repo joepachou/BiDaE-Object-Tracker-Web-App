@@ -45,7 +45,7 @@ const InfoPrompt = ({
                     :   ""
                 }
             </div>
-            <div style={{width: '50px'}}></div>
+            {/* <div style={{width: '50px'}}></div>
             <div 
                 className='text-capitalize mr-2' 
                 style={style.alertTextTitle}
@@ -65,7 +65,7 @@ const InfoPrompt = ({
                         locale.texts.OBJECTS
                     :   ""
                 }
-            </div>
+            </div> */}
         {/*
             fix bug 4.3
         */}

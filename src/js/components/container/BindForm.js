@@ -355,6 +355,8 @@ class BindForm extends React.Component {
                                     <Button variant="outline-secondary" className="text-capitalize" onClick={this.handleClose}>
                                         {locale.texts.CANCEL}
                                     </Button>
+
+
                                     <Button 
                                         type="button" 
                                         className="text-capitalize" 
@@ -364,6 +366,8 @@ class BindForm extends React.Component {
                                     >
                                         {locale.texts.SAVE}
                                     </Button>
+
+                                    
                                 </Modal.Footer>
 
                                    

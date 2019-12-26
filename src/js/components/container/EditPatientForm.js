@@ -11,6 +11,9 @@ import CheckboxGroup from './CheckboxGroup'
 import Checkbox from '../presentational/Checkbox'
 import RadioButtonGroup from './RadioButtonGroup'
 import RadioButton from '../presentational/RadioButton'
+import { 
+    addPatient,
+} from "../../dataSrc"
 let monitorTypeMap = {};
 
 Object.keys(config.monitorType).forEach(key => {
@@ -22,6 +25,9 @@ class EditPatientForm extends React.Component {
         show: this.props.show,
     };
 
+
+    componentDidMount = () => {
+    }
 
     componentDidUpdate = (prevProps) => {
         if (!(_.isEqual(prevProps, this.props))) {
@@ -38,17 +44,28 @@ class EditPatientForm extends React.Component {
 
     
     handleSubmit = (postOption) => {
+
         const path = this.props.formPath
         axios.post(path, {
             formOption: postOption
         }).then(res => {
-            setTimeout(this.props.handleSubmitForm(),1000)
+       
         }).catch( error => {
             console.log(error)
         })
+       this.props.handleSubmitForm()
     }
 
+
+        
+
+
     render() {
+
+   
+
+
+
         const locale = this.context
 
 
@@ -65,12 +82,12 @@ class EditPatientForm extends React.Component {
             room_number,
             id,
             mac_address,
-            patientNumber,
             asset_control_number,
             object_type,
             physician_name,
             monitor_type = [],
-            room
+            room,
+            physicianName
         } = selectedObjectData
      
         const areaOptions = Object.values(config.mapConfig.areaOptions).map(area => {
@@ -80,16 +97,24 @@ class EditPatientForm extends React.Component {
             };
         })
 
+
+      
+
         const genderOptions = [
             { 
-                value: 'MAN', 
+                value: '1', 
                 label: locale.texts.MALE
             },
             { 
-                value: 'GIRL', 
+                value: '2', 
                 label: locale.texts.FEMALE 
             },
         ]
+
+
+
+      
+
 
         const style = {
             input: {
@@ -124,31 +149,30 @@ class EditPatientForm extends React.Component {
                     <Formik              
                         initialValues = {{
                             area: area_name || '',
-                            patientName: name || '' ,
+                            name: name || '' ,
                             // roomNumber: room_number || '',
-                            physician: physician_name 
-                                ? {
-                                    value: physician_name,
-                                    label: physician_name
-                                }
-                                : null,
                             mac_address: mac_address || '',
-                            patientNumber:asset_control_number|| '',
-                            gender :  object_type === locale.texts.MALE 
-                                ?   genderOptions[0] 
-                                :   object_type === locale.texts.FEMALE ?
-
-                                genderOptions[1]
-
-                                :'',
+                            asset_control_number:asset_control_number|| '',
+                            gender :  object_type === 'Female' 
+                                ?   genderOptions[1] 
+                                : object_type === '女' 
+                                ?   genderOptions[1]
+                                : genderOptions[0]
+                              ,
                             monitorType: selectedObjectData.length !== 0 ? monitor_type.split('/') : [],
                             room: room 
                                 ? {
                                     value: room,
                                     label: room
                                 }
-                                : null
+                                : null,
 
+                             physician : this.props.physicianName ?
+                             {
+                                    value: this.props.physicianName,
+                                    label:this.props.physicianName
+                             }
+                             : null
                         }}
                        
                         validationSchema = {
@@ -156,7 +180,7 @@ class EditPatientForm extends React.Component {
                             Yup.object().shape({
                                
                                 
-                                patientName: Yup.string().required(locale.texts.NAME_IS_REQUIRED),
+                                name: Yup.string().required(locale.texts.NAME_IS_REQUIRED),
                                 // roomNumber: Yup.string().required(locale.texts.ROOMNUMBER_IS_REQUIRED),
                                
                                 // physician: Yup.string()
@@ -173,10 +197,10 @@ class EditPatientForm extends React.Component {
                                 area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
                                 gender: Yup.string().required(locale.texts.GENDER_IS_REQUIRED),
                                 
-                                patientNumber: Yup.string()
+                                asset_control_number: Yup.string()
                                 .required(locale.texts.NUMBER_IS_REQUIRED)
                                 .test(
-                                    'patientNumber',
+                                    'asset_control_number',
                                     locale.texts.THE_Patient_Number_IS_ALREADY_USED,
                                         value => {
                                             return value === selectedObjectData.asset_control_number ||
@@ -184,7 +208,7 @@ class EditPatientForm extends React.Component {
                                     }
                                 )
                                 .test(
-                                    'patientNumber',
+                                    'asset_control_number',
                                     locale.texts.THE_Patient_Number_IS_ALREADY_USED,
                                         value => {
                                             return value === selectedObjectData.asset_control_number ||
@@ -226,19 +250,25 @@ class EditPatientForm extends React.Component {
 
 
                         onSubmit={(values, { setStatus, setSubmitting }) => {
+               
+                            console.log('@!#!@#')
+                             console.log(this.props.physicianName)
+                           
                             let monitor_type = values.monitorType
                             .filter(item => item)
                             .reduce((sum, item) => {
                                 sum += parseInt(monitorTypeMap[item])
                                 return sum
                             },0)
+                           
                             const postOption = {
                                 ...values,
                                 area_id: config.mapConfig.areaModules[values.area.value].id,
-                                gender_id : config.mapConfig.gender[values.gender.value].id,
-                                physician: values.physician ? values.physician.value : '',
+                                gender_id : values.gender.value,
+                                physician: values.physician ? values.physician.value : 0,
                                 monitor_type, 
                                 room: values.room ? values.room.label : '',
+                                object_type:values.gender.value,
                             }
                             this.handleSubmit(postOption)                            
                         }}
@@ -247,15 +277,15 @@ class EditPatientForm extends React.Component {
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (  
                             <Form className="text-capitalize">
                                 <div className="form-group">
-                                    <label htmlFor="patientName">{locale.texts.NAME}*</label>
-                                    <Field name="patientName" type="text" className={'form-control' + (errors.patientName && touched.patientName ? ' is-invalid' : '')} placeholder=''/>
-                                    <ErrorMessage name="patientName" component="div" className="invalid-feedback" />
+                                    <label htmlFor="name">{locale.texts.NAME}*</label>
+                                    <Field name="name" type="text" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} placeholder=''/>
+                                    <ErrorMessage name="name" component="div" className="invalid-feedback" />
                                 </div>
 
                                 <div className="form-group">
-                                    <label htmlFor="patientNumber">{locale.texts.PATIENT_NUMBER}*</label>
-                                    <Field name="patientNumber" type="text" className={'form-control' + (errors.patientNumber && touched.patientNumber ? ' is-invalid' : '')} placeholder=''/>
-                                    <ErrorMessage name="patientNumber" component="div" className="invalid-feedback" />
+                                    <label htmlFor="asset_control_number">{locale.texts.PATIENT_NUMBER}*</label>
+                                    <Field name="asset_control_number" type="text" className={'form-control' + (errors.asset_control_number && touched.asset_control_number ? ' is-invalid' : '')} placeholder=''/>
+                                    <ErrorMessage name="asset_control_number" component="div" className="invalid-feedback" />
                                 </div>
                                 
 {/* 
@@ -408,9 +438,10 @@ class EditPatientForm extends React.Component {
                                     <Button variant="outline-secondary" className="text-capitalize" onClick={this.handleClose}>
                                         {locale.texts.CANCEL}
                                     </Button>
-                                    <Button type="submit" className="text-capitalize" variant="primary" disabled={isSubmitting}>
+                                    <Button type="submit" className="text-capitalize" variant="primary" onClick={this.handleSubmit} disabled={isSubmitting}>
                                         {locale.texts.SAVE}
                                     </Button>
+
                                 </Modal.Footer>
                             </Form>
                         )}

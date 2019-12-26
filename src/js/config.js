@@ -9,38 +9,8 @@ import BOT_LOGO from "../img//logo/BOT_LOGO_RED.png";
 import moment from 'moment'
 import patientP from "../img//logo/pic.png"
 
-
-
 const config = {
     
-    
-    surveillanceMap: {
-
-
-        /* For test. To start object tracking*/
-        startInteval: true,
-
-        /* Object tracking query inteval */
-        intevalTime: 1000,
-        
-        /* Tracking object Rssi filter */
-        locationAccuracyMapToDefault: {
-            0: -100,
-            1: -70,
-            2: -50,
-        },
-
-        locationAccuracyMapToDB: {
-            0: "low_rssi",
-            1: "med_rssi",
-            2: "high_rssi",
-        },
-
-
-        // objectTypeSet: new Set(["Bed", "EKG Machine", "Infusion pump", "SONOSITE Ultrasound", "Ultrasound", "Bladder scanner", "CPM"])
-        // objectType: ["三合一Monitor", "EKG", "IV Pump", "烤燈", "血壓血氧監視器", "電擊器", "CPM"]
-    },
-
     objectStatus: {
         PERIMETER: "perimeter",
         FENCE: "fence",
@@ -500,8 +470,13 @@ const config = {
         mapOptions: {
             crs: L.CRS.Simple,
             // center: L.latLng(-2000, -4000),
+<<<<<<< HEAD
             zoom: -5,
             minZoom: -8,
+=======
+            zoom: -6,
+            minZoom: -7,
+>>>>>>> c8025006658866fa3f2252f3d829bd956cb3caf3
             maxZoom: 0,
             zoomDelta: 0.25,
             zoomSnap: 0,
@@ -515,7 +490,7 @@ const config = {
 
         /** Set the icon option */
         iconOptions: {
-            iconSize: 30,
+            iconSize: 22,
             showNumber: !false,
         },
 
@@ -589,7 +564,6 @@ const config = {
 
         defaultAreaId: process.env.DEFAULT_AREA_ID,
     
-        
         gender: {
             MAN: {
                 id: 1,
@@ -598,17 +572,6 @@ const config = {
                 id: 2,
             },
         },
-
-        BOTDefaultAreas: {
-            1: "NTUH_EMERGENCY_ROOM",
-            2: "IIS_SINICA_FOURTH_FLOOR",
-            3: "NTUH_YUNLIN_WARD_FIVE_B",
-            4: "NURSING_HOME",
-            5: "YUANLIN_CHRISTIAN_HOSPITAL",
-            6: "VETERAN_HOME_FIRST_FLOOR",
-            7: "VETERAN_HOME_THIRD_FLOOR",
-        },
-
 
         areaOptions: process.env.SITES_GROUP
             .split(',')
@@ -624,16 +587,6 @@ const config = {
                 }[item]
                 return res
             }, {}),
-
-        // areaOptions: {
-        //         1: "NTUH_EMERGENCY_ROOM",
-        //         2: "IIS_SINICA_FOURTH_FLOOR",
-        //         3: "NTUH_YUNLIN_WARD_FIVE_B",
-        //         4: "NURSING_HOME",
-        //         5: "YUANLIN_CHRISTIAN_HOSPITAL",
-        //         6: "VETERAN_HOME_FIRST_FLOOR",
-        //         7: "VETERAN_HOME_THIRD_FLOOR",
-        // },
     
         areaModules: {
             NTUH_EMERGENCY_ROOM: {
@@ -691,7 +644,7 @@ const config = {
         startInteval: true,
 
         /* Set the tracking query inteval time(ms) */
-        intevalTime: 1000,
+        intervalTime: process.env.OBJECT_TRACKING_INTERVAL_TIME_IN_MILLI_SEC,
 
         objectStatus: {
             PERIMETER: "perimeter",
@@ -704,9 +657,9 @@ const config = {
         
         /* Set the rssi threshold */
         locationAccuracyMapToDefault: {
-            0: -100,
-            1: -60,
-            2: -50,
+            0: process.env.LOCATION_ACCURACY_LOW,
+            1: process.env.LOCATION_ACCURACY_MED,
+            2: process.env.LOCATION_ACCURACY_HIGH
         },
 
         locationAccuracyMapToDB: {
@@ -873,14 +826,13 @@ const config = {
             }
         },
 
-        defaultAreaId: 3,
+        defaultAreaId: process.env.DEFAULT_AREA_ID,
     
-        
         gender: {
-            MAN: {
+            Male: {
                 id: 1,
             },
-            GIRL:{
+            Female:{
                 id: 2,
             },
         },
@@ -958,11 +910,9 @@ const config = {
             },
         },
 
-        /* For test. To start object tracking*/
-        startInteval: true,
-
         /* Set the tracking query inteval time(ms) */
-        intevalTime: 1000,
+        intervalTime: process.env.OBJECT_TRACKING_INTERVAL_TIME_IN_MILLI_SEC,
+
 
         objectStatus: {
             PERIMETER: "perimeter",
@@ -975,9 +925,9 @@ const config = {
         
         /* Set the rssi threshold */
         locationAccuracyMapToDefault: {
-            0: -100,
-            1: -60,
-            2: -50,
+            0: process.env.LOCATION_ACCURACY_LOW,
+            1: process.env.LOCATION_ACCURACY_MED,
+            2: process.env.LOCATION_ACCURACY_HIGH
         },
 
         locationAccuracyMapToDB: {

@@ -31,7 +31,6 @@ class FrequentSearch extends React.Component {
     }
 
     getSearchKey = (itemName) => {
-        console.log('press')
         this.props.getSearchKey(itemName)
         this.setState({
             searchKey: itemName

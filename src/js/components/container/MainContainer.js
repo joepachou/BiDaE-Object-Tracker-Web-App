@@ -44,8 +44,8 @@ class MainContainer extends React.Component{
         hasGridButton: false,
         isHighlightSearchPanel: false,
         rssiThreshold: window.innerWidth < config.mobileWidowWidth
-            ? config.surveillanceMap.locationAccuracyMapToDefault[0]
-            : config.surveillanceMap.locationAccuracyMapToDefault[1],
+            ? config.mapConfig.locationAccuracyMapToDefault[0]
+            : config.mapConfig.locationAccuracyMapToDefault[1],
         authenticated: this.context.auth.authenticated,
         shouldUpdateTrackingData: true,
         markerClickPackage: {}
@@ -55,7 +55,7 @@ class MainContainer extends React.Component{
         this.getTrackingData();
         this.getLbeaconPosition();
         this.getGeoFenceConfig()
-        this.interval = setInterval(this.getTrackingData, config.surveillanceMap.intevalTime)
+        this.interval = setInterval(this.getTrackingData, config.mapConfig.intervalTime)
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -64,7 +64,7 @@ class MainContainer extends React.Component{
         let [{violatedObjects}] = stateReducer
         if (stateReducer[0].shouldUpdateTrackingData !== this.state.shouldUpdateTrackingData) {
             let [{shouldUpdateTrackingData}] = stateReducer
-            this.interval = shouldUpdateTrackingData ? setInterval(this.getTrackingData, config.surveillanceMap.intevalTime) : clearInterval(this.interval);
+            this.interval = shouldUpdateTrackingData ? setInterval(this.getTrackingData, config.mapConfig.intervalTime) : clearInterval(this.interval);
             this.setState({
                 shouldUpdateTrackingData
             })
@@ -168,7 +168,7 @@ class MainContainer extends React.Component{
     }
 
     changeLocationAccuracy = (locationAccuracy) => {
-        const rssiThreshold = config.surveillanceMap.locationAccuracyMapToDefault[locationAccuracy]
+        const rssiThreshold = config.mapConfig.locationAccuracyMapToDefault[locationAccuracy]
         this.setState({
             rssiThreshold
         })
