@@ -157,12 +157,8 @@ class DissociationForm extends React.Component {
 
         const { 
             title, 
-            selectedObjectData 
+            data
         } = this.props;
-        const { 
-            name,
-            type,
-        } = selectedObjectData
 
         return (
             <Modal show={this.state.show} onHide={this.handleClose} size='md'>
@@ -179,49 +175,30 @@ class DissociationForm extends React.Component {
 
                         validationSchema = {
                             Yup.object().shape({
-                                mac: Yup.string().required(locale.texts.PLEASE_ENTER_OR_SCAN_MAC_ADDRESS)
-                                .test(
-                                    'mac', 
-                                    "mac address未在列表上" ,
-                                    value => {
-                                        let temp = []
-                                        this.props.data.map(item => {
-                                            temp.push(item.mac_address.toLowerCase())
-                                        })
-
-                                        if (temp.includes(value.toLowerCase())) {
-                                            this.setState({
-                                                showDetail : true,
-                                                inputValue : value.toLowerCase()
-                                            }) 
-                                       
-                                            setTimeout(() => {
-                                                axios.post(getImportData, {
-                                                        formOption: value.toLowerCase()
-                                                    }).then(res => {
-                                                        res.data.rows.map(item => {
-                                                            this.setState({
-                                                                objectName: item.name,
-                                                                objectType: item.type,
-                                                            }) 
-                                                        })
-                                                    
-                                                    }).catch( error => {
-                                                        console.log(error)
-                                                    })
-                                                }, 500);
-                                            return  true
-                                        } 
-                                        this.setState({ showDetail : false })
-                                        return false
-  
-                                    }
-                                )
-                        })
+                                mac: Yup.string()
+                                    .required(locale.texts.ASSET_CONTROL_NUMBER_IS_REQUIRED)
+                                    .test(
+                                        'mac', 
+                                        "mac未在列表上" ,
+                                        value => {
+                                            if (Object.keys(data).includes(value) ||
+                                                Object.keys(data).includes(value.match(/.{1,2}/g).join(':'))
+                                            ) {
+                                                this.setState({
+                                                    objectName: data[value].name,
+                                                    objectType: data[value].type,
+                                                    showDetail : true,
+                                                    inputValue : value
+                                                }) 
+                                                return true
+                                            } else return false
+                                        }
+                                    )
+                            })
                         }
 
                         onSubmit={(values, { setStatus, setSubmitting }) => {
-                                this.handleSubmit(values.ASN)
+                                this.handleSubmit(values.mac)
                         }}
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm }) => (
