@@ -243,37 +243,34 @@ const query_getImportTable = () => {
 } 
 
 
-
-
-
-// INSERT INTO object_table
-// (
-// 	asset_control_number,
-// 	mac_address,
-// 	name,
-// 	type,
-// 	registered_timestamp,
-// 	status,
-// 	object_type
-// )
-// VALUES(
-// 	'${formOption[0]}',
-// 	'${formOption[1]}',
-// 	'${formOption[2]}',
-// 	'${formOption[3]}',
-// 	now(),
-// 	'normal',
-// 	0
-// )
-
-
 function query_editImportData (formOption) {
+	// const test = `
+	// 	UPDATE import_table
+	// 	SET 
+	// 		mac_address = '${formOption[1]}',
+	// 		bindflag = '${formOption[4]}'
+	// 	WHERE asset_control_number = '${formOption[0]}';
+	// `
 	const test = `
-		UPDATE import_table
-		SET 
-			mac_address = '${formOption[1]}',
-			bindflag = '${formOption[4]}'
-		WHERE asset_control_number = '${formOption[0]}';
+		INSERT INTO object_table
+			(
+				asset_control_number,
+				mac_address,
+				name,
+				type,
+				registered_timestamp,
+				status,
+				object_type
+			)
+		VALUES(
+			'${formOption[0]}',
+			'${formOption[1]}',
+			'${formOption[2]}',
+			'${formOption[3]}',
+			now(),
+			'normal',
+			0
+		)
 	`
 	;
 
@@ -321,25 +318,24 @@ function query_cleanBinding(formOption) {
 
 
 function query_getImportData(formOption){
-	let text = '';
-	text +=`
-	SELECT 
-		import_table.name, 
-		import_table.type,
-		import_table.mac_address
-	FROM import_table
+	let	text =	`
+		SELECT 
+			name, 
+			type,
+			asset_control_number
+		FROM object_table
 
-	WHERE import_table.asset_control_number = $1
-	
-	`;
+		WHERE mac_address = $1 
+		
+		`;
 
-const values = [formOption];
+	const values = [formOption];
 
-const query = {
-	text,
-	values
-};
-return query;
+	const query = {
+		text,
+		values
+	};
+	return query;
 }
 
 
@@ -560,7 +556,6 @@ function query_addObject (formOption) {
 
 
 function query_addPatient (formOption) {
-	console.log('goddamn')
 	const text = 
 		`
 		INSERT INTO import_table (
@@ -950,10 +945,10 @@ const query_deletePatient = (idPackage) => {
 	return query
 }
 
-const query_deleteDevice = (idPackage) => {
+const query_deleteDevice = (idPackage, formOption) => {
 	const query = `
 		DELETE FROM object_table
-		WHERE id IN (${idPackage.map(item => `'${item}'`)});
+		WHERE mac_address IN (${formOption.map(item => `'${item}'`)});
 	`
 	return query
 }
@@ -1306,7 +1301,6 @@ function query_backendSearch(keyType, keyWord){
 			}
 			break
 	}
-	console.log(query)
 	return query
 }
 function query_deleteSameNameSearchQueue(keyType, keyWord){

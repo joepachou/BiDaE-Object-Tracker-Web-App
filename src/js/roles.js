@@ -19,7 +19,7 @@ const rules = {
             "route:patientManagement",
             "route:userProfile",
             // "route:systemStatus",
-            "route:objectManagement",
+            // "route:objectManagement",
             "route:bigScreen",
             // "route:shiftChangeRecord",
             "user:mydevice",

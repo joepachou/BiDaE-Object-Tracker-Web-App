@@ -39,7 +39,7 @@ import AddAllForm from './AddAllForm';
 import XLSX from "xlsx";
 import InputFiles from "react-input-files";
 import BindForm from './BindForm'
-import EditImportTable from './EditImportTable'
+import DissociationForm from './DissociationForm'
 import AccessControl from '../presentational/AccessControl'
 const SelectTable = selecTableHOC(ReactTable);
 
@@ -220,7 +220,7 @@ class ObjectManagementContainer extends React.Component{
         let totalArray = [];
         
 
-        axios.post(getObjectTable_fromImport, {
+        axios.post(getObjectTable, {
             locale: locale.abbr
         })
         .then(res => {
@@ -317,7 +317,6 @@ class ObjectManagementContainer extends React.Component{
         let { name } = e.target
         switch(name) {
             case "add object": 
-        
                 this.setState({
                     isShowEdit: true,
                     formTitle: name,
@@ -331,20 +330,8 @@ class ObjectManagementContainer extends React.Component{
                 this.setState({
                     isShowBind: true,
                 })
-                break;
-            
-
-            // console.log(e.target.name)
-
-                // this.setState({
-                //     isShowEdit: true,
-                //     formTitle: name,
-                //     selectedRowData: [],
-                //     selectedRowData_Patient:[],
-                //     formPath: addObject
-                // })
-
-                break;
+            break;
+        
             case "delete object":
                 this.deleteRecordDevice();
                 break;
@@ -355,18 +342,22 @@ class ObjectManagementContainer extends React.Component{
                     formPath: addObject
                 })
                 break;
-
-
-             case "delete import data":
-                    this.deleteRecordImport();
-                 break;  
+            case "delete import data":
+                this.deleteRecordImport();
+                break;  
+            case "dissociation":
+                this.setState({
+                    formTitle: name,
+                    isShowEditImportTable: true
+                })
         }
 
     }
 
     deleteBind= () => {
+
         this.setState({
-          isShowEditImportTable:true
+              isShowEditImportTable:true
           // selectedRowData_Import:
        })
     }
@@ -374,21 +365,21 @@ class ObjectManagementContainer extends React.Component{
 
     deleteBinding = () => {
         let { locale } = this.context
-        axios.post(cleanBinding, {
-            locale: locale.abbr,
-            formOption:this.state.selection
-        })
-        .then(res => {
-            this.setState({
-                selection: [],
-                selectAll: false,
-            })
-        })
-        .catch(err => {
-            console.log("clean Binding fail : " + err);
-        })
+        // axios.post(cleanBinding, {
+        //     locale: locale.abbr,
+        //     formOption: this.state.selection
+        // })
+        // .then(res => {
+        //     this.setState({
+        //         selection: [],
+        //         selectAll: false,
+        //     })
+        // })
+        // .catch(err => {
+        //     console.log("clean Binding fail : " + err);
+        // })
     
-        this.handleSubmitForm()
+        // this.handleSubmitForm()
     }
 
 
@@ -702,10 +693,8 @@ class ObjectManagementContainer extends React.Component{
                 <br/>
                 <Tabs selectedIndex={this.state.tabIndex} onSelect={tabIndex => this.setState({ tabIndex })}>
                     <TabList>
-                       
                         <Tab>{locale.texts.DEVICE_FORM}</Tab>
                         <Tab>{locale.texts.PATIENT_FORM}</Tab>
-
                         <AccessControl
                             permission={"user:importTable"}
                             renderNoAccess={() => null}
@@ -713,71 +702,64 @@ class ObjectManagementContainer extends React.Component{
                             <Tab>{locale.texts.TOTAL_DATA}</Tab>
                         </AccessControl>
                     </TabList>
-
-
-            
-
-
-                <TabPanel>
-                    <ButtonToolbar>
-                         <Button 
-                            variant="outline-primary" 
-                            className='text-capitalize mr-2 mb-1'
-                            name="associate object"
-                            onClick={this.handleClickButton}
-                        >
-                            {locale.texts.ASSOCIATE}
-                        </Button>
-                     
-                        <Button 
-                            variant="outline-primary" 
-                            className='text-capitalize mr-2 mb-1'
-                            name="delete binding"
-                            onClick={this.deleteBinding}
-                        >
-                            {locale.texts.BINDING_DELETE}
-                        </Button>
-                            
-                        <Button 
-                            variant="outline-primary" 
-                            className='text-capitalize mr-2 mb-1'
-                            name="add object"
-                            onClick={this.handleClickButton}
-                        >
-                            {locale.texts.ADD_OBJECT}
-                        </Button>
-
-                         
-                        {/* <Button 
-                            variant="outline-primary" 
-                            className='text-capitalize mr-2 mb-1'
-                            name="delete bind"
-                            onClick={this.deleteBind}
-                        >
-                            {'取消綁定：2'}
-                        </Button> */}
-
-                        {/* 
-                        <Button 
-                            variant="outline-primary" 
-                            className='text-capitalize mr-2 mb-1'
-                            name="associate object"
-                            onClick={this.handleClickButton}
-                        >
-                            {locale.texts.ASSOCIATE}
-                        </Button>
-                         
-                        <InputFiles accept=".xlsx, .xls" onChange={this.onImportExcel}>
-                            <button 
-                            className="btn btn-primary"
+                    <TabPanel>
+                        <ButtonToolbar>
+                            <Button 
+                                variant="outline-primary" 
+                                className='text-capitalize mr-2 mb-1'
+                                name="associate object"
+                                onClick={this.handleClickButton}
                             >
-                            {locale.texts.IMPORT_OBJECT}
-                            </button>
-                        </InputFiles> */}
+                                {locale.texts.ASSOCIATE}
+                            </Button>
+                        
+                            {/* <Button 
+                                variant="outline-primary" 
+                                className='text-capitalize mr-2 mb-1'
+                                name="delete binding"
+                                onClick={this.deleteBinding}
+                            >
+                                {locale.texts.BINDING_DELETE}
+                            </Button> */}
+                                
+                            <Button 
+                                variant="outline-primary" 
+                                className='text-capitalize mr-2 mb-1'
+                                name="add object"
+                                onClick={this.handleClickButton}
+                            >
+                                {locale.texts.ADD_OBJECT}
+                            </Button>
+                            <Button 
+                                variant="outline-primary" 
+                                className='text-capitalize mr-2 mb-1'
+                                name="dissociation"
+                                onClick={this.handleClickButton}
+                            >
+                                {locale.texts.BINDING_DELETE}
+                            </Button>
+
+                            {/* 
+                            <Button 
+                                variant="outline-primary" 
+                                className='text-capitalize mr-2 mb-1'
+                                name="associate object"
+                                onClick={this.handleClickButton}
+                            >
+                                {locale.texts.ASSOCIATE}
+                            </Button>
+                            
+                            <InputFiles accept=".xlsx, .xls" onChange={this.onImportExcel}>
+                                <button 
+                                className="btn btn-primary"
+                                >
+                                {locale.texts.IMPORT_OBJECT}
+                                </button>
+                            </InputFiles> */}
 
 
-                    </ButtonToolbar>
-                    <SelectTable
+                        </ButtonToolbar>
+                        <SelectTable
                             keyField='id'
                             data={this.state.data}
                             columns={this.state.column}
@@ -786,7 +768,6 @@ class ObjectManagementContainer extends React.Component{
                             style={{height:'75vh'}}
                             {...extraProps}
                             getTrProps={(state, rowInfo, column, instance) => {
-                            
                                 return {
                                     onClick: (e, handleOriginal) => {
                                             this.setState({
@@ -794,9 +775,10 @@ class ObjectManagementContainer extends React.Component{
                                                 isShowEdit: true,
                                                 isPatientShowEdit: false,
                                                 formTitle: 'edit object',
-                                                formPath: editImport,
+                                                formPath: editObject,
                                             })
                                             let id = (rowInfo.index+1).toString()
+
                                             this.toggleSelection(id)
                                             if (handleOriginal) {
                                                 handleOriginal()
@@ -806,27 +788,26 @@ class ObjectManagementContainer extends React.Component{
                             }
                             }
                         />
-                </TabPanel>
-                
-                <TabPanel>
-                    <ButtonToolbar>
-                        <Button 
-                            variant="outline-primary" 
-                            className='mb-1 text-capitalize mr-2'
-                            onClick={this.handlePatientClick}
-                        >
-                            {locale.texts.ADD_INPATIENT}
-                            
-                        </Button>
-                        <Button 
-                            variant="outline-primary" 
-                            className='mb-1 text-capitalize'
-                            onClick={this.deleteRecordPatient}    
-                        >
-                            {locale.texts.DELETE}
-                        </Button>
-                    </ButtonToolbar>
-                    <SelectTable
+                    </TabPanel>
+                    <TabPanel>
+                        <ButtonToolbar>
+                            <Button 
+                                variant="outline-primary" 
+                                className='mb-1 text-capitalize mr-2'
+                                onClick={this.handlePatientClick}
+                            >
+                                {locale.texts.ADD_INPATIENT}
+                                
+                            </Button>
+                            <Button 
+                                variant="outline-primary" 
+                                className='mb-1 text-capitalize'
+                                onClick={this.deleteRecordPatient}    
+                            >
+                                {locale.texts.DELETE}
+                            </Button>
+                        </ButtonToolbar>
+                        <SelectTable
                             keyField='name'
                             data={this.state.dataPatient}
                             columns={this.state.columnPatient}
@@ -838,10 +819,6 @@ class ObjectManagementContainer extends React.Component{
                             
                                 return {
                                     onClick: (e, handleOriginal) => {
-
-                                        
-                                       
-
                                         this.setState({
                                             selectedRowData_Patient: this.state.dataPatient[rowInfo.index],
                                             isShowEdit: false,
@@ -856,45 +833,40 @@ class ObjectManagementContainer extends React.Component{
                                         }
 
                                         this.state.physicianList.map(item => {
-                                             item.id == this.state.dataPatient[rowInfo.index].physician_id ?
-                                             
-                                             this.setState({
+                                            item.id == this.state.dataPatient[rowInfo.index].physician_id ?
+                                            
+                                            this.setState({
                                                 physicianName:item.name
                                         })
-                                             : null
+                                            : null
                                         })
 
-                                       
+                                    
                                     }
                                 }
                             }}
                         />
                     </TabPanel>
-
-
-
-
-                     <TabPanel> 
-                    <ButtonToolbar>
-                      <InputFiles accept=".xlsx, .xls" onChange={this.onImportExcel}>
+                    <TabPanel> 
+                        <ButtonToolbar>
+                            <InputFiles accept=".xlsx, .xls" onChange={this.onImportExcel}>
+                                <Button 
+                                variant="outline-primary" 
+                                className="btn btn-primary mr-2 mb-1"
+                                >
+                                {locale.texts.IMPORT_OBJECT}
+                                </Button>
+                            </InputFiles>
                             <Button 
-                             variant="outline-primary" 
-                             className="btn btn-primary mr-2 mb-1"
+                                variant="outline-primary" 
+                                className='text-capitalize mr-2 mb-1'
+                                name="delete import data"
+                                onClick={this.handleClickButton}
                             >
-                            {locale.texts.IMPORT_OBJECT}
+                                {locale.texts.DELETE}
                             </Button>
-                        </InputFiles>
-                        <Button 
-                            variant="outline-primary" 
-                            className='text-capitalize mr-2 mb-1'
-                            name="delete import data"
-                            onClick={this.handleClickButton}
-                        >
-                            {locale.texts.DELETE}
-                        </Button>
-
-                    </ButtonToolbar>
-                    <SelectTable
+                        </ButtonToolbar>
+                        <SelectTable
                             keyField='id'
                             data={this.state.dataImport}
                             columns={this.state.columnImport}
@@ -909,7 +881,7 @@ class ObjectManagementContainer extends React.Component{
                                     onClick: (e, handleOriginal) => {
                                             // let id = (rowInfo.index+1).toString()
                                             // this.toggleSelection(id)
-                                           
+                                            
                                             if (handleOriginal) {
                                                 handleOriginal()
                                             }
@@ -918,7 +890,7 @@ class ObjectManagementContainer extends React.Component{
                             }
                             }
                         />
-                </TabPanel>
+                    </TabPanel>
                 </Tabs>
                 <EditPatientForm
                     show = {isPatientShowEdit} 
@@ -942,27 +914,29 @@ class ObjectManagementContainer extends React.Component{
                     formPath={this.state.formPath}
                     handleCloseForm={this.handleCloseForm}
                     data={this.state.data}
-                    dataPatient = {this.state.dataPatient}
+                    // dataPatient = {this.state.dataPatient}
                 />
 
                 <BindForm
                     show = {isShowBind} 
                     title=  {this.state.formTitle} 
-                    selectedObjectData={selectedRowData_Import || null} 
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={this.state.formPath}
                     handleCloseForm={this.handleCloseForm}
-                    data={this.state.dataImport}
+                    data={this.state.dataImport.reduce((dataMap, item) => {
+                        dataMap[item.asset_control_number] = item
+                        return dataMap
+                        }, {})
+                    }
                 />
-
-                <EditImportTable
+                <DissociationForm
                     show = {isShowEditImportTable} 
                     title=  {this.state.formTitle} 
                     selectedObjectData={selectedRowData_Import || null} 
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={this.state.formPath}
                     handleCloseForm={this.handleCloseForm}
-                    data={this.state.dataImport}
+                    data={this.state.data}
                 />
             </Container>
         )
