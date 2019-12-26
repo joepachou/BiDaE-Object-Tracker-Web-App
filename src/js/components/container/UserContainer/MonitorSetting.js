@@ -1,11 +1,7 @@
 import React from 'react';
 import { AppContext } from '../../../context/AppContext';
-import { 
-    Row, 
-    Col, 
-    Container
-} from "react-bootstrap"
 import MonitorSettingBlock from './MonitorSettingBlock';
+import GeoFenceSetting from './GeoFenceSetting'
 import config from '../../../config';
 
 class MonitorSetting extends React.Component{

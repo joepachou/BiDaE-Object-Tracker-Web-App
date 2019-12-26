@@ -37,6 +37,7 @@ const rules = {
         permission: [
             "form:edit",
             "route:systemStatus",
+            "route:userProfile",
             "route:objectManagement",
             "route:editObjectManagement",
             "user:mydevice",
