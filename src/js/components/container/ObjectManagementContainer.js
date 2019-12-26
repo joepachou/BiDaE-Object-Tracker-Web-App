@@ -365,19 +365,20 @@ class ObjectManagementContainer extends React.Component{
 
     deleteBinding = () => {
         let { locale } = this.context
-        // axios.post(cleanBinding, {
-        //     locale: locale.abbr,
-        //     formOption: this.state.selection
-        // })
-        // .then(res => {
-        //     this.setState({
-        //         selection: [],
-        //         selectAll: false,
-        //     })
-        // })
-        // .catch(err => {
-        //     console.log("clean Binding fail : " + err);
-        // })
+       
+        axios.post(cleanBinding, {
+            locale: locale.abbr,
+            formOption:this.state.selection
+        })
+        .then(res => {
+            this.setState({
+                selection: [],
+                selectAll: false,
+            })
+        })
+        .catch(err => {
+            console.log("clean Binding fail : " + err);
+        })
     
         // this.handleSubmitForm()
     }

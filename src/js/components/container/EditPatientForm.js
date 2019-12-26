@@ -53,7 +53,7 @@ class EditPatientForm extends React.Component {
         }).catch( error => {
             console.log(error)
         })
-       
+       this.props.handleSubmitForm()
     }
 
 
@@ -153,11 +153,11 @@ class EditPatientForm extends React.Component {
                             // roomNumber: room_number || '',
                             mac_address: mac_address || '',
                             asset_control_number:asset_control_number|| '',
-                            gender :  object_type === 'male' 
-                                ?   genderOptions[0] 
-                                : object_type === '男' 
-                                ?   genderOptions[0]
-                                : genderOptions[1]
+                            gender :  object_type === 'Female' 
+                                ?   genderOptions[1] 
+                                : object_type === '女' 
+                                ?   genderOptions[1]
+                                : genderOptions[0]
                               ,
                             monitorType: selectedObjectData.length !== 0 ? monitor_type.split('/') : [],
                             room: room 

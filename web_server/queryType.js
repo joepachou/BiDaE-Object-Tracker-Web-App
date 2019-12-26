@@ -167,8 +167,6 @@ const query_getObjectTable = (area_id, ) => {
 		`;
 	}
 
-
-
 	return text
 } 
 
@@ -311,6 +309,7 @@ function query_cleanBinding(formOption) {
 		values
 	};
 
+	
 	return query
 
 

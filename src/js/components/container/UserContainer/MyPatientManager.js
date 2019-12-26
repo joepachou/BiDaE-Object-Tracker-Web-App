@@ -222,14 +222,22 @@ class MyPatientManager extends React.Component{
     render(){
 
         const { locale } = this.context
+        const style = {
+            AddableListStyle: {
+                height: "35vh",
+                overflow: "scroll"
+            }
+        }
         return (
             <Fragment>
                 <Row className="w-100 d-flex bg-white">
                     <Col>
                         <h5 className="text-capitalize">{locale.texts.MY_PATIENT_LIST}</h5>
-                        <AddableList
-                            getAPI={this.getAPIfromAddableList_1}
-                        />
+                        <div style={style.AddableListStyle}>
+                            <AddableList
+                                getAPI={this.getAPIfromAddableList_1}
+                            />
+                        </div>
                     </Col>
                 </Row>
                 {/* <Row>
@@ -241,9 +249,11 @@ class MyPatientManager extends React.Component{
                 <Row className='w-100 d-flex bg-white'>
                     <Col>
                         <h5 className="text-capitalize">{locale.texts.NOT_MY_PATIENT_LIST}</h5>
-                        <AddableList
-                            getAPI={this.getAPIfromAddableList_2}
-                        />
+                        <div style={style.AddableListStyle}>
+                            <AddableList
+                                getAPI={this.getAPIfromAddableList_2}
+                            />
+                        </div>
                     </Col>
                 </Row>
             </Fragment>

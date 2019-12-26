@@ -282,7 +282,6 @@ class BindForm extends React.Component {
                                     </div>
                                 </FadeIn>
 
-
                                 {this.state.showDetail &&
                                     <Modal.Footer>
                                         <Button variant="outline-secondary" className="text-capitalize" onClick={this.handleClose}>
