@@ -14,8 +14,7 @@ const AppContextProvider = (props) => {
     const locale = React.useContext(LocaleContext)
 
     const initialState = {
-        // areaId: auth.authenticated ? auth.user.areas_id[0] : config.mapConfig.defaultAreaId,
-        areaId: config.mapConfig.defaultAreaId,
+        areaId: parseInt(config.mapConfig.defaultAreaId),
         shouldUpdateTrackingData: true
     }
     
@@ -32,7 +31,6 @@ const AppContextProvider = (props) => {
         </AppContext.Provider>
     );
 }
-
 
 const CombinedContext = props => {
     return (
