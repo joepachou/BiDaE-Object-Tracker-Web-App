@@ -159,7 +159,6 @@ class ObjectManagementContainer extends React.Component{
         })
         .then(res => {
             let columnImport = _.cloneDeep(importTableColumn)
-         
             columnImport.map(field => {
                 field.headerStyle = {
                     textAlign: 'left',
@@ -190,7 +189,7 @@ class ObjectManagementContainer extends React.Component{
             
             this.setState({
                 dataImport: res.data.rows,
-                columnImport: columnImport,
+                columnImport,
             })
         })
 
@@ -203,18 +202,29 @@ class ObjectManagementContainer extends React.Component{
 
     getData = () => {
         let { locale } = this.context
-        
         axios.post(getObjectTable, {
             locale: locale.abbr
         })
         .then(res => {
-            // let column = _.cloneDeep(objectTableColumn)
-            // column.map(field => {
-            //     field.headerStyle = {
-            //         textAlign: 'left',
-            //     }
-            //     field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
-            // })
+            let column = _.cloneDeep(objectTableColumn)
+            column.map(field => {
+                field.headerStyle = {
+                    textAlign: 'left',
+                }
+                field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
+            })
+            column.push({
+                Header: locale.texts['remove'.toUpperCase().replace(/ /g, '_')],
+                accessor: "Delete Option",
+                minWidth: 60,
+                Cell: props =>
+                    <Button 
+                        variant="outline-danger" 
+                        className='text-capitalize ml-3 mr-2 mb-1'
+                        onClick={()=>this.DeleteClick(props)}
+                        >{locale.texts.REMOVE}
+                    </Button>
+            })
         
             res.data.rows.map(item => {
                 item.monitor_type = this.getMonitorTypeArray(item, 'object').join('/')
@@ -240,7 +250,7 @@ class ObjectManagementContainer extends React.Component{
             
             this.setState({
                 data: res.data.rows,
-                // column: column,
+                column: column,
             })
         })
         .catch(err => {
@@ -646,7 +656,6 @@ class ObjectManagementContainer extends React.Component{
     };
 
     DeleteClick= (key) => {
-        console.log(key.row._original);
         deleteFlag = true 
         this.setState({
             isShowEditImportTable: true
@@ -682,56 +691,6 @@ class ObjectManagementContainer extends React.Component{
             selectType
         };
         
-        const  objectTableColumn_delete = [
-            {
-                Header: locale.texts['Name'.toUpperCase().replace(/ /g, '_')],
-                accessor: "name"
-            },
-            {
-                Header: locale.texts['Type'.toUpperCase().replace(/ /g, '_')],
-                accessor: "type"
-            },
-            {
-                Header: locale.texts["auth_area".toUpperCase().replace(/ /g, '_')],
-                accessor: "area_name.label"
-            },
-            {
-                Header:locale.texts["Asset Control Number".toUpperCase().replace(/ /g, '_')],
-                accessor: "asset_control_number"
-            },
-            {
-                Header: locale.texts["status".toUpperCase().replace(/ /g, '_')],
-                accessor: "status.label",
-            },
-            {
-                Header: locale.texts["transferred_location".toUpperCase().replace(/ /g, '_')],
-                accessor: "transferred_location.label"
-            },
-            {
-                Header: locale.texts["Mac Address".toUpperCase().replace(/ /g, '_')],
-                accessor: "mac_address",
-            },
-            {
-                Header:  locale.texts["monitor_type".toUpperCase().replace(/ /g, '_')],
-                accessor: "monitor_type"
-            },
-            {
-                Header: locale.texts["DELETE_OPTION".toUpperCase().replace(/ /g, '_')],
-                accessor: "Delete Option",
-                minWidth: 60,
-                // style: {
-                //     cursor: 'pointer',
-                //   },
-                Cell: props =>
-                <Button 
-                variant="outline-danger" 
-                className='text-capitalize ml-3 mr-2 mb-1'
-                onClick={()=>this.DeleteClick(props)}
-                >{locale.texts.DELETE}</Button>
-            },
-           
-        ]
-
         return (
             <Container className='py-2 text-capitalize' fluid>
                 <br/>
@@ -774,14 +733,14 @@ class ObjectManagementContainer extends React.Component{
                             >
                                 {locale.texts.ADD_OBJECT}
                             </Button>
-                            <Button 
+                            {/* <Button 
                                 variant="outline-primary" 
                                 className='text-capitalize mr-2 mb-1'
                                 name="dissociation"
                                 onClick={this.handleClickButton}
                             >
                                 {locale.texts.BINDING_DELETE}
-                            </Button>
+                            </Button> */}
 
                             {/* 
                             <Button 
@@ -806,7 +765,8 @@ class ObjectManagementContainer extends React.Component{
                         <SelectTable
                             keyField='id'
                             data={this.state.data}
-                            columns={objectTableColumn_delete}
+                            // columns={objectTableColumn_delete}
+                            columns={this.state.column}
                             ref={r => (this.selectTable = r)}
                             className="-highlight"
                             style={{height:'75vh'}}
@@ -814,34 +774,33 @@ class ObjectManagementContainer extends React.Component{
                             getTrProps={(state, rowInfo, column, instance) => {
                                 return {
                                     onClick: (e, handleOriginal) => {
+                                        this.setState({
+                                            selectedRowData: this.state.data[rowInfo.index],
+                                            isShowEdit: true,
+                                            isPatientShowEdit: false,
+                                            formTitle: 'edit object',
+                                            formPath: editObject,
+                                        })
+                                        
+                                        
+                                        let id = (rowInfo.index+1).toString()
 
+
+                                        deleteFlag ? 
                                             this.setState({
-                                                selectedRowData: this.state.data[rowInfo.index],
-                                                isShowEdit: true,
-                                                isPatientShowEdit: false,
-                                                formTitle: 'edit object',
-                                                formPath: editObject,
-                                            })
-                                           
-                                            
-                                            let id = (rowInfo.index+1).toString()
+                                            isShowEdit: false,
+                                        })
+                                        : null
 
+                                        deleteFlag ? 
+                                        deleteFlag = false
+                                        : null
 
-                                            deleteFlag ? 
-                                             this.setState({
-                                                isShowEdit: false,
-                                            })
-                                            : null
-
-                                            deleteFlag ? 
-                                            deleteFlag = false
-                                            : null
-
-                                            this.toggleSelection(id)
-                                            if (handleOriginal) {
-                                                handleOriginal()
-                                            }
+                                        this.toggleSelection(id)
+                                        if (handleOriginal) {
+                                            handleOriginal()
                                         }
+                                    }
                                 }
                             }
                             }
@@ -927,19 +886,16 @@ class ObjectManagementContainer extends React.Component{
                         <SelectTable
                             keyField='id'
                             data={this.state.dataImport}
-                            columns={importTableColumn}
+                            columns={this.state.columnImport}
                             ref={r => (this.selectTable = r)}
                             className="-highlight"
                             style={{height:'75vh'}}
                             {...extraProps}
-                        
                             getTrProps={(state, rowInfo, column, instance) => {
                             
                                 return {
                                     onClick: (e, handleOriginal) => {
-                                            // let id = (rowInfo.index+1).toString()
-                                            // this.toggleSelection(id)
-                                            
+    
                                             if (handleOriginal) {
                                                 handleOriginal()
                                             }
