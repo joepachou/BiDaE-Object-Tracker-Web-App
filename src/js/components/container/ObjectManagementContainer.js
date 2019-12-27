@@ -72,6 +72,7 @@ class ObjectManagementContainer extends React.Component{
         isShowEditImportTable:false,
         dataImportThis:[],
         physicianName:'',
+        physicianIDNumber:0,
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -451,6 +452,7 @@ class ObjectManagementContainer extends React.Component{
         const selection = [];
         if (selectAll) {
             const wrappedInstance = this.selectTable.getWrappedInstance();
+  
             const currentRecords = wrappedInstance.props.data
             // const currentRecords = wrappedInstance.getResolvedState().sortedData;
            
@@ -459,9 +461,8 @@ class ObjectManagementContainer extends React.Component{
             });
         }
          
-        this.setState({ selectAll, selection });
+         this.setState({ selectAll, selection });
 
-  
     };
 
     isSelected = (key) => {
@@ -561,7 +562,8 @@ class ObjectManagementContainer extends React.Component{
             selectedRowData_Import:[],
             formTitle: 'add inpatient',
             formPath: addPatient,
-            physicianName:''
+            physicianName:'',
+            physicianIDNumber:0
         })
     }
 
@@ -715,10 +717,11 @@ class ObjectManagementContainer extends React.Component{
             {
                 Header: locale.texts["status".toUpperCase().replace(/ /g, '_')],
                 accessor: "status.label",
+                minWidth: 50,
             },
             {
                 Header: locale.texts["transferred_location".toUpperCase().replace(/ /g, '_')],
-                accessor: "transferred_location.label"
+                accessor: "transferred_location.label",
             },
             {
                 Header: locale.texts["Mac Address".toUpperCase().replace(/ /g, '_')],
@@ -879,7 +882,7 @@ class ObjectManagementContainer extends React.Component{
                             </Button>
                         </ButtonToolbar>
                         <SelectTable
-                            keyField='name'
+                            keyField='id'
                             data={this.state.dataPatient}
                             columns={this.state.columnPatient}
                             ref={r => (this.selectTable = r)}
@@ -904,10 +907,12 @@ class ObjectManagementContainer extends React.Component{
                                         }
 
                                         this.state.physicianList.map(item => {
+                                          
                                             item.id == this.state.dataPatient[rowInfo.index].physician_id ?
                                             
                                             this.setState({
-                                                physicianName:item.name
+                                                physicianName:item.name,
+                                                physicianIDNumber:item.id
                                         })
                                             : null
                                         })
@@ -975,6 +980,7 @@ class ObjectManagementContainer extends React.Component{
                     physicianList={this.state.physicianList}
                     roomOptions={this.state.roomOptions}
                     physicianName = {this.state.physicianName}
+                    physicianIDNumber = {this.state.physicianIDNumber}
                 />  
        
 
