@@ -26,7 +26,7 @@ const en =  {
     POSITION_UNDEFINE:"Select position status",
     ROOM_NUMBER:"Room Number",
     PATIENT_NUMBER:"Patient Number",
-    ATTENDING_PHYSICIAN:"attending physician ID",
+    ATTENDING_PHYSICIAN:"attending physician",
     BATTERY_ALERT:"battery replacement alert",
     PICTURE:"Picture",
     BATTERY_CHANGE:"need change",

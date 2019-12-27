@@ -25,7 +25,7 @@ const tw = {
     POSITION:"位置狀態",
     POSITION_UNDEFINE:"選擇狀態",
     ROOM_NUMBER:"病房編號",
-    ATTENDING_PHYSICIAN:"醫生編號",
+    ATTENDING_PHYSICIAN:"醫生姓名",
     BATTERY_ALERT:"電池更換提示",
     PICTURE:"相關圖片",
     BATTERY_CHANGE:"需更換",
@@ -107,7 +107,8 @@ const tw = {
     ACN_VERIFICATION:"ACN驗證",
     BINDING_SETTING:"綁定設定",
     BINDING_DELETE:"取消綁定",
-    DELETE_OPTION:"刪除選項",
+    DELETE_OPTION:"移除選項",
+
     /* Form Field */
     NAME: "名稱",
     TYPE: "類別",
