@@ -178,38 +178,38 @@ const query_getPatientTable = (area_id) => {
 	if (!area_id) {
 		text += `
 			SELECT 
-				import_table.name, 
-				import_table.id,
-				import_table.area_id,
-				import_table.physician_id,
-				import_table.mac_address,
-				import_table.asset_control_number,
-				import_table.object_type,
-				import_table.monitor_type,
-				import_table.room
-			FROM import_table 
+				object_table.name, 
+				object_table.id,
+				object_table.area_id,
+				object_table.physician_id,
+				object_table.mac_address,
+				object_table.asset_control_number,
+				object_table.object_type,
+				object_table.monitor_type,
+				object_table.room
+			FROM object_table 
 
-			WHERE import_table.object_type != '0'
+			WHERE object_table.object_type != '0'
 
-			ORDER BY import_table.name ASC	
+			ORDER BY object_table.name ASC	
 		`;
 	} else {
 		text +=`
 			SELECT 
-			import_table.name, 
-				import_table.id,
-				import_table.area_id,
-				import_table.physician_id,
-				import_table.mac_address,
-				import_table.asset_control_number,
-				import_table.object_type,
-				import_table.monitor_type,
-				import_table.room
+			object_table.name, 
+			object_table.id,
+			object_table.area_id,
+			object_table.physician_id,
+			object_table.mac_address,
+			object_table.asset_control_number,
+			object_table.object_type,
+			object_table.monitor_type,
+			object_table.room
 
-			FROM import_table 
-			WHERE import_table.object_type != '0'
+			FROM object_table 
+			WHERE object_table.object_type != '0'
 
-			ORDER BY import_table.name ASC	
+			ORDER BY object_table.name ASC	
 		`;
 	}
 	return text
@@ -471,14 +471,14 @@ function query_editObject (formOption) {
 function query_editPatient (formOption) {
 
 	const text = `
-		Update import_table 
+		Update object_table 
 		SET name = $1,
 			mac_address = $2,
 			physician_id = $4,
 			area_id = $5,
 			object_type = $6,
 			room_number = $7,
-			type = $8
+			monitor_type = $8
 		WHERE asset_control_number = $3
 	`;
 		
@@ -486,7 +486,7 @@ function query_editPatient (formOption) {
 		formOption.name,
 		formOption.mac_address,
 		formOption.asset_control_number,
-		formOption.physician,
+		formOption.physicianIDNumber,
 		formOption.area_id,
 		formOption.gender_id,
 		formOption.room,
@@ -556,7 +556,7 @@ function query_addObject (formOption) {
 function query_addPatient (formOption) {
 	const text = 
 		`
-		INSERT INTO import_table (
+		INSERT INTO object_table (
 			name,
 			mac_address, 
 			asset_control_number,
@@ -566,9 +566,10 @@ function query_addPatient (formOption) {
 			room_number,
 			monitor_type,
 			type,
-			registered_timestamp
+			registered_timestamp,
+			status
 		)
-		VALUES($1,$2,$3,$4,$5,$6,$7,$8,'Patient',now())
+		VALUES($1,$2,$3,$4,$5,$6,$7,$8,'Patient',now(),'normal')
 		`;
 	const values = [
 		formOption.name,

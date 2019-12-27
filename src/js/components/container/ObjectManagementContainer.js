@@ -72,6 +72,8 @@ class ObjectManagementContainer extends React.Component{
         isShowEditImportTable:false,
         dataImportThis:[],
         physicianName:'',
+        physicianIDNumber:0,
+        disableASN:false,
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -321,7 +323,8 @@ class ObjectManagementContainer extends React.Component{
                     selectedRowData: [],
                     selectedRowData_Patient:[],
                     selectedRowData_Import:[],
-                    formPath: addObject
+                    formPath: addObject,
+                    disableASN:false
                 })
                 break;
             case "associate object":
@@ -450,6 +453,7 @@ class ObjectManagementContainer extends React.Component{
         const selection = [];
         if (selectAll) {
             const wrappedInstance = this.selectTable.getWrappedInstance();
+  
             const currentRecords = wrappedInstance.props.data
             // const currentRecords = wrappedInstance.getResolvedState().sortedData;
            
@@ -458,9 +462,8 @@ class ObjectManagementContainer extends React.Component{
             });
         }
          
-        this.setState({ selectAll, selection });
+         this.setState({ selectAll, selection });
 
-  
     };
 
     isSelected = (key) => {
@@ -557,7 +560,9 @@ class ObjectManagementContainer extends React.Component{
             selectedRowData_Import:[],
             formTitle: 'add inpatient',
             formPath: addPatient,
-            physicianName:''
+            physicianName:'',
+            physicianIDNumber:0,
+            disableASN:false,
         })
     }
 
@@ -690,7 +695,7 @@ class ObjectManagementContainer extends React.Component{
             toggleSelection,
             selectType
         };
-        
+
         return (
             <Container className='py-2 text-capitalize' fluid>
                 <br/>
@@ -774,17 +779,16 @@ class ObjectManagementContainer extends React.Component{
                             getTrProps={(state, rowInfo, column, instance) => {
                                 return {
                                     onClick: (e, handleOriginal) => {
-                                        this.setState({
-                                            selectedRowData: this.state.data[rowInfo.index],
-                                            isShowEdit: true,
-                                            isPatientShowEdit: false,
-                                            formTitle: 'edit object',
-                                            formPath: editObject,
-                                        })
-                                        
-                                        
-                                        let id = (rowInfo.index+1).toString()
-
+                                            this.setState({
+                                                selectedRowData: this.state.data[rowInfo.index],
+                                                isShowEdit: true,
+                                                isPatientShowEdit: false,
+                                                formTitle: 'edit object',
+                                                formPath: editObject,
+                                                disableASN:'true'
+                                            })
+                                                              
+                                            let id = (rowInfo.index+1).toString()
 
                                         deleteFlag ? 
                                             this.setState({
@@ -825,7 +829,7 @@ class ObjectManagementContainer extends React.Component{
                             </Button>
                         </ButtonToolbar>
                         <SelectTable
-                            keyField='name'
+                            keyField='id'
                             data={this.state.dataPatient}
                             columns={this.state.columnPatient}
                             ref={r => (this.selectTable = r)}
@@ -842,6 +846,7 @@ class ObjectManagementContainer extends React.Component{
                                             isPatientShowEdit: true,
                                             formTitle: 'edit patient',
                                             formPath: editPatient,
+                                            disableASN:true,
                                         })
                                         let id = (rowInfo.index+1).toString()
                                         this.toggleSelection(id)
@@ -850,10 +855,12 @@ class ObjectManagementContainer extends React.Component{
                                         }
 
                                         this.state.physicianList.map(item => {
+                                          
                                             item.id == this.state.dataPatient[rowInfo.index].physician_id ?
                                             
                                             this.setState({
-                                                physicianName:item.name
+                                                physicianName:item.name,
+                                                physicianIDNumber:item.id
                                         })
                                             : null
                                         })
@@ -918,6 +925,8 @@ class ObjectManagementContainer extends React.Component{
                     physicianList={this.state.physicianList}
                     roomOptions={this.state.roomOptions}
                     physicianName = {this.state.physicianName}
+                    physicianIDNumber = {this.state.physicianIDNumber}
+                    disableASN = {this.state.disableASN}
                 />  
        
 
@@ -930,6 +939,7 @@ class ObjectManagementContainer extends React.Component{
                     handleCloseForm={this.handleCloseForm}
                     data={this.state.data}
                     // dataPatient = {this.state.dataPatient}
+                    disableASN = {this.state.disableASN}
                 />
 
             

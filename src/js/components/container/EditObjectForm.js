@@ -35,12 +35,12 @@ class EditObjectForm extends React.Component {
 
     state = {
         show: this.props.show,
-        transferredLocationOptions: []
-
+        transferredLocationOptions: [],
     };
 
     componentDidMount = () => {
         this.getTransferredLocation();
+      
      }
 
     
@@ -54,6 +54,9 @@ class EditObjectForm extends React.Component {
                 show: this.props.show,
             })
         }
+        
+
+
     }
   
     handleClose = () => {
@@ -62,6 +65,7 @@ class EditObjectForm extends React.Component {
 
     handleSubmit = (postOption) => {
         const path = this.props.formPath
+   
         axios.post(path, {
             formOption: postOption
         }).then(res => {
@@ -139,6 +143,7 @@ class EditObjectForm extends React.Component {
             transferred_location,
             area_name,
         } = selectedObjectData
+
 
         return (
             <Modal show={this.state.show} onHide={this.handleClose} size='md'>
@@ -272,7 +277,9 @@ class EditObjectForm extends React.Component {
 
                                 <div className="form-group">
                                     <label htmlFor="asset_control_number" className='text-uppercase'>{locale.texts.ACN}*</label>
+                                
                                     <Field 
+                                        disabled= {this.props.disableASN}
                                         name="asset_control_number" 
                                         type="text" 
                                         className={'form-control' + (errors.asset_control_number && touched.asset_control_number ? ' is-invalid' : '')} 

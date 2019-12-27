@@ -78,6 +78,7 @@ const tw = {
     DEVICE: "儀器",
     DOWNLOAD: "下載",
     DELETE: "刪除",
+    REMOVE: "移除",
     ADD_USER: "新增使用者",
     ADD_INPATIENT:"新增病人",
     DELECT_INPATIENT:"刪除病人",

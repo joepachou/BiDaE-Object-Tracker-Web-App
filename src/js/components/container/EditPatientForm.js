@@ -48,6 +48,7 @@ class EditPatientForm extends React.Component {
 
         const path = this.props.formPath
         axios.post(path, {
+
             formOption: postOption
         }).then(res => {
        
@@ -252,8 +253,6 @@ class EditPatientForm extends React.Component {
 
                         onSubmit={(values, { setStatus, setSubmitting }) => {
                
-                            console.log('@!#!@#')
-                             console.log(this.props.physicianName)
                            
                             let monitor_type = values.monitorType
                             .filter(item => item)
@@ -270,6 +269,7 @@ class EditPatientForm extends React.Component {
                                 monitor_type, 
                                 room: values.room ? values.room.label : '',
                                 object_type:values.gender.value,
+                                physicianIDNumber : this.props.physicianIDNumber
                             }
                             this.handleSubmit(postOption)                            
                         }}
@@ -285,7 +285,7 @@ class EditPatientForm extends React.Component {
 
                                 <div className="form-group">
                                     <label htmlFor="asset_control_number">{locale.texts.PATIENT_NUMBER}*</label>
-                                    <Field name="asset_control_number" type="text" className={'form-control' + (errors.asset_control_number && touched.asset_control_number ? ' is-invalid' : '')} placeholder=''/>
+                                    <Field disabled={this.props.disableASN} name="asset_control_number" type="text" className={'form-control' + (errors.asset_control_number && touched.asset_control_number ? ' is-invalid' : '')} placeholder=''/>
                                     <ErrorMessage name="asset_control_number" component="div" className="invalid-feedback" />
                                 </div>
                                 

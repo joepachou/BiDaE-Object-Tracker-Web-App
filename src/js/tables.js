@@ -320,25 +320,19 @@ const patientTableColumn = [
 const importTableColumn = [
     {
         Header: "Name",
-        accessor: "name"
+        accessor: "name",
+        width: 200,
     },
     {
         Header: "Type",
-        accessor: "type"
+        accessor: "type",
+        width: 200,
     },
     {
         Header: "Asset Control Number",
-        accessor: "asset_control_number"
+        accessor: "asset_control_number",
+        width: 200,
     },
-     {
-        Header: "BindFlag",
-        accessor: "bindflag"
-    },
-    {
-        Header: "Mac Address",
-        accessor: "mac_address",
-    },
-   
 ]
 
 

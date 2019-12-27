@@ -80,6 +80,7 @@ const en =  {
     DEVICES: "devices",
     DOWNLOAD: "download",
     DELETE: "delete",
+    REMOVE: "remove",
     DELECT_LBEACON:"Delete LBeacon",
     DELECT_GATEWAY:"Delete Gateway",
     ADD_USER: "add user",
@@ -108,6 +109,7 @@ const en =  {
     BINDING_SETTING:"Binding Setting",
     BINDING_DELETE:"Binding Delete",
     DELETE_OPTION:"Delete option",
+    
     /* Form Field */
     NAME: "name",
     TYPE: "type",
