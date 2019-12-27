@@ -121,6 +121,9 @@ const config = {
         8: "location",
     },
 
+    objectMonitorType: [1],
+    patientMonitorType: [1,2,4,8],
+
     monitorSettingType: {
         RESIDENT_MOVEMENT_MONITOR: "resident movement monitor",
         RESIDENT_LOCATION_MONITOR: "resident location monitor",
@@ -470,8 +473,13 @@ const config = {
         mapOptions: {
             crs: L.CRS.Simple,
             // center: L.latLng(-2000, -4000),
+<<<<<<< HEAD
+            zoom: -5,
+            minZoom: -8,
+=======
             zoom: -6,
             minZoom: -7,
+>>>>>>> c8025006658866fa3f2252f3d829bd956cb3caf3
             maxZoom: 0,
             zoomDelta: 0.25,
             zoomSnap: 0,

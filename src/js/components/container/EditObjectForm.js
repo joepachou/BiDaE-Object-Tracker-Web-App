@@ -106,20 +106,6 @@ class EditObjectForm extends React.Component {
     render() {
         const { locale } = this.context
 
-        // const options = Object.keys(config.transferredLocation).map(location => {
-        //     return {
-        //         value: location,
-        //         label: locale.texts[location.toUpperCase().replace(/ /g, '_')],
-        //         options: config.transferredLocation[location].map(branch => {
-        //             return {
-        //                 value: `${location},${branch}`,
-        //                 label: locale.texts[branch.toUpperCase().replace(/ /g, '_')],
-
-        //             }
-        //         })
-        //     }
-        // })
-
         const areaOptions = Object.values(config.mapConfig.areaOptions).map(area => {
             return {
                 value: area,
@@ -156,6 +142,7 @@ class EditObjectForm extends React.Component {
             transferred_location,
             area_name,
         } = selectedObjectData
+
         return (
             <Modal show={this.state.show} onHide={this.handleClose} size='md'>
                 <Modal.Header closeButton className='font-weight-bold text-capitalize'>
@@ -171,11 +158,13 @@ class EditObjectForm extends React.Component {
                             radioGroup: status.value ,
                             area: area_name || '',
                             select: status.value === config.objectStatus.TRANSFERRED 
-                                ? transferred_location
+                                ? transferred_location 
                                 : '',
-                            checkboxGroup: selectedObjectData.length !== 0 ? 
-                             selectedObjectData.monitor_type == 0 ? null: selectedObjectData.monitor_type.split('/') 
-                            : []
+                            checkboxGroup: selectedObjectData.length !== 0 
+                                ?   selectedObjectData.monitor_type == 0 
+                                    ? null
+                                    : selectedObjectData.monitor_type.split('/') 
+                                : []
                         }}
 
                         validationSchema = {
@@ -239,35 +228,34 @@ class EditObjectForm extends React.Component {
                        
                         onSubmit={(values, { setStatus, setSubmitting }) => {
                             let monitor_type  = 0
-                        if ( isNull(values.checkboxGroup)){
+                            if ( isNull(values.checkboxGroup)){
 
-                        }else{
-                            monitor_type = values.checkboxGroup
+                            }else{
+                                monitor_type = values.checkboxGroup
                                     .filter(item => item)
                                     .reduce((sum, item) => {
                                         sum += parseInt(monitorTypeMap[item])
                                         return sum
                                     },0)      
-                        }
+                            }
                                   
-                        
                             const postOption = {
                                 id,
                                 ...values,
                                 status: values.radioGroup,
                                 transferred_location: values.radioGroup === config.objectStatus.TRANSFERRED 
-                                    ? values.select
+                                    ? values.select.value
                                     : '',
                                 monitor_type: monitor_type || 0,
                                 area_id: config.mapConfig.areaModules[values.area.value].id || 0
                             }
+
                             while(postOption.type[postOption.type.length-1] == " "){
                                 postOption.type = postOption.type.substring(0,postOption.type.length-1);       
                             }
                             while(postOption.name[postOption.name.length-1] == " "){
                                 postOption.name = postOption.name.substring(0,postOption.name.length-1);       
                             }
-                            console.log(postOption.type + "121312313213")
                             this.handleSubmit(postOption)                            
                         }}
 

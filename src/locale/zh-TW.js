@@ -167,6 +167,8 @@ const tw = {
     RESIDENT_LOCATION_MONITOR: "位置監控",
     RESIDENT_LONG_STAY_IN_DANGER: "久留監控",
     RESIDENT_NOT_STAY_ROOM: "房間監控",
+    DISSOCIATION: "解除綁定",
+
 
     /** Error Message */
     GENDER_IS_REQUIRED: "請選擇性別",
@@ -189,6 +191,11 @@ const tw = {
     THE_ATTENDINGPHYSICIAN_IS_WRONG: "醫生編號 必須是數字",  
     AREA_IS_REQUIRED: "請選擇地區",
     NOT_ASSIGNED_TO_ANY_DEVICES: "尚未指定任何儀器",
+
+    /** Place Holder */
+    PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "請輸入或掃描mac address",
+    PLEASE_ENTER_OR_SCAN_ASSET_CONTROL_NUMBER: "請輸入或掃描財產編號",
+
 
     /* Object Status */
     STATUS: "狀態",
