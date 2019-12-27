@@ -107,7 +107,7 @@ const en =  {
     ACN_VERIFICATION:"ACN Verification",
     BINDING_SETTING:"Binding Setting",
     BINDING_DELETE:"Binding Delete",
-
+    DELETE_OPTION:"Delete option",
     /* Form Field */
     NAME: "name",
     TYPE: "type",
