@@ -17,19 +17,16 @@ import CheckboxGroup from './CheckboxGroup'
 import Checkbox from '../presentational/Checkbox'
 import RadioButtonGroup from './RadioButtonGroup'
 import RadioButton from '../presentational/RadioButton'
-import { toast } from 'react-toastify';
-
 import { isNull } from 'util';
-import { editImport } from '../../dataSrc'
-
 import { AppContext } from '../../context/AppContext';
 import dataSrc from '../../dataSrc'
 
 
 let monitorTypeMap = {};
 
-Object.keys(config.monitorType).forEach(key => {
-    monitorTypeMap[config.monitorType[key]] = key
+Object.keys(config.monitorType)
+    .forEach(key => {
+        monitorTypeMap[config.monitorType[key]] = key
 })
 
 class EditObjectForm extends React.Component {
@@ -65,7 +62,7 @@ class EditObjectForm extends React.Component {
 
     handleSubmit = (postOption) => {
         const path = this.props.formPath
-          axios.post(path, {
+        axios.post(path, {
             formOption: postOption
         }).then(res => {
            
@@ -391,14 +388,16 @@ class EditObjectForm extends React.Component {
                                             onChange={setFieldValue}
                                             // onBlur={setFieldTouched}
                                         >
-                                            {Object.values(config.monitorType).map((item,index) => {
-                                                return <Field
-                                                    key={index}
-                                                    component={Checkbox}
-                                                    name="checkboxGroup"
-                                                    id={item}
-                                                    label={item}
-                                                />
+                                            {Object.keys(config.monitorType)
+                                                .filter(key => config.monitorTypeMap.object.includes(parseInt(key)))
+                                                .map((key,index) => {
+                                                    return <Field
+                                                        key={index}
+                                                        component={Checkbox}
+                                                        name="checkboxGroup"
+                                                        id={config.monitorType[key]}
+                                                        label={config.monitorType[key]}
+                                                    />
                                             })}
                                         </CheckboxGroup>
                                     </Col>

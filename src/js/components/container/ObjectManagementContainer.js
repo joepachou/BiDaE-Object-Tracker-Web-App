@@ -132,7 +132,7 @@ class ObjectManagementContainer extends React.Component{
             })
             res.data.rows.map(item => {
 
-                item.monitor_type = this.getMonitorTypeArray(item).join('/')
+                item.monitor_type = this.getMonitorTypeArray(item, 'patient').join('/')
                 
                 item.area_name = {
                     value: config.mapConfig.areaOptions[item.area_id],
@@ -169,7 +169,6 @@ class ObjectManagementContainer extends React.Component{
             })
 
             res.data.rows.map(item => {
-                item.monitor_type = this.getMonitorTypeArray(item).join('/')
 
                 item.status = {
                     value: item.status,
@@ -203,23 +202,9 @@ class ObjectManagementContainer extends React.Component{
       
     }
 
-
-
-
-    getMonitorTypeArray = (item) => {
-        return Object.keys(config.monitorType).reduce((checkboxGroup, index) => {
-            if (item.monitor_type & index) {
-                checkboxGroup.push(config.monitorType[index])
-            }
-            return checkboxGroup
-        }, [])
-    }
-
     getData = () => {
         let { locale } = this.context
-        let totalArray = [];
         
-
         axios.post(getObjectTable, {
             locale: locale.abbr
         })
@@ -232,10 +217,8 @@ class ObjectManagementContainer extends React.Component{
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })
         
-
             res.data.rows.map(item => {
-                totalArray.push(item)
-                item.monitor_type = this.getMonitorTypeArray(item).join('/')
+                item.monitor_type = this.getMonitorTypeArray(item, 'object').join('/')
 
                 item.status = {
                     value: item.status,
@@ -260,14 +243,20 @@ class ObjectManagementContainer extends React.Component{
                 data: res.data.rows,
                 column: column,
             })
-
-
         })
         .catch(err => {
             console.log(err);
         })
+    }
 
-
+    getMonitorTypeArray = (item, type) => {
+        return Object.keys(config.monitorType)
+            .reduce((checkboxGroup, index) => {
+                if (item.monitor_type & index) {
+                    checkboxGroup.push(config.monitorType[index])
+                }
+                return checkboxGroup
+            }, [])
     }
 
     getLbeaconData = () => {
@@ -468,9 +457,6 @@ class ObjectManagementContainer extends React.Component{
     isSelected = (key) => {
         return this.state.selection.includes(key);
     };
-
-
-
 
     deleteRecordPatient = () => {
         let idPackage = []
@@ -673,6 +659,7 @@ class ObjectManagementContainer extends React.Component{
             isShowBind,
             isShowEditImportTable,
         } = this.state
+
         const { locale } = this.context
 
         const {
@@ -937,7 +924,11 @@ class ObjectManagementContainer extends React.Component{
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={this.state.formPath}
                     handleCloseForm={this.handleCloseForm}
-                    data={this.state.data}
+                    data={this.state.data.reduce((dataMap, item) => {
+                        dataMap[item.mac_address] = item
+                        return dataMap
+                        }, {})
+                    }
                 />
             </Container>
         )

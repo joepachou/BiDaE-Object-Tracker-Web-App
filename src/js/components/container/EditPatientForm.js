@@ -16,8 +16,9 @@ import {
 } from "../../dataSrc"
 let monitorTypeMap = {};
 
-Object.keys(config.monitorType).forEach(key => {
-    monitorTypeMap[config.monitorType[key]] = key
+Object.keys(config.monitorType)
+    .forEach(key => {
+        monitorTypeMap[config.monitorType[key]] = key
 })
   
 class EditPatientForm extends React.Component {
@@ -422,14 +423,16 @@ class EditPatientForm extends React.Component {
                                             onChange={setFieldValue}
                                             // onBlur={setFieldTouched}
                                         >
-                                            {Object.values(config.monitorType).map((item,index) => {
-                                                return <Field
-                                                    key={index}
-                                                    component={Checkbox}
-                                                    name="checkboxGroup"
-                                                    id={item}
-                                                    label={item}
-                                                />
+                                            {Object.keys(config.monitorType)
+                                                .filter(key => config.monitorTypeMap.patient.includes(parseInt(key)))
+                                                .map((key,index) => {
+                                                    return <Field
+                                                        key={index}
+                                                        component={Checkbox}
+                                                        name="checkboxGroup"
+                                                        id={config.monitorType[key]}
+                                                        label={config.monitorType[key]}
+                                                    />
                                             })}
                                         </CheckboxGroup>
                                     </Col>
