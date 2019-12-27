@@ -668,6 +668,9 @@ class ObjectManagementContainer extends React.Component{
          fileReader.readAsBinaryString(files[0]);
     };
 
+    submitClick= (key) => {
+        console.log(key.row._original);
+    };
 
     render(){
         const { 
@@ -696,6 +699,44 @@ class ObjectManagementContainer extends React.Component{
             toggleSelection,
             selectType
         };
+        
+        const importTableColumn = [
+            {
+                Header: "Name",
+                accessor: "name"
+            },
+            {
+                Header: "Type",
+                accessor: "type"
+            },
+            {
+                Header: "Asset Control Number",
+                accessor: "asset_control_number"
+            },
+             {
+                Header: "BindFlag",
+                accessor: "bindflag"
+            },
+            {
+                Header: "Mac Address",
+                accessor: "mac_address",
+            },
+            {
+                Header: "Delete Option",
+                accessor: "Delete Option",
+                minWidth: 50,
+                // style: {
+                //     cursor: 'pointer',
+                //   },
+                Cell: props =>
+                <Button 
+                variant="outline-danger" 
+                className='text-capitalize ml-3 mr-2 mb-1'
+                onClick={()=>this.submitClick(props)}
+                >{'刪除'}</Button>
+            },
+           
+        ]
 
         return (
             <Container className='py-2 text-capitalize' fluid>
@@ -896,7 +937,7 @@ class ObjectManagementContainer extends React.Component{
                     <SelectTable
                             keyField='id'
                             data={this.state.dataImport}
-                            columns={this.state.columnImport}
+                            columns={importTableColumn}
                             ref={r => (this.selectTable = r)}
                             className="-highlight"
                             style={{height:'75vh'}}
