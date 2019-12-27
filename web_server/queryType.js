@@ -182,12 +182,16 @@ const query_getPatientTable = (area_id) => {
 				object_table.id,
 				object_table.area_id,
 				object_table.physician_id,
+				user_table.name as physician_name,
 				object_table.mac_address,
 				object_table.asset_control_number,
 				object_table.object_type,
 				object_table.monitor_type,
 				object_table.room
 			FROM object_table 
+
+			LEFT JOIN user_table
+			ON object_table.physician_id = user_table.id
 
 			WHERE object_table.object_type != '0'
 
@@ -196,17 +200,21 @@ const query_getPatientTable = (area_id) => {
 	} else {
 		text +=`
 			SELECT 
-			object_table.name, 
-			object_table.id,
-			object_table.area_id,
-			object_table.physician_id,
-			object_table.mac_address,
-			object_table.asset_control_number,
-			object_table.object_type,
-			object_table.monitor_type,
-			object_table.room
+				object_table.name, 
+				object_table.id,
+				object_table.area_id,
+				object_table.physician_id,
+				user_table.name as physician_name,
+				object_table.mac_address,
+				object_table.asset_control_number,
+				object_table.object_type,
+				object_table.monitor_type,
+				object_table.room
 
 			FROM object_table 
+			LEFT JOIN user_table
+			ON object_table.physician_id = user_table.id
+
 			WHERE object_table.object_type != '0'
 
 			ORDER BY object_table.name ASC	
@@ -486,7 +494,7 @@ function query_editPatient (formOption) {
 		formOption.name,
 		formOption.mac_address,
 		formOption.asset_control_number,
-		formOption.physicianIDNumber,
+		formOption.physician,
 		formOption.area_id,
 		formOption.gender_id,
 		formOption.room,
@@ -1362,7 +1370,6 @@ const query_addBulkObject = (jsonObj) => {
 			)`
 		})}
 	`
-	console.log(text)
 	return text	
 }
 

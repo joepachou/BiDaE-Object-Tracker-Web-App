@@ -222,7 +222,7 @@ class ObjectManagementContainer extends React.Component{
                 Cell: props =>
                     <Button 
                         variant="outline-danger" 
-                        className='text-capitalize ml-3 mr-2 mb-1'
+                        className='text-capitalize ml-3 mr-2 py-0'
                         onClick={()=>this.DeleteClick(props)}
                         >{locale.texts.REMOVE}
                     </Button>

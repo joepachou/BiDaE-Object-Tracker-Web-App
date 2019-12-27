@@ -58,15 +58,7 @@ class EditPatientForm extends React.Component {
        this.props.handleSubmitForm()
     }
 
-
-        
-
-
     render() {
-
-   
-
-
 
         const locale = this.context
 
@@ -99,9 +91,6 @@ class EditPatientForm extends React.Component {
             };
         })
 
-
-      
-
         const genderOptions = [
             { 
                 value: '1', 
@@ -112,11 +101,6 @@ class EditPatientForm extends React.Component {
                 label: locale.texts.FEMALE 
             },
         ]
-
-
-
-      
-
 
         const style = {
             input: {
