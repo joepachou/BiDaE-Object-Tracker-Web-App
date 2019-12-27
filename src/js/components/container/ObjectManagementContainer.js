@@ -73,6 +73,7 @@ class ObjectManagementContainer extends React.Component{
         dataImportThis:[],
         physicianName:'',
         physicianIDNumber:0,
+        disableASN:false,
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -323,7 +324,8 @@ class ObjectManagementContainer extends React.Component{
                     selectedRowData: [],
                     selectedRowData_Patient:[],
                     selectedRowData_Import:[],
-                    formPath: addObject
+                    formPath: addObject,
+                    disableASN:false
                 })
                 break;
             case "associate object":
@@ -563,7 +565,8 @@ class ObjectManagementContainer extends React.Component{
             formTitle: 'add inpatient',
             formPath: addPatient,
             physicianName:'',
-            physicianIDNumber:0
+            physicianIDNumber:0,
+            disableASN:false,
         })
     }
 
@@ -837,6 +840,7 @@ class ObjectManagementContainer extends React.Component{
                                                 isPatientShowEdit: false,
                                                 formTitle: 'edit object',
                                                 formPath: editObject,
+                                                disableASN:'true'
                                             })
                                            
                                             
@@ -899,6 +903,7 @@ class ObjectManagementContainer extends React.Component{
                                             isPatientShowEdit: true,
                                             formTitle: 'edit patient',
                                             formPath: editPatient,
+                                            disableASN:true,
                                         })
                                         let id = (rowInfo.index+1).toString()
                                         this.toggleSelection(id)
@@ -981,6 +986,7 @@ class ObjectManagementContainer extends React.Component{
                     roomOptions={this.state.roomOptions}
                     physicianName = {this.state.physicianName}
                     physicianIDNumber = {this.state.physicianIDNumber}
+                    disableASN = {this.state.disableASN}
                 />  
        
 
@@ -993,6 +999,7 @@ class ObjectManagementContainer extends React.Component{
                     handleCloseForm={this.handleCloseForm}
                     data={this.state.data}
                     // dataPatient = {this.state.dataPatient}
+                    disableASN = {this.state.disableASN}
                 />
 
             

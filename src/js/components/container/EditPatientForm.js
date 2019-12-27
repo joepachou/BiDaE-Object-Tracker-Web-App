@@ -284,7 +284,7 @@ class EditPatientForm extends React.Component {
 
                                 <div className="form-group">
                                     <label htmlFor="asset_control_number">{locale.texts.PATIENT_NUMBER}*</label>
-                                    <Field disabled={true} name="asset_control_number" type="text" className={'form-control' + (errors.asset_control_number && touched.asset_control_number ? ' is-invalid' : '')} placeholder=''/>
+                                    <Field disabled={this.props.disableASN} name="asset_control_number" type="text" className={'form-control' + (errors.asset_control_number && touched.asset_control_number ? ' is-invalid' : '')} placeholder=''/>
                                     <ErrorMessage name="asset_control_number" component="div" className="invalid-feedback" />
                                 </div>
                                 
