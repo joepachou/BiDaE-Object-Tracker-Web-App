@@ -758,8 +758,8 @@ const deleteGateway = (request, response) => {
     const { idPackage } = request.body
     pool.query(queryType.query_deleteGateway(idPackage))
     .then(res => {
-                console.log('delete Gateway record success')
-                response.status(200).json(res)
+        console.log('delete Gateway record success')
+        response.status(200).json(res)
     })
     .catch(err => {
         console.log(err)
@@ -768,11 +768,11 @@ const deleteGateway = (request, response) => {
 
 
 const deleteDevice = (request, response) => {
-    const { idPackage } = request.body
-    pool.query(queryType.query_deleteDevice(idPackage))
+    const { idPackage, formOption } = request.body
+    pool.query(queryType.query_deleteDevice(idPackage, formOption))
     .then(res => {
-                console.log('delete Device success')
-                response.status(200).json(res)
+        console.log('delete Device success')
+        response.status(200).json(res)
     })
     .catch(err => {
         console.log(err)

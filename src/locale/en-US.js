@@ -60,7 +60,7 @@ const en =  {
     SEARCH_RESULTS_NOT_FOUND: "search results not founds",
     PLEASE_SELECT_SEARCH_OBJECT: "please select search object",
     BIND_MAC_ADDRESS:"Enter the mac_address for binding",
-    TOTAL_DATA:"total data in object_import_table",
+    TOTAL_DATA: "HIS Data",
 
     /* Button */
     CLEAR : "clear",
@@ -107,7 +107,7 @@ const en =  {
     ACN_VERIFICATION:"ACN Verification",
     BINDING_SETTING:"Binding Setting",
     BINDING_DELETE:"Binding Delete",
-
+    DELETE_OPTION:"Delete option",
     /* Form Field */
     NAME: "name",
     TYPE: "type",
@@ -169,6 +169,7 @@ const en =  {
     RESIDENT_LOCATION_MONITOR: "resident location monitor",
     RESIDENT_LONG_STAY_IN_DANGER: "resident long stay",
     RESIDENT_NOT_STAY_ROOM: "resident not stay room",
+    DISSOCIATION: "dissociation",
 
     /** Error Message */
     GENDER_IS_REQUIRED: "Gender is required",
@@ -190,6 +191,11 @@ const en =  {
     THE_ATTENDINGPHYSICIAN_IS_WRONG: "AttendingPhysician must be a number",     
     AREA_IS_REQUIRED: "Area is required",
     NOT_ASSIGNED_TO_ANY_DEVICES: "Not assigned to any devices",
+
+    /** Place Holder */
+    PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "please enter or scan mac address",
+    PLEASE_ENTER_OR_SCAN_ASSET_CONTROL_NUMBER: "please enter or scan asset control number",
+
 
     /* Object Status */
     STATUS: "status",

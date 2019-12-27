@@ -121,6 +121,9 @@ const config = {
         8: "location",
     },
 
+    objectMonitorType: [1],
+    patientMonitorType: [1,2,4,8],
+
     monitorSettingType: {
         RESIDENT_MOVEMENT_MONITOR: "resident movement monitor",
         RESIDENT_LOCATION_MONITOR: "resident location monitor",

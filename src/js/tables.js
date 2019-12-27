@@ -1,6 +1,12 @@
 import React from "react";
 import config from "./config"
 
+import { Button } from 'react-bootstrap';
+import 'react-table/react-table.css';
+
+
+
+
 const style = {
     column: {
         textAlign: "center",

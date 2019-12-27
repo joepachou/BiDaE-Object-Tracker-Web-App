@@ -37,6 +37,7 @@ const rules = {
         permission: [
             "form:edit",
             "route:systemStatus",
+            "route:userProfile",
             "route:objectManagement",
             "route:editObjectManagement",
             "user:mydevice",
@@ -46,7 +47,8 @@ const rules = {
             // "user:toggleArea",
             "user:toggleShowDevices",
             "user:toggleShowResidents",
-            "route:monitorSetting"
+            "route:monitorSetting",
+            "user:importTable"
         ]
     },
     dev: {
