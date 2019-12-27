@@ -42,7 +42,7 @@ import BindForm from './BindForm'
 import DissociationForm from './DissociationForm'
 import AccessControl from '../presentational/AccessControl'
 const SelectTable = selecTableHOC(ReactTable);
-
+let deleteFlag = false;
 
 class ObjectManagementContainer extends React.Component{
     static contextType = AppContext
@@ -66,13 +66,12 @@ class ObjectManagementContainer extends React.Component{
         selectAll: false,
         locale: this.context.locale.abbr,
         tabIndex: 0,
-        deleteFlag: 0,
         roomOptions: {},
         dataImport:[],
         isShowBind:false,
         isShowEditImportTable:false,
         dataImportThis:[],
-        physicianName:''
+        physicianName:'',
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -209,13 +208,13 @@ class ObjectManagementContainer extends React.Component{
             locale: locale.abbr
         })
         .then(res => {
-            let column = _.cloneDeep(objectTableColumn)
-            column.map(field => {
-                field.headerStyle = {
-                    textAlign: 'left',
-                }
-                field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
-            })
+            // let column = _.cloneDeep(objectTableColumn)
+            // column.map(field => {
+            //     field.headerStyle = {
+            //         textAlign: 'left',
+            //     }
+            //     field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
+            // })
         
             res.data.rows.map(item => {
                 item.monitor_type = this.getMonitorTypeArray(item, 'object').join('/')
@@ -241,7 +240,7 @@ class ObjectManagementContainer extends React.Component{
             
             this.setState({
                 data: res.data.rows,
-                column: column,
+                // column: column,
             })
         })
         .catch(err => {
@@ -646,6 +645,13 @@ class ObjectManagementContainer extends React.Component{
          fileReader.readAsBinaryString(files[0]);
     };
 
+    DeleteClick= (key) => {
+        console.log(key.row._original);
+        deleteFlag = true 
+        this.setState({
+            isShowEditImportTable: true
+        })
+    };
 
     render(){
         const { 
@@ -675,6 +681,56 @@ class ObjectManagementContainer extends React.Component{
             toggleSelection,
             selectType
         };
+        
+        const  objectTableColumn_delete = [
+            {
+                Header: locale.texts['Name'.toUpperCase().replace(/ /g, '_')],
+                accessor: "name"
+            },
+            {
+                Header: locale.texts['Type'.toUpperCase().replace(/ /g, '_')],
+                accessor: "type"
+            },
+            {
+                Header: locale.texts["auth_area".toUpperCase().replace(/ /g, '_')],
+                accessor: "area_name.label"
+            },
+            {
+                Header:locale.texts["Asset Control Number".toUpperCase().replace(/ /g, '_')],
+                accessor: "asset_control_number"
+            },
+            {
+                Header: locale.texts["status".toUpperCase().replace(/ /g, '_')],
+                accessor: "status.label",
+            },
+            {
+                Header: locale.texts["transferred_location".toUpperCase().replace(/ /g, '_')],
+                accessor: "transferred_location.label"
+            },
+            {
+                Header: locale.texts["Mac Address".toUpperCase().replace(/ /g, '_')],
+                accessor: "mac_address",
+            },
+            {
+                Header:  locale.texts["monitor_type".toUpperCase().replace(/ /g, '_')],
+                accessor: "monitor_type"
+            },
+            {
+                Header: locale.texts["DELETE_OPTION".toUpperCase().replace(/ /g, '_')],
+                accessor: "Delete Option",
+                minWidth: 60,
+                // style: {
+                //     cursor: 'pointer',
+                //   },
+                Cell: props =>
+                <Button 
+                variant="outline-danger" 
+                className='text-capitalize ml-3 mr-2 mb-1'
+                onClick={()=>this.DeleteClick(props)}
+                >{locale.texts.DELETE}</Button>
+            },
+           
+        ]
 
         return (
             <Container className='py-2 text-capitalize' fluid>
@@ -750,7 +806,7 @@ class ObjectManagementContainer extends React.Component{
                         <SelectTable
                             keyField='id'
                             data={this.state.data}
-                            columns={this.state.column}
+                            columns={objectTableColumn_delete}
                             ref={r => (this.selectTable = r)}
                             className="-highlight"
                             style={{height:'75vh'}}
@@ -758,6 +814,7 @@ class ObjectManagementContainer extends React.Component{
                             getTrProps={(state, rowInfo, column, instance) => {
                                 return {
                                     onClick: (e, handleOriginal) => {
+
                                             this.setState({
                                                 selectedRowData: this.state.data[rowInfo.index],
                                                 isShowEdit: true,
@@ -765,7 +822,20 @@ class ObjectManagementContainer extends React.Component{
                                                 formTitle: 'edit object',
                                                 formPath: editObject,
                                             })
+                                           
+                                            
                                             let id = (rowInfo.index+1).toString()
+
+
+                                            deleteFlag ? 
+                                             this.setState({
+                                                isShowEdit: false,
+                                            })
+                                            : null
+
+                                            deleteFlag ? 
+                                            deleteFlag = false
+                                            : null
 
                                             this.toggleSelection(id)
                                             if (handleOriginal) {
@@ -857,7 +927,7 @@ class ObjectManagementContainer extends React.Component{
                         <SelectTable
                             keyField='id'
                             data={this.state.dataImport}
-                            columns={this.state.columnImport}
+                            columns={importTableColumn}
                             ref={r => (this.selectTable = r)}
                             className="-highlight"
                             style={{height:'75vh'}}
@@ -881,7 +951,7 @@ class ObjectManagementContainer extends React.Component{
                     </TabPanel>
                 </Tabs>
                 <EditPatientForm
-                    show = {isPatientShowEdit} 
+                    show = {isPatientShowEdit && !this.state.DeleteFlag} 
                     title= {this.state.formTitle} 
                     selectedObjectData={selectedRowData_Patient || null} 
                     handleSubmitForm={this.handleSubmitForm}
@@ -894,6 +964,7 @@ class ObjectManagementContainer extends React.Component{
                     physicianName = {this.state.physicianName}
                 />  
        
+
                 <EditObjectForm 
                     show = {isShowEdit} 
                     title= {this.state.formTitle} 
@@ -904,6 +975,8 @@ class ObjectManagementContainer extends React.Component{
                     data={this.state.data}
                     // dataPatient = {this.state.dataPatient}
                 />
+
+            
 
                 <BindForm
                     show = {isShowBind} 

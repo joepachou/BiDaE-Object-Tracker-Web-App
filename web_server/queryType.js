@@ -309,7 +309,6 @@ function query_cleanBinding(formOption) {
 		values
 	};
 
-	
 	return query
 
 
