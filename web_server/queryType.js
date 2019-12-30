@@ -232,17 +232,8 @@ const query_getImportTable = () => {
 				import_table.name, 
 				import_table.asset_control_number,
 				import_table.type,
-				import_table.id,
-				import_table.bindflag,
-				import_table.mac_address,
-				import_table.area_id,
-				import_table.status,
-				import_table.transferred_location,
-				import_table.monitor_type
+				import_table.id
 			FROM import_table
-
-
-			ORDER BY import_table.bindflag DESC	
 		`;
 	
 	return text
