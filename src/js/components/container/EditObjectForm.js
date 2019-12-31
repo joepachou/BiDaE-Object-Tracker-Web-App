@@ -277,7 +277,6 @@ class EditObjectForm extends React.Component {
 
                                 <div className="form-group">
                                     <label htmlFor="asset_control_number" className='text-uppercase'>{locale.texts.ACN}*</label>
-                                
                                     <Field 
                                         disabled= {this.props.disableASN}
                                         name="asset_control_number" 
@@ -293,10 +292,10 @@ class EditObjectForm extends React.Component {
                                 <div className="form-group">
                                     <label htmlFor="mac_address">{locale.texts.MAC_ADDRESS}*</label>
                                     <Field 
+                                        disabled =  {this.props.disableASN}
                                         name="mac_address" 
                                         type="text" 
                                         className={'form-control' + (errors.mac_address && touched.mac_address ? ' is-invalid' : '')} 
-                                        disabled={title.toLowerCase() === locale.texts.EDIT_OBJECT}
                                     />
                                     <ErrorMessage name="mac_address" component="div" className="invalid-feedback" />
                                 </div>

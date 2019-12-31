@@ -193,6 +193,7 @@ const tw = {
     THE_ATTENDINGPHYSICIAN_IS_WRONG: "醫生編號 必須是數字",  
     AREA_IS_REQUIRED: "請選擇地區",
     NOT_ASSIGNED_TO_ANY_DEVICES: "尚未指定任何儀器",
+    MAC_DO_NOT_IN_LIST:"此Mac未在列表上",
 
     /** Place Holder */
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "請輸入或掃描mac address",

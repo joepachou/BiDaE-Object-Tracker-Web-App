@@ -193,6 +193,7 @@ const en =  {
     THE_ATTENDINGPHYSICIAN_IS_WRONG: "AttendingPhysician must be a number",     
     AREA_IS_REQUIRED: "Area is required",
     NOT_ASSIGNED_TO_ANY_DEVICES: "Not assigned to any devices",
+    MAC_DO_NOT_IN_LIST:"This Mac Address do not match data",
 
     /** Place Holder */
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "please enter or scan mac address",
