@@ -107,6 +107,7 @@ const tw = {
     BINDING_SETTING:"綁定設定",
     BINDING_DELETE:"取消綁定",
     DELETE_OPTION:"刪除選項",
+    CLEAN_PATH:"刪除路徑",
     /* Form Field */
     NAME: "名稱",
     TYPE: "類別",

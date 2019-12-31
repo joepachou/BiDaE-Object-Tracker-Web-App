@@ -72,7 +72,28 @@ function query_getTrackingData () {
 	return query;
 }
 
+const query_getTrackingTableByMacAddress = (object_mac_address,i,second) => {
+	let text = '';
 
+		text += `
+			SELECT
+				object_mac_address,
+				lbeacon_uuid,
+				avg(rssi)
+			FROM tracking_table
+			WHERE object_mac_address = '
+			`;
+		text += object_mac_address;
+		text +=`'
+			AND final_timestamp > now() - interval '${(i+1)*second}seconds' 
+			AND final_timestamp < now() - interval '${i*second}seconds'
+			GROUP BY object_mac_address, lbeacon_uuid
+			ORDER BY avg(rssi) DESC 
+			LIMIT 1
+			`;
+	//console.log(text)
+	return text;
+}
 const query_getImportDataFromBinding = () => {
 
 	let text = '';
@@ -1367,7 +1388,8 @@ const query_addBulkObject = (jsonObj) => {
 
 
 module.exports = {
-    query_getTrackingData,
+	query_getTrackingData,
+	query_getTrackingTableByMacAddress,
 	query_getObjectTable,
 	query_getObjectTable_fromImport,
 	query_getPatientTable,
