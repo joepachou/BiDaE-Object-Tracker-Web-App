@@ -17,22 +17,6 @@ class NavbarContainer extends React.Component {
     state = {
         isShowSigninForm: false,
         isShowShiftChange: false,
-        auth: this.context.auth
-    }
-
-    componentDidUpdate = (prevProps, prevState) => {
-        let { auth } = this.context
-        if (!(_.isEqual(prevState.auth, auth))) {
-            const [{ areaId }, dispatch] = this.context.stateReducer
-            const { auth } = this.context
-            dispatch({
-                type: "setArea",
-                value: auth.authenticated ? auth.user.areas_id[0] : config.mapConfig.defaultAreaId
-            })
-            this.setState({
-                auth,
-            })
-        }
     }
 
     handleSigninFormShowUp = () => {
@@ -245,18 +229,6 @@ class NavbarContainer extends React.Component {
                                         <NavDropdown.Item className="lang-select">{auth.user.name}</NavDropdown.Item>
                                     </LinkContainer>
                                     <Dropdown.Divider />
-                                    {/* <AccessControl
-                                        permission={'user:shiftChange'}
-                                        renderNoAccess={() => null}
-                                    >
-                                        <NavDropdown.Item 
-                                            className="lang-select" 
-                                            onClick={this.handleShiftChangeRecordShowUp}
-                                        >
-                                            {locale.texts.SHIFT_CHANGE_RECORD}
-                                        </NavDropdown.Item>
-                                        <Dropdown.Divider />
-                                    </AccessControl> */}
                                     <LinkContainer to="/" className="bg-white">
                                         <NavDropdown.Item className="lang-select" onClick={auth.signout}>{locale.texts.SIGN_OUT}</NavDropdown.Item>
                                     </LinkContainer>

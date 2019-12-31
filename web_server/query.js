@@ -321,6 +321,7 @@ const getObjectTable_fromImport = (request, response) => {
 
 const editPatient = (request, response) => {
     const formOption = request.body.formOption
+    console.log(formOption)
     pool.query(queryType.query_editPatient(formOption))
         .then(res => {
             console.log("edit Patient success");

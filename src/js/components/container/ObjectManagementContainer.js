@@ -42,7 +42,7 @@ import BindForm from './BindForm'
 import DissociationForm from './DissociationForm'
 import AccessControl from '../presentational/AccessControl'
 const SelectTable = selecTableHOC(ReactTable);
-
+let deleteFlag = false;
 
 class ObjectManagementContainer extends React.Component{
     static contextType = AppContext
@@ -66,13 +66,14 @@ class ObjectManagementContainer extends React.Component{
         selectAll: false,
         locale: this.context.locale.abbr,
         tabIndex: 0,
-        deleteFlag: 0,
         roomOptions: {},
         dataImport:[],
         isShowBind:false,
         isShowEditImportTable:false,
         dataImportThis:[],
-        physicianName:''
+        physicianName:'',
+        physicianIDNumber:0,
+        disableASN:false,
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -132,7 +133,7 @@ class ObjectManagementContainer extends React.Component{
             })
             res.data.rows.map(item => {
 
-                item.monitor_type = this.getMonitorTypeArray(item).join('/')
+                item.monitor_type = this.getMonitorTypeArray(item, 'patient').join('/')
                 
                 item.area_name = {
                     value: config.mapConfig.areaOptions[item.area_id],
@@ -160,7 +161,6 @@ class ObjectManagementContainer extends React.Component{
         })
         .then(res => {
             let columnImport = _.cloneDeep(importTableColumn)
-         
             columnImport.map(field => {
                 field.headerStyle = {
                     textAlign: 'left',
@@ -169,7 +169,6 @@ class ObjectManagementContainer extends React.Component{
             })
 
             res.data.rows.map(item => {
-                item.monitor_type = this.getMonitorTypeArray(item).join('/')
 
                 item.status = {
                     value: item.status,
@@ -192,7 +191,7 @@ class ObjectManagementContainer extends React.Component{
             
             this.setState({
                 dataImport: res.data.rows,
-                columnImport: columnImport,
+                columnImport,
             })
         })
 
@@ -203,23 +202,8 @@ class ObjectManagementContainer extends React.Component{
       
     }
 
-
-
-
-    getMonitorTypeArray = (item) => {
-        return Object.keys(config.monitorType).reduce((checkboxGroup, index) => {
-            if (item.monitor_type & index) {
-                checkboxGroup.push(config.monitorType[index])
-            }
-            return checkboxGroup
-        }, [])
-    }
-
     getData = () => {
         let { locale } = this.context
-        let totalArray = [];
-        
-
         axios.post(getObjectTable, {
             locale: locale.abbr
         })
@@ -231,11 +215,21 @@ class ObjectManagementContainer extends React.Component{
                 }
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })
+            column.push({
+                Header: locale.texts['remove'.toUpperCase().replace(/ /g, '_')],
+                accessor: "Delete Option",
+                minWidth: 60,
+                Cell: props =>
+                    <Button 
+                        variant="outline-danger" 
+                        className='text-capitalize ml-3 mr-2 py-0'
+                        onClick={()=>this.DeleteClick(props)}
+                        >{locale.texts.REMOVE}
+                    </Button>
+            })
         
-
             res.data.rows.map(item => {
-                totalArray.push(item)
-                item.monitor_type = this.getMonitorTypeArray(item).join('/')
+                item.monitor_type = this.getMonitorTypeArray(item, 'object').join('/')
 
                 item.status = {
                     value: item.status,
@@ -260,14 +254,20 @@ class ObjectManagementContainer extends React.Component{
                 data: res.data.rows,
                 column: column,
             })
-
-
         })
         .catch(err => {
             console.log(err);
         })
+    }
 
-
+    getMonitorTypeArray = (item, type) => {
+        return Object.keys(config.monitorType)
+            .reduce((checkboxGroup, index) => {
+                if (item.monitor_type & index) {
+                    checkboxGroup.push(config.monitorType[index])
+                }
+                return checkboxGroup
+            }, [])
     }
 
     getLbeaconData = () => {
@@ -323,7 +323,8 @@ class ObjectManagementContainer extends React.Component{
                     selectedRowData: [],
                     selectedRowData_Patient:[],
                     selectedRowData_Import:[],
-                    formPath: addObject
+                    formPath: addObject,
+                    disableASN:false
                 })
                 break;
             case "associate object":
@@ -452,6 +453,7 @@ class ObjectManagementContainer extends React.Component{
         const selection = [];
         if (selectAll) {
             const wrappedInstance = this.selectTable.getWrappedInstance();
+  
             const currentRecords = wrappedInstance.props.data
             // const currentRecords = wrappedInstance.getResolvedState().sortedData;
            
@@ -460,17 +462,13 @@ class ObjectManagementContainer extends React.Component{
             });
         }
          
-        this.setState({ selectAll, selection });
+         this.setState({ selectAll, selection });
 
-  
     };
 
     isSelected = (key) => {
         return this.state.selection.includes(key);
     };
-
-
-
 
     deleteRecordPatient = () => {
         let idPackage = []
@@ -562,7 +560,9 @@ class ObjectManagementContainer extends React.Component{
             selectedRowData_Import:[],
             formTitle: 'add inpatient',
             formPath: addPatient,
-            physicianName:''
+            physicianName:'',
+            physicianIDNumber:0,
+            disableASN:false,
         })
     }
 
@@ -660,8 +660,11 @@ class ObjectManagementContainer extends React.Component{
          fileReader.readAsBinaryString(files[0]);
     };
 
-    submitClick= (key) => {
-        console.log(key.row._original);
+    DeleteClick= (key) => {
+        deleteFlag = true 
+        this.setState({
+            isShowEditImportTable: true
+        })
     };
 
     render(){
@@ -676,6 +679,7 @@ class ObjectManagementContainer extends React.Component{
             isShowBind,
             isShowEditImportTable,
         } = this.state
+
         const { locale } = this.context
 
         const {
@@ -691,44 +695,6 @@ class ObjectManagementContainer extends React.Component{
             toggleSelection,
             selectType
         };
-        
-        const importTableColumn = [
-            {
-                Header: "Name",
-                accessor: "name"
-            },
-            {
-                Header: "Type",
-                accessor: "type"
-            },
-            {
-                Header: "Asset Control Number",
-                accessor: "asset_control_number"
-            },
-             {
-                Header: "BindFlag",
-                accessor: "bindflag"
-            },
-            {
-                Header: "Mac Address",
-                accessor: "mac_address",
-            },
-            {
-                Header: "Delete Option",
-                accessor: "Delete Option",
-                minWidth: 50,
-                // style: {
-                //     cursor: 'pointer',
-                //   },
-                Cell: props =>
-                <Button 
-                variant="outline-danger" 
-                className='text-capitalize ml-3 mr-2 mb-1'
-                onClick={()=>this.submitClick(props)}
-                >{'刪除'}</Button>
-            },
-           
-        ]
 
         return (
             <Container className='py-2 text-capitalize' fluid>
@@ -772,14 +738,14 @@ class ObjectManagementContainer extends React.Component{
                             >
                                 {locale.texts.ADD_OBJECT}
                             </Button>
-                            <Button 
+                            {/* <Button 
                                 variant="outline-primary" 
                                 className='text-capitalize mr-2 mb-1'
                                 name="dissociation"
                                 onClick={this.handleClickButton}
                             >
                                 {locale.texts.BINDING_DELETE}
-                            </Button>
+                            </Button> */}
 
                             {/* 
                             <Button 
@@ -804,6 +770,7 @@ class ObjectManagementContainer extends React.Component{
                         <SelectTable
                             keyField='id'
                             data={this.state.data}
+                            // columns={objectTableColumn_delete}
                             columns={this.state.column}
                             ref={r => (this.selectTable = r)}
                             className="-highlight"
@@ -818,14 +785,26 @@ class ObjectManagementContainer extends React.Component{
                                                 isPatientShowEdit: false,
                                                 formTitle: 'edit object',
                                                 formPath: editObject,
+                                                disableASN:'true'
                                             })
+                                                              
                                             let id = (rowInfo.index+1).toString()
 
-                                            this.toggleSelection(id)
-                                            if (handleOriginal) {
-                                                handleOriginal()
-                                            }
+                                        deleteFlag ? 
+                                            this.setState({
+                                            isShowEdit: false,
+                                        })
+                                        : null
+
+                                        deleteFlag ? 
+                                        deleteFlag = false
+                                        : null
+
+                                        this.toggleSelection(id)
+                                        if (handleOriginal) {
+                                            handleOriginal()
                                         }
+                                    }
                                 }
                             }
                             }
@@ -850,7 +829,7 @@ class ObjectManagementContainer extends React.Component{
                             </Button>
                         </ButtonToolbar>
                         <SelectTable
-                            keyField='name'
+                            keyField='id'
                             data={this.state.dataPatient}
                             columns={this.state.columnPatient}
                             ref={r => (this.selectTable = r)}
@@ -867,6 +846,7 @@ class ObjectManagementContainer extends React.Component{
                                             isPatientShowEdit: true,
                                             formTitle: 'edit patient',
                                             formPath: editPatient,
+                                            disableASN:true,
                                         })
                                         let id = (rowInfo.index+1).toString()
                                         this.toggleSelection(id)
@@ -875,10 +855,12 @@ class ObjectManagementContainer extends React.Component{
                                         }
 
                                         this.state.physicianList.map(item => {
+                                          
                                             item.id == this.state.dataPatient[rowInfo.index].physician_id ?
                                             
                                             this.setState({
-                                                physicianName:item.name
+                                                physicianName:item.name,
+                                                physicianIDNumber:item.id
                                         })
                                             : null
                                         })
@@ -911,19 +893,16 @@ class ObjectManagementContainer extends React.Component{
                         <SelectTable
                             keyField='id'
                             data={this.state.dataImport}
-                            columns={importTableColumn}
+                            columns={this.state.columnImport}
                             ref={r => (this.selectTable = r)}
                             className="-highlight"
                             style={{height:'75vh'}}
                             {...extraProps}
-                        
                             getTrProps={(state, rowInfo, column, instance) => {
                             
                                 return {
                                     onClick: (e, handleOriginal) => {
-                                            // let id = (rowInfo.index+1).toString()
-                                            // this.toggleSelection(id)
-                                            
+    
                                             if (handleOriginal) {
                                                 handleOriginal()
                                             }
@@ -935,7 +914,7 @@ class ObjectManagementContainer extends React.Component{
                     </TabPanel>
                 </Tabs>
                 <EditPatientForm
-                    show = {isPatientShowEdit} 
+                    show = {isPatientShowEdit && !this.state.DeleteFlag} 
                     title= {this.state.formTitle} 
                     selectedObjectData={selectedRowData_Patient || null} 
                     handleSubmitForm={this.handleSubmitForm}
@@ -946,8 +925,11 @@ class ObjectManagementContainer extends React.Component{
                     physicianList={this.state.physicianList}
                     roomOptions={this.state.roomOptions}
                     physicianName = {this.state.physicianName}
+                    physicianIDNumber = {this.state.physicianIDNumber}
+                    disableASN = {this.state.disableASN}
                 />  
        
+
                 <EditObjectForm 
                     show = {isShowEdit} 
                     title= {this.state.formTitle} 
@@ -957,7 +939,10 @@ class ObjectManagementContainer extends React.Component{
                     handleCloseForm={this.handleCloseForm}
                     data={this.state.data}
                     // dataPatient = {this.state.dataPatient}
+                    disableASN = {this.state.disableASN}
                 />
+
+            
 
                 <BindForm
                     show = {isShowBind} 
@@ -978,7 +963,11 @@ class ObjectManagementContainer extends React.Component{
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={this.state.formPath}
                     handleCloseForm={this.handleCloseForm}
-                    data={this.state.data}
+                    data={this.state.data.reduce((dataMap, item) => {
+                        dataMap[item.mac_address] = item
+                        return dataMap
+                        }, {})
+                    }
                 />
             </Container>
         )

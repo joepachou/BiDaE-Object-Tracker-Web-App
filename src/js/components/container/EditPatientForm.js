@@ -16,8 +16,9 @@ import {
 } from "../../dataSrc"
 let monitorTypeMap = {};
 
-Object.keys(config.monitorType).forEach(key => {
-    monitorTypeMap[config.monitorType[key]] = key
+Object.keys(config.monitorType)
+    .forEach(key => {
+        monitorTypeMap[config.monitorType[key]] = key
 })
   
 class EditPatientForm extends React.Component {
@@ -47,6 +48,7 @@ class EditPatientForm extends React.Component {
 
         const path = this.props.formPath
         axios.post(path, {
+
             formOption: postOption
         }).then(res => {
        
@@ -56,15 +58,7 @@ class EditPatientForm extends React.Component {
        this.props.handleSubmitForm()
     }
 
-
-        
-
-
     render() {
-
-   
-
-
 
         const locale = this.context
 
@@ -97,9 +91,6 @@ class EditPatientForm extends React.Component {
             };
         })
 
-
-      
-
         const genderOptions = [
             { 
                 value: '1', 
@@ -110,11 +101,6 @@ class EditPatientForm extends React.Component {
                 label: locale.texts.FEMALE 
             },
         ]
-
-
-
-      
-
 
         const style = {
             input: {
@@ -251,8 +237,6 @@ class EditPatientForm extends React.Component {
 
                         onSubmit={(values, { setStatus, setSubmitting }) => {
                
-                            console.log('@!#!@#')
-                             console.log(this.props.physicianName)
                            
                             let monitor_type = values.monitorType
                             .filter(item => item)
@@ -269,6 +253,7 @@ class EditPatientForm extends React.Component {
                                 monitor_type, 
                                 room: values.room ? values.room.label : '',
                                 object_type:values.gender.value,
+                                physicianIDNumber : this.props.physicianIDNumber
                             }
                             this.handleSubmit(postOption)                            
                         }}
@@ -284,7 +269,7 @@ class EditPatientForm extends React.Component {
 
                                 <div className="form-group">
                                     <label htmlFor="asset_control_number">{locale.texts.PATIENT_NUMBER}*</label>
-                                    <Field name="asset_control_number" type="text" className={'form-control' + (errors.asset_control_number && touched.asset_control_number ? ' is-invalid' : '')} placeholder=''/>
+                                    <Field disabled={this.props.disableASN} name="asset_control_number" type="text" className={'form-control' + (errors.asset_control_number && touched.asset_control_number ? ' is-invalid' : '')} placeholder=''/>
                                     <ErrorMessage name="asset_control_number" component="div" className="invalid-feedback" />
                                 </div>
                                 
@@ -422,14 +407,16 @@ class EditPatientForm extends React.Component {
                                             onChange={setFieldValue}
                                             // onBlur={setFieldTouched}
                                         >
-                                            {Object.values(config.monitorType).map((item,index) => {
-                                                return <Field
-                                                    key={index}
-                                                    component={Checkbox}
-                                                    name="checkboxGroup"
-                                                    id={item}
-                                                    label={item}
-                                                />
+                                            {Object.keys(config.monitorType)
+                                                .filter(key => config.monitorTypeMap.patient.includes(parseInt(key)))
+                                                .map((key,index) => {
+                                                    return <Field
+                                                        key={index}
+                                                        component={Checkbox}
+                                                        name="checkboxGroup"
+                                                        id={config.monitorType[key]}
+                                                        label={config.monitorType[key]}
+                                                    />
                                             })}
                                         </CheckboxGroup>
                                     </Col>

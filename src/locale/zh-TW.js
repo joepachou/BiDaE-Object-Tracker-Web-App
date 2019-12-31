@@ -25,7 +25,7 @@ const tw = {
     POSITION:"位置狀態",
     POSITION_UNDEFINE:"選擇狀態",
     ROOM_NUMBER:"病房編號",
-    ATTENDING_PHYSICIAN:"醫生編號",
+    ATTENDING_PHYSICIAN:"醫生姓名",
     BATTERY_ALERT:"電池更換提示",
     PICTURE:"相關圖片",
     BATTERY_CHANGE:"需更換",
@@ -78,6 +78,7 @@ const tw = {
     DEVICE: "儀器",
     DOWNLOAD: "下載",
     DELETE: "刪除",
+    REMOVE: "移除",
     ADD_USER: "新增使用者",
     ADD_INPATIENT:"新增病人",
     DELECT_INPATIENT:"刪除病人",
@@ -106,8 +107,13 @@ const tw = {
     ACN_VERIFICATION:"ACN驗證",
     BINDING_SETTING:"綁定設定",
     BINDING_DELETE:"取消綁定",
+<<<<<<< HEAD
     DELETE_OPTION:"刪除選項",
     CLEAN_PATH:"刪除路徑",
+=======
+    DELETE_OPTION:"移除選項",
+
+>>>>>>> 051fdb4c2156958ea908d89cdaa6b8f451af1bcd
     /* Form Field */
     NAME: "名稱",
     TYPE: "類別",
@@ -192,6 +198,7 @@ const tw = {
     THE_ATTENDINGPHYSICIAN_IS_WRONG: "醫生編號 必須是數字",  
     AREA_IS_REQUIRED: "請選擇地區",
     NOT_ASSIGNED_TO_ANY_DEVICES: "尚未指定任何儀器",
+    MAC_DO_NOT_IN_LIST:"此Mac未在列表上",
 
     /** Place Holder */
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "請輸入或掃描mac address",

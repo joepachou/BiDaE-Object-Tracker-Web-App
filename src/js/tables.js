@@ -287,13 +287,9 @@ const patientTableColumn = [
     },
     {
         Header: "auth Area",
-        accessor: "area_name.label"
+        accessor: "area_name.label",
+        width: 150,
     },
-    // {
-    //     Header: "room Number",
-    //     accessor: "room_number",
-    //     width: 100,
-    // },
     {
         Header: "room",
         accessor: "room",
@@ -301,11 +297,13 @@ const patientTableColumn = [
     },
     {
         Header: "attending Physician",
-        accessor: "physician_id"
+        accessor: "physician_name",
+        width: 100,
     },
     {
         Header: "Mac Address",
         accessor: "mac_address",
+        width: 150,
     },
     {
         Header: "Monitor Type",
@@ -313,32 +311,22 @@ const patientTableColumn = [
     },
 ]
 
-
-
-
-
 const importTableColumn = [
     {
         Header: "Name",
-        accessor: "name"
+        accessor: "name",
+        width: 200,
     },
     {
         Header: "Type",
-        accessor: "type"
+        accessor: "type",
+        width: 200,
     },
     {
         Header: "Asset Control Number",
-        accessor: "asset_control_number"
+        accessor: "asset_control_number",
+        width: 200,
     },
-     {
-        Header: "BindFlag",
-        accessor: "bindflag"
-    },
-    {
-        Header: "Mac Address",
-        accessor: "mac_address",
-    },
-   
 ]
 
 
