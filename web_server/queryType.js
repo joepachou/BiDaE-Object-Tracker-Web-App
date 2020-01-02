@@ -21,9 +21,20 @@ function query_getTrackingData () {
 			lbeacon_table.description as location_description,
 			edit_object_record.notes,
 			user_table.name as physician_name,
-			notification.json_agg as notification
+			object_table.reserved_timestamp,
+			notification.json_agg as notification,
+			object_table.reserved_user_id,
+
+			(
+				SELECT name
+				FROM user_table
+				WHERE user_table.id = object_table.reserved_user_id
+			) as reserved_user_name
+		
+
 
 		FROM object_summary_table
+
 
 		LEFT JOIN object_table
 		ON object_table.mac_address = object_summary_table.mac_address
@@ -630,18 +641,33 @@ function query_addPatient (formOption) {
 
 
 
-const query_editObjectPackage = (formOption, record_id) => {
+const query_editObjectPackage = (formOption,username, record_id) => {
 	let item = formOption[0]
+
 	let text = `
+
+
+
+		
+		SELECT id
+		FROM user_table
+		WHERE user_table.name='${username}';
+
 		UPDATE object_table
 		SET 
 			status = '${item.status}',
 			transferred_location = '${item.transferred_location ? item.transferred_location.value : ' '}',
 			note_id = ${record_id},
-			reserved_timestamp = ${item.status == 'reserve' ? 'now()' : null}
+			reserved_timestamp = ${item.status == 'reserve' ? 'now()' : null},
+			reserved_user_id = (SELECT id
+				FROM user_table
+				WHERE user_table.name='${username}')
+								
 		WHERE asset_control_number IN (${formOption.map(item => `'${item.asset_control_number}'`)});
 	`
 	return text
+
+	return null
 }
 
 function query_signin(username) {

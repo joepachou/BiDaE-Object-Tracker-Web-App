@@ -12,6 +12,8 @@ class ConfirmForm extends React.Component {
     state = {
         show: this.props.show,
         isShowForm: false,
+        reserveInitTime: moment(),
+        isDelayTime: false
     };
 
   
@@ -21,6 +23,7 @@ class ConfirmForm extends React.Component {
         }
         this.setState({ 
             show: false ,
+            isDelayTime: false
         });
     }
   
@@ -40,11 +43,19 @@ class ConfirmForm extends React.Component {
         }
     }
 
-    handleChange = (e) => {
+    handleButtonClick = (e) => {
         const { name }  = e.target
-        this.setState({
-            [name]: e.target.value
-        })
+        switch(name) {
+            case "reserve":
+            // console.log(this.state.reserveInitTime)
+                this.setState({
+                    isDelayTime: true
+                })
+        }
+    }
+
+    getPrompt = () => {
+        
     }
 
     render() {
@@ -69,6 +80,10 @@ class ConfirmForm extends React.Component {
             selectedObjectData
         } = this.props;
 
+        const {
+            isDelayTime
+        } = this.state
+
         const colProps = {
             titleCol: {
                 xs: 3,
@@ -84,6 +99,7 @@ class ConfirmForm extends React.Component {
 
         let hasSelectedObjectData = selectedObjectData[0] ? true : false;
         let isTransferObject = hasSelectedObjectData && selectedObjectData[0].status === config.objectStatus.TRANSFERRED ? true : false;
+        let isReservedObject = hasSelectedObjectData && selectedObjectData[0].status === config.objectStatus.RESERVE ? true : false;
 
         return (
             <>  
@@ -156,6 +172,37 @@ class ConfirmForm extends React.Component {
                                             </h5>
                                         : null
                                     }
+                                    {isReservedObject &&
+                                        <> 
+                                            {isReservedObject && locale.texts.FROM}
+                                            <div className='d-flex justify-content-center'>
+                                            {/* {console.log(this.state.reserveInitTime)} */}
+                                            {console.log('render')}
+                                                {isDelayTime
+                                                    ?   moment().add(config.reservedDelayTime, 'minutes').locale(locale.abbr).format("LT")
+                                                    :   moment().locale(locale.abbr).format("LT")
+                                                }
+                                                ~
+                                                {isDelayTime
+                                                    ?   moment().add(config.reservedInterval + config.reservedDelayTime, 'minutes').locale(locale.abbr).format("LT")
+                                                    :   moment().add(config.reservedInterval, 'minutes').locale(locale.abbr).format("LT")
+                                                }                                            
+                                            </div>
+                                            <Row className='d-flex justify-content-center'>
+                                                <ButtonToolbar >
+                                                    <Button 
+                                                        variant="outline-secondary" 
+                                                        className='mr-2 text-capitalize' 
+                                                        onClick={this.handleButtonClick}
+                                                        name="reserve"
+                                                        disabled={isDelayTime}
+                                                    >
+                                                        {locale.texts.DELAY_BY} {config.reservedDelayTime} {locale.texts.MINUTES}
+                                                    </Button>
+                                                </ButtonToolbar>
+                                            </Row>
+                                        </>
+                                    }
                                 </div>
                             </Col>
                         </Row>
@@ -164,21 +211,10 @@ class ConfirmForm extends React.Component {
                                 <h6>{moment().locale(locale.abbr).format(config.confirmFormTimeFormat)}</h6>    
                             </Col>
                         </Row>
-                        {selectedObjectData.status === config.objectStatus.RESERVE && 
-                            <>
-                                <hr/>
-                                <Row className='d-flex justify-content-center'>
-                                    <ButtonToolbar >
-                                        <Button variant="outline-secondary" className='mr-2' onClick={this.handleClick}>
-                                            {locale.texts.DELAY_BY}
-                                        </Button>
-                                    </ButtonToolbar>
-                                </Row>
-                            </>
-                        }
                         <Formik    
                             onSubmit={({ radioGroup, select }, { setStatus, setSubmitting }) => {
-                                this.props.handleConfirmFormSubmit()
+                             
+                               this.props.handleConfirmFormSubmit(isDelayTime)
                             }}
 
                             render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
