@@ -122,6 +122,13 @@ const getTrackingData = (request, response) => {
                 delete item.lbeacon_uuid
                 delete item.monitor_type
 
+               
+                /** format timestamp*/
+                item.reserved_timestamp_LT = moment.tz(item.reserved_timestamp, process.env.TZ).locale(locale).format('LT');
+                item.reserved_timestamp_MMDD = moment.tz(item.reserved_timestamp, process.env.TZ).locale(locale).format('MM/DD');
+                item.reserved_timestamp_final = moment(item.reserved_timestamp).add(30,"minutes").format("LT");
+                item.reserved_timestamp = moment.tz(item.reserved_timestamp, process.env.TZ).locale(locale).format('lll');
+
                 return item
             })
             toReturn[1].battery_voltage = 2
@@ -394,8 +401,7 @@ const editObjectPackage = (request, response) => {
         .then(res => {
             const record_id = res.rows[0].id
             console.log('Add edited object record success')
-
-            pool.query(queryType.query_editObjectPackage(formOption, record_id))
+            pool.query(queryType.query_editObjectPackage(formOption,username, record_id))
                 .then(res => {
                     console.log('Edit object package success')
                     if (pdfPackage) {

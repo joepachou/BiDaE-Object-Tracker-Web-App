@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Image} from 'react-bootstrap';
-import userProfileImg from '../../../../img/userProfile.png';
+import userProfileImg from '../../../../img/icon/userProfile.png';
 import { AppContext } from '../../../context/AppContext';
 import ImageUploader from 'react-images-upload';
 import config from '../../../config';

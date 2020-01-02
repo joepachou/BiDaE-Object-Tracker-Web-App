@@ -1,11 +1,7 @@
 import React from 'react';
 import { Modal, Button, Row, Col, Image, ButtonToolbar} from 'react-bootstrap'
-import config from '../../config';
-import moment from 'moment';
 import { Formik, Form } from 'formik';
 import { AppContext } from '../../context/AppContext';
-import { Container } from 'react-grid-system';
-import dataSrc from '../../dataSrc'
   
 class DownloadPdfRequestForm extends React.Component {
 

@@ -21,9 +21,20 @@ function query_getTrackingData () {
 			lbeacon_table.description as location_description,
 			edit_object_record.notes,
 			user_table.name as physician_name,
-			notification.json_agg as notification
+			object_table.reserved_timestamp,
+			notification.json_agg as notification,
+			object_table.reserved_user_id,
+
+			(
+				SELECT name
+				FROM user_table
+				WHERE user_table.id = object_table.reserved_user_id
+			) as reserved_user_name
+		
+
 
 		FROM object_summary_table
+
 
 		LEFT JOIN object_table
 		ON object_table.mac_address = object_summary_table.mac_address
@@ -524,35 +535,30 @@ function query_editPatient (formOption) {
 
 
 
-
 function query_addObject (formOption) {
-	const text = 
-		`
-		INSERT INTO import_table (
+	const text = `
+		INSERT INTO object_table (
 			type, 
-			status, 
-			transferred_location, 
 			asset_control_number, 
-			name, 
-			mac_address, 
-			registered_timestamp,
-			monitor_type,
-			area_id,
-			object_type,
-			bindflag
+			name,
+			mac_address,
+			object_type
 		)
-		VALUES($1, $2, $3, $4, $5, $6, now(), $7, $8, 0,'Already Binding')
-		`;
+		VALUES (
+			$1, 
+			$2, 
+			$3,
+			$4,
+			0
+		);
+	`;
 		
 	const values = [
 		formOption.type, 
-		formOption.status, 
-		formOption.transferred_location ? formOption.transferred_location.value : null, 
 		formOption.asset_control_number, 
 		formOption.name, 
-		formOption.mac_address, 
-		formOption.monitor_type,
-		formOption.area_id
+		formOption.mac_address
+
 	];
 
 
@@ -563,15 +569,6 @@ function query_addObject (formOption) {
 
 	return query;
 }
-
-
-
-
-
-
-
-
-
 
 function query_addPatient (formOption) {
 	const text = 
@@ -610,38 +607,34 @@ function query_addPatient (formOption) {
 	return query;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 const query_editObjectPackage = (formOption, record_id) => {
+
 	let item = formOption[0]
+
 	let text = `
+
+
+
+		
+		SELECT id
+		FROM user_table
+		WHERE user_table.name='${username}';
+
 		UPDATE object_table
 		SET 
 			status = '${item.status}',
 			transferred_location = '${item.transferred_location ? item.transferred_location.value : ' '}',
 			note_id = ${record_id},
-			reserved_timestamp = ${item.status == 'reserve' ? 'now()' : null}
+			reserved_timestamp = ${item.status == 'reserve' ? 'now()' : null},
+			reserved_user_id = (SELECT id
+				FROM user_table
+				WHERE user_table.name='${username}')
+								
 		WHERE asset_control_number IN (${formOption.map(item => `'${item.asset_control_number}'`)});
 	`
 	return text
+
+	return null
 }
 
 function query_signin(username) {
