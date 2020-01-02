@@ -107,13 +107,9 @@ const tw = {
     ACN_VERIFICATION:"ACN驗證",
     BINDING_SETTING:"綁定設定",
     BINDING_DELETE:"取消綁定",
-<<<<<<< HEAD
     DELETE_OPTION:"刪除選項",
     CLEAN_PATH:"刪除路徑",
-=======
-    DELETE_OPTION:"移除選項",
 
->>>>>>> 051fdb4c2156958ea908d89cdaa6b8f451af1bcd
     /* Form Field */
     NAME: "名稱",
     TYPE: "類別",

@@ -124,6 +124,7 @@ const getTrackingData = (request, response) => {
 
                 return item
             })
+            toReturn[1].battery_voltage = 2
 
         response.status(200).json(toReturn)
 

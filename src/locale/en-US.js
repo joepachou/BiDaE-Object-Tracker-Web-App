@@ -109,10 +109,7 @@ const en =  {
     BINDING_SETTING:"Binding Setting",
     BINDING_DELETE:"Binding Delete",
     DELETE_OPTION:"Delete option",
-<<<<<<< HEAD
     CLEAN_PATH:"Clean path",
-=======
->>>>>>> 051fdb4c2156958ea908d89cdaa6b8f451af1bcd
     
     /* Form Field */
     NAME: "name",
