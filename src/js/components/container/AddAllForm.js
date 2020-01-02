@@ -7,13 +7,8 @@
  */
 import React from 'react';
 import { Modal, Button, Row, Col } from 'react-bootstrap';
-import Select from 'react-select';
-import config from '../../config';
-import axios from 'axios';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { AppContext } from '../../context/AppContext';
-import dataSrc from "../../dataSrc"
-import * as d3 from "d3";
 import XLSX from "xlsx";
 import InputFiles from "react-input-files";
 

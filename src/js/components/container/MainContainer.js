@@ -15,6 +15,7 @@ import ToastNotification from '../presentational/ToastNotification'
 import SearchResult from '../presentational/SearchResultList';
 import AntPath from "leaflet-ant-path";
 
+
 const {
     ALL_DEVICES,
     MY_DEVICES,
@@ -61,7 +62,6 @@ class MainContainer extends React.Component{
     }
 
     componentDidUpdate = (prevProps, prevState) => {
-        console.log(this.state.showPath)
         let isTrackingDataChange = !(_.isEqual(this.state.trackingData, prevState.trackingData))
         let { stateReducer } = this.context
         let [{violatedObjects}] = stateReducer
@@ -578,6 +578,7 @@ class MainContainer extends React.Component{
                             handleShowPath={this.handleShowPath}
                         />
                     </Col>
+
                     <Col id='searchPanel' xs={12} sm={5} md={3} lg={4} xl={4} className="w-100 px-2" style={style.searchPanel}>
                         <SearchContainer 
                             hasSearchKey={this.state.hasSearchKey}
@@ -598,6 +599,7 @@ class MainContainer extends React.Component{
                             />
                         </div>
                     </Col>
+                    
                 </Row>
             </div>
         )

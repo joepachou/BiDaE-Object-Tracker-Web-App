@@ -10,8 +10,6 @@ const fs = require('fs')
 const http = require('http');;
 const https = require('https');
 const session = require('express-session')
-const formidable = require('formidable');
-const cors = require('cors');
 // const csv = require('csv-parse')
 const csv =require('csvtojson')
 const {
@@ -24,7 +22,6 @@ const {
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true,}));
 app.use(express.static(path.join(__dirname,'dist')));
-// app.use(cors())
 
 app.use(session({
     secret: 'super_hound',

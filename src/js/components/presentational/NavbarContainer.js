@@ -9,6 +9,7 @@ import AccessControl from './AccessControl';
 import ShiftChange from '../container/ShiftChange'
 import { AppContext } from '../../context/AppContext';
 import Select from 'react-select';
+import BatteryLevelNotification from "../container/BatteryLevelNotification"
 
 class NavbarContainer extends React.Component {
 
@@ -215,6 +216,7 @@ class NavbarContainer extends React.Component {
 
                     </Nav>
                     <Nav className='text-capitalize'>
+                        <BatteryLevelNotification />
                         <Nav.Item 
                             className="nav-link nav-route" 
                             onClick={locale.changeLocale}
