@@ -109,6 +109,10 @@ const en =  {
     BINDING_SETTING:"Binding Setting",
     BINDING_DELETE:"Binding Delete",
     DELETE_OPTION:"Delete option",
+<<<<<<< HEAD
+    CLEAN_PATH:"Clean path",
+=======
+>>>>>>> 051fdb4c2156958ea908d89cdaa6b8f451af1bcd
     
     /* Form Field */
     NAME: "name",
@@ -193,6 +197,7 @@ const en =  {
     THE_ATTENDINGPHYSICIAN_IS_WRONG: "AttendingPhysician must be a number",     
     AREA_IS_REQUIRED: "Area is required",
     NOT_ASSIGNED_TO_ANY_DEVICES: "Not assigned to any devices",
+    MAC_DO_NOT_IN_LIST:"This Mac Address do not match data",
 
     /** Place Holder */
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "please enter or scan mac address",

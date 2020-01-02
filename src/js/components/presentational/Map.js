@@ -8,7 +8,8 @@ import _ from 'lodash'
 import { AppContext } from '../../context/AppContext';
 import axios from 'axios';
 import dataSrc from '../../dataSrc'
-
+import {antPath} from 'leaflet-ant-path'
+import polylineDecorator from 'leaflet-polylinedecorator'
 
 class Map extends React.Component {
     
@@ -21,24 +22,60 @@ class Map extends React.Component {
         hasErrorCircle: false,
         hasInvisibleCircle: false,       
         hasIniLbeaconPosition: false,
-        hasGeoFenceMaker: false
+        hasGeoFenceMaker: false,
+        pathMacAddress: ''
     }
     map = null;
     image = null;
+    // polyline = null;
+    // decorator = L.layerGroup();
+    pathOfDevice = L.layerGroup();
     markersLayer = L.layerGroup();
     errorCircle = L.layerGroup();
     lbeaconsPosition = L.layerGroup();
-    geoFenceLayer = L.layerGroup()
+    ç = L.layerGroup()
     currentZoom = 0
     prevZoom = 0
     pin_shift_scale = [0, -150]
 
     componentDidMount = () => {
-        this.initMap();  
+
+        this.initMap();
+    
+        // if( this.state.ok === 0){
+        //     var latLngs = []
+        //     axios.post(dataSrc.getTrackingTableByMacAddress, {
+        //         object_mac_address : "c1:0f:00:0d:25:8d"
+        //     })
+        //     .then(res => {
+        //         res.data.rows.map(item => {
+        //             // console.log(item.lbeacon_uuid)
+        //             // let latLngY = item.lbeacon_uuid.slice( 17, 18)+item.lbeacon_uuid.slice( 19, 23)
+        //             // let latLngX = item.lbeacon_uuid.slice( 31, 37)
+        //             // //console.log(latLngX + "," + latLngY)
+        //             // let latLng = [latLngX,latLngY]
+        //             // latLngs.push(latLng)
+        //             // this.setState({
+        //             //     latLngs: latLngs
+        //             // })
+        //             // this.setState({
+        //             //     ok: 1
+        //             // })
+        //         })
+        //         //console.log(this.state.latLngs)
+        //     })
+        //     .catch(err => {
+        //         console.log(`get tracking table by mac address fail: ${err}`)
+        //     })
+        // }
+        // this.drawPolyline();  
     }
 
     componentDidUpdate = (prevProps) => {
         this.handleObjectMarkers();
+        //this.drawPolyline();
+
+        this.drawPolyline();
 
         if (JSON.parse(process.env.IS_LBEACON_MARK) && this.props.lbeaconPosition.length !== 0 && !this.state.hasIniLbeaconPosition) {
             this.createLbeaconMarkers()
@@ -62,7 +99,9 @@ class Map extends React.Component {
     }
 
     /** Set the search map configuration establishing in config.js  */
+
     initMap = () => {
+        //console.log("initMap")
         let [{areaId}] = this.context.stateReducer
         let { 
             areaModules,
@@ -88,9 +127,79 @@ class Map extends React.Component {
         /** Set the map's events */
         this.map.on('zoomend', this.resizeMarkers)
     }
+    /** init path */
+    
+    drawPolyline = () => {
+        // console.log(this.props.pathMacAddress)
+        // console.log("in")
+        if(this.props.showPath){
+            if(this.state.pathMacAddress === ''){
+                let i=4;
+                let numberOfData = 100; // data you want to draw on map
+                let route = []
+                for(i=numberOfData;i>=0;i--){
+                    axios.post(dataSrc.getTrackingTableByMacAddress, {
+                        object_mac_address : this.props.pathMacAddress,
+                        i: i,
+                        second: 100
+                    })
+                    .then(res => {
+                        res.data.rows.map(item => {
+                            //console.log(item.lbeacon_uuid)
+                            let latLngY = item.lbeacon_uuid.slice( 17, 18)+item.lbeacon_uuid.slice( 19, 23)
+                            let latLngX = item.lbeacon_uuid.slice( 31, 37)
+                            //console.log(latLngX + "," + latLngY)
+                            let latLng = [latLngX,latLngY]
+                            let pos = this.macAddressToCoordinate(item.object_mac_address,latLng);
+                            var marker = L.circleMarker(pos, {radius:5});
+                            this.pathOfDevice.addLayer(marker)
+                            route.push(pos)
+                        })
 
+                        var polyline = L.polyline(route)
+                        var decorator = L.polylineDecorator( polyline, {
+                            patterns: [
+                                {
+                                    offset: '100%',
+                                    repeat: 0,
+                                    symbol: L.Symbol.arrowHead({
+                                        pixelSize: 10,
+                                        polygon: false,
+                                        pathOptions: {stroke:true}
+                                    })
+                                }
+                            ]
+                        })
+
+                        //console.log(polyline)
+                        //console.log(this.pathOfDevice)
+                        this.pathOfDevice.addLayer(polyline)
+                        this.pathOfDevice.addLayer(decorator)
+                        this.pathOfDevice.addTo(this.map)
+                    })
+                    .catch(err => {
+                        console.log(`get tracking table by mac address fail: ${err}`)
+                    })
+                }
+
+                this.setState({
+                    pathMacAddress: this.props.pathMacAddress
+                })
+            }
+        }else{
+            if(this.state.pathMacAddress !== ''){
+                this.pathOfDevice.clearLayers()
+                this.pathOfDevice.addTo(this.map)
+                console.log(this.pathOfDevice)
+                this.setState({
+                    pathMacAddress: ''
+                })
+            }
+        }
+    }
     /** Resize the markers and errorCircles when the view is zoomend. */
     resizeMarkers = () => {
+       //console.log("resizeMarker")
         this.prevZoom = this.currentZoom
         this.currentZoom = this.map.getZoom();
         this.calculateScale();
@@ -113,6 +222,7 @@ class Map extends React.Component {
 
     /** Set the overlay image */
     setMap = () => {
+        //console.log("setMap")
         let [{areaId}] = this.context.stateReducer
 
         let { 
@@ -204,7 +314,7 @@ class Map extends React.Component {
         /** Creat the marker of all lbeacons onto the map  */
 
         lbeaconPosition.map(pos => {
-            console.log(lbeaconPosition)
+            //console.log(lbeaconPosition)
             let latLng = pos.split(',')
             let lbeacon = L.circleMarker(latLng, mapConfig.lbeaconMarkerOption).addTo(this.lbeaconsPosition);
 
@@ -235,7 +345,7 @@ class Map extends React.Component {
      * @param e the object content of the mouse clicking. 
      */
     handlemenu = (e) => {
-
+        //console.log("handleMenu")
         const { objectInfo } = this.state
         const lbeacon_coorinate = Object.values(e.target._latlng).toString();
         let objectList = [], key;
@@ -253,6 +363,7 @@ class Map extends React.Component {
         this.props.selectObjectListProp(objectList);
     }
 
+    
     /**
      * When handleTrackingData() is executed, handleObjectMarkes() will be called. That is, 
      * once the component is updated, handleObjectMarkers() will be executed.
@@ -263,6 +374,7 @@ class Map extends React.Component {
      * Create the error circle of markers, and add into this.markersLayer.
      */
     handleObjectMarkers = () => {
+        //console.log("handle tracking data")
         let { locale } = this.context
 
         /** Clear the old markerslayers. */
@@ -281,12 +393,12 @@ class Map extends React.Component {
         .map(item => {
             // console.log(item)
             let position = this.macAddressToCoordinate(item.mac_address,item.currentPosition);
-
+            
             /** Set the Marker's popup 
              * popupContent (objectName, objectImg, objectImgWidth)
              * More Style sheet include in Map.css */
             let popupContent = this.props.mapConfig.getPopupContent([item], this.collectObjectsByLatLng(item.currentPosition), locale)
-
+            
             /** Set the icon option*/
             item.iconOption = {
 
@@ -314,7 +426,7 @@ class Map extends React.Component {
             }
 
             const option = new L.AwesomeNumberMarkers (item.iconOption)
-            let marker =  L.marker(position, {icon: option}).bindPopup(popupContent, this.props.mapConfig.popupOptions)
+            let marker =  L.marker(position, {icon: option}).bindPopup(popupContent, this.props.mapConfig.popupOptions).openPopup();
             // console.log(item.iconOption.currentPosition[0])
             var pos = marker.getLatLng()
             marker.setLatLng([pos.lat - this.prevZoom * this.pin_shift_scale[0] + this.currentZoom* this.pin_shift_scale[0], pos.lng - this.pin_shift_scale[1]* this.prevZoom + this.currentZoom* this.pin_shift_scale[1]])
@@ -328,7 +440,6 @@ class Map extends React.Component {
             marker.on('mouseover', function () { this.openPopup(); })
             marker.on('click', this.handleMarkerClick);
             // marker.on('mouseout', function () { this.closePopup(); })
-
         })
         /** Add the new markerslayers to the map */
         this.markersLayer.addTo(this.map);
@@ -343,12 +454,14 @@ class Map extends React.Component {
 
     /** Fire when clicing marker */
     handleMarkerClick = (e) => {
+        //console.log("handle marker click")
         const lbPosition =  e.target.options.icon.options.currentPosition
         this.props.getSearchKey('objects', null, lbPosition, )
     }
 
     /** Filter out undesired tracking data */
     filterTrackingData = (proccessedTrackingData) => {
+        //console.log("filterTrackingData")
         return proccessedTrackingData.filter(item => {
             return (
                 item.found && 
@@ -361,11 +474,13 @@ class Map extends React.Component {
     }
 
     collectObjectsByLatLng = (lbPosition) => {
+        //console.log("collect object")
         let objectList = []
         this.filterTrackingData(this.props.proccessedTrackingData)
         .map(item => {
             item.currentPosition && item.currentPosition.toString() === lbPosition.toString() && item.isMatchedObject ? objectList.push(item) : null;
         })
+
         return objectList 
     }
 
@@ -373,7 +488,7 @@ class Map extends React.Component {
      * @param   mac_address The mac_address of the object retrieved from DB. 
      * @param   lbeacon_coordinate The lbeacon's coordinate processed by createLbeaconCoordinate().*/
     macAddressToCoordinate = (mac_address, lbeacon_coordinate) => {
-
+        //console.log("mac")
         /** Example of lbeacon_uuid: 01:1f:2d:13:5e:33 
          *                           0123456789       16
          */
@@ -387,9 +502,14 @@ class Map extends React.Component {
         return [yyy, xxx];
     }
 
+//    handleObjectListClick= () => {
+//        console.log('click')
+//    }
+    
     render(){
         return(   
-            <div id='mapid' style={{}}/>
+                <div id='mapid' style={{}}></div>
+
         )
     }
 }

@@ -10,8 +10,9 @@ import PdfDownloadForm from "./PdfDownloadForm"
 import config from "../../config";
 import AccessControl from "../presentational/AccessControl"
 import { AppContext } from "../../context/AppContext";
-
-
+import AntPath from "react-leaflet-ant-path";
+import dataSrc from '../../dataSrc'
+import axios from 'axios';
 class SurveillanceContainer extends React.Component {
 
     static contextType = AppContext
@@ -24,8 +25,11 @@ class SurveillanceContainer extends React.Component {
         showObjects: [],
     }
 
-
+    componentDidMount = () => {
+        
+    }
     componentDidUpdate = (prevProps, prevState) => {
+        
         if (this.props.geoFenceConfig.length !== 0 && !(_.isEqual(prevProps.geoFenceConfig, this.props.geoFenceConfig))) {
             this.setState({
                 isOpenFence: this.props.geoFenceConfig[0].enable
@@ -141,6 +145,9 @@ class SurveillanceContainer extends React.Component {
                     showObjects
                 })
                 break;
+            case "cleanPath":
+                    this.props.handleClosePath();
+                break;
         }
 
     }
@@ -150,6 +157,8 @@ class SurveillanceContainer extends React.Component {
             showPdfDownloadForm: false
         })
     }
+
+    
 
     // getSearchKey = (searchKey, colorPanel, searchValue) => {
     //     let markerClickPackage = {}
@@ -202,7 +211,9 @@ class SurveillanceContainer extends React.Component {
         return(
             <div id="surveillanceContainer" style={style.surveillanceContainer} className="overflow-hidden">
                 <div style={style.mapBlock}>
-                    <Map 
+                    
+                    <Map
+                        pathMacAddress={this.props.pathMacAddress}
                         hasSearchKey={hasSearchKey}
                         colorPanel={this.props.colorPanel}
                         proccessedTrackingData={this.props.proccessedTrackingData}
@@ -213,6 +224,10 @@ class SurveillanceContainer extends React.Component {
                         isOpenFence={this.state.isOpenFence}
                         searchedObjectType={this.state.showObjects}
                         mapConfig={config.mapConfig}
+                        pathData={this.state.pathData}
+                        handleClosePath={this.props.handleClosePath}
+                        handleShowPath={this.props.handleShowPath}
+                        showPath={this.props.showPath}
                     />
                 </div>
                 <div style={style.navBlock}>
@@ -303,6 +318,23 @@ class SurveillanceContainer extends React.Component {
                                         ?   locale.texts.SHOW_RESIDENTS
                                         :   locale.texts.HIDE_RESIDENTS 
                                     }
+                                </Button>
+                            </Nav.Item>
+                        </AccessControl>
+                        <AccessControl
+                            permission={"user:cleanPath"}
+                            renderNoAccess={()=>null}
+                        >
+                            <Nav.Item className="mt-2">
+                                <Button
+                                    variant="primary"
+                                    className="mr-1 ml-2 text-capitalize" 
+                                    onClick={this.handleClickButton}
+                                    name="cleanPath"
+                                    active={(this.props.showPath)}
+                                    disabled={!(this.props.showPath)}
+                                >
+                                    {locale.texts.CLEAN_PATH}
                                 </Button>
                             </Nav.Item>
                         </AccessControl>

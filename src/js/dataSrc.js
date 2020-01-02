@@ -2,6 +2,7 @@ const dataSrcIP = process.env.DATASRC_IP;
 const protocol = process.env.PROTOCOL;
 const domain = `${protocol}://${dataSrcIP}`;
 const getTrackingData = `${protocol}://${dataSrcIP}/data/getTrackingData`;
+const getTrackingTableByMacAddress = `${protocol}://${dataSrcIP}/data/getTrackingTableByMacAddress`;
 const getObjectTable = `${protocol}://${dataSrcIP}/data/getObjectTable`;
 const getObjectTable_fromImport = `${protocol}://${dataSrcIP}/data/getObjectTable_fromImport`;
 const getPatientTable = `${protocol}://${dataSrcIP}/data/getPatientTable`;
@@ -63,6 +64,7 @@ const pdfUrl = function(path){
 module.exports = {
     domain,
     getTrackingData,
+    getTrackingTableByMacAddress,
     getImportData,
     editImportData,
     editImport,

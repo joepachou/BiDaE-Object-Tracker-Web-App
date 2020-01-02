@@ -687,6 +687,7 @@ const config = {
             var DeviceTotalNumber = 0;
 
             objectList.map((item,index) => {
+                //console.log(item)
                 if (item.object_type != 0) PatientTotalNumber ++;
                 else DeviceTotalNumber ++;   
             })
@@ -695,23 +696,26 @@ const config = {
                 <div>
                     <h4 class="border-bottom pb-1 px-2">${object[0].location_description}</h4>
                     ${objectList.map((item, index) => {
-                        var element = `<div class="row popupRow mb-2 mx-2 d-flex jusify-content-start">`
+                        var element = `<div id='${item.mac_address}'class="row popupRow mb-2 mx-2 d-flex jusify-content-start">`
+                        element += `<div class="popupType" onclick={this.aaa}>`
                         element += config.mapConfig.popupOptions.showNumber
                             ?   `<div class="popupType text-capitalize">${index + 1}.</div>`
                             :   `<div class="popupType text-capitalize">&#9642;  </div>`
                         if(item.object_type == 0){
-                            element +=                                ` 
-                            <div class="popupType text-capitalize">
-                               ${item.type}
-                            </div>
-                            <div class="popupType ">
-                                , ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn}
-                            </div>
-                            <div class="popupType">
-                                ${item.status !== "normal" 
-                                    ? `, ${locale.texts[item.status.toUpperCase()]}`
-                                    : `, ${item.residence_time}`
-                                }
+                            element +=
+                        `
+                                <div class="popupType text-capitalize">
+                                   ${item.type}
+                                </div>
+                                <div class="popupType ">
+                                    , ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn}
+                                </div>
+                                <div class="popupType">
+                                    ${item.status !== "normal" 
+                                        ? `, ${locale.texts[item.status.toUpperCase()]}`
+                                        : `, ${item.residence_time}`
+                                    }
+                                </div>
                             </div>
                         `
                         } else {
@@ -963,7 +967,7 @@ const config = {
                 <div>
                     <h4 class="border-bottom pb-1 px-2">${object[0].location_description}</h4>
                     ${objectList.map((item, index) => {
-                        var element = `<div class="row popupRow mb-2 mx-2 d-flex jusify-content-start">`
+                        var element = `<div id="${item.mac_address}" class="row popupRow mb-2 mx-2 d-flex jusify-content-start">`
                         element += config.mapConfig.popupOptions.showNumber
                             ?   `<div class="popupType text-capitalize">${index + 1}.</div>`
                             :   `<div class="popupType text-capitalize">&#9642;  </div>`
@@ -1000,7 +1004,7 @@ const config = {
                         return element
                     }).join("")
                     }
-                </div>` 
+                </div>`
             return content
         },
 

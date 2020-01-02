@@ -57,7 +57,9 @@ class DissociationForm extends React.Component {
         mac_address:'',
         alertText:'',
         ISuxTest:false,
-        ISuxTest_success:false
+        ISuxTest_success:false,
+        returnFlag:false,
+        valueForDataArray:'',
     };
 
     componentDidUpdate = (prevProps) => {
@@ -80,7 +82,6 @@ class DissociationForm extends React.Component {
     }
 
     handleSubmit = (postOption) => {
-        if (this.state.showDetail)  {
             axios.post(deleteDevice, {
                 formOption: [postOption]
             }).then(res => {
@@ -88,12 +89,6 @@ class DissociationForm extends React.Component {
             }).catch( error => {
                 console.log(error)
             })
-        } else {
-            setTimeout(this.props.handleSubmitForm(),1000)
-            alert("連結失敗，表裡沒有這個ASN");
-            this.props.handleCloseForm()
-            this.handleClose()
-        }    
     }
 
     handleMacAddress(event){
@@ -179,19 +174,40 @@ class DissociationForm extends React.Component {
                                     .required(locale.texts.ASSET_CONTROL_NUMBER_IS_REQUIRED)
                                     .test(
                                         'mac', 
-                                        "mac未在列表上" ,
-                                        value => {
-                                            if (Object.keys(data).includes(value) ||
-                                                Object.keys(data).includes(value.match(/.{1,2}/g).join(':'))
-                                            ) {
+                                        locale.texts.MAC_DO_NOT_IN_LIST ,
+                                        value => {                      if (Object.keys(data).includes(value) 
+                                                ) {
+                                                    this.setState({returnFlag:true,valueForDataArray:value }) 
+                                                }else if(Object.keys(data).includes(value.match(/.{1,2}/g).join(':'))
+                                                ){
+                                                    {
+                                                        this.setState({returnFlag:true,valueForDataArray:value.match(/.{1,2}/g).join(':') }) 
+                                                }
+                                                }else {
+                                                    this.setState({ returnFlag:false}) 
+                                                }  
+
+
+                                            if (this.state.returnFlag == true){
                                                 this.setState({
-                                                    objectName: data[value].name,
-                                                    objectType: data[value].type,
+                                                    objectName: data[this.state.valueForDataArray].name,
+                                                    objectType: data[this.state.valueForDataArray].type,
                                                     showDetail : true,
                                                     inputValue : value
                                                 }) 
                                                 return true
-                                            } else return false
+                                            }else
+                                            {
+                                                this.setState({
+                                                    objectName: '',
+                                                    objectType: '',
+                                                    showDetail : false,
+                                                    inputValue : ''
+                                                }) 
+                                                return false
+                                            }
+                                        
+
                                         }
                                     )
                             })

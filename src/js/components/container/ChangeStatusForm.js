@@ -33,6 +33,14 @@ class ChangeStatusForm extends React.Component {
         }
     }
 
+    pathOnClickHandler = () => {
+        //console.log(this.props.selectedObjectData)
+        this.props.selectedObjectData.map((item,index)=>{
+            this.props.handleShowPath(item.mac_address);
+        })
+        this.handleClose()
+    }
+
     getTransferredLocation = () => {
         let { locale } = this.context
         axios.get(dataSrc.getTransferredLocation)
@@ -67,11 +75,6 @@ class ChangeStatusForm extends React.Component {
         });
     }
   
-    handleShow = () =>  {
-        this.setState({ 
-            show: true 
-        });
-    }
 
     handleClick = (e) => {
         const item = e.target.name
@@ -118,6 +121,10 @@ class ChangeStatusForm extends React.Component {
             },
             crossIcom: {
                 cursor: "pointer"
+            },
+
+            buttonPath: {
+                fontSize: '0.5rem'
             }
         }
 
@@ -133,6 +140,7 @@ class ChangeStatusForm extends React.Component {
         }
 
         let { title } = this.props;
+        
         let selectedObjectData = this.props.selectedObjectData.length !== 0 ? this.props.selectedObjectData[0] : []
         let {
             transferred_location = ''
@@ -151,6 +159,7 @@ class ChangeStatusForm extends React.Component {
                         className='font-weight-bold text-capitalize'
                     >
                         {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
+                        <Button variant="link" style={style.buttonPath} onClick={this.pathOnClickHandler}>追蹤路徑</Button>
                     </Modal.Header >
                     <Modal.Body>
                         <div className='modalDeviceListGroup' style={style.deviceList}>
