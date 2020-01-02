@@ -277,8 +277,9 @@ class EditObjectForm extends React.Component {
 
                                 <div className="form-group">
                                     <label htmlFor="asset_control_number" className='text-uppercase'>{locale.texts.ACN}*</label>
+                            
                                     <Field 
-                                        disabled= {this.props.disableASN}
+                                        disabled= {this.props.disableASN ? 1 : 0}
                                         name="asset_control_number" 
                                         type="text" 
                                         className={'form-control' + (errors.asset_control_number && touched.asset_control_number ? ' is-invalid' : '')} 
@@ -292,7 +293,7 @@ class EditObjectForm extends React.Component {
                                 <div className="form-group">
                                     <label htmlFor="mac_address">{locale.texts.MAC_ADDRESS}*</label>
                                     <Field 
-                                        disabled =  {this.props.disableASN}
+                                        disabled =  {this.props.disableASN? 1 : 0}
                                         name="mac_address" 
                                         type="text" 
                                         className={'form-control' + (errors.mac_address && touched.mac_address ? ' is-invalid' : '')} 

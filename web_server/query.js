@@ -144,6 +144,17 @@ const getObjectTable = (request, response) => {
         })     
 }
 
+const getTrackingTableByMacAddress = (request, response) => {
+    let{ locale, object_mac_address, i, second} = request.body
+    pool.query(queryType.query_getTrackingTableByMacAddress(object_mac_address, i, second))
+        .then(res => {
+            console.log("get tracking table by mac address")
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log('get trackingTableByMacAddress: ' + err)
+        })
+}
 
 const getPatientTable = (request, response) => {
     let { locale, areaId } = request.body
@@ -1170,5 +1181,6 @@ module.exports = {
     confirmValidation,
     backendSearch,
     getBackendSearchQueue,
-    getObjectTable_fromImport
+    getObjectTable_fromImport,
+    getTrackingTableByMacAddress
 }

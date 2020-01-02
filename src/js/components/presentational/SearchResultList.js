@@ -33,6 +33,7 @@ class SearchResult extends React.Component {
         editedObjectPackage: [],
         showAddDevice: false,
         showDownloadPdfRequest: false,
+        showPath: false
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -342,7 +343,8 @@ class SearchResult extends React.Component {
 
                     </Button>
                 </Row>
-                <ChangeStatusForm 
+                <ChangeStatusForm
+                    handleShowPath={this.props.handleShowPath} 
                     show={this.state.showEditObjectForm} 
                     title={'report device status'} 
                     selectedObjectData={this.state.selectedObjectData} 

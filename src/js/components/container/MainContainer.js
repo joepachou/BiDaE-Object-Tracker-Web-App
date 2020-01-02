@@ -13,7 +13,7 @@ import { AppContext } from '../../context/AppContext'
 import { toast } from 'react-toastify';
 import ToastNotification from '../presentational/ToastNotification'
 import SearchResult from '../presentational/SearchResultList';
-
+import AntPath from "leaflet-ant-path";
 
 const {
     ALL_DEVICES,
@@ -48,7 +48,9 @@ class MainContainer extends React.Component{
             : config.mapConfig.locationAccuracyMapToDefault[1],
         authenticated: this.context.auth.authenticated,
         shouldUpdateTrackingData: true,
-        markerClickPackage: {}
+        markerClickPackage: {},
+        showPath: false,
+        pathMacAddress:''
     }
 
     componentDidMount = () => {
@@ -59,6 +61,7 @@ class MainContainer extends React.Component{
     }
 
     componentDidUpdate = (prevProps, prevState) => {
+        console.log(this.state.showPath)
         let isTrackingDataChange = !(_.isEqual(this.state.trackingData, prevState.trackingData))
         let { stateReducer } = this.context
         let [{violatedObjects}] = stateReducer
@@ -479,6 +482,20 @@ class MainContainer extends React.Component{
             isHighlightSearchPanel: boolean
         })
     }
+
+    handleShowPath = (mac_address) => {
+        //console.log(mac_address)
+        this.setState({
+            showPath: true,
+            pathMacAddress: mac_address
+        })
+    }
+
+    handleClosePath = () => {
+        this.setState({
+            showPath: false
+        })
+    }
     
     render(){
 
@@ -539,7 +556,9 @@ class MainContainer extends React.Component{
                             title={locale.texts.FOUND} 
                             title2={locale.texts.NOT_FOUND}
                         />
-                        <SurveillanceContainer 
+                        <SurveillanceContainer
+                            showPath={this.state.showPath}
+                            pathMacAddress={this.state.pathMacAddress} 
                             proccessedTrackingData={proccessedTrackingData.length === 0 ? trackingData : proccessedTrackingData}
                             hasSearchKey={hasSearchKey}
                             colorPanel={colorPanel}
@@ -555,6 +574,8 @@ class MainContainer extends React.Component{
                             clearAlerts={this.clearAlerts}
                             searchKey={this.state.searchKey}
                             authenticated={this.state.authenticated}
+                            handleClosePath={this.handleClosePath}
+                            handleShowPath={this.handleShowPath}
                         />
                     </Col>
                     <Col id='searchPanel' xs={12} sm={5} md={3} lg={4} xl={4} className="w-100 px-2" style={style.searchPanel}>
@@ -573,6 +594,7 @@ class MainContainer extends React.Component{
                                 searchResult={this.state.searchResult} 
                                 searchKey={this.state.searchKey}
                                 highlightSearchPanel={this.highlightSearchPanel}
+                                handleShowPath={this.handleShowPath}
                             />
                         </div>
                     </Col>
