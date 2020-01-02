@@ -524,35 +524,30 @@ function query_editPatient (formOption) {
 
 
 
-
 function query_addObject (formOption) {
-	const text = 
-		`
-		INSERT INTO import_table (
+	const text = `
+		INSERT INTO object_table (
 			type, 
-			status, 
-			transferred_location, 
 			asset_control_number, 
-			name, 
-			mac_address, 
-			registered_timestamp,
-			monitor_type,
-			area_id,
-			object_type,
-			bindflag
+			name,
+			mac_address,
+			object_type
 		)
-		VALUES($1, $2, $3, $4, $5, $6, now(), $7, $8, 0,'Already Binding')
-		`;
+		VALUES (
+			$1, 
+			$2, 
+			$3,
+			$4,
+			0
+		);
+	`;
 		
 	const values = [
 		formOption.type, 
-		formOption.status, 
-		formOption.transferred_location ? formOption.transferred_location.value : null, 
 		formOption.asset_control_number, 
 		formOption.name, 
-		formOption.mac_address, 
-		formOption.monitor_type,
-		formOption.area_id
+		formOption.mac_address
+
 	];
 
 
@@ -563,15 +558,6 @@ function query_addObject (formOption) {
 
 	return query;
 }
-
-
-
-
-
-
-
-
-
 
 function query_addPatient (formOption) {
 	const text = 
@@ -609,26 +595,6 @@ function query_addPatient (formOption) {
 
 	return query;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 const query_editObjectPackage = (formOption, record_id) => {
 	let item = formOption[0]

@@ -54,9 +54,6 @@ class EditObjectForm extends React.Component {
                 show: this.props.show,
             })
         }
-        
-
-
     }
   
     handleClose = () => {
@@ -143,7 +140,7 @@ class EditObjectForm extends React.Component {
             transferred_location,
             area_name,
         } = selectedObjectData
-
+        console.log(mac_address)
 
         return (
             <Modal show={this.state.show} onHide={this.handleClose} size='md'>
@@ -179,16 +176,16 @@ class EditObjectForm extends React.Component {
                                         'asset_control_number', 
                                         locale.texts.THE_ASSET_CONTROL_NUMBER_IS_ALREADY_USED,
                                         value => {
-                                            return value === selectedObjectData.asset_control_number || 
-                                                !this.props.data.map(item => item.asset_control_number).includes(value)
-                                        }
-                                    )
-                                    .test(
-                                        'asset_control_number', 
-                                        locale.texts.THE_ASSET_CONTROL_NUMBER_IS_ALREADY_USED,
-                                        value => {
-                                            return value === selectedObjectData.asset_control_number || 
-                                                !this.props.dataPatient.map(item => item.asset_control_number).includes(value)
+                                            return value !== undefined && new Promise((resolve, reject) => {
+                                                axios.post(dataSrc.getObjectTable, {
+                                                })
+                                                .then(res => {
+                                                    resolve(!(res.data.rows.map(item => item.asset_control_number).includes(value)))
+                                                })
+                                                .catch(err => {
+                                                    console.log(err)
+                                                })
+                                            })
                                         }
                                     ),
                                 mac_address: Yup.string()
@@ -197,18 +194,19 @@ class EditObjectForm extends React.Component {
                                         'mac_address',
                                         locale.texts.THE_MAC_ADDRESS_IS_ALREADY_USED,
                                         value => {
-                                            return value === selectedObjectData.mac_address ||
-                                                !this.props.data.map(item => item.mac_address.toUpperCase().replace(/:/g, '')).includes(value.toUpperCase().replace(/:/g, ''))
+                                            return value !== undefined && new Promise((resolve, reject) => {
+                                                axios.post(dataSrc.getObjectTable, {
+                                                })
+                                                .then(res => {
+                                                    resolve(!(res.data.rows.map(item => item.mac_address).includes(value)))
+                                                })
+                                                .catch(err => {
+                                                    console.log(err)
+                                                })
+                                            })
                                         }
-                                    ).test(
-                                        'mac_address',
-                                        locale.texts.THE_MAC_ADDRESS_IS_ALREADY_USED,
-                                        value => {
-                                            return value === selectedObjectData.mac_address ||
-                                                !this.props.dataPatient.map(item => item.mac_address.toUpperCase().replace(/:/g, '')).includes(value.toUpperCase().replace(/:/g, ''))
-                                        }
-                                        
-                                    ).test(
+                                    )
+                                    .test(
                                         'mac_address',
                                         locale.texts.THE_MAC_ADDRESS_FORM_IS_WRONG,
                                         value => {
@@ -258,11 +256,13 @@ class EditObjectForm extends React.Component {
                             while(postOption.name[postOption.name.length-1] == " "){
                                 postOption.name = postOption.name.substring(0,postOption.name.length-1);       
                             }
+                            // console.log(postOption)
                             this.handleSubmit(postOption)                            
                         }}
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm }) => (
                             <Form className="text-capitalize">
+                            {/* {console.log(errors)} */}
                                 <div className="form-group">
                                     <label htmlFor="name">{locale.texts.NAME}*</label>
                                     <Field name="name" type="text" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} placeholder=''/>
