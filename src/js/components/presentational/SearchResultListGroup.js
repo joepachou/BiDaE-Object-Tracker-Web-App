@@ -31,7 +31,13 @@ const getDescription = (item, locale) => {
                                 ? `, ${item.residence_time} `
                                 : ''
                             : ''
-                        }   
+                        }  
+                        ${item.status == "reserve" 
+                        ? `~ ${item.reserved_timestamp_final}`
+                        : ''
+                    
+                    }
+
                     `
                     :   `
                         ${item.type},

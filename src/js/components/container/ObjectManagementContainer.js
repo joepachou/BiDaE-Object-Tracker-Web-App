@@ -663,7 +663,8 @@ class ObjectManagementContainer extends React.Component{
     DeleteClick= (key) => {
         deleteFlag = true 
         this.setState({
-            isShowEditImportTable: true
+            isShowEditImportTable: true,
+            selectedRowData_Import : key.row
         })
     };
 

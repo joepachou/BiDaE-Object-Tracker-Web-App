@@ -174,38 +174,51 @@ class DissociationForm extends React.Component {
                                     .required(locale.texts.ASSET_CONTROL_NUMBER_IS_REQUIRED)
                                     .test(
                                         'mac', 
-                                        locale.texts.MAC_DO_NOT_IN_LIST ,
-                                        value => {                      if (Object.keys(data).includes(value) 
-                                                ) {
-                                                    this.setState({returnFlag:true,valueForDataArray:value }) 
-                                                }else if(Object.keys(data).includes(value.match(/.{1,2}/g).join(':'))
-                                                ){
+                                        locale.texts.MAC_DO_NOT_MATCH ,
+                                        value => {  
+                                        
+                                            if (value != undefined){
+
+
+                                                if (this.props.selectedObjectData.mac_address == value)
+                                                {
+                                                        this.setState({returnFlag:true,valueForDataArray:value }) 
+                                                }
+                                                else if(this.props.selectedObjectData.mac_address == value.match(/.{1,2}/g).join(':'))
+                                                {
                                                     {
                                                         this.setState({returnFlag:true,valueForDataArray:value.match(/.{1,2}/g).join(':') }) 
                                                 }
-                                                }else {
+                                                }
+                                                else
+                                                    {
                                                     this.setState({ returnFlag:false}) 
                                                 }  
 
 
-                                            if (this.state.returnFlag == true){
-                                                this.setState({
-                                                    objectName: data[this.state.valueForDataArray].name,
-                                                    objectType: data[this.state.valueForDataArray].type,
-                                                    showDetail : true,
-                                                    inputValue : value
-                                                }) 
-                                                return true
-                                            }else
-                                            {
-                                                this.setState({
-                                                    objectName: '',
-                                                    objectType: '',
-                                                    showDetail : false,
-                                                    inputValue : ''
-                                                }) 
-                                                return false
+                                                if (this.state.returnFlag == true){
+                                                    this.setState({
+                                                        objectName: data[this.state.valueForDataArray].name,
+                                                        objectType: data[this.state.valueForDataArray].type,
+                                                        showDetail : true,
+                                                        inputValue : value
+                                                    }) 
+                                                    return true
+                                                }else
+                                                {
+                                                    this.setState({
+                                                        objectName: '',
+                                                        objectType: '',
+                                                        showDetail : false,
+                                                        inputValue : ''
+                                                    }) 
+                                                    return false
+                                                }
+
                                             }
+
+
+                                           
                                         
 
                                         }

@@ -107,9 +107,12 @@ const tw = {
     ACN_VERIFICATION:"ACN驗證",
     BINDING_SETTING:"綁定設定",
     BINDING_DELETE:"取消綁定",
+    DELETE_OPTION:"刪除選項",
+    CLEAN_PATH:"刪除路徑",
+    DELETE_OPTION:"移除選項",
     DELETE_OPTION:"移除選項",
     CLEAN_PATH:"刪除路徑",
-
+    
     /* Form Field */
     NAME: "名稱",
     TYPE: "類別",
@@ -194,7 +197,7 @@ const tw = {
     THE_ATTENDINGPHYSICIAN_IS_WRONG: "醫生編號 必須是數字",  
     AREA_IS_REQUIRED: "請選擇地區",
     NOT_ASSIGNED_TO_ANY_DEVICES: "尚未指定任何儀器",
-    MAC_DO_NOT_IN_LIST:"此Mac未在列表上",
+    MAC_DO_NOT_MATCH:"不符合當前Mac",
 
     /** Place Holder */
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "請輸入或掃描mac address",

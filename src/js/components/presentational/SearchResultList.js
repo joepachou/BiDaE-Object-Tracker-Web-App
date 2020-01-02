@@ -143,7 +143,7 @@ class SearchResult extends React.Component {
         )
     }
 
-    handleConfirmFormSubmit = (e) => {
+    handleConfirmFormSubmit = (e,isDelayTime) => {
         let { editedObjectPackage } = this.state;
         let { locale, auth, stateReducer } = this.context
         let [{}, dispatch] = stateReducer
@@ -153,33 +153,35 @@ class SearchResult extends React.Component {
 
         /** Create the pdf package, including pdf, pdf setting and path */
         let pdfPackage = shouldCreatePdf && config.getPdfPackage(status, auth.user, this.state.editedObjectPackage, locale)
-        axios.post(dataSrc.editObjectPackage, {
-            formOption: editedObjectPackage,
-            username,
-            pdfPackage
-        }).then(res => {
-            setTimeout(
-                function() {
-                    this.setState ({
-                        showConfirmForm: shouldCreatePdf,
-                        // editedObjectPackage: [],
-                        // selection: [],
-                        // selectedObjectData: [],
-                        showAddDevice: false,
-                        showDownloadPdfRequest: shouldCreatePdf,
-                        pdfPath: shouldCreatePdf && pdfPackage.path
-                    })
-                    dispatch({
-                        type: 'setUpdateTrackingData',
-                        value: true
-                    })
-                }
-                .bind(this),
-                1000
-            )
-        }).catch( error => {
-            console.log(error)
-        })
+  
+
+        // axios.post(dataSrc.editObjectPackage, {
+        //     formOption: editedObjectPackage,
+        //     username,
+        //     pdfPackage
+        // }).then(res => {
+        //     setTimeout(
+        //         function() {
+        //             this.setState ({
+        //                 showConfirmForm: shouldCreatePdf,
+        //                 // editedObjectPackage: [],
+        //                 // selection: [],
+        //                 // selectedObjectData: [],
+        //                 showAddDevice: false,
+        //                 showDownloadPdfRequest: shouldCreatePdf,
+        //                 pdfPath: shouldCreatePdf && pdfPackage.path
+        //             })
+        //             dispatch({
+        //                 type: 'setUpdateTrackingData',
+        //                 value: true
+        //             })
+        //         }
+        //         .bind(this),
+        //         1000
+        //     )
+        // }).catch( error => {
+        //     console.log(error)
+        // })
     } 
 
     handleToggleNotFound = (e) => {

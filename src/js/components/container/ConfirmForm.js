@@ -213,7 +213,8 @@ class ConfirmForm extends React.Component {
                         </Row>
                         <Formik    
                             onSubmit={({ radioGroup, select }, { setStatus, setSubmitting }) => {
-                                this.props.handleConfirmFormSubmit(isDelayTime)
+                             
+                               this.props.handleConfirmFormSubmit(isDelayTime)
                             }}
 
                             render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
