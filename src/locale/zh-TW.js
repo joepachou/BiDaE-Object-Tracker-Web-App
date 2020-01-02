@@ -107,7 +107,7 @@ const tw = {
     ACN_VERIFICATION:"ACN驗證",
     BINDING_SETTING:"綁定設定",
     BINDING_DELETE:"取消綁定",
-    DELETE_OPTION:"刪除選項",
+    DELETE_OPTION:"移除選項",
     CLEAN_PATH:"刪除路徑",
 
     /* Form Field */
