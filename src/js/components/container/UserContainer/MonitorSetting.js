@@ -1,7 +1,7 @@
 import React from 'react';
 import { AppContext } from '../../../context/AppContext';
 import MonitorSettingBlock from './MonitorSettingBlock';
-import GeoFenceSetting from './GeoFenceSetting'
+import GeoFenceSettingBlock from './GeoFenceSettingBlock'
 import config from '../../../config';
 
 class MonitorSetting extends React.Component{
@@ -24,6 +24,9 @@ class MonitorSetting extends React.Component{
                 />
                 <MonitorSettingBlock
                     title={config.monitorSettingType.RESIDENT_NOT_STAY_ROOM}
+                />
+                <GeoFenceSettingBlock
+                    title={config.monitorSettingType.GEO_FENCE_VIOLENCE}
                 />
             </div>
         )

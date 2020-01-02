@@ -45,6 +45,7 @@ const setUserRole = `${protocol}://${dataSrcIP}/test/setUserRole`
 const getAreaTable = `${protocol}://${dataSrcIP}/data/getAreaTable`
 const getGeoFenceConfig = `${protocol}://${dataSrcIP}/data/getGeoFenceConfig`
 const setGeoFenceConfig = `${protocol}://${dataSrcIP}/data/setGeoFenceConfig`
+const setGeoFenceConfigRows = `${protocol}://${dataSrcIP}/data/setGeoFenceConfigRows`
 const addShiftChangeRecord = `${protocol}://${dataSrcIP}/data/addShiftChangeRecord`
 const checkoutViolation = `${protocol}://${dataSrcIP}/data/checkoutViolation`
 const confirmValidation = `${protocol}://${dataSrcIP}/data/confirmValidation`
@@ -110,6 +111,7 @@ module.exports = {
     getAreaTable,
     getGeoFenceConfig,
     setGeoFenceConfig,
+    setGeoFenceConfigRows,
     addShiftChangeRecord,
     checkoutViolation,
     confirmValidation,

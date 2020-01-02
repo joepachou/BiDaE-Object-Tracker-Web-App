@@ -234,10 +234,10 @@ const getLbeaconTable = (request, response) => {
         .then(res => {
             console.log('Get lbeaconTable data')
             res.rows.map(item => {
-                item.health_status =  moment().diff(item.last_report_timestamp, 'days') < 1 ? 1 : 0 
-                item.last_report_timestamp = moment.tz(item.last_report_timestamp, process.env.TZ).locale(locale).format('lll');
+                // item.health_status =  moment().diff(item.last_report_timestamp, 'days') < 1 ? 1 : 0 
+                // item.last_report_timestamp = moment.tz(item.last_report_timestamp, process.env.TZ).locale(locale).format('lll');
             })
-            response.status(200).json(res)
+            response.status(200).json(res.rows)
 
         })
         .catch(err => {
@@ -845,6 +845,18 @@ const setGeoFenceConfig = (request, response) =>{
         })
 }
 
+const setGeoFenceConfigRows = (request, response) =>{
+    let config = request.body
+    pool.query(queryType.query_setGeoFenceConfigRows(config))
+        .then(res => {
+            console.log(`set geo fence config`)
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(`set geo fence config fail: ${err}`)
+        })
+}
+
 const checkoutViolation = (request, response) => {
     let { 
         mac_address,
@@ -1177,6 +1189,7 @@ module.exports = {
     validateUsername,
     setUserRole,
     setGeoFenceConfig,
+    setGeoFenceConfigRows,
     setMonitorConfig,
     checkoutViolation,
     confirmValidation,
