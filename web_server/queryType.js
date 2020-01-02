@@ -667,7 +667,7 @@ const query_editObjectPackage = (formOption,username, record_id) => {
 	`
 	return text
 
-	return null
+
 }
 
 function query_signin(username) {
