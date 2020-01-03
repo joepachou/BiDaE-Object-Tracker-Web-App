@@ -1121,6 +1121,29 @@ const query_getGeoFenceConfig = (areaId) => {
 	;`
 }
 
+const query_setGeoFenceConfigRows = (config) =>{
+
+	const merge_perimeters_uuids 	= config.perimeters['uuids'].join(',')
+	const merge_fences_uuids 		= config.fences['uuids'].join(',')
+	console.log(config)
+
+	var perimeters = [config.perimeters['number'], merge_perimeters_uuids, config.perimeters['rssi']].join(',')
+	var fences = [config.fences['number'], merge_fences_uuids, config.fences['rssi']].join(',')
+
+	const query =  `
+		UPDATE geo_fence_config
+		SET 
+			enable = '${config.enable}',
+			perimeters = '${perimeters}',
+			fences = '${fences}',
+			start_time = '${config.start_time}',
+			end_time = '${config.end_time}',
+			area_id = ${config.area_id}
+		WHERE id = ${config.id}
+	`
+	return query
+}
+
 const query_setGeoFenceConfig = (value, areaId) =>{
 	return `
 		UPDATE geo_fence_config
@@ -1429,6 +1452,7 @@ module.exports = {
 	query_getAreaTable,
 	query_getGeoFenceConfig,
 	query_setGeoFenceConfig,
+	query_setGeoFenceConfigRows,
 	query_checkoutViolation,
 	query_confirmValidation,
 	query_backendSearch,

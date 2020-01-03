@@ -173,6 +173,7 @@ const en =  {
     RESIDENT_LOCATION_MONITOR: "resident location monitor",
     RESIDENT_LONG_STAY_IN_DANGER: "resident long stay",
     RESIDENT_NOT_STAY_ROOM: "resident not stay room",
+    RESIDENT_VIOLATE_GEOFENCE: "resodent violate geofence",
     DISSOCIATION: "dissociation",
 
     /** Error Message */

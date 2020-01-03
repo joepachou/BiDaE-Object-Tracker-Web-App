@@ -131,12 +131,14 @@ const config = {
         RESIDENT_LOCATION_MONITOR: "resident location monitor",
         RESIDENT_LONG_STAY_IN_DANGER: "resident long stay in danger",
         RESIDENT_NOT_STAY_ROOM: "resident not stay room",
+        GEO_FENCE_VIOLENCE: "resident violate geofence",
     },
 
     monitorSettingUrlMap: {
         "resident movement monitor": "movement_config",
         "resident long stay in danger": "location_long_stay_in_danger_config",
-        "resident not stay room": "location_not_stay_room_config"
+        "resident not stay room": "location_not_stay_room_config",
+        "resident violate geofence": "geo_fence_config"
     },
 
     shiftOption: [

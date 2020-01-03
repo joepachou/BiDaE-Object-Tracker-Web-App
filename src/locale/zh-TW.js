@@ -174,6 +174,7 @@ const tw = {
     RESIDENT_LOCATION_MONITOR: "位置監控",
     RESIDENT_LONG_STAY_IN_DANGER: "久留監控",
     RESIDENT_NOT_STAY_ROOM: "房間監控",
+    RESIDENT_VIOLATE_GEOFENCE: "Geofence監控",
     DISSOCIATION: "解除綁定",
 
 
