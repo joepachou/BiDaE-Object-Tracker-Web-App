@@ -69,7 +69,7 @@ const getTrackingData = (request, response) => {
 
     pool.query(queryType.query_getTrackingData())        
         .then(res => {
-            console.log('Get tracking data')
+            console.log('get tracking data')
 
             /** Filter the objects that do no belong the area */
             const toReturn = res.rows
@@ -141,8 +141,8 @@ const getTrackingData = (request, response) => {
 }
 
 const getObjectTable = (request, response) => {
-    let { locale, areaId } = request.body
-    pool.query(queryType.query_getObjectTable(areaId))       
+    let { locale, areaId, objectType } = request.body
+    pool.query(queryType.query_getObjectTable(areaId, objectType))       
         .then(res => {
             console.log('Get objectTable data')
             response.status(200).json(res)
@@ -218,8 +218,6 @@ const editImportData = (request, response) => {
 const cleanBinding = (request, response) => {
     let { locale, areaId } = request.body
     const formOption = request.body.formOption
-    console.log('gggggg')
-    console.log(formOption)
     formOption.map( item => {
        pool.query(queryType.query_cleanBinding(item))       
         .then(res => {
@@ -354,29 +352,28 @@ const objectImport = (request, response) => {
 
 }
 
-
 const addObject = (request, response) => {
     const formOption = request.body.formOption
     pool.query(queryType.query_addObject(formOption))
         .then(res => {
-            console.log("Add Object Success");
-            response.status(200).json(res)
+            console.log("add object success");
+            pool.query(queryType.query_addImport(formOption))
+                .then(res => {
+                    console.log("add import success");
+                    response.status(200).json(res)
+                })
+                .catch(err => {
+                    console.log("add object fails: " + err)
+                })
         })
         .catch(err => {
-            console.log("Add Object Fails: " + err)
-            response.status(500).json({
-                message:'not good'
-            })
+            console.log("add object fails: " + err)
+
         })
-    
 }
 
-
 const addPatient = (request, response) => {
-
     const formOption = request.body.formOption
- 
-    
     pool.query(queryType.query_addPatient(formOption))
         .then(res => {
             console.log("Add Patient Success");

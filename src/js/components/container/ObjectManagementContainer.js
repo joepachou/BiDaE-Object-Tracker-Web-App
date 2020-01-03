@@ -194,8 +194,6 @@ class ObjectManagementContainer extends React.Component{
                 columnImport,
             })
         })
-
-
         .catch(err => {
             console.log(err);
         })
@@ -205,7 +203,8 @@ class ObjectManagementContainer extends React.Component{
     getData = () => {
         let { locale } = this.context
         axios.post(getObjectTable, {
-            locale: locale.abbr
+            locale: locale.abbr,
+            objectType: [0]
         })
         .then(res => {
             let column = _.cloneDeep(objectTableColumn)
@@ -663,8 +662,7 @@ class ObjectManagementContainer extends React.Component{
     DeleteClick= (key) => {
         deleteFlag = true 
         this.setState({
-            isShowEditImportTable: true,
-            selectedRowData_Import : key.row
+            isShowEditImportTable: true
         })
     };
 
@@ -929,8 +927,6 @@ class ObjectManagementContainer extends React.Component{
                     physicianIDNumber = {this.state.physicianIDNumber}
                     disableASN = {this.state.disableASN}
                 />  
-       
-
                 <EditObjectForm 
                     show = {isShowEdit} 
                     title= {this.state.formTitle} 
@@ -942,8 +938,6 @@ class ObjectManagementContainer extends React.Component{
                     // dataPatient = {this.state.dataPatient}
                     disableASN = {this.state.disableASN}
                 />
-
-            
 
                 <BindForm
                     show = {isShowBind} 

@@ -151,7 +151,7 @@ const query_getObjectTable_fromImport = () => {
 	return text
 }
 
-const query_getObjectTable = (area_id, ) => {
+const query_getObjectTable = (area_id, objectType ) => {
 
 	let text = '';
 	if (!area_id) {
@@ -170,10 +170,7 @@ const query_getObjectTable = (area_id, ) => {
 				object_table.id,
 				object_table.room
 			FROM object_table 
-			WHERE object_table.object_type = 0
-
-	
-
+			WHERE object_table.object_type IN (${objectType.map(type => type)})
 			ORDER BY object_table.name ASC;
 		`;
 	} else {
@@ -193,12 +190,11 @@ const query_getObjectTable = (area_id, ) => {
 				object_table.room
 
 			FROM object_table 
-			WHERE object_table.object_type = 0
+			WHERE object_table.object_type IN (${objectType.map(type => type)})
 					
 			ORDER BY object_table.type DESC;
 		`;
 	}
-
 	return text
 } 
 
@@ -257,9 +253,7 @@ const query_getPatientTable = (area_id) => {
 
 const query_getImportTable = () => {
 
-	let text = '';
-	
-		text +=`
+	let text = `
 			SELECT 
 				import_table.name, 
 				import_table.asset_control_number,
@@ -542,6 +536,7 @@ function query_addObject (formOption) {
 			asset_control_number, 
 			name,
 			mac_address,
+			status,
 			object_type
 		)
 		VALUES (
@@ -549,6 +544,7 @@ function query_addObject (formOption) {
 			$2, 
 			$3,
 			$4,
+			'normal',
 			0
 		);
 	`;
@@ -607,6 +603,32 @@ function query_addPatient (formOption) {
 	return query;
 }
 
+const query_addImport = (formOption) => {
+	const text = `
+		INSERT INTO import_table (
+			type, 
+			asset_control_number, 
+			name
+		)
+		VALUES (
+			$1, 
+			$2, 
+			$3
+		);
+	`;
+	const values = [
+		formOption.type, 
+		formOption.asset_control_number, 
+		formOption.name, 
+	];
+	const query = {
+		text,
+		values
+	};
+
+	return query;
+}
+
 const query_editObjectPackage = (formOption, record_id) => {
 
 	let item = formOption[0]
@@ -615,7 +637,7 @@ const query_editObjectPackage = (formOption, record_id) => {
 
 
 
-		
+
 		SELECT id
 		FROM user_table
 		WHERE user_table.name='${username}';
@@ -1437,7 +1459,8 @@ module.exports = {
 	query_editImportData,
 	query_cleanBinding,
 	query_getImportData,
-	query_editObject
+	query_editObject,
+	query_addImport
 }
 
 

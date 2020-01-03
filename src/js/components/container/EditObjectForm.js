@@ -62,7 +62,6 @@ class EditObjectForm extends React.Component {
 
     handleSubmit = (postOption) => {
         const path = this.props.formPath
-   
         axios.post(path, {
             formOption: postOption
         }).then(res => {
@@ -140,7 +139,6 @@ class EditObjectForm extends React.Component {
             transferred_location,
             area_name,
         } = selectedObjectData
-        console.log(mac_address)
 
         return (
             <Modal show={this.state.show} onHide={this.handleClose} size='md'>
@@ -178,9 +176,14 @@ class EditObjectForm extends React.Component {
                                         value => {
                                             return value !== undefined && new Promise((resolve, reject) => {
                                                 axios.post(dataSrc.getObjectTable, {
+                                                    objectType: [0]
                                                 })
                                                 .then(res => {
-                                                    resolve(!(res.data.rows.map(item => item.asset_control_number).includes(value)))
+                                                    if (this.props.selectedObjectData.length == 0) {
+                                                        resolve(!(res.data.rows.map(item => item.asset_control_number).includes(value)))
+                                                    } else {
+                                                        resolve(true)
+                                                    }
                                                 })
                                                 .catch(err => {
                                                     console.log(err)
@@ -196,9 +199,14 @@ class EditObjectForm extends React.Component {
                                         value => {
                                             return value !== undefined && new Promise((resolve, reject) => {
                                                 axios.post(dataSrc.getObjectTable, {
+                                                    objectType: [0]
                                                 })
                                                 .then(res => {
-                                                    resolve(!(res.data.rows.map(item => item.mac_address).includes(value)))
+                                                    if (this.props.selectedObjectData.length == 0) {
+                                                        resolve(!(res.data.rows.map(item => item.mac_address).includes(value)))
+                                                    } else {
+                                                        resolve(true)
+                                                    }
                                                 })
                                                 .catch(err => {
                                                     console.log(err)
@@ -256,13 +264,11 @@ class EditObjectForm extends React.Component {
                             while(postOption.name[postOption.name.length-1] == " "){
                                 postOption.name = postOption.name.substring(0,postOption.name.length-1);       
                             }
-                            // console.log(postOption)
                             this.handleSubmit(postOption)                            
                         }}
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm }) => (
                             <Form className="text-capitalize">
-                            {/* {console.log(errors)} */}
                                 <div className="form-group">
                                     <label htmlFor="name">{locale.texts.NAME}*</label>
                                     <Field name="name" type="text" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} placeholder=''/>
