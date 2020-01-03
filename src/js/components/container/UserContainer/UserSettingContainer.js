@@ -8,7 +8,6 @@ import AdminManagementContainer from './AdminManagementContainer'
 import EditObjectManagement from './EditObjectManagement'
 import LocaleContext from '../../../context/LocaleContext';
 import AccessControl from '../../presentational/AccessControl'
-import DeviceManager from './DeviceManager'
 import MyDeviceManager from './MyDeviceManager';
 import MyPatientManager from './MyPatientManager';
 import MonitorSetting from "./MonitorSetting";
