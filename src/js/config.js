@@ -691,7 +691,7 @@ const config = {
                 if (item.object_type != 0) PatientTotalNumber ++;
                 else DeviceTotalNumber ++;   
             })
-            
+            //摸到大頭針之後的方塊
             const content = `
                 <div>
                     <h4 class="border-bottom pb-1 px-2">${object[0].location_description}</h4>
@@ -713,9 +713,18 @@ const config = {
                                 <div class="popupType">
                                     ${item.status !== "normal" 
                                         ? `, ${locale.texts[item.status.toUpperCase()]}`
-                                        : `, ${item.residence_time}`
+                                        : `, ${item.residence_time}`    
                                     }
                                 </div>
+
+                                <div class="popupType">
+                                ${item.status == "reserve" 
+                                    ? `~ ${item.reserved_timestamp_final}`
+                                    : ''
+                                }
+                            </div>
+                        
+
                             </div>
                         `
                         } else {

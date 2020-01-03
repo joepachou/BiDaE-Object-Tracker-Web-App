@@ -112,7 +112,8 @@ const tw = {
     DELETE_OPTION:"移除選項",
     DELETE_OPTION:"移除選項",
     CLEAN_PATH:"刪除路徑",
-    
+    RETURN:"還原",
+
     /* Form Field */
     NAME: "名稱",
     TYPE: "類別",

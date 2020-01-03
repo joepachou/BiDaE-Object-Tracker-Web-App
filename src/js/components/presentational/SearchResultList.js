@@ -153,35 +153,38 @@ class SearchResult extends React.Component {
 
         /** Create the pdf package, including pdf, pdf setting and path */
         let pdfPackage = shouldCreatePdf && config.getPdfPackage(status, auth.user, this.state.editedObjectPackage, locale)
-  
-
-        // axios.post(dataSrc.editObjectPackage, {
-        //     formOption: editedObjectPackage,
-        //     username,
-        //     pdfPackage
-        // }).then(res => {
-        //     setTimeout(
-        //         function() {
-        //             this.setState ({
-        //                 showConfirmForm: shouldCreatePdf,
-        //                 // editedObjectPackage: [],
-        //                 // selection: [],
-        //                 // selectedObjectData: [],
-        //                 showAddDevice: false,
-        //                 showDownloadPdfRequest: shouldCreatePdf,
-        //                 pdfPath: shouldCreatePdf && pdfPackage.path
-        //             })
-        //             dispatch({
-        //                 type: 'setUpdateTrackingData',
-        //                 value: true
-        //             })
-        //         }
-        //         .bind(this),
-        //         1000
-        //     )
-        // }).catch( error => {
-        //     console.log(error)
-        // })
+     
+        editedObjectPackage.isDelayTime = e
+     
+        axios.post(dataSrc.editObjectPackage, {
+            locale,
+            formOption: editedObjectPackage,
+            username,
+            pdfPackage,
+            isDelayTime:e
+        }).then(res => {
+            setTimeout(
+                function() {
+                    this.setState ({
+                        showConfirmForm: shouldCreatePdf,
+                        // editedObjectPackage: [],
+                        // selection: [],
+                        // selectedObjectData: [],
+                        showAddDevice: false,
+                        showDownloadPdfRequest: shouldCreatePdf,
+                        pdfPath: shouldCreatePdf && pdfPackage.path
+                    })
+                    dispatch({
+                        type: 'setUpdateTrackingData',
+                        value: true
+                    })
+                }
+                .bind(this),
+                1000
+            )
+        }).catch( error => {
+            console.log(error)
+        })
     } 
 
     handleToggleNotFound = (e) => {
