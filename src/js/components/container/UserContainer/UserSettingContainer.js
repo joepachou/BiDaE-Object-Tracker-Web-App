@@ -3,7 +3,6 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import dataSrc from "../../../dataSrc";
 import { Tab, Col, Row, Button, Nav, Container} from 'react-bootstrap';
 import ShiftChangeRecord from './ShiftChangeRecord'
-import ShiftChangeRecord2 from './ShiftChangeRecord2'
 import AdminManagementContainer from './AdminManagementContainer'
 import EditObjectManagement from './EditObjectManagement'
 import LocaleContext from '../../../context/LocaleContext';
@@ -51,7 +50,7 @@ class UserSettingContainer extends React.Component{
                 name: 'Shift Change Record',
                 path: 'shiftChangeRecord',
                 href: '#ShiftChangeRecord',
-                component: <ShiftChangeRecord2 />
+                component: <ShiftChangeRecord />
             },
             {
                 name: "Monitor Setting",
@@ -132,25 +131,25 @@ class UserSettingContainer extends React.Component{
                             <Col lg={10} className="" style={style.component}>
                                 <Tab.Content>
                                     {this.pageList.map((page, index) => {
-                                                return (
-                                                    <AccessControl
-                                                        permission={'route:'+ page.path}
-                                                        renderNoAccess={() => null}
-                                                        key={index}
-                                                    >
-                                                        <Tab.Pane className='mb-5' eventKey={page.href} id={page.name.replace(/ /g, '')}>   
-                                                            <div style={style.title} className='text-capitalize'>
-                                                                {locale.texts[page.name.toUpperCase().replace(/ /g, '_')]}
-                                                            </div>
-                                                            <hr/>
-                                                            <Row className="w-100d-flex bg-white py-1">
-                                                                <Col>
-                                                                    {page.component}
-                                                                </Col>
-                                                            </Row>
-                                                        </Tab.Pane >
-                                                    </AccessControl>
-                                                )
+                                        return (
+                                            <AccessControl
+                                                permission={'route:'+ page.path}
+                                                renderNoAccess={() => null}
+                                                key={index}
+                                            >
+                                                <Tab.Pane className='mb-5' eventKey={page.href} id={page.name.replace(/ /g, '')}>   
+                                                    <div style={style.title} className='text-capitalize'>
+                                                        {locale.texts[page.name.toUpperCase().replace(/ /g, '_')]}
+                                                    </div>
+                                                    <hr/>
+                                                    <Row className="w-100d-flex bg-white py-1">
+                                                        <Col>
+                                                            {page.component}
+                                                        </Col>
+                                                    </Row>
+                                                </Tab.Pane >
+                                            </AccessControl>
+                                        )
                                     })}
                                 </Tab.Content>
                             </Col>
