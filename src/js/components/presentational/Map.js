@@ -492,11 +492,15 @@ class Map extends React.Component {
         /** Example of lbeacon_uuid: 01:1f:2d:13:5e:33 
          *                           0123456789       16
          */
-        const xx = mac_address.slice(12,14);
-        const yy = mac_address.slice(15,17);
+        // const xx = mac_address.slice(12,14);
+        const xx = mac_address.slice(15,16);
+
+        // const yy = mac_address.slice(15,17);
+        const yy = mac_address.slice(16,17);
+
         const multiplier = this.props.mapConfig.markerDispersity; // 1m = 100cm = 1000mm, multipler = 1000/16*16 = 3
-		const origin_x = lbeacon_coordinate[1] - parseInt(80, 16) * multiplier ; 
-		const origin_y = lbeacon_coordinate[0] - parseInt(80, 16) * multiplier ;
+		const origin_x = lbeacon_coordinate[1] - parseInt(8, 16) * multiplier ; 
+		const origin_y = lbeacon_coordinate[0] - parseInt(8, 16) * multiplier ;
 		const xxx = origin_x + parseInt(xx, 16) * multiplier;
         const yyy = origin_y + parseInt(yy, 16) * multiplier;
         return [yyy, xxx];
