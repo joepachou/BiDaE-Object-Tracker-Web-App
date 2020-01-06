@@ -669,7 +669,7 @@ const config = {
         },
 
         /* Set the Marker dispersity that can be any positive number */
-        markerDispersity: 13,
+        markerDispersity: 300,
 
         popupOptions: {
             minWidth: "500",
