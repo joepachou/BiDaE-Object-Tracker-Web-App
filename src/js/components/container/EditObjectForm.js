@@ -128,7 +128,13 @@ class EditObjectForm extends React.Component {
             },
         }
 
-        const { title, selectedObjectData } = this.props;
+        const { 
+            title, 
+            selectedObjectData,
+            importData,
+            objectTable
+        } = this.props;
+
         const { 
             id,
             name,
@@ -174,56 +180,35 @@ class EditObjectForm extends React.Component {
                                         'asset_control_number', 
                                         locale.texts.THE_ASSET_CONTROL_NUMBER_IS_ALREADY_USED,
                                         value => {
-                                            return value !== undefined && new Promise((resolve, reject) => {
-                                                axios.post(dataSrc.getObjectTable, {
-                                                    objectType: [0]
-                                                })
-                                                .then(res => {
-                                                    if (this.props.selectedObjectData.length == 0) {
-                                                        resolve(!(res.data.rows.map(item => item.asset_control_number).includes(value)))
-                                                    } else {
-                                                        resolve(true)
-                                                    }
-                                                })
-                                                .catch(err => {
-                                                    console.log(err)
-                                                })
-                                            })
+                                            if (this.props.selectedObjectData.length == 0) {
+                                                return (!(importData.map(item => item.asset_control_number).includes(value)))
+                                            } 
+                                            return true
                                         }
                                     ),
                                 mac_address: Yup.string()
                                     .required(locale.texts.MAC_ADDRESS_IS_REQUIRED)
+
+                                    /** check if there are duplicated mac address in object table */
                                     .test(
                                         'mac_address',
-                                        locale.texts.THE_MAC_ADDRESS_IS_ALREADY_USED,
-                                        value => {
-                                            return value !== undefined && new Promise((resolve, reject) => {
-                                                axios.post(dataSrc.getObjectTable, {
-                                                    objectType: [0]
-                                                })
-                                                .then(res => {
-                                                    if (this.props.selectedObjectData.length == 0) {
-                                                        resolve(!(res.data.rows.map(item => item.mac_address).includes(value)))
-                                                    } else {
-                                                        resolve(true)
-                                                    }
-                                                })
-                                                .catch(err => {
-                                                    console.log(err)
-                                                })
-                                            })
-                                        }
-                                    )
-                                    .test(
-                                        'mac_address',
-                                        locale.texts.THE_MAC_ADDRESS_FORM_IS_WRONG,
+                                        locale.texts.THE_MAC_ADDRESS_IS_ALREADY_USED_OR_FORMAT_IS_NOT_CORRECT,
                                         value => {
                                             if (value == undefined) return false
-                                            var pattern = new RegExp("^[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}$");
-                                            if( value.match(pattern)) return true
-                                            return false
+
+                                            if (this.props.selectedObjectData.length != 0) {
+                                                return true
+                                            } else {
+
+                                                var pattern = new RegExp("^[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}$");
+                                                if(value.match(pattern)) {
+                                                    return (!objectTable.map(item => item.mac_address).includes(value.match(/.{1,2}/g).join(':')))
+                                                } 
+                                                return false
+                                            }
                                         }
                                     ),
+
                                 radioGroup: Yup.string().required(locale.texts.STATUS_IS_REQUIRED),
 
                                 select: Yup.string()
@@ -246,7 +231,6 @@ class EditObjectForm extends React.Component {
                                         return sum
                                     },0)      
                             }
-                                  
                             const postOption = {
                                 id,
                                 ...values,

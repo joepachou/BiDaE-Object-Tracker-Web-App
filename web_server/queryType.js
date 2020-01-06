@@ -544,7 +544,7 @@ function query_addObject (formOption) {
 			$2, 
 			$3,
 			$4,
-			'normal',
+			$5,
 			0
 		);
 	`;
@@ -553,7 +553,8 @@ function query_addObject (formOption) {
 		formOption.type, 
 		formOption.asset_control_number, 
 		formOption.name, 
-		formOption.mac_address
+		formOption.mac_address,
+		formOption.status
 
 	];
 

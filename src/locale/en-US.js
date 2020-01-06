@@ -195,6 +195,7 @@ const en =  {
     AREA_IS_REQUIRED: "Area is required",
     NOT_ASSIGNED_TO_ANY_DEVICES: "Not assigned to any devices",
     MAC_DO_NOT_MATCH:"Mac address do not match",
+    THE_MAC_ADDRESS_IS_ALREADY_USED_OR_FORMAT_IS_NOT_CORRECT: 'Mac Address is already used or the format is wrong',
 
     /** Place Holder */
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "please enter or scan mac address",
