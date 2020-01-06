@@ -183,8 +183,10 @@ class ObjectManagementContainer extends React.Component{
                     <Button 
                         variant="outline-danger" 
                         className='text-capitalize ml-3 mr-2 py-0'
-                        onClick={()=>this.DeleteClick(props)}
-                        >{locale.texts.REMOVE}
+                        style={{background: 'none'}}
+                        onClick={()=>this.handleRemove(props)}
+                    >
+                        {locale.texts.REMOVE}
                     </Button>
             })
 
@@ -333,15 +335,6 @@ class ObjectManagementContainer extends React.Component{
         }
 
     }
-
-    deleteBind= () => {
-
-        this.setState({
-              isShowEditImportTable:true
-          // selectedRowData_Import:
-       })
-    }
-
 
     deleteBinding = () => {
         let { locale } = this.context
@@ -639,10 +632,13 @@ class ObjectManagementContainer extends React.Component{
          fileReader.readAsBinaryString(files[0]);
     };
 
-    DeleteClick= (key) => {
+    handleRemove = (key) => {
         deleteFlag = true 
+
         this.setState({
-            isShowEditImportTable: true
+            selectedObjectData: key.original,
+            isShowEditImportTable: true,
+            formTitle: "dissociation" 
         })
     };
 
@@ -699,15 +695,6 @@ class ObjectManagementContainer extends React.Component{
                             >
                                 {locale.texts.ASSOCIATE}
                             </Button>
-                        
-                            {/* <Button 
-                                variant="outline-primary" 
-                                className='text-capitalize mr-2 mb-1'
-                                name="delete binding"
-                                onClick={this.deleteBinding}
-                            >
-                                {locale.texts.BINDING_DELETE}
-                            </Button> */}
                                 
                             <Button 
                                 variant="outline-primary" 
@@ -717,39 +704,10 @@ class ObjectManagementContainer extends React.Component{
                             >
                                 {locale.texts.ADD_OBJECT}
                             </Button>
-                            {/* <Button 
-                                variant="outline-primary" 
-                                className='text-capitalize mr-2 mb-1'
-                                name="dissociation"
-                                onClick={this.handleClickButton}
-                            >
-                                {locale.texts.BINDING_DELETE}
-                            </Button> */}
-
-                            {/* 
-                            <Button 
-                                variant="outline-primary" 
-                                className='text-capitalize mr-2 mb-1'
-                                name="associate object"
-                                onClick={this.handleClickButton}
-                            >
-                                {locale.texts.ASSOCIATE}
-                            </Button>
-                            
-                            <InputFiles accept=".xlsx, .xls" onChange={this.onImportExcel}>
-                                <button 
-                                className="btn btn-primary"
-                                >
-                                {locale.texts.IMPORT_OBJECT}
-                                </button>
-                            </InputFiles> */}
-
-
                         </ButtonToolbar>
                         <SelectTable
                             keyField='id'
                             data={this.state.data}
-                            // columns={objectTableColumn_delete}
                             columns={this.state.column}
                             ref={r => (this.selectTable = r)}
                             className="-highlight"
@@ -757,32 +715,20 @@ class ObjectManagementContainer extends React.Component{
                             {...extraProps}
                             getTrProps={(state, rowInfo, column, instance) => {
                                 return {
-                                    onClick: (e, handleOriginal) => {
-                                        this.setState({
-                                            selectedRowData: this.state.data[rowInfo.index],
-                                            isShowEdit: true,
-                                            isPatientShowEdit: false,
-                                            formTitle: 'edit object',
-                                            formPath: editObject,
-                                            disableASN:'true'
-                                        })
-                                                            
-                                        let id = (rowInfo.index+1).toString()
-
-                                        deleteFlag ? 
+                                    onClick: (e) => {
+                                        if (!e.target.type) {
                                             this.setState({
-                                            isShowEdit: false,
-                                        })
-                                        : null
-
-                                        deleteFlag ? 
-                                        deleteFlag = false
-                                        : null
-
-                                        this.toggleSelection(id)
-                                        if (handleOriginal) {
-                                            handleOriginal()
+                                                selectedRowData: this.state.data[rowInfo.index],
+                                                isShowEdit: true,
+                                                isPatientShowEdit: false,
+                                                formTitle: 'edit object',
+                                                formPath: editObject,
+                                                disableASN:'true'
+                                            })
                                         }
+              
+                                        let id = (rowInfo.index+1).toString()
+                                        this.toggleSelection(id)
                                     }
                                 }
                             }
@@ -922,7 +868,7 @@ class ObjectManagementContainer extends React.Component{
 
                 <BindForm
                     show = {isShowBind} 
-                    title=  {this.state.formTitle} 
+                    title={this.state.formTitle} 
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={this.state.formPath}
                     handleCloseForm={this.handleCloseForm}
@@ -933,13 +879,13 @@ class ObjectManagementContainer extends React.Component{
                     }
                 />
                 <DissociationForm
-                    show = {isShowEditImportTable} 
-                    title=  {this.state.formTitle} 
-                    selectedObjectData={selectedRowData_Import || null} 
+                    show={isShowEditImportTable} 
+                    title={this.state.formTitle} 
+                    selectedObjectData={this.state.selectedObjectData || null} 
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={this.state.formPath}
                     handleCloseForm={this.handleCloseForm}
-                    data={this.state.data.reduce((dataMap, item) => {
+                    data={this.state.objectTable.reduce((dataMap, item) => {
                         dataMap[item.mac_address] = item
                         return dataMap
                         }, {})
