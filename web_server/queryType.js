@@ -537,6 +537,7 @@ function query_addObject (formOption) {
 			name,
 			mac_address,
 			status,
+			area_id,
 			object_type
 		)
 		VALUES (
@@ -545,6 +546,7 @@ function query_addObject (formOption) {
 			$3,
 			$4,
 			$5,
+			$6,
 			0
 		);
 	`;
@@ -554,8 +556,8 @@ function query_addObject (formOption) {
 		formOption.asset_control_number, 
 		formOption.name, 
 		formOption.mac_address,
-		formOption.status
-
+		formOption.status,
+		formOption.area_id
 	];
 
 
