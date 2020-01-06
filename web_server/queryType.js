@@ -267,49 +267,40 @@ const query_getImportTable = () => {
 
 
 function query_editImportData (formOption) {
-	// const test = `
-	// 	UPDATE import_table
-	// 	SET 
-	// 		mac_address = '${formOption[1]}',
-	// 		bindflag = '${formOption[4]}'
-	// 	WHERE asset_control_number = '${formOption[0]}';
-	// `
-	const test = `
-		INSERT INTO object_table
-			(
-				asset_control_number,
-				mac_address,
-				name,
-				type,
-				registered_timestamp,
-				status,
-				object_type
-			)
-		VALUES(
-			'${formOption[0]}',
-			'${formOption[1]}',
-			'${formOption[2]}',
-			'${formOption[3]}',
-			now(),
+	console.log(formOption)
+	const text = `
+		INSERT INTO object_table (
+			asset_control_number,
+			mac_address,
+			name,
+			type,
+			status,
+			object_type
+		)
+		VALUES (
+			$1,
+			$2,
+			$3,
+			$4,
 			'normal',
 			0
 		)
 	`
 	;
 
-	// const values = [
-	// 	formOption[0],
-	// 	formOption[1],
-	// 	formOption[2],
-	// 	formOption[3]
-	// ]
+	const values = [
+		formOption[0],
+		formOption[1],
+		formOption[2],
+		formOption[3]
+	]
 
-	// const query = {
-	// 	text, 
-	// 	values
-	// };
+	const query = {
+		text, 
+		values
+	};
 
-	return test;
+	return query;
 
 }
 

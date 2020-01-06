@@ -174,7 +174,7 @@ const tw = {
     RESIDENT_LONG_STAY_IN_DANGER: "久留監控",
     RESIDENT_NOT_STAY_ROOM: "房間監控",
     DISSOCIATION: "解除綁定",
-
+    ASSOCIATION: "綁定儀器",
 
     /** Error Message */
     GENDER_IS_REQUIRED: "請選擇性別",
@@ -199,7 +199,7 @@ const tw = {
     NOT_ASSIGNED_TO_ANY_DEVICES: "尚未指定任何儀器",
     MAC_DO_NOT_MATCH:"不符合當前Mac",
     THE_MAC_ADDRESS_IS_ALREADY_USED_OR_FORMAT_IS_NOT_CORRECT: 'Mac Address已被使用或形式錯誤',
-
+    ASSET_CONTROL_NUMBER_IS_NOT_FOUND: "未有符合的財產編號",
 
     /** Place Holder */
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "請輸入或掃描mac address",

@@ -207,11 +207,11 @@ const editImportData = (request, response) => {
     const formOption = request.body.formOption
     pool.query(queryType.query_editImportData(formOption))       
         .then(res => {
-            console.log('edit ImportData data')
+            console.log('edit import data')
             response.status(200).json(res)
         })
         .catch(err => {
-            console.log("edit ImportDataf ails: " + err)
+            console.log("edit import data fails" + err)
         })     
 }
 

@@ -308,7 +308,7 @@ class ObjectManagementContainer extends React.Component{
                     disableASN:false
                 })
                 break;
-            case "associate object":
+            case "associate":
                 this.setState({
                     isShowBind: true,
                 })
@@ -690,7 +690,7 @@ class ObjectManagementContainer extends React.Component{
                             <Button 
                                 variant="outline-primary" 
                                 className='text-capitalize mr-2 mb-1'
-                                name="associate object"
+                                name="associate"
                                 onClick={this.handleClickButton}
                             >
                                 {locale.texts.ASSOCIATE}
@@ -789,8 +789,6 @@ class ObjectManagementContainer extends React.Component{
                                         })
                                             : null
                                         })
-
-                                    
                                     }
                                 }
                             }}
@@ -823,18 +821,6 @@ class ObjectManagementContainer extends React.Component{
                             className="-highlight"
                             style={{height:'75vh'}}
                             {...extraProps}
-                            getTrProps={(state, rowInfo, column, instance) => {
-                            
-                                return {
-                                    onClick: (e, handleOriginal) => {
-    
-                                            if (handleOriginal) {
-                                                handleOriginal()
-                                            }
-                                        }
-                                }
-                            }
-                            }
                         />
                     </TabPanel>
                 </Tabs>

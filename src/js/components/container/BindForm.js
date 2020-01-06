@@ -77,44 +77,38 @@ class BindForm extends React.Component {
 
     handleSubmit = (postOption) => {
 
-                if (this.state.showDetail){
-                        var pattern = new RegExp("^[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}$");
-                        if( this.state.mac_address.match(pattern)) 
-                        {
-                        let formOption = []
-                        formOption.push(this.state.inputValue)
-                        formOption.push(this.state.mac_address)
-                        formOption.push(this.state.objectName)
-                        formOption.push(this.state.objectType)
-                        // formOption.push('Already Binding')
-                        console.log(formOption)
-                        axios.post(editImportData, 
-                            {
-                                formOption
-                            }).then(res => {
-                                this.UXtest()
-                            }).catch( error => {
-                                console.log(error)
-                            })
-                        } 
-                else{
-                    setTimeout(this.props.handleSubmitForm(),1000)
-                    alert("連結失敗，MAC格式錯誤");
-                    this.props.handleCloseForm()
-                    this.handleClose()
-                } 
-        
-                    }
-                    else{
-                        setTimeout(this.props.handleSubmitForm(),1000)
-                        alert("連結失敗，表裡沒有這個acn");
-                        this.props.handleCloseForm()
+        if (this.state.showDetail){
+            var pattern = new RegExp("^[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}$");
+            if( this.state.mac_address.match(pattern)) {
+                let formOption = []
+                formOption.push(this.state.inputValue)
+                formOption.push(this.state.mac_address)
+                formOption.push(this.state.objectName)
+                formOption.push(this.state.objectType)
+
+                console.log(formOption)
+                axios.post(editImportData, {
+                    formOption
+                }).then(res => {
+                    setTimeout(function() { 
+                        this.props.handleSubmitForm()
                         this.handleClose()
-                    }    
-
-                  
-
-      
+                    }.bind(this),1000)
+                }).catch( error => {
+                    console.log(error)
+                })
+            } else {
+                setTimeout(this.props.handleSubmitForm(),1000)
+                alert("連結失敗，MAC格式錯誤");
+                this.props.handleCloseForm()
+                this.handleClose()
+            } 
+        } else {
+            setTimeout(this.props.handleSubmitForm(),1000)
+            alert("連結失敗，表裡沒有這個acn");
+            this.props.handleCloseForm()
+            this.handleClose()
+        }    
     }
 
     handleMacAddress(event){
@@ -159,23 +153,6 @@ class BindForm extends React.Component {
             })
         :
         null
-
-    
-    }
-
-    UXtest = () => {
-        this.setState({ISuxTest: true}) 
-        setTimeout(function() 
-        { 
-            this.setState({ISuxTest: false})
-            this.setState({ISuxTest_success: true}) 
-            setTimeout(function() { 
-                this.setState({ISuxTest_success: false})
-                this.props.handleSubmitForm()
-                this.handleClose()
-            }.bind(this),1000)
-        }.bind(this), 1000)
-    
     }
 
 
@@ -187,7 +164,7 @@ class BindForm extends React.Component {
         return (
             <Modal show={this.state.show} onHide={this.handleClose} size='md'>
                 <Modal.Header closeButton className='font-weight-bold text-capitalize'>
-                    {locale.texts.BINDING_SETTING}
+                    {locale.texts.ASSOCIATION}
                 </Modal.Header >
                 <Modal.Body
                     className='mb-2'
@@ -196,14 +173,13 @@ class BindForm extends React.Component {
                         initialValues = {{
                            acn:''
                         }}
-
                         validationSchema = {
                             Yup.object().shape({
                                 acn: Yup.string()
                                     .required(locale.texts.ASSET_CONTROL_NUMBER_IS_REQUIRED)
                                     .test(
                                         'acn', 
-                                        "acn未在列表上" ,
+                                        locale.texts.ASSET_CONTROL_NUMBER_IS_NOT_FOUND,
                                         value => {
                                             if (Object.keys(data).includes(value)) {
                                                 this.setState({
@@ -230,7 +206,7 @@ class BindForm extends React.Component {
                                         type="text"
                                         name="acn"
                                         placeholder={locale.texts.PLEASE_ENTER_OR_SCAN_ASSET_CONTROL_NUMBER}
-                                        className={'form-control' + (errors.acn && touched.acn ? ' is-invalid' : '')} 
+                                        className={'text-capitalize form-control' + (errors.acn && touched.acn ? ' is-invalid' : '')} 
                                         // value={this.state.inputValue}
                                         // onChange={this.updateInput()}
                                     />
@@ -262,25 +238,6 @@ class BindForm extends React.Component {
                                     </div>
                                   
                                 }
-
-                                <FadeIn>
-                                    <div className="d-flex justify-content-center align-items-center">
-                                    {this.state.ISuxTest ? (
-                                        <Lottie options={defaultOptions} height={120} width={120} /> 
-                                    ) : (
-                                        null
-                                    )}
-                                    </div>
-                                </FadeIn>
-                                <FadeIn>
-                                    <div className="d-flex justify-content-center align-items-center">
-                                    {this.state.ISuxTest_success ? (
-                                        <Lottie options={defaultOptions2} height={120} width={120} /> 
-                                    ) : (
-                                        null
-                                    )}
-                                    </div>
-                                </FadeIn>
 
                                 {this.state.showDetail &&
                                     <Modal.Footer>
