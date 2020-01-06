@@ -220,7 +220,7 @@ class MainContainer extends React.Component{
             locale: locale.abbr
         })
         .then(res => {
-            let lbeaconPosition = res.data.rows.reduce((activatedLbeacons, item) => {
+            let lbeaconPosition = res.data.reduce((activatedLbeacons, item) => {
                 let coordinate = this.createLbeaconCoordinate(item.uuid).toString()
                 if (item.health_status && !activatedLbeacons.includes(coordinate)) {
                     activatedLbeacons.push(coordinate)

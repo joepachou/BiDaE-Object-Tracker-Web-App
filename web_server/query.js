@@ -239,10 +239,10 @@ const getLbeaconTable = (request, response) => {
         .then(res => {
             console.log('Get lbeaconTable data')
             res.rows.map(item => {
-                item.health_status =  moment().diff(item.last_report_timestamp, 'days') < 1 ? 1 : 0 
-                item.last_report_timestamp = moment.tz(item.last_report_timestamp, process.env.TZ).locale(locale).format('lll');
+                // item.health_status =  moment().diff(item.last_report_timestamp, 'days') < 1 ? 1 : 0 
+                // item.last_report_timestamp = moment.tz(item.last_report_timestamp, process.env.TZ).locale(locale).format('lll');
             })
-            response.status(200).json(res)
+            response.status(200).json(res.rows)
 
         })
         .catch(err => {
@@ -392,13 +392,30 @@ const addPatient = (request, response) => {
 
 
 const editObjectPackage = (request, response) => {
-    const { formOption, username, pdfPackage } = request.body
+    const { formOption, username, pdfPackage,isDelayTime,locale } = request.body
+   
+    // moment.tz(item.submit_timestamp, process.env.TZ).locale(locale).format('LLL');
+    // moment(item.reserved_timestamp).add(30,"minutes")
+    let time = ''
+    isDelayTime ? time = moment(Date.now()).add(40,"minutes")._d
+    : time = moment(Date.now()).add(30,"minutes")._d
+
+    
+    console.log('-----------------final time:-----------------')
+    console.log(moment(time).format('LT'))
+    console.log('-----------------another type:-----------------')
+    console.log(moment(time).toDate())
+    console.log('----------------------------------------------')
+
+
+    
+
 
     pool.query(queryType.query_addEditObjectRecord(formOption, username))
         .then(res => {
             const record_id = res.rows[0].id
             console.log('Add edited object record success')
-            pool.query(queryType.query_editObjectPackage(formOption,username, record_id))
+            pool.query(queryType.query_editObjectPackage(formOption,username, record_id,time))
                 .then(res => {
                     console.log('Edit object package success')
                     if (pdfPackage) {
@@ -848,6 +865,18 @@ const setGeoFenceConfig = (request, response) =>{
         })
 }
 
+const setGeoFenceConfigRows = (request, response) =>{
+    let config = request.body
+    pool.query(queryType.query_setGeoFenceConfigRows(config))
+        .then(res => {
+            console.log(`set geo fence config`)
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(`set geo fence config fail: ${err}`)
+        })
+}
+
 const checkoutViolation = (request, response) => {
     let { 
         mac_address,
@@ -1180,6 +1209,7 @@ module.exports = {
     validateUsername,
     setUserRole,
     setGeoFenceConfig,
+    setGeoFenceConfigRows,
     setMonitorConfig,
     checkoutViolation,
     confirmValidation,

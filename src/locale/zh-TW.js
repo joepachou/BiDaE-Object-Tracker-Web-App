@@ -112,7 +112,8 @@ const tw = {
     DELETE_OPTION:"移除選項",
     DELETE_OPTION:"移除選項",
     CLEAN_PATH:"刪除路徑",
-    
+    RETURN:"還原",
+
     /* Form Field */
     NAME: "名稱",
     TYPE: "類別",
@@ -173,6 +174,7 @@ const tw = {
     RESIDENT_LOCATION_MONITOR: "位置監控",
     RESIDENT_LONG_STAY_IN_DANGER: "久留監控",
     RESIDENT_NOT_STAY_ROOM: "房間監控",
+    RESIDENT_VIOLATE_GEOFENCE: "Geofence監控",
     DISSOCIATION: "解除綁定",
     ASSOCIATION: "綁定儀器",
 

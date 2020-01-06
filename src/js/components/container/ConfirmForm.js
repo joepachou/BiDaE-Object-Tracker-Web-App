@@ -49,7 +49,7 @@ class ConfirmForm extends React.Component {
             case "reserve":
             // console.log(this.state.reserveInitTime)
                 this.setState({
-                    isDelayTime: true
+                    isDelayTime: !this.state.isDelayTime
                 })
         }
     }
@@ -194,10 +194,9 @@ class ConfirmForm extends React.Component {
                                                         variant="outline-secondary" 
                                                         className='mr-2 text-capitalize' 
                                                         onClick={this.handleButtonClick}
-                                                        name="reserve"
-                                                        disabled={isDelayTime}
-                                                    >
-                                                        {locale.texts.DELAY_BY} {config.reservedDelayTime} {locale.texts.MINUTES}
+                                                        name="reserve"    
+                                                    > 
+                                                    { this.state.isDelayTime ? locale.texts.RETURN  : locale.texts.DELAY_BY} {config.reservedDelayTime} {locale.texts.MINUTES}
                                                     </Button>
                                                 </ButtonToolbar>
                                             </Row>
@@ -213,7 +212,6 @@ class ConfirmForm extends React.Component {
                         </Row>
                         <Formik    
                             onSubmit={({ radioGroup, select }, { setStatus, setSubmitting }) => {
-                             
                                this.props.handleConfirmFormSubmit(isDelayTime)
                             }}
 

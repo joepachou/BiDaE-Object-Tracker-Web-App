@@ -131,12 +131,14 @@ const config = {
         RESIDENT_LOCATION_MONITOR: "resident location monitor",
         RESIDENT_LONG_STAY_IN_DANGER: "resident long stay in danger",
         RESIDENT_NOT_STAY_ROOM: "resident not stay room",
+        GEO_FENCE_VIOLENCE: "resident violate geofence",
     },
 
     monitorSettingUrlMap: {
         "resident movement monitor": "movement_config",
         "resident long stay in danger": "location_long_stay_in_danger_config",
-        "resident not stay room": "location_not_stay_room_config"
+        "resident not stay room": "location_not_stay_room_config",
+        "resident violate geofence": "geo_fence_config"
     },
 
     shiftOption: [
@@ -691,7 +693,7 @@ const config = {
                 if (item.object_type != 0) PatientTotalNumber ++;
                 else DeviceTotalNumber ++;   
             })
-            
+            //摸到大頭針之後的方塊
             const content = `
                 <div>
                     <h4 class="border-bottom pb-1 px-2">${object[0].location_description}</h4>
@@ -713,9 +715,18 @@ const config = {
                                 <div class="popupType">
                                     ${item.status !== "normal" 
                                         ? `, ${locale.texts[item.status.toUpperCase()]}`
-                                        : `, ${item.residence_time}`
+                                        : `, ${item.residence_time}`    
                                     }
                                 </div>
+
+                                <div class="popupType">
+                                ${item.status == "reserve" 
+                                    ? `~ ${item.reserved_timestamp_final}`
+                                    : ''
+                                }
+                            </div>
+                        
+
                             </div>
                         `
                         } else {

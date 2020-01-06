@@ -110,7 +110,8 @@ const en =  {
     BINDING_DELETE:"Binding Delete",
     DELETE_OPTION:"Delete option",
     CLEAN_PATH:"Clean path",
-    
+    RETURN:"Return",
+
     /* Form Field */
     NAME: "name",
     TYPE: "type",
@@ -172,6 +173,7 @@ const en =  {
     RESIDENT_LOCATION_MONITOR: "resident location monitor",
     RESIDENT_LONG_STAY_IN_DANGER: "resident long stay",
     RESIDENT_NOT_STAY_ROOM: "resident not stay room",
+    RESIDENT_VIOLATE_GEOFENCE: "resodent violate geofence",
     DISSOCIATION: "dissociation",
     ASSOCIATION: "association",
 

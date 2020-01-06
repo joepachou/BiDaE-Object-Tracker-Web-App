@@ -123,6 +123,7 @@ class MonitorSettingBlock extends React.Component{
 
         return (
             <div>
+                {console.log('hoi')}
                 {Object.keys(this.state.data).length !== 0 
                     ?   <>
                             <Row className="my-3">

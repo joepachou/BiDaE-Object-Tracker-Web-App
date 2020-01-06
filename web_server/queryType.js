@@ -538,6 +538,7 @@ function query_addObject (formOption) {
 			$4,
 			$5,
 			$6,
+			'normal',
 			0
 		);
 	`;
@@ -623,14 +624,14 @@ const query_addImport = (formOption) => {
 	return query;
 }
 
-const query_editObjectPackage = (formOption, record_id) => {
+const query_editObjectPackage = (formOption,username, record_id,time) => {
 
 	let item = formOption[0]
 
+	console.log(time)
+	console.log('O.O')
+
 	let text = `
-
-
-
 
 		SELECT id
 		FROM user_table
@@ -641,7 +642,7 @@ const query_editObjectPackage = (formOption, record_id) => {
 			status = '${item.status}',
 			transferred_location = '${item.transferred_location ? item.transferred_location.value : ' '}',
 			note_id = ${record_id},
-			reserved_timestamp = ${item.status == 'reserve' ? 'now()' : null},
+			reserved_timestamp = ${item.status == 'reserve' ? time : null},
 			reserved_user_id = (SELECT id
 				FROM user_table
 				WHERE user_table.name='${username}')
@@ -650,7 +651,7 @@ const query_editObjectPackage = (formOption, record_id) => {
 	`
 	return text
 
-	return null
+
 }
 
 function query_signin(username) {
@@ -1135,6 +1136,29 @@ const query_getGeoFenceConfig = (areaId) => {
 	;`
 }
 
+const query_setGeoFenceConfigRows = (config) =>{
+
+	const merge_perimeters_uuids 	= config.perimeters['uuids'].join(',')
+	const merge_fences_uuids 		= config.fences['uuids'].join(',')
+	console.log(config)
+
+	var perimeters = [config.perimeters['number'], merge_perimeters_uuids, config.perimeters['rssi']].join(',')
+	var fences = [config.fences['number'], merge_fences_uuids, config.fences['rssi']].join(',')
+
+	const query =  `
+		UPDATE geo_fence_config
+		SET 
+			enable = '${config.enable}',
+			perimeters = '${perimeters}',
+			fences = '${fences}',
+			start_time = '${config.start_time}',
+			end_time = '${config.end_time}',
+			area_id = ${config.area_id}
+		WHERE id = ${config.id}
+	`
+	return query
+}
+
 const query_setGeoFenceConfig = (value, areaId) =>{
 	return `
 		UPDATE geo_fence_config
@@ -1443,6 +1467,7 @@ module.exports = {
 	query_getAreaTable,
 	query_getGeoFenceConfig,
 	query_setGeoFenceConfig,
+	query_setGeoFenceConfigRows,
 	query_checkoutViolation,
 	query_confirmValidation,
 	query_backendSearch,
