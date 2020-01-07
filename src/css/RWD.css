@@ -93,18 +93,6 @@
 
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) and (max-width: 991.98px) {
-    html, body {
-        /* font-size: 14px; */
-    }
-
-    #navbar {
-        /* height: 50px; */
-        /* font-size: 14px; */
-    }
-
-    /* .navbar img {
-        width: 60px;
-    } */
 
     #mapid {
         height: 30vh;
@@ -124,11 +112,9 @@
         height: 55px;
         font-size: 14px;
     }
-
     #mapid {
-        height: 40vh;
+        height: 75vh;
     } 
-
 }
 
 /* Extra large devices (large desktops, 1200px and up) */
@@ -154,15 +140,6 @@
         height: 90vh;
     }
 
-    /* .searchResultListGroup {
-        max-Height: 
-        overflow: hidden scroll;
-    } */
-
-    /* #searchResult {
-        padding-right: 1rem
-    } */
-
     #downloadPdfRequest {
         z-Index: 1050;
         top: 10%;
@@ -171,14 +148,4 @@
         bottom: auto;
         padding: 0;
     }
-
-    /* #confirmForm {
-        z-Index: 1050;
-        top: 10%;
-        left: -10%;
-        right: auto;
-        bottom: auto;
-        padding: 0;
-    } */
-
 }
