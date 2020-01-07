@@ -8,7 +8,6 @@ import _ from 'lodash'
 import { AppContext } from '../../context/AppContext';
 import axios from 'axios';
 import dataSrc from '../../dataSrc'
-import {antPath} from 'leaflet-ant-path'
 import polylineDecorator from 'leaflet-polylinedecorator'
 
 class Map extends React.Component {
@@ -27,48 +26,17 @@ class Map extends React.Component {
     }
     map = null;
     image = null;
-    // polyline = null;
-    // decorator = L.layerGroup();
     pathOfDevice = L.layerGroup();
     markersLayer = L.layerGroup();
     errorCircle = L.layerGroup();
     lbeaconsPosition = L.layerGroup();
-    ç = L.layerGroup()
+    geoFenceLayer = L.layerGroup()
     currentZoom = 0
     prevZoom = 0
     pin_shift_scale = [0, -150]
 
     componentDidMount = () => {
-
         this.initMap();
-    
-        // if( this.state.ok === 0){
-        //     var latLngs = []
-        //     axios.post(dataSrc.getTrackingTableByMacAddress, {
-        //         object_mac_address : "c1:0f:00:0d:25:8d"
-        //     })
-        //     .then(res => {
-        //         res.data.rows.map(item => {
-        //             // console.log(item.lbeacon_uuid)
-        //             // let latLngY = item.lbeacon_uuid.slice( 17, 18)+item.lbeacon_uuid.slice( 19, 23)
-        //             // let latLngX = item.lbeacon_uuid.slice( 31, 37)
-        //             // //console.log(latLngX + "," + latLngY)
-        //             // let latLng = [latLngX,latLngY]
-        //             // latLngs.push(latLng)
-        //             // this.setState({
-        //             //     latLngs: latLngs
-        //             // })
-        //             // this.setState({
-        //             //     ok: 1
-        //             // })
-        //         })
-        //         //console.log(this.state.latLngs)
-        //     })
-        //     .catch(err => {
-        //         console.log(`get tracking table by mac address fail: ${err}`)
-        //     })
-        // }
-        // this.drawPolyline();  
     }
 
     componentDidUpdate = (prevProps) => {
@@ -99,7 +67,6 @@ class Map extends React.Component {
     }
 
     /** Set the search map configuration establishing in config.js  */
-
     initMap = () => {
         //console.log("initMap")
         let [{areaId}] = this.context.stateReducer
