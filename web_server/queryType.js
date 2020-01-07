@@ -356,18 +356,18 @@ function query_getImportData(formOption){
 
 const query_getLbeaconTable = 
     `
-	SELECT 
-		id,
-		uuid, 
-		description, 
-		ip_address, 
-		health_status, 
-		gateway_ip_address, 
-		last_report_timestamp,
-		danger_area,
-		room
-	FROM lbeacon_table
-	ORDER BY last_report_timestamp DESC
+		SELECT 
+			id,
+			uuid, 
+			description, 
+			ip_address, 
+			health_status, 
+			gateway_ip_address, 
+			last_report_timestamp,
+			danger_area,
+			room
+		FROM lbeacon_table
+		ORDER BY last_report_timestamp DESC
 	`;
 
 const query_getGatewayTable = 

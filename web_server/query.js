@@ -228,21 +228,20 @@ const cleanBinding = (request, response) => {
             console.log("clean Binding fails: " + err)
         })      
     })
-        
-    
 }
 
 
 const getLbeaconTable = (request, response) => {
+
     let { locale } = request.body || 'en'
     pool.query(queryType.query_getLbeaconTable)
         .then(res => {
             console.log('Get lbeaconTable data')
             res.rows.map(item => {
-                // item.health_status =  moment().diff(item.last_report_timestamp, 'days') < 1 ? 1 : 0 
-                // item.last_report_timestamp = moment.tz(item.last_report_timestamp, process.env.TZ).locale(locale).format('lll');
+                item.health_status =  moment().diff(item.last_report_timestamp, 'days') < 1 ? 1 : 0 
+                item.last_report_timestamp = moment.tz(item.last_report_timestamp, process.env.TZ).locale(locale).format('lll');
             })
-            response.status(200).json(res.rows)
+            response.status(200).json(res)
 
         })
         .catch(err => {

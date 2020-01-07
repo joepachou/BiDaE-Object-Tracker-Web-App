@@ -14,7 +14,6 @@ import {
     deleteLBeacon,
     deleteGateway
 } from "../../dataSrc"
-
 import { 
     trackingTableColumn,
     lbeaconTableColumn,
@@ -23,8 +22,9 @@ import {
 import { AppContext } from '../../context/AppContext';
 import {Tabs, Tab,TabList, TabPanel } from 'react-tabs';
 const SelectTable = selecTableHOC(ReactTable);
-class SystemStatus extends React.Component{
 
+
+class SystemStatus extends React.Component{
     static contextType = AppContext
     state = {
         lbeaconData: [],
@@ -450,14 +450,6 @@ class SystemStatus extends React.Component{
                             freezeWhenExpanded={false}
                         />
                 </TabPanel>
-
-
-
-
-{/* 
-                    <TabPanel>
-
-                    </TabPanel> */}
                 </Tabs>
                 <EditLbeaconForm 
                     show= {this.state.isShowModal} 
