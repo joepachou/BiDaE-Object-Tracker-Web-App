@@ -35,8 +35,7 @@ class SearchContainerForTablet extends React.Component {
 
     componentDidUpdate = (prepProps) => {
         /** Refresh the search result automatically 
-         *  This feature can be adjust by the user by changing the boolean value in config
-        */
+         *  This feature can be adjust by the user by changing the boolean value in config */
         if (this.state.refreshSearchResult 
             && this.state.hasSearchKey 
             && !this.props.hasGridButton) {
@@ -61,6 +60,7 @@ class SearchContainerForTablet extends React.Component {
     getObjectType = () => {
 
         axios.post(getObjectTable, {
+            objectType: [0]
         })
         .then(res => {
             let objectTypeList = res.data.rows.reduce((objectTypeList, item) => {
@@ -76,54 +76,7 @@ class SearchContainerForTablet extends React.Component {
         .catch(err => {
             console.log(err)
         })
-        // const titleElementStyle = {
-        //     background: 'rgba(227, 222, 222, 0.619)',
-        //     fontWeight: 'bold',
-        //     fontSize: 10,
-        //     padding: 5,
-        // }
-
-        // const itemElementStyle = {
-        //     padding: 5
-        // }
-        
-
-        // /** Creat a set that stands for the unique object in this searching area */
-        // const { searchableObjectData } = this.props;
-        
-        // let objectTypeSet = new Set();
-        // let objectTypeMap = new Map();
-        
-        // for (let object in searchableObjectData) {
-        //     objectTypeSet.add(searchableObjectData[object].type)
-        // }
-
-        // /** Creat the titleList by inserting the item in the objectTypeSet
-        //  *  Also, create the character title element
-        //  */
-        // let sectionTitleList = [];
-        // let groupLetter = '';
-        // let elementIndex = 0;
-
-        // Array.from(objectTypeSet).map( item => {
-        //     // let currentLetter = item.toUpperCase().slice(0,1);
-        //     let currentLetter = item ? item.toUpperCase().charAt(0) : item;
-        //     if(!(groupLetter === currentLetter)) {
-        //         groupLetter = currentLetter;
-        //         let titleElement = <a id={groupLetter} key={elementIndex} className='titleElementStyle'><ListGroup.Item style={titleElementStyle}>{groupLetter}</ListGroup.Item></a>;
-        //         sectionTitleList.push(titleElement)
-        //         elementIndex++;
-        //     }
-        //     let itemElement = <a onClick={this.props.getSearchKey} key={elementIndex}><ListGroup.Item action style={itemElementStyle} >{item}</ListGroup.Item></a>;
-        //     sectionTitleList.push(itemElement);
-        //     elementIndex++;
-        // })
-        // this.setState({
-        //     sectionTitleList: sectionTitleList,
-        // })
     }
-
- 
 
     /**
      * Handle the cursor hover events in device that can use mouse.
@@ -172,14 +125,6 @@ class SearchContainerForTablet extends React.Component {
     }
 
     render() {      
-        const style = {
-        //     titleText: {
-        //         color: 'rgb(80, 80, 80, 1)'
-        //     }, 
-        }
-
-        const { locale } = this.context
-        
         return (                   
             <div id='searchContainer' className="py-1" onTouchMove={this.handleTouchMove}>
                 <Row id='searchBar' className='d-flex justify-content-center align-items-center pb-2'>
@@ -200,26 +145,7 @@ class SearchContainerForTablet extends React.Component {
                             />                            
                         </Col>
                     </Row>
-                    {/* <Col id='searchableObjectType' md={6} sm={6} xs={6} lg={6} xl={2} className='px-0'> */}
-                        {/* <SearchableObjectType 
-                            sectionTitleList={this.state.sectionTitleList} 
-                            sectionIndexList={this.state.sectionIndexList} 
-                            sectionIndex={this.state.sectionIndex} 
-                            handleMouseOver={this.handleMouseOver} 
-                            handleTouchStart={this.handleTouchStart} 
-                            handleTouchMove={this.handleTouchMove} 
-                            isShowSectionTitle={this.state.isShowSectionTitle}
-                            clientHeight={this.state.clientHeight}
-                        /> */}
-                    {/* </Col> */}
                 </div>
-                {/* <SearchableObjectType
-                    floatUp = {this.props.floatUp}
-                    objectTypeList = {this.props.objectTypeList}
-                    // onSubmit={this.getSearchResult}
-                    getSearchKey={this.props.getSearchKey}
-                    auth={this.props.auth}
-                /> */}
             </div>
         );
     }
