@@ -10,9 +10,7 @@ import PdfDownloadForm from "./PdfDownloadForm"
 import config from "../../config";
 import AccessControl from "../presentational/AccessControl"
 import { AppContext } from "../../context/AppContext";
-import AntPath from "react-leaflet-ant-path";
-import dataSrc from '../../dataSrc'
-import axios from 'axios';
+
 class SurveillanceContainer extends React.Component {
 
     static contextType = AppContext
