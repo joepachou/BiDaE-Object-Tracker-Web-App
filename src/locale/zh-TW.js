@@ -103,6 +103,7 @@ const tw = {
     SHOW_SEARCH_RESULTS_FOUND: "顯示找到的搜尋結果",
     SHOW_SEARCH_RESULTS_NOT_FOUND: "顯示未找到的搜尋結果",
     ASSOCIATE: "綁定設定",
+    DISSOCIATE: "解除綁定",
     IMPORT_OBJECT:"匯入",
     ACN_VERIFICATION:"ACN驗證",
     BINDING_SETTING:"綁定設定",
