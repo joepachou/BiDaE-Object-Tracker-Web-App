@@ -489,10 +489,9 @@ const config = {
             scrollWheelZoom: false
         },
 
-
         /** Set the icon option */
         iconOptions: {
-            iconSize: 22,
+            iconSize: process.env.MARKER_SIZE_IN_DESKTOP || 1,
             showNumber: !false,
         },
 
@@ -671,7 +670,7 @@ const config = {
         },
 
         /* Set the Marker dispersity that can be any positive number */
-        markerDispersity: 300,
+        markerDispersity: process.env.MARKER_DISPERSITY || 100,
 
         popupOptions: {
             minWidth: "500",
@@ -682,17 +681,7 @@ const config = {
 
         /** Set the html content of popup of markers */
         getPopupContent: (object, objectList, locale) => {
-            var indexNumberForPatient = 0
-            var indexNumberForDevice = 0
-            /* The style sheet is right in the src/css/Surveillance.css*/
-            var PatientTotalNumber = 0;
-            var DeviceTotalNumber = 0;
 
-            objectList.map((item,index) => {
-                //console.log(item)
-                if (item.object_type != 0) PatientTotalNumber ++;
-                else DeviceTotalNumber ++;   
-            })
             //摸到大頭針之後的方塊
             const content = `
                 <div>
@@ -963,16 +952,6 @@ const config = {
 
         /** Set the html content of popup of markers */
         getPopupContent: (object, objectList, locale) => {
-            var indexNumberForPatient = 0
-            var indexNumberForDevice = 0
-            /* The style sheet is right in the src/css/Surveillance.css*/
-            var PatientTotalNumber = 0;
-            var DeviceTotalNumber = 0;
-
-            objectList.map((item,index) => {
-                if (item.object_type != 0) PatientTotalNumber ++;
-                else DeviceTotalNumber ++;   
-            })
             
             const content = `
                 <div>
