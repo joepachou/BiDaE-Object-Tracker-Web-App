@@ -126,31 +126,6 @@ const query_getImportDataFromBinding = () => {
 	return text
 } 
 
-const query_getObjectTable_fromImport = () => {
-	let text = '';
-	
-		text +=`
-			SELECT 
-				import_table.name, 
-				import_table.asset_control_number,
-				import_table.type,
-				import_table.id,
-				import_table.bindflag,
-				import_table.mac_address,
-				import_table.area_id,
-				import_table.status,
-				import_table.transferred_location,
-				import_table.monitor_type
-			FROM import_table
-			WHERE import_table.bindflag = 'Already Binding'
-
-
-			ORDER BY import_table.asset_control_number ASC	
-		`;
-	
-	return text
-}
-
 const query_getObjectTable = (area_id, objectType ) => {
 
 	let text = '';
@@ -266,14 +241,15 @@ const query_getImportTable = () => {
 } 
 
 
-function query_editImportData (formOption) {
+function query_addAssociation (formOption) {
 	console.log(formOption)
 	const text = `
 		INSERT INTO object_table (
-			asset_control_number,
-			mac_address,
 			name,
 			type,
+			asset_control_number,
+			mac_address,
+			area_id,
 			status,
 			object_type
 		)
@@ -282,6 +258,7 @@ function query_editImportData (formOption) {
 			$2,
 			$3,
 			$4,
+			$5,
 			'normal',
 			0
 		)
@@ -289,10 +266,11 @@ function query_editImportData (formOption) {
 	;
 
 	const values = [
-		formOption[0],
-		formOption[1],
-		formOption[2],
-		formOption[3]
+		formOption.name,
+		formOption.type,
+		formOption.asset_control_number,
+		formOption.mac_address,
+		formOption.area_id
 	]
 
 	const query = {
@@ -1423,7 +1401,6 @@ module.exports = {
 	query_getTrackingData,
 	query_getTrackingTableByMacAddress,
 	query_getObjectTable,
-	query_getObjectTable_fromImport,
 	query_getPatientTable,
 	query_getImportTable,
     query_getLbeaconTable,
@@ -1475,7 +1452,7 @@ module.exports = {
 	query_deleteSameNameSearchQueue,
 	query_getBackendSearchQueue,
 	query_addBulkObject,
-	query_editImportData,
+	query_addAssociation,
 	query_cleanBinding,
 	query_getImportData,
 	query_editObject,

@@ -69,6 +69,7 @@ const getTrackingData = (request, response) => {
 
     pool.query(queryType.query_getTrackingData())        
         .then(res => {
+
             console.log('get tracking data')
 
             /** Filter the objects that do no belong the area */
@@ -105,10 +106,12 @@ const getTrackingData = (request, response) => {
                     < process.env.PANIC_TIME_INTERVAL_IN_SEC ? 1 : 0
 
                 /** Flag the object's battery volumn is limiting */
-                if (item.battery_voltage >= process.env.BATTER_VOLTAGE_INDICATOR                    
+                // console.log(process.env )
+                // console.log(item.battery_voltage)
+                if (item.battery_voltage >= parseInt(process.env.BATTERY_VOLTAGE_INDICATOR)                    
                     && item.found) {
                         item.battery_voltage = 3;
-                } else if (item.battery_voltage < process.env.BATTER_VOLTAGE_INDICATOR && item.battery_voltage > 0 && item.found) {
+                } else if (item.battery_voltage < parseInt(process.env.BATTERY_VOLTAGE_INDICATOR) && item.battery_voltage > 0 && item.found) {
                     item.battery_voltage = 2;
                 } else {
                     item.battery_voltage = 0
@@ -131,7 +134,6 @@ const getTrackingData = (request, response) => {
 
                 return item
             })
-            toReturn[1].battery_voltage = 2
 
         response.status(200).json(toReturn)
 
@@ -201,11 +203,10 @@ const getImportData = (request, response) => {
         })     
 }
 
-
-const editImportData = (request, response) => {
+const addAssociation = (request, response) => {
     let { locale, areaId } = request.body
     const formOption = request.body.formOption
-    pool.query(queryType.query_editImportData(formOption))       
+    pool.query(queryType.query_addAssociation(formOption))       
         .then(res => {
             console.log('edit import data')
             response.status(200).json(res)
@@ -253,6 +254,7 @@ const getLbeaconTable = (request, response) => {
 
 const getGatewayTable = (request, response) => {
     let { locale } = request.body
+
     pool.query(queryType.query_getGatewayTable)
         .then(res => {
             console.log('Get gatewayTable data')
@@ -308,21 +310,6 @@ const editImport = (request, response) => {
             console.log("Edit Import Fails: " + err)
         })
 }
-
-
-const getObjectTable_fromImport = (request, response) => {
-    const idPackage = request.body.newData
-        pool.query(queryType.query_getObjectTable_fromImport(idPackage))
-        .then(res => {
-            console.log("getObjectTable_fromImport success");
-            response.status(200).json(res)
-        })
-        .catch(err => {
-            console.log("getObjectTable_fromImport Fails: " + err)
-        })   
-}
-    
-
 
 const editPatient = (request, response) => {
     const formOption = request.body.formOption
@@ -1168,7 +1155,7 @@ module.exports = {
     getPatientTable,
     getImportTable,
     getImportData,
-    editImportData,
+    addAssociation,
     cleanBinding,
     getLbeaconTable,
     getGatewayTable,
@@ -1214,6 +1201,5 @@ module.exports = {
     confirmValidation,
     backendSearch,
     getBackendSearchQueue,
-    getObjectTable_fromImport,
     getTrackingTableByMacAddress
 }
