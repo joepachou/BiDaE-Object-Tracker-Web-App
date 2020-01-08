@@ -168,15 +168,9 @@ class ObjectManagementContainer extends React.Component{
             let columnPatient = _.cloneDeep(patientTableColumn)
             let data = [], dataPatient = []
 
-            column.map(field => {
-                field.headerStyle = {
-                    textAlign: 'left',
-                }
-                field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
-            })
-
             column.push({
-                Header: locale.texts['remove'.toUpperCase().replace(/ /g, '_')],
+                // Header: locale.texts['remove'.toUpperCase().replace(/ /g, '_')],
+                Header: "",
                 accessor: "Delete Option",
                 minWidth: 60,
                 Cell: props =>
@@ -188,6 +182,13 @@ class ObjectManagementContainer extends React.Component{
                     >
                         {locale.texts.REMOVE}
                     </Button>
+            })
+
+            column.map(field => {
+                field.headerStyle = {
+                    textAlign: 'left',
+                }
+                field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })
 
             columnPatient.map(field => {
@@ -695,7 +696,6 @@ class ObjectManagementContainer extends React.Component{
                             >
                                 {locale.texts.ASSOCIATE}
                             </Button>
-                                
                             <Button 
                                 variant="outline-primary" 
                                 className='text-capitalize mr-2 mb-1'
@@ -704,8 +704,17 @@ class ObjectManagementContainer extends React.Component{
                             >
                                 {locale.texts.ADD_OBJECT}
                             </Button>
+                            <Button 
+                                variant="outline-primary" 
+                                className='text-capitalize mr-2 mb-1'
+                                name="dissociation"
+                                onClick={this.handleClickButton}
+                            >
+                                {locale.texts.DISSOCIATE}
+                            </Button>
                         </ButtonToolbar>
-                        <SelectTable
+                        {/* <SelectTable */}
+                        <ReactTable
                             keyField='id'
                             data={this.state.data}
                             columns={this.state.column}
@@ -858,6 +867,7 @@ class ObjectManagementContainer extends React.Component{
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={this.state.formPath}
                     handleCloseForm={this.handleCloseForm}
+                    objectTable={this.state.objectTable}
                     data={this.state.dataImport.reduce((dataMap, item) => {
                         dataMap[item.asset_control_number] = item
                         return dataMap

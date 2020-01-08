@@ -1,58 +1,25 @@
-/**
- * EditObjectForm is the Modal in ObjectManagementContainer.
- * To increase the input in this form, please add the following code
- * 1. Creat the state of the desired input name in constructor and the html content in render function
- * 2. Add the corresponding terms in handleSubmit and handleChange
- * 3. Modify the query_editObject function in queryType
- */
-import React, { Component } from 'react';
+import React from 'react';
 import { Modal, Button, Row, Col } from 'react-bootstrap';
-import LocaleContext from '../../context/LocaleContext';
 import axios from 'axios';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { 
-    getImportData,
-    editImportData
+    addAssociation
 } from "../../dataSrc"
-
-import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
-import * as preloader from "./preloader.json";
-import * as success from "./success.json";
 import { AppContext } from '../../context/AppContext';
-const defaultOptions = {
-    loop: true,
-    autoplay: true,
-    animationData: preloader.default,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice"
-    }
-  };
-  const defaultOptions2 = {
-    loop: true,
-    autoplay: true,
-    animationData: success.default,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice"
-    }
-  };
-
+import Select from 'react-select';
+import config from '../../config'
 
 class BindForm extends React.Component {
 
     static contextType = AppContext
 
     state = {
-        show: this.props.show,
-        inputValue:'',
-        showDetail : '',
+        mac:'',
+        showDetail: false,
         objectName:'',
         objectType:'',
-        mac_address:'',
         alertText:'',
-        ISuxTest:false,
-        ISuxTest_success:false
     };
     
 
@@ -66,103 +33,50 @@ class BindForm extends React.Component {
   
     handleClose = () => {
         this.setState({
-            inputValue:'',
+            mac:'',
             showDetail : false,
             objectName:'',
             objectType:'',
-            mac_address:''
-    })
+            selectData: {},
+        })
         this.props.handleCloseForm()
     }
 
-    handleSubmit = (postOption) => {
-
-        if (this.state.showDetail){
-            var pattern = new RegExp("^[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}$");
-            if( this.state.mac_address.match(pattern)) {
-                let formOption = []
-                formOption.push(this.state.inputValue)
-                formOption.push(this.state.mac_address)
-                formOption.push(this.state.objectName)
-                formOption.push(this.state.objectType)
-
-                console.log(formOption)
-                axios.post(editImportData, {
-                    formOption
-                }).then(res => {
-                    setTimeout(function() { 
-                        this.props.handleSubmitForm()
-                        this.handleClose()
-                    }.bind(this),1000)
-                }).catch( error => {
-                    console.log(error)
-                })
-            } else {
-                setTimeout(this.props.handleSubmitForm(),1000)
-                alert("連結失敗，MAC格式錯誤");
-                this.props.handleCloseForm()
-                this.handleClose()
-            } 
-        } else {
-            setTimeout(this.props.handleSubmitForm(),1000)
-            alert("連結失敗，表裡沒有這個acn");
-            this.props.handleCloseForm()
-            this.handleClose()
-        }    
-    }
-
-    handleMacAddress(event){
-        this.setState({mac_address : event.target.value })
-    }
-
-
-
-    updateInput = (event) => {
-     this.setState({inputValue : event.target.value })
-        setTimeout(() => {
-            this.handleChange()   
-         }, 500);
-    }
-
-    handleChange(){
-    //   console.log(this.state.inputValue)
-    //   console.log(this.props.data)
-    this.setState({showDetail : false}) 
-        this.props.data.map(item => {
-            if(item.asset_control_number == this.state.inputValue )
-              this.setState({showDetail : true}) 
-    })
-
-       
-   
-
-
-   this.state.showDetail ?
-        axios.post(getImportData, {
-                formOption: this.state.inputValue
-            }).then(res => {
-                res.data.rows.map(item => {
-                    this.setState({
-                         objectName: item.name,
-                         objectType: item.type,
-                     }) 
-                })
-              
-            }).catch( error => {
-                console.log(error)
-            })
-        :
-        null
-    }
-
-
     render() {
         const { locale } = this.context
+
+        const areaOptions = Object.values(config.mapConfig.areaOptions).map(area => {
+            return {
+                value: area,
+                label: locale.texts[area.toUpperCase().replace(/ /g, '_')]
+            };
+        })
+
+        const style = {
+            input: {
+                borderRadius: 0,
+                borderBottom: '1 solid grey',
+                borderTop: 0,
+                borderLeft: 0,
+                borderRight: 0,
+                
+            },
+            errorMessage: {
+                width: '100%',
+                marginTop: '0.25rem',
+                marginBottom: '0.25rem',
+                fontSize: '80%',
+                color: '#dc3545'
+            },
+        }
+
         let {
-            data
+            data,
+            objectTable
         } = this.props
+
         return (
-            <Modal show={this.state.show} onHide={this.handleClose} size='md'>
+            <Modal show={this.props.show} onHide={this.handleClose} size='md'>
                 <Modal.Header closeButton className='font-weight-bold text-capitalize'>
                     {locale.texts.ASSOCIATION}
                 </Modal.Header >
@@ -171,44 +85,88 @@ class BindForm extends React.Component {
                 >
                     <Formik                    
                         initialValues = {{
-                           acn:''
+                           acn:'',
+                           mac:'',
+                           area:"",
                         }}
                         validationSchema = {
                             Yup.object().shape({
                                 acn: Yup.string()
                                     .required(locale.texts.ASSET_CONTROL_NUMBER_IS_REQUIRED)
-                                    .test(
-                                        'acn', 
-                                        locale.texts.ASSET_CONTROL_NUMBER_IS_NOT_FOUND,
-                                        value => {
+                                    .test({
+                                        name: 'acn', 
+                                        message: locale.texts.ASSET_CONTROL_NUMBER_IS_NOT_FOUND,
+                                        test: function (value) {
+                                            console.log(value)
                                             if (Object.keys(data).includes(value)) {
-                                                this.setState({
-                                                    objectName: data[value].name,
-                                                    objectType: data[value].type,
-                                                    showDetail : true,
-                                                    inputValue : value
-                                                }) 
+                                                // console.log(this)
+                                                // this.setState({
+                                                //     objectName: data[value].name,
+                                                //     // objectType: data[value].type,
+                                                //     showDetail: true,
+                                                //     // acn: value,
+                                                //     // selectData: data[value]
+                                                // }) 
+
                                                 return true
-                                            } else return false
+                                            } 
+                                            return this.createError({
+                                                message: '123',
+                                                path: 'acn',
+                                            })
                                         }
-                                    )
+                                    }),
+                                mac: Yup.string()
+                                .required(locale.texts.MAC_ADDRESS_IS_REQUIRED)
+
+                                /** check if there are duplicated mac address in object table */
+                                .test(
+                                    'mac_address',
+                                    locale.texts.THE_MAC_ADDRESS_IS_ALREADY_USED_OR_FORMAT_IS_NOT_CORRECT,
+                                    value => {
+                                        if (value == undefined) return false
+
+                                        var pattern = new RegExp("^[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}$");
+                                        if(value.match(pattern)) {
+                                            return (!objectTable.map(item => item.mac_address).includes(value.match(/.{1,2}/g).join(':')))
+                                        } 
+                                        return false
+                                    }
+                                ),
+
+                                area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
+
                             })
                         }
 
                         onSubmit={(values, { setStatus, setSubmitting }) => {
-                            this.handleSubmit()
+                            let formOption = this.state.selectData
+                            formOption = {
+                                ...formOption,
+                                mac_address: values.mac,
+                                area_id: config.mapConfig.areaModules[values.area.value].id || 0
+                            }
+                            axios.post(addAssociation, {
+                                formOption
+                            }).then(res => {
+                                setTimeout(function() { 
+                                    this.props.handleSubmitForm()
+                                    this.handleClose()
+                                }.bind(this),1000)
+                            }).catch( error => {
+                                console.log(error)
+                            })
                         }}
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm }) => (
                             <Form className="text-capitalize">
                                 <div className="form-group">
+                                    <small id="TextIDsmall" className="form-text text-muted">{locale.texts.ASSET_CONTROL_NUMBER}</small>
                                    <Field 
                                         type="text"
                                         name="acn"
                                         placeholder={locale.texts.PLEASE_ENTER_OR_SCAN_ASSET_CONTROL_NUMBER}
                                         className={'text-capitalize form-control' + (errors.acn && touched.acn ? ' is-invalid' : '')} 
-                                        // value={this.state.inputValue}
-                                        // onChange={this.updateInput()}
                                     />
                                       <ErrorMessage name="acn" component="div" className="invalid-feedback" />
                                 </div>
@@ -223,20 +181,39 @@ class BindForm extends React.Component {
                                             <small id="TextTypesmall" className="form-text text-muted">{locale.texts.TYPE}</small>
                                             <input type="readOnly" className="form-control" id="TextType" placeholder="類型" disabled = {true}  value={this.state.objectType}></input>  
                                         </div>  
+                                        <div className="form-group">
+                                            <small id="TextIDsmall" className="form-text text-muted">{locale.texts.AUTH_AREA}</small>
 
+                                            <Select
+                                                placeholder = {locale.texts.SELECT_AREA}
+                                                name="area"
+                                                value = {values.area}
+                                                onChange={value => setFieldValue("area", value)}
+                                                options={areaOptions}
+                                                style={style.select}
+                                                components={{
+                                                    IndicatorSeparator: () => null
+                                                }}
+                                            />
+                                            <Row className='no-gutters' className='d-flex align-self-center'>
+                                                <Col>
+                                                    {touched.area && errors.area &&
+                                                    <div style={style.errorMessage}>{errors.area}</div>}
+                                                </Col>
+                                            </Row>   
+                                            <ErrorMessage name="area" component="div" className="invalid-feedback" />
+                                        </div>
                                         <div className="form-group">
                                             <small id="inputMacAddresssmall" className="form-text text-muted">{locale.texts.MAC_ADDRESS}</small>
-                                            <input 
-                                                type="text" 
-                                                className="form-control" 
-                                                id="MacAddress" 
+                                            <Field 
+                                                type="text"
+                                                name="mac"
                                                 placeholder={locale.texts.PLEASE_ENTER_OR_SCAN_MAC_ADDRESS} 
-                                                value={this.state.mac_address}  
-                                                onChange={this.handleMacAddress.bind(this)}
-                                            />  
+                                                className={'text-capitalize form-control' + (errors.mac && touched.mac ? ' is-invalid' : '')} 
+                                            />
+                                            <ErrorMessage name="mac" component="div" className="invalid-feedback" />
                                         </div>
                                     </div>
-                                  
                                 }
 
                                 {this.state.showDetail &&

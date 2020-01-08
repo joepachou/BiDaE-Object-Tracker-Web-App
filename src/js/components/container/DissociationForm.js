@@ -7,43 +7,15 @@
  */
 import React, { Component } from 'react';
 import { Modal, Button, Row, Col } from 'react-bootstrap';
-import Select from 'react-select';
-import config from '../../config';
-import LocaleContext from '../../context/LocaleContext';
 import axios from 'axios';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import KeyboardEventHandler from 'react-keyboard-event-handler';
-
 import { 
     getImportData,
     editImportData,
     deleteDevice
 } from "../../dataSrc"
-
-import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
-import * as preloader from "./preloader.json";
-import * as success from "./success.json";
 import { AppContext } from '../../context/AppContext';
-
-const defaultOptions = {
-    loop: true,
-    autoplay: true,
-    animationData: preloader.default,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice"
-    }
-  };
-  const defaultOptions2 = {
-    loop: true,
-    autoplay: true,
-    animationData: success.default,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice"
-    }
-  };
-
 
 class DissociationForm extends React.Component {
 
@@ -135,20 +107,6 @@ class DissociationForm extends React.Component {
             null
     }
 
-    UXtest = () => {
-        this.setState({ISuxTest: true}) 
-        setTimeout(function() 
-        { 
-            this.setState({ISuxTest: false})
-            this.setState({ISuxTest_success: true}) 
-            setTimeout(function() { 
-                this.props.handleSubmitForm()
-                this.handleClose()
-            }.bind(this),1000)
-        }.bind(this), 1000)
-    
-    }
-
     render() {
         const { locale } = this.context
 
@@ -174,7 +132,7 @@ class DissociationForm extends React.Component {
                         validationSchema = {
                             Yup.object().shape({
                                 mac: Yup.string()
-                                    .required(locale.texts.ASSET_CONTROL_NUMBER_IS_REQUIRED)
+                                    .required(locale.texts.MAC_ADDRESS_IS_REQUIRED)
                                     .test(
                                         'mac', 
                                         locale.texts.MAC_DO_NOT_MATCH ,
@@ -230,7 +188,7 @@ class DissociationForm extends React.Component {
                                         type="text"
                                         name="mac"
                                         placeholder={locale.texts.PLEASE_ENTER_OR_SCAN_MAC_ADDRESS}
-                                        className={'form-control' + (errors.mac && touched.mac ? ' is-invalid' : '')} 
+                                        className={'text-capitalize form-control' + (errors.mac && touched.mac ? ' is-invalid' : '')} 
                                         // value={this.state.inputValue}
                                         // onChange={this.updateInput()}
                                     />
