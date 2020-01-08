@@ -106,11 +106,11 @@ a:hover {
 }
 
 .navbar-brand {
-    font-size: 1.25rem;
+    font-size: 1rem;
 }
 
 .navbar-brand:hover {
-    font-weight: 700;
+    /* font-weight: 700; */
 }
 
 .navbar-light .navbar-toggler {
@@ -387,6 +387,11 @@ button:focus {
     z-index: 1050;
 }
 
+/** react-select */
+/* .css-yk16xz-control {
+    border: 0;
+} */
+
 /** Basic html tag */
 textarea {
     border-color: rgb(204, 204, 204);
@@ -408,12 +413,18 @@ p {
 .title {
     font-size: 1.25rem;
     font-weight: 500;
+    margin: 10px 0;
 }
 
 /** .search result list group style sheet*/ 
 .searchResultListGroup {
-    /* max-Height: 55vh; */
-    overflow: hidden scroll;
+    max-height: 35vh; 
+    overflow: scroll;
+}
+
+.searchResultListGroupForTablet {
+    max-height: 28vh; 
+    overflow: scroll;
 }
 
 /** scroll bar customize */

@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 /** Import Custom CSS */
-import './js/customizedCSS';
+import './js/importSrc.js';
 
 /** Container Component */
 import App from './App'

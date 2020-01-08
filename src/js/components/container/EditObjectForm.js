@@ -9,7 +9,6 @@ import React from 'react';
 import { Modal, Button, Row, Col } from 'react-bootstrap';
 import Select from 'react-select';
 import config from '../../config';
-import LocaleContext from '../../context/LocaleContext';
 import axios from 'axios';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -17,18 +16,33 @@ import CheckboxGroup from './CheckboxGroup'
 import Checkbox from '../presentational/Checkbox'
 import RadioButtonGroup from './RadioButtonGroup'
 import RadioButton from '../presentational/RadioButton'
-import { toast } from 'react-toastify';
+import { isNull } from 'util';
+import { AppContext } from '../../context/AppContext';
+import dataSrc from '../../dataSrc'
+
 
 let monitorTypeMap = {};
 
-Object.keys(config.monitorType).forEach(key => {
-    monitorTypeMap[config.monitorType[key]] = key
+Object.keys(config.monitorType)
+    .forEach(key => {
+        monitorTypeMap[config.monitorType[key]] = key
 })
-  
+
 class EditObjectForm extends React.Component {
+
+    static contextType = AppContext
+
     state = {
         show: this.props.show,
+        transferredLocationOptions: [],
     };
+
+    componentDidMount = () => {
+        this.getTransferredLocation();
+      
+     }
+
+    
     /**
      * EditObjectForm will update if user selects one of the object table.
      * The selected object data will transfer from ObjectMangentContainer to EditObjectForm
@@ -50,28 +64,43 @@ class EditObjectForm extends React.Component {
         axios.post(path, {
             formOption: postOption
         }).then(res => {
-            setTimeout(this.props.handleSubmitForm(),1000)
+           
         }).catch( error => {
             console.log(error)
         })
+        this.props.handleSubmitForm()
+    }
+        
+
+
+    getTransferredLocation = () => {
+        let { locale } = this.context
+        axios.get(dataSrc.getTransferredLocation)
+        .then(res => {
+            const transferredLocationOptions = res.data.map(loc => {
+                return {          
+                    value: loc.transferred_location,
+                    label: locale.texts[loc.transferred_location.toUpperCase().replace(/ /g, '_')],
+                    options: Object.values(loc)
+                        .filter((item, index) => index > 0)
+                        .map(branch => {
+                            return {
+                                value: `${loc.transferred_location},${branch}`,
+                                label: locale.texts[branch.toUpperCase().replace(/ /g, '_')],
+                            }
+                    })
+                }
+
+            })
+            this.setState({
+                transferredLocationOptions
+            })
+        })
     }
 
+
     render() {
-        const locale = this.context
-
-        const options = Object.keys(config.transferredLocation).map(location => {
-            return {
-                value: location,
-                label: locale.texts[location.toUpperCase().replace(/ /g, '_')],
-                options: config.transferredLocation[location].map(branch => {
-                    return {
-                        value: `${location},${branch}`,
-                        label: locale.texts[branch.toUpperCase().replace(/ /g, '_')],
-
-                    }
-                })
-            }
-        })
+        const { locale } = this.context
 
         const areaOptions = Object.values(config.mapConfig.areaOptions).map(area => {
             return {
@@ -98,8 +127,15 @@ class EditObjectForm extends React.Component {
             },
         }
 
-        const { title, selectedObjectData } = this.props;
         const { 
+            title, 
+            selectedObjectData,
+            importData,
+            objectTable
+        } = this.props;
+
+        const { 
+            id,
             name,
             type,
             status = '',
@@ -121,12 +157,16 @@ class EditObjectForm extends React.Component {
                             type: type || '',
                             asset_control_number: asset_control_number || '',
                             mac_address: mac_address || '',
-                            radioGroup: status.value,
+                            radioGroup: status.value ,
                             area: area_name || '',
                             select: status.value === config.objectStatus.TRANSFERRED 
-                                ? transferred_location
+                                ? transferred_location 
                                 : '',
-                            checkboxGroup: selectedObjectData.length !== 0 ? selectedObjectData.monitor_type.split(',') : []
+                            checkboxGroup: selectedObjectData.length !== 0 
+                                ?   selectedObjectData.monitor_type == 0 
+                                    ? null
+                                    : selectedObjectData.monitor_type.split('/') 
+                                : []
                         }}
 
                         validationSchema = {
@@ -139,29 +179,35 @@ class EditObjectForm extends React.Component {
                                         'asset_control_number', 
                                         locale.texts.THE_ASSET_CONTROL_NUMBER_IS_ALREADY_USED,
                                         value => {
-                                            return value === selectedObjectData.asset_control_number || 
-                                                !this.props.data.map(item => item.asset_control_number).includes(value)
+                                            if (this.props.selectedObjectData.length == 0) {
+                                                return (!(importData.map(item => item.asset_control_number).includes(value)))
+                                            } 
+                                            return true
                                         }
                                     ),
                                 mac_address: Yup.string()
                                     .required(locale.texts.MAC_ADDRESS_IS_REQUIRED)
+
+                                    /** check if there are duplicated mac address in object table */
                                     .test(
                                         'mac_address',
-                                        locale.texts.THE_MAC_ADDRESS_IS_ALREADY_USED,
-                                        value => {
-                                            return value === selectedObjectData.mac_address ||
-                                                !this.props.data.map(item => item.mac_address).includes(value)
-                                        }
-                                    ).test(
-                                        'mac_address',
-                                        locale.texts.THE_MAC_ADDRESS_FORM_IS_WRONG,
+                                        locale.texts.THE_MAC_ADDRESS_IS_ALREADY_USED_OR_FORMAT_IS_NOT_CORRECT,
                                         value => {
                                             if (value == undefined) return false
-                                            var pattern = new RegExp("^[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}$");
-                                            if( value.match(pattern)) return true
-                                            return false
+
+                                            if (this.props.selectedObjectData.length != 0) {
+                                                return true
+                                            } else {
+
+                                                var pattern = new RegExp("^[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}$");
+                                                if(value.match(pattern)) {
+                                                    return (!objectTable.map(item => item.mac_address).includes(value.match(/.{1,2}/g).join(':')))
+                                                } 
+                                                return false
+                                            }
                                         }
                                     ),
+
                                 radioGroup: Yup.string().required(locale.texts.STATUS_IS_REQUIRED),
 
                                 select: Yup.string()
@@ -171,27 +217,40 @@ class EditObjectForm extends React.Component {
                                     }),
                                 area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
                         })}
-
+                       
                         onSubmit={(values, { setStatus, setSubmitting }) => {
-                            let monitor_type = values.checkboxGroup
+                            let monitor_type  = 0
+                            if ( isNull(values.checkboxGroup)){
+
+                            }else{
+                                monitor_type = values.checkboxGroup
                                     .filter(item => item)
                                     .reduce((sum, item) => {
                                         sum += parseInt(monitorTypeMap[item])
                                         return sum
-                                    },0)
+                                    },0)      
+                            }
                             const postOption = {
+                                id,
                                 ...values,
                                 status: values.radioGroup,
                                 transferred_location: values.radioGroup === config.objectStatus.TRANSFERRED 
-                                    ? values.select
+                                    ? values.select.value
                                     : '',
-                                monitor_type: monitor_type,
-                                area_id: config.mapConfig.areaModules[values.area.value].id
+                                monitor_type: monitor_type || 0,
+                                area_id: config.mapConfig.areaModules[values.area.value].id || 0
+                            }
+
+                            while(postOption.type[postOption.type.length-1] == " "){
+                                postOption.type = postOption.type.substring(0,postOption.type.length-1);       
+                            }
+                            while(postOption.name[postOption.name.length-1] == " "){
+                                postOption.name = postOption.name.substring(0,postOption.name.length-1);       
                             }
                             this.handleSubmit(postOption)                            
                         }}
 
-                        render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
+                        render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm }) => (
                             <Form className="text-capitalize">
                                 <div className="form-group">
                                     <label htmlFor="name">{locale.texts.NAME}*</label>
@@ -207,7 +266,9 @@ class EditObjectForm extends React.Component {
 
                                 <div className="form-group">
                                     <label htmlFor="asset_control_number" className='text-uppercase'>{locale.texts.ACN}*</label>
+                            
                                     <Field 
+                                        disabled= {this.props.disableASN ? 1 : 0}
                                         name="asset_control_number" 
                                         type="text" 
                                         className={'form-control' + (errors.asset_control_number && touched.asset_control_number ? ' is-invalid' : '')} 
@@ -221,10 +282,10 @@ class EditObjectForm extends React.Component {
                                 <div className="form-group">
                                     <label htmlFor="mac_address">{locale.texts.MAC_ADDRESS}*</label>
                                     <Field 
+                                        disabled =  {this.props.disableASN? 1 : 0}
                                         name="mac_address" 
                                         type="text" 
                                         className={'form-control' + (errors.mac_address && touched.mac_address ? ' is-invalid' : '')} 
-                                        disabled={title.toLowerCase() === locale.texts.EDIT_OBJECT}
                                     />
                                     <ErrorMessage name="mac_address" component="div" className="invalid-feedback" />
                                 </div>
@@ -291,7 +352,7 @@ class EditObjectForm extends React.Component {
                                                 name = "select"
                                                 value = {values.select}
                                                 onChange={value => setFieldValue("select", value)}
-                                                options={options}
+                                                options={this.state.transferredLocationOptions}
                                                 isSearchable={false}
                                                 isDisabled={values.radioGroup !== config.objectStatus.TRANSFERRED}
                                                 style={style.select}
@@ -317,20 +378,22 @@ class EditObjectForm extends React.Component {
                                         <CheckboxGroup
                                             id="checkboxGroup"
                                             label={locale.texts.MONITOR_TYPE}
-                                            value={values.checkboxGroup}
+                                            value={values.checkboxGroup || ''}
                                             error={errors.checkboxGroup}
                                             touched={touched.checkboxGroup}
                                             onChange={setFieldValue}
                                             // onBlur={setFieldTouched}
                                         >
-                                            {Object.values(config.monitorType).map((item,index) => {
-                                                return <Field
-                                                    key={index}
-                                                    component={Checkbox}
-                                                    name="checkboxGroup"
-                                                    id={item}
-                                                    label={item}
-                                                />
+                                            {Object.keys(config.monitorType)
+                                                .filter(key => config.monitorTypeMap.object.includes(parseInt(key)))
+                                                .map((key,index) => {
+                                                    return <Field
+                                                        key={index}
+                                                        component={Checkbox}
+                                                        name="checkboxGroup"
+                                                        id={config.monitorType[key]}
+                                                        label={config.monitorType[key]}
+                                                    />
                                             })}
                                         </CheckboxGroup>
                                     </Col>
@@ -340,7 +403,13 @@ class EditObjectForm extends React.Component {
                                     <Button variant="outline-secondary" className="text-capitalize" onClick={this.handleClose}>
                                         {locale.texts.CANCEL}
                                     </Button>
-                                    <Button type="submit" className="text-capitalize" variant="primary" disabled={isSubmitting}>
+                                    <Button 
+                                        type="button" 
+                                        className="text-capitalize" 
+                                        variant="primary" 
+                                        disabled={isSubmitting}
+                                        onClick={submitForm}
+                                    >
                                         {locale.texts.SAVE}
                                     </Button>
                                 </Modal.Footer>
@@ -352,7 +421,5 @@ class EditObjectForm extends React.Component {
         );
     }
 }
-
-EditObjectForm.contextType = LocaleContext;
   
 export default EditObjectForm;

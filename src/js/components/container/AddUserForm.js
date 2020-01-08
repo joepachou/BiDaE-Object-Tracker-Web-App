@@ -250,30 +250,37 @@ class AddUserForm extends React.Component {
                                     </Col>                                        
                                 </Row>
                                 <hr/>
-                                <Row className="form-group my-3 text-capitalize" noGutters>
-                                    <Col lg={4} className='d-flex align-items-center'>
-                                        <label htmlFor="type">{locale.texts.SELECT_SHIFT}</label>
-                                    </Col>
-                                    <Col lg={8}>
-                                        <Select
-                                            placeholder = {locale.texts.SELECT_SHIFT}
-                                            name="shiftSelect"
-                                            value = {values.shiftSelect.value}
-                                            onChange={value => setFieldValue("shiftSelect", value.value)}
-                                            options={shiftOptions}
-                                            style={style.select}
-                                            components={{
-                                                IndicatorSeparator: () => null
-                                            }}
-                                        />
-                                        <Row className='no-gutters' className='d-flex align-self-center'>
-                                            <Col>
-                                                {touched.area && errors.area &&
-                                                <div style={style.errorMessage}>{errors.area}</div>}
-                                            </Col>
-                                        </Row>        
-                                    </Col>                                        
-                                </Row>
+                                
+                                    {
+                                        /*
+                                            <Row className="form-group my-3 text-capitalize" noGutters>
+                                                <Col lg={4} className='d-flex align-items-center'>
+                                                    <label htmlFor="type">{locale.texts.SELECT_SHIFT}</label>
+                                                </Col>
+                                                <Col lg={8}>
+                                                    <Select
+                                                        placeholder = {locale.texts.SELECT_SHIFT}
+                                                        name="shiftSelect"
+                                                        value = {values.shiftSelect.value}
+                                                        onChange={value => setFieldValue("shiftSelect", value.value)}
+                                                        options={shiftOptions}
+                                                        style={style.select}
+                                                        components={{
+                                                            IndicatorSeparator: () => null
+                                                        }}
+                                                    />
+                                                    <Row className='no-gutters' className='d-flex align-self-center'>
+                                                        <Col>
+                                                            {touched.area && errors.area &&
+                                                            <div style={style.errorMessage}>{errors.area}</div>}
+                                                        </Col>
+                                                    </Row>     
+                                                </Col>                                        
+                                            </Row>   
+                                        */
+                                    }
+                                        
+                                    
                                 <Modal.Footer>
                                     <Button variant="outline-secondary" className="text-capitalize" onClick={this.handleClose}>
                                         {locale.texts.CANCEL}

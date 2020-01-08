@@ -19,41 +19,6 @@ import DownloadPdfRequestForm from '../container/DownloadPdfRequestForm'
 import moment from 'moment'
 import config from '../../config'
 
-
-const Toast = () => {
-
-    const style = {
-        column: {
-            textAlign: 'center',
-        },
-        icon: {
-            check: {
-                color: 'green',
-            },
-            times: {
-                color: 'red',
-            },
-            exclamation: {
-                color: 'orange',
-            }
-        }
-    }
-
-    return (
-        <Row>
-            <Col className='d-flex '>
-                <i className="fas fa-check " style={style.icon.check}></i>     
-            </Col>
-            <Col>
-                view report     
-            </Col>
-            <Col>
-                download report     
-            </Col> 
-        </Row>
-    )
-}
-
 class SearchResult extends React.Component {
 
     static contextType = AppContext
@@ -63,10 +28,20 @@ class SearchResult extends React.Component {
         showConfirmForm: false,
         selectedObjectData: [],
         showNotFoundResult: false,
+        showPatientResult: false,
         selection: [],
         editedObjectPackage: [],
         showAddDevice: false,
         showDownloadPdfRequest: false,
+        showPath: false
+    }
+
+    componentDidUpdate = (prevProps, prevState) => {
+        if (!(_.isEqual(prevProps.searchKey, this.props.searchKey))) {
+            this.setState({
+                showNotFoundResult: false
+            })
+        } 
     }
 
     handleSelectResultItem = (eventKey) => {
@@ -168,17 +143,25 @@ class SearchResult extends React.Component {
         )
     }
 
-    handleConfirmFormSubmit = (e) => {
+    handleConfirmFormSubmit = (e,isDelayTime) => {
         let { editedObjectPackage } = this.state;
-        let { auth, stateReducer } = this.context
+        let { locale, auth, stateReducer } = this.context
         let [{}, dispatch] = stateReducer
         let username = auth.user.name
         let shouldCreatePdf = config.statusToCreatePdf.includes(editedObjectPackage[0].status)
-        let pdfPackage = shouldCreatePdf && this.createPdfPackage()
+        let status = editedObjectPackage[0].status
+
+        /** Create the pdf package, including pdf, pdf setting and path */
+        let pdfPackage = shouldCreatePdf && config.getPdfPackage(status, auth.user, this.state.editedObjectPackage, locale)
+     
+        editedObjectPackage.isDelayTime = e
+     
         axios.post(dataSrc.editObjectPackage, {
+            locale,
             formOption: editedObjectPackage,
             username,
-            pdfPackage
+            pdfPackage,
+            isDelayTime:e
         }).then(res => {
             setTimeout(
                 function() {
@@ -199,10 +182,6 @@ class SearchResult extends React.Component {
                 .bind(this),
                 1000
             )
-            // toast(<Toast />, {
-            //     closeOnClick: false,
-            //     position: "top-right",
-            // })
         }).catch( error => {
             console.log(error)
         })
@@ -213,13 +192,6 @@ class SearchResult extends React.Component {
         this.setState({ 
             showNotFoundResult: !this.state.showNotFoundResult 
         })
-    }
-
-    /** Create the content of pdf */
-    createPdfPackage = () => {
-        let { locale, auth } = this.context
-        let pdfPackage = config.getPdfPackage('editObject', auth.user, this.state.editedObjectPackage, locale)
-        return pdfPackage
     }
 
     handleAdditionalButton = (text) => {
@@ -260,8 +232,6 @@ class SearchResult extends React.Component {
         })
     }
 
-
-
     render() {
         const { locale } = this.context;
         const { searchKey } = this.props;
@@ -269,7 +239,6 @@ class SearchResult extends React.Component {
             noResultDiv: {
                 color: 'grey',
                 fontSize: '1rem',
-                fontWeight: 300
             },
             titleText: {
                 color: 'rgb(80, 80, 80, 0.9)',
@@ -290,16 +259,23 @@ class SearchResult extends React.Component {
 
         let foundResult = this.props.searchResult.filter(item => item.found)
         let notFoundResult = this.props.searchResult.filter(item => !item.found)
-
         let searchResult = this.state.showNotFoundResult 
             ? notFoundResult
             : foundResult
 
+        // let title = this.state.showNotFoundResult 
+        //     ? (this.props.searchKey === "my patients" || this.props.searchKey === "all patients")
+        //         ? locale.texts.PATIENTS_NOT_FOUND
+        //         : locale.texts.DEVICES_NOT_FOUND
+        //     : (this.props.searchKey === "my patients" || this.props.searchKey === "all patients")
+        //         ? locale.texts.PATIENTS_FOUND
+        //         : locale.texts.DEVICES_FOUND
+
         let title = this.state.showNotFoundResult 
-            ? locale.texts.DEVICES_NOT_FOUND
-            : locale.texts.DEVICES_FOUND
-
-
+        ? locale.texts.SEARCH_RESULTS_NOT_FOUND
+        : locale.texts.SEARCH_RESULTS_FOUND
+        // ? '未找到的結果'
+        // : '找到的結果'
 
         return(
             <div>
@@ -312,12 +288,13 @@ class SearchResult extends React.Component {
                     <InfoPrompt data={{[devicePlural]: searchResult.length}} title={title}/>
                 </Row> */}
                 <Row>
+                   
                     {searchResult.length === 0 
                         ?   <Col className='d-flex justify-content-center font-weight-lighter' style={style.noResultDiv}>
                                 <div className='searchResultForDestop'>{locale.texts.NO_RESULT}</div>
                             </Col> 
                         :   
-                            <Col className="searchResultListGroup mx-2 d-flex justify-content-center">
+                            <Col className="searchResultListGroup d-flex justify-content-center">
                                 <AccessControl
                                     permission={'form:edit'}
                                     renderNoAccess={() => (
@@ -330,10 +307,17 @@ class SearchResult extends React.Component {
                                 >
                                     <SearchResultListGroup 
                                         data={searchResult}
-                                        handleSelectResultItem={this.handleSelectResultItem}
+                                        handleSelectResultItem={searchResult[0].object_type == 0 
+                                            ? this.handleSelectResultItem
+                                            : null
+                                        }
                                         selection={this.state.selection}
-                                        action
+                                        action={searchResult[0].object_type == 0
+                                            ? true
+                                            : false
+                                        }
                                     />
+
                                 </AccessControl>
                             </Col>
                     }
@@ -346,13 +330,25 @@ class SearchResult extends React.Component {
                         size="lg"
                         disabled={false}
                     >
-                        {this.state.showNotFoundResult 
+                        {/* {(this.props.searchKey == "my patients" || this.props.searchKey == "all patients") 
+                            ?
+                            this.state.showNotFoundResult
+                            ? locale.texts.SHOW_PATIENTS_FOUND
+                            :locale.texts.SHOW_PATIENTS_NOT_FOUND
+                            :
+                            this.state.showNotFoundResult 
                             ? locale.texts.SHOW_DEVICES_FOUND
                             : locale.texts.SHOW_DEVICES_NOT_FOUND
+                        } */}
+                        {this.state.showNotFoundResult
+                            ? locale.texts.SHOW_SEARCH_RESULTS_FOUND
+                            : locale.texts.SHOW_SEARCH_RESULTS_NOT_FOUND
                         }
+
                     </Button>
                 </Row>
-                <ChangeStatusForm 
+                <ChangeStatusForm
+                    handleShowPath={this.props.handleShowPath} 
                     show={this.state.showEditObjectForm} 
                     title={'report device status'} 
                     selectedObjectData={this.state.selectedObjectData} 
@@ -371,11 +367,11 @@ class SearchResult extends React.Component {
                     handleConfirmFormSubmit={this.handleConfirmFormSubmit}
                     showDownloadPdfRequest={this.state.showDownloadPdfRequest}
                 />
-                {/* <DownloadPdfRequestForm
+                <DownloadPdfRequestForm
                     show={this.state.showDownloadPdfRequest} 
                     pdfPath={this.state.pdfPath}
                     close={this.handleFormClose}
-                /> */}
+                />
             </div>
         )
     }

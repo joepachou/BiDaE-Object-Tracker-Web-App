@@ -7,7 +7,7 @@ import config from './config';
 
 let defaultUser = {
     role: "guest",
-    areas_id: [config.defaultAreaId.toString()]
+    areas_id: [config.mapConfig.defaultAreaId.toString()]
 }
 
 class Auth extends React.Component {

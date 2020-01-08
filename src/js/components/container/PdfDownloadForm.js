@@ -4,8 +4,6 @@ import {
     Button,
     Row,
 }  from 'react-bootstrap';
-import Cookies from 'js-cookie'
-import LocaleContext from '../../context/LocaleContext';
 import axios from 'axios';
 import dataSrc from '../../dataSrc';
 import QRCode from 'qrcode.react';
@@ -47,25 +45,23 @@ class PdfDownloadForm extends React.Component {
     }
     componentDidUpdate = (preProps) => {
         if(this.props.show && !this.state.show){
-            var foundResult = [], notFoundResult = []
-            for(var item of this.props.data){
-                item.found ? foundResult.push(item) : notFoundResult.push(item)
+
+            let data = { 
+                foundResult: [], 
+                notFoundResult: [] 
             }
 
-            let userInfo = this.props.userInfo
-            let { locale } = this.context
-            let contentTime = moment().locale(locale.abbr).format(config.pdfFileContentTimeFormat)
-            let fileNameTime = moment().locale('en').format(config.pdfFileNameTimeFormat)
-            let pdfFormat = config.pdfFormat(userInfo, foundResult, notFoundResult, locale, contentTime, 'searchResult')
+            for(var item of this.props.data){
+                item.found ? data.foundResult.push(item) : data.notFoundResult.push(item)
+            }
 
-            let fileDir = config.searchResultFolderPath
-            let fileName = `${'search_result'}_${fileNameTime}.pdf`
-            let filePath = `${fileDir}/${fileName}`
+            let { locale, auth, stateReducer } = this.context
+            let [{areaId}] = stateReducer
+            let pdfPackage = config.getPdfPackage('searchResult', auth.user, data, locale, areaId)
 
             var searResultInfo = {
-                userInfo,
-                pdfFormat,
-                filePath
+                userInfo: auth.user,
+                pdfPackage,
             }
             this.sendSearchResultToBackend(searResultInfo,(path) => {
                 this.setState({
@@ -100,7 +96,7 @@ class PdfDownloadForm extends React.Component {
         } = this.state
 
         const { locale } = this.context
-
+        //console.log(this.state.data)
         return (
             <Modal 
                 show={this.state.show}  

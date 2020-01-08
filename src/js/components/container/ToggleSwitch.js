@@ -2,6 +2,7 @@ import React from 'react';
 import LocaleContext from '../../context/LocaleContext';
 
 class ToggleSwitch extends React.Component {
+
 	state = {
 		toggle: this.props.defaultLabel,
 	}
@@ -17,6 +18,7 @@ class ToggleSwitch extends React.Component {
 	render() {
 
 		const locale = this.context.texts
+		
 		return (
 			<form className="switch-field text-capitalize">
 				<input

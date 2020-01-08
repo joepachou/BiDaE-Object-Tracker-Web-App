@@ -4,11 +4,12 @@ import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom"
 import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Nav, NavDropdown, Image, Dropdown  } from 'react-bootstrap'
 import SigninPage from '../container/SigninPage';
-import SignupPage from '../container/SignupPage';
 import config from '../../config';
 import AccessControl from './AccessControl';
 import ShiftChange from '../container/ShiftChange'
 import { AppContext } from '../../context/AppContext';
+import Select from 'react-select';
+import BatteryLevelNotification from "../container/BatteryLevelNotification"
 
 class NavbarContainer extends React.Component {
 
@@ -16,7 +17,6 @@ class NavbarContainer extends React.Component {
 
     state = {
         isShowSigninForm: false,
-        isShowSignupForm: false,
         isShowShiftChange: false,
     }
 
@@ -86,6 +86,31 @@ class NavbarContainer extends React.Component {
             },
             navbarBrand: {
                 color: 'black'
+            },
+            select: {
+                border: 0,
+            },
+            customStyles: {
+
+                option: (provided, state) => ({
+                    ...provided,
+                //   borderBottom: '1px dotted pink',
+                //   color: state.isSelected ? 'red' : 'blue',
+                    padding: '0.5rem',
+                    fontSize: '1rem'
+                }),
+
+                control: () => ({
+                  // none of react-select's styles are passed to <Control />
+                    width: 230,
+                }),
+                
+                singleValue: (provided, state) => {
+                    const opacity = state.isDisabled ? 0.5 : 1;
+                    const transition = 'opacity 300ms';
+                
+                    return { ...provided, opacity, transition };
+                }
             }
         }
         const { locale, auth, stateReducer } = this.context;
@@ -93,24 +118,60 @@ class NavbarContainer extends React.Component {
 
         const { 
             isShowSigninForm, 
-            isShowSignupForm,
             isShowShiftChange
         } = this.state;
+
+        const {
+            areaOptions,
+            defaultAreaId,
+        } = config.mapConfig
+
+        const options = Object.values(config.mapConfig.areaOptions).map(area => {
+            return {
+                value: area,
+                label: locale.texts[area.toUpperCase().replace(/ /g, '_')],
+            }
+        })
+
+        let selectedArea = {
+            value: areaOptions[areaId] || areaOptions[defaultAreaId] || Object.values(areaOptions)[0],
+            label: this.context.locale.texts[areaOptions[areaId]] || 
+                this.context.locale.texts[areaOptions[defaultAreaId]] || 
+                this.context.locale.texts[Object.values(areaOptions)[0]]
+        }
 
         return (
             <Navbar id='navbar' bg="white" className="navbar sticky-top navbar-light" expand='lg' style={style.navbar}>
                 <Navbar.Brand className='px-0 mx-0 text-capitalized'>  
-                    <Link to="/" className="nav-link nav-brand d-flex align-items-center px-0 text-capitalized" style={style.navbarBrand}>
+                    <Nav.Item className="nav-link nav-brand d-flex align-items-center px-0 text-capitalized" style={style.navbarBrand}>
                         <Image
                             alt=""
                             src={config.image.logo}
                             width={50}
                             className="d-inline-block align-top px-1"
                         />
-                        <div className="text-capitalize">
-                            {locale.texts[config.mapConfig.areaOptions[areaId]]}
-                        </div>
-                    </Link>
+                        <Select
+                            placeholder = {locale.texts.SELECT_LOCATION}
+                            name="select"
+                            value = {selectedArea}
+                            options={options}
+                            className="text-capitalize"
+                            onChange={value => {
+                                let { stateReducer } = this.context
+                                let [{areaId}, dispatch] = stateReducer
+                                dispatch({
+                                    type: 'setArea',
+                                    value: config.mapConfig.areaModules[value.value].id
+                                })
+                            }}
+                            styles={style.customStyles}
+                            isSearchable={false}
+                            components={{
+                                IndicatorSeparator: () => null,
+                                DropdownIndicator:() => null
+                            }}
+                        />
+                    </Nav.Item>
                 </Navbar.Brand>
                 
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -146,8 +207,16 @@ class NavbarContainer extends React.Component {
                                 {locale.texts.SHIFT_CHANGE_RECORD}
                             </Nav.Item>
                         </AccessControl>
+                        <AccessControl
+                            permission={'route:bigScreen'}
+                            renderNoAccess={() => null}
+                        >
+                            <Nav.Item><Link to="/page/bigScreen" className="nav-link nav-route" >{locale.texts.BIG_SCREEN}</Link></Nav.Item>
+                        </AccessControl>
+
                     </Nav>
                     <Nav className='text-capitalize'>
+                        <BatteryLevelNotification />
                         <Nav.Item 
                             className="nav-link nav-route" 
                             onClick={locale.changeLocale}
@@ -162,18 +231,6 @@ class NavbarContainer extends React.Component {
                                         <NavDropdown.Item className="lang-select">{auth.user.name}</NavDropdown.Item>
                                     </LinkContainer>
                                     <Dropdown.Divider />
-                                    {/* <AccessControl
-                                        permission={'user:shiftChange'}
-                                        renderNoAccess={() => null}
-                                    >
-                                        <NavDropdown.Item 
-                                            className="lang-select" 
-                                            onClick={this.handleShiftChangeRecordShowUp}
-                                        >
-                                            {locale.texts.SHIFT_CHANGE_RECORD}
-                                        </NavDropdown.Item>
-                                        <Dropdown.Divider />
-                                    </AccessControl> */}
                                     <LinkContainer to="/" className="bg-white">
                                         <NavDropdown.Item className="lang-select" onClick={auth.signout}>{locale.texts.SIGN_OUT}</NavDropdown.Item>
                                     </LinkContainer>

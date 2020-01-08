@@ -15,9 +15,14 @@ import axios from 'axios';
 import dataSrc from '../../dataSrc';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import { AppContext } from '../../context/AppContext';
+import RadioButtonGroup from "./RadioButtonGroup"
+import RadioButton from "../presentational/RadioButton"
 
   
 class EditLbeaconForm extends React.Component {
+
+    static contextType = AppContext
     
     state = {
         show: this.props.show,            
@@ -29,16 +34,10 @@ class EditLbeaconForm extends React.Component {
      * EditLbeaconForm will update if user selects one of the object table.
      * The selected object data will transfer from ObjectMangentContainer to EditLbeaconForm
      */
-
     componentDidUpdate = (prevProps) => {
         if (prevProps.show != this.props.show && this.props.show) {
             this.setState({
                 show: this.props.show,
-                // formOption: {
-                //     low_rssi: this.state.formOption.low_rssi || this.props.selectedObjectData.low_rssi,
-                //     med_rssi: this.state.formOption.med_rssi || this.props.selectedObjectData.med_rssi,
-                //     high_rssi: this.state.formOption.high_rssi || this.props.selectedObjectData.high_rssi
-                // }
             })
         }
     }
@@ -48,11 +47,6 @@ class EditLbeaconForm extends React.Component {
         this.setState({ 
             show: false,
             selectedObjectData: {},
-            formOption: {
-                low_rssi: '',
-                med_rssi: '',
-                high_rssi: '',
-            }
         });
     }
   
@@ -103,22 +97,16 @@ class EditLbeaconForm extends React.Component {
   
     render() {
 
-        const style = {
-            input: {
-                // borderRadius: 0,
-                // borderBottom: '1 solid grey',
-                // borderTop: 0,
-                // borderLeft: 0,
-                // borderRight: 0,
-                
-            }
-        }
-
         const { 
             title, 
             selectedObjectData 
         } = this.props;
-        const locale = this.context;
+
+        const {
+            danger_area = '',
+            room
+        } = selectedObjectData
+        const { locale } = this.context;
 
         const colProps = {
             titleCol: {
@@ -141,28 +129,29 @@ class EditLbeaconForm extends React.Component {
                 <Modal.Body>
                     <Formik
                         initialValues = {{
-                            low: this.props.selectedObjectData.low_rssi || '',
-                            med: this.props.selectedObjectData.med_rssi || '',
-                            high: this.props.selectedObjectData.high_rssi || '',
-                            description: this.props.selectedObjectData.description
+                            description: this.props.selectedObjectData.description,
+                            danger_area: danger_area 
+                                ?   danger_area.toString()
+                                :   '0',
+                            room,
                         }}
 
                         validationSchema = {
                             Yup.object().shape({
-                            low: Yup.number().negative('The value must be a negative number'),
-                            med: Yup.number().negative('The value must be a negative number'),
-                            high: Yup.number().negative('The value must be a negative number'),
-                            description: Yup.string().required()
 
                         })}
 
-                        onSubmit={({ low, med, high, description }, { setStatus, setSubmitting }) => {
+                        onSubmit={(values, { setStatus, setSubmitting }) => {
+                            let {
+                                description,
+                                danger_area,
+                                room
+                            } = values
                             let lbeaconSettingPackage = {
                                 uuid: this.props.selectedObjectData.uuid,
-                                low_rssi: low,
-                                med_rssi: med,
-                                high_rssi: high,
                                 description,
+                                danger_area,
+                                room,
                             }
 
                             axios.post(dataSrc.editLbeacon, {
@@ -183,7 +172,8 @@ class EditLbeaconForm extends React.Component {
                             })
                         }}
 
-                        render={({ errors, status, touched, isSubmitting }) => (
+                        render={({ values, errors, status, touched, isSubmitting }) => (
+                            
                             <Form
                                 className='text-capitalize'
                             >
@@ -195,7 +185,8 @@ class EditLbeaconForm extends React.Component {
                                         {selectedObjectData.uuid}
                                     </Col>
                                 </Row>
-                                <Row>
+                                <hr/>
+                                <Row className="my-3">
                                     <Col 
                                         {...colProps.titleCol} 
                                         className='d-flex align-items-center'
@@ -203,44 +194,50 @@ class EditLbeaconForm extends React.Component {
                                         {locale.texts.LOCATION}
                                     </Col>
                                     <Col {...colProps.inputCol}>
-                                        <Field name="description" type="text" style={style.input} className={'form-control' + (errors.description && touched.description ? ' is-invalid' : '')} placeholder=''/>
+                                        <Field name="description" type="text" className={'form-control' + (errors.description && touched.description ? ' is-invalid' : '')} placeholder=''/>
                                         <ErrorMessage name="description" component="div" className="invalid-feedback" />                                    
                                     </Col>
                                 </Row>
                                 <hr/>
-                                <Row>
-                                    <Col>
-                                        {locale.texts.RSSI_THRESHOLD}
-                                    </Col>
-                                </Row>
-                                <Row className="form-group">
-                                    {/* <label htmlFor="username">Username</label> */}
-                                    <Col {...colProps.titleCol} className='d-flex align-items-center'>
-                                        {locale.texts.LOW}
+                                <Row className="my-3">
+                                    <Col 
+                                        {...colProps.titleCol} 
+                                        className='d-flex align-items-center'
+                                    >
+                                        {locale.texts.ROOM}
                                     </Col>
                                     <Col {...colProps.inputCol}>
-                                        <Field name="low" type="text" style={style.input} className={'form-control' + (errors.low && touched.low ? ' is-invalid' : '')} placeholder=''/>
-                                        <ErrorMessage name="low" component="div" className="invalid-feedback" />                                    
+                                        <Field name="room" type="text" className={'form-control' + (errors.description && touched.description ? ' is-invalid' : '')} placeholder=''/>
+                                        <ErrorMessage name="room" component="div" className="invalid-feedback" />                                    
                                     </Col>
                                 </Row>
-                                <Row className="form-group">
-                                    {/* <label htmlFor="username">Username</label> */}
-                                    <Col {...colProps.titleCol}className='d-flex align-items-center'>
-                                        {locale.texts.MED}
+                                <hr/>
+                                <Row className="my-3">
+                                    <Col
+                                        {...colProps.titleCol} 
+                                    >
+                                        <RadioButtonGroup
+                                                id="danger_area"
+                                                label={locale.texts.DANGER_AREA}
+                                                value={values.danger_area}
+                                                error={errors.danger_area}
+                                                touched={touched.danger_area}
+                                        />
                                     </Col>
                                     <Col {...colProps.inputCol}>
-                                        <Field name="med" type="text" style={style.input} className={'form-control' + (errors.med && touched.med ? ' is-invalid' : '')} placeholder=''/>
-                                        <ErrorMessage name="med" component="div" className="invalid-feedback" />                                    
-                                    </Col>
-                                </Row>
-                                <Row className="form-group">
-                                    {/* <label htmlFor="username">Username</label> */}
-                                    <Col {...colProps.titleCol} className='d-flex align-items-center'>
-                                        {locale.texts.HIGH}
-                                    </Col>
-                                    <Col {...colProps.inputCol}>
-                                        <Field name="high" type="text" style={style.input} className={'form-control' + (errors.high && touched.high ? ' is-invalid' : '')} placeholder=''/>
-                                        <ErrorMessage name="high" component="div" className="invalid-feedback" />                                    
+                                        <Field
+                                            component={RadioButton}
+                                            name="danger_area"
+                                            id="1"
+                                            label={locale.texts.ENABLE}
+                                        />
+                                        <Field
+                                            component={RadioButton}
+                                            name="danger_area"
+                                            id="0"
+                                            label={locale.texts.DISABLE}
+                                        />
+                                        <ErrorMessage name="danger_area" component="div" className="invalid-feedback" />                                    
                                     </Col>
                                 </Row>
                                 <Modal.Footer>
@@ -268,7 +265,5 @@ class EditLbeaconForm extends React.Component {
         );
     }
 }
-
-EditLbeaconForm.contextType = LocaleContext;
   
 export default EditLbeaconForm;

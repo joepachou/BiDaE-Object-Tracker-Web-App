@@ -146,6 +146,7 @@ class EditObjectManagement extends React.Component{
         */
         // start off with the existing state
         let selection = [...this.state.selection];
+     
         key = typeof key === 'number' ? key : parseInt(key.split('-')[1])
         const keyIndex = selection.indexOf(key);
         // check to see if the key exists
@@ -159,6 +160,7 @@ class EditObjectManagement extends React.Component{
             // it does not exist so add it
             selection.push(key);
         }
+        {console.log(selection)}
         // update the state
         this.setState({ 
             selection 
@@ -242,6 +244,7 @@ class EditObjectManagement extends React.Component{
         };
 
         return (
+            
             <>
                 <ButtonToolbar>
                     <Button 
@@ -261,6 +264,7 @@ class EditObjectManagement extends React.Component{
                     // getTrProps={this.onRowClick}
                 /> */}
                 {this.state.data ? (
+                
                     <SelectTable
                         keyField='_id'
                         data={this.state.data}
@@ -271,9 +275,12 @@ class EditObjectManagement extends React.Component{
                         // showPagination = {false}
                         {...extraProps}
                         getTrProps={(state, rowInfo, column, instance) => {
+                          
                             return {
                                 onClick: (e, handleOriginal) => {
                                     let id = rowInfo.original._id
+                                    {console.log('dd')}
+                                    {console.log(rowInfo)}
                                     this.toggleSelection(id)
                             
                                     // IMPORTANT! React-Table uses onClick internally to trigger

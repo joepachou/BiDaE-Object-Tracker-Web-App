@@ -1,6 +1,12 @@
 import React from "react";
 import config from "./config"
 
+import { Button } from 'react-bootstrap';
+import 'react-table/react-table.css';
+
+
+
+
 const style = {
     column: {
         textAlign: "center",
@@ -14,9 +20,24 @@ const style = {
         },
         exclamation: {
             color: "orange",
+        },
+        circle: {
+            color: "orange",
+        }
+    },
+    battery:{
+        full: {
+            color: "green",
+        },
+        half: {
+            color: "orange",
+        },
+        empty: {
+            color: "red",
         }
     }
 }
+
 
 const lbeaconTableColumn = [
     // {
@@ -32,6 +53,15 @@ const lbeaconTableColumn = [
                     : <i className="fas fa-times-circle" style={style.icon.times}></i>
             },
             {
+                Header: "danger area",
+                accessor: "danger_area",
+                width: 60,
+                style: style.column,
+                Cell: props => props.value 
+                    ? <i className="fas fa-circle" style={style.icon.circle}></i>
+                    : null
+            },
+            {
                 Header: "UUID",
                 accessor: "uuid",
                 width: 330
@@ -40,6 +70,11 @@ const lbeaconTableColumn = [
                 Header: "description",
                 accessor: "description",
                 width: 200
+            },
+            {
+                Header: "room",
+                accessor: "room",
+                width: 100,
             },
             {
                 Header: "IP Address",
@@ -56,26 +91,17 @@ const lbeaconTableColumn = [
                 accessor: "last_report_timestamp",
                 width: 200,
             },
+            {
+                Header: "Note",
+                accessor: "note",
+                width: 250,
+            },
     //     ]
     // },
     // {
     //     Header: "RSSI Threshold",
     //     columns: [
-            {
-                Header: "High",
-                accessor: "high_rssi",
-                maxWidth: 50
-            },
-            {
-                Header: "Med",
-                accessor: "med_rssi",
-                maxWidth: 50
-            },
-            {
-                Header: "Low",
-                accessor: "low_rssi",
-                maxWidth: 50,
-            },
+
     //     ]
     // }
     // {
@@ -89,6 +115,9 @@ const gatewayTableColumn = [
     // {
     //     Header: "Info",
     //     columns: [
+
+
+    //原本是60 150 200 200 200
             {
                 Header: "Status",
                 accessor: "health_status",
@@ -102,22 +131,22 @@ const gatewayTableColumn = [
             {
                 Header: "IP Address",
                 accessor: "ip_address",
-                width: 150
+                width: 250
             },
             {
-                Header: "Last Report Time",
+                Header: "Last Report Timestamp",
                 accessor: "last_report_timestamp",
-                width: 200,
+                width: 300,
             },
             {
-                Header: "Registered Time",
+                Header: "Registered Timestamp",
                 accessor: "registered_timestamp",
-                width: 200,
+                width: 300,
             },
             {
                 Header: "Note",
                 accessor: "note",
-                width: 200,
+                width: 250,
             },
     //     ]
     // },
@@ -128,6 +157,11 @@ const gatewayTableColumn = [
     // },
 
 ]
+
+// props.value === 3 && <i class="fas fa-battery-full" style={style.icon.check}></i> ||
+// props.value === 2 && <i class="fas fa-battery-half" style={style.icon.exclamation}></i> ||
+// props.value === 1 && <i class="fas fa-battery-quarter" style={style.icon.exclamation}></i> ||
+// props.value === 0 && <i class="fas fa-charging-station" style={style.icon.exclamation}></i>
 
 const trackingTableColumn = [
     {
@@ -145,8 +179,9 @@ const trackingTableColumn = [
         style: style.column,
         width: 70,
         Cell: props => 
-            props.value === 3 && <i className="fas fa-check-circle text-center" style={style.icon.check}></i> ||
-            props.value === 2 && <i className="fas fa-exclamation-circle text-center" style={style.icon.exclamation}></i>
+            props.value === 3 && <i  className="fas fa-battery-full" style={style.battery.full}></i> ||
+            props.value === 2 && <i className="fas fa-battery-half" style={style.battery.half}></i> ||
+            props.value === 1 && <i className="fas fa-battery-empty" style={style.battery.empty}></i>
     },
     {
         Header: "Panic",
@@ -163,12 +198,12 @@ const trackingTableColumn = [
     {
         Header: "Mac Address",
         accessor: "mac_address",
-        maxWidth: 150,
+        width: 150,
     },
     {
         Header: "Name",
         accessor: "name",
-        width: 100
+        width: 150
     },
     {
         Header: "Type",
@@ -178,7 +213,7 @@ const trackingTableColumn = [
     {
         Header: "Asset Control Number",
         accessor: "asset_control_number",
-        maxWidth: 180
+        width: 140
     },
     {
         Header: "Status",
@@ -188,17 +223,17 @@ const trackingTableColumn = [
     {
         Header: "Transferred Location",
         accessor: "transferred_location",
-        width: 230
+        width: 180
     },
     {
         Header: "Last Location",
         accessor: "location_description",
-        width: 200
+        width: 180
     },
     {
         Header: "Residence Time",
         accessor: "residence_time",
-        width: 150,
+        width: 100,
     },
 ]
 
@@ -232,6 +267,69 @@ const searchResultTableColumn = [
         accessor: "residence_time"
     },
 ]
+
+const patientTableColumn = [
+    //accessor要對到抓下來資料的名字
+    {
+        Header: "Name",
+        accessor: "name",
+        width: 150
+    },
+    {
+        Header: "PATIENT_GENDER",
+        accessor: "object_type",
+        width: 50,
+    },
+    {
+        Header: "patient Number",
+        accessor: "asset_control_number",
+        width: 100,
+    },
+    {
+        Header: "auth Area",
+        accessor: "area_name.label",
+        width: 150,
+    },
+    {
+        Header: "room",
+        accessor: "room",
+        width: 100,
+    },
+    {
+        Header: "attending Physician",
+        accessor: "physician_name",
+        width: 100,
+    },
+    {
+        Header: "Mac Address",
+        accessor: "mac_address",
+        width: 150,
+    },
+    {
+        Header: "Monitor Type",
+        accessor: "monitor_type"
+    },
+]
+
+const importTableColumn = [
+    {
+        Header: "Name",
+        accessor: "name",
+        width: 200,
+    },
+    {
+        Header: "Type",
+        accessor: "type",
+        width: 200,
+    },
+    {
+        Header: "Asset Control Number",
+        accessor: "asset_control_number",
+        width: 200,
+    },
+]
+
+
 
 const objectTableColumn = [
     {
@@ -312,11 +410,6 @@ const userInfoTableColumn = [
         Header: "Roles",
         accessor: "role_type",
         width: 150,
-    },
-    {
-        Header: "shift",
-        accessor: "shift.label",
-        width: 100
     },
     {
         Header: "last visit timestamp",
@@ -417,6 +510,8 @@ export {
     lbeaconTableColumn,
     gatewayTableColumn,
     objectTableColumn,
+    importTableColumn,
+    patientTableColumn,
     geofenceTableColumn,
     userInfoTableColumn,
     editObjectRecordTableColumn,

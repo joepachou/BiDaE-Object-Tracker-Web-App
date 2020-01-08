@@ -1,61 +1,16 @@
-import IIS_SINICA_FLOOR_FOUR_MAP from "../img/map/iis_new_building_four_floor.png";
+import IIS_SINICA_FOURTH_FLOORTH_MAP from "../img/map/iis_new_building_fourth_floor.png";
 import NTUH_YUNLIN_WARD_FIVE_B_MAP from "../img/map/ntuh_yunlin_branch_ward_five_b.png";
+import NURSING_HOME_MAP from "../img/map/nursing_home.png"
+import YUANLIN_CHRISTIAN_HOSPITAL_MAP from "../img/map/yuanlin_christian_hospital.png"
+import VETERAN_HOME_FIRST_FLOOR_MAP from "../img/map/veteran_home_first_floor.png"
+import VETERAN_HOME_THIRD_FLOOR_MAP from "../img/map/veteran_home_third_floor.png"
+import NTUH_MAP from "../img/map/ntuh_map.png"
 import BOT_LOGO from "../img//logo/BOT_LOGO_RED.png";
 import moment from 'moment'
 import patientP from "../img//logo/pic.png"
+
 const config = {
     
-    defaultAreaId: 3,
-
-    // areaOptions: {
-    //     // 1: "IIS_SINICA_FLOOR_FOUR",
-    //     3: "NTUH_YUNLIN_WARD_FIVE_B",
-    // },
-
-    // areaModules: {
-    //     // IIS_SINICA_FLOOR_FOUR: {
-    //     //     name: "IIS_SINICA_FLOOR_FOUR",
-    //     //     url: IIS_SINICA_FLOOR_FOUR_MAP,
-    //     //     bounds: [[0,0], [21130,35710]],
-    //     // },
-    //     NTUH_YUNLIN_WARD_FIVE_B: {
-    //         name: "NTUH_YUNLIN_WARD_FIVE_B",
-    //         url: NTUH_YUNLIN_WARD_FIVE_B_MAP,
-    //         bounds: [[-5000,-5000], [21067,31928]],
-    //     }
-    // },
-    
-    surveillanceMap: {
-
-
-        /* For test. To start object tracking*/
-        startInteval: true,
-
-        /* Object tracking query inteval */
-        intevalTime: 1000,
-        
-        /* Tracking object Rssi filter */
-        locationAccuracyMapToDefault: {
-            0: -100,
-            1: -60,
-            2: -50,
-        },
-
-        locationAccuracyMapToDB: {
-            0: "low_rssi",
-            1: "med_rssi",
-            2: "high_rssi",
-        },
-
-
-        // objectTypeSet: new Set(["Bed", "EKG Machine", "Infusion pump", "SONOSITE Ultrasound", "Ultrasound", "Bladder scanner", "CPM"])
-        objectType: ["三合一Monitor", "EKG", "IV Pump", "烤燈", "血壓血氧監視器", "電擊器", "CPM"]
-
-        
-    },
-
-    
-
     objectStatus: {
         PERIMETER: "perimeter",
         FENCE: "fence",
@@ -64,6 +19,25 @@ const config = {
         RESERVE: "reserve",
         TRANSFERRED: "transferred",   
     },
+
+    /** Reserved Object interval time in minutes */
+    reservedInterval: 30,
+
+    /** Extend object reserved time in minutes  */
+    reservedDelayTime: 10,
+
+    patientStatus:{
+        BATTERY_CHANGE:"Change",
+        BATTERY_NORMAL:"Normal",
+    },
+
+
+    gender:{
+        GENDER:"Gender",
+        MAN:"man",
+        GIRL:"girl",
+    },
+
 
     ACNOmitsymbol: 'xxxxxx',
 
@@ -78,21 +52,6 @@ const config = {
         sosTimePeriod: 300,
 
         objectManagementRSSIThreshold: 0
-    },
-
-    transferredLocation: {
-        Yuanlin_Christian_Hospital: [
-            "ward_1",
-            "ward_2",
-        ],
-        NTU_Hospital_Yunlin_branch: [
-            "ward_5_b",
-            "ward_5_a",
-            "nursing_home"
-        ],
-        NTU_Hospital_Taipei: [
-            "emergency_room"
-        ],
     },
     
     locale: {
@@ -122,8 +81,8 @@ const config = {
 
     healthReport: {
         startInteval: false,
-        pollLbeaconTabelIntevalTime: 60000,
-        pollGatewayTableIntevalTime: 60000,
+        pollLbeaconTabelIntevalTime: 5000,
+        pollGatewayTableIntevalTime: 5000,
     },
 
     userPreference: {
@@ -140,7 +99,10 @@ const config = {
 
     frequentSearchOption: {
         MY_DEVICES: "my devices",
-        ALL_DEVICES: "all devices"
+        ALL_DEVICES: "all devices",
+        MY_PATIENTS: "my patients",
+        ALL_PATIENTS: "all patients",
+        OBJECTS: "objects"
     },
 
     searchResult:{
@@ -149,11 +111,34 @@ const config = {
         displayMode: "showAll",
     },
 
+    searchResultProportion: '32vh',
+
     monitorType: {
         // 0: "normal",
         1: "geofence",
         2: "panic",
         4: "movement",
+        8: "location",
+    },
+
+    monitorTypeMap: {
+        object: [1],
+        patient: [1,2,4,8]
+    },
+
+    monitorSettingType: {
+        RESIDENT_MOVEMENT_MONITOR: "resident movement monitor",
+        RESIDENT_LOCATION_MONITOR: "resident location monitor",
+        RESIDENT_LONG_STAY_IN_DANGER: "resident long stay in danger",
+        RESIDENT_NOT_STAY_ROOM: "resident not stay room",
+        GEO_FENCE_VIOLENCE: "resident violate geofence",
+    },
+
+    monitorSettingUrlMap: {
+        "resident movement monitor": "movement_config",
+        "resident long stay in danger": "location_long_stay_in_danger_config",
+        "resident not stay room": "location_not_stay_room_config",
+        "resident violate geofence": "geo_fence_config"
     },
 
     shiftOption: [
@@ -166,9 +151,10 @@ const config = {
     searchResultFolderPath: "search_result",
 
     folderPath: {
-        editObject: "edit_object_record",
-        shiftChange: "shift_record",
-        searchResult: "search_result"
+        broken: `${process.env.DEFAULT_FOLDER}/edit_object_record`,
+        transferred: `${process.env.DEFAULT_FOLDER}/edit_object_record`,
+        shiftChange: `${process.env.DEFAULT_FOLDER}/shift_record`,
+        searchResult: `${process.env.DEFAULT_FOLDER}/search_result`
     },
 
     shiftRecordFileNameTimeFormat: "MM_DD_YYYY",
@@ -177,13 +163,14 @@ const config = {
     confirmFormTimeFormat: "LLLL",
     shiftChangeRecordTimeFormat: "LLL",
     pdfFileContentTimeFormat: "LLL",
-    pdfFileNameTimeFormat: "MM_DD_YYYY",
+    pdfFileNameTimeFormat: "YYYY-MM-Do_hh_mm_ss",
 
     roles: [
         "guest",
         "care_provider",
         "system_admin"
     ],
+
 
     defaultRole: "care_provider", 
 
@@ -195,7 +182,7 @@ const config = {
     },
 
     toastProps: {
-        position: "top-left",
+        position: "bottom-right",
         autoClose: false,
         newestOnTop: false,
         closeOnClick: true,
@@ -204,259 +191,294 @@ const config = {
         draggable: true
     },
 
+    toastMonitorMap: {
+        1: "warn",
+        2: "info",
+        4: "error",
+        8: "info",
+    },
+
     statusToCreatePdf: [
         "broken",
         "transferred"
     ],
 
-    pdfFormat: (userInfo, foundResult, notFoundResult, locale, time, option) => {
-        const hasFoundResult = foundResult.length !== 0
-        const hasNotFoundResult = notFoundResult.length !== 0
-        const title = config.getPDFTitle(userInfo, locale, time, option)
-
-        let foundTitle = hasFoundResult
-            ?   `<h3 style="text-transform: capitalize; margin-bottom: 10px; font-weight: bold">
-                    ${locale.texts.DEVICES_FOUND_IN}
-                    ${userInfo.areas_id.map(id => {
-                        return locale.texts[config.mapConfig.areaOptions[id]]
-                    })}
-                </h3>`
-            :   "";
-        let foundData = hasFoundResult 
-            ?   foundResult.map((item, index) => {
-                    return `
-                        <div key=${index} style="margin-bottom: 5px;">
-                            ${index + 1}.${item.name}, 
-                            ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn}, 
-                            ${locale.texts.NEAR}${item.location_description}
-                        </div>
-                    `
-                    
-                }).join(" ")
-            :   ""
-        let notFoundTitle = hasNotFoundResult 
-            ?   `<h3 className="mt-1" style="text-transform: capitalize; margin-bottom: 10px; font-weight: bold">
-                    ${locale.texts.DEVICES_NOT_FOUND_IN}
-                    ${userInfo.areas_id.map(id => {
-                        return locale.texts[config.mapConfig.areaOptions[id]]
-                    })}
-                </h3>`
-            :   "";
-        let notFoundData = hasNotFoundResult 
-            ?   notFoundResult.map((item, index) => {
-                    return `
-                        <div key=${index} style="margin-bottom: 5px;">
-                            ${index + 1}.${item.name}, 
-                            ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn}, 
-                            ${locale.texts.NEAR}${item.location_description}
-                        </div>
-                    `
-                }).join(" ")
-            :   "";
-        let pdfFormat = title + foundTitle + foundData + notFoundTitle + notFoundData
-        return pdfFormat
-    },
-
-    /** g */
-    getPdfPackage: (option, user, data, locale) => {
-        const header = config.getPdfHeader(user, locale, null, option,)
-        const body = config.getPdfBody[option](data, locale)
-        const path = config.getPdfPath(option)
+    /** Create pdf package, including header, body and the pdf path
+     * options include shiftChange, searchResult, broken report, transffered report
+     */
+    getPdfPackage: (option, user, data, locale, location, name) => {
+        const header = config.pdfFormat.getHeader(user, locale, option, name)
+        const body = config.pdfFormat.getBody[option](data, locale, user, location)
+        const path = config.pdfFormat.getPath(option, user)
         const pdf = header + body
 
         return {
             pdf,
             path,
-            options: config.pdfOptions
+            options: config.pdfFormat.pdfOptions
         }
     },
 
-    /** The pdf option setting in html-pdf */
-    pdfOptions: {
-        "format": "A4",
-        "orientation": "portrait",
-        "border": "1cm",
-        "timeout": "120000"
+    getShift: (abbr) => {
+        const hour = moment().locale(abbr).hours()
+        if (hour < 17 && hour > 8){
+            return config.shiftOption[0]
+        }else if(hour < 24 && hour > 17){
+            return config.shiftOption[1]
+        }else{
+            return config.shiftOption[2]
+        }
     },
-
-    getPdfPath: (option) =>{
-        let fileDir = config.folderPath[option]
-        let fileName = `${fileDir}_${moment().format(config.pdfFileNameTimeFormat)}.pdf`
-        let filePath = `${fileDir}/${fileName}`
-        return filePath
-    },
-
-    pdfFileName: {
-        editObject: () => {
-            return ``
+    /** Pdf format config */
+    pdfFormat: {
+        getHeader: (user, locale, option, name) => {
+            let title = config.pdfFormat.getTitle(option, locale)
+            let timestamp = config.pdfFormat.getTimeStamp(locale)
+            let titleInfo = config.pdfFormat.getSubTitle[option](locale, user, name)
+            return title + timestamp + titleInfo
         },
-
-    },
-
-    getPdfBody: {
-        editObject: (data, locale) => {
-            let title = `
-                <h3 style="text-transform: capitalize; margin-bottom: 5px; font-weight: bold">
-                    ${locale.texts.BROKENDEVICE_LIST}
-                </h3>
+    
+        getTitle: (option, locale) => {
+            return `
+                <h1 style="text-transform: capitalize;">
+                    ${locale.texts[config.pdfFormat.pdfTitle[option]]}
+                </h1>
             `
-            
-            let list = data.map((item, index) => {
+        },
+    
+        getTimeStamp: (locale) => {
+            return `
+                <div style="text-transform: capitalize;">
+                    ${locale.texts.DATE_TIME}: ${moment().locale(locale.abbr).format('LLL')}
+                </div>
+            `
+        },
+    
+        pdfTitle: {
+            broken: "REQUEST_FOR_DEVICE_REPARIE",
+            transferred: "DEVICE_TRANSFER_RECORD",
+            shiftChange: "SHIFT_CHANGE_RECORD",
+            searchResult: "SEARCH_RESULT",
+        },
+    
+
+        getPath: (option, user) =>{
+            let fileDir = config.folderPath[option]
+            let fileName = config.pdfFormat.getFileName[option](user, option)
+            let filePath = `${fileDir}/${fileName}`
+    
+            return filePath
+        },
+    
+        getFileName: {
+            broken: (user, option) => {
+                return `${option}_report_${moment().format(config.pdfFileNameTimeFormat)}.pdf`
+            },
+            transferred: (user, option) => {
+                return `${option}_report_${moment().format(config.pdfFileNameTimeFormat)}.pdf`
+            },
+            shiftChange: (user) => {
+                return `${user.name}_${moment().format(config.pdfFileNameTimeFormat)}.pdf`
+            },
+            searchResult: (user, option) => {
+                return `${option}_${moment().format(config.pdfFileNameTimeFormat)}.pdf`
+            },
+        },
+    
+        getBody: {
+            broken: (data, locale) => {
+                let title = config.pdfFormat.getBodyItem.getBodyTitle("broken device list", locale)
+                let list = config.pdfFormat.getBodyItem.getDataContent(data, locale)
+                let notes = config.pdfFormat.getBodyItem.getNotes(data)
+                return title + list + notes
+            },
+            transferred: (data, locale) => {
+                // console.log(data[0].transferred_location.value.split(','))
+                let area = data[0].transferred_location.label
+                let signature_title = config.pdfFormat.getBodyItem.getBodyTitle("transferred to", locale, area)
+                let list_title = config.pdfFormat.getBodyItem.getBodyTitle("transferred device list", locale)
+                let signature = config.pdfFormat.getBodyItem.getSignature(locale)
+                let list = config.pdfFormat.getBodyItem.getDataContent(data, locale)
+                let notes = config.pdfFormat.getBodyItem.getNotes(data)
+                return signature_title + signature + list_title + list + notes
+            },
+            shiftChange: (data, locale, user) => {
+                let area =  locale.texts[config.mapConfig.areaOptions[parseInt(user.areas_id[0])]]
+                let foundTitle = config.pdfFormat.getBodyItem.getBodyTitle(
+                    "devices found in", 
+                    locale, 
+                    area,
+                    data.foundResult.length !== 0
+                )
+                let foundResultList = config.pdfFormat.getBodyItem.getDataContent(data.foundResult, locale)
+                let notFoundTitle = config.pdfFormat.getBodyItem.getBodyTitle(
+                    "devices not found in", 
+                    locale, 
+                    area,
+                    data.notFoundResult.length !== 0
+                )
+                let notFoundResultList = config.pdfFormat.getBodyItem.getDataContent(data.notFoundResult, locale)
+                return foundTitle + foundResultList + notFoundTitle + notFoundResultList
+            },
+            searchResult: (data, locale, user, location) => {
+                let area =  locale.texts[config.mapConfig.areaOptions[parseInt(user.areas_id[0])]]
+                let foundTitle = config.pdfFormat.getBodyItem.getBodyTitle(
+                    "devices found in", 
+                    locale, 
+                    area, 
+                    data.foundResult.length !== 0
+                )
+                let foundResultList = config.pdfFormat.getBodyItem.getDataContent(data.foundResult, locale)
+                let notFoundTitle = config.pdfFormat.getBodyItem.getBodyTitle(
+                    "devices not found in", 
+                    locale, 
+                    area,
+                    data.notFoundResult.length !== 0
+                )
+                let notFoundResultList = config.pdfFormat.getBodyItem.getDataContent(data.notFoundResult, locale)
+                return foundTitle + foundResultList + notFoundTitle + notFoundResultList
+            },
+        },
+        getBodyItem: {
+            getBodyTitle: (title, locale, area, hasTitle = true) => {
+                return hasTitle 
+                    ?   `
+                        <h3 style="text-transform: capitalize; margin-bottom: 5px; font-weight: bold">
+                            ${locale.texts[title.toUpperCase().replace(/ /g, '_')]}
+                            ${area ? area : ''}
+                        </h3>
+                    `
+                    : ``;
+            },
+    
+            getDataContent: (data, locale) => {
+                return data.map((item, index) => {
+                    return `
+                        <div key=${index} style="text-transform: capitalize; margin: 10px;">
+                            ${index + 1}.${item.name}, 
+                            ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}: ${item.last_four_acn}, 
+                            ${locale.texts.NEAR}${item.location_description}
+                        </div>
+                    `
+                }).join(" ")
+            },
+    
+            getNotes: (data) => {
                 return `
-                    <div key=${index} style="text-transform: capitalize; margin: 10px;">
-                        ${index + 1}.${item.name}, 
-                        ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}: ${item.last_four_acn}, 
-                        ${locale.texts.NEAR}${item.location_description}
+                    <h3 style="text-transform: capitalize; margin-bottom: 5px; font-weight: bold">
+                        ${data[0].notes ? `${locale.texts.NOTE}: ${data[0].notes}` : ''}
+                    </h3>
+                `
+            },
+
+            getSignature: (locale) => {
+                return `
+                    <div style="text-transform: capitalize; margin: 10px width: 200px;">
+                        <div style="text-transform: capitalize; margin: 10px width: 100%;">
+                            <p style="display: inline">${locale.texts.RECEIVER_ID}:</p>
+                            <input 
+                                style="
+                                    width: 100%; 
+                                    border-bottom: 1px solid black; 
+                                    border-top: 0;
+                                    border-left: 0;
+                                    border-right: 0;
+                                    display: inline-block"
+                            />
+                        </div>
+                        <div style="text-transform: capitalize; margin: 10px width: 100%;">
+                            <p style="display: inline">${locale.texts.RECEIVER_NAME}:</p>
+                            <input 
+                                style="
+                                    width: 100%; 
+                                    border-bottom: 1px solid black; 
+                                    border-top: 0;
+                                    border-left: 0;
+                                    border-right: 0;
+                                    display: inline-block"
+                            />   
+                        </div>
+                        <div style="text-transform: capitalize; margin: 10px width: 100%;">
+                            <p style="display: inline">${locale.texts.RECEIVER_SIGNATURE}:</p>
+                            <input 
+                                style="
+                                    width: 100%; 
+                                    border-bottom: 1px solid black; 
+                                    border-top: 0;
+                                    border-left: 0;
+                                    border-right: 0;
+                                    display: inline-block"
+                            />                  
+                        </div>
                     </div>
                 `
-            }).join(" ")
-
-            let notes = `
-                <h3 style="text-transform: capitalize; margin-bottom: 5px; font-weight: bold">
-                    ${data[0].notes ? `${locale.texts.NOTE}: ${data[0].notes}` : ''}
-                </h3>
-            `
-            return title + list + notes
-        }
-    },
-
-    getPdfFormat: (userInfo, foundResult, notFoundResult, locale, time, option) => {
-        const hasFoundResult = foundResult.length !== 0
-        const hasNotFoundResult = notFoundResult.length !== 0
-        const title = config.getPDFTitle(userInfo, locale, time, option)
-
-        let foundTitle = hasFoundResult
-            ?   `<h3 style="text-transform: capitalize; margin-bottom: 5px; font-weight: bold">
-                    ${locale.texts.DEVICES_FOUND_IN}
-                    ${userInfo.areas_id.map(id => {
-                        return locale.texts[config.mapConfig.areaOptions[id]]
-                    })}
-                </h3>`
-            :   "";
-        let foundData = hasFoundResult 
-            ?   foundResult.map((item, index) => {
-                    return `
-                        <div key=${index} style="text-transform: capitalize; margin: 10px;">
-                            ${index + 1}.${item.name}, 
-                            ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}: ${item.last_four_acn}, 
-                            ${locale.texts.NEAR}${item.location_description}
-                        </div>
-                    `
-                    
-                }).join(" ")
-            :   ""
-        let notFoundTitle = hasNotFoundResult 
-            ?   `<h3 className="mt-1" style="text-transform: capitalize; margin-bottom: 5px; font-weight: bold">
-                    ${locale.texts.DEVICES_NOT_FOUND_IN}
-                    ${userInfo.areas_id.map(id => {
-                        return locale.texts[config.mapConfig.areaOptions[id]]
-                    })}
-                </h3>`
-            :   "";
-        let notFoundData = hasNotFoundResult 
-            ?   notFoundResult.map((item, index) => {
-                    return `
-                        <div key=${index} style="text-transform: capitalize; margin: 10px;">
-                            ${index + 1}.${item.name}, 
-                            ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}: ${item.last_four_acn}, 
-                            ${locale.texts.NEAR}${item.location_description}
-                        </div>
-                    `
-                }).join(" ")
-            :   "";
-        let pdfFormat = title + foundTitle + foundData + notFoundTitle + notFoundData
-        return pdfFormat
-    },
-
-    getPDFTitle: (userInfo, locale, time, option) => {
-        let timestamp = `<div style="text-transform: capitalize;">${locale.texts.DATE_TIME}: ${time}</div>`
-        let header;
-        switch(option) {
-            case "shiftChange":
-                const nextShiftIndex = (config.shiftOption.indexOf(userInfo.shift) + 1) % config.shiftOption.length
-                const nextShift = locale.texts[config.shiftOption[nextShiftIndex].toUpperCase().replace(/ /g, "_")]
-                const thisShift = locale.texts[userInfo.shift.toUpperCase().replace(/ /g, "_")]
-                // header = `<h1 style="text-transform: capitalize;">
-                //         ${locale.texts.SHIFT_CHANGE_RECORD}-${locale.texts.CONFIRM_BY}
-                //     </h1>`
-                header = `<h1 style="text-transform: capitalize;">
-                    ${locale.texts.SHIFT_CHANGE_RECORD}
-                </h1>`
-                let shift = `<div style="text-transform: capitalize;">
-                        ${locale.texts.SHIFT}: ${thisShift} ${locale.texts.SHIFT_TO} ${nextShift}
-                    </div>`
-                let checkby = `<div style="text-transform: capitalize;">
-                        ${locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: ${userInfo.name}, ${thisShift}
-                    </div>`
-                return header + timestamp + shift + checkby
-            case "searchResult":
-                header = `<h1 style="text-transform: capitalize;">
-                        ${locale.texts.SEARCH_RESULT}
-                    </h1>`
-                return header + timestamp
-            case "editObject":
-                header = `<h1 style="text-transform: capitalize;">
-                        ${locale.texts.REQUEST_FOR_DEVICE_REPARIE}
-                    </h1>`
-                return header
-        }
-
-    },
-
-    getPdfHeader: (user, locale, time, option) => {
-        let title = `<h1 style="text-transform: capitalize;">
-            ${locale.texts[config.pdfTitle[option]]}
-        </h1>
-        `
-        let timestamp = `
-            <div style="text-transform: capitalize;">
-                ${locale.texts.DATE_TIME}: ${moment().locale(locale.abbr).format('LLL')}
-            </div>
-        `
-
-        let titleInfo = config.pdfTitleInfo[option](locale, user)
-        return title + timestamp + titleInfo
-
-    },
-
-    pdfTitleInfo: {
-        shiftChange: (locale, user) => {
-            const nextShiftIndex = (config.shiftOption.indexOf(user.shift) + 1) % config.shiftOption.length
-            const nextShift = locale.texts[config.shiftOption[nextShiftIndex].toUpperCase().replace(/ /g, "_")]
-            const thisShift = locale.texts[user.shift.toUpperCase().replace(/ /g, "_")]
-            let shift = `<div style="text-transform: capitalize;">
-                    ${locale.texts.SHIFT}: ${thisShift} ${locale.texts.SHIFT_TO} ${nextShift}
-                </div>`
-            let checkby = `<div style="text-transform: capitalize;">
-                    ${locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: ${user.name}, ${thisShift}
-                </div>`
-            return shift + checkby
+            }
         },
-        searchResult: (locale) => {
-
-        },
-        editObject: (locale, user) => {
-            let info = `<div style="text-transform: capitalize;">
-                    ${locale.texts.USERNAME}: ${user.name}
-                </div>`
-            return info
-        }
-    },
-
     
-    pdfTitle: {
-        editObject: "REQUEST_FOR_DEVICE_REPARIE"
+        getSubTitle: {
+            shiftChange: (locale, user, name) => {
+                const nextShiftIndex = (config.shiftOption.indexOf(config.getShift(locale.abbr)) + 2) % config.shiftOption.length
+
+                const nextShift = locale.texts[config.shiftOption[nextShiftIndex].toUpperCase().replace(/ /g, "_")]
+                const thisShift = locale.texts[config.getShift(locale.abbr).toUpperCase().replace(/ /g, "_")]
+                let shift = `<div style="text-transform: capitalize;">
+                        ${locale.texts.SHIFT}: ${nextShift} ${locale.texts.SHIFT_TO} ${thisShift}
+                    </div>`
+                let confirmedBy = `<div style="text-transform: capitalize;">
+                    ${locale.abbr == 'en' 
+                        ? `${locale.texts.CONFIRMED_BY} ${name}`
+                        : `${locale.texts.CONFIRMED_BY}: ${name}`
+                    }
+                </div>`
+                let checkby = `<div style="text-transform: capitalize;">
+                        ${locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: ${user.name}, ${thisShift}
+                    </div>`
+                return confirmedBy + shift + checkby
+            },
+    
+            searchResult: (locale, user) => {
+                let username = config.pdfFormat.getSubTitleInfo.username(locale, user)
+                return username
+            },
+            broken: (locale, user) => {
+                let username = config.pdfFormat.getSubTitleInfo.username(locale, user)
+                return username
+            },
+            transferred: (locale, user) => {
+                let username = config.pdfFormat.getSubTitleInfo.username(locale, user)
+                return username
+            }
+        },
+    
+        getSubTitleInfo: {
+            username: (locale, user) => {
+                return `
+                    <div style="text-transform: capitalize;">
+                        ${locale.texts.USERNAME}: ${user.name}
+                    </div>
+                `
+            },
+        },
+
+        /** The pdf option setting in html-pdf */
+        pdfOptions: {
+            "format": "A4",
+            "orientation": "portrait",
+            "border": "1cm",
+            "timeout": "12000"
+        },
     },
 
-    /** Set the map option.
+
+    /** Map configuration.
      *  Refer leaflet.js for more option setting https://leafletjs.com/reference-1.5.0.html
      */
     mapConfig: {
         mapOptions: {
             crs: L.CRS.Simple,
             // center: L.latLng(-2000, -4000),
-            zoom: -5,
-            minZoom: -6,
+            zoom: -6,
+            minZoom: -7,
             maxZoom: 0,
             zoomDelta: 0.25,
             zoomSnap: 0,
@@ -470,7 +492,7 @@ const config = {
 
         /** Set the icon option */
         iconOptions: {
-            iconSize: 30,
+            iconSize: 22,
             showNumber: !false,
         },
 
@@ -512,7 +534,7 @@ const config = {
             male_1: "male_1",
 
             // ["slateblue", "tan", "lightyellow", "lavender", "orange","lightblue", "mistyrose", "yellowgreen", "darkseagreen", "orchid"]
-            pinColorArray: ["orchid","mistyrose", "tan", "lightyellow", "lavender","lightblue", "yellowgreen"]
+            pinColorArray: ["orchid", "tan", "lightyellow", "lavender","lightblue", "yellowgreen"]
         },
 
         geoFenceMarkerOption: {
@@ -538,36 +560,93 @@ const config = {
                 else if (item.status !== config.mapConfig.objectStatus.NORMAL) return config.mapConfig.iconColor.unNormal
                 else return config.mapConfig.iconColor.normal
             } 
-            else if (item.object_type == 1) return config.mapConfig.iconColor.female
-            else if (item.object_type == 2) return config.mapConfig.iconColor.male
+            else if (item.object_type == 1) return config.mapConfig.iconColor.male
+            else if (item.object_type == 2) return config.mapConfig.iconColor.female
         },
-        
-        areaOptions: {
-            // 1: "IIS_SINICA_FLOOR_FOUR",
-            3: "NTUH_YUNLIN_WARD_FIVE_B",
+
+        defaultAreaId: process.env.DEFAULT_AREA_ID,
+    
+        gender: {
+            MAN: {
+                id: 1,
+            },
+            GIRL:{
+                id: 2,
+            },
         },
+
+        areaOptions: process.env.SITES_GROUP
+            .split(',')
+            .reduce((res, item) => {
+                res[item] = {
+                    1: "NTUH_EMERGENCY_ROOM",
+                    2: "IIS_SINICA_FOURTH_FLOOR",
+                    3: "NTUH_YUNLIN_WARD_FIVE_B",
+                    4: "NURSING_HOME",
+                    5: "YUANLIN_CHRISTIAN_HOSPITAL",
+                    6: "VETERAN_HOME_FIRST_FLOOR",
+                    7: "VETERAN_HOME_THIRD_FLOOR",
+                }[item]
+                return res
+            }, {}),
     
         areaModules: {
+            NTUH_EMERGENCY_ROOM: {
+                id: 1,
+                name: "NTUH",
+                url: NTUH_MAP,
+                bounds: [[-250,700], [33409,56814]],
+            },
 
-            // IIS_SINICA_FLOOR_FOUR: {
-            //     name: "IIS_SINICA_FLOOR_FOUR",
-            //     url: IIS_SINICA_FLOOR_FOUR_MAP,
-            //     bounds: [[0,0], [21130,35710]],
-            // },
+            IIS_SINICA_FOURTH_FLOOR: {
+                id: 2,
+                name: "IIS_SINICA_FOURTH_FLOOR",
+                url: IIS_SINICA_FOURTH_FLOORTH_MAP,
+                bounds: [[0,0], [21130,35710]],
+            },
 
             NTUH_YUNLIN_WARD_FIVE_B: {
                 id: 3,
                 name: "NTUH_YUNLIN_WARD_FIVE_B",
                 url: NTUH_YUNLIN_WARD_FIVE_B_MAP,
-                bounds: [[-5000,-5000], [21067,31928]],
-            }
+                bounds: [[0, 0], [26067,36928]],
+
+            },
+            NURSING_HOME: {
+                id: 4,
+                name: "NURSING_HOME",
+                url: NURSING_HOME_MAP,
+                bounds: [[0,0], [20000,45000]],
+            },
+            
+            YUANLIN_CHRISTIAN_HOSPITAL: {
+                id: 5,
+                name: "YUANLIN_CHRISTIAN_HOSPITAL",
+                url: YUANLIN_CHRISTIAN_HOSPITAL_MAP,
+                bounds: [[0, 0], [27000,27000]],
+
+            },
+
+            VETERAN_HOME_FIRST_FLOOR: {
+                id: 6,
+                name: "VETERAN_HOME_FIRST_FLOOR",
+                url: VETERAN_HOME_FIRST_FLOOR_MAP,
+                bounds: [[0,0], [21000,26000]],
+            },
+
+            VETERAN_HOME_THIRD_FLOOR: {
+                id: 7,
+                name: "VETERAN_HOME_THIRD_FLOOR",
+                url: VETERAN_HOME_THIRD_FLOOR_MAP,
+                bounds: [[0,0], [21000,26000]],
+            },
         },
 
         /* For test. To start object tracking*/
         startInteval: true,
 
         /* Set the tracking query inteval time(ms) */
-        intevalTime: 1000,
+        intervalTime: process.env.OBJECT_TRACKING_INTERVAL_TIME_IN_MILLI_SEC,
 
         objectStatus: {
             PERIMETER: "perimeter",
@@ -580,9 +659,9 @@ const config = {
         
         /* Set the rssi threshold */
         locationAccuracyMapToDefault: {
-            0: -100,
-            1: -60,
-            2: -50,
+            0: process.env.LOCATION_ACCURACY_LOW,
+            1: process.env.LOCATION_ACCURACY_MED,
+            2: process.env.LOCATION_ACCURACY_HIGH
         },
 
         locationAccuracyMapToDB: {
@@ -592,42 +671,64 @@ const config = {
         },
 
         /* Set the Marker dispersity that can be any positive number */
-        markerDispersity: 5,
+        markerDispersity: 300,
 
         popupOptions: {
             minWidth: "500",
             maxHeight: "300",
             className : "customPopup",
+            showNumber: false
         },
 
         /** Set the html content of popup of markers */
         getPopupContent: (object, objectList, locale) => {
-
+            var indexNumberForPatient = 0
+            var indexNumberForDevice = 0
             /* The style sheet is right in the src/css/Surveillance.css*/
+            var PatientTotalNumber = 0;
+            var DeviceTotalNumber = 0;
+
+            objectList.map((item,index) => {
+                //console.log(item)
+                if (item.object_type != 0) PatientTotalNumber ++;
+                else DeviceTotalNumber ++;   
+            })
+            //摸到大頭針之後的方塊
             const content = `
                 <div>
                     <h4 class="border-bottom pb-1 px-2">${object[0].location_description}</h4>
-                    ${objectList.map((item, index) =>{
-                        var element = `<div class="row popupRow mb-2 mx-2 d-flex jusify-content-start">`
-                        if (item.object_type == 0) {
-                            element += 
-                                ` 
-                                    <div class="popupType text-capitalize">
-                                        ${config.mapConfig.iconOptions.showNumber ? `${index + 1}`: ''} 
-                                    </div>
-                                    <div class="popupType text-capitalize">
-                                       . ${item.type}
-                                    </div>
-                                    <div class="popupType ">
-                                        , ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn}
-                                    </div>
-                                    <div class="popupType">
-                                        ${item.status !== "normal" 
-                                            ? `, ${locale.texts[item.status.toUpperCase()]}`
-                                            : `, ${item.residence_time}`
-                                        }
-                                    </div>
-                                `
+                    ${objectList.map((item, index) => {
+                        var element = `<div id='${item.mac_address}'class="row popupRow mb-2 mx-2 d-flex jusify-content-start">`
+                        element += `<div class="popupType" onclick={this.aaa}>`
+                        element += config.mapConfig.popupOptions.showNumber
+                            ?   `<div class="popupType text-capitalize">${index + 1}.</div>`
+                            :   `<div class="popupType text-capitalize">&#9642;  </div>`
+                        if(item.object_type == 0){
+                            element +=
+                        `
+                                <div class="popupType text-capitalize">
+                                   ${item.type}
+                                </div>
+                                <div class="popupType ">
+                                    , ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn}
+                                </div>
+                                <div class="popupType">
+                                    ${item.status !== "normal" 
+                                        ? `, ${locale.texts[item.status.toUpperCase()]}`
+                                        : `, ${item.residence_time}`    
+                                    }
+                                </div>
+
+                                <div class="popupType">
+                                ${item.status == "reserve" 
+                                    ? `~ ${item.reserved_timestamp_final}`
+                                    : ''
+                                }
+                            </div>
+                        
+
+                            </div>
+                        `
                         } else {
                             element += 
                                 `     
@@ -637,13 +738,284 @@ const config = {
                                     <div class="popupType">
                                         , ${locale.texts.PHYSICIAN_NAME}: ${item.physician_name}
                                     </div>
+                                    <div class="popupType">
+                                        , ${item.residence_time}
+                                    </div>
                                 `
                         }
                         element += `</div>`
-                            return element
-                        }).join("")
+                        return element
+                    }).join("")
                     }
-                </div> `
+                </div>` 
+            return content
+        },
+
+    },
+    
+    bigScreenConfig: {
+        mapOptions: {
+            crs: L.CRS.Simple,
+            center: L.latLng(17000, 18000),
+            zoom: -5.7,
+            minZoom: -6,
+            maxZoom: 0,
+            zoomDelta: 0.25,
+            zoomSnap: 0,
+            zoomControl: false,
+            attributionControl: false,
+            dragging: false,
+            doubleClickZoom: false,
+            scrollWheelZoom: false
+        },
+
+
+        /** Set the icon option */
+        iconOptions: {
+            iconSize: 30,
+            showNumber: false,
+        },
+
+        /** Set the representation of color pin 
+         * Icon options for AwesomeNumberMarkers 
+         * The process: 
+         * 1. Add the declaration of the desired icon option
+         * 2. Add the CSS description in leafletMarker.css */
+        iconColorList: [
+            "black",
+            "red",
+            "orange",
+            "blue",
+            "grey",
+            "white",
+            "orchid",
+            "mistyrose",
+            "tan",
+            "lightyello",
+            "lavender",
+            "lightblue",
+            "yellowgreen",
+            "sos",
+            "female",
+            "male"
+        ],
+
+        iconColor: {
+            normal: "black",
+            geofenceF: "red",
+            geofenceP: "orange",
+            searched: "blue",
+            unNormal: "grey",
+            sos: "sos",
+            number: "white",
+            female: "female",
+            male: "male",
+            female_1: "female_2",
+            male_1: "male_1",
+
+            // ["slateblue", "tan", "lightyellow", "lavender", "orange","lightblue", "mistyrose", "yellowgreen", "darkseagreen", "orchid"]
+            pinColorArray: ["orchid", "tan", "lightyellow", "lavender","lightblue", "yellowgreen"]
+        },
+
+        geoFenceMarkerOption: {
+            color: 'rgba(0, 0, 0, 0)',
+            fillColor: 'orange',
+            fillOpacity: 0.4,
+            radius: 25,
+        },
+
+        lbeaconMarkerOption: {
+            color: 'rgba(0, 0, 0, 0)',
+            fillColor: 'orange',
+            fillOpacity: 0.4,
+            radius: 15,
+        },
+
+        /** Set the schema to select the color pin */
+        getIconColor: (item, hasColorPanel) => {
+
+            if(item.pinColor == -1){
+                return config.mapConfig.iconColor.normal
+            }else{
+                return config.mapConfig.iconColor.pinColorArray[item.pinColor]
+            }
+        },
+
+        defaultAreaId: process.env.DEFAULT_AREA_ID,
+    
+        gender: {
+            Male: {
+                id: 1,
+            },
+            Female:{
+                id: 2,
+            },
+        },
+
+        areaOptions: process.env.SITES_GROUP
+            .split(',')
+            .reduce((res, item) => {
+                res[item] = {
+                    1: "NTUH_EMERGENCY_ROOM",
+                    2: "IIS_SINICA_FOURTH_FLOOR",
+                    3: "NTUH_YUNLIN_WARD_FIVE_B",
+                    4: "NURSING_HOME",
+                    5: "YUANLIN_CHRISTIAN_HOSPITAL",
+                    6: "VETERAN_HOME_FIRST_FLOOR",
+                    7: "VETERAN_HOME_THIRD_FLOOR",
+                }[item]
+                return res
+            }, {}),
+
+        
+    
+        areaModules: {
+
+            NTUH_EMERGENCY_ROOM: {
+
+                id: 1,
+                name: "NTUH",
+                url: NTUH_MAP,
+                bounds: [[0,0], [33659,56214]],
+            },
+
+            IIS_SINICA_FOURTH_FLOOR: {
+                id: 2,
+                name: "IIS_SINICA_FOURTH_FLOOR",
+                url: IIS_SINICA_FOURTH_FLOORTH_MAP,
+                bounds: [[0,0], [21130,35710]],
+            },
+
+            NTUH_YUNLIN_WARD_FIVE_B: {
+                id: 3,
+                name: "NTUH_YUNLIN_WARD_FIVE_B",
+                url: NTUH_YUNLIN_WARD_FIVE_B_MAP,
+                // bounds: [[-5000,-5000], [21067,31928]],
+                bounds: [[0, 0], [26067,36928]],
+
+            },
+            NURSING_HOME: {
+                id: 4,
+                name: "NURSING_HOME",
+                url: NURSING_HOME_MAP,
+                bounds: [[0,0], [20000,45000]],
+            },
+            
+            YUANLIN_CHRISTIAN_HOSPITAL: {
+                id: 5,
+                name: "YUANLIN_CHRISTIAN_HOSPITAL",
+                url: YUANLIN_CHRISTIAN_HOSPITAL_MAP,
+                // bounds: [[3000,-3000], [24000,30000]],
+                bounds: [[0, 0], [27000,27000]],
+
+            },
+
+            VETERAN_HOME_FIRST_FLOOR: {
+                id: 6,
+                name: "VETERAN_HOME_FIRST_FLOOR",
+                url: VETERAN_HOME_FIRST_FLOOR_MAP,
+                bounds: [[0,0], [21000,26000]],
+            },
+
+            VETERAN_HOME_THIRD_FLOOR: {
+                id: 7,
+                name: "VETERAN_HOME_THIRD_FLOOR",
+                url: VETERAN_HOME_THIRD_FLOOR_MAP,
+                bounds: [[0,0], [21000,26000]],
+            },
+        },
+
+        /* Set the tracking query inteval time(ms) */
+        intervalTime: process.env.OBJECT_TRACKING_INTERVAL_TIME_IN_MILLI_SEC,
+
+
+        objectStatus: {
+            PERIMETER: "perimeter",
+            FENCE: "fence",
+            NORMAL: "normal",
+            BROKEN: "broken",
+            RESERVE: "reserve",
+            TRANSFERRED: "transferred",   
+        },
+        
+        /* Set the rssi threshold */
+        locationAccuracyMapToDefault: {
+            0: process.env.LOCATION_ACCURACY_LOW,
+            1: process.env.LOCATION_ACCURACY_MED,
+            2: process.env.LOCATION_ACCURACY_HIGH
+        },
+
+        locationAccuracyMapToDB: {
+            0: "low_rssi",
+            1: "med_rssi",
+            2: "high_rssi",
+        },
+
+        /* Set the Marker dispersity that can be any positive number */
+        markerDispersity: 13,
+
+        popupOptions: {
+            minWidth: "500",
+            maxHeight: "300",
+            className : "customPopup",
+            showNumber: false
+        },
+
+        /** Set the html content of popup of markers */
+        getPopupContent: (object, objectList, locale) => {
+            var indexNumberForPatient = 0
+            var indexNumberForDevice = 0
+            /* The style sheet is right in the src/css/Surveillance.css*/
+            var PatientTotalNumber = 0;
+            var DeviceTotalNumber = 0;
+
+            objectList.map((item,index) => {
+                if (item.object_type != 0) PatientTotalNumber ++;
+                else DeviceTotalNumber ++;   
+            })
+            
+            const content = `
+                <div>
+                    <h4 class="border-bottom pb-1 px-2">${object[0].location_description}</h4>
+                    ${objectList.map((item, index) => {
+                        var element = `<div id="${item.mac_address}" class="row popupRow mb-2 mx-2 d-flex jusify-content-start">`
+                        element += config.mapConfig.popupOptions.showNumber
+                            ?   `<div class="popupType text-capitalize">${index + 1}.</div>`
+                            :   `<div class="popupType text-capitalize">&#9642;  </div>`
+                        if(item.object_type == 0){
+                            element +=                                ` 
+                            <div class="popupType text-capitalize">
+                               ${item.type}
+                            </div>
+                            <div class="popupType ">
+                                , ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn}
+                            </div>
+                            <div class="popupType">
+                                ${item.status !== "normal" 
+                                    ? `, ${locale.texts[item.status.toUpperCase()]}`
+                                    : `, ${item.residence_time}`
+                                }
+                            </div>
+                        `
+                        } else {
+                            element += 
+                                `     
+                                    <div class="popupType">
+                                        ${item.name} 
+                                    </div>
+                                    <div class="popupType">
+                                        , ${locale.texts.PHYSICIAN_NAME}: ${item.physician_name}
+                                    </div>
+                                    <div class="popupType">
+                                        , ${item.residence_time}
+                                    </div>
+                                `
+                        }
+                        element += `</div>`
+                        return element
+                    }).join("")
+                    }
+                </div>`
             return content
         },
 

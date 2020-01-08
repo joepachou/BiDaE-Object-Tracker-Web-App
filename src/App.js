@@ -8,7 +8,6 @@ import routes from './js/routes';
 import CombinedContext from './js/context/AppContext'
 import { ToastContainer } from 'react-toastify';
 import config from './js/config'
-import 'react-toastify/dist/ReactToastify.min.css';
 
 const App = () => {
     return (

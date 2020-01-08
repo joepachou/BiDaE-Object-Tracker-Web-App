@@ -7,6 +7,8 @@ import * as Yup from 'yup';
 import RadioButton from '../presentational/RadioButton';
 import RadioButtonGroup from './RadioButtonGroup';
 import { AppContext } from '../../context/AppContext';
+import axios from 'axios';
+import dataSrc from '../../dataSrc'
 
 class ChangeStatusForm extends React.Component {
 
@@ -15,7 +17,54 @@ class ChangeStatusForm extends React.Component {
     state = {
         show: this.props.show,
         isShowForm: false,
+        transferredLocationOptions: []
     };
+
+    componentDidMount = () => {
+       this.getTransferredLocation();
+    }
+
+    componentDidUpdate = (prevProps) => {
+        if (prevProps != this.props && this.props.selectedObjectData.length !== 0) {
+            this.setState({
+                show: this.props.show,
+                isShowForm: true,
+            })
+        }
+    }
+
+    pathOnClickHandler = () => {
+        //console.log(this.props.selectedObjectData)
+        this.props.selectedObjectData.map((item,index)=>{
+            this.props.handleShowPath(item.mac_address);
+        })
+        this.handleClose()
+    }
+
+    getTransferredLocation = () => {
+        let { locale } = this.context
+        axios.get(dataSrc.getTransferredLocation)
+        .then(res => {
+            const transferredLocationOptions = res.data.map(loc => {
+                return {          
+                    value: loc.transferred_location,
+                    label: locale.texts[loc.transferred_location.toUpperCase().replace(/ /g, '_')],
+                    options: Object.values(loc)
+                        .filter((item, index) => index > 0)
+                        .map(branch => {
+                            return {
+                                value: `${loc.transferred_location},${branch}`,
+                                label: locale.texts[branch.toUpperCase().replace(/ /g, '_')],
+                            }
+                    })
+                }
+
+            })
+            this.setState({
+                transferredLocationOptions
+            })
+        })
+    }
 
     handleClose = (e) => {
         if(this.props.handleChangeObjectStatusFormClose) {
@@ -26,21 +75,6 @@ class ChangeStatusForm extends React.Component {
         });
     }
   
-    handleShow = () =>  {
-        this.setState({ 
-            show: true 
-        });
-    }
-
-
-    componentDidUpdate = (prevProps) => {
-        if (prevProps != this.props && this.props.selectedObjectData.length !== 0) {
-            this.setState({
-                show: this.props.show,
-                isShowForm: true,
-            })
-        }
-    }
 
     handleClick = (e) => {
         const item = e.target.name
@@ -60,20 +94,6 @@ class ChangeStatusForm extends React.Component {
     render() {
 
         const { locale } = this.context
-
-        const options = Object.keys(config.transferredLocation).map(location => {
-            return {
-                value: location,
-                label: locale.texts[location.toUpperCase().replace(/ /g, '_')],
-                options: config.transferredLocation[location].map(branch => {
-                    return {
-                        value: `${location},${branch}`,
-                        label: locale.texts[branch.toUpperCase().replace(/ /g, '_')],
-
-                    }
-                })
-            }
-        })
 
         const style = {
             input: {
@@ -98,6 +118,13 @@ class ChangeStatusForm extends React.Component {
             },
             textarea: {
                 width: '100%'
+            },
+            crossIcom: {
+                cursor: "pointer"
+            },
+
+            buttonPath: {
+                fontSize: '0.5rem'
             }
         }
 
@@ -113,6 +140,7 @@ class ChangeStatusForm extends React.Component {
         }
 
         let { title } = this.props;
+        
         let selectedObjectData = this.props.selectedObjectData.length !== 0 ? this.props.selectedObjectData[0] : []
         let {
             transferred_location = ''
@@ -131,6 +159,7 @@ class ChangeStatusForm extends React.Component {
                         className='font-weight-bold text-capitalize'
                     >
                         {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
+                        <Button variant="link" style={style.buttonPath} onClick={this.pathOnClickHandler}>追蹤路徑</Button>
                     </Modal.Header >
                     <Modal.Body>
                         <div className='modalDeviceListGroup' style={style.deviceList}>
@@ -142,7 +171,12 @@ class ChangeStatusForm extends React.Component {
                                             {this.props.selectedObjectData.length > 1 
                                                 ? 
                                                     <Col xs={1} sm={1} className='d-flex align-items-center'>
-                                                        <i className="fas fa-times" onClick={this.props.handleRemoveButton} name={item.mac_address}></i> 
+                                                        <i 
+                                                            className="fas fa-times" 
+                                                            onClick={this.props.handleRemoveButton} 
+                                                            name={item.mac_address}
+                                                            style={style.crossIcom}
+                                                        /> 
                                                     </Col>
                                                 : null
                                             }
@@ -255,7 +289,7 @@ class ChangeStatusForm extends React.Component {
                                             name="select"
                                             value = {values.select}
                                             onChange={value => setFieldValue("select", value)}
-                                            options={options}
+                                            options={this.state.transferredLocationOptions}
                                             isDisabled={values.radioGroup !== config.objectStatus.TRANSFERRED}
                                             style={style.select}
                                             components={{
@@ -294,6 +328,8 @@ class ChangeStatusForm extends React.Component {
                                         </Col>
                                     </Row>
                                     <hr/>
+
+                                    
                                     <Row className='d-flex justify-content-center pb-2'>
                                         <ButtonToolbar >
                                             <Button 
@@ -306,6 +342,7 @@ class ChangeStatusForm extends React.Component {
                                             >
                                                 {locale.texts.ADD_DEVICE}
                                             </Button>
+
                                             {/* <Button 
                                                 name='add note'
                                                 variant="outline-secondary" 

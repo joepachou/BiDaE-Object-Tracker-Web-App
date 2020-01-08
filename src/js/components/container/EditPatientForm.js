@@ -7,11 +7,18 @@ import LocaleContext from '../../context/LocaleContext';
 import axios from 'axios';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-
+import CheckboxGroup from './CheckboxGroup'
+import Checkbox from '../presentational/Checkbox'
+import RadioButtonGroup from './RadioButtonGroup'
+import RadioButton from '../presentational/RadioButton'
+import { 
+    addPatient,
+} from "../../dataSrc"
 let monitorTypeMap = {};
 
-Object.keys(config.monitorType).forEach(key => {
-    monitorTypeMap[config.monitorType[key]] = key
+Object.keys(config.monitorType)
+    .forEach(key => {
+        monitorTypeMap[config.monitorType[key]] = key
 })
   
 class EditPatientForm extends React.Component {
@@ -19,6 +26,9 @@ class EditPatientForm extends React.Component {
         show: this.props.show,
     };
 
+
+    componentDidMount = () => {
+    }
 
     componentDidUpdate = (prevProps) => {
         if (!(_.isEqual(prevProps, this.props))) {
@@ -35,33 +45,44 @@ class EditPatientForm extends React.Component {
 
     
     handleSubmit = (postOption) => {
+
         const path = this.props.formPath
-        console.log(postOption)
         axios.post(path, {
+
             formOption: postOption
         }).then(res => {
-            setTimeout(this.props.handleSubmitForm(),1000)
+       
         }).catch( error => {
             console.log(error)
         })
+       this.props.handleSubmitForm()
     }
 
     render() {
+
         const locale = this.context
 
-        const options = Object.keys(config.transferredLocation).map(location => {
-            return {
-                value: location,
-                label: locale.texts[location.toUpperCase().replace(/ /g, '_')],
-                options: config.transferredLocation[location].map(branch => {
-                    return {
-                        value: `${location},${branch}`,
-                        label: locale.texts[branch.toUpperCase().replace(/ /g, '_')],
-                    }
-                })
-            }
-        })
 
+        const { 
+            title, 
+            selectedObjectData,
+            physicianList = []
+        } = this.props;
+
+        const { 
+            name,
+            physician_id,
+            area_name,
+            room_number,
+            id,
+            mac_address,
+            asset_control_number,
+            object_type,
+            physician_name,
+            monitor_type = [],
+            room,
+            physicianName
+        } = selectedObjectData
      
         const areaOptions = Object.values(config.mapConfig.areaOptions).map(area => {
             return {
@@ -70,10 +91,16 @@ class EditPatientForm extends React.Component {
             };
         })
 
-
-
-
-
+        const genderOptions = [
+            { 
+                value: '1', 
+                label: locale.texts.MALE
+            },
+            { 
+                value: '2', 
+                label: locale.texts.FEMALE 
+            },
+        ]
 
         const style = {
             input: {
@@ -92,21 +119,12 @@ class EditPatientForm extends React.Component {
                 color: '#dc3545'
             },
         }
-
-        var patientPosition = [
-            { value: 'one', label: locale.texts.MOVING },
-            { value: 'two', label: locale.texts.STATIONARY }
-        ];
-
-        const { title, selectedObjectData } = this.props;
-
-        const { 
-            patientName,
-            roomNumber,
-            attendingPhysician,
-            mac_address,
-            asset_number,
-        } = selectedObjectData
+        let physicianListOptions = physicianList.map(user => {
+            return {
+                value: user.id,
+                label: user.name
+            }
+        }) 
 
         return (
             <Modal show={this.state.show} onHide={this.handleClose} size='md'>
@@ -114,34 +132,77 @@ class EditPatientForm extends React.Component {
                     {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
                 </Modal.Header >
                 <Modal.Body>
+                    <Formik              
+                        initialValues = {{
+                            area: area_name || '',
+                            name: name || '' ,
+                            // roomNumber: room_number || '',
+                            mac_address: mac_address || '',
+                            asset_control_number:asset_control_number|| '',
+                            gender :  object_type === 'Female' 
+                                ?   genderOptions[1] 
+                                : object_type === '女' 
+                                ?   genderOptions[1]
+                                : genderOptions[0]
+                              ,
+                            monitorType: selectedObjectData.length !== 0 ? monitor_type.split('/') : [],
+                            room: room 
+                                ? {
+                                    value: room,
+                                    label: room
+                                }
+                                : null,
 
-
-
-
-
-
-
-
-                
-                    <Formik                    
-                       
-
-                       initialValues = {{
-                        patientName: patientName || '' ,
-                        roomNumber: roomNumber || '',
-                        attendingPhysician: attendingPhysician || '',
-                        mac_address: mac_address || '',
-                        asset_number: asset_number || '',    
+                             physician : this.props.physicianName ?
+                             {
+                                    value:this.props.physicianName,
+                                    label:this.props.physicianName
+                             }
+                             : null
                         }}
-
-
-
+                       
                         validationSchema = {
+                            
                             Yup.object().shape({
-                                patientName: Yup.string().required(locale.texts.NAME_IS_REQUIRED),
-                                roomNumber: Yup.string().required('馬的給我填'),
-                                attendingPhysician: Yup.string().required('馬的給我填'),
-                                asset_number: Yup.string().required('馬的給我填'),
+                               
+                                
+                                name: Yup.string().required(locale.texts.NAME_IS_REQUIRED),
+                                // roomNumber: Yup.string().required(locale.texts.ROOMNUMBER_IS_REQUIRED),
+                               
+                                // physician: Yup.string()
+                                // .required(locale.texts.ATTENDING_IS_REQUIRED)
+                                // .test(
+                                //         'physician',
+                                //         locale.texts.THE_ATTENDINGPHYSICIAN_IS_WRONG,
+                                //         value => {
+                                //             if( isNaN(value) == false) return true
+                                //             if (isNaN(value) == true) return false
+                                //         }
+                                //     ),
+
+                                area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
+                                gender: Yup.string().required(locale.texts.GENDER_IS_REQUIRED),
+                                
+                                asset_control_number: Yup.string()
+                                .required(locale.texts.NUMBER_IS_REQUIRED)
+                                .test(
+                                    'asset_control_number',
+                                    locale.texts.THE_Patient_Number_IS_ALREADY_USED,
+                                        value => {
+                                            return value === selectedObjectData.asset_control_number ||
+                                                !this.props.data.map(item => item.asset_control_number).includes(value)
+                                    }
+                                )
+                                .test(
+                                    'asset_control_number',
+                                    locale.texts.THE_Patient_Number_IS_ALREADY_USED,
+                                        value => {
+                                            return value === selectedObjectData.asset_control_number ||
+                                                !this.props.objectData.map(item => item.asset_control_number).includes(value)
+                                    }
+                                )
+                                ,
+
 
                                 mac_address: Yup.string()
                                     .required(locale.texts.MAC_ADDRESS_IS_REQUIRED)
@@ -150,8 +211,17 @@ class EditPatientForm extends React.Component {
                                         locale.texts.THE_MAC_ADDRESS_IS_ALREADY_USED,
                                         value => {
                                             return value === selectedObjectData.mac_address ||
-                                                !this.props.data.map(item => item.mac_address).includes(value)
+                                                !this.props.data.map(item => item.mac_address.toUpperCase().replace(/:/g, '')).includes(value.toUpperCase().replace(/:/g, ''))
                                         }
+                                        
+                                    ).test(
+                                        'mac_address',
+                                        locale.texts.THE_MAC_ADDRESS_IS_ALREADY_USED,
+                                        value => {
+                                            return value === selectedObjectData.mac_address ||
+                                                !this.props.objectData.map(item => item.mac_address.toUpperCase().replace(/:/g, '')).includes(value.toUpperCase().replace(/:/g, ''))
+                                        }
+                                        
                                     ).test(
                                         'mac_address',
                                         locale.texts.THE_MAC_ADDRESS_FORM_IS_WRONG,
@@ -162,50 +232,99 @@ class EditPatientForm extends React.Component {
                                             return false
                                         }
                                     ),
-                                    
                         })}
 
 
                         onSubmit={(values, { setStatus, setSubmitting }) => {
+               
+                           
+                            let monitor_type = values.monitorType
+                            .filter(item => item)
+                            .reduce((sum, item) => {
+                                sum += parseInt(monitorTypeMap[item])
+                                return sum
+                            },0)
+                           
                             const postOption = {
                                 ...values,
+                                area_id: config.mapConfig.areaModules[values.area.value].id,
+                                gender_id : values.gender.value,
+                                physician: values.physician ? values.physician.value : 0,
+                                monitor_type, 
+                                room: values.room ? values.room.label : '',
+                                object_type:values.gender.value,
+                                physicianIDNumber : this.props.physicianIDNumber
                             }
                             this.handleSubmit(postOption)                            
                         }}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (  
                             <Form className="text-capitalize">
-                                <Row className="form-group my-3 text-capitalize" noGutters>
+                                <div className="form-group">
+                                    <label htmlFor="name">{locale.texts.NAME}*</label>
+                                    <Field name="name" type="text" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} placeholder=''/>
+                                    <ErrorMessage name="name" component="div" className="invalid-feedback" />
+                                </div>
+
+                                <div className="form-group">
+                                    <label htmlFor="asset_control_number">{locale.texts.PATIENT_NUMBER}*</label>
+                                    <Field disabled={this.props.disableASN} name="asset_control_number" type="text" className={'form-control' + (errors.asset_control_number && touched.asset_control_number ? ' is-invalid' : '')} placeholder=''/>
+                                    <ErrorMessage name="asset_control_number" component="div" className="invalid-feedback" />
+                                </div>
+                                
+{/* 
+                                <div className="form-group">
+                                    <label htmlFor="roomNumber">{locale.texts.ROOM_NUMBER}*</label>
+                                    <Field name="roomNumber" type="text" className={'form-control' + (errors.roomNumber && touched.roomNumber ? ' is-invalid' : '')} placeholder=''/>
+                                    <ErrorMessage name="roomNumber" component="div" className="invalid-feedback" />
+                                </div> */}
+                                <div className="form-group">
+                                    <label htmlFor="mac_address">{locale.texts.MAC_ADDRESS}*</label>
+                                    <Field 
+                                        name="mac_address" 
+                                        type="text" 
+                                        className={'form-control' + (errors.mac_address && touched.mac_address ? ' is-invalid' : '')} 
+                                        disabled={title.toLowerCase() === locale.texts.EDIT_OBJECT}
+                                    />
+                                    <ErrorMessage name="mac_address" component="div" className="invalid-feedback" />
+                                </div>
+                                <hr/>
+                                <Row className="text-capitalize" noGutters>
+                                    <Col lg={3} className='d-flex align-items-center'>
+                                        <label htmlFor="physician">{locale.texts.ATTENDING_PHYSICIAN}*</label>
+                                    </Col>
+                                    <Col lg={9}>
+                                        <Select
+                                            placeholder = {locale.texts.SELECT_PHYSICIAN}
+                                            name="physician"
+                                            value = {values.physician}
+                                            onChange= {(value) => setFieldValue("physician", value)}
+                                            options={physicianListOptions}
+                                            style={style.select}
+                                            components={{
+                                                IndicatorSeparator: () => null
+                                            }}
+                                        />
+                                    </Col>
+                                </Row>
+                                <Row className="text-capitalize" noGutters>
+                                   <Col lg={9}>
+                                        <Row className='no-gutters' className='d-flex align-self-center'>
+                                            <Col>
+                                                {touched.physician && errors.physician &&
+                                                <div style={style.errorMessage}>{errors.physician}</div>}
+                                            </Col>
+                                        </Row>        
+                                    </Col> 
+                                </Row>
+                                <hr/>
+                                <Row className="text-capitalize" noGutters>
                                     <Col lg={3} className='d-flex align-items-center'>
                                         <label htmlFor="type">{locale.texts.AUTH_AREA}</label>
                                     </Col>
                                     <Col lg={9}>
-                                <Select
+                                        <Select
                                             placeholder = {locale.texts.SELECT_AREA}
                                             name="area"
                                             value = {values.area}
@@ -215,10 +334,10 @@ class EditPatientForm extends React.Component {
                                             components={{
                                                 IndicatorSeparator: () => null
                                             }}
-                                />
+                                        />
                                     </Col>
                                 </Row>
-                                <Row className="form-group my-3 text-capitalize" noGutters>
+                                <Row className="text-capitalize" noGutters>
                                    <Col lg={9}>
                                         <Row className='no-gutters' className='d-flex align-self-center'>
                                             <Col>
@@ -227,104 +346,94 @@ class EditPatientForm extends React.Component {
                                             </Col>
                                         </Row>        
                                     </Col> 
-                                       
                                 </Row>
                                 <hr/>
-                          
-
-
-                                <div className="form-group">
-                                    <label htmlFor="patientName">{locale.texts.NAME}*</label>
-                                    <Field name="patientName" type="text" className={'form-control' + (errors.patientName && touched.patientName ? ' is-invalid' : '')} placeholder=''/>
-                                    <ErrorMessage name="patientName" component="div" className="invalid-feedback" />
-                                </div>
-
-
-                                <div className="form-group">
-                                    <label htmlFor="roomNumber">{locale.texts.ROOM_NUMBER}*</label>
-                                    <Field name="roomNumber" type="text" className={'form-control' + (errors.roomNumber && touched.roomNumber ? ' is-invalid' : '')} placeholder=''/>
-                                    <ErrorMessage name="roomNumber" component="div" className="invalid-feedback" />
-                                </div>
-
-                                <div className="form-group">
-                                    <label htmlFor="attendingPhysician">{locale.texts.ATTENDING_PHYSICIAN}*</label>
-                                    <Field name="attendingPhysician" type="text" className={'form-control' + (errors.attendingPhysician && touched.attendingPhysician ? ' is-invalid' : '')} placeholder=''/>
-                                    <ErrorMessage name="attendingPhysician" component="div" className="invalid-feedback" />
-                                </div>
-
-                                <div className="form-group">
-                                    <label htmlFor="mac_address">{locale.texts.MAC_ADDRESS}*</label>
-                                    <Field name="mac_address" type="text" className={'form-control' + (errors.mac_address && touched.mac_address ? ' is-invalid' : '')} placeholder=''/>
-                                    <ErrorMessage name="mac_address" component="div" className="invalid-feedback" />
-                                </div>
-
-
-                                <div className="form-group">
-                                    <label htmlFor="asset_number">{locale.texts.ASSET_CONTROL_NUMBER_IS_REQUIRED}*</label>
-                                    <Field name="asset_number" type="text" className={'form-control' + (errors.asset_number && touched.asset_number ? ' is-invalid' : '')} placeholder=''/>
-                                    <ErrorMessage name="asset_number" component="div" className="invalid-feedback" />
-                                </div>
-
-
-
-                                <div className="form-group">
-                                    <label htmlFor="patientStatus">{locale.texts.PICTURE}</label>
-                                </div>
-
-                                {/* <Image src={config.patientPicture.logo} rounded width={470} height={200} ></Image> */}
-
-<hr/>
-
-{/* 電池 */}
-                                {/* <Row className="form-group my-3 text-capitalize">
-                                    <Col>
-                                        <RadioButtonGroup
-                                            id="radioGroup"
-                                            label={locale.texts.BATTERY_ALERT}
-                                            value={values.radioGroup}
-                                            error={errors.radioGroup}
-                                            touched={touched.radioGroup}
-                                        >
-                                            <Field
-                                                component={RadioButton}
-                                                name="radioGroup"
-                                                id={config.patientStatus.BATTERY_NORMAL}
-                                                label={locale.texts.NORMAL}
-                                            />
-                                            <Field
-                                                component={RadioButton}
-                                                name="radioGroup"
-                                                id={config.patientStatus.BATTERY_CHANGE}
-                                                label={locale.texts.BATTERY_CHANGE}
-                                            />
-                                        </RadioButtonGroup>
+                                <Row className="text-capitalize" noGutters>
+                                    <Col lg={3} className='d-flex align-items-center'>
+                                        <label htmlFor="type">{locale.texts.PATIENT_GENDER}</label>
+                                    </Col>
+                                    <Col lg={9}>
+                                        <Select 
+                                            placeholder = {locale.texts.CHOOSE_GENDER}
+                                            name ="gender"
+                                            // onChange={this.change} 
+                                      
+                                            value={values.gender}
+                                           onChange={value => setFieldValue("gender", value)}
+                                            options={genderOptions}
+                                            components={{
+                                                IndicatorSeparator: () => null
+                                            }}
+                                        />
+                                    </Col> 
+                                </Row>
+                                <hr/>
+                                <Row className="text-capitalize" noGutters>
+                                    <Col lg={3} className='d-flex align-items-center'>
+                                        <label htmlFor="type">{locale.texts.ROOM}</label>
+                                    </Col>
+                                    <Col lg={9}>
+                                        <Select 
+                                            placeholder = {locale.texts.SELECT_ROOM}
+                                            name ="room"
+                                            value={values.room}
+                                            onChange={value => setFieldValue("room", value)}
+                                            options={this.props.roomOptions}
+                                            components={{
+                                                IndicatorSeparator: () => null
+                                            }}
+                                        />
+                                    </Col> 
+                                </Row>
+                                
+                                <Row className="text-capitalize mb-1" noGutters>
+                                   <Col lg={9}>
                                         <Row className='no-gutters' className='d-flex align-self-center'>
                                             <Col>
-                                                {touched.radioGroup && errors.radioGroup &&
-                                                <div style={style.errorMessage}>{errors.radioGroup}</div>}
-                                                {touched.select && errors.select &&
-                                                <div style={style.errorMessage}>{errors.select}</div>}
+                                                {touched.room && errors.room &&
+                                                <div style={style.errorMessage}>{errors.room}</div>}
                                             </Col>
-                                        </Row>                                                
-                                    </Col>
+                                        </Row>        
+                                    </Col> 
                                 </Row>
-                                <hr/> */}
+                                <hr/>
+                                <Row className="form-group my-3 text-capitalize">
+                                    <Col>
+                                        <CheckboxGroup
+                                            id="monitorType"
+                                            label={locale.texts.MONITOR_TYPE}
+                                            value={values.monitorType}
+                                            error={errors.monitorType}
+                                            touched={touched.monitorType}
+                                            onChange={setFieldValue}
+                                            
+                                            // onBlur={setFieldTouched}
+                                        >
+                                            {Object.keys(config.monitorType)
+                                                .filter(key => config.monitorTypeMap.patient.includes(parseInt(key)))
+                                                .map((key,index) => {
+                                                    return <Field
+                                                        key={index}
+                                                        component={Checkbox}
+                                                        name="checkboxGroup"
+                                                        id={config.monitorType[key]}
+                                                        label={config.monitorType[key]}
+                                                    />
+                                            })}
+                                        </CheckboxGroup>
+                                    </Col>
 
 
-                                <Col lg={3} className='text-capitalize'>
-                                        <label htmlFor="type">{'UUID' + '+' + 'MAC_Address:'}</label>
-                                </Col>
 
-
+                                </Row>
                                 <Modal.Footer>
                                     <Button variant="outline-secondary" className="text-capitalize" onClick={this.handleClose}>
                                         {locale.texts.CANCEL}
-                                    
-
                                     </Button>
-                                    <Button type="submit" className="text-capitalize" variant="primary" disabled={isSubmitting}>
+                                    <Button type="submit" className="text-capitalize" variant="primary" onClick={this.handleSubmit} disabled={isSubmitting}>
                                         {locale.texts.SAVE}
                                     </Button>
+
                                 </Modal.Footer>
                             </Form>
                         )}

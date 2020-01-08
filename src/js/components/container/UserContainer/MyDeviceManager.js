@@ -190,7 +190,8 @@ class MyDeviceManager extends React.Component{
             var dataMap = {}
 
             for(var item of data){
-                dataMap[item.asset_control_number] = item
+                if(item.object_type == 0)
+                    dataMap[item.asset_control_number] = item
             }
             this.device.dataMap = dataMap
 
@@ -225,17 +226,26 @@ class MyDeviceManager extends React.Component{
     }
     
     
-    render(){
+    render() {
 
         const { locale } = this.context
+
+        const style = {
+            AddableListStyle: {
+                height: "35vh",
+                overflow: "scroll"
+            }
+        }
         return (
             <Fragment>
                 <Row className="w-100 d-flex bg-white">
                     <Col>
                         <h5 className="text-capitalize">{locale.texts.MY_DEVICES_LIST}</h5>
-                        <AddableList
-                            getAPI={this.getAPIfromAddableList_1}
-                        />
+                        <div style={style.AddableListStyle}>
+                            <AddableList
+                                getAPI={this.getAPIfromAddableList_1}
+                            />
+                        </div>
                     </Col>
                 </Row>
                 {/* <Row>
@@ -247,9 +257,11 @@ class MyDeviceManager extends React.Component{
                 <Row className='w-100 d-flex bg-white'>
                     <Col>
                         <h5 className="text-capitalize">{locale.texts.NOT_MY_DEVICES_LIST}</h5>
-                        <AddableList
-                            getAPI={this.getAPIfromAddableList_2}
-                        />
+                        <div style={style.AddableListStyle}>
+                            <AddableList
+                                getAPI={this.getAPIfromAddableList_2}
+                            />
+                        </div>
                     </Col>
                 </Row>
             </Fragment>

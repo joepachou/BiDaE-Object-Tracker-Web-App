@@ -12,9 +12,17 @@ import dataSrc from '../../dataSrc'
 import { AppContext } from '../../context/AppContext'
 import { toast } from 'react-toastify';
 import ToastNotification from '../presentational/ToastNotification'
+import SearchResult from '../presentational/SearchResultList';
+import moment from 'moment'
 
-const myDevices = config.frequentSearchOption.MY_DEVICES ;
-const allDevices = config.frequentSearchOption.ALL_DEVICES;
+
+const {
+    ALL_DEVICES,
+    MY_DEVICES,
+    ALL_PATIENTS,
+    MY_PATIENTS,
+    OBJECTS,
+} = config.frequentSearchOption
 
 class MainContainer extends React.Component{
 
@@ -28,6 +36,7 @@ class MainContainer extends React.Component{
         violatedObjects: {},
         hasSearchKey: false,
         searchKey: '',
+        lastsearchKey: '',
         searchResult: [],
         colorPanel: null,
         clearColorPanel: false,
@@ -36,25 +45,29 @@ class MainContainer extends React.Component{
         hasGridButton: false,
         isHighlightSearchPanel: false,
         rssiThreshold: window.innerWidth < config.mobileWidowWidth
-            ? config.surveillanceMap.locationAccuracyMapToDefault[0]
-            : config.surveillanceMap.locationAccuracyMapToDefault[1],
-        auth: this.context.auth,
+            ? config.mapConfig.locationAccuracyMapToDefault[0]
+            : config.mapConfig.locationAccuracyMapToDefault[1],
+        authenticated: this.context.auth.authenticated,
         shouldUpdateTrackingData: true,
+        markerClickPackage: {},
+        showPath: false,
+        pathMacAddress:''
     }
 
     componentDidMount = () => {
         this.getTrackingData();
         this.getLbeaconPosition();
         this.getGeoFenceConfig()
-        this.interval = setInterval(this.getTrackingData, config.surveillanceMap.intevalTime)
+        this.interval = setInterval(this.getTrackingData, config.mapConfig.intervalTime)
     }
 
     componentDidUpdate = (prevProps, prevState) => {
         let isTrackingDataChange = !(_.isEqual(this.state.trackingData, prevState.trackingData))
         let { stateReducer } = this.context
+        let [{violatedObjects}] = stateReducer
         if (stateReducer[0].shouldUpdateTrackingData !== this.state.shouldUpdateTrackingData) {
             let [{shouldUpdateTrackingData}] = stateReducer
-            this.interval = shouldUpdateTrackingData ? setInterval(this.getTrackingData, config.surveillanceMap.intevalTime) : clearInterval(this.interval);
+            this.interval = shouldUpdateTrackingData ? setInterval(this.getTrackingData, config.mapConfig.intervalTime) : clearInterval(this.interval);
             this.setState({
                 shouldUpdateTrackingData
             })
@@ -62,22 +75,22 @@ class MainContainer extends React.Component{
         if (isTrackingDataChange && this.state.hasSearchKey) {
             this.handleRefreshSearchResult()
         }
-        if (!(_.isEqual(prevState.auth, this.context.auth))) {
+        if (!(_.isEqual(prevState.authenticated, this.context.auth.authenticated))) {
             this.getTrackingData(this.context.stateReducer[0].areaId)
             this.setState({
-                auth: this.context.auth,
+                authenticated: this.context.auth.authenticated,
+                searchResult: [],
+                searchKey: '',
+                hasSearchKey: false
             })
         } 
+
         let newViolatedObject = Object.keys(this.state.violatedObjects).filter(item => !Object.keys(prevState.violatedObjects).includes(item))
-        if (newViolatedObject !== 0 ) {
+        if (newViolatedObject.length !== 0 ) {
             newViolatedObject.map(item => {
-                toast.warn(<ToastNotification data={this.state.violatedObjects[item]} />, {
-                    hideProgressBar: true,
-                    autoClose: false
-                })
+                this.getToastNotification(this.state.violatedObjects[item])
             })
         }
-
     }
 
     shouldComponentUpdate = (nextProps,nextState) => {
@@ -101,32 +114,66 @@ class MainContainer extends React.Component{
         return shouldUpdate
     }
 
+    getToastNotification = (item) => {
+        item.notification.map(event => {
+            if (event.type == 2) return 
+            let toastId = `${item.id}:${event.type}`
+            let toastOptions = {
+                hideProgressBar: true,
+                autoClose: false,
+                onClose: this.onCloseToast,
+                toastId
+            }
+            this.getToastType(event.type, item, toastOptions, event.time)  
+        })
+    }
+
+    getToastType = (type, data, option, time) => {
+        return toast[config.toastMonitorMap[type]](<ToastNotification data={data} time={time} type={type}/>, option)
+    }
+
+    onCloseToast = (toast) => {
+        let mac_address = toast.data ? toast.data.mac_address : toast.mac_address;
+        let monitor_type = toast.type
+        axios.post(dataSrc.checkoutViolation, {
+            mac_address,
+            monitor_type
+        })
+        .then(res => {
+        })
+        .catch(err => {
+            console.log(`checkout violation fail: ${err}`)
+        })
+    }
+
+    /** Clear the record violated object */
+    clearAlerts = () => {
+        Object.values(this.state.violatedObjects).map(item => {
+            item.notification.map(event => {
+                let dismissedObj = {
+                    mac_address: item.mac_address,
+                    type: event.type
+                }
+
+                this.onCloseToast(dismissedObj)
+            })
+        })
+        toast.dismiss()
+    }
+
     componentWillUnmount = () => {
         clearInterval(this.interval);
     }
 
     handleRefreshSearchResult = () => {
-        let { searchKey, colorPanel, searchValue } = this.state
-        this.getSearchKey(searchKey, colorPanel, searchValue)
+        let { searchKey, colorPanel, searchValue, markerClickPackage } = this.state
+        this.getSearchKey(searchKey, colorPanel, searchValue, markerClickPackage)
     }
 
     changeLocationAccuracy = (locationAccuracy) => {
-        const rssiThreshold = config.surveillanceMap.locationAccuracyMapToDefault[locationAccuracy]
+        const rssiThreshold = config.mapConfig.locationAccuracyMapToDefault[locationAccuracy]
         this.setState({
             rssiThreshold
-        })
-    }
-
-    setArea = (value) => {
-        let { stateReducer } = this.context
-        let [{areaId}, dispatch] = stateReducer
-        this.getTrackingData(value)
-        dispatch({
-            type:'setArea',
-            value,
-        })
-        this.setState({
-            areaId, 
         })
     }
 
@@ -140,7 +187,7 @@ class MainContainer extends React.Component{
 
     getTrackingData = () => {
         let { auth, locale, stateReducer } = this.context
-        let [{areaId}] = stateReducer
+        let [{areaId, violatedObjects}, dispatch] = stateReducer
         axios.post(dataSrc.getTrackingData,{
             rssiThreshold: this.state.rssiThreshold,
             locale: locale.abbr,
@@ -148,12 +195,14 @@ class MainContainer extends React.Component{
             areaId,
         })
         .then(res => {
+
             let violatedObjects = res.data.reduce((violatedObjects, item) => {
                 if (!(item.mac_address in violatedObjects) && item.isViolated) {
                     violatedObjects[item.mac_address] = item
                 } 
                 return violatedObjects
             }, _.cloneDeep(this.state.violatedObjects))
+
             this.setState({
                 trackingData: res.data,
                 violatedObjects,
@@ -204,23 +253,19 @@ class MainContainer extends React.Component{
         })
     }
 
-    /** Clear the record violated object */
-    clearAlerts = () => {
-        toast.dismiss()
-    }
-
     /** Parsing the lbeacon's location coordinate from lbeacon_uuid*/
     createLbeaconCoordinate = (lbeacon_uuid) => {
+
         /** Example of lbeacon_uuid: 00000018-0000-0000-7310-000000004610 */
-        const zz = lbeacon_uuid.slice(6,8);
+        const zz = lbeacon_uuid.slice(0,4);
         const xx = parseInt(lbeacon_uuid.slice(14,18) + lbeacon_uuid.slice(19,23));
         const yy = parseInt(lbeacon_uuid.slice(-8));
-        return [yy, xx];
+        return [yy, xx, zz];
     }
 
     /** Transfer the search result, not found list and color panel from SearchContainer, GridButton to MainContainer 
      *  The three variable will then pass into SurveillanceContainer */
-    processSearchResult = (searchResult, colorPanel, searchKey, searchValue) => {
+    processSearchResult = (searchResult, colorPanel, searchKey, searchValue, markerClickPackage) => {
         /** Count the number of found object type */
         let duplicateSearchKey = []
 
@@ -231,6 +276,7 @@ class MainContainer extends React.Component{
         duplicateSearchKey.filter(key => {
             return key !== 'all devices' || key !== 'my devices'
         })
+
         let searchResultObjectTypeMap = searchResult
             .filter(item => item.found)
             .reduce((allObjectTypes, item) => {
@@ -246,6 +292,7 @@ class MainContainer extends React.Component{
         }, {})
 
         duplicateSearchKey.map(key => searchResultObjectTypeMap[key] = 0)
+        
         if(colorPanel) {
             this.setState({
                 hasSearchKey: Object.keys(colorPanel).length === 0 ? false : true,
@@ -256,6 +303,7 @@ class MainContainer extends React.Component{
                 searchResultObjectTypeMap: searchResultObjectTypeMap, 
                 clearSearchResult: false,
                 hasGridButton: true,
+                markerClickPackage,
             })
         } else {
             this.clearGridButtonBGColor();
@@ -268,7 +316,8 @@ class MainContainer extends React.Component{
                 searchResultObjectTypeMap: searchResultObjectTypeMap, 
                 clearSearchResult: false,
                 hasGridButton: false,
-                searchValue
+                searchValue,
+                markerClickPackage
             })
         }
     }
@@ -284,6 +333,8 @@ class MainContainer extends React.Component{
         this.clearGridButtonBGColor();
         this.setState({
             hasSearchKey: false,
+            searchKey: '',
+            lastsearchKey: '',
             searchResult: [],
             colorPanel: null,
             clearColorPanel: true,
@@ -294,63 +345,134 @@ class MainContainer extends React.Component{
     }
 
     /** Fired once the user click the item in object type list or in frequent seaerch */
-    getSearchKey = (searchKey, colorPanel = null, searchValue = null) => {
-        const searchResult = this.getResultBySearchKey(searchKey, colorPanel, searchValue)
-        this.processSearchResult(searchResult, colorPanel, searchKey, searchValue)
+    getSearchKey = (searchKey, colorPanel = null, searchValue = null, markerClickPackage = {}) => {
+        const searchResult = this.getResultBySearchKey(searchKey, colorPanel, searchValue, markerClickPackage)
+        this.processSearchResult(searchResult, colorPanel, searchKey, searchValue, markerClickPackage)
     }
 
-    getResultBySearchKey = (searchKey, colorPanel, searchValue) => {
+    getResultBySearchKey = (searchKey, colorPanel, searchValue, markerClickPackage) => {
         let searchResult = [];
         let { auth } = this.context
+
         let proccessedTrackingData = _.cloneDeep(this.state.trackingData)
-        if (searchKey === myDevices) {
+        if (searchKey === MY_DEVICES) {
+
             const devicesAccessControlNumber = auth.user.myDevice || []
-            proccessedTrackingData.map(item => {
-                if (devicesAccessControlNumber.includes(item.asset_control_number)) {
-                    item.searched = true;
-                    searchResult.push(item)
-                }
-            })
-        } else if (searchKey === allDevices) {
-            searchResult = proccessedTrackingData.filter(item => item.object_type == 0)
+            proccessedTrackingData
+                .filter(item => item.object_type == 0)
                 .map(item => {
-                    item.searched = auth.user.areas_id.includes(item.area_id) ? true : false
+                    if (devicesAccessControlNumber.includes(item.asset_control_number)) {
+                        item.searched = true;
+                        item.searchedType = -1;
+                        searchResult.push(item)
+                    }
+                })
+        } else if (searchKey === ALL_DEVICES) {
+            searchResult = proccessedTrackingData
+                .filter(item => item.object_type == 0)
+                .map(item => {
+                    if (auth.user.areas_id.includes(item.area_id)) {
+                        item.searchedType = 0
+                    }
                     return item
                 })
-        } else if (searchKey === 'coordinate') {
-            searchResult = this.collectObjectsByLatLng(searchValue,proccessedTrackingData)
+
+        } else if (searchKey === MY_PATIENTS){
+            const devicesAccessControlNumber = auth.user.myDevice || []
+
+            proccessedTrackingData
+                .filter(item => item.object_type != 0)
+                .map(item => {
+                    if (devicesAccessControlNumber.includes(item.asset_control_number)) {
+                        item.searched = true;
+                        // item.searched = auth.user.areas_id.includes(item.area_id) ? true : false
+                        item.searchedType = -2;
+                        searchResult.push(item)
+                    }
+                })
+
+        } else if (searchKey === ALL_PATIENTS) {
+
+            searchResult = proccessedTrackingData
+                .filter(item => item.object_type != 0)
+                .map(item => {
+                    // item.searched = auth.user.areas_id.includes(item.area_id) ? true : false
+                    item.searchedType = 1;
+                    return item
+                })
+
+        } else if (searchKey == OBJECTS) {
+            searchResult = this.collectObjectsByLatLng(searchValue, proccessedTrackingData, markerClickPackage)
         } else if (typeof searchKey === 'object') {
+
             proccessedTrackingData.map(item => {
                 if (searchKey.includes(item.type)) {
                     item.searched = true;
+                    item.searchedType = -1;
                     item.pinColor = colorPanel[item.type];
                     searchResult.push(item)
                 } 
             })
+
+            let searchResultMac = [];
+            searchResult.map(item => {
+                searchResultMac.push(item.mac_address)
+            })
         } else {
+            
+            let searchResultMac = [];
+
             proccessedTrackingData.map(item => {
-                if (item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0
-                    || item.asset_control_number.slice(10,14).indexOf(searchKey) >= 0
-                    || item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0) {
+                if (item.object_type == 0 && (item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0
+                    // fix 4.7.3
+                    || item.asset_control_number.indexOf(searchKey) >= 0
+                    // original
+                    // || item.asset_control_number.slice(10,14).indexOf(searchKey) >= 0
+                    // 
+                    || item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0) 
+                ) {
 
                     item.searched = true
+                    item.searchedType = -1;
                     searchResult.push(item)
+                    searchResultMac.push(item.mac_address)
                 }
             })
+
+            if(this.state.lastsearchKey != searchKey){
+                axios.post(dataSrc.backendSearch,{
+                    keyType : 'all attributes',
+                    keyWord : searchKey,
+                    mac_address : searchResultMac
+                })
+                .then(res => {
+                })
+                .catch(err =>{
+                    console.log(err)
+                })
+                this.setState({
+                    lastsearchKey: searchKey
+                })
+            }
         }
+
         this.setState({
             proccessedTrackingData
         })
         return searchResult
     }
 
-    collectObjectsByLatLng = (lbPosition, proccessedTrackingData) => {
+    collectObjectsByLatLng = (lbPosition, proccessedTrackingData, markerClickPackage) => {
         let objectList = []
-        proccessedTrackingData.map(item => {
-            if (item.currentPosition && item.currentPosition.toString() === lbPosition.toString()) {
-                item.searched = true;
-                objectList.push(item);
-            }
+        proccessedTrackingData
+        .filter(item => {
+            return item.currentPosition && 
+                item.currentPosition.toString() === lbPosition.toString()
+        })
+        .map(item => {
+            item.searched = true;
+            // item.searchedType = markerClickPackage[item.mac_address].searchedType
+            objectList.push(item);            
         })
         return objectList 
     }
@@ -358,6 +480,20 @@ class MainContainer extends React.Component{
     highlightSearchPanel = (boolean) => {
         this.setState({
             isHighlightSearchPanel: boolean
+        })
+    }
+
+    handleShowPath = (mac_address) => {
+        //console.log(mac_address)
+        this.setState({
+            showPath: true,
+            pathMacAddress: mac_address
+        })
+    }
+
+    handleClosePath = () => {
+        this.setState({
+            showPath: false
         })
     }
     
@@ -370,7 +506,8 @@ class MainContainer extends React.Component{
             trackingData,
             proccessedTrackingData,
             searchResult,
-            searchResultObjectTypeMap
+            searchResultObjectTypeMap,
+            searchKey
         } = this.state;
 
         const style = {
@@ -408,53 +545,40 @@ class MainContainer extends React.Component{
 
         let deviceNum = this.state.trackingData.filter(item => item.found).length
         let devicePlural = deviceNum === 1 ? locale.texts.DEVICE : locale.texts.DEVICES
-        let data = hasSearchKey 
-            ? searchResult.length !== 0 
-                ? Object.keys(searchResultObjectTypeMap).length !== 0 
-                    ? searchResultObjectTypeMap
-                    : {[devicePlural] : 0} 
-                : {[devicePlural] : 0} 
-            : {[devicePlural]: this.state.trackingData.filter(item => item.found && item.object_type == 0).length}
-
-        return(
+        return (
             /** "page-wrap" the default id named by react-burget-menu */
             <div id="page-wrap" className='mx-1 my-2 overflow-hidden' style={style.pageWrap} >
-                <Row id="mainContainer" className='d-flex w-100 justify-content-around mx-0 overflow-hidden' style={style.container}>
+                <Row id="mainContainer" className='d-flex w-100 justify-content-around mx-0' style={style.container}>
                     <Col sm={7} md={9} lg={8} xl={8} id='searchMap' className="pl-2 pr-1" >
                         <InfoPrompt 
-                            data={data}
+                            searchKey={searchKey}
+                            searchResult={searchResult}
                             title={locale.texts.FOUND} 
+                            title2={locale.texts.NOT_FOUND}
                         />
-                        {/* {this.state.hasSearchKey 
-                            ?   this.state.searchResult.length !== 0   
-                                ?   <InfoPrompt 
-                                        data={this.state.searchResultObjectTypeMap} 
-                                        title={locale.texts.FOUND} 
-                                    />
-                                :                                         
-                            :   <InfoPrompt 
-                                    data={{
-                                        [devicePlural]: this.state.trackingData.filter(item => item.found).length
-                                    }}
-                                    title={locale.texts.FOUND} 
-                                />
-                        }      */}
-                        <SurveillanceContainer 
+                        <SurveillanceContainer
+                            showPath={this.state.showPath}
+                            pathMacAddress={this.state.pathMacAddress} 
                             proccessedTrackingData={proccessedTrackingData.length === 0 ? trackingData : proccessedTrackingData}
                             hasSearchKey={hasSearchKey}
                             colorPanel={colorPanel}
+                            searchResult={this.state.searchResult}
                             handleClearButton={this.handleClearButton}
                             getSearchKey={this.getSearchKey}
                             clearColorPanel={clearColorPanel}
                             changeLocationAccuracy={this.changeLocationAccuracy}
-                            setArea={this.setArea}
                             setFence={this.setFence}
                             auth={auth}
                             lbeaconPosition={this.state.lbeaconPosition}
                             geoFenceConfig={this.state.geoFenceConfig.filter(item => parseInt(item.unique_key) == areaId)}
                             clearAlerts={this.clearAlerts}
+                            searchKey={this.state.searchKey}
+                            authenticated={this.state.authenticated}
+                            handleClosePath={this.handleClosePath}
+                            handleShowPath={this.handleShowPath}
                         />
                     </Col>
+
                     <Col id='searchPanel' xs={12} sm={5} md={3} lg={4} xl={4} className="w-100 px-2" style={style.searchPanel}>
                         <SearchContainer 
                             hasSearchKey={this.state.hasSearchKey}
@@ -471,9 +595,11 @@ class MainContainer extends React.Component{
                                 searchResult={this.state.searchResult} 
                                 searchKey={this.state.searchKey}
                                 highlightSearchPanel={this.highlightSearchPanel}
+                                handleShowPath={this.handleShowPath}
                             />
                         </div>
                     </Col>
+                    
                 </Row>
             </div>
         )

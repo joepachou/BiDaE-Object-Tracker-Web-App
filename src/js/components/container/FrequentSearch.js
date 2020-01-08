@@ -42,7 +42,7 @@ class FrequentSearch extends React.Component {
 
         const style = {
             list: {
-                maxHeight: "40vh",
+                maxHeight: this.props.maxHeigh,
                 overflow: "hidden scroll"
             }
         }
@@ -50,7 +50,7 @@ class FrequentSearch extends React.Component {
         return (
             <div id='frequentSearch' >
                 <div className='text-capitalize title'>{locale.texts.FREQUENT_SEARCH}</div>
-                <div style={style.list} className="d-inline-flex flex-column justify-content-center searchOption">
+                <div style={style.list} className="d-inline-flex flex-column searchOption">
                     {auth.authenticated && auth.user.searchHistory &&
                         auth.user.searchHistory.filter( (item,index) => {
                             return index < config.userPreference.searchHistoryNumber
@@ -62,7 +62,6 @@ class FrequentSearch extends React.Component {
                                 // active={this.state.searchKey === item.name.toLowerCase()} 
                                 key={index}
                                 name={item.name}
-                                className="text-capitalize"
                             >
                                 {item.name}
                             </Button>
@@ -75,21 +74,39 @@ class FrequentSearch extends React.Component {
                     >
                         <Button
                             variant="outline-custom"
+                            onClick={this.handleClick}
+                            className="text-capitalize"
+                            name = 'my patients'
+                        >
+                            {locale.texts.MY_PATIENTS}
+                        </Button>
+
+                        <Button
+                            variant="outline-custom"
                             onClick={this.handleClick} 
+                            className="text-capitalize"
                             // active={this.state.searchKey === 'my devices'}
                             name='my devices'
                         >
-                            {locale.texts.MY_DEVICE}
+                            {locale.texts.MY_DEVICES}
                         </Button>
                     </AccessControl>
-                
+                    <Button 
+                        variant="outline-custom"
+                        onClick={this.handleClick}
+                        className="text-capitalize" 
+                        // active={this.state.searchKey === 'all devices'}
+                        name='all patients'
+                    >
+                        {locale.texts.ALL_PATIENTS}
+                    </Button>
                     <Button 
                         variant="outline-custom"
                         onClick={this.handleClick} 
                         // active={this.state.searchKey === 'all devices'}
                         name='all devices'
                     >
-                        {locale.texts.ALL_DEVICE}
+                        {locale.texts.ALL_DEVICES}
                     </Button>
                 </div>
             </div>

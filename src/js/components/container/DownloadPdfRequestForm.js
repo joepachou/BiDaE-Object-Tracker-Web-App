@@ -1,10 +1,7 @@
 import React from 'react';
 import { Modal, Button, Row, Col, Image, ButtonToolbar} from 'react-bootstrap'
-import config from '../../config';
-import moment from 'moment';
 import { Formik, Form } from 'formik';
 import { AppContext } from '../../context/AppContext';
-import { Container } from 'react-grid-system';
   
 class DownloadPdfRequestForm extends React.Component {
 
@@ -57,7 +54,7 @@ class DownloadPdfRequestForm extends React.Component {
                 break;
             case "downloadReport":
                 var link = document.createElement('a');
-                link.href = `http://localhost:8080/${this.props.pdfPath}`;
+                link.href = `/${this.props.pdfPath}`;
                 link.download = "";
                 link.click();
                 break;
@@ -86,11 +83,11 @@ class DownloadPdfRequestForm extends React.Component {
             },
             downloadPdfRequest: {
                 // position: "absolute",
-                zIndex: 3000,
+                zIndex: 6000,
                 // top: '20%',
                 // left: '-10%',
-                right: 'auto',
-                bottom: 'auto',
+                // right: 'auto',
+                // bottom: 'auto',
                 padding: 0,
             },
             icon: {
