@@ -61,6 +61,7 @@ const en =  {
     PLEASE_SELECT_SEARCH_OBJECT: "please select search object",
     BIND_MAC_ADDRESS:"Enter the mac_address for binding",
     TOTAL_DATA: "HIS Data",
+    BATTERY_NOTIFICATION: "battery notification",
 
     /* Button */
     CLEAR : "clear",
@@ -274,6 +275,7 @@ const en =  {
     LOW_RSSI: "low RSSI",
     NOTE: "notes",
     BATTERY_VOLTAGE: "batter voltage",
+    BATTERY_INDICATOR: "batter indicator",
     BATTERY: "battery",
     PANIC: "panic",
     GEOFENCE_TYPE: "geofence type",

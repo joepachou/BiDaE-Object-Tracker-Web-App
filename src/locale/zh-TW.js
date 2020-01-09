@@ -59,6 +59,7 @@ const tw = {
     PLEASE_SELECT_SEARCH_OBJECT: "請選擇搜尋物件",
     BIND_MAC_ADDRESS:"綁定哪個Mac_Address?",
     TOTAL_DATA:"匯入資料",
+    BATTERY_NOTIFICATION: "電量通知",
 
     /* Button */
     CLEAR : "清除",
@@ -278,6 +279,8 @@ const tw = {
     LOW_RSSI: "低RSSI",
     NOTE: "註記",
     BATTERY_VOLTAGE: "電量",
+    BATTERY_INDICATOR: "電量",
+    REMAIN_BATTERY_VOLUMN: "剩餘電量",
     BATTERY: "電量",
     PANIC: "求救",
     GEOFENCE_TYPE: "geofence類別",
