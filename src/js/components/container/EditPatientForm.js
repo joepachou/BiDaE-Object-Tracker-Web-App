@@ -46,7 +46,6 @@ class EditPatientForm extends React.Component {
 
     
     handleSubmit = (postOption) => {
-        console.log(this.props.formPath)
         const path = this.props.formPath
         axios.post(path, {
             formOption: postOption
@@ -91,7 +90,11 @@ class EditPatientForm extends React.Component {
             };
         })
 
+
         const genderOptions = [
+            {
+
+            },
             { 
                 value: '1', 
                 label: locale.texts.MALE
@@ -139,12 +142,8 @@ class EditPatientForm extends React.Component {
                             // roomNumber: room_number || '',
                             mac_address: mac_address || '',
                             asset_control_number:asset_control_number|| '',
-                            gender :  object_type === 'Female' 
-                                ?   genderOptions[1] 
-                                : object_type === '女' 
-                                ?   genderOptions[1]
-                                : genderOptions[0]
-                              ,
+                            gender :   object_type == locale.texts.MALE ? genderOptions[1] : genderOptions[2] 
+                            ,
                             monitorType: selectedObjectData.length !== 0 ? monitor_type.split('/') : [],
                             room: room 
                                 ? {
@@ -266,7 +265,7 @@ class EditPatientForm extends React.Component {
                         }}
 
 
-                        render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (  
+                        render={({ values, errors, status, touched, isSubmitting, setFieldValue,submitForm }) => (  
                             <Form className="text-capitalize">
                                 <div className="form-group">
                                     <label htmlFor="name">{locale.texts.NAME}*</label>
@@ -437,7 +436,7 @@ class EditPatientForm extends React.Component {
                                     <Button variant="outline-secondary" className="text-capitalize" onClick={this.handleClose}>
                                         {locale.texts.CANCEL}
                                     </Button>
-                                    <Button type="submit" className="text-capitalize" variant="primary" disabled={isSubmitting}>
+                                    <Button type="button" onClick={submitForm} className="text-capitalize" variant="primary" disabled={isSubmitting}>
                                         {locale.texts.SAVE}
                                     </Button>
 
