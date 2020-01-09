@@ -257,7 +257,7 @@ const query_getImportTable = () => {
 
 
 function query_addAssociation (formOption) {
-	console.log(formOption)
+	// console.log(formOption)
 	const text = `
 		INSERT INTO object_table (
 			name,
@@ -474,7 +474,7 @@ function query_editObject (formOption) {
 
 
 function query_editPatient (formOption) {
-	console.log(formOption)
+	// console.log(formOption)
 	const text = `
 		Update object_table 
 		SET name = $1,
@@ -551,7 +551,7 @@ function query_addObject (formOption) {
 }
 
 function query_addPatient (formOption) {
-	console.log(formOption)
+	// console.log(formOption)
 	const text = 
 		`
 		INSERT INTO object_table (
@@ -1129,7 +1129,7 @@ const query_setGeoFenceConfigRows = (config) =>{
 
 	const merge_perimeters_uuids 	= config.perimeters['uuids'].join(',')
 	const merge_fences_uuids 		= config.fences['uuids'].join(',')
-	console.log(config)
+	// console.log(config)
 
 	var perimeters = [config.perimeters['number'], merge_perimeters_uuids, config.perimeters['rssi']].join(',')
 	var fences = [config.fences['number'], merge_fences_uuids, config.fences['rssi']].join(',')
