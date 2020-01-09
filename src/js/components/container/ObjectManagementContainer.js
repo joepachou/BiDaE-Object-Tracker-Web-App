@@ -461,13 +461,15 @@ class ObjectManagementContainer extends React.Component{
                  deleteCount +=1
         })
 
-         
-        deleteArray.map( item => {
-        this.state.dataPatient[item] === undefined ?
-              null
-            :
-            idPackage.push(parseInt(this.state.dataPatient[item].id))
+        this.state.dataPatient.map(dataItem => {
+            this.state.selection.map(deleteItem =>{
+                dataItem.id == deleteItem ?
+                idPackage.push(parseInt(dataItem.id))
+                :
+                null
+            })
         })
+
         axios.post(deletePatient, {
             idPackage
         })
@@ -480,7 +482,6 @@ class ObjectManagementContainer extends React.Component{
         .catch(err => {
             console.log(err)
         })
-
         this.handleSubmitForm()
 
     }
@@ -609,6 +610,7 @@ class ObjectManagementContainer extends React.Component{
                 //沒被擋掉的存到newData後輸出
         
                  let { locale } = this.context
+ 
                 axios.post(objectImport, {
                     locale: locale.abbr ,
                     newData
@@ -773,7 +775,10 @@ class ObjectManagementContainer extends React.Component{
                             
                                 return {
                                     onClick: (e, handleOriginal) => {
+
                                         this.setState({
+                                            physicianName:this.state.dataPatient[rowInfo.index].physician_name,
+                                            physicianIDNumber:this.state.dataPatient[rowInfo.index].physician_id,
                                             selectedRowData_Patient: this.state.dataPatient[rowInfo.index],
                                             isShowEdit: false,
                                             isPatientShowEdit: true,
@@ -787,11 +792,6 @@ class ObjectManagementContainer extends React.Component{
                                             handleOriginal()
                                         }
 
-                                     
-                                            this.setState({
-                                                physicianName:this.state.dataPatient[rowInfo.index].physician_name,
-                                                physicianIDNumber:this.state.dataPatient[rowInfo.index].physician_id
-                                            })
                                             
                                     }
                                 }

@@ -390,17 +390,13 @@ function query_objectImport (idPackage) {
 		INSERT INTO import_table (
 			name,
 			type,
-			asset_control_number,
-			bindflag,
-			status
+			asset_control_number
 		)
 		VALUES ${idPackage.map((item) => {
 			return `(
 				'${item.name}',
 				'${item.type}',
-				'${item.asset_control_number}',
-				'No Binding',
-				'normal'
+				'${item.asset_control_number}'
 			)`
 		})};
 	`
@@ -478,7 +474,7 @@ function query_editObject (formOption) {
 
 
 function query_editPatient (formOption) {
-	
+	console.log(formOption)
 	const text = `
 		Update object_table 
 		SET name = $1,
@@ -555,6 +551,7 @@ function query_addObject (formOption) {
 }
 
 function query_addPatient (formOption) {
+	console.log(formOption)
 	const text = 
 		`
 		INSERT INTO object_table (
@@ -567,16 +564,15 @@ function query_addPatient (formOption) {
 			room_number,
 			monitor_type,
 			type,
-			registered_timestamp,
 			status
 		)
-		VALUES($1,$2,$3,$4,$5,$6,$7,$8,'Patient',now(),'normal')
+		VALUES($1,$2,$3,$4,$5,$6,$7,$8,'Patient','normal')
 		`;
 	const values = [
 		formOption.name,
 		formOption.mac_address,
 		formOption.asset_control_number,
-		formOption.physician,
+		formOption.physician.value,
 		formOption.area_id,
 		formOption.gender_id,
 		formOption.room,
@@ -961,7 +957,7 @@ const query_deleteShiftChangeRecord = (idPackage) => {
 
 const query_deletePatient = (idPackage) => {
 	const query = `
-		DELETE FROM import_table
+		DELETE FROM object_table
 		WHERE id IN (${idPackage.map(item => `'${item}'`)});
 	`
 	return query
