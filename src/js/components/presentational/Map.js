@@ -225,7 +225,7 @@ class Map extends React.Component {
         this.resizeFactor = Math.pow(2, (this.zoomDiff));
         this.resizeConst = Math.floor(this.zoomDiff * 30);
         this.scalableErrorCircleRadius = 200 * this.resizeFactor;
-        this.scalableIconSize = this.props.mapConfig.iconOptions.iconSize + this.resizeConst
+        this.scalableIconSize = parseInt(this.props.mapConfig.iconOptions.iconSize) + this.resizeConst
         this.scalableNumberSize = Math.floor(this.scalableIconSize / 3);
     }
 
@@ -374,6 +374,7 @@ class Map extends React.Component {
             let popupContent = this.props.mapConfig.getPopupContent([item], this.collectObjectsByLatLng(item.currentPosition), locale)
             
             /** Set the icon option*/
+            console.log()
             item.iconOption = {
 
                 /** Set the pin color */
