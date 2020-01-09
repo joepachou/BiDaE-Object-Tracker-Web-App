@@ -108,7 +108,7 @@ class Map extends React.Component {
                     axios.post(dataSrc.getTrackingTableByMacAddress, {
                         object_mac_address : this.props.pathMacAddress,
                         i: i,
-                        second: 100
+                        second: 10
                     })
                     .then(res => {
                         res.data.rows.map(item => {
@@ -118,21 +118,28 @@ class Map extends React.Component {
                             //console.log(latLngX + "," + latLngY)
                             let latLng = [latLngX,latLngY]
                             let pos = this.macAddressToCoordinate(item.object_mac_address,latLng);
-                            var marker = L.circleMarker(pos, {radius:5});
+                            var marker = L.circleMarker(pos, {radius:3,color:'darkgray'});
                             this.pathOfDevice.addLayer(marker)
                             route.push(pos)
                         })
 
-                        var polyline = L.polyline(route)
+                        var polyline = L.polyline(route,{
+                            color: 'black',
+                            dashArray: '1,1'
+                        })
                         var decorator = L.polylineDecorator( polyline, {
                             patterns: [
                                 {
                                     offset: '100%',
                                     repeat: 0,
                                     symbol: L.Symbol.arrowHead({
+                                        weight: 3,
                                         pixelSize: 10,
                                         polygon: false,
-                                        pathOptions: {stroke:true}
+                                        pathOptions: {
+                                            color: 'black',
+                                            stroke:true
+                                        }
                                     })
                                 }
                             ]
