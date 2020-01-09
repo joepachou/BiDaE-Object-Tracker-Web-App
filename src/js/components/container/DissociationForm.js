@@ -7,42 +7,15 @@
  */
 import React, { Component } from 'react';
 import { Modal, Button, Row, Col } from 'react-bootstrap';
-import Select from 'react-select';
-import config from '../../config';
-import LocaleContext from '../../context/LocaleContext';
 import axios from 'axios';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import KeyboardEventHandler from 'react-keyboard-event-handler';
-
 import { 
     getImportData,
     editImportData,
     deleteDevice
 } from "../../dataSrc"
-
-import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
-import * as preloader from "./preloader.json";
-import * as success from "./success.json";
 import { AppContext } from '../../context/AppContext';
-const defaultOptions = {
-    loop: true,
-    autoplay: true,
-    animationData: preloader.default,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice"
-    }
-  };
-  const defaultOptions2 = {
-    loop: true,
-    autoplay: true,
-    animationData: success.default,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice"
-    }
-  };
-
 
 class DissociationForm extends React.Component {
 
@@ -77,18 +50,21 @@ class DissociationForm extends React.Component {
             objectName:'',
             objectType:'',
             mac_address:''
-    })
+        })
         this.props.handleCloseForm()
     }
 
     handleSubmit = (postOption) => {
-            axios.post(deleteDevice, {
-                formOption: [postOption]
-            }).then(res => {
-                this.UXtest()
-            }).catch( error => {
-                console.log(error)
-            })
+        axios.post(deleteDevice, {
+            formOption: [postOption]
+        }).then(res => {
+            setTimeout(function() { 
+                this.props.handleSubmitForm()
+                this.handleClose()
+            }.bind(this),1000)
+        }).catch( error => {
+            console.log(error)
+        })
     }
 
     handleMacAddress(event){
@@ -131,30 +107,15 @@ class DissociationForm extends React.Component {
             null
     }
 
-    UXtest = () => {
-        this.setState({ISuxTest: true}) 
-        setTimeout(function() 
-        { 
-            this.setState({ISuxTest: false})
-            this.setState({ISuxTest_success: true}) 
-            setTimeout(function() { 
-                this.setState({ISuxTest_success: false})
-                this.props.handleSubmitForm()
-                this.handleClose()
-            }.bind(this),1000)
-        }.bind(this), 1000)
-    
-    }
-
     render() {
         const { locale } = this.context
 
 
         const { 
             title, 
-            data
+            data,
+            selectedObjectData
         } = this.props;
-
         return (
             <Modal show={this.state.show} onHide={this.handleClose} size='md'>
                 <Modal.Header closeButton className='font-weight-bold text-capitalize'>
@@ -171,63 +132,53 @@ class DissociationForm extends React.Component {
                         validationSchema = {
                             Yup.object().shape({
                                 mac: Yup.string()
-                                    .required(locale.texts.ASSET_CONTROL_NUMBER_IS_REQUIRED)
+                                    .required(locale.texts.MAC_ADDRESS_IS_REQUIRED)
                                     .test(
                                         'mac', 
                                         locale.texts.MAC_DO_NOT_MATCH ,
                                         value => {  
-                                        
-                                            if (value != undefined){
+                                            if (value == undefined) return false
 
+                                            if (this.props.selectedObjectData.mac_address == value) {
+                                                this.setState({
+                                                    returnFlag:true,
+                                                    valueForDataArray:value 
+                                                }) 
+                                            } else if(this.props.selectedObjectData.mac_address == value.match(/.{1,2}/g).join(':')) {
+                                                this.setState({
+                                                    returnFlag:true,
+                                                    valueForDataArray:value.match(/.{1,2}/g).join(':') 
+                                                }) 
+                                            } else {
+                                                this.setState({ 
+                                                    returnFlag:false
+                                                }) 
+                                            }  
 
-                                                if (this.props.selectedObjectData.mac_address == value)
-                                                {
-                                                        this.setState({returnFlag:true,valueForDataArray:value }) 
-                                                }
-                                                else if(this.props.selectedObjectData.mac_address == value.match(/.{1,2}/g).join(':'))
-                                                {
-                                                    {
-                                                        this.setState({returnFlag:true,valueForDataArray:value.match(/.{1,2}/g).join(':') }) 
-                                                }
-                                                }
-                                                else
-                                                    {
-                                                    this.setState({ returnFlag:false}) 
-                                                }  
-
-
-                                                if (this.state.returnFlag == true){
-                                                    this.setState({
-                                                        objectName: data[this.state.valueForDataArray].name,
-                                                        objectType: data[this.state.valueForDataArray].type,
-                                                        showDetail : true,
-                                                        inputValue : value
-                                                    }) 
-                                                    return true
-                                                }else
-                                                {
-                                                    this.setState({
-                                                        objectName: '',
-                                                        objectType: '',
-                                                        showDetail : false,
-                                                        inputValue : ''
-                                                    }) 
-                                                    return false
-                                                }
-
+                                            if (this.state.returnFlag == true) {
+                                                this.setState({
+                                                    objectName: data[this.state.valueForDataArray].name,
+                                                    objectType: data[this.state.valueForDataArray].type,
+                                                    showDetail : true,
+                                                    inputValue : value
+                                                }) 
+                                                return true
+                                            } else {
+                                                this.setState({
+                                                    objectName: '',
+                                                    objectType: '',
+                                                    showDetail : false,
+                                                    inputValue : ''
+                                                }) 
+                                                return false
                                             }
-
-
-                                           
-                                        
-
                                         }
                                     )
                             })
                         }
 
                         onSubmit={(values, { setStatus, setSubmitting }) => {
-                                this.handleSubmit(values.mac)
+                            this.handleSubmit(values.mac)
                         }}
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm }) => (
@@ -237,51 +188,32 @@ class DissociationForm extends React.Component {
                                         type="text"
                                         name="mac"
                                         placeholder={locale.texts.PLEASE_ENTER_OR_SCAN_MAC_ADDRESS}
-                                        className={'form-control' + (errors.mac && touched.mac ? ' is-invalid' : '')} 
+                                        className={'text-capitalize form-control' + (errors.mac && touched.mac ? ' is-invalid' : '')} 
                                         // value={this.state.inputValue}
                                         // onChange={this.updateInput()}
                                     />
                                       <ErrorMessage name="mac" component="div" className="invalid-feedback" />
                                 </div>
 
-                                {this.state.showDetail
-                                    ?   <div>
+                                {this.state.showDetail &&
+                                    <div>
+                                        <div className="form-group">
+                                            
                                             <div className="form-group">
-                                              
-                                                <div className="form-group">
-                                                <small id="TextIDsmall" className="form-text text-muted">{locale.texts.NAME}</small>
-                                                    <input type="readOnly" className="form-control" id="TextID" placeholder="名稱" disabled = {true}  value={this.state.objectName} ></input>  
-                                                </div>
-                                            </div>
-                                            <div className="form-group">
-                                                
-                                                <div className="form-group">
-                                                <small id="TextTypesmall" className="form-text text-muted">{locale.texts.TYPE}</small>
-                                                    <input type="readOnly" className="form-control" id="TextType" placeholder="類型" disabled = {true}  value={this.state.objectType}></input>  
-                                                </div>  
+                                            <small id="TextIDsmall" className="form-text text-muted">{locale.texts.NAME}</small>
+                                                <input type="readOnly" className="form-control" id="TextID" placeholder="名稱" disabled = {true}  value={this.state.objectName} ></input>  
                                             </div>
                                         </div>
-                                    :   null
+                                        <div className="form-group">
+                                            
+                                            <div className="form-group">
+                                            <small id="TextTypesmall" className="form-text text-muted">{locale.texts.TYPE}</small>
+                                                <input type="readOnly" className="form-control" id="TextType" placeholder="類型" disabled = {true}  value={this.state.objectType}></input>  
+                                            </div>  
+                                        </div>
+                                    </div>
                                 }
                                
-                                <FadeIn>
-                                    <div className="d-flex justify-content-center align-items-center">
-                                    {this.state.ISuxTest ? (
-                                        <Lottie options={defaultOptions} height={120} width={120} /> 
-                                    ) : (
-                                        null
-                                    )}
-                                    </div>
-                                </FadeIn>
-                                <FadeIn>
-                                    <div className="d-flex justify-content-center align-items-center">
-                                    {this.state.ISuxTest_success ? (
-                                        <Lottie options={defaultOptions2} height={120} width={120} /> 
-                                    ) : (
-                                        null
-                                    )}
-                                    </div>
-                                </FadeIn>
                                 {this.state.showDetail &&
                                     <Modal.Footer>
                                         <Button variant="outline-secondary" className="text-capitalize" onClick={this.handleClose}>
@@ -294,7 +226,7 @@ class DissociationForm extends React.Component {
                                             disabled={isSubmitting}
                                             onClick={submitForm}
                                         >
-                                            {locale.texts.SAVE}
+                                            {locale.texts.REMOVE}
                                         </Button>
                                     </Modal.Footer>
                                 }

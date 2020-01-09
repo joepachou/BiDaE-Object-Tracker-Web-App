@@ -59,8 +59,8 @@ class SearchContainer extends React.Component {
      * The data is retrieving from Surveillance -> MainContain -> SearchContainer
      */
     getObjectType = () => {
-
         axios.post(getObjectTable, {
+            objectType: [0]
         })
         .then(res => {
             let objectTypeList = res.data.rows.reduce((objectTypeList, item) => {

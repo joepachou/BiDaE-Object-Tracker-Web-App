@@ -3,23 +3,37 @@ import React from 'react'
 
 import NotificationBadge from 'react-notification-badge';
 import {Effect} from 'react-notification-badge';
-import { Navbar, Nav, NavDropdown, Image, Dropdown  } from 'react-bootstrap'
+import { NavDropdown, Row  } from 'react-bootstrap'
 import axios from 'axios';
 import _ from 'lodash'
 import { AppContext } from '../../context/AppContext'
 import dataSrc from '../../dataSrc'
+import config from '../../config'
+import { getDescription } from '../../helper/descriptionGenerator'
 
 class BatteryLevelNotification extends React.Component {
+    
     static contextType = AppContext
+    
     state = {
         count:0,
-        runOutPowerItems: []
+        runOutPowerItems: [],
+        locale: this.context.locale.abbr,
+    }
+
+    componentDidUpdate = (prevProps, prevState) => {
+        if (this.context.locale.abbr !== prevState.locale) {
+            this.getTrackingData()
+            this.setState({
+                locale: this.context.locale.abbr
+            })
+        }
     }
 
     componentDidMount = () => {
         this.getTrackingData();
-        this.interval = setInterval(this.getTrackingData, 1000)
     }
+
     getTrackingData = () => {
         let { auth, locale, stateReducer } = this.context
         let [{areaId, violatedObjects}, dispatch] = stateReducer
@@ -36,29 +50,61 @@ class BatteryLevelNotification extends React.Component {
         })
     }
 
-
     render() {
         const {runOutPowerItems} = this.state
-        let container = {
-            height: '50px',
-            width: '50px',
-            display: 'inline-block',
-            margin: '5px',
-            backgroundColor: 'gray'
+
+        let { locale } = this.context
+
+        const style = {
+            list: {
+                wordBreak: 'keep-all',
+                zIndex: 1,
+                overFlow: 'hidden scroll'
+            },
+            dropdown: {
+                overflow: 'hidden scroll',
+                maxHeight: '300px',
+            }
         }
 
-        let title = {
-            width: '100px'
-        }
         return (
-            <NavDropdown title={<i className="fas fa-bell" style={{fontSize: '20px'}}><NotificationBadge count={runOutPowerItems.length} effect={Effect.SCALE}/></i>}id="collasible-nav-dropdown" alignRight>
-                {runOutPowerItems.map(item => {
-                    return (
-                            <NavDropdown.Item key = {item.mac_address}>
-                                name: {item.name}, type: {item.type},MAC address: {item.mac_address}
+            <NavDropdown 
+                id="collasible-nav-dropdown"
+                alignRight
+                title={
+                    <i className="fas fa-bell" style={{fontSize: '20px'}}>
+                        <NotificationBadge 
+                            count={runOutPowerItems.length} 
+                            effect={Effect.SCALE}
+                        />
+                    </i>
+                }
+            >
+                <div style={style.dropdown}>
+                    
+                    {runOutPowerItems.map(item => {
+                        return (
+                            <NavDropdown.Item 
+                                key={item.mac_address}
+                            >
+                                <Row>
+                                    <div 
+                                        className='d-inline-flex justify-content-start text-left' 
+                                        style={style.list}
+                                    >   
+                                        {/* {selection.indexOf(item.mac_address) >= 0 
+                                            ? <i className="fas fa-check mx-2 py-1" style={style.icon}></i> 
+                                            : config.mapConfig.iconOptions.showNumber
+                                                ?   <p className='d-inline-block mx-2'>{index + 1}.</p>
+                                                :   <p className='d-inline-block mx-2'>&#9642;</p>
+                                        } */}
+                                        {getDescription(item, locale, config)}
+                                    </div>
+                                </Row>
                             </NavDropdown.Item>
                         )
-                })}
+                    })}
+                </div>
             </NavDropdown> 
             
         )

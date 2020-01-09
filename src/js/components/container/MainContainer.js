@@ -13,7 +13,7 @@ import { AppContext } from '../../context/AppContext'
 import { toast } from 'react-toastify';
 import ToastNotification from '../presentational/ToastNotification'
 import SearchResult from '../presentational/SearchResultList';
-import AntPath from "leaflet-ant-path";
+import moment from 'moment'
 
 
 const {

@@ -104,13 +104,15 @@ const en =  {
     SHOW_SEARCH_RESULTS_FOUND: "show search results found",
     SHOW_SEARCH_RESULTS_NOT_FOUND: "show search results not found",
     ASSOCIATE: "associate",
+    DISSOCIATE: "dissociate",
     IMPORT_OBJECT:"Import Excel",
     ACN_VERIFICATION:"ACN Verification",
     BINDING_SETTING:"Binding Setting",
     BINDING_DELETE:"Binding Delete",
     DELETE_OPTION:"Delete option",
     CLEAN_PATH:"Clean path",
-    
+    RETURN:"Return",
+
     /* Form Field */
     NAME: "name",
     TYPE: "type",
@@ -174,6 +176,7 @@ const en =  {
     RESIDENT_NOT_STAY_ROOM: "resident not stay room",
     RESIDENT_VIOLATE_GEOFENCE: "resodent violate geofence",
     DISSOCIATION: "dissociation",
+    ASSOCIATION: "association",
 
     /** Error Message */
     GENDER_IS_REQUIRED: "Gender is required",
@@ -196,6 +199,8 @@ const en =  {
     AREA_IS_REQUIRED: "Area is required",
     NOT_ASSIGNED_TO_ANY_DEVICES: "Not assigned to any devices",
     MAC_DO_NOT_MATCH:"Mac address do not match",
+    THE_MAC_ADDRESS_IS_ALREADY_USED_OR_FORMAT_IS_NOT_CORRECT: 'Mac Address is already used or the format is wrong',
+    ASSET_CONTROL_NUMBER_IS_NOT_FOUND: "asset control number is not found",
 
     /** Place Holder */
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "please enter or scan mac address",

@@ -126,32 +126,7 @@ const query_getImportDataFromBinding = () => {
 	return text
 } 
 
-const query_getObjectTable_fromImport = () => {
-	let text = '';
-	
-		text +=`
-			SELECT 
-				import_table.name, 
-				import_table.asset_control_number,
-				import_table.type,
-				import_table.id,
-				import_table.bindflag,
-				import_table.mac_address,
-				import_table.area_id,
-				import_table.status,
-				import_table.transferred_location,
-				import_table.monitor_type
-			FROM import_table
-			WHERE import_table.bindflag = 'Already Binding'
-
-
-			ORDER BY import_table.asset_control_number ASC	
-		`;
-	
-	return text
-}
-
-const query_getObjectTable = (area_id, ) => {
+const query_getObjectTable = (area_id, objectType ) => {
 
 	let text = '';
 	if (!area_id) {
@@ -168,12 +143,16 @@ const query_getObjectTable = (area_id, ) => {
 				object_table.area_id,
 				object_table.object_type,
 				object_table.id,
-				object_table.room
+				object_table.room,
+				object_table.physician_id,
+				(
+					SELECT name
+					FROM user_table
+					WHERE user_table.id = object_table.physician_id
+				) as physician_name
+				
 			FROM object_table 
-			WHERE object_table.object_type = 0
-
-	
-
+			WHERE object_table.object_type IN (${objectType.map(type => type)})
 			ORDER BY object_table.name ASC;
 		`;
 	} else {
@@ -190,15 +169,20 @@ const query_getObjectTable = (area_id, ) => {
 				object_table.area_id,
 				object_table.object_type,
 				object_table.id,
-				object_table.room
+				object_table.room,
+				object_table.physician_id,
+				(
+					SELECT name
+					FROM user_table
+					WHERE user_table.id = object_table.physician_id
+				) as physician_name
 
 			FROM object_table 
-			WHERE object_table.object_type = 0
+			WHERE object_table.object_type IN (${objectType.map(type => type)})
 					
 			ORDER BY object_table.type DESC;
 		`;
 	}
-
 	return text
 } 
 
@@ -220,6 +204,8 @@ const query_getPatientTable = (area_id) => {
 				object_table.object_type,
 				object_table.monitor_type,
 				object_table.room
+
+			
 			FROM object_table 
 
 			LEFT JOIN user_table
@@ -257,9 +243,7 @@ const query_getPatientTable = (area_id) => {
 
 const query_getImportTable = () => {
 
-	let text = '';
-	
-		text +=`
+	let text = `
 			SELECT 
 				import_table.name, 
 				import_table.asset_control_number,
@@ -272,50 +256,44 @@ const query_getImportTable = () => {
 } 
 
 
-function query_editImportData (formOption) {
-	// const test = `
-	// 	UPDATE import_table
-	// 	SET 
-	// 		mac_address = '${formOption[1]}',
-	// 		bindflag = '${formOption[4]}'
-	// 	WHERE asset_control_number = '${formOption[0]}';
-	// `
-	const test = `
-		INSERT INTO object_table
-			(
-				asset_control_number,
-				mac_address,
-				name,
-				type,
-				registered_timestamp,
-				status,
-				object_type
-			)
-		VALUES(
-			'${formOption[0]}',
-			'${formOption[1]}',
-			'${formOption[2]}',
-			'${formOption[3]}',
-			now(),
+function query_addAssociation (formOption) {
+	console.log(formOption)
+	const text = `
+		INSERT INTO object_table (
+			name,
+			type,
+			asset_control_number,
+			mac_address,
+			area_id,
+			status,
+			object_type
+		)
+		VALUES (
+			$1,
+			$2,
+			$3,
+			$4,
+			$5,
 			'normal',
 			0
 		)
 	`
 	;
 
-	// const values = [
-	// 	formOption[0],
-	// 	formOption[1],
-	// 	formOption[2],
-	// 	formOption[3]
-	// ]
+	const values = [
+		formOption.name,
+		formOption.type,
+		formOption.asset_control_number,
+		formOption.mac_address,
+		formOption.area_id
+	]
 
-	// const query = {
-	// 	text, 
-	// 	values
-	// };
+	const query = {
+		text, 
+		values
+	};
 
-	return test;
+	return query;
 
 }
 
@@ -371,18 +349,18 @@ function query_getImportData(formOption){
 
 const query_getLbeaconTable = 
     `
-	SELECT 
-		id,
-		uuid, 
-		description, 
-		ip_address, 
-		health_status, 
-		gateway_ip_address, 
-		last_report_timestamp,
-		danger_area,
-		room
-	FROM lbeacon_table
-	ORDER BY last_report_timestamp DESC
+		SELECT 
+			id,
+			uuid, 
+			description, 
+			ip_address, 
+			health_status, 
+			gateway_ip_address, 
+			last_report_timestamp,
+			danger_area,
+			room
+		FROM lbeacon_table
+		ORDER BY last_report_timestamp DESC
 	`;
 
 const query_getGatewayTable = 
@@ -500,7 +478,7 @@ function query_editObject (formOption) {
 
 
 function query_editPatient (formOption) {
-
+	
 	const text = `
 		Update object_table 
 		SET name = $1,
@@ -517,7 +495,7 @@ function query_editPatient (formOption) {
 		formOption.name,
 		formOption.mac_address,
 		formOption.asset_control_number,
-		formOption.physician,
+		formOption.physicianIDNumber,
 		formOption.area_id,
 		formOption.gender_id,
 		formOption.room,
@@ -542,6 +520,8 @@ function query_addObject (formOption) {
 			asset_control_number, 
 			name,
 			mac_address,
+			status,
+			area_id,
 			object_type
 		)
 		VALUES (
@@ -549,6 +529,9 @@ function query_addObject (formOption) {
 			$2, 
 			$3,
 			$4,
+			$5,
+			$6,
+			'normal',
 			0
 		);
 	`;
@@ -557,8 +540,9 @@ function query_addObject (formOption) {
 		formOption.type, 
 		formOption.asset_control_number, 
 		formOption.name, 
-		formOption.mac_address
-
+		formOption.mac_address,
+		formOption.status,
+		formOption.area_id
 	];
 
 
@@ -607,15 +591,41 @@ function query_addPatient (formOption) {
 	return query;
 }
 
-const query_editObjectPackage = (formOption, record_id) => {
+const query_addImport = (formOption) => {
+	const text = `
+		INSERT INTO import_table (
+			type, 
+			asset_control_number, 
+			name
+		)
+		VALUES (
+			$1, 
+			$2, 
+			$3
+		);
+	`;
+	const values = [
+		formOption.type, 
+		formOption.asset_control_number, 
+		formOption.name, 
+	];
+	const query = {
+		text,
+		values
+	};
+
+	return query;
+}
+
+const query_editObjectPackage = (formOption,username, record_id,time) => {
 
 	let item = formOption[0]
 
+	// console.log(time)
+	// console.log('O.O')
+
 	let text = `
 
-
-
-		
 		SELECT id
 		FROM user_table
 		WHERE user_table.name='${username}';
@@ -625,7 +635,7 @@ const query_editObjectPackage = (formOption, record_id) => {
 			status = '${item.status}',
 			transferred_location = '${item.transferred_location ? item.transferred_location.value : ' '}',
 			note_id = ${record_id},
-			reserved_timestamp = ${item.status == 'reserve' ? 'now()' : null},
+			reserved_timestamp = ${item.status == 'reserve' ? time : null},
 			reserved_user_id = (SELECT id
 				FROM user_table
 				WHERE user_table.name='${username}')
@@ -634,7 +644,7 @@ const query_editObjectPackage = (formOption, record_id) => {
 	`
 	return text
 
-	return null
+
 }
 
 function query_signin(username) {
@@ -1406,7 +1416,6 @@ module.exports = {
 	query_getTrackingData,
 	query_getTrackingTableByMacAddress,
 	query_getObjectTable,
-	query_getObjectTable_fromImport,
 	query_getPatientTable,
 	query_getImportTable,
     query_getLbeaconTable,
@@ -1458,10 +1467,11 @@ module.exports = {
 	query_deleteSameNameSearchQueue,
 	query_getBackendSearchQueue,
 	query_addBulkObject,
-	query_editImportData,
+	query_addAssociation,
 	query_cleanBinding,
 	query_getImportData,
-	query_editObject
+	query_editObject,
+	query_addImport
 }
 
 

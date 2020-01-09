@@ -155,7 +155,7 @@ class EditPatientForm extends React.Component {
 
                              physician : this.props.physicianName ?
                              {
-                                    value: this.props.physicianName,
+                                    value:this.props.physicianName,
                                     label:this.props.physicianName
                              }
                              : null
@@ -299,7 +299,7 @@ class EditPatientForm extends React.Component {
                                             placeholder = {locale.texts.SELECT_PHYSICIAN}
                                             name="physician"
                                             value = {values.physician}
-                                            onChange={value => setFieldValue("physician", value)}
+                                            onChange= {(value) => setFieldValue("physician", value)}
                                             options={physicianListOptions}
                                             style={style.select}
                                             components={{
@@ -356,9 +356,10 @@ class EditPatientForm extends React.Component {
                                         <Select 
                                             placeholder = {locale.texts.CHOOSE_GENDER}
                                             name ="gender"
-                                            onChange={this.change} 
-                                            onChange={value => setFieldValue("gender", value)}
+                                            // onChange={this.change} 
+                                      
                                             value={values.gender}
+                                           onChange={value => setFieldValue("gender", value)}
                                             options={genderOptions}
                                             components={{
                                                 IndicatorSeparator: () => null
@@ -375,8 +376,8 @@ class EditPatientForm extends React.Component {
                                         <Select 
                                             placeholder = {locale.texts.SELECT_ROOM}
                                             name ="room"
-                                            onChange={value => setFieldValue("room", value)}
                                             value={values.room}
+                                            onChange={value => setFieldValue("room", value)}
                                             options={this.props.roomOptions}
                                             components={{
                                                 IndicatorSeparator: () => null
@@ -384,6 +385,7 @@ class EditPatientForm extends React.Component {
                                         />
                                     </Col> 
                                 </Row>
+                                
                                 <Row className="text-capitalize mb-1" noGutters>
                                    <Col lg={9}>
                                         <Row className='no-gutters' className='d-flex align-self-center'>
@@ -393,7 +395,6 @@ class EditPatientForm extends React.Component {
                                             </Col>
                                         </Row>        
                                     </Col> 
-                                       
                                 </Row>
                                 <hr/>
                                 <Row className="form-group my-3 text-capitalize">
@@ -405,6 +406,7 @@ class EditPatientForm extends React.Component {
                                             error={errors.monitorType}
                                             touched={touched.monitorType}
                                             onChange={setFieldValue}
+                                            
                                             // onBlur={setFieldTouched}
                                         >
                                             {Object.keys(config.monitorType)
@@ -420,6 +422,9 @@ class EditPatientForm extends React.Component {
                                             })}
                                         </CheckboxGroup>
                                     </Col>
+
+
+
                                 </Row>
                                 <Modal.Footer>
                                     <Button variant="outline-secondary" className="text-capitalize" onClick={this.handleClose}>

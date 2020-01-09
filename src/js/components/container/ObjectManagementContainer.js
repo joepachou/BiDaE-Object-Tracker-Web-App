@@ -4,7 +4,6 @@ import React from 'react';
 import { 
     getAreaTable,
     getObjectTable,
-    getPatientTable,
     editObject,
     editPatient,
     editImport,
@@ -17,9 +16,7 @@ import {
     objectImport,
     getImportTable,
     deleteImportData,
-    getObjectTable_fromImport,
     cleanBinding,
-    getUser_ID_Name
 } from "../../dataSrc"
 import axios from 'axios';
 import ReactTable from 'react-table';
@@ -52,7 +49,9 @@ class ObjectManagementContainer extends React.Component{
         columnImport:[],
         columnPatient:[],
         data:[],
+        dataImport: [],
         dataPatient:[],
+        objectTable: [],
         isShowEdit: false,
         isPatientShowEdit: false,
         isShowAddAll: false,
@@ -67,7 +66,6 @@ class ObjectManagementContainer extends React.Component{
         locale: this.context.locale.abbr,
         tabIndex: 0,
         roomOptions: {},
-        dataImport:[],
         isShowBind:false,
         isShowEditImportTable:false,
         dataImportThis:[],
@@ -79,7 +77,6 @@ class ObjectManagementContainer extends React.Component{
     componentDidUpdate = (prevProps, prevState) => {
         if (this.context.locale.abbr !== prevState.locale) {
             this.getData()
-            this.getDataPatient()
             this.getDataImport()
             this.setState({
                 locale: this.context.locale.abbr
@@ -89,7 +86,6 @@ class ObjectManagementContainer extends React.Component{
 
     componentDidMount = () => {
         this.getData();
-        this.getDataPatient();
         this.getDataImport()
         this.getUserList();
         this.getLbeaconData();
@@ -112,46 +108,6 @@ class ObjectManagementContainer extends React.Component{
         .catch(err => {
             console.log(err)
         })
-    }
-
-
-
-    getDataPatient = () => {
-        let { locale } = this.context
-
-        axios.post(getPatientTable, {
-            locale: locale.abbr
-        })
-        .then(res => {
-            let columnPatient = _.cloneDeep(patientTableColumn)
-
-            columnPatient.map(field => {
-                field.headerStyle = {
-                    textAlign: 'left',
-                }
-                field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
-            })
-            res.data.rows.map(item => {
-
-                item.monitor_type = this.getMonitorTypeArray(item, 'patient').join('/')
-                
-                item.area_name = {
-                    value: config.mapConfig.areaOptions[item.area_id],
-                    label: locale.texts[config.mapConfig.areaOptions[item.area_id]],
-                }
-                item.object_type = locale.texts.genderSelect[item.object_type]
-            })
-            
-            this.setState({ 
-                dataPatient: res.data.rows,
-                columnPatient: columnPatient,
-            })
-
-        })
-        .catch(err => {
-            console.log(err);
-        })
-      
     }
 
     getDataImport = () => {
@@ -194,8 +150,6 @@ class ObjectManagementContainer extends React.Component{
                 columnImport,
             })
         })
-
-
         .catch(err => {
             console.log(err);
         })
@@ -205,54 +159,81 @@ class ObjectManagementContainer extends React.Component{
     getData = () => {
         let { locale } = this.context
         axios.post(getObjectTable, {
-            locale: locale.abbr
+            locale: locale.abbr,
+            objectType: [0, 1, 2]
         })
         .then(res => {
+          
             let column = _.cloneDeep(objectTableColumn)
-            column.map(field => {
-                field.headerStyle = {
-                    textAlign: 'left',
-                }
-                field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
-            })
+            let columnPatient = _.cloneDeep(patientTableColumn)
+            let data = [], dataPatient = []
+
             column.push({
-                Header: locale.texts['remove'.toUpperCase().replace(/ /g, '_')],
+                // Header: locale.texts['remove'.toUpperCase().replace(/ /g, '_')],
+                Header: "",
                 accessor: "Delete Option",
                 minWidth: 60,
                 Cell: props =>
                     <Button 
                         variant="outline-danger" 
                         className='text-capitalize ml-3 mr-2 py-0'
-                        onClick={()=>this.DeleteClick(props)}
-                        >{locale.texts.REMOVE}
+                        style={{background: 'none'}}
+                        onClick={()=>this.handleRemove(props)}
+                    >
+                        {locale.texts.REMOVE}
                     </Button>
             })
-        
-            res.data.rows.map(item => {
-                item.monitor_type = this.getMonitorTypeArray(item, 'object').join('/')
 
-                item.status = {
-                    value: item.status,
-                    label: item.status ? locale.texts[item.status.toUpperCase()] : null,
+            column.map(field => {
+                field.headerStyle = {
+                    textAlign: 'left',
                 }
-                item.transferred_location = item.transferred_location 
-                    ? {
-                        value: item.transferred_location,
-                        label: locale.texts[item.transferred_location.toUpperCase().replace(/ /g, '_')],
-                        label: item.transferred_location.toUpperCase().split(',').map(item => {
-                            return locale.texts[item]
-                        }).join()
+                field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
+            })
+
+            columnPatient.map(field => {
+                field.headerStyle = {
+                    textAlign: 'left',
+                }
+                field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
+            })
+
+            res.data.rows.map(item => {
+                if (item.object_type != 0) {
+                    item.monitor_type = this.getMonitorTypeArray(item, 'patient').join('/')
+                    item.object_type = locale.texts.genderSelect[item.object_type]
+                    dataPatient.push(item)
+                } else {
+                    item.monitor_type = this.getMonitorTypeArray(item, 'object').join('/')
+
+                    item.status = {
+                        value: item.status,
+                        label: item.status ? locale.texts[item.status.toUpperCase()] : null,
                     }
-                    : ''
+                    item.transferred_location = item.transferred_location 
+                        ? {
+                            value: item.transferred_location,
+                            label: locale.texts[item.transferred_location.toUpperCase().replace(/ /g, '_')],
+                            label: item.transferred_location.toUpperCase().split(',').map(item => {
+                                return locale.texts[item]
+                            }).join()
+                        }
+                        : ''
+                    data.push(item)
+                }
+
                 item.area_name = {
                     value: config.mapConfig.areaOptions[item.area_id],
                     label: locale.texts[config.mapConfig.areaOptions[item.area_id]],
                 }
             })
-            
+
             this.setState({
-                data: res.data.rows,
-                column: column,
+                data,
+                column,
+                dataPatient,
+                columnPatient,
+                objectTable: res.data.rows
             })
         })
         .catch(err => {
@@ -327,7 +308,7 @@ class ObjectManagementContainer extends React.Component{
                     disableASN:false
                 })
                 break;
-            case "associate object":
+            case "associate":
                 this.setState({
                     isShowBind: true,
                 })
@@ -354,15 +335,6 @@ class ObjectManagementContainer extends React.Component{
         }
 
     }
-
-    deleteBind= () => {
-
-        this.setState({
-              isShowEditImportTable:true
-          // selectedRowData_Import:
-       })
-    }
-
 
     deleteBinding = () => {
         let { locale } = this.context
@@ -660,11 +632,13 @@ class ObjectManagementContainer extends React.Component{
          fileReader.readAsBinaryString(files[0]);
     };
 
-    DeleteClick= (key) => {
+    handleRemove = (key) => {
         deleteFlag = true 
+
         this.setState({
+            selectedObjectData: key.original,
             isShowEditImportTable: true,
-            selectedRowData_Import : key.row
+            formTitle: "dissociation" 
         })
     };
 
@@ -716,21 +690,11 @@ class ObjectManagementContainer extends React.Component{
                             <Button 
                                 variant="outline-primary" 
                                 className='text-capitalize mr-2 mb-1'
-                                name="associate object"
+                                name="associate"
                                 onClick={this.handleClickButton}
                             >
                                 {locale.texts.ASSOCIATE}
                             </Button>
-                        
-                            {/* <Button 
-                                variant="outline-primary" 
-                                className='text-capitalize mr-2 mb-1'
-                                name="delete binding"
-                                onClick={this.deleteBinding}
-                            >
-                                {locale.texts.BINDING_DELETE}
-                            </Button> */}
-                                
                             <Button 
                                 variant="outline-primary" 
                                 className='text-capitalize mr-2 mb-1'
@@ -739,39 +703,19 @@ class ObjectManagementContainer extends React.Component{
                             >
                                 {locale.texts.ADD_OBJECT}
                             </Button>
-                            {/* <Button 
+                            <Button 
                                 variant="outline-primary" 
                                 className='text-capitalize mr-2 mb-1'
                                 name="dissociation"
                                 onClick={this.handleClickButton}
                             >
-                                {locale.texts.BINDING_DELETE}
-                            </Button> */}
-
-                            {/* 
-                            <Button 
-                                variant="outline-primary" 
-                                className='text-capitalize mr-2 mb-1'
-                                name="associate object"
-                                onClick={this.handleClickButton}
-                            >
-                                {locale.texts.ASSOCIATE}
+                                {locale.texts.DISSOCIATE}
                             </Button>
-                            
-                            <InputFiles accept=".xlsx, .xls" onChange={this.onImportExcel}>
-                                <button 
-                                className="btn btn-primary"
-                                >
-                                {locale.texts.IMPORT_OBJECT}
-                                </button>
-                            </InputFiles> */}
-
-
                         </ButtonToolbar>
-                        <SelectTable
+                        {/* <SelectTable */}
+                        <ReactTable
                             keyField='id'
                             data={this.state.data}
-                            // columns={objectTableColumn_delete}
                             columns={this.state.column}
                             ref={r => (this.selectTable = r)}
                             className="-highlight"
@@ -779,7 +723,8 @@ class ObjectManagementContainer extends React.Component{
                             {...extraProps}
                             getTrProps={(state, rowInfo, column, instance) => {
                                 return {
-                                    onClick: (e, handleOriginal) => {
+                                    onClick: (e) => {
+                                        if (!e.target.type) {
                                             this.setState({
                                                 selectedRowData: this.state.data[rowInfo.index],
                                                 isShowEdit: true,
@@ -788,23 +733,10 @@ class ObjectManagementContainer extends React.Component{
                                                 formPath: editObject,
                                                 disableASN:'true'
                                             })
-                                                              
-                                            let id = (rowInfo.index+1).toString()
-
-                                        deleteFlag ? 
-                                            this.setState({
-                                            isShowEdit: false,
-                                        })
-                                        : null
-
-                                        deleteFlag ? 
-                                        deleteFlag = false
-                                        : null
-
-                                        this.toggleSelection(id)
-                                        if (handleOriginal) {
-                                            handleOriginal()
                                         }
+              
+                                        let id = (rowInfo.index+1).toString()
+                                        this.toggleSelection(id)
                                     }
                                 }
                             }
@@ -855,18 +787,12 @@ class ObjectManagementContainer extends React.Component{
                                             handleOriginal()
                                         }
 
-                                        this.state.physicianList.map(item => {
-                                          
-                                            item.id == this.state.dataPatient[rowInfo.index].physician_id ?
-                                            
+                                     
                                             this.setState({
-                                                physicianName:item.name,
-                                                physicianIDNumber:item.id
-                                        })
-                                            : null
-                                        })
-
-                                    
+                                                physicianName:this.state.dataPatient[rowInfo.index].physician_name,
+                                                physicianIDNumber:this.state.dataPatient[rowInfo.index].physician_id
+                                            })
+                                            
                                     }
                                 }
                             }}
@@ -899,18 +825,6 @@ class ObjectManagementContainer extends React.Component{
                             className="-highlight"
                             style={{height:'75vh'}}
                             {...extraProps}
-                            getTrProps={(state, rowInfo, column, instance) => {
-                            
-                                return {
-                                    onClick: (e, handleOriginal) => {
-    
-                                            if (handleOriginal) {
-                                                handleOriginal()
-                                            }
-                                        }
-                                }
-                            }
-                            }
                         />
                     </TabPanel>
                 </Tabs>
@@ -929,8 +843,6 @@ class ObjectManagementContainer extends React.Component{
                     physicianIDNumber = {this.state.physicianIDNumber}
                     disableASN = {this.state.disableASN}
                 />  
-       
-
                 <EditObjectForm 
                     show = {isShowEdit} 
                     title= {this.state.formTitle} 
@@ -939,18 +851,18 @@ class ObjectManagementContainer extends React.Component{
                     formPath={this.state.formPath}
                     handleCloseForm={this.handleCloseForm}
                     data={this.state.data}
-                    // dataPatient = {this.state.dataPatient}
+                    importData={this.state.dataImport}
+                    objectTable={this.state.objectTable}
                     disableASN = {this.state.disableASN}
                 />
 
-            
-
                 <BindForm
                     show = {isShowBind} 
-                    title=  {this.state.formTitle} 
+                    title={this.state.formTitle} 
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={this.state.formPath}
                     handleCloseForm={this.handleCloseForm}
+                    objectTable={this.state.objectTable}
                     data={this.state.dataImport.reduce((dataMap, item) => {
                         dataMap[item.asset_control_number] = item
                         return dataMap
@@ -958,13 +870,13 @@ class ObjectManagementContainer extends React.Component{
                     }
                 />
                 <DissociationForm
-                    show = {isShowEditImportTable} 
-                    title=  {this.state.formTitle} 
-                    selectedObjectData={selectedRowData_Import || null} 
+                    show={isShowEditImportTable} 
+                    title={this.state.formTitle} 
+                    selectedObjectData={this.state.selectedObjectData || null} 
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={this.state.formPath}
                     handleCloseForm={this.handleCloseForm}
-                    data={this.state.data.reduce((dataMap, item) => {
+                    data={this.state.objectTable.reduce((dataMap, item) => {
                         dataMap[item.mac_address] = item
                         return dataMap
                         }, {})

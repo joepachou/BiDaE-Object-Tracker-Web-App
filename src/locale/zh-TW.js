@@ -103,6 +103,7 @@ const tw = {
     SHOW_SEARCH_RESULTS_FOUND: "顯示找到的搜尋結果",
     SHOW_SEARCH_RESULTS_NOT_FOUND: "顯示未找到的搜尋結果",
     ASSOCIATE: "綁定設定",
+    DISSOCIATE: "解除綁定",
     IMPORT_OBJECT:"匯入",
     ACN_VERIFICATION:"ACN驗證",
     BINDING_SETTING:"綁定設定",
@@ -112,7 +113,8 @@ const tw = {
     DELETE_OPTION:"移除選項",
     DELETE_OPTION:"移除選項",
     CLEAN_PATH:"刪除路徑",
-    
+    RETURN:"還原",
+
     /* Form Field */
     NAME: "名稱",
     TYPE: "類別",
@@ -175,7 +177,7 @@ const tw = {
     RESIDENT_NOT_STAY_ROOM: "房間監控",
     RESIDENT_VIOLATE_GEOFENCE: "Geofence監控",
     DISSOCIATION: "解除綁定",
-
+    ASSOCIATION: "綁定儀器",
 
     /** Error Message */
     GENDER_IS_REQUIRED: "請選擇性別",
@@ -199,6 +201,8 @@ const tw = {
     AREA_IS_REQUIRED: "請選擇地區",
     NOT_ASSIGNED_TO_ANY_DEVICES: "尚未指定任何儀器",
     MAC_DO_NOT_MATCH:"不符合當前Mac",
+    THE_MAC_ADDRESS_IS_ALREADY_USED_OR_FORMAT_IS_NOT_CORRECT: 'Mac Address已被使用或形式錯誤',
+    ASSET_CONTROL_NUMBER_IS_NOT_FOUND: "未有符合的財產編號",
 
     /** Place Holder */
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "請輸入或掃描mac address",

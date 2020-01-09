@@ -69,7 +69,8 @@ const getTrackingData = (request, response) => {
 
     pool.query(queryType.query_getTrackingData())        
         .then(res => {
-            console.log('Get tracking data')
+
+            console.log('get tracking data')
 
             /** Filter the objects that do no belong the area */
             const toReturn = res.rows
@@ -105,10 +106,12 @@ const getTrackingData = (request, response) => {
                     < process.env.PANIC_TIME_INTERVAL_IN_SEC ? 1 : 0
 
                 /** Flag the object's battery volumn is limiting */
-                if (item.battery_voltage >= process.env.BATTER_VOLTAGE_INDICATOR                    
+                // console.log(process.env )
+                // console.log(item.battery_voltage)
+                if (item.battery_voltage >= parseInt(process.env.BATTERY_VOLTAGE_INDICATOR)                    
                     && item.found) {
                         item.battery_voltage = 3;
-                } else if (item.battery_voltage < process.env.BATTER_VOLTAGE_INDICATOR && item.battery_voltage > 0 && item.found) {
+                } else if (item.battery_voltage < parseInt(process.env.BATTERY_VOLTAGE_INDICATOR) && item.battery_voltage > 0 && item.found) {
                     item.battery_voltage = 2;
                 } else {
                     item.battery_voltage = 0
@@ -131,7 +134,6 @@ const getTrackingData = (request, response) => {
 
                 return item
             })
-            toReturn[1].battery_voltage = 2
 
         response.status(200).json(toReturn)
 
@@ -141,8 +143,8 @@ const getTrackingData = (request, response) => {
 }
 
 const getObjectTable = (request, response) => {
-    let { locale, areaId } = request.body
-    pool.query(queryType.query_getObjectTable(areaId))       
+    let { locale, areaId, objectType } = request.body
+    pool.query(queryType.query_getObjectTable(areaId, objectType))       
         .then(res => {
             console.log('Get objectTable data')
             response.status(200).json(res)
@@ -201,25 +203,22 @@ const getImportData = (request, response) => {
         })     
 }
 
-
-const editImportData = (request, response) => {
+const addAssociation = (request, response) => {
     let { locale, areaId } = request.body
     const formOption = request.body.formOption
-    pool.query(queryType.query_editImportData(formOption))       
+    pool.query(queryType.query_addAssociation(formOption))       
         .then(res => {
-            console.log('edit ImportData data')
+            console.log('edit import data')
             response.status(200).json(res)
         })
         .catch(err => {
-            console.log("edit ImportDataf ails: " + err)
+            console.log("edit import data fails" + err)
         })     
 }
 
 const cleanBinding = (request, response) => {
     let { locale, areaId } = request.body
     const formOption = request.body.formOption
-    console.log('gggggg')
-    console.log(formOption)
     formOption.map( item => {
        pool.query(queryType.query_cleanBinding(item))       
         .then(res => {
@@ -230,21 +229,20 @@ const cleanBinding = (request, response) => {
             console.log("clean Binding fails: " + err)
         })      
     })
-        
-    
 }
 
 
 const getLbeaconTable = (request, response) => {
+
     let { locale } = request.body || 'en'
     pool.query(queryType.query_getLbeaconTable)
         .then(res => {
             console.log('Get lbeaconTable data')
             res.rows.map(item => {
-                // item.health_status =  moment().diff(item.last_report_timestamp, 'days') < 1 ? 1 : 0 
-                // item.last_report_timestamp = moment.tz(item.last_report_timestamp, process.env.TZ).locale(locale).format('lll');
+                item.health_status =  moment().diff(item.last_report_timestamp, 'days') < 1 ? 1 : 0 
+                item.last_report_timestamp = moment.tz(item.last_report_timestamp, process.env.TZ).locale(locale).format('lll');
             })
-            response.status(200).json(res.rows)
+            response.status(200).json(res)
 
         })
         .catch(err => {
@@ -256,6 +254,7 @@ const getLbeaconTable = (request, response) => {
 
 const getGatewayTable = (request, response) => {
     let { locale } = request.body
+
     pool.query(queryType.query_getGatewayTable)
         .then(res => {
             console.log('Get gatewayTable data')
@@ -312,24 +311,8 @@ const editImport = (request, response) => {
         })
 }
 
-
-const getObjectTable_fromImport = (request, response) => {
-    const idPackage = request.body.newData
-        pool.query(queryType.query_getObjectTable_fromImport(idPackage))
-        .then(res => {
-            console.log("getObjectTable_fromImport success");
-            response.status(200).json(res)
-        })
-        .catch(err => {
-            console.log("getObjectTable_fromImport Fails: " + err)
-        })   
-}
-    
-
-
 const editPatient = (request, response) => {
     const formOption = request.body.formOption
-    console.log(formOption)
     pool.query(queryType.query_editPatient(formOption))
         .then(res => {
             console.log("edit Patient success");
@@ -354,29 +337,28 @@ const objectImport = (request, response) => {
 
 }
 
-
 const addObject = (request, response) => {
     const formOption = request.body.formOption
     pool.query(queryType.query_addObject(formOption))
         .then(res => {
-            console.log("Add Object Success");
-            response.status(200).json(res)
+            console.log("add object success");
+            pool.query(queryType.query_addImport(formOption))
+                .then(res => {
+                    console.log("add import success");
+                    response.status(200).json(res)
+                })
+                .catch(err => {
+                    console.log("add object fails: " + err)
+                })
         })
         .catch(err => {
-            console.log("Add Object Fails: " + err)
-            response.status(500).json({
-                message:'not good'
-            })
+            console.log("add object fails: " + err)
+
         })
-    
 }
 
-
 const addPatient = (request, response) => {
-
     const formOption = request.body.formOption
- 
-    
     pool.query(queryType.query_addPatient(formOption))
         .then(res => {
             console.log("Add Patient Success");
@@ -395,13 +377,30 @@ const addPatient = (request, response) => {
 
 
 const editObjectPackage = (request, response) => {
-    const { formOption, username, pdfPackage } = request.body
+    const { formOption, username, pdfPackage,isDelayTime,locale } = request.body
+   
+    // moment.tz(item.submit_timestamp, process.env.TZ).locale(locale).format('LLL');
+    // moment(item.reserved_timestamp).add(30,"minutes")
+    let time = ''
+    isDelayTime ? time = moment(Date.now()).add(40,"minutes")._d
+    : time = moment(Date.now()).add(30,"minutes")._d
+
+    
+    console.log('-----------------final time:-----------------')
+    console.log(moment(time).format('LT'))
+    console.log('-----------------another type:-----------------')
+    console.log(moment(time).toDate())
+    console.log('----------------------------------------------')
+
+
+    
+
 
     pool.query(queryType.query_addEditObjectRecord(formOption, username))
         .then(res => {
             const record_id = res.rows[0].id
             console.log('Add edited object record success')
-            pool.query(queryType.query_editObjectPackage(formOption,username, record_id))
+            pool.query(queryType.query_editObjectPackage(formOption,username, record_id,time))
                 .then(res => {
                     console.log('Edit object package success')
                     if (pdfPackage) {
@@ -1155,7 +1154,7 @@ module.exports = {
     getPatientTable,
     getImportTable,
     getImportData,
-    editImportData,
+    addAssociation,
     cleanBinding,
     getLbeaconTable,
     getGatewayTable,
@@ -1201,6 +1200,5 @@ module.exports = {
     confirmValidation,
     backendSearch,
     getBackendSearchQueue,
-    getObjectTable_fromImport,
     getTrackingTableByMacAddress
 }

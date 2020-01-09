@@ -4,7 +4,6 @@ const domain = `${protocol}://${dataSrcIP}`;
 const getTrackingData = `${protocol}://${dataSrcIP}/data/getTrackingData`;
 const getTrackingTableByMacAddress = `${protocol}://${dataSrcIP}/data/getTrackingTableByMacAddress`;
 const getObjectTable = `${protocol}://${dataSrcIP}/data/getObjectTable`;
-const getObjectTable_fromImport = `${protocol}://${dataSrcIP}/data/getObjectTable_fromImport`;
 const getPatientTable = `${protocol}://${dataSrcIP}/data/getPatientTable`;
 const getLbeaconTable = `${protocol}://${dataSrcIP}/data/getLbeaconTable`;
 const getGatewayTable = `${protocol}://${dataSrcIP}/data/getGatewayTable`;
@@ -17,7 +16,7 @@ const addObject = `${protocol}://${dataSrcIP}/data/addObject`;
 const addPatient= `${protocol}://${dataSrcIP}/data/addPatient`;
 const getImportTable = `${protocol}://${dataSrcIP}/data/getImportTable`;
 const getImportData = `${protocol}://${dataSrcIP}/data/getImportData`;
-const editImportData = `${protocol}://${dataSrcIP}/data/editImportData`;
+const addAssociation = `${protocol}://${dataSrcIP}/data/addAssociation`;
 const cleanBinding = `${protocol}://${dataSrcIP}/data/cleanBinding`;
 const editObjectPackage = `${protocol}://${dataSrcIP}/data/editObjectPackage`;
 const signin = `${protocol}://${dataSrcIP}/user/signin`;
@@ -67,7 +66,7 @@ module.exports = {
     getTrackingData,
     getTrackingTableByMacAddress,
     getImportData,
-    editImportData,
+    addAssociation,
     editImport,
     cleanBinding,
     getObjectTable,
@@ -118,6 +117,5 @@ module.exports = {
     setMonitorConfig,
     backendSearch,
     getSearchQueue, 
-    getObjectTable_fromImport,
     pinImage
 };
