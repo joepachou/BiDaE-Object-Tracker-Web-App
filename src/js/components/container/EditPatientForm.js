@@ -40,15 +40,14 @@ class EditPatientForm extends React.Component {
   
     handleClose = () => {
         this.props.handleCloseForm()
+
     }
 
 
     
     handleSubmit = (postOption) => {
-
         const path = this.props.formPath
         axios.post(path, {
-
             formOption: postOption
         }).then(res => {
        
@@ -91,7 +90,11 @@ class EditPatientForm extends React.Component {
             };
         })
 
+
         const genderOptions = [
+            {
+
+            },
             { 
                 value: '1', 
                 label: locale.texts.MALE
@@ -139,12 +142,8 @@ class EditPatientForm extends React.Component {
                             // roomNumber: room_number || '',
                             mac_address: mac_address || '',
                             asset_control_number:asset_control_number|| '',
-                            gender :  object_type === 'Female' 
-                                ?   genderOptions[1] 
-                                : object_type === '女' 
-                                ?   genderOptions[1]
-                                : genderOptions[0]
-                              ,
+                            gender :   object_type == locale.texts.MALE ? genderOptions[1] : genderOptions[2] 
+                            ,
                             monitorType: selectedObjectData.length !== 0 ? monitor_type.split('/') : [],
                             room: room 
                                 ? {
@@ -155,10 +154,10 @@ class EditPatientForm extends React.Component {
 
                              physician : this.props.physicianName ?
                              {
-                                    value: this.props.physicianName,
+                                    value:this.props.physicianName,
                                     label:this.props.physicianName
                              }
-                             : null
+                             : ''
                         }}
                        
                         validationSchema = {
@@ -169,8 +168,8 @@ class EditPatientForm extends React.Component {
                                 name: Yup.string().required(locale.texts.NAME_IS_REQUIRED),
                                 // roomNumber: Yup.string().required(locale.texts.ROOMNUMBER_IS_REQUIRED),
                                
-                                // physician: Yup.string()
-                                // .required(locale.texts.ATTENDING_IS_REQUIRED)
+                                physician: Yup.string()
+                                .required(locale.texts.ATTENDING_IS_REQUIRED),
                                 // .test(
                                 //         'physician',
                                 //         locale.texts.THE_ATTENDINGPHYSICIAN_IS_WRONG,
@@ -182,7 +181,8 @@ class EditPatientForm extends React.Component {
 
                                 area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
                                 gender: Yup.string().required(locale.texts.GENDER_IS_REQUIRED),
-                                
+             
+
                                 asset_control_number: Yup.string()
                                 .required(locale.texts.NUMBER_IS_REQUIRED)
                                 .test(
@@ -244,22 +244,28 @@ class EditPatientForm extends React.Component {
                                 sum += parseInt(monitorTypeMap[item])
                                 return sum
                             },0)
-                           
+                            
+                            physicianList.map(item => {
+                              item.name == values.physician.value ?
+                              values.physician.value = item.id
+                              :
+                                null
+                            })
+
                             const postOption = {
                                 ...values,
                                 area_id: config.mapConfig.areaModules[values.area.value].id,
                                 gender_id : values.gender.value,
-                                physician: values.physician ? values.physician.value : 0,
                                 monitor_type, 
                                 room: values.room ? values.room.label : '',
                                 object_type:values.gender.value,
-                                physicianIDNumber : this.props.physicianIDNumber
+                                physicianIDNumber : values.physician.value ? values.physician.value :this.props.physicianIDNumber
                             }
                             this.handleSubmit(postOption)                            
                         }}
 
 
-                        render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (  
+                        render={({ values, errors, status, touched, isSubmitting, setFieldValue,submitForm }) => (  
                             <Form className="text-capitalize">
                                 <div className="form-group">
                                     <label htmlFor="name">{locale.texts.NAME}*</label>
@@ -299,7 +305,7 @@ class EditPatientForm extends React.Component {
                                             placeholder = {locale.texts.SELECT_PHYSICIAN}
                                             name="physician"
                                             value = {values.physician}
-                                            onChange={value => setFieldValue("physician", value)}
+                                            onChange= {(value) => setFieldValue("physician", value)}
                                             options={physicianListOptions}
                                             style={style.select}
                                             components={{
@@ -321,7 +327,7 @@ class EditPatientForm extends React.Component {
                                 <hr/>
                                 <Row className="text-capitalize" noGutters>
                                     <Col lg={3} className='d-flex align-items-center'>
-                                        <label htmlFor="type">{locale.texts.AUTH_AREA}</label>
+                                        <label htmlFor="type">{locale.texts.AUTH_AREA}*</label>
                                     </Col>
                                     <Col lg={9}>
                                         <Select
@@ -356,9 +362,10 @@ class EditPatientForm extends React.Component {
                                         <Select 
                                             placeholder = {locale.texts.CHOOSE_GENDER}
                                             name ="gender"
-                                            onChange={this.change} 
-                                            onChange={value => setFieldValue("gender", value)}
+                                            // onChange={this.change} 
+                                      
                                             value={values.gender}
+                                           onChange={value => setFieldValue("gender", value)}
                                             options={genderOptions}
                                             components={{
                                                 IndicatorSeparator: () => null
@@ -375,8 +382,8 @@ class EditPatientForm extends React.Component {
                                         <Select 
                                             placeholder = {locale.texts.SELECT_ROOM}
                                             name ="room"
-                                            onChange={value => setFieldValue("room", value)}
                                             value={values.room}
+                                            onChange={value => setFieldValue("room", value)}
                                             options={this.props.roomOptions}
                                             components={{
                                                 IndicatorSeparator: () => null
@@ -384,6 +391,7 @@ class EditPatientForm extends React.Component {
                                         />
                                     </Col> 
                                 </Row>
+                                
                                 <Row className="text-capitalize mb-1" noGutters>
                                    <Col lg={9}>
                                         <Row className='no-gutters' className='d-flex align-self-center'>
@@ -393,7 +401,6 @@ class EditPatientForm extends React.Component {
                                             </Col>
                                         </Row>        
                                     </Col> 
-                                       
                                 </Row>
                                 <hr/>
                                 <Row className="form-group my-3 text-capitalize">
@@ -405,6 +412,7 @@ class EditPatientForm extends React.Component {
                                             error={errors.monitorType}
                                             touched={touched.monitorType}
                                             onChange={setFieldValue}
+                                            
                                             // onBlur={setFieldTouched}
                                         >
                                             {Object.keys(config.monitorType)
@@ -420,12 +428,15 @@ class EditPatientForm extends React.Component {
                                             })}
                                         </CheckboxGroup>
                                     </Col>
+
+
+
                                 </Row>
                                 <Modal.Footer>
                                     <Button variant="outline-secondary" className="text-capitalize" onClick={this.handleClose}>
                                         {locale.texts.CANCEL}
                                     </Button>
-                                    <Button type="submit" className="text-capitalize" variant="primary" onClick={this.handleSubmit} disabled={isSubmitting}>
+                                    <Button type="button" onClick={submitForm} className="text-capitalize" variant="primary" disabled={isSubmitting}>
                                         {locale.texts.SAVE}
                                     </Button>
 

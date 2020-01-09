@@ -143,7 +143,14 @@ const query_getObjectTable = (area_id, objectType ) => {
 				object_table.area_id,
 				object_table.object_type,
 				object_table.id,
-				object_table.room
+				object_table.room,
+				object_table.physician_id,
+				(
+					SELECT name
+					FROM user_table
+					WHERE user_table.id = object_table.physician_id
+				) as physician_name
+				
 			FROM object_table 
 			WHERE object_table.object_type IN (${objectType.map(type => type)})
 			ORDER BY object_table.name ASC;
@@ -162,7 +169,13 @@ const query_getObjectTable = (area_id, objectType ) => {
 				object_table.area_id,
 				object_table.object_type,
 				object_table.id,
-				object_table.room
+				object_table.room,
+				object_table.physician_id,
+				(
+					SELECT name
+					FROM user_table
+					WHERE user_table.id = object_table.physician_id
+				) as physician_name
 
 			FROM object_table 
 			WHERE object_table.object_type IN (${objectType.map(type => type)})
@@ -191,6 +204,8 @@ const query_getPatientTable = (area_id) => {
 				object_table.object_type,
 				object_table.monitor_type,
 				object_table.room
+
+			
 			FROM object_table 
 
 			LEFT JOIN user_table
@@ -242,7 +257,7 @@ const query_getImportTable = () => {
 
 
 function query_addAssociation (formOption) {
-	console.log(formOption)
+	// console.log(formOption)
 	const text = `
 		INSERT INTO object_table (
 			name,
@@ -375,17 +390,13 @@ function query_objectImport (idPackage) {
 		INSERT INTO import_table (
 			name,
 			type,
-			asset_control_number,
-			bindflag,
-			status
+			asset_control_number
 		)
 		VALUES ${idPackage.map((item) => {
 			return `(
 				'${item.name}',
 				'${item.type}',
-				'${item.asset_control_number}',
-				'No Binding',
-				'normal'
+				'${item.asset_control_number}'
 			)`
 		})};
 	`
@@ -463,7 +474,7 @@ function query_editObject (formOption) {
 
 
 function query_editPatient (formOption) {
-
+	// console.log(formOption)
 	const text = `
 		Update object_table 
 		SET name = $1,
@@ -480,7 +491,7 @@ function query_editPatient (formOption) {
 		formOption.name,
 		formOption.mac_address,
 		formOption.asset_control_number,
-		formOption.physician,
+		formOption.physicianIDNumber,
 		formOption.area_id,
 		formOption.gender_id,
 		formOption.room,
@@ -540,6 +551,7 @@ function query_addObject (formOption) {
 }
 
 function query_addPatient (formOption) {
+	// console.log(formOption)
 	const text = 
 		`
 		INSERT INTO object_table (
@@ -552,16 +564,15 @@ function query_addPatient (formOption) {
 			room_number,
 			monitor_type,
 			type,
-			registered_timestamp,
 			status
 		)
-		VALUES($1,$2,$3,$4,$5,$6,$7,$8,'Patient',now(),'normal')
+		VALUES($1,$2,$3,$4,$5,$6,$7,$8,'Patient','normal')
 		`;
 	const values = [
 		formOption.name,
 		formOption.mac_address,
 		formOption.asset_control_number,
-		formOption.physician,
+		formOption.physician.value,
 		formOption.area_id,
 		formOption.gender_id,
 		formOption.room,
@@ -606,8 +617,8 @@ const query_editObjectPackage = (formOption,username, record_id,time) => {
 
 	let item = formOption[0]
 
-	console.log(time)
-	console.log('O.O')
+	// console.log(time)
+	// console.log('O.O')
 
 	let text = `
 
@@ -946,7 +957,7 @@ const query_deleteShiftChangeRecord = (idPackage) => {
 
 const query_deletePatient = (idPackage) => {
 	const query = `
-		DELETE FROM import_table
+		DELETE FROM object_table
 		WHERE id IN (${idPackage.map(item => `'${item}'`)});
 	`
 	return query
@@ -1118,7 +1129,7 @@ const query_setGeoFenceConfigRows = (config) =>{
 
 	const merge_perimeters_uuids 	= config.perimeters['uuids'].join(',')
 	const merge_fences_uuids 		= config.fences['uuids'].join(',')
-	console.log(config)
+	// console.log(config)
 
 	var perimeters = [config.perimeters['number'], merge_perimeters_uuids, config.perimeters['rssi']].join(',')
 	var fences = [config.fences['number'], merge_fences_uuids, config.fences['rssi']].join(',')
