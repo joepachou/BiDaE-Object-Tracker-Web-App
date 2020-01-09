@@ -158,11 +158,6 @@ const gatewayTableColumn = [
 
 ]
 
-// props.value === 3 && <i class="fas fa-battery-full" style={style.icon.check}></i> ||
-// props.value === 2 && <i class="fas fa-battery-half" style={style.icon.exclamation}></i> ||
-// props.value === 1 && <i class="fas fa-battery-quarter" style={style.icon.exclamation}></i> ||
-// props.value === 0 && <i class="fas fa-charging-station" style={style.icon.exclamation}></i>
-
 const trackingTableColumn = [
     {
         Header: "Found",
@@ -175,7 +170,7 @@ const trackingTableColumn = [
     },
     {
         Header: "Battery",
-        accessor: "battery_voltage",
+        accessor: "battery_indicator",
         style: style.column,
         width: 70,
         Cell: props => 

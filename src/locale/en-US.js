@@ -276,6 +276,7 @@ const en =  {
     NOTE: "notes",
     BATTERY_VOLTAGE: "batter voltage",
     BATTERY_INDICATOR: "batter indicator",
+    REMAINING_BATTERY_VOLTAGE: 'remaining battery voltage  ',
     BATTERY: "battery",
     PANIC: "panic",
     GEOFENCE_TYPE: "geofence type",

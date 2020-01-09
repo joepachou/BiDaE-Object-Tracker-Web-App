@@ -110,11 +110,11 @@ const getTrackingData = (request, response) => {
                 // console.log(item.battery_voltage)
                 if (item.battery_voltage >= parseInt(process.env.BATTERY_VOLTAGE_INDICATOR)                    
                     && item.found) {
-                        item.battery_voltage = 3;
+                        item.battery_indicator = 3;
                 } else if (item.battery_voltage < parseInt(process.env.BATTERY_VOLTAGE_INDICATOR) && item.battery_voltage > 0 && item.found) {
-                    item.battery_voltage = 2;
+                    item.battery_indicator = 2;
                 } else {
-                    item.battery_voltage = 0
+                    item.battery_indicator = 0
                 }
 
                 /** Delete the unused field of the object */
