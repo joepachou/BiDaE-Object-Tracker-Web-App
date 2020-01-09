@@ -158,7 +158,7 @@ class EditPatientForm extends React.Component {
                                     value:this.props.physicianName,
                                     label:this.props.physicianName
                              }
-                             : null
+                             : ''
                         }}
                        
                         validationSchema = {
@@ -169,8 +169,8 @@ class EditPatientForm extends React.Component {
                                 name: Yup.string().required(locale.texts.NAME_IS_REQUIRED),
                                 // roomNumber: Yup.string().required(locale.texts.ROOMNUMBER_IS_REQUIRED),
                                
-                                // physician: Yup.string()
-                                // .required(locale.texts.ATTENDING_IS_REQUIRED)
+                                physician: Yup.string()
+                                .required(locale.texts.ATTENDING_IS_REQUIRED),
                                 // .test(
                                 //         'physician',
                                 //         locale.texts.THE_ATTENDINGPHYSICIAN_IS_WRONG,
@@ -182,7 +182,8 @@ class EditPatientForm extends React.Component {
 
                                 area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
                                 gender: Yup.string().required(locale.texts.GENDER_IS_REQUIRED),
-                                
+             
+
                                 asset_control_number: Yup.string()
                                 .required(locale.texts.NUMBER_IS_REQUIRED)
                                 .test(
@@ -327,7 +328,7 @@ class EditPatientForm extends React.Component {
                                 <hr/>
                                 <Row className="text-capitalize" noGutters>
                                     <Col lg={3} className='d-flex align-items-center'>
-                                        <label htmlFor="type">{locale.texts.AUTH_AREA}</label>
+                                        <label htmlFor="type">{locale.texts.AUTH_AREA}*</label>
                                     </Col>
                                     <Col lg={9}>
                                         <Select
