@@ -41,9 +41,9 @@
         width: 25px;
     }
 
-    #mapid {
+    /* #mapid {
         height: 40vh;
-    } 
+    }  */
 
     .modal {
         z-Index: 1080;
@@ -85,9 +85,9 @@
         font-size: 1rem;
     }
 
-    #mapid {
+    /* #mapid {
         height: 45vh;
-    } 
+    }  */
 
  }
 
@@ -112,9 +112,9 @@
         height: 55px;
         font-size: 14px;
     }
-    #mapid {
-        height: 75vh;
-    } 
+    /* #mapid {
+        //height: 75vh;
+    }  */
 }
 
 /* Extra large devices (large desktops, 1200px and up) */
@@ -123,9 +123,9 @@
     #navbar {
         height: 65px;
     }
-    #mapid {
+    /* #mapid {
         height: 75vh;
-    } 
+    }  */
 
     #changeStatusForm {
         z-Index: 1050;
