@@ -23,6 +23,7 @@ const rules = {
             "route:bigScreen",
             // "route:shiftChangeRecord",
             "user:mydevice",
+            "user:mypatient",
             "user:shiftChange",
             "user:saveSearchRecord",
             "user:cleanPath",
