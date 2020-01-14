@@ -9,7 +9,11 @@ import { AppContext } from '../../context/AppContext';
 import axios from 'axios';
 import dataSrc from '../../dataSrc'
 import polylineDecorator from 'leaflet-polylinedecorator'
-
+import {
+    BrowserView,
+    TabletView,
+    MobileOnlyView
+} from 'react-device-detect'
 class Map extends React.Component {
     
 
@@ -484,9 +488,15 @@ class Map extends React.Component {
     }
     
     render(){
-        return(   
-                <div id='mapid' style={{}}></div>
-
+        return(
+            <div>
+                <BrowserView>   
+                    <div id='mapid' style={{height:'75vh'}}></div>
+                </BrowserView>
+                <TabletView>
+                    <div id='mapid' style={{height:'40vh'}}></div>
+                </TabletView>
+            </div>
         )
     }
 }

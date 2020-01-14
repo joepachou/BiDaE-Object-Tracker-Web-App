@@ -10,7 +10,10 @@ import PdfDownloadForm from "./PdfDownloadForm"
 import config from "../../config";
 import AccessControl from "../presentational/AccessControl"
 import { AppContext } from "../../context/AppContext";
-
+import { BrowserView, TabletView } from "react-device-detect";
+import QRcodeContainer from './QRcode'
+import InfoPromptForTablet from '../presentational/InfoPromptForTablet'
+import PdfDownloadFormForTablet from './PdfDownloadFormForTablet'
 class SurveillanceContainer extends React.Component {
 
     static contextType = AppContext
@@ -183,6 +186,10 @@ class SurveillanceContainer extends React.Component {
                 height: "5rem",
                 lineHeight: "3rem"
             },
+            titleForTablet: {
+                color: "grey",
+                fontSize: "1rem",
+            },
             // surveillanceContainer: {
             //     height: "100vh"
             // },
@@ -194,9 +201,24 @@ class SurveillanceContainer extends React.Component {
                 border: "solid 2px rgba(227, 222, 222, 0.619)",
                 padding: "5px",
             },
-            // gridButton: {
-            //     display: this.state.showDevice ? null : "none"
-            // }
+            gridButton: {
+                display: this.state.showDevice ? null : "none"
+            },
+            MapAndQrcode: {
+                height: '42vh'
+            },
+            qrBlock: {
+                width: '10vw',
+                //border: 'solid'
+            },
+            mapBlockForTablet: {
+                border: "solid 2px rgba(227, 222, 222, 0.619)",
+                padding: "5px",
+                width: '60vw'
+            },
+            button: {
+                fontSize: "0.8rem"
+            }
         }
         const { 
             locale,
@@ -207,6 +229,8 @@ class SurveillanceContainer extends React.Component {
         let [{areaId}] = stateReducer
 
         return(
+            <div>
+            <BrowserView>
             <div id="surveillanceContainer" style={style.surveillanceContainer} className="overflow-hidden">
                 <div style={style.mapBlock}>
                     
@@ -236,6 +260,194 @@ class SurveillanceContainer extends React.Component {
                                 {locale.texts.LOCATION_ACCURACY}
                             </div>
                         </Nav.Item>
+                        <Nav.Item className="pt-2 mr-2">
+                            <ToggleSwitch 
+                                changeLocationAccuracy={this.props.changeLocationAccuracy} 
+                                leftLabel="low"
+                                defaultLabel="med" 
+                                rightLabel="high"
+                            />
+                        </Nav.Item>
+                        <Nav.Item className="mt-2">
+                            <Button 
+                                variant="outline-primary" 
+                                className="mr-1 ml-2 text-capitalize" 
+                                onClick={this.handleClickButton} 
+                                name="clear"
+                                disabled={!this.props.hasSearchKey}
+                            >
+                                {locale.texts.CLEAR}
+                            </Button>
+                        </Nav.Item>
+                        <AccessControl
+                            permission={"user:saveSearchRecord"}
+                            renderNoAccess={() => null}
+                        >
+                            <Nav.Item className="mt-2">
+                                <Button 
+                                    variant="outline-primary" 
+                                    className="mr-1 ml-2 text-capitalize" 
+                                    onClick={this.handleClickButton} 
+                                    name="save"
+                                    disabled={!this.props.hasSearchKey || this.state.showPdfDownloadForm}
+                                >
+                                    {locale.texts.SAVE}
+                                </Button>
+                            </Nav.Item>
+                        </AccessControl>
+                        <AccessControl
+                            permission={"user:toggleShowDevices"}
+                            renderNoAccess={() => null}
+                        >
+                            <Nav.Item className="mt-2">
+                                <Button 
+                                    variant="primary" 
+                                    className="mr-1 ml-2 text-capitalize" 
+                                    onClick={this.handleClickButton} 
+                                    name="searchedObjectType"
+                                    value={[-1, 0]}
+                                    active={(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) }
+                                    disabled={
+                                        !(this.state.searchedObjectType.includes(-1) ||
+                                        this.state.searchedObjectType.includes(0))
+                                    }
+                                >
+                                    {!(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) 
+                                        ?   locale.texts.SHOW_DEVICES 
+                                        :   locale.texts.HIDE_DEVICES 
+                                    }
+                                </Button>
+                            </Nav.Item>
+                        </AccessControl>
+                        <AccessControl
+                            permission={"user:toggleShowResidents"}
+                            renderNoAccess={() => null}
+                        >
+                            <Nav.Item className="mt-2">
+                                <Button 
+                                    variant="primary" 
+                                    className="mr-1 ml-2 text-capitalize" 
+                                    onClick={this.handleClickButton} 
+                                    name="searchedObjectType"
+                                    value={[-2, 1, 2]}
+                                    active={(this.state.showObjects.includes(1) || this.state.showObjects.includes(2))}
+                                    disabled={
+                                        !(this.state.searchedObjectType.includes(1) ||
+                                        this.state.searchedObjectType.includes(2))
+                                    }
+                                >
+                                    {!(this.state.showObjects.includes(1) || this.state.showObjects.includes(2)) 
+                                        ?   locale.texts.SHOW_RESIDENTS
+                                        :   locale.texts.HIDE_RESIDENTS 
+                                    }
+                                </Button>
+                            </Nav.Item>
+                        </AccessControl>
+                        <AccessControl
+                            permission={"user:cleanPath"}
+                            renderNoAccess={()=>null}
+                        >
+                            <Nav.Item className="mt-2">
+                                <Button
+                                    variant="primary"
+                                    className="mr-1 ml-2 text-capitalize" 
+                                    onClick={this.handleClickButton}
+                                    name="cleanPath"
+                                    active={(this.props.showPath)}
+                                    disabled={!(this.props.showPath)}
+                                >
+                                    {locale.texts.CLEAN_PATH}
+                                </Button>
+                            </Nav.Item>
+                        </AccessControl>
+                        {this.props.geoFenceConfig.map((item, index) => {
+                            return ( parseInt(item.unique_key) == areaId && 
+                                <Fragment
+                                    key={index}
+                                >
+                                    <Nav.Item className="mt-2 bd-highligh ml-auto">
+                                        <Button 
+                                            variant="warning" 
+                                            className="mr-1 ml-2 text-capitalize" 
+                                            onClick={this.handleClickButton} 
+                                            name="fence"
+                                            value={+!this.state.isOpenFence}
+                                            active={!this.state.isOpenFence}
+                                        >
+                                            {this.state.isOpenFence ? locale.texts.FENCE_ON : locale.texts.FENCE_OFF}
+                                        </Button>
+                                    </Nav.Item>
+                                    <Nav.Item className="mt-2">
+                                        <Button 
+                                            variant="outline-primary" 
+                                            className="mr-1 ml-2 text-capitalize" 
+                                            onClick={this.handleClickButton} 
+                                            name="clearAlerts"
+                                        >
+                                            {locale.texts.CLEAR_ALERTS}
+                                        </Button>
+                                    </Nav.Item>
+                                </Fragment>
+                            )
+                        })}
+                    </Nav>
+                </div>
+                <PdfDownloadForm 
+                    show={this.state.showPdfDownloadForm}
+                    data={this.props.searchResult}
+                    handleClose = {this.handleClosePdfForm}
+                    userInfo={auth.user}
+                />
+            </div>
+            </BrowserView>
+            <TabletView>
+            <div id="surveillanceContainer" className="w-100 h-100 d-flex flex-column">
+                <div className="d-flex w-100 h-100 flex-column">
+                    <div>
+                        <div className="w-100 d-flex flex-row align-items justify-content" style={style.MapAndQrcode}>
+                            <div style={style.qrBlock} className="d-flex flex-column align-items">
+                                <div>
+                                    
+                                    <QRcodeContainer
+                                        data={this.props.proccessedTrackingData.filter(item => item.searched)}
+                                        userInfo={auth.user}
+                                        searchKey={this.props.searchKey}
+                                        isSearched = {this.props.isSearched}
+                                    /> 
+                                    <InfoPromptForTablet 
+                                        data={this.props.data}
+                                        searchKey={this.props.searchKey}
+                                        title={locale.texts.FOUND}
+                                        searchResultLength={this.props.searchResult.length} 
+                                    />
+                                </div>
+                                <div style={style.titleForTablet} className="mt-auto">
+                                    {locale.texts.LOCATION_ACCURACY}
+                                </div>
+                            </div>
+                            <div style={style.mapBlockForTablet}>
+                            <Map
+                                pathMacAddress={this.props.pathMacAddress}
+                                hasSearchKey={hasSearchKey}
+                                colorPanel={this.props.colorPanel}
+                                proccessedTrackingData={this.props.proccessedTrackingData}
+                                lbeaconPosition={this.props.lbeaconPosition}
+                                geoFenceConfig={this.props.geoFenceConfig.filter(item => parseInt(item.unique_key) == areaId)}
+                                getSearchKey={this.props.getSearchKey}
+                                areaId={areaId}
+                                isOpenFence={this.state.isOpenFence}
+                                searchedObjectType={this.state.showObjects}
+                                mapConfig={config.mapConfig}
+                                pathData={this.state.pathData}
+                                handleClosePath={this.props.handleClosePath}
+                                handleShowPath={this.props.handleShowPath}
+                                showPath={this.props.showPath}
+                            />
+                            </div>
+                        </div>
+                        
+                        <div style={style.navBlock}>
+                    <Nav style={style.button} className="d-flex align-items-start text-capitalize bd-highlight">
                         <Nav.Item className="pt-2 mr-2">
                             <ToggleSwitch 
                                 changeLocationAccuracy={this.props.changeLocationAccuracy} 
@@ -385,12 +597,16 @@ class SurveillanceContainer extends React.Component {
                         })}
                     </Nav>
                 </div>
-                <PdfDownloadForm 
-                    show={this.state.showPdfDownloadForm}
-                    data={this.props.searchResult}
-                    handleClose = {this.handleClosePdfForm}
-                    userInfo={auth.user}
-                />
+                    <PdfDownloadFormForTablet 
+                        show={this.state.showPdfDownloadForm}
+                        data={this.props.searchResult}
+                        handleClose = {this.handleClosePdfForm}
+                        userInfo={auth.user}
+                    />
+                    </div>
+                </div>
+            </div>
+            </TabletView>
             </div>
         )
     }
