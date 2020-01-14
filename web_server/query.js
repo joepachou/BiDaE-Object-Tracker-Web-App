@@ -981,6 +981,14 @@ const parseLbeaconCoordinate = (lbeacon_uuid) => {
     return [yy, xx, area_id];
 }
 
+const calculateCoordinate = (item) => {
+    const area_id = parseInt(item.lbeacon_uuid.slice(0,4))
+    const xx = item.base_x;
+    const yy = item.base_y;
+
+    return [yy, xx, area_id]
+}
+
 const parseGeoFenceCoordinate = (uuid) => {
     /** Example geofence uuid: 00010018000000003460000000011900 */
     const area_id = uuid.slice(0, 4);
@@ -1009,7 +1017,9 @@ const checkMatchedObject = (item, userAuthenticatedAreaId, currentAreaId) => {
     let isInUserSAuthArea = userAuthenticatedAreaId.includes(currentAreaId)
 
     /** Parse lbeacon uuid into three field in an array: area id, latitude, longtitude */
-    let lbeacon_coordinate = item.lbeacon_uuid ? parseLbeaconCoordinate(item.lbeacon_uuid) : null;
+    // let lbeacon_coordinate = item.lbeacon_uuid ? parseLbeaconCoordinate(item.lbeacon_uuid) : null;
+
+    let lbeacon_coordinate = item.lbeacon_uuid ? calculateCoordinate(item) : null;
 
     /** Set the lbeacon's area id from lbeacon_coordinate*/
     let lbeacon_area_id = item.lbeacon_uuid ? lbeacon_coordinate[2] : null;

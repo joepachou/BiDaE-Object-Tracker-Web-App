@@ -9,6 +9,8 @@ function query_getTrackingData () {
 			object_summary_table.panic_violation_timestamp,
 			object_summary_table.rssi,
 			object_summary_table.battery_voltage,
+			object_summary_table.base_x,
+			object_summary_table.base_y,
 			object_table.name,
 			object_table.type,
 			object_table.status,
