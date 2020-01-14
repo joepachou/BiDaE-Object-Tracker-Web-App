@@ -59,6 +59,7 @@ const tw = {
     PLEASE_SELECT_SEARCH_OBJECT: "請選擇搜尋物件",
     BIND_MAC_ADDRESS:"綁定哪個Mac_Address?",
     TOTAL_DATA:"匯入資料",
+    IMPORT_PATIENT_DATA:"匯入病人",
 
     /* Button */
     CLEAR : "清除",

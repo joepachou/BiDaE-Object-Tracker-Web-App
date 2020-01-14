@@ -61,6 +61,7 @@ const en =  {
     PLEASE_SELECT_SEARCH_OBJECT: "please select search object",
     BIND_MAC_ADDRESS:"Enter the mac_address for binding",
     TOTAL_DATA: "HIS Data",
+    IMPORT_PATIENT_DATA:"HIS Patient",
 
     /* Button */
     CLEAR : "clear",

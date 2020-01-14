@@ -17,6 +17,7 @@ import {
     getImportTable,
     deleteImportData,
     cleanBinding,
+    getImportPatient,
 } from "../../dataSrc"
 import axios from 'axios';
 import ReactTable from 'react-table';
@@ -51,6 +52,7 @@ class ObjectManagementContainer extends React.Component{
         data:[],
         dataImport: [],
         dataPatient:[],
+        dataImportPatient:[],
         objectTable: [],
         isShowEdit: false,
         isPatientShowEdit: false,
@@ -147,13 +149,27 @@ class ObjectManagementContainer extends React.Component{
             
             this.setState({
                 dataImport: res.data.rows,
-                columnImport,
+                columnImport
             })
         })
         .catch(err => {
             console.log(err);
         })
-      
+
+
+        axios.post(getImportPatient, {
+            locale: locale.abbr
+        })
+        .then(res =>{
+            this.setState({
+                dataImportPatient: res.data.rows,
+            })
+        })
+        .catch(err => {
+            console.log(err);
+        })
+
+       
     }
 
     getData = () => {
@@ -540,6 +556,7 @@ class ObjectManagementContainer extends React.Component{
     }
 
     onImportExcel = files => {
+     
         // 獲取上傳的文件對象
         //const { files } = file.target; // 通過FileReader對象讀取文件
         const fileReader = new FileReader();
@@ -610,7 +627,7 @@ class ObjectManagementContainer extends React.Component{
                 //沒被擋掉的存到newData後輸出
         
                  let { locale } = this.context
- 
+                
                 axios.post(objectImport, {
                     locale: locale.abbr ,
                     newData
@@ -680,13 +697,22 @@ class ObjectManagementContainer extends React.Component{
                     <TabList>
                         <Tab>{locale.texts.DEVICE_FORM}</Tab>
                         <Tab>{locale.texts.PATIENT_FORM}</Tab>
+                        
                         <AccessControl
                             permission={"user:importTable"}
                             renderNoAccess={() => null}
                         >
                             <Tab>{locale.texts.TOTAL_DATA}</Tab>
                         </AccessControl>
+
+                        <AccessControl
+                            permission={"user:importTable"}
+                            renderNoAccess={() => null}
+                        >
+                             <Tab>{locale.texts.IMPORT_PATIENT_DATA}</Tab>
+                        </AccessControl>
                     </TabList>
+
                     <TabPanel>
                         <ButtonToolbar>
                             <Button 
@@ -798,6 +824,7 @@ class ObjectManagementContainer extends React.Component{
                             }}
                         />
                     </TabPanel>
+
                     <TabPanel> 
                         <ButtonToolbar>
                             <InputFiles accept=".xlsx, .xls" onChange={this.onImportExcel}>
@@ -827,7 +854,58 @@ class ObjectManagementContainer extends React.Component{
                             {...extraProps}
                         />
                     </TabPanel>
+
+                    
+
+                    <TabPanel> 
+                        <ButtonToolbar>
+                            <InputFiles accept=".xlsx, .xls" name="import_patient" onChange={this.onImportExcel}>
+                                <Button 
+                                variant="outline-primary" 
+                                className="btn btn-primary mr-2 mb-1"
+                                >
+                                {locale.texts.IMPORT_OBJECT}
+                                </Button>
+                            </InputFiles>
+                            <Button 
+                                variant="outline-primary" 
+                                className='text-capitalize mr-2 mb-1'
+                                name="delete import patient"
+                                onClick={this.handleClickButton}
+                            >
+                                {locale.texts.DELETE}
+                            </Button>
+                        </ButtonToolbar>
+                        <SelectTable
+                            keyField='id'
+                            data={this.state.dataImportPatient}
+                            columns={this.state.columnImport}
+                            ref={r => (this.selectTable = r)}
+                            className="-highlight"
+                            style={{height:'75vh'}}
+                            {...extraProps}
+
+
+
+                            getTrProps={(state, rowInfo, column, instance) => {
+                            
+                            return {
+                                onClick: (e, handleOriginal) => {
+                                    console.log(this.state.dataImportPatient)
+                                }
+                            }
+
+
+                          }}
+                        />
+                    </TabPanel>
+
+
+
+
                 </Tabs>
+
+
                 <EditPatientForm
                     show = {isPatientShowEdit && !this.state.DeleteFlag} 
                     title= {this.state.formTitle} 
@@ -872,9 +950,10 @@ class ObjectManagementContainer extends React.Component{
                 <DissociationForm
                     show={isShowEditImportTable} 
                     title={this.state.formTitle} 
-                    selectedObjectData={this.state.selectedObjectData || null} 
+                    selectedObjectData={this.state.selectedObjectData || 'handleAllDelete'} 
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={this.state.formPath}
+                    objectTable={this.state.objectTable}
                     handleCloseForm={this.handleCloseForm}
                     data={this.state.objectTable.reduce((dataMap, item) => {
                         dataMap[item.mac_address] = item

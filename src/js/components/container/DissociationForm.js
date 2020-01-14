@@ -124,11 +124,13 @@ class DissociationForm extends React.Component {
                 <Modal.Body
                     className='mb-2'
                 >
+             
+                
                     <Formik                    
                         initialValues = {{
                            mac:''
                         }}
-
+                        //C10f0027a1a7
                         validationSchema = {
                             Yup.object().shape({
                                 mac: Yup.string()
@@ -136,32 +138,49 @@ class DissociationForm extends React.Component {
                                     .test(
                                         'mac', 
                                         locale.texts.MAC_DO_NOT_MATCH ,
-                                        value => {  
+                                        
+                                        value => {
+                                        value != undefined   ?   value = value.toString().toLowerCase() :null  
+                                        if (this.props.selectedObjectData == 'handleAllDelete'){
+                                            if(value != undefined){
+                                                if (value.length ==17 || value.length ==12) {
+                                                    this.setState({  returnFlag:false }) 
+                                                    this.props.objectTable.map(item =>{
+                                                        if (value == item.mac_address){
+                                                            this.setState({ returnFlag:true,  valueForDataArray:value}) 
+                                                        }  else if(item.mac_address== value.match(/.{1,2}/g).join(':')) {
+                                                        this.setState({
+                                                            returnFlag:true,
+                                                            valueForDataArray:value.match(/.{1,2}/g).join(':')
+                                                            }) 
+                                                        }           
+                                                })
+                                              }
+                                            }
+                                        } else{
+                                            
                                             if (value == undefined) return false
-
                                             if (this.props.selectedObjectData.mac_address == value) {
-                                                this.setState({
-                                                    returnFlag:true,
-                                                    valueForDataArray:value 
-                                                }) 
+                                                this.setState({ returnFlag:true,valueForDataArray:value   }) 
                                             } else if(this.props.selectedObjectData.mac_address == value.match(/.{1,2}/g).join(':')) {
-                                                this.setState({
-                                                    returnFlag:true,
-                                                    valueForDataArray:value.match(/.{1,2}/g).join(':') 
-                                                }) 
+                                                this.setState({returnFlag:true, valueForDataArray:value.match(/.{1,2}/g).join(':')  }) 
                                             } else {
                                                 this.setState({ 
                                                     returnFlag:false
                                                 }) 
                                             }  
 
+                                        }
+                                          
                                             if (this.state.returnFlag == true) {
                                                 this.setState({
                                                     objectName: data[this.state.valueForDataArray].name,
                                                     objectType: data[this.state.valueForDataArray].type,
                                                     showDetail : true,
-                                                    inputValue : value
+                                                    inputValue : value,
+                                                    returnFlag:false
                                                 }) 
+                                                
                                                 return true
                                             } else {
                                                 this.setState({
@@ -172,6 +191,7 @@ class DissociationForm extends React.Component {
                                                 }) 
                                                 return false
                                             }
+
                                         }
                                     )
                             })

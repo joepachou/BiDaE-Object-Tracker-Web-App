@@ -53,8 +53,10 @@ const setMonitorConfig = `${protocol}://${dataSrcIP}/data/setMonitorConfig`
 const backendSearch = `${protocol}://${dataSrcIP}/data/backendSearch`
 const getSearchQueue = `${protocol}://${dataSrcIP}/data/getSearchQueue`
 const objectImport = `${protocol}://${dataSrcIP}/data/objectImport`
+const getImportPatient = `${protocol}://${dataSrcIP}/data/getImportPatient`
 const addBulkObject = `${protocol}://${dataSrcIP}/data/addBulkObject`
 const pinImage = `${protocol}://${dataSrcIP}/image/pinImage`
+
 const getTransferredLocation = `${protocol}://${dataSrcIP}/data/getTransferredLocation`
 
 const pdfUrl = function(path){
@@ -72,6 +74,7 @@ module.exports = {
     getObjectTable,
     getPatientTable,
     getImportTable,
+    getImportPatient,
     getLbeaconTable,
     getGatewayTable,
     getMonitorConfig,

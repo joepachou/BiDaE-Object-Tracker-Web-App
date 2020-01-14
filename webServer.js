@@ -114,6 +114,8 @@ app.post('/user/signin', db.signin)
 
 app.post('/user/signup', db.signup);
 
+app.post('/data/getImportPatient', db.getImportPatient);
+
 app.post('/user/getUserInfo', db.getUserInfo)
 
 app.post('/user/addUserSearchHistory', db.addUserSearchHistory)

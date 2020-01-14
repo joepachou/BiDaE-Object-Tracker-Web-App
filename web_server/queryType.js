@@ -249,12 +249,25 @@ const query_getImportTable = () => {
 				import_table.asset_control_number,
 				import_table.type,
 				import_table.id
-			FROM import_table
+			FROM import_table WHERE import_table.type != 'patient'
 		`;
 	
 	return text
 } 
 
+const query_getImportPatient = () => {
+
+	let text = `
+			SELECT 
+				import_table.name, 
+				import_table.asset_control_number,
+				import_table.type,
+				import_table.id
+			FROM import_table WHERE import_table.type ='patient'
+		`;
+	
+	return text
+} 
 
 function query_addAssociation (formOption) {
 	// console.log(formOption)
@@ -1467,7 +1480,8 @@ module.exports = {
 	query_cleanBinding,
 	query_getImportData,
 	query_editObject,
-	query_addImport
+	query_addImport,
+	query_getImportPatient
 }
 
 
