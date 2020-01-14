@@ -50,6 +50,9 @@ function query_getTrackingData () {
 		LEFT JOIN user_table
 		ON user_table.id = object_table.physician_id
 
+		INNER JOIN search_criteria
+		ON object_summary_table.rssi > search_criteria.search_rssi
+
 		LEFT JOIN (
 			SELECT 
 				mac_address,
@@ -1409,6 +1412,29 @@ const query_addBulkObject = (jsonObj) => {
 	return text	
 }
 
+const query_setSearchRssi = (rssi) => {
+	let text = `
+		UPDATE search_criteria
+		SET search_rssi = $1
+	`
+	let values = [
+		rssi
+	]
+	let query = {
+		text,
+		values
+	}
+	return query
+}
+
+const query_getSearchRssi = () =>{
+	let text = `
+		SELECT search_rssi
+		FROM search_criteria
+	`
+	return text
+}
+
 
 module.exports = {
 	query_getTrackingData,
@@ -1469,7 +1495,9 @@ module.exports = {
 	query_cleanBinding,
 	query_getImportData,
 	query_editObject,
-	query_addImport
+	query_addImport,
+	query_setSearchRssi,
+	query_getSearchRssi
 }
 
 

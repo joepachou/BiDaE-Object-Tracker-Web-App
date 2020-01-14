@@ -16,13 +16,11 @@ import { toast } from 'react-toastify';
 import ToastNotification from '../presentational/ToastNotification'
 import SearchResult from '../presentational/SearchResultList';
 import SearchContainerForTablet from './SearchContainerForTablet';
-import moment from 'moment'
 import {
     BrowserView,
     MobileOnlyView,
     TabletView
 } from 'react-device-detect'
-
 
 const {
     ALL_DEVICES,
@@ -52,7 +50,7 @@ class MainContainer extends React.Component{
         clearSearchResult: false,
         hasGridButton: false,
         isHighlightSearchPanel: false,
-        rssiThreshold: window.innerWidth < config.mobileWidowWidth
+        rssi: window.innerWidth < config.mobileWidowWidth
             ? config.mapConfig.locationAccuracyMapToDefault[0]
             : config.mapConfig.locationAccuracyMapToDefault[1],
         authenticated: this.context.auth.authenticated,
@@ -65,7 +63,8 @@ class MainContainer extends React.Component{
     componentDidMount = () => {
         this.getTrackingData();
         this.getLbeaconPosition();
-        this.getGeoFenceConfig()
+        this.getGeoFenceConfig();
+        this.getSearchRssi();
         this.interval = setInterval(this.getTrackingData, config.mapConfig.intervalTime)
     }
 
@@ -120,6 +119,18 @@ class MainContainer extends React.Component{
                                 isGeoFenceDataChange ||
                                 isViolatedObjectChange
         return shouldUpdate
+    }
+
+    getSearchRssi = () => {
+        axios.get(dataSrc.getSearchRssi)
+            .then(res => {
+                this.setState({
+                    rssi: res.data.rows[0].search_rssi
+                })
+            })
+            .catch(err => {
+                console.log(`get search rssi fail ${err}`)
+            })
     }
 
     getToastNotification = (item) => {
@@ -179,9 +190,15 @@ class MainContainer extends React.Component{
     }
 
     changeLocationAccuracy = (locationAccuracy) => {
-        const rssiThreshold = config.mapConfig.locationAccuracyMapToDefault[locationAccuracy]
+        const rssi = config.mapConfig.locationAccuracyMapToDefault[locationAccuracy]
+        axios.post(dataSrc.setSearchRssi, {
+            rssi
+        })
+        .catch(err => {
+            console.log(`set search rssi fail ${err}`)
+        })
         this.setState({
-            rssiThreshold
+            rssi
         })
     }
 
@@ -197,7 +214,7 @@ class MainContainer extends React.Component{
         let { auth, locale, stateReducer } = this.context
         let [{areaId, violatedObjects}, dispatch] = stateReducer
         axios.post(dataSrc.getTrackingData,{
-            rssiThreshold: this.state.rssiThreshold,
+            rssi: this.state.rssi,
             locale: locale.abbr,
             user: auth.user,
             areaId,
@@ -574,8 +591,7 @@ class MainContainer extends React.Component{
         } = this.context
 
         let [{areaId}] = stateReducer
-
-
+        // console.log(this.state.rssi)
         let deviceNum = this.state.trackingData.filter(item => item.found).length
         let devicePlural = deviceNum === 1 ? locale.texts.DEVICE : locale.texts.DEVICES
         return (

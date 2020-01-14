@@ -56,6 +56,9 @@ const objectImport = `${protocol}://${dataSrcIP}/data/objectImport`
 const addBulkObject = `${protocol}://${dataSrcIP}/data/addBulkObject`
 const pinImage = `${protocol}://${dataSrcIP}/image/pinImage`
 const getTransferredLocation = `${protocol}://${dataSrcIP}/data/getTransferredLocation`
+const setSearchRssi = `${protocol}://${dataSrcIP}/data/setSearchRssi`
+const getSearchRssi = `${protocol}://${dataSrcIP}/data/getSearchRssi`
+
 
 const pdfUrl = function(path){
     return `${protocol}://${dataSrcIP}/${path}`
@@ -117,5 +120,7 @@ module.exports = {
     setMonitorConfig,
     backendSearch,
     getSearchQueue, 
-    pinImage
+    pinImage,
+    setSearchRssi,
+    getSearchRssi
 };

@@ -1155,7 +1155,28 @@ const addBulkObject = (req, res) => {
         })
         return res.status(200).send(req.file)
     })
-    
+}
+
+const setSearchRssi = (request, response) => {
+    let { rssi } = request.body
+    pool.query(queryType.query_setSearchRssi(rssi))
+        .then(res => {
+            console.log('set search rssi success')
+        })
+        .catch(err => {
+            console.log(`set search rssi fail ${err}`)
+        })
+}
+
+const getSearchRssi = (request, response) => {
+    pool.query(queryType.query_getSearchRssi())
+        .then(res => {
+            console.log(`get search rssi success`)
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(`get search rssi fail ${err}`)
+        })
 }
 
 module.exports = {
@@ -1206,9 +1227,11 @@ module.exports = {
     setGeoFenceConfig,
     setGeoFenceConfigRows,
     setMonitorConfig,
+    setSearchRssi,
     checkoutViolation,
     confirmValidation,
     backendSearch,
     getBackendSearchQueue,
-    getTrackingTableByMacAddress
+    getTrackingTableByMacAddress,
+    getSearchRssi
 }
