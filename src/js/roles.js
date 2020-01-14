@@ -23,6 +23,7 @@ const rules = {
             "route:bigScreen",
             // "route:shiftChangeRecord",
             "user:mydevice",
+            "user:mypatient",
             "user:shiftChange",
             "user:saveSearchRecord",
             "user:cleanPath",
@@ -30,8 +31,8 @@ const rules = {
             // "user:toggleArea",
             "user:toggleShowDevices",
             "user:toggleShowResidents",
-            "route:monitorSetting"
-
+            "route:monitorSetting",
+            "user:batteryNotice"
         ]
     },
     system_admin: {
@@ -50,7 +51,8 @@ const rules = {
             "user:toggleShowDevices",
             "user:toggleShowResidents",
             "route:monitorSetting",
-            "user:importTable"
+            "user:importTable",
+            "user:batteryNotice"
         ]
     },
     dev: {

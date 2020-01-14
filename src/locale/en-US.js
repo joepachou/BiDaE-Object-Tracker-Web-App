@@ -62,6 +62,7 @@ const en =  {
     BIND_MAC_ADDRESS:"Enter the mac_address for binding",
     TOTAL_DATA: "HIS Data",
     IMPORT_PATIENT_DATA:"HIS Patient",
+    BATTERY_NOTIFICATION: "battery notification",
 
     /* Button */
     CLEAR : "clear",
@@ -275,6 +276,8 @@ const en =  {
     LOW_RSSI: "low RSSI",
     NOTE: "notes",
     BATTERY_VOLTAGE: "batter voltage",
+    BATTERY_INDICATOR: "batter indicator",
+    REMAINING_BATTERY_VOLTAGE: 'remaining battery voltage  ',
     BATTERY: "battery",
     PANIC: "panic",
     GEOFENCE_TYPE: "geofence type",

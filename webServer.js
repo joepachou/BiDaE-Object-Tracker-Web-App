@@ -182,6 +182,10 @@ app.post('/data/getAreaTable', db.getAreaTable)
 
 app.post('/data/addBulkObject', db.addBulkObject)
 
+app.post('/data/setSearchRssi', db.setSearchRssi)
+
+app.get('/data/getSearchRssi', db.getSearchRssi)
+
 app.get('/data/getTransferredLocation', (req, res) => {
     csv()
     .fromFile('transferred_location.csv')

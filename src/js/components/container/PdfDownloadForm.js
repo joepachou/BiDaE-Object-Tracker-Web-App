@@ -10,7 +10,11 @@ import QRCode from 'qrcode.react';
 import moment from 'moment'
 import config from '../../config'
 import { AppContext } from '../../context/AppContext';
-
+import {
+    BrowserView,
+    MobileOnlyView,
+    TabletView
+} from 'react-device-detect'
 // need Inputs : search Result
 // this component will send json to back end, backend will return a url, and the component generate a qrcode
 class PdfDownloadForm extends React.Component {

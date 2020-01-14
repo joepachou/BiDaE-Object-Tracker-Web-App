@@ -216,7 +216,12 @@ class NavbarContainer extends React.Component {
 
                     </Nav>
                     <Nav className='text-capitalize'>
-                        <BatteryLevelNotification />
+                        <AccessControl
+                            permission={'user:batteryNotice'}
+                            renderNoAccess={() => null}
+                        >
+                            <BatteryLevelNotification />
+                        </AccessControl>
                         <Nav.Item 
                             className="nav-link nav-route" 
                             onClick={locale.changeLocale}
@@ -227,13 +232,15 @@ class NavbarContainer extends React.Component {
                         {auth.authenticated
                             ? 
                                 <NavDropdown title={<i className="fas fa-user-alt"></i> }id="collasible-nav-dropdown" alignRight>
-                                    <LinkContainer to="/page/userSetting" className="bg-white">
-                                        <NavDropdown.Item className="lang-select">{auth.user.name}</NavDropdown.Item>
-                                    </LinkContainer>
-                                    <Dropdown.Divider />
-                                    <LinkContainer to="/" className="bg-white">
-                                        <NavDropdown.Item className="lang-select" onClick={auth.signout}>{locale.texts.SIGN_OUT}</NavDropdown.Item>
-                                    </LinkContainer>
+                                    <div className="dropdownWrapper">
+                                        <LinkContainer to="/page/userSetting" className="bg-white">
+                                            <NavDropdown.Item className="lang-select">{auth.user.name}</NavDropdown.Item>
+                                        </LinkContainer>
+                                        <Dropdown.Divider />
+                                        <LinkContainer to="/" className="bg-white">
+                                            <NavDropdown.Item className="lang-select" onClick={auth.signout}>{locale.texts.SIGN_OUT}</NavDropdown.Item>
+                                        </LinkContainer>
+                                    </div>
                                 </NavDropdown> 
                             : 
                                 <Nav.Item className="nav-link nav-route" onClick={this.handleSigninFormShowUp}>{locale.texts.SIGN_IN}</Nav.Item>
