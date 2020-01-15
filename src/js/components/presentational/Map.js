@@ -49,7 +49,7 @@ class Map extends React.Component {
 
         this.drawPolyline();
 
-        if (JSON.parse(process.env.IS_LBEACON_MARK) && this.props.lbeaconPosition.length !== 0 && !this.state.hasIniLbeaconPosition) {
+        if (parseInt(process.env.IS_LBEACON_MARK) && this.props.lbeaconPosition.length !== 0 && !this.state.hasIniLbeaconPosition) {
             this.createLbeaconMarkers()
         }
 
@@ -168,7 +168,6 @@ class Map extends React.Component {
             if(this.state.pathMacAddress !== ''){
                 this.pathOfDevice.clearLayers()
                 this.pathOfDevice.addTo(this.map)
-                console.log(this.pathOfDevice)
                 this.setState({
                     pathMacAddress: ''
                 })
@@ -185,8 +184,11 @@ class Map extends React.Component {
             let icon = marker.options.icon;
 
             icon.options.iconSize = [this.scalableIconSize, this.scalableIconSize]
+            // icon.options.iconAnchor = [this.scalableIconAnchor, this.scalableIconAnchor]
             icon.options.numberSize = this.scalableNumberSize
             var pos = marker.getLatLng()
+            // console.log(marker)
+            // console.log(pos)
             marker.setLatLng([pos.lat - this.prevZoom * this.pin_shift_scale[0] + this.currentZoom* this.pin_shift_scale[0], pos.lng - this.pin_shift_scale[1]* this.prevZoom + this.currentZoom* this.pin_shift_scale[1]])
             marker.setIcon(icon);
 
@@ -229,7 +231,8 @@ class Map extends React.Component {
         this.resizeFactor = Math.pow(2, (this.zoomDiff));
         this.resizeConst = Math.floor(this.zoomDiff * 30);
         this.scalableErrorCircleRadius = 200 * this.resizeFactor;
-        this.scalableIconSize = this.props.mapConfig.iconOptions.iconSize + this.resizeConst
+        this.scalableIconSize = parseInt(this.props.mapConfig.iconOptions.iconSize) + this.resizeConst
+        // this.scalableIconAnchor = parseInt(this.props.mapConfig.iconOptions.iconSize) + this.resizeConst
         this.scalableNumberSize = Math.floor(this.scalableIconSize / 3);
     }
 
@@ -483,10 +486,6 @@ class Map extends React.Component {
         const yyy = origin_y + parseInt(yy, 16) * multiplier;
         return [yyy, xxx];
     }
-
-//    handleObjectListClick= () => {
-//        console.log('click')
-//    }
     
     render(){
         return(

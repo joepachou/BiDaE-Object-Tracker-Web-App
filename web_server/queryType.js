@@ -9,6 +9,8 @@ function query_getTrackingData () {
 			object_summary_table.panic_violation_timestamp,
 			object_summary_table.rssi,
 			object_summary_table.battery_voltage,
+			object_summary_table.base_x,
+			object_summary_table.base_y,
 			object_table.name,
 			object_table.type,
 			object_table.status,
@@ -47,6 +49,9 @@ function query_getTrackingData () {
 
 		LEFT JOIN user_table
 		ON user_table.id = object_table.physician_id
+
+		INNER JOIN search_criteria
+		ON object_summary_table.rssi > search_criteria.search_rssi
 
 		LEFT JOIN (
 			SELECT 
@@ -249,12 +254,25 @@ const query_getImportTable = () => {
 				import_table.asset_control_number,
 				import_table.type,
 				import_table.id
-			FROM import_table
+			FROM import_table WHERE import_table.type != 'patient'
 		`;
 	
 	return text
 } 
 
+const query_getImportPatient = () => {
+
+	let text = `
+			SELECT 
+				import_table.name, 
+				import_table.asset_control_number,
+				import_table.type,
+				import_table.id
+			FROM import_table WHERE import_table.type ='patient'
+		`;
+	
+	return text
+} 
 
 function query_addAssociation (formOption) {
 	// console.log(formOption)
@@ -1407,6 +1425,29 @@ const query_addBulkObject = (jsonObj) => {
 	return text	
 }
 
+const query_setSearchRssi = (rssi) => {
+	let text = `
+		UPDATE search_criteria
+		SET search_rssi = $1
+	`
+	let values = [
+		rssi
+	]
+	let query = {
+		text,
+		values
+	}
+	return query
+}
+
+const query_getSearchRssi = () =>{
+	let text = `
+		SELECT search_rssi
+		FROM search_criteria
+	`
+	return text
+}
+
 
 module.exports = {
 	query_getTrackingData,
@@ -1467,7 +1508,11 @@ module.exports = {
 	query_cleanBinding,
 	query_getImportData,
 	query_editObject,
-	query_addImport
+	query_addImport,
+
+	query_getImportPatient,
+	query_setSearchRssi,
+	query_getSearchRssi
 }
 
 

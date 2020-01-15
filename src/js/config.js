@@ -676,7 +676,8 @@ const config = {
             minWidth: "500",
             maxHeight: "300",
             className : "customPopup",
-            showNumber: false
+            showNumber: false,
+            autoPan: false
         },
 
         /** Set the html content of popup of markers */

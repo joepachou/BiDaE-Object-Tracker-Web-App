@@ -178,6 +178,18 @@ const getPatientTable = (request, response) => {
         })     
 }
 
+const getImportPatient = (request, response) => {
+    let { locale, areaId } = request.body
+    pool.query(queryType.query_getImportPatient())       
+        .then(res => {
+            console.log('get ImportPatient data')
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log("get ImportPatient fails: " + err)
+        })     
+}
+
 const getImportTable = (request, response) => {
     let { locale, areaId } = request.body
     pool.query(queryType.query_getImportTable())       
@@ -981,6 +993,14 @@ const parseLbeaconCoordinate = (lbeacon_uuid) => {
     return [yy, xx, area_id];
 }
 
+const calculateCoordinate = (item) => {
+    const area_id = parseInt(item.lbeacon_uuid.slice(0,4))
+    const xx = item.base_x;
+    const yy = item.base_y;
+
+    return [yy, xx, area_id]
+}
+
 const parseGeoFenceCoordinate = (uuid) => {
     /** Example geofence uuid: 00010018000000003460000000011900 */
     const area_id = uuid.slice(0, 4);
@@ -1009,7 +1029,9 @@ const checkMatchedObject = (item, userAuthenticatedAreaId, currentAreaId) => {
     let isInUserSAuthArea = userAuthenticatedAreaId.includes(currentAreaId)
 
     /** Parse lbeacon uuid into three field in an array: area id, latitude, longtitude */
-    let lbeacon_coordinate = item.lbeacon_uuid ? parseLbeaconCoordinate(item.lbeacon_uuid) : null;
+    // let lbeacon_coordinate = item.lbeacon_uuid ? parseLbeaconCoordinate(item.lbeacon_uuid) : null;
+
+    let lbeacon_coordinate = item.lbeacon_uuid ? calculateCoordinate(item) : null;
 
     /** Set the lbeacon's area id from lbeacon_coordinate*/
     let lbeacon_area_id = item.lbeacon_uuid ? lbeacon_coordinate[2] : null;
@@ -1145,7 +1167,28 @@ const addBulkObject = (req, res) => {
         })
         return res.status(200).send(req.file)
     })
-    
+}
+
+const setSearchRssi = (request, response) => {
+    let { rssi } = request.body
+    pool.query(queryType.query_setSearchRssi(rssi))
+        .then(res => {
+            console.log('set search rssi success')
+        })
+        .catch(err => {
+            console.log(`set search rssi fail ${err}`)
+        })
+}
+
+const getSearchRssi = (request, response) => {
+    pool.query(queryType.query_getSearchRssi())
+        .then(res => {
+            console.log(`get search rssi success`)
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(`get search rssi fail ${err}`)
+        })
 }
 
 module.exports = {
@@ -1153,6 +1196,7 @@ module.exports = {
     getObjectTable,
     getPatientTable,
     getImportTable,
+    getImportPatient,
     getImportData,
     addAssociation,
     cleanBinding,
@@ -1196,9 +1240,11 @@ module.exports = {
     setGeoFenceConfig,
     setGeoFenceConfigRows,
     setMonitorConfig,
+    setSearchRssi,
     checkoutViolation,
     confirmValidation,
     backendSearch,
     getBackendSearchQueue,
-    getTrackingTableByMacAddress
+    getTrackingTableByMacAddress,
+    getSearchRssi
 }

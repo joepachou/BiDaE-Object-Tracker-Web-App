@@ -92,9 +92,6 @@ class EditPatientForm extends React.Component {
 
 
         const genderOptions = [
-            {
-
-            },
             { 
                 value: '1', 
                 label: locale.texts.MALE
@@ -142,8 +139,7 @@ class EditPatientForm extends React.Component {
                             // roomNumber: room_number || '',
                             mac_address: mac_address || '',
                             asset_control_number:asset_control_number|| '',
-                            gender :   object_type == locale.texts.MALE ? genderOptions[1] : genderOptions[2] 
-                            ,
+                            gender :   object_type == locale.texts.FEMALE ? genderOptions[1] : genderOptions[0],
                             monitorType: selectedObjectData.length !== 0 ? monitor_type.split('/') : [],
                             room: room 
                                 ? {
@@ -291,7 +287,7 @@ class EditPatientForm extends React.Component {
                                         name="mac_address" 
                                         type="text" 
                                         className={'form-control' + (errors.mac_address && touched.mac_address ? ' is-invalid' : '')} 
-                                        disabled={title.toLowerCase() === locale.texts.EDIT_OBJECT}
+                                        disabled={this.props.disableASN}
                                     />
                                     <ErrorMessage name="mac_address" component="div" className="invalid-feedback" />
                                 </div>

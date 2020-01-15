@@ -456,6 +456,7 @@ class SurveillanceContainer extends React.Component {
                         <Nav.Item className="pt-2 mr-2">
                             <ToggleSwitch 
                                 changeLocationAccuracy={this.props.changeLocationAccuracy} 
+                                rssi={this.state.rssi}
                                 leftLabel="low"
                                 defaultLabel="med" 
                                 rightLabel="high"
