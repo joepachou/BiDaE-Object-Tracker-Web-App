@@ -331,7 +331,7 @@ class Map extends React.Component {
         const lbeacon_coorinate = Object.values(e.target._latlng).toString();
         let objectList = [], key;
         for (key in objectInfo) {
-            if (objectInfo[key].currentPosition.toString() == lbeacon_coorinate) {
+            if (objectInfo[key].lbeacon_coordinate.toString() == lbeacon_coorinate) {
                 objectList.push(objectInfo[key])
             }
         }
@@ -378,7 +378,7 @@ class Map extends React.Component {
             /** Set the Marker's popup 
              * popupContent (objectName, objectImg, objectImgWidth)
              * More Style sheet include in Map.css */
-            let popupContent = this.props.mapConfig.getPopupContent([item], this.collectObjectsByLatLng(item.currentPosition), locale)
+            let popupContent = this.props.mapConfig.getPopupContent([item], this.collectObjectsByLatLng(item.lbeacon_coordinate), locale)
             
             /** Set the icon option*/
             item.iconOption = {
@@ -391,6 +391,9 @@ class Map extends React.Component {
 
                 /** Insert the object's mac_address to be the data when clicking the object's marker */
                 macAddress: item.mac_address,
+
+                lbeacon_coordinate: item.lbeacon_coordinate,
+
                 currentPosition: item.currentPosition,
 
                 /** Show the ordered on location pin */
@@ -408,7 +411,6 @@ class Map extends React.Component {
 
             const option = new L.AwesomeNumberMarkers (item.iconOption)
             let marker =  L.marker(position, {icon: option}).bindPopup(popupContent, this.props.mapConfig.popupOptions).openPopup();
-            // console.log(item.iconOption.currentPosition[0])
             var pos = marker.getLatLng()
             marker.setLatLng([pos.lat - this.prevZoom * this.pin_shift_scale[0] + this.currentZoom* this.pin_shift_scale[0], pos.lng - this.pin_shift_scale[1]* this.prevZoom + this.currentZoom* this.pin_shift_scale[1]])
             marker.addTo(this.markersLayer)
@@ -436,7 +438,7 @@ class Map extends React.Component {
     /** Fire when clicing marker */
     handleMarkerClick = (e) => {
         //console.log("handle marker click")
-        const lbPosition =  e.target.options.icon.options.currentPosition
+        const lbPosition =  e.target.options.icon.options.lbeacon_coordinate
         this.props.getSearchKey('objects', null, lbPosition, )
     }
 
@@ -455,11 +457,10 @@ class Map extends React.Component {
     }
 
     collectObjectsByLatLng = (lbPosition) => {
-        //console.log("collect object")
         let objectList = []
         this.filterTrackingData(this.props.proccessedTrackingData)
         .map(item => {
-            item.currentPosition && item.currentPosition.toString() === lbPosition.toString() && item.isMatchedObject ? objectList.push(item) : null;
+            item.lbeacon_coordinate && item.lbeacon_coordinate.toString() === lbPosition.toString() && item.isMatchedObject ? objectList.push(item) : null;
         })
 
         return objectList 

@@ -159,20 +159,6 @@ class SurveillanceContainer extends React.Component {
         })
     }
 
-    
-
-    // getSearchKey = (searchKey, colorPanel, searchValue) => {
-    //     let markerClickPackage = {}
-    //     this.props.proccessedTrackingData.map(item => {
-    //         if (this.state.showObjects.includes(item.searchedType)) {
-    //             markerClickPackage[item.mac_address] = item
-    //         }
-    //     })
-
-
-    //     this.props.getSearchKey(searchKey, colorPanel, searchValue, markerClickPackage)
-    // }
-
     render(){
         const { 
             hasSearchKey,
@@ -190,12 +176,6 @@ class SurveillanceContainer extends React.Component {
                 color: "grey",
                 fontSize: "1rem",
             },
-            // surveillanceContainer: {
-            //     height: "100vh"
-            // },
-            navBlock: {
-                // height: "40%"
-            }, 
             mapBlock: {
                 // height: "60%",
                 border: "solid 2px rgba(227, 222, 222, 0.619)",
@@ -233,7 +213,6 @@ class SurveillanceContainer extends React.Component {
             <BrowserView>
             <div id="surveillanceContainer" style={style.surveillanceContainer} className="overflow-hidden">
                 <div style={style.mapBlock}>
-                    
                     <Map
                         pathMacAddress={this.props.pathMacAddress}
                         hasSearchKey={hasSearchKey}
@@ -266,6 +245,8 @@ class SurveillanceContainer extends React.Component {
                                 leftLabel="low"
                                 defaultLabel="med" 
                                 rightLabel="high"
+                                rssi={this.props.rssi}
+                                locationAccuracyMap={config.mapConfig.locationAccuracyMap}
                             />
                         </Nav.Item>
                         <Nav.Item className="mt-2">
@@ -451,10 +432,11 @@ class SurveillanceContainer extends React.Component {
                         <Nav.Item className="pt-2 mr-2">
                             <ToggleSwitch 
                                 changeLocationAccuracy={this.props.changeLocationAccuracy} 
-                                rssi={this.state.rssi}
+                                rssi={this.props.rssi}
                                 leftLabel="low"
                                 defaultLabel="med" 
                                 rightLabel="high"
+                                locationAccuracyMap={config.mapConfig.locationAccuracyMap}
                             />
                         </Nav.Item>
                         <Nav.Item className="mt-2">
@@ -549,23 +531,6 @@ class SurveillanceContainer extends React.Component {
                                 </Button>
                             </Nav.Item>
                         </AccessControl>
-                        {/* <Nav.Item className="mt-2">
-                            <Button 
-                                variant="outline-primary" 
-                                className="mr-1 text-capitalize" 
-                                onClick={this.handleClickButton} 
-                                name="show devices"
-                            >
-                                {this.state.showDevice ? locale.texts.HIDE_DEVICES : locale.texts.SHOW_DEVICES }
-                            </Button>
-                        </Nav.Item >
-                        <div style={style.gridButton} className="mt-2 mx-3">
-                            <GridButton
-                                clearColorPanel={this.props.clearColorPanel}
-                                getSearchKey={this.props.getSearchKey}
-                                mapConfig={config.mapConfig}
-                            />
-                        </div> */}
                         {this.props.geoFenceConfig.map((item, index) => {
                             return ( parseInt(item.unique_key) == areaId && 
                                 <Fragment

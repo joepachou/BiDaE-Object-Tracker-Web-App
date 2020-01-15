@@ -491,8 +491,8 @@ class MainContainer extends React.Component{
         let objectList = []
         proccessedTrackingData
         .filter(item => {
-            return item.currentPosition && 
-                item.currentPosition.toString() === lbPosition.toString()
+            return item.lbeacon_coordinate && 
+                item.lbeacon_coordinate.toString() === lbPosition.toString()
         })
         .map(item => {
             item.searched = true;
@@ -509,7 +509,6 @@ class MainContainer extends React.Component{
     }
 
     handleShowPath = (mac_address) => {
-        //console.log(mac_address)
         this.setState({
             showPath: true,
             pathMacAddress: mac_address
@@ -591,7 +590,6 @@ class MainContainer extends React.Component{
         } = this.context
 
         let [{areaId}] = stateReducer
-        // console.log(this.state.rssi)
         let deviceNum = this.state.trackingData.filter(item => item.found).length
         let devicePlural = deviceNum === 1 ? locale.texts.DEVICE : locale.texts.DEVICES
         return (
@@ -627,6 +625,7 @@ class MainContainer extends React.Component{
                                     authenticated={this.state.authenticated}
                                     handleClosePath={this.handleClosePath}
                                     handleShowPath={this.handleShowPath}
+                                    rssi={this.state.rssi}
                                 />
                             </Col>
 
