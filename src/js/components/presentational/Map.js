@@ -497,6 +497,9 @@ class Map extends React.Component {
                 <TabletView>
                     <div id='mapid' style={{height:'40vh'}}></div>
                 </TabletView>
+                <MobileOnlyView>
+                    <div id='mapid' style={{height: '30vh'}}></div>
+                </MobileOnlyView>
             </div>
         )
     }

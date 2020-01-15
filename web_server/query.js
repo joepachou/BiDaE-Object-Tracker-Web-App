@@ -176,6 +176,18 @@ const getPatientTable = (request, response) => {
         })     
 }
 
+const getImportPatient = (request, response) => {
+    let { locale, areaId } = request.body
+    pool.query(queryType.query_getImportPatient())       
+        .then(res => {
+            console.log('get ImportPatient data')
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log("get ImportPatient fails: " + err)
+        })     
+}
+
 const getImportTable = (request, response) => {
     let { locale, areaId } = request.body
     pool.query(queryType.query_getImportTable())       
@@ -1158,6 +1170,7 @@ module.exports = {
     getObjectTable,
     getPatientTable,
     getImportTable,
+    getImportPatient,
     getImportData,
     addAssociation,
     cleanBinding,
