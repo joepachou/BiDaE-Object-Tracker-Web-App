@@ -59,7 +59,8 @@ class MainContainer extends React.Component{
         shouldUpdateTrackingData: true,
         markerClickPackage: {},
         showPath: false,
-        pathMacAddress:''
+        pathMacAddress:'',
+        display: true
     }
 
     componentDidMount = () => {
@@ -504,6 +505,12 @@ class MainContainer extends React.Component{
             showPath: false
         })
     }
+
+    handleShowResultListForMobile = () => {
+        this.setState({
+            display: false
+        })
+    }
     
     render(){
 
@@ -557,12 +564,25 @@ class MainContainer extends React.Component{
                 width:'30vw'
             },
 
+            containerForMobile:{
+                justifyContent: 'center'
+            },
+            
+            searchPanelForMobile: {
+                zIndex: this.state.isHighlightSearchPanel ? 1060 : 1,
+                fontSize: '2rem',
+                background: "white",
+                borderRadius: 10,
+                //border: 'solid',
+                height: '90vh',
+                width:'90vw'
+            },
+
             searchResultList: {
                 dispaly: this.state.hasSearchKey ? null : 'none',
                 maxHeight: '40vh',
                 justifyContent: 'center'
             },
-
             MapAndQrcode: {
                 maxHeight: '50vh',
             }
@@ -691,7 +711,55 @@ class MainContainer extends React.Component{
                     </div>
                 </TabletView>
                 <MobileOnlyView>
-                    <p>QQ is Mobile</p>
+                <div id="page-wrap" className='d-flex flex-column w-100' style={{height: "90vh"}}>
+                    <div className='d-flex flex-row h-100 w-100 justify-content-center'>
+                        {/** left area of row */}
+                            {
+                                this.state.display ?
+                                <div id='searchPanel' className="h-100" style={style.searchPanelForMobile}>
+                                    <SearchContainer 
+                                        hasSearchKey={this.state.hasSearchKey}
+                                        clearSearchResult={this.state.clearSearchResult}
+                                        hasGridButton={this.state.hasGridButton}
+                                        auth={auth}
+                                        getSearchKey={this.getSearchKey}
+                                        handleShowResultListForMobile={this.handleShowResultListForMobile}
+                                    />
+                                </div>
+                                :
+                                    <div className='h-100 w-100 d-flex justify-content-center flex-row'>
+                                        <div className='d-flex flex-column'>
+                                        <SurveillanceContainer
+                                            showPath={this.state.showPath}
+                                            pathMacAddress={this.state.pathMacAddress} 
+                                            proccessedTrackingData={proccessedTrackingData.length === 0 ? trackingData : proccessedTrackingData}
+                                            hasSearchKey={hasSearchKey}
+                                            colorPanel={colorPanel}
+                                            searchResult={this.state.searchResult}
+                                            handleClearButton={this.handleClearButton}
+                                            getSearchKey={this.getSearchKey}
+                                            clearColorPanel={clearColorPanel}
+                                            changeLocationAccuracy={this.changeLocationAccuracy}
+                                            setFence={this.setFence}
+                                            auth={auth}
+                                            lbeaconPosition={this.state.lbeaconPosition}
+                                            geoFenceConfig={this.state.geoFenceConfig.filter(item => parseInt(item.unique_key) == areaId)}
+                                            clearAlerts={this.clearAlerts}
+                                            searchKey={this.state.searchKey}
+                                            authenticated={this.state.authenticated}
+                                            handleClosePath={this.handleClosePath}
+                                            handleShowPath={this.handleShowPath}
+                                        />
+                                        <SearchResultListForTablet
+                                            searchResult={this.state.searchResult} 
+                                            searchKey={this.state.searchKey}
+                                            highlightSearchPanel={this.highlightSearchPanel}
+                                        />
+                                        </div>
+                                    </div>
+                            }
+                    </div>
+                </div>
                 </MobileOnlyView>
             </div>
         )

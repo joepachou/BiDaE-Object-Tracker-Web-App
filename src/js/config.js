@@ -478,7 +478,7 @@ const config = {
             crs: L.CRS.Simple,
             // center: L.latLng(-2000, -4000),
             zoom: -6,
-            minZoom: -7,
+            minZoom: -10,
             maxZoom: 0,
             zoomDelta: 0.25,
             zoomSnap: 0,

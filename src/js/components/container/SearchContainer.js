@@ -7,10 +7,15 @@ import config from '../../config';
 import SearchableObjectType from '../presentational/SearchableObjectType'
 import LocaleContext from '../../context/LocaleContext';
 import ObjectTypeList from './ObjectTypeList'
+import ObjectTypeListForTablet from './ObjectTypeListForTablet'
 import axios from 'axios';
 import { getObjectTable } from '../../dataSrc'
 import { AppContext } from '../../context/AppContext';
-
+import {
+    BrowserView,
+    TabletView,
+    MobileOnlyView
+} from 'react-device-detect'
 
 class SearchContainer extends React.Component {
 
@@ -175,60 +180,97 @@ class SearchContainer extends React.Component {
         const style = {
         //     titleText: {
         //         color: 'rgb(80, 80, 80, 1)'
-        //     }, 
+        //     },
+        
+            textForMobile: {
+                fontSize: '2rem'
+            }
         }
 
         const { locale } = this.context
         
-        return (                   
-            <div id='searchContainer' className="py-1" onTouchMove={this.handleTouchMove}>
-                <Row id='searchBar' className='d-flex justify-content-center align-items-center pb-2'>
-                    <Searchbar 
-                        placeholder={this.state.searchKey}
-                        getSearchKey={this.props.getSearchKey}
-                        clearSearchResult={this.props.clearSearchResult}    
-                    />
-                </Row>
-                <div id='searchOption' className="pt-2">
-                    <Row>
-                        <Col md={6} sm={6} xs={6} lg={6} xl={6} className='px-0'>
-                            <FrequentSearch 
-                                getSearchKey={this.props.getSearchKey}  
-                                clearSearchResult={this.props.clearSearchResult}   
-                                hasGridButton={this.props.hasGridButton} 
-                                maxHeigh={config.searchResultProportion}
+        return (
+            <div>
+                <BrowserView>                   
+                    <div id='searchContainer' className="py-1" onTouchMove={this.handleTouchMove}>
+                        <Row id='searchBar' className='d-flex justify-content-center align-items-center pb-2'>
+                            <Searchbar 
+                                placeholder={this.state.searchKey}
+                                getSearchKey={this.props.getSearchKey}
+                                clearSearchResult={this.props.clearSearchResult}    
                             />
-                        </Col>
-                        <Col md={6} sm={6} xs={6} lg={6} xl={6} className='px-0'>
-                            <ObjectTypeList
-                                getSearchKey={this.props.getSearchKey}  
-                                clearSearchResult={this.props.clearSearchResult}   
-                                hasGridButton={this.props.hasGridButton} 
-                                objectTypeList={this.state.objectTypeList}
-                                maxHeigh={config.searchResultProportion}
-                            />                            
-                        </Col>
-                    </Row>
-                    {/* <Col id='searchableObjectType' md={6} sm={6} xs={6} lg={6} xl={2} className='px-0'> */}
-                        {/* <SearchableObjectType 
-                            sectionTitleList={this.state.sectionTitleList} 
-                            sectionIndexList={this.state.sectionIndexList} 
-                            sectionIndex={this.state.sectionIndex} 
-                            handleMouseOver={this.handleMouseOver} 
-                            handleTouchStart={this.handleTouchStart} 
-                            handleTouchMove={this.handleTouchMove} 
-                            isShowSectionTitle={this.state.isShowSectionTitle}
-                            clientHeight={this.state.clientHeight}
-                        /> */}
-                    {/* </Col> */}
-                </div>
-                {/* <SearchableObjectType
-                    floatUp = {this.props.floatUp}
-                    objectTypeList = {this.props.objectTypeList}
-                    // onSubmit={this.getSearchResult}
-                    getSearchKey={this.props.getSearchKey}
-                    auth={this.props.auth}
-                /> */}
+                        </Row>
+                        <div id='searchOption' className="pt-2">
+                            <Row>
+                                <Col md={6} sm={6} xs={6} lg={6} xl={6} className='px-0'>
+                                    <FrequentSearch 
+                                        getSearchKey={this.props.getSearchKey}  
+                                        clearSearchResult={this.props.clearSearchResult}   
+                                        hasGridButton={this.props.hasGridButton} 
+                                        maxHeigh={config.searchResultProportion}
+                                    />
+                                </Col>
+                                <Col md={6} sm={6} xs={6} lg={6} xl={6} className='px-0'>
+                                    <ObjectTypeList
+                                        getSearchKey={this.props.getSearchKey}  
+                                        clearSearchResult={this.props.clearSearchResult}   
+                                        hasGridButton={this.props.hasGridButton} 
+                                        objectTypeList={this.state.objectTypeList}
+                                        maxHeigh={config.searchResultProportion}
+                                    />                            
+                                </Col>
+                            </Row>
+                        </div>
+                    </div>
+                </BrowserView>
+                <TabletView>
+                    <div id='searchContainer' className="py-1" onTouchMove={this.handleTouchMove}>
+                        <Row id='searchBar' className='d-flex justify-content-center align-items-center pb-2'>
+                            <Searchbar 
+                                placeholder={this.state.searchKey}
+                                getSearchKey={this.props.getSearchKey}
+                                clearSearchResult={this.props.clearSearchResult}    
+                            />
+                        </Row>
+                        <div id='searchOption' className="pt-2">
+                            <Row>
+                                <Col className='px-0'>
+                                    <ObjectTypeListForTablet
+                                        getSearchKey={this.props.getSearchKey}  
+                                        clearSearchResult={this.props.clearSearchResult}   
+                                        hasGridButton={this.props.hasGridButton} 
+                                        objectTypeList={this.state.objectTypeList}
+                                    />                            
+                                </Col>
+                            </Row>
+                        </div>
+                    </div>
+                </TabletView>
+                <MobileOnlyView>
+                    <div id='searchContainer' className="py-1" onTouchMove={this.handleTouchMove}>
+                        <Row id='searchBar' className='d-flex justify-content-center align-items-center pb-2'>
+                            <Searchbar 
+                                placeholder={this.state.searchKey}
+                                getSearchKey={this.props.getSearchKey}
+                                clearSearchResult={this.props.clearSearchResult}
+                                handleShowResultListForMobile={this.props.handleShowResultListForMobile}    
+                            />
+                        </Row>
+                        <div id='searchOption' className="pt-2" style={style.textForMobile}>
+                            <Row>
+                                <Col className='px-0'>
+                                    <ObjectTypeListForTablet
+                                        getSearchKey={this.props.getSearchKey}  
+                                        clearSearchResult={this.props.clearSearchResult}   
+                                        hasGridButton={this.props.hasGridButton} 
+                                        objectTypeList={this.state.objectTypeList}
+                                        handleShowResultListForMobile={this.props.handleShowResultListForMobile}   
+                                    />                            
+                                </Col>
+                            </Row>
+                        </div>
+                    </div>
+                </MobileOnlyView>
             </div>
         );
     }

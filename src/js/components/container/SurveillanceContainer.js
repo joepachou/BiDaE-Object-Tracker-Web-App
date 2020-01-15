@@ -10,9 +10,9 @@ import PdfDownloadForm from "./PdfDownloadForm"
 import config from "../../config";
 import AccessControl from "../presentational/AccessControl"
 import { AppContext } from "../../context/AppContext";
-import { BrowserView, TabletView } from "react-device-detect";
+import { BrowserView, TabletView, MobileOnlyView } from "react-device-detect";
 import QRcodeContainer from './QRcode'
-import InfoPromptForTablet from '../presentational/InfoPromptForTablet'
+import InfoPrompt from '../presentational/InfoPrompt'
 import PdfDownloadFormForTablet from './PdfDownloadFormForTablet'
 class SurveillanceContainer extends React.Component {
 
@@ -189,6 +189,11 @@ class SurveillanceContainer extends React.Component {
             titleForTablet: {
                 color: "grey",
                 fontSize: "1rem",
+            },
+            mapForMobile: {
+                width: '90vw',
+                height: '30vh',
+                border: 'solid'
             },
             // surveillanceContainer: {
             //     height: "100vh"
@@ -414,11 +419,11 @@ class SurveillanceContainer extends React.Component {
                                         searchKey={this.props.searchKey}
                                         isSearched = {this.props.isSearched}
                                     /> 
-                                    <InfoPromptForTablet 
-                                        data={this.props.data}
+                                    <InfoPrompt
                                         searchKey={this.props.searchKey}
-                                        title={locale.texts.FOUND}
-                                        searchResultLength={this.props.searchResult.length} 
+                                        searchResult={this.props.searchResult}
+                                        title={locale.texts.FOUND} 
+                                        title2={locale.texts.NOT_FOUND} 
                                     />
                                 </div>
                                 <div style={style.titleForTablet} className="mt-auto">
@@ -607,6 +612,27 @@ class SurveillanceContainer extends React.Component {
                 </div>
             </div>
             </TabletView>
+            <MobileOnlyView>
+                <div style={style.mapForMobile}>
+                    <Map
+                        pathMacAddress={this.props.pathMacAddress}
+                        hasSearchKey={hasSearchKey}
+                        colorPanel={this.props.colorPanel}
+                        proccessedTrackingData={this.props.proccessedTrackingData}
+                        lbeaconPosition={this.props.lbeaconPosition}
+                        geoFenceConfig={this.props.geoFenceConfig.filter(item => parseInt(item.unique_key) == areaId)}
+                        getSearchKey={this.props.getSearchKey}
+                        areaId={areaId}
+                        isOpenFence={this.state.isOpenFence}
+                        searchedObjectType={this.state.showObjects}
+                        mapConfig={config.mapConfig}
+                        pathData={this.state.pathData}
+                        handleClosePath={this.props.handleClosePath}
+                        handleShowPath={this.props.handleShowPath}
+                        showPath={this.props.showPath}
+                    />
+                </div>
+            </MobileOnlyView>
             </div>
         )
     }
