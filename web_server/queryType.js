@@ -542,7 +542,6 @@ function query_addObject (formOption) {
 			$4,
 			$5,
 			$6,
-			'normal',
 			0
 		);
 	`;
