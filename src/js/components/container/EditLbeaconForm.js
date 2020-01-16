@@ -129,11 +129,11 @@ class EditLbeaconForm extends React.Component {
                 <Modal.Body>
                     <Formik
                         initialValues = {{
-                            description: this.props.selectedObjectData.description,
+                            description: this.props.selectedObjectData.description || undefined,
                             danger_area: danger_area 
                                 ?   danger_area.toString()
                                 :   '0',
-                            room,
+                            room : undefined,
                         }}
 
                         validationSchema = {

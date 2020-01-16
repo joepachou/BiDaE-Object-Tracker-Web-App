@@ -205,6 +205,10 @@ const tw = {
     MAC_DO_NOT_MATCH:"不符合當前Mac",
     THE_MAC_ADDRESS_IS_ALREADY_USED_OR_FORMAT_IS_NOT_CORRECT: 'Mac Address已被使用或形式錯誤',
     ASSET_CONTROL_NUMBER_IS_NOT_FOUND: "未有符合的財產編號",
+    INCORRECT:"帳號錯誤",
+    PASSWORD_INCORRECT:"密碼錯誤",
+    AUTHORITY_NOT_ENOUGH:"權限不足",
+    ACCOUNT_NOT_BELONG_THIS_AREA:"該帳號不屬於此區域",
 
     /** Place Holder */
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "請輸入或掃描mac address",
@@ -333,7 +337,11 @@ const tw = {
     VETERAN_HOME_THIRD_FLOOR: "榮民之家3樓",
     NTUH_EMERGENCY_ROOM: "急診室",
 
-    
+    /** 手機版本按鈕 */
+    SHOW_MAP : "顯示地圖",
+    HIDE_MAP : "隱藏地圖",
+    CLEAR_RESULT: "重新搜尋",
+
     DEVICE_FOUND: function (length){
         return "發現"+length.toString()+"個儀器"
     },

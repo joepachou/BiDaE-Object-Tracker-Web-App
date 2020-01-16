@@ -191,20 +191,32 @@ class EditObjectForm extends React.Component {
                                     /** check if there are duplicated mac address in object table */
                                     .test(
                                         'mac_address',
-                                        locale.texts.THE_MAC_ADDRESS_IS_ALREADY_USED_OR_FORMAT_IS_NOT_CORRECT,
+                                        locale.texts.THE_MAC_ADDRESS_FORM_IS_WRONG,
                                         value => {
                                             if (value == undefined) return false
-
                                             if (this.props.selectedObjectData.length != 0) {
                                                 return true
                                             } else {
-
                                                 var pattern = new RegExp("^[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}$");
                                                 if(value.match(pattern)) {
                                                     return (!objectTable.map(item => item.mac_address).includes(value.match(/.{1,2}/g).join(':')))
                                                 } 
                                                 return false
                                             }
+                                            
+                                        }
+                                        
+                                    )
+                                    .test(
+                                        'mac_address',
+                                        locale.texts.THE_MAC_ADDRESS_IS_ALREADY_USED ,
+                                        value =>{
+                                            let repeatFlag = false
+                                            this.props.data.map(item => {
+                                               item.mac_address == value ?  repeatFlag = true : null
+                                            })
+                                            return !repeatFlag
+                                           
                                         }
                                     ),
 
@@ -254,13 +266,13 @@ class EditObjectForm extends React.Component {
                             <Form className="text-capitalize">
                                 <div className="form-group">
                                     <label htmlFor="name">{locale.texts.NAME}*</label>
-                                    <Field name="name" type="text" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} placeholder=''/>
+                                    <Field  name="name" type="text" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} placeholder=''/>
                                     <ErrorMessage name="name" component="div" className="invalid-feedback" />
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="type">{locale.texts.TYPE}*</label>
-                                    <Field name="type" type="text" className={'form-control' + (errors.type && touched.type ? ' is-invalid' : '')} placeholder=''/>
-                                    <ErrorMessage name="type" component="div" className="invalid-feedback" />
+                                    <Field  name="type" type="text" className={'form-control' + (errors.type && touched.type ? ' is-invalid' : '')} placeholder=''/>
+                                    <ErrorMessage name="tyspe" component="div" className="invalid-feedback" />
                                 </div>
 
 

@@ -18,6 +18,7 @@ import { toast } from 'react-toastify';
 import DownloadPdfRequestForm from '../container/DownloadPdfRequestForm'
 import moment from 'moment'
 import config from '../../config'
+import { TabletView, MobileOnlyView } from 'react-device-detect';
 
 class SearchResultListForTablet extends React.Component {
 
@@ -276,98 +277,100 @@ class SearchResultListForTablet extends React.Component {
 
         return(
             <div>
-                <Row className='d-flex justify-content-center' style={style.titleText}>
-                    <h4 className='text-capitalize'>
-                        {title}
-                    </h4>
-                </Row>
-                {/* <Row className='w-100 searchResultForMobile'>
-                    <InfoPrompt data={{[devicePlural]: searchResult.length}} title={title}/>
-                </Row> */}
-                <Row>
-                   
-                    {searchResult.length === 0 
-                        ?   <Col className='d-flex justify-content-center font-weight-lighter' style={style.noResultDiv}>
-                                <div className='searchResultForDestop'>{locale.texts.NO_RESULT}</div>
-                            </Col> 
-                        :   
-                            <Col className="searchResultListGroupForTablet d-flex justify-content-center">
-                                <AccessControl
-                                    permission={'form:edit'}
-                                    renderNoAccess={() => (
+                <TabletView>
+                    <Row className='d-flex justify-content-center' style={style.titleText}>
+                        <h4 className='text-capitalize'>
+                            {title}
+                        </h4>
+                    </Row>
+                    {/* <Row className='w-100 searchResultForMobile'>
+                        <InfoPrompt data={{[devicePlural]: searchResult.length}} title={title}/>
+                    </Row> */}
+                    <Row>
+                    
+                        {searchResult.length === 0 
+                            ?   <Col className='d-flex justify-content-center font-weight-lighter' style={style.noResultDiv}>
+                                    <div className='searchResultForDestop'>{locale.texts.NO_RESULT}</div>
+                                </Col> 
+                            :   
+                                <Col className="searchResultListGroupForTablet d-flex justify-content-center">
+                                    <AccessControl
+                                        permission={'form:edit'}
+                                        renderNoAccess={() => (
+                                            <SearchResultListGroup 
+                                                data={this.props.searchResult}
+                                                selection={this.state.selection}
+                                            />
+                                        )
+                                        }
+                                    >
                                         <SearchResultListGroup 
-                                            data={this.props.searchResult}
+                                            data={searchResult}
+                                            handleSelectResultItem={searchResult[0].object_type == 0 
+                                                ? this.handleSelectResultItem
+                                                : null
+                                            }
                                             selection={this.state.selection}
+                                            action={searchResult[0].object_type == 0
+                                                ? true
+                                                : false
+                                            }
                                         />
-                                    )
-                                    }
-                                >
-                                    <SearchResultListGroup 
-                                        data={searchResult}
-                                        handleSelectResultItem={searchResult[0].object_type == 0 
-                                            ? this.handleSelectResultItem
-                                            : null
-                                        }
-                                        selection={this.state.selection}
-                                        action={searchResult[0].object_type == 0
-                                            ? true
-                                            : false
-                                        }
-                                    />
 
-                                </AccessControl>
-                            </Col>
-                    }
-                </Row>
-                <Row className='d-flex justify-content-center mt-3'>
-                    <Button
-                        variant="link"
-                        className="text-capitalize"
-                        onClick={this.handleToggleNotFound}
-                        size="lg"
-                        disabled={false}
-                    >
-                        {/* {(this.props.searchKey == "my patients" || this.props.searchKey == "all patients") 
-                            ?
-                            this.state.showNotFoundResult
-                            ? locale.texts.SHOW_PATIENTS_FOUND
-                            :locale.texts.SHOW_PATIENTS_NOT_FOUND
-                            :
-                            this.state.showNotFoundResult 
-                            ? locale.texts.SHOW_DEVICES_FOUND
-                            : locale.texts.SHOW_DEVICES_NOT_FOUND
-                        } */}
-                        {this.state.showNotFoundResult
-                            ? locale.texts.SHOW_SEARCH_RESULTS_FOUND
-                            : locale.texts.SHOW_SEARCH_RESULTS_NOT_FOUND
+                                    </AccessControl>
+                                </Col>
                         }
+                    </Row>
+                    <Row className='d-flex justify-content-center mt-3'>
+                        <Button
+                            variant="link"
+                            className="text-capitalize"
+                            onClick={this.handleToggleNotFound}
+                            size="lg"
+                            disabled={false}
+                        >
+                            {/* {(this.props.searchKey == "my patients" || this.props.searchKey == "all patients") 
+                                ?
+                                this.state.showNotFoundResult
+                                ? locale.texts.SHOW_PATIENTS_FOUND
+                                :locale.texts.SHOW_PATIENTS_NOT_FOUND
+                                :
+                                this.state.showNotFoundResult 
+                                ? locale.texts.SHOW_DEVICES_FOUND
+                                : locale.texts.SHOW_DEVICES_NOT_FOUND
+                            } */}
+                            {this.state.showNotFoundResult
+                                ? locale.texts.SHOW_SEARCH_RESULTS_FOUND
+                                : locale.texts.SHOW_SEARCH_RESULTS_NOT_FOUND
+                            }
 
-                    </Button>
-                </Row>
-                <ChangeStatusForm 
-                    show={this.state.showEditObjectForm} 
-                    title={'report device status'} 
-                    selectedObjectData={this.state.selectedObjectData} 
-                    searchKey={searchKey}
-                    handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose}
-                    handleChangeObjectStatusFormSubmit={this.handleChangeObjectStatusFormSubmit}
-                    handleAdditionalButton={this.handleAdditionalButton}
-                    showAddDevice={this.state.showAddDevice}
-                    handleRemoveButton={this.handleRemoveButton}
-                />
-                <ConfirmForm 
-                    show={this.state.showConfirmForm}  
-                    title={'thank you for reporting'}
-                    selectedObjectData={this.state.editedObjectPackage} 
-                    handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose} 
-                    handleConfirmFormSubmit={this.handleConfirmFormSubmit}
-                    showDownloadPdfRequest={this.state.showDownloadPdfRequest}
-                />
-                <DownloadPdfRequestForm
-                    show={this.state.showDownloadPdfRequest} 
-                    pdfPath={this.state.pdfPath}
-                    close={this.handleFormClose}
-                />
+                        </Button>
+                    </Row>
+                    <ChangeStatusForm 
+                        show={this.state.showEditObjectForm} 
+                        title={'report device status'} 
+                        selectedObjectData={this.state.selectedObjectData} 
+                        searchKey={searchKey}
+                        handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose}
+                        handleChangeObjectStatusFormSubmit={this.handleChangeObjectStatusFormSubmit}
+                        handleAdditionalButton={this.handleAdditionalButton}
+                        showAddDevice={this.state.showAddDevice}
+                        handleRemoveButton={this.handleRemoveButton}
+                    />
+                    <ConfirmForm 
+                        show={this.state.showConfirmForm}  
+                        title={'thank you for reporting'}
+                        selectedObjectData={this.state.editedObjectPackage} 
+                        handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose} 
+                        handleConfirmFormSubmit={this.handleConfirmFormSubmit}
+                        showDownloadPdfRequest={this.state.showDownloadPdfRequest}
+                    />
+                    <DownloadPdfRequestForm
+                        show={this.state.showDownloadPdfRequest} 
+                        pdfPath={this.state.pdfPath}
+                        close={this.handleFormClose}
+                    />
+                </TabletView>
             </div>
         )
     }

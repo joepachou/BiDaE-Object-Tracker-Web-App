@@ -630,9 +630,9 @@ const query_addImport = (formOption) => {
 const query_editObjectPackage = (formOption,username, record_id,time) => {
 
 	let item = formOption[0]
-
-	// console.log(time)
-	// console.log('O.O')
+	console.log('---------------------------')
+	console.log(time)
+	console.log('---------------------------')
 
 	let text = `
 
@@ -882,6 +882,27 @@ const query_getRoleNameList = () => {
 	`
 	return query
 }
+
+
+const query_getRoleFromUserID= (username) => {
+
+	let text = `
+	SELECT 
+		role_id 
+	FROM user_roles WHERE user_id = $1;
+`
+
+	const values = [username];
+
+	const query = {
+	    text,
+	   	values
+	};
+
+	return query;
+}
+
+
 
 const query_deleteUser = (username) => {
 	
@@ -1187,7 +1208,18 @@ const query_confirmValidation = (username) => {
 		SELECT 
 			user_table.name, 
 			user_table.password,
-			roles.name as role
+			roles.name as role,
+			user_roles.role_id as role_id,
+			array (
+				SELECT area_id
+				FROM user_areas
+				WHERE user_areas.user_id = user_table.id
+			) as areas_id,
+			(
+				SELECT id
+				FROM user_table
+				WHERE user_table.name = $1
+			) as user_id
 
 		FROM user_table
 
@@ -1196,7 +1228,10 @@ const query_confirmValidation = (username) => {
 
 		LEFT JOIN roles
 		ON user_roles.role_id = roles.id
-
+		
+		LEFT JOIN user_areas
+		ON user_areas.user_id = user_table.id
+		
 		WHERE user_table.name = $1;
 	`
 
@@ -1397,6 +1432,54 @@ function query_getBackendSearchQueue(){
 	return query
 }
 
+
+const query_addBulkObject = (jsonObj) => {
+	let text =  `
+		INSERT INTO import_table (
+			name,
+			type,
+			asset_control_number,
+			bindflag,
+		)
+		VALUES ${jsonObj.map((item, index) => {
+			return `(
+				'${item.name}',
+				'${item.type}',
+				'c2:00:00:00:00:0${index}',
+				'${item.asset_control_number}',
+				now(),
+				0,
+				'normal'
+			)`
+		})}
+	`
+	return text	
+}
+
+const query_setSearchRssi = (rssi) => {
+	let text = `
+		UPDATE search_criteria
+		SET search_rssi = $1
+	`
+	let values = [
+		rssi
+	]
+	let query = {
+		text,
+		values
+	}
+	return query
+}
+
+const query_getSearchRssi = () =>{
+	let text = `
+		SELECT search_rssi
+		FROM search_criteria
+	`
+	return text
+}
+
+
 module.exports = {
 	query_getTrackingData,
 	query_getTrackingTableByMacAddress,
@@ -1427,6 +1510,7 @@ module.exports = {
 	query_getUserRole,
 	query_getRoleNameList,
 	query_deleteUser,
+	query_getRoleFromUserID,
 	query_setUserRole,
 	query_getEditObjectRecord,
 	query_deleteEditObjectRecord,

@@ -146,6 +146,8 @@ app.post('/test/getRoleNameList', db.getRoleNameList)
 
 app.post('/test/deleteUser', db.deleteUser)
 
+app.post('/test/getRoleFromUserID', db.getRoleFromUserID)
+
 app.post('/test/setUserRole', db.setUserRole)
 
 app.post('/test/getEditObjectRecord', db.getEditObjectRecord)

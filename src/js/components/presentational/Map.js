@@ -12,7 +12,10 @@ import polylineDecorator from 'leaflet-polylinedecorator'
 import {
     BrowserView,
     TabletView,
-    MobileOnlyView
+    MobileOnlyView,
+    isMobileOnly,
+    isBrowser,
+    isTablet
 } from 'react-device-detect'
 class Map extends React.Component {
     
@@ -78,9 +81,16 @@ class Map extends React.Component {
             areaModules,
             areaOptions,
             defaultAreaId,
-            mapOptions
+            mapOptions, 
         } = this.props.mapConfig
 
+        if(isBrowser) {
+            mapOptions.minZoom = -7
+        }else if(isTablet) {
+            mapOptions.minZoom = -7
+        }else{
+            mapOptions.minZoom = -8
+        }
         /** Error handler of the user's auth area does not include the group of sites */
         let areaOption = areaOptions[areaId] || areaOptions[defaultAreaId] || Object.values(areaOptions)[0]
 
@@ -231,9 +241,17 @@ class Map extends React.Component {
         this.resizeFactor = Math.pow(2, (this.zoomDiff));
         this.resizeConst = Math.floor(this.zoomDiff * 30);
         this.scalableErrorCircleRadius = 200 * this.resizeFactor;
-        this.scalableIconSize = parseInt(this.props.mapConfig.iconOptions.iconSize) + this.resizeConst
-        // this.scalableIconAnchor = parseInt(this.props.mapConfig.iconOptions.iconSize) + this.resizeConst
-        this.scalableNumberSize = Math.floor(this.scalableIconSize / 3);
+        if(isBrowser)
+            this.scalableIconSize = parseInt(this.props.mapConfig.iconOptions.iconSize) + this.resizeConst
+        else if(isTablet)
+            this.scalableIconSize = parseInt(this.props.mapConfig.iconOptions.iconSizeForTablet) + this.resizeConst
+        else 
+            this.scalableIconSize = parseInt(this.props.mapConfig.iconOptions.iconSizeForMobile) + this.resizeConst
+            // this.scalableIconAnchor = parseInt(this.props.mapConfig.iconOptions.iconSize) + this.resizeConst
+        //console.log(this.props.mapConfig.iconOptions.iconSizeForMobile)
+        //console.log(this.scalableIconSize)
+        //console.log(this.props.mapConfig.iconOptions.iconSizeForTablet)
+            this.scalableNumberSize = Math.floor(this.scalableIconSize / 3);
     }
 
     /** Create the lbeacon and invisibleCircle markers */
@@ -369,10 +387,11 @@ class Map extends React.Component {
         const iconSize = [this.scalableIconSize, this.scalableIconSize];
         const numberSize = this.scalableNumberSize;
         let counter = 0;
-
+        //console.log(this.props.proccessedTrackingData)
         this.filterTrackingData(_.cloneDeep(this.props.proccessedTrackingData))
         .map(item => {
-            // console.log(item)
+            //console.log(item)
+            //console.log('good')
             let position = this.macAddressToCoordinate(item.mac_address,item.currentPosition);
             
             /** Set the Marker's popup 
@@ -444,16 +463,25 @@ class Map extends React.Component {
 
     /** Filter out undesired tracking data */
     filterTrackingData = (proccessedTrackingData) => {
-        //console.log("filterTrackingData")
-        return proccessedTrackingData.filter(item => {
-            return (
-                item.found && 
-                item.isMatchedObject && 
-                (   this.props.searchedObjectType.includes(parseInt(item.object_type)) ||
-                    this.props.searchedObjectType.includes(parseInt(item.searchedType))
+        //console.log(proccessedTrackingData)
+        if(isMobileOnly){
+            return proccessedTrackingData.filter(item => {
+                return (
+                    item.found && 
+                    item.isMatchedObject
                 )
-            )
-        })
+            })
+        }else{
+            return proccessedTrackingData.filter(item => {
+                return (
+                    item.found && 
+                    item.isMatchedObject && 
+                    (   this.props.searchedObjectType.includes(parseInt(item.object_type)) ||
+                        this.props.searchedObjectType.includes(parseInt(item.searchedType))
+                    )
+                )
+            })
+        }
     }
 
     collectObjectsByLatLng = (lbPosition) => {
@@ -498,7 +526,7 @@ class Map extends React.Component {
                     <div id='mapid' style={{height:'40vh'}}></div>
                 </TabletView>
                 <MobileOnlyView>
-                    <div id='mapid' style={{height: '30vh'}}></div>
+                    <div id='mapid' style={{height: '28vh'}}></div>
                 </MobileOnlyView>
             </div>
         )

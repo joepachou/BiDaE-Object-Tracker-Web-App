@@ -21,6 +21,10 @@ import {
     MobileOnlyView,
     TabletView
 } from 'react-device-detect'
+import {
+    Button,
+    ButtonGroup
+} from 'react-bootstrap'
 
 const {
     ALL_DEVICES,
@@ -55,7 +59,8 @@ class MainContainer extends React.Component{
         markerClickPackage: {},
         showPath: false,
         pathMacAddress:'',
-        display: true
+        display: true,
+        showMobileMap: true
     }
 
     componentDidMount = () => {
@@ -498,6 +503,18 @@ class MainContainer extends React.Component{
         })
     }
     
+    mapButtonHandler = () => {
+        this.setState({
+            showMobileMap: !this.state.showMobileMap
+        })
+    }
+
+    clearResultHandler = () => {
+        this.setState({
+            display: true
+        })
+    }
+
     render(){
 
         const { 
@@ -571,7 +588,6 @@ class MainContainer extends React.Component{
             auth,
             stateReducer,
         } = this.context
-
         let [{areaId}] = stateReducer
         let deviceNum = this.state.trackingData.filter(item => item.found).length
         let devicePlural = deviceNum === 1 ? locale.texts.DEVICE : locale.texts.DEVICES
@@ -666,10 +682,11 @@ class MainContainer extends React.Component{
 
                                 {/** includeing search result */}                    
                                 <div id="searchResult" className="d-flex" style={style.searchResultList}>
-                                    <SearchResultListForTablet
+                                    <SearchResultList
                                         searchResult={this.state.searchResult} 
                                         searchKey={this.state.searchKey}
                                         highlightSearchPanel={this.highlightSearchPanel}
+                                        handleShowPath={this.handleShowPath}
                                     />
                                 </div>
                             </div>
@@ -693,45 +710,64 @@ class MainContainer extends React.Component{
                         {/** left area of row */}
                             {
                                 this.state.display ?
-                                <div id='searchPanel' className="h-100" style={style.searchPanelForMobile}>
-                                    <SearchContainer 
-                                        hasSearchKey={this.state.hasSearchKey}
-                                        clearSearchResult={this.state.clearSearchResult}
-                                        hasGridButton={this.state.hasGridButton}
-                                        auth={auth}
-                                        getSearchKey={this.getSearchKey}
-                                        handleShowResultListForMobile={this.handleShowResultListForMobile}
-                                    />
-                                </div>
-                                :
-                                    <div className='h-100 w-100 d-flex justify-content-center flex-row'>
-                                        <div className='d-flex flex-column'>
-                                        <SurveillanceContainer
-                                            showPath={this.state.showPath}
-                                            pathMacAddress={this.state.pathMacAddress} 
-                                            proccessedTrackingData={proccessedTrackingData.length === 0 ? trackingData : proccessedTrackingData}
-                                            hasSearchKey={hasSearchKey}
-                                            colorPanel={colorPanel}
-                                            searchResult={this.state.searchResult}
-                                            handleClearButton={this.handleClearButton}
-                                            getSearchKey={this.getSearchKey}
-                                            clearColorPanel={clearColorPanel}
-                                            setFence={this.setFence}
+
+                                    <div id='searchPanel' className="h-100" style={style.searchPanelForMobile}>
+                                        <SearchContainer 
+                                            hasSearchKey={this.state.hasSearchKey}
+                                            clearSearchResult={this.state.clearSearchResult}
+                                            hasGridButton={this.state.hasGridButton}
                                             auth={auth}
-                                            lbeaconPosition={this.state.lbeaconPosition}
-                                            geoFenceConfig={this.state.geoFenceConfig.filter(item => parseInt(item.unique_key) == areaId)}
-                                            clearAlerts={this.clearAlerts}
-                                            searchKey={this.state.searchKey}
-                                            authenticated={this.state.authenticated}
-                                            handleClosePath={this.handleClosePath}
-                                            handleShowPath={this.handleShowPath}
+                                            getSearchKey={this.getSearchKey}
+                                            handleShowResultListForMobile={this.handleShowResultListForMobile}
                                         />
-                                        <SearchResultListForTablet
-                                            searchResult={this.state.searchResult} 
-                                            searchKey={this.state.searchKey}
-                                            highlightSearchPanel={this.highlightSearchPanel}
-                                        />
-                                        </div>
+                                    </div>
+                                :
+                                    <div style={{width:'90vw'}}>
+                                        {
+                                            this.state.showMobileMap ?
+                                                <div>
+                                                    <SurveillanceContainer
+                                                        showPath={this.state.showPath}
+                                                        pathMacAddress={this.state.pathMacAddress} 
+                                                        proccessedTrackingData={proccessedTrackingData.length === 0 ? trackingData : proccessedTrackingData}
+                                                        hasSearchKey={hasSearchKey}
+                                                        colorPanel={colorPanel}
+                                                        searchResult={this.state.searchResult}
+                                                        handleClearButton={this.handleClearButton}
+                                                        getSearchKey={this.getSearchKey}
+                                                        clearColorPanel={clearColorPanel}
+                                                        changeLocationAccuracy={this.changeLocationAccuracy}
+                                                        setFence={this.setFence}
+                                                        auth={auth}
+                                                        lbeaconPosition={this.state.lbeaconPosition}
+                                                        geoFenceConfig={this.state.geoFenceConfig.filter(item => parseInt(item.unique_key) == areaId)}
+                                                        clearAlerts={this.clearAlerts}
+                                                        searchKey={this.state.searchKey}
+                                                        authenticated={this.state.authenticated}
+                                                        handleClosePath={this.handleClosePath}
+                                                        handleShowPath={this.handleShowPath}
+                                                    />
+                                                </div>
+                                            :
+                                                ''
+                                        }
+                                            <div className='justify-content-center'>
+                                                <SearchResultList
+                                                    searchResult={this.state.searchResult} 
+                                                    searchKey={this.state.searchKey}
+                                                    highlightSearchPanel={this.highlightSearchPanel}
+                                                    handleShowPath={this.handleShowPath}
+                                                    showMobileMap={this.state.showMobileMap}
+                                                />
+                                            </div>
+                                    <ButtonGroup>
+                                        {
+                                            this.state.showMobileMap 
+                                            ?   <Button variant='outline-primary' onClick={this.mapButtonHandler}>{locale.texts.HIDE_MAP}</Button>
+                                            :   <Button variant='outline-primary' onClick={this.mapButtonHandler}>{locale.texts.SHOW_MAP}</Button>
+                                        }
+                                        <Button variant='outline-primary' onClick={this.clearResultHandler}>{locale.texts.CLEAR_RESULT}</Button>
+                                    </ButtonGroup>
                                     </div>
                             }
                     </div>
