@@ -10,7 +10,7 @@ import PdfDownloadForm from "./PdfDownloadForm"
 import config from "../../config";
 import AccessControl from "../presentational/AccessControl"
 import { AppContext } from "../../context/AppContext";
-import { BrowserView, TabletView, MobileOnlyView } from "react-device-detect";
+import { BrowserView, TabletView, MobileOnlyView, isBrowser, isTablet, isMobileOnly } from "react-device-detect";
 import QRcodeContainer from './QRcode'
 import InfoPrompt from '../presentational/InfoPrompt'
 import PdfDownloadFormForTablet from './PdfDownloadFormForTablet'
@@ -193,7 +193,8 @@ class SurveillanceContainer extends React.Component {
             mapForMobile: {
                 width: '90vw',
                 height: '30vh',
-                border: 'solid'
+                border: "solid 2px rgba(227, 222, 222, 0.619)",
+                padding: "5px",
             },
             // surveillanceContainer: {
             //     height: "100vh"

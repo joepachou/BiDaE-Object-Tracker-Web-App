@@ -328,6 +328,12 @@ const en =  {
     VETERAN_HOME_THIRD_FLOOR: "veteran home floor 3",
     NTUH_EMERGENCY_ROOM: "emergency room",
 
+    /** Mobile Button */
+
+    SHOW_MAP : "Show the Map",
+    HIDE_MAP : "Hide the Map",
+    CLEAR_RESULT: "Clear the search result",
+
     DEVICE_FOUND: function (length){
         return length.toString()+" devices are found"
     },

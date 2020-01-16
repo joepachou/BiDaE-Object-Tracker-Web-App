@@ -333,7 +333,11 @@ const tw = {
     VETERAN_HOME_THIRD_FLOOR: "榮民之家3樓",
     NTUH_EMERGENCY_ROOM: "急診室",
 
-    
+    /** 手機版本按鈕 */
+    SHOW_MAP : "顯示地圖",
+    HIDE_MAP : "隱藏地圖",
+    CLEAR_RESULT: "重新搜尋",
+
     DEVICE_FOUND: function (length){
         return "發現"+length.toString()+"個儀器"
     },
