@@ -25,7 +25,10 @@ class LBeaconPicker extends React.Component {
 
     getBeacon = () => {
         if(this.props.area){
-            axios.post(dataSrc.getLbeaconTable, {}).then(res => {
+            let { locale } = this.context
+            axios.post(dataSrc.getLbeaconTable, {
+                locale: locale.abbr
+            }).then(res => {
                 let beacons = res.data.rows.filter(beacon => {
                     return parseInt(beacon.uuid.slice(0, 4)) == parseInt(this.props.area)
                 })

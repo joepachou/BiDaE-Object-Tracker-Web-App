@@ -246,7 +246,7 @@ const cleanBinding = (request, response) => {
 
 const getLbeaconTable = (request, response) => {
 
-    let { locale } = request.body || 'en'
+    let { locale } = request.body 
     pool.query(queryType.query_getLbeaconTable)
         .then(res => {
             console.log('Get lbeaconTable data')
