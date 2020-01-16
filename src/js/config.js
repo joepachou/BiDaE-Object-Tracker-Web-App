@@ -668,10 +668,10 @@ const config = {
             2: process.env.LOCATION_ACCURACY_HIGH
         },
 
-        locationAccuracyMapToDB: {
-            0: "low_rssi",
-            1: "med_rssi",
-            2: "high_rssi",
+        locationAccuracyMap: {
+            '-100': "low",
+            '-70': "med",
+            '-50': "high",
         },
 
         /* Set the Marker dispersity that can be any positive number */
@@ -940,10 +940,10 @@ const config = {
             2: process.env.LOCATION_ACCURACY_HIGH
         },
 
-        locationAccuracyMapToDB: {
-            0: "low_rssi",
-            1: "med_rssi",
-            2: "high_rssi",
+        locationAccuracyMap: {
+            '-100': "low",
+            '-70': "med",
+            '-50': "high",
         },
 
         /* Set the Marker dispersity that can be any positive number */
