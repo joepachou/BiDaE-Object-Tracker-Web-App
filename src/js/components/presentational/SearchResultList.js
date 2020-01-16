@@ -3,20 +3,16 @@ import {
     Button,
     Col, 
     Row, 
-    Image,
 } from 'react-bootstrap'
 import ChangeStatusForm from '../container/ChangeStatusForm';
 import ConfirmForm from '../container/ConfirmForm';
 import dataSrc from '../../dataSrc';
 import _ from 'lodash';
 import axios from 'axios';
-import InfoPrompt from './InfoPrompt';
 import AccessControl from './AccessControl';
 import SearchResultListGroup from '../presentational/SearchResultListGroup'
 import { AppContext } from '../../context/AppContext';
-import { toast } from 'react-toastify';
 import DownloadPdfRequestForm from '../container/DownloadPdfRequestForm'
-import moment from 'moment'
 import config from '../../config'
 
 class SearchResult extends React.Component {
@@ -114,14 +110,6 @@ class SearchResult extends React.Component {
     }
 
     handleChangeObjectStatusFormSubmit = values => {
-        // let selectedObjectData = _.cloneDeep(this.state.selectedObjectData)
-        // let editedObjectPackage = {
-        //     status: values.radioGroup.toLowerCase(),
-        //     transferred_location: values.select ? values.select: '',
-        //     notes: values.textarea,
-        //     package: [...selectedObjectData.map(item => item.mac_address)]
-        // }
-        // console.log(editedObjectPackage)
         let editedObjectPackage = _.cloneDeep(this.state.selectedObjectData).map(item => {
             item.status = values.radioGroup.toLowerCase(),
             item.transferred_location = values.select ? values.select: '';
@@ -167,9 +155,6 @@ class SearchResult extends React.Component {
                 function() {
                     this.setState ({
                         showConfirmForm: shouldCreatePdf,
-                        // editedObjectPackage: [],
-                        // selection: [],
-                        // selectedObjectData: [],
                         showAddDevice: false,
                         showDownloadPdfRequest: shouldCreatePdf,
                         pdfPath: shouldCreatePdf && pdfPackage.path
@@ -263,19 +248,10 @@ class SearchResult extends React.Component {
             ? notFoundResult
             : foundResult
 
-        // let title = this.state.showNotFoundResult 
-        //     ? (this.props.searchKey === "my patients" || this.props.searchKey === "all patients")
-        //         ? locale.texts.PATIENTS_NOT_FOUND
-        //         : locale.texts.DEVICES_NOT_FOUND
-        //     : (this.props.searchKey === "my patients" || this.props.searchKey === "all patients")
-        //         ? locale.texts.PATIENTS_FOUND
-        //         : locale.texts.DEVICES_FOUND
-
         let title = this.state.showNotFoundResult 
-        ? locale.texts.SEARCH_RESULTS_NOT_FOUND
-        : locale.texts.SEARCH_RESULTS_FOUND
-        // ? '未找到的結果'
-        // : '找到的結果'
+            ? locale.texts.SEARCH_RESULTS_NOT_FOUND
+            : locale.texts.SEARCH_RESULTS_FOUND
+
 
         return(
             <div>
@@ -284,11 +260,7 @@ class SearchResult extends React.Component {
                         {title}
                     </h4>
                 </Row>
-                {/* <Row className='w-100 searchResultForMobile'>
-                    <InfoPrompt data={{[devicePlural]: searchResult.length}} title={title}/>
-                </Row> */}
                 <Row>
-                   
                     {searchResult.length === 0 
                         ?   <Col className='d-flex justify-content-center font-weight-lighter' style={style.noResultDiv}>
                                 <div className='searchResultForDestop'>{locale.texts.NO_RESULT}</div>
@@ -317,7 +289,6 @@ class SearchResult extends React.Component {
                                             : false
                                         }
                                     />
-
                                 </AccessControl>
                             </Col>
                     }
@@ -330,16 +301,6 @@ class SearchResult extends React.Component {
                         size="lg"
                         disabled={false}
                     >
-                        {/* {(this.props.searchKey == "my patients" || this.props.searchKey == "all patients") 
-                            ?
-                            this.state.showNotFoundResult
-                            ? locale.texts.SHOW_PATIENTS_FOUND
-                            :locale.texts.SHOW_PATIENTS_NOT_FOUND
-                            :
-                            this.state.showNotFoundResult 
-                            ? locale.texts.SHOW_DEVICES_FOUND
-                            : locale.texts.SHOW_DEVICES_NOT_FOUND
-                        } */}
                         {this.state.showNotFoundResult
                             ? locale.texts.SHOW_SEARCH_RESULTS_FOUND
                             : locale.texts.SHOW_SEARCH_RESULTS_NOT_FOUND
