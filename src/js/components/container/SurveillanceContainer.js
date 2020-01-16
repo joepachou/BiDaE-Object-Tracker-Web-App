@@ -182,14 +182,7 @@ class SurveillanceContainer extends React.Component {
                 height: '30vh',
                 border: 'solid'
             },
-            // surveillanceContainer: {
-            //     height: "100vh"
-            // },
-            navBlock: {
-                // height: "40%"
-            }, 
             mapBlock: {
-                // height: "60%",
                 border: "solid 2px rgba(227, 222, 222, 0.619)",
                 padding: "5px",
             },
@@ -201,7 +194,6 @@ class SurveillanceContainer extends React.Component {
             },
             qrBlock: {
                 width: '10vw',
-                //border: 'solid'
             },
             mapBlockForTablet: {
                 border: "solid 2px rgba(227, 222, 222, 0.619)",
@@ -320,23 +312,25 @@ class SurveillanceContainer extends React.Component {
                                 </Button>
                             </Nav.Item>
                         </AccessControl>
-                        <AccessControl
-                            permission={"user:cleanPath"}
-                            renderNoAccess={()=>null}
-                        >
-                            <Nav.Item className="mt-2">
-                                <Button
-                                    variant="primary"
-                                    className="mr-1 ml-2 text-capitalize" 
-                                    onClick={this.handleClickButton}
-                                    name="cleanPath"
-                                    active={(this.props.showPath)}
-                                    disabled={!(this.props.showPath)}
-                                >
-                                    {locale.texts.CLEAN_PATH}
-                                </Button>
-                            </Nav.Item>
-                        </AccessControl>
+                        {process.env.IS_TRACKING_PATH_ON == 1 && 
+                            <AccessControl
+                                permission={"user:cleanPath"}
+                                renderNoAccess={()=>null}
+                            >
+                                <Nav.Item className="mt-2">
+                                    <Button
+                                        variant="primary"
+                                        className="mr-1 ml-2 text-capitalize" 
+                                        onClick={this.handleClickButton}
+                                        name="cleanPath"
+                                        active={(this.props.showPath)}
+                                        disabled={!(this.props.showPath)}
+                                    >
+                                        {locale.texts.CLEAN_PATH}
+                                    </Button>
+                                </Nav.Item>
+                            </AccessControl>
+                        }
                         {this.props.geoFenceConfig.map((item, index) => {
                             return ( parseInt(item.unique_key) == areaId && 
                                 <Fragment
@@ -510,23 +504,25 @@ class SurveillanceContainer extends React.Component {
                                 </Button>
                             </Nav.Item>
                         </AccessControl>
-                        <AccessControl
-                            permission={"user:cleanPath"}
-                            renderNoAccess={()=>null}
-                        >
-                            <Nav.Item className="mt-2">
-                                <Button
-                                    variant="primary"
-                                    className="mr-1 ml-2 text-capitalize" 
-                                    onClick={this.handleClickButton}
-                                    name="cleanPath"
-                                    active={(this.props.showPath)}
-                                    disabled={!(this.props.showPath)}
-                                >
-                                    {locale.texts.CLEAN_PATH}
-                                </Button>
-                            </Nav.Item>
-                        </AccessControl>
+                        {process.env.IS_TRACKING_PATH_ON == 1 && 
+                            <AccessControl
+                                permission={"user:cleanPath"}
+                                renderNoAccess={()=>null}
+                            >
+                                <Nav.Item className="mt-2">
+                                    <Button
+                                        variant="primary"
+                                        className="mr-1 ml-2 text-capitalize" 
+                                        onClick={this.handleClickButton}
+                                        name="cleanPath"
+                                        active={(this.props.showPath)}
+                                        disabled={!(this.props.showPath)}
+                                    >
+                                        {locale.texts.CLEAN_PATH}
+                                    </Button>
+                                </Nav.Item>
+                            </AccessControl>
+                        }
                         {this.props.geoFenceConfig.map((item, index) => {
                             return ( parseInt(item.unique_key) == areaId && 
                                 <Fragment
