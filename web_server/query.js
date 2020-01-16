@@ -58,7 +58,9 @@ moment.updateLocale('zh-tw', {
 });
 
 const getTrackingData = (request, response) => {
-    const rssiThreshold = request.body.rssiThreshold || -65
+
+    const rssiThreshold = process.env.RSSI_THRESHOLD
+
     const locale = request.body.locale || 'en'
 
     /** The user's authenticated area id */
@@ -1143,28 +1145,6 @@ const addBulkObject = (req, res) => {
     })
 }
 
-const setSearchRssi = (request, response) => {
-    let { rssi } = request.body
-    pool.query(queryType.query_setSearchRssi(rssi))
-        .then(res => {
-            console.log('set search rssi success')
-        })
-        .catch(err => {
-            console.log(`set search rssi fail ${err}`)
-        })
-}
-
-const getSearchRssi = (request, response) => {
-    pool.query(queryType.query_getSearchRssi())
-        .then(res => {
-            console.log(`get search rssi success`)
-            response.status(200).json(res)
-        })
-        .catch(err => {
-            console.log(`get search rssi fail ${err}`)
-        })
-}
-
 module.exports = {
     getTrackingData,
     getObjectTable,
@@ -1214,11 +1194,9 @@ module.exports = {
     setGeoFenceConfig,
     setGeoFenceConfigRows,
     setMonitorConfig,
-    setSearchRssi,
     checkoutViolation,
     confirmValidation,
     backendSearch,
     getBackendSearchQueue,
     getTrackingTableByMacAddress,
-    getSearchRssi
 }

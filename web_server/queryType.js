@@ -1397,54 +1397,6 @@ function query_getBackendSearchQueue(){
 	return query
 }
 
-
-const query_addBulkObject = (jsonObj) => {
-	let text =  `
-		INSERT INTO import_table (
-			name,
-			type,
-			asset_control_number,
-			bindflag,
-		)
-		VALUES ${jsonObj.map((item, index) => {
-			return `(
-				'${item.name}',
-				'${item.type}',
-				'c2:00:00:00:00:0${index}',
-				'${item.asset_control_number}',
-				now(),
-				0,
-				'normal'
-			)`
-		})}
-	`
-	return text	
-}
-
-const query_setSearchRssi = (rssi) => {
-	let text = `
-		UPDATE search_criteria
-		SET search_rssi = $1
-	`
-	let values = [
-		rssi
-	]
-	let query = {
-		text,
-		values
-	}
-	return query
-}
-
-const query_getSearchRssi = () =>{
-	let text = `
-		SELECT search_rssi
-		FROM search_criteria
-	`
-	return text
-}
-
-
 module.exports = {
 	query_getTrackingData,
 	query_getTrackingTableByMacAddress,
@@ -1499,16 +1451,12 @@ module.exports = {
 	query_backendSearch_writeQueue,
 	query_deleteSameNameSearchQueue,
 	query_getBackendSearchQueue,
-	query_addBulkObject,
 	query_addAssociation,
 	query_cleanBinding,
 	query_getImportData,
 	query_editObject,
 	query_addImport,
-
 	query_getImportPatient,
-	query_setSearchRssi,
-	query_getSearchRssi
 }
 
 
