@@ -50,9 +50,6 @@ function query_getTrackingData () {
 		LEFT JOIN user_table
 		ON user_table.id = object_table.physician_id
 
-		INNER JOIN search_criteria
-		ON object_summary_table.rssi > search_criteria.search_rssi
-
 		LEFT JOIN (
 			SELECT 
 				mac_address,

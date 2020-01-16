@@ -4,7 +4,7 @@ import LocaleContext from '../../context/LocaleContext';
 class ToggleSwitch extends React.Component {
 
 	state = {
-		toggle: this.props.defaultLabel,
+		toggle: this.props.locationAccuracyMap[this.props.rssi]
 	}
 
 	toggleState = (e) => {
@@ -14,9 +14,8 @@ class ToggleSwitch extends React.Component {
 			toggle: name,
 		});
 	}
-
+	
 	render() {
-
 		const locale = this.context.texts
 		
 		return (

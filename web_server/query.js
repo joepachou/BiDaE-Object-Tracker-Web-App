@@ -106,8 +106,6 @@ const getTrackingData = (request, response) => {
                     < process.env.PANIC_TIME_INTERVAL_IN_SEC ? 1 : 0
 
                 /** Flag the object's battery volumn is limiting */
-                // console.log(process.env )
-                // console.log(item.battery_voltage)
                 if (item.battery_voltage >= parseInt(process.env.BATTERY_VOLTAGE_INDICATOR)                    
                     && item.found) {
                         item.battery_indicator = 3;
@@ -396,17 +394,6 @@ const editObjectPackage = (request, response) => {
     let time = ''
     isDelayTime ? time = moment(Date.now()).add(40,"minutes")._d
     : time = moment(Date.now()).add(30,"minutes")._d
-
-    
-    console.log('-----------------final time:-----------------')
-    console.log(moment(time).format('LT'))
-    console.log('-----------------another type:-----------------')
-    console.log(moment(time).toDate())
-    console.log('----------------------------------------------')
-
-
-    
-
 
     pool.query(queryType.query_addEditObjectRecord(formOption, username))
         .then(res => {
@@ -1005,7 +992,7 @@ const parseLbeaconCoordinate = (lbeacon_uuid) => {
     return [yy, xx, area_id];
 }
 
-const calculateCoordinate = (item) => {
+const calculatePosition = (item) => {
     const area_id = parseInt(item.lbeacon_uuid.slice(0,4))
     const xx = item.base_x;
     const yy = item.base_y;
@@ -1041,15 +1028,15 @@ const checkMatchedObject = (item, userAuthenticatedAreaId, currentAreaId) => {
     let isInUserSAuthArea = userAuthenticatedAreaId.includes(currentAreaId)
 
     /** Parse lbeacon uuid into three field in an array: area id, latitude, longtitude */
-    // let lbeacon_coordinate = item.lbeacon_uuid ? parseLbeaconCoordinate(item.lbeacon_uuid) : null;
+    let lbeacon_coordinate = item.lbeacon_uuid ? parseLbeaconCoordinate(item.lbeacon_uuid) : null;
 
-    let lbeacon_coordinate = item.lbeacon_uuid ? calculateCoordinate(item) : null;
+    item.lbeacon_coordinate = lbeacon_coordinate
+
+    /** Set the object's location in the form of lbeacon coordinate parsing by lbeacon uuid  */
+    item.currentPosition = item.lbeacon_uuid ? calculatePosition(item) : null;
 
     /** Set the lbeacon's area id from lbeacon_coordinate*/
     let lbeacon_area_id = item.lbeacon_uuid ? lbeacon_coordinate[2] : null;
-
-    /** Set the object's location in the form of lbeacon coordinate parsing by lbeacon uuid  */
-    item.currentPosition = item.lbeacon_uuid ? lbeacon_coordinate : null;
 
     /** Set the boolean if the object scanned by Lbeacon is matched the current area */
     let isMatchedArea = lbeacon_area_id == parseInt(currentAreaId)
@@ -1079,19 +1066,6 @@ const checkMatchedObject = (item, userAuthenticatedAreaId, currentAreaId) => {
         return false
     }
 }
-
-// #######################################################
-// backend search
-/*
-    format: {
-        keyType: 'location' or 'name' or 'all devices' or 'acn last 4' or 'type',
-        keyWord: {uuid for 'location'} 
-            or {substring of name for 'name'} 
-            or {substring of type for 'type'} 
-            or { xx for 'all devices' }
-    }
-*/
-
 
 const backendSearch = (request, response) => {
     

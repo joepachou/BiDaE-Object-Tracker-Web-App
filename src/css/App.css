@@ -419,12 +419,17 @@ p {
 /** .search result list group style sheet*/ 
 .searchResultListGroup {
     max-height: 35vh; 
-    overflow: scroll;
+    overflow: scroll scroll;
 }
 
 .searchResultListGroupForTablet {
     max-height: 28vh; 
-    overflow: scroll;
+    overflow: scroll scroll;
+}
+
+.searchResultListGroupForMobile {
+    
+    overflow: scroll scroll;
 }
 
 /** scroll bar customize */
@@ -454,12 +459,34 @@ p {
     -webkit-appearance: none;
     width: 7px;
 }
+
+.searchResultListGroupForTablet::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+}
+
+.searchResultListGroupForMobile::::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+}
+
 .searchResultListGroup::-webkit-scrollbar-thumb {
     border-radius: 4px;
     background-color: rgba(0, 0, 0, .5);
     -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
 }
 
+.searchResultListGroupForTablet::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, .5);
+    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+}
+
+.searchResultListGroupForMobile::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, .5);
+    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+}
 #batteryNoticeDiv::-webkit-scrollbar {
     -webkit-appearance: none;
     width: 7px;

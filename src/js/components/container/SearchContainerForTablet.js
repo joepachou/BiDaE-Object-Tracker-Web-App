@@ -10,7 +10,11 @@ import ObjectTypeListForTablet from './ObjectTypeListForTablet'
 import axios from 'axios';
 import { getObjectTable } from '../../dataSrc'
 import { AppContext } from '../../context/AppContext';
-
+import {
+    BrowserView,
+    TabletView,
+    MobileOnlyView
+} from 'react-device-detect'
 
 class SearchContainerForTablet extends React.Component {
 
@@ -137,12 +141,15 @@ class SearchContainerForTablet extends React.Component {
                 <div id='searchOption' className="pt-2">
                     <Row>
                         <Col className='px-0'>
-                            <ObjectTypeListForTablet
-                                getSearchKey={this.props.getSearchKey}  
-                                clearSearchResult={this.props.clearSearchResult}   
-                                hasGridButton={this.props.hasGridButton} 
-                                objectTypeList={this.state.objectTypeList}
-                            />                            
+                            <TabletView>
+                                <ObjectTypeListForTablet
+                                    getSearchKey={this.props.getSearchKey}  
+                                    clearSearchResult={this.props.clearSearchResult}   
+                                    hasGridButton={this.props.hasGridButton} 
+                                    objectTypeList={this.state.objectTypeList}
+                                />
+                            </TabletView>
+                                                        
                         </Col>
                     </Row>
                 </div>

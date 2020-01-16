@@ -8,6 +8,7 @@ import NTUH_MAP from "../img/map/ntuh_map.png"
 import BOT_LOGO from "../img//logo/BOT_LOGO_RED.png";
 import moment from 'moment'
 import patientP from "../img//logo/pic.png"
+import { isTablet, isBrowser, isMobileOnly } from "react-device-detect";
 
 const config = {
     
@@ -479,6 +480,8 @@ const config = {
             // center: L.latLng(-2000, -4000),
             zoom: -6,
             minZoom: -7,
+            minZoomForTablet: -7,
+            minZoomForMobile: -10,
             maxZoom: 0,
             zoomDelta: 0.25,
             zoomSnap: 0,
@@ -492,6 +495,8 @@ const config = {
         /** Set the icon option */
         iconOptions: {
             iconSize: process.env.MARKER_SIZE_IN_DESKTOP || 1,
+            iconSizeForTablet: process.env.MARKER_SIZE_IN_TABLET || 1,
+            iconSizeForMobile: process.env.MARKER_SIZE_IN_MOBILE || 1,
             showNumber: !false,
         },
 
@@ -663,10 +668,10 @@ const config = {
             2: process.env.LOCATION_ACCURACY_HIGH
         },
 
-        locationAccuracyMapToDB: {
-            0: "low_rssi",
-            1: "med_rssi",
-            2: "high_rssi",
+        locationAccuracyMap: {
+            '-100': "low",
+            '-70': "med",
+            '-50': "high",
         },
 
         /* Set the Marker dispersity that can be any positive number */
@@ -935,10 +940,10 @@ const config = {
             2: process.env.LOCATION_ACCURACY_HIGH
         },
 
-        locationAccuracyMapToDB: {
-            0: "low_rssi",
-            1: "med_rssi",
-            2: "high_rssi",
+        locationAccuracyMap: {
+            '-100': "low",
+            '-70': "med",
+            '-50': "high",
         },
 
         /* Set the Marker dispersity that can be any positive number */

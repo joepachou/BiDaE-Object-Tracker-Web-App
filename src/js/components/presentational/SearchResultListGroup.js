@@ -16,10 +16,10 @@ const SearchResultListGroup = ({
     const { locale } = React.useContext(AppContext);
    
     if (document.getElementById('searchPanel')) {
-        var searchPanelElementHeight = document.getElementById('searchPanel').clientHeight
-        var searchContainerElementHeight = document.getElementById('searchContainer').clientHeight
+        //var searchPanelElementHeight = document.getElementById('searchPanel').clientHeight
+        //var searchContainerElementHeight = document.getElementById('searchContainer').clientHeight
         var factor = 0.8
-        var modifiedHeight = Math.floor((searchPanelElementHeight - searchContainerElementHeight) * factor)
+        //var modifiedHeight = Math.floor((searchPanelElementHeight - searchContainerElementHeight) * factor)
     }
 
     const style = {

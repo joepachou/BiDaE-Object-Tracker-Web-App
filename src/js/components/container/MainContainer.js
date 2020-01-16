@@ -21,6 +21,10 @@ import {
     MobileOnlyView,
     TabletView
 } from 'react-device-detect'
+import {
+    Button,
+    ButtonGroup
+} from 'react-bootstrap'
 
 const {
     ALL_DEVICES,
@@ -57,7 +61,9 @@ class MainContainer extends React.Component{
         shouldUpdateTrackingData: true,
         markerClickPackage: {},
         showPath: false,
-        pathMacAddress:''
+        pathMacAddress:'',
+        display: true,
+        showMobileMap: true
     }
 
     componentDidMount = () => {
@@ -491,8 +497,8 @@ class MainContainer extends React.Component{
         let objectList = []
         proccessedTrackingData
         .filter(item => {
-            return item.currentPosition && 
-                item.currentPosition.toString() === lbPosition.toString()
+            return item.lbeacon_coordinate && 
+                item.lbeacon_coordinate.toString() === lbPosition.toString()
         })
         .map(item => {
             item.searched = true;
@@ -509,7 +515,6 @@ class MainContainer extends React.Component{
     }
 
     handleShowPath = (mac_address) => {
-        //console.log(mac_address)
         this.setState({
             showPath: true,
             pathMacAddress: mac_address
@@ -521,7 +526,25 @@ class MainContainer extends React.Component{
             showPath: false
         })
     }
+
+    handleShowResultListForMobile = () => {
+        this.setState({
+            display: false
+        })
+    }
     
+    mapButtonHandler = () => {
+        this.setState({
+            showMobileMap: !this.state.showMobileMap
+        })
+    }
+
+    clearResultHandler = () => {
+        this.setState({
+            display: true
+        })
+    }
+
     render(){
 
         const { 
@@ -574,12 +597,25 @@ class MainContainer extends React.Component{
                 width:'30vw'
             },
 
+            containerForMobile:{
+                justifyContent: 'center'
+            },
+            
+            searchPanelForMobile: {
+                zIndex: this.state.isHighlightSearchPanel ? 1060 : 1,
+                fontSize: '2rem',
+                background: "white",
+                borderRadius: 10,
+                //border: 'solid',
+                height: '90vh',
+                width:'90vw'
+            },
+
             searchResultList: {
                 dispaly: this.state.hasSearchKey ? null : 'none',
                 maxHeight: '40vh',
                 justifyContent: 'center'
             },
-
             MapAndQrcode: {
                 maxHeight: '50vh',
             }
@@ -590,7 +626,6 @@ class MainContainer extends React.Component{
             stateReducer,
         } = this.context
         let [{areaId}] = stateReducer
-        // console.log(this.state.rssi)
         let deviceNum = this.state.trackingData.filter(item => item.found).length
         let devicePlural = deviceNum === 1 ? locale.texts.DEVICE : locale.texts.DEVICES
         return (
@@ -626,6 +661,7 @@ class MainContainer extends React.Component{
                                     authenticated={this.state.authenticated}
                                     handleClosePath={this.handleClosePath}
                                     handleShowPath={this.handleShowPath}
+                                    rssi={this.state.rssi}
                                 />
                             </Col>
 
@@ -684,10 +720,11 @@ class MainContainer extends React.Component{
 
                                 {/** includeing search result */}                    
                                 <div id="searchResult" className="d-flex" style={style.searchResultList}>
-                                    <SearchResultListForTablet
+                                    <SearchResultList
                                         searchResult={this.state.searchResult} 
                                         searchKey={this.state.searchKey}
                                         highlightSearchPanel={this.highlightSearchPanel}
+                                        handleShowPath={this.handleShowPath}
                                     />
                                 </div>
                             </div>
@@ -706,7 +743,72 @@ class MainContainer extends React.Component{
                     </div>
                 </TabletView>
                 <MobileOnlyView>
-                    <p>QQ is Mobile</p>
+                <div id="page-wrap" className='d-flex flex-column w-100' style={{height: "90vh"}}>
+                    <div className='d-flex flex-row h-100 w-100 justify-content-center'>
+                        {/** left area of row */}
+                            {
+                                this.state.display ?
+                                    <div id='searchPanel' className="h-100" style={style.searchPanelForMobile}>
+                                        <SearchContainer 
+                                            hasSearchKey={this.state.hasSearchKey}
+                                            clearSearchResult={this.state.clearSearchResult}
+                                            hasGridButton={this.state.hasGridButton}
+                                            auth={auth}
+                                            getSearchKey={this.getSearchKey}
+                                            handleShowResultListForMobile={this.handleShowResultListForMobile}
+                                        />
+                                    </div>
+                                :
+                                    <div style={{width:'90vw'}}>
+                                        {
+                                            this.state.showMobileMap ?
+                                                <div>
+                                                    <SurveillanceContainer
+                                                        showPath={this.state.showPath}
+                                                        pathMacAddress={this.state.pathMacAddress} 
+                                                        proccessedTrackingData={proccessedTrackingData.length === 0 ? trackingData : proccessedTrackingData}
+                                                        hasSearchKey={hasSearchKey}
+                                                        colorPanel={colorPanel}
+                                                        searchResult={this.state.searchResult}
+                                                        handleClearButton={this.handleClearButton}
+                                                        getSearchKey={this.getSearchKey}
+                                                        clearColorPanel={clearColorPanel}
+                                                        changeLocationAccuracy={this.changeLocationAccuracy}
+                                                        setFence={this.setFence}
+                                                        auth={auth}
+                                                        lbeaconPosition={this.state.lbeaconPosition}
+                                                        geoFenceConfig={this.state.geoFenceConfig.filter(item => parseInt(item.unique_key) == areaId)}
+                                                        clearAlerts={this.clearAlerts}
+                                                        searchKey={this.state.searchKey}
+                                                        authenticated={this.state.authenticated}
+                                                        handleClosePath={this.handleClosePath}
+                                                        handleShowPath={this.handleShowPath}
+                                                    />
+                                                </div>
+                                            :
+                                                ''
+                                        }
+                                            <div className='justify-content-center'>
+                                                <SearchResultList
+                                                    searchResult={this.state.searchResult} 
+                                                    searchKey={this.state.searchKey}
+                                                    highlightSearchPanel={this.highlightSearchPanel}
+                                                    handleShowPath={this.handleShowPath}
+                                                    showMobileMap={this.state.showMobileMap}
+                                                />
+                                            </div>
+                                    <ButtonGroup>
+                                        {
+                                            this.state.showMobileMap 
+                                            ?   <Button variant='outline-primary' onClick={this.mapButtonHandler}>{locale.texts.HIDE_MAP}</Button>
+                                            :   <Button variant='outline-primary' onClick={this.mapButtonHandler}>{locale.texts.SHOW_MAP}</Button>
+                                        }
+                                        <Button variant='outline-primary' onClick={this.clearResultHandler}>{locale.texts.CLEAR_RESULT}</Button>
+                                    </ButtonGroup>
+                                    </div>
+                            }
+                    </div>
+                </div>
                 </MobileOnlyView>
             </div>
         )
