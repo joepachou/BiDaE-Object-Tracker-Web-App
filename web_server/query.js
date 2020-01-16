@@ -395,6 +395,12 @@ const editObjectPackage = (request, response) => {
     isDelayTime ? time = moment(Date.now()).add(40,"minutes")._d
     : time = moment(Date.now()).add(30,"minutes")._d
 
+    console.log('---------------------------')
+    console.log(moment(time).format('lll'))
+    console.log('---------------------------')
+    console.log( moment(Date.now()).add(30,"minutes")._d)
+    console.log('---------------------------')
+
     pool.query(queryType.query_addEditObjectRecord(formOption, username))
         .then(res => {
             const record_id = res.rows[0].id

@@ -542,7 +542,6 @@ function query_addObject (formOption) {
 			$4,
 			$5,
 			$6,
-			'normal',
 			0
 		);
 	`;
@@ -631,9 +630,9 @@ const query_addImport = (formOption) => {
 const query_editObjectPackage = (formOption,username, record_id,time) => {
 
 	let item = formOption[0]
-
-	// console.log(time)
-	// console.log('O.O')
+	console.log('---------------------------')
+	console.log(time)
+	console.log('---------------------------')
 
 	let text = `
 
