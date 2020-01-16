@@ -1,10 +1,8 @@
 
 import React from 'react';
-import { Modal, Button, Row, Col } from 'react-bootstrap';
 import Select from 'react-select';
 import { AppContext } from '../../../context/AppContext';
 import axios from 'axios'
-import config from "../../../config"
 import dataSrc from "../../../dataSrc"
   
 class LBeaconPicker extends React.Component {
@@ -18,13 +16,6 @@ class LBeaconPicker extends React.Component {
         this.getBeacon()        
     }
 
-    shouldComponentUpdate = (nextProps, nextState) => {
-        // if(nextProps.area != this.props.area){
-        //     return true
-        // }
-        // return false
-        return true
-    }
     componentDidUpdate = (prevProps, prevState) => {
         if(prevProps.area != this.props.area){
             this.getBeacon()
@@ -35,7 +26,7 @@ class LBeaconPicker extends React.Component {
     getBeacon = () => {
         if(this.props.area){
             axios.post(dataSrc.getLbeaconTable, {}).then(res => {
-                let beacons = res.data.filter(beacon => {
+                let beacons = res.data.rows.filter(beacon => {
                     return parseInt(beacon.uuid.slice(0, 4)) == parseInt(this.props.area)
                 })
                 this.setState({
@@ -65,7 +56,6 @@ class LBeaconPicker extends React.Component {
         }
 
         let { locale } = this.context
-        console.log(this.state.beacons)
         return (
             <Select
                 name="beaconPicker"
