@@ -43,6 +43,7 @@ const rules = {
             "route:objectManagement",
             "route:editObjectManagement",
             "user:mydevice",
+            "user:mypatient",
             "user:saveSearchRecord",
             "route:userManager",
             "route:shiftChangeRecord",
