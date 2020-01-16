@@ -245,22 +245,6 @@ class SurveillanceContainer extends React.Component {
                 </div>
                 <div style={style.navBlock}>
                     <Nav className="d-flex align-items-start text-capitalize bd-highlight">
-                        <Nav.Item>
-                            <div style={style.title} 
-                            >
-                                {locale.texts.LOCATION_ACCURACY}
-                            </div>
-                        </Nav.Item>
-                        <Nav.Item className="pt-2 mr-2">
-                            <ToggleSwitch 
-                                changeLocationAccuracy={this.props.changeLocationAccuracy} 
-                                leftLabel="low"
-                                defaultLabel="med" 
-                                rightLabel="high"
-                                rssi={this.props.rssi}
-                                locationAccuracyMap={config.mapConfig.locationAccuracyMap}
-                            />
-                        </Nav.Item>
                         <Nav.Item className="mt-2">
                             <Button 
                                 variant="outline-primary" 
