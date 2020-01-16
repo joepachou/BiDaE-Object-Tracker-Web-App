@@ -259,9 +259,7 @@ class EditObjectForm extends React.Component {
                             while(postOption.name[postOption.name.length-1] == " "){
                                 postOption.name = postOption.name.substring(0,postOption.name.length-1);       
                             }
-                            console.log(postOption)
-                            console.log(this.props.data)
-                            // this.handleSubmit(postOption)                            
+                            this.handleSubmit(postOption)                            
                         }}
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm }) => (
