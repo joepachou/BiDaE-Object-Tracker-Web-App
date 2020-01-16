@@ -40,6 +40,7 @@ const getUserList = `${protocol}://${dataSrcIP}/test/getUserList`
 const getUserRole = `${protocol}://${dataSrcIP}/test/getUserRole`
 const getRoleNameList = `${protocol}://${dataSrcIP}/test/getRoleNameList`
 const deleteUser = `${protocol}://${dataSrcIP}/test/deleteUser`
+const getRoleFromUserID = `${protocol}://${dataSrcIP}/test/getRoleFromUserID`
 const setUserRole = `${protocol}://${dataSrcIP}/test/setUserRole`
 const getAreaTable = `${protocol}://${dataSrcIP}/data/getAreaTable`
 const getGeoFenceConfig = `${protocol}://${dataSrcIP}/data/getGeoFenceConfig`
@@ -73,6 +74,7 @@ module.exports = {
     getImportData,
     addAssociation,
     editImport,
+    getRoleFromUserID,
     cleanBinding,
     getObjectTable,
     getPatientTable,

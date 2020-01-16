@@ -203,6 +203,10 @@ const en =  {
     MAC_DO_NOT_MATCH:"Mac address do not match",
     THE_MAC_ADDRESS_IS_ALREADY_USED_OR_FORMAT_IS_NOT_CORRECT: 'Mac Address is already used or the format is wrong',
     ASSET_CONTROL_NUMBER_IS_NOT_FOUND: "asset control number is not found",
+    INCORRECT:"Username incorrect",
+    PASSWORD_INCORRECT:"Password incorrect",
+    AUTHORITY_NOT_ENOUGH:"Authority not enough",
+    ACCOUNT_NOT_BELONG_THIS_AREA:"This account not belong this area",
 
     /** Place Holder */
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "please enter or scan mac address",

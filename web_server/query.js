@@ -60,7 +60,7 @@ moment.updateLocale('zh-tw', {
 const getTrackingData = (request, response) => {
     const rssiThreshold = request.body.rssiThreshold || -65
     const locale = request.body.locale || 'en'
-
+   
     /** The user's authenticated area id */
     const userAuthenticatedAreaId= request.body.user.areas_id
     /** The UI's current area id */
@@ -693,6 +693,19 @@ const deleteUser = (request, response) => {
         })  
 }
 
+const getRoleFromUserID = (request, response) => {
+    var username = request.body.username
+    pool.query(queryType.query_getRoleFromUserID(username))
+        .then(res => {
+            console.log('get Role From User ID success')
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(`get Role From User ID failer ${err}`)
+        })  
+}
+
+
 const setUserRole = (request, response) => {
     var {
         username,
@@ -890,16 +903,14 @@ const checkoutViolation = (request, response) => {
 }
 
 const confirmValidation = (request, response) => {
-
+    const locale = request.body.locale
     let { username, password } = request.body
-
     pool.query(queryType.query_confirmValidation(username))
         .then(res => {
-
             if (res.rowCount < 1) {
                 response.json({
                     confirmation: false,
-                    message: "Incorrect"
+                    message: locale.texts.INCORRECT
                 })
             } else {
                 const hash = res.rows[0].password
@@ -916,17 +927,18 @@ const confirmValidation = (request, response) => {
                         role,
                         id,
                     }
-
+                    console.log(res.rows[0])
                     request.session.userInfo = userInfo
-
-                    console.log('confirm validation')
                     response.json({
                         confirmation: true,
+                        user_id:res.rows[0].user_id,
+                        role_id:res.rows[0].role_id,
+                        areas_id:res.rows[0].areas_id
                     })
                 } else {
                     response.json({
                         confirmation: false,
-                        message: "password is incorrect"
+                        message: locale.texts.PASSWORD_INCORRECT
                     })
                 }
             }
@@ -1231,6 +1243,7 @@ module.exports = {
     deleteLBeacon,
     deleteGateway,
     deleteUser,
+    getRoleFromUserID,
     signin,
     signup,
     generatePDF,

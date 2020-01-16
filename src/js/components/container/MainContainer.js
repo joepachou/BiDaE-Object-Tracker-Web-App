@@ -589,7 +589,6 @@ class MainContainer extends React.Component{
             auth,
             stateReducer,
         } = this.context
-
         let [{areaId}] = stateReducer
         // console.log(this.state.rssi)
         let deviceNum = this.state.trackingData.filter(item => item.found).length

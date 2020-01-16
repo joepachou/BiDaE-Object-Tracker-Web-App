@@ -127,7 +127,7 @@ class ShiftChange extends React.Component {
 
     handleConfirmFormSubmit = (name) => {
         let { locale, auth } = this.context   
-
+      
         let pdfPackage = config.getPdfPackage('shiftChange', auth.user, this.state.searchResult ,locale,'', name)
         axios.post(dataSrc.addShiftChangeRecord, {
             userInfo: auth.user,
@@ -155,7 +155,7 @@ class ShiftChange extends React.Component {
 
         const { userInfo } = this.props
         const { foundResult, notFoundResult } = this.state.searchResult
-        const { locale, auth } = this.context
+        const { locale, auth,stateReducer } = this.context
         const style = {
             row: {
                 width: '100%'
@@ -276,6 +276,8 @@ class ShiftChange extends React.Component {
                     // handleSignupFormShowUp={this.handleSignupFormShowUp}
                     onClose={this.handleSignFormClose}
                     signin={auth.signin}
+                    stateReducer ={stateReducer[0].areaId}
+                    auth={auth}
                 />
             </Fragment>
 

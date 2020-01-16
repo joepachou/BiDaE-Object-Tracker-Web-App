@@ -887,6 +887,27 @@ const query_getRoleNameList = () => {
 	return query
 }
 
+
+const query_getRoleFromUserID= (username) => {
+
+	let text = `
+	SELECT 
+		role_id 
+	FROM user_roles WHERE user_id = $1;
+`
+
+	const values = [username];
+
+	const query = {
+	    text,
+	   	values
+	};
+
+	return query;
+}
+
+
+
 const query_deleteUser = (username) => {
 	
 	const query = `
@@ -1191,7 +1212,18 @@ const query_confirmValidation = (username) => {
 		SELECT 
 			user_table.name, 
 			user_table.password,
-			roles.name as role
+			roles.name as role,
+			user_roles.role_id as role_id,
+			array (
+				SELECT area_id
+				FROM user_areas
+				WHERE user_areas.user_id = user_table.id
+			) as areas_id,
+			(
+				SELECT id
+				FROM user_table
+				WHERE user_table.name = $1
+			) as user_id
 
 		FROM user_table
 
@@ -1200,7 +1232,10 @@ const query_confirmValidation = (username) => {
 
 		LEFT JOIN roles
 		ON user_roles.role_id = roles.id
-
+		
+		LEFT JOIN user_areas
+		ON user_areas.user_id = user_table.id
+		
 		WHERE user_table.name = $1;
 	`
 
@@ -1401,7 +1436,6 @@ function query_getBackendSearchQueue(){
 	return query
 }
 
-
 const query_addBulkObject = (jsonObj) => {
 	let text =  `
 		INSERT INTO import_table (
@@ -1479,6 +1513,7 @@ module.exports = {
 	query_getUserRole,
 	query_getRoleNameList,
 	query_deleteUser,
+	query_getRoleFromUserID,
 	query_setUserRole,
 	query_getEditObjectRecord,
 	query_deleteEditObjectRecord,
