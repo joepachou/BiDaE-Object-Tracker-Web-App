@@ -51,6 +51,23 @@ class FrequentSearch extends React.Component {
             <div id='frequentSearch' >
                 <div className='text-capitalize title'>{locale.texts.FREQUENT_SEARCH}</div>
                 <div style={style.list} className="d-inline-flex flex-column searchOption">
+                    {auth.authenticated && auth.user.searchHistory &&
+                        auth.user.searchHistory.filter( (item,index) => {
+                            return index < config.userPreference.searchHistoryNumber
+                    }).map( (item, index) => {
+                        return (
+                            <Button
+                                variant="outline-custom"
+                                onClick={this.handleClick} 
+                                // active={this.state.searchKey === item.name.toLowerCase()} 
+                                key={index}
+                                name={item.name}
+                            >
+                                {item.name}
+                            </Button>
+                        )
+                    })}
+                    <hr/>
                     <Button 
                         variant="outline-custom"
                         onClick={this.handleClick} 
@@ -95,22 +112,6 @@ class FrequentSearch extends React.Component {
                             {locale.texts.MY_PATIENTS}
                         </Button>
                     </AccessControl>
-                    {auth.authenticated && auth.user.searchHistory &&
-                        auth.user.searchHistory.filter( (item,index) => {
-                            return index < config.userPreference.searchHistoryNumber
-                    }).map( (item, index) => {
-                        return (
-                            <Button
-                                variant="outline-custom"
-                                onClick={this.handleClick} 
-                                // active={this.state.searchKey === item.name.toLowerCase()} 
-                                key={index}
-                                name={item.name}
-                            >
-                                {item.name}
-                            </Button>
-                        )
-                    })}
                 </div>
             </div>
         )

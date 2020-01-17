@@ -183,14 +183,7 @@ class SurveillanceContainer extends React.Component {
                 border: "solid 2px rgba(227, 222, 222, 0.619)",
                 padding: "5px",
             },
-            // surveillanceContainer: {
-            //     height: "100vh"
-            // },
-            navBlock: {
-                // height: "40%"
-            }, 
             mapBlock: {
-                // height: "60%",
                 border: "solid 2px rgba(227, 222, 222, 0.619)",
                 padding: "5px",
             },
@@ -202,7 +195,6 @@ class SurveillanceContainer extends React.Component {
             },
             qrBlock: {
                 width: '10vw',
-                //border: 'solid'
             },
             mapBlockForTablet: {
                 border: "solid 2px rgba(227, 222, 222, 0.619)",
@@ -246,22 +238,6 @@ class SurveillanceContainer extends React.Component {
                 </div>
                 <div style={style.navBlock}>
                     <Nav className="d-flex align-items-start text-capitalize bd-highlight">
-                        <Nav.Item>
-                            <div style={style.title} 
-                            >
-                                {locale.texts.LOCATION_ACCURACY}
-                            </div>
-                        </Nav.Item>
-                        <Nav.Item className="pt-2 mr-2">
-                            <ToggleSwitch 
-                                changeLocationAccuracy={this.props.changeLocationAccuracy} 
-                                leftLabel="low"
-                                defaultLabel="med" 
-                                rightLabel="high"
-                                rssi={this.props.rssi}
-                                locationAccuracyMap={config.mapConfig.locationAccuracyMap}
-                            />
-                        </Nav.Item>
                         <Nav.Item className="mt-2">
                             <Button 
                                 variant="outline-primary" 
@@ -337,23 +313,25 @@ class SurveillanceContainer extends React.Component {
                                 </Button>
                             </Nav.Item>
                         </AccessControl>
-                        <AccessControl
-                            permission={"user:cleanPath"}
-                            renderNoAccess={()=>null}
-                        >
-                            <Nav.Item className="mt-2">
-                                <Button
-                                    variant="primary"
-                                    className="mr-1 ml-2 text-capitalize" 
-                                    onClick={this.handleClickButton}
-                                    name="cleanPath"
-                                    active={(this.props.showPath)}
-                                    disabled={!(this.props.showPath)}
-                                >
-                                    {locale.texts.CLEAN_PATH}
-                                </Button>
-                            </Nav.Item>
-                        </AccessControl>
+                        {process.env.IS_TRACKING_PATH_ON == 1 && 
+                            <AccessControl
+                                permission={"user:cleanPath"}
+                                renderNoAccess={()=>null}
+                            >
+                                <Nav.Item className="mt-2">
+                                    <Button
+                                        variant="primary"
+                                        className="mr-1 ml-2 text-capitalize" 
+                                        onClick={this.handleClickButton}
+                                        name="cleanPath"
+                                        active={(this.props.showPath)}
+                                        disabled={!(this.props.showPath)}
+                                    >
+                                        {locale.texts.CLEAN_PATH}
+                                    </Button>
+                                </Nav.Item>
+                            </AccessControl>
+                        }
                         {this.props.geoFenceConfig.map((item, index) => {
                             return ( parseInt(item.unique_key) == areaId && 
                                 <Fragment
@@ -527,23 +505,25 @@ class SurveillanceContainer extends React.Component {
                                 </Button>
                             </Nav.Item>
                         </AccessControl>
-                        <AccessControl
-                            permission={"user:cleanPath"}
-                            renderNoAccess={()=>null}
-                        >
-                            <Nav.Item className="mt-2">
-                                <Button
-                                    variant="primary"
-                                    className="mr-1 ml-2 text-capitalize" 
-                                    onClick={this.handleClickButton}
-                                    name="cleanPath"
-                                    active={(this.props.showPath)}
-                                    disabled={!(this.props.showPath)}
-                                >
-                                    {locale.texts.CLEAN_PATH}
-                                </Button>
-                            </Nav.Item>
-                        </AccessControl>
+                        {process.env.IS_TRACKING_PATH_ON == 1 && 
+                            <AccessControl
+                                permission={"user:cleanPath"}
+                                renderNoAccess={()=>null}
+                            >
+                                <Nav.Item className="mt-2">
+                                    <Button
+                                        variant="primary"
+                                        className="mr-1 ml-2 text-capitalize" 
+                                        onClick={this.handleClickButton}
+                                        name="cleanPath"
+                                        active={(this.props.showPath)}
+                                        disabled={!(this.props.showPath)}
+                                    >
+                                        {locale.texts.CLEAN_PATH}
+                                    </Button>
+                                </Nav.Item>
+                            </AccessControl>
+                        }
                         {this.props.geoFenceConfig.map((item, index) => {
                             return ( parseInt(item.unique_key) == areaId && 
                                 <Fragment

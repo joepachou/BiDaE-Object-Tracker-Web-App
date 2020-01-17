@@ -54,9 +54,6 @@ class MainContainer extends React.Component{
         clearSearchResult: false,
         hasGridButton: false,
         isHighlightSearchPanel: false,
-        rssi: window.innerWidth < config.mobileWidowWidth
-            ? config.mapConfig.locationAccuracyMapToDefault[0]
-            : config.mapConfig.locationAccuracyMapToDefault[1],
         authenticated: this.context.auth.authenticated,
         shouldUpdateTrackingData: true,
         markerClickPackage: {},
@@ -70,7 +67,6 @@ class MainContainer extends React.Component{
         this.getTrackingData();
         this.getLbeaconPosition();
         this.getGeoFenceConfig();
-        this.getSearchRssi();
         this.interval = setInterval(this.getTrackingData, config.mapConfig.intervalTime)
     }
 
@@ -125,18 +121,6 @@ class MainContainer extends React.Component{
                                 isGeoFenceDataChange ||
                                 isViolatedObjectChange
         return shouldUpdate
-    }
-
-    getSearchRssi = () => {
-        axios.get(dataSrc.getSearchRssi)
-            .then(res => {
-                this.setState({
-                    rssi: res.data.rows[0].search_rssi
-                })
-            })
-            .catch(err => {
-                console.log(`get search rssi fail ${err}`)
-            })
     }
 
     getToastNotification = (item) => {
@@ -195,19 +179,6 @@ class MainContainer extends React.Component{
         this.getSearchKey(searchKey, colorPanel, searchValue, markerClickPackage)
     }
 
-    changeLocationAccuracy = (locationAccuracy) => {
-        const rssi = config.mapConfig.locationAccuracyMapToDefault[locationAccuracy]
-        axios.post(dataSrc.setSearchRssi, {
-            rssi
-        })
-        .catch(err => {
-            console.log(`set search rssi fail ${err}`)
-        })
-        this.setState({
-            rssi
-        })
-    }
-
     async setFence (value, areaId) {
         let result = await axios.post(dataSrc.setGeoFenceConfig, {
             value,
@@ -220,7 +191,6 @@ class MainContainer extends React.Component{
         let { auth, locale, stateReducer } = this.context
         let [{areaId, violatedObjects}, dispatch] = stateReducer
         axios.post(dataSrc.getTrackingData,{
-            rssi: this.state.rssi,
             locale: locale.abbr,
             user: auth.user,
             areaId,
@@ -563,13 +533,6 @@ class MainContainer extends React.Component{
                 overflow: "hidden hidden",
             },
 
-            container: {
-                /** The height: 100vh will cause the page can only have 100vh height.
-                 * In other word, if the seaerch result is too long and have to scroll down, the page cannot scroll down
-                 */
-                // height: '100vh'
-                
-            },
             searchResultDiv: {
                 display: this.state.hasSearchKey ? null : 'none',
                 // paddingTop: 30,
@@ -628,6 +591,7 @@ class MainContainer extends React.Component{
         let [{areaId}] = stateReducer
         let deviceNum = this.state.trackingData.filter(item => item.found).length
         let devicePlural = deviceNum === 1 ? locale.texts.DEVICE : locale.texts.DEVICES
+
         return (
             /** "page-wrap" the default id named by react-burget-menu */
             <div>
@@ -651,7 +615,6 @@ class MainContainer extends React.Component{
                                     handleClearButton={this.handleClearButton}
                                     getSearchKey={this.getSearchKey}
                                     clearColorPanel={clearColorPanel}
-                                    changeLocationAccuracy={this.changeLocationAccuracy}
                                     setFence={this.setFence}
                                     auth={auth}
                                     lbeaconPosition={this.state.lbeaconPosition}
@@ -705,7 +668,6 @@ class MainContainer extends React.Component{
                                         handleClearButton={this.handleClearButton}
                                         getSearchKey={this.getSearchKey}
                                         clearColorPanel={clearColorPanel}
-                                        changeLocationAccuracy={this.changeLocationAccuracy}
                                         setFence={this.setFence}
                                         auth={auth}
                                         lbeaconPosition={this.state.lbeaconPosition}
@@ -748,6 +710,7 @@ class MainContainer extends React.Component{
                         {/** left area of row */}
                             {
                                 this.state.display ?
+
                                     <div id='searchPanel' className="h-100" style={style.searchPanelForMobile}>
                                         <SearchContainer 
                                             hasSearchKey={this.state.hasSearchKey}

@@ -1412,6 +1412,7 @@ function query_getBackendSearchQueue(){
 	return query
 }
 
+
 const query_addBulkObject = (jsonObj) => {
 	let text =  `
 		INSERT INTO import_table (
@@ -1513,16 +1514,12 @@ module.exports = {
 	query_backendSearch_writeQueue,
 	query_deleteSameNameSearchQueue,
 	query_getBackendSearchQueue,
-	query_addBulkObject,
 	query_addAssociation,
 	query_cleanBinding,
 	query_getImportData,
 	query_editObject,
 	query_addImport,
-
 	query_getImportPatient,
-	query_setSearchRssi,
-	query_getSearchRssi
 }
 
 

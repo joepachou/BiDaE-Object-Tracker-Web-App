@@ -4,8 +4,8 @@ import axios from 'axios';
 import Cookies from 'js-cookie'
 import dataSrc from "../../../dataSrc";
 import AddableList from './AddableList'
-import LocaleContext from '../../../context/LocaleContext';
 import { AppContext } from '../../../context/AppContext';
+import retrieveData from '../../../helper/retrieveData'
 
 const Fragment = React.Fragment;
 
@@ -17,23 +17,16 @@ const style = {
     firstText: {
         paddingLeft: 15,
         paddingRight: 0,
-        // background: 'rgb(227, 222, 222)',
-        // height: 30,
-        // width: 30,
     },
     middleText: {
         paddingLeft: 2,
         paddingRight: 2,
-    },
-    lastText: {
-        // textAlign: 'right'
     },
     icon: {
         color: '#007bff'
     },
     list: {
         wordBreak: 'keep-all',
-        // color:'red',
         zIndex: 1
     },
 }
@@ -152,6 +145,10 @@ class MyDeviceManager extends React.Component{
         this.getAPIfromAddableList_2 = this.getAPIfromAddableList_2.bind(this)
     }
 
+    componentDidMount(){
+        this.getObjectData()
+    }
+
     getAPIfromAddableList_1(API){
         let { locale } = this.context
         const {itemLayout, validation, onClick} = this.functionForAddableList
@@ -171,58 +168,47 @@ class MyDeviceManager extends React.Component{
         this.APIforAddableList_2.setOnClick(onClick)
     }
 
-    componentDidMount(){
-        // if(this.props.getAPI){
-        //     this.props.getAPI(this.API)
-        // }else{
-        //     console.error('please set attributes called "getAPI" for UserSettingContainer')
-        // }
-        this.getObjectData()
-    }
-
     getObjectData() {
         let { locale, auth } = this.context
-        axios.post(dataSrc.getObjectTable, {
-            locale: locale.lang,
-            areaId: auth.user.areas_id,
-        }).then(res => {
-            let data = res.data.rows
-            var dataMap = {}
+        retrieveData.getObjectTable(locale.lang, auth.user.areas_id, [0])
+            .then(res => {
+                let data = res.data.rows
+                var dataMap = {}
 
-            for(var item of data){
-                if(item.object_type == 0)
-                    dataMap[item.asset_control_number] = item
-            }
-            this.device.dataMap = dataMap
-
-            axios.post(dataSrc.getUserInfo, {
-                username: JSON.parse(Cookies.get('user')).name
-            }).then((res) => {
-                var myDeviceList = res.data.rows[0].mydevice || []
-                var allDeviceList = Object.keys(dataMap)
-
-                this.device.myDeviceList = myDeviceList
-                var myDevices = {}, notMyDevices = {}
-
-                for(var acn of allDeviceList){
-                    if(myDeviceList.includes(acn)){
-                        myDevices[acn] = dataMap[acn]
-                    }else{
-                        notMyDevices[acn] = dataMap[acn]
-                    }
+                for(var item of data){
+                    if(item.object_type == 0)
+                        dataMap[item.asset_control_number] = item
                 }
+                this.device.dataMap = dataMap
 
-                this.device.myDevices = myDevices
-                this.device.notMyDevices = notMyDevices
-                this.APIforAddableList_1.setList(myDevices)
-                this.APIforAddableList_2.setList(notMyDevices)
-            }).catch(err => {
-                console.log(err)
+                axios.post(dataSrc.getUserInfo, {
+                    username: JSON.parse(Cookies.get('user')).name
+                }).then((res) => {
+                    var myDeviceList = res.data.rows[0].mydevice || []
+                    var allDeviceList = Object.keys(dataMap)
+
+                    this.device.myDeviceList = myDeviceList
+                    var myDevices = {}, notMyDevices = {}
+
+                    for(var acn of allDeviceList){
+                        if(myDeviceList.includes(acn)){
+                            myDevices[acn] = dataMap[acn]
+                        }else{
+                            notMyDevices[acn] = dataMap[acn]
+                        }
+                    }
+
+                    this.device.myDevices = myDevices
+                    this.device.notMyDevices = notMyDevices
+                    this.APIforAddableList_1.setList(myDevices)
+                    this.APIforAddableList_2.setList(notMyDevices)
+                }).catch(err => {
+                    console.log(err)
+                })
             })
-        })
-        .catch(function (error) {
-            console.log(error);
-        })
+            .catch(function (error) {
+                console.log(error);
+            })
     }
     
     

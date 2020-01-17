@@ -142,9 +142,7 @@ class ChangeStatusForm extends React.Component {
         let { title } = this.props;
         
         let selectedObjectData = this.props.selectedObjectData.length !== 0 ? this.props.selectedObjectData[0] : []
-        let {
-            transferred_location = ''
-        } = selectedObjectData
+
         return (
             <>  
                 <Modal  
@@ -159,7 +157,9 @@ class ChangeStatusForm extends React.Component {
                         className='font-weight-bold text-capitalize'
                     >
                         {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
-                        <Button variant="link" style={style.buttonPath} onClick={this.pathOnClickHandler}>追蹤路徑</Button>
+                        {process.env.IS_TRACKING_PATH_ON == 1 && 
+                            <Button variant="link" style={style.buttonPath} onClick={this.pathOnClickHandler}>追蹤路徑</Button>                        
+                        }
                     </Modal.Header >
                     <Modal.Body>
                         <div className='modalDeviceListGroup' style={style.deviceList}>
