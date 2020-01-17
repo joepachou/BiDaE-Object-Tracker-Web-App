@@ -686,18 +686,6 @@ const deleteUser = (request, response) => {
         })  
 }
 
-const getRoleFromUserID = (request, response) => {
-    var username = request.body.username
-    pool.query(queryType.query_getRoleFromUserID(username))
-        .then(res => {
-            console.log('get Role From User ID success')
-            response.status(200).json(res)
-        })
-        .catch(err => {
-            console.log(`get Role From User ID failer ${err}`)
-        })  
-}
-
 
 const setUserRole = (request, response) => {
     var {
@@ -1223,7 +1211,6 @@ module.exports = {
     deleteLBeacon,
     deleteGateway,
     deleteUser,
-    getRoleFromUserID,
     signin,
     signup,
     generatePDF,
