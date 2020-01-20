@@ -85,11 +85,11 @@ class Map extends React.Component {
         } = this.props.mapConfig
 
         if(isBrowser) {
-            mapOptions.minZoom = -7
+            mapOptions.minZoom = mapOptions.minZoom
         }else if(isTablet) {
-            mapOptions.minZoom = -7
+            mapOptions.minZoom = mapOptions.minZoomForTablet
         }else{
-            mapOptions.minZoom = -8
+            mapOptions.minZoom = mapOptions.minZoomForMobile
         }
         /** Error handler of the user's auth area does not include the group of sites */
         let areaOption = areaOptions[areaId] || areaOptions[defaultAreaId] || Object.values(areaOptions)[0]
