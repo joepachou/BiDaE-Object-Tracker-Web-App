@@ -19,7 +19,7 @@ function query_getTrackingData () {
 			object_table.area_id,
 			object_table.object_type,
 			object_table.physician_id,
-			split_part(object_table.asset_control_number, '-', 3) as last_four_acn,
+			object_table.asset_control_number as last_four_acn,
 			lbeacon_table.description as location_description,
 			edit_object_record.notes,
 			user_table.name as physician_name,

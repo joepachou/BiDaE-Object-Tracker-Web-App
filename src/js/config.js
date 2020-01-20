@@ -357,7 +357,7 @@ const config = {
                     return `
                         <div key=${index} style="text-transform: capitalize; margin: 10px;">
                             ${index + 1}.${item.name}, 
-                            ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}: ${item.last_four_acn}, 
+                            ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}: ${item.last_four_acn.slice(-4)}, 
                             ${locale.texts.NEAR}${item.location_description}
                         </div>
                     `
@@ -705,7 +705,7 @@ const config = {
                                    ${item.type}
                                 </div>
                                 <div class="popupType ">
-                                    , ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn}
+                                    , ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn.slice(-4)}
                                 </div>
                                 <div class="popupType">
                                     ${item.status !== "normal" 
@@ -973,7 +973,7 @@ const config = {
                                ${item.type}
                             </div>
                             <div class="popupType ">
-                                , ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn}
+                                , ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn.slice(-4)}
                             </div>
                             <div class="popupType">
                                 ${item.status !== "normal" 
