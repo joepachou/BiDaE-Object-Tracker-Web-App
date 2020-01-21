@@ -7,7 +7,7 @@ export const getDescription = (item, locale, config) => {
                     ?   `
                         ${item.type},
                         
-                        ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn},
+                        ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn.slice(-4)},
                         
                         ${item.currentPosition 
                             ? locale.abbr == 'en' 
@@ -34,7 +34,7 @@ export const getDescription = (item, locale, config) => {
                     :   `
                         ${item.type},
 
-                        ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn},
+                        ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn.slice(-4)},
                         
                         ${getSubDescription(item, locale)}
 
