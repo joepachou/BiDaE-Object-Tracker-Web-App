@@ -68,6 +68,9 @@ class BatteryLevelNotification extends React.Component {
             title: {
                 background: '#8080801a',
                 fontSize: '1.2rem'
+            },
+            icon: {
+                fontSize: '15px'
             }
         }
 
@@ -75,7 +78,7 @@ class BatteryLevelNotification extends React.Component {
             <NavDropdown 
                 alignRight
                 title={
-                    <i className="fas fa-bell" style={{fontSize: '20px'}}>
+                    <i className="fas fa-bell" style={style.icon}>
                         <NotificationBadge 
                             count={runOutPowerItems.length} 
                             effect={Effect.SCALE}
