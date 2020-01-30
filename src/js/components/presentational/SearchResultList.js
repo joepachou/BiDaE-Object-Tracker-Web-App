@@ -19,6 +19,7 @@ import {
     TabletView,
     MobileOnlyView
 } from 'react-device-detect'
+import moment from 'moment'
 
 class SearchResult extends React.Component {
 
@@ -136,25 +137,23 @@ class SearchResult extends React.Component {
         )
     }
 
-    handleConfirmFormSubmit = (e,isDelayTime) => {
+    handleConfirmFormSubmit = (isDelayTime) => {
         let { editedObjectPackage } = this.state;
         let { locale, auth, stateReducer } = this.context
         let [{}, dispatch] = stateReducer
         let username = auth.user.name
         let shouldCreatePdf = config.statusToCreatePdf.includes(editedObjectPackage[0].status)
         let status = editedObjectPackage[0].status
-
+        let reservedTimestamp = isDelayTime ? moment().add(10, 'minutes').format() : moment().format()
         /** Create the pdf package, including pdf, pdf setting and path */
         let pdfPackage = shouldCreatePdf && config.getPdfPackage(status, auth.user, this.state.editedObjectPackage, locale)
-     
-        editedObjectPackage.isDelayTime = e
      
         axios.post(dataSrc.editObjectPackage, {
             locale,
             formOption: editedObjectPackage,
             username,
             pdfPackage,
-            isDelayTime:e
+            reservedTimestamp
         }).then(res => {
             setTimeout(
                 function() {
