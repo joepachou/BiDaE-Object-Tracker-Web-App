@@ -872,26 +872,6 @@ const query_getRoleNameList = () => {
 }
 
 
-const query_getRoleFromUserID= (username) => {
-
-	let text = `
-	SELECT 
-		role_id 
-	FROM user_roles WHERE user_id = $1;
-`
-
-	const values = [username];
-
-	const query = {
-	    text,
-	   	values
-	};
-
-	return query;
-}
-
-
-
 const query_deleteUser = (username) => {
 	
 	const query = `
@@ -1498,7 +1478,6 @@ module.exports = {
 	query_getUserRole,
 	query_getRoleNameList,
 	query_deleteUser,
-	query_getRoleFromUserID,
 	query_setUserRole,
 	query_getEditObjectRecord,
 	query_deleteEditObjectRecord,

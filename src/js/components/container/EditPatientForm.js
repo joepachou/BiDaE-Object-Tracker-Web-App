@@ -196,8 +196,7 @@ class EditPatientForm extends React.Component {
                                             return value === selectedObjectData.asset_control_number ||
                                                 !this.props.objectData.map(item => item.asset_control_number).includes(value)
                                     }
-                                )
-                                ,
+                                ),
 
 
                                 mac_address: Yup.string()
