@@ -765,10 +765,23 @@ class ObjectManagementContainer extends React.Component{
               
                                         let id = (rowInfo.index+1).toString()
                                         this.toggleSelection(id)
+                                    },
+                                }
+                            }}
+                            getTdProps={() => {
+                                return {
+                                    style: {
+                                        borderRight: 'none'
                                     }
                                 }
-                            }
-                            }
+                            }}
+                            getTheadThProps={() => {
+                                return {
+                                    style: {
+                                        borderRight: 'none'
+                                    }
+                                }
+                            }}
                         />
                     </TabPanel>
                     <TabPanel>
