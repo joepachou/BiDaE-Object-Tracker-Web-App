@@ -100,7 +100,6 @@ class ConfirmForm extends React.Component {
         let hasSelectedObjectData = selectedObjectData[0] ? true : false;
         let isTransferObject = hasSelectedObjectData && selectedObjectData[0].status === config.objectStatus.TRANSFERRED ? true : false;
         let isReservedObject = hasSelectedObjectData && selectedObjectData[0].status === config.objectStatus.RESERVE ? true : false;
-
         return (
             <>  
                 <Modal 
@@ -177,7 +176,6 @@ class ConfirmForm extends React.Component {
                                             {isReservedObject && locale.texts.FROM}
                                             <div className='d-flex justify-content-center'>
                                             {/* {console.log(this.state.reserveInitTime)} */}
-                                            {console.log('render')}
                                                 {isDelayTime
                                                     ?   moment().add(config.reservedDelayTime, 'minutes').locale(locale.abbr).format("LT")
                                                     :   moment().locale(locale.abbr).format("LT")
@@ -212,7 +210,7 @@ class ConfirmForm extends React.Component {
                         </Row>
                         <Formik    
                             onSubmit={({ radioGroup, select }, { setStatus, setSubmitting }) => {
-                               this.props.handleConfirmFormSubmit(isDelayTime)
+                                this.props.handleConfirmFormSubmit(this.state.isDelayTime)
                             }}
 
                             render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (

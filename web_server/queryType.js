@@ -19,7 +19,7 @@ function query_getTrackingData () {
 			object_table.area_id,
 			object_table.object_type,
 			object_table.physician_id,
-			split_part(object_table.asset_control_number, '-', 3) as last_four_acn,
+			object_table.asset_control_number as last_four_acn,
 			lbeacon_table.description as location_description,
 			edit_object_record.notes,
 			user_table.name as physician_name,
@@ -627,25 +627,15 @@ const query_addImport = (formOption) => {
 	return query;
 }
 
-const query_editObjectPackage = (formOption,username, record_id,time) => {
-
+const query_editObjectPackage = (formOption, username, record_id, reservedTimestamp) => {
 	let item = formOption[0]
-	console.log('---------------------------')
-	console.log(time)
-	console.log('---------------------------')
-
 	let text = `
-
-		SELECT id
-		FROM user_table
-		WHERE user_table.name='${username}';
-
 		UPDATE object_table
 		SET 
 			status = '${item.status}',
 			transferred_location = '${item.transferred_location ? item.transferred_location.value : ' '}',
 			note_id = ${record_id},
-			reserved_timestamp = ${item.status == 'reserve' ? time : null},
+			reserved_timestamp = ${item.status == 'reserve' ? `'${reservedTimestamp}'` : null},
 			reserved_user_id = (SELECT id
 				FROM user_table
 				WHERE user_table.name='${username}')
@@ -653,8 +643,6 @@ const query_editObjectPackage = (formOption,username, record_id,time) => {
 		WHERE asset_control_number IN (${formOption.map(item => `'${item.asset_control_number}'`)});
 	`
 	return text
-
-
 }
 
 function query_signin(username) {

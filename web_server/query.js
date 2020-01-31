@@ -389,25 +389,13 @@ const addPatient = (request, response) => {
 
 
 const editObjectPackage = (request, response) => {
-    const { formOption, username, pdfPackage,isDelayTime,locale } = request.body
-   
-    // moment.tz(item.submit_timestamp, process.env.TZ).locale(locale).format('LLL');
-    // moment(item.reserved_timestamp).add(30,"minutes")
-    let time = ''
-    isDelayTime ? time = moment(Date.now()).add(40,"minutes")._d
-    : time = moment(Date.now()).add(30,"minutes")._d
-
-    console.log('---------------------------')
-    console.log(moment(time).format('lll'))
-    console.log('---------------------------')
-    console.log( moment(Date.now()).add(30,"minutes")._d)
-    console.log('---------------------------')
+    const { formOption, username, pdfPackage, reservedTimestamp, locale} = request.body
 
     pool.query(queryType.query_addEditObjectRecord(formOption, username))
         .then(res => {
             const record_id = res.rows[0].id
             console.log('Add edited object record success')
-            pool.query(queryType.query_editObjectPackage(formOption,username, record_id,time))
+            pool.query(queryType.query_editObjectPackage(formOption, username, record_id, reservedTimestamp))
                 .then(res => {
                     console.log('Edit object package success')
                     if (pdfPackage) {

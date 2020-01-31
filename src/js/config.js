@@ -357,8 +357,9 @@ const config = {
                     return `
                         <div key=${index} style="text-transform: capitalize; margin: 10px;">
                             ${index + 1}.${item.name}, 
-                            ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}: ${item.last_four_acn}, 
-                            ${locale.texts.NEAR}${item.location_description}
+                            ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}: ${item.last_four_acn.slice(-4)}, 
+                            ${locale.texts.NEAR}${item.location_description},
+                            ${item.residence_time}
                         </div>
                     `
                 }).join(" ")
@@ -478,11 +479,11 @@ const config = {
         mapOptions: {
             crs: L.CRS.Simple,
             // center: L.latLng(-2000, -4000),
-            zoom: -6,
-            minZoom: -7,
+            zoom: -5.5,
+            minZoom: -6,
             minZoomForTablet: -7,
             minZoomForMobile: -10,
-            maxZoom: 0,
+            maxZoom: -5,
             zoomDelta: 0.25,
             zoomSnap: 0,
             zoomControl: true,
@@ -705,7 +706,7 @@ const config = {
                                    ${item.type}
                                 </div>
                                 <div class="popupType ">
-                                    , ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn}
+                                    , ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn.slice(-4)}
                                 </div>
                                 <div class="popupType">
                                     ${item.status !== "normal" 
@@ -973,7 +974,7 @@ const config = {
                                ${item.type}
                             </div>
                             <div class="popupType ">
-                                , ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn}
+                                , ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn.slice(-4)}
                             </div>
                             <div class="popupType">
                                 ${item.status !== "normal" 

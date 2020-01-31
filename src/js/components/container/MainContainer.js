@@ -602,8 +602,6 @@ class MainContainer extends React.Component{
                                 <InfoPrompt 
                                     searchKey={searchKey}
                                     searchResult={searchResult}
-                                    title={locale.texts.FOUND} 
-                                    title2={locale.texts.NOT_FOUND}
                                 />
                                 <SurveillanceContainer
                                     showPath={this.state.showPath}
