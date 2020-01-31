@@ -822,10 +822,12 @@ const getGeoFenceConfig = (request, response) => {
     pool.query(queryType.query_getGeoFenceConfig(areaId))
         .then(res => {
             res.rows.map(item => {
+                item.start_time = item.start_time.split(':').filter((item,index) => index < 2).join(':')
+                item.end_time = item.end_time.split(':').filter((item,index) => index < 2).join(':')
                 item.perimeters = parseGeoFenceConfig(item.perimeters)
                 item.fences = parseGeoFenceConfig(item.fences)
             })
-            console.log("get geo fence config")
+            console.log("get geofence config")
             response.status(200).json(res)
         })
         .catch(err => {
@@ -929,15 +931,13 @@ const getMonitorConfig = (request, response) => {
 
     pool.query(queryType.query_getMonitorConfig(type, sitesGroup))
         .then(res => {
-            console.log(`get ${type}`)
+            console.log(`get ${type.replace(/_/g, ' ')}`)
 
             let toReturn = res.rows
             .filter(item => {
                 return areasId.includes(item.area_id)
             })
             .map(item => {
-                // item.start_time = moment(item.start_time, "hh:mm:ss").format("hh:mm")
-                // item.end_time = moment(item.end_time, "hh:mm:ss").format("hh:mm")
                 item.start_time = item.start_time.split(':').filter((item,index) => index < 2).join(':')
                 item.end_time = item.end_time.split(':').filter((item,index) => index < 2).join(':')
                 return item
@@ -955,15 +955,13 @@ const setMonitorConfig = (request, response) => {
     } = request.body
     pool.query(queryType.query_setMonitorConfig(monitorConfigPackage))
         .then(res => {
-            console.log(`set ${monitorConfigPackage.type}`)
+            console.log(`set ${monitorConfigPackage.type.replace(/_/g, ' ')}`)
             response.status(200).json(res)
         })
         .catch(err => {
             console.log(`set monitor config fail: ${err}`)
         })
 }
-
-
 
 /** Parse the lbeacon's location coordinate from lbeacon_uuid*/
 const parseLbeaconCoordinate = (lbeacon_uuid) => {
