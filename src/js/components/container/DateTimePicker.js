@@ -10,16 +10,12 @@ class DateTimePicker extends React.Component {
     static contextType = AppContext
 
     state = {
-        time: "0",
         length: 24,
     }
 
     onChange = (value) => {
         let id = this.props.id
         this.props.getValue(value, this.props.name, id)
-        this.setState({
-            time: value
-        })
     }
 
     render() {
