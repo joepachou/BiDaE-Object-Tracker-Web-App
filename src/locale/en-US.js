@@ -153,6 +153,10 @@ const en =  {
     ENABLE_START_TIME: "start time",
     ENABLE_END_TIME: "end time",
     BINDFLAG:"Binding Status",
+    PERIMETERS_GROUP: "perimeters group",
+    FENCES_GROUP: "fences group",
+
+    
 
     /** Form Title */
     EDIT_LBEACON: "edit lbeacon",
@@ -179,6 +183,7 @@ const en =  {
     RESIDENT_VIOLATE_GEOFENCE: "resodent violate geofence",
     DISSOCIATION: "dissociation",
     ASSOCIATION: "association",
+    EDIT_GEOFENCE_CONFIG: "edit geofence config",
 
     /** Error Message */
     GENDER_IS_REQUIRED: "Gender is required",

@@ -155,7 +155,9 @@ const tw = {
     ENABLE_START_TIME: "啟動時間",
     ENABLE_END_TIME: "結束時間",
     BINDFLAG:"綁定狀態",
-   
+    PERIMETERS_GROUP: "perimeters group",
+    FENCES_GROUP: "fences group",
+       
     /** Form Title */
     EDIT_LBEACON: "編輯 lbeacon",
     ADD_OBJECT: "增加儀器",
@@ -180,6 +182,7 @@ const tw = {
     RESIDENT_VIOLATE_GEOFENCE: "Geofence監控",
     DISSOCIATION: "解除綁定",
     ASSOCIATION: "綁定儀器",
+    EDIT_GEOFENCE_CONFIG: "編輯電子圍籬設定",
 
     /** Error Message */
     GENDER_IS_REQUIRED: "請選擇性別",
