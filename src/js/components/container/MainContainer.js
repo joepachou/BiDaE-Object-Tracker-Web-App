@@ -112,6 +112,9 @@ class MainContainer extends React.Component{
         let isGeoFenceDataChange = !(_.isEqual(this.state.geoFenceConfig, nextState.geoFenceConfig))
         let isViolatedObjectChange = !(_.isEqual(this.state.isViolatedObjectChange, nextState.isViolatedObjectChange))
 
+        let showMobileMap = !(_.isEqual(this.state.showMobileMap, nextState.showMobileMap))
+        let display = !(_.isEqual(this.state.display, nextState.display)) 
+        
         let isHighlightSearchPanelChange = !(_.isEqual(this.state.isHighlightSearchPanel, nextState.isHighlightSearchPanel))
         let shouldUpdate = isTrackingDataChange || 
                                 hasSearchKey || 
@@ -119,7 +122,9 @@ class MainContainer extends React.Component{
                                 isSearchResultChange || 
                                 isHighlightSearchPanelChange || 
                                 isGeoFenceDataChange ||
-                                isViolatedObjectChange
+                                isViolatedObjectChange ||
+                                showMobileMap ||
+                                display
         return shouldUpdate
     }
 
@@ -749,6 +754,14 @@ class MainContainer extends React.Component{
                                             :
                                                 ''
                                         }
+                                            <ButtonGroup style={{marginTop:'5px',marginBottom:'5px'}}>
+                                                {
+                                                    this.state.showMobileMap 
+                                                    ?   <Button variant='outline-primary' onClick={this.mapButtonHandler}>{locale.texts.HIDE_MAP}</Button>
+                                                    :   <Button variant='outline-primary' onClick={this.mapButtonHandler}>{locale.texts.SHOW_MAP}</Button>
+                                                }
+                                                <Button variant='outline-primary' onClick={this.clearResultHandler}>{locale.texts.CLEAR_RESULT}</Button>
+                                            </ButtonGroup>
                                             <div className='justify-content-center'>
                                                 <SearchResultList
                                                     searchResult={this.state.searchResult} 
@@ -758,14 +771,7 @@ class MainContainer extends React.Component{
                                                     showMobileMap={this.state.showMobileMap}
                                                 />
                                             </div>
-                                    <ButtonGroup>
-                                        {
-                                            this.state.showMobileMap 
-                                            ?   <Button variant='outline-primary' onClick={this.mapButtonHandler}>{locale.texts.HIDE_MAP}</Button>
-                                            :   <Button variant='outline-primary' onClick={this.mapButtonHandler}>{locale.texts.SHOW_MAP}</Button>
-                                        }
-                                        <Button variant='outline-primary' onClick={this.clearResultHandler}>{locale.texts.CLEAR_RESULT}</Button>
-                                    </ButtonGroup>
+                                    
                                     </div>
                             }
                     </div>
