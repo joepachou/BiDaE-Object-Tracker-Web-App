@@ -982,24 +982,20 @@ const calculatePosition = (item) => {
     return [yy, xx, area_id]
 }
 
-const parseGeoFenceCoordinate = (uuid) => {
-    /** Example geofence uuid: 00010018000000003460000000011900 */
-    const area_id = uuid.slice(0, 4);
-    const xx = parseInt(uuid.slice(11, 20))
-    const yy = parseInt(uuid.slice(-8))
-    return [area_id, yy, xx]
-}
-
 /** Parse geo fence config */
 const parseGeoFenceConfig = (field) => {
     let fieldParse = field.split(',')
     let number = parseInt(fieldParse[0])
-    let uuids = fieldParse.slice(1, number + 1).map(uuid => parseGeoFenceCoordinate(uuid))
-    let rssi = fieldParse[number + 1]
+    let lbeacons = {}
+    lbeacons.uuids = fieldParse
+        .filter((item, index) => index % 2 == 1 && item)
+        .map(item => item.replace(/ /g, ''))
+    lbeacons.rssis = fieldParse
+        .filter((item, index) => index % 2 == 0 && index != 0)
+        .map(item => item.replace(/ /g, ''))
     return {
         number,
-        uuids,
-        rssi
+        lbeacons,
     }
 }
 

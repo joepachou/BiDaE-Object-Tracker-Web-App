@@ -15,14 +15,18 @@ class MonitorSettingBlock extends React.Component{
     static contextType = AppContext
 
     state = {
-        type: config.monitorSettingUrlMap[this.props.title],
+        type: config.monitorSettingUrlMap[this.props.type],
         data: []
     }
 
     componentDidMount = () => {
+        this.getMonitorConfig()
+    }
+
+    getMonitorConfig = () => {
         let { auth } = this.context
         axios.post(dataSrc.getMonitorConfig, {
-            type: config.monitorSettingUrlMap[this.props.title],
+            type: config.monitorSettingUrlMap[this.props.type],
             areasId: auth.user.areas_id
         })
         .then(res => {
@@ -47,14 +51,13 @@ class MonitorSettingBlock extends React.Component{
         if (name == 'start' && endTime.split(':')[0] <= startTime.split(':')[0]) {
             endTime = [parseInt(startTime.split(':')[0]) + 1, endTime.split(':')[1]].join(':')
         }
-
+        
         let monitorConfigPackage = {
-            type: config.monitorSettingUrlMap[this.props.title],
+            type: config.monitorSettingUrlMap[this.props.type],
             ...this.state.data[id],
             start_time: startTime,
             end_time: endTime
         }
-
         axios.post(dataSrc.setMonitorConfig, {
             monitorConfigPackage
         })
@@ -76,7 +79,7 @@ class MonitorSettingBlock extends React.Component{
         let id = target.id.split(':')[1]
 
         let monitorConfigPackage = {
-            type: config.monitorSettingUrlMap[this.props.title],
+            type: config.monitorSettingUrlMap[this.props.type],
             ...this.state.data[id],
             enable: parseInt(target.value)
         }
@@ -103,11 +106,11 @@ class MonitorSettingBlock extends React.Component{
             container: {
                 minHeight: "100vh"
             },
-            title: {
+            type: {
                 fontWeight: 600,
                 fontSize: '1.3rem',
             },
-            subTitle: {
+            subtype: {
                 color: "#6c757d",
                 fontWeight: 500,
                 fontSize: '1.2rem',
@@ -117,7 +120,7 @@ class MonitorSettingBlock extends React.Component{
             }
         }
         let {
-            title
+            type
         } = this.props
         let { locale } = this.context
 
@@ -127,8 +130,8 @@ class MonitorSettingBlock extends React.Component{
                     ?   <>
                             <Row className="my-3">
                                 <Col>
-                                    <div style={style.title}>
-                                        {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
+                                    <div style={style.type}>
+                                        {locale.texts[type.toUpperCase().replace(/ /g, '_')]}
                                     </div>
                                 </Col>
                             </Row>
@@ -140,7 +143,7 @@ class MonitorSettingBlock extends React.Component{
                                             className="mx-4"
                                         >
                                             <Col xl={9}>
-                                                <div style={style.subTitle}>
+                                                <div style={style.subtype}>
                                                     {config.mapConfig.areaOptions[item.area_id] 
                                                         ?   locale.texts[config.mapConfig.areaOptions[item.area_id]]
                                                         :   null
@@ -211,7 +214,7 @@ class MonitorSettingBlock extends React.Component{
                                                     rightLabel="off"
                                                     onChange={this.handleSwitcherChange}
                                                     status={item.enable}
-                                                    title={this.props.title}
+                                                    type={this.props.type}
                                                     subId={item.id}
                                                 />
                                             </Col>

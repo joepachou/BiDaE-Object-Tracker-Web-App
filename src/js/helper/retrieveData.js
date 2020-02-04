@@ -8,8 +8,12 @@ const retrieveData = {
             areaId,
             objectType,
         })
+    },
+    getLbeaconTable: async function(locale) {
+        return await axios.post(dataSrc.getLbeaconTable, {
+            locale,
+        })
     }
-
 }
 
 

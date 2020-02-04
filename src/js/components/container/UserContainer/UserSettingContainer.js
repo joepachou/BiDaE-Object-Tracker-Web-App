@@ -99,7 +99,7 @@ class UserSettingContainer extends React.Component{
 
         return (
             <Container fluid className="mt-5">
-                <Tab.Container id="list-group-tabs-example" defaultActiveKey="#UserProfile" className='mt-5' >
+                <Tab.Container id="list-group-tabs-example" defaultActiveKey="#MonitorSetting" className='mt-5' >
                     <Row className='' noGutters>
                         <div className='d-flex flex-row'style={style.main}>
                             <Col lg={2} style={style.sideNav}>

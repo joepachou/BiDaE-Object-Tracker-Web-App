@@ -17,16 +17,16 @@ class MonitorSetting extends React.Component{
         return (
             <div style={style.container} className="px-0 text-capitalize">
                 <MonitorSettingBlock
-                    title={config.monitorSettingType.RESIDENT_MOVEMENT_MONITOR}
+                    type={config.monitorSettingType.RESIDENT_MOVEMENT_MONITOR}
                 />
                 <MonitorSettingBlock
-                    title={config.monitorSettingType.RESIDENT_LONG_STAY_IN_DANGER}
+                    type={config.monitorSettingType.RESIDENT_LONG_STAY_IN_DANGER}
                 />
                 <MonitorSettingBlock
-                    title={config.monitorSettingType.RESIDENT_NOT_STAY_ROOM}
+                    type={config.monitorSettingType.RESIDENT_NOT_STAY_ROOM}
                 />
                 <GeoFenceSettingBlock
-                    title={config.monitorSettingType.GEO_FENCE_VIOLENCE}
+                    type={config.monitorSettingType.GEO_FENCE_VIOLENCE}
                 />
             </div>
         )

@@ -5,7 +5,7 @@ const Switcher = ({
 	leftLabel,
 	rightLabel,
 	status,
-	title,
+	type,
 	onChange,
 	subId
 }) => {
@@ -20,23 +20,23 @@ const Switcher = ({
 			>
 				<input
 					type="radio"
-					id={title.replace(/ /g, '_') + "_left" + ":" + subId}
+					id={type.replace(/ /g, '_') + "_left" + ":" + subId}
 					name={leftLabel}
 					value={1}
 					onChange={onChange}
 					checked={status == 1}
 				/>
-				<label htmlFor={title.replace(/ /g, '_') + "_left" + ":" + subId}>{locale.texts[leftLabel.toUpperCase()]}</label>
+				<label htmlFor={type.replace(/ /g, '_') + "_left" + ":" + subId}>{locale.texts[leftLabel.toUpperCase()]}</label>
 
 				<input
 					type="radio"
-					id={title.replace(/ /g, '_') + "_right" + ":" + subId}
+					id={type.replace(/ /g, '_') + "_right" + ":" + subId}
 					name={rightLabel}
 					value={0}
 					onChange={onChange}
 					checked={status == 0}
 				/>
-				<label htmlFor={title.replace(/ /g, '_') + "_right" + ":" + subId}>{locale.texts[rightLabel.toUpperCase()]}</label>
+				<label htmlFor={type.replace(/ /g, '_') + "_right" + ":" + subId}>{locale.texts[rightLabel.toUpperCase()]}</label>
 			</form>
 		);
 }

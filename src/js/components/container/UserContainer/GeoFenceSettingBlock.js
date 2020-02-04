@@ -3,6 +3,8 @@ import { AppContext } from '../../../context/AppContext';
 import { 
     Row, 
     Col, 
+    ButtonToolbar,
+    Button
 } from "react-bootstrap"
 import Switcher from "../Switcher";
 import axios from "axios"
@@ -11,6 +13,10 @@ import config from "../../../config"
 import DateTimePicker from '../DateTimePicker';
 import AreaPicker from './AreaPicker';
 import LBeaconPicker from './LBeaconPicker';
+import ReactTable from 'react-table'
+import { geofenceConfigColumn } from '../../../tables'
+import EditGeofenceConfig from '../EditGeofenceConfig'
+import retrieveData from '../../../helper/retrieveData'
 
 
 class GeoFenceSettingBlock extends React.Component{
@@ -18,22 +24,42 @@ class GeoFenceSettingBlock extends React.Component{
     static contextType = AppContext
 
     state = {
-        type: config.monitorSettingUrlMap[this.props.title],
+        type: config.monitorSettingUrlMap[this.props.type],
         data: [],
+        columns: [],
+        lbeaconsTable: [],
         selectedArea: null,
-        selectedBeacon: null
+        selectedBeacon: null,
+        selectedData: null,
+        show: false
     }
 
     componentDidMount = () => {
+        this.getMonitorConfig()
+        this.getLbeaconTable()
+
+    }
+
+    getLbeaconTable = () => {
+        let { locale } = this.context
+        retrieveData.getLbeaconTable(locale.abbr)
+            .then(res => {
+                this.setState({
+                    lbeaconsTable: res.data.rows
+                })
+            })
+    }
+
+    getMonitorConfig = () => {
         let { auth } = this.context
         axios.post(dataSrc.getGeoFenceConfig, {
-            type: config.monitorSettingUrlMap[this.props.title],
+            type: config.monitorSettingUrlMap[this.props.type],
             areasId: auth.user.areas_id
         })
         .then(res => {
-
             this.setState({
                 data: res.data.rows,
+                columns: geofenceConfigColumn
             })
         })
         .catch(err => {
@@ -77,7 +103,6 @@ class GeoFenceSettingBlock extends React.Component{
             ...this.state.data[id],
             enable: parseInt(target.value)
         }
-
         axios.post(dataSrc.setMonitorConfig, {
             monitorConfigPackage
         })
@@ -119,16 +144,54 @@ class GeoFenceSettingBlock extends React.Component{
         this.sendToBackEnd(this.state.data[rule_id])
         
     }
+
+    handleClickButton = (e) => {
+        let { name } = e.target
+        switch(name) {
+            case "add rule": 
+                this.setState({
+                    show: true
+                })
+                break;
+        }
+    }
+
+    handleClose = () => {
+        this.setState({
+            show: false
+        })
+    }
+
+    handleSubmit = (monitorConfigPackage) => {
+        axios.post(dataSrc.setMonitorConfig, {
+            monitorConfigPackage
+        })
+        .then(res => {
+            setTimeout(
+                () => {
+                    this.getMonitorConfig(),
+                    this.setState({
+                        show: false
+                    })
+                },
+                300
+            )
+        })
+        .catch(err => { 
+            console.log(err)
+        })
+    }
+
     render() {
         let style = {
             container: {
                 minHeight: "100vh"
             },
-            title: {
+            type: {
                 fontWeight: 600,
                 fontSize: '1.3rem',
             },
-            subTitle: {
+            subtype: {
                 color: "#6c757d",
                 fontWeight: 500,
                 fontSize: '1.2rem',
@@ -138,17 +201,23 @@ class GeoFenceSettingBlock extends React.Component{
             }
         }
         let {
-            title
+            type
         } = this.props
+
+        let {
+            lbeaconsTable
+        } = this.state
+
         let { locale } = this.context
+
         return (
             <div>
                 {Object.keys(this.state.data).length !== 0 
                     ?   <>
                             <Row className="my-3">
                                 <Col>
-                                    <div style={style.title}>
-                                        {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
+                                    <div style={style.type}>
+                                        {locale.texts[type.toUpperCase().replace(/ /g, '_')]}
                                     </div>
                                 </Col>
                             </Row>
@@ -160,7 +229,7 @@ class GeoFenceSettingBlock extends React.Component{
                                             className="mx-4"
                                         >
                                             <Col xl={9}>
-                                                <div style={style.subTitle}>
+                                                <div style={style.subtype}>
                                                     {
                                                         // config.mapConfig.areaOptions[item.area_id] 
                                                         // ?   locale.texts[config.mapConfig.areaOptions[item.area_id]]
@@ -281,7 +350,7 @@ class GeoFenceSettingBlock extends React.Component{
                                                             <Row 
                                                                 className="w-100 p-0 m-0"
                                                             >
-                                                            {
+                                                            {/* {
                                                                 item.perimeters['uuids'].map((beacon, beacon_index) => {
                                                                     return (
                                                                         <Col 
@@ -300,7 +369,7 @@ class GeoFenceSettingBlock extends React.Component{
                                                                     )
                                                                     
                                                                 })
-                                                            }
+                                                            } */}
 
                                                             </Row>
                                                         </Col>
@@ -313,7 +382,7 @@ class GeoFenceSettingBlock extends React.Component{
                                                     rightLabel="off"
                                                     onChange={this.handleSwitcherChange}
                                                     status={item.enable}
-                                                    title={this.props.title}
+                                                    type={this.props.type}
                                                     subId={item.id}
                                                 />
                                             </Col>
@@ -326,11 +395,66 @@ class GeoFenceSettingBlock extends React.Component{
                         </>
                     :   null
                 }
+                <div>
+                    <ButtonToolbar>
+                        <Button 
+                            variant="outline-primary" 
+                            className='text-capitalize mr-2 mb-1'
+                            name="add rule"
+                            onClick={this.handleClickButton}
+                        >
+                            Add rule
+                        </Button>
+                    </ButtonToolbar>
+                    <ReactTable
+                        keyField='id'
+                        data={this.state.data}
+                        columns={this.state.columns}
+                        ref={r => (this.selectTable = r)}
+                        className="-highlight"
+                        style={{height:'75vh'}}
+                        getTrProps={(state, rowInfo, column, instance) => {
+                            return {
+                                onClick: (e) => {
+                                    this.setState({
+                                        show: true,
+                                        selectedData: rowInfo.original
+                                    })
+                                },
+                            }
+                        }}
+                        
+                        getTdProps={() => {
+                            return {
+                                style: {
+                                    borderRight: 'none'
+                                }
+                            }
+                        }}
+                        getTheadThProps={() => {
+                            return {
+                                style: {
+                                    borderRight: 'none',
+                                    textAlign: 'left',
+                                }
+                            }
+                        }}
+                    />
+                </div>
+                <EditGeofenceConfig
+                    handleShowPath={this.props.handleShowPath} 
+                    selectedData={this.state.selectedData}
+                    show={this.state.show} 
+                    handleClose={this.handleClose}
+                    title={'edit geofence config'}
+                    type={config.monitorSettingUrlMap[this.props.type]} 
+                    handleSubmit={this.handleSubmit}
+                    lbeaconsTable={lbeaconsTable}
+                />
             </div>
         )
     }
 }
 
 export default GeoFenceSettingBlock
-                                                            // <Button><i className="fas fa-plus-circle" style={{fontSize: '30px'}}></i>
-// 
+ 

@@ -1234,7 +1234,9 @@ const query_setMonitorConfig = (monitorConfigPackage) => {
 		SET 
 			start_time = '${monitorConfigPackage.start_time}',
 			end_time = '${monitorConfigPackage.end_time}',
-			enable = '${monitorConfigPackage.enable}'
+			enable = '${monitorConfigPackage.enable}',
+			perimeters = '${monitorConfigPackage.perimeters}',
+			fences = '${monitorConfigPackage.fences}'
 		WHERE id = ${monitorConfigPackage.id};
 	`
 }
