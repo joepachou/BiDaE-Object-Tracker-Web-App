@@ -141,6 +141,8 @@ const tw = {
     SELECT_LOCATION: "選擇地點",
     SELECT_PHYSICIAN: "選擇醫師",
     SELECT_ROOM: "選擇房號",
+    SELECT_LBEACON: "選擇lbeacon",
+    SELECT_TIME: "選擇時間",
     WRITE_THE_NOTES: "填寫註記...",
     USERNAME: "使用者名稱",
     PASSWORD: "密碼",
@@ -158,7 +160,7 @@ const tw = {
     PERIMETERS_GROUP: "perimeters group",
     FENCES_GROUP: "fences group",
        
-    /** Form Title */
+    /** form title */
     EDIT_LBEACON: "編輯 lbeacon",
     ADD_OBJECT: "增加儀器",
     EDIT_OBJECT: "編輯儀器",
@@ -183,6 +185,7 @@ const tw = {
     DISSOCIATION: "解除綁定",
     ASSOCIATION: "綁定儀器",
     EDIT_GEOFENCE_CONFIG: "編輯電子圍籬設定",
+    ADD_GEOFENCE_CONFIG: "新增電子圍籬設定",
 
     /** Error Message */
     GENDER_IS_REQUIRED: "請選擇性別",

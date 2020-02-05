@@ -19,6 +19,14 @@ class DateTimePicker extends React.Component {
 
     render() {
 
+        let {
+            locale
+        } = this.context
+
+        let {
+            value
+        } = this.props
+
         let options = Array.from(Array(this.state.length + 1).keys())
             .filter(index => {
                 return index >= parseInt(this.props.start) && index <= parseInt(this.props.end)
@@ -29,14 +37,16 @@ class DateTimePicker extends React.Component {
                     label: `${index}:00`
                 }
             })
-        let defaultValue = {
-            value: this.props.value,
-            label: this.props.value
-        }
+        let defaultValue = value ? {
+            value: value,
+            label: value
+        } : "";
+
 
         return (
             <Select
                 name="timepicker"
+                placeholder={locale.texts.SELECT_TIME}
                 value={defaultValue}
                 onChange={value => this.onChange(value)}
                 options={options}

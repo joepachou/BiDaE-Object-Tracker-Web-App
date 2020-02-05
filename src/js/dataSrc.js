@@ -50,6 +50,7 @@ const checkoutViolation = `${protocol}://${dataSrcIP}/data/checkoutViolation`
 const confirmValidation = `${protocol}://${dataSrcIP}/data/confirmValidation`
 const getMonitorConfig = `${protocol}://${dataSrcIP}/data/getMonitorConfig`
 const setMonitorConfig = `${protocol}://${dataSrcIP}/data/setMonitorConfig`
+const addMonitorConfig = `${protocol}://${dataSrcIP}/data/addMonitorConfig`
 const backendSearch = `${protocol}://${dataSrcIP}/data/backendSearch`
 const getSearchQueue = `${protocol}://${dataSrcIP}/data/getSearchQueue`
 const objectImport = `${protocol}://${dataSrcIP}/data/objectImport`
@@ -119,4 +120,5 @@ module.exports = {
     backendSearch,
     getSearchQueue, 
     pinImage,
+    addMonitorConfig
 };

@@ -963,6 +963,20 @@ const setMonitorConfig = (request, response) => {
         })
 }
 
+const addMonitorConfig = (request, response) => {
+    let {
+        monitorConfigPackage,
+    } = request.body
+    pool.query(queryType.query_addMonitorConfig(monitorConfigPackage))
+        .then(res => {
+            console.log(`add ${monitorConfigPackage.type.replace(/_/g, ' ')}`)
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(`add monitor config fail: ${err}`)
+        })
+}
+
 /** Parse the lbeacon's location coordinate from lbeacon_uuid*/
 const parseLbeaconCoordinate = (lbeacon_uuid) => {
     /** Example of lbeacon_uuid: 00000018-0000-0000-7310-000000004610 */
@@ -1133,6 +1147,7 @@ const addBulkObject = (req, res) => {
     })
 }
 
+
 module.exports = {
     getTrackingData,
     getObjectTable,
@@ -1187,4 +1202,5 @@ module.exports = {
     backendSearch,
     getBackendSearchQueue,
     getTrackingTableByMacAddress,
+    addMonitorConfig
 }

@@ -9,26 +9,30 @@ import axios from 'axios';
 import dataSrc from '../../dataSrc'
 import Switcher from './Switcher'
 import styleConfig from '../../styleConfig';
+import LocaleContext from '../../context/LocaleContext';
+
+let initialState = {
+    show: false,
+    isShowForm: false,
+    transferredLocationOptions: [],
+    isAdding: false,
+    addedPerimeters: {
+        uuids: [],
+        rssis: []
+    },
+    addedFences: {
+        uuids: [],
+        rssis: []
+    },
+    enable: 0,
+    areaID: ''
+}
 
 class EditGeofenceConfig extends React.Component {
 
     static contextType = AppContext
     
-    state = {
-        show: this.props.show,
-        isShowForm: false,
-        transferredLocationOptions: [],
-        isAdding: false,
-        addedPerimeters: {
-            uuids: [],
-            rssis: []
-        },
-        addedFences: {
-            uuids: [],
-            rssis: []
-        },
-        enable: null,
-    };
+    state = {...initialState}
 
     componentDidUpdate = (prevProps) => {
         if (!prevProps.selectedData && this.props.selectedData) {
@@ -42,7 +46,9 @@ class EditGeofenceConfig extends React.Component {
             }
             let {
                 perimeters,
-                fences
+                fences,
+                enable,
+                area
             } = this.props.selectedData
             perimeters.lbeacons.uuids.map(item => {
                 addedPerimeters.uuids.push(item)
@@ -59,7 +65,8 @@ class EditGeofenceConfig extends React.Component {
             this.setState({
                 addedPerimeters,
                 addedFences,
-                enable: this.props.selectedData.enable
+                enable,
+                areaID: area.id
             })
         }
     }
@@ -69,45 +76,15 @@ class EditGeofenceConfig extends React.Component {
             this.props.handleShowPath(item.mac_address);
         })
         this.handleClose()
-    }
-
-    getTransferredLocation = () => {
-        let { locale } = this.context
-        axios.get(dataSrc.getTransferredLocation)
-        .then(res => {
-            const transferredLocationOptions = res.data.map(loc => {
-                return {          
-                    value: loc.transferred_location,
-                    label: locale.texts[loc.transferred_location.toUpperCase().replace(/ /g, '_')],
-                    options: Object.values(loc)
-                        .filter((item, index) => index > 0)
-                        .map(branch => {
-                            return {
-                                value: `${loc.transferred_location},${branch}`,
-                                label: locale.texts[branch.toUpperCase().replace(/ /g, '_')],
-                            }
-                    })
-                }
-
-            })
-            this.setState({
-                transferredLocationOptions
-            })
-        })
-    }
-
-    handleClose = (e) => {
-        if(this.props.handleChangeObjectStatusFormClose) {
-            this.props.handleChangeObjectStatusFormClose();
-        }
-        this.setState({ 
-            show: false 
-        });
-    }
-  
+    }  
 
     handleClose = () => {
         this.props.handleClose()
+        this.setState({ 
+            ...initialState,
+            show: false 
+            
+        });
     }
 
     handleClick = (e, values) => {
@@ -168,23 +145,29 @@ class EditGeofenceConfig extends React.Component {
 
     render() {
         const { 
-            locale 
+            locale,
+            auth
         } = this.context
 
         let { 
             selectedData,
-            lbeaconsTable 
+            lbeaconsTable,
+            isEdited
         } = this.props;
 
         let {
             addedPerimeters,
-            addedFences
+            addedFences,
+            areaID,
+            enable
         } = this.state
 
         let lbeaconsOptions = lbeaconsTable
             .filter(item => {
+                let lbeaconAreaID = parseInt(item.uuid.slice(0,4))
                 return !addedPerimeters.uuids.includes(item.uuid.replace(/-/g, '')) 
                         && !addedFences.uuids.includes(item.uuid.replace(/-/g, ''))
+                        && lbeaconAreaID == areaID
 
             })
             .reduce((options, item) => {
@@ -195,6 +178,19 @@ class EditGeofenceConfig extends React.Component {
                 })
                 return options
             }, [])
+
+        let areaOptions = auth.user.areas_id
+            .filter(item => {
+                return this.props.areaOptions[item]
+            })
+            .map(item => {
+                return {
+                    value: this.props.areaOptions[item],
+                    label: locale.texts[this.props.areaOptions[item]],
+                    id: item
+                }        
+            })
+        let modifiedStartingTime = selectedData ? parseInt(selectedData.start_time.split(':')[0]) + 1 : 0
 
         return (
             <Modal  
@@ -213,35 +209,38 @@ class EditGeofenceConfig extends React.Component {
                 <Modal.Body>
                     <Formik
                         initialValues = {{
-                            name: selectedData && selectedData.name,
-                            start: selectedData && selectedData.start_time,
-                            end: selectedData && selectedData.end_time,
+                            name: selectedData ? selectedData.name : '',
+                            start: selectedData ? selectedData.start_time : '',
+                            end: selectedData ? selectedData.end_time : '',
                             p_lbeacon: null,
                             p_add_rssi: "",
                             f_lbeacon: null,
                             f_add_rssi: "",
-                            enable: selectedData && selectedData.enable,
+                            enable: enable,
+                            area: selectedData ? selectedData.area : ''
                         }}
 
                         validationSchema = {
                             Yup.object().shape({
-                                
+                                name: Yup.string().required(locale.texts.NAME_IS_REQUIRED),                                
                         })}
 
                         onSubmit={(values, { setStatus, setSubmitting }) => {
-
-                                let perimeters = this.transferTypeToString(this.state.addedPerimeters)
-                                let fences = this.transferTypeToString(this.state.addedFences)
-                                let monitorConfigPackage = {
-                                    id: selectedData.id,
-                                    enable: this.state.enable,
-                                    type: this.props.type,
-                                    start_time: values.start,
-                                    end_time: values.end,
-                                    perimeters,
-                                    fences
-                                }
-                                this.props.handleSubmit(monitorConfigPackage)
+                            let perimeters = this.transferTypeToString(this.state.addedPerimeters)
+                            let fences = this.transferTypeToString(this.state.addedFences)
+                            let monitorConfigPackage = {
+                                id: isEdited ? selectedData.id : '',
+                                name: values.name,
+                                enable: this.state.enable,
+                                type: this.props.type,
+                                start_time: values.start,
+                                end_time: values.end,
+                                perimeters,
+                                fences,
+                                area_id: values.area.id,
+                                action: isEdited ? 'set' : 'add'
+                            }
+                            this.props.handleSubmit(monitorConfigPackage)
                         }}
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
@@ -253,7 +252,27 @@ class EditGeofenceConfig extends React.Component {
                                         onChange={this.handleClick}
                                         status={this.state.enable}
                                         type={this.props.type}
-                                        subId={selectedData.id}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <small  className="form-text text-muted">{locale.texts.AREA}</small>
+                                    <Select
+                                        placeholder={locale.texts.SELECT_AREA}
+                                        name='area'
+                                        options={areaOptions}
+                                        value={values.area}
+                                        styles={styleConfig.reactSelect}
+                                        isDisabled={isEdited}
+                                        onChange={value => {
+                                            setFieldValue('area', value)
+                                            this.setState({
+                                                areaID: value.id
+                                            })
+
+                                        }}
+                                        components={{
+                                            IndicatorSeparator: () => null,
+                                        }}
                                     />
                                 </div>
                                 <div className="form-group">
@@ -261,7 +280,7 @@ class EditGeofenceConfig extends React.Component {
                                     <Field  
                                         name="name" 
                                         type="text" 
-                                        className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} 
+                                        className={'form-control' + (errors.name  ? ' is-invalid' : '')} 
                                         placeholder=''
                                     />
                                     <ErrorMessage name="name" component="div" className="invalid-feedback" />
@@ -269,36 +288,30 @@ class EditGeofenceConfig extends React.Component {
                                 <Row>
                                     <Col>
                                         <small  className="form-text text-muted">{locale.texts.ENABLE_START_TIME}</small>
-                                        {selectedData &&
-                                            <DateTimePicker
-                                                id={selectedData.id}
-                                                value={values.start}
-                                                getValue={value => {
-                                                    setFieldValue("start", value.value)
-                                                    if (values.end.split(':')[0] <= value.value.split(':')[0]) {
-                                                        let resetTime = [parseInt(value.value.split(':')[0]) + 1, values.end.split(':')[1]].join(':')
-                                                        setFieldValue("end", resetTime)
-                                                    }
+                                        <DateTimePicker
+                                            value={values.start}
+                                            getValue={value => {
+                                                setFieldValue("start", value.value)
+                                                if (values.end.split(':')[0] <= value.value.split(':')[0]) {
+                                                    let resetTime = [parseInt(value.value.split(':')[0]) + 1, values.end.split(':')[1]].join(':')
+                                                    setFieldValue("end", resetTime)
+                                                }
 
-                                                }}
-                                                name="start"
-                                                start="0"
-                                                end="23"
-                                            />
-                                        }
+                                            }}
+                                            name="start"
+                                            start="0"
+                                            end="23"
+                                        />
                                     </Col>
                                     <Col>
                                         <small  className="form-text text-muted">{locale.texts.ENABLE_END_TIME}</small>
-                                        {selectedData &&
-                                            <DateTimePicker
-                                                id={selectedData.id}
-                                                value={values.end}
-                                                getValue={value => setFieldValue("end", value.value)}
-                                                name="end"
-                                                start={parseInt(selectedData.start_time.split(':')[0]) + 1}
-                                                end="24"
-                                            />
-                                        }
+                                        <DateTimePicker
+                                            value={values.end}
+                                            getValue={value => setFieldValue("end", value.value)}
+                                            name="end"
+                                            start={modifiedStartingTime}
+                                            end="24"
+                                        />
                                     </Col>
                                 </Row>
 
@@ -365,6 +378,8 @@ const TypeGroup = ({
     errors,
     setFieldValue
 }) => {
+    const locale = React.useContext(LocaleContext);
+
     let style = {
         icon: {
             minus: {
@@ -402,7 +417,7 @@ const TypeGroup = ({
                             <Field  
                                 name={`p-${index + 1}-uuid`} 
                                 type="text" 
-                                className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} 
+                                className={'form-control' + (errors.name ? ' is-invalid' : '')} 
                                 placeholder={item}
                                 value={item}
                             />
@@ -411,7 +426,7 @@ const TypeGroup = ({
                             <Field  
                                 name={`p-${index + 1}-rssi`} 
                                 type="text" 
-                                className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} 
+                                className={'form-control' + (errors.name ? ' is-invalid' : '')} 
                                 placeholder=''
                                 value={repository.rssis[index]}
                             />                                                
@@ -438,7 +453,7 @@ const TypeGroup = ({
                 </Col>
                 <Col lg={9} className="pr-1">
                     <Select
-                        placeholder={'select lbeacon'}
+                        placeholder={locale.texts.SELECT_LBEACON}
                         name={`${abbr}_lbeacon`}
                         options={lbeaconsOptions}
                         value={values[`${abbr}_lbeacon`]}
@@ -453,9 +468,10 @@ const TypeGroup = ({
                     <Field  
                         name={`${abbr}_add_rssi`}
                         type="text" 
-                        className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} 
+                        className={'form-control' + (errors[`${abbr}_add_rssi`] ? ' is-invalid' : '')} 
                         placeholder='RSSI'
-                    />                                                
+                    />                 
+                    <ErrorMessage name={`${abbr}_add_rssi`} component="div" className="invalid-feedback" />                               
                 </Col>
             </Row>
         </div>

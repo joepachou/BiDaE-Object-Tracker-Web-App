@@ -25,11 +25,11 @@ class GeoFenceSettingBlock extends React.Component{
         data: [],
         columns: [],
         lbeaconsTable: [],
-        selectedArea: null,
-        selectedBeacon: null,
         selectedData: null,
         show: false,
-        locale: this.context.locale.abbr,        
+        locale: this.context.locale.abbr,   
+        isEdited: false,
+        path: ''     
     }
 
     componentDidMount = () => {
@@ -74,7 +74,11 @@ class GeoFenceSettingBlock extends React.Component{
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })
             res.data.rows.map(item => {
-                item.area_id = locale.texts[config.mapConfig.areaOptions[item.area_id]]
+                item.area = {
+                    value: config.mapConfig.areaOptions[item.area_id],
+                    label: locale.texts[config.mapConfig.areaOptions[item.area_id]],
+                    id: item.area_id
+                }
             })
 
             this.setState({
@@ -92,7 +96,9 @@ class GeoFenceSettingBlock extends React.Component{
         switch(name) {
             case "add rule": 
                 this.setState({
-                    show: true
+                    show: true,
+                    isEdited: false,
+                    path: 'addMonitorConfig'
                 })
                 break;
         }
@@ -100,12 +106,15 @@ class GeoFenceSettingBlock extends React.Component{
 
     handleClose = () => {
         this.setState({
-            show: false
+            show: false,
+            selectedData: null,
         })
     }
 
     handleSubmit = (monitorConfigPackage) => {
-        axios.post(dataSrc.setMonitorConfig, {
+        let { path } = this.state
+
+        axios.post(dataSrc[path], {
             monitorConfigPackage
         })
         .then(res => {
@@ -113,7 +122,8 @@ class GeoFenceSettingBlock extends React.Component{
                 () => {
                     this.getMonitorConfig(),
                     this.setState({
-                        show: false
+                        show: false,
+                        selectedData: null,
                     })
                 },
                 300
@@ -147,7 +157,8 @@ class GeoFenceSettingBlock extends React.Component{
         } = this.props
 
         let {
-            lbeaconsTable
+            lbeaconsTable,
+            isEdited
         } = this.state
 
         let { locale } = this.context
@@ -184,7 +195,9 @@ class GeoFenceSettingBlock extends React.Component{
                             onClick: (e) => {
                                 this.setState({
                                     show: true,
-                                    selectedData: rowInfo.original
+                                    selectedData: rowInfo.original,
+                                    isEdited: true,
+                                    path: 'setMonitorConfig'
                                 })
                             },
                         }
@@ -195,10 +208,12 @@ class GeoFenceSettingBlock extends React.Component{
                     selectedData={this.state.selectedData}
                     show={this.state.show} 
                     handleClose={this.handleClose}
-                    title={'edit geofence config'}
+                    title={isEdited ? 'edit geofence config' : 'add geofence config'}
                     type={config.monitorSettingUrlMap[this.props.type]} 
                     handleSubmit={this.handleSubmit}
                     lbeaconsTable={lbeaconsTable}
+                    areaOptions={config.mapConfig.areaOptions}
+                    isEdited={this.state.isEdited}
                 />
             </div>
         )

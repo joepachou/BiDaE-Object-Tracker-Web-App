@@ -450,7 +450,7 @@ const geofenceConfigColumn = [
     },
     {
         Header: "area",
-        accessor: "area_id",
+        accessor: "area.label",
     },
     {
         Header: "Name",

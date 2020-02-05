@@ -139,6 +139,8 @@ const en =  {
     SELECT_LOCATION: "select location",
     SELECT_PHYSICIAN: "select physician",
     SELECT_ROOM: "select room",
+    SELECT_LBEACON: "select lbeacon",
+    SELECT_TIME: "select time",
     WRITE_THE_NOTES: "write some notes...",
     USERNAME: "username",
     PASSWORD: "password",
@@ -158,7 +160,7 @@ const en =  {
 
     
 
-    /** Form Title */
+    /** form title */
     EDIT_LBEACON: "edit lbeacon",
     ADD_OBJECT: "add object",
     EDIT_OBJECT: "edit object",
@@ -184,6 +186,7 @@ const en =  {
     DISSOCIATION: "dissociation",
     ASSOCIATION: "association",
     EDIT_GEOFENCE_CONFIG: "edit geofence config",
+    ADD_GEOFENCE_CONFIG: "add geofence config",
 
     /** Error Message */
     GENDER_IS_REQUIRED: "Gender is required",

@@ -1132,8 +1132,6 @@ const query_setGeoFenceConfigRows = (config) =>{
 
 	const merge_perimeters_uuids 	= config.perimeters['uuids'].join(',')
 	const merge_fences_uuids 		= config.fences['uuids'].join(',')
-	// console.log(config)
-
 	var perimeters = [config.perimeters['number'], merge_perimeters_uuids, config.perimeters['rssi']].join(',')
 	var fences = [config.fences['number'], merge_fences_uuids, config.fences['rssi']].join(',')
 
@@ -1229,16 +1227,100 @@ const query_getMonitorConfig = (type, sitesGroup) => {
 }
 
 const query_setMonitorConfig = (monitorConfigPackage) => {
-	return `
-		UPDATE ${monitorConfigPackage.type}
+	let {
+		type,
+		id,
+		name,
+		start_time,
+		end_time,
+		enable,
+		perimeters,
+		fences,
+		area_id
+	} = monitorConfigPackage
+
+	let text = `
+		UPDATE ${type}
 		SET 
-			start_time = '${monitorConfigPackage.start_time}',
-			end_time = '${monitorConfigPackage.end_time}',
-			enable = '${monitorConfigPackage.enable}',
-			perimeters = '${monitorConfigPackage.perimeters}',
-			fences = '${monitorConfigPackage.fences}'
-		WHERE id = ${monitorConfigPackage.id};
+			name = $2,
+			area_id = $3,
+			start_time = $4,
+			end_time = $5,
+			enable = $6,
+			perimeters = $7,
+			fences = $8
+		WHERE id = $1;
 	`
+	let values = [
+		id,
+		name,
+		area_id,
+		start_time,
+		end_time,
+		enable,
+		perimeters,
+		fences,
+	]
+
+	let query = {
+		text,
+		values
+	}
+
+	return query
+}
+
+const query_addMonitorConfig = (monitorConfigPackage) => {
+
+	let {
+		type,
+		id,
+		name,
+		start_time,
+		end_time,
+		enable,
+		perimeters,
+		fences,
+		area_id
+	} = monitorConfigPackage
+
+	let text = `
+		INSERT INTO ${type}
+			(
+				name,
+				start_time,
+				end_time,
+				enable,
+				perimeters,
+				fences,
+				area_id
+			)
+		VALUES 
+			(
+				$1,
+				$2,
+				$3,
+				$4,
+				$5,
+				$6,
+				$7
+		)
+	`
+
+	let values = [
+		name,
+		start_time,
+		end_time,
+		enable,
+		perimeters,
+		fences,
+		area_id,
+	]
+
+	return {
+		text, 
+		values
+	}
 }
 
 function query_backendSearch(keyType, keyWord){
@@ -1510,6 +1592,7 @@ module.exports = {
 	query_editObject,
 	query_addImport,
 	query_getImportPatient,
+	query_addMonitorConfig,
 }
 
 

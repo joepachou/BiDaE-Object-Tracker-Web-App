@@ -174,6 +174,8 @@ app.post('/data/getMonitorConfig', db.getMonitorConfig)
 
 app.post('/data/setMonitorConfig', db.setMonitorConfig)
 
+app.post('/data/addMonitorConfig', db.addMonitorConfig)
+
 app.post('/data/backendSearch', db.backendSearch)
 
 app.post('/data/getSearchQueue', db.getBackendSearchQueue)
