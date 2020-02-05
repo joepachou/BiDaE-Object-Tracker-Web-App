@@ -1,10 +1,9 @@
 
 import React from 'react';
-import { Modal, Button, Row, Col } from 'react-bootstrap';
 import Select from 'react-select';
 import { AppContext } from '../../context/AppContext';
-import moment from "moment"
-  
+import styleConfig from "../../styleConfig"
+
 class DateTimePicker extends React.Component {
 
     static contextType = AppContext
@@ -35,8 +34,6 @@ class DateTimePicker extends React.Component {
             label: this.props.value
         }
 
-        let { locale } = this.context
-
         return (
             <Select
                 name="timepicker"
@@ -44,6 +41,8 @@ class DateTimePicker extends React.Component {
                 onChange={value => this.onChange(value)}
                 options={options}
                 isSearchable={false}
+                styles={styleConfig.reactSelect}
+                controlHeigh={20}
                 components={{
                     IndicatorSeparator: () => null
                 }}

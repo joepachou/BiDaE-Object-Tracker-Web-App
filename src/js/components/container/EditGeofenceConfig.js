@@ -9,6 +9,8 @@ import { AppContext } from '../../context/AppContext';
 import axios from 'axios';
 import dataSrc from '../../dataSrc'
 import retrieveData from '../../helper/retrieveData'
+import Switcher from './Switcher'
+import styleConfig from '../../styleConfig';
 
 class EditGeofenceConfig extends React.Component {
 
@@ -26,7 +28,8 @@ class EditGeofenceConfig extends React.Component {
         addedFences: {
             uuids: [],
             rssis: []
-        }
+        },
+        enable: null,
     };
 
     componentDidUpdate = (prevProps) => {
@@ -57,7 +60,8 @@ class EditGeofenceConfig extends React.Component {
             })
             this.setState({
                 addedPerimeters,
-                addedFences
+                addedFences,
+                enable: this.props.selectedData.enable
             })
         }
     }
@@ -111,7 +115,7 @@ class EditGeofenceConfig extends React.Component {
     handleClick = (e, values) => {
         let name = e.target.getAttribute('name')
         let type = e.target.getAttribute('type')
-        let index = e.target.getAttribute('value')
+        let value = e.target.getAttribute('value')
         let { 
             addedPerimeters,
             addedFences 
@@ -119,9 +123,9 @@ class EditGeofenceConfig extends React.Component {
         switch(name) { 
             case "remove":
                 if (type == 'perimeters') {
-                    addedPerimeters = this.parseLbeacons(addedPerimeters, index)
+                    addedPerimeters = this.parseLbeacons(addedPerimeters, value)
                 } else {
-                    addedFences = this.parseLbeacons(addedFences, index)
+                    addedFences = this.parseLbeacons(addedFences, value)
                 }
                 break;
             case "add":
@@ -132,6 +136,11 @@ class EditGeofenceConfig extends React.Component {
                     addedFences.uuids.push(values.f_lbeacon.value.replace(/-/g, ''))
                     addedFences.rssis.push(values.f_add_rssi)
                 }
+                break;
+            case "switch": 
+                this.setState({
+                    enable: value
+                })
                 break;
         }
         this.setState({
@@ -166,10 +175,37 @@ class EditGeofenceConfig extends React.Component {
         let style = {
             icon: {
                 minus: {
-                   color: 'red'
+                   color: 'red',
+                   cursor: 'pointer'
                 },
                 add: {
-                    color: 'rgb(0, 123, 255, 0.6)'
+                    color: 'rgb(0, 123, 255, 0.6)',
+                    cursor: 'pointer'
+                }
+            },
+            rssiDiv: {
+                
+            },
+            select: {
+
+                option: (provided, state) => ({
+                    ...provided,
+                //   borderBottom: '1px dotted pink',
+                //   color: state.isSelected ? 'red' : 'blue',
+                    padding: '0.5rem',
+                    fontSize: '1rem'
+                }),
+
+                control: () => ({
+                  // none of react-select's styles are passed to <Control />
+                    width: 230,
+                }),
+                
+                singleValue: (provided, state) => {
+                    const opacity = state.isDisabled ? 0.5 : 1;
+                    const transition = 'opacity 300ms';
+                
+                    return { ...provided, opacity, transition };
                 }
             }
         }
@@ -218,6 +254,7 @@ class EditGeofenceConfig extends React.Component {
                             p_add_rssi: "",
                             f_lbeacon: null,
                             f_add_rssi: "",
+                            enable: selectedData && selectedData.enable,
                         }}
 
                         validationSchema = {
@@ -231,7 +268,7 @@ class EditGeofenceConfig extends React.Component {
                                 let fences = this.transferTypeToString(this.state.addedFences)
                                 let monitorConfigPackage = {
                                     id: selectedData.id,
-                                    enable: 1,
+                                    enable: this.state.enable,
                                     type: this.props.type,
                                     start_time: values.start,
                                     end_time: values.end,
@@ -243,6 +280,16 @@ class EditGeofenceConfig extends React.Component {
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
                             <Form className="text-capitalize">
+                                <div className="form-group">
+                                    <Switcher
+                                        leftLabel="on"
+                                        rightLabel="off"
+                                        onChange={this.handleClick}
+                                        status={this.state.enable}
+                                        type={this.props.type}
+                                        subId={selectedData.id}
+                                    />
+                                </div>
                                 <div className="form-group">
                                     <small id="TextIDsmall" className="form-text text-muted">{locale.texts.NAME}</small>
                                     <Field  
@@ -355,6 +402,10 @@ class EditGeofenceConfig extends React.Component {
                                                     options={lbeaconsOptions}
                                                     value={values.p_lbeacon}
                                                     onChange={value => setFieldValue("p_lbeacon", value)}
+                                                    styles={styleConfig.reactSelect}
+                                                    components={{
+                                                        IndicatorSeparator: () => null,
+                                                    }}
                                                 />
                                             }
                                         </Col>
@@ -363,7 +414,7 @@ class EditGeofenceConfig extends React.Component {
                                                 name="p_add_rssi" 
                                                 type="text" 
                                                 className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} 
-                                                placeholder='rssi'
+                                                placeholder='RSSI'
                                             />                                                
                                         </Col>
                                     </Row>
@@ -435,7 +486,11 @@ class EditGeofenceConfig extends React.Component {
                                                     name="f_lbeacon"
                                                     options={lbeaconsOptions}
                                                     value={values.f_lbeacon}
+                                                    styles={styleConfig.reactSelect}
                                                     onChange={value => setFieldValue("f_lbeacon", value)}
+                                                    components={{
+                                                        IndicatorSeparator: () => null,
+                                                    }}
                                                 />
                                             }
                                         </Col>
@@ -444,7 +499,7 @@ class EditGeofenceConfig extends React.Component {
                                                 name="f_add_rssi" 
                                                 type="text" 
                                                 className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} 
-                                                placeholder='rssi'
+                                                placeholder='RSSI'
                                             />                                                
                                         </Col>
                                     </Row>
