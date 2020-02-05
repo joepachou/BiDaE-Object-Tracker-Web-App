@@ -262,7 +262,7 @@ const tw = {
     CONFIRM: "確認", 
     REMOVE_USER_CONFIRM: "移除使用者",
 
-    /** Table Title */
+    /** table Title */
     TRACKING: "物件追蹤",
     MY_DEVICES_LIST: "我的儀器",
     MY_PATIENT_LIST: "我的病人",
@@ -271,7 +271,7 @@ const tw = {
     PATIENT: "病人",
     DEVICES: "儀器",
     
-    /** Table Field */
+    /** table Field */
     ID: "ID",
     HEALTH_STATUS: "狀態",
     UUID: "UUID",
@@ -312,6 +312,7 @@ const tw = {
     PHYSICIAN_NAME: "醫護人員姓名",
     DANGER_AREA: "警戒區",
     ROOM: "房號",
+    AREA: "地區",
 
     /** User Roles */
     CARE_PROVIDER: "護理人員",

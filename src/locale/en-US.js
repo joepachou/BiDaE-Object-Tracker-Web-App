@@ -262,14 +262,14 @@ const en =  {
     CONFIRM: "Confirm",
     REMOVE_USER_CONFIRM: "Remove User",
 
-    /** Table Title */
+    /** table Title */
     TRACKING: "tracking",
     MY_DEVICES_LIST: "my devices list",
     MY_PATIENT_LIST: "my patient list",
     NOT_MY_DEVICES_LIST: "not my devices list",
     NOT_MY_PATIENT_LIST: "not my patient list",
     
-    /** Table Field */
+    /** table Field */
     ID: "ID",
     HEALTH_STATUS: "status",
     UUID: "UUID",
@@ -310,6 +310,7 @@ const en =  {
     PHYSICIAN_NAME: "physician name",
     DANGER_AREA: "danger area",
     ROOM: "room",
+    AREA: "area",
 
     /** User Roles */
     CARE_PROVIDER: "care provider",
