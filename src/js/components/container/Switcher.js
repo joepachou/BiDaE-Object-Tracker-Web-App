@@ -15,13 +15,13 @@ const Switcher = ({
 	let { locale } = context
 		
         return (
-			<form 
+			<div
 				className="switch-field text-capitalize"
 			>
 				<input
 					type="radio"
 					id={type.replace(/ /g, '_') + "_left" + ":" + subId}
-					name={leftLabel}
+					name="switch"
 					value={1}
 					onChange={onChange}
 					checked={status == 1}
@@ -31,13 +31,13 @@ const Switcher = ({
 				<input
 					type="radio"
 					id={type.replace(/ /g, '_') + "_right" + ":" + subId}
-					name={rightLabel}
+					name="switch"
 					value={0}
 					onChange={onChange}
 					checked={status == 0}
 				/>
 				<label htmlFor={type.replace(/ /g, '_') + "_right" + ":" + subId}>{locale.texts[rightLabel.toUpperCase()]}</label>
-			</form>
+			</div>
 		);
 }
 
