@@ -1,14 +1,12 @@
 import React from 'react';
-import { Modal, Button, Row, Col, Image, ButtonToolbar, ToggleButton} from 'react-bootstrap'
+import { Modal, Button, Row, Col } from 'react-bootstrap'
 import Select from 'react-select';
-import config from '../../config';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import DateTimePicker from './DateTimePicker'
 import { AppContext } from '../../context/AppContext';
 import axios from 'axios';
 import dataSrc from '../../dataSrc'
-import retrieveData from '../../helper/retrieveData'
 import Switcher from './Switcher'
 import styleConfig from '../../styleConfig';
 
@@ -116,6 +114,7 @@ class EditGeofenceConfig extends React.Component {
         let name = e.target.getAttribute('name')
         let type = e.target.getAttribute('type')
         let value = e.target.getAttribute('value')
+
         let { 
             addedPerimeters,
             addedFences 
@@ -171,47 +170,8 @@ class EditGeofenceConfig extends React.Component {
         const { 
             locale 
         } = this.context
-        
-        let style = {
-            icon: {
-                minus: {
-                   color: 'red',
-                   cursor: 'pointer'
-                },
-                add: {
-                    color: 'rgb(0, 123, 255, 0.6)',
-                    cursor: 'pointer'
-                }
-            },
-            rssiDiv: {
-                
-            },
-            select: {
-
-                option: (provided, state) => ({
-                    ...provided,
-                //   borderBottom: '1px dotted pink',
-                //   color: state.isSelected ? 'red' : 'blue',
-                    padding: '0.5rem',
-                    fontSize: '1rem'
-                }),
-
-                control: () => ({
-                  // none of react-select's styles are passed to <Control />
-                    width: 230,
-                }),
-                
-                singleValue: (provided, state) => {
-                    const opacity = state.isDisabled ? 0.5 : 1;
-                    const transition = 'opacity 300ms';
-                
-                    return { ...provided, opacity, transition };
-                }
-            }
-        }
 
         let { 
-            type,
             selectedData,
             lbeaconsTable 
         } = this.props;
@@ -221,14 +181,20 @@ class EditGeofenceConfig extends React.Component {
             addedFences
         } = this.state
 
-        let lbeaconsOptions = lbeaconsTable.reduce((options, item) => {
-            options.push({
-                id: item.id,
-                value: item.uuid,
-                label: `${item.description}[${item.uuid}]`
+        let lbeaconsOptions = lbeaconsTable
+            .filter(item => {
+                return !addedPerimeters.uuids.includes(item.uuid.replace(/-/g, '')) 
+                        && !addedFences.uuids.includes(item.uuid.replace(/-/g, ''))
+
             })
-            return options
-        }, [])
+            .reduce((options, item) => {
+                options.push({
+                    id: item.id,
+                    value: item.uuid,
+                    label: `${item.description}[${item.uuid}]`
+                })
+                return options
+            }, [])
 
         return (
             <Modal  
@@ -291,7 +257,7 @@ class EditGeofenceConfig extends React.Component {
                                     />
                                 </div>
                                 <div className="form-group">
-                                    <small id="TextIDsmall" className="form-text text-muted">{locale.texts.NAME}</small>
+                                    <small  className="form-text text-muted">{locale.texts.NAME}</small>
                                     <Field  
                                         name="name" 
                                         type="text" 
@@ -302,7 +268,7 @@ class EditGeofenceConfig extends React.Component {
                                 </div>
                                 <Row>
                                     <Col>
-                                        <small id="TextIDsmall" className="form-text text-muted">{locale.texts.ENABLE_START_TIME}</small>
+                                        <small  className="form-text text-muted">{locale.texts.ENABLE_START_TIME}</small>
                                         {selectedData &&
                                             <DateTimePicker
                                                 id={selectedData.id}
@@ -322,7 +288,7 @@ class EditGeofenceConfig extends React.Component {
                                         }
                                     </Col>
                                     <Col>
-                                        <small id="TextIDsmall" className="form-text text-muted">{locale.texts.ENABLE_END_TIME}</small>
+                                        <small  className="form-text text-muted">{locale.texts.ENABLE_END_TIME}</small>
                                         {selectedData &&
                                             <DateTimePicker
                                                 id={selectedData.id}
@@ -336,174 +302,29 @@ class EditGeofenceConfig extends React.Component {
                                     </Col>
                                 </Row>
 
-                                <div className="form-group" id="perimeters">
-                                    <small id="TextIDsmall" className="form-text text-muted">
-                                        {locale.texts.PERIMETERS_GROUP}
-                                    </small>
-                                    {addedPerimeters.uuids.map((item, index) => {
-                                        return (
-                                            <Row noGutters className="py-1" key={index}>
-                                                <Col 
-                                                    lg={1}
-                                                    className="d-flex align-items-center justify-content-center"
-                                                >
-                                                    <i 
-                                                        className="fas fa-minus-circle"
-                                                        style={style.icon.minus}
-                                                        name='remove'
-                                                        type="perimeters"
-                                                        value={index}
-                                                        onClick={this.handleClick}
-                                                    ></i>
-                                                </Col>
-                                                <Col lg={9} className="pr-1">
-                                                    <Field  
-                                                        name={`p-${index + 1}-uuid`} 
-                                                        type="text" 
-                                                        className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} 
-                                                        placeholder={item}
-                                                        value={item}
-                                                    />
-                                                </Col>
-                                                <Col lg={2}>
-                                                    <Field  
-                                                        name={`p-${index + 1}-rssi`} 
-                                                        type="text" 
-                                                        className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} 
-                                                        placeholder=''
-                                                        value={addedPerimeters.rssis[index]}
-                                                    />                                                
-                                                </Col>
-                                            </Row>
-                                        )
-                                    })}
-                                    <Row noGutters className="py-1">
-                                        <Col 
-                                            lg={1}
-                                            className="d-flex align-items-center justify-content-center"
-                                        >
-                                            <i 
-                                                className='fa fa-plus'
-                                                name='add'
-                                                type="perimeters"
-                                                style={style.icon.add}
-                                                onClick={(e) => {
-                                                    this.handleClick(e, values)
-                                                    setFieldValue("p_lbeacon", null),
-                                                    setFieldValue("p_add_rssi", '')
-                                                }}
-                                            ></i>
-                                        </Col>
-                                        <Col lg={9} className="pr-1">
-                                            {selectedData &&
-                                                <Select
-                                                    placeholder={'select lbeacon'}
-                                                    name="p_lbeacon"
-                                                    options={lbeaconsOptions}
-                                                    value={values.p_lbeacon}
-                                                    onChange={value => setFieldValue("p_lbeacon", value)}
-                                                    styles={styleConfig.reactSelect}
-                                                    components={{
-                                                        IndicatorSeparator: () => null,
-                                                    }}
-                                                />
-                                            }
-                                        </Col>
-                                        <Col lg={2}>
-                                            <Field  
-                                                name="p_add_rssi" 
-                                                type="text" 
-                                                className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} 
-                                                placeholder='RSSI'
-                                            />                                                
-                                        </Col>
-                                    </Row>
-                                </div>
+                                <TypeGroup 
+                                    type='perimeters'
+                                    abbr='p'
+                                    title={locale.texts.PERIMETERS_GROUP}
+                                    repository={addedPerimeters}
+                                    onClick={this.handleClick} 
+                                    lbeaconsOptions={lbeaconsOptions}
+                                    values={values}
+                                    errors={errors}
+                                    setFieldValue={setFieldValue}
+                                />
 
-
-                                <div className="form-group" id="fences">
-                                    <small id="TextIDsmall" className="form-text text-muted">
-                                        {locale.texts.FENCES_GROUP}
-                                    </small>
-                                    {addedFences.uuids.map((item, index) => {
-                                        return (
-                                            <Row noGutters className="py-1" key={index}>
-                                                <Col 
-                                                    lg={1}
-                                                    className="d-flex align-items-center justify-content-center"
-                                                >
-                                                    <i 
-                                                        className="fas fa-minus-circle"
-                                                        style={style.icon.minus}
-                                                        type="fences"
-                                                        name='remove'
-                                                        value={index}
-                                                        onClick={this.handleClick}
-                                                    ></i>
-                                                </Col>
-                                                <Col lg={9} className="pr-1">
-                                                    <Field  
-                                                        name={`p-${index + 1}-uuid`} 
-                                                        type="text" 
-                                                        className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} 
-                                                        placeholder={item}
-                                                        value={item}
-                                                    />
-                                                </Col>
-                                                <Col lg={2}>
-                                                    <Field  
-                                                        name={`p-${index + 1}-rssi`} 
-                                                        type="text" 
-                                                        className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} 
-                                                        placeholder=''
-                                                        value={addedFences.rssis[index]}
-                                                    />                                                
-                                                </Col>
-                                            </Row>
-                                        )
-                                    })}
-                                    <Row noGutters className="py-1">
-                                        <Col 
-                                            lg={1}
-                                            className="d-flex align-items-center justify-content-center"
-                                        >
-                                            <i 
-                                                className='fa fa-plus'
-                                                name='add'
-                                                style={style.icon.add}
-                                                type="fences"
-                                                onClick={(e) => {
-                                                    this.handleClick(e, values)
-                                                    setFieldValue("f_lbeacon", null),
-                                                    setFieldValue("f_add_rssi", '')
-                                                }}
-                                            ></i>
-                                        </Col>
-                                        <Col lg={9} className="pr-1">
-                                            {selectedData &&
-                                                <Select
-                                                    placeholder={'select lbeacon'}
-                                                    name="f_lbeacon"
-                                                    options={lbeaconsOptions}
-                                                    value={values.f_lbeacon}
-                                                    styles={styleConfig.reactSelect}
-                                                    onChange={value => setFieldValue("f_lbeacon", value)}
-                                                    components={{
-                                                        IndicatorSeparator: () => null,
-                                                    }}
-                                                />
-                                            }
-                                        </Col>
-                                        <Col lg={2}>
-                                            <Field  
-                                                name="f_add_rssi" 
-                                                type="text" 
-                                                className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} 
-                                                placeholder='RSSI'
-                                            />                                                
-                                        </Col>
-                                    </Row>
-                                </div>
+                                <TypeGroup 
+                                    type='fences'
+                                    abbr='f'
+                                    title={locale.texts.FENCES_GROUP}
+                                    repository={addedFences}
+                                    onClick={this.handleClick} 
+                                    lbeaconsOptions={lbeaconsOptions}
+                                    values={values}
+                                    errors={errors}
+                                    setFieldValue={setFieldValue}
+                                />
 
                                 <Modal.Footer>
                                     <Button 
@@ -532,3 +353,111 @@ class EditGeofenceConfig extends React.Component {
 }
   
 export default EditGeofenceConfig;
+
+const TypeGroup = ({
+    type,
+    abbr,
+    title,
+    repository,
+    onClick,
+    lbeaconsOptions,
+    values,
+    errors,
+    setFieldValue
+}) => {
+    let style = {
+        icon: {
+            minus: {
+               color: 'red',
+               cursor: 'pointer'
+            },
+            add: {
+                color: 'rgb(0, 123, 255, 0.6)',
+                cursor: 'pointer'
+            }
+        },
+    }
+    return (
+        <div className="form-group">
+            <small  className="form-text text-muted">
+                {title}
+            </small>
+            {repository.uuids.map((item, index) => {
+                return (
+                    <Row noGutters className="py-1" key={index}>
+                        <Col 
+                            lg={1}
+                            className="d-flex align-items-center justify-content-center"
+                        >
+                            <i 
+                                className="fas fa-minus-circle"
+                                style={style.icon.minus}
+                                type={type}
+                                name='remove'
+                                value={index}
+                                onClick={onClick}
+                            ></i>
+                        </Col>
+                        <Col lg={9} className="pr-1">
+                            <Field  
+                                name={`p-${index + 1}-uuid`} 
+                                type="text" 
+                                className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} 
+                                placeholder={item}
+                                value={item}
+                            />
+                        </Col>
+                        <Col lg={2}>
+                            <Field  
+                                name={`p-${index + 1}-rssi`} 
+                                type="text" 
+                                className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} 
+                                placeholder=''
+                                value={repository.rssis[index]}
+                            />                                                
+                        </Col>
+                    </Row>
+                )
+            })}
+            <Row noGutters className="py-1">
+                <Col 
+                    lg={1}
+                    className="d-flex align-items-center justify-content-center"
+                >
+                    <i 
+                        className='fa fa-plus'
+                        name='add'
+                        style={style.icon.add}
+                        type={type}
+                        onClick={(e) => {
+                            onClick(e, values)
+                            setFieldValue(`${abbr}_lbeacon`, null),
+                            setFieldValue(`${abbr}_add_rssi`, '')
+                        }}
+                    ></i>
+                </Col>
+                <Col lg={9} className="pr-1">
+                    <Select
+                        placeholder={'select lbeacon'}
+                        name={`${abbr}_lbeacon`}
+                        options={lbeaconsOptions}
+                        value={values[`${abbr}_lbeacon`]}
+                        styles={styleConfig.reactSelect}
+                        onChange={value => setFieldValue(`${abbr}_lbeacon`, value)}
+                        components={{
+                            IndicatorSeparator: () => null,
+                        }}
+                    />
+                </Col>
+                <Col lg={2}>
+                    <Field  
+                        name={`${abbr}_add_rssi`}
+                        type="text" 
+                        className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} 
+                        placeholder='RSSI'
+                    />                                                
+                </Col>
+            </Row>
+        </div>
+    )
+} 
