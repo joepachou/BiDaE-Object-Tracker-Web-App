@@ -4,6 +4,9 @@ const styleConfig = {
             ...provided,
             padding: '0.5rem',
             fontSize: '0.8rem',
+            // background: state.isSelected ? 'rgba(0, 123, 255, 0.6)' : 'none',
+            // background: state.isFocused ? 'rgba(0, 123, 255, 0.6)' : 'none',
+            // cursor: 'pointer'
             // height:  20,
         }),
         valueContainer: (provided) => ({
@@ -15,8 +18,9 @@ const styleConfig = {
             ...provided,
             height: 30
         }),
-        menuList: (provided) => ({
+        menu: (provided) => ({
             ...provided,
+            padding: 0
         }),
         control: (provided) => ({
             ...provided,
@@ -26,6 +30,49 @@ const styleConfig = {
             position: 'none',
 
         }),
+        singleValue: (provided) => ({
+            ...provided,
+
+            maxWidth: 'calc(90% - 8px)'
+        }),
+    },
+    reactTable: {
+
+        getTdProps: () => {
+            return {
+                style: {
+                    borderRight: 'none',
+                    fontSize: '1rem'
+                }
+            }
+        },
+
+        getTheadThProps: () => {
+            return {
+                style: {
+                    borderRight: 'none',
+                    textAlign: 'left',
+                    fontSize: '1rem'
+                }
+            }
+        },
+        getProps: () => {
+            return {
+                style: {
+                    border: 'none',
+                }
+            }
+        },
+
+        getTheadProps: () => {
+            return {
+                style: {
+                    boxShadow: 'none',
+                }
+            }
+        },
+
+        showPagination: false
 
     }
 }

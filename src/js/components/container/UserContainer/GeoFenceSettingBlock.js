@@ -6,7 +6,6 @@ import {
     ButtonToolbar,
     Button
 } from "react-bootstrap"
-import Switcher from "../Switcher";
 import axios from "axios"
 import dataSrc from "../../../dataSrc"
 import config from "../../../config"
@@ -14,6 +13,7 @@ import ReactTable from 'react-table'
 import { geofenceConfigColumn } from '../../../tables'
 import EditGeofenceConfig from '../EditGeofenceConfig'
 import retrieveData from '../../../helper/retrieveData'
+import styleConfig from '../../../styleConfig';
 
 
 class GeoFenceSettingBlock extends React.Component{
@@ -84,23 +84,6 @@ class GeoFenceSettingBlock extends React.Component{
         })
         .catch(err => {
             console.log(err)
-        })
-    }
-
-    sendToBackEnd = (rule) => {
-
-        for(var i in rule.perimeters['uuids']){
-
-            if (Array.isArray(rule.perimeters['uuids'][i])){
-                rule.perimeters['uuids'][i] = rule.perimeters['uuids'][i].join('')
-            }
-        }
-        axios.post(dataSrc.setGeoFenceConfigRows, rule)
-            .then(res => {
-                this.setState({})
-            })
-            .catch(err => { 
-                console.log(err)
         })
     }
 
@@ -194,8 +177,9 @@ class GeoFenceSettingBlock extends React.Component{
                     columns={this.state.columns}
                     ref={r => (this.selectTable = r)}
                     className="-highlight"
-                    style={{height:'75vh'}}
-                    getTrProps={(state, rowInfo, column, instance) => {
+                    minRows={0}
+                    {...styleConfig.reactTable}
+                    getTrProps= {(state, rowInfo, column, instance) => {
                         return {
                             onClick: (e) => {
                                 this.setState({
@@ -203,22 +187,6 @@ class GeoFenceSettingBlock extends React.Component{
                                     selectedData: rowInfo.original
                                 })
                             },
-                        }
-                    }}
-                    
-                    getTdProps={() => {
-                        return {
-                            style: {
-                                borderRight: 'none'
-                            }
-                        }
-                    }}
-                    getTheadThProps={() => {
-                        return {
-                            style: {
-                                borderRight: 'none',
-                                textAlign: 'left',
-                            }
                         }
                     }}
                 />

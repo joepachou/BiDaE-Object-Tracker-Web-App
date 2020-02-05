@@ -1,5 +1,5 @@
-import React from "react";
-import 'react-table/react-table.css';
+import React from 'react'
+import config from './config'
 
 const style = {
     column: {
@@ -440,21 +440,30 @@ const deviceManagerTableColumn = [
 
 const geofenceConfigColumn = [
     {
+        Header: "enable",
+        accessor: "enable",
+        width: 60,
+        style: style.column,
+        Cell: props => props.value 
+            ? <i className="fas fa-check-circle text-center" style={style.icon.check}></i>
+            : <i className="fas fa-times-circle" style={style.icon.times}></i>
+    },
+    {
+        Header: "area",
+        accessor: "area_id",
+    },
+    {
         Header: "Name",
         accessor: "name"
     },
     {
-        Header: "start time",
+        Header: "enable start time",
         accessor: "start_time"
     },
     {
-        Header: "end time",
+        Header: "enable end time",
         accessor: "end_time"
     },
-    {
-        Header: "area",
-        accessor: "area_id"
-    }
 ]
 
 
