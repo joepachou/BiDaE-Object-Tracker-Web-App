@@ -74,6 +74,12 @@ const styleConfig = {
 
         showPagination: false
 
+    },
+    checkbox: {
+        fontSize: '0.8rem'
+    },
+    radioButton: {
+        fontSize: '0.8rem'
     }
 }
 

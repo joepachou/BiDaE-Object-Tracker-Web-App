@@ -1,4 +1,5 @@
 import React from 'react'
+import styleConfig from '../../styleConfig'
 
 const RadioButton = ({
     field: { name, value, onChange, onBlur },
@@ -8,20 +9,22 @@ const RadioButton = ({
     ...props
 }) => {
     return (
-        <div>
-            <input
+        <div 
+            className="pretty p-default p-round p-bigger"
+            style={styleConfig.radioButton}    
+        >
+            <input 
+                type="radio" 
                 name={name}
-                id={id}
-                type="radio"
                 value={id} 
                 checked={id === value}
                 onChange={onChange}
                 onBlur={onBlur}
                 {...props}
             />
-            <label htmlFor={id} className="pl-2">
-                {label}
-            </label>
+            <div class="state p-primary">
+                <label>{label}</label>
+            </div>
         </div>
     );
 };

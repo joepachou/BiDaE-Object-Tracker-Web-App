@@ -1,4 +1,5 @@
 import React from 'react';
+import styleConfig from '../../styleConfig'
 
 
 const Checkbox = ({
@@ -6,25 +7,25 @@ const Checkbox = ({
     form: { errors, touched, setFieldValue },
     id,
     label,
-    // className,
     ...props
 }) => {
     return (
-        <div>
-            <input
+        <div 
+            className="pretty p-default p-round p-bigger" 
+            style={styleConfig.checkbox}
+        >
+            <input 
                 name={name}
                 id={id}
                 type="checkbox"
                 value={value}
                 checked={value}
                 onChange={onChange}
-                onBlur={onBlur}
-                // className={classNames("radio-button")}
+                onBlur={onBlur} 
             />
-            <label htmlFor={id} className="pl-2">
-                {label}
-            </label>
-            {touched[name] && <InputFeedback error={errors[name]} />}
+            <div className="state p-primary">
+                <label>{label}</label>
+            </div>
         </div>
     );
 };
