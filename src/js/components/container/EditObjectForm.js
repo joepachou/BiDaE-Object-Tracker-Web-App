@@ -19,6 +19,7 @@ import RadioButton from '../presentational/RadioButton'
 import { isNull } from 'util';
 import { AppContext } from '../../context/AppContext';
 import dataSrc from '../../dataSrc'
+import styleConfig from '../../styleConfig';
 
 
 let monitorTypeMap = {};
@@ -264,21 +265,56 @@ class EditObjectForm extends React.Component {
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm }) => (
                             <Form className="text-capitalize">
+                                <Row>
+                                    <Col>
+                                        <small  className="form-text text-muted">{locale.texts.NAME}</small>
+                                        <Field  name="name" type="text" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} placeholder=''/>
+                                        <ErrorMessage name="name" component="div" className="invalid-feedback" />
+                                    </Col>
+                                    <Col>
+                                        <small  className="form-text text-muted">{locale.texts.TYPE}</small>
+                                        <Field  name="type" type="text" className={'form-control' + (errors.type && touched.type ? ' is-invalid' : '')} placeholder=''/>
+                                        <ErrorMessage name="tyspe" component="div" className="invalid-feedback" />
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        <div className="form-group">
+                                            <small  className="form-text text-muted">{locale.texts.MAC_ADDRESS}</small>
+                                            <Field 
+                                                disabled =  {this.props.disableASN? 1 : 0}
+                                                name="mac_address" 
+                                                type="text" 
+                                                className={'form-control' + (errors.mac_address && touched.mac_address ? ' is-invalid' : '')} 
+                                            />
+                                            <ErrorMessage name="mac_address" component="div" className="invalid-feedback" />
+                                        </div>
+                                    </Col>
+                                    <Col>
+                                        <div className="form-group">
+                                            <small  className="form-text text-muted">{locale.texts.AUTH_AREA}</small>
+                                            <Select
+                                                placeholder = {locale.texts.SELECT_AREA}
+                                                name="area"
+                                                value = {values.area}
+                                                onChange={value => setFieldValue("area", value)}
+                                                options={areaOptions}
+                                                styles={styleConfig.reactSelect}
+                                                components={{
+                                                    IndicatorSeparator: () => null
+                                                }}
+                                            />
+                                            <Row className='no-gutters' className='d-flex align-self-center'>
+                                                <Col>
+                                                    {touched.area && errors.area &&
+                                                    <div style={style.errorMessage}>{errors.area}</div>}
+                                                </Col>
+                                            </Row>        
+                                        </div>
+                                    </Col>
+                                </Row>
                                 <div className="form-group">
-                                    <label htmlFor="name">{locale.texts.NAME}*</label>
-                                    <Field  name="name" type="text" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} placeholder=''/>
-                                    <ErrorMessage name="name" component="div" className="invalid-feedback" />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="type">{locale.texts.TYPE}*</label>
-                                    <Field  name="type" type="text" className={'form-control' + (errors.type && touched.type ? ' is-invalid' : '')} placeholder=''/>
-                                    <ErrorMessage name="tyspe" component="div" className="invalid-feedback" />
-                                </div>
-
-
-                                <div className="form-group">
-                                    <label htmlFor="asset_control_number" className='text-uppercase'>{locale.texts.ACN}*</label>
-                            
+                                    <small  className="form-text text-muted">{locale.texts.ACN}</small>
                                     <Field 
                                         disabled= {this.props.disableASN ? 1 : 0}
                                         name="asset_control_number" 
@@ -288,60 +324,23 @@ class EditObjectForm extends React.Component {
                                     />
                                     <ErrorMessage name="asset_control_number" component="div" className="invalid-feedback" />
                                 </div>
-
-
-                                
+                                <hr/>
                                 <div className="form-group">
-                                    <label htmlFor="mac_address">{locale.texts.MAC_ADDRESS}*</label>
-                                    <Field 
-                                        disabled =  {this.props.disableASN? 1 : 0}
-                                        name="mac_address" 
-                                        type="text" 
-                                        className={'form-control' + (errors.mac_address && touched.mac_address ? ' is-invalid' : '')} 
-                                    />
-                                    <ErrorMessage name="mac_address" component="div" className="invalid-feedback" />
-                                </div>
-                                <hr/>
-                                <Row className="form-group my-3 text-capitalize" noGutters>
-                                    <Col lg={3} className='d-flex align-items-center'>
-                                        <label htmlFor="type">{locale.texts.AUTH_AREA}</label>
-                                    </Col>
-                                    <Col lg={9}>
-                                        <Select
-                                            placeholder = {locale.texts.SELECT_AREA}
-                                            name="area"
-                                            value = {values.area}
-                                            onChange={value => setFieldValue("area", value)}
-                                            options={areaOptions}
-                                            style={style.select}
-                                            components={{
-                                                IndicatorSeparator: () => null
-                                            }}
-                                        />
-                                        <Row className='no-gutters' className='d-flex align-self-center'>
-                                            <Col>
-                                                {touched.area && errors.area &&
-                                                <div style={style.errorMessage}>{errors.area}</div>}
-                                            </Col>
-                                        </Row>        
-                                    </Col>                                        
-                                </Row>
-                                <hr/>
-                                <Row className="form-group my-3 text-capitalize">
-                                    <Col>
-                                        <RadioButtonGroup
-                                            id="radioGroup"
-                                            label={locale.texts.STATUS}
-                                            value={values.radioGroup}
-                                            error={errors.radioGroup}
-                                            touched={touched.radioGroup}
-                                        >
-                                            <Field
+                                    <small  className="form-text text-muted">{locale.texts.STATUS}</small>
+                                    <RadioButtonGroup
+                                        id="radioGroup"
+                                        value={values.radioGroup}
+                                        error={errors.radioGroup}
+                                        touched={touched.radioGroup}
+                                    >
+                                        <div className="d-flex justify-content-between form-group my-1">
+                                            <Field  
                                                 component={RadioButton}
                                                 name="radioGroup"
                                                 id={config.objectStatus.NORMAL}
                                                 label={locale.texts.NORMAL}
                                             />
+    
                                             <Field
                                                 component={RadioButton}
                                                 name="radioGroup"
@@ -354,62 +353,62 @@ class EditObjectForm extends React.Component {
                                                 id={config.objectStatus.RESERVE}
                                                 label={locale.texts.RESERVE}
                                             />
+                                            
                                             <Field
                                                 component={RadioButton}
                                                 name="radioGroup"
                                                 id={config.objectStatus.TRANSFERRED}
                                                 label={locale.texts.TRANSFERRED}
                                             />
-                                            <Select
-                                                name = "select"
-                                                value = {values.select}
-                                                onChange={value => setFieldValue("select", value)}
-                                                options={this.state.transferredLocationOptions}
-                                                isSearchable={false}
-                                                isDisabled={values.radioGroup !== config.objectStatus.TRANSFERRED}
-                                                style={style.select}
-                                                placeholder={locale.texts.SELECT_LOCATION}
-                                                components={{
-                                                    IndicatorSeparator: () => null
-                                                }}
-                                            />
-                                        </RadioButtonGroup>
-                                        <Row className='no-gutters' className='d-flex align-self-center'>
-                                            <Col>
-                                                {touched.radioGroup && errors.radioGroup &&
-                                                <div style={style.errorMessage}>{errors.radioGroup}</div>}
-                                                {touched.select && errors.select &&
-                                                <div style={style.errorMessage}>{errors.select}</div>}
-                                            </Col>
-                                        </Row>                                                
-                                    </Col>
-                                </Row>
-                                <hr/>
-                                <Row className="form-group my-3 text-capitalize">
-                                    <Col>
-                                        <CheckboxGroup
-                                            id="checkboxGroup"
-                                            label={locale.texts.MONITOR_TYPE}
-                                            value={values.checkboxGroup || ''}
-                                            error={errors.checkboxGroup}
-                                            touched={touched.checkboxGroup}
-                                            onChange={setFieldValue}
-                                            // onBlur={setFieldTouched}
-                                        >
-                                            {Object.keys(config.monitorType)
-                                                .filter(key => config.monitorTypeMap.object.includes(parseInt(key)))
-                                                .map((key,index) => {
-                                                    return <Field
-                                                        key={index}
-                                                        component={Checkbox}
-                                                        name="checkboxGroup"
-                                                        id={config.monitorType[key]}
-                                                        label={config.monitorType[key]}
-                                                    />
-                                            })}
-                                        </CheckboxGroup>
-                                    </Col>
-                                </Row>
+                                        </div>
+                                    </RadioButtonGroup>
+                                    <Select
+                                        name = "select"
+                                        value = {values.select}
+                                        className="my-1"
+                                        onChange={value => setFieldValue("select", value)}
+                                        options={this.state.transferredLocationOptions}
+                                        isSearchable={false}
+                                        isDisabled={values.radioGroup !== config.objectStatus.TRANSFERRED}
+                                        styles={styleConfig.reactSelect}
+                                        placeholder={locale.texts.SELECT_LOCATION}
+                                        components={{
+                                            IndicatorSeparator: () => null
+                                        }}
+                                    />
+                                    <Row className='no-gutters' className='d-flex align-self-center'>
+                                        <Col>
+                                            {touched.radioGroup && errors.radioGroup &&
+                                            <div style={style.errorMessage}>{errors.radioGroup}</div>}
+                                            {touched.select && errors.select &&
+                                            <div style={style.errorMessage}>{errors.select}</div>}
+                                        </Col>
+                                    </Row>    
+                                    <hr/>                                            
+                                </div>
+                                <div className="form-group">
+                                    <small  className="form-text text-muted">{locale.texts.MONITOR_TYPE}</small>
+                                    <CheckboxGroup
+                                        id="checkboxGroup"
+                                        label={locale.texts.MONITOR_TYPE}
+                                        value={values.checkboxGroup || ''}
+                                        error={errors.checkboxGroup}
+                                        touched={touched.checkboxGroup}
+                                        onChange={setFieldValue}
+                                    >
+                                        {Object.keys(config.monitorType)
+                                            .filter(key => config.monitorTypeMap.object.includes(parseInt(key)))
+                                            .map((key,index) => {
+                                                return <Field
+                                                    key={index}
+                                                    component={Checkbox}
+                                                    name="checkboxGroup"
+                                                    id={config.monitorType[key]}
+                                                    label={config.monitorType[key]}
+                                                />
+                                        })}
+                                    </CheckboxGroup>
+                                </div>
 
                                 <Modal.Footer>
                                     <Button variant="outline-secondary" className="text-capitalize" onClick={this.handleClose}>

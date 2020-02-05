@@ -224,9 +224,9 @@ const tw = {
     /* Object Status */
     STATUS: "狀態",
     NORMAL: "正常",
-    BROKEN: "已報修",
-    TRANSFERRED: "已轉移",
-    RESERVE: "已預定",
+    BROKEN: "報修",
+    TRANSFERRED: "轉移",
+    RESERVE: "預約",
 
     /** Area and Transferred Location */
     YUANLIN_CHRISTIAN_HOSPITAL: "員林基督教醫院",
