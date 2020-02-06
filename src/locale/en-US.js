@@ -141,7 +141,7 @@ const en =  {
     SELECT_ROOM: "select room",
     SELECT_LBEACON: "select lbeacon",
     SELECT_TIME: "select time",
-    WRITE_THE_NOTES: "write some notes...",
+    WRITE_THE_NOTES: "notes",
     USERNAME: "username",
     PASSWORD: "password",
     DATE_TIME: "date/time",

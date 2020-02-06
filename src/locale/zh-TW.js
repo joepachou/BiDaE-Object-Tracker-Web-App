@@ -143,7 +143,7 @@ const tw = {
     SELECT_ROOM: "選擇房號",
     SELECT_LBEACON: "選擇lbeacon",
     SELECT_TIME: "選擇時間",
-    WRITE_THE_NOTES: "填寫註記...",
+    WRITE_THE_NOTES: "註記",
     USERNAME: "使用者名稱",
     PASSWORD: "密碼",
     DATE_TIME: "時間",
