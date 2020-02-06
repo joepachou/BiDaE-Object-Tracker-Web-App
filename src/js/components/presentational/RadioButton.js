@@ -22,7 +22,7 @@ const RadioButton = ({
                 onBlur={onBlur}
                 {...props}
             />
-            <div class="state p-primary">
+            <div className="state p-primary">
                 <label>{label}</label>
             </div>
         </div>
