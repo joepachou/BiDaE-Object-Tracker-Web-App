@@ -8,7 +8,7 @@ import {
 const FormikFormGroup = ({
    name,
    label,
-   errors,
+   error,
    touched,
    type = 'text',
    disabled,
@@ -30,12 +30,16 @@ const FormikFormGroup = ({
                 :   <Field  
                         name={name} 
                         type={type} 
-                        className={'form-control' + (errors && touched ? ' is-invalid' : '')} 
+                        className={'form-control' + (error && touched ? ' is-invalid' : '')} 
                         placeholder={placeholder}
                         disabled={disabled}
                     />
             }
-            <ErrorMessage name={name} component="div" className="invalid-feedback" />
+            <ErrorMessage 
+                name={name} 
+                component="div" 
+                className="invalid-feedback" 
+            />
         </div>
     );
 };
