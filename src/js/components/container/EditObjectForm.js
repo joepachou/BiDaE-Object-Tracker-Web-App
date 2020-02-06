@@ -20,6 +20,7 @@ import { isNull } from 'util';
 import { AppContext } from '../../context/AppContext';
 import dataSrc from '../../dataSrc'
 import styleConfig from '../../styleConfig';
+import FormikFormGroup from '../presentational/FormikFormGroup'
 
 
 let monitorTypeMap = {};
@@ -109,24 +110,6 @@ class EditObjectForm extends React.Component {
                 label: locale.texts[area.toUpperCase().replace(/ /g, '_')]
             };
         })
-
-        const style = {
-            input: {
-                borderRadius: 0,
-                borderBottom: '1 solid grey',
-                borderTop: 0,
-                borderLeft: 0,
-                borderRight: 0,
-                
-            },
-            errorMessage: {
-                width: '100%',
-                marginTop: '0.25rem',
-                marginBottom: '0.25rem',
-                fontSize: '80%',
-                color: '#dc3545'
-            },
-        }
 
         const { 
             title, 
@@ -267,155 +250,170 @@ class EditObjectForm extends React.Component {
                             <Form className="text-capitalize">
                                 <Row>
                                     <Col>
-                                        <small  className="form-text text-muted">{locale.texts.NAME}</small>
-                                        <Field  name="name" type="text" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} placeholder=''/>
-                                        <ErrorMessage name="name" component="div" className="invalid-feedback" />
+                                        <FormikFormGroup 
+                                            type="text"
+                                            name="name"
+                                            label={locale.texts.NAME}
+                                            errors={errors.name}
+                                            touched={touched.name}
+                                            placeholder=""
+                                        />
                                     </Col>
                                     <Col>
-                                        <small  className="form-text text-muted">{locale.texts.TYPE}</small>
-                                        <Field  name="type" type="text" className={'form-control' + (errors.type && touched.type ? ' is-invalid' : '')} placeholder=''/>
-                                        <ErrorMessage name="tyspe" component="div" className="invalid-feedback" />
+                                        <FormikFormGroup 
+                                            type="text"
+                                            name="type"
+                                            label={locale.texts.TYPE}
+                                            errors={errors.type}
+                                            touched={touched.type}
+                                            placeholder=""
+                                        />
                                     </Col>
                                 </Row>
                                 <Row>
                                     <Col>
-                                        <div className="form-group">
-                                            <small  className="form-text text-muted">{locale.texts.MAC_ADDRESS}</small>
-                                            <Field 
-                                                disabled =  {this.props.disableASN? 1 : 0}
-                                                name="mac_address" 
-                                                type="text" 
-                                                className={'form-control' + (errors.mac_address && touched.mac_address ? ' is-invalid' : '')} 
-                                            />
-                                            <ErrorMessage name="mac_address" component="div" className="invalid-feedback" />
-                                        </div>
+                                        <FormikFormGroup 
+                                            type="text"
+                                            name="mac_address"
+                                            label={locale.texts.MAC_ADDRESS}
+                                            errors={errors.mac_address}
+                                            touched={touched.mac_address}
+                                            placeholder=""
+                                            disabled={this.props.disableASN? 1 : 0}
+                                        />
                                     </Col>
                                     <Col>
-                                        <div className="form-group">
-                                            <small  className="form-text text-muted">{locale.texts.AUTH_AREA}</small>
-                                            <Select
-                                                placeholder = {locale.texts.SELECT_AREA}
-                                                name="area"
-                                                value = {values.area}
-                                                onChange={value => setFieldValue("area", value)}
-                                                options={areaOptions}
-                                                styles={styleConfig.reactSelect}
-                                                components={{
-                                                    IndicatorSeparator: () => null
-                                                }}
-                                            />
-                                            <Row className='d-flex align-self-center'>
-                                                <Col>
-                                                    {touched.area && errors.area &&
-                                                    <div style={style.errorMessage}>{errors.area}</div>}
-                                                </Col>
-                                            </Row>        
-                                        </div>
+                                        <FormikFormGroup 
+                                            type="text"
+                                            name="mac_address"
+                                            label={locale.texts.AUTH_AREA}
+                                            errors={errors.mac_address}
+                                            touched={touched.mac_address}
+                                            placeholder=""
+                                            component={() => ( 
+                                                <Select
+                                                    placeholder={locale.texts.SELECT_AREA}
+                                                    name="area"
+                                                    value = {values.area}
+                                                    onChange={value => setFieldValue("area", value)}
+                                                    options={areaOptions}
+                                                    styles={styleConfig.reactSelect}
+                                                    components={{
+                                                        IndicatorSeparator: () => null
+                                                    }}
+                                                />
+                                            )}
+                                        />
                                     </Col>
                                 </Row>
-                                <div className="form-group">
-                                    <small  className="form-text text-muted">{locale.texts.ACN}</small>
-                                    <Field 
-                                        disabled= {this.props.disableASN ? 1 : 0}
-                                        name="asset_control_number" 
-                                        type="text" 
-                                        className={'form-control' + (errors.asset_control_number && touched.asset_control_number ? ' is-invalid' : '')} 
-                                        placeholder=''
-                                    />
-                                    <ErrorMessage name="asset_control_number" component="div" className="invalid-feedback" />
-                                </div>
+                                <FormikFormGroup 
+                                    type="text"
+                                    name="asset_control_number"
+                                    label={locale.texts.ACN}
+                                    errors={errors.asset_control_number}
+                                    touched={touched.asset_control_number}
+                                    placeholder=""
+                                    disabled= {this.props.disableASN ? 1 : 0}
+                                />
                                 <hr/>
-                                <div className="form-group">
-                                    <small  className="form-text text-muted">{locale.texts.STATUS}</small>
-                                    <RadioButtonGroup
-                                        id="status"
-                                        value={values.status}
-                                        error={errors.status}
-                                        touched={touched.status}
-                                    >
-                                        <div className="d-flex justify-content-between form-group my-1">
-                                            <Field  
-                                                component={RadioButton}
-                                                name="status"
-                                                id={config.objectStatus.NORMAL}
-                                                label={locale.texts.NORMAL}
-                                            />
-    
-                                            <Field
-                                                component={RadioButton}
-                                                name="status"
-                                                id={config.objectStatus.BROKEN}
-                                                label={locale.texts.BROKEN}
-                                            />
-                                            <Field
-                                                component={RadioButton}
-                                                name="status"
-                                                id={config.objectStatus.RESERVE}
-                                                label={locale.texts.RESERVE}
-                                            />
-                                            
-                                            <Field
-                                                component={RadioButton}
-                                                name="status"
-                                                id={config.objectStatus.TRANSFERRED}
-                                                label={locale.texts.TRANSFERRED}
-                                            />
-                                        </div>
-                                    </RadioButtonGroup>   
-                                </div>
-                                <div 
-                                    className="form-group"
-                                    style={{display: values.status == 'transferred' ? '' : 'none'}}
-                                >
-                                    <small  className="form-text text-muted">{locale.texts.AREA}</small>
-
-                                    <Select
-                                        name="select"
-                                        value = {values.transferred_location}
-                                        className="my-1"
-                                        onChange={value => setFieldValue("transferred_location", value)}
-                                        options={this.state.transferredLocationOptions}
-                                        isSearchable={false}
-                                        isDisabled={values.status !== config.objectStatus.TRANSFERRED}
-                                        styles={styleConfig.reactSelect}
-                                        placeholder={locale.texts.SELECT_LOCATION}
-                                        components={{
-                                            IndicatorSeparator: () => null
-                                        }}
-                                    />
-                                    <Row className='no-gutters' className='d-flex align-self-center'>
-                                        <Col>
-                                            {touched.status && errors.status &&
-                                            <div style={style.errorMessage}>{errors.status}</div>}
-                                            {touched.transferred_location && errors.transferred_location &&
-                                            <div style={style.errorMessage}>{errors.transferred_location}</div>}
-                                        </Col>
-                                    </Row> 
-                                </div>
-                                <hr/>                                            
-                                <div className="form-group">
-                                    <small  className="form-text text-muted">{locale.texts.MONITOR_TYPE}</small>
-                                    <CheckboxGroup
-                                        id="checkboxGroup"
-                                        label={locale.texts.MONITOR_TYPE}
-                                        value={values.checkboxGroup || ''}
-                                        error={errors.checkboxGroup}
-                                        touched={touched.checkboxGroup}
-                                        onChange={setFieldValue}
-                                    >
-                                        {Object.keys(config.monitorType)
-                                            .filter(key => config.monitorTypeMap.object.includes(parseInt(key)))
-                                            .map((key,index) => {
-                                                return <Field
-                                                    key={index}
-                                                    component={Checkbox}
-                                                    name="checkboxGroup"
-                                                    id={config.monitorType[key]}
-                                                    label={config.monitorType[key]}
+                                <FormikFormGroup 
+                                    name="status"
+                                    label={locale.texts.STATUS}
+                                    errors={errors.status}
+                                    touched={touched.status}
+                                    placeholder=""
+                                    component={() => (
+                                        <RadioButtonGroup
+                                            value={values.status}
+                                            error={errors.status}
+                                            touched={touched.status}
+                                        >
+                                            <div className="d-flex justify-content-between form-group my-1">
+                                                <Field  
+                                                    component={RadioButton}
+                                                    name="status"
+                                                    id={config.objectStatus.NORMAL}
+                                                    label={locale.texts.NORMAL}
                                                 />
-                                        })}
-                                    </CheckboxGroup>
-                                </div>
+        
+                                                <Field
+                                                    component={RadioButton}
+                                                    name="status"
+                                                    id={config.objectStatus.BROKEN}
+                                                    label={locale.texts.BROKEN}
+                                                />
+                                                <Field
+                                                    component={RadioButton}
+                                                    name="status"
+                                                    id={config.objectStatus.RESERVE}
+                                                    label={locale.texts.RESERVE}
+                                                />
+                                                
+                                                <Field
+                                                    component={RadioButton}
+                                                    name="status"
+                                                    id={config.objectStatus.TRANSFERRED}
+                                                    label={locale.texts.TRANSFERRED}
+                                                />
+                                            </div>
+                                        </RadioButtonGroup>  
+                                    )}
+                                /> 
+                                <FormikFormGroup 
+                                    name="select"
+                                    label={locale.texts.AREA}
+                                    errors={errors.transferred_location}
+                                    touched={touched.transferred_location}
+                                    placeholder=""
+                                    disabled= {this.props.disableASN ? 1 : 0}
+                                    display={values.status == 'transferred'}
+                                    component={() => (
+                                        <Select
+                                            name="select"
+                                            value = {values.transferred_location}
+                                            className="my-1"
+                                            onChange={value => setFieldValue("transferred_location", value)}
+                                            options={this.state.transferredLocationOptions}
+                                            isSearchable={false}
+                                            isDisabled={values.status !== config.objectStatus.TRANSFERRED}
+                                            styles={styleConfig.reactSelect}
+                                            placeholder={locale.texts.SELECT_LOCATION}
+                                            components={{
+                                                IndicatorSeparator: () => null
+                                            }}
+                                        />
+                                    )}
+                                />
+                                <hr/> 
+                                <FormikFormGroup 
+                                    name="asset_control_number"
+                                    label={locale.texts.MONITOR_TYPE}
+                                    errors={errors.checkboxGroup}
+                                    touched={touched.checkboxGroup}
+                                    placeholder=""
+                                    component={() => (
+                                        <CheckboxGroup
+                                            id="checkboxGroup"
+                                            label={locale.texts.MONITOR_TYPE}
+                                            value={values.checkboxGroup || ''}
+                                            error={errors.checkboxGroup}
+                                            touched={touched.checkboxGroup}
+                                            onChange={setFieldValue}
+                                        >
+                                            {Object.keys(config.monitorType)
+                                                .filter(key => config.monitorTypeMap.object.includes(parseInt(key)))
+                                                .map((key,index) => {
+                                                    return <Field
+                                                        key={index}
+                                                        component={Checkbox}
+                                                        name="checkboxGroup"
+                                                        id={config.monitorType[key]}
+                                                        label={config.monitorType[key]}
+                                                    />
+                                            })}
+                                        </CheckboxGroup>
+                                    )}
+                                />                                           
 
                                 <Modal.Footer>
                                     <Button variant="outline-secondary" className="text-capitalize" onClick={this.handleClose}>
