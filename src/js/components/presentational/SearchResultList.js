@@ -117,7 +117,7 @@ class SearchResult extends React.Component {
 
     handleChangeObjectStatusFormSubmit = values => {
         let editedObjectPackage = _.cloneDeep(this.state.selectedObjectData).map(item => {
-            item.status = values.radioGroup.toLowerCase(),
+            item.status = values.status.toLowerCase(),
             item.transferred_location = values.select ? values.select: '';
             item.notes = values.notes
             return item

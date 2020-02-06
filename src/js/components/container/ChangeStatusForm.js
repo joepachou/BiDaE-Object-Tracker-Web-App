@@ -141,117 +141,119 @@ class ChangeStatusForm extends React.Component {
         let selectedObjectData = this.props.selectedObjectData.length !== 0 ? this.props.selectedObjectData[0] : []
 
         return (
-            <>  
-                <Modal  
-                    show={this.state.show}
-                    onHide={this.handleClose} 
-                    size="md" 
-                    id='changeStatusForm' 
-                    enforceFocus={false}
+            <Modal  
+                show={this.state.show}
+                onHide={this.handleClose} 
+                size="md" 
+                id='changeStatusForm' 
+                enforceFocus={false}
+            >
+                <Modal.Header 
+                    closeButton 
+                    className='font-weight-bold text-capitalize'
                 >
-                    <Modal.Header 
-                        closeButton 
-                        className='font-weight-bold text-capitalize'
-                    >
-                        {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
-                        {process.env.IS_TRACKING_PATH_ON == 1 && 
-                            <Button variant="link" style={style.buttonPath} onClick={this.pathOnClickHandler}>追蹤路徑</Button>                        
-                        }
-                    </Modal.Header >
-                    <Modal.Body>
-                        <Formik
-                            initialValues = {{
-                                radioGroup: this.props.selectedObjectData.length !== 0 ? this.props.selectedObjectData[0].status : '',
-                                select: this.props.selectedObjectData.length !== 0 && this.props.selectedObjectData[0].status === config.objectStatus.TRANSFERRED
-                                    ? { 
-                                        value: selectedObjectData.transferred_location,
-                                        label: selectedObjectData.transferred_location.toUpperCase().split(',').map(item => locale.texts[item]).join('/')
-                                    }
-                                    : '', 
-                                note: selectedObjectData.notes || ''
-                            }}
+                    {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
+                    {process.env.IS_TRACKING_PATH_ON == 1 && 
+                        <Button variant="link" style={style.buttonPath} onClick={this.pathOnClickHandler}>追蹤路徑</Button>                        
+                    }
+                </Modal.Header >
+                <Modal.Body>
+                    <Formik
+                        initialValues = {{
+                            status: this.props.selectedObjectData.length !== 0 ? this.props.selectedObjectData[0].status : '',
+                            select: this.props.selectedObjectData.length !== 0 && this.props.selectedObjectData[0].status === config.objectStatus.TRANSFERRED
+                                ? { 
+                                    value: selectedObjectData.transferred_location,
+                                    label: selectedObjectData.transferred_location.toUpperCase().split(',').map(item => locale.texts[item]).join('/')
+                                }
+                                : '', 
+                            note: selectedObjectData.notes || ''
+                        }}
 
-                            validationSchema = {
-                                Yup.object().shape({
-                                    radioGroup: Yup.string().required(locale.texts.STATUS_IS_REQUIRED),
+                        validationSchema = {
+                            Yup.object().shape({
+                                status: Yup.string().required(locale.texts.STATUS_IS_REQUIRED),
 
-                                    select: Yup.string()
-                                        .when('radioGroup', {
-                                            is: config.objectStatus.TRANSFERRED,
-                                            then: Yup.string().required(locale.texts.LOCATION_IS_REQUIRED)
-                                        })
-                            })}
+                                select: Yup.string()
+                                    .when('status', {
+                                        is: config.objectStatus.TRANSFERRED,
+                                        then: Yup.string().required(locale.texts.LOCATION_IS_REQUIRED)
+                                    })
+                        })}
 
-                            onSubmit={(values, { setStatus, setSubmitting }) => {
-                                this.props.handleChangeObjectStatusFormSubmit(values)
-                            }}
+                        onSubmit={(values, { setStatus, setSubmitting }) => {
+                            this.props.handleChangeObjectStatusFormSubmit(values)
+                        }}
 
-                            render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
-                                <Form className="text-capitalize">
-                                    <div className='modalDeviceListGroup' style={style.deviceList}>
-                                        {this.props.selectedObjectData.map((item,index) => {
-                                            return (
-                                                <div key={index} >
-                                                    {index > 0 ? <hr/> : null}
-                                                    <Row noGutters={true}  className='text-capitalize'>
-                                                        {this.props.selectedObjectData.length > 1 
-                                                            ? 
-                                                                <Col xs={1} sm={1} className='d-flex align-items-center'>
-                                                                    <i 
-                                                                        className="fas fa-times" 
-                                                                        onClick={this.props.handleRemoveButton} 
-                                                                        name={item.mac_address}
-                                                                        style={style.crossIcom}
-                                                                    /> 
-                                                                </Col>
-                                                            : null
-                                                        }
-                                                        <Col>
-                                                            <Row>
-                                                                <Col>
-                                                                    <small  className="form-text text-muted">{locale.texts.NAME}</small>
-                                                                    <Field  
-                                                                        value={item.name} 
-                                                                        type="text" 
-                                                                        className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} 
-                                                                        placeholder=''
-                                                                        disabled={true}
-                                                                    />
-                                                                    <ErrorMessage name="name" component="div" className="invalid-feedback" />
-                                                                </Col>
-                                                                <Col>
-                                                                    <small  className="form-text text-muted">{locale.texts.TYPE}</small>
-                                                                    <Field  
-                                                                        value={item.type} 
-                                                                        type="text" 
-                                                                        className={'form-control' + (errors.type && touched.type ? ' is-invalid' : '')} 
-                                                                        placeholder=''
-                                                                        disabled={true}
-                                                                    />
-                                                                    <ErrorMessage name="tyspe" component="div" className="invalid-feedback" />
-                                                                </Col>
-                                                            </Row>
-                                                            <div className="form-group">
-                                                                <small  className="form-text text-muted">{locale.texts.ASSET_CONTROL_NUMBER}</small>
-                                                                <Field 
-                                                                    disabled= {this.props.disableASN ? 1 : 0}
-                                                                    name="asset_control_number" 
+                        render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
+                            <Form className="text-capitalize">
+                                <div className='modalDeviceListGroup' style={style.deviceList}>
+                                    {this.props.selectedObjectData.map((item,index) => {
+                                        return (
+                                            <div key={index} >
+                                                {index > 0 ? <hr/> : null}
+                                                <Row noGutters={true}  className='text-capitalize'>
+                                                    {this.props.selectedObjectData.length > 1 
+                                                        ? 
+                                                            <Col xs={1} sm={1} className='d-flex align-items-center'>
+                                                                <i 
+                                                                    className="fas fa-times" 
+                                                                    onClick={this.props.handleRemoveButton} 
+                                                                    name={item.mac_address}
+                                                                    style={style.crossIcom}
+                                                                /> 
+                                                            </Col>
+                                                        : null
+                                                    }
+                                                    <Col>
+                                                        <Row>
+                                                            <Col>
+                                                                <small  className="form-text text-muted">{locale.texts.NAME}</small>
+                                                                <Field  
+                                                                    value={item.name} 
                                                                     type="text" 
-                                                                    className={'form-control' + (errors.asset_control_number && touched.asset_control_number ? ' is-invalid' : '')} 
+                                                                    className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} 
                                                                     placeholder=''
-                                                                    value={item.asset_control_number}
                                                                     disabled={true}
                                                                 />
-                                                                <ErrorMessage name="asset_control_number" component="div" className="invalid-feedback" />
-                                                            </div>
-                                                        </Col>
-                                                    </Row>
-                                                </div>
-                                            )
-                                        })}
-                                    </div>
+                                                                <ErrorMessage name="name" component="div" className="invalid-feedback" />
+                                                            </Col>
+                                                            <Col>
+                                                                <small  className="form-text text-muted">{locale.texts.TYPE}</small>
+                                                                <Field  
+                                                                    value={item.type} 
+                                                                    type="text" 
+                                                                    className={'form-control' + (errors.type && touched.type ? ' is-invalid' : '')} 
+                                                                    placeholder=''
+                                                                    disabled={true}
+                                                                />
+                                                                <ErrorMessage name="tyspe" component="div" className="invalid-feedback" />
+                                                            </Col>
+                                                        </Row>
+                                                        <div className="form-group">
+                                                            <small  className="form-text text-muted">{locale.texts.ASSET_CONTROL_NUMBER}</small>
+                                                            <Field 
+                                                                disabled= {this.props.disableASN ? 1 : 0}
+                                                                name="asset_control_number" 
+                                                                type="text" 
+                                                                className={'form-control' + (errors.asset_control_number && touched.asset_control_number ? ' is-invalid' : '')} 
+                                                                placeholder=''
+                                                                value={item.asset_control_number}
+                                                                disabled={true}
+                                                            />
+                                                            <ErrorMessage name="asset_control_number" component="div" className="invalid-feedback" />
+                                                        </div>
+                                                    </Col>
+                                                </Row>
+                                            </div>
+                                        )
+                                    })}
                                     <hr/>
-                                    <div className="form-group">
+                                </div>
+
+                                <div 
+                                    className="form-group"
+                                >
                                     <small  className="form-text text-muted">{locale.texts.STATUS}</small>
                                     <RadioButtonGroup
                                         value={values.status}
@@ -265,7 +267,7 @@ class ChangeStatusForm extends React.Component {
                                                 id={config.objectStatus.NORMAL}
                                                 label={locale.texts.NORMAL}
                                             />
-    
+
                                             <Field
                                                 component={RadioButton}
                                                 name="status"
@@ -288,6 +290,7 @@ class ChangeStatusForm extends React.Component {
                                         </div>
                                     </RadioButtonGroup>   
                                 </div>
+
                                 <div 
                                     className="form-group"
                                     style={{display: values.status == 'transferred' ? '' : 'none'}}
@@ -317,7 +320,10 @@ class ChangeStatusForm extends React.Component {
                                         </Col>
                                     </Row> 
                                 </div>
-                                <div className="form-group">
+
+                                <div 
+                                    className="form-group"
+                                >
                                     <small  className="form-text text-muted">{locale.texts.NOTES}</small>
                                     <Field 
                                         name="note" 
@@ -326,47 +332,45 @@ class ChangeStatusForm extends React.Component {
                                         placeholder={locale.texts.WRITE_THE_NOTES}
                                     />
                                     <ErrorMessage name="note" component="div" className="invalid-feedback" />
-
                                     <hr/>
                                 </div>
                                 
-                                    <Row className='d-flex justify-content-center pb-2'>
-                                        <ButtonToolbar >
-                                            <Button 
-                                                name='add device'
-                                                variant="outline-secondary" 
-                                                className='mr-2 notShowOnMobile text-capitalize' 
-                                                onClick={this.handleClick} 
-                                                active={this.props.showAddDevice}
-                                                name='add device'
-                                            >
-                                                {locale.texts.ADD_DEVICE}
-                                            </Button>
-                                        </ButtonToolbar>
-                                    </Row>
-                                    <Modal.Footer>
+                                <Row className='d-flex justify-content-center pb-2'>
+                                    <ButtonToolbar >
                                         <Button 
+                                            name='add device'
                                             variant="outline-secondary" 
-                                            className="text-capitalize" 
-                                            onClick={this.handleClose}
+                                            className='mr-2 notShowOnMobile text-capitalize' 
+                                            onClick={this.handleClick} 
+                                            active={this.props.showAddDevice}
+                                            name='add device'
                                         >
-                                            {locale.texts.CANCEL}
+                                            {locale.texts.ADD_DEVICE}
                                         </Button>
-                                        <Button 
-                                            type="submit" 
-                                            className="text-capitalize" 
-                                            variant="primary" 
-                                            disabled={isSubmitting}
-                                        >
-                                            {locale.texts.SAVE}
-                                        </Button>
-                                    </Modal.Footer>
-                                </Form>
-                            )}
-                        />
-                    </Modal.Body>
-                </Modal>
-            </>
+                                    </ButtonToolbar>
+                                </Row>
+                                <Modal.Footer>
+                                    <Button 
+                                        variant="outline-secondary" 
+                                        className="text-capitalize" 
+                                        onClick={this.handleClose}
+                                    >
+                                        {locale.texts.CANCEL}
+                                    </Button>
+                                    <Button 
+                                        type="submit" 
+                                        className="text-capitalize" 
+                                        variant="primary" 
+                                        disabled={isSubmitting}
+                                    >
+                                        {locale.texts.SAVE}
+                                    </Button>
+                                </Modal.Footer>
+                            </Form>
+                        )}
+                    />
+                </Modal.Body>
+            </Modal>
         );
     }
 }
