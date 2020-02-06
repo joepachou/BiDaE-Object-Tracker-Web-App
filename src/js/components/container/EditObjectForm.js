@@ -158,7 +158,7 @@ class EditObjectForm extends React.Component {
                             type: type || '',
                             asset_control_number: asset_control_number || '',
                             mac_address: mac_address || '',
-                            radioGroup: status.value ,
+                            status: status.value ,
                             area: area_name || '',
                             select: status.value === config.objectStatus.TRANSFERRED 
                                 ? transferred_location 
@@ -221,10 +221,10 @@ class EditObjectForm extends React.Component {
                                         }
                                     ),
 
-                                radioGroup: Yup.string().required(locale.texts.STATUS_IS_REQUIRED),
+                                status: Yup.string().required(locale.texts.STATUS_IS_REQUIRED),
 
-                                select: Yup.string()
-                                    .when('radioGroup', {
+                                transferred_location: Yup.string()
+                                    .when('status', {
                                         is: config.objectStatus.TRANSFERRED,
                                         then: Yup.string().required(locale.texts.LOCATION_IS_REQUIRED)
                                     }),
@@ -246,9 +246,9 @@ class EditObjectForm extends React.Component {
                             const postOption = {
                                 id,
                                 ...values,
-                                status: values.radioGroup,
-                                transferred_location: values.radioGroup === config.objectStatus.TRANSFERRED 
-                                    ? values.select.value
+                                status: values.status,
+                                transferred_location: values.status === config.objectStatus.TRANSFERRED 
+                                    ? values.transferred_location.value
                                     : '',
                                 monitor_type: monitor_type || 0,
                                 area_id: config.mapConfig.areaModules[values.area.value].id || 0
@@ -304,7 +304,7 @@ class EditObjectForm extends React.Component {
                                                     IndicatorSeparator: () => null
                                                 }}
                                             />
-                                            <Row className='no-gutters' className='d-flex align-self-center'>
+                                            <Row className='d-flex align-self-center'>
                                                 <Col>
                                                     {touched.area && errors.area &&
                                                     <div style={style.errorMessage}>{errors.area}</div>}
@@ -328,48 +328,55 @@ class EditObjectForm extends React.Component {
                                 <div className="form-group">
                                     <small  className="form-text text-muted">{locale.texts.STATUS}</small>
                                     <RadioButtonGroup
-                                        id="radioGroup"
-                                        value={values.radioGroup}
-                                        error={errors.radioGroup}
-                                        touched={touched.radioGroup}
+                                        id="status"
+                                        value={values.status}
+                                        error={errors.status}
+                                        touched={touched.status}
                                     >
                                         <div className="d-flex justify-content-between form-group my-1">
                                             <Field  
                                                 component={RadioButton}
-                                                name="radioGroup"
+                                                name="status"
                                                 id={config.objectStatus.NORMAL}
                                                 label={locale.texts.NORMAL}
                                             />
     
                                             <Field
                                                 component={RadioButton}
-                                                name="radioGroup"
+                                                name="status"
                                                 id={config.objectStatus.BROKEN}
                                                 label={locale.texts.BROKEN}
                                             />
                                             <Field
                                                 component={RadioButton}
-                                                name="radioGroup"
+                                                name="status"
                                                 id={config.objectStatus.RESERVE}
                                                 label={locale.texts.RESERVE}
                                             />
                                             
                                             <Field
                                                 component={RadioButton}
-                                                name="radioGroup"
+                                                name="status"
                                                 id={config.objectStatus.TRANSFERRED}
                                                 label={locale.texts.TRANSFERRED}
                                             />
                                         </div>
-                                    </RadioButtonGroup>
+                                    </RadioButtonGroup>   
+                                </div>
+                                <div 
+                                    className="form-group"
+                                    style={{display: values.status == 'transferred' ? '' : 'none'}}
+                                >
+                                    <small  className="form-text text-muted">{locale.texts.AREA}</small>
+
                                     <Select
-                                        name = "select"
-                                        value = {values.select}
+                                        name="select"
+                                        value = {values.transferred_location}
                                         className="my-1"
-                                        onChange={value => setFieldValue("select", value)}
+                                        onChange={value => setFieldValue("transferred_location", value)}
                                         options={this.state.transferredLocationOptions}
                                         isSearchable={false}
-                                        isDisabled={values.radioGroup !== config.objectStatus.TRANSFERRED}
+                                        isDisabled={values.status !== config.objectStatus.TRANSFERRED}
                                         styles={styleConfig.reactSelect}
                                         placeholder={locale.texts.SELECT_LOCATION}
                                         components={{
@@ -378,14 +385,14 @@ class EditObjectForm extends React.Component {
                                     />
                                     <Row className='no-gutters' className='d-flex align-self-center'>
                                         <Col>
-                                            {touched.radioGroup && errors.radioGroup &&
-                                            <div style={style.errorMessage}>{errors.radioGroup}</div>}
-                                            {touched.select && errors.select &&
-                                            <div style={style.errorMessage}>{errors.select}</div>}
+                                            {touched.status && errors.status &&
+                                            <div style={style.errorMessage}>{errors.status}</div>}
+                                            {touched.transferred_location && errors.transferred_location &&
+                                            <div style={style.errorMessage}>{errors.transferred_location}</div>}
                                         </Col>
-                                    </Row>    
-                                    <hr/>                                            
+                                    </Row> 
                                 </div>
+                                <hr/>                                            
                                 <div className="form-group">
                                     <small  className="form-text text-muted">{locale.texts.MONITOR_TYPE}</small>
                                     <CheckboxGroup
