@@ -8,6 +8,7 @@ const RadioButton = ({
     className,
     ...props
 }) => {
+    console.log()
     return (
         <div 
             className="pretty p-default p-round p-bigger"
@@ -17,7 +18,7 @@ const RadioButton = ({
                 type="radio" 
                 name={name}
                 value={id} 
-                checked={id === value}
+                checked={id == value}
                 onChange={onChange}
                 onBlur={onBlur}
                 {...props}
