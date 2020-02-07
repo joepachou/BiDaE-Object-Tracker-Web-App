@@ -86,16 +86,21 @@ class Map extends React.Component {
 
         if(isBrowser) {
             mapOptions.minZoom = mapOptions.minZoom
+            mapOptions.zoom = mapOptions.zoom
         }else if(isTablet) {
             mapOptions.minZoom = mapOptions.minZoomForTablet
+            mapOptions.zoom = mapOptions.minZoomForTablet
         }else{
             mapOptions.minZoom = mapOptions.minZoomForMobile
+            mapOptions.zoom = mapOptions.minZoomForMobile
         }
+
         /** Error handler of the user's auth area does not include the group of sites */
         let areaOption = areaOptions[areaId] || areaOptions[defaultAreaId] || Object.values(areaOptions)[0]
 
         let { url, bounds } = areaModules[areaOption]
         let map = L.map('mapid', mapOptions);
+        console.log(mapOptions)
         let image = L.imageOverlay(url, bounds).addTo(map);
         map.addLayer(image)
         map.fitBounds(bounds);
@@ -247,7 +252,7 @@ class Map extends React.Component {
             this.scalableIconSize = parseInt(this.props.mapConfig.iconOptions.iconSizeForTablet) + this.resizeConst
         else 
             this.scalableIconSize = parseInt(this.props.mapConfig.iconOptions.iconSizeForMobile) + this.resizeConst
-            // this.scalableIconAnchor = parseInt(this.props.mapConfig.iconOptions.iconSize) + this.resizeConst
+        // this.scalableIconAnchor = parseInt(this.props.mapConfig.iconOptions.iconSize) + this.resizeConst
         //console.log(this.props.mapConfig.iconOptions.iconSizeForMobile)
         //console.log(this.scalableIconSize)
         //console.log(this.props.mapConfig.iconOptions.iconSizeForTablet)
@@ -464,24 +469,15 @@ class Map extends React.Component {
     /** Filter out undesired tracking data */
     filterTrackingData = (proccessedTrackingData) => {
         //console.log(proccessedTrackingData)
-        if(isMobileOnly){
-            return proccessedTrackingData.filter(item => {
-                return (
-                    item.found && 
-                    item.isMatchedObject
+        return proccessedTrackingData.filter(item => {
+            return (
+                item.found && 
+                item.isMatchedObject && 
+                (   this.props.searchedObjectType.includes(parseInt(item.object_type)) ||
+                    this.props.searchedObjectType.includes(parseInt(item.searchedType))
                 )
-            })
-        }else{
-            return proccessedTrackingData.filter(item => {
-                return (
-                    item.found && 
-                    item.isMatchedObject && 
-                    (   this.props.searchedObjectType.includes(parseInt(item.object_type)) ||
-                        this.props.searchedObjectType.includes(parseInt(item.searchedType))
-                    )
-                )
-            })
-        }
+            )
+        })
     }
 
     collectObjectsByLatLng = (lbPosition) => {

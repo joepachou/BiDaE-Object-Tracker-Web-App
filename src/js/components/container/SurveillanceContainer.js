@@ -179,7 +179,6 @@ class SurveillanceContainer extends React.Component {
 
             mapForMobile: {
                 width: '90vw',
-                height: '30vh',
                 border: "solid 2px rgba(227, 222, 222, 0.619)",
                 padding: "5px",
             },
@@ -212,6 +211,9 @@ class SurveillanceContainer extends React.Component {
         } = this.context;
 
         let [{areaId}] = stateReducer
+
+        console.log(this.state.searchedObjectType)
+        console.log(this.state.showObjects)
 
         return(
             <div>
@@ -393,9 +395,6 @@ class SurveillanceContainer extends React.Component {
                                         title2={locale.texts.NOT_FOUND} 
                                     />
                                 </div>
-                                <div style={style.titleForTablet} className="mt-auto">
-                                    {locale.texts.LOCATION_ACCURACY}
-                                </div>
                             </div>
                             <div style={style.mapBlockForTablet}>
                             <Map
@@ -420,16 +419,7 @@ class SurveillanceContainer extends React.Component {
                         
                         <div style={style.navBlock}>
                     <Nav style={style.button} className="d-flex align-items-start text-capitalize bd-highlight">
-                        <Nav.Item className="pt-2 mr-2">
-                            <ToggleSwitch 
-                                changeLocationAccuracy={this.props.changeLocationAccuracy} 
-                                rssi={this.props.rssi}
-                                leftLabel="low"
-                                defaultLabel="med" 
-                                rightLabel="high"
-                                locationAccuracyMap={config.mapConfig.locationAccuracyMap}
-                            />
-                        </Nav.Item>
+                        
                         <Nav.Item className="mt-2">
                             <Button 
                                 variant="outline-primary" 
@@ -584,6 +574,7 @@ class SurveillanceContainer extends React.Component {
                         handleClosePath={this.props.handleClosePath}
                         handleShowPath={this.props.handleShowPath}
                         showPath={this.props.showPath}
+                        style={{border:'solid'}}
                     />
                 </div>
             </MobileOnlyView>

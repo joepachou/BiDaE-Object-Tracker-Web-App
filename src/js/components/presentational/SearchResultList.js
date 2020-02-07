@@ -475,7 +475,7 @@ class SearchResult extends React.Component {
                                     </Col> 
                                 :   
                                     
-                                    <Col className="searchResultListGroupForMobile d-flex justify-content-center" style={style.searchResultListFormobile}>
+                                    <Col className="searchResultListGroupForMobile d-flex justify-content-center" >
                                         <AccessControl
                                             permission={'form:edit'}
                                             renderNoAccess={() => (

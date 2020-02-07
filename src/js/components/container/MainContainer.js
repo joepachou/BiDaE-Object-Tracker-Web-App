@@ -25,7 +25,7 @@ import {
     Button,
     ButtonGroup
 } from 'react-bootstrap'
-
+import ScrollArea from 'react-scrollbar'
 const {
     ALL_DEVICES,
     MY_DEVICES,
@@ -568,9 +568,13 @@ class MainContainer extends React.Component{
             containerForMobile:{
                 justifyContent: 'center'
             },
-            
+            mapForMobile: {
+                display: this.state.showMobileMap ? null : 'none'
+            },
+
             searchPanelForMobile: {
                 zIndex: this.state.isHighlightSearchPanel ? 1060 : 1,
+                display: this.state.display ? null : 'none',
                 fontSize: '2rem',
                 background: "white",
                 borderRadius: 10,
@@ -578,14 +582,19 @@ class MainContainer extends React.Component{
                 height: '90vh',
                 width:'90vw'
             },
-
+            searchResultForMobile: {
+                width: '90vw',
+                display: this.state.display ? 'none' : null,
+            },
             searchResultList: {
                 dispaly: this.state.hasSearchKey ? null : 'none',
-                maxHeight: '40vh',
-                justifyContent: 'center'
+                maxHeight: '28vh'
             },
             MapAndQrcode: {
                 maxHeight: '50vh',
+            },
+            searchResultListFormobile: {
+                maxHeight: this.state.showMobileMap ? '40vh' : '70vh'
             }
         }
         const { 
@@ -648,6 +657,7 @@ class MainContainer extends React.Component{
                                         searchKey={this.state.searchKey}
                                         highlightSearchPanel={this.highlightSearchPanel}
                                         handleShowPath={this.handleShowPath}
+                                        showMobileMap={this.state.showMobileMap}
                                     />
                                 </div>
                             </Col>
@@ -680,23 +690,27 @@ class MainContainer extends React.Component{
                                         authenticated={this.state.authenticated}
                                         handleClosePath={this.handleClosePath}
                                         handleShowPath={this.handleShowPath}
+                                        rssi={this.state.rssi}
                                     />
                                 </div>
 
-                                {/** includeing search result */}                    
-                                <div id="searchResult" className="d-flex" style={style.searchResultList}>
-                                    <SearchResultList
-                                        searchResult={this.state.searchResult} 
-                                        searchKey={this.state.searchKey}
-                                        highlightSearchPanel={this.highlightSearchPanel}
-                                        handleShowPath={this.handleShowPath}
-                                    />
-                                </div>
+                                {/** includeing search result */}
+                                <ScrollArea style={style.searchResultList} smoothScrolling={true}>                 
+                                    <div id="searchResult" className="d-flex" style={{justifyContent: 'center'}}>
+                                        <SearchResultList
+                                            searchResult={this.state.searchResult} 
+                                            searchKey={this.state.searchKey}
+                                            highlightSearchPanel={this.highlightSearchPanel}
+                                            handleShowPath={this.handleShowPath}
+                                            showMobileMap={this.state.showMobileMap}
+                                        />
+                                    </div>
+                                </ScrollArea>   
                             </div>
 
                         {/** right area of row */}
                             <div id='searchPanel' className="h-100" style={style.searchPanelForTablet}>
-                                <SearchContainerForTablet 
+                                <SearchContainer
                                     hasSearchKey={this.state.hasSearchKey}
                                     clearSearchResult={this.state.clearSearchResult}
                                     hasGridButton={this.state.hasGridButton}
@@ -709,71 +723,64 @@ class MainContainer extends React.Component{
                 </TabletView>
                 <MobileOnlyView>
                 <div id="page-wrap" className='d-flex flex-column w-100' style={{height: "90vh"}}>
-                    <div className='d-flex flex-row h-100 w-100 justify-content-center'>
+                    <div className='d-flex h-100 w-100 justify-content-center'>
                         {/** left area of row */}
-                            {
-                                this.state.display ?
-
-                                    <div id='searchPanel' className="h-100" style={style.searchPanelForMobile}>
-                                        <SearchContainer 
-                                            hasSearchKey={this.state.hasSearchKey}
-                                            clearSearchResult={this.state.clearSearchResult}
-                                            hasGridButton={this.state.hasGridButton}
-                                            auth={auth}
-                                            getSearchKey={this.getSearchKey}
-                                            handleShowResultListForMobile={this.handleShowResultListForMobile}
+                        <div id='searchPanel' className="h-100" style={style.searchPanelForMobile}>
+                            <SearchContainer 
+                                hasSearchKey={this.state.hasSearchKey}
+                                clearSearchResult={this.state.clearSearchResult}
+                                hasGridButton={this.state.hasGridButton}
+                                auth={auth}
+                                getSearchKey={this.getSearchKey}
+                                handleShowResultListForMobile={this.handleShowResultListForMobile}
+                            />
+                        </div>
+                                
+                        <div style={style.searchResultForMobile}>
+                                <div style={style.mapForMobile}>
+                                    <SurveillanceContainer
+                                        showPath={this.state.showPath}
+                                        pathMacAddress={this.state.pathMacAddress} 
+                                        proccessedTrackingData={proccessedTrackingData.length === 0 ? trackingData : proccessedTrackingData}
+                                        hasSearchKey={hasSearchKey}
+                                        colorPanel={colorPanel}
+                                        searchResult={this.state.searchResult}
+                                        handleClearButton={this.handleClearButton}
+                                        getSearchKey={this.getSearchKey}
+                                        clearColorPanel={clearColorPanel}
+                                        setFence={this.setFence}
+                                        auth={auth}
+                                        lbeaconPosition={this.state.lbeaconPosition}
+                                        geoFenceConfig={this.state.geoFenceConfig.filter(item => parseInt(item.unique_key) == areaId)}
+                                        clearAlerts={this.clearAlerts}
+                                        searchKey={this.state.searchKey}
+                                        authenticated={this.state.authenticated}
+                                        handleClosePath={this.handleClosePath}
+                                        handleShowPath={this.handleShowPath}
+                                        rssi={this.state.rssi}
+                                    />
+                                </div>
+                                <ButtonGroup style={{marginTop:'5px',marginBottom:'5px'}}>
+                                    {
+                                        this.state.showMobileMap 
+                                        ?   <Button variant='outline-primary' onClick={this.mapButtonHandler}>{locale.texts.HIDE_MAP}</Button>
+                                        :   <Button variant='outline-primary' onClick={this.mapButtonHandler}>{locale.texts.SHOW_MAP}</Button>
+                                    }
+                                    <Button variant='outline-primary' onClick={this.clearResultHandler}>{locale.texts.CLEAR_RESULT}</Button>
+                                </ButtonGroup>
+                                <ScrollArea style={style.searchResultListFormobile} smoothScrolling={true}>
+                                    <div className='justify-content-center'>
+                                        <SearchResultList
+                                            searchResult={this.state.searchResult} 
+                                            searchKey={this.state.searchKey}
+                                            highlightSearchPanel={this.highlightSearchPanel}
+                                            handleShowPath={this.handleShowPath}
+                                            showMobileMap={this.state.showMobileMap}
                                         />
                                     </div>
-                                :
-                                    <div style={{width:'90vw'}}>
-                                        {
-                                            this.state.showMobileMap ?
-                                                <div>
-                                                    <SurveillanceContainer
-                                                        showPath={this.state.showPath}
-                                                        pathMacAddress={this.state.pathMacAddress} 
-                                                        proccessedTrackingData={proccessedTrackingData.length === 0 ? trackingData : proccessedTrackingData}
-                                                        hasSearchKey={hasSearchKey}
-                                                        colorPanel={colorPanel}
-                                                        searchResult={this.state.searchResult}
-                                                        handleClearButton={this.handleClearButton}
-                                                        getSearchKey={this.getSearchKey}
-                                                        clearColorPanel={clearColorPanel}
-                                                        changeLocationAccuracy={this.changeLocationAccuracy}
-                                                        setFence={this.setFence}
-                                                        auth={auth}
-                                                        lbeaconPosition={this.state.lbeaconPosition}
-                                                        geoFenceConfig={this.state.geoFenceConfig.filter(item => parseInt(item.unique_key) == areaId)}
-                                                        clearAlerts={this.clearAlerts}
-                                                        searchKey={this.state.searchKey}
-                                                        authenticated={this.state.authenticated}
-                                                        handleClosePath={this.handleClosePath}
-                                                        handleShowPath={this.handleShowPath}
-                                                    />
-                                                </div>
-                                            :
-                                                ''
-                                        }
-                                            <ButtonGroup style={{marginTop:'5px',marginBottom:'5px'}}>
-                                                {
-                                                    this.state.showMobileMap 
-                                                    ?   <Button variant='outline-primary' onClick={this.mapButtonHandler}>{locale.texts.HIDE_MAP}</Button>
-                                                    :   <Button variant='outline-primary' onClick={this.mapButtonHandler}>{locale.texts.SHOW_MAP}</Button>
-                                                }
-                                                <Button variant='outline-primary' onClick={this.clearResultHandler}>{locale.texts.CLEAR_RESULT}</Button>
-                                            </ButtonGroup>
-                                            <div className='justify-content-center'>
-                                                <SearchResultList
-                                                    searchResult={this.state.searchResult} 
-                                                    searchKey={this.state.searchKey}
-                                                    highlightSearchPanel={this.highlightSearchPanel}
-                                                    handleShowPath={this.handleShowPath}
-                                                    showMobileMap={this.state.showMobileMap}
-                                                />
-                                            </div>
-                                    
-                                    </div>
-                            }
+                                </ScrollArea>
+                        
+                        </div>
                     </div>
                 </div>
                 </MobileOnlyView>
