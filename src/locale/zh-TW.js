@@ -117,6 +117,7 @@ const tw = {
     DELETE_OPTION:"移除選項",
     CLEAN_PATH:"刪除路徑",
     RETURN:"還原",
+    ADD_RULE: "增加設定",
 
     /* Form Field */
     NAME: "名稱",
@@ -191,6 +192,7 @@ const tw = {
     ASSOCIATION: "綁定儀器",
     EDIT_GEOFENCE_CONFIG: "編輯電子圍籬設定",
     ADD_GEOFENCE_CONFIG: "新增電子圍籬設定",
+    WARNING: "警告",
 
     /** Error Message */
     GENDER_IS_REQUIRED: "請選擇性別",
@@ -323,6 +325,12 @@ const tw = {
     AREA: "地區",
     API_VERSION: "api version",
     SERVER_TIME_OFFSET: "server time offset",
+    ACTION: "action",
+
+    /** message */
+    ARE_YOU_SURE_TO_DELETE: "確定要刪除 ?",
+
+
 
     /** User Roles */
     CARE_PROVIDER: "護理人員",

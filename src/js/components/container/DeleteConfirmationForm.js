@@ -1,97 +1,65 @@
 import React from 'react';
 import { Modal, Button, Row, Col } from 'react-bootstrap'
-import Select from 'react-select';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import DateTimePicker from './DateTimePicker'
 import { AppContext } from '../../context/AppContext';
-import Switcher from './Switcher'
-import styleConfig from '../../styleConfig';
 import LocaleContext from '../../context/LocaleContext';
-import FormikFormGroup from '../presentational/FormikFormGroup'
-import RadioButtonGroup from './RadioButtonGroup';
-import RadioButton from '../presentational/RadioButton'
 
-class DeleteConfirmationForm extends React.Component {
+const DeleteConfirmationForm = ({
+    handleClose,
+    handleSubmit,
+    show
+}) => {
 
-    static contextType = AppContext
-    
-    state = {
-        show: false
-    }
+    const locale = React.useContext(LocaleContext);
 
-    handleClose = () => {
-        this.props.handleClose()
-    }
-    
-    render() {
-        const { 
-            locale,
-            auth
-        } = this.context
-
-
-
-        return (
-            <Modal  
-                show={this.props.show} 
-                onHide={this.handleClose} 
-                size="md" 
-                id='DeleteConfirmationForm' 
-                enforceFocus={false}
-                centered	
-
+    return (
+        <Modal  
+            show={show} 
+            onHide={handleClose} 
+            size="md" 
+            id='DeleteConfirmationForm' 
+            enforceFocus={false}
+        >
+            <Modal.Header 
+                closeButton 
+                className='font-weight-bold text-capitalize'
             >
-                <Modal.Header 
-                    closeButton 
-                    className='font-weight-bold text-capitalize'
-                >
-                    {"are you sure ? "}
-                </Modal.Header >
-                <Modal.Body>
-                    <Formik
-                        initialValues = {{
-
-                        }}
-
-                        validationSchema = {
-                            Yup.object().shape({
-
-                        })}
-
-                        onSubmit={(values, { setStatus, setSubmitting }) => {
-                            this.props.handleSubmit()
-                        }}
-
-                        render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
-                            <Form className="text-capitalize">
-                                <div>
-                                    are you sure to delete?
-                                </div>
-                                <Modal.Footer>
-                                    <Button 
-                                        variant="outline-secondary" 
-                                        className="text-capitalize" 
-                                        onClick={this.handleClose}
-                                    >
-                                        {locale.texts.CANCEL}
-                                    </Button>
-                                    <Button 
-                                        type="submit" 
-                                        className="text-capitalize" 
-                                        variant="primary" 
-                                        disabled={isSubmitting}
-                                    >
-                                        {locale.texts.SAVE}
-                                    </Button>
-                                </Modal.Footer>
-                            </Form>
-                        )}
-                    />
-                </Modal.Body>
-            </Modal>
-        );
-    }
+                {locale.texts.WARNING}
+            </Modal.Header >
+            <Modal.Body>
+                <Formik
+                    onSubmit={(values, { setStatus, setSubmitting }) => {
+                        handleSubmit()
+                    }}
+                    render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
+                        <Form className="text-capitalize">
+                            <div className="mb-5">
+                                {locale.texts.ARE_YOU_SURE_TO_DELETE}
+                            </div>
+                            <Modal.Footer>
+                                <Button 
+                                    variant="outline-secondary" 
+                                    className="text-capitalize" 
+                                    onClick={handleClose}
+                                >
+                                    {locale.texts.CANCEL}
+                                </Button>
+                                <Button 
+                                    type="submit" 
+                                    className="text-capitalize" 
+                                    variant="primary" 
+                                    disabled={isSubmitting}
+                                >
+                                    {locale.texts.YES}
+                                </Button>
+                            </Modal.Footer>
+                        </Form>
+                    )}
+                />
+            </Modal.Body>
+        </Modal>
+    );
+    
 }
   
 export default DeleteConfirmationForm;

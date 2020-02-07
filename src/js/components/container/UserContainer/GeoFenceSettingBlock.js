@@ -14,7 +14,6 @@ import EditGeofenceConfig from '../EditGeofenceConfig'
 import retrieveData from '../../../helper/retrieveData'
 import styleConfig from '../../../styleConfig';
 import { Menu, Icon, Button, Table } from 'antd';
-const { SubMenu } = Menu;
 import DeleteConfirmationForm from '../DeleteConfirmationForm'
 
 
@@ -49,6 +48,7 @@ class GeoFenceSettingBlock extends React.Component{
             })
         }
     }
+
     getLbeaconTable = () => {
         let { locale } = this.context
         retrieveData.getLbeaconTable(locale.abbr)
@@ -75,24 +75,22 @@ class GeoFenceSettingBlock extends React.Component{
                 Header: "action",
                 minWidth: 60,
                 Cell: props => (
-                    <div>
-                        <a 
-                            name="edit"
-                            style={styleConfig.link}
-                            onClick={(e) => {
-                                this.handleClickButton(e, props)
-                        }} >
-                            {locale.texts.EDIT}
-                        </a>
-                        &nbsp;
-                        <a 
-                            name="delete"
-                            style={styleConfig.link}
-                            onClick={(e) => {
-                                this.handleClickButton(e, props)
-                        }} >
-                            {locale.texts.DELETE}
-                        </a>
+                    <div className="d-flex justify-content-start">
+                        {['edit', 'delete'].map(item => {
+                            return  ( 
+                                <div key={item}>
+                                    <a 
+                                        name={item}
+                                        style={styleConfig.link}
+                                        onClick={(e) => {
+                                            this.handleClickButton(e, props)
+                                    }} >
+                                        {locale.texts[item.toUpperCase()]}
+                                    </a>
+                                    &nbsp;
+                                </div>
+                            )
+                        })}
                     </div>
                 )
             })
@@ -150,7 +148,6 @@ class GeoFenceSettingBlock extends React.Component{
                     path: 'deleteMonitorConfig'
                 })
                 break;
-            
         }
     }
 
@@ -197,17 +194,8 @@ class GeoFenceSettingBlock extends React.Component{
                 minHeight: "100vh"
             },
             type: {
-                // fontWeight: 600,
                 fontSize: '1rem',
             },
-            subtype: {
-                color: "#6c757d",
-                fontWeight: 500,
-                fontSize: '1.2rem',
-            },
-            hr: {
-                width: "95%"
-            }
         }
         let {
             type
@@ -216,7 +204,6 @@ class GeoFenceSettingBlock extends React.Component{
         let {
             lbeaconsTable,
             isEdited,
-            current
         } = this.state
 
         let { locale } = this.context
@@ -237,7 +224,7 @@ class GeoFenceSettingBlock extends React.Component{
                         name="add rule"
                         onClick={this.handleClickButton}
                     >
-                        Add rule
+                        {locale.texts.ADD_RULE}
                     </Button>
                 </ButtonToolbar>
                 <ReactTable
@@ -248,18 +235,6 @@ class GeoFenceSettingBlock extends React.Component{
                     className="-highlight"
                     minRows={0}
                     {...styleConfig.reactTable}
-                    // getTrProps= {(state, rowInfo, column, instance) => {
-                    //     return {
-                    //         onClick: (e) => {
-                    //             this.setState({
-                    //                 show: true,
-                    //                 selectedData: rowInfo.original,
-                    //                 isEdited: true,
-                    //                 path: 'setMonitorConfig'
-                    //             })
-                    //         },
-                    //     }
-                    // }}
                 />
                 {/* <Table 
                     dataSource={this.state.data}
@@ -281,7 +256,6 @@ class GeoFenceSettingBlock extends React.Component{
                     show={this.state.showDeleteConfirmation} 
                     handleClose={this.handleClose}
                     handleSubmit={this.handleSubmit}
-                    type={config.monitorSettingUrlMap[this.props.type]} 
                 />
             </div>
         )

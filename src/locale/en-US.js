@@ -115,6 +115,7 @@ const en =  {
     DELETE_OPTION:"Delete option",
     CLEAN_PATH:"Clean path",
     RETURN:"Return",
+    ADD_RULE: "add rule",
 
     /* Form Field */
     NAME: "name",
@@ -190,6 +191,7 @@ const en =  {
     ASSOCIATION: "association",
     EDIT_GEOFENCE_CONFIG: "edit geofence config",
     ADD_GEOFENCE_CONFIG: "add geofence config",
+    WARNING: "warning",
 
     /** Error Message */
     GENDER_IS_REQUIRED: "Gender is required",
@@ -319,6 +321,10 @@ const en =  {
     AREA: "area",
     API_VERSION: "api version",
     SERVER_TIME_OFFSET: "server time offset",
+    ACTION: "action",
+
+    /** message */
+    ARE_YOU_SURE_TO_DELETE: "are you sure to delete ?",
 
     /** User Roles */
     CARE_PROVIDER: "care provider",
