@@ -3,10 +3,10 @@
 html,body {
     -webkit-overflow-scrolling: touch;
     margin: 0;
-    font-family: 'Noto Sans TC', sans-serif; /* "Roboto", "Helvetica", "Arial", sans-serif; /* 
+    font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans TC', sans-serif, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
     /* font-size: 1.8vh; */
-    /* font-size: 18px; */
-    /* position: fixed; */
+    /* font-size: 14px; */
+    position: fixed;
     width: 100%;
     overscroll-behavior: auto;
     background: white;
@@ -316,7 +316,19 @@ a:hover {
 }
 
 .btn-outline-custom {
-    font-size: 18px;
+    font-size: 0.8rem;
+}
+
+.btn-outline-custom {
+    font-size: 0.8rem;
+}
+
+.btn.btn-primary {
+    font-size: 0.8rem
+}
+
+.btn.btn-outline-secondary {
+    font-size: 0.8rem
 }
 
 /** React Bootstrap button variant primary */
@@ -354,12 +366,23 @@ a:hover {
     padding: .3rem .75rem;
 }
 
+.btn.btn-outline-custom {
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: none;
+    padding: .3rem .75rem;
+}
+
 .btn:focus {
     box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0)
 }
 
 button:focus {
     outline: 0;
+}
+
+button.close {
+    font-weight: 400;
 }
 
 
@@ -371,7 +394,9 @@ button:focus {
 
 /* React-table */
 .ReactTable .rt-thead .rt-tr {
-    font-weight: 500;
+    /* font-weight: 500; */
+    color: black;
+    font-size: 0.8rem
 }
 
 .ReactTable .rt-tr:hover .action {

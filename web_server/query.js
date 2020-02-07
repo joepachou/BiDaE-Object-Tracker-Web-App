@@ -977,6 +977,20 @@ const addMonitorConfig = (request, response) => {
         })
 }
 
+const deleteMonitorConfig = (request, response) => {
+    let {
+        monitorConfigPackage,
+    } = request.body
+    pool.query(queryType.query_deleteMonitorConfig(monitorConfigPackage))
+        .then(res => {
+            console.log(`delete ${monitorConfigPackage.type.replace(/_/g, ' ')}`)
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(`delete monitor config fail: ${err}`)
+        })
+}
+
 /** Parse the lbeacon's location coordinate from lbeacon_uuid*/
 const parseLbeaconCoordinate = (lbeacon_uuid) => {
     /** Example of lbeacon_uuid: 00000018-0000-0000-7310-000000004610 */
@@ -1199,5 +1213,6 @@ module.exports = {
     backendSearch,
     getBackendSearchQueue,
     getTrackingTableByMacAddress,
-    addMonitorConfig
+    addMonitorConfig,
+    deleteMonitorConfig
 }

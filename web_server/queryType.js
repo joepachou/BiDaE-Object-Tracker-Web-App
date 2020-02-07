@@ -1330,6 +1330,17 @@ const query_addMonitorConfig = (monitorConfigPackage) => {
 	}
 }
 
+const query_deleteMonitorConfig = (monitorConfigPackage) => {
+	let {
+		type,
+		id
+	} = monitorConfigPackage
+	return `
+		DELETE FROM ${type}
+		WHERE id = ${id}
+	`
+}
+
 function query_backendSearch(keyType, keyWord){
 	var query 	= null
 	var text 	= null
@@ -1600,6 +1611,7 @@ module.exports = {
 	query_addImport,
 	query_getImportPatient,
 	query_addMonitorConfig,
+	query_deleteMonitorConfig
 }
 
 

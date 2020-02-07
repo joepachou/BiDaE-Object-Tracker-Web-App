@@ -4,7 +4,6 @@ import {
     Row, 
     Col, 
     ButtonToolbar,
-    Button
 } from "react-bootstrap"
 import axios from "axios"
 import dataSrc from "../../../dataSrc"
@@ -14,6 +13,9 @@ import { geofenceConfigColumn } from '../../../tables'
 import EditGeofenceConfig from '../EditGeofenceConfig'
 import retrieveData from '../../../helper/retrieveData'
 import styleConfig from '../../../styleConfig';
+import { Menu, Icon, Button, Table } from 'antd';
+const { SubMenu } = Menu;
+import DeleteConfirmationForm from '../DeleteConfirmationForm'
 
 
 class GeoFenceSettingBlock extends React.Component{
@@ -27,6 +29,7 @@ class GeoFenceSettingBlock extends React.Component{
         lbeaconsTable: [],
         selectedData: null,
         show: false,
+        showDeleteConfirmation: false,
         locale: this.context.locale.abbr,   
         isEdited: false,
         path: ''     
@@ -67,13 +70,44 @@ class GeoFenceSettingBlock extends React.Component{
         })
         .then(res => {
             let columns = _.cloneDeep(geofenceConfigColumn)
+
+            columns.push({
+                Header: "action",
+                minWidth: 60,
+                Cell: props => (
+                    <div>
+                        <a 
+                            name="edit"
+                            style={styleConfig.link}
+                            onClick={(e) => {
+                                this.handleClickButton(e, props)
+                        }} >
+                            {locale.texts.EDIT}
+                        </a>
+                        &nbsp;
+                        <a 
+                            name="delete"
+                            style={styleConfig.link}
+                            onClick={(e) => {
+                                this.handleClickButton(e, props)
+                        }} >
+                            {locale.texts.DELETE}
+                        </a>
+                    </div>
+                )
+            })
             columns.map(field => {
                 field.headerStyle = {
                     textAlign: 'left',
                 }
+                field.title = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
+                field.dataIndex = field.Header
+                field.key = field.Header  
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })
-            res.data.rows.map(item => {
+            
+            res.data.rows.map((item,index) => {
+                item.key=index + 1
                 item.area = {
                     value: config.mapConfig.areaOptions[item.area_id],
                     label: locale.texts[config.mapConfig.areaOptions[item.area_id]],
@@ -91,7 +125,7 @@ class GeoFenceSettingBlock extends React.Component{
         })
     }
 
-    handleClickButton = (e) => {
+    handleClickButton = (e, value) => {
         let { name } = e.target
         switch(name) {
             case "add rule": 
@@ -101,21 +135,43 @@ class GeoFenceSettingBlock extends React.Component{
                     path: 'addMonitorConfig'
                 })
                 break;
+            case "edit":
+                this.setState({
+                    show: true,
+                    selectedData: value.original,
+                    isEdited: true,
+                    path: 'setMonitorConfig'
+                })
+                break;
+            case "delete":
+                this.setState({
+                    showDeleteConfirmation: true,
+                    selectedData: value.original,
+                    path: 'deleteMonitorConfig'
+                })
+                break;
+            
         }
     }
 
     handleClose = () => {
         this.setState({
             show: false,
+            showDeleteConfirmation: false,
             selectedData: null,
         })
     }
 
-    handleSubmit = (monitorConfigPackage) => {
-        let { path } = this.state
-
+    handleSubmit = (pack) => {
+        let configPackage = pack ? pack : {}
+        let { 
+            path,
+            selectedData
+        } = this.state
+        configPackage["type"] = config.monitorSettingUrlMap[this.props.type]
+        configPackage["id"] = selectedData.id
         axios.post(dataSrc[path], {
-            monitorConfigPackage
+            monitorConfigPackage: configPackage
         })
         .then(res => {
             setTimeout(
@@ -123,6 +179,7 @@ class GeoFenceSettingBlock extends React.Component{
                     this.getMonitorConfig(),
                     this.setState({
                         show: false,
+                        showDeleteConfirmation: false,
                         selectedData: null,
                     })
                 },
@@ -140,8 +197,8 @@ class GeoFenceSettingBlock extends React.Component{
                 minHeight: "100vh"
             },
             type: {
-                fontWeight: 600,
-                fontSize: '1.3rem',
+                // fontWeight: 600,
+                fontSize: '1rem',
             },
             subtype: {
                 color: "#6c757d",
@@ -158,14 +215,15 @@ class GeoFenceSettingBlock extends React.Component{
 
         let {
             lbeaconsTable,
-            isEdited
+            isEdited,
+            current
         } = this.state
 
         let { locale } = this.context
 
         return (
             <div>
-                <Row className="my-3">
+                <Row>
                     <Col>
                         <div style={style.type}>
                             {locale.texts[type.toUpperCase().replace(/ /g, '_')]}
@@ -190,19 +248,23 @@ class GeoFenceSettingBlock extends React.Component{
                     className="-highlight"
                     minRows={0}
                     {...styleConfig.reactTable}
-                    getTrProps= {(state, rowInfo, column, instance) => {
-                        return {
-                            onClick: (e) => {
-                                this.setState({
-                                    show: true,
-                                    selectedData: rowInfo.original,
-                                    isEdited: true,
-                                    path: 'setMonitorConfig'
-                                })
-                            },
-                        }
-                    }}
+                    // getTrProps= {(state, rowInfo, column, instance) => {
+                    //     return {
+                    //         onClick: (e) => {
+                    //             this.setState({
+                    //                 show: true,
+                    //                 selectedData: rowInfo.original,
+                    //                 isEdited: true,
+                    //                 path: 'setMonitorConfig'
+                    //             })
+                    //         },
+                    //     }
+                    // }}
                 />
+                {/* <Table 
+                    dataSource={this.state.data}
+                    columns={this.state.columns}
+                /> */}
                 <EditGeofenceConfig
                     handleShowPath={this.props.handleShowPath} 
                     selectedData={this.state.selectedData}
@@ -214,6 +276,12 @@ class GeoFenceSettingBlock extends React.Component{
                     lbeaconsTable={lbeaconsTable}
                     areaOptions={config.mapConfig.areaOptions}
                     isEdited={this.state.isEdited}
+                />
+                <DeleteConfirmationForm
+                    show={this.state.showDeleteConfirmation} 
+                    handleClose={this.handleClose}
+                    handleSubmit={this.handleSubmit}
+                    type={config.monitorSettingUrlMap[this.props.type]} 
                 />
             </div>
         )

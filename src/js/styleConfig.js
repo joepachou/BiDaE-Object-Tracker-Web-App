@@ -42,7 +42,7 @@ const styleConfig = {
             return {
                 style: {
                     borderRight: 'none',
-                    fontSize: '1rem'
+                    fontSize: '0.9rem'
                 }
             }
         },
@@ -52,7 +52,8 @@ const styleConfig = {
                 style: {
                     borderRight: 'none',
                     textAlign: 'left',
-                    fontSize: '1rem'
+                    fontSize: '0.9rem',
+                    fontWeight: 500
                 }
             }
         },
@@ -80,6 +81,9 @@ const styleConfig = {
     },
     radioButton: {
         fontSize: '0.8rem'
+    },
+    link: {
+        color: '#1890ff'
     }
 }
 
