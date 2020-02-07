@@ -570,3 +570,12 @@ p {
 .dropdownWrapper {
     padding: .5rem 0
 }
+
+/** bootstrap gutters */
+.no-gutters>.col:first-child {
+    padding-right: 5px;
+
+}
+.no-gutters>.col:last-child {
+    padding-left: 5px;
+}
