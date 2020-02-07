@@ -86,8 +86,16 @@ const lbeaconTableColumn = [
     {
         Header: "Note",
         accessor: "note",
-        width: 250,
+        width: 150,
     },
+    {
+        Header: "api version",
+        accessor: 'api_version',
+    },
+    {
+        Header: "server time offset",
+        accessor: "server_time_offset",
+    }
 ]
 
 const gatewayTableColumn = [
@@ -118,7 +126,11 @@ const gatewayTableColumn = [
     {
         Header: "Note",
         accessor: "note",
-        width: 250,
+        width: 150,
+    },
+    {
+        Header: "api version",
+        accessor: 'api_version',
     },
 ]
 
@@ -445,24 +457,43 @@ const geofenceConfigColumn = [
         width: 60,
         style: style.column,
         Cell: props => props.value 
-            ? <i className="fas fa-check-circle text-center" style={style.icon.check}></i>
-            : <i className="fas fa-times-circle" style={style.icon.times}></i>
+            ? <i className="fas fa-check" style={style.icon.check}></i>
+            : ""
     },
     {
         Header: "area",
         accessor: "area.label",
+        width: 100,
     },
     {
-        Header: "Name",
-        accessor: "name"
+        Header: "name",
+        accessor: "name",
+        width: 100,
     },
     {
         Header: "enable start time",
-        accessor: "start_time"
+        accessor: "start_time",
+        width: 90,
     },
     {
         Header: "enable end time",
-        accessor: "end_time"
+        accessor: "end_time",
+        width: 90,
+    },
+    {
+        Header: "perimeters group",
+        accessor: "perimeters.lbeacons"
+    },
+    {
+        Header: "fences group",
+        accessor: "fences.lbeacons"
+    },
+    {
+        Header: "is global fence",
+        accessor: "is_global_fence",
+        Cell: props => props.value 
+            ? <i className="fas fa-check" style={style.icon.check}></i>
+            : ""
     },
 ]
 

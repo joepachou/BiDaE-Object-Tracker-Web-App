@@ -65,6 +65,7 @@ const tw = {
     /* Button */
     CLEAR : "清除",
     SAVE : "儲存",
+    EDIT: "編輯",
     CANCEL: "取消",
     SEND: "送出",
     SIGN_IN: "登入",
@@ -320,6 +321,8 @@ const tw = {
     DANGER_AREA: "警戒區",
     ROOM: "房號",
     AREA: "地區",
+    API_VERSION: "api version",
+    SERVER_TIME_OFFSET: "server time offset",
 
     /** User Roles */
     CARE_PROVIDER: "護理人員",

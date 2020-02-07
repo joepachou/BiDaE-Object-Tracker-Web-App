@@ -67,6 +67,7 @@ const en =  {
     /* Button */
     CLEAR : "clear",
     SAVE : "save",
+    EDIT: "edit",
     CANCEL: "cancel",
     SEND: "send",
     SIGN_IN: "sign in",
@@ -316,6 +317,8 @@ const en =  {
     DANGER_AREA: "danger area",
     ROOM: "room",
     AREA: "area",
+    API_VERSION: "api version",
+    SERVER_TIME_OFFSET: "server time offset",
 
     /** User Roles */
     CARE_PROVIDER: "care provider",

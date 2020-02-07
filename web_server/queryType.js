@@ -373,7 +373,9 @@ const query_getLbeaconTable =
 			gateway_ip_address, 
 			last_report_timestamp,
 			danger_area,
-			room
+			room,
+			api_version,
+			server_time_offset
 		FROM lbeacon_table
 		ORDER BY last_report_timestamp DESC
 	`;
@@ -385,7 +387,8 @@ const query_getGatewayTable =
 		health_status, 
 		last_report_timestamp,
 		registered_timestamp,
-		id
+		id,
+		api_version
 	FROM 
 		gateway_table 
 	ORDER BY last_report_timestamp DESC`;
