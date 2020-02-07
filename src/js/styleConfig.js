@@ -68,7 +68,7 @@ const styleConfig = {
         getTheadProps: () => {
             return {
                 style: {
-                    boxShadow: 'none',
+                    boxShadow: 'rgba(32, 33, 36, 0.28) 0px 1px 6px 0px',
                 }
             }
         },

@@ -39,6 +39,7 @@ import InputFiles from "react-input-files";
 import BindForm from './BindForm'
 import DissociationForm from './DissociationForm'
 import AccessControl from '../presentational/AccessControl'
+import styleConfig from '../../styleConfig'
 const SelectTable = selecTableHOC(ReactTable);
 let deleteFlag = false;
 
@@ -749,6 +750,8 @@ class ObjectManagementContainer extends React.Component{
                             className="-highlight"
                             style={{height:'75vh'}}
                             {...extraProps}
+                            {...styleConfig.reactTable}
+
                             getTrProps={(state, rowInfo, column, instance) => {
                                 return {
                                     onClick: (e) => {
@@ -907,15 +910,9 @@ class ObjectManagementContainer extends React.Component{
                                     console.log(this.state.dataImportPatient)
                                 }
                             }
-
-
                           }}
                         />
                     </TabPanel>
-
-
-
-
                 </Tabs>
 
 
