@@ -159,6 +159,10 @@ const tw = {
     BINDFLAG:"綁定狀態",
     PERIMETERS_GROUP: "perimeters group",
     FENCES_GROUP: "fences group",
+    RSSI: "rssi",
+    YES: '是',
+    NO: '否',
+    IS_GLOBAL_FENCE: '全境電子圍籬',
        
     /** form title */
     EDIT_LBEACON: "編輯 lbeacon",

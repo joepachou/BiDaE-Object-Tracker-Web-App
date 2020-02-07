@@ -1125,6 +1125,7 @@ const query_getGeoFenceConfig = (areaId) => {
 		SELECT
 			*
 		FROM geo_fence_config
+		ORDER BY id
 	;`
 }
 
@@ -1236,7 +1237,8 @@ const query_setMonitorConfig = (monitorConfigPackage) => {
 		enable,
 		perimeters,
 		fences,
-		area_id
+		area_id,
+		is_global_fence
 	} = monitorConfigPackage
 
 	let text = `
@@ -1248,7 +1250,8 @@ const query_setMonitorConfig = (monitorConfigPackage) => {
 			end_time = $5,
 			enable = $6,
 			perimeters = $7,
-			fences = $8
+			fences = $8,
+			is_global_fence = $9
 		WHERE id = $1;
 	`
 	let values = [
@@ -1260,6 +1263,7 @@ const query_setMonitorConfig = (monitorConfigPackage) => {
 		enable,
 		perimeters,
 		fences,
+		is_global_fence
 	]
 
 	let query = {

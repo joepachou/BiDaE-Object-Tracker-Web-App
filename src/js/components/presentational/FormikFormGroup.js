@@ -6,7 +6,7 @@ import {
 
 
 const FormikFormGroup = ({
-   name,
+   name = "default",
    label,
    error,
    touched,
@@ -30,7 +30,7 @@ const FormikFormGroup = ({
                 :   <Field  
                         name={name} 
                         type={type} 
-                        className={'form-control' + (error && touched ? ' is-invalid' : '')} 
+                        className={'form-control' + (error ? ' is-invalid' : '')} 
                         placeholder={placeholder}
                         disabled={disabled}
                     />

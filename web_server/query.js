@@ -997,19 +997,16 @@ const calculatePosition = (item) => {
 }
 
 /** Parse geo fence config */
-const parseGeoFenceConfig = (field) => {
+const parseGeoFenceConfig = (field = []) => {
     let fieldParse = field.split(',')
     let number = parseInt(fieldParse[0])
-    let lbeacons = {}
-    lbeacons.uuids = fieldParse
-        .filter((item, index) => index % 2 == 1 && item)
-        .map(item => item.replace(/ /g, ''))
-    lbeacons.rssis = fieldParse
-        .filter((item, index) => index % 2 == 0 && index != 0)
-        .map(item => item.replace(/ /g, ''))
+    let lbeacons = fieldParse
+        .filter((item, index) => index > 0  && index <= number)
+    let rssi = fieldParse[number + 1]
     return {
         number,
         lbeacons,
+        rssi
     }
 }
 

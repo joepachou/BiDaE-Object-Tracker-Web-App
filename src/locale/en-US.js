@@ -157,8 +157,10 @@ const en =  {
     BINDFLAG:"Binding Status",
     PERIMETERS_GROUP: "perimeters group",
     FENCES_GROUP: "fences group",
-
-    
+    RSSI: "rssi",
+    YES: 'yes',
+    NO: 'no',
+    IS_GLOBAL_FENCE: 'global fence',
 
     /** form title */
     EDIT_LBEACON: "edit lbeacon",
