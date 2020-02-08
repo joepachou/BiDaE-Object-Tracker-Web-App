@@ -520,7 +520,7 @@ class Map extends React.Component {
         return(
             <div>
                 <BrowserView>   
-                    <div id='mapid' style={{height:'75vh'}}></div>
+                    <div id='mapid' style={{height:'80vh'}}></div>
                 </BrowserView>
                 <TabletView>
                     <div id='mapid' style={{height:'40vh'}}></div>

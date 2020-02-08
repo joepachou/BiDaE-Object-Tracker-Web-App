@@ -145,6 +145,7 @@ class SearchResult extends React.Component {
         let shouldCreatePdf = config.statusToCreatePdf.includes(editedObjectPackage[0].status)
         let status = editedObjectPackage[0].status
         let reservedTimestamp = isDelayTime ? moment().add(10, 'minutes').format() : moment().format()
+
         /** Create the pdf package, including pdf, pdf setting and path */
         let pdfPackage = shouldCreatePdf && config.getPdfPackage(status, auth.user, this.state.editedObjectPackage, locale)
      
@@ -261,20 +262,15 @@ class SearchResult extends React.Component {
 
 
         return(
-            <div>
-
+            <div className='text-capitalize'>
                 <BrowserView>
                     <div>
                         <Row className='d-flex justify-content-center' style={style.titleText}>
-                            <h4 className='text-capitalize'>
+                            <div className='text-capitalize title'>
                                 {title}
-                            </h4>
+                            </div>
                         </Row>
-                        {/* <Row className='w-100 searchResultForMobile'>
-                            <InfoPrompt data={{[devicePlural]: searchResult.length}} title={title}/>
-                        </Row> */}
                         <Row>
-                        
                             {searchResult.length === 0 
                                 ?   <Col className='d-flex justify-content-center font-weight-lighter' style={style.noResultDiv}>
                                         <div className='searchResultForDestop'>{locale.texts.NO_RESULT}</div>
