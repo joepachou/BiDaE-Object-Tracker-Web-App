@@ -100,14 +100,6 @@ class SearchResult extends React.Component {
             selectedObjectData: [],
             showAddDevice: false
         })
-        setTimeout(
-            function (){
-                this.setState({
-                    selectedObjectData: [],
-                })
-            }.bind(this),
-            200
-        )
         dispatch({
             type: 'setUpdateTrackingData',
             value: true
@@ -118,7 +110,7 @@ class SearchResult extends React.Component {
     handleChangeObjectStatusFormSubmit = values => {
         let editedObjectPackage = _.cloneDeep(this.state.selectedObjectData).map(item => {
             item.status = values.status.toLowerCase(),
-            item.transferred_location = values.select ? values.select: '';
+            item.transferred_location = values.transferred_location ? values.transferred_location : '';
             item.notes = values.notes
             return item
         })
@@ -162,7 +154,8 @@ class SearchResult extends React.Component {
                         showConfirmForm: shouldCreatePdf,
                         showAddDevice: false,
                         showDownloadPdfRequest: shouldCreatePdf,
-                        pdfPath: shouldCreatePdf && pdfPackage.path
+                        pdfPath: shouldCreatePdf && pdfPackage.path,
+                        selection: []
                     })
                     dispatch({
                         type: 'setUpdateTrackingData',
@@ -233,14 +226,9 @@ class SearchResult extends React.Component {
             titleText: {
                 color: 'rgb(80, 80, 80, 0.9)',
             }, 
-            alertTextTitle: {
-                fontWeight: 1000,
-                color: 'rgba(101, 111, 121, 0.78)'
-            },
             downloadPdfRequest: {
                 zIndex: 3000,
                 top: '30%',
-                // left: '-10%',
                 right: 'auto',
                 bottom: 'auto',
                 padding: 0,
@@ -312,21 +300,10 @@ class SearchResult extends React.Component {
                                 size="lg"
                                 disabled={false}
                             >
-                                {/* {(this.props.searchKey == "my patients" || this.props.searchKey == "all patients") 
-                                    ?
-                                    this.state.showNotFoundResult
-                                    ? locale.texts.SHOW_PATIENTS_FOUND
-                                    :locale.texts.SHOW_PATIENTS_NOT_FOUND
-                                    :
-                                    this.state.showNotFoundResult 
-                                    ? locale.texts.SHOW_DEVICES_FOUND
-                                    : locale.texts.SHOW_DEVICES_NOT_FOUND
-                                } */}
                                 {this.state.showNotFoundResult
                                     ? locale.texts.SHOW_SEARCH_RESULTS_FOUND
                                     : locale.texts.SHOW_SEARCH_RESULTS_NOT_FOUND
                                 }
-
                             </Button>
                         </Row>
                         <ChangeStatusForm
@@ -363,11 +340,7 @@ class SearchResult extends React.Component {
                                 {title}
                             </h4>
                         </Row>
-                        {/* <Row className='w-100 searchResultForMobile'>
-                            <InfoPrompt data={{[devicePlural]: searchResult.length}} title={title}/>
-                        </Row> */}
                         <Row>
-                        
                             {searchResult.length === 0 
                                 ?   <Col className='d-flex justify-content-center font-weight-lighter' style={style.noResultDiv}>
                                         <div className='searchResultForDestop'>{locale.texts.NO_RESULT}</div>
@@ -409,16 +382,6 @@ class SearchResult extends React.Component {
                                 size="lg"
                                 disabled={false}
                             >
-                                {/* {(this.props.searchKey == "my patients" || this.props.searchKey == "all patients") 
-                                    ?
-                                    this.state.showNotFoundResult
-                                    ? locale.texts.SHOW_PATIENTS_FOUND
-                                    :locale.texts.SHOW_PATIENTS_NOT_FOUND
-                                    :
-                                    this.state.showNotFoundResult 
-                                    ? locale.texts.SHOW_DEVICES_FOUND
-                                    : locale.texts.SHOW_DEVICES_NOT_FOUND
-                                } */}
                                 {this.state.showNotFoundResult
                                     ? locale.texts.SHOW_SEARCH_RESULTS_FOUND
                                     : locale.texts.SHOW_SEARCH_RESULTS_NOT_FOUND
@@ -455,48 +418,45 @@ class SearchResult extends React.Component {
                 </TabletView>
                 <MobileOnlyView>
                 <div>
-                        <Row className='d-flex justify-content-center' style={style.titleText}>
-                            <h4 className='text-capitalize'>
-                                {title}
-                            </h4>
-                        </Row>
-                        {/* <Row className='w-100 searchResultForMobile'>
-                            <InfoPrompt data={{[devicePlural]: searchResult.length}} title={title}/>
-                        </Row> */}
-                        <Row>
-                        
-                            {searchResult.length === 0 
-                                ?   <Col className='d-flex justify-content-center font-weight-lighter' style={style.noResultDiv}>
-                                        <div className='searchResultForDestop'>{locale.texts.NO_RESULT}</div>
-                                    </Col> 
-                                :   
-                                    
-                                    <Col className="searchResultListGroupForMobile d-flex justify-content-center" style={style.searchResultListFormobile}>
-                                        <AccessControl
-                                            permission={'form:edit'}
-                                            renderNoAccess={() => (
-                                                <SearchResultListGroup 
-                                                    data={searchResult}
-                                                    selection={this.state.selection}
-                                                />
-                                            )
-                                            }
-                                        >
+                    <Row className='d-flex justify-content-center' style={style.titleText}>
+                        <h4 className='text-capitalize'>
+                            {title}
+                        </h4>
+                    </Row>
+                    <Row>
+                    
+                        {searchResult.length === 0 
+                            ?   <Col className='d-flex justify-content-center font-weight-lighter' style={style.noResultDiv}>
+                                    <div className='searchResultForDestop'>{locale.texts.NO_RESULT}</div>
+                                </Col> 
+                            :   
+                                
+                                <Col className="searchResultListGroupForMobile d-flex justify-content-center" style={style.searchResultListFormobile}>
+                                    <AccessControl
+                                        permission={'form:edit'}
+                                        renderNoAccess={() => (
                                             <SearchResultListGroup 
                                                 data={searchResult}
-                                                handleSelectResultItem={searchResult[0].object_type == 0 
-                                                    ? this.handleSelectResultItem
-                                                    : null
-                                                }
                                                 selection={this.state.selection}
-                                                action={searchResult[0].object_type == 0
-                                                    ? true
-                                                    : false
-                                                }
                                             />
+                                        )
+                                        }
+                                    >
+                                        <SearchResultListGroup 
+                                            data={searchResult}
+                                            handleSelectResultItem={searchResult[0].object_type == 0 
+                                                ? this.handleSelectResultItem
+                                                : null
+                                            }
+                                            selection={this.state.selection}
+                                            action={searchResult[0].object_type == 0
+                                                ? true
+                                                : false
+                                            }
+                                        />
 
-                                        </AccessControl>
-                                    </Col>
+                                    </AccessControl>
+                                </Col>
                             }
                         </Row>
                         <Row className='d-flex justify-content-center mt-3'>
@@ -507,16 +467,6 @@ class SearchResult extends React.Component {
                                 size="lg"
                                 disabled={false}
                             >
-                                {/* {(this.props.searchKey == "my patients" || this.props.searchKey == "all patients") 
-                                    ?
-                                    this.state.showNotFoundResult
-                                    ? locale.texts.SHOW_PATIENTS_FOUND
-                                    :locale.texts.SHOW_PATIENTS_NOT_FOUND
-                                    :
-                                    this.state.showNotFoundResult 
-                                    ? locale.texts.SHOW_DEVICES_FOUND
-                                    : locale.texts.SHOW_DEVICES_NOT_FOUND
-                                } */}
                                 {this.state.showNotFoundResult
                                     ? locale.texts.SHOW_SEARCH_RESULTS_FOUND
                                     : locale.texts.SHOW_SEARCH_RESULTS_NOT_FOUND

@@ -4,7 +4,6 @@ import {
     ErrorMessage 
 } from 'formik';
 
-
 const FormikFormGroup = ({
    name = "default",
    label,
@@ -16,15 +15,20 @@ const FormikFormGroup = ({
    component,
    display = true
 }) => {
+
     let style = {
-        display: display ? '' : "none"
+        display: display
     }
     return (
         <div 
             className="form-group"
             style={style}
         >
-            <small  className="form-text text-muted">{label}</small>
+            <small 
+                className="form-text text-muted text-capitaliz"
+            >
+                {label}
+            </small>
             {component 
                 ?   component()
                 :   <Field  

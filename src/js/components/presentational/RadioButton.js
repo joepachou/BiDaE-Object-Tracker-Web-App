@@ -8,10 +8,9 @@ const RadioButton = ({
     className,
     ...props
 }) => {
-    console.log()
     return (
         <div 
-            className="pretty p-default p-round p-bigger"
+            className="pretty p-default p-round"
             style={styleConfig.radioButton}    
         >
             <input 

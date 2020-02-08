@@ -12,7 +12,6 @@ import {
     Formik, 
     Field, 
     Form, 
-    ErrorMessage 
 } from 'formik';
 import * as Yup from 'yup';
 import RadioButton from '../presentational/RadioButton';
@@ -21,6 +20,7 @@ import { AppContext } from '../../context/AppContext';
 import axios from 'axios';
 import dataSrc from '../../dataSrc'
 import styleConfig from '../../styleConfig'
+import FormikFormGroup from '../presentational/FormikFormGroup'
 
 class ChangeStatusForm extends React.Component {
 
@@ -37,7 +37,7 @@ class ChangeStatusForm extends React.Component {
     }
 
     componentDidUpdate = (prevProps) => {
-        if (prevProps != this.props && this.props.selectedObjectData.length !== 0) {
+        if (prevProps != this.props && this.props.selectedObjectData) {
             this.setState({
                 show: this.props.show,
                 isShowForm: true,
@@ -46,16 +46,20 @@ class ChangeStatusForm extends React.Component {
     }
 
     pathOnClickHandler = () => {
-        this.props.selectedObjectData.map((item,index)=>{
+        let {
+            selectedObjectData
+        } = this.props
+
+        selectedObjectData ? selectedObjectData.map((item,index)=>{
             this.props.handleShowPath(item.mac_address);
-        })
+        }) : null;
         this.handleClose()
     }
 
     getTransferredLocation = () => {
         let { locale } = this.context
         axios.get(dataSrc.getTransferredLocation)
-        .then(res => {
+            .then(res => {
             const transferredLocationOptions = res.data.map(loc => {
                 return {          
                     value: loc.transferred_location,
@@ -93,12 +97,6 @@ class ChangeStatusForm extends React.Component {
             case 'add device':
                 this.props.handleAdditionalButton(item);
                 break;
-            case 'add note':
-            case 'hide note':
-                this.setState({
-                    showNotesControl: !this.state.showNotesControl
-                })
-                break;
         }
     }
 
@@ -107,22 +105,6 @@ class ChangeStatusForm extends React.Component {
         const { locale } = this.context
 
         const style = {
-            input: {
-                borderRadius: 0,
-                borderBottom: '1 solid grey',
-                borderTop: 0,
-                borderLeft: 0,
-                borderRight: 0,
-                
-            },
-            errorMessage: {
-                width: '100%',
-                marginTop: '0.25rem',
-                marginBottom: '0.25rem',
-                fontSize: '80%',
-                color: '#dc3545'
-            },
-
             deviceList: {
                 maxHeight: '20rem',
                 overflow: 'hidden scroll' 
@@ -130,15 +112,15 @@ class ChangeStatusForm extends React.Component {
             crossIcom: {
                 cursor: "pointer"
             },
-
             buttonPath: {
                 fontSize: '0.5rem'
             }
         }
 
-        let { title } = this.props;
-        
-        let selectedObjectData = this.props.selectedObjectData.length !== 0 ? this.props.selectedObjectData[0] : []
+        let { 
+            title,
+            selectedObjectData 
+        } = this.props
 
         return (
             <Modal  
@@ -160,21 +142,24 @@ class ChangeStatusForm extends React.Component {
                 <Modal.Body>
                     <Formik
                         initialValues = {{
-                            status: this.props.selectedObjectData.length !== 0 ? this.props.selectedObjectData[0].status : '',
-                            select: this.props.selectedObjectData.length !== 0 && this.props.selectedObjectData[0].status === config.objectStatus.TRANSFERRED
+                            name: selectedObjectData.length != 0 ? selectedObjectData[0].name : '',
+                            type: selectedObjectData.length != 0 ? selectedObjectData[0].type : '',
+                            asset_control_number: selectedObjectData.length != 0 ? selectedObjectData[0].asset_control_number : '',
+                            status: selectedObjectData.length != 0 ? selectedObjectData[0].status : '',
+                            transferred_location: selectedObjectData.length != 0 && selectedObjectData[0].status == config.objectStatus.TRANSFERRED
                                 ? { 
                                     value: selectedObjectData.transferred_location,
-                                    label: selectedObjectData.transferred_location.toUpperCase().split(',').map(item => locale.texts[item]).join('/')
+                                    label: selectedObjectData[0].transferred_location.toUpperCase().split(',').map(item => locale.texts[item]).join('/')
                                 }
                                 : '', 
-                            note: selectedObjectData.notes || ''
+                            notes: selectedObjectData.length != 0 ? selectedObjectData[0].notes : ''
                         }}
 
                         validationSchema = {
                             Yup.object().shape({
                                 status: Yup.string().required(locale.texts.STATUS_IS_REQUIRED),
 
-                                select: Yup.string()
+                                transferred_location: Yup.string()
                                     .when('status', {
                                         is: config.objectStatus.TRANSFERRED,
                                         then: Yup.string().required(locale.texts.LOCATION_IS_REQUIRED)
@@ -192,7 +177,7 @@ class ChangeStatusForm extends React.Component {
                                         return (
                                             <div key={index} >
                                                 {index > 0 ? <hr/> : null}
-                                                <Row noGutters={true}  className='text-capitalize'>
+                                                <Row noGutters className='text-capitalize'>
                                                     {this.props.selectedObjectData.length > 1 
                                                         ? 
                                                             <Col xs={1} sm={1} className='d-flex align-items-center'>
@@ -206,43 +191,39 @@ class ChangeStatusForm extends React.Component {
                                                         : null
                                                     }
                                                     <Col>
-                                                        <Row>
+                                                        <Row noGutters>
                                                             <Col>
-                                                                <small  className="form-text text-muted">{locale.texts.NAME}</small>
-                                                                <Field  
-                                                                    value={item.name} 
-                                                                    type="text" 
-                                                                    className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} 
-                                                                    placeholder=''
-                                                                    disabled={true}
+                                                                <FormikFormGroup 
+                                                                    type="text"
+                                                                    name="name"
+                                                                    label={locale.texts.NAME}
+                                                                    errors={errors.name}
+                                                                    touched={touched.name}
+                                                                    placeholder=""
+                                                                    disabled
                                                                 />
-                                                                <ErrorMessage name="name" component="div" className="invalid-feedback" />
                                                             </Col>
                                                             <Col>
-                                                                <small  className="form-text text-muted">{locale.texts.TYPE}</small>
-                                                                <Field  
-                                                                    value={item.type} 
-                                                                    type="text" 
-                                                                    className={'form-control' + (errors.type && touched.type ? ' is-invalid' : '')} 
-                                                                    placeholder=''
-                                                                    disabled={true}
+                                                                <FormikFormGroup 
+                                                                    type="text"
+                                                                    name="type"
+                                                                    label={locale.texts.TYPE}
+                                                                    errors={errors.type}
+                                                                    touched={touched.type}
+                                                                    placeholder=""
+                                                                    disabled
                                                                 />
-                                                                <ErrorMessage name="tyspe" component="div" className="invalid-feedback" />
                                                             </Col>
                                                         </Row>
-                                                        <div className="form-group">
-                                                            <small  className="form-text text-muted">{locale.texts.ASSET_CONTROL_NUMBER}</small>
-                                                            <Field 
-                                                                disabled= {this.props.disableASN ? 1 : 0}
-                                                                name="asset_control_number" 
-                                                                type="text" 
-                                                                className={'form-control' + (errors.asset_control_number && touched.asset_control_number ? ' is-invalid' : '')} 
-                                                                placeholder=''
-                                                                value={item.asset_control_number}
-                                                                disabled={true}
-                                                            />
-                                                            <ErrorMessage name="asset_control_number" component="div" className="invalid-feedback" />
-                                                        </div>
+                                                        <FormikFormGroup 
+                                                            type="text"
+                                                            name="asset_control_number"
+                                                            label={locale.texts.ACN}
+                                                            errors={errors.asset_control_number}
+                                                            touched={touched.asset_control_number}
+                                                            placeholder=""
+                                                            disabled
+                                                        />
                                                     </Col>
                                                 </Row>
                                             </div>
@@ -250,90 +231,80 @@ class ChangeStatusForm extends React.Component {
                                     })}
                                     <hr/>
                                 </div>
-
-                                <div 
-                                    className="form-group"
-                                >
-                                    <small  className="form-text text-muted">{locale.texts.STATUS}</small>
-                                    <RadioButtonGroup
-                                        value={values.status}
-                                        error={errors.status}
-                                        touched={touched.status}
-                                    >
-                                        <div className="d-flex justify-content-between form-group my-1">
-                                            <Field  
-                                                component={RadioButton}
-                                                name="status"
-                                                id={config.objectStatus.NORMAL}
-                                                label={locale.texts.NORMAL}
-                                            />
-
-                                            <Field
-                                                component={RadioButton}
-                                                name="status"
-                                                id={config.objectStatus.BROKEN}
-                                                label={locale.texts.BROKEN}
-                                            />
-                                            <Field
-                                                component={RadioButton}
-                                                name="status"
-                                                id={config.objectStatus.RESERVE}
-                                                label={locale.texts.RESERVE}
-                                            />
-                                            
-                                            <Field
-                                                component={RadioButton}
-                                                name="status"
-                                                id={config.objectStatus.TRANSFERRED}
-                                                label={locale.texts.TRANSFERRED}
-                                            />
-                                        </div>
-                                    </RadioButtonGroup>   
-                                </div>
-
-                                <div 
-                                    className="form-group"
-                                    style={{display: values.status == 'transferred' ? '' : 'none'}}
-                                >
-                                    <small  className="form-text text-muted">{locale.texts.AREA}</small>
-
-                                    <Select
-                                        name="select"
-                                        value = {values.transferred_location}
-                                        className="my-1"
-                                        onChange={value => setFieldValue("transferred_location", value)}
-                                        options={this.state.transferredLocationOptions}
-                                        isSearchable={false}
-                                        isDisabled={values.status !== config.objectStatus.TRANSFERRED}
-                                        styles={styleConfig.reactSelect}
-                                        placeholder={locale.texts.SELECT_LOCATION}
-                                        components={{
-                                            IndicatorSeparator: () => null
-                                        }}
-                                    />
-                                    <Row className='no-gutters' className='d-flex align-self-center'>
-                                        <Col>
-                                            {touched.status && errors.status &&
-                                            <div style={style.errorMessage}>{errors.status}</div>}
-                                            {touched.transferred_location && errors.transferred_location &&
-                                            <div style={style.errorMessage}>{errors.transferred_location}</div>}
-                                        </Col>
-                                    </Row> 
-                                </div>
-
-                                <div 
-                                    className="form-group"
-                                >
-                                    <small  className="form-text text-muted">{locale.texts.NOTES}</small>
-                                    <Field 
-                                        name="note" 
-                                        type="text" 
-                                        className={'form-control' + (errors.note && touched.note ? ' is-invalid' : '')} 
-                                        placeholder={locale.texts.WRITE_THE_NOTES}
-                                    />
-                                    <ErrorMessage name="note" component="div" className="invalid-feedback" />
-                                    <hr/>
-                                </div>
+                                <FormikFormGroup 
+                                    type="text"
+                                    name="status"
+                                    label={locale.texts.STATUS}
+                                    errors={errors.status}
+                                    touched={touched.status}
+                                    placeholder=""
+                                    component={() => (
+                                        <RadioButtonGroup
+                                            value={values.status}
+                                        >
+                                            <div className="d-flex justify-content-between form-group my-1">
+                                                <Field  
+                                                    component={RadioButton}
+                                                    name="status"
+                                                    id={config.objectStatus.NORMAL}
+                                                    label={locale.texts.NORMAL}
+                                                />
+    
+                                                <Field
+                                                    component={RadioButton}
+                                                    name="status"
+                                                    id={config.objectStatus.BROKEN}
+                                                    label={locale.texts.BROKEN}
+                                                />
+                                                <Field
+                                                    component={RadioButton}
+                                                    name="status"
+                                                    id={config.objectStatus.RESERVE}
+                                                    label={locale.texts.RESERVE}
+                                                />
+                                                
+                                                <Field
+                                                    component={RadioButton}
+                                                    name="status"
+                                                    id={config.objectStatus.TRANSFERRED}
+                                                    label={locale.texts.TRANSFERRED}
+                                                />
+                                            </div>
+                                        </RadioButtonGroup>   
+                                    )}
+                                />
+                                <FormikFormGroup 
+                                    type="text"
+                                    name="transferred_location"
+                                    label={locale.texts.NAME}
+                                    errors={errors.transferred_location}
+                                    touched={touched.transferred_location}
+                                    display={values.status == 'transferred' ? '' : 'none'}
+                                    component={() => (
+                                        <Select
+                                            name="transferred_location"
+                                            value={values.transferred_location}
+                                            className="my-1"
+                                            onChange={value => setFieldValue("transferred_location", value)}
+                                            options={this.state.transferredLocationOptions}
+                                            isSearchable={false}
+                                            styles={styleConfig.reactSelect}
+                                            placeholder={locale.texts.SELECT_LOCATION}
+                                            components={{
+                                                IndicatorSeparator: () => null
+                                            }}
+                                        />
+                                    )}
+                                />
+                                <hr/>
+                                <FormikFormGroup 
+                                    type="text"
+                                    name="notes"
+                                    label={locale.texts.NOTES}
+                                    errors={errors.notes}
+                                    touched={touched.notes}
+                                    placeholder={locale.texts.WRITE_THE_NOTES}
+                                />
                                 
                                 <Row className='d-flex justify-content-center pb-2'>
                                     <ButtonToolbar >
