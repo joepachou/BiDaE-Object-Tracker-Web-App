@@ -20,14 +20,16 @@ const SearchResultListGroup = ({
             color: '#007bff'
         },
         item: {
-            width: 25,
+            width: 30,
+        },
+        listGroup: {
+            color: 'rgb(33, 37, 41)'
         }
     }
 
     return (
         <ListGroup 
             onSelect={handleSelectResultItem} 
-            style={style.listGroup}
         >
             {data.map((item,index) => {
                 let element = 
@@ -37,6 +39,7 @@ const SearchResultListGroup = ({
                         key={index} 
                         action={action}
                         active
+                        style={style.listGroup}
                         className='d-flex justify-content-start text-left py-1' 
 
                     >   

@@ -241,7 +241,7 @@ class MainContainer extends React.Component{
     getGeoFenceConfig = () => {
         let { stateReducer } = this.context
         let [{areaId}] = stateReducer
-        axios.post(dataSrc.getGeoFenceConfig, {
+        axios.post(dataSrc.getGeofenceConfig, {
             areaId
         })
         .then(res => {
@@ -250,7 +250,7 @@ class MainContainer extends React.Component{
             })
         })
         .catch(err => {
-            console.log(`get geo fence data fail: ${err}`)
+            console.log(`get geo fence data fail ${err}`)
         })
     }
 

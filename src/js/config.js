@@ -40,7 +40,7 @@ const config = {
     },
 
 
-    ACNOmitsymbol: 'xxxxxx',
+    ACNOmitsymbol: 'XXXXXX',
 
     objectManage: {
 
