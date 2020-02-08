@@ -1,20 +1,14 @@
 import React from 'react';
-import LocaleContext from '../../context/LocaleContext';
 import searchIcon from '../../../img/icon/search.png';
-import { Form, Row, Col, Button } from 'react-bootstrap';
-
+import { Form, Button } from 'react-bootstrap';
 
 class Searchbar extends React.Component {
-    constructor() {
-        super()
-        this.state = {
-            value: '',
-        }
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleChange = this.handleChange.bind(this);
+    
+    state = {
+        value: '',
     }
 
-    componentDidUpdate(prepProps) {
+    componentDidUpdate = (prepProps) => {
         if (prepProps.clearSearchResult !== this.props.clearSearchResult && !prepProps.clearSearchResult) {
             this.setState({
                 value: '',
@@ -22,12 +16,12 @@ class Searchbar extends React.Component {
         }
     }
 
-    handleSubmit(e) {
+    handleSubmit = (e) => {
         e.preventDefault();
         this.props.getSearchKey(this.state.value);
     }
 
-    handleChange(e) {
+    handleChange = (e) => {
         this.setState({
             value: e.target.value
         })
@@ -39,17 +33,16 @@ class Searchbar extends React.Component {
             form: {
                 border: "2px solid rgba(227, 222, 222, 0.447)",
                 borderRadius : '25px',
-                fontSize: '16px',
+                fontSize: '20px',
                 width:300,
             },
             input: {
-                background: 'rgba(0,0,0,0',
+                background: 'rgba(0,0,0,0)',
+                fontSize: '1rem'
             }
         }
 
         const { value } = this.state;
-
-        const locale = this.context;
 
         return (            
             <Form className="d-flex justify-content-around" style={style.form}>
@@ -63,11 +56,17 @@ class Searchbar extends React.Component {
                         onChange={this.handleChange}
                     />
                 </Form.Group>
-                <Button type="submit" variant='link' className="btn btn-link btn-sm text-uppercase bd-highlight" onClick={this.handleSubmit}><img src={searchIcon} width="30px" /></Button>
+                <Button 
+                    type="submit" 
+                    variant='link' 
+                    className="btn btn-link btn-sm text-uppercase bd-highlight" 
+                    onClick={this.handleSubmit}
+                >
+                    <img src={searchIcon} width="25px" />
+                </Button>
             </Form>
         );
     }
 }
 
-Searchbar.contextType = LocaleContext;
 export default Searchbar;
