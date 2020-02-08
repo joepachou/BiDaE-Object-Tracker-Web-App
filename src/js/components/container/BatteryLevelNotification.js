@@ -64,10 +64,11 @@ class BatteryLevelNotification extends React.Component {
             dropdown: {
                 overflow: 'hidden scroll',
                 maxHeight: '300px',
+                marginBottom: 5
             },
             title: {
                 background: '#8080801a',
-                fontSize: '1.2rem'
+                fontSize: '1rem'
             },
             icon: {
                 fontSize: '15px'
@@ -82,6 +83,10 @@ class BatteryLevelNotification extends React.Component {
                         <NotificationBadge 
                             count={runOutPowerItems.length} 
                             effect={Effect.SCALE}
+                            style={{
+                                top: '-28px',
+                                right: '-10px',    
+                            }}
                         />
                     </i>
                 }
@@ -109,16 +114,14 @@ class BatteryLevelNotification extends React.Component {
                                 disabled
                                 style={{color: "black"}}
                             >
-                                <Row>
-                                    <div 
-                                        className='d-inline-flex justify-content-start text-left' 
-                                        style={style.list}
-                                    >   
-                                        <p className='d-inline-block mx-2'>&#8729;</p>
-                                        {getDescription(item, locale, config)}
-                                        {locale.texts.BATTERY_VOLTAGE}:{(item.battery_voltage/10).toFixed(1)}
-                                    </div>
-                                </Row>
+                                <div 
+                                    className='d-inline-flex justify-content-start text-left' 
+                                    style={style.list}
+                                >   
+                                    <p className='d-inline-block mx-2'>&#8729;</p>
+                                    {getDescription(item, locale, config)}
+                                    {locale.texts.BATTERY_VOLTAGE}:{(item.battery_voltage/10).toFixed(1)}
+                                </div>
                             </NavDropdown.Item>
                         )
                     })}
