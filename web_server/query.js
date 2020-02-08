@@ -69,7 +69,7 @@ const getTrackingData = (request, response) => {
     const currentAreaId = request.body.areaId.toString()
     let counter = 0
 
-    pool.query(queryType.query_getTrackingData())        
+    pool.query(queryType.getTrackingData())        
         .then(res => {
 
             console.log('get tracking data')
@@ -144,7 +144,7 @@ const getTrackingData = (request, response) => {
 
 const getObjectTable = (request, response) => {
     let { locale, areaId, objectType } = request.body
-    pool.query(queryType.query_getObjectTable(areaId, objectType))       
+    pool.query(queryType.getObjectTable(areaId, objectType))       
         .then(res => {
             console.log('Get objectTable data')
             response.status(200).json(res)
@@ -156,7 +156,7 @@ const getObjectTable = (request, response) => {
 
 const getTrackingTableByMacAddress = (request, response) => {
     let{ locale, object_mac_address, i, second} = request.body
-    pool.query(queryType.query_getTrackingTableByMacAddress(object_mac_address, i, second))
+    pool.query(queryType.getTrackingTableByMacAddress(object_mac_address, i, second))
         .then(res => {
             console.log("get tracking table by mac address")
             response.status(200).json(res)
@@ -168,7 +168,7 @@ const getTrackingTableByMacAddress = (request, response) => {
 
 const getPatientTable = (request, response) => {
     let { locale, areaId } = request.body
-    pool.query(queryType.query_getPatientTable(areaId))       
+    pool.query(queryType.getPatientTable(areaId))       
         .then(res => {
             console.log('Get getPatientTable data')
             response.status(200).json(res)
@@ -180,7 +180,7 @@ const getPatientTable = (request, response) => {
 
 const getImportPatient = (request, response) => {
     let { locale, areaId } = request.body
-    pool.query(queryType.query_getImportPatient())       
+    pool.query(queryType.getImportPatient())       
         .then(res => {
             console.log('get ImportPatient data')
             response.status(200).json(res)
@@ -192,7 +192,7 @@ const getImportPatient = (request, response) => {
 
 const getImportTable = (request, response) => {
     let { locale, areaId } = request.body
-    pool.query(queryType.query_getImportTable())       
+    pool.query(queryType.getImportTable())       
         .then(res => {
             console.log('Get getImportTable data')
             response.status(200).json(res)
@@ -205,7 +205,7 @@ const getImportTable = (request, response) => {
 const getImportData = (request, response) => {
     let { locale, areaId } = request.body
     const formOption = request.body.formOption
-    pool.query(queryType.query_getImportData(formOption))       
+    pool.query(queryType.getImportData(formOption))       
         .then(res => {
             console.log('Get getImportData data')
             response.status(200).json(res)
@@ -218,7 +218,7 @@ const getImportData = (request, response) => {
 const addAssociation = (request, response) => {
     let { locale, areaId } = request.body
     const formOption = request.body.formOption
-    pool.query(queryType.query_addAssociation(formOption))       
+    pool.query(queryType.addAssociation(formOption))       
         .then(res => {
             console.log('edit import data')
             response.status(200).json(res)
@@ -232,7 +232,7 @@ const cleanBinding = (request, response) => {
     let { locale, areaId } = request.body
     const formOption = request.body.formOption
     formOption.map( item => {
-       pool.query(queryType.query_cleanBinding(item))       
+       pool.query(queryType.cleanBinding(item))       
         .then(res => {
             console.log('clean Binding')
             response.status(200).json(res)
@@ -247,7 +247,7 @@ const cleanBinding = (request, response) => {
 const getLbeaconTable = (request, response) => {
 
     let { locale } = request.body 
-    pool.query(queryType.query_getLbeaconTable)
+    pool.query(queryType.getLbeaconTable)
         .then(res => {
             console.log('Get lbeaconTable data')
             res.rows.map(item => {
@@ -267,7 +267,7 @@ const getLbeaconTable = (request, response) => {
 const getGatewayTable = (request, response) => {
     let { locale } = request.body
 
-    pool.query(queryType.query_getGatewayTable)
+    pool.query(queryType.getGatewayTable)
         .then(res => {
             console.log('Get gatewayTable data')
             res.rows.map(item => {
@@ -285,7 +285,7 @@ const getGatewayTable = (request, response) => {
 
 const getGeofenceData = (request, response) => {
     let { locale } = request.body
-    pool.query(queryType.query_getGeofenceData)
+    pool.query(queryType.getGeofenceData)
         .then(res =>  {
             console.log("Get Geofence Data")
             res.rows.map(item => {
@@ -301,7 +301,7 @@ const getGeofenceData = (request, response) => {
 
 const editObject = (request, response) => {
     const formOption = request.body.formOption
-    pool.query(queryType.query_editObject(formOption))
+    pool.query(queryType.editObject(formOption))
         .then(res => {
             console.log("Edit object success");
             response.status(200).json(res)
@@ -313,7 +313,7 @@ const editObject = (request, response) => {
 
 const editImport = (request, response) => {
     const formOption = request.body.formOption
-    pool.query(queryType.query_editImport(formOption))
+    pool.query(queryType.editImport(formOption))
         .then(res => {
             console.log("Edit Import success");
             response.status(200).json(res)
@@ -325,7 +325,7 @@ const editImport = (request, response) => {
 
 const editPatient = (request, response) => {
     const formOption = request.body.formOption
-    pool.query(queryType.query_editPatient(formOption))
+    pool.query(queryType.editPatient(formOption))
         .then(res => {
             console.log("edit Patient success");
             response.status(200).json(res)
@@ -337,7 +337,7 @@ const editPatient = (request, response) => {
 
 const objectImport = (request, response) => {
     const idPackage = request.body.newData
-       pool.query(queryType.query_objectImport(idPackage))
+       pool.query(queryType.objectImport(idPackage))
         .then(res => {
             console.log("import objects success");
             response.status(200).json(res)
@@ -351,10 +351,10 @@ const objectImport = (request, response) => {
 
 const addObject = (request, response) => {
     const formOption = request.body.formOption
-    pool.query(queryType.query_addObject(formOption))
+    pool.query(queryType.addObject(formOption))
         .then(res => {
             console.log("add object success");
-            pool.query(queryType.query_addImport(formOption))
+            pool.query(queryType.addImport(formOption))
                 .then(res => {
                     console.log("add import success");
                     response.status(200).json(res)
@@ -371,7 +371,7 @@ const addObject = (request, response) => {
 
 const addPatient = (request, response) => {
     const formOption = request.body.formOption
-    pool.query(queryType.query_addPatient(formOption))
+    pool.query(queryType.addPatient(formOption))
         .then(res => {
             console.log("Add Patient Success");
             response.status(200).json(res)
@@ -391,11 +391,11 @@ const addPatient = (request, response) => {
 const editObjectPackage = (request, response) => {
     const { formOption, username, pdfPackage, reservedTimestamp, locale} = request.body
 
-    pool.query(queryType.query_addEditObjectRecord(formOption, username))
+    pool.query(queryType.addEditObjectRecord(formOption, username))
         .then(res => {
             const record_id = res.rows[0].id
             console.log('Add edited object record success')
-            pool.query(queryType.query_editObjectPackage(formOption, username, record_id, reservedTimestamp))
+            pool.query(queryType.editObjectPackage(formOption, username, record_id, reservedTimestamp))
                 .then(res => {
                     console.log('Edit object package success')
                     if (pdfPackage) {
@@ -423,7 +423,7 @@ const signin = (request, response) => {
     const { password, shift } = request.body
     
 
-    pool.query(queryType.query_signin(username))
+    pool.query(queryType.signin(username))
         .then(res => {
             if (res.rowCount < 1) {
                 console.log(`Sign in fail: username or password is incorrect`)
@@ -459,9 +459,9 @@ const signin = (request, response) => {
                         authentication: true,
                         userInfo
                     })
-                    pool.query(queryType.query_setVisitTimestamp(username))
+                    pool.query(queryType.setVisitTimestamp(username))
                         .catch(err => console.log(err))
-                    // pool.query(queryType.query_setShift(shift, username))
+                    // pool.query(queryType.setShift(shift, username))
                     //     .catch(err => console.log(err))
                     console.log(`Sign in success: ${name}`)
                 } else {
@@ -494,9 +494,9 @@ const signup = (request, response) => {
         password: hash,
         shiftSelect
     }
-    pool.query(queryType.query_signup(signupPackage))
+    pool.query(queryType.signup(signupPackage))
         .then(res => {
-            pool.query(queryType.query_insertUserData(username, role, area_id))
+            pool.query(queryType.insertUserData(username, role, area_id))
                 .then(res => {
                     console.log('sign up success')
                     response.status(200).json(res)
@@ -512,7 +512,7 @@ const signup = (request, response) => {
 
 const getUserInfo = (request, response) => {
     const username = request.body.username;
-    pool.query(queryType.query_getUserInfo(username))
+    pool.query(queryType.getUserInfo(username))
         .then(res => {
             console.log('Get user info')
             response.status(200).json(res)
@@ -525,7 +525,7 @@ const getUserInfo = (request, response) => {
 const addUserSearchHistory = (request, response) => {
     let { username, searchHistory } = request.body;
     searchHistory = JSON.stringify(searchHistory)
-    pool.query(queryType.query_addUserSearchHistory(username, searchHistory))
+    pool.query(queryType.addUserSearchHistory(username, searchHistory))
         .then(res => {
             console.log('Add user searech history success')
             response.status(200).json(res)
@@ -537,7 +537,7 @@ const addUserSearchHistory = (request, response) => {
 
 const editLbeacon = (request, response) => {
     const { formOption } = request.body    
-    pool.query(queryType.query_editLbeacon(formOption))
+    pool.query(queryType.editLbeacon(formOption))
         .then(res => {
             console.log('Edit lbeacon success')
             response.status(200).json(res)
@@ -564,7 +564,7 @@ const addShiftChangeRecord = (request, response) => {
     let { userInfo, pdfPackage } = request.body
 
     /** If there are some trouble when download pdf, try npm rebuild phantomjs-prebuilt */
-    pool.query(queryType.query_addShiftChangeRecord(userInfo, pdfPackage.path))
+    pool.query(queryType.addShiftChangeRecord(userInfo, pdfPackage.path))
         .then(res => {
 
              /** If there are some trouble when download pdf, try npm rebuild phantomjs-prebuilt */
@@ -583,7 +583,7 @@ const addShiftChangeRecord = (request, response) => {
 
 const modifyUserDevices = (request, response) => {
     const {username, mode, acn} = request.body
-    pool.query(queryType.query_modifyUserDevices(username, mode, acn), (error, results) => {
+    pool.query(queryType.modifyUserDevices(username, mode, acn), (error, results) => {
         if (error) {
             
         } else {
@@ -597,7 +597,7 @@ const modifyUserDevices = (request, response) => {
 
 const getPDFInfo = (request, response) => {
     let { locale } = request.body
-    pool.query(queryType.query_getShiftChangeRecord())
+    pool.query(queryType.getShiftChangeRecord())
         .then(res => {
             console.log('get shift change record success')
             res.rows.map(item => {
@@ -612,7 +612,7 @@ const getPDFInfo = (request, response) => {
 
 const validateUsername = (request, response) => {
     let { username } = request.body
-    pool.query(queryType.query_validateUsername(username))
+    pool.query(queryType.validateUsername(username))
         .then(res => {
             let precheck = false
             res.rowCount === 0 ? precheck = true : precheck = false;
@@ -626,7 +626,7 @@ const validateUsername = (request, response) => {
 
 const getUserList = (request, response) => {
     let { locale } = request.body
-    pool.query(queryType.query_getUserList())
+    pool.query(queryType.getUserList())
         .then(res => {
             console.log('get user list success')
             res.rows.map(item => {
@@ -644,7 +644,7 @@ const getUserList = (request, response) => {
 
 const getUserRole = (request, response) => {
     var { username } = request.body
-    pool.query(queryType.query_getUserRole(username))
+    pool.query(queryType.getUserRole(username))
         .then(res => {
             response.status(200).json(res)
         })
@@ -654,7 +654,7 @@ const getUserRole = (request, response) => {
 }
 
 const getRoleNameList = (request, response) => {
-    pool.query(queryType.query_getRoleNameList())
+    pool.query(queryType.getRoleNameList())
         .then(res => {
             response.status(200).json(res)
         })
@@ -666,7 +666,7 @@ const getRoleNameList = (request, response) => {
 
 const deleteUser = (request, response) => {
     var username = request.body.username
-    pool.query(queryType.query_deleteUser(username))
+    pool.query(queryType.deleteUser(username))
         .then(res => {
             console.log('delete user success')
             response.status(200).json(res)
@@ -683,7 +683,7 @@ const setUserRole = (request, response) => {
         roleSelect,
         shiftSelect
     } = request.body
-    pool.query(queryType.query_setUserRole(username, roleSelect, shiftSelect))
+    pool.query(queryType.setUserRole(username, roleSelect, shiftSelect))
         .then(res => {
             console.log(`set user success`)
             response.status(200).json(res)
@@ -695,7 +695,7 @@ const setUserRole = (request, response) => {
 
 const getEditObjectRecord = (request, response) => {
     const { locale } = request.body
-    pool.query(queryType.query_getEditObjectRecord())
+    pool.query(queryType.getEditObjectRecord())
         .then(res => {
             console.log('get edit object record')
 
@@ -711,7 +711,7 @@ const getEditObjectRecord = (request, response) => {
 
 const deleteEditObjectRecord = (request, response) => {
     const { idPackage } = request.body
-    pool.query(queryType.query_deleteEditObjectRecord(idPackage))
+    pool.query(queryType.deleteEditObjectRecord(idPackage))
         .then(res => {
             pool.query(`UPDATE object_table SET note_id = null WHERE note_id IN (${idPackage.map(id => `${id}`)})`)
                 .then(res => {
@@ -732,7 +732,7 @@ const deleteEditObjectRecord = (request, response) => {
 
 const deleteShiftChangeRecord = (request, response) => {
     const { idPackage } = request.body
-    pool.query(queryType.query_deleteShiftChangeRecord(idPackage))
+    pool.query(queryType.deleteShiftChangeRecord(idPackage))
     .then(res => {
                 console.log('delete shift change record success')
                 response.status(200).json(res)
@@ -745,7 +745,7 @@ const deleteShiftChangeRecord = (request, response) => {
 
 const deletePatient = (request, response) => {
     const { idPackage } = request.body
-    pool.query(queryType.query_deletePatient(idPackage))
+    pool.query(queryType.deletePatient(idPackage))
     .then(res => {
                 console.log('deletePatient change record success')
                 response.status(200).json(res)
@@ -758,7 +758,7 @@ const deletePatient = (request, response) => {
 
 const deleteLBeacon = (request, response) => {
     const { idPackage } = request.body
-    pool.query(queryType.query_deleteLBeacon(idPackage))
+    pool.query(queryType.deleteLBeacon(idPackage))
     .then(res => {
                 console.log('delete LBeacon record success')
                 response.status(200).json(res)
@@ -770,7 +770,7 @@ const deleteLBeacon = (request, response) => {
 
 const deleteGateway = (request, response) => {
     const { idPackage } = request.body
-    pool.query(queryType.query_deleteGateway(idPackage))
+    pool.query(queryType.deleteGateway(idPackage))
     .then(res => {
         console.log('delete Gateway record success')
         response.status(200).json(res)
@@ -783,7 +783,7 @@ const deleteGateway = (request, response) => {
 
 const deleteDevice = (request, response) => {
     const { idPackage, formOption } = request.body
-    pool.query(queryType.query_deleteDevice(idPackage, formOption))
+    pool.query(queryType.deleteDevice(idPackage, formOption))
     .then(res => {
         console.log('delete Device success')
         response.status(200).json(res)
@@ -796,7 +796,7 @@ const deleteDevice = (request, response) => {
 const deleteImportData = (request, response) => {
     const { idPackage } = request.body
 
-        pool.query(queryType.query_deleteImportData(idPackage))
+        pool.query(queryType.deleteImportData(idPackage))
         .then(res => {
                     console.log('delete ImportData success')
                     response.status(200).json(res)
@@ -807,7 +807,7 @@ const deleteImportData = (request, response) => {
 }
 
 const getAreaTable = (request, response) => {
-    pool.query(queryType.query_getAreaTable())
+    pool.query(queryType.getAreaTable())
         .then(res => {
             console.log("get area table")
             response.status(200).json(res)
@@ -817,46 +817,43 @@ const getAreaTable = (request, response) => {
         })
 }
 
-const getGeoFenceConfig = (request, response) => {
-    let { areaId } = request.body
-    pool.query(queryType.query_getGeoFenceConfig(areaId))
+const getMonitorConfig = (request, response) => {
+    let {
+        type,
+        areasId
+    } = request.body
+
+    let sitesGroup = process.env.SITES_GROUP.split(',')
+
+    pool.query(queryType.getMonitorConfig(type, sitesGroup))
         .then(res => {
-            res.rows.map(item => {
+            console.log(`get ${type} success`)
+
+            let toReturn = res.rows
+            .filter(item => {
+                return areasId.includes(item.area_id)
+            })
+            .map(item => {
                 item.start_time = item.start_time.split(':').filter((item,index) => index < 2).join(':')
                 item.end_time = item.end_time.split(':').filter((item,index) => index < 2).join(':')
-                item.perimeters = parseGeoFenceConfig(item.perimeters)
-                item.fences = parseGeoFenceConfig(item.fences)
+                return item
             })
-            console.log("get geofence config")
-            response.status(200).json(res)
+            response.status(200).json(toReturn)
         })
         .catch(err => {
-            console.log(`get geo fence config fail: ${err}`)
+            console.log(`get ${type} fail ${err}`)
         })
 }
 
-
-const setGeoFenceConfig = (request, response) =>{
-    let { value, areaId } = request.body
-    pool.query(queryType.query_setGeoFenceConfig(value, areaId))
+const setMonitorConfig = (request, response) =>{
+    let { monitorConfigPackage } = request.body
+    pool.query(queryType.setMonitorConfig(monitorConfigPackage))
         .then(res => {
-            console.log(`set geo fence config`)
+            console.log(`set monitor config success`)
             response.status(200).json(res)
         })
         .catch(err => {
-            console.log(`set geo fence config fail: ${err}`)
-        })
-}
-
-const setGeoFenceConfigRows = (request, response) =>{
-    let config = request.body
-    pool.query(queryType.query_setGeoFenceConfigRows(config))
-        .then(res => {
-            console.log(`set geo fence config`)
-            response.status(200).json(res)
-        })
-        .catch(err => {
-            console.log(`set geo fence config fail: ${err}`)
+            console.log(`set monitor config fail ${err}`)
         })
 }
 
@@ -865,7 +862,7 @@ const checkoutViolation = (request, response) => {
         mac_address,
         monitor_type
     } = request.body
-    pool.query(queryType.query_checkoutViolation(mac_address, monitor_type))
+    pool.query(queryType.checkoutViolation(mac_address, monitor_type))
         .then(res => {
             console.log(`checkout violation`)
             response.status(200).json(res)
@@ -878,7 +875,7 @@ const checkoutViolation = (request, response) => {
 const confirmValidation = (request, response) => {
     const locale = request.body.locale
     let { username, password } = request.body
-    pool.query(queryType.query_confirmValidation(username))
+    pool.query(queryType.confirmValidation(username))
         .then(res => {
             if (res.rowCount < 1) {
                 response.json({
@@ -921,59 +918,49 @@ const confirmValidation = (request, response) => {
         })
 }
 
-const getMonitorConfig = (request, response) => {
-    let {
-        type,
-        areasId
-    } = request.body
-
-    let sitesGroup = process.env.SITES_GROUP.split(',')
-
-    pool.query(queryType.query_getMonitorConfig(type, sitesGroup))
+const getGeofenceConfig = (request, response) => {
+    let { areaId } = request.body
+    pool.query(queryType.getGeofenceConfig(areaId))
         .then(res => {
-            console.log(`get ${type.replace(/_/g, ' ')}`)
-
-            let toReturn = res.rows
-            .filter(item => {
-                return areasId.includes(item.area_id)
-            })
-            .map(item => {
+            res.rows.map(item => {
                 item.start_time = item.start_time.split(':').filter((item,index) => index < 2).join(':')
                 item.end_time = item.end_time.split(':').filter((item,index) => index < 2).join(':')
-                return item
+                item.perimeters = parseGeoFenceConfig(item.perimeters)
+                item.fences = parseGeoFenceConfig(item.fences)
             })
-            response.status(200).json(toReturn)
-        })
-        .catch(err => {
-            console.log(`get ${type} fail: ${err}`)
-        })
-}
-
-const setMonitorConfig = (request, response) => {
-    let {
-        monitorConfigPackage,
-    } = request.body
-    pool.query(queryType.query_setMonitorConfig(monitorConfigPackage))
-        .then(res => {
-            console.log(`set ${monitorConfigPackage.type.replace(/_/g, ' ')}`)
+            console.log("get geofence config success")
             response.status(200).json(res)
         })
         .catch(err => {
-            console.log(`set monitor config fail: ${err}`)
+            console.log(`get geofence config fail ${err}`)
         })
 }
 
-const addMonitorConfig = (request, response) => {
+const setGeofenceConfig = (request, response) => {
     let {
         monitorConfigPackage,
     } = request.body
-    pool.query(queryType.query_addMonitorConfig(monitorConfigPackage))
+    pool.query(queryType.setGeofenceConfig(monitorConfigPackage))
         .then(res => {
-            console.log(`add ${monitorConfigPackage.type.replace(/_/g, ' ')}`)
+            console.log(`set geofence config success`)
             response.status(200).json(res)
         })
         .catch(err => {
-            console.log(`add monitor config fail: ${err}`)
+            console.log(`set geofence config fail: ${err}`)
+        })
+}
+
+const addGeofenceConfig = (request, response) => {
+    let {
+        monitorConfigPackage,
+    } = request.body
+    pool.query(queryType.addGeofenceConfig(monitorConfigPackage))
+        .then(res => {
+            console.log(`add geofence config success`)
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(`add geofence config fail: ${err}`)
         })
 }
 
@@ -981,7 +968,7 @@ const deleteMonitorConfig = (request, response) => {
     let {
         monitorConfigPackage,
     } = request.body
-    pool.query(queryType.query_deleteMonitorConfig(monitorConfigPackage))
+    pool.query(queryType.deleteMonitorConfig(monitorConfigPackage))
         .then(res => {
             console.log(`delete ${monitorConfigPackage.type.replace(/_/g, ' ')}`)
             response.status(200).json(res)
@@ -1073,7 +1060,7 @@ const checkMatchedObject = (item, userAuthenticatedAreaId, currentAreaId) => {
 const backendSearch = (request, response) => {
     
     const {keyType, keyWord, mac_address} = request.body
-    var query = queryType.query_backendSearch(keyType, keyWord, mac_address)
+    var query = queryType.backendSearch(keyType, keyWord, mac_address)
     pool.query(query, (err, res) => {
         if(err){
             console.log(err)
@@ -1089,7 +1076,7 @@ const backendSearch = (request, response) => {
                     console.log('delete same name')
                     console.log(err)
                 }else{
-                    pool.query(`DELETE FROM search_result_queue WHERE id NOT IN (SELECT id FROM search_result_queue ORDER BY query_time desc LIMIT 4)`, (err, res) => {
+                    pool.query(`DELETE FROM search_result_queue WHERE id NOT IN (SELECT id FROM search_result_queue ORDER BY time desc LIMIT 4)`, (err, res) => {
                         if(err){
                             console.log('delete exceed')
                             console.log(err)
@@ -1105,7 +1092,7 @@ const backendSearch = (request, response) => {
                                 if(err){
                                     console.log(err)
                                 }else{
-                                    pool.query(queryType.query_backendSearch_writeQueue(keyType, keyWord, mac_addresses, avail[0]), (err, res) => {
+                                    pool.query(queryType.backendSearch_writeQueue(keyType, keyWord, mac_addresses, avail[0]), (err, res) => {
                                         if(err){
                                             console.log(err)
                                         }else{
@@ -1128,7 +1115,7 @@ const backendSearch = (request, response) => {
 
 }
 const getBackendSearchQueue = (request, response) => {
-    var query = queryType.query_getBackendSearchQueue()
+    var query = queryType.getBackendSearchQueue()
     pool.query(query, (err, res) => {
         response.send(res.rows)
     })
@@ -1146,7 +1133,7 @@ const addBulkObject = (req, res) => {
         csv()
         .fromFile(csvFilePath)
         .then((jsonObj) => {
-            pool.query(queryType.query_addBulkObject(jsonObj))
+            pool.query(queryType.addBulkObject(jsonObj))
                 .then(res => {
                     console.log(res)
                 })
@@ -1166,8 +1153,6 @@ module.exports = {
     getImportTable,
     getImportPatient,
     getImportData,
-    addAssociation,
-    cleanBinding,
     getLbeaconTable,
     getGatewayTable,
     getGeofenceData,
@@ -1175,7 +1160,7 @@ module.exports = {
     getUserRole,
     getRoleNameList,
     getAreaTable,
-    getGeoFenceConfig,
+    getGeofenceConfig,
     getUserInfo,
     getPDFInfo,
     getEditObjectRecord,
@@ -1185,6 +1170,8 @@ module.exports = {
     addObject,
     addPatient,
     addBulkObject,
+    addAssociation,
+    cleanBinding,
     editObject,
     editImport,
     editPatient,
@@ -1205,14 +1192,13 @@ module.exports = {
     modifyUserDevices,
     validateUsername,
     setUserRole,
-    setGeoFenceConfig,
-    setGeoFenceConfigRows,
     setMonitorConfig,
+    setGeofenceConfig,
     checkoutViolation,
     confirmValidation,
     backendSearch,
     getBackendSearchQueue,
     getTrackingTableByMacAddress,
-    addMonitorConfig,
+    addGeofenceConfig,
     deleteMonitorConfig
 }

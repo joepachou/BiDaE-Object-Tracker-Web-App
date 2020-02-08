@@ -1,4 +1,4 @@
-function query_getTrackingData () {
+function getTrackingData () {
 	const query = `
 		SELECT 
 			object_table.mac_address,
@@ -85,7 +85,7 @@ function query_getTrackingData () {
 	return query;
 }
 
-const query_getTrackingTableByMacAddress = (object_mac_address,i,second) => {
+const getTrackingTableByMacAddress = (object_mac_address,i,second) => {
 	let text = '';
 
 		text += `
@@ -107,7 +107,7 @@ const query_getTrackingTableByMacAddress = (object_mac_address,i,second) => {
 	//console.log(text)
 	return text;
 }
-const query_getImportDataFromBinding = () => {
+const getImportDataFromBinding = () => {
 
 	let text = '';
 	
@@ -128,7 +128,7 @@ const query_getImportDataFromBinding = () => {
 	return text
 } 
 
-const query_getObjectTable = (area_id, objectType ) => {
+const getObjectTable = (area_id, objectType ) => {
 
 	let text = '';
 	if (!area_id) {
@@ -190,7 +190,7 @@ const query_getObjectTable = (area_id, objectType ) => {
 
 
 // WHERE object_table.object_type = '2'
-const query_getPatientTable = (area_id) => {
+const getPatientTable = (area_id) => {
 
 	let text = '';
 	if (!area_id) {
@@ -243,7 +243,7 @@ const query_getPatientTable = (area_id) => {
 	return text
 } 
 
-const query_getImportTable = () => {
+const getImportTable = () => {
 
 	let text = `
 			SELECT 
@@ -257,7 +257,7 @@ const query_getImportTable = () => {
 	return text
 } 
 
-const query_getImportPatient = () => {
+const getImportPatient = () => {
 
 	let text = `
 			SELECT 
@@ -271,7 +271,7 @@ const query_getImportPatient = () => {
 	return text
 } 
 
-function query_addAssociation (formOption) {
+function addAssociation (formOption) {
 	// console.log(formOption)
 	const text = `
 		INSERT INTO object_table (
@@ -312,7 +312,7 @@ function query_addAssociation (formOption) {
 
 }
 
-function query_cleanBinding(formOption) {
+function cleanBinding(formOption) {
 	const text =
 		`
 		UPDATE import_table
@@ -339,7 +339,7 @@ function query_cleanBinding(formOption) {
 }
 
 
-function query_getImportData(formOption){
+function getImportData(formOption){
 	let	text =	`
 		SELECT 
 			name, 
@@ -362,7 +362,7 @@ function query_getImportData(formOption){
 
 
 
-const query_getLbeaconTable = 
+const getLbeaconTable = 
     `
 		SELECT 
 			id,
@@ -380,7 +380,7 @@ const query_getLbeaconTable =
 		ORDER BY last_report_timestamp DESC
 	`;
 
-const query_getGatewayTable = 
+const getGatewayTable = 
     `
 	SELECT 
 		ip_address, 
@@ -393,7 +393,7 @@ const query_getGatewayTable =
 		gateway_table 
 	ORDER BY last_report_timestamp DESC`;
 
-const query_getGeofenceData = 
+const getGeofenceData = 
 	`
 	SELECT * 
 	FROM geo_fence_alert 
@@ -402,7 +402,7 @@ const query_getGeofenceData =
 	`;
 	
 
-function query_objectImport (idPackage) {
+function objectImport (idPackage) {
 
 	let text =  `
 		INSERT INTO import_table (
@@ -422,7 +422,7 @@ function query_objectImport (idPackage) {
 }
 
 
-function query_editImport (formOption) {
+function editImport (formOption) {
 	const text =
 		`
 		Update import_table 
@@ -456,7 +456,7 @@ function query_editImport (formOption) {
 }
 
 
-function query_editObject (formOption) {
+function editObject (formOption) {
 	let text = 
 		`
 		Update object_table 
@@ -491,7 +491,7 @@ function query_editObject (formOption) {
 
 
 
-function query_editPatient (formOption) {
+function editPatient (formOption) {
 	// console.log(formOption)
 	const text = `
 		Update object_table 
@@ -527,7 +527,7 @@ function query_editPatient (formOption) {
 
 
 
-function query_addObject (formOption) {
+function addObject (formOption) {
 	const text = `
 		INSERT INTO object_table (
 			type, 
@@ -567,7 +567,7 @@ function query_addObject (formOption) {
 	return query;
 }
 
-function query_addPatient (formOption) {
+function addPatient (formOption) {
 	// console.log(formOption)
 	const text = 
 		`
@@ -604,7 +604,7 @@ function query_addPatient (formOption) {
 	return query;
 }
 
-const query_addImport = (formOption) => {
+const addImport = (formOption) => {
 	const text = `
 		INSERT INTO import_table (
 			type, 
@@ -630,7 +630,7 @@ const query_addImport = (formOption) => {
 	return query;
 }
 
-const query_editObjectPackage = (formOption, username, record_id, reservedTimestamp) => {
+const editObjectPackage = (formOption, username, record_id, reservedTimestamp) => {
 	let item = formOption[0]
 	let text = `
 		UPDATE object_table
@@ -648,7 +648,7 @@ const query_editObjectPackage = (formOption, username, record_id, reservedTimest
 	return text
 }
 
-function query_signin(username) {
+function signin(username) {
 
 	const text =
 		`
@@ -688,7 +688,7 @@ function query_signin(username) {
 	
 }
 
-function query_signup(signupPackage) {
+function signup(signupPackage) {
 
 	const text = 
 		`
@@ -717,7 +717,7 @@ function query_signup(signupPackage) {
 	return query
 }
 
-function query_getUserInfo(username) {
+function getUserInfo(username) {
 	const text =  `
 	SELECT name, mydevice, search_history from user_table where name= $1
 	`;
@@ -732,7 +732,7 @@ function query_getUserInfo(username) {
 	return query
 }
 
-function query_addUserSearchHistory (username, searchHistory) {
+function addUserSearchHistory (username, searchHistory) {
 	const text = `
 		UPDATE user_table
 		SET search_history = $1
@@ -749,7 +749,7 @@ function query_addUserSearchHistory (username, searchHistory) {
 	return query
 }
 
-function query_editLbeacon (formOption) {
+function editLbeacon (formOption) {
 	const text =
 		`
 		UPDATE lbeacon_table
@@ -776,7 +776,7 @@ function query_editLbeacon (formOption) {
 	return query
 }
 
-function query_modifyUserDevices(username, mode, acn){
+function modifyUserDevices(username, mode, acn){
 	var text = ""
 	if(mode === 'add'){
 		text = `
@@ -798,7 +798,7 @@ function query_modifyUserDevices(username, mode, acn){
 	
 }
 
-function query_getShiftChangeRecord(){
+function getShiftChangeRecord(){
 	const query = `
 		SELECT 
 			shift_change_record.id,
@@ -817,7 +817,7 @@ function query_getShiftChangeRecord(){
 	return query
 }
 
-const query_validateUsername = (username) => {
+const validateUsername = (username) => {
 	const text = `
 		SELECT 
 			name
@@ -838,7 +838,7 @@ const query_validateUsername = (username) => {
 }
 
 
-const query_getUserList = () => {
+const getUserList = () => {
 	const query = `
 		SELECT
 			user_table.id,
@@ -858,14 +858,14 @@ const query_getUserList = () => {
 	return query
 }
 
-const query_getUserRole = (username) => {
+const getUserRole = (username) => {
 	const query = `select name      from roles      where 
 		id=(       select role_id   from user_roles where 
 		user_id=(  select id        from user_table where name='${username}'));`
 	return query
 }
 
-const query_getRoleNameList = () => {
+const getRoleNameList = () => {
 	const query = `
 		SELECT 
 			name 
@@ -875,7 +875,7 @@ const query_getRoleNameList = () => {
 }
 
 
-const query_deleteUser = (username) => {
+const deleteUser = (username) => {
 	
 	const query = `
 		
@@ -903,7 +903,7 @@ const query_deleteUser = (username) => {
 	return query
 }
 
-const query_setUserRole = (username, roleSelect, shiftSelect) => {
+const setUserRole = (username, roleSelect, shiftSelect) => {
 	const query = `
 		UPDATE user_roles
 		SET role_id = (
@@ -923,7 +923,7 @@ const query_setUserRole = (username, roleSelect, shiftSelect) => {
 	return query
 }
 
-const query_getEditObjectRecord = () => {
+const getEditObjectRecord = () => {
 	const query = `
 		SELECT
 			user_table.name,
@@ -942,7 +942,7 @@ const query_getEditObjectRecord = () => {
 	return query
 }
 
-const query_deleteEditObjectRecord = (idPackage) => {
+const deleteEditObjectRecord = (idPackage) => {
 	const query = `
 		DELETE FROM edit_object_record
 		WHERE id IN (${idPackage.map(item => `'${item}'`)});
@@ -951,7 +951,7 @@ const query_deleteEditObjectRecord = (idPackage) => {
 }
 
 
-const query_deleteShiftChangeRecord = (idPackage) => {
+const deleteShiftChangeRecord = (idPackage) => {
 	const query = `
 		DELETE FROM shift_change_record
 		WHERE id IN (${idPackage.map(item => `'${item}'`)});
@@ -961,7 +961,7 @@ const query_deleteShiftChangeRecord = (idPackage) => {
 
 
 
-const query_deletePatient = (idPackage) => {
+const deletePatient = (idPackage) => {
 	const query = `
 		DELETE FROM object_table
 		WHERE id IN (${idPackage.map(item => `'${item}'`)});
@@ -969,7 +969,7 @@ const query_deletePatient = (idPackage) => {
 	return query
 }
 
-const query_deleteDevice = (idPackage, formOption) => {
+const deleteDevice = (idPackage, formOption) => {
 	const query = `
 		DELETE FROM object_table
 		WHERE mac_address IN (${formOption.map(item => `'${item}'`)});
@@ -977,7 +977,7 @@ const query_deleteDevice = (idPackage, formOption) => {
 	return query
 }
 
-const query_deleteImportData = (idPackage) => {
+const deleteImportData = (idPackage) => {
 	const query = `
 		DELETE FROM import_table
 		WHERE id IN (${idPackage.map(item => `'${item}'`)});
@@ -988,7 +988,7 @@ const query_deleteImportData = (idPackage) => {
 
 
 
-const query_deleteLBeacon = (idPackage) => {
+const deleteLBeacon = (idPackage) => {
 	const query = `
 		DELETE FROM lbeacon_table
 		WHERE id IN (${idPackage.map(item => `'${item}'`)});
@@ -997,7 +997,7 @@ const query_deleteLBeacon = (idPackage) => {
 }
 
 
-const query_deleteGateway = (idPackage) => {
+const deleteGateway = (idPackage) => {
 	const query = `
 		DELETE FROM gateway_table
 		WHERE id IN (${idPackage.map(item => `'${item}'`)});
@@ -1009,7 +1009,7 @@ const query_deleteGateway = (idPackage) => {
 
 
 
-const query_setShift = (shift, username) => {
+const setShift = (shift, username) => {
 	const query = `
 		update user_table
 		set shift='${shift}'
@@ -1018,7 +1018,7 @@ const query_setShift = (shift, username) => {
 	return query
 }
 
-const query_setVisitTimestamp = (username) => {
+const setVisitTimestamp = (username) => {
 	return `
 		UPDATE user_table
 		SET last_visit_timestamp=now()
@@ -1026,7 +1026,7 @@ const query_setVisitTimestamp = (username) => {
 	`
 }
 
-const query_insertUserData = (username, role, area_id) => {
+const insertUserData = (username, role, area_id) => {
 	return `
 		INSERT INTO user_roles (user_id, role_id)
 		VALUES (
@@ -1053,7 +1053,7 @@ const query_insertUserData = (username, role, area_id) => {
 	`
 }
 
-const query_addEditObjectRecord = (formOption, username) => {
+const addEditObjectRecord = (formOption, username) => {
 	let item = formOption[0]
 	const text = `
 		INSERT INTO edit_object_record (
@@ -1092,7 +1092,7 @@ const query_addEditObjectRecord = (formOption, username) => {
 
 }
 
-const query_addShiftChangeRecord = (userInfo, file_path) => {
+const addShiftChangeRecord = (userInfo, file_path) => {
 	const query = `
 		INSERT INTO shift_change_record (
 			user_id, 
@@ -1114,7 +1114,7 @@ const query_addShiftChangeRecord = (userInfo, file_path) => {
 	return query
 }
 
-const query_getAreaTable = () => {
+const getAreaTable = () => {
 	return `
 		SELECT 
 			id,
@@ -1123,7 +1123,7 @@ const query_getAreaTable = () => {
 	`
 }
 
-const query_getGeoFenceConfig = (areaId) => {
+const getGeofenceConfig = (areaId) => {
 	return `
 		SELECT
 			*
@@ -1132,105 +1132,8 @@ const query_getGeoFenceConfig = (areaId) => {
 	;`
 }
 
-const query_setGeoFenceConfigRows = (config) =>{
 
-	const merge_perimeters_uuids 	= config.perimeters['uuids'].join(',')
-	const merge_fences_uuids 		= config.fences['uuids'].join(',')
-	var perimeters = [config.perimeters['number'], merge_perimeters_uuids, config.perimeters['rssi']].join(',')
-	var fences = [config.fences['number'], merge_fences_uuids, config.fences['rssi']].join(',')
-
-	const query =  `
-		UPDATE geo_fence_config
-		SET 
-			enable = '${config.enable}',
-			perimeters = '${perimeters}',
-			fences = '${fences}',
-			start_time = '${config.start_time}',
-			end_time = '${config.end_time}',
-			area_id = ${config.area_id}
-		WHERE id = ${config.id}
-	`
-	return query
-}
-
-const query_setGeoFenceConfig = (value, areaId) =>{
-	return `
-		UPDATE geo_fence_config
-		SET enable = ${value}
-		WHERE id = ${areaId}
-	`
-}
-
-const query_checkoutViolation = (mac_address, monitor_type) => {
-	return `
-		UPDATE notification_table
-		SET web_processed = 1
-		WHERE (
-			mac_address = '${mac_address}'
-			AND monitor_type = ${monitor_type}
-			AND violation_timestamp < NOW()
-		) 	
-	`
-}
-
-const query_confirmValidation = (username) => {
-	let text = `
-		SELECT 
-			user_table.name, 
-			user_table.password,
-			roles.name as role,
-			user_roles.role_id as role_id,
-			array (
-				SELECT area_id
-				FROM user_areas
-				WHERE user_areas.user_id = user_table.id
-			) as areas_id,
-			(
-				SELECT id
-				FROM user_table
-				WHERE user_table.name = $1
-			) as user_id
-
-		FROM user_table
-
-		LEFT JOIN user_roles
-		ON user_roles.user_id = user_table.id
-
-		LEFT JOIN roles
-		ON user_roles.role_id = roles.id
-		
-		LEFT JOIN user_areas
-		ON user_areas.user_id = user_table.id
-		
-		WHERE user_table.name = $1;
-	`
-
-	const values = [username];
-
-	const query = {
-		text,
-		values
-	};
-
-	return query;
-
-}
-
-const query_getMonitorConfig = (type, sitesGroup) => {
-	let text =  `
-		SELECT 
-			id, 
-			area_id,
-			enable,
-			start_time,
-			end_time
-		FROM ${type}
-		WHERE area_id IN (${sitesGroup.map(item => item)});
-	`
-	return text
-}
-
-const query_setMonitorConfig = (monitorConfigPackage) => {
+const setGeofenceConfig = (monitorConfigPackage) => {
 	let {
 		type,
 		id,
@@ -1277,7 +1180,112 @@ const query_setMonitorConfig = (monitorConfigPackage) => {
 	return query
 }
 
-const query_addMonitorConfig = (monitorConfigPackage) => {
+const checkoutViolation = (mac_address, monitor_type) => {
+	return `
+		UPDATE notification_table
+		SET web_processed = 1
+		WHERE (
+			mac_address = '${mac_address}'
+			AND monitor_type = ${monitor_type}
+			AND violation_timestamp < NOW()
+		) 	
+	`
+}
+
+const confirmValidation = (username) => {
+	let text = `
+		SELECT 
+			user_table.name, 
+			user_table.password,
+			roles.name as role,
+			user_roles.role_id as role_id,
+			array (
+				SELECT area_id
+				FROM user_areas
+				WHERE user_areas.user_id = user_table.id
+			) as areas_id,
+			(
+				SELECT id
+				FROM user_table
+				WHERE user_table.name = $1
+			) as user_id
+
+		FROM user_table
+
+		LEFT JOIN user_roles
+		ON user_roles.user_id = user_table.id
+
+		LEFT JOIN roles
+		ON user_roles.role_id = roles.id
+		
+		LEFT JOIN user_areas
+		ON user_areas.user_id = user_table.id
+		
+		WHERE user_table.name = $1;
+	`
+
+	const values = [username];
+
+	const query = {
+		text,
+		values
+	};
+
+	return query;
+
+}
+
+const getMonitorConfig = (type, sitesGroup) => {
+	let text =  `
+		SELECT 
+			id, 
+			area_id,
+			enable,
+			start_time,
+			end_time
+		FROM ${type}
+		WHERE area_id IN (${sitesGroup.map(item => item)});
+	`
+	return text
+}
+
+const setMonitorConfig = (monitorConfigPackage) => {
+	let {
+		type,
+		id,
+		start_time,
+		end_time,
+		enable,
+		area_id,
+	} = monitorConfigPackage
+
+	let text = `
+		UPDATE ${type}
+		SET 
+			area_id = $2,
+			start_time = $3,
+			end_time = $4,
+			enable = $5
+		
+		WHERE id = $1;
+	`
+	let values = [
+		id,
+		area_id,
+		start_time,
+		end_time,
+		enable,
+	]
+
+	let query = {
+		text,
+		values
+	}
+
+	return query
+}
+
+const addGeofenceConfig = (monitorConfigPackage) => {
 
 	let {
 		type,
@@ -1311,7 +1319,7 @@ const query_addMonitorConfig = (monitorConfigPackage) => {
 				$5,
 				$6,
 				$7
-		)
+			)
 	`
 
 	let values = [
@@ -1330,7 +1338,7 @@ const query_addMonitorConfig = (monitorConfigPackage) => {
 	}
 }
 
-const query_deleteMonitorConfig = (monitorConfigPackage) => {
+const deleteMonitorConfig = (monitorConfigPackage) => {
 	let {
 		type,
 		id
@@ -1341,7 +1349,7 @@ const query_deleteMonitorConfig = (monitorConfigPackage) => {
 	`
 }
 
-function query_backendSearch(keyType, keyWord){
+function backendSearch(keyType, keyWord){
 	var query 	= null
 	var text 	= null
 	var values 	= null
@@ -1463,19 +1471,19 @@ function query_backendSearch(keyType, keyWord){
 	}
 	return query
 }
-function query_deleteSameNameSearchQueue(keyType, keyWord){
+function deleteSameNameSearchQueue(keyType, keyWord){
 
 	var text = `DELETE FROM search_result_queue where (key_type = '${keyType}' AND key_word = '${keyWord}') 
 	OR 
-		id NOT IN (SELECT id FROM search_result_queue ORDER BY query_time desc LIMIT 5) RETURNING *;`
+		id NOT IN (SELECT id FROM search_result_queue ORDER BY time desc LIMIT 5) RETURNING *;`
 	// console.log(text)
 	return text
 }
-function query_backendSearch_writeQueue(keyType, keyWord, mac_addresses, pin_color_index){
+function backendSearch_writeQueue(keyType, keyWord, mac_addresses, pin_color_index){
 	var text = 
 		`
 			INSERT INTO 
-				search_result_queue(query_time, key_type, key_word, result_mac_address, pin_color_index) VALUES
+				search_result_queue(time, key_type, key_word, result_mac_address, pin_color_index) VALUES
 				(now(), $1, $2, ARRAY['${mac_addresses.join('\',\'')}'], $3);
 		`
 	values =  [keyType, keyWord, pin_color_index]
@@ -1487,7 +1495,7 @@ function query_backendSearch_writeQueue(keyType, keyWord, mac_addresses, pin_col
 	return query
 }
 
-function query_getBackendSearchQueue(){
+function getBackendSearchQueue(){
 	var query = 
 		`
 			SELECT 
@@ -1495,7 +1503,7 @@ function query_getBackendSearchQueue(){
 			FROM
 				search_result_queue
 			ORDER BY
-				query_time DESC
+				time DESC
 			LIMIT 5
 		`
 	
@@ -1503,7 +1511,7 @@ function query_getBackendSearchQueue(){
 }
 
 
-const query_addBulkObject = (jsonObj) => {
+const addBulkObject = (jsonObj) => {
 	let text =  `
 		INSERT INTO import_table (
 			name,
@@ -1526,7 +1534,7 @@ const query_addBulkObject = (jsonObj) => {
 	return text	
 }
 
-const query_setSearchRssi = (rssi) => {
+const setSearchRssi = (rssi) => {
 	let text = `
 		UPDATE search_criteria
 		SET search_rssi = $1
@@ -1541,7 +1549,7 @@ const query_setSearchRssi = (rssi) => {
 	return query
 }
 
-const query_getSearchRssi = () =>{
+const getSearchRssi = () =>{
 	let text = `
 		SELECT search_rssi
 		FROM search_criteria
@@ -1551,67 +1559,66 @@ const query_getSearchRssi = () =>{
 
 
 module.exports = {
-	query_getTrackingData,
-	query_getTrackingTableByMacAddress,
-	query_getObjectTable,
-	query_getPatientTable,
-	query_getImportTable,
-    query_getLbeaconTable,
-	query_getGatewayTable,
-	query_getGeofenceData,
-	query_getMonitorConfig,
-	query_setMonitorConfig,
-	query_editPatient,
-	query_editObject,
-	query_editImport,
-	query_objectImport,
-	query_addObject,
-	query_addPatient,
-	query_editObjectPackage,
-	query_signin,
-	query_signup,
-	query_getUserInfo,
-	query_addUserSearchHistory,
-	query_editLbeacon,
-	query_modifyUserDevices,
-	query_getShiftChangeRecord,
-	query_validateUsername,
-	query_getUserList,
-	query_getUserRole,
-	query_getRoleNameList,
-	query_deleteUser,
-	query_setUserRole,
-	query_getEditObjectRecord,
-	query_deleteEditObjectRecord,
-	query_deleteShiftChangeRecord,
-	query_deletePatient,
-	query_deleteDevice,
-	query_deleteImportData,
-	query_setShift,
-	query_deleteLBeacon,
-	query_deleteGateway,
-	query_setVisitTimestamp,
-	query_insertUserData,
-	query_addEditObjectRecord,
-	query_addShiftChangeRecord,
-	query_getAreaTable,
-	query_getGeoFenceConfig,
-	query_setGeoFenceConfig,
-	query_setGeoFenceConfigRows,
-	query_checkoutViolation,
-	query_confirmValidation,
-	query_backendSearch,
-	query_backendSearch_writeQueue,
-	query_deleteSameNameSearchQueue,
-	query_getBackendSearchQueue,
-	query_addAssociation,
-	query_cleanBinding,
-	query_getImportData,
-	query_editObject,
-	query_addImport,
-	query_getImportPatient,
-	query_addMonitorConfig,
-	query_deleteMonitorConfig
+	getTrackingData,
+	getTrackingTableByMacAddress,
+	getObjectTable,
+	getPatientTable,
+	getImportTable,
+    getLbeaconTable,
+	getGatewayTable,
+	getGeofenceData,
+	getMonitorConfig,
+	setGeofenceConfig,
+	editPatient,
+	editObject,
+	editImport,
+	objectImport,
+	addObject,
+	addPatient,
+	editObjectPackage,
+	signin,
+	signup,
+	getUserInfo,
+	addUserSearchHistory,
+	editLbeacon,
+	modifyUserDevices,
+	getShiftChangeRecord,
+	validateUsername,
+	getUserList,
+	getUserRole,
+	getRoleNameList,
+	deleteUser,
+	setUserRole,
+	getEditObjectRecord,
+	deleteEditObjectRecord,
+	deleteShiftChangeRecord,
+	deletePatient,
+	deleteDevice,
+	deleteImportData,
+	setShift,
+	deleteLBeacon,
+	deleteGateway,
+	setVisitTimestamp,
+	insertUserData,
+	addEditObjectRecord,
+	addShiftChangeRecord,
+	getAreaTable,
+	getGeofenceConfig,
+	setMonitorConfig,
+	checkoutViolation,
+	confirmValidation,
+	backendSearch,
+	backendSearch_writeQueue,
+	deleteSameNameSearchQueue,
+	getBackendSearchQueue,
+	addAssociation,
+	cleanBinding,
+	getImportData,
+	editObject,
+	addImport,
+	getImportPatient,
+	addGeofenceConfig,
+	deleteMonitorConfig
 }
 
 

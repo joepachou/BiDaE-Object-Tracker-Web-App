@@ -42,15 +42,14 @@ const getRoleNameList = `${protocol}://${dataSrcIP}/test/getRoleNameList`
 const deleteUser = `${protocol}://${dataSrcIP}/test/deleteUser`
 const setUserRole = `${protocol}://${dataSrcIP}/test/setUserRole`
 const getAreaTable = `${protocol}://${dataSrcIP}/data/getAreaTable`
-const getGeoFenceConfig = `${protocol}://${dataSrcIP}/data/getGeoFenceConfig`
-const setGeoFenceConfig = `${protocol}://${dataSrcIP}/data/setGeoFenceConfig`
-const setGeoFenceConfigRows = `${protocol}://${dataSrcIP}/data/setGeoFenceConfigRows`
+const getGeofenceConfig = `${protocol}://${dataSrcIP}/data/getGeofenceConfig`
+const setGeofenceConfig = `${protocol}://${dataSrcIP}/data/setGeofenceConfig`
 const addShiftChangeRecord = `${protocol}://${dataSrcIP}/data/addShiftChangeRecord`
 const checkoutViolation = `${protocol}://${dataSrcIP}/data/checkoutViolation`
 const confirmValidation = `${protocol}://${dataSrcIP}/data/confirmValidation`
 const getMonitorConfig = `${protocol}://${dataSrcIP}/data/getMonitorConfig`
 const setMonitorConfig = `${protocol}://${dataSrcIP}/data/setMonitorConfig`
-const addMonitorConfig = `${protocol}://${dataSrcIP}/data/addMonitorConfig`
+const addGeofenceConfig = `${protocol}://${dataSrcIP}/data/addGeofenceConfig`
 const deleteMonitorConfig = `${protocol}://${dataSrcIP}/data/deleteMonitorConfig`
 const backendSearch = `${protocol}://${dataSrcIP}/data/backendSearch`
 const getSearchQueue = `${protocol}://${dataSrcIP}/data/getSearchQueue`
@@ -111,9 +110,8 @@ module.exports = {
     deleteUser,
     setUserRole,
     getAreaTable,
-    getGeoFenceConfig,
-    setGeoFenceConfig,
-    setGeoFenceConfigRows,
+    getGeofenceConfig,
+    setGeofenceConfig,
     addShiftChangeRecord,
     checkoutViolation,
     confirmValidation,
@@ -121,6 +119,6 @@ module.exports = {
     backendSearch,
     getSearchQueue, 
     pinImage,
-    addMonitorConfig,
+    addGeofenceConfig,
     deleteMonitorConfig
 };

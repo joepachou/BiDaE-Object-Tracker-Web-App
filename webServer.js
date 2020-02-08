@@ -130,11 +130,9 @@ app.post('/data/modifyMyDevice', db.modifyUserDevices)
 
 app.post('/data/getAreaTable', db.getAreaTable)
 
-app.post('/data/getGeoFenceConfig', db.getGeoFenceConfig)
+app.post('/data/getGeofenceConfig', db.getGeofenceConfig)
 
-app.post('/data/setGeoFenceConfig', db.setGeoFenceConfig)
-
-app.post('/data/setGeoFenceConfigRows', db.setGeoFenceConfigRows)
+app.post('/data/setGeofenceConfig', db.setGeofenceConfig)
 
 app.post('/validation/username', db.validateUsername)
 
@@ -174,7 +172,7 @@ app.post('/data/getMonitorConfig', db.getMonitorConfig)
 
 app.post('/data/setMonitorConfig', db.setMonitorConfig)
 
-app.post('/data/addMonitorConfig', db.addMonitorConfig)
+app.post('/data/addGeofenceConfig', db.addGeofenceConfig)
 
 app.post('/data/deleteMonitorConfig', db.deleteMonitorConfig)
 

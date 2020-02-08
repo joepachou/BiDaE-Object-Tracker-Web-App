@@ -16,15 +16,15 @@ class MonitorSetting extends React.Component{
         }
         return (
             <div style={style.container} className="px-0 text-capitalize">
-                <MonitorSettingBlock
+                {/* {/* <MonitorSettingBlock
                     type={config.monitorSettingType.RESIDENT_MOVEMENT_MONITOR}
-                />
+                /> */}
                 <MonitorSettingBlock
                     type={config.monitorSettingType.RESIDENT_LONG_STAY_IN_DANGER}
                 />
                 <MonitorSettingBlock
                     type={config.monitorSettingType.RESIDENT_NOT_STAY_ROOM}
-                />
+                /> 
                 <GeoFenceSettingBlock
                     type={config.monitorSettingType.GEO_FENCE_VIOLENCE}
                 />
