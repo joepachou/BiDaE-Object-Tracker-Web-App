@@ -1,7 +1,6 @@
 import React from 'react';
 import { Alert } from 'react-bootstrap'
 import { AppContext } from '../../context/AppContext';
-import config from "../../config"
 import {
     BrowserView,
     TabletView,
@@ -15,7 +14,6 @@ const style = {
     },
     alertTextTitle: {
         fontSize: '1.2rem',
-        fontWeight: 500,
         color: 'rgba(101, 111, 121, 0.78)',
     },
     alerTextTitleForTablet: {
