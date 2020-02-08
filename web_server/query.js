@@ -124,7 +124,8 @@ const getTrackingData = (request, response) => {
                 delete item.rssi
                 delete item.lbeacon_uuid
                 delete item.monitor_type
-
+                delete item.base_x
+                delete item.base_y
                
                 /** format timestamp*/
                 item.reserved_timestamp_LT = moment.tz(item.reserved_timestamp, process.env.TZ).locale(locale).format('LT');
