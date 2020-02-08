@@ -186,12 +186,13 @@ const en =  {
     RESIDENT_LOCATION_MONITOR: "resident location monitor",
     RESIDENT_LONG_STAY_IN_DANGER: "resident long stay",
     RESIDENT_NOT_STAY_ROOM: "resident not stay room",
-    RESIDENT_VIOLATE_GEOFENCE: "resodent violate geofence",
+    RESIDENT_VIOLATE_GEOFENCE: "resident violate geofence",
     DISSOCIATION: "dissociation",
     ASSOCIATION: "association",
     EDIT_GEOFENCE_CONFIG: "edit geofence config",
     ADD_GEOFENCE_CONFIG: "add geofence config",
     WARNING: "warning",
+    PROCESS_IS_COMPLETED: "process is completed",
 
     /** Error Message */
     GENDER_IS_REQUIRED: "Gender is required",
@@ -325,6 +326,7 @@ const en =  {
 
     /** message */
     ARE_YOU_SURE_TO_DELETE: "are you sure to delete ?",
+    NOW_YOU_CAN_DO_THE_FOllOWING_ACTION: "now you can do the following action",
 
     /** User Roles */
     CARE_PROVIDER: "care provider",

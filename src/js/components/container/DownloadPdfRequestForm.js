@@ -1,41 +1,21 @@
 import React from 'react';
-import { Modal, Button, Row, Col, Image, ButtonToolbar} from 'react-bootstrap'
-import { Formik, Form } from 'formik';
+import { 
+    Modal, 
+    Button 
+} from 'react-bootstrap'
+import { 
+    Formik, 
+    Form 
+} from 'formik';
 import { AppContext } from '../../context/AppContext';
   
 class DownloadPdfRequestForm extends React.Component {
 
     static contextType = AppContext
     
-    state = {
-        show: this.props.show,
-        isShowForm: false,
-    };
 
-  
     handleClose = (e) => {
-        if(this.props.handleChangeObjectStatusFormClose) {
-            this.props.handleChangeObjectStatusFormClose();
-        }
-        this.setState({ 
-            show: false ,
-        });
-    }
-  
-    handleShow = () => {
-        this.setState({ 
-            show: true 
-        });
-    }
-
-
-    componentDidUpdate = (prevProps) => {
-        if (prevProps != this.props) {
-            this.setState({
-                show: this.props.show,
-                isShowForm: true,
-            })
-        }
+        this.props.handleClose();
     }
 
     handleChange = (e) => {
@@ -59,7 +39,7 @@ class DownloadPdfRequestForm extends React.Component {
                 link.click();
                 break;
             case "close":
-                this.props.close()
+                this.props.handleClose()
                 break;
         }
     }
@@ -69,38 +49,14 @@ class DownloadPdfRequestForm extends React.Component {
         const { locale } = this.context
 
         const style = {
-            input: {
-                borderRadius: 0,
-                borderBottom: '1 solid grey',
-                borderTop: 0,
-                borderLeft: 0,
-                borderRight: 0,
-                
-            },
             deviceList: {
                 maxHeight: '20rem',
                 overflow: 'hidden scroll' 
             },
             downloadPdfRequest: {
-                // position: "absolute",
                 zIndex: 6000,
-                // top: '20%',
-                // left: '-10%',
-                // right: 'auto',
-                // bottom: 'auto',
                 padding: 0,
             },
-            icon: {
-                check: {
-                    color: 'green'
-                }
-            },
-            anchor: {
-                display: "none",
-            }
-            // confirmForm: {
-            //     position: "static",
-            // }
         }
 
         return (
@@ -108,42 +64,50 @@ class DownloadPdfRequestForm extends React.Component {
                 id='downloadPdfRequest' 
                 show={this.props.show} 
                 onHide={this.handleClose} 
-                size="sm"
+                size="md"
                 style={style.downloadPdfRequest}
             >
+                <Modal.Header 
+                    closeButton 
+                    className='font-weight-bold text-capitalize'
+                >
+                    {locale.texts.PROCESS_IS_COMPLETED}
+                </Modal.Header>
                 <Modal.Body className="py-2">
                     <Formik    
-                        onSubmit={({ radioGroup, select }, { setStatus, setSubmitting }) => {
-                            this.props.handleDownloadPdfRequestFormSubmit()
-                        }}
-
-                        render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
-                            <Form className="d-flex justify-content-center">
-                                <i className="fas fa-check-circle text-center d-flex align-items-center" style={style.icon.check}></i>
-                                <Button 
-                                    variant="outline-secondary" 
-                                    onClick={this.handleClickButton}
-                                    className="text-capitalize"
-                                    name="viewReport"
-                                >
-                                    {locale.texts.VIEW_REPORT}
-                                </Button>
-                                <Button 
-                                    variant="outline-secondary" 
-                                    onClick={this.handleClickButton}
-                                    className="text-capitalize"
-                                    name="downloadReport"
-                                >
-                                    {locale.texts.DOWNLOAD_REPORT}
-                                </Button>
-                                <Button 
-                                    variant="outline-secondary" 
-                                    onClick={this.handleClickButton}
-                                    className="text-capitalize"
-                                    name="close"
-                                >
-                                    {locale.texts.CLOSE}
-                                </Button>
+                        render={() => (
+                            <Form>
+                                <div className="mb-3">
+                                    <div className="mb-3">
+                                        {locale.texts.NOW_YOU_CAN_DO_THE_FOllOWING_ACTION}
+                                    </div>
+                                    <div className="d-flex justify-content-around">
+                                        <Button 
+                                            variant="outline-secondary" 
+                                            onClick={this.handleClickButton}
+                                            className="text-capitalize"
+                                            name="viewReport"
+                                        >
+                                            {locale.texts.VIEW_REPORT}
+                                        </Button>
+                                        <Button 
+                                            variant="outline-secondary" 
+                                            onClick={this.handleClickButton}
+                                            className="text-capitalize"
+                                            name="downloadReport"
+                                        >
+                                            {locale.texts.DOWNLOAD_REPORT}
+                                        </Button>
+                                        <Button 
+                                            variant="outline-secondary" 
+                                            onClick={this.handleClickButton}
+                                            className="text-capitalize"
+                                            name="close"
+                                        >
+                                            {locale.texts.CLOSE}
+                                    </Button>
+                                    </div>
+                                </div>
                             </Form>
                         )}
                     />
