@@ -497,6 +497,33 @@ const geofenceConfigColumn = [
     },
 ]
 
+const monitorConfigColumn = [
+    {
+        Header: "enable",
+        accessor: "enable",
+        width: 60,
+        style: style.column,
+        Cell: props => props.value 
+            ? <i className="fas fa-check" style={style.icon.check}></i>
+            : ""
+    },
+    {
+        Header: "area",
+        accessor: "area.label",
+        width: 100,
+    },
+    {
+        Header: "enable start time",
+        accessor: "start_time",
+        width: 90,
+    },
+    {
+        Header: "enable end time",
+        accessor: "end_time",
+        width: 90,
+    },
+]
+
 
 
 export { 
@@ -512,6 +539,7 @@ export {
     editObjectRecordTableColumn,
     shiftChangeRecordTableColumn,
     deviceManagerTableColumn,
-    geofenceConfigColumn
+    geofenceConfigColumn,
+    monitorConfigColumn,
 
 }

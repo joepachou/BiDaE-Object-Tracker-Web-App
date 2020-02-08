@@ -1235,6 +1235,45 @@ const confirmValidation = (username) => {
 
 }
 
+const addMonitorConfig = (monitorConfigPackage) => {
+	let {
+		type,
+		start_time,
+		end_time,
+		enable,
+		area_id
+	} = monitorConfigPackage
+
+	let text = `
+		INSERT INTO ${type}
+			(
+				start_time,
+				end_time,
+				enable,
+				area_id
+			)
+		VALUES 
+			(
+				$1,
+				$2,
+				$3,
+				$4
+			)
+	`
+
+	let values = [
+		start_time,
+		end_time,
+		enable,
+		area_id,
+	]
+
+	return {
+		text, 
+		values
+	}
+}
+
 const getMonitorConfig = (type, sitesGroup) => {
 	let text =  `
 		SELECT 
@@ -1244,7 +1283,10 @@ const getMonitorConfig = (type, sitesGroup) => {
 			start_time,
 			end_time
 		FROM ${type}
-		WHERE area_id IN (${sitesGroup.map(item => item)});
+
+		WHERE area_id IN (${sitesGroup.map(item => item)})
+
+		ORDER BY id;
 	`
 	return text
 }
@@ -1618,7 +1660,8 @@ module.exports = {
 	addImport,
 	getImportPatient,
 	addGeofenceConfig,
-	deleteMonitorConfig
+	deleteMonitorConfig,
+	addMonitorConfig
 }
 
 

@@ -22,9 +22,9 @@ class MonitorSetting extends React.Component{
                 <MonitorSettingBlock
                     type={config.monitorSettingType.RESIDENT_LONG_STAY_IN_DANGER}
                 />
-                <MonitorSettingBlock
+                {/* <MonitorSettingBlock
                     type={config.monitorSettingType.RESIDENT_NOT_STAY_ROOM}
-                /> 
+                />  */}
                 <GeoFenceSettingBlock
                     type={config.monitorSettingType.GEO_FENCE_VIOLENCE}
                 />

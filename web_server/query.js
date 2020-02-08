@@ -964,6 +964,24 @@ const addGeofenceConfig = (request, response) => {
         })
 }
 
+const addMonitorConfig = (request, response) => {
+    let {
+        monitorConfigPackage,
+    } = request.body
+
+    let {
+        type
+    } = monitorConfigPackage
+    pool.query(queryType.addMonitorConfig(monitorConfigPackage))
+        .then(res => {
+            console.log(`add ${type} config success`)
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(`add ${type} fail ${err}`)
+        })
+}
+
 const deleteMonitorConfig = (request, response) => {
     let {
         monitorConfigPackage,
@@ -1200,5 +1218,6 @@ module.exports = {
     getBackendSearchQueue,
     getTrackingTableByMacAddress,
     addGeofenceConfig,
-    deleteMonitorConfig
+    deleteMonitorConfig,
+    addMonitorConfig
 }

@@ -49,6 +49,7 @@ const checkoutViolation = `${protocol}://${dataSrcIP}/data/checkoutViolation`
 const confirmValidation = `${protocol}://${dataSrcIP}/data/confirmValidation`
 const getMonitorConfig = `${protocol}://${dataSrcIP}/data/getMonitorConfig`
 const setMonitorConfig = `${protocol}://${dataSrcIP}/data/setMonitorConfig`
+const addMonitorConfig = `${protocol}://${dataSrcIP}/data/addMonitorConfig`
 const addGeofenceConfig = `${protocol}://${dataSrcIP}/data/addGeofenceConfig`
 const deleteMonitorConfig = `${protocol}://${dataSrcIP}/data/deleteMonitorConfig`
 const backendSearch = `${protocol}://${dataSrcIP}/data/backendSearch`
@@ -120,5 +121,6 @@ module.exports = {
     getSearchQueue, 
     pinImage,
     addGeofenceConfig,
-    deleteMonitorConfig
+    deleteMonitorConfig,
+    addMonitorConfig
 };

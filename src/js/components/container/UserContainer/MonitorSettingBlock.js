@@ -1,16 +1,12 @@
 import React from 'react';
 import { AppContext } from '../../../context/AppContext';
 import { 
-    Row, 
-    Col, 
     ButtonToolbar,
     Button
 } from "react-bootstrap"
-import Switcher from "../Switcher";
 import axios from "axios"
 import dataSrc from "../../../dataSrc"
 import config from "../../../config"
-import DateTimePicker from '../DateTimePicker';
 import ReactTable from 'react-table';
 import styleConfig from '../../../styleConfig';
 import EditMonitorConfigForm from '../EditMonitorConfigForm';
@@ -26,6 +22,7 @@ class MonitorSettingBlock extends React.Component{
         data: [],
         columns: [],
         path: '',
+        areaOptions: []
     }
 
     componentDidMount = () => {
@@ -42,6 +39,7 @@ class MonitorSettingBlock extends React.Component{
             areasId: auth.user.areas_id
         })
         .then(res => {
+
             let columns = _.cloneDeep(monitorConfigColumn)
 
             columns.push({
@@ -76,20 +74,34 @@ class MonitorSettingBlock extends React.Component{
                 }
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })
+
             
             res.data.map((item,index) => {
-                item.key=index + 1
                 item.area = {
                     value: config.mapConfig.areaOptions[item.area_id],
                     label: locale.texts[config.mapConfig.areaOptions[item.area_id]],
                     id: item.area_id
                 }
             })
-            console.log(res.data)
+
+            let areaOptions = auth.user.areas_id
+                .filter(id => {
+                    return Object.keys(config.mapConfig.areaOptions).includes(id) 
+                        && !res.data.map(item => item.area_id).includes(id)
+                })
+                .reduce((options, id) => {
+                    options.push({
+                        value: config.mapConfig.areaOptions[id],
+                        label: locale.texts[config.mapConfig.areaOptions[id]],
+                        id,
+                    })
+                    return options
+                }, [])
 
             this.setState({
                 data: res.data,
                 columns,
+                areaOptions
             })
         })
         .catch(err => {
@@ -104,9 +116,7 @@ class MonitorSettingBlock extends React.Component{
             selectedData
         } = this.state
         configPackage["type"] = config.monitorSettingUrlMap[this.props.type]
-        configPackage["id"] = selectedData.id
-        console.log(configPackage)
-        console.log(path)
+        configPackage["id"] = selectedData ? selectedData.id : null;
         axios.post(dataSrc[path], {
             monitorConfigPackage: configPackage
         })
@@ -127,63 +137,6 @@ class MonitorSettingBlock extends React.Component{
             console.log(err)
         })
     }
-
-
-    // handleTimeChange = (time, name, id) => {
-
-    //     let endTime = name == 'end' ? time.value : this.state.data[id].end_time;
-    //     let startTime = name == 'start' ? time.value : this.state.data[id].start_time;
-    //     if (name == 'start' && endTime.split(':')[0] <= startTime.split(':')[0]) {
-    //         endTime = [parseInt(startTime.split(':')[0]) + 1, endTime.split(':')[1]].join(':')
-    //     }
-        
-    //     let monitorConfigPackage = {
-    //         type: config.monitorSettingUrlMap[this.props.type],
-    //         ...this.state.data[id],
-    //         start_time: startTime,
-    //         end_time: endTime
-    //     }
-    //     axios.post(dataSrc.setMonitorConfig, {
-    //         monitorConfigPackage
-    //     })
-    //     .then(res => {
-    //         this.setState({
-    //             data: {
-    //                 ...this.state.data,
-    //                 [id]: monitorConfigPackage
-    //             }
-    //         })
-    //     })
-    //     .catch(err => { 
-    //         console.log(err)
-    //     })
-    // }
-    
-    // handleSwitcherChange = (e) => {
-    //     let target = e.target
-    //     let id = target.id.split(':')[1]
-
-    //     let monitorConfigPackage = {
-    //         type: config.monitorSettingUrlMap[this.props.type],
-    //         ...this.state.data[id],
-    //         enable: parseInt(target.value)
-    //     }
-
-    //     axios.post(dataSrc.setMonitorConfig, {
-    //         monitorConfigPackage
-    //     })
-    //     .then(res => {
-    //         this.setState({
-    //             data: {
-    //                 ...this.state.data,
-    //                 [id]: monitorConfigPackage
-    //             }
-    //         })
-    //     })
-    //     .catch(err => { 
-    //         console.log(err)
-    //     })
-    // }
 
     handleClose = () => {
         this.setState({
@@ -223,6 +176,11 @@ class MonitorSettingBlock extends React.Component{
 
 
     render() {
+
+        let { 
+            locale 
+        } = this.context
+
         let style = {
             container: {
                 minHeight: "100vh"
@@ -242,7 +200,6 @@ class MonitorSettingBlock extends React.Component{
         let {
             type
         } = this.props
-        let { locale } = this.context
 
         return (
             <div>
@@ -276,7 +233,7 @@ class MonitorSettingBlock extends React.Component{
                     title={'test'}
                     type={config.monitorSettingUrlMap[this.props.type]} 
                     handleSubmit={this.handleSubmit}
-                    areaOptions={config.mapConfig.areaOptions}
+                    areaOptions={this.state.areaOptions}
                 />
                 <DeleteConfirmationForm
                     show={this.state.showDeleteConfirmation} 

@@ -4,6 +4,7 @@ import {
     Row, 
     Col, 
     ButtonToolbar,
+    Button
 } from "react-bootstrap"
 import axios from "axios"
 import dataSrc from "../../../dataSrc"
@@ -13,8 +14,7 @@ import { geofenceConfigColumn } from '../../../tables'
 import EditGeofenceConfig from '../EditGeofenceConfig'
 import retrieveData from '../../../helper/retrieveData'
 import styleConfig from '../../../styleConfig';
-import { Menu, Icon, Button, Table } from 'antd';
-import DeleteConfirmationForm from '../DeleteConfirmationForm'
+import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm'
 
 
 class GeoFenceSettingBlock extends React.Component{
@@ -64,7 +64,7 @@ class GeoFenceSettingBlock extends React.Component{
             auth,
             locale,
         } = this.context
-        axios.post(dataSrc.getGeoFenceConfig, {
+        axios.post(dataSrc.getGeofenceConfig, {
             type: config.monitorSettingUrlMap[this.props.type],
             areasId: auth.user.areas_id
         })
@@ -76,7 +76,7 @@ class GeoFenceSettingBlock extends React.Component{
                 minWidth: 60,
                 Cell: props => (
                     <div className="d-flex justify-content-start">
-                        {['edit', 'delete'].map(item => {
+                        {['edit', 'delete'].map((item, index, original) => {
                             return  ( 
                                 <div key={item}>
                                     <a 
@@ -87,7 +87,10 @@ class GeoFenceSettingBlock extends React.Component{
                                     }} >
                                         {locale.texts[item.toUpperCase()]}
                                     </a>
-                                    &nbsp;
+                                    {index < original.length - 1
+                                        ? <div className="ant-divider ant-divider-vertical" />
+                                        : ""
+                                    }
                                 </div>
                             )
                         })}
@@ -98,9 +101,6 @@ class GeoFenceSettingBlock extends React.Component{
                 field.headerStyle = {
                     textAlign: 'left',
                 }
-                field.title = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
-                field.dataIndex = field.Header
-                field.key = field.Header  
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })
             
@@ -130,7 +130,7 @@ class GeoFenceSettingBlock extends React.Component{
                 this.setState({
                     show: true,
                     isEdited: false,
-                    path: 'addMonitorConfig'
+                    path: 'addGeofenceConfig'
                 })
                 break;
             case "edit":
@@ -138,7 +138,7 @@ class GeoFenceSettingBlock extends React.Component{
                     show: true,
                     selectedData: value.original,
                     isEdited: true,
-                    path: 'setMonitorConfig'
+                    path: 'setGeofenceConfig'
                 })
                 break;
             case "delete":
@@ -210,13 +210,9 @@ class GeoFenceSettingBlock extends React.Component{
 
         return (
             <div>
-                <Row>
-                    <Col>
-                        <div style={style.type}>
-                            {locale.texts[type.toUpperCase().replace(/ /g, '_')]}
-                        </div>
-                    </Col>
-                </Row>
+                <div style={style.type} className="mb-4">
+                    {locale.texts[type.toUpperCase().replace(/ /g, '_')]}
+                </div>
                 <ButtonToolbar>
                     <Button 
                         variant="outline-primary" 
@@ -236,10 +232,6 @@ class GeoFenceSettingBlock extends React.Component{
                     minRows={0}
                     {...styleConfig.reactTable}
                 />
-                {/* <Table 
-                    dataSource={this.state.data}
-                    columns={this.state.columns}
-                /> */}
                 <EditGeofenceConfig
                     handleShowPath={this.props.handleShowPath} 
                     selectedData={this.state.selectedData}
