@@ -27,22 +27,11 @@ class ChangeStatusForm extends React.Component {
     static contextType = AppContext
     
     state = {
-        show: this.props.show,
-        isShowForm: false,
         transferredLocationOptions: []
     };
 
     componentDidMount = () => {
        this.getTransferredLocation();
-    }
-
-    componentDidUpdate = (prevProps) => {
-        if (prevProps != this.props && this.props.selectedObjectData) {
-            this.setState({
-                show: this.props.show,
-                isShowForm: true,
-            })
-        }
     }
 
     pathOnClickHandler = () => {
@@ -82,12 +71,7 @@ class ChangeStatusForm extends React.Component {
     }
 
     handleClose = (e) => {
-        if(this.props.handleChangeObjectStatusFormClose) {
-            this.props.handleChangeObjectStatusFormClose();
-        }
-        this.setState({ 
-            show: false 
-        });
+        this.props.handleChangeObjectStatusFormClose();
     }
   
 
@@ -124,7 +108,7 @@ class ChangeStatusForm extends React.Component {
 
         return (
             <Modal  
-                show={this.state.show}
+                show={this.props.show}
                 onHide={this.handleClose} 
                 size="md" 
                 id='changeStatusForm' 
