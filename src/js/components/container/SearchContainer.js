@@ -1,11 +1,8 @@
 import React from 'react';
 import Searchbar from '../presentational/Searchbar';
-import { Col, Row, Nav, ListGroup} from 'react-bootstrap'
+import { Col, Row } from 'react-bootstrap'
 import FrequentSearch from './FrequentSearch';
 import config from '../../config';
-// import SearchableObjectType from '../presentational/SearchableObjectType_1'
-import SearchableObjectType from '../presentational/SearchableObjectType'
-import LocaleContext from '../../context/LocaleContext';
 import ObjectTypeList from './ObjectTypeList'
 import ObjectTypeListForTablet from './ObjectTypeListForTablet'
 import axios from 'axios';
@@ -39,9 +36,9 @@ class SearchContainer extends React.Component {
     }
 
     componentDidUpdate = (prepProps) => {
+        
         /** Refresh the search result automatically 
-         *  This feature can be adjust by the user by changing the boolean value in config
-        */
+         *  This feature can be adjust by the user by changing the boolean value in config */
         if (this.state.refreshSearchResult 
             && this.state.hasSearchKey 
             && !this.props.hasGridButton) {
@@ -59,10 +56,8 @@ class SearchContainer extends React.Component {
         }
 
     }
-    /**
-     * Get the searchable object type. 
-     * The data is retrieving from Surveillance -> MainContain -> SearchContainer
-     */
+    /* Get the searchable object type. 
+     * The data is retrieving from Surveillance -> MainContain -> SearchContainer */
     getObjectType = () => {
         axios.post(getObjectTable, {
             objectType: [0]
@@ -81,61 +76,10 @@ class SearchContainer extends React.Component {
         .catch(err => {
             console.log(err)
         })
-        // const titleElementStyle = {
-        //     background: 'rgba(227, 222, 222, 0.619)',
-        //     fontWeight: 'bold',
-        //     fontSize: 10,
-        //     padding: 5,
-        // }
-
-        // const itemElementStyle = {
-        //     padding: 5
-        // }
-        
-
-        // /** Creat a set that stands for the unique object in this searching area */
-        // const { searchableObjectData } = this.props;
-        
-        // let objectTypeSet = new Set();
-        // let objectTypeMap = new Map();
-        
-        // for (let object in searchableObjectData) {
-        //     objectTypeSet.add(searchableObjectData[object].type)
-        // }
-
-        // /** Creat the titleList by inserting the item in the objectTypeSet
-        //  *  Also, create the character title element
-        //  */
-        // let sectionTitleList = [];
-        // let groupLetter = '';
-        // let elementIndex = 0;
-
-        // Array.from(objectTypeSet).map( item => {
-        //     // let currentLetter = item.toUpperCase().slice(0,1);
-        //     let currentLetter = item ? item.toUpperCase().charAt(0) : item;
-        //     if(!(groupLetter === currentLetter)) {
-        //         groupLetter = currentLetter;
-        //         let titleElement = <a id={groupLetter} key={elementIndex} className='titleElementStyle'><ListGroup.Item style={titleElementStyle}>{groupLetter}</ListGroup.Item></a>;
-        //         sectionTitleList.push(titleElement)
-        //         elementIndex++;
-        //     }
-        //     let itemElement = <a onClick={this.props.getSearchKey} key={elementIndex}><ListGroup.Item action style={itemElementStyle} >{item}</ListGroup.Item></a>;
-        //     sectionTitleList.push(itemElement);
-        //     elementIndex++;
-        // })
-        // this.setState({
-        //     sectionTitleList: sectionTitleList,
-        // })
     }
 
- 
-
-    /**
-     * Handle the cursor hover events in device that can use mouse.
-     */
+    /* Handle the cursor hover events in device that can use mouse.*/
     handleMouseOver = (e) => {
-        // document.getElementById('sectionTitle').display = null;
-        // document.getElementById(e.target.innerText).scrollIntoView({behavior: "instant", block: "start", inline: "nearest"})
         location.href = '#' + e.target.innerText;
         this.setState({
             isShowSectionTitle: true,
@@ -143,9 +87,7 @@ class SearchContainer extends React.Component {
         })
     }
 
-    /**
-     * Handle the touch start events in mobile device
-     */
+    /* Handle the touch start events in mobile device */
     handleTouchStart = (e) => { 
         if (e.target.classList.contains("sectionIndexItem")) {
             location.href = '#' + sectionIndex;
@@ -156,9 +98,7 @@ class SearchContainer extends React.Component {
         })
     }
 
-    /**
-     * Handle the touch move events in mobile device
-     */
+    /* Handle the touch move events in mobile device */
     handleTouchMove = (e) => { 
         
         const pageX = e.changedTouches[0].pageX;
@@ -166,8 +106,6 @@ class SearchContainer extends React.Component {
         const element = document.elementFromPoint(pageX, pageY);
 
         if (element.classList.contains("sectionIndexItem")) {
-            // document.getElementById('sectionTitle').display = null;
-            // document.getElementById(element.innerText).scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"})
             location.href = '#' + element.innerText;
             this.setState({
                 isShowSectionTitle: true,
@@ -177,17 +115,11 @@ class SearchContainer extends React.Component {
     }
 
     render() {      
-        const style = {
-        //     titleText: {
-        //         color: 'rgb(80, 80, 80, 1)'
-        //     },
-        
+        const style = {    
             textForMobile: {
                 fontSize: '2rem'
             }
         }
-
-        const { locale } = this.context
         
         return (
             <div>
