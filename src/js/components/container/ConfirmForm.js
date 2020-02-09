@@ -69,10 +69,11 @@ class ConfirmForm extends React.Component {
                 show={this.props.show} 
                 onHide={this.handleClose} 
                 size="md"
+                className="text-capitalize"
             >
                     <Modal.Header 
                         closeButton 
-                        className='font-weight-bold text-capitalize'
+                        className='font-weight-bold'
                     >
                         {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
                     </Modal.Header >

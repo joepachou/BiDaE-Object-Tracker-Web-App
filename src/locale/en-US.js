@@ -326,7 +326,7 @@ const en =  {
 
     /** message */
     ARE_YOU_SURE_TO_DELETE: "are you sure to delete ?",
-    NOW_YOU_CAN_DO_THE_FOllOWING_ACTION: "now you can do the following action",
+    NOW_YOU_CAN_DO_THE_FOllOWING_ACTION: "Now you can do the following action",
 
     /** User Roles */
     CARE_PROVIDER: "care provider",
