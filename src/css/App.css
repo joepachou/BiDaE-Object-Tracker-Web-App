@@ -6,7 +6,7 @@ html,body {
     font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans TC', sans-serif, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
     /* font-size: 1.8vh; */
     font-size: 16px;
-    /* position: fixed; */
+    position: fixed;
     width: 100%;
     overscroll-behavior: auto;
     background: white;
@@ -529,7 +529,8 @@ p {
 
 /** .search result list group style sheet*/ 
 .searchResultListGroup {
-    max-height: 35vh; 
+    max-height: 42vh;
+    overflow:  hidden scroll; 
 }
 
 .searchResultListGroupForTablet {

@@ -20,10 +20,10 @@ const SearchResultListGroup = ({
             color: '#007bff'
         },
         item: {
-            width: 30,
+            width: 35,
         },
         listGroup: {
-            color: 'rgb(33, 37, 41)'
+            color: 'rgb(33, 37, 41)',
         }
     }
 
@@ -43,7 +43,10 @@ const SearchResultListGroup = ({
                         className='d-flex justify-content-start text-left py-1' 
 
                     >   
-                        <div style={style.item}>
+                        <div 
+                            style={style.item}
+                            className="d-flex justify-content-center"
+                        >
                             {selection.indexOf(item.mac_address) >= 0 
                                 ? <i className="fas fa-check" style={style.icon}></i> 
                                 : config.mapConfig.iconOptions.showNumber
