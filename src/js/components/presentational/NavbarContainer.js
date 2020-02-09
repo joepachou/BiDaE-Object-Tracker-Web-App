@@ -220,14 +220,13 @@ class NavbarContainer extends React.Component {
 
                 <SigninPage 
                     show={showSignin}
-                    handleSigninFormSubmit={this.handleSigninFormSubmit}
-                    handleSignFormClose={this.handleSignFormClose}
+                    handleSubmit={this.handleSigninFormSubmit}
+                    handleClose={this.handleSignFormClose}
                     signin={auth.signin}
                 />
                 <ShiftChange 
                     show={showShiftChange}
-                    handleShiftChangeRecordSubmit = {this.handleShiftChangeRecordSubmit}
-                    handleShiftChangeRecordClose={this.handleShiftChangeRecordClose}
+                    handleClose={this.handleShiftChangeRecordClose}
                     userInfo={auth.user}
                 />
             </Navbar>

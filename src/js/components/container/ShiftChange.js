@@ -1,11 +1,7 @@
 import React, {Fragment} from 'react';
 import { 
     Modal, 
-    Image, 
-    Row, 
-    Col,
     Button,
-    Container
 } from 'react-bootstrap';
 import axios from 'axios';
 import dataSrc from '../../dataSrc'
@@ -20,7 +16,6 @@ class ShiftChange extends React.Component {
     static contextType = AppContext
 
     state = {
-        show: false,
         searchResult: {
             foundResult: [],
             notFoundResult: [],
@@ -30,47 +25,22 @@ class ShiftChange extends React.Component {
         APIforTableDone: false,
         isShowConfirmForm: false
     }
-        APIforTable = null
+    APIforTable = null
 
 
     getAPIfromTable = (API) => {
-        // console.log('API')
         this.APIforTable = API
-
         this.APIforTable.setOnClick(this.onClickTableItem)
-
         setTimeout(
             () => {
                 this.APIforTable.updateSearchResult(this.state.searchResult)
             }, 100
         )
-
-    }
-
-    onClickTableItem(e){       
-
     }
 
     componentDidMount = () => {
         this.getTrackingData(true)
     }
-
-    componentDidUpdate = (preProps) => {
-        if (preProps != this.props){
-            this.getTrackingData()
-            this.setState({
-                show: this.props.show,
-            })
-        }
-    }
-
-    handleClose = () => {
-        this.props.handleShiftChangeRecordClose()
-        this.setState({
-            show: false
-        })
-    }
-
 
     getTrackingData = (update) => {
         let { 
@@ -151,15 +121,15 @@ class ShiftChange extends React.Component {
     }
 
     render() {
-        const { show } = this.state;
 
-        const { userInfo } = this.props
+        const { 
+            userInfo,
+            show,
+            handleClose
+        } = this.props
         const { foundResult, notFoundResult } = this.state.searchResult
         const { locale, auth,stateReducer } = this.context
         const style = {
-            row: {
-                width: '100%'
-            },
             modalBody: {
                 height: '60vh',
                 overflow: 'hidden scroll'
@@ -170,48 +140,34 @@ class ShiftChange extends React.Component {
         const hasNotFoundResult = notFoundResult.length !== 0;
         return (
             <Fragment>
-                <Modal show={show} size="md" onHide={this.handleClose}>
+                <Modal 
+                    show={show} 
+                    size="md" 
+                    onHide={handleClose}
+                    className='text-capitalize'
+                >
                     <Modal.Header
                         className='d-flex flex-column'
                     >
-                        <Row>
-                            <Col className='text-capitalize'>
-                                <h5>{locale.texts.SHIFT_CHANGE_RECORD}</h5>                                
-                                {/* <h5>{locale.texts.CHECKED_BY} {userInfo.name} {locale.texts.WHOSE_DEVICES}</h5> */}
-                                {/* <h5>{locale.texts.CHECKED_BY} {userInfo.name} </h5> */}
-                            </Col>
-                        </Row>
-                        <Row style={style.row} className='text-capitalize'> 
-                            <Col>
-                                <div>{locale.texts.DATE_TIME}: {nowTime.format(config.shiftChangeRecordTimeFormat)}</div>
-                            </Col>
-                        </Row>
-                        <Row style={style.row} className='text-capitalize'>
-                            <Col>
-                                <div>{locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: {auth.user.name}</div>
+                        <div className="title">
+                            {locale.texts.SHIFT_CHANGE_RECORD}
+                        </div>                                
+                        <div>
+                            {locale.texts.DATE_TIME}: {nowTime.format(config.shiftChangeRecordTimeFormat)}
+                        </div>
+                        <div 
+                        >
+                            {locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: {auth.user.name}
+                        </div>
+                        <div 
+                        >
+                            {locale.texts.SHIFT}: {locale.texts[config.getShift(locale.abbr).toUpperCase().replace(/ /g, '_')]}
+                        </div>
 
-                                {/* <div>{locale.texts.SHIFT}: {auth.user.shift ? locale.texts[auth.user.shift.toUpperCase().replace(/ /g, '_')] : ''} </div> */}
-                            </Col>
-                        </Row>
-                        <Row style={style.row} className='text-capitalize'>
-                            <Col>
-                                <div>
-                                    {locale.texts.SHIFT}: {locale.texts[config.getShift(locale.abbr).toUpperCase().replace(/ /g, '_')]}
-                                 </div>
-
-                                {/* <div>{locale.texts.SHIFT}: {auth.user.shift ? locale.texts[auth.user.shift.toUpperCase().replace(/ /g, '_')] : ''} </div> */}
-                            </Col>
-                        </Row>
-                        {/* <Row style={style.row} className='text-capitalize'> 
-                            <Col>
-                                <div>{locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: </div>
-                            </Col>
-                        </Row> */}
                     </Modal.Header>
                     <Modal.Body  
                         style ={style.modalBody}
                         id="shiftChange"
-                        className='pt-1'
                      >        
                         {!hasFoundResult && !hasNotFoundResult && 
                             <div className="d-flex justify-content-center">
@@ -221,11 +177,14 @@ class ShiftChange extends React.Component {
 
                         <div>
                             {hasFoundResult && 
-
-                            <h6 className="text-capitalize">{locale.texts.DEVICES_FOUND_IN} {auth.user.areas_id.map(id => {
-                                    return locale.texts[config.mapConfig.areaOptions[id]]
-                                })}
-                            </h6>}     
+                                <div
+                                    className="subtitle"
+                                >
+                                    {locale.texts.DEVICES_FOUND_IN} {auth.user.areas_id.map(id => {
+                                        return locale.texts[config.mapConfig.areaOptions[id]]
+                                    })}
+                                </div>
+                            }     
                             {hasFoundResult && foundResult.map((item, index) => {
                                 return (
                                     <div key={index} className="pb-1">
@@ -238,11 +197,14 @@ class ShiftChange extends React.Component {
                         </div>
                         <div className='my-2'>
                             { hasNotFoundResult && 
-                            
-                            <h6 className="text-capitalize"> {locale.texts.DEVICES_NOT_FOUND_IN} {auth.user.areas_id.map(id => {
-                                    return locale.texts[config.mapConfig.areaOptions[id]]
-                                })}
-                            </h6>}
+                                <div 
+                                    className="subtitle"
+                                > 
+                                    {locale.texts.DEVICES_NOT_FOUND_IN} {auth.user.areas_id.map(id => {
+                                        return locale.texts[config.mapConfig.areaOptions[id]]
+                                    })}
+                                </div>
+                            }
                             { hasNotFoundResult && notFoundResult.map((item, index) => {
                                 return (
                                     <div key={index} className="pb-1">
@@ -255,12 +217,14 @@ class ShiftChange extends React.Component {
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="outline-secondary" className="text-capitalize" onClick={this.handleClose}>
+                        <Button 
+                            variant="outline-secondary" 
+                            onClick={handleClose}
+                        >
                             {locale.texts.CANCEL}
                         </Button>
                         <Button 
                             type="submit" 
-                            className="text-capitalize" 
                             variant="primary" 
                             onClick = {this.confirmShift}
                             disabled={!hasFoundResult && !hasNotFoundResult}
@@ -273,14 +237,12 @@ class ShiftChange extends React.Component {
                 <GeneralConfirmForm
                     show={this.state.isShowConfirmForm}
                     handleConfirmFormSubmit={this.handleConfirmFormSubmit}
-                    // handleSignupFormShowUp={this.handleSignupFormShowUp}
                     onClose={this.handleSignFormClose}
                     signin={auth.signin}
                     stateReducer ={stateReducer[0].areaId}
                     auth={auth}
                 />
             </Fragment>
-
         )
     }
 }

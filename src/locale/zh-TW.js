@@ -135,7 +135,7 @@ const tw = {
     HIDE_NOTE: "隱藏註記",
     DELAY_BY: "延後",
     SHIFT: "班別",
-    DAY_SHIFT: "白班",
+    DAY_SHIFT: "早班",
     SWING_SHIFT: "小夜班",
     NIGHT_SHIFT: "大夜班",
     SELECT_SHIFT: "選擇班別",

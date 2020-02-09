@@ -5,11 +5,12 @@ html,body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans TC', sans-serif, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
     /* font-size: 1.8vh; */
-    /* font-size: 14px; */
+    font-size: 16px;
     position: fixed;
     width: 100%;
     overscroll-behavior: auto;
     background: white;
+    color: rgb(92, 92, 92);
     /* height: 100%; */   
 }
 
@@ -17,6 +18,22 @@ html,body {
 :focus {
     outline: 0;
 }
+
+::-webkit-input-placeholder {
+    text-transform: capitalize
+ }
+ 
+ :-moz-placeholder { 
+    text-transform: capitalize
+ }
+ 
+ ::-moz-placeholder {  
+    text-transform: capitalize
+ }
+ 
+ :-ms-input-placeholder { 
+    text-transform: capitalize
+ }
 
 
 input {
@@ -121,7 +138,7 @@ a:hover {
     height: 100%;
 } */
 
-/* Already Set in the NavbarContainer */ 
+/* already set in the NavbarContainer */ 
 .navbar-light .navbar-nav .nav-link {
     color:black;
     padding: 0.5rem 1.5rem
@@ -131,7 +148,7 @@ a:hover {
     color: grey;
 } 
 
-/* SearchBar customized CSS */
+/* searchBar customized css */
 #searchbar:hover,
 #searchbar:focus-within {
     box-shadow: 0 1px 6px 0 rgba(32,33,36,0.28);
@@ -154,6 +171,10 @@ a:hover {
     background-color: inherit;
     opacity: 0.6;
     font-style: italic;
+}
+
+.form-text {
+    margin-top: 0;
 }
 
 .Select-control {
@@ -186,7 +207,8 @@ a:hover {
 .alert-secondary {
     border: 0;
     background: rgba(143, 143, 143, 0.1);
-    box-shadow: 2px 5px 4px 0 #cbcbcb
+    box-shadow: 2px 2px 4px 0 #cbcbcb;
+    margin-bottom: 0.8rem;
 }
 
 .alert {
@@ -201,10 +223,27 @@ a:hover {
 
 /* React-bootstrap button */
 /** React Bootstrap button variant outline-primary */
-.btn-outline-primary {
+
+.btn {
+    font-size: 1rem;
+    transition: none;
+    padding: .3rem .75rem;
+    text-transform: capitalize;
+}
+
+.btn:focus {
+    box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0)
+}
+
+button:focus {
+    outline: 0;
+}
+
+.btn.btn-outline-primary {
     background-color: white;
     color: rgb(0, 123, 255, 1);
     border-color: rgb(0, 123, 255, 0.6);
+    font-size: 1rem;
 }
 
 .btn-outline-primary:hover {
@@ -244,6 +283,7 @@ a:hover {
 .btn-outline-secondary {
     border: none;
     font-weight: 500;
+
 }
 
 .btn-outline-secondary:not(:disabled):not(.disabled).active:focus {
@@ -257,7 +297,7 @@ a:hover {
 
 .btn-outline-secondary:hover {
     background-color: white;
-    border-color: rgb(224, 224, 224);
+    border-color: rgb(92, 92, 92, 1);
     color: rgb(0, 0, 0, 0.75);
 }
 
@@ -324,11 +364,11 @@ a:hover {
 }
 
 .btn.btn-primary {
-    font-size: 0.8rem
+    font-size: 1rem
 }
 
 .btn.btn-outline-secondary {
-    font-size: 0.8rem
+    font-size: 1rem
 }
 
 /** React Bootstrap button variant primary */
@@ -359,26 +399,11 @@ a:hover {
     border-color: red;
 }
 
-.btn {
-    font-size: 1rem;
-    font-weight: 500;
-    transition: none;
-    padding: .3rem .75rem;
-}
-
 .btn.btn-outline-custom {
-    font-size: 0.8rem;
-    font-weight: 500;
+    font-size: 1rem;
+    /* font-weight: 500; */
     transition: none;
-    padding: .3rem .75rem;
-}
-
-.btn:focus {
-    box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0)
-}
-
-button:focus {
-    outline: 0;
+    padding: .2rem .75rem;
 }
 
 button.close {
@@ -483,9 +508,16 @@ p {
 
 /** title style sheet e.g freqent search, object type*/
 .title {
-    font-size: 1.25rem;
-    font-weight: 500;
-    margin: 10px 0;
+    font-size: 1.2rem;
+    font-weight: 400;
+    /* margin: 10px 0; */
+    color: black
+}
+
+.subtitle {
+    font-size: 1rem;
+    font-weight: 400;
+    color: black
 }
 
 /** .search result list group style sheet*/ 
