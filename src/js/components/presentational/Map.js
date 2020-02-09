@@ -440,7 +440,7 @@ class Map extends React.Component {
         
             /** Set the marker's event. */
             marker.on('mouseover', function () { this.openPopup(); })
-            marker.on('click', this.handleMarkerClick);
+            // marker.on('click', this.handleMarkerClick);
             // marker.on('mouseout', function () { this.closePopup(); })
         })
         /** Add the new markerslayers to the map */
@@ -498,14 +498,7 @@ class Map extends React.Component {
      * @param   mac_address The mac_address of the object retrieved from DB. 
      * @param   lbeacon_coordinate The lbeacon's coordinate processed by createLbeaconCoordinate().*/
     macAddressToCoordinate = (mac_address, lbeacon_coordinate) => {
-        //console.log("mac")
-        /** Example of lbeacon_uuid: 01:1f:2d:13:5e:33 
-         *                           0123456789       16
-         */
-        // const xx = mac_address.slice(12,14);
         const xx = mac_address.slice(15,16);
-
-        // const yy = mac_address.slice(15,17);
         const yy = mac_address.slice(16,17);
 
         const multiplier = this.props.mapConfig.markerDispersity; // 1m = 100cm = 1000mm, multipler = 1000/16*16 = 3
