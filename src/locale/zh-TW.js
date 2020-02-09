@@ -180,7 +180,6 @@ const tw = {
     TRANSFERRED_DEVICE_LIST: "轉移儀器列表",
     WHOSE_DEVICES: "的儀器",
     TRANSFERRED_TO: "轉移至",
-    PLEASE_ENTER_ID_AND_PASSWORD: "請輸入ID及密碼",
     CHECKED_BY: "確認",
     CONFIRMED_BY: "審核",
     RESIDENT_MOVEMENT_MONITOR: "移動監控",
@@ -333,6 +332,7 @@ const tw = {
     NOW_YOU_CAN_DO_THE_FOllOWING_ACTION: "你可以執行以下操作",
     USERNAME_OR_PASSWORD_IS_INCORRECT: "使用者名稱或是密碼錯誤",
     PASSWORD_IS_INCORRECT: "密碼錯誤",
+    PLEASE_ENTER_ID_AND_PASSWORD: "請輸入管理者的ID及密碼",
 
     /** User Roles */
     CARE_PROVIDER: "護理人員",

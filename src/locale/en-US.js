@@ -179,7 +179,6 @@ const en =  {
     TRANSFERRED_DEVICE_LIST: "transferred device list",
     WHOSE_DEVICES: "'s devices",
     TRANSFERRED_TO: "transferred to",
-    PLEASE_ENTER_ID_AND_PASSWORD: "please enter ID and password",
     CHECKED_BY: "checked by",
     CONFIRMED_BY: "confirmed by",
     RESIDENT_MOVEMENT_MONITOR: "resident movement monitor",
@@ -329,6 +328,7 @@ const en =  {
     NOW_YOU_CAN_DO_THE_FOllOWING_ACTION: "Now you can do the following action",
     USERNAME_OR_PASSWORD_IS_INCORRECT: "Username or password is incorrect",
     PASSWORD_IS_INCORRECT: "password is incorrect",
+    PLEASE_ENTER_ID_AND_PASSWORD: "please enter Admin's info",
 
 
     /** User Roles */

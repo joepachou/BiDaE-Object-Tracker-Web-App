@@ -11,13 +11,6 @@ import LocaleContext from '../../context/LocaleContext'
 import axios from 'axios';
 import dataSrc from '../../dataSrc'
 
-const style = {
-    warning: {
-        fontSize: '0.8rem',
-        textTransform: 'initial'
-    }
-}
-
 const SigninPage = ({
     show,
     handleClose,
@@ -76,8 +69,7 @@ const SigninPage = ({
                         <Form>
                             {status &&
                                 <div 
-                                    className={'alert alert-danger mb-2'}
-                                    style={style.warning}
+                                    className={'alert alert-danger mb-2 warning'}
                                 >
                                     <i className="fas fa-times-circle mr-2"/>
                                     {locale.texts[status.toUpperCase().replace(/ /g, "_")]}
@@ -87,7 +79,6 @@ const SigninPage = ({
                                 <Field 
                                     name="username" 
                                     type="text" 
-                                    style={style.input} 
                                     className={'form-control' + (errors.username && touched.username ? ' is-invalid' : '')} 
                                     placeholder={locale.texts.USERNAME}
                                 />

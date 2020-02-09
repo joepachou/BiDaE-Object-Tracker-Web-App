@@ -32,9 +32,10 @@ class NavbarContainer extends React.Component {
         })
     }
 
-    handleSignFormClose = () => {
+    handleClose = () => {
         this.setState({
             showSignin: false,
+            showShiftChange: false
         })
     }
 
@@ -44,7 +45,7 @@ class NavbarContainer extends React.Component {
         })
     }
 
-    handleShiftChangeRecordClose = () => {
+    handleShiftChangeRecordSubmit = () => {
         this.setState({
             showShiftChange: false
         })
@@ -111,9 +112,15 @@ class NavbarContainer extends React.Component {
         }
 
         return (
-            <Navbar id='navbar' bg="white" className="navbar sticky-top navbar-light" expand='lg' style={style.navbar}>
-                <Navbar.Brand className='px-0 mx-0 text-capitalized'>  
-                    <Nav.Item className="nav-link nav-brand d-flex align-items-center px-0 text-capitalized" style={style.navbarBrand}>
+            <Navbar 
+                id='navbar' 
+                bg="white" 
+                className="navbar sticky-top navbar-light text-capitalize" 
+                expand='lg' 
+                style={style.navbar}
+            >
+                <Navbar.Brand className='px-0 mx-0'>  
+                    <Nav.Item className="nav-link nav-brand d-flex align-items-center px-0 " style={style.navbarBrand}>
                         <Image
                             alt=""
                             src={config.image.logo}
@@ -221,12 +228,13 @@ class NavbarContainer extends React.Component {
                 <SigninPage 
                     show={showSignin}
                     handleSubmit={this.handleSigninFormSubmit}
-                    handleClose={this.handleSignFormClose}
+                    handleClose={this.handleClose}
                     signin={auth.signin}
                 />
                 <ShiftChange 
                     show={showShiftChange}
-                    handleClose={this.handleShiftChangeRecordClose}
+                    handleClose={this.handleClose}
+                    handleSubmit={this.handleShiftChangeRecordSubmit}
                     userInfo={auth.user}
                 />
             </Navbar>

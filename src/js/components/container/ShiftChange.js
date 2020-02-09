@@ -23,7 +23,7 @@ class ShiftChange extends React.Component {
         fileUrl: '',
         showPdfDownloadForm: false,
         APIforTableDone: false,
-        isShowConfirmForm: false
+        showConfirmForm: false
     }
     APIforTable = null
 
@@ -91,7 +91,7 @@ class ShiftChange extends React.Component {
 
     confirmShift = () => {
         this.setState({
-            isShowConfirmForm: true
+            showConfirmForm: true
         })
     }
 
@@ -103,9 +103,10 @@ class ShiftChange extends React.Component {
             userInfo: auth.user,
             pdfPackage,
         }).then(res => {
+            this.props.handleSubmit()
             this.setState({
                 fileUrl: pdfPackage.path,
-                isShowConfirmForm: false
+                showConfirmForm: false,
             })
 
             this.refs.download.click()
@@ -116,7 +117,7 @@ class ShiftChange extends React.Component {
 
     handleSignFormClose = () => {
         this.setState({
-            isShowConfirmForm: false
+            showConfirmForm: false
         })
     }
 
@@ -133,6 +134,9 @@ class ShiftChange extends React.Component {
             modalBody: {
                 height: '60vh',
                 overflow: 'hidden scroll'
+            },
+            row: {
+                wordBreak: 'break-all'
             }
         }
         const nowTime = moment().locale(locale.abbr)
@@ -187,7 +191,11 @@ class ShiftChange extends React.Component {
                             }     
                             {hasFoundResult && foundResult.map((item, index) => {
                                 return (
-                                    <div key={index} className="pb-1">
+                                    <div 
+                                        key={index} 
+                                        className="pb-1"
+                                        style={style.row}
+                                    >
                                         {index + 1}.{item.name}, 
                                         {locale.texts.LAST_FOUR_DIGITS_IN_ACN}: {item.last_four_acn}, 
                                         {locale.texts.NEAR}{item.location_description}
@@ -207,7 +215,10 @@ class ShiftChange extends React.Component {
                             }
                             { hasNotFoundResult && notFoundResult.map((item, index) => {
                                 return (
-                                    <div key={index} className="pb-1">
+                                    <div 
+                                        key={index} 
+                                        className="pb-1 text-break"
+                                    >
                                         {index + 1}.{item.name}, 
                                         {locale.texts.ASSET_CONTROL_NUMBER}: {config.ACNOmitsymbol}{item.last_four_acn},
                                         {locale.texts.NEAR}{item.location_description}
@@ -235,9 +246,9 @@ class ShiftChange extends React.Component {
                     </Modal.Footer>
                 </Modal>
                 <GeneralConfirmForm
-                    show={this.state.isShowConfirmForm}
-                    handleConfirmFormSubmit={this.handleConfirmFormSubmit}
-                    onClose={this.handleSignFormClose}
+                    show={this.state.showConfirmForm}
+                    handleSubmit={this.handleConfirmFormSubmit}
+                    handleClose={this.handleSignFormClose}
                     signin={auth.signin}
                     stateReducer ={stateReducer[0].areaId}
                     auth={auth}
