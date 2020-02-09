@@ -20,6 +20,8 @@ import {
     MobileOnlyView
 } from 'react-device-detect'
 import moment from 'moment'
+import ScrollArea from 'react-scrollbar'
+
 
 class SearchResult extends React.Component {
 
@@ -235,6 +237,10 @@ class SearchResult extends React.Component {
             },
             searchResultListFormobile: {
                 maxHeight: this.props.showMobileMap ? '40vh' : '75vh'
+            },
+            searchResultListForTable: {
+                dispaly: this.props.searchKey ? null : 'none',
+                maxHeight: '28vh'
             }
         }
 
@@ -335,7 +341,7 @@ class SearchResult extends React.Component {
                     </div>
                 </BrowserView>
                 <TabletView>
-                <div>
+                    <div>
                         <Row className='d-flex justify-content-center' style={style.titleText}>
                             <h4 className='text-capitalize'>
                                 {title}
@@ -348,31 +354,33 @@ class SearchResult extends React.Component {
                                     </Col> 
                                 :   
                                     <Col className="searchResultListGroupForTablet d-flex justify-content-center">
-                                        <AccessControl
-                                            permission={'form:edit'}
-                                            renderNoAccess={() => (
+                                        <ScrollArea style={style.searchResultListForTable} smoothScrolling={true}>                 
+                                            <AccessControl
+                                                permission={'form:edit'}
+                                                renderNoAccess={() => (
+                                                    <SearchResultListGroup 
+                                                        data={searchResult}
+                                                        selection={this.state.selection}
+                                                    />
+                                                )
+                                                }
+                                            >
                                                 <SearchResultListGroup 
                                                     data={searchResult}
+                                                    handleSelectResultItem={searchResult[0].object_type == 0 
+                                                        ? this.handleSelectResultItem
+                                                        : null
+                                                    }
                                                     selection={this.state.selection}
+                                                    action={
+                                                        searchResult[0].object_type == 0 && !this.state.showNotFoundResult
+                                                            ? true
+                                                            : false
+                                                    }
                                                 />
-                                            )
-                                            }
-                                        >
-                                            <SearchResultListGroup 
-                                                data={searchResult}
-                                                handleSelectResultItem={searchResult[0].object_type == 0 
-                                                    ? this.handleSelectResultItem
-                                                    : null
-                                                }
-                                                selection={this.state.selection}
-                                                action={
-                                                    searchResult[0].object_type == 0 && !this.state.showNotFoundResult
-                                                        ? true
-                                                        : false
-                                                }
-                                            />
 
-                                        </AccessControl>
+                                            </AccessControl>
+                                        </ScrollArea>
                                     </Col>
                             }
                         </Row>

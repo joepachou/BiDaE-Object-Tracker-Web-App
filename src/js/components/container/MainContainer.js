@@ -695,17 +695,17 @@ class MainContainer extends React.Component{
                                 </div>
 
                                 {/** includeing search result */}
-                                <ScrollArea style={style.searchResultList} smoothScrolling={true}>                 
-                                    <div id="searchResult" className="d-flex" style={{justifyContent: 'center'}}>
-                                        <SearchResultList
-                                            searchResult={this.state.searchResult} 
-                                            searchKey={this.state.searchKey}
-                                            highlightSearchPanel={this.highlightSearchPanel}
-                                            handleShowPath={this.handleShowPath}
-                                            showMobileMap={this.state.showMobileMap}
-                                        />
-                                    </div>
-                                </ScrollArea>   
+                                {/* <ScrollArea style={style.searchResultList} smoothScrolling={true}>                  */}
+                                <div id="searchResult" className="d-flex" style={{justifyContent: 'center'}}>
+                                    <SearchResultList
+                                        searchResult={this.state.searchResult} 
+                                        searchKey={this.state.searchKey}
+                                        highlightSearchPanel={this.highlightSearchPanel}
+                                        handleShowPath={this.handleShowPath}
+                                        showMobileMap={this.state.showMobileMap}
+                                    />
+                                </div>
+                                {/* </ScrollArea>    */}
                             </div>
 
                         {/** right area of row */}
