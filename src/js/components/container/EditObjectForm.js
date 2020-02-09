@@ -248,13 +248,14 @@ class EditObjectForm extends React.Component {
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm }) => (
                             <Form className="text-capitalize">
-                                <Row>
+                                <Row noGutters>
+                                {console.log(touched)}
                                     <Col>
                                         <FormikFormGroup 
                                             type="text"
                                             name="name"
                                             label={locale.texts.NAME}
-                                            errors={errors.name}
+                                            error={errors.name}
                                             touched={touched.name}
                                             placeholder=""
                                         />
@@ -264,31 +265,31 @@ class EditObjectForm extends React.Component {
                                             type="text"
                                             name="type"
                                             label={locale.texts.TYPE}
-                                            errors={errors.type}
+                                            error={errors.type}
                                             touched={touched.type}
                                             placeholder=""
                                         />
                                     </Col>
                                 </Row>
-                                <Row>
+                                <Row noGutters>
                                     <Col>
                                         <FormikFormGroup 
                                             type="text"
                                             name="mac_address"
                                             label={locale.texts.MAC_ADDRESS}
-                                            errors={errors.mac_address}
+                                            error={errors.mac_address}
                                             touched={touched.mac_address}
                                             placeholder=""
-                                            disabled={this.props.disableASN? 1 : 0}
+                                            disabled
                                         />
                                     </Col>
                                     <Col>
                                         <FormikFormGroup 
                                             type="text"
-                                            name="mac_address"
+                                            name="area"
                                             label={locale.texts.AUTH_AREA}
-                                            errors={errors.mac_address}
-                                            touched={touched.mac_address}
+                                            error={errors.area}
+                                            touched={touched.area}
                                             placeholder=""
                                             component={() => ( 
                                                 <Select
@@ -310,7 +311,7 @@ class EditObjectForm extends React.Component {
                                     type="text"
                                     name="asset_control_number"
                                     label={locale.texts.ACN}
-                                    errors={errors.asset_control_number}
+                                    error={errors.asset_control_number}
                                     touched={touched.asset_control_number}
                                     placeholder=""
                                     disabled= {this.props.disableASN ? 1 : 0}
@@ -319,7 +320,7 @@ class EditObjectForm extends React.Component {
                                 <FormikFormGroup 
                                     name="status"
                                     label={locale.texts.STATUS}
-                                    errors={errors.status}
+                                    error={errors.status}
                                     touched={touched.status}
                                     placeholder=""
                                     component={() => (
@@ -359,13 +360,13 @@ class EditObjectForm extends React.Component {
                                         </RadioButtonGroup>  
                                     )}
                                 /> 
+                                {console.log(values)}
                                 <FormikFormGroup 
                                     name="select"
                                     label={locale.texts.AREA}
-                                    errors={errors.transferred_location}
+                                    error={errors.transferred_location}
                                     touched={touched.transferred_location}
                                     placeholder=""
-                                    disabled= {this.props.disableASN ? 1 : 0}
                                     display={values.status == 'transferred'}
                                     component={() => (
                                         <Select
@@ -388,7 +389,7 @@ class EditObjectForm extends React.Component {
                                 <FormikFormGroup 
                                     name="asset_control_number"
                                     label={locale.texts.MONITOR_TYPE}
-                                    errors={errors.checkboxGroup}
+                                    error={errors.checkboxGroup}
                                     touched={touched.checkboxGroup}
                                     placeholder=""
                                     component={() => (

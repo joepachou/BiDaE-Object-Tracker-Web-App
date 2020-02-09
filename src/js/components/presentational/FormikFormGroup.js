@@ -15,14 +15,19 @@ const FormikFormGroup = ({
    component,
    display = true
 }) => {
-
     let style = {
-        display: display
+        container: {
+            display: display ? null : 'none',
+        },
+        
+        error: {
+            color: "#dc3545"
+        }
     }
     return (
         <div 
-            className="form-group"
-            style={style}
+            className="form-group mb-3"
+            style={style.container}
         >
             <small 
                 className="form-text text-muted text-capitaliz"
@@ -39,11 +44,14 @@ const FormikFormGroup = ({
                         disabled={disabled}
                     />
             }
-            <ErrorMessage 
-                name={name} 
-                component="div" 
-                className="invalid-feedback" 
-            />
+            {error && touched && 
+                <small 
+                    className="form-text text-capitaliz"
+                    style={style.error}
+                >
+                    {error}
+                </small>
+            }
         </div>
     );
 };
