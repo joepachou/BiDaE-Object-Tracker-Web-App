@@ -282,9 +282,10 @@ class SearchResult extends React.Component {
                                                     : null
                                                 }
                                                 selection={this.state.selection}
-                                                action={searchResult[0].object_type == 0
-                                                    ? true
-                                                    : false
+                                                action={
+                                                    searchResult[0].object_type == 0 && !this.state.showNotFoundResult
+                                                        ? true
+                                                        : false
                                                 }
                                             />
 
@@ -329,7 +330,7 @@ class SearchResult extends React.Component {
                         <DownloadPdfRequestForm
                             show={this.state.showDownloadPdfRequest} 
                             pdfPath={this.state.pdfPath}
-                            close={this.handleFormClose}
+                            handleClose={this.handleFormClose}
                         />
                     </div>
                 </BrowserView>
@@ -364,9 +365,10 @@ class SearchResult extends React.Component {
                                                     : null
                                                 }
                                                 selection={this.state.selection}
-                                                action={searchResult[0].object_type == 0
-                                                    ? true
-                                                    : false
+                                                action={
+                                                    searchResult[0].object_type == 0 && !this.state.showNotFoundResult
+                                                        ? true
+                                                        : false
                                                 }
                                             />
 
@@ -449,9 +451,10 @@ class SearchResult extends React.Component {
                                                 : null
                                             }
                                             selection={this.state.selection}
-                                            action={searchResult[0].object_type == 0
-                                                ? true
-                                                : false
+                                            action={
+                                                searchResult[0].object_type == 0 && !this.state.showNotFoundResult
+                                                    ? true
+                                                    : false
                                             }
                                         />
 
