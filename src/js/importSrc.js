@@ -41,14 +41,14 @@ import "../../node_modules/leaflet.markercluster/dist/MarkerCluster.css"
 
 import "../../node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css"
 
-/** font awesome related source */
+/** font awesome related source */ 
 import "../../node_modules/@fortawesome/fontawesome-free/css/all.css"
 
 /** pretty check box */
 import "../../node_modules/pretty-checkbox/dist/pretty-checkbox.min.css"
 
 /** ant design */
-import "../../node_modules/antd/dist/antd.css"
+// import "../../node_modules/antd/dist/antd.css"
 
 
 
