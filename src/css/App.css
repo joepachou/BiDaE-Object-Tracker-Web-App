@@ -11,7 +11,8 @@ html,body {
     overscroll-behavior: auto;
     background: white;
     color: rgb(92, 92, 92);
-    letter-spacing: 1px
+    letter-spacing: 1px;
+    height: '100vh';   
 }
 
 /* html element */
@@ -529,17 +530,14 @@ p {
 /** .search result list group style sheet*/ 
 .searchResultListGroup {
     max-height: 35vh; 
-    overflow: scroll scroll;
 }
 
 .searchResultListGroupForTablet {
-    max-height: 28vh; 
-    overflow: scroll scroll;
+  
 }
 
 .searchResultListGroupForMobile {
     
-    overflow: scroll scroll;
 }
 
 /** scroll bar customize */

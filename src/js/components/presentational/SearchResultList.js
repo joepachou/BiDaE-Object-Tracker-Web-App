@@ -441,8 +441,7 @@ class SearchResult extends React.Component {
                                                 data={searchResult}
                                                 selection={this.state.selection}
                                             />
-                                        )
-                                        }
+                                        )}
                                     >
                                         <SearchResultListGroup 
                                             data={searchResult}

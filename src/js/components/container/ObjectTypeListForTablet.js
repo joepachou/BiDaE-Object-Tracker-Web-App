@@ -8,6 +8,7 @@ import {
     TabletView,
     isMobileOnly
 } from 'react-device-detect'
+import ScrollArea from 'react-scrollbar'
 
 class ObjectTypeListForTablet extends React.Component {
 
@@ -49,8 +50,8 @@ class ObjectTypeListForTablet extends React.Component {
 
         const style = {
             list: {
-                maxHeight: "50vh",
-                overflow: "hidden scroll",
+                // maxHeight: "50vh",
+                // overflow: "hidden scroll",
             },
             listForMobile: {
                 maxHeight: '50vh',
@@ -70,7 +71,16 @@ class ObjectTypeListForTablet extends React.Component {
             textSmall:{
                 fontSize: '1.5rem',
                 fontWeight: 400
+            },
+            textSmallButton:{
+                padding:'0.1rem',
+                fontSize: '1.5rem',
+                fontWeight: 400,
             }
+        }
+
+        const optionsOfMobile = {
+            maxScrollbarLength: 500
         }
 
         return (
@@ -78,24 +88,26 @@ class ObjectTypeListForTablet extends React.Component {
             <TabletView>
             <div id='objectTypeList' className='d-inline-flex flex-column'>
                 <div className='text-capitalize title'>{locale.texts.OBJECT_TYPE}</div>
-                <div style={style.list} className="d-inline-flex flex-column searchOption">
-                    {this.props.objectTypeList.map((item, index) => {
-                        return ( 
-                            <Button
-                                variant="outline-custom"
-                                onClick={this.handleClick} 
-                                // active={this.state.searchKey === item.toLowerCase()} 
-                                key={index}
-                                name={item}
-                                className="text-capitalize"
-                                style={style.button}
-                            >
-                                {item}
-                            </Button>
-                        )
-                    })}
-                    &nbsp;
-                </div>
+                <ScrollArea style={{maxHeight:'40vh'}} smoothScrolling={true}>
+                    <div className="d-inline-flex flex-column searchOption">
+                        {this.props.objectTypeList.map((item, index) => {
+                            return ( 
+                                <Button
+                                    variant="outline-custom"
+                                    onClick={this.handleClick} 
+                                    // active={this.state.searchKey === item.toLowerCase()} 
+                                    key={index}
+                                    name={item}
+                                    className="text-capitalize"
+                                    style={style.button}
+                                >
+                                    {item}
+                                </Button>
+                            )
+                        })}
+                        &nbsp;
+                    </div>
+                </ScrollArea>
                 
                 <div className='d-inline-flex flex-column'>
                 &nbsp;
@@ -197,7 +209,9 @@ class ObjectTypeListForTablet extends React.Component {
                 </div>
                 <div id='objectTypeList' className='d-inline-flex flex-column'>
                 <div className='text-capitalize title' style={style.text}>{locale.texts.OBJECT_TYPE}</div>
-                <div style={style.list} className="d-inline-flex flex-column searchOption">
+                
+                <ScrollArea style={{maxHeight:'50vh'}}>
+                    <div className="d-inline-flex flex-column searchOption" >
                     {this.props.objectTypeList.map((item, index) => {
                         return ( 
                             <Button
@@ -207,15 +221,15 @@ class ObjectTypeListForTablet extends React.Component {
                                 key={index}
                                 name={item}
                                 className="text-capitalize"
-                                style={style.button}
-                                style={style.textSmall}
+                                style={style.textSmallButton}
                             >
                                 {item}
                             </Button>
                         )
                     })}
                     &nbsp;
-                </div>
+                    </div>
+                </ScrollArea>
                 
                 
             </div>
