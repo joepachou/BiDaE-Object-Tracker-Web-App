@@ -3,78 +3,50 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom";
 import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Nav, NavDropdown, Image, Dropdown  } from 'react-bootstrap'
-import SigninPage from '../container/SigninPage';
+import SigninPage from '../presentational/SigninPage';
 import config from '../../config';
 import AccessControl from './AccessControl';
 import ShiftChange from '../container/ShiftChange'
 import { AppContext } from '../../context/AppContext';
 import Select from 'react-select';
 import BatteryLevelNotification from "../container/BatteryLevelNotification"
-import styleConfig from '../../styleConfig';
 
 class NavbarContainer extends React.Component {
 
     static contextType = AppContext
 
     state = {
-        isShowSigninForm: false,
-        isShowShiftChange: false,
+        showSignin: false,
+        showShiftChange: false,
     }
 
     handleSigninFormShowUp = () => {
         this.setState({
-            isShowSigninForm: true,
-            isShowSignupForm: false,
+            showSignin: true,
         })
-    }
-
-    handleSignupFormShowUp = () => {
-        this.setState({
-            isShowSigninForm: false,
-        })
-        setTimeout(
-            function (){
-                this.setState({
-                    isShowSignupForm: true,
-                })
-            }.bind(this),
-            300
-        )
     }
 
     handleSigninFormSubmit = () => {
         this.setState({
-            isShowSigninForm: false,
+            showSignin: false,
         })
-    }
-
-    handleSignupFormSubmit = () => {
-        setTimeout(
-            function(){
-                this.setState({
-                    isShowSignupForm: false,
-                })
-            }.bind(this),
-            1000
-        )
     }
 
     handleSignFormClose = () => {
         this.setState({
-            isShowSigninForm: false,
-            isShowSignupForm: false,
+            showSignin: false,
         })
     }
 
     handleShiftChangeRecordShowUp = () => {
         this.setState({
-            isShowShiftChange: true
+            showShiftChange: true
         })
     }
 
     handleShiftChangeRecordClose = () => {
         this.setState({
-            isShowShiftChange: false
+            showShiftChange: false
         })
     }
 
@@ -115,8 +87,8 @@ class NavbarContainer extends React.Component {
         const [{ areaId }, dispatch] = stateReducer
 
         const { 
-            isShowSigninForm, 
-            isShowShiftChange
+            showSignin, 
+            showShiftChange
         } = this.state;
 
         const {
@@ -247,14 +219,13 @@ class NavbarContainer extends React.Component {
                 </Navbar.Collapse>
 
                 <SigninPage 
-                    show={isShowSigninForm}
+                    show={showSignin}
                     handleSigninFormSubmit={this.handleSigninFormSubmit}
-                    handleSignupFormShowUp={this.handleSignupFormShowUp}
                     handleSignFormClose={this.handleSignFormClose}
                     signin={auth.signin}
                 />
                 <ShiftChange 
-                    show = {isShowShiftChange}
+                    show={showShiftChange}
                     handleShiftChangeRecordSubmit = {this.handleShiftChangeRecordSubmit}
                     handleShiftChangeRecordClose={this.handleShiftChangeRecordClose}
                     userInfo={auth.user}

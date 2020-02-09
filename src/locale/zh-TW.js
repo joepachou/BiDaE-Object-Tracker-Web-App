@@ -331,6 +331,8 @@ const tw = {
     /** message */
     ARE_YOU_SURE_TO_DELETE: "確定要刪除 ?",
     NOW_YOU_CAN_DO_THE_FOllOWING_ACTION: "你可以執行以下操作",
+    USERNAME_OR_PASSWORD_IS_INCORRECT: "使用者名稱或是密碼錯誤",
+    PASSWORD_IS_INCORRECT: "密碼錯誤",
 
     /** User Roles */
     CARE_PROVIDER: "護理人員",
