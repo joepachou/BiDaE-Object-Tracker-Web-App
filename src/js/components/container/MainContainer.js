@@ -26,6 +26,12 @@ import {
     ButtonGroup
 } from 'react-bootstrap'
 import ScrollArea from 'react-scrollbar'
+import { 
+    disableBodyScroll, 
+    enableBodyScroll, 
+    clearAllBodyScrollLocks 
+} from 'body-scroll-lock';
+
 const {
     ALL_DEVICES,
     MY_DEVICES,
@@ -64,6 +70,11 @@ class MainContainer extends React.Component{
     }
 
     componentDidMount = () => {
+
+        let targetElement = document.querySelector('body')
+
+        disableBodyScroll(targetElement);
+
         this.getTrackingData();
         this.getLbeaconPosition();
         this.getGeoFenceConfig();
