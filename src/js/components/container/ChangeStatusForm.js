@@ -105,7 +105,6 @@ class ChangeStatusForm extends React.Component {
             title,
             selectedObjectData 
         } = this.props
-
         return (
             <Modal  
                 show={this.props.show}
@@ -181,7 +180,7 @@ class ChangeStatusForm extends React.Component {
                                                                     type="text"
                                                                     name="name"
                                                                     label={locale.texts.NAME}
-                                                                    errors={errors.name}
+                                                                    error={errors.name}
                                                                     touched={touched.name}
                                                                     placeholder=""
                                                                     disabled
@@ -192,7 +191,7 @@ class ChangeStatusForm extends React.Component {
                                                                     type="text"
                                                                     name="type"
                                                                     label={locale.texts.TYPE}
-                                                                    errors={errors.type}
+                                                                    error={errors.type}
                                                                     touched={touched.type}
                                                                     placeholder=""
                                                                     disabled
@@ -203,7 +202,7 @@ class ChangeStatusForm extends React.Component {
                                                             type="text"
                                                             name="asset_control_number"
                                                             label={locale.texts.ACN}
-                                                            errors={errors.asset_control_number}
+                                                            error={errors.asset_control_number}
                                                             touched={touched.asset_control_number}
                                                             placeholder=""
                                                             disabled
@@ -219,7 +218,7 @@ class ChangeStatusForm extends React.Component {
                                     type="text"
                                     name="status"
                                     label={locale.texts.STATUS}
-                                    errors={errors.status}
+                                    error={errors.status}
                                     touched={touched.status}
                                     placeholder=""
                                     component={() => (
@@ -260,15 +259,14 @@ class ChangeStatusForm extends React.Component {
                                 <FormikFormGroup 
                                     type="text"
                                     name="transferred_location"
-                                    label={locale.texts.NAME}
-                                    errors={errors.transferred_location}
+                                    label={locale.texts.TRANSFERRED_LOCATION}
+                                    error={errors.transferred_location}
                                     touched={touched.transferred_location}
-                                    display={values.status == 'transferred' ? '' : 'none'}
+                                    display={values.status == 'transferred'}
                                     component={() => (
                                         <Select
                                             name="transferred_location"
                                             value={values.transferred_location}
-                                            className="my-1"
                                             onChange={value => setFieldValue("transferred_location", value)}
                                             options={this.state.transferredLocationOptions}
                                             isSearchable={false}
@@ -285,7 +283,7 @@ class ChangeStatusForm extends React.Component {
                                     type="text"
                                     name="notes"
                                     label={locale.texts.NOTES}
-                                    errors={errors.notes}
+                                    error={errors.notes}
                                     touched={touched.notes}
                                     placeholder={locale.texts.WRITE_THE_NOTES}
                                 />
