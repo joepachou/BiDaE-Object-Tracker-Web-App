@@ -131,7 +131,7 @@ class ChangeStatusForm extends React.Component {
                             status: selectedObjectData.length != 0 ? selectedObjectData[0].status : '',
                             transferred_location: selectedObjectData.length != 0 && selectedObjectData[0].status == config.objectStatus.TRANSFERRED
                                 ? { 
-                                    value: selectedObjectData.transferred_location,
+                                    value: selectedObjectData[0].transferred_location,
                                     label: selectedObjectData[0].transferred_location.toUpperCase().split(',').map(item => locale.texts[item]).join('/')
                                 }
                                 : '', 
