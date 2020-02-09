@@ -766,7 +766,7 @@ class MainContainer extends React.Component{
                                     }
                                     <Button variant='outline-primary' onClick={this.clearResultHandler}>{locale.texts.CLEAR_RESULT}</Button>
                                 </ButtonGroup>
-                                <ScrollArea style={style.searchResultListFormobile} smoothScrolling={true}>
+                                {/* <ScrollArea style={style.searchResultListFormobile} smoothScrolling={true}> */}
                                     <div className='d-flex justify-content-center'>
                                         <SearchResultList
                                             searchResult={this.state.searchResult} 
@@ -776,8 +776,7 @@ class MainContainer extends React.Component{
                                             showMobileMap={this.state.showMobileMap}
                                         />
                                     </div>
-                                </ScrollArea>
-                            
+                                {/* </ScrollArea> */}                            
                             </div>
                         </div>
                     </div>

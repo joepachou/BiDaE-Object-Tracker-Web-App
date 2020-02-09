@@ -235,10 +235,11 @@ class SearchResult extends React.Component {
                 bottom: 'auto',
                 padding: 0,
             },
-            searchResultListFormobile: {
-                maxHeight: this.props.showMobileMap ? '40vh' : '75vh'
+            searchResultListForMobile: {
+                maxHeight: this.props.showMobileMap ? '40vh' : '70vh',
+                dispaly: this.props.searchKey ? null : 'none',
             },
-            searchResultListForTable: {
+            searchResultListForTablet: {
                 dispaly: this.props.searchKey ? null : 'none',
                 maxHeight: '28vh'
             }
@@ -354,7 +355,7 @@ class SearchResult extends React.Component {
                                     </Col> 
                                 :   
                                     <Col className="searchResultListGroupForTablet d-flex justify-content-center">
-                                        <ScrollArea style={style.searchResultListForTable} smoothScrolling={true}>                 
+                                        <ScrollArea style={style.searchResultListForTablet} smoothScrolling={true}>                 
                                             <AccessControl
                                                 permission={'form:edit'}
                                                 renderNoAccess={() => (
@@ -441,31 +442,33 @@ class SearchResult extends React.Component {
                                 </Col> 
                             :   
                                 
-                                <Col className="searchResultListGroupForMobile d-flex justify-content-center" style={style.searchResultListFormobile}>
-                                    <AccessControl
-                                        permission={'form:edit'}
-                                        renderNoAccess={() => (
+                                <Col className="searchResultListGroupForMobile d-flex justify-content-center">  
+                                    <ScrollArea style={style.searchResultListForMobile} smoothScrolling={true}>                 
+                                        <AccessControl
+                                            permission={'form:edit'}
+                                            renderNoAccess={() => (
+                                                <SearchResultListGroup 
+                                                    data={searchResult}
+                                                    selection={this.state.selection}
+                                                />
+                                            )}
+                                        >
                                             <SearchResultListGroup 
                                                 data={searchResult}
+                                                handleSelectResultItem={searchResult[0].object_type == 0 
+                                                    ? this.handleSelectResultItem
+                                                    : null
+                                                }
                                                 selection={this.state.selection}
+                                                action={
+                                                    searchResult[0].object_type == 0 && !this.state.showNotFoundResult
+                                                        ? true
+                                                        : false
+                                                }
                                             />
-                                        )}
-                                    >
-                                        <SearchResultListGroup 
-                                            data={searchResult}
-                                            handleSelectResultItem={searchResult[0].object_type == 0 
-                                                ? this.handleSelectResultItem
-                                                : null
-                                            }
-                                            selection={this.state.selection}
-                                            action={
-                                                searchResult[0].object_type == 0 && !this.state.showNotFoundResult
-                                                    ? true
-                                                    : false
-                                            }
-                                        />
 
-                                    </AccessControl>
+                                        </AccessControl>
+                                    </ScrollArea>
                                 </Col>
                             }
                         </Row>
