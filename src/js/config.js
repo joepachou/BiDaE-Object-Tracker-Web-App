@@ -290,7 +290,7 @@ const config = {
             broken: (data, locale) => {
                 let title = config.pdfFormat.getBodyItem.getBodyTitle("broken device list", locale)
                 let list = config.pdfFormat.getBodyItem.getDataContent(data, locale)
-                let notes = config.pdfFormat.getBodyItem.getNotes(data)
+                let notes = config.pdfFormat.getBodyItem.getNotes(data, locale)
                 return title + list + notes
             },
             transferred: (data, locale) => {
@@ -300,7 +300,7 @@ const config = {
                 let list_title = config.pdfFormat.getBodyItem.getBodyTitle("transferred device list", locale)
                 let signature = config.pdfFormat.getBodyItem.getSignature(locale)
                 let list = config.pdfFormat.getBodyItem.getDataContent(data, locale)
-                let notes = config.pdfFormat.getBodyItem.getNotes(data)
+                let notes = config.pdfFormat.getBodyItem.getNotes(data, locale)
                 return signature_title + signature + list_title + list + notes
             },
             shiftChange: (data, locale, user) => {
@@ -365,7 +365,7 @@ const config = {
                 }).join(" ")
             },
     
-            getNotes: (data) => {
+            getNotes: (data, locale) => {
                 return `
                     <h3 style="text-transform: capitalize; margin-bottom: 5px; font-weight: bold">
                         ${data[0].notes ? `${locale.texts.NOTE}: ${data[0].notes}` : ''}
@@ -691,59 +691,45 @@ const config = {
 
             //摸到大頭針之後的方塊
             const content = `
-                <div>
-                    <h4 class="border-bottom pb-1 px-2">${object[0].location_description}</h4>
-                    ${objectList.map((item, index) => {
-                        var element = `<div id='${item.mac_address}'class="row popupRow mb-2 mx-2 d-flex jusify-content-start">`
-                        element += `<div class="popupType" onclick={this.aaa}>`
-                        element += config.mapConfig.popupOptions.showNumber
-                            ?   `<div class="popupType text-capitalize">${index + 1}.</div>`
-                            :   `<div class="popupType text-capitalize">&#9642;  </div>`
-                        if(item.object_type == 0){
-                            element +=
-                        `
-                                <div class="popupType text-capitalize">
-                                   ${item.type}
-                                </div>
-                                <div class="popupType ">
-                                    , ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn.slice(-4)}
-                                </div>
-                                <div class="popupType">
-                                    ${item.status !== "normal" 
-                                        ? `, ${locale.texts[item.status.toUpperCase()]}`
-                                        : `, ${item.residence_time}`    
-                                    }
-                                </div>
+                <div class="text-capitalize">
+                    <div class="popupTitle">${object[0].location_description}</div>
+                    <div class="popupContent"> 
+                        ${objectList.map((item, index) => {
+                            var element = `<div id='${item.mac_address}' class="popupItem">`
+                            element += config.mapConfig.popupOptions.showNumber
+                                ?   `${index + 1}.`
+                                :   `&bull;`
+                            if(item.object_type == 0){
+                                element +=
+                                    `
+                                        ${item.type},
+                                        ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn.slice(-4)},
+                                        ${item.status !== "normal" 
+                                            ? `${locale.texts[item.status.toUpperCase()]}`
+                                            : `${item.residence_time}`    
+                                        }
+                                        ${item.status == "reserve" 
+                                            ? `~ ${item.reserved_timestamp_final}`
+                                            : ''
+                                        }
+                                    `
+                            } else {
+                                element += 
+                                    `     
+                                        ${item.name}, 
 
-                                <div class="popupType">
-                                ${item.status == "reserve" 
-                                    ? `~ ${item.reserved_timestamp_final}`
-                                    : ''
-                                }
-                            </div>
-                        
+                                        ${locale.texts.PHYSICIAN_NAME}: ${item.physician_name},
 
-                            </div>
-                        `
-                        } else {
-                            element += 
-                                `     
-                                    <div class="popupType">
-                                        ${item.name} 
-                                    </div>
-                                    <div class="popupType">
-                                        , ${locale.texts.PHYSICIAN_NAME}: ${item.physician_name}
-                                    </div>
-                                    <div class="popupType">
-                                        , ${item.residence_time}
-                                    </div>
-                                `
+                                        ${item.residence_time}
+                                    `
+                            }
+                            element += `</div>`
+                            return element
+                        }).join("")
                         }
-                        element += `</div>`
-                        return element
-                    }).join("")
-                    }
-                </div>` 
+                    </div>
+                </div>
+            ` 
             return content
         },
 

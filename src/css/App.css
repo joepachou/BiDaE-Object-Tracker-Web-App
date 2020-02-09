@@ -11,7 +11,7 @@ html,body {
     overscroll-behavior: auto;
     background: white;
     color: rgb(92, 92, 92);
-    /* height: 100%; */   
+    letter-spacing: .05rem
 }
 
 /* html element */
@@ -517,7 +517,13 @@ p {
 .subtitle {
     font-size: 1rem;
     font-weight: 400;
-    color: black
+    color: black;
+    margin-bottom: 5px;
+}
+
+.warning {
+    font-size: 0.8rem;
+    text-transform: initial;
 }
 
 /** .search result list group style sheet*/ 
@@ -596,17 +602,6 @@ p {
     width: 7px;
 }
 #batteryNoticeDiv::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: rgba(0, 0, 0, .5);
-    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
-}
-
-.customPopup .leaflet-container .leaflet-popup-scrolled::-webkit-scrollbar {
-    -webkit-appearance: none;
-    width: 7px;
-}
-
-.customPopup .leaflet-container .leaflet-popup-scrolled::-webkit-scrollbar-thumb {
     border-radius: 4px;
     background-color: rgba(0, 0, 0, .5);
     -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);

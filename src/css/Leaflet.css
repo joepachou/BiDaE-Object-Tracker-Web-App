@@ -5,10 +5,11 @@
 
 .customPopup .leaflet-popup-tip,
 .customPopup .leaflet-popup-content-wrapper {
-    font-size: 30px;   
+    font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans TC', sans-serif, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 }
+
 .customPopup .leaflet-popup-scrolled {
-    overflow: hidden scroll;
+    /* overflow: hidden scroll; */
     border-bottom: 0;
     border-top: 0;
 }
@@ -20,7 +21,6 @@
  
 .customPopup .leaflet-popup-content {
     padding: 0;
-    /* word-break: break-all; */
 }
 
 .customPopup .contentBox {
@@ -39,15 +39,33 @@
     background-color: black;
 }
 
-.popupType {
-    display: inline-block;
-    color:rgba(50, 47, 47, 0.89);
-    font-size: 16px;
-    font-weight: 600;
-}
 .popupItem {
-    display: inline-block;
-    color:grey;
-    font-size: 15px;
-    font-weight: 500
+    display: flex;
+    justify-content: start;
+    font-size: 1rem;
+    margin: 0 .2rem .2rem .2rem;
+}
+
+.popupTitle {
+    color: black;
+    font-size: 1.2rem;
+    padding: 0 .2rem .2rem .4rem;
+}
+
+.popupContent {
+    overflow: hidden scroll;
+    max-height: 300px;
+    border-top: 1px solid rgba(32, 33, 36, 0.28);
+    padding: 0.2rem 0;
+}
+
+.customPopup .leaflet-container .leaflet-popup-scrolled::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+}
+
+.customPopup .leaflet-container .leaflet-popup-scrolled::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, .5);
+    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
 }
