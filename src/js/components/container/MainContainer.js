@@ -580,11 +580,11 @@ class MainContainer extends React.Component{
                 borderRadius: 10,
                 //border: 'solid',
                 height: '90vh',
-                width:'90vw'
+                // width:'90vw'
             },
             searchResultForMobile: {
-                width: '90vw',
-                display: this.state.display ? 'none' : null,
+                // width: '90vw',
+                // display: this.state.display ? 'none' : null,
             },
             searchResultList: {
                 dispaly: this.state.hasSearchKey ? null : 'none',
@@ -722,21 +722,19 @@ class MainContainer extends React.Component{
                     </div>
                 </TabletView>
                 <MobileOnlyView>
-                <div id="page-wrap" className='d-flex flex-column w-100' style={{height: "90vh"}}>
-                    <div className='d-flex h-100 w-100 justify-content-center'>
-                        {/** left area of row */}
-                        <div id='searchPanel' className="h-100" style={style.searchPanelForMobile}>
-                            <SearchContainer 
-                                hasSearchKey={this.state.hasSearchKey}
-                                clearSearchResult={this.state.clearSearchResult}
-                                hasGridButton={this.state.hasGridButton}
-                                auth={auth}
-                                getSearchKey={this.getSearchKey}
-                                handleShowResultListForMobile={this.handleShowResultListForMobile}
-                            />
-                        </div>
-                                
-                        <div style={style.searchResultForMobile}>
+                    <div id="page-wrap" className='d-flex flex-column' style={{height: "90vh"}}>
+                        <div className='h-100' style={{overflow: 'hidden hidden'}}>
+                            <div id='searchPanel' className="h-100" style={style.searchPanelForMobile}>
+                                <SearchContainer 
+                                    hasSearchKey={this.state.hasSearchKey}
+                                    clearSearchResult={this.state.clearSearchResult}
+                                    hasGridButton={this.state.hasGridButton}
+                                    auth={auth}
+                                    getSearchKey={this.getSearchKey}
+                                    handleShowResultListForMobile={this.handleShowResultListForMobile}
+                                />
+                            </div>
+                            <div style={style.searchResultForMobile} className="m-1">
                                 <div style={style.mapForMobile}>
                                     <SurveillanceContainer
                                         showPath={this.state.showPath}
@@ -769,7 +767,7 @@ class MainContainer extends React.Component{
                                     <Button variant='outline-primary' onClick={this.clearResultHandler}>{locale.texts.CLEAR_RESULT}</Button>
                                 </ButtonGroup>
                                 <ScrollArea style={style.searchResultListFormobile} smoothScrolling={true}>
-                                    <div className='justify-content-center'>
+                                    <div className='d-flex justify-content-center'>
                                         <SearchResultList
                                             searchResult={this.state.searchResult} 
                                             searchKey={this.state.searchKey}
@@ -779,10 +777,10 @@ class MainContainer extends React.Component{
                                         />
                                     </div>
                                 </ScrollArea>
-                        
+                            
+                            </div>
                         </div>
                     </div>
-                </div>
                 </MobileOnlyView>
             </div>
         )

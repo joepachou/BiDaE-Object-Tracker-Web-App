@@ -178,7 +178,7 @@ class SurveillanceContainer extends React.Component {
             },
 
             mapForMobile: {
-                width: '90vw',
+                // width: '90vw',
                 border: "solid 2px rgba(227, 222, 222, 0.619)",
                 padding: "5px",
             },

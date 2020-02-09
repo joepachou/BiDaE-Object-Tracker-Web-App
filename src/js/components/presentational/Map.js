@@ -75,7 +75,6 @@ class Map extends React.Component {
 
     /** Set the search map configuration establishing in config.js  */
     initMap = () => {
-        //console.log("initMap")
         let [{areaId}] = this.context.stateReducer
         let { 
             areaModules,
@@ -100,24 +99,22 @@ class Map extends React.Component {
 
         let { url, bounds } = areaModules[areaOption]
         let map = L.map('mapid', mapOptions);
-
+        console.log('init map')
         let image = L.imageOverlay(url, bounds).addTo(map);
         map.addLayer(image)
         map.fitBounds(bounds);
-
         this.image = image
         this.map = map;
         this.originalZoom = this.map.getZoom()
         this.currentZoom = this.map.getZoom();
         this.prevZoom = this.map.getZoom();
+        
         /** Set the map's events */
         this.map.on('zoomend', this.resizeMarkers)
     }
     /** init path */
     
     drawPolyline = () => {
-        // console.log(this.props.pathMacAddress)
-        // console.log("in")
         if(this.props.showPath){
             if(this.state.pathMacAddress === ''){
                 let i=4;
@@ -163,9 +160,6 @@ class Map extends React.Component {
                                 }
                             ]
                         })
-
-                        //console.log(polyline)
-                        //console.log(this.pathOfDevice)
                         this.pathOfDevice.addLayer(polyline)
                         this.pathOfDevice.addLayer(decorator)
                         this.pathOfDevice.addTo(this.map)
@@ -191,23 +185,17 @@ class Map extends React.Component {
     }
     /** Resize the markers and errorCircles when the view is zoomend. */
     resizeMarkers = () => {
-       //console.log("resizeMarker")
         this.prevZoom = this.currentZoom
         this.currentZoom = this.map.getZoom();
         this.calculateScale();
         this.markersLayer.eachLayer( marker => {
             let icon = marker.options.icon;
-
             icon.options.iconSize = [this.scalableIconSize, this.scalableIconSize]
             // icon.options.iconAnchor = [this.scalableIconAnchor, this.scalableIconAnchor]
             icon.options.numberSize = this.scalableNumberSize
             var pos = marker.getLatLng()
-            // console.log(marker)
-            // console.log(pos)
             marker.setLatLng([pos.lat - this.prevZoom * this.pin_shift_scale[0] + this.currentZoom* this.pin_shift_scale[0], pos.lng - this.pin_shift_scale[1]* this.prevZoom + this.currentZoom* this.pin_shift_scale[1]])
             marker.setIcon(icon);
-
-            
         })
 
         this.errorCircle.eachLayer( circle => {
@@ -217,8 +205,8 @@ class Map extends React.Component {
 
     /** Set the overlay image */
     setMap = () => {
-        //console.log("setMap")
         let [{areaId}] = this.context.stateReducer
+        console.log('set Map')
 
         let { 
             areaModules,
@@ -252,10 +240,6 @@ class Map extends React.Component {
             this.scalableIconSize = parseInt(this.props.mapConfig.iconOptions.iconSizeForTablet) + this.resizeConst
         else 
             this.scalableIconSize = parseInt(this.props.mapConfig.iconOptions.iconSizeForMobile) + this.resizeConst
-        // this.scalableIconAnchor = parseInt(this.props.mapConfig.iconOptions.iconSize) + this.resizeConst
-        //console.log(this.props.mapConfig.iconOptions.iconSizeForMobile)
-        //console.log(this.scalableIconSize)
-        //console.log(this.props.mapConfig.iconOptions.iconSizeForTablet)
             this.scalableNumberSize = Math.floor(this.scalableIconSize / 3);
     }
 
@@ -264,8 +248,6 @@ class Map extends React.Component {
 
         this.geoFenceLayer.clearLayers()
 
-
-        // console.log('create geofence marker')
         let { stateReducer } = this.context
         let [{areaId}] = stateReducer
 
@@ -275,7 +257,7 @@ class Map extends React.Component {
         } = this.props
         
         /** Creat the marker of all lbeacons onto the map  */
-        axios.post(dataSrc.getGeoFenceConfig, {
+        axios.post(dataSrc.getGeofenceConfig, {
             areaId
         })
         .then(res => {
@@ -378,7 +360,6 @@ class Map extends React.Component {
      * Create the error circle of markers, and add into this.markersLayer.
      */
     handleObjectMarkers = () => {
-        //console.log("handle tracking data")
         let { locale } = this.context
 
         /** Clear the old markerslayers. */
@@ -451,12 +432,6 @@ class Map extends React.Component {
         /** Add the new markerslayers to the map */
         this.markersLayer.addTo(this.map);
         this.errorCircle .addTo(this.map);
-
-        // if (!this.state.hasErrorCircle) {
-        //     this.setState({
-        //         hasErrorCircle: true,
-        //     })
-        // }
     }
 
     /** Fire when clicing marker */
@@ -468,7 +443,6 @@ class Map extends React.Component {
 
     /** Filter out undesired tracking data */
     filterTrackingData = (proccessedTrackingData) => {
-        //console.log(proccessedTrackingData)
         return proccessedTrackingData.filter(item => {
             return (
                 item.found && 
