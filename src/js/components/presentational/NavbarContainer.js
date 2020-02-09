@@ -3,7 +3,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom";
 import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Nav, NavDropdown, Image, Dropdown  } from 'react-bootstrap'
-import SigninPage from '../presentational/SigninPage';
+import SiginForm from './SigninForm';
 import config from '../../config';
 import AccessControl from './AccessControl';
 import ShiftChange from '../container/ShiftChange'
@@ -225,7 +225,7 @@ class NavbarContainer extends React.Component {
                     </Nav>
                 </Navbar.Collapse>
 
-                <SigninPage 
+                <SiginForm 
                     show={showSignin}
                     handleSubmit={this.handleSigninFormSubmit}
                     handleClose={this.handleClose}

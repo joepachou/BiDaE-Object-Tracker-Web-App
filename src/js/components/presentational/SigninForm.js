@@ -11,7 +11,7 @@ import LocaleContext from '../../context/LocaleContext'
 import axios from 'axios';
 import dataSrc from '../../dataSrc'
 
-const SigninPage = ({
+const SiginForm = ({
     show,
     handleClose,
     signin,
@@ -117,4 +117,4 @@ const SigninPage = ({
     )
 }
 
-export default SigninPage
+export default SiginForm
