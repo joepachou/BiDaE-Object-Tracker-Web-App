@@ -10,6 +10,7 @@ import ShiftChange from '../container/ShiftChange'
 import { AppContext } from '../../context/AppContext';
 import Select from 'react-select';
 import BatteryLevelNotification from "../container/BatteryLevelNotification"
+import styleConfig from '../../styleConfig';
 
 class NavbarContainer extends React.Component {
 
@@ -91,26 +92,23 @@ class NavbarContainer extends React.Component {
                 border: 0,
             },
             customStyles: {
-
                 option: (provided, state) => ({
                     ...provided,
-                //   borderBottom: '1px dotted pink',
-                //   color: state.isSelected ? 'red' : 'blue',
                     padding: '0.5rem',
-                    fontSize: '1rem'
+                    fontSize: '0.8rem',
+                    cursor: 'pointer',
                 }),
-
+                
                 control: () => ({
-                  // none of react-select's styles are passed to <Control />
                     width: 230,
                 }),
                 
-                singleValue: (provided, state) => {
-                    const opacity = state.isDisabled ? 0.5 : 1;
-                    const transition = 'opacity 300ms';
-                
-                    return { ...provided, opacity, transition };
-                }
+                singleValue: (provided, state) => ({
+                    opacity: state.isDisabled ? 0.5 : 1,
+                    transition: 'opacity 300ms',
+                    cursor: 'pointer',
+                }),
+
             }
         }
         const { locale, auth, stateReducer } = this.context;

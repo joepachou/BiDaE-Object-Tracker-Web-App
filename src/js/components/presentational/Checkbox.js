@@ -11,7 +11,7 @@ const Checkbox = ({
 }) => {
     return (
         <div 
-            className="pretty p-default p-round p-bigger" 
+            className="pretty p-default p-round" 
             style={styleConfig.checkbox}
         >
             <input 
