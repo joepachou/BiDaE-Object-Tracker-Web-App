@@ -954,7 +954,8 @@ const deleteEditObjectRecord = (idPackage) => {
 const deleteShiftChangeRecord = (idPackage) => {
 	const query = `
 		DELETE FROM shift_change_record
-		WHERE id IN (${idPackage.map(item => `'${item}'`)});
+		WHERE id IN (${idPackage.map(item => `'${item}'`)})
+		RETURNING *;
 	`
 	return query
 }
