@@ -40,7 +40,7 @@ const SearchResultListGroup = ({
                         action={action}
                         active
                         style={style.listGroup}
-                        className='d-flex justify-content-start py-1 align-items-center' 
+                        className='d-flex py-1 text-left justify-content-start' 
 
                     >   
                         <div 
@@ -48,7 +48,10 @@ const SearchResultListGroup = ({
                             className="d-flex justify-content-center"
                         >
                             {selection.indexOf(item.mac_address) >= 0 
-                                ? <i className="fas fa-check" style={style.icon}></i> 
+                                ?   <i 
+                                        className="fas fa-check align-items-center" 
+                                        style={style.icon}
+                                    /> 
                                 : config.mapConfig.iconOptions.showNumber
                                     ?   <p className='d-inline-block'>{index + 1}.</p>
                                     :   <p className='d-inline-block'>&#9642;</p>
