@@ -21,6 +21,8 @@ import {
 } from '../../tables';
 import { AppContext } from '../../context/AppContext';
 import {Tabs, Tab,TabList, TabPanel } from 'react-tabs';
+import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm'
+
 const SelectTable = selecTableHOC(ReactTable);
 
 
@@ -39,6 +41,7 @@ class SystemStatus extends React.Component{
         toggleAllFlag:0,
         tabIndex:0,
         locale: this.context.locale.lang,
+        showDeleteConfirmation: false
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -457,6 +460,11 @@ class SystemStatus extends React.Component{
                     selectedObjectData={this.state.selectedRowData} 
                     handleSubmitForm={this.handleSubmitForm}
                     handleCloseForm={this.handleCloseForm}
+                />
+                <DeleteConfirmationForm
+                    show={this.state.showDeleteConfirmation} 
+                    handleClose={this.handleClose}
+                    handleSubmit={this.handleSubmit}
                 />
             </Container>
         )

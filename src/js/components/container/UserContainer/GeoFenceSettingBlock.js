@@ -160,13 +160,15 @@ class GeoFenceSettingBlock extends React.Component{
     }
 
     handleSubmit = (pack) => {
+        console.log('pack', pack)
+        console.log('state', this.state)
         let configPackage = pack ? pack : {}
         let { 
             path,
             selectedData
         } = this.state
         configPackage["type"] = config.monitorSettingUrlMap[this.props.type]
-        configPackage["id"] = selectedData.id
+        configPackage["id"] = selectedData ? selectedData.id : null
         axios.post(dataSrc[path], {
             monitorConfigPackage: configPackage
         })
