@@ -6,6 +6,8 @@ const bcrypt = require('bcrypt');
 const pg = require('pg');
 const pdf = require('html-pdf');
 const csv =require('csvtojson')
+var exec = require('child_process').execFile;
+const fs = require('fs')
 const config = {
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
@@ -539,7 +541,7 @@ const addUserSearchHistory = (request, response) => {
 }
 
 const editLbeacon = (request, response) => {
-    const { formOption } = request.body    
+    const { formOption } = request.body
     pool.query(queryType.editLbeacon(formOption))
         .then(res => {
             console.log('Edit lbeacon success')
@@ -548,7 +550,6 @@ const editLbeacon = (request, response) => {
         .catch(err => {
             console.log('Edit lbeacon fails ' + err)
         })
-
 }
 
 const generatePDF = (request, response) => {
@@ -738,7 +739,15 @@ const deleteShiftChangeRecord = (request, response) => {
     pool.query(queryType.deleteShiftChangeRecord(idPackage))
     .then(res => {
                 console.log('delete shift change record success')
-                response.status(200).json(res)
+                console.log(res.rows)
+                fs.unlink(res.rows[0].file_path, (err) => {
+                    if(err){
+                        console.log('err when deleting files', err)
+                    }
+                    response.status(200).json(res)
+                    
+                })
+                
     })
     .catch(err => {
         console.log(err)
@@ -933,10 +942,19 @@ const setGeofenceConfig = (request, response) => {
     let {
         monitorConfigPackage,
     } = request.body
+
+    let area_id = monitorConfigPackage.area.id
     pool.query(queryType.setGeofenceConfig(monitorConfigPackage))
         .then(res => {
             console.log(`set geofence config success`)
-            response.status(200).json(res)
+            exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 5432 -c cmd_reload_geo_fence_setting -r geofence_list -f area_one -a ${area_id}`.split(' '), function(err, data){
+                if(err){
+                    console.log('err', err)
+                }else{
+                    console.log('data', data)
+                    response.status(200).json(res)
+                }
+            })
         })
         .catch(err => {
             console.log(`set geofence config fail: ${err}`)
@@ -947,10 +965,19 @@ const addGeofenceConfig = (request, response) => {
     let {
         monitorConfigPackage,
     } = request.body
+    let area_id = monitorConfigPackage.area.id
+    
     pool.query(queryType.addGeofenceConfig(monitorConfigPackage))
         .then(res => {
             console.log(`add geofence config success`)
-            response.status(200).json(res)
+            exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 5432 -c cmd_reload_geo_fence_setting -r geofence_list -f area_one -a ${area_id}`.split(' '), function(err, data){
+                if(err){
+                    console.log('err', err)
+                }else{
+                    console.log('data', data)
+                    response.status(200).json(res)
+                }
+            })
         })
         .catch(err => {
             console.log(`add geofence config fail: ${err}`)
