@@ -919,8 +919,8 @@ const getGeofenceConfig = (request, response) => {
             res.rows.map(item => {
                 item.start_time = item.start_time.split(':').filter((item,index) => index < 2).join(':')
                 item.end_time = item.end_time.split(':').filter((item,index) => index < 2).join(':')
-                item.perimeters = parseGeoFenceConfig(item.perimeters)
-                item.fences = parseGeoFenceConfig(item.fences)
+                item.parsePerimeters = parseGeoFenceConfig(item.perimeters)
+                item.parseFences = parseGeoFenceConfig(item.fences)
             })
             console.log("get geofence config success")
             response.status(200).json(res)
@@ -934,22 +934,28 @@ const setGeofenceConfig = (request, response) => {
     let {
         monitorConfigPackage,
     } = request.body
+    let { 
+        area_id 
+    } = monitorConfigPackage
 
-    let area_id = monitorConfigPackage.area.id
     pool.query(queryType.setGeofenceConfig(monitorConfigPackage))
         .then(res => {
             console.log(`set geofence config success`)
-            exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 5432 -c cmd_reload_geo_fence_setting -r geofence_list -f area_one -a ${area_id}`.split(' '), function(err, data){
-                if(err){
-                    console.log('err', err)
-                }else{
-                    console.log('data', data)
-                    response.status(200).json(res)
-                }
-            })
+            if (process.env.RELOAD_GEO_CONFIG_PATH) {
+                exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 5432 -c cmd_reload_geo_fence_setting -r geofence_list -f area_one -a ${area_id}`.split(' '), function(err, data){
+                    if(err){
+                        console.log('err', err)
+                    }else{
+                        console.log('data', data)
+                        response.status(200).json(res)
+                    }
+                })
+            } 
+            response.status(200).json(res)
+          
         })
         .catch(err => {
-            console.log(`set geofence config fail: ${err}`)
+            console.log(`set geofence config fail ${err}`)
         })
 }
 

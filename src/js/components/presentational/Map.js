@@ -55,8 +55,7 @@ class Map extends React.Component {
         if (parseInt(process.env.IS_LBEACON_MARK) && this.props.lbeaconPosition.length !== 0 && !this.state.hasIniLbeaconPosition) {
             this.createLbeaconMarkers()
         }
-
-        if (this.props.geoFenceConfig.length !== 0 && !this.state.hasGeoFenceMaker && this.props.isOpenFence) {
+        if (this.props.geofenceConfig.length !== 0 && !this.state.hasGeoFenceMaker && this.props.isOpenFence) {
             this.createGeoFenceMarkers()
         }
 
@@ -245,14 +244,13 @@ class Map extends React.Component {
 
     /** Create the lbeacon and invisibleCircle markers */
     createGeoFenceMarkers = () => {     
-
         this.geoFenceLayer.clearLayers()
 
         let { stateReducer } = this.context
         let [{areaId}] = stateReducer
 
         let {
-            geoFenceConfig,
+            geofenceConfig,
             mapConfig
         } = this.props
         

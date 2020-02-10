@@ -1140,7 +1140,7 @@ const setGeofenceConfig = (monitorConfigPackage) => {
 	} = monitorConfigPackage
 
 	let text = `
-		UPDATE ${type}
+		UPDATE geo_fence_config
 		SET 
 			name = $2,
 			area_id = $3,
