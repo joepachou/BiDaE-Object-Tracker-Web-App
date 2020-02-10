@@ -391,16 +391,7 @@ const getGatewayTable =
 		api_version
 	FROM 
 		gateway_table 
-	ORDER BY last_report_timestamp DESC`;
-
-const getGeofenceData = 
-	`
-	SELECT * 
-	FROM geo_fence_alert 
-	ORDER BY receive_time DESC 
-	LIMIT 50
-	`;
-	
+	ORDER BY last_report_timestamp DESC`;	
 
 function objectImport (idPackage) {
 
@@ -1610,7 +1601,6 @@ module.exports = {
 	getImportTable,
     getLbeaconTable,
 	getGatewayTable,
-	getGeofenceData,
 	getMonitorConfig,
 	setGeofenceConfig,
 	editPatient,

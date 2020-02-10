@@ -8,7 +8,6 @@ const getPatientTable = `${protocol}://${dataSrcIP}/data/getPatientTable`;
 const getLbeaconTable = `${protocol}://${dataSrcIP}/data/getLbeaconTable`;
 const getGatewayTable = `${protocol}://${dataSrcIP}/data/getGatewayTable`;
 const searchResult = `${protocol}://${dataSrcIP}/data/searchResult`;
-const geofenceData = `${protocol}://${dataSrcIP}/data/geofenceData`;
 const editObject = `${protocol}://${dataSrcIP}/data/editObject`;
 const editImport = `${protocol}://${dataSrcIP}/data/editImport`;
 const editPatient = `${protocol}://${dataSrcIP}/data/editPatient`;
@@ -80,7 +79,6 @@ module.exports = {
     getMonitorConfig,
     getTransferredLocation,
     searchResult,
-    geofenceData,
     editObject,
     deletePatient,
     editPatient,

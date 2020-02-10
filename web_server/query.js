@@ -286,22 +286,6 @@ const getGatewayTable = (request, response) => {
         })
 }
 
-const getGeofenceData = (request, response) => {
-    let { locale } = request.body
-    pool.query(queryType.getGeofenceData)
-        .then(res =>  {
-            console.log("Get Geofence Data")
-            res.rows.map(item => {
-                item.receive_time= moment.tz(item.receive_time, process.env.TZ).locale(locale).format('lll');
-                item.alert_time = moment.tz(item.alert_time, process.env.TZ).locale(locale).format('lll');
-            })
-            response.status(200).json(res);
-        })
-        .catch(err => {
-            console.log("Get Geofence Data fails: " + err)
-        })
-}
-
 const editObject = (request, response) => {
     const formOption = request.body.formOption
     pool.query(queryType.editObject(formOption))
@@ -977,6 +961,7 @@ const addGeofenceConfig = (request, response) => {
     
     pool.query(queryType.addGeofenceConfig(monitorConfigPackage))
         .then(res => {
+            console.log(area_id)
             console.log(`add geofence config success`)
             exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 5432 -c cmd_reload_geo_fence_setting -r geofence_list -f area_one -a ${area_id}`.split(' '), function(err, data){
                 if(err){
@@ -1201,7 +1186,6 @@ module.exports = {
     getImportData,
     getLbeaconTable,
     getGatewayTable,
-    getGeofenceData,
     getUserList,
     getUserRole,
     getRoleNameList,
