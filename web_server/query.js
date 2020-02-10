@@ -1122,7 +1122,7 @@ const backendSearch = (request, response) => {
                     console.log('delete same name')
                     console.log(err)
                 }else{
-                    pool.query(`DELETE FROM search_result_queue WHERE id NOT IN (SELECT id FROM search_result_queue ORDER BY time desc LIMIT 4)`, (err, res) => {
+                    pool.query(`DELETE FROM search_result_queue WHERE id NOT IN (SELECT id FROM search_result_queue ORDER BY query_time desc LIMIT 4)`, (err, res) => {
                         if(err){
                             console.log('delete exceed')
                             console.log(err)
