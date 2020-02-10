@@ -111,11 +111,11 @@ class ChangeStatusForm extends React.Component {
                 onHide={this.handleClose} 
                 size="md" 
                 id='changeStatusForm' 
+                className='text-capitalize'
                 enforceFocus={false}
             >
                 <Modal.Header 
                     closeButton 
-                    className='font-weight-bold text-capitalize'
                 >
                     {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
                     {process.env.IS_TRACKING_PATH_ON == 1 && 

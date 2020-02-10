@@ -73,7 +73,6 @@ class ConfirmForm extends React.Component {
             >
                     <Modal.Header 
                         closeButton 
-                        className='font-weight-bold'
                     >
                         {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
                     </Modal.Header >

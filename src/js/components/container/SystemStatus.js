@@ -1,8 +1,5 @@
-/** React Library */
 import React from 'react';
-
-/** Import Components */
-import { Row, Col, Container,  Nav, Button, ButtonToolbar } from 'react-bootstrap';
+import { Container,  Nav, Button, ButtonToolbar } from 'react-bootstrap';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import EditLbeaconForm from './EditLbeaconForm'
@@ -22,12 +19,11 @@ import {
 import { AppContext } from '../../context/AppContext';
 import {Tabs, Tab,TabList, TabPanel } from 'react-tabs';
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
-
 const SelectTable = selecTableHOC(ReactTable);
-
 
 class SystemStatus extends React.Component{
     static contextType = AppContext
+
     state = {
         lbeaconData: [],
         lbeaconColumn: [],
@@ -37,11 +33,11 @@ class SystemStatus extends React.Component{
         trackingColunm: [],
         selection: [],
         selectedRowData: {},
-        isShowModal: false,
+        showEdit: false,
+        showDeleteConfirmation: false,
         toggleAllFlag:0,
         tabIndex:0,
         locale: this.context.locale.lang,
-        showDeleteConfirmation: false,
         selectedData: null,
         deleteObjectType: null
     }
@@ -149,40 +145,30 @@ class SystemStatus extends React.Component{
             console.log("get tracking data fail : " + err);
         })
     }
-    handleCloseDeleteConfirmForm = () => {
-        this.setState({
-            show: false,
-            showDeleteConfirmation: false,
-            selectedData: null,
-        })
-    }
 
     handleSubmitDeleteConfirmForm  = (pack) => {
-        if(this.state.deleteObjectType == 'lbeacon'){
+        if (this.state.deleteObjectType == 'lbeacon'){
             this.deleteRecord()
-        }else if(this.state.deleteObjectType == 'gateway'){
+        } else if (this.state.deleteObjectType == 'gateway'){
             this.deleteRecordGateway()
         }
     }
+
     handleSubmitForm = () => {
         setTimeout(this.getLbeaconData(), 500) 
         setTimeout(this.getGatewayData(), 500) 
         this.setState({
-            isShowModal: false
+            showEdit: false
         })
     }
 
-    handleCloseForm = () => {
+    handleClose = () => {
         this.setState({
-            isShowModal: false
+            showEdit: false,
+            showDeleteConfirmation: false,
+            selectedData: null,
         })
     }
-    
-
-
-
-
-            //  selectTable
 
     toggleSelection = (key, shift, row) => {
         let selection = [...this.state.selection];
@@ -217,26 +203,12 @@ class SystemStatus extends React.Component{
                this.state.gatewayData.map (item => {
                     selection.push(item.id);
                 })
-
             }
-        // console.log('toggleAllFlag:    '  + this.state.tabIndex )
-        //     const wrappedInstance = this.selectTable.getWrappedInstance();
-        //     const currentRecords = wrappedInstance.getResolvedState().sortedData;
-        //      console.log(currentRecords)
-        //     currentRecords.forEach(item => {
-        //         selection.push(item._original.id);
-        //     });
-
-           
         }
-
         this.setState({ selectAll, selection });
-        
-
     }
 
     isSelected = (key) => {
-
         return this.state.selection.includes(key);
     }
 
@@ -275,9 +247,7 @@ class SystemStatus extends React.Component{
             .catch(err => {
                 console.log(err)
             })
-
             this.handleSubmitForm()
-
     }
 
     deleteRecordGateway = () => {
@@ -285,7 +255,6 @@ class SystemStatus extends React.Component{
         var deleteArray = [];
         var deleteCount = 0;
         this.state.gatewayData.map (item => {
-        
             this.state.selection.map(itemSelect => {
                 itemSelect === item.id
                 ? 
@@ -319,31 +288,11 @@ class SystemStatus extends React.Component{
             })
 
             this.handleSubmitForm()
-
     }
 
-
     render(){
-
-        const style = {
-            reactTable: {
-                width:'100%',
-                fontSize: '1em',
-            },
-            container: {
-                width: '100%',
-                paddingRight: 15,
-                paddingLeft: 15,
-                margin: '0 10rem 0 10rem'
-            }
-        }
-
-        const { locale } = this.context;
-        const { isShowEdit, selectedRowData,selectedRowData_Patient,isPatientShowEdit } = this.state
-    
-
+        const { locale } = this.context;    
         const { selectAll, selectType } = this.state;
-
         const {
             toggleSelection,
             toggleAll,
@@ -358,10 +307,9 @@ class SystemStatus extends React.Component{
             selectType
         };
 
-
         return(
             <Container className='py-2 text-capitalize' fluid>
-             <br/>
+                <br/>
                 <Nav
                     activeKey="/home"
                     onSelect={selectedKey => alert(`selected ${selectedKey}`)}
@@ -372,77 +320,67 @@ class SystemStatus extends React.Component{
                     onSelect={tabIndex => this.setState({ tabIndex })} 
                     className='mb-1'
                 >
-
-
-                <TabList>
-                <Tab>{'LBeacon'}</Tab>
-                <Tab>{'Gateway'}</Tab>
-                <Tab>{locale.texts.TRACKING}</Tab>
-                </TabList>
-
-                <TabPanel>
-                <ButtonToolbar>
-                    <Button 
-                        variant="outline-primary" 
-                        className='mb-1 text-capitalize mr-2'
-                        onClick={() => {
-                            this.setState({
-                                deleteObjectType: 'lbeacon',
-                                showDeleteConfirmation: true
-                            })
-                        }}
-                    >
-                         {locale.texts.DELECT_LBEACON}
-                    </Button>
-                </ButtonToolbar>
-
-                <SelectTable
-                        keyField='id'
-                        data={this.state.lbeaconData}
-                        columns={this.state.lbeaconColumn}
-                        ref={r => (this.selectTable = r)}
-                        className="-highlight"
-                         style={{height:'75vh'}}
-                        {...extraProps}
-                        getTrProps={(state, rowInfo, column, instance) => {
-                           
-                            return {
-                                onClick: (e, handleOriginal) => {
-                                    
+                    <TabList>
+                        <Tab>{'LBeacon'}</Tab>
+                        <Tab>{'Gateway'}</Tab>
+                        <Tab>{locale.texts.TRACKING}</Tab>
+                    </TabList>
+                    <TabPanel>
+                        <ButtonToolbar>
+                            <Button 
+                                variant="outline-primary" 
+                                className='mb-1 text-capitalize mr-2'
+                                onClick={() => {
+                                    this.setState({
+                                        deleteObjectType: 'lbeacon',
+                                        showDeleteConfirmation: true
+                                    })
+                                }}
+                            >
+                                {locale.texts.DELECT_LBEACON}
+                            </Button>
+                        </ButtonToolbar>
+                        <SelectTable
+                            keyField='id'
+                            data={this.state.lbeaconData}
+                            columns={this.state.lbeaconColumn}
+                            ref={r => (this.selectTable = r)}
+                            className="-highlight"
+                            style={{height:'75vh'}}
+                            {...extraProps}
+                            getTrProps={(state, rowInfo, column, instance) => {
+                                return {
+                                    onClick: (e, handleOriginal) => {
                                         this.setState({
                                             selectedRowData: rowInfo.original,
-                                            isShowModal: true,
+                                            showEdit: true,
                                         })
                                         let id = (rowInfo.index+1).toString()
                                         this.toggleSelection(id)
                                         if (handleOriginal) {
                                             handleOriginal()
                                         }
-                                     }
-                            }
-                        }
-                        }
-                    />
-                </TabPanel> 
-
-
-                <TabPanel>
-                <ButtonToolbar>
-                <Button 
-                        variant="outline-primary" 
-                        className='mb-1 text-capitalize mr-2'
-                        onClick={() => {
-                            this.setState({
-                                deleteObjectType: 'gateway',
-                                showDeleteConfirmation: true
-                            })
-                        }}
-                    >
-                           {locale.texts.DELECT_GATEWAY}
-                    </Button>
-                </ButtonToolbar>
-
-                <SelectTable
+                                    }
+                                }
+                            }}
+                        />
+                    </TabPanel> 
+                    <TabPanel>
+                        <ButtonToolbar>
+                            <Button 
+                                variant="outline-primary" 
+                                className='mb-1 text-capitalize mr-2'
+                                onClick={() => {
+                                    this.setState({
+                                        deleteObjectType: 'gateway',
+                                        showDeleteConfirmation: true
+                                    })
+                                }}
+                            >
+                                {locale.texts.DELECT_GATEWAY}
+                            </Button>
+                        </ButtonToolbar>
+                        <SelectTable
                             keyField='id'
                             data={this.state.gatewayData} 
                             columns={this.state.gatewayColunm}
@@ -451,27 +389,21 @@ class SystemStatus extends React.Component{
                             style={{height:'75vh'}}
                             {...extraProps}
                             getTrProps={(state, rowInfo, column, instance) => {
-                            
                                 return {
                                     onClick: (e, handleOriginal) => {
-                                        
-                                            this.setState({
-                                                selectedRowData: rowInfo.original,
-                                            })
-                                            // let id = (rowInfo.index+1).toString()
-                                            // this.toggleSelection(id)
-                                            if (handleOriginal) {
-                                                handleOriginal()
-                                            }
+                                        this.setState({
+                                            selectedRowData: rowInfo.original,
+                                        })
+                                        if (handleOriginal) {
+                                            handleOriginal()
                                         }
+                                    }
                                 }
-                            }
-                            }
-                        />
-                </TabPanel> 
-
-                <TabPanel>
-                    <ReactTable 
+                            }}
+                    />
+                    </TabPanel> 
+                    <TabPanel>
+                        <ReactTable 
                             minRows={6} 
                             defaultPageSize={15} 
                             data={this.state.trackingData} 
@@ -480,18 +412,18 @@ class SystemStatus extends React.Component{
                             resizable={true}
                             freezeWhenExpanded={false}
                         />
-                </TabPanel>
+                    </TabPanel>
                 </Tabs>
                 <EditLbeaconForm 
-                    show= {this.state.isShowModal} 
+                    show= {this.state.showEdit} 
                     title={'edit lbeacon'}
                     selectedObjectData={this.state.selectedRowData} 
-                    handleSubmitForm={this.handleSubmitForm}
-                    handleCloseForm={this.handleCloseForm}
+                    handleSubmit={this.handleSubmitForm}
+                    handleClose={this.handleClose}
                 />
                 <DeleteConfirmationForm
                     show={this.state.showDeleteConfirmation} 
-                    handleClose={this.handleCloseDeleteConfirmForm}
+                    handleClose={this.handleClose}
                     handleSubmit={this.handleSubmitDeleteConfirmForm}
                 />
             </Container>
