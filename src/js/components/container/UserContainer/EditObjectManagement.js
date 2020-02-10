@@ -14,6 +14,7 @@ import { editObjectRecordTableColumn } from '../../../tables';
 import DeleteForm from '../DeleteForm'
 import { deleteEditObjectRecord } from '../../../dataSrc'
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
+import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm'
 const SelectTable = selecTableHOC(ReactTable);
 
 
@@ -26,6 +27,7 @@ class EditObjectManagement extends React.Component{
         locale: this.context.abbr,
         selectAll: false,
         selection: [],
+        showDeleteConfirmation: false,
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -166,7 +168,7 @@ class EditObjectManagement extends React.Component{
             selection 
         });
 
-    };
+    }
 
     isSelected = (key) => {
         /*
@@ -175,7 +177,7 @@ class EditObjectManagement extends React.Component{
             for selection (either an array, object keys, or even a Javascript Set object).
         */
         return this.state.selection.includes(key);
-    };
+    }
 
     deleteRecord = () => {
         // console.log(this.state.selection)
@@ -192,11 +194,22 @@ class EditObjectManagement extends React.Component{
             this.setState({
                 selection: [],
                 selectAll: false,
+                showDeleteConfirmation: false
             })
         })
         .catch(err => {
             console.log(err)
         })
+    }
+
+    handleCloseDeleteConfirmForm = () => {
+        this.setState({
+            showDeleteConfirmation: false,
+        })
+    }
+
+    handleSubmitDeleteConfirmForm = (pack) => {
+        this.deleteRecord()
     }
 
     render(){
@@ -250,7 +263,11 @@ class EditObjectManagement extends React.Component{
                     <Button 
                         variant="outline-primary" 
                         className='mb-1 text-capitalize'
-                        onClick={this.deleteRecord}    
+                        onClick={() => {
+                            this.setState({
+                                showDeleteConfirmation: true
+                            })
+                        }}    
                     >
                         {locale.texts.DELETE}
                     </Button>
@@ -297,6 +314,11 @@ class EditObjectManagement extends React.Component{
                     />
                     ) : null
                 }
+                <DeleteConfirmationForm
+                    show={this.state.showDeleteConfirmation} 
+                    handleClose={this.handleCloseDeleteConfirmForm}
+                    handleSubmit={this.handleSubmitDeleteConfirmForm}
+                />
                 {/* <DeleteForm
                     roleName={this.state.roleName}
                     show={this.state.showForm}

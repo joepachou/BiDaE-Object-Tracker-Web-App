@@ -56,7 +56,7 @@ class NavbarContainer extends React.Component {
             navbar: {
                 boxShadow: "0 1px 6px 0 rgba(32,33,36,0.28)",
                 fontWeight: '450',
-                marginBottom: 10
+                marginBottom: 10,
             },
             navbarBrand: {
                 color: 'black'
@@ -73,7 +73,7 @@ class NavbarContainer extends React.Component {
                 }),
                 
                 control: () => ({
-                    width: 230,
+                    width: 200,
                 }),
                 
                 singleValue: (provided, state) => ({
@@ -112,12 +112,12 @@ class NavbarContainer extends React.Component {
         }
 
         return (
-            <Navbar 
-                id='navbar' 
+            <Navbar  
                 bg="white" 
                 className="navbar sticky-top navbar-light text-capitalize" 
-                expand='lg' 
-                style={style.navbar}
+                expand="lg"
+                fixed="top" 
+                collapseOnSelect
             >
                 <Navbar.Brand className='px-0 mx-0'>  
                     <Nav.Item className="nav-link nav-brand d-flex align-items-center px-0 " style={style.navbarBrand}>
@@ -148,10 +148,10 @@ class NavbarContainer extends React.Component {
                                 DropdownIndicator:() => null
                             }}
                         />
-                    </Nav.Item>
+                    </Nav.Item> 
                 </Navbar.Brand>
                 
-                <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                <Navbar.Toggle aria-controls="responisve-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">  
                     <Nav className="mr-auto text-capitalize my-auto" >
                         <Nav.Item><Link to="/" className="nav-link nav-route" >{locale.texts.HOME}</Link></Nav.Item>

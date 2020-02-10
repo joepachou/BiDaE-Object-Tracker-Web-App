@@ -21,6 +21,8 @@ import {
 } from '../../tables';
 import { AppContext } from '../../context/AppContext';
 import {Tabs, Tab,TabList, TabPanel } from 'react-tabs';
+import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
+
 const SelectTable = selecTableHOC(ReactTable);
 
 
@@ -39,6 +41,9 @@ class SystemStatus extends React.Component{
         toggleAllFlag:0,
         tabIndex:0,
         locale: this.context.locale.lang,
+        showDeleteConfirmation: false,
+        selectedData: null,
+        deleteObjectType: null
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -144,7 +149,21 @@ class SystemStatus extends React.Component{
             console.log("get tracking data fail : " + err);
         })
     }
+    handleCloseDeleteConfirmForm = () => {
+        this.setState({
+            show: false,
+            showDeleteConfirmation: false,
+            selectedData: null,
+        })
+    }
 
+    handleSubmitDeleteConfirmForm  = (pack) => {
+        if(this.state.deleteObjectType == 'lbeacon'){
+            this.deleteRecord()
+        }else if(this.state.deleteObjectType == 'gateway'){
+            this.deleteRecordGateway()
+        }
+    }
     handleSubmitForm = () => {
         setTimeout(this.getLbeaconData(), 500) 
         setTimeout(this.getGatewayData(), 500) 
@@ -165,141 +184,143 @@ class SystemStatus extends React.Component{
 
             //  selectTable
 
-            toggleSelection = (key, shift, row) => {
-                let selection = [...this.state.selection];
-                key = key.split('-')[1] ? key.split('-')[1] : key
-                const keyIndex = selection.indexOf(key);
-            
-                if (keyIndex >= 0) {
-                    selection = [
-                    ...selection.slice(0, keyIndex),
-                    ...selection.slice(keyIndex + 1)
-                    ];
-                } else {
-                    selection.push(key);
-                }
-                this.setState({ 
-                    selection 
-                });
-            };
+    toggleSelection = (key, shift, row) => {
+        let selection = [...this.state.selection];
+        key = key.split('-')[1] ? key.split('-')[1] : key
+        const keyIndex = selection.indexOf(key);
 
-            toggleAll = () => {
-                const selectAll = this.state.selectAll ? false : true;
-                const selection = [];
-                if (selectAll) {
+        if (keyIndex >= 0) {
+            selection = [
+            ...selection.slice(0, keyIndex),
+            ...selection.slice(keyIndex + 1)
+            ];
+        } else {
+            selection.push(key);
+        }
+        this.setState({ 
+            selection 
+        });
+    }
 
-                    if(this.state.tabIndex == '0')
-                    {
-                    this.state.lbeaconData.map (item => {
-                        selection.push(item.id);
-                    })
+    toggleAll = () => {
+        const selectAll = this.state.selectAll ? false : true;
+        const selection = [];
+        if (selectAll) {
 
-                    }else if (this.state.tabIndex == '1') {
-                       this.state.gatewayData.map (item => {
-                            selection.push(item.id);
-                        })
-    
-                    }
-                // console.log('toggleAllFlag:    '  + this.state.tabIndex )
-                //     const wrappedInstance = this.selectTable.getWrappedInstance();
-                //     const currentRecords = wrappedInstance.getResolvedState().sortedData;
-                //      console.log(currentRecords)
-                //     currentRecords.forEach(item => {
-                //         selection.push(item._original.id);
-                //     });
+            if(this.state.tabIndex == '0')
+            {
+            this.state.lbeaconData.map (item => {
+                selection.push(item.id);
+            })
 
-                   
-                }
-
-                this.setState({ selectAll, selection });
-                
-
-            };
-
-            isSelected = (key) => {
-
-                return this.state.selection.includes(key);
-            };
-
-            deleteRecord = () => {
-                let idPackage = []
-                var deleteArray = [];
-                var deleteCount = 0;
-                this.state.lbeaconData.map (item => {
-                
-                    this.state.selection.map(itemSelect => {
-                        itemSelect === item.id
-                        ? 
-                        deleteArray.push(deleteCount.toString())
-                        : 
-                        null          
-                    })
-                        deleteCount +=1
+            }else if (this.state.tabIndex == '1') {
+               this.state.gatewayData.map (item => {
+                    selection.push(item.id);
                 })
-            
-                deleteArray.map( item => {
-                    this.state.lbeaconData[item] === undefined ?
-                        null
-                        :
-                        idPackage.push(parseInt(this.state.lbeaconData[item].id))
-                    })
-                    axios.post(deleteLBeacon, {
-                        idPackage
-                    })
-                    .then(res => {
-                        this.setState({
-                            selection: [],
-                            selectAll: false,
-                        })
-                    })
-                    .catch(err => {
-                        console.log(err)
-                    })
-
-                    this.handleSubmitForm()
 
             }
-
-            deleteRecordGateway = () => {
-                let idPackage = []
-                var deleteArray = [];
-                var deleteCount = 0;
-                this.state.gatewayData.map (item => {
-                
-                    this.state.selection.map(itemSelect => {
-                        itemSelect === item.id
-                        ? 
-                        deleteArray.push(deleteCount.toString())
-                        : 
-                        null          
-                    })
-                        deleteCount +=1
-                })
-            
-                deleteArray.map( item => {
-                    this.state.gatewayData[item] === undefined ?
-                        null
-                        :
-                        idPackage.push(parseInt(this.state.gatewayData[item].id))
-                    })
+        // console.log('toggleAllFlag:    '  + this.state.tabIndex )
+        //     const wrappedInstance = this.selectTable.getWrappedInstance();
+        //     const currentRecords = wrappedInstance.getResolvedState().sortedData;
+        //      console.log(currentRecords)
+        //     currentRecords.forEach(item => {
+        //         selection.push(item._original.id);
+        //     });
 
            
-                    axios.post(deleteGateway, {
-                        idPackage
-                    })
-                    .then(res => {
-                        this.setState({
-                            selection: [],
-                            selectAll: false,
-                        })
-                    })
-                    .catch(err => {
-                        console.log(err)
-                    })
+        }
 
-                    this.handleSubmitForm()
+        this.setState({ selectAll, selection });
+        
 
-            }
+    }
+
+    isSelected = (key) => {
+
+        return this.state.selection.includes(key);
+    }
+
+    deleteRecord = () => {
+        let idPackage = []
+        var deleteArray = [];
+        var deleteCount = 0;
+        this.state.lbeaconData.map (item => {
+        
+            this.state.selection.map(itemSelect => {
+                itemSelect === item.id
+                ? 
+                deleteArray.push(deleteCount.toString())
+                : 
+                null          
+            })
+                deleteCount +=1
+        })
+
+        deleteArray.map( item => {
+            this.state.lbeaconData[item] === undefined ?
+                null
+                :
+                idPackage.push(parseInt(this.state.lbeaconData[item].id))
+            })
+            axios.post(deleteLBeacon, {
+                idPackage
+            })
+            .then(res => {
+                this.setState({
+                    selection: [],
+                    selectAll: false,
+                    showDeleteConfirmation: false
+                })
+            })
+            .catch(err => {
+                console.log(err)
+            })
+
+            this.handleSubmitForm()
+
+    }
+
+    deleteRecordGateway = () => {
+        let idPackage = []
+        var deleteArray = [];
+        var deleteCount = 0;
+        this.state.gatewayData.map (item => {
+        
+            this.state.selection.map(itemSelect => {
+                itemSelect === item.id
+                ? 
+                deleteArray.push(deleteCount.toString())
+                : 
+                null          
+            })
+                deleteCount +=1
+        })
+
+        deleteArray.map( item => {
+            this.state.gatewayData[item] === undefined ?
+                null
+                :
+                idPackage.push(parseInt(this.state.gatewayData[item].id))
+            })
+
+
+            axios.post(deleteGateway, {
+                idPackage
+            })
+            .then(res => {
+                this.setState({
+                    selection: [],
+                    selectAll: false,
+                    showDeleteConfirmation: false
+                })
+            })
+            .catch(err => {
+                console.log(err)
+            })
+
+            this.handleSubmitForm()
+
+    }
 
 
     render(){
@@ -361,10 +382,15 @@ class SystemStatus extends React.Component{
 
                 <TabPanel>
                 <ButtonToolbar>
-                <Button 
+                    <Button 
                         variant="outline-primary" 
                         className='mb-1 text-capitalize mr-2'
-                        onClick={this.deleteRecord}
+                        onClick={() => {
+                            this.setState({
+                                deleteObjectType: 'lbeacon',
+                                showDeleteConfirmation: true
+                            })
+                        }}
                     >
                          {locale.texts.DELECT_LBEACON}
                     </Button>
@@ -405,7 +431,12 @@ class SystemStatus extends React.Component{
                 <Button 
                         variant="outline-primary" 
                         className='mb-1 text-capitalize mr-2'
-                        onClick={this.deleteRecordGateway}
+                        onClick={() => {
+                            this.setState({
+                                deleteObjectType: 'gateway',
+                                showDeleteConfirmation: true
+                            })
+                        }}
                     >
                            {locale.texts.DELECT_GATEWAY}
                     </Button>
@@ -457,6 +488,11 @@ class SystemStatus extends React.Component{
                     selectedObjectData={this.state.selectedRowData} 
                     handleSubmitForm={this.handleSubmitForm}
                     handleCloseForm={this.handleCloseForm}
+                />
+                <DeleteConfirmationForm
+                    show={this.state.showDeleteConfirmation} 
+                    handleClose={this.handleCloseDeleteConfirmForm}
+                    handleSubmit={this.handleSubmitDeleteConfirmForm}
                 />
             </Container>
         )
