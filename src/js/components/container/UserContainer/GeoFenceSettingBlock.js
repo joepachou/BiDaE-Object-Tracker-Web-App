@@ -166,7 +166,7 @@ class GeoFenceSettingBlock extends React.Component{
             selectedData
         } = this.state
         configPackage["type"] = config.monitorSettingUrlMap[this.props.type]
-        configPackage["id"] = selectedData.id
+        configPackage["id"] = selectedData ? selectedData.id : null
         axios.post(dataSrc[path], {
             monitorConfigPackage: configPackage
         })
