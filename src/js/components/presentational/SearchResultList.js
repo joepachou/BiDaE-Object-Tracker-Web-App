@@ -284,13 +284,14 @@ class SearchResult extends React.Component {
                                         >
                                             <SearchResultListGroup 
                                                 data={searchResult}
-                                                handleSelectResultItem={searchResult[0].object_type == 0 
-                                                    ? this.handleSelectResultItem
-                                                    : null
+                                                handleSelectResultItem={
+                                                    searchResult[0].object_type == 0 
+                                                        ? this.handleSelectResultItem
+                                                        : null
                                                 }
                                                 selection={this.state.selection}
                                                 action={
-                                                    searchResult[0].object_type == 0 && !this.state.showNotFoundResult
+                                                    searchResult[0].object_type == 0 
                                                         ? true
                                                         : false
                                                 }

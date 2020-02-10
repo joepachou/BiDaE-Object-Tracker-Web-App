@@ -20,7 +20,7 @@ const SearchResultListGroup = ({
             color: '#007bff'
         },
         item: {
-            width: 35,
+            minWidth: 35,
         },
         listGroup: {
             color: 'rgb(33, 37, 41)',
@@ -40,7 +40,7 @@ const SearchResultListGroup = ({
                         action={action}
                         active
                         style={style.listGroup}
-                        className='d-flex justify-content-start text-left py-1' 
+                        className='d-flex justify-content-start py-1 align-items-center' 
 
                     >   
                         <div 
