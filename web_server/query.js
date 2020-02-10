@@ -741,9 +741,9 @@ const deleteShiftChangeRecord = (request, response) => {
                 fs.unlink(res.rows[0].file_path, (err) => {
                     if(err){
                         console.log('err when deleting files', err)
-                    }else{
-                        response.status(200).json(res)
                     }
+                    response.status(200).json(res)
+                    
                 })
                 
     })
