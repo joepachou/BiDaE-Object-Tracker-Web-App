@@ -73,7 +73,7 @@ const styleConfig = {
             }
         },
 
-        showPagination: false
+        // showPagination: false
 
     },
     checkbox: {
