@@ -539,7 +539,7 @@ const addUserSearchHistory = (request, response) => {
 }
 
 const editLbeacon = (request, response) => {
-    const { formOption } = request.body    
+    const { formOption } = request.body
     pool.query(queryType.editLbeacon(formOption))
         .then(res => {
             console.log('Edit lbeacon success')
@@ -548,7 +548,6 @@ const editLbeacon = (request, response) => {
         .catch(err => {
             console.log('Edit lbeacon fails ' + err)
         })
-
 }
 
 const generatePDF = (request, response) => {

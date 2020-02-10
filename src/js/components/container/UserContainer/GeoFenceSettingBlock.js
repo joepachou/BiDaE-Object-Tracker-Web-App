@@ -160,8 +160,6 @@ class GeoFenceSettingBlock extends React.Component{
     }
 
     handleSubmit = (pack) => {
-        console.log('pack', pack)
-        console.log('state', this.state)
         let configPackage = pack ? pack : {}
         let { 
             path,
