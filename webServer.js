@@ -65,6 +65,7 @@ app.use(function(req, res, next) {
 // })
 
 
+
 app.get('/image/pinImage/:pinImage', (req, res) => {
     res.sendFile(path.join(__dirname, 'src','img','colorPin',req.params['pinImage']));
 })
@@ -72,6 +73,12 @@ app.get('/image/pinImage/:pinImage', (req, res) => {
 app.get(/^\/page\/(.*)/, (req, res) => {
     res.sendFile(path.join(__dirname, 'dist','index.html'));
 })
+
+app.post('/data/DeleteUserArea', db.DeleteUserArea);
+
+app.post('/data/addUserArea', db.addUserArea);
+
+app.post('/data/getUserArea', db.getUserArea);
 
 app.post('/data/getObjectTable', db.getObjectTable);
 

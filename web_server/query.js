@@ -444,7 +444,8 @@ const signin = (request, response) => {
                         search_history,
                         areas_id,
                         shift,
-                        id
+                        id,
+                        main_area
                     } = res.rows[0]
 
                     let userInfo = {
@@ -454,7 +455,8 @@ const signin = (request, response) => {
                         searchHistory: search_history,
                         shift,
                         id,
-                        areas_id
+                        areas_id,
+                        main_area
                     }
 
                     request.session.userInfo = userInfo
@@ -816,16 +818,6 @@ const deleteImportData = (request, response) => {
         })
 }
 
-const getAreaTable = (request, response) => {
-    pool.query(queryType.getAreaTable())
-        .then(res => {
-            console.log("get area table")
-            response.status(200).json(res)
-        })
-        .catch(err => {
-            console.log("get area table fail: "+ err)
-        })
-}
 
 const getMonitorConfig = (request, response) => {
     let {
@@ -1191,6 +1183,51 @@ const addBulkObject = (req, res) => {
     })
 }
 
+const getUserArea = (request, response) =>{
+    let { user_id } = request.body
+    pool.query(queryType.getUserArea(user_id))
+        .then(res => {
+            console.log(`get UserArea success `)
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(`get UserArea fail: ${err}`)
+        })
+}
+
+const getAreaTable = (request, response) => {
+    pool.query(queryType.getAreaTable())
+        .then(res => {
+            console.log("get area table")
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log("get area table fail: "+ err)
+        })
+}
+
+const addUserArea = (request, response) => {
+    const formOption = request.body
+    pool.query(queryType.addUserArea(formOption.user_id,formOption.area_id))
+        .then(res => {
+            console.log("add UserArea success");
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log("add UserArea fails: " + err)
+        })
+}
+const DeleteUserArea = (request, response) => {
+    const formOption = request.body
+    pool.query(queryType.DeleteUserArea(formOption.user_id,formOption.area_id))
+        .then(res => {
+            console.log("Delete UserArea success");
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log("Delete UserArea fails: " + err)
+        })
+}
 
 module.exports = {
     getTrackingData,
@@ -1247,5 +1284,8 @@ module.exports = {
     getTrackingTableByMacAddress,
     addGeofenceConfig,
     deleteMonitorConfig,
-    addMonitorConfig
+    addMonitorConfig,
+    getUserArea,
+    addUserArea,
+    DeleteUserArea
 }

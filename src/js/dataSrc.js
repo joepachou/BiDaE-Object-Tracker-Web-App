@@ -59,10 +59,12 @@ const getImportPatient = `${protocol}://${dataSrcIP}/data/getImportPatient`
 const addBulkObject = `${protocol}://${dataSrcIP}/data/addBulkObject`
 const pinImage = `${protocol}://${dataSrcIP}/image/pinImage`
 const getTransferredLocation = `${protocol}://${dataSrcIP}/data/getTransferredLocation`
+const getUserArea= `${protocol}://${dataSrcIP}/data/getUserArea`
+const addUserArea= `${protocol}://${dataSrcIP}/data/addUserArea`
+const DeleteUserArea= `${protocol}://${dataSrcIP}/data/DeleteUserArea`
 const pdfUrl = function(path){
     return `${protocol}://${dataSrcIP}/${path}`
 }
-
 module.exports = {
     domain,
     getTrackingData,
@@ -122,5 +124,8 @@ module.exports = {
     pinImage,
     addGeofenceConfig,
     deleteMonitorConfig,
-    addMonitorConfig
+    addMonitorConfig,
+    getUserArea,
+    addUserArea,
+    DeleteUserArea
 };
