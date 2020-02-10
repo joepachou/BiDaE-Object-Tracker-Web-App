@@ -236,7 +236,7 @@ class SearchResult extends React.Component {
                 padding: 0,
             },
             searchResultListForMobile: {
-                maxHeight: this.props.showMobileMap ? '40vh' : '70vh',
+                maxHeight: this.props.showMobileMap ? '35vh' : '65vh',
                 dispaly: this.props.searchKey ? null : 'none',
             },
             searchResultListForTablet: {
