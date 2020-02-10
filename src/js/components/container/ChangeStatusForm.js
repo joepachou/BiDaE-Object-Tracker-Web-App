@@ -135,7 +135,7 @@ class ChangeStatusForm extends React.Component {
                                     label: selectedObjectData[0].transferred_location.toUpperCase().split(',').map(item => locale.texts[item]).join('/')
                                 }
                                 : '', 
-                            notes: selectedObjectData.length != 0 ? selectedObjectData[0].notes : ''
+                            notes: selectedObjectData.length != 0 ? selectedObjectData[0].notes ? selectedObjectData[0].notes : "" : "",
                         }}
 
                         validationSchema = {
@@ -174,6 +174,7 @@ class ChangeStatusForm extends React.Component {
                                                         : null
                                                     }
                                                     <Col>
+                                                    {console.log(values)}
                                                         <Row noGutters>
                                                             <Col>
                                                                 <FormikFormGroup 
