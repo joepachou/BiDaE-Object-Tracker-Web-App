@@ -174,7 +174,6 @@ class ChangeStatusForm extends React.Component {
                                                         : null
                                                     }
                                                     <Col>
-                                                    {console.log(values)}
                                                         <Row noGutters>
                                                             <Col>
                                                                 <FormikFormGroup 

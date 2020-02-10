@@ -10,7 +10,7 @@ import { Modal, Button, Row, Col } from 'react-bootstrap';
 import Select from 'react-select';
 import config from '../../config';
 import axios from 'axios';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
+import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
 import CheckboxGroup from './CheckboxGroup'
 import Checkbox from '../presentational/Checkbox'
@@ -249,7 +249,6 @@ class EditObjectForm extends React.Component {
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm }) => (
                             <Form className="text-capitalize">
                                 <Row noGutters>
-                                {console.log(touched)}
                                     <Col>
                                         <FormikFormGroup 
                                             type="text"
@@ -360,7 +359,6 @@ class EditObjectForm extends React.Component {
                                         </RadioButtonGroup>  
                                     )}
                                 /> 
-                                {console.log(values)}
                                 <FormikFormGroup 
                                     name="select"
                                     label={locale.texts.AREA}

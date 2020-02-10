@@ -96,7 +96,7 @@ class ConfirmForm extends React.Component {
                                             return (
                                                 <div key={index} >
                                                     {index > 0 ? <hr/> : null}
-                                                    <Row>
+                                                    <Row noGutters>
                                                         <Col>
                                                             <FormikFormGroup 
                                                                 type="text"
