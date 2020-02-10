@@ -21,15 +21,6 @@ class BindForm extends React.Component {
         objectType:'',
         alertText:'',
     };
-    
-
-    componentDidUpdate = (prevProps) => {
-        if (!(_.isEqual(prevProps, this.props))) {
-            this.setState({
-                show: this.props.show,
-            })
-        }
-    }
   
     handleClose = () => {
         this.setState({
@@ -39,7 +30,7 @@ class BindForm extends React.Component {
             objectType:'',
             selectData: {},
         })
-        this.props.handleCloseForm()
+        this.props.handleClose()
     }
 
     render() {
@@ -72,12 +63,20 @@ class BindForm extends React.Component {
 
         let {
             data,
-            objectTable
+            objectTable,
+            show
         } = this.props
 
         return (
-            <Modal show={this.props.show} onHide={this.handleClose} size='md'>
-                <Modal.Header closeButton className='font-weight-bold text-capitalize'>
+            <Modal 
+                show={show} 
+                onHide={this.handleClose} 
+                size='md'
+                className='text-capitalize'
+            >
+                <Modal.Header 
+                    closeButton 
+                >
                     {locale.texts.ASSOCIATION}
                 </Modal.Header >
                 <Modal.Body
