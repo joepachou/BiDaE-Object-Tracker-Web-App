@@ -112,12 +112,14 @@ class NavbarContainer extends React.Component {
         }
 
         return (
-            <Navbar  
+            <Navbar
+                id="navbar"  
                 bg="white" 
                 className="navbar sticky-top navbar-light text-capitalize" 
                 expand="lg"
                 fixed="top" 
                 collapseOnSelect
+                style={style.navbar}
             >
                 <Navbar.Brand className='px-0 mx-0'>  
                     <Nav.Item className="nav-link nav-brand d-flex align-items-center px-0 " style={style.navbarBrand}>
