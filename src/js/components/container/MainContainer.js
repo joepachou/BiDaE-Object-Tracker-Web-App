@@ -2,10 +2,8 @@ import React from 'react';
 import SearchContainer from './SearchContainer';
 import 'react-table/react-table.css';
 import SearchResultList from '../presentational/SearchResultList'
-import SearchResultListForTablet from '../presentational/SearchResultListForTablet'
 import { Row, Col, Toast } from 'react-bootstrap'
 import SurveillanceContainer from './SurveillanceContainer';
-import SurveillanceContainerTablet from './SurveillanceContainerTablet';
 import config from '../../config';
 import InfoPrompt from '../presentational/InfoPrompt';
 import _ from 'lodash'
@@ -14,8 +12,6 @@ import dataSrc from '../../dataSrc'
 import { AppContext } from '../../context/AppContext'
 import { toast } from 'react-toastify';
 import ToastNotification from '../presentational/ToastNotification'
-import SearchResult from '../presentational/SearchResultList';
-import SearchContainerForTablet from './SearchContainerForTablet';
 import {
     BrowserView,
     MobileOnlyView,
@@ -25,11 +21,8 @@ import {
     Button,
     ButtonGroup
 } from 'react-bootstrap'
-import ScrollArea from 'react-scrollbar'
 import { 
     disableBodyScroll, 
-    enableBodyScroll, 
-    clearAllBodyScrollLocks 
 } from 'body-scroll-lock';
 
 const {
@@ -488,7 +481,6 @@ class MainContainer extends React.Component{
         })
         .map(item => {
             item.searched = true;
-            // item.searchedType = markerClickPackage[item.mac_address].searchedType
             objectList.push(item);            
         })
         return objectList 
@@ -704,9 +696,6 @@ class MainContainer extends React.Component{
                                         rssi={this.state.rssi}
                                     />
                                 </div>
-
-                                {/** includeing search result */}
-                                {/* <ScrollArea style={style.searchResultList} smoothScrolling={true}>                  */}
                                 <div id="searchResult" className="d-flex" style={{justifyContent: 'center'}}>
                                     <SearchResultList
                                         searchResult={this.state.searchResult} 
@@ -716,10 +705,7 @@ class MainContainer extends React.Component{
                                         showMobileMap={this.state.showMobileMap}
                                     />
                                 </div>
-                                {/* </ScrollArea>    */}
                             </div>
-
-                        {/** right area of row */}
                             <div id='searchPanel' className="h-100" style={style.searchPanelForTablet}>
                                 <SearchContainer
                                     hasSearchKey={this.state.hasSearchKey}
@@ -777,17 +763,15 @@ class MainContainer extends React.Component{
                                     }
                                     <Button variant='outline-primary' onClick={this.clearResultHandler}>{locale.texts.CLEAR_RESULT}</Button>
                                 </ButtonGroup>
-                                {/* <ScrollArea style={style.searchResultListFormobile} smoothScrolling={true}> */}
-                                    <div className='d-flex justify-content-center'>
-                                        <SearchResultList
-                                            searchResult={this.state.searchResult} 
-                                            searchKey={this.state.searchKey}
-                                            highlightSearchPanel={this.highlightSearchPanel}
-                                            handleShowPath={this.handleShowPath}
-                                            showMobileMap={this.state.showMobileMap}
-                                        />
-                                    </div>
-                                {/* </ScrollArea> */}                            
+                                <div className='d-flex justify-content-center'>
+                                    <SearchResultList
+                                        searchResult={this.state.searchResult} 
+                                        searchKey={this.state.searchKey}
+                                        highlightSearchPanel={this.highlightSearchPanel}
+                                        handleShowPath={this.handleShowPath}
+                                        showMobileMap={this.state.showMobileMap}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
