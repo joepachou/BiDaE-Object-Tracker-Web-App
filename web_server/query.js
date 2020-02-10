@@ -7,7 +7,7 @@ const pg = require('pg');
 const pdf = require('html-pdf');
 const csv =require('csvtojson')
 var exec = require('child_process').execFile;
-
+const fs = require('fs')
 const config = {
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
@@ -737,7 +737,15 @@ const deleteShiftChangeRecord = (request, response) => {
     pool.query(queryType.deleteShiftChangeRecord(idPackage))
     .then(res => {
                 console.log('delete shift change record success')
-                response.status(200).json(res)
+                console.log(res.rows)
+                fs.unlink(res.rows[0].file_path, (err) => {
+                    if(err){
+                        console.log('err when deleting files', err)
+                    }
+                    response.status(200).json(res)
+                    
+                })
+                
     })
     .catch(err => {
         console.log(err)

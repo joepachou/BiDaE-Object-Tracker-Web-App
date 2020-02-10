@@ -28,7 +28,8 @@ class DeviceManager extends React.Component{
         data: [],
         columns: [],
         showForm: false,
-        locale: this.context.locale.abbr
+        locale: this.context.locale.abbr,
+        showDeleteConfirmation: false,
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -334,6 +335,16 @@ class EditObjectManagement extends React.Component{
         })
     }
 
+    handleCloseDeleteConfirmForm = () => {
+        this.setState({
+            showDeleteConfirmation: false,
+        })
+    }
+
+    handleSubmitDeleteConfirmForm = (pack) => {
+        this.deleteRecord()
+    }
+
     render(){
         // User {record.edit_user_id}, Edit at {moment(record.edit_time).format('LLLL')}
         // console.log('renderrrrrrr')
@@ -386,7 +397,11 @@ class EditObjectManagement extends React.Component{
                     <Button 
                         variant="outline-primary" 
                         className='mb-1 text-capitalize'
-                        onClick={this.deleteRecord}    
+                        onClick={() => {
+                            console.log('click')
+                            this.setState({
+                                showDeleteConfirmation: true
+                            }}    
                     >
                         {locale.texts.DELETE}
                     </Button>
@@ -429,6 +444,11 @@ class EditObjectManagement extends React.Component{
                     />
                     ) : null
                 }
+                <DeleteConfirmationForm
+                    show={this.state.showDeleteConfirmation} 
+                    handleClose={this.handleCloseDeleteConfirmForm}
+                    handleSubmit={this.handleSubmitDeleteConfirmForm}
+                />
                 {/* <DeleteForm
                     roleName={this.state.roleName}
                     show={this.state.showForm}
