@@ -20,6 +20,7 @@ class BindForm extends React.Component {
         objectName:'',
         objectType:'',
         alertText:'',
+        bindData:'',
     };
     
 
@@ -36,6 +37,7 @@ class BindForm extends React.Component {
             mac:'',
             showDetail : false,
             objectName:'',
+            bindData:'',
             objectType:'',
             selectData: {},
         })
@@ -69,12 +71,10 @@ class BindForm extends React.Component {
                 color: '#dc3545'
             },
         }
-
         let {
             data,
             objectTable
         } = this.props
-
         return (
             <Modal show={this.props.show} onHide={this.handleClose} size='md'>
                 <Modal.Header closeButton className='font-weight-bold text-capitalize'>
@@ -92,30 +92,29 @@ class BindForm extends React.Component {
                         validationSchema = {
                             Yup.object().shape({
                                 acn: Yup.string()
-                                    .required(locale.texts.ASSET_CONTROL_NUMBER_IS_REQUIRED)
-                                    .test({
-                                        name: 'acn', 
-                                        message: locale.texts.ASSET_CONTROL_NUMBER_IS_NOT_FOUND,
-                                        test: function (value) {
-                                            console.log(value)
-                                            if (Object.keys(data).includes(value)) {
-                                                // console.log(this)
-                                                // this.setState({
-                                                //     objectName: data[value].name,
-                                                //     // objectType: data[value].type,
-                                                //     showDetail: true,
-                                                //     // acn: value,
-                                                //     // selectData: data[value]
-                                                // }) 
+                                .required(locale.texts.ASSET_CONTROL_NUMBER_IS_REQUIRED)
+                                    // .test({
+                                    //     name: 'acn', 
+                                    //     message: locale.texts.ASSET_CONTROL_NUMBER_IS_NOT_FOUND,
+                                     
+                                    // }),
+                                .test(
+                                    'acn', 
+                                    locale.texts.ASSET_CONTROL_NUMBER_IS_NOT_FOUND,
+                                    value => {
+                                    let findFlag = false
+                                    this.props.ImportData.map(item =>{
+                                      if( item.asset_control_number == value ){
+                                        this.setState({bindData:item})
+                                        findFlag = true
+                                      } 
+                                     })
+                                     this.setState({showDetail:true})
+                                     return findFlag
+                                    }
+                                ),
 
-                                                return true
-                                            } 
-                                            return this.createError({
-                                                message: '123',
-                                                path: 'acn',
-                                            })
-                                        }
-                                    }),
+
                                 mac: Yup.string()
                                 .required(locale.texts.MAC_ADDRESS_IS_REQUIRED)
 
@@ -175,11 +174,11 @@ class BindForm extends React.Component {
                                     <div>
                                         <div className="form-group">
                                             <small id="TextIDsmall" className="form-text text-muted">{locale.texts.NAME}</small>
-                                            <input type="readOnly" className="form-control" id="TextID" placeholder="名稱" disabled = {true}  value={this.state.objectName} ></input>  
+                                            <input type="readOnly" className="form-control" id="TextID" placeholder="名稱" disabled = {true}  value={this.state.bindData.name} ></input>  
                                         </div>                                      
                                         <div className="form-group">
                                             <small id="TextTypesmall" className="form-text text-muted">{locale.texts.TYPE}</small>
-                                            <input type="readOnly" className="form-control" id="TextType" placeholder="類型" disabled = {true}  value={this.state.objectType}></input>  
+                                            <input type="readOnly" className="form-control" id="TextType" placeholder="類型" disabled = {true}  value={this.state.bindData.type}></input>  
                                         </div>  
                                         <div className="form-group">
                                             <small id="TextIDsmall" className="form-text text-muted">{locale.texts.AUTH_AREA}</small>
