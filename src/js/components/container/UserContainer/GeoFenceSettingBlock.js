@@ -11,7 +11,7 @@ import dataSrc from "../../../dataSrc"
 import config from "../../../config"
 import ReactTable from 'react-table'
 import { geofenceConfigColumn } from '../../../tables'
-import EditGeofenceConfig from '../EditGeofenceConfig'
+import EditGeofenceConfig from '../../presentational/EditGeofenceConfig'
 import retrieveDataHelper from '../../../helper/retrieveDataHelper'
 import styleConfig from '../../../styleConfig';
 import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm'
@@ -77,18 +77,23 @@ class GeoFenceSettingBlock extends React.Component{
                 Cell: props => (
                     <div className="d-flex justify-content-start">
                         {['edit', 'delete'].map((item, index, original) => {
-                            return  ( 
-                                <div key={item}>
-                                    <a 
+                            return   ( 
+                                <div 
+                                    key={item} 
+                                    className="d-flex justify-content-start"
+                                >
+                                    <Button
+                                        variant="link" 
                                         name={item}
+                                        size="sm"
                                         style={styleConfig.link}
                                         onClick={(e) => {
                                             this.handleClickButton(e, props)
                                     }} >
                                         {locale.texts[item.toUpperCase()]}
-                                    </a>
+                                    </Button>
                                     {index < original.length - 1
-                                        ? <div className="ant-divider ant-divider-vertical" />
+                                        ? <div className="mx-1">|</div>
                                         : ""
                                     }
                                 </div>
@@ -209,9 +214,6 @@ class GeoFenceSettingBlock extends React.Component{
 
         return (
             <div>
-                <div style={style.type} className="mb-4">
-                    {locale.texts[type.toUpperCase().replace(/ /g, '_')]}
-                </div>
                 <ButtonToolbar>
                     <Button 
                         variant="outline-primary" 
