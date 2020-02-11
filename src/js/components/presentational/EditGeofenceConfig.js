@@ -194,10 +194,6 @@ const EditGeofenceConfig = ({
                                         value={values.start_time}
                                         getValue={value => {
                                             setFieldValue("start_time", value.value)
-                                            if (parseInt(values.end_time.split(':')[0]) <= parseInt(value.value.split(':')[0])) {
-                                                let resetTime = [parseInt(value.value.split(':')[0]) + 1, values.end_time.split(':')[1]].join(':')
-                                                setFieldValue("end_time", resetTime)
-                                            }
                                         }}
                                         name="start_time"
                                         start="0"
@@ -210,7 +206,7 @@ const EditGeofenceConfig = ({
                                         value={values.end_time}
                                         getValue={value => setFieldValue("end_time", value.value)}
                                         name="end_time"
-                                        start={parseInt(values.start_time.split(':')[0]) + 1}
+                                        start="0"
                                         end="24"
                                     />
                                 </Col>
