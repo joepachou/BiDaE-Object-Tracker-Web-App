@@ -22,7 +22,6 @@ class DissociationForm extends React.Component {
     static contextType = AppContext
 
     state = {
-        show: this.props.show,
         inputValue:'',
         showDetail : '',
         objectName:'',
@@ -34,14 +33,6 @@ class DissociationForm extends React.Component {
         returnFlag:false,
         valueForDataArray:'',
     };
-
-    componentDidUpdate = (prevProps) => {
-        if (!(_.isEqual(prevProps, this.props))) {
-            this.setState({
-                show: this.props.show,
-            })
-        }
-    }
   
     handleClose = () => {
         this.setState({
@@ -51,7 +42,7 @@ class DissociationForm extends React.Component {
             objectType:'',
             mac_address:''
         })
-        this.props.handleCloseForm()
+        this.props.handleClose()
     }
 
     handleSubmit = (postOption) => {
@@ -70,8 +61,6 @@ class DissociationForm extends React.Component {
     handleMacAddress(event){
         this.setState({mac_address : event.target.value })
     }
-
-
 
     updateInput = (event) => {
      this.setState({inputValue : event.target.value })
@@ -110,22 +99,27 @@ class DissociationForm extends React.Component {
     render() {
         const { locale } = this.context
 
-
         const { 
             title, 
             data,
-            selectedObjectData
+            selectedObjectData,
+            show
         } = this.props;
         return (
-            <Modal show={this.state.show} onHide={this.handleClose} size='md'>
-                <Modal.Header closeButton className='font-weight-bold text-capitalize'>
+            <Modal 
+                show={show} 
+                onHide={this.handleClose} 
+                size='md'
+                className='text-capitalize'
+            >
+                <Modal.Header 
+                    closeButton 
+                >
                     {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
                 </Modal.Header >
                 <Modal.Body
                     className='mb-2'
                 >
-             
-                
                     <Formik                    
                         initialValues = {{
                            mac:''

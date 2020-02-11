@@ -482,11 +482,11 @@ const geofenceConfigColumn = [
     },
     {
         Header: "perimeters group",
-        accessor: "perimeters.lbeacons"
+        accessor: "parsePerimeters.lbeacons"
     },
     {
         Header: "fences group",
-        accessor: "fences.lbeacons"
+        accessor: "parseFences.lbeacons"
     },
     {
         Header: "is global fence",

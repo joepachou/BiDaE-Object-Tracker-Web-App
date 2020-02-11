@@ -286,22 +286,6 @@ const getGatewayTable = (request, response) => {
         })
 }
 
-const getGeofenceData = (request, response) => {
-    let { locale } = request.body
-    pool.query(queryType.getGeofenceData)
-        .then(res =>  {
-            console.log("Get Geofence Data")
-            res.rows.map(item => {
-                item.receive_time= moment.tz(item.receive_time, process.env.TZ).locale(locale).format('lll');
-                item.alert_time = moment.tz(item.alert_time, process.env.TZ).locale(locale).format('lll');
-            })
-            response.status(200).json(res);
-        })
-        .catch(err => {
-            console.log("Get Geofence Data fails: " + err)
-        })
-}
-
 const editObject = (request, response) => {
     const formOption = request.body.formOption
     pool.query(queryType.editObject(formOption))
@@ -927,8 +911,8 @@ const getGeofenceConfig = (request, response) => {
             res.rows.map(item => {
                 item.start_time = item.start_time.split(':').filter((item,index) => index < 2).join(':')
                 item.end_time = item.end_time.split(':').filter((item,index) => index < 2).join(':')
-                item.perimeters = parseGeoFenceConfig(item.perimeters)
-                item.fences = parseGeoFenceConfig(item.fences)
+                item.parsePerimeters = parseGeoFenceConfig(item.perimeters)
+                item.parseFences = parseGeoFenceConfig(item.fences)
             })
             console.log("get geofence config success")
             response.status(200).json(res)
@@ -942,22 +926,29 @@ const setGeofenceConfig = (request, response) => {
     let {
         monitorConfigPackage,
     } = request.body
+    let { 
+        area_id 
+    } = monitorConfigPackage
 
-    let area_id = monitorConfigPackage.area.id
     pool.query(queryType.setGeofenceConfig(monitorConfigPackage))
         .then(res => {
             console.log(`set geofence config success`)
-            exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 5432 -c cmd_reload_geo_fence_setting -r geofence_list -f area_one -a ${area_id}`.split(' '), function(err, data){
-                if(err){
-                    console.log('err', err)
-                }else{
-                    console.log('data', data)
-                    response.status(200).json(res)
-                }
-            })
+            if (process.env.RELOAD_GEO_CONFIG_PATH) {
+                exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 5432 -c cmd_reload_geo_fence_setting -r geofence_list -f area_one -a ${area_id}`.split(' '), function(err, data){
+                    if(err){
+                        console.log('err', err)
+                    }else{
+                        console.log('data', data)
+                        response.status(200).json(res)
+                    }
+                })
+            } 
+            console.log('IPC has not set')
+            response.status(200).json(res)
+          
         })
         .catch(err => {
-            console.log(`set geofence config fail: ${err}`)
+            console.log(`set geofence config fail ${err}`)
         })
 }
 
@@ -970,14 +961,18 @@ const addGeofenceConfig = (request, response) => {
     pool.query(queryType.addGeofenceConfig(monitorConfigPackage))
         .then(res => {
             console.log(`add geofence config success`)
-            exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 5432 -c cmd_reload_geo_fence_setting -r geofence_list -f area_one -a ${area_id}`.split(' '), function(err, data){
-                if(err){
-                    console.log('err', err)
-                }else{
-                    console.log('data', data)
-                    response.status(200).json(res)
-                }
-            })
+            if (process.env.RELOAD_GEO_CONFIG_PATH) {
+                exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 5432 -c cmd_reload_geo_fence_setting -r geofence_list -f area_one -a ${area_id}`.split(' '), function(err, data){
+                    if(err){
+                        console.log('err', err)
+                    }else{
+                        console.log('data', data)
+                        response.status(200).json(res)
+                    }
+                })
+            }
+            console.log('IPC has not set')
+            response.status(200).json(res)
         })
         .catch(err => {
             console.log(`add geofence config fail: ${err}`)
@@ -1018,9 +1013,6 @@ const deleteMonitorConfig = (request, response) => {
 
 /** Parse the lbeacon's location coordinate from lbeacon_uuid*/
 const parseLbeaconCoordinate = (lbeacon_uuid) => {
-    /** Example of lbeacon_uuid: 00000018-0000-0000-7310-000000004610 */
-    // console.log(lbeacon_uuid)
-    // const zz = lbeacon_uuid.slice(6,8);
     const area_id = parseInt(lbeacon_uuid.slice(0,4))
     const xx = parseInt(lbeacon_uuid.slice(14,18) + lbeacon_uuid.slice(19,23));
     const yy = parseInt(lbeacon_uuid.slice(-8));
@@ -1042,10 +1034,17 @@ const parseGeoFenceConfig = (field = []) => {
     let lbeacons = fieldParse
         .filter((item, index) => index > 0  && index <= number)
     let rssi = fieldParse[number + 1]
+    let coordinates = lbeacons.map(item => {
+        const area_id = parseInt(item.slice(0,4))
+        const xx = parseInt(item.slice(12,20));
+        const yy = parseInt(item.slice(-8));
+        return [yy, xx]
+    })
     return {
         number,
         lbeacons,
-        rssi
+        rssi,
+        coordinates
     }
 }
 
@@ -1114,7 +1113,7 @@ const backendSearch = (request, response) => {
                     console.log('delete same name')
                     console.log(err)
                 }else{
-                    pool.query(`DELETE FROM search_result_queue WHERE id NOT IN (SELECT id FROM search_result_queue ORDER BY time desc LIMIT 4)`, (err, res) => {
+                    pool.query(`DELETE FROM search_result_queue WHERE id NOT IN (SELECT id FROM search_result_queue ORDER BY query_time desc LIMIT 4)`, (err, res) => {
                         if(err){
                             console.log('delete exceed')
                             console.log(err)
@@ -1238,7 +1237,6 @@ module.exports = {
     getImportData,
     getLbeaconTable,
     getGatewayTable,
-    getGeofenceData,
     getUserList,
     getUserRole,
     getRoleNameList,

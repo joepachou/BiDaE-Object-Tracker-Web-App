@@ -236,7 +236,7 @@ class SearchResult extends React.Component {
                 padding: 0,
             },
             searchResultListForMobile: {
-                maxHeight: this.props.showMobileMap ? '40vh' : '70vh',
+                maxHeight: this.props.showMobileMap ? '35vh' : '65vh',
                 dispaly: this.props.searchKey ? null : 'none',
             },
             searchResultListForTablet: {
@@ -261,7 +261,7 @@ class SearchResult extends React.Component {
                 <BrowserView>
                     <div>
                         <Row className='d-flex justify-content-center' style={style.titleText}>
-                            <div className='text-capitalize title'>
+                            <div className='title'>
                                 {title}
                             </div>
                         </Row>
@@ -284,13 +284,14 @@ class SearchResult extends React.Component {
                                         >
                                             <SearchResultListGroup 
                                                 data={searchResult}
-                                                handleSelectResultItem={searchResult[0].object_type == 0 
-                                                    ? this.handleSelectResultItem
-                                                    : null
+                                                handleSelectResultItem={
+                                                    searchResult[0].object_type == 0 
+                                                        ? this.handleSelectResultItem
+                                                        : null
                                                 }
                                                 selection={this.state.selection}
                                                 action={
-                                                    searchResult[0].object_type == 0 && !this.state.showNotFoundResult
+                                                    searchResult[0].object_type == 0 
                                                         ? true
                                                         : false
                                                 }
@@ -303,7 +304,6 @@ class SearchResult extends React.Component {
                         <Row className='d-flex justify-content-center mt-3'>
                             <Button
                                 variant="link"
-                                className="text-capitalize"
                                 onClick={this.handleToggleNotFound}
                                 size="lg"
                                 disabled={false}
@@ -314,37 +314,12 @@ class SearchResult extends React.Component {
                                 }
                             </Button>
                         </Row>
-                        <ChangeStatusForm
-                            handleShowPath={this.props.handleShowPath} 
-                            show={this.state.showEditObjectForm} 
-                            title={'report device status'} 
-                            selectedObjectData={this.state.selectedObjectData} 
-                            searchKey={searchKey}
-                            handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose}
-                            handleChangeObjectStatusFormSubmit={this.handleChangeObjectStatusFormSubmit}
-                            handleAdditionalButton={this.handleAdditionalButton}
-                            showAddDevice={this.state.showAddDevice}
-                            handleRemoveButton={this.handleRemoveButton}
-                        />
-                        <ConfirmForm 
-                            show={this.state.showConfirmForm}  
-                            title={'thank you for reporting'}
-                            selectedObjectData={this.state.editedObjectPackage} 
-                            handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose} 
-                            handleConfirmFormSubmit={this.handleConfirmFormSubmit}
-                            showDownloadPdfRequest={this.state.showDownloadPdfRequest}
-                        />
-                        <DownloadPdfRequestForm
-                            show={this.state.showDownloadPdfRequest} 
-                            pdfPath={this.state.pdfPath}
-                            handleClose={this.handleFormClose}
-                        />
                     </div>
                 </BrowserView>
                 <TabletView>
                     <div>
                         <Row className='d-flex justify-content-center' style={style.titleText}>
-                            <h4 className='text-capitalize'>
+                            <h4>
                                 {title}
                             </h4>
                         </Row>
@@ -388,7 +363,6 @@ class SearchResult extends React.Component {
                         <Row className='d-flex justify-content-center mt-3'>
                             <Button
                                 variant="link"
-                                className="text-capitalize"
                                 onClick={this.handleToggleNotFound}
                                 size="lg"
                                 disabled={false}
@@ -400,31 +374,6 @@ class SearchResult extends React.Component {
 
                             </Button>
                         </Row>
-                        <ChangeStatusForm
-                            handleShowPath={this.props.handleShowPath} 
-                            show={this.state.showEditObjectForm} 
-                            title={'report device status'} 
-                            selectedObjectData={this.state.selectedObjectData} 
-                            searchKey={searchKey}
-                            handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose}
-                            handleChangeObjectStatusFormSubmit={this.handleChangeObjectStatusFormSubmit}
-                            handleAdditionalButton={this.handleAdditionalButton}
-                            showAddDevice={this.state.showAddDevice}
-                            handleRemoveButton={this.handleRemoveButton}
-                        />
-                        <ConfirmForm 
-                            show={this.state.showConfirmForm}  
-                            title={'thank you for reporting'}
-                            selectedObjectData={this.state.editedObjectPackage} 
-                            handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose} 
-                            handleConfirmFormSubmit={this.handleConfirmFormSubmit}
-                            showDownloadPdfRequest={this.state.showDownloadPdfRequest}
-                        />
-                        <DownloadPdfRequestForm
-                            show={this.state.showDownloadPdfRequest} 
-                            pdfPath={this.state.pdfPath}
-                            close={this.handleFormClose}
-                        />
                     </div>
                 </TabletView>
                 <MobileOnlyView>
@@ -475,7 +424,6 @@ class SearchResult extends React.Component {
                         <Row className='d-flex justify-content-center mt-3'>
                             <Button
                                 variant="link"
-                                className="text-capitalize"
                                 onClick={this.handleToggleNotFound}
                                 size="lg"
                                 disabled={false}
@@ -487,33 +435,33 @@ class SearchResult extends React.Component {
 
                             </Button>
                         </Row>
-                        <ChangeStatusForm
-                            handleShowPath={this.props.handleShowPath} 
-                            show={this.state.showEditObjectForm} 
-                            title={'report device status'} 
-                            selectedObjectData={this.state.selectedObjectData} 
-                            searchKey={searchKey}
-                            handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose}
-                            handleChangeObjectStatusFormSubmit={this.handleChangeObjectStatusFormSubmit}
-                            handleAdditionalButton={this.handleAdditionalButton}
-                            showAddDevice={this.state.showAddDevice}
-                            handleRemoveButton={this.handleRemoveButton}
-                        />
-                        <ConfirmForm 
-                            show={this.state.showConfirmForm}  
-                            title={'thank you for reporting'}
-                            selectedObjectData={this.state.editedObjectPackage} 
-                            handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose} 
-                            handleConfirmFormSubmit={this.handleConfirmFormSubmit}
-                            showDownloadPdfRequest={this.state.showDownloadPdfRequest}
-                        />
-                        <DownloadPdfRequestForm
-                            show={this.state.showDownloadPdfRequest} 
-                            pdfPath={this.state.pdfPath}
-                            close={this.handleFormClose}
-                        />
                     </div>
                 </MobileOnlyView>
+                <ChangeStatusForm
+                    handleShowPath={this.props.handleShowPath} 
+                    show={this.state.showEditObjectForm} 
+                    title={'report device status'} 
+                    selectedObjectData={this.state.selectedObjectData} 
+                    searchKey={searchKey}
+                    handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose}
+                    handleChangeObjectStatusFormSubmit={this.handleChangeObjectStatusFormSubmit}
+                    handleAdditionalButton={this.handleAdditionalButton}
+                    showAddDevice={this.state.showAddDevice}
+                    handleRemoveButton={this.handleRemoveButton}
+                />
+                <ConfirmForm 
+                    show={this.state.showConfirmForm}  
+                    title={'thank you for reporting'}
+                    selectedObjectData={this.state.editedObjectPackage} 
+                    handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose} 
+                    handleConfirmFormSubmit={this.handleConfirmFormSubmit}
+                    showDownloadPdfRequest={this.state.showDownloadPdfRequest}
+                />
+                <DownloadPdfRequestForm
+                    show={this.state.showDownloadPdfRequest} 
+                    pdfPath={this.state.pdfPath}
+                    handleClose={this.handleFormClose}
+                />
             </div>
         )
     }

@@ -1,6 +1,5 @@
 import Main from "./Main";
 import SystemStatus from "./components/container/SystemStatus";
-import Geofence from "./components/container/Geofence";
 import ObjectManagementContainer from "./components/container/ObjectManagementContainer";
 import UserSettingContainer from "./components/container/UserContainer/UserSettingContainer";
 import BigScreenContainer from "./components/container/BigScreen/BigScreenContainer";
@@ -14,11 +13,6 @@ const routes = [
     {
         path: '/page/systemStatus',
         component: SystemStatus,
-        exact: true,
-    },
-    {
-        path: '/page/geofence',
-        component: Geofence,
         exact: true,
     },
     {

@@ -5,7 +5,6 @@ import {
     Nav, 
     Button,
 }  from "react-bootstrap";
-import GridButton from "../container/GridButton";
 import PdfDownloadForm from "./PdfDownloadForm"
 import config from "../../config";
 import AccessControl from "../presentational/AccessControl"
@@ -30,10 +29,10 @@ class SurveillanceContainer extends React.Component {
         
     }
     componentDidUpdate = (prevProps, prevState) => {
-        
-        if (this.props.geoFenceConfig.length !== 0 && !(_.isEqual(prevProps.geoFenceConfig, this.props.geoFenceConfig))) {
+
+        if (this.props.geofenceConfig.length !== 0 && !(_.isEqual(prevProps.geofenceConfig, this.props.geofenceConfig))) {
             this.setState({
-                isOpenFence: this.props.geoFenceConfig[0].enable
+                isOpenFence: this.props.geofenceConfig[0].enable
             })
         }
         var searchedObjectType = this.state.searchedObjectType
@@ -114,14 +113,14 @@ class SurveillanceContainer extends React.Component {
                 })
                 break;
             case "fence":
-                this.props.setFence(value, areaId)
+                this.props.setFence(value, areaId, this.props.geofenceConfig)
                 .then(res => {
                     this.setState({
                         isOpenFence: !this.state.isOpenFence
                     })
                 })
                 .catch(err => {
-                    console.log(`set fence config fail: ${err}`)
+                    console.log(`set geofence config fail ${err}`)
                 })
                 break;
             case "clearAlerts":
@@ -160,10 +159,6 @@ class SurveillanceContainer extends React.Component {
     }
 
     render(){
-        const { 
-            hasSearchKey,
-        } = this.props;
-
         const style = {
             title: {
                 color: "grey",
@@ -210,6 +205,11 @@ class SurveillanceContainer extends React.Component {
             auth
         } = this.context;
 
+        const { 
+            hasSearchKey,
+            geofenceConfig
+        } = this.props;
+
         let [{areaId}] = stateReducer
 
         return(
@@ -223,7 +223,7 @@ class SurveillanceContainer extends React.Component {
                         colorPanel={this.props.colorPanel}
                         proccessedTrackingData={this.props.proccessedTrackingData}
                         lbeaconPosition={this.props.lbeaconPosition}
-                        geoFenceConfig={this.props.geoFenceConfig.filter(item => parseInt(item.unique_key) == areaId)}
+                        geofenceConfig={this.props.geofenceConfig}
                         getSearchKey={this.props.getSearchKey}
                         areaId={areaId}
                         isOpenFence={this.state.isOpenFence}
@@ -331,15 +331,15 @@ class SurveillanceContainer extends React.Component {
                                 </Nav.Item>
                             </AccessControl>
                         }
-                        {this.props.geoFenceConfig.map((item, index) => {
-                            return ( parseInt(item.unique_key) == areaId && 
+                        {geofenceConfig.map((item, index) => {
+                            return (
                                 <Fragment
                                     key={index}
                                 >
                                     <Nav.Item className="mt-2 bd-highligh ml-auto">
                                         <Button 
                                             variant="warning" 
-                                            className="mr-1 ml-2 text-capitalize" 
+                                            className="mr-1 ml-2" 
                                             onClick={this.handleClickButton} 
                                             name="fence"
                                             value={+!this.state.isOpenFence}
@@ -351,7 +351,7 @@ class SurveillanceContainer extends React.Component {
                                     <Nav.Item className="mt-2">
                                         <Button 
                                             variant="outline-primary" 
-                                            className="mr-1 ml-2 text-capitalize" 
+                                            className="mr-1 ml-2" 
                                             onClick={this.handleClickButton} 
                                             name="clearAlerts"
                                         >
@@ -400,7 +400,7 @@ class SurveillanceContainer extends React.Component {
                                 colorPanel={this.props.colorPanel}
                                 proccessedTrackingData={this.props.proccessedTrackingData}
                                 lbeaconPosition={this.props.lbeaconPosition}
-                                geoFenceConfig={this.props.geoFenceConfig.filter(item => parseInt(item.unique_key) == areaId)}
+                                geofenceConfig={this.props.geofenceConfig}
                                 getSearchKey={this.props.getSearchKey}
                                 areaId={areaId}
                                 isOpenFence={this.state.isOpenFence}
@@ -511,7 +511,7 @@ class SurveillanceContainer extends React.Component {
                                 </Nav.Item>
                             </AccessControl>
                         }
-                        {this.props.geoFenceConfig.map((item, index) => {
+                        {this.props.geofenceConfig.map((item, index) => {
                             return ( parseInt(item.unique_key) == areaId && 
                                 <Fragment
                                     key={index}
@@ -561,7 +561,7 @@ class SurveillanceContainer extends React.Component {
                         colorPanel={this.props.colorPanel}
                         proccessedTrackingData={this.props.proccessedTrackingData}
                         lbeaconPosition={this.props.lbeaconPosition}
-                        geoFenceConfig={this.props.geoFenceConfig.filter(item => parseInt(item.unique_key) == areaId)}
+                        geofenceConfig={this.props.geofenceConfig}
                         getSearchKey={this.props.getSearchKey}
                         areaId={areaId}
                         isOpenFence={this.state.isOpenFence}

@@ -560,9 +560,10 @@ const config = {
 
         /** Set the schema to select the color pin */
         getIconColor: (item, hasColorPanel) => {
+            if (item.panic) return config.mapConfig.iconColor.sos
+
             if (item.object_type == 0) {
-                if (item.panic) return config.mapConfig.iconColor.sos
-                else if (item.searched && hasColorPanel) return item.pinColor
+                if (item.searched && hasColorPanel) return item.pinColor
                 else if (item.searched) return config.mapConfig.iconColor.searched
                 else if (item.status !== config.mapConfig.objectStatus.NORMAL) return config.mapConfig.iconColor.unNormal
                 else return config.mapConfig.iconColor.normal
@@ -602,7 +603,7 @@ const config = {
                 id: 1,
                 name: "NTUH",
                 url: NTUH_MAP,
-                bounds: [[-250,700], [33409,56814]],
+                bounds: [[0, 0], [33660,57514]],
             },
 
             IIS_SINICA_FOURTH_FLOOR: {

@@ -391,16 +391,7 @@ const getGatewayTable =
 		api_version
 	FROM 
 		gateway_table 
-	ORDER BY last_report_timestamp DESC`;
-
-const getGeofenceData = 
-	`
-	SELECT * 
-	FROM geo_fence_alert 
-	ORDER BY receive_time DESC 
-	LIMIT 50
-	`;
-	
+	ORDER BY last_report_timestamp DESC`;	
 
 function objectImport (idPackage) {
 
@@ -1149,7 +1140,7 @@ const setGeofenceConfig = (monitorConfigPackage) => {
 	} = monitorConfigPackage
 
 	let text = `
-		UPDATE ${type}
+		UPDATE geo_fence_config
 		SET 
 			name = $2,
 			area_id = $3,
@@ -1526,7 +1517,7 @@ function backendSearch_writeQueue(keyType, keyWord, mac_addresses, pin_color_ind
 	var text = 
 		`
 			INSERT INTO 
-				search_result_queue(time, key_type, key_word, result_mac_address, pin_color_index) VALUES
+				search_result_queue(query_time, key_type, key_word, result_mac_address, pin_color_index) VALUES
 				(now(), $1, $2, ARRAY['${mac_addresses.join('\',\'')}'], $3);
 		`
 	values =  [keyType, keyWord, pin_color_index]
@@ -1534,6 +1525,7 @@ function backendSearch_writeQueue(keyType, keyWord, mac_addresses, pin_color_ind
 		text,
 		values
 	}
+	console.log(123)
 	
 	return query
 }
@@ -1665,7 +1657,6 @@ module.exports = {
 	getImportTable,
     getLbeaconTable,
 	getGatewayTable,
-	getGeofenceData,
 	getMonitorConfig,
 	setGeofenceConfig,
 	editPatient,
