@@ -951,6 +951,7 @@ const setGeofenceConfig = (request, response) => {
                     }
                 })
             } 
+            console.log('IPC has not set')
             response.status(200).json(res)
           
         })
@@ -967,16 +968,19 @@ const addGeofenceConfig = (request, response) => {
     
     pool.query(queryType.addGeofenceConfig(monitorConfigPackage))
         .then(res => {
-            console.log(area_id)
             console.log(`add geofence config success`)
-            exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 5432 -c cmd_reload_geo_fence_setting -r geofence_list -f area_one -a ${area_id}`.split(' '), function(err, data){
-                if(err){
-                    console.log('err', err)
-                }else{
-                    console.log('data', data)
-                    response.status(200).json(res)
-                }
-            })
+            if (process.env.RELOAD_GEO_CONFIG_PATH) {
+                exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 5432 -c cmd_reload_geo_fence_setting -r geofence_list -f area_one -a ${area_id}`.split(' '), function(err, data){
+                    if(err){
+                        console.log('err', err)
+                    }else{
+                        console.log('data', data)
+                        response.status(200).json(res)
+                    }
+                })
+            }
+            console.log('IPC has not set')
+            response.status(200).json(res)
         })
         .catch(err => {
             console.log(`add geofence config fail: ${err}`)
@@ -1017,9 +1021,6 @@ const deleteMonitorConfig = (request, response) => {
 
 /** Parse the lbeacon's location coordinate from lbeacon_uuid*/
 const parseLbeaconCoordinate = (lbeacon_uuid) => {
-    /** Example of lbeacon_uuid: 00000018-0000-0000-7310-000000004610 */
-    // console.log(lbeacon_uuid)
-    // const zz = lbeacon_uuid.slice(6,8);
     const area_id = parseInt(lbeacon_uuid.slice(0,4))
     const xx = parseInt(lbeacon_uuid.slice(14,18) + lbeacon_uuid.slice(19,23));
     const yy = parseInt(lbeacon_uuid.slice(-8));
@@ -1041,10 +1042,17 @@ const parseGeoFenceConfig = (field = []) => {
     let lbeacons = fieldParse
         .filter((item, index) => index > 0  && index <= number)
     let rssi = fieldParse[number + 1]
+    let coordinates = lbeacons.map(item => {
+        const area_id = parseInt(item.slice(0,4))
+        const xx = parseInt(item.slice(12,20));
+        const yy = parseInt(item.slice(-8));
+        return [yy, xx]
+    })
     return {
         number,
         lbeacons,
-        rssi
+        rssi,
+        coordinates
     }
 }
 
