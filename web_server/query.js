@@ -8,6 +8,7 @@ const pdf = require('html-pdf');
 const csv =require('csvtojson')
 var exec = require('child_process').execFile;
 const fs = require('fs')
+const path = require('path')
 const config = {
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
@@ -231,6 +232,22 @@ const addAssociation = (request, response) => {
         })     
 }
 
+
+const addAssociation_Patient = (request, response) => {
+    let { locale, areaId } = request.body
+    const formOption = request.body.formOption
+    pool.query(queryType.addAssociation_Patient(formOption))       
+        .then(res => {
+            console.log('add Association Patient data')
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log("add Association Patient fails" + err)
+        })     
+}
+
+
+
 const cleanBinding = (request, response) => {
     let { locale, areaId } = request.body
     const formOption = request.body.formOption
@@ -377,8 +394,7 @@ const addPatient = (request, response) => {
 
 const editObjectPackage = (request, response) => {
     const { formOption, username, pdfPackage, reservedTimestamp, locale} = request.body
-
-    pool.query(queryType.addEditObjectRecord(formOption, username))
+    pool.query(queryType.addEditObjectRecord(formOption, username, pdfPackage.path))
         .then(res => {
             const record_id = res.rows[0].id
             console.log('Add edited object record success')
@@ -386,7 +402,7 @@ const editObjectPackage = (request, response) => {
                 .then(res => {
                     console.log('Edit object package success')
                     if (pdfPackage) {
-                        pdf.create(pdfPackage.pdf, pdfPackage.options).toFile(pdfPackage.path, function(err, result) {
+                        pdf.create(pdfPackage.pdf, pdfPackage.options).toFile(path.join(process.env.LOCAL_FILE_PATH, pdfPackage.path), function(err, result) {
                             if (err) return console.log(err);
                         
                             console.log("pdf create success");
@@ -538,7 +554,6 @@ const editLbeacon = (request, response) => {
 
 const generatePDF = (request, response) => {
     let { pdfPackage } = request.body
-
     /** If there are some trouble when download pdf, try npm rebuild phantomjs-prebuilt */
     pdf.create(pdfPackage.pdf, pdfPackage.options).toFile(pdfPackage.path, function(err, result) {
         if (err) return console.log(err);
@@ -554,9 +569,8 @@ const addShiftChangeRecord = (request, response) => {
     /** If there are some trouble when download pdf, try npm rebuild phantomjs-prebuilt */
     pool.query(queryType.addShiftChangeRecord(userInfo, pdfPackage.path))
         .then(res => {
-
              /** If there are some trouble when download pdf, try npm rebuild phantomjs-prebuilt */
-            pdf.create(pdfPackage.pdf, pdfPackage.options).toFile(pdfPackage.path, function(err, result) {
+            pdf.create(pdfPackage.pdf, pdfPackage.options).toFile(path.join(process.env.LOCAL_FILE_PATH, pdfPackage.path), function(err, result) {
                 if (err) return console.log(err);
             
                 console.log("pdf create");
@@ -702,9 +716,15 @@ const deleteEditObjectRecord = (request, response) => {
     pool.query(queryType.deleteEditObjectRecord(idPackage))
         .then(res => {
             pool.query(`UPDATE object_table SET note_id = null WHERE note_id IN (${idPackage.map(id => `${id}`)})`)
-                .then(res => {
+                .then(res1 => {
                     console.log('delete edit object record success')
-                    response.status(200).json(res)
+                    fs.unlink(path.join(process.env.LOCAL_FILE_PATH, res.rows[0].path), (err) => {
+                        if(err){
+                            console.log('err when deleting files', err)
+                        }
+                        response.status(200).json('success')
+                        
+                    })
                 })
                 .catch(err => {
                     console.log('delete edit object record fail: ' + err)
@@ -723,8 +743,7 @@ const deleteShiftChangeRecord = (request, response) => {
     pool.query(queryType.deleteShiftChangeRecord(idPackage))
     .then(res => {
                 console.log('delete shift change record success')
-                console.log(res.rows)
-                fs.unlink(res.rows[0].file_path, (err) => {
+                fs.unlink(path.join(process.env.LOCAL_FILE_PATH, res.rows[0].file_path), (err) => {
                     if(err){
                         console.log('err when deleting files', err)
                     }
@@ -1253,6 +1272,7 @@ module.exports = {
     addPatient,
     addBulkObject,
     addAssociation,
+    addAssociation_Patient,
     cleanBinding,
     editObject,
     editImport,

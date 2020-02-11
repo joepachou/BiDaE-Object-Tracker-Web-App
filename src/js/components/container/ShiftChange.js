@@ -11,6 +11,7 @@ import config from '../../config';
 import { AppContext } from '../../context/AppContext'
 import GeneralConfirmForm from '../container/GeneralConfirmForm'
 import retrieveDataHelper from '../../helper/retrieveDataHelper'
+import DownloadPdfRequestForm from './DownloadPdfRequestForm'
 
 const style = {
     modalBody: {
@@ -38,7 +39,8 @@ class ShiftChange extends React.Component {
         showPdfDownloadForm: false,
         APIforTableDone: false,
         showConfirmForm: false,
-        devicesArray: []
+        devicesArray: [],
+        showDownloadPdfRequest: false,
     }
     APIforTable = null
 
@@ -121,9 +123,10 @@ class ShiftChange extends React.Component {
             this.setState({
                 fileUrl: pdfPackage.path,
                 showConfirmForm: false,
+                showDownloadPdfRequest: true
             })
 
-            this.refs.download.click()
+            // this.refs.download.click()
         }).catch(err => {
             console.log(err)
         })
@@ -134,7 +137,11 @@ class ShiftChange extends React.Component {
             showConfirmForm: false
         })
     }
-
+    handlePdfDownloadFormClose = () => {
+        this.setState({
+            showDownloadPdfRequest: false
+        })
+    }
     render() {
 
         const { 
@@ -216,7 +223,6 @@ class ShiftChange extends React.Component {
                         >
                             {locale.texts.CONFIRM}
                         </Button>
-                        <a href={`/${this.state.fileUrl}`} ref="download" download style={{display: 'none'}}>hi</a>
                     </Modal.Footer>
                 </Modal>
                 <GeneralConfirmForm
@@ -226,6 +232,11 @@ class ShiftChange extends React.Component {
                     signin={auth.signin}
                     stateReducer ={stateReducer[0].areaId}
                     auth={auth}
+                />
+                <DownloadPdfRequestForm
+                    show={this.state.showDownloadPdfRequest} 
+                    pdfPath={this.state.fileUrl}
+                    handleClose={this.handlePdfDownloadFormClose}
                 />
             </Fragment>
         )

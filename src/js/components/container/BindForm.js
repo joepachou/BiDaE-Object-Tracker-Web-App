@@ -4,7 +4,8 @@ import axios from 'axios';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { 
-    addAssociation
+    addAssociation,
+    addAssociation_Patient
 } from "../../dataSrc"
 import { AppContext } from '../../context/AppContext';
 import Select from 'react-select';
@@ -20,6 +21,7 @@ class BindForm extends React.Component {
         objectName:'',
         objectType:'',
         alertText:'',
+        bindData:'',
     };
   
     handleClose = () => {
@@ -27,10 +29,11 @@ class BindForm extends React.Component {
             mac:'',
             showDetail : false,
             objectName:'',
+            bindData:'',
             objectType:'',
             selectData: {},
         })
-        this.props.handleClose()
+        this.props.handleCloseForm()
     }
 
     render() {
@@ -60,13 +63,11 @@ class BindForm extends React.Component {
                 color: '#dc3545'
             },
         }
-
         let {
             data,
             objectTable,
             show
         } = this.props
-
         return (
             <Modal 
                 show={show} 
@@ -91,30 +92,33 @@ class BindForm extends React.Component {
                         validationSchema = {
                             Yup.object().shape({
                                 acn: Yup.string()
-                                    .required(locale.texts.ASSET_CONTROL_NUMBER_IS_REQUIRED)
-                                    .test({
-                                        name: 'acn', 
-                                        message: locale.texts.ASSET_CONTROL_NUMBER_IS_NOT_FOUND,
-                                        test: function (value) {
-                                            console.log(value)
-                                            if (Object.keys(data).includes(value)) {
-                                                // console.log(this)
-                                                // this.setState({
-                                                //     objectName: data[value].name,
-                                                //     // objectType: data[value].type,
-                                                //     showDetail: true,
-                                                //     // acn: value,
-                                                //     // selectData: data[value]
-                                                // }) 
+                                .required(locale.texts.ASSET_CONTROL_NUMBER_IS_REQUIRED)
+                                    // .test({
+                                    //     name: 'acn', 
+                                    //     message: locale.texts.ASSET_CONTROL_NUMBER_IS_NOT_FOUND,
+                                     
+                                    // }),
+                                .test(
+                                    'acn', 
+                                    locale.texts.ASSET_CONTROL_NUMBER_IS_NOT_FOUND,
+                                    value => {
+                                    let findFlag = false
+                                    let DeviceOrPatient= ''
+                                    this.props.bindCase == 1 ? DeviceOrPatient =this.props.ImportData :  DeviceOrPatient =this.props.PatientImportData
+                                    //等於１就是儀器 所以只拿object的data
+                                    //等於２就是病人 拿patient的data
+                                    DeviceOrPatient.map(item =>{
+                                      if( item.asset_control_number == value ){
+                                        this.setState({bindData:item})
+                                        findFlag = true
+                                      } 
+                                     })
+                                     findFlag == true ?  this.setState({showDetail:true}) :  this.setState({showDetail:false})
+                                     return findFlag
+                                    }
+                                ),
 
-                                                return true
-                                            } 
-                                            return this.createError({
-                                                message: '123',
-                                                path: 'acn',
-                                            })
-                                        }
-                                    }),
+
                                 mac: Yup.string()
                                 .required(locale.texts.MAC_ADDRESS_IS_REQUIRED)
 
@@ -139,22 +143,37 @@ class BindForm extends React.Component {
                         }
 
                         onSubmit={(values, { setStatus, setSubmitting }) => {
-                            let formOption = this.state.selectData
+                            let formOption = this.state.bindData
                             formOption = {
                                 ...formOption,
                                 mac_address: values.mac,
                                 area_id: config.mapConfig.areaModules[values.area.value].id || 0
                             }
-                            axios.post(addAssociation, {
-                                formOption
-                            }).then(res => {
-                                setTimeout(function() { 
-                                    this.props.handleSubmitForm()
-                                    this.handleClose()
-                                }.bind(this),1000)
-                            }).catch( error => {
-                                console.log(error)
-                            })
+                            if (this.props.bindCase == 1) 
+                            {
+                                axios.post(addAssociation, {
+                                    formOption
+                                }).then(res => {
+                                    setTimeout(function() { 
+                                        this.props.handleSubmitForm()
+                                        this.handleClose()
+                                    }.bind(this),1000)
+                                }).catch( error => {
+                                    console.log(error)
+                                })
+                            }else if (this.props.bindCase == 2){
+                                axios.post(addAssociation_Patient, {
+                                    formOption
+                                }).then(res => {
+                                    setTimeout(function() { 
+                                        this.props.handleSubmitForm()
+                                        this.handleClose()
+                                    }.bind(this),1000)
+                                }).catch( error => {
+                                    console.log(error)
+                                })
+                            }
+                        
                         }}
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm }) => (
@@ -174,11 +193,11 @@ class BindForm extends React.Component {
                                     <div>
                                         <div className="form-group">
                                             <small id="TextIDsmall" className="form-text text-muted">{locale.texts.NAME}</small>
-                                            <input type="readOnly" className="form-control" id="TextID" placeholder="名稱" disabled = {true}  value={this.state.objectName} ></input>  
+                                            <input type="readOnly" className="form-control" id="TextID" placeholder="名稱" disabled = {true}  value={this.state.bindData.name} ></input>  
                                         </div>                                      
                                         <div className="form-group">
                                             <small id="TextTypesmall" className="form-text text-muted">{locale.texts.TYPE}</small>
-                                            <input type="readOnly" className="form-control" id="TextType" placeholder="類型" disabled = {true}  value={this.state.objectType}></input>  
+                                            <input type="readOnly" className="form-control" id="TextType" placeholder="類型" disabled = {true}  value={this.state.bindData.type}></input>  
                                         </div>  
                                         <div className="form-group">
                                             <small id="TextIDsmall" className="form-text text-muted">{locale.texts.AUTH_AREA}</small>
