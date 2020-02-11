@@ -22,7 +22,8 @@ class MonitorSettingBlock extends React.Component{
         data: [],
         columns: [],
         path: '',
-        areaOptions: []
+        areaOptions: [],
+        isEdited: false,
     }
 
     componentDidMount = () => {
@@ -34,6 +35,7 @@ class MonitorSettingBlock extends React.Component{
             auth,
             locale
         } = this.context
+
         axios.post(dataSrc.getMonitorConfig, {
             type: config.monitorSettingUrlMap[this.props.type],
             areasId: auth.user.areas_id
@@ -189,6 +191,11 @@ class MonitorSettingBlock extends React.Component{
         let {
             type
         } = this.props
+
+        let {
+            areaOptions,
+            isEdited
+        } = this.state
         
         let title = `edit ${type}`.toUpperCase().replace(/ /g, '_')
         return (
@@ -199,6 +206,7 @@ class MonitorSettingBlock extends React.Component{
                         className='mr-2 mb-1'
                         name="add rule"
                         onClick={this.handleClickButton}
+                        disabled={areaOptions.length == 0}
                     >
                         {locale.texts.ADD_RULE}
                     </Button>
@@ -221,6 +229,7 @@ class MonitorSettingBlock extends React.Component{
                     type={config.monitorSettingUrlMap[this.props.type]} 
                     handleSubmit={this.handleSubmit}
                     areaOptions={this.state.areaOptions}
+                    isEdited={isEdited}
                 />
                 <DeleteConfirmationForm
                     show={this.state.showDeleteConfirmation} 

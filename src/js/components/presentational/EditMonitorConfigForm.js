@@ -62,7 +62,7 @@ const EditMonitorConfigForm =  ({
                     }}
 
                     render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
-                        <Form className="text-capitalize">
+                        <Form>
                             <Row className="d-flex align-items-center">
                                 <Col>
                                     <Switcher
@@ -78,6 +78,7 @@ const EditMonitorConfigForm =  ({
                                 </Col>
                             </Row>
                             <hr/>
+                            {console.log(isEdited)}
                             <FormikFormGroup 
                                 label={locale.texts.AREA}
                                 error={errors.area}
@@ -105,14 +106,10 @@ const EditMonitorConfigForm =  ({
                                         value={values.start_time}
                                         getValue={value => {
                                             setFieldValue("start_time", value.value)
-                                            if (parseInt(values.end_time.split(':')[0]) <= parseInt(value.value.split(':')[0])) {
-                                                let resetTime = [parseInt(value.value.split(':')[0]) + 1, values.end_time.split(':')[1]].join(':')
-                                                setFieldValue("end_time", resetTime)
-                                            }
                                         }}
                                         name="start_time"
                                         start="0"
-                                        end="23"
+                                        end="24"
                                     />
                                 </Col>
                                 <Col>
@@ -121,7 +118,7 @@ const EditMonitorConfigForm =  ({
                                         value={values.end_time}
                                         getValue={value => setFieldValue("end_time", value.value)}
                                         name="end_time"
-                                        start={parseInt(values.start_time.split(':')[0]) + 1}
+                                        start="0"
                                         end="24"
                                     />
                                 </Col>

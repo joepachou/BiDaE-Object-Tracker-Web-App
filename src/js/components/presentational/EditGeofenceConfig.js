@@ -106,7 +106,7 @@ const EditGeofenceConfig = ({
                     }}
 
                     render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
-                        <Form className="text-capitalize">
+                        <Form>
                             <Row className="d-flex align-items-center">
                                 <Col>
                                     <Switcher
@@ -239,7 +239,6 @@ const EditGeofenceConfig = ({
                                 parseLbeaconsGroup={parseLbeaconsGroup}
                                 lbeaconsTable={lbeaconsTable}
                             />
-
                             <Modal.Footer>
                                 <Button 
                                     variant="outline-secondary" 
