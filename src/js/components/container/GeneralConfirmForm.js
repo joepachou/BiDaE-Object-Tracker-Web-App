@@ -22,6 +22,8 @@ class GeneralConfirmForm extends React.Component {
         this.props.handleSignupFormShowUp()
     }
 
+   
+
     render() {
         const { locale } = this.context;
 
@@ -74,6 +76,7 @@ class GeneralConfirmForm extends React.Component {
                     
                         onSubmit={({ username, password, radioGroup }, { setStatus, setSubmitting }) => {
                             this.setState({isShowDialog : false,dialogText:''})
+
                             axios.post(dataSrc.confirmValidation, {
                                 username,
                                 password,

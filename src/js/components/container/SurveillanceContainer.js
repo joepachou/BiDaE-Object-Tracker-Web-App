@@ -13,6 +13,8 @@ import { BrowserView, TabletView, MobileOnlyView, isBrowser, isTablet, isMobileO
 import QRcodeContainer from './QRcode'
 import InfoPrompt from '../presentational/InfoPrompt'
 import PdfDownloadFormForTablet from './PdfDownloadFormForTablet'
+import GeneralConfirmForm from '../container/GeneralConfirmForm'
+
 class SurveillanceContainer extends React.Component {
 
     static contextType = AppContext
@@ -23,7 +25,9 @@ class SurveillanceContainer extends React.Component {
         isOpenFence: false,
         searchedObjectType: [],
         showObjects: [],
+        showConfirmForm: false,
     }
+
 
     componentDidMount = () => {
         
@@ -90,6 +94,24 @@ class SurveillanceContainer extends React.Component {
         }
     }
 
+    handleConfirmFormSubmit = (e) => {
+        
+        let { stateReducer } = this.context
+        let [{areaId}, dispatch] = stateReducer
+        let {  value }  = +!this.state.isOpenFence
+        this.props.setFence(value, areaId, this.props.geofenceConfig)
+        .then(res => {
+            this.setState({
+                isOpenFence: !this.state.isOpenFence
+            })
+        })
+        .catch(err => {
+            console.log(`set geofence config fail ${err}`)
+        })
+        this.handleClosePdfForm()
+    }
+
+    
     handleClickButton = (e) => {
         const { name, value } = e.target
         let { stateReducer } = this.context
@@ -112,16 +134,26 @@ class SurveillanceContainer extends React.Component {
                     showPdfDownloadForm: true,
                 })
                 break;
+                
             case "fence":
-                this.props.setFence(value, areaId, this.props.geofenceConfig)
-                .then(res => {
-                    this.setState({
-                        isOpenFence: !this.state.isOpenFence
-                    })
+                this.setState({
+                    showConfirmForm: true
                 })
-                .catch(err => {
-                    console.log(`set geofence config fail ${err}`)
-                })
+
+                // this.props.setFence(value, areaId, this.props.geofenceConfig)
+                // .then(res => {
+                //     this.setState({
+                //         isOpenFence: !this.state.isOpenFence
+                //     })
+                // })
+                // .catch(err => {
+                //     console.log(`set geofence config fail ${err}`)
+                // })
+
+            
+            
+
+
                 break;
             case "clearAlerts":
                 this.props.clearAlerts()
@@ -154,7 +186,8 @@ class SurveillanceContainer extends React.Component {
 
     handleClosePdfForm = () => {
         this.setState({
-            showPdfDownloadForm: false
+            showPdfDownloadForm: false,
+            showConfirmForm: false
         })
     }
 
@@ -337,6 +370,19 @@ class SurveillanceContainer extends React.Component {
                                     key={index}
                                 >
                                     <Nav.Item className="mt-2 bd-highligh ml-auto">
+                                        
+                                       
+                                        <GeneralConfirmForm
+                                            show={this.state.showConfirmForm}
+                                            handleSubmit={this.handleConfirmFormSubmit}
+                                            handleClose={this.handleClosePdfForm}
+                                            signin={auth.signin}
+                                            stateReducer ={stateReducer[0].areaId}
+                                            auth={auth}
+                                        />        
+
+
+                                        
                                         <Button 
                                             variant="warning" 
                                             className="mr-1 ml-2" 
