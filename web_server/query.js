@@ -942,9 +942,10 @@ const setGeofenceConfig = (request, response) => {
                         response.status(200).json(res)
                     }
                 })
-            } 
-            console.log('IPC has not set')
-            response.status(200).json(res)
+            } else {
+                response.status(200).json(res)
+                console.log('IPC has not set')
+            }
           
         })
         .catch(err => {
@@ -970,9 +971,10 @@ const addGeofenceConfig = (request, response) => {
                         response.status(200).json(res)
                     }
                 })
+            } else {
+                response.status(200).json(res)
+                console.log('IPC has not set')
             }
-            console.log('IPC has not set')
-            response.status(200).json(res)
         })
         .catch(err => {
             console.log(`add geofence config fail: ${err}`)
