@@ -5,7 +5,7 @@ import Cookies from 'js-cookie'
 import dataSrc from "../../../dataSrc";
 import AddableList from './AddableList'
 import { AppContext } from '../../../context/AppContext';
-import retrieveData from '../../../helper/retrieveData'
+import retrieveDataHelper from '../../../helper/retrieveDataHelper'
 
 const Fragment = React.Fragment;
 
@@ -170,45 +170,48 @@ class MyDeviceManager extends React.Component{
 
     getObjectData() {
         let { locale, auth } = this.context
-        retrieveData.getObjectTable(locale.lang, auth.user.areas_id, [0])
-            .then(res => {
-                let data = res.data.rows
-                var dataMap = {}
+        retrieveDataHelper.getObjectTable(
+            locale.lang, 
+            auth.user.areas_id, 
+            [0]
+        ).then(res => {
+            let data = res.data.rows
+            var dataMap = {}
 
-                for(var item of data){
-                    if(item.object_type == 0)
-                        dataMap[item.asset_control_number] = item
-                }
-                this.device.dataMap = dataMap
+            for(var item of data){
+                if(item.object_type == 0)
+                    dataMap[item.asset_control_number] = item
+            }
+            this.device.dataMap = dataMap
 
-                axios.post(dataSrc.getUserInfo, {
-                    username: JSON.parse(Cookies.get('user')).name
-                }).then((res) => {
-                    var myDeviceList = res.data.rows[0].mydevice || []
-                    var allDeviceList = Object.keys(dataMap)
+            axios.post(dataSrc.getUserInfo, {
+                username: JSON.parse(Cookies.get('user')).name
+            }).then((res) => {
+                var myDeviceList = res.data.rows[0].mydevice || []
+                var allDeviceList = Object.keys(dataMap)
 
-                    this.device.myDeviceList = myDeviceList
-                    var myDevices = {}, notMyDevices = {}
+                this.device.myDeviceList = myDeviceList
+                var myDevices = {}, notMyDevices = {}
 
-                    for(var acn of allDeviceList){
-                        if(myDeviceList.includes(acn)){
-                            myDevices[acn] = dataMap[acn]
-                        }else{
-                            notMyDevices[acn] = dataMap[acn]
-                        }
+                for(var acn of allDeviceList){
+                    if(myDeviceList.includes(acn)){
+                        myDevices[acn] = dataMap[acn]
+                    }else{
+                        notMyDevices[acn] = dataMap[acn]
                     }
+                }
 
-                    this.device.myDevices = myDevices
-                    this.device.notMyDevices = notMyDevices
-                    this.APIforAddableList_1.setList(myDevices)
-                    this.APIforAddableList_2.setList(notMyDevices)
-                }).catch(err => {
-                    console.log(err)
-                })
+                this.device.myDevices = myDevices
+                this.device.notMyDevices = notMyDevices
+                this.APIforAddableList_1.setList(myDevices)
+                this.APIforAddableList_2.setList(notMyDevices)
+            }).catch(err => {
+                console.log(err)
             })
-            .catch(function (error) {
-                console.log(error);
-            })
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
     }
     
     
@@ -234,12 +237,6 @@ class MyDeviceManager extends React.Component{
                         </div>
                     </Col>
                 </Row>
-                {/* <Row>
-                    <Col xl={2} className='p-5 d-flex flex-column align-self-center text-center'>
-                        <i className="fas fa-angle-double-right fa-2x"></i>
-                        <i className="fas fa-angle-double-left fa-2x"></i>
-                    </Col>
-                </Row> */}
                 <Row className='w-100 d-flex bg-white'>
                     <Col>
                         <h5 className="text-capitalize">{locale.texts.NOT_MY_DEVICES_LIST}</h5>

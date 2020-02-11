@@ -10,7 +10,21 @@ import moment from 'moment'
 import config from '../../config';
 import { AppContext } from '../../context/AppContext'
 import GeneralConfirmForm from '../container/GeneralConfirmForm'
+import retrieveDataHelper from '../../helper/retrieveDataHelper'
 import DownloadPdfRequestForm from './DownloadPdfRequestForm'
+
+const style = {
+    modalBody: {
+        height: '60vh',
+        overflow: 'hidden scroll'
+    },
+    row: {
+        wordBreak: 'break-all'
+    },
+    item: {
+        minWidth: 30,
+    },
+}
 
 class ShiftChange extends React.Component {
 
@@ -25,6 +39,7 @@ class ShiftChange extends React.Component {
         showPdfDownloadForm: false,
         APIforTableDone: false,
         showConfirmForm: false,
+        devicesArray: [],
         showDownloadPdfRequest: false,
     }
     APIforTable = null
@@ -40,8 +55,10 @@ class ShiftChange extends React.Component {
         )
     }
 
-    componentDidMount = () => {
-        this.getTrackingData(true)
+    componentDidUpdate = (prevProps) => {
+        if (this.props.show && !prevProps.show) {
+            this.getTrackingData()
+        }
     }
 
     getTrackingData = (update) => {
@@ -51,38 +68,35 @@ class ShiftChange extends React.Component {
             stateReducer 
         } = this.context
         let [{areaId}] = stateReducer
-        axios.post(dataSrc.getTrackingData, {
-            rssiThreshold: config.mapConfig.locationAccuracyMapToDefault[1],
-            locale: locale.abbr,
-            user: auth.user,
-            areaId,
-        }).then(res => {
-            GetResultData('my devices', res.data, auth.user)
-                .then(result => {
-                    var foundResult = []
-                    var notFoundResult = []
-                    for(var i in result){
-                        if(result[i].found){
-                            foundResult.push(result[i])
-                        }else{
-                            notFoundResult.push(result[i])
+
+        retrieveDataHelper.getTrackingData(locale.abbr, auth.user, areaId)
+            .then(res => {
+                GetResultData('my devices', res.data, auth.user)
+                    .then(result => {
+                        var foundResult = []
+                        var notFoundResult = []
+                        for(var i in result){
+                            if(result[i].found){
+                                foundResult.push(result[i])
+                            }else{
+                                notFoundResult.push(result[i])
+                            }
                         }
-                    }
-                    
-                    this.setState({
-                        searchResult: {
-                            foundResult: foundResult,
-                            notFoundResult: notFoundResult,
-                        }
+                        
+                        this.setState({
+                            searchResult: {
+                                foundResult: foundResult,
+                                notFoundResult: notFoundResult,
+                            }
+                        })
+                    }) 
+                    .catch(err => {
+                        console.log(`get myDevice data fail ${err}`)
                     })
-                }) 
-                .catch(err => {
-                    console.log(`get myDevice data fail: ${err}`)
-                })
-        })
-        .catch(err => {
-            console.log(`get tracking data fail: ${err}`)
-        })
+            })
+            .catch(err => {
+                console.log(`get tracking data fail: ${err}`)
+            })
     }
 
     handleClosePdfForm = () => {
@@ -131,24 +145,22 @@ class ShiftChange extends React.Component {
     render() {
 
         const { 
-            userInfo,
+            locale, 
+            auth,
+            stateReducer 
+        } = this.context
+
+        const { 
             show,
             handleClose
         } = this.props
+
         const { foundResult, notFoundResult } = this.state.searchResult
-        const { locale, auth,stateReducer } = this.context
-        const style = {
-            modalBody: {
-                height: '60vh',
-                overflow: 'hidden scroll'
-            },
-            row: {
-                wordBreak: 'break-all'
-            }
-        }
+
         const nowTime = moment().locale(locale.abbr)
         const hasFoundResult = foundResult.length !== 0;
         const hasNotFoundResult = notFoundResult.length !== 0;
+
         return (
             <Fragment>
                 <Modal 
@@ -184,55 +196,17 @@ class ShiftChange extends React.Component {
                             <div className="d-flex justify-content-center">
                                 <p className="font-italic ">{locale.texts.NOT_ASSIGNED_TO_ANY_DEVICES}</p>
                             </div>
-                        }     
-
-                        <div>
-                            {hasFoundResult && 
-                                <div
-                                    className="subtitle"
-                                >
-                                    {locale.texts.DEVICES_FOUND_IN} {auth.user.areas_id.map(id => {
-                                        return locale.texts[config.mapConfig.areaOptions[id]]
-                                    })}
-                                </div>
-                            }     
-                            {hasFoundResult && foundResult.map((item, index) => {
-                                return (
-                                    <div 
-                                        key={index} 
-                                        className="pb-1"
-                                        style={style.row}
-                                    >
-                                        {index + 1}.{item.name}, 
-                                        {locale.texts.LAST_FOUR_DIGITS_IN_ACN}: {item.last_four_acn}, 
-                                        {locale.texts.NEAR}{item.location_description}
-                                    </div>
-                                )
-                            })}
-                        </div>
-                        <div className='my-2'>
-                            { hasNotFoundResult && 
-                                <div 
-                                    className="subtitle"
-                                > 
-                                    {locale.texts.DEVICES_NOT_FOUND_IN} {auth.user.areas_id.map(id => {
-                                        return locale.texts[config.mapConfig.areaOptions[id]]
-                                    })}
-                                </div>
-                            }
-                            { hasNotFoundResult && notFoundResult.map((item, index) => {
-                                return (
-                                    <div 
-                                        key={index} 
-                                        className="pb-1 text-break"
-                                    >
-                                        {index + 1}.{item.name}, 
-                                        {locale.texts.ASSET_CONTROL_NUMBER}: {config.ACNOmitsymbol}{item.last_four_acn},
-                                        {locale.texts.NEAR}{item.location_description}
-                                    </div>
-                                )
-                            })}
-                        </div>
+                        }    
+                        <TypeBlock
+                            title="found"
+                            hasType={hasFoundResult} 
+                            typeArray={foundResult}
+                        /> 
+                        <TypeBlock
+                            title="not found"
+                            hasType={hasNotFoundResult} 
+                            typeArray={notFoundResult}
+                        /> 
                     </Modal.Body>
                     <Modal.Footer>
                         <Button 
@@ -270,3 +244,56 @@ class ShiftChange extends React.Component {
 }
 
 export default ShiftChange
+
+const TypeBlock = ({
+    title,
+    hasType,
+    typeArray,
+}) => {
+    let appContext = React.useContext(AppContext)
+
+    let {
+        locale,
+        auth
+    } = appContext
+
+    title = `devices ${title} in`.toUpperCase().replace(/ /g, '_')
+
+    return (
+        <div>
+            {hasType && 
+                <div
+                    className="subtitle"
+                >
+                    {locale.texts.DEVICES_FOUND_IN} {auth.user.areas_id.map(id => {
+                        return locale.texts[config.mapConfig.areaOptions[id]]
+                    })}
+                </div>
+            }     
+            {hasType && typeArray.map((item, index) => {
+                return (
+                    <div 
+                        className='d-flex justify-content-start'
+                        key={index}
+                    >
+                        <div 
+                            style={style.item}
+                            className='d-flex justify-content-center'
+                        >
+                            {index + 1}.
+                        </div>
+                        <div 
+                            key={index} 
+                            className="pb-1"
+                            style={style.row}
+                        >
+                            {item.name}, 
+                            {locale.texts.LAST_FOUR_DIGITS_IN_ACN}: {item.last_four_acn}, 
+                            {locale.texts.NEAR}{item.location_description}
+                        </div>
+                    </div>
+                )
+            })}
+        </div>
+    )
+}

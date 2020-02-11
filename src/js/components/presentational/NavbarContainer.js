@@ -84,9 +84,12 @@ class NavbarContainer extends React.Component {
 
             }
         }
-        const { locale, auth, stateReducer } = this.context;
+        const { 
+            locale, 
+            auth, 
+            stateReducer 
+        } = this.context;
         const [{ areaId }, dispatch] = stateReducer
-
         const { 
             showSignin, 
             showShiftChange
@@ -134,7 +137,6 @@ class NavbarContainer extends React.Component {
                             name="select"
                             value = {selectedArea}
                             options={options}
-                            className="text-capitalize"
                             onChange={value => {
                                 let { stateReducer } = this.context
                                 let [{areaId}, dispatch] = stateReducer

@@ -67,7 +67,7 @@ class ObjectManagementContainer extends React.Component{
         formPath: '',
         selectAll: false,
         locale: this.context.locale.abbr,
-        tabIndex: 0,
+        tabIndex: 1,
         roomOptions: {},
         isShowBind:false,
         isShowEditImportTable:false,
@@ -303,7 +303,7 @@ class ObjectManagementContainer extends React.Component{
         })
     }
 
-    handleCloseForm = () => {
+    handleClose = () => {
         this.setState({
             isShowEdit: false,
             isPatientShowEdit: false,
@@ -705,7 +705,6 @@ class ObjectManagementContainer extends React.Component{
 
         return (
             <Container className='py-2 text-capitalize' fluid>
-                <br/>
                 <Tabs selectedIndex={this.state.tabIndex} onSelect={tabIndex => this.setState({ tabIndex })}>
                     <TabList>
                         <Tab>{locale.texts.DEVICE_FORM}</Tab>
@@ -762,7 +761,6 @@ class ObjectManagementContainer extends React.Component{
                             className="-highlight"
                             style={{height:'75vh'}}
                             {...extraProps}
-                            {...styleConfig.reactTable}
 
                             getTrProps={(state, rowInfo, column, instance) => {
                                 return {
@@ -920,29 +918,16 @@ class ObjectManagementContainer extends React.Component{
                             className="-highlight"
                             style={{height:'75vh'}}
                             {...extraProps}
-
-
-
-                            getTrProps={(state, rowInfo, column, instance) => {
-                            
-                            return {
-                                onClick: (e, handleOriginal) => {
-                                    console.log(this.state.dataImportPatient)
-                                }
-                            }
-                          }}
                         />
                     </TabPanel>
                 </Tabs>
-
-
                 <EditPatientForm
                     show = {isPatientShowEdit && !this.state.DeleteFlag} 
                     title= {this.state.formTitle} 
                     selectedObjectData={selectedRowData_Patient || null} 
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={this.state.formPath}
-                    handleClose={this.handleCloseForm}
+                    handleClose={this.handleClose}
                     data={this.state.dataPatient}
                     objectData = {this.state.data}
                     physicianList={this.state.physicianList}
@@ -952,12 +937,12 @@ class ObjectManagementContainer extends React.Component{
                     disableASN = {this.state.disableASN}
                 />  
                 <EditObjectForm 
-                    show = {isShowEdit} 
-                    title= {this.state.formTitle} 
+                    show={isShowEdit} 
+                    title={this.state.formTitle} 
                     selectedObjectData={selectedRowData || null} 
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={this.state.formPath}
-                    handleClose={this.handleCloseForm}
+                    handleClose={this.handleClose}
                     data={this.state.data}
                     importData={this.state.dataImport}
                     objectTable={this.state.objectTable}
@@ -970,7 +955,7 @@ class ObjectManagementContainer extends React.Component{
                     title={this.state.formTitle} 
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={this.state.formPath}
-                    handleCloseForm={this.handleCloseForm}
+                    handleClose={this.handleClose}
                     objectTable={this.state.objectTable}
                     ImportData= {this.state.dataImport}
                     PatientImportData = {this.state.dataImportPatient}
@@ -990,7 +975,7 @@ class ObjectManagementContainer extends React.Component{
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={this.state.formPath}
                     objectTable={this.state.objectTable}
-                    handleCloseForm={this.handleCloseForm}
+                    handleClose={this.handleClose}
                     data={this.state.objectTable.reduce((dataMap, item) => {
                         dataMap[item.mac_address] = item
                         return dataMap

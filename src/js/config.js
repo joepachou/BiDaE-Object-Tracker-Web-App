@@ -702,43 +702,46 @@ const config = {
 
         /** Set the html content of popup of markers */
         getPopupContent: (object, objectList, locale) => {
-
-            //摸到大頭針之後的方塊
             const content = `
                 <div class="text-capitalize">
-                    <div class="popupTitle">${object[0].location_description}</div>
+                    <div class="popupTitle">
+                        ${object[0].location_description}
+                    </div>
                     <div class="popupContent"> 
                         ${objectList.map((item, index) => {
-                            var element = `<div id='${item.mac_address}' class="popupItem">`
-                            element += config.mapConfig.popupOptions.showNumber
-                                ?   `${index + 1}.`
-                                :   `&bull;`
-                            if(item.object_type == 0){
-                                element +=
-                                    `
-                                        ${item.type},
-                                        ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn.slice(-4)},
-                                        ${item.status !== "normal" 
-                                            ? `${locale.texts[item.status.toUpperCase()]}`
-                                            : `${item.residence_time}`    
-                                        }
-                                        ${item.status == "reserve" 
-                                            ? `~ ${item.reserved_timestamp_final}`
-                                            : ''
-                                        }
-                                    `
-                            } else {
-                                element += 
-                                    `     
-                                        ${item.name}, 
-
-                                        ${locale.texts.PHYSICIAN_NAME}: ${item.physician_name},
-
-                                        ${item.residence_time}
-                                    `
-                            }
-                            element += `</div>`
-                            return element
+                            return  `
+                                <div id='${item.mac_address}' class="popupItem">
+                                    <div class="d-flex justify-content-start">
+                                        <div class="popupIndex">
+                                            ${config.mapConfig.popupOptions.showNumber
+                                                ?   `${index + 1}.`
+                                                :   `&bull;`
+                                            }
+                                        </div>
+                                        <div>
+                                            ${item.object_type == 0
+                                                ?   `
+                                                    ${item.type},
+                                                    ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn.slice(-4)},
+                                                    ${item.status !== "normal" 
+                                                        ? `${locale.texts[item.status.toUpperCase()]}`
+                                                        : `${item.residence_time}`    
+                                                    }
+                                                    ${item.status == "reserve" 
+                                                        ? `~ ${item.reserved_timestamp_final}`
+                                                        : ''
+                                                    }
+                                                `
+                                                :   `     
+                                                    ${item.name}, 
+                                                    ${locale.texts.PHYSICIAN_NAME}: ${item.physician_name},
+                                                    ${item.residence_time}
+                                                `
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            `                            
                         }).join("")
                         }
                     </div>
