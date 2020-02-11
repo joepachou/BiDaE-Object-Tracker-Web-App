@@ -27,6 +27,7 @@ const SiginForm = ({
             size="sm" 
             onHide={handleClose}
             className='text-capitalize'
+            enforceFocus={false}
         >
             <Modal.Body>
                 <div className='d-flex justify-content-center'>

@@ -9,114 +9,102 @@ import {
 } from 'formik';
 import { AppContext } from '../../context/AppContext';
 import dataSrc from '../../dataSrc'
+import LocaleContext from '../../context/LocaleContext';
   
-class DownloadPdfRequestForm extends React.Component {
-
-    static contextType = AppContext
+const DownloadPdfRequestForm = ({
+    handleClose,
+    pdfPath,
+    show
+}) => {
     
+    let locale = React.useContext(LocaleContext)
 
-    handleClose = (e) => {
-        this.props.handleClose();
+    const style = {
+        deviceList: {
+            maxHeight: '20rem',
+            overflow: 'hidden scroll' 
+        },
+        downloadPdfRequest: {
+            zIndex: 6000,
+            padding: 0,
+        },
     }
 
-    handleChange = (e) => {
-        const { name }  = e.target
-        this.setState({
-            [name]: e.target.value
-        })
-    }
 
-    handleClickButton = e => {
+    const handleClickButton = e => {
         
         let { name } = e.target
+        console.log(name)
         switch(name) {
             case "viewReport":
-                window.open(this.props.pdfPath);
+                window.open(dataSrc.pdfUrl(pdfPath));
                 break;
             case "downloadReport":
-            console.log(dataSrc.pdfUrl(this.props.pdfPath))
+            console.log(dataSrc.pdfUrl(pdfPath))
                 var link = document.createElement('a');
-                link.href = dataSrc.pdfUrl(this.props.pdfPath);
+                link.href = dataSrc.pdfUrl(pdfPath);
                 link.download = "";
                 link.click();
                 break;
             case "close":
-                this.props.handleClose()
+                handleClose()
                 break;
         }
     }
 
-    render() {
-
-        const { locale } = this.context
-
-        const style = {
-            deviceList: {
-                maxHeight: '20rem',
-                overflow: 'hidden scroll' 
-            },
-            downloadPdfRequest: {
-                zIndex: 6000,
-                padding: 0,
-            },
-        }
-
-        return (
-            <Modal 
-                id='downloadPdfRequest' 
-                show={this.props.show} 
-                onHide={this.handleClose} 
-                size="md"
-                style={style.downloadPdfRequest}
+    
+    return (
+        <Modal 
+            id='downloadPdfRequest' 
+            show={show} 
+            onHide={handleClose} 
+            size="md"
+            style={style.downloadPdfRequest}
+            className='text-capitalize'
+        >
+            <Modal.Header 
+                closeButton 
             >
-                <Modal.Header 
-                    closeButton 
-                    className='font-weight-bold text-capitalize'
-                >
-                    {locale.texts.PROCESS_IS_COMPLETED}
-                </Modal.Header>
-                <Modal.Body className="py-2">
-                    <Formik    
-                        render={() => (
-                            <Form>
+                {locale.texts.PROCESS_IS_COMPLETED}
+            </Modal.Header>
+            <Modal.Body className="py-2">
+                <Formik    
+                    render={() => (
+                        <Form>
+                            <div className="mb-3">
                                 <div className="mb-3">
-                                    <div className="mb-3">
-                                        {locale.texts.NOW_YOU_CAN_DO_THE_FOllOWING_ACTION}
-                                    </div>
-                                    <div className="d-flex justify-content-around">
-                                        <Button 
-                                            variant="outline-secondary" 
-                                            onClick={this.handleClickButton}
-                                            className="text-capitalize"
-                                            name="viewReport"
-                                        >
-                                            {locale.texts.VIEW_REPORT}
-                                        </Button>
-                                        <Button 
-                                            variant="outline-secondary" 
-                                            onClick={this.handleClickButton}
-                                            className="text-capitalize"
-                                            name="downloadReport"
-                                        >
-                                            {locale.texts.DOWNLOAD_REPORT}
-                                        </Button>
-                                        <Button 
-                                            variant="outline-secondary" 
-                                            onClick={this.handleClickButton}
-                                            className="text-capitalize"
-                                            name="close"
-                                        >
-                                            {locale.texts.CLOSE}
-                                    </Button>
-                                    </div>
+                                    {locale.texts.NOW_YOU_CAN_DO_THE_FOllOWING_ACTION}
                                 </div>
-                            </Form>
-                        )}
-                    />
-                </Modal.Body>
-            </Modal>
-        );
-    }
+                                <div className="d-flex justify-content-around">
+                                    <Button 
+                                        variant="outline-secondary" 
+                                        onClick={handleClickButton}
+                                        name="viewReport"
+                                    >
+                                        {locale.texts.VIEW_REPORT}
+                                    </Button>
+                                    <Button 
+                                        variant="outline-secondary" 
+                                        onClick={handleClickButton}
+                                        name="downloadReport"
+                                    >
+                                        {locale.texts.DOWNLOAD_REPORT}
+                                    </Button>
+                                    <Button 
+                                        variant="outline-secondary" 
+                                        onClick={handleClickButton}
+                                        name="close"
+                                    >
+                                        {locale.texts.CLOSE}
+                                </Button>
+                                </div>
+                            </div>
+                        </Form>
+                    )}
+                />
+            </Modal.Body>
+        </Modal>
+    );
 }
   
 export default DownloadPdfRequestForm;

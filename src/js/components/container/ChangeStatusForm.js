@@ -111,11 +111,11 @@ class ChangeStatusForm extends React.Component {
                 onHide={this.handleClose} 
                 size="md" 
                 id='changeStatusForm' 
+                className='text-capitalize'
                 enforceFocus={false}
             >
                 <Modal.Header 
                     closeButton 
-                    className='font-weight-bold text-capitalize'
                 >
                     {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
                     {process.env.IS_TRACKING_PATH_ON == 1 && 
@@ -135,7 +135,7 @@ class ChangeStatusForm extends React.Component {
                                     label: selectedObjectData[0].transferred_location.toUpperCase().split(',').map(item => locale.texts[item]).join('/')
                                 }
                                 : '', 
-                            notes: selectedObjectData.length != 0 ? selectedObjectData[0].notes : ''
+                            notes: selectedObjectData.length != 0 ? selectedObjectData[0].notes ? selectedObjectData[0].notes : "" : "",
                         }}
 
                         validationSchema = {

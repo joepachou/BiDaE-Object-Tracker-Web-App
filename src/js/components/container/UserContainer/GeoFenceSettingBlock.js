@@ -112,7 +112,6 @@ class GeoFenceSettingBlock extends React.Component{
                     id: item.area_id
                 }
             })
-
             this.setState({
                 data: res.data.rows,
                 columns,

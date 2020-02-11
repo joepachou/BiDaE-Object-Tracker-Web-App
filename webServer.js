@@ -65,6 +65,7 @@ app.use(function(req, res, next) {
 // })
 
 
+
 app.get('/image/pinImage/:pinImage', (req, res) => {
     res.sendFile(path.join(__dirname, 'src','img','colorPin',req.params['pinImage']));
 })
@@ -72,6 +73,12 @@ app.get('/image/pinImage/:pinImage', (req, res) => {
 app.get(/^\/page\/(.*)/, (req, res) => {
     res.sendFile(path.join(__dirname, 'dist','index.html'));
 })
+
+app.post('/data/DeleteUserArea', db.DeleteUserArea);
+
+app.post('/data/addUserArea', db.addUserArea);
+
+app.post('/data/getUserArea', db.getUserArea);
 
 app.post('/data/getObjectTable', db.getObjectTable);
 
@@ -90,8 +97,6 @@ app.post('/data/cleanBinding', db.cleanBinding);
 app.post('/data/getLbeaconTable', db.getLbeaconTable);
 
 app.post('/data/getGatewayTable', db.getGatewayTable);
-
-app.post('/data/geofenceData', db.getGeofenceData);
 
 app.post('/data/getTrackingData', db.getTrackingData);
 
@@ -232,15 +237,15 @@ app.get('/download/com.beditech.IndoorNavigation.apk', (req, res) => {
 //     cert: certificate,
 //     ca: ca_bundle
 // } : null
-// /** Enable HTTPS server */
-// PRIVATE_KEY ? httpsServer.listen(httpsPort, () => {
-//     console.log(`HTTPS Server running on PORT ${httpsPort}`)
-// }) : null
 
 // const httpsServer = https.createServer(credentials, app)
 
 const httpServer = http.createServer(app);
 
+/** Enable HTTPS server */
+// PRIVATE_KEY ? httpsServer.listen(httpsPort, () => {
+//     console.log(`HTTPS Server running on PORT ${httpsPort}`)
+// }) : null
 
 /** Enable HTTP server */
 httpServer.listen(httpPort, () =>{

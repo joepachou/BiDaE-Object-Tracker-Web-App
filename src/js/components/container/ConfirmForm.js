@@ -73,7 +73,6 @@ class ConfirmForm extends React.Component {
             >
                     <Modal.Header 
                         closeButton 
-                        className='font-weight-bold'
                     >
                         {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
                     </Modal.Header >
@@ -96,7 +95,7 @@ class ConfirmForm extends React.Component {
                                             return (
                                                 <div key={index} >
                                                     {index > 0 ? <hr/> : null}
-                                                    <Row>
+                                                    <Row noGutters>
                                                         <Col>
                                                             <FormikFormGroup 
                                                                 type="text"

@@ -391,16 +391,7 @@ const getGatewayTable =
 		api_version
 	FROM 
 		gateway_table 
-	ORDER BY last_report_timestamp DESC`;
-
-const getGeofenceData = 
-	`
-	SELECT * 
-	FROM geo_fence_alert 
-	ORDER BY receive_time DESC 
-	LIMIT 50
-	`;
-	
+	ORDER BY last_report_timestamp DESC`;	
 
 function objectImport (idPackage) {
 
@@ -664,8 +655,8 @@ function signin(username) {
 				SELECT area_id
 				FROM user_areas
 				WHERE user_areas.user_id = user_table.id
-			) as areas_id
-
+			) as areas_id,
+			main_area
 		FROM user_table
 
 		LEFT JOIN user_roles
@@ -1154,7 +1145,7 @@ const setGeofenceConfig = (monitorConfigPackage) => {
 	} = monitorConfigPackage
 
 	let text = `
-		UPDATE ${type}
+		UPDATE geo_fence_config
 		SET 
 			name = $2,
 			area_id = $3,
@@ -1539,6 +1530,7 @@ function backendSearch_writeQueue(keyType, keyWord, mac_addresses, pin_color_ind
 		text,
 		values
 	}
+	console.log(123)
 	
 	return query
 }
@@ -1605,6 +1597,62 @@ const getSearchRssi = () =>{
 	return text
 }
 
+function getUserArea(user_id){
+
+    const text =  `
+    SELECT 
+        area_id
+    FROM user_areas WHERE user_areas.user_id = $1;
+    `;
+
+    const values = [user_id];
+
+    const query = {
+        text,
+        values
+    };
+
+    return query
+
+}
+
+function addUserArea (user_id,area_id){
+    const text = `
+    INSERT INTO user_areas (
+        user_id,
+        area_id
+    )
+    VALUES (
+        $1, 
+        $2
+    );
+`;
+    
+const values = [
+    user_id,
+    area_id
+];
+
+
+const query = {
+    text,
+    values
+};
+
+return query;
+}
+
+function DeleteUserArea (user_id,area_id){
+
+    const query = `
+        
+        DELETE FROM user_areas
+        WHERE user_id = '${user_id}' AND area_id = '${area_id}'
+    
+    `
+    return query
+
+}
 
 module.exports = {
 	getTrackingData,
@@ -1614,7 +1662,6 @@ module.exports = {
 	getImportTable,
     getLbeaconTable,
 	getGatewayTable,
-	getGeofenceData,
 	getMonitorConfig,
 	setGeofenceConfig,
 	editPatient,
@@ -1667,7 +1714,10 @@ module.exports = {
 	getImportPatient,
 	addGeofenceConfig,
 	deleteMonitorConfig,
-	addMonitorConfig
+	addMonitorConfig,
+	getUserArea,
+	addUserArea,
+	DeleteUserArea
 }
 
 

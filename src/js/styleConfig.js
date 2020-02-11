@@ -4,10 +4,6 @@ const styleConfig = {
             ...provided,
             padding: '0.5rem',
             fontSize: '0.8rem',
-            // background: state.isSelected ? 'rgba(0, 123, 255, 0.6)' : 'none',
-            // background: state.isFocused ? 'rgba(0, 123, 255, 0.6)' : 'none',
-            // cursor: 'pointer'
-            // height:  20,
         }),
         valueContainer: (provided) => ({
             ...provided,
@@ -53,7 +49,7 @@ const styleConfig = {
                     borderRight: 'none',
                     textAlign: 'left',
                     fontSize: '0.9rem',
-                    fontWeight: 500
+                    // fontWeight: 500
                 }
             }
         },
@@ -73,18 +69,18 @@ const styleConfig = {
             }
         },
 
-        showPagination: false
+        // showPagination: false
 
     },
     checkbox: {
-        fontSize: '0.8rem'
+        fontSize: '0.9rem'
     },
     radioButton: {
-        fontSize: '0.8rem'
+        fontSize: '0.9rem'
     },
     link: {
         color: '#1890ff'
-    }
+    },
 }
 
 export default styleConfig

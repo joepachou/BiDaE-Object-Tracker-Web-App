@@ -9,7 +9,6 @@ const getPatientTable = `${protocol}://${dataSrcIP}/data/getPatientTable`;
 const getLbeaconTable = `${protocol}://${dataSrcIP}/data/getLbeaconTable`;
 const getGatewayTable = `${protocol}://${dataSrcIP}/data/getGatewayTable`;
 const searchResult = `${protocol}://${dataSrcIP}/data/searchResult`;
-const geofenceData = `${protocol}://${dataSrcIP}/data/geofenceData`;
 const editObject = `${protocol}://${dataSrcIP}/data/editObject`;
 const editImport = `${protocol}://${dataSrcIP}/data/editImport`;
 const editPatient = `${protocol}://${dataSrcIP}/data/editPatient`;
@@ -60,10 +59,12 @@ const getImportPatient = `${protocol}://${dataSrcIP}/data/getImportPatient`
 const addBulkObject = `${protocol}://${dataSrcIP}/data/addBulkObject`
 const pinImage = `${protocol}://${dataSrcIP}/image/pinImage`
 const getTransferredLocation = `${protocol}://${dataSrcIP}/data/getTransferredLocation`
+const getUserArea= `${protocol}://${dataSrcIP}/data/getUserArea`
+const addUserArea= `${protocol}://${dataSrcIP}/data/addUserArea`
+const DeleteUserArea= `${protocol}://${dataSrcIP}/data/DeleteUserArea`
 const pdfUrl = function(path){
-    return `${protocol}://${dataSrcIP}/${path}`
+    return `${protocol}://${dataSrcIP}:${port}/${path}`
 }
-
 module.exports = {
     domain,
     getTrackingData,
@@ -81,7 +82,6 @@ module.exports = {
     getMonitorConfig,
     getTransferredLocation,
     searchResult,
-    geofenceData,
     editObject,
     deletePatient,
     editPatient,
@@ -123,5 +123,8 @@ module.exports = {
     pinImage,
     addGeofenceConfig,
     deleteMonitorConfig,
-    addMonitorConfig
+    addMonitorConfig,
+    getUserArea,
+    addUserArea,
+    DeleteUserArea
 };

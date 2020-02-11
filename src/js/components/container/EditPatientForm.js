@@ -5,46 +5,25 @@ import Select from 'react-select';
 import config from '../../config';
 import LocaleContext from '../../context/LocaleContext';
 import axios from 'axios';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
+import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
 import CheckboxGroup from './CheckboxGroup'
 import Checkbox from '../presentational/Checkbox'
-import RadioButtonGroup from './RadioButtonGroup'
-import RadioButton from '../presentational/RadioButton'
 import { 
     addPatient,
 } from "../../dataSrc"
-let monitorTypeMap = {};
+import FormikFormGroup from '../presentational/FormikFormGroup'
+import styleConfig from '../../styleConfig'
 
+
+let monitorTypeMap = {};
 Object.keys(config.monitorType)
     .forEach(key => {
         monitorTypeMap[config.monitorType[key]] = key
 })
   
 class EditPatientForm extends React.Component {
-    state = {
-        show: this.props.show,
-    };
-
-
-    componentDidMount = () => {
-    }
-
-    componentDidUpdate = (prevProps) => {
-        if (!(_.isEqual(prevProps, this.props))) {
-            this.setState({
-                show: this.props.show,
-            })
-        }
-    }
   
-    handleClose = () => {
-        this.props.handleCloseForm()
-
-    }
-
-
-    
     handleSubmit = (postOption) => {
         const path = this.props.formPath
         axios.post(path, {
@@ -61,11 +40,13 @@ class EditPatientForm extends React.Component {
 
         const locale = this.context
 
-
         const { 
             title, 
             selectedObjectData,
-            physicianList = []
+            physicianList = [],
+            show,
+            handleClose
+
         } = this.props;
 
         const { 
@@ -90,7 +71,6 @@ class EditPatientForm extends React.Component {
             };
         })
 
-
         const genderOptions = [
             { 
                 value: '1', 
@@ -102,23 +82,6 @@ class EditPatientForm extends React.Component {
             },
         ]
 
-        const style = {
-            input: {
-                borderRadius: 0,
-                borderBottom: '1 solid grey',
-                borderTop: 0,
-                borderLeft: 0,
-                borderRight: 0,
-                
-            },
-            errorMessage: {
-                width: '100%',
-                marginTop: '0.25rem',
-                marginBottom: '0.25rem',
-                fontSize: '80%',
-                color: '#dc3545'
-            },
-        }
         let physicianListOptions = physicianList.map(user => {
             return {
                 value: user.id,
@@ -127,8 +90,15 @@ class EditPatientForm extends React.Component {
         }) 
 
         return (
-            <Modal show={this.state.show} onHide={this.handleClose} size='md'>
-                <Modal.Header closeButton className='font-weight-bold text-capitalize'>
+            <Modal 
+                show={show} 
+                onHide={handleClose} 
+                size='md'
+                className='text-capitalize'
+            >
+                <Modal.Header 
+                    closeButton
+                >
                     {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
                 </Modal.Header >
                 <Modal.Body>
@@ -136,7 +106,6 @@ class EditPatientForm extends React.Component {
                         initialValues = {{
                             area: area_name || '',
                             name: name || '' ,
-                            // roomNumber: room_number || '',
                             mac_address: mac_address || '',
                             asset_control_number:asset_control_number|| '',
                             gender :   object_type == locale.texts.FEMALE ? genderOptions[1] : genderOptions[0],
@@ -157,46 +126,32 @@ class EditPatientForm extends React.Component {
                         }}
                        
                         validationSchema = {
-                            
                             Yup.object().shape({
-                               
-                                
                                 name: Yup.string().required(locale.texts.NAME_IS_REQUIRED),
                                 // roomNumber: Yup.string().required(locale.texts.ROOMNUMBER_IS_REQUIRED),
-                               
-                                physician: Yup.string()
-                                .required(locale.texts.ATTENDING_IS_REQUIRED),
-                                // .test(
-                                //         'physician',
-                                //         locale.texts.THE_ATTENDINGPHYSICIAN_IS_WRONG,
-                                //         value => {
-                                //             if( isNaN(value) == false) return true
-                                //             if (isNaN(value) == true) return false
-                                //         }
-                                //     ),
-
+                                physician: Yup.string().required(locale.texts.ATTENDING_IS_REQUIRED),
                                 area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
                                 gender: Yup.string().required(locale.texts.GENDER_IS_REQUIRED),
              
 
                                 asset_control_number: Yup.string()
-                                .required(locale.texts.NUMBER_IS_REQUIRED)
-                                .test(
-                                    'asset_control_number',
-                                    locale.texts.THE_Patient_Number_IS_ALREADY_USED,
-                                        value => {
-                                            return value === selectedObjectData.asset_control_number ||
-                                                !this.props.data.map(item => item.asset_control_number).includes(value)
-                                    }
-                                )
-                                .test(
-                                    'asset_control_number',
-                                    locale.texts.THE_Patient_Number_IS_ALREADY_USED,
-                                        value => {
-                                            return value === selectedObjectData.asset_control_number ||
-                                                !this.props.objectData.map(item => item.asset_control_number).includes(value)
-                                    }
-                                ),
+                                    .required(locale.texts.NUMBER_IS_REQUIRED)
+                                    .test(
+                                        'asset_control_number',
+                                        locale.texts.THE_Patient_Number_IS_ALREADY_USED,
+                                            value => {
+                                                return value === selectedObjectData.asset_control_number ||
+                                                    !this.props.data.map(item => item.asset_control_number).includes(value)
+                                        }
+                                    )
+                                    .test(
+                                        'asset_control_number',
+                                        locale.texts.THE_Patient_Number_IS_ALREADY_USED,
+                                            value => {
+                                                return value === selectedObjectData.asset_control_number ||
+                                                    !this.props.objectData.map(item => item.asset_control_number).includes(value)
+                                        }
+                                    ),
 
 
                                 mac_address: Yup.string()
@@ -261,122 +216,122 @@ class EditPatientForm extends React.Component {
 
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue,submitForm }) => (  
-                            <Form className="text-capitalize">
-                                <div className="form-group">
-                                    <label htmlFor="name">{locale.texts.NAME}*</label>
-                                    <Field name="name" type="text" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} placeholder=''/>
-                                    <ErrorMessage name="name" component="div" className="invalid-feedback" />
-                                </div>
-
-                                <div className="form-group">
-                                    <label htmlFor="asset_control_number">{locale.texts.PATIENT_NUMBER}*</label>
-                                    <Field disabled={this.props.disableASN} name="asset_control_number" type="text" className={'form-control' + (errors.asset_control_number && touched.asset_control_number ? ' is-invalid' : '')} placeholder=''/>
-                                    <ErrorMessage name="asset_control_number" component="div" className="invalid-feedback" />
-                                </div>
-                                
-{/* 
-                                <div className="form-group">
-                                    <label htmlFor="roomNumber">{locale.texts.ROOM_NUMBER}*</label>
-                                    <Field name="roomNumber" type="text" className={'form-control' + (errors.roomNumber && touched.roomNumber ? ' is-invalid' : '')} placeholder=''/>
-                                    <ErrorMessage name="roomNumber" component="div" className="invalid-feedback" />
-                                </div> */}
-                                <div className="form-group">
-                                    <label htmlFor="mac_address">{locale.texts.MAC_ADDRESS}*</label>
-                                    <Field 
-                                        name="mac_address" 
-                                        type="text" 
-                                        className={'form-control' + (errors.mac_address && touched.mac_address ? ' is-invalid' : '')} 
-                                        disabled={this.props.disableASN}
-                                    />
-                                    <ErrorMessage name="mac_address" component="div" className="invalid-feedback" />
-                                </div>
-                                <hr/>
-                                <Row className="text-capitalize" noGutters>
-                                    <Col lg={3} className='d-flex align-items-center'>
-                                        <label htmlFor="physician">{locale.texts.ATTENDING_PHYSICIAN}*</label>
+                            <Form>
+                                <Row noGutters>
+                                    <Col>
+                                        <FormikFormGroup 
+                                            type="text"
+                                            name="name"
+                                            label={locale.texts.NAME}
+                                            error={errors.name}
+                                            touched={touched.name}
+                                            placeholder=""
+                                        />
                                     </Col>
-                                    <Col lg={9}>
-                                        <Select
-                                            placeholder = {locale.texts.SELECT_PHYSICIAN}
-                                            name="physician"
-                                            value = {values.physician}
-                                            onChange= {(value) => setFieldValue("physician", value)}
-                                            options={physicianListOptions}
-                                            style={style.select}
-                                            components={{
-                                                IndicatorSeparator: () => null
-                                            }}
+                                    <Col>
+                                        <FormikFormGroup 
+                                            name="gender"
+                                            label={locale.texts.PATIENT_GENDER}
+                                            error={errors.asset_control_number}
+                                            touched={touched.asset_control_number}
+                                            component={() => (
+                                                <Select 
+                                                    placeholder={locale.texts.CHOOSE_GENDER}
+                                                    name ="gender"            
+                                                    styles={styleConfig.reactSelect}                          
+                                                    value={values.gender}
+                                                    onChange={value => setFieldValue("gender", value)}
+                                                    options={genderOptions}
+                                                    components={{
+                                                        IndicatorSeparator: () => null
+                                                    }}
+                                                />
+                                            )}
                                         />
                                     </Col>
                                 </Row>
-                                <Row className="text-capitalize" noGutters>
-                                   <Col lg={9}>
-                                        <Row className='no-gutters' className='d-flex align-self-center'>
-                                            <Col>
-                                                {touched.physician && errors.physician &&
-                                                <div style={style.errorMessage}>{errors.physician}</div>}
-                                            </Col>
-                                        </Row>        
-                                    </Col> 
+                                <Row noGutters>
+                                    <Col>
+                                        <FormikFormGroup 
+                                            type="text"
+                                            name="asset_control_number"
+                                            label={locale.texts.PATIENT_NUMBER}
+                                            error={errors.asset_control_number}
+                                            touched={touched.asset_control_number}
+                                            placeholder=""
+                                            disabled={this.props.disableASN}
+                                        />
+                                    </Col>
+                                    <Col>
+                                        <FormikFormGroup 
+                                            type="text"
+                                            name="mac_address"
+                                            label={locale.texts.MAC_ADDRESS}
+                                            error={errors.mac_address}
+                                            touched={touched.mac_address}
+                                            placeholder=""
+                                            disabled={this.props.disableASN}
+                                        />
+                                    </Col>
                                 </Row>
                                 <hr/>
-                                <Row className="text-capitalize" noGutters>
-                                    <Col lg={3} className='d-flex align-items-center'>
-                                        <label htmlFor="type">{locale.texts.AUTH_AREA}*</label>
-                                    </Col>
-                                    <Col lg={9}>
-                                        <Select
-                                            placeholder = {locale.texts.SELECT_AREA}
+                                <Row noGutters>
+                                    <Col>
+                                        <FormikFormGroup 
+                                            type="text"
                                             name="area"
-                                            value = {values.area}
-                                            onChange={value => setFieldValue("area", value)}
-                                            options={areaOptions}
-                                            style={style.select}
-                                            components={{
-                                                IndicatorSeparator: () => null
-                                            }}
+                                            label={locale.texts.AUTH_AREA}
+                                            error={errors.area}
+                                            touched={touched.area}
+                                            component={() => (
+                                                <Select
+                                                    placeholder = {locale.texts.SELECT_AREA}
+                                                    name="area"
+                                                    value = {values.area}
+                                                    onChange={value => setFieldValue("area", value)}
+                                                    options={areaOptions}
+                                                    styles={styleConfig.reactSelect}
+                                                    components={{
+                                                        IndicatorSeparator: () => null
+                                                    }}
+                                                />
+                                            )}
+                                        />
+                                    </Col>
+                                    <Col>
+                                        <FormikFormGroup 
+                                            type="text"
+                                            name="physician"
+                                            label={locale.texts.ATTENDING_PHYSICIAN}
+                                            error={errors.asset_control_number}
+                                            touched={touched.asset_control_number}
+                                            component={() => (
+                                                <Select
+                                                    placeholder = {locale.texts.SELECT_PHYSICIAN}
+                                                    name="physician"
+                                                    value = {values.physician}
+                                                    onChange= {(value) => setFieldValue("physician", value)}
+                                                    options={physicianListOptions}
+                                                    styles={styleConfig.reactSelect}
+                                                    components={{
+                                                        IndicatorSeparator: () => null
+                                                    }}
+                                                />
+                                            )}
                                         />
                                     </Col>
                                 </Row>
-                                <Row className="text-capitalize" noGutters>
-                                   <Col lg={9}>
-                                        <Row className='no-gutters' className='d-flex align-self-center'>
-                                            <Col>
-                                                {touched.area && errors.area &&
-                                                <div style={style.errorMessage}>{errors.area}</div>}
-                                            </Col>
-                                        </Row>        
-                                    </Col> 
-                                </Row>
-                                <hr/>
-                                <Row className="text-capitalize" noGutters>
-                                    <Col lg={3} className='d-flex align-items-center'>
-                                        <label htmlFor="type">{locale.texts.PATIENT_GENDER}</label>
-                                    </Col>
-                                    <Col lg={9}>
-                                        <Select 
-                                            placeholder = {locale.texts.CHOOSE_GENDER}
-                                            name ="gender"
-                                            // onChange={this.change} 
-                                      
-                                            value={values.gender}
-                                           onChange={value => setFieldValue("gender", value)}
-                                            options={genderOptions}
-                                            components={{
-                                                IndicatorSeparator: () => null
-                                            }}
-                                        />
-                                    </Col> 
-                                </Row>
-                                <hr/>
-                                <Row className="text-capitalize" noGutters>
-                                    <Col lg={3} className='d-flex align-items-center'>
-                                        <label htmlFor="type">{locale.texts.ROOM}</label>
-                                    </Col>
-                                    <Col lg={9}>
+                                <FormikFormGroup 
+                                    type="text"
+                                    name="room"
+                                    label={locale.texts.ROOM}
+                                    error={errors.room}
+                                    touched={touched.room}
+                                    component={() => (
                                         <Select 
                                             placeholder = {locale.texts.SELECT_ROOM}
                                             name ="room"
+                                            styles={styleConfig.reactSelect}                          
                                             value={values.room}
                                             onChange={value => setFieldValue("room", value)}
                                             options={this.props.roomOptions}
@@ -384,31 +339,20 @@ class EditPatientForm extends React.Component {
                                                 IndicatorSeparator: () => null
                                             }}
                                         />
-                                    </Col> 
-                                </Row>
-                                
-                                <Row className="text-capitalize mb-1" noGutters>
-                                   <Col lg={9}>
-                                        <Row className='no-gutters' className='d-flex align-self-center'>
-                                            <Col>
-                                                {touched.room && errors.room &&
-                                                <div style={style.errorMessage}>{errors.room}</div>}
-                                            </Col>
-                                        </Row>        
-                                    </Col> 
-                                </Row>
+                                    )}
+                                />
                                 <hr/>
-                                <Row className="form-group my-3 text-capitalize">
-                                    <Col>
+                                <FormikFormGroup 
+                                    name="room"
+                                    label={locale.texts.MONITOR_TYPE}
+                                    error={errors.monitorType}
+                                    touched={touched.monitorType}
+                                    component={() => (
                                         <CheckboxGroup
                                             id="monitorType"
                                             label={locale.texts.MONITOR_TYPE}
                                             value={values.monitorType}
-                                            error={errors.monitorType}
-                                            touched={touched.monitorType}
-                                            onChange={setFieldValue}
-                                            
-                                            // onBlur={setFieldTouched}
+                                            onChange={setFieldValue}                                            
                                         >
                                             {Object.keys(config.monitorType)
                                                 .filter(key => config.monitorTypeMap.patient.includes(parseInt(key)))
@@ -422,19 +366,23 @@ class EditPatientForm extends React.Component {
                                                     />
                                             })}
                                         </CheckboxGroup>
-                                    </Col>
-
-
-
-                                </Row>
+                                    )}
+                                />
                                 <Modal.Footer>
-                                    <Button variant="outline-secondary" className="text-capitalize" onClick={this.handleClose}>
+                                    <Button 
+                                        variant="outline-secondary" 
+                                        onClick={handleClose}
+                                    >
                                         {locale.texts.CANCEL}
                                     </Button>
-                                    <Button type="button" onClick={submitForm} className="text-capitalize" variant="primary" disabled={isSubmitting}>
+                                    <Button 
+                                        type="button" 
+                                        onClick={submitForm} 
+                                        variant="primary" 
+                                        disabled={isSubmitting}
+                                    >
                                         {locale.texts.SAVE}
                                     </Button>
-
                                 </Modal.Footer>
                             </Form>
                         )}

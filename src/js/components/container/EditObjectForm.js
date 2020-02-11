@@ -10,7 +10,7 @@ import { Modal, Button, Row, Col } from 'react-bootstrap';
 import Select from 'react-select';
 import config from '../../config';
 import axios from 'axios';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
+import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
 import CheckboxGroup from './CheckboxGroup'
 import Checkbox from '../presentational/Checkbox'
@@ -35,32 +35,13 @@ class EditObjectForm extends React.Component {
     static contextType = AppContext
 
     state = {
-        show: this.props.show,
         transferredLocationOptions: [],
     };
 
     componentDidMount = () => {
         this.getTransferredLocation();
-      
-     }
-
+    }
     
-    /**
-     * EditObjectForm will update if user selects one of the object table.
-     * The selected object data will transfer from ObjectMangentContainer to EditObjectForm
-     */
-    componentDidUpdate = (prevProps) => {
-        if (!(_.isEqual(prevProps, this.props))) {
-            this.setState({
-                show: this.props.show,
-            })
-        }
-    }
-  
-    handleClose = () => {
-        this.props.handleCloseForm()
-    }
-
     handleSubmit = (postOption) => {
         const path = this.props.formPath
         axios.post(path, {
@@ -73,8 +54,6 @@ class EditObjectForm extends React.Component {
         this.props.handleSubmitForm()
     }
         
-
-
     getTransferredLocation = () => {
         let { locale } = this.context
         axios.get(dataSrc.getTransferredLocation)
@@ -100,7 +79,6 @@ class EditObjectForm extends React.Component {
         })
     }
 
-
     render() {
         const { locale } = this.context
 
@@ -115,7 +93,9 @@ class EditObjectForm extends React.Component {
             title, 
             selectedObjectData,
             importData,
-            objectTable
+            objectTable,
+            show,
+            handleClose
         } = this.props;
 
         const { 
@@ -130,8 +110,15 @@ class EditObjectForm extends React.Component {
         } = selectedObjectData
 
         return (
-            <Modal show={this.state.show} onHide={this.handleClose} size='md'>
-                <Modal.Header closeButton className='font-weight-bold text-capitalize'>
+            <Modal 
+                show={show} 
+                onHide={handleClose} 
+                size='md'
+                className='text-capitalize'
+            >
+                <Modal.Header 
+                    closeButton 
+                >
                     {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
                 </Modal.Header >
                 <Modal.Body>
@@ -197,7 +184,9 @@ class EditObjectForm extends React.Component {
                                         value =>{
                                             let repeatFlag = false
                                             this.props.data.map(item => {
-                                               item.mac_address == value ?  repeatFlag = true : null
+                                                if (item.asset_control_number != this.props.selectedObjectData.asset_control_number){
+                                                     item.mac_address == value ?  repeatFlag = true : null
+                                                }
                                             })
                                             return !repeatFlag
                                            
@@ -249,7 +238,6 @@ class EditObjectForm extends React.Component {
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm }) => (
                             <Form className="text-capitalize">
                                 <Row noGutters>
-                                {console.log(touched)}
                                     <Col>
                                         <FormikFormGroup 
                                             type="text"
@@ -280,7 +268,7 @@ class EditObjectForm extends React.Component {
                                             error={errors.mac_address}
                                             touched={touched.mac_address}
                                             placeholder=""
-                                            disabled
+                                            disabled={this.props.disableASN ? 1 : 0}
                                         />
                                     </Col>
                                     <Col>
@@ -359,8 +347,8 @@ class EditObjectForm extends React.Component {
                                             </div>
                                         </RadioButtonGroup>  
                                     )}
-                                /> 
-                                {console.log(values)}
+
+                                />  
                                 <FormikFormGroup 
                                     name="select"
                                     label={locale.texts.AREA}
@@ -415,14 +403,15 @@ class EditObjectForm extends React.Component {
                                         </CheckboxGroup>
                                     )}
                                 />                                           
-
                                 <Modal.Footer>
-                                    <Button variant="outline-secondary" className="text-capitalize" onClick={this.handleClose}>
+                                    <Button 
+                                        variant="outline-secondary" 
+                                        onClick={handleClose}
+                                    >
                                         {locale.texts.CANCEL}
                                     </Button>
                                     <Button 
                                         type="button" 
-                                        className="text-capitalize" 
                                         variant="primary" 
                                         disabled={isSubmitting}
                                         onClick={submitForm}
