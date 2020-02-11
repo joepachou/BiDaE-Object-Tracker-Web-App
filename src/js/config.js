@@ -128,18 +128,17 @@ const config = {
     },
 
     monitorSettingType: {
-        RESIDENT_MOVEMENT_MONITOR: "resident movement monitor",
-        RESIDENT_LOCATION_MONITOR: "resident location monitor",
-        RESIDENT_LONG_STAY_IN_DANGER: "resident long stay in danger",
-        RESIDENT_NOT_STAY_ROOM: "resident not stay room",
-        GEO_FENCE_VIOLENCE: "resident violate geofence",
+        MOVEMENT_MONITOR: "movement monitor",
+        LONG_STAY_IN_DANGER_MONITOR: "long stay in danger monitor",
+        NOT_STAY_ROOM_MONITOR: "not stay room monitor",
+        GEOFENCE_MONITOR: "geofence monitor",
     },
 
     monitorSettingUrlMap: {
-        "resident movement monitor": "movement_config",
-        "resident long stay in danger": "location_long_stay_in_danger_config",
-        "resident not stay room": "location_not_stay_room_config",
-        "resident violate geofence": "geo_fence_config"
+        "movement monitor": "movement_config",
+        "long stay in danger monitor": "location_long_stay_in_danger_config",
+        "not stay room monitor": "location_not_stay_room_config",
+        "geofence monitor": "geo_fence_config"
     },
 
     shiftOption: [

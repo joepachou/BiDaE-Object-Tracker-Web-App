@@ -12,7 +12,7 @@ import config from "../../../config"
 import ReactTable from 'react-table'
 import { geofenceConfigColumn } from '../../../tables'
 import EditGeofenceConfig from '../EditGeofenceConfig'
-import retrieveData from '../../../helper/retrieveData'
+import retrieveDataHelper from '../../../helper/retrieveDataHelper'
 import styleConfig from '../../../styleConfig';
 import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm'
 
@@ -51,7 +51,7 @@ class GeoFenceSettingBlock extends React.Component{
 
     getLbeaconTable = () => {
         let { locale } = this.context
-        retrieveData.getLbeaconTable(locale.abbr)
+        retrieveDataHelper.getLbeaconTable(locale.abbr)
             .then(res => {
                 this.setState({
                     lbeaconsTable: res.data.rows
