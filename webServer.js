@@ -203,7 +203,7 @@ app.get('/data/getTransferredLocation', (req, res) => {
 })
 
 app.get(`/${process.env.DEFAULT_FOLDER}/shift_record/:file`, (req, res) =>{
-	res.sendFile(path.join(__dirname, `${process.env.DEFAULT_FOLDER}/shift_record`,req.params['file']));
+	res.sendFile(path.join(`${process.env.LOCAL_FILE_PATH}`, `${process.env.DEFAULT_FOLDER}/shift_record`,req.params['file']));
 })
 
 app.get(`/${process.env.DEFAULT_FOLDER}/search_result/:file`, (req, res) =>{
@@ -211,7 +211,7 @@ app.get(`/${process.env.DEFAULT_FOLDER}/search_result/:file`, (req, res) =>{
 })
 
 app.get(`/${process.env.DEFAULT_FOLDER}/edit_object_record/:file`, (req, res) =>{
-	res.sendFile(path.join(__dirname, `${process.env.DEFAULT_FOLDER}/edit_object_record`,req.params['file']));
+	res.sendFile(path.join(`${process.env.LOCAL_FILE_PATH}`, `${process.env.DEFAULT_FOLDER}/edit_object_record`,req.params['file']));
 })
 
 app.get('/download/com.beditech.IndoorNavigation.apk', (req, res) => {
@@ -230,24 +230,24 @@ app.get('/download/com.beditech.IndoorNavigation.apk', (req, res) => {
  * If it is window os, please refer to https://tecadmin.net/install-openssl-on-windows/ install openssl 
  * and set the environment variables*/
 
-var privateKey = PRIVATE_KEY ? fs.readFileSync(__dirname + `/ssl/${PRIVATE_KEY}`) : null
-var certificate = CERTIFICATE ? fs.readFileSync(__dirname + `/ssl/${CERTIFICATE}`) : null
-var ca_bundle = CA_BUNDLE ? fs.readFileSync(__dirname + `/ssl/${CA_BUNDLE}`) : null
+// var privateKey = PRIVATE_KEY ? fs.readFileSync(__dirname + `/ssl/${PRIVATE_KEY}`) : null
+// var certificate = CERTIFICATE ? fs.readFileSync(__dirname + `/ssl/${CERTIFICATE}`) : null
+// var ca_bundle = CA_BUNDLE ? fs.readFileSync(__dirname + `/ssl/${CA_BUNDLE}`) : null
 
-var credentials = PRIVATE_KEY ? { 
-    key: privateKey, 
-    cert: certificate,
-    ca: ca_bundle
-} : null
+// var credentials = PRIVATE_KEY ? { 
+//     key: privateKey, 
+//     cert: certificate,
+//     ca: ca_bundle
+// } : null
 
-const httpsServer = https.createServer(credentials, app)
+// const httpsServer = https.createServer(credentials, app)
 
 const httpServer = http.createServer(app);
 
 /** Enable HTTPS server */
-PRIVATE_KEY ? httpsServer.listen(httpsPort, () => {
-    console.log(`HTTPS Server running on PORT ${httpsPort}`)
-}) : null
+// PRIVATE_KEY ? httpsServer.listen(httpsPort, () => {
+//     console.log(`HTTPS Server running on PORT ${httpsPort}`)
+// }) : null
 
 /** Enable HTTP server */
 httpServer.listen(httpPort, () =>{

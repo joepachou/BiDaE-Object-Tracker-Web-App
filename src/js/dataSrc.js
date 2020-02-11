@@ -1,5 +1,6 @@
 const dataSrcIP = process.env.DATASRC_IP;
 const protocol = process.env.PROTOCOL;
+const port = process.env.PORT;
 const domain = `${protocol}://${dataSrcIP}`;
 const getTrackingData = `${protocol}://${dataSrcIP}/data/getTrackingData`;
 const getTrackingTableByMacAddress = `${protocol}://${dataSrcIP}/data/getTrackingTableByMacAddress`;
@@ -63,7 +64,7 @@ const getUserArea= `${protocol}://${dataSrcIP}/data/getUserArea`
 const addUserArea= `${protocol}://${dataSrcIP}/data/addUserArea`
 const DeleteUserArea= `${protocol}://${dataSrcIP}/data/DeleteUserArea`
 const pdfUrl = function(path){
-    return `${protocol}://${dataSrcIP}/${path}`
+    return `${protocol}://${dataSrcIP}:${port}/${path}`
 }
 module.exports = {
     domain,

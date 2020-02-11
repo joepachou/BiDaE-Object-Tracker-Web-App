@@ -7,6 +7,8 @@ import {
     Formik, 
     Form 
 } from 'formik';
+import { AppContext } from '../../context/AppContext';
+import dataSrc from '../../dataSrc'
 import LocaleContext from '../../context/LocaleContext';
   
 const DownloadPdfRequestForm = ({
@@ -28,6 +30,29 @@ const DownloadPdfRequestForm = ({
         },
     }
 
+
+    const handleClickButton = e => {
+        
+        let { name } = e.target
+        console.log(name)
+        switch(name) {
+            case "viewReport":
+                window.open(dataSrc.pdfUrl(pdfPath));
+                break;
+            case "downloadReport":
+            console.log(dataSrc.pdfUrl(pdfPath))
+                var link = document.createElement('a');
+                link.href = dataSrc.pdfUrl(pdfPath);
+                link.download = "";
+                link.click();
+                break;
+            case "close":
+                handleClose()
+                break;
+        }
+    }
+
+    
     return (
         <Modal 
             id='downloadPdfRequest' 
@@ -53,28 +78,21 @@ const DownloadPdfRequestForm = ({
                                 <div className="d-flex justify-content-around">
                                     <Button 
                                         variant="outline-secondary" 
-                                        onClick={() => {
-                                            window.open(pdfPath);
-                                        }}
+                                        onClick={handleClickButton}
                                         name="viewReport"
                                     >
                                         {locale.texts.VIEW_REPORT}
                                     </Button>
                                     <Button 
                                         variant="outline-secondary" 
-                                        onClick={() => {
-                                            var link = document.createElement('a');
-                                            link.href = `/${pdfPath}`;
-                                            link.download = "";
-                                            link.click();
-                                        }}
+                                        onClick={handleClickButton}
                                         name="downloadReport"
                                     >
                                         {locale.texts.DOWNLOAD_REPORT}
                                     </Button>
                                     <Button 
                                         variant="outline-secondary" 
-                                        onClick={handleClose}
+                                        onClick={handleClickButton}
                                         name="close"
                                     >
                                         {locale.texts.CLOSE}

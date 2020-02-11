@@ -655,6 +655,7 @@ const addImport = (formOption) => {
 	`;
 	const values = [
 		formOption.type, 
+
 		formOption.asset_control_number, 
 		formOption.name, 
 	];
@@ -981,7 +982,7 @@ const getEditObjectRecord = () => {
 const deleteEditObjectRecord = (idPackage) => {
 	const query = `
 		DELETE FROM edit_object_record
-		WHERE id IN (${idPackage.map(item => `'${item}'`)});
+		WHERE id IN (${idPackage.map(item => `'${item}'`)}) RETURNING *;
 	`
 	return query
 }
@@ -1090,7 +1091,7 @@ const insertUserData = (username, role, area_id) => {
 	`
 }
 
-const addEditObjectRecord = (formOption, username) => {
+const addEditObjectRecord = (formOption, username, filePath) => {
 	let item = formOption[0]
 	const text = `
 		INSERT INTO edit_object_record (
@@ -1099,7 +1100,8 @@ const addEditObjectRecord = (formOption, username) => {
 			notes, 
 			new_status, 
 			new_location, 
-			edit_objects
+			edit_objects,
+			path
 		)
 		VALUES (
 			(
@@ -1111,14 +1113,17 @@ const addEditObjectRecord = (formOption, username) => {
 			$2,
 			$3,
 			'${item.transferred_location ? item.transferred_location.value : ' '}',
-			ARRAY [${formOption.map(item => `'${item.asset_control_number}'`)}]
+			ARRAY [${formOption.map(item => `'${item.asset_control_number}'`)}],
+			$4
 		)
 		RETURNING id;
 	`
+	// console.log(item)
 	const values = [
 		username,
 		item.notes,
 		item.status,
+		filePath
 	]
 
 	const query = {
@@ -1554,7 +1559,7 @@ function deleteSameNameSearchQueue(keyType, keyWord){
 
 	var text = `DELETE FROM search_result_queue where (key_type = '${keyType}' AND key_word = '${keyWord}') 
 	OR 
-		id NOT IN (SELECT id FROM search_result_queue ORDER BY time desc LIMIT 5) RETURNING *;`
+		id NOT IN (SELECT id FROM search_result_queue ORDER BY query_time desc LIMIT 5) RETURNING *;`
 	// console.log(text)
 	return text
 }
@@ -1583,7 +1588,7 @@ function getBackendSearchQueue(){
 			FROM
 				search_result_queue
 			ORDER BY
-				time DESC
+				query_time DESC
 			LIMIT 5
 		`
 	
