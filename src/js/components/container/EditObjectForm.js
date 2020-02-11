@@ -184,7 +184,9 @@ class EditObjectForm extends React.Component {
                                         value =>{
                                             let repeatFlag = false
                                             this.props.data.map(item => {
-                                               item.mac_address == value ?  repeatFlag = true : null
+                                                if (item.asset_control_number != this.props.selectedObjectData.asset_control_number){
+                                                     item.mac_address == value ?  repeatFlag = true : null
+                                                }
                                             })
                                             return !repeatFlag
                                            
@@ -266,7 +268,7 @@ class EditObjectForm extends React.Component {
                                             error={errors.mac_address}
                                             touched={touched.mac_address}
                                             placeholder=""
-                                            // disabled
+                                            disabled={this.props.disableASN ? 1 : 0}
                                         />
                                     </Col>
                                     <Col>
@@ -345,7 +347,8 @@ class EditObjectForm extends React.Component {
                                             </div>
                                         </RadioButtonGroup>  
                                     )}
-                                /> 
+
+                                />  
                                 <FormikFormGroup 
                                     name="select"
                                     label={locale.texts.AREA}

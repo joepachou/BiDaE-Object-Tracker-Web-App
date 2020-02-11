@@ -603,7 +603,7 @@ class MainContainer extends React.Component{
                 maxHeight: '50vh',
             },
             searchResultListFormobile: {
-                maxHeight: this.state.showMobileMap ? '40vh' : '70vh'
+                maxHeight: this.state.showMobileMap ? '20vh' : '65vh'
             }
         }
         const { 

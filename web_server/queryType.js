@@ -654,8 +654,8 @@ function signin(username) {
 				SELECT area_id
 				FROM user_areas
 				WHERE user_areas.user_id = user_table.id
-			) as areas_id
-
+			) as areas_id,
+			main_area
 		FROM user_table
 
 		LEFT JOIN user_roles
@@ -1592,6 +1592,62 @@ const getSearchRssi = () =>{
 	return text
 }
 
+function getUserArea(user_id){
+
+    const text =  `
+    SELECT 
+        area_id
+    FROM user_areas WHERE user_areas.user_id = $1;
+    `;
+
+    const values = [user_id];
+
+    const query = {
+        text,
+        values
+    };
+
+    return query
+
+}
+
+function addUserArea (user_id,area_id){
+    const text = `
+    INSERT INTO user_areas (
+        user_id,
+        area_id
+    )
+    VALUES (
+        $1, 
+        $2
+    );
+`;
+    
+const values = [
+    user_id,
+    area_id
+];
+
+
+const query = {
+    text,
+    values
+};
+
+return query;
+}
+
+function DeleteUserArea (user_id,area_id){
+
+    const query = `
+        
+        DELETE FROM user_areas
+        WHERE user_id = '${user_id}' AND area_id = '${area_id}'
+    
+    `
+    return query
+
+}
 
 module.exports = {
 	getTrackingData,
@@ -1653,7 +1709,10 @@ module.exports = {
 	getImportPatient,
 	addGeofenceConfig,
 	deleteMonitorConfig,
-	addMonitorConfig
+	addMonitorConfig,
+	getUserArea,
+	addUserArea,
+	DeleteUserArea
 }
 
 
