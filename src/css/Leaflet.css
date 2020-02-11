@@ -57,6 +57,11 @@
     max-height: 300px;
     border-top: 1px solid rgba(32, 33, 36, 0.28);
     padding: 0.2rem 0;
+    display: block;
+}
+
+.popupIndex {
+    min-width: 1rem;
 }
 
 .customPopup .leaflet-container .leaflet-popup-scrolled::-webkit-scrollbar {
