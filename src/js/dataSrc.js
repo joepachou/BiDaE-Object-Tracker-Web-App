@@ -16,6 +16,7 @@ const addPatient= `${protocol}://${dataSrcIP}/data/addPatient`;
 const getImportTable = `${protocol}://${dataSrcIP}/data/getImportTable`;
 const getImportData = `${protocol}://${dataSrcIP}/data/getImportData`;
 const addAssociation = `${protocol}://${dataSrcIP}/data/addAssociation`;
+const addAssociation_Patient = `${protocol}://${dataSrcIP}/data/addAssociation_Patient`;
 const cleanBinding = `${protocol}://${dataSrcIP}/data/cleanBinding`;
 const editObjectPackage = `${protocol}://${dataSrcIP}/data/editObjectPackage`;
 const signin = `${protocol}://${dataSrcIP}/user/signin`;
@@ -70,6 +71,7 @@ module.exports = {
     getTrackingTableByMacAddress,
     getImportData,
     addAssociation,
+    addAssociation_Patient,
     editImport,
     cleanBinding,
     getObjectTable,

@@ -312,6 +312,51 @@ function addAssociation (formOption) {
 
 }
 
+
+function addAssociation_Patient (formOption) {
+	// console.log(formOption)
+	const text = `
+		INSERT INTO object_table (
+			name,
+			type,
+			asset_control_number,
+			mac_address,
+			area_id,
+			status,
+			object_type
+		)
+		VALUES (
+			$1,
+			$2,
+			$3,
+			$4,
+			$5,
+			'Patient',
+			1
+		)
+	`
+	;
+
+	const values = [
+		formOption.name,
+		formOption.type,
+		formOption.asset_control_number,
+		formOption.mac_address,
+		formOption.area_id
+	]
+
+	const query = {
+		text, 
+		values
+	};
+
+	return query;
+
+}
+
+
+
+
 function cleanBinding(formOption) {
 	const text =
 		`
@@ -1702,6 +1747,7 @@ module.exports = {
 	deleteSameNameSearchQueue,
 	getBackendSearchQueue,
 	addAssociation,
+	addAssociation_Patient,
 	cleanBinding,
 	getImportData,
 	editObject,

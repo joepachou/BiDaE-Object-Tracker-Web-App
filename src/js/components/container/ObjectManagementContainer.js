@@ -71,6 +71,7 @@ class ObjectManagementContainer extends React.Component{
         roomOptions: {},
         isShowBind:false,
         isShowEditImportTable:false,
+        bindCase:0, // １是Object 2是Patient
         dataImportThis:[],
         physicianName:'',
         physicianIDNumber:0,
@@ -297,6 +298,7 @@ class ObjectManagementContainer extends React.Component{
             isShowEdit: true,
             isPatientShowEdit: true,
             isShowBind:true,
+            bindCase:0,
             isShowEditImportTable:true
         })
     }
@@ -307,6 +309,7 @@ class ObjectManagementContainer extends React.Component{
             isPatientShowEdit: false,
             isShowAddAll: false,
             isShowBind:false,
+            bindCase:0,
             isShowEditImportTable:false
         })
     }
@@ -328,9 +331,16 @@ class ObjectManagementContainer extends React.Component{
             case "associate":
                 this.setState({
                     isShowBind: true,
+                    bindCase:1,
                 })
             break;
-        
+            case "associate_patient":
+                this.setState({
+                    isShowBind: true,
+                    bindCase:2,
+                })
+            break;
+
             case "delete object":
                 this.deleteRecordDevice();
                 break;
@@ -407,6 +417,7 @@ class ObjectManagementContainer extends React.Component{
             isShowEdit: false,
             isPatientShowEdit: false,
             isShowBind:false,
+            bindCase:0,
             isShowEditImportTable:false
         })
     }
@@ -672,6 +683,7 @@ class ObjectManagementContainer extends React.Component{
             selectAll,
             selectType,
             isShowBind,
+            bindCase,
             isShowEditImportTable,
         } = this.state
 
@@ -787,19 +799,27 @@ class ObjectManagementContainer extends React.Component{
                             }}
                         />
                     </TabPanel>
+
                     <TabPanel>
                         <ButtonToolbar>
                             <Button 
                                 variant="outline-primary" 
-                                className='mb-1 text-capitalize mr-2'
-                                onClick={this.handlePatientClick}
+                                className='text-capitalize mr-2 mb-1'
+                                name="associate_patient"
+                                onClick={this.handleClickButton}
                             >
-                                {locale.texts.ADD_INPATIENT}
-                                
+                                {locale.texts.ASSOCIATE}
                             </Button>
                             <Button 
                                 variant="outline-primary" 
-                                className='mb-1 text-capitalize'
+                                className='text-capitalize mr-2 mb-1'
+                                onClick={this.handlePatientClick}
+                            >
+                                {locale.texts.ADD_INPATIENT}
+                            </Button>
+                            <Button 
+                                variant="outline-primary" 
+                                className='text-capitalize mr-2 mb-1'
                                 onClick={this.deleteRecordPatient}    
                             >
                                 {locale.texts.DELETE}
@@ -922,7 +942,7 @@ class ObjectManagementContainer extends React.Component{
                     selectedObjectData={selectedRowData_Patient || null} 
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={this.state.formPath}
-                    handleCloseForm={this.handleCloseForm}
+                    handleClose={this.handleCloseForm}
                     data={this.state.dataPatient}
                     objectData = {this.state.data}
                     physicianList={this.state.physicianList}
@@ -937,7 +957,7 @@ class ObjectManagementContainer extends React.Component{
                     selectedObjectData={selectedRowData || null} 
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={this.state.formPath}
-                    handleCloseForm={this.handleCloseForm}
+                    handleClose={this.handleCloseForm}
                     data={this.state.data}
                     importData={this.state.dataImport}
                     objectTable={this.state.objectTable}
@@ -946,17 +966,23 @@ class ObjectManagementContainer extends React.Component{
 
                 <BindForm
                     show = {isShowBind} 
+                    bindCase = {this.state.bindCase}
                     title={this.state.formTitle} 
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={this.state.formPath}
                     handleCloseForm={this.handleCloseForm}
                     objectTable={this.state.objectTable}
+                    ImportData= {this.state.dataImport}
+                    PatientImportData = {this.state.dataImportPatient}
                     data={this.state.dataImport.reduce((dataMap, item) => {
                         dataMap[item.asset_control_number] = item
                         return dataMap
                         }, {})
                     }
                 />
+
+
+
                 <DissociationForm
                     show={isShowEditImportTable} 
                     title={this.state.formTitle} 

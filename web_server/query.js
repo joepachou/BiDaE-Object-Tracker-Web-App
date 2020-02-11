@@ -231,6 +231,22 @@ const addAssociation = (request, response) => {
         })     
 }
 
+
+const addAssociation_Patient = (request, response) => {
+    let { locale, areaId } = request.body
+    const formOption = request.body.formOption
+    pool.query(queryType.addAssociation_Patient(formOption))       
+        .then(res => {
+            console.log('add Association Patient data')
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log("add Association Patient fails" + err)
+        })     
+}
+
+
+
 const cleanBinding = (request, response) => {
     let { locale, areaId } = request.body
     const formOption = request.body.formOption
@@ -1252,6 +1268,7 @@ module.exports = {
     addPatient,
     addBulkObject,
     addAssociation,
+    addAssociation_Patient,
     cleanBinding,
     editObject,
     editImport,

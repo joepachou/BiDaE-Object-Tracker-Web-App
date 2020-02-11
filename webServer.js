@@ -92,6 +92,8 @@ app.post('/data/getImportData', db.getImportData);
 
 app.post('/data/addAssociation', db.addAssociation);
 
+app.post('/data/addAssociation_Patient', db.addAssociation_Patient);
+
 app.post('/data/cleanBinding', db.cleanBinding);
 
 app.post('/data/getLbeaconTable', db.getLbeaconTable);

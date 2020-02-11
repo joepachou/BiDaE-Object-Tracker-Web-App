@@ -4,7 +4,8 @@ import axios from 'axios';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { 
-    addAssociation
+    addAssociation,
+    addAssociation_Patient
 } from "../../dataSrc"
 import { AppContext } from '../../context/AppContext';
 import Select from 'react-select';
@@ -32,7 +33,7 @@ class BindForm extends React.Component {
             objectType:'',
             selectData: {},
         })
-        this.props.handleClose()
+        this.props.handleCloseForm()
     }
 
     render() {
@@ -102,13 +103,17 @@ class BindForm extends React.Component {
                                     locale.texts.ASSET_CONTROL_NUMBER_IS_NOT_FOUND,
                                     value => {
                                     let findFlag = false
-                                    this.props.ImportData.map(item =>{
+                                    let DeviceOrPatient= ''
+                                    this.props.bindCase == 1 ? DeviceOrPatient =this.props.ImportData :  DeviceOrPatient =this.props.PatientImportData
+                                    //等於１就是儀器 所以只拿object的data
+                                    //等於２就是病人 拿patient的data
+                                    DeviceOrPatient.map(item =>{
                                       if( item.asset_control_number == value ){
                                         this.setState({bindData:item})
                                         findFlag = true
                                       } 
                                      })
-                                     this.setState({showDetail:true})
+                                     findFlag == true ?  this.setState({showDetail:true}) :  this.setState({showDetail:false})
                                      return findFlag
                                     }
                                 ),
@@ -138,22 +143,37 @@ class BindForm extends React.Component {
                         }
 
                         onSubmit={(values, { setStatus, setSubmitting }) => {
-                            let formOption = this.state.selectData
+                            let formOption = this.state.bindData
                             formOption = {
                                 ...formOption,
                                 mac_address: values.mac,
                                 area_id: config.mapConfig.areaModules[values.area.value].id || 0
                             }
-                            axios.post(addAssociation, {
-                                formOption
-                            }).then(res => {
-                                setTimeout(function() { 
-                                    this.props.handleSubmitForm()
-                                    this.handleClose()
-                                }.bind(this),1000)
-                            }).catch( error => {
-                                console.log(error)
-                            })
+                            if (this.props.bindCase == 1) 
+                            {
+                                axios.post(addAssociation, {
+                                    formOption
+                                }).then(res => {
+                                    setTimeout(function() { 
+                                        this.props.handleSubmitForm()
+                                        this.handleClose()
+                                    }.bind(this),1000)
+                                }).catch( error => {
+                                    console.log(error)
+                                })
+                            }else if (this.props.bindCase == 2){
+                                axios.post(addAssociation_Patient, {
+                                    formOption
+                                }).then(res => {
+                                    setTimeout(function() { 
+                                        this.props.handleSubmitForm()
+                                        this.handleClose()
+                                    }.bind(this),1000)
+                                }).catch( error => {
+                                    console.log(error)
+                                })
+                            }
+                        
                         }}
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm }) => (
