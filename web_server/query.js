@@ -700,13 +700,13 @@ const deleteEditObjectRecord = (request, response) => {
     pool.query(queryType.deleteEditObjectRecord(idPackage))
         .then(res => {
             pool.query(`UPDATE object_table SET note_id = null WHERE note_id IN (${idPackage.map(id => `${id}`)})`)
-                .then(res => {
+                .then(res1 => {
                     console.log('delete edit object record success')
-                    fs.unlink(path.join(process.env.LOCAL_FILE_PATH, res.rows[0].file_path), (err) => {
+                    fs.unlink(path.join(process.env.LOCAL_FILE_PATH, res.rows[0].path), (err) => {
                         if(err){
                             console.log('err when deleting files', err)
                         }
-                        response.status(200).json(res)
+                        response.status(200).json('success')
                         
                     })
                 })
