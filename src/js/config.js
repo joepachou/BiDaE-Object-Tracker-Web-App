@@ -598,6 +598,17 @@ const config = {
                 return res
             }, {}),
     
+        areaList : [
+            "none",
+            "NTUH_EMERGENCY_ROOM",
+            "IIS_SINICA_FOURTH_FLOOR",
+            "NTUH_YUNLIN_WARD_FIVE_B",
+            "NURSING_HOME",
+            "YUANLIN_CHRISTIAN_HOSPITAL",
+            "VETERAN_HOME_FIRST_FLOOR",
+            "VETERAN_HOME_THIRD_FLOOR",
+        ],
+        
         areaModules: {
             NTUH_EMERGENCY_ROOM: {
                 id: 1,

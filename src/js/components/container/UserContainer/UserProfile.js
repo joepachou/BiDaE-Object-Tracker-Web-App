@@ -157,8 +157,8 @@ class UserProfile extends React.Component{
             elseArea:elseArray,
         })
 
-
-       let repeatFlag = false;
+    
+        let repeatFlag = false;
         this.state.userData.map(item =>{
             item.area_id == config.mapConfig.areaList.indexOf(name) ? repeatFlag = true : null
         })
