@@ -1064,11 +1064,12 @@ const setVisitTimestamp = (username) => {
 	`
 }
 
-const insertUserData = (username, role, area_id) => {
+const insertUserData = (username, roles, area_id) => {
 	return `
 		INSERT INTO user_roles (user_id, role_id)
-		VALUES (
-			(
+		VALUES 
+		${
+			roles.map(role => `((
 				SELECT id
 				FROM user_table
 				WHERE name='${username}'
@@ -1077,8 +1078,10 @@ const insertUserData = (username, role, area_id) => {
 				SELECT id 
 				FROM roles
 				WHERE name='${role}'
-			)
-		);
+			))`).join(',')
+		}
+			
+		;
 		INSERT INTO user_areas (user_id, area_id)
 		VALUES (
 			(

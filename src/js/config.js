@@ -172,7 +172,7 @@ const config = {
     ],
 
 
-    defaultRole: "care_provider", 
+    defaultRole: ["care_provider"], 
 
     mobileWindowWidth: 600,
 

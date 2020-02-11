@@ -21,6 +21,8 @@ import config from '../../config';
 import axios from 'axios';
 import dataSrc from '../../dataSrc';
 import { AppContext } from '../../context/AppContext'
+import CheckboxGroup from './CheckboxGroup'
+import Checkbox from '../presentational/Checkbox'
 
 
 class AddUserForm extends React.Component {
@@ -79,6 +81,7 @@ class AddUserForm extends React.Component {
         }
         const { title } = this.props
         const { show } = this.state;
+
         return (
             <Modal show={show} size="sm" onHide={this.handleClose}>
                 <Modal.Header closeButton className='font-weight-bold text-capitalize'>
@@ -134,6 +137,7 @@ class AddUserForm extends React.Component {
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
                             <Form className="text-capitalize">
+                            {console.log('values', values)}
                                 <div className="form-group">
                                     <label htmlFor="name">{locale.texts.NAME}*</label>
                                     <Field 
@@ -193,27 +197,55 @@ class AddUserForm extends React.Component {
                                 </Row> */}
                                 <Row className="form-group my-3 text-capitalize">
                                     <Col>
-                                        <RadioButtonGroup
-                                            id="role"
-                                            label={locale.texts.ROLES}
-                                            value={values.radioGroup}
-                                            error={errors.radioGroup}
-                                            touched={touched.radioGroup}
-                                        >
-                                        {this.props.roleName
-                                            .filter(roleName => roleName.name !== 'guest')
-                                            .map((roleName, index) => {
-                                                return (
-                                                    <Field
-                                                        component={RadioButton}
-                                                        key={index}
-                                                        name="role"
-                                                        id={roleName.name}
-                                                        label={locale.texts[roleName.name.toUpperCase()]}
-                                                    />
-                                                )
-                                        })}
-                                        </RadioButtonGroup>
+                                        {
+                                            <CheckboxGroup
+                                                id="role"
+                                                label={locale.texts.ROLES}
+                                                value={values.role}
+                                                error={errors.radioGroup}
+                                                touched={touched.radioGroup}
+                                                onChange={setFieldValue}                                            
+                                            >
+                                                {this.props.roleName
+                                                    .filter(roleName => roleName.name !== 'guest' && roleName.name !== 'dev')
+                                                    .map((roleName, index) => {
+                                                        console.log(roleName)
+                                                        return (
+                                                            <Field
+                                                                component={Checkbox}
+                                                                key={index}
+                                                                name="role"
+                                                                id={roleName.name}
+                                                                label={locale.texts[roleName.name.toUpperCase()]}
+                                                            />
+                                                        )
+                                                })}
+                                            </CheckboxGroup>
+                                        }
+                                        {
+                                            // <RadioButtonGroup
+                                            //     id="role"
+                                            //     label={locale.texts.ROLES}
+                                            //     value={values.radioGroup}
+                                            //     error={errors.radioGroup}
+                                            //     touched={touched.radioGroup}
+                                            // >
+                                            // {this.props.roleName
+                                            //     .filter(roleName => roleName.name !== 'guest')
+                                            //     .map((roleName, index) => {
+                                            //         return (
+                                            //             <Field
+                                            //                 component={RadioButton}
+                                            //                 key={index}
+                                            //                 name="role"
+                                            //                 id={roleName.name}
+                                            //                 label={locale.texts[roleName.name.toUpperCase()]}
+                                            //             />
+                                            //         )
+                                            // })}
+                                            // </RadioButtonGroup>
+                                        }
+                                        
                                         <Row className='no-gutters' className='d-flex align-self-center'>
                                             <Col>
                                                 {touched.radioGroup && errors.radioGroup &&

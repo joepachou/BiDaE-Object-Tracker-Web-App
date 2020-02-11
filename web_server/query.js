@@ -490,7 +490,7 @@ const signup = (request, response) => {
         area_id,
         shiftSelect
     } = request.body;
-    
+    console.log(role)
     const saltRounds = 10;
     const hash = bcrypt.hashSync(password, saltRounds);
 
@@ -685,6 +685,7 @@ const setUserRole = (request, response) => {
         roleSelect,
         shiftSelect
     } = request.body
+    console.log(username, roleSelect)
     pool.query(queryType.setUserRole(username, roleSelect, shiftSelect))
         .then(res => {
             console.log(`set user success`)
