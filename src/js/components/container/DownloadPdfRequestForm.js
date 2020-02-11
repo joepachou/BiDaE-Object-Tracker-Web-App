@@ -8,6 +8,7 @@ import {
     Form 
 } from 'formik';
 import { AppContext } from '../../context/AppContext';
+import dataSrc from '../../dataSrc'
   
 class DownloadPdfRequestForm extends React.Component {
 
@@ -33,8 +34,9 @@ class DownloadPdfRequestForm extends React.Component {
                 window.open(this.props.pdfPath);
                 break;
             case "downloadReport":
+            console.log(dataSrc.pdfUrl(this.props.pdfPath))
                 var link = document.createElement('a');
-                link.href = `/${this.props.pdfPath}`;
+                link.href = dataSrc.pdfUrl(this.props.pdfPath);
                 link.download = "";
                 link.click();
                 break;

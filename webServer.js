@@ -196,7 +196,7 @@ app.get('/data/getTransferredLocation', (req, res) => {
 })
 
 app.get(`/${process.env.DEFAULT_FOLDER}/shift_record/:file`, (req, res) =>{
-	res.sendFile(path.join(__dirname, `${process.env.DEFAULT_FOLDER}/shift_record`,req.params['file']));
+	res.sendFile(path.join(`${process.env.LOCAL_FILE_PATH}`, `${process.env.DEFAULT_FOLDER}/shift_record`,req.params['file']));
 })
 
 app.get(`/${process.env.DEFAULT_FOLDER}/search_result/:file`, (req, res) =>{
@@ -204,7 +204,7 @@ app.get(`/${process.env.DEFAULT_FOLDER}/search_result/:file`, (req, res) =>{
 })
 
 app.get(`/${process.env.DEFAULT_FOLDER}/edit_object_record/:file`, (req, res) =>{
-	res.sendFile(path.join(__dirname, `${process.env.DEFAULT_FOLDER}/edit_object_record`,req.params['file']));
+	res.sendFile(path.join(`${process.env.LOCAL_FILE_PATH}`, `${process.env.DEFAULT_FOLDER}/edit_object_record`,req.params['file']));
 })
 
 app.get('/download/com.beditech.IndoorNavigation.apk', (req, res) => {

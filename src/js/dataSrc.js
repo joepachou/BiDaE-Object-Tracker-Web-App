@@ -1,5 +1,6 @@
 const dataSrcIP = process.env.DATASRC_IP;
 const protocol = process.env.PROTOCOL;
+const port = process.env.PORT;
 const domain = `${protocol}://${dataSrcIP}`;
 const getTrackingData = `${protocol}://${dataSrcIP}/data/getTrackingData`;
 const getTrackingTableByMacAddress = `${protocol}://${dataSrcIP}/data/getTrackingTableByMacAddress`;
