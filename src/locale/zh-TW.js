@@ -37,6 +37,7 @@ const tw = {
     MALE:'男',
     FEMALE:'女',
     SCAN_TAG:"請掃描TAG",
+    ALREADY_CHOOSE:"已選擇",
 
     /* Location accuracy */
     LOCATION_ACCURACY: "位置精準度",

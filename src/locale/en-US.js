@@ -39,6 +39,7 @@ const en =  {
     PATIENT: 'patient',
     DEVICES: 'devices',
     SCAN_TAG:"Please Scan TAG",
+    ALREADY_CHOOSE:"Already choose",
 
     /* Location accuracy */
     LOCATION_ACCURACY: "Location Accuracy",
