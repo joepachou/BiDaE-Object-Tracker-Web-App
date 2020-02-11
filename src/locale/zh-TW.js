@@ -37,6 +37,8 @@ const tw = {
     MALE:'男',
     FEMALE:'女',
     SCAN_TAG:"請掃描TAG",
+    ALREADY_CHOOSE:"已選擇",
+    MAIN_AREA:"主要地區",
 
     /* Location accuracy */
     LOCATION_ACCURACY: "位置精準度",
@@ -118,7 +120,9 @@ const tw = {
     CLEAN_PATH:"刪除路徑",
     RETURN:"還原",
     ADD_RULE: "增加設定",
-
+    ADD:"新增",
+    REMOVE:"移除",
+    
     /* Form Field */
     NAME: "名稱",
     TYPE: "類別",

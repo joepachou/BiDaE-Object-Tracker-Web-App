@@ -141,6 +141,7 @@ class AdminManagementContainer extends React.Component{
     }
 
     onSubmitModifyUserInfo = (newInfo) => {
+        console.log(newInfo)
         axios.post(setUserRole, {
             username: this.state.selectedUser.name,
             ...newInfo
