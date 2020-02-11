@@ -1,6 +1,4 @@
 import React from 'react';
-
-/** Import leaflet.js */
 import L from 'leaflet';
 import 'leaflet.markercluster';
 import '../../helper/leaflet_awesome_number_markers';
@@ -19,7 +17,6 @@ import {
 } from 'react-device-detect'
 class Map extends React.Component {
     
-
     static contextType = AppContext
 
     state = {
@@ -48,8 +45,6 @@ class Map extends React.Component {
 
     componentDidUpdate = (prevProps) => {
         this.handleObjectMarkers();
-        //this.drawPolyline();
-
         this.drawPolyline();
 
         if (parseInt(process.env.IS_LBEACON_MARK) && this.props.lbeaconPosition.length !== 0 && !this.state.hasIniLbeaconPosition) {
@@ -98,7 +93,6 @@ class Map extends React.Component {
 
         let { url, bounds } = areaModules[areaOption]
         let map = L.map('mapid', mapOptions);
-        console.log('init map')
         let image = L.imageOverlay(url, bounds).addTo(map);
         map.addLayer(image)
         map.fitBounds(bounds);
@@ -111,8 +105,8 @@ class Map extends React.Component {
         /** Set the map's events */
         this.map.on('zoomend', this.resizeMarkers)
     }
+
     /** init path */
-    
     drawPolyline = () => {
         if(this.props.showPath){
             if(this.state.pathMacAddress === ''){
@@ -190,7 +184,6 @@ class Map extends React.Component {
         this.markersLayer.eachLayer( marker => {
             let icon = marker.options.icon;
             icon.options.iconSize = [this.scalableIconSize, this.scalableIconSize]
-            // icon.options.iconAnchor = [this.scalableIconAnchor, this.scalableIconAnchor]
             icon.options.numberSize = this.scalableNumberSize
             var pos = marker.getLatLng()
             marker.setLatLng([pos.lat - this.prevZoom * this.pin_shift_scale[0] + this.currentZoom* this.pin_shift_scale[0], pos.lng - this.pin_shift_scale[1]* this.prevZoom + this.currentZoom* this.pin_shift_scale[1]])
@@ -205,8 +198,6 @@ class Map extends React.Component {
     /** Set the overlay image */
     setMap = () => {
         let [{areaId}] = this.context.stateReducer
-        console.log('set Map')
-
         let { 
             areaModules,
             areaOptions,
@@ -246,35 +237,17 @@ class Map extends React.Component {
     createGeoFenceMarkers = () => {     
         this.geoFenceLayer.clearLayers()
 
-        let { stateReducer } = this.context
-        let [{areaId}] = stateReducer
-
         let {
             geofenceConfig,
             mapConfig
         } = this.props
-        
+
         /** Creat the marker of all lbeacons onto the map  */
-        axios.post(dataSrc.getGeofenceConfig, {
-            areaId
+        geofenceConfig[0].parsePerimeters.coordinates.map(item => {
+            let perimeters = L.circleMarker(item, mapConfig.geoFenceMarkerOption).addTo(this.geoFenceLayer);
         })
-        .then(res => {
-            res.data.rows.filter(item => {
-                return parseInt(item.unique_key) == areaId && item.enable == 1
-            }).map(item => {
-                item.fences.uuids.map(uuid => {
-                    let latLng = uuid.slice(1, 3)
-                    let fences = L.circleMarker(latLng, mapConfig.geoFenceMarkerOption).addTo(this.geoFenceLayer);
-                })
-    
-                item.perimeters.uuids.map(uuid => {
-                    let latLng = uuid.slice(1, 3)
-                    let perimeters = L.circleMarker(latLng, mapConfig.geoFenceMarkerOption).addTo(this.geoFenceLayer);
-                })
-            })
-        })
-        .catch(err => {
-            console.log(`get geo fence data fail: ${err}`)
+        geofenceConfig[0].parseFences.coordinates.map(item => {
+            let fences = L.circleMarker(item, mapConfig.geoFenceMarkerOption).addTo(this.geoFenceLayer);
         })
         
         /** Add the new markerslayers to the map */
@@ -374,8 +347,6 @@ class Map extends React.Component {
         //console.log(this.props.proccessedTrackingData)
         this.filterTrackingData(_.cloneDeep(this.props.proccessedTrackingData))
         .map(item => {
-            //console.log(item)
-            //console.log('good')
             let position = this.macAddressToCoordinate(item.mac_address,item.currentPosition);
             
             /** Set the Marker's popup 
