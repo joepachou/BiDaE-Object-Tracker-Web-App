@@ -5,101 +5,80 @@ import { Tab, Col, Row, Button, Nav, Container} from 'react-bootstrap';
 import ShiftChangeRecord from './ShiftChangeRecord'
 import AdminManagementContainer from './AdminManagementContainer'
 import EditObjectManagement from './EditObjectManagement'
-import LocaleContext from '../../../context/LocaleContext';
 import AccessControl from '../../presentational/AccessControl'
 import MyDeviceManager from './MyDeviceManager';
 import MyPatientManager from './MyPatientManager';
 import MonitorSetting from "./MonitorSetting";
 import UserProfile from "./UserProfile";
+import { AppContext } from '../../../context/AppContext';
+
 class UserSettingContainer extends React.Component{
-    constructor() {
-        super();
 
-        this.pageList = [
-            {
-                name: 'User Profile',
-                path: 'userProfile',
-                href: '#UserProfile',
-                component: <UserProfile />
-            },
-            {
-                name: 'Devices Management',
-                path: 'devicesManagement',
-                href: '#DevicesManagement',
-                component: <MyDeviceManager />
-            },
-            {
-                name: 'Patient Management',
-                path: 'patientManagement',
-                href: '#PatientManagement',
-                component: <MyPatientManager />
-            },
-            {
-                name: 'User Manager',
-                path: 'userManager',
-                href: '#UserManager',
-                component: <AdminManagementContainer />
-            },
-            {
-                name: 'Edit Object Management',
-                path: 'editObjectManagement',
-                href: '#EditObjectManagement',
-                component: <EditObjectManagement />
-            },
-            {
-                name: 'Shift Change Record',
-                path: 'shiftChangeRecord',
-                href: '#ShiftChangeRecord',
-                component: <ShiftChangeRecord />
-            },
-            {
-                name: "Monitor Setting",
-                path: "monitorSetting",
-                href: "#MonitorSetting",
-                component: <MonitorSetting />
-            }
-        ]
-    }
-    // sideNavMouseOver(e){
-    //     e.target.style.fontSize = "1.6rem"
-    // }
-    // sideNavMouseLeave(e){
-    //     e.target.style.fontSize = "1.5rem"
-    // }
+    static contextType = AppContext
 
-
+    pageList = [
+        {
+            name: 'User Profile',
+            path: 'userProfile',
+            href: '#UserProfile',
+            component: <UserProfile />
+        },
+        {
+            name: 'Devices Management',
+            path: 'devicesManagement',
+            href: '#DevicesManagement',
+            component: <MyDeviceManager />
+        },
+        {
+            name: 'Patient Management',
+            path: 'patientManagement',
+            href: '#PatientManagement',
+            component: <MyPatientManager />
+        },
+        {
+            name: 'User Manager',
+            path: 'userManager',
+            href: '#UserManager',
+            component: <AdminManagementContainer />
+        },
+        {
+            name: 'Edit Object Management',
+            path: 'editObjectManagement',
+            href: '#EditObjectManagement',
+            component: <EditObjectManagement />
+        },
+        {
+            name: 'Shift Change Record',
+            path: 'shiftChangeRecord',
+            href: '#ShiftChangeRecord',
+            component: <ShiftChangeRecord />
+        },
+        {
+            name: "Monitor Setting",
+            path: "monitorSetting",
+            href: "#MonitorSetting",
+            component: <MonitorSetting />
+        }
+    ]
+    
     render(){
-        var indexNumber = 0
-        const locale = this.context
+        const  { locale } = this.context
         const style = {
             title: {
-                fontSize: '1.6rem',
-                fontWeight: 600,
+                fontSize: '1.4rem',
+                // fontWeight: 500,
+                color: 'black'
             },
             main:{
                 //border: 'solid',
                 width: '100vw',
                 height: '85vh'
             },
-            sideNav: {
-                //width: '200px',
-                //border: 'solid',
-                //position: 'fixed'
-            },
-            component: {
-                overflow: 'scroll',
-                //border: 'solid'
-                //position: 'absolute'
-            }
-        }
-
-        function onClickHandler(index){
-            console.log(index)
         }
 
         return (
             <Container fluid className="mt-5">
-                <Tab.Container id="list-group-tabs-example" defaultActiveKey="#MonitorSetting" className='mt-5' >
+                <Tab.Container transition={false} defaultActiveKey="#MonitorSetting" className='mt-5' >
                     <Row className='' noGutters>
                         <div className='d-flex flex-row'style={style.main}>
                             <Col lg={2} style={style.sideNav}>
@@ -160,6 +139,5 @@ class UserSettingContainer extends React.Component{
         )
     }
 }
-UserSettingContainer.contextType = LocaleContext;
 
 export default UserSettingContainer

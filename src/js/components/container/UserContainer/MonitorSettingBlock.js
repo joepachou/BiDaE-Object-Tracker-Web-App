@@ -49,17 +49,22 @@ class MonitorSettingBlock extends React.Component{
                     <div className="d-flex justify-content-start">
                         {['edit', 'delete'].map((item, index, original) => {
                             return  ( 
-                                <div key={item}>
-                                    <a 
+                                <div 
+                                    key={item} 
+                                    className="d-flex justify-content-start"
+                                >
+                                    <Button
+                                        variant="link" 
                                         name={item}
+                                        size="sm"
                                         style={styleConfig.link}
                                         onClick={(e) => {
                                             this.handleClickButton(e, props)
                                     }} >
                                         {locale.texts[item.toUpperCase()]}
-                                    </a>
+                                    </Button>
                                     {index < original.length - 1
-                                        ? <div className="ant-divider ant-divider-vertical" />
+                                        ? <div className="mx-1">|</div>
                                         : ""
                                     }
                                 </div>

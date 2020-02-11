@@ -90,7 +90,7 @@ class UserProfile extends React.Component{
       getAreaTable = () => {
 
           let { locale } = this.context
-          console.log(locale)
+
           const {auth} = this.context
           rows_data = []
           this.setState({rows_data})
@@ -108,8 +108,7 @@ class UserProfile extends React.Component{
                 res_UserArea.data.rows.map(nowArea => {
                     noteArray[parseInt(nowArea.area_id)] ='已選擇'
                 })
-                console.log(noteArray)
-                console.log(auth.user)
+
                 noteArray[parseInt(auth.user.main_area)] = '首要地區'
                 mainAreaBtn[parseInt(auth.user.main_area)] = true
                
@@ -254,7 +253,6 @@ class UserProfile extends React.Component{
 
     render(){
         const { locale } = this.context
-        console.log(locale)
         const {auth} = this.context;
         //console.log(config.mapConfig.areaModules)
         const style = {
