@@ -49,7 +49,7 @@ const SearchResultListGroup = ({
                         >
                             {selection.indexOf(item.mac_address) >= 0 
                                 ?   <i 
-                                        className="fas fa-check align-items-center" 
+                                        className="fas fa-check d-flex align-items-center" 
                                         style={style.icon}
                                     /> 
                                 : config.mapConfig.iconOptions.showNumber
