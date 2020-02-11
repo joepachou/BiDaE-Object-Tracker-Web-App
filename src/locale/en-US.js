@@ -40,6 +40,7 @@ const en =  {
     DEVICES: 'devices',
     SCAN_TAG:"Please Scan TAG",
     ALREADY_CHOOSE:"Already choose",
+    MAIN_AREA:"Main area",
 
     /* Location accuracy */
     LOCATION_ACCURACY: "Location Accuracy",
@@ -117,6 +118,9 @@ const en =  {
     CLEAN_PATH:"Clean path",
     RETURN:"Return",
     ADD_RULE: "add rule",
+    ADD:"Add",
+    REMOVE:"Remove",
+
 
     /* Form Field */
     NAME: "name",

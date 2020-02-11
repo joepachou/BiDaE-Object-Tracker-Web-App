@@ -24,7 +24,7 @@ class UserProfile extends React.Component{
 
     static contextType = AppContext
     state= {
-     
+        locale: '',
         userData:[],
         mainArea:'',
         elseArea:[],
@@ -54,7 +54,17 @@ class UserProfile extends React.Component{
         rows_data:[],
 
     }
-   
+
+    componentDidUpdate = (prevProps, prevState) => {
+        if (this.context.locale.abbr !== prevState.locale) {
+            this.setState({
+                locale: this.context.locale.abbr,
+                rows_data:[]
+            })
+            this.getAreaTable();
+        }
+    }
+
     componentDidMount = () => {
         this.getUserData()
         this.getAreaTable()
@@ -88,9 +98,7 @@ class UserProfile extends React.Component{
       }
 
       getAreaTable = () => {
-
           let { locale } = this.context
-
           const {auth} = this.context
           rows_data = []
           this.setState({rows_data})
@@ -106,24 +114,29 @@ class UserProfile extends React.Component{
                 let mainAreaBtn = []
                 let noteArray = []
                 res_UserArea.data.rows.map(nowArea => {
-                    noteArray[parseInt(nowArea.area_id)] ='已選擇'
+                    noteArray[parseInt(nowArea.area_id)] =locale.texts.ALREADY_CHOOSE
                 })
 
-                noteArray[parseInt(auth.user.main_area)] = '首要地區'
+                noteArray[parseInt(auth.user.main_area)] = locale.texts.MAIN_AREA
                 mainAreaBtn[parseInt(auth.user.main_area)] = true
                
-                res.data.rows.map(item=>{
+                if (rows_data == ''){//避免有兩個一樣的資料，像是２筆變４筆
+                    res.data.rows.map(item=>{
                     if (process.env.SITES_GROUP.includes(parseInt(item.id)) ){
                        noteCount +=1    
                       rows_data.push({
                         area : locale.texts[item.name],
-                        add :   <Button  name={item.name} disabled={mainAreaBtn[noteCount]} variant="outline-success" className="text-capitalize"  onClick={this.handleAddArea}>{'新增'}</Button>,
-                        remove :   <Button  name={item.name} disabled={mainAreaBtn[noteCount]}  variant="outline-info" className="text-capitalize"  onClick={this.handleRemoveArea}>{'移除'}</Button>,
+                        add :   <Button  name={item.name} disabled={mainAreaBtn[noteCount]} variant="outline-success" className="text-capitalize"  onClick={this.handleAddArea}>{locale.texts.ADD}</Button>,
+                        remove :   <Button  name={item.name} disabled={mainAreaBtn[noteCount]}  variant="outline-info" className="text-capitalize"  onClick={this.handleRemoveArea}>{locale.texts.REMOVE}</Button>,
                         note : noteArray[noteCount]
                         })
                     }
                     })
                 this.setState({rows_data})
+
+                    
+                }
+               
                 })
                 .catch(err => {
                     console.log(err)
@@ -148,7 +161,7 @@ class UserProfile extends React.Component{
     }
 
     handleAddArea =(e) =>{
-       
+        let { locale } = this.context
         let { name } = e.target
         const {auth} = this.context;
         this.state.elseArea.includes(name) ? null :   elseArray.push(name)
@@ -181,7 +194,7 @@ class UserProfile extends React.Component{
         rows_data = this.state.rows_data
         rows_data.map(item=>{
               if(itemCount == config.mapConfig.areaList.indexOf(name)){
-                   item.note = '已選擇'
+                   item.note = locale.texts.ALREADY_CHOOSE
               }
              itemCount = itemCount+1
         })
