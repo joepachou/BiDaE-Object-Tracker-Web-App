@@ -1,15 +1,8 @@
 import React from 'react';
-
-/** Import Presentational Component */
-
-
-
 import ListGroup from 'react-bootstrap/ListGroup';
-
-
-import { Col, Row } from 'react-bootstrap';
 const Fragment = React.Fragment;
-export default class AddableList extends React.Component{
+
+class AddableList extends React.Component{
 
     constructor() {
         super();
@@ -131,18 +124,14 @@ export default class AddableList extends React.Component{
 
         const style = {
             listGroup: {
-                // maxHeight: '50vh', 
-                // minHeight: '50vh', 
-                overflowY: 'scroll'
+                overflow: 'hidden scroll'
             },
             item: {
                 cursor: "pointer",
             }
         }
-        
         return (
             <Fragment>
-                {/* <h5>{this.state.title}</h5> */}
                 <ListGroup className="addableList" variant = "flush" style={style.listGroup}>
                     {this.state.itemList !== null 
                         ? 
@@ -158,9 +147,8 @@ export default class AddableList extends React.Component{
                                     if(item === 'add'){
                                         html = (
                                         <div className="py-1 pr-2" key = {index}>
-                                                <input  type="text" className="form-control h5 float-left w-75 border-0" onKeyPress={this.addListByEnter}></input>
-
-                                                <h4 className="float-right" name="add" onClick={this.removeItem}>x</h4>
+                                            <input  type="text" className="form-control h5 float-left w-75 border-0" onKeyPress={this.addListByEnter}></input>
+                                            <h4 className="float-right" name="add" onClick={this.removeItem}>x</h4>
                                         </div>      
                                     )}else{
                                         html = (
@@ -181,13 +169,11 @@ export default class AddableList extends React.Component{
                             })()
                         : 
                             null
-                    }
-                    {
-                        // <ListGroup.Item variant="light" action onClick={this.addNewItem}>+ Add More items</ListGroup.Item>
-                    }
-                    
+                    }                    
                 </ListGroup> 
             </Fragment>
         )
     }
 }
+
+export default AddableList

@@ -6,6 +6,12 @@ import dataSrc from "../../../dataSrc";
 import AddableList from './AddableList'
 import LocaleContext from '../../../context/LocaleContext';
 import { AppContext } from '../../../context/AppContext';
+import {
+    getDescription,
+    getName,
+    getPatientID,
+    getPhysicianName
+}from '../../../helper/descriptionGenerator';
 
 const Fragment = React.Fragment;
 
@@ -17,9 +23,7 @@ const style = {
     firstText: {
         paddingLeft: 15,
         paddingRight: 0,
-        // background: 'rgb(227, 222, 222)',
-        // height: 30,
-        // width: 30,
+
     },
     middleText: {
         paddingLeft: 2,
@@ -35,6 +39,9 @@ const style = {
         wordBreak: 'keep-all',
         // color:'red',
         zIndex: 1
+    },
+    item: {
+        minWidth: 35,
     },
 }
 
@@ -129,12 +136,19 @@ class MyPatientManager extends React.Component{
                         className='d-flex justify-content-start text-left' 
                         style={style.list}
                         name={item.asset_control_number}
-                    >
-                        <p className='d-inline-block mx-1'>&#9642;</p>
-                        {item.name},
-                        &nbsp;
-                        {item.asset_control_number}
-                        &nbsp;
+                        className='d-flex py-1 text-left justify-content-start' 
+                    >   
+                        <div 
+                            style={style.item}
+                            className="d-flex justify-content-center"
+                        >
+                            <div className='d-inline-block'>&bull;</div>
+                        </div>
+                        <div>
+                            {getName(item, locale)}
+                            {getPatientID(item, locale)}
+                            {getPhysicianName(item, locale).replace(/,/, '')}
+                        </div>
                     </div>
                 )
             }
@@ -165,11 +179,6 @@ class MyPatientManager extends React.Component{
     }
 
     componentDidMount(){
-        // if(this.props.getAPI){
-        //     this.props.getAPI(this.API)
-        // }else{
-        //     console.error('please set attributes called "getAPI" for UserSettingContainer')
-        // }
         this.getObjectData()
     }
 
@@ -240,12 +249,6 @@ class MyPatientManager extends React.Component{
                         </div>
                     </Col>
                 </Row>
-                {/* <Row>
-                    <Col xl={2} className='p-5 d-flex flex-column align-self-center text-center'>
-                        <i className="fas fa-angle-double-right fa-2x"></i>
-                        <i className="fas fa-angle-double-left fa-2x"></i>
-                    </Col>
-                </Row> */}
                 <Row className='w-100 d-flex bg-white'>
                     <Col>
                         <h5 className="text-capitalize">{locale.texts.NOT_MY_PATIENT_LIST}</h5>

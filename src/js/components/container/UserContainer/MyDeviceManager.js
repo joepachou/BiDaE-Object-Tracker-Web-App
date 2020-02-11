@@ -6,8 +6,12 @@ import dataSrc from "../../../dataSrc";
 import AddableList from './AddableList'
 import { AppContext } from '../../../context/AppContext';
 import retrieveDataHelper from '../../../helper/retrieveDataHelper'
-
-const Fragment = React.Fragment;
+import {
+    getDescription,
+    getName,
+    getType,
+    getACN
+}from '../../../helper/descriptionGenerator';
 
 const style = {
     listItem: {
@@ -26,8 +30,11 @@ const style = {
         color: '#007bff'
     },
     list: {
-        wordBreak: 'keep-all',
+        // wordBreak: 'keep-all',
         zIndex: 1
+    },
+    item: {
+        minWidth: 35,
     },
 }
 
@@ -122,25 +129,23 @@ class MyDeviceManager extends React.Component{
                         className='d-flex justify-content-start text-left' 
                         style={style.list}
                         name={item.asset_control_number}
-                    >
-                        <p className='d-inline-block mx-1'>&#9642;</p>
-                        
-                        {item.type},
-                        &nbsp;
-                        {item.asset_control_number}
-                        <p className='d-inline-block mx-1 text-capitalize'>
-                            {item.status !== 'normal'
-                                ? `, ${locale.texts[item.status.toUpperCase()]}`
-                                : ''
-                            }                        
-                        </p>
-                        &nbsp;
+                        className='d-flex py-1 text-left justify-content-start' 
+                    >   
+                        <div 
+                            style={style.item}
+                            className="d-flex justify-content-center"
+                        >
+                            <div className='d-inline-block'>&bull;</div>
+                        </div>
+                        <div>
+                            {getName(item, locale)}
+                            {getType(item, locale)}
+                            {getACN(item, locale).replace(/,/, '')}
+                        </div>
                     </div>
                 )
             }
         }
-
-
         this.getAPIfromAddableList_1 = this.getAPIfromAddableList_1.bind(this)
         this.getAPIfromAddableList_2 = this.getAPIfromAddableList_2.bind(this)
     }
@@ -169,7 +174,10 @@ class MyDeviceManager extends React.Component{
     }
 
     getObjectData() {
-        let { locale, auth } = this.context
+        let { 
+            locale, 
+            auth 
+        } = this.context
         retrieveDataHelper.getObjectTable(
             locale.lang, 
             auth.user.areas_id, 
@@ -185,7 +193,7 @@ class MyDeviceManager extends React.Component{
             this.device.dataMap = dataMap
 
             axios.post(dataSrc.getUserInfo, {
-                username: JSON.parse(Cookies.get('user')).name
+                username: auth.user.name
             }).then((res) => {
                 var myDeviceList = res.data.rows[0].mydevice || []
                 var allDeviceList = Object.keys(dataMap)
@@ -226,10 +234,14 @@ class MyDeviceManager extends React.Component{
             }
         }
         return (
-            <Fragment>
+            <div
+                className="text-capitalize"
+            >
                 <Row className="w-100 d-flex bg-white">
                     <Col>
-                        <h5 className="text-capitalize">{locale.texts.MY_DEVICES_LIST}</h5>
+                        <div className="title">
+                            {locale.texts.MY_DEVICES_LIST}
+                        </div>
                         <div style={style.AddableListStyle}>
                             <AddableList
                                 getAPI={this.getAPIfromAddableList_1}
@@ -237,9 +249,12 @@ class MyDeviceManager extends React.Component{
                         </div>
                     </Col>
                 </Row>
+                <br/>
                 <Row className='w-100 d-flex bg-white'>
                     <Col>
-                        <h5 className="text-capitalize">{locale.texts.NOT_MY_DEVICES_LIST}</h5>
+                        <div className="title">
+                            {locale.texts.NOT_MY_DEVICES_LIST}
+                        </div>
                         <div style={style.AddableListStyle}>
                             <AddableList
                                 getAPI={this.getAPIfromAddableList_2}
@@ -247,7 +262,7 @@ class MyDeviceManager extends React.Component{
                         </div>
                     </Col>
                 </Row>
-            </Fragment>
+            </div>
         )
     }
 }
