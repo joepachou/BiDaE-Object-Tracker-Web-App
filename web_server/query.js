@@ -814,7 +814,6 @@ const getMonitorConfig = (request, response) => {
     pool.query(queryType.getMonitorConfig(type, sitesGroup))
         .then(res => {
             console.log(`get ${type} success`)
-
             let toReturn = res.rows
             .filter(item => {
                 return areasId.includes(item.area_id)
