@@ -33,7 +33,7 @@ class BindForm extends React.Component {
             objectType:'',
             selectData: {},
         })
-        this.props.handleCloseForm()
+        this.props.handleClose()
     }
 
     render() {
