@@ -81,9 +81,10 @@ class AdminManagementContainer extends React.Component{
                     textTransform: 'capitalize'
                 }
             })
+
             res.data.rows.map((item, index) => {
                 item.id = index + 1
-                item.role_type = locale.texts[item.role_type.toUpperCase()]
+                item.role_type = item.role_type.map(role => locale.texts[role.toUpperCase()]).join(',')
                 item.shift = item.shift ? {
                     value: item.shift, 
                     label: locale.texts[item.shift.toUpperCase().replace(/ /g, '_')]
@@ -102,7 +103,7 @@ class AdminManagementContainer extends React.Component{
             }).then((res) => {
                 var userRole = ''
                 if(res.data.length !== 0){
-                    userRole = res.data.rows[0].name
+                    userRole = res.data[0]
                 }
                 callBack(userRole)
             })
@@ -141,7 +142,6 @@ class AdminManagementContainer extends React.Component{
     }
 
     onSubmitModifyUserInfo = (newInfo) => {
-        console.log(newInfo)
         axios.post(setUserRole, {
             username: this.state.selectedUser.name,
             ...newInfo
@@ -216,6 +216,7 @@ class AdminManagementContainer extends React.Component{
 
     render(){
         const locale = this.context
+
         return (
             <Fragment>
                 <ButtonToolbar>
