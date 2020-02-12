@@ -38,6 +38,7 @@ app.use(function(req, res, next) {
     next();
 });
 
+setInterval(db.clearSearchHistory, 86400*1)
 // app.get('/', (req,res) => {
 //     if (req.session.userInfo) {
 //         res.write('views: ' + req.session.userInfo + req.sessionID)

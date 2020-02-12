@@ -1794,6 +1794,12 @@ function DeleteUserArea (user_id,area_id){
     return query
 
 }
+function clearSearchHistory(){
+	const query = `
+		DELETE FROM search_history WHERE now() > search_time + interval '1 month'
+	`
+	return query
+}
 
 module.exports = {
 	getTrackingData,
@@ -1860,7 +1866,8 @@ module.exports = {
 	addMonitorConfig,
 	getUserArea,
 	addUserArea,
-	DeleteUserArea
+	DeleteUserArea,
+	clearSearchHistory
 }
 
 

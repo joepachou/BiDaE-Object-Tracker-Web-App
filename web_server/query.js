@@ -1265,6 +1265,13 @@ const DeleteUserArea = (request, response) => {
             console.log("Delete UserArea fails: " + err)
         })
 }
+const clearSearchHistory = () => {
+    pool.query(queryType.clearSearchHistory()).then(res => {
+
+    }).catch(err => {
+        console.log(err)
+    })
+}
 
 module.exports = {
     getTrackingData,
@@ -1325,5 +1332,9 @@ module.exports = {
     addMonitorConfig,
     getUserArea,
     addUserArea,
-    DeleteUserArea
+    DeleteUserArea,
+
+
+
+    clearSearchHistory
 }
