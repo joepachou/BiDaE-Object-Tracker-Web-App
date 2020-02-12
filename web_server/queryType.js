@@ -1017,7 +1017,8 @@ const getEditObjectRecord = () => {
 			edit_object_record.id,
 			edit_object_record.edit_time,
 			edit_object_record.notes,
-			edit_object_record.new_status
+			edit_object_record.new_status,
+			edit_object_record.path as file_path
 		FROM edit_object_record
 
 		LEFT JOIN user_table

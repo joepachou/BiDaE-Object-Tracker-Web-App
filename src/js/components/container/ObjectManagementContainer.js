@@ -40,6 +40,7 @@ import BindForm from './BindForm'
 import DissociationForm from './DissociationForm'
 import AccessControl from '../presentational/AccessControl'
 import styleConfig from '../../styleConfig'
+import Searchbar from '../presentational/Searchbar';
 const SelectTable = selecTableHOC(ReactTable);
 let deleteFlag = false;
 
@@ -248,8 +249,10 @@ class ObjectManagementContainer extends React.Component{
 
             this.setState({
                 data,
+                filteredData: data,
                 column,
                 dataPatient,
+                filteredPatient: dataPatient,
                 columnPatient,
                 objectTable: res.data.rows
             })
@@ -671,7 +674,60 @@ class ObjectManagementContainer extends React.Component{
             isShowEditImportTable: true,
             formTitle: "dissociation" 
         })
-    };
+    }
+    filterData = (data, key, filteredAttribute) => {
+        
+        let filteredData = data.filter(obj => {
+                                if(filteredAttribute.includes('name')){
+                                    let keyRex = new RegExp(key)
+                                    if(obj.name.toLowerCase().match(keyRex)){
+                                        return true
+                                    }
+                                }
+                                if(filteredAttribute.includes('type')){
+                                    let keyRex = new RegExp(key)
+                                    if(obj.type.toLowerCase().match(keyRex)){
+                                        return true
+                                    }
+                                }
+                                if(filteredAttribute.includes('acn')){
+                                    let keyRex = new RegExp(key)
+                                    if(obj.asset_control_number.toLowerCase().match(keyRex)){
+                                        return true
+                                    }
+                                }
+                                if(filteredAttribute.includes('status')){
+                                    // statement
+                                }
+                                if(filteredAttribute.includes('area')){
+                                    // statement
+                                }
+                                if(filteredAttribute.includes('monitor type')){
+                                    // statement
+                                }
+                                if(filteredAttribute.includes('mac address')){
+                                    // statement
+                                }
+                                return false
+                            })
+        return filteredData
+        
+    }
+    filterObjects = (key) => {
+        let filteredAttribute = ['name', 'type','acn']
+        let filteredData = this.filterData(this.state.data, key, filteredAttribute)
+        this.setState({
+            filteredData
+        })
+    }
+    filterPatients = (key) => {
+        let filteredAttribute = ['name', 'type','acn']
+        let filteredPatient = this.filterData(this.state.dataPatient, key, filteredAttribute)
+        this.setState({
+            filteredPatient
+        })
+
+    }
 
     render(){
         const { 
@@ -726,36 +782,51 @@ class ObjectManagementContainer extends React.Component{
                     </TabList>
 
                     <TabPanel>
-                        <ButtonToolbar>
-                            <Button 
-                                variant="outline-primary" 
-                                className='text-capitalize mr-2 mb-1'
-                                name="associate"
-                                onClick={this.handleClickButton}
-                            >
-                                {locale.texts.ASSOCIATE}
-                            </Button>
-                            <Button 
-                                variant="outline-primary" 
-                                className='text-capitalize mr-2 mb-1'
-                                name="add object"
-                                onClick={this.handleClickButton}
-                            >
-                                {locale.texts.ADD_OBJECT}
-                            </Button>
-                            <Button 
-                                variant="outline-primary" 
-                                className='text-capitalize mr-2 mb-1'
-                                name="dissociation"
-                                onClick={this.handleClickButton}
-                            >
-                                {locale.texts.DISSOCIATE}
-                            </Button>
-                        </ButtonToolbar>
+                    <Row>
+                        <Col lg={8} xl={8}>
+                            <ButtonToolbar>
+                                <Button 
+                                    variant="outline-primary" 
+                                    className='text-capitalize mr-2 mb-1'
+                                    name="associate"
+                                    onClick={this.handleClickButton}
+                                >
+                                    {locale.texts.ASSOCIATE}
+                                </Button>
+                                <Button 
+                                    variant="outline-primary" 
+                                    className='text-capitalize mr-2 mb-1'
+                                    name="add object"
+                                    onClick={this.handleClickButton}
+                                >
+                                    {locale.texts.ADD_OBJECT}
+                                </Button>
+                                <Button 
+                                    variant="outline-primary" 
+                                    className='text-capitalize mr-2 mb-1'
+                                    name="dissociation"
+                                    onClick={this.handleClickButton}
+                                >
+                                    {locale.texts.DISSOCIATE}
+                                </Button>
+
+                            </ButtonToolbar>
+
+                        
+                        </Col>
+                        <Col lg={4} xl={4}>
+                            <Searchbar 
+                                className={'float-right'}
+                                placeholder={''}
+                                getSearchKey={this.filterObjects}
+                                clearSearchResult={null}    
+                            />
+                        </Col>
+                    </Row>
                         {/* <SelectTable */}
                         <ReactTable
                             keyField='id'
-                            data={this.state.data}
+                            data={this.state.filteredData}
                             columns={this.state.column}
                             ref={r => (this.selectTable = r)}
                             className="-highlight"
@@ -767,7 +838,7 @@ class ObjectManagementContainer extends React.Component{
                                     onClick: (e) => {
                                         if (!e.target.type) {
                                             this.setState({
-                                                selectedRowData: this.state.data[rowInfo.index],
+                                                selectedRowData: this.state.filteredData[rowInfo.index],
                                                 isShowEdit: true,
                                                 isPatientShowEdit: false,
                                                 formTitle: 'edit object',
@@ -799,33 +870,48 @@ class ObjectManagementContainer extends React.Component{
                     </TabPanel>
 
                     <TabPanel>
-                        <ButtonToolbar>
-                            <Button 
-                                variant="outline-primary" 
-                                className='text-capitalize mr-2 mb-1'
-                                name="associate_patient"
-                                onClick={this.handleClickButton}
-                            >
-                                {locale.texts.ASSOCIATE}
-                            </Button>
-                            <Button 
-                                variant="outline-primary" 
-                                className='text-capitalize mr-2 mb-1'
-                                onClick={this.handlePatientClick}
-                            >
-                                {locale.texts.ADD_INPATIENT}
-                            </Button>
-                            <Button 
-                                variant="outline-primary" 
-                                className='text-capitalize mr-2 mb-1'
-                                onClick={this.deleteRecordPatient}    
-                            >
-                                {locale.texts.DELETE}
-                            </Button>
-                        </ButtonToolbar>
+                        
+                        <Row>
+                        <Col lg={8} xl={8}>
+                            <ButtonToolbar>
+                                <Button 
+                                    variant="outline-primary" 
+                                    className='text-capitalize mr-2 mb-1'
+                                    name="associate_patient"
+                                    onClick={this.handleClickButton}
+                                >
+                                    {locale.texts.ASSOCIATE}
+                                </Button>
+                                <Button 
+                                    variant="outline-primary" 
+                                    className='text-capitalize mr-2 mb-1'
+                                    onClick={this.handlePatientClick}
+                                >
+                                    {locale.texts.ADD_INPATIENT}
+                                </Button>
+                                <Button 
+                                    variant="outline-primary" 
+                                    className='text-capitalize mr-2 mb-1'
+                                    onClick={this.deleteRecordPatient}    
+                                >
+                                    {locale.texts.DELETE}
+                                </Button>
+                            </ButtonToolbar>
+
+                        
+                        </Col>
+                        <Col lg={4} xl={4}>
+                            <Searchbar 
+                                className={'float-right'}
+                                placeholder={''}
+                                getSearchKey={this.filterPatients}
+                                clearSearchResult={null}    
+                            />
+                        </Col>
+                    </Row>
                         <SelectTable
                             keyField='id'
-                            data={this.state.dataPatient}
+                            data={this.state.filteredPatient}
                             columns={this.state.columnPatient}
                             ref={r => (this.selectTable = r)}
                             className="-highlight"
@@ -837,9 +923,9 @@ class ObjectManagementContainer extends React.Component{
                                     onClick: (e, handleOriginal) => {
 
                                         this.setState({
-                                            physicianName:this.state.dataPatient[rowInfo.index].physician_name,
-                                            physicianIDNumber:this.state.dataPatient[rowInfo.index].physician_id,
-                                            selectedRowData_Patient: this.state.dataPatient[rowInfo.index],
+                                            physicianName:this.state.filteredPatient[rowInfo.index].physician_name,
+                                            physicianIDNumber:this.state.filteredPatient[rowInfo.index].physician_id,
+                                            selectedRowData_Patient: this.state.filteredPatient[rowInfo.index],
                                             isShowEdit: false,
                                             isPatientShowEdit: true,
                                             formTitle: 'edit patient',
