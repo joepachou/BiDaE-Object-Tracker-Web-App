@@ -439,7 +439,8 @@ const signin = (request, response) => {
                 if (bcrypt.compareSync(password, hash)) {
                     let { 
                         name, 
-                        role, 
+                        roles, 
+                        permissions,
                         mydevice, 
                         search_history,
                         areas_id,
@@ -451,7 +452,8 @@ const signin = (request, response) => {
                     let userInfo = {
                         name,
                         myDevice: mydevice,
-                        role,
+                        roles,
+                        permissions,
                         searchHistory: search_history,
                         shift,
                         id,
