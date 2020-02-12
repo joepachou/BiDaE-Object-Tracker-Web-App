@@ -26,6 +26,7 @@ const getUserInfo = `${protocol}://${dataSrcIP}/user/getUserInfo`;
 const addUserSearchHistory = `${protocol}://${dataSrcIP}/user/addUserSearchHistory`;
 const editLbeacon = `${protocol}://${dataSrcIP}/data/editLbeacon`;
 const modifyMyDevice = `${protocol}://${dataSrcIP}/data/modifyMyDevice`;
+const modifyUserInfo = `${protocol}://${dataSrcIP}/data/modifyUserInfo`;
 const generatePDF = `${protocol}://${dataSrcIP}/data/generatePDF`;
 const getPDFInfo = `${protocol}://${dataSrcIP}/data/PDFInfo`;
 const validateUsername = `${protocol}://${dataSrcIP}/validation/username`;
@@ -99,6 +100,7 @@ module.exports = {
     pdfUrl,
     generatePDF,
     modifyMyDevice,
+    modifyUserInfo,
     deleteDevice,
     deleteImportData,
     deleteLBeacon,

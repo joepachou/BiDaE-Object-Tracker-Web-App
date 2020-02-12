@@ -693,7 +693,7 @@ function signin(username) {
 		user_info
 			AS
 				(
-					SELECT name, password, mydevice, search_history, id, main_area
+					SELECT name, password, mydevice, search_history, id, main_area, max_search_history_count
 					FROM user_table
 					WHERE name =$1
 				)
@@ -731,6 +731,7 @@ function signin(username) {
 			user_info.search_history,
 			user_info.id,
 			user_info.id,
+			user_info.max_search_history_count as freq_search_count,
 			array(
 				SELECT role_name FROM roles
 			) as roles,
@@ -793,7 +794,7 @@ function signup(signupPackage) {
 
 function getUserInfo(username) {
 	const text =  `
-	SELECT name, mydevice, search_history from user_table where name= $1
+	SELECT name, mydevice, search_history, max_search_history_count as freqSearchCount from user_table where name= $1
 	`;
 
 	const values = [username];
@@ -868,6 +869,13 @@ function modifyUserDevices(username, mode, acn){
 		text = ""
 	}
 
+	return text
+	
+}
+function modifyUserInfo(username, info){
+	console.log(username)
+	const {freqSearchCount} = info
+	text = `UPDATE user_table SET max_search_history_count = ${freqSearchCount} WHERE name='${username}'`
 	return text
 	
 }
@@ -1793,6 +1801,7 @@ module.exports = {
 	addUserSearchHistory,
 	editLbeacon,
 	modifyUserDevices,
+	modifyUserInfo,
 	getShiftChangeRecord,
 	validateUsername,
 	getUserList,

@@ -135,6 +135,8 @@ app.post('/data/PDFInfo',db.getPDFInfo)
 
 app.post('/data/modifyMyDevice', db.modifyUserDevices)
 
+app.post('/data/modifyUserInfo', db.modifyUserInfo)
+
 app.post('/data/getAreaTable', db.getAreaTable)
 
 app.post('/validation/username', db.validateUsername)
