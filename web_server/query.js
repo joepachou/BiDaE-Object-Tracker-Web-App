@@ -901,7 +901,6 @@ const confirmValidation = (request, response) => {
                         role,
                         id,
                     }
-                    console.log(res.rows[0])
                     request.session.userInfo = userInfo
                     response.json({
                         confirmation: true,
