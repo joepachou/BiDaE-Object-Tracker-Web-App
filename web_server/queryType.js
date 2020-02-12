@@ -689,30 +689,67 @@ function signin(username) {
 
 	const text =
 		`
+		WITH 
+		user_info
+			AS
+				(
+					SELECT name, password, mydevice, search_history, id, main_area
+					FROM user_table
+					WHERE name =$1
+				)
+		,
+		roles
+			AS
+				(
+					SELECT user_roles.user_id, user_roles.role_id, roles.name as role_name 
+					FROM user_roles
+					INNER JOIN roles
+					ON roles.id = user_roles.role_id
+					WHERE user_roles.user_id = (SELECT id FROM user_info)
+				),
+		permissions
+			AS
+				(
+					SELECT roles_permission.role_id, roles_permission.permission_id, permission_table.name as permission_name 
+					FROM roles_permission
+					INNER JOIN permission_table
+					ON roles_permission.permission_id = permission_table.id
+					WHERE roles_permission.role_id in (SELECT role_id FROM roles)
+				),
+		areas
+			AS
+				(
+					SELECT area_id
+					FROM user_areas
+					WHERE user_areas.user_id = (SELECT id FROM user_info)
+				)
+
 		SELECT 
-			user_table.name, 
-			user_table.password,
-			roles.name as role, 
-			user_table.mydevice, 
-			user_table.search_history,
-			user_table.id,
+			user_info.name, 
+			user_info.password,
+			user_info.mydevice, 
+			user_info.search_history,
+			user_info.id,
+			user_info.id,
+			array(
+				SELECT role_name FROM roles
+			) as roles,
+			array(
+				SELECT permission_name FROM permissions 
+			) as permissions, 
 			array (
-				SELECT area_id
-				FROM user_areas
-				WHERE user_areas.user_id = user_table.id
-			) as areas_id,
-			main_area
-		FROM user_table
+				SELECT area_id FROM areas
+			) as areas_id
 
-		LEFT JOIN user_roles
-		ON user_roles.user_id = user_table.id
-
-		LEFT JOIN roles
-		ON user_roles.role_id = roles.id
-
-		WHERE user_table.name = $1
+		FROM user_info
 		
 		`;
+		
+
+
+
+
+		
 
 	const values = [username];
 
