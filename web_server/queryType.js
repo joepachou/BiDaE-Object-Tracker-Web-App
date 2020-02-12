@@ -693,7 +693,7 @@ function signin(username) {
 		user_info
 			AS
 				(
-					SELECT name, password, mydevice, search_history, id, main_area, max_search_history_count
+					SELECT name, password, mydevice, id, main_area, max_search_history_count
 					FROM user_table
 					WHERE name =$1
 				)
@@ -722,13 +722,20 @@ function signin(username) {
 					SELECT area_id
 					FROM user_areas
 					WHERE user_areas.user_id = (SELECT id FROM user_info)
+				),
+		search_histories
+			AS
+				(
+					SELECT keyword as name, COUNT(id) as value
+					FROM search_history where user_id = (SELECT id FROM user_info)
+					GROUP BY keyWord
 				)
 
 		SELECT 
 			user_info.name, 
 			user_info.password,
 			user_info.mydevice, 
-			user_info.search_history,
+			array(select row_to_json(search_histories) FROM search_histories) AS search_history,
 			user_info.id,
 			user_info.id,
 			user_info.max_search_history_count as freq_search_count,
@@ -807,14 +814,24 @@ function getUserInfo(username) {
 	return query
 }
 
-function addUserSearchHistory (username, searchHistory) {
+function addUserSearchHistory (username, keyType, keyWord) {
+	// const text = `
+	// 	UPDATE user_table
+	// 	SET search_history = $1
+	// 	WHERE name = $2
+	// `;
 	const text = `
-		UPDATE user_table
-		SET search_history = $1
-		WHERE name = $2
+		INSERT INTO search_history(search_time, keyWord, key_type, user_id)
+		VALUES(
+			now(),
+			$1,
+			$2,
+			(SELECT id from user_table where name = $3)
+		) 
+			
 	`;
 
-	const values = [searchHistory, username];
+	const values = [keyWord, keyType, username];
 
 	const query = {
 		text, 

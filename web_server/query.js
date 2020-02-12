@@ -449,7 +449,7 @@ const signin = (request, response) => {
                         id,
                         main_area
                     } = res.rows[0]
-
+                    console.log(search_history)
                     let userInfo = {
                         name,
                         myDevice: mydevice,
@@ -532,9 +532,9 @@ const getUserInfo = (request, response) => {
 }
 
 const addUserSearchHistory = (request, response) => {
-    let { username, searchHistory } = request.body;
-    searchHistory = JSON.stringify(searchHistory)
-    pool.query(queryType.addUserSearchHistory(username, searchHistory))
+    let { username, keyType, keyWord } = request.body;
+    // searchHistory = JSON.stringify(s)
+    pool.query(queryType.addUserSearchHistory(username, keyType, keyWord))
         .then(res => {
             console.log('Add user searech history success')
             response.status(200).json(res)

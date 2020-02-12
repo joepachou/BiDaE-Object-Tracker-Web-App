@@ -46,7 +46,7 @@ class FrequentSearch extends React.Component {
                 overflow: "hidden scroll"
             }
         }
-
+        console.log(auth.user)
         return (
             <div id='frequentSearch' >
                 <div className='text-capitalize title'>{locale.texts.FREQUENT_SEARCH}</div>

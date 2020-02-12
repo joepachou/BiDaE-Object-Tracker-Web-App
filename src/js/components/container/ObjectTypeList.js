@@ -35,10 +35,20 @@ class ObjectTypeList extends React.Component {
     }
 
     getSearchKey = (itemName) => {
+        const {auth} = this.context
         this.props.getSearchKey(itemName)
-        this.setState({
-            searchKey: itemName
+        axios.post(addUserSearchHistory, {
+            username: auth.user.name,
+            keyType: 'object type search',// keyType
+            keyWord: itemName
+        }).then(res => {
+            this.setState({
+                searchKey: itemName
+            })
+        }).catch(err => {
+            console.log(err)
         })
+        
     }
 
     addSearchHistory(searchKey) {
@@ -68,13 +78,14 @@ class ObjectTypeList extends React.Component {
     }
 
     checkInSearchHistory(username, searchHistory) {
-        axios.post(addUserSearchHistory, {
-            username,
-            searchHistory,
-        }).then(res => {
-        }).catch(err => {
-            console.log(err)
-        })
+        // axios.post(addUserSearchHistory, {
+        //     username,
+        //     searchHistory,
+        // }).then(res => {
+
+        // }).catch(err => {
+        //     console.log(err)
+        // })
     }
 
     render() {
