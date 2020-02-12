@@ -1665,30 +1665,6 @@ function getBackendSearchQueue(){
 	return query
 }
 
-
-const addBulkObject = (jsonObj) => {
-	let text =  `
-		INSERT INTO import_table (
-			name,
-			type,
-			asset_control_number,
-			bindflag,
-		)
-		VALUES ${jsonObj.map((item, index) => {
-			return `(
-				'${item.name}',
-				'${item.type}',
-				'c2:00:00:00:00:0${index}',
-				'${item.asset_control_number}',
-				now(),
-				0,
-				'normal'
-			)`
-		})}
-	`
-	return text	
-}
-
 const setSearchRssi = (rssi) => {
 	let text = `
 		UPDATE search_criteria

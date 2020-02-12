@@ -492,7 +492,6 @@ const signup = (request, response) => {
         area_id,
         shiftSelect
     } = request.body;
-    console.log(role)
     const saltRounds = 10;
     const hash = bcrypt.hashSync(password, saltRounds);
 
@@ -592,7 +591,6 @@ const modifyUserDevices = (request, response) => {
             
         } else {
             console.log('Modify Success')
-            // console.log('Get user info success')
         }
         
         response.status(200).json(results)
@@ -632,7 +630,6 @@ const getUserList = (request, response) => {
     let { locale } = request.body
     pool.query(queryType.getUserList())
         .then(res => {
-            console.log(res.rows)
             console.log('get user list success')
             res.rows.map(item => {
                 item.last_visit_timestamp = 
@@ -651,7 +648,6 @@ const getUserRole = (request, response) => {
     var { username } = request.body
     pool.query(queryType.getUserRole(username))
         .then(res => {
-            console.log(res.rows)
             response.status(200).json(res.rows[0].roles)
         })
         .catch(err => {
@@ -689,7 +685,6 @@ const setUserRole = (request, response) => {
         roleSelect,
         shiftSelect
     } = request.body
-    console.log(username, roleSelect)
     pool.query(queryType.setUserRole(username, roleSelect, shiftSelect))
         .then(res => {
             console.log(`set user success`)
@@ -779,38 +774,38 @@ const deletePatient = (request, response) => {
 const deleteLBeacon = (request, response) => {
     const { idPackage } = request.body
     pool.query(queryType.deleteLBeacon(idPackage))
-    .then(res => {
-                console.log('delete LBeacon record success')
-                response.status(200).json(res)
-    })
-    .catch(err => {
-        console.log(err)
-    })
+        .then(res => {
+            console.log('delete LBeacon record success')
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(err)
+        })
 }
 
 const deleteGateway = (request, response) => {
     const { idPackage } = request.body
     pool.query(queryType.deleteGateway(idPackage))
-    .then(res => {
-        console.log('delete Gateway record success')
-        response.status(200).json(res)
-    })
-    .catch(err => {
-        console.log(err)
-    })
+        .then(res => {
+            console.log('delete Gateway record success')
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(err)
+        })
 }
 
 
 const deleteDevice = (request, response) => {
     const { idPackage, formOption } = request.body
     pool.query(queryType.deleteDevice(idPackage, formOption))
-    .then(res => {
-        console.log('delete Device success')
-        response.status(200).json(res)
-    })
-    .catch(err => {
-        console.log(err)
-    })
+        .then(res => {
+            console.log('delete Device success')
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(err)
+        })
 }
 
 const deleteImportData = (request, response) => {
