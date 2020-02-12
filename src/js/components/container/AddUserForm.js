@@ -222,29 +222,6 @@ class AddUserForm extends React.Component {
                                                 })}
                                             </CheckboxGroup>
                                         }
-                                        {
-                                            // <RadioButtonGroup
-                                            //     id="role"
-                                            //     label={locale.texts.ROLES}
-                                            //     value={values.radioGroup}
-                                            //     error={errors.radioGroup}
-                                            //     touched={touched.radioGroup}
-                                            // >
-                                            // {this.props.roleName
-                                            //     .filter(roleName => roleName.name !== 'guest')
-                                            //     .map((roleName, index) => {
-                                            //         return (
-                                            //             <Field
-                                            //                 component={RadioButton}
-                                            //                 key={index}
-                                            //                 name="role"
-                                            //                 id={roleName.name}
-                                            //                 label={locale.texts[roleName.name.toUpperCase()]}
-                                            //             />
-                                            //         )
-                                            // })}
-                                            // </RadioButtonGroup>
-                                        }
                                         
                                         <Row className='no-gutters' className='d-flex align-self-center'>
                                             <Col>
