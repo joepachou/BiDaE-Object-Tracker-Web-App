@@ -53,7 +53,7 @@ class FrequentSearch extends React.Component {
                 <div style={style.list} className="d-inline-flex flex-column searchOption">
                     {auth.authenticated && auth.user.searchHistory &&
                         auth.user.searchHistory.filter( (item,index) => {
-                            return index < config.userPreference.searchHistoryNumber
+                            return index < auth.user.freqSearchCount
                     }).map( (item, index) => {
                         return (
                             <Button

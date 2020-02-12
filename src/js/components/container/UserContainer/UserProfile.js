@@ -10,7 +10,8 @@ import {
     getAreaTable,
     getUserArea,
     addUserArea,
-    DeleteUserArea
+    DeleteUserArea,
+    modifyUserInfo
 } from "../../../dataSrc"
 import {
     Row,
@@ -23,6 +24,7 @@ let  rows_data = []
 class UserProfile extends React.Component{
 
     static contextType = AppContext
+
     state= {
         locale: '',
         userData:[],
@@ -51,7 +53,20 @@ class UserProfile extends React.Component{
               }
            
           ],
+        settingColumns: [
+          {
+            label: 'Settings',
+            field: 'setting',
+            sord: 'asc'
+          },
+          {
+            label: '',
+            field: 'choice',
+            sort: 'asc'
+          }
+        ],
         rows_data:[],
+        userInfo: null
 
     }
 
@@ -66,6 +81,10 @@ class UserProfile extends React.Component{
     }
 
     componentDidMount = () => {
+        const {auth} = this.context
+        this.setState({
+          userInfo: auth.user
+        })
         this.getUserData()
         this.getAreaTable()
       }
@@ -145,6 +164,35 @@ class UserProfile extends React.Component{
           .catch(err => {
               console.log(err)
           })
+      }
+      resetFreqSearchCount = (e) => {
+        const {auth} = this.context;
+        let value = e.target.value
+        let userInfo = this.state.userInfo
+        userInfo.freqSearchCount = value
+        this.setState({
+          userInfo: userInfo
+        })
+        console.log(userInfo)
+        axios.post(modifyUserInfo, {
+          info: userInfo,
+          username: userInfo['name']
+        }).then(res => {
+          auth.setUserInfo('freqSearchCount', value)
+          console.log(res)
+        }) 
+      }
+      generateSettingBlock = () => {
+        let rows_data = [{
+          setting: '# of search history',
+          choice: this.state.userInfo ? <input type="number" 
+                        placeholder={this.state.userInfo['freqSearchCount']} 
+                        value={this.state.userInfo['freqSearchCount']} 
+                        min="1" 
+                        max="10" 
+                        onChange = {this.resetFreqSearchCount}/> : null
+        }]
+        return rows_data
       }
  
 
@@ -292,7 +340,7 @@ class UserProfile extends React.Component{
         // const key = Object.keys(config.mapConfig.areaOptions)
         // const value = Object.values(config.mapConfig.areaOptions)
    
-
+        console.log(this.state.rows_data)
         return(
              //    頭像
             // <div className='d-flex flex-row'style={style.userProfileContainer}>
@@ -316,14 +364,22 @@ class UserProfile extends React.Component{
 
            
 
-            <div className='d-flex flex-row'>
+            <div className=''>
      
 
-                <Row >
+                <Row className="m-3" style={{width: '100%'}}>
                     <Col>
                         <MDBTable>
                         <MDBTableHead columns={this.state.columns} />
                         <MDBTableBody rows={this.state.rows_data} />
+                        </MDBTable>
+                    </Col>
+                </Row>
+                <Row id="Setting" className="m-3" style={{width: '100%'}}>
+                    <Col> 
+                        <MDBTable>
+                        <MDBTableHead columns={this.state.settingColumns} />
+                        <MDBTableBody rows={this.generateSettingBlock()} />
                         </MDBTable>
                     </Col>
                 </Row>

@@ -443,6 +443,7 @@ const signin = (request, response) => {
                         permissions,
                         mydevice, 
                         search_history,
+                        freq_search_count,
                         areas_id,
                         shift,
                         id,
@@ -455,6 +456,7 @@ const signin = (request, response) => {
                         roles,
                         permissions,
                         searchHistory: search_history,
+                        freqSearchCount: freq_search_count,
                         shift,
                         id,
                         areas_id,
@@ -594,6 +596,18 @@ const modifyUserDevices = (request, response) => {
         }
         
         response.status(200).json(results)
+    })
+}
+
+const modifyUserInfo = (request, response) => {
+    const {username, info} = request.body
+    pool.query(queryType.modifyUserInfo(username, info), (error, results) => {
+        if(error){
+            console.log(error)
+        }else{
+            console.log('modify user info success')
+            response.status(200).send('ok')
+        }
     })
 }
 
@@ -1291,6 +1305,7 @@ module.exports = {
     signup,
     generatePDF,
     modifyUserDevices,
+    modifyUserInfo,
     validateUsername,
     setUserRole,
     setMonitorConfig,
