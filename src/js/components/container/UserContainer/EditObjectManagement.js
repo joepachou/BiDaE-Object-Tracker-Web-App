@@ -308,6 +308,7 @@ class EditObjectManagement extends React.Component{
                                     if (handleOriginal) {
                                         handleOriginal()
                                     }
+                                    window.open(`http://${process.env.DATASRC_IP}/${rowInfo.original.file_path}`);
                                 }
                             }
                         }}
