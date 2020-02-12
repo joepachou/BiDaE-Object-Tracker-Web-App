@@ -9,7 +9,7 @@ import dataSrc from "../../../dataSrc"
 import config from "../../../config"
 import ReactTable from 'react-table';
 import styleConfig from '../../../styleConfig';
-import EditMonitorConfigForm from '../EditMonitorConfigForm';
+import EditMonitorConfigForm from '../../presentational/EditMonitorConfigForm';
 import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm'
 import { monitorConfigColumn } from '../../../tables'
 
@@ -22,7 +22,8 @@ class MonitorSettingBlock extends React.Component{
         data: [],
         columns: [],
         path: '',
-        areaOptions: []
+        areaOptions: [],
+        isEdited: false,
     }
 
     componentDidMount = () => {
@@ -34,6 +35,7 @@ class MonitorSettingBlock extends React.Component{
             auth,
             locale
         } = this.context
+
         axios.post(dataSrc.getMonitorConfig, {
             type: config.monitorSettingUrlMap[this.props.type],
             areasId: auth.user.areas_id
@@ -186,37 +188,25 @@ class MonitorSettingBlock extends React.Component{
             locale 
         } = this.context
 
-        let style = {
-            container: {
-                minHeight: "100vh"
-            },
-            type: {
-                fontWeight: 600,
-                fontSize: '1.2rem',
-            },
-            subtype: {
-                color: "#6c757d",
-                fontSize: '1.2rem',
-            },
-            hr: {
-                width: "95%"
-            }
-        }
         let {
             type
         } = this.props
 
+        let {
+            areaOptions,
+            isEdited
+        } = this.state
+        
+        let title = `edit ${type}`.toUpperCase().replace(/ /g, '_')
         return (
             <div>
-                <div style={style.type} className="mb-4">
-                    {locale.texts[type.toUpperCase().replace(/ /g, '_')]}
-                </div>
                 <ButtonToolbar>
                     <Button 
                         variant="outline-primary" 
-                        className='text-capitalize mr-2 mb-1'
+                        className='mr-2 mb-1'
                         name="add rule"
                         onClick={this.handleClickButton}
+                        disabled={areaOptions.length == 0}
                     >
                         {locale.texts.ADD_RULE}
                     </Button>
@@ -235,10 +225,11 @@ class MonitorSettingBlock extends React.Component{
                     selectedData={this.state.selectedData}
                     show={this.state.show} 
                     handleClose={this.handleClose}
-                    title={'test'}
+                    title={title}
                     type={config.monitorSettingUrlMap[this.props.type]} 
                     handleSubmit={this.handleSubmit}
                     areaOptions={this.state.areaOptions}
+                    isEdited={isEdited}
                 />
                 <DeleteConfirmationForm
                     show={this.state.showDeleteConfirmation} 

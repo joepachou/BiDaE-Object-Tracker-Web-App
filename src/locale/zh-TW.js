@@ -190,13 +190,17 @@ const tw = {
     LOCATION_MONITOR: "位置監控",
     LONG_STAY_IN_DANGER_MONITOR: "久留監控",
     NOT_STAY_ROOM_MONITOR: "房間監控",
-    GEOFENCE_MONITOR: "Geofence監控",
+    GEOFENCE_MONITOR: "電子圍籬監控",
     DISSOCIATION: "解除綁定",
     ASSOCIATION: "綁定儀器",
     EDIT_GEOFENCE_CONFIG: "編輯電子圍籬設定",
     ADD_GEOFENCE_CONFIG: "新增電子圍籬設定",
     WARNING: "警告",
     PROCESS_IS_COMPLETED: "完成!",
+    EDIT_MOVEMENT_MONITOR: "編輯移動監控",
+    EDIT_LONG_STAY_IN_DANGER_MONITOR: "編輯久留監控",
+    EDIT_NOT_STAY_ROOM_MONITOR: "編輯房間監控",
+
 
     /** Error Message */
     GENDER_IS_REQUIRED: "請選擇性別",

@@ -490,7 +490,7 @@ const signup = (request, response) => {
         area_id,
         shiftSelect
     } = request.body;
-    
+    console.log(role)
     const saltRounds = 10;
     const hash = bcrypt.hashSync(password, saltRounds);
 
@@ -630,6 +630,7 @@ const getUserList = (request, response) => {
     let { locale } = request.body
     pool.query(queryType.getUserList())
         .then(res => {
+            console.log(res.rows)
             console.log('get user list success')
             res.rows.map(item => {
                 item.last_visit_timestamp = 
@@ -648,7 +649,8 @@ const getUserRole = (request, response) => {
     var { username } = request.body
     pool.query(queryType.getUserRole(username))
         .then(res => {
-            response.status(200).json(res)
+            console.log(res.rows)
+            response.status(200).json(res.rows[0].roles)
         })
         .catch(err => {
             console.log(`get user role fail ${err}`)
@@ -685,6 +687,7 @@ const setUserRole = (request, response) => {
         roleSelect,
         shiftSelect
     } = request.body
+    console.log(username, roleSelect)
     pool.query(queryType.setUserRole(username, roleSelect, shiftSelect))
         .then(res => {
             console.log(`set user success`)

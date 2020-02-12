@@ -882,7 +882,7 @@ const getUserList = () => {
 			user_table.name, 
 			user_table.registered_timestamp,
 			user_table.last_visit_timestamp,
-			roles.name AS role_type 
+			array_agg(roles.name) AS role_type 
 		FROM user_table  
 		INNER JOIN (
 			SELECT * 
@@ -890,15 +890,18 @@ const getUserList = () => {
 			INNER JOIN roles ON user_roles.role_id = roles.id
 		) roles
 		ON user_table.id = roles.user_id
+		GROUP BY user_table.id, user_table.name,user_table.registered_timestamp, user_table.last_visit_timestamp
 		ORDER BY user_table.name DESC
 	`
 	return query
 }
 
 const getUserRole = (username) => {
-	const query = `select name      from roles      where 
-		id=(       select role_id   from user_roles where 
-		user_id=(  select id        from user_table where name='${username}'));`
+	const query = `select array_agg(name)  as roles from roles 
+		where id in
+			(select role_id from user_roles 
+		where user_roles.user_id in 
+			(select id from user_table where name='${username}'))`;
 	return query
 }
 
@@ -940,24 +943,51 @@ const deleteUser = (username) => {
 	return query
 }
 
-const setUserRole = (username, roleSelect, shiftSelect) => {
+const setUserRole = (username, roles, shift) => {
+	// console.log(roleSelect)
 	const query = `
-		UPDATE user_roles
-		SET role_id = (
-			SELECT id 
-			FROM roles 
-			where name='${roleSelect}'
-		)
-		WHERE user_roles.user_id = (
-			SELECT id 
-			FROM user_table 
-			WHERE name='${username}'
-		);
+		DELETE FROM user_roles WHERE user_roles.user_id = (
+				SELECT id 
+				FROM user_table 
+				WHERE name='${username}'
+			);
+		
+		INSERT INTO user_roles (user_id, role_id)
+			VALUES 
+			${
+				roles.map(role => `((
+					SELECT id
+					FROM user_table
+					WHERE name='${username}'
+				), 
+				(
+					SELECT id 
+					FROM roles
+					WHERE name='${role}'
+				))`).join(',')
+			};
+
 		UPDATE user_table
-		SET shift = '${shiftSelect.value}'
-		WHERE name = '${username}';
+			SET shift = '${shift.value}'
+			WHERE name = '${username}';
+		
 	`
+	// DELETE FROM user_areas WHERE user_areas.user_id = (
+	// 		SELECT id 
+	// 		FROM user_table 
+	// 		WHERE name='${username}'
+	// 	);
+	// INSERT INTO user_areas (user_id, area_id)
+	// 	VALUES (
+	// 		(
+	// 			SELECT id
+	// 			FROM user_table
+	// 			WHERE name='${username}'
+	// 		), 
+	// 		${area_id}
+	// 	);
 	return query
+	
 }
 
 const getEditObjectRecord = () => {
@@ -1064,11 +1094,12 @@ const setVisitTimestamp = (username) => {
 	`
 }
 
-const insertUserData = (username, role, area_id) => {
+const insertUserData = (username, roles, area_id) => {
 	return `
 		INSERT INTO user_roles (user_id, role_id)
-		VALUES (
-			(
+		VALUES 
+		${
+			roles.map(role => `((
 				SELECT id
 				FROM user_table
 				WHERE name='${username}'
@@ -1077,8 +1108,10 @@ const insertUserData = (username, role, area_id) => {
 				SELECT id 
 				FROM roles
 				WHERE name='${role}'
-			)
-		);
+			))`).join(',')
+		}
+			
+		;
 		INSERT INTO user_areas (user_id, area_id)
 		VALUES (
 			(

@@ -7,6 +7,8 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import Select from 'react-select'
 import * as Yup from 'yup';
 import config from '../../../config'
+import CheckboxGroup from '../CheckboxGroup'
+import Checkbox from '../../presentational/Checkbox'
 
 const Fragment = React.Fragment;
 
@@ -44,7 +46,7 @@ export default class ModifyUserInfo extends React.Component{
     }
     shouldComponentUpdate(nextProps, nextState){
         if(nextProps.show && !this.props.show){
-            this.staticParameter.userRole = nextProps.userRole
+            this.staticParameter.userRole = [nextProps.userRole]
             return true
         }
         return true
@@ -119,6 +121,7 @@ export default class ModifyUserInfo extends React.Component{
                     {locale.texts.EDIT_USER}
                 </Modal.Header>
                 <Modal.Body>
+                    {console.log(userRole)}
                     <Formik     
                         initialValues = {{
                             roleSelect: userRole,
@@ -139,27 +142,55 @@ export default class ModifyUserInfo extends React.Component{
                                     </Col>
                                 </Row>
                                 <hr/>
-                                <RadioButtonGroup
-                                    id="roleSelect"
-                                    label={locale.texts.ROLES}
-                                    value={values.roleSelect}
-                                    error={errors.roleSelect}
-                                    touched={touched.roleSelect}
-                                >
-                                {this.props.roleName
-                                    .filter(roleName => roleName.name !== 'guest')
-                                    .map((roleName, index) => {
-                                        return (
-                                            <Field
-                                                component={RadioButton}
-                                                key={index}
-                                                name="roleSelect"
-                                                id={roleName.name}
-                                                label={locale.texts[roleName.name.toUpperCase()]}
-                                            />
-                                        )
-                                })}
-                                </RadioButtonGroup>
+                                {
+                                    <CheckboxGroup
+                                        id="roleSelect"
+                                        label={locale.texts.ROLES}
+                                        value={values.roleSelect}
+                                        error={errors.roleSelect}
+                                        touched={touched.roleSelect}
+                                        onChange={setFieldValue}                                            
+                                    >
+                                        {this.props.roleName
+                                            .filter(roleName => roleName.name !== 'guest' && roleName.name !== 'dev')
+                                            .map((roleName, index) => {
+                                                console.log(values)
+                                                return (
+                                                    <Field
+                                                        component={Checkbox}
+                                                        key={index}
+                                                        name="roleSelect"
+                                                        id={roleName.name}
+                                                        label={locale.texts[roleName.name.toUpperCase()]}
+                                                    />
+                                                )
+                                        })}
+                                    </CheckboxGroup>
+                                }
+                                {
+                                    // <RadioButtonGroup
+                                    //     id="roleSelect"
+                                    //     label={locale.texts.ROLES}
+                                    //     value={values.roleSelect}
+                                    //     error={errors.roleSelect}
+                                    //     touched={touched.roleSelect}
+                                    // >
+                                    // {this.props.roleName
+                                    //     .filter(roleName => roleName.name !== 'guest')
+                                    //     .map((roleName, index) => {
+                                    //         return (
+                                    //             <Field
+                                    //                 component={RadioButton}
+                                    //                 key={index}
+                                    //                 name="roleSelect"
+                                    //                 id={roleName.name}
+                                    //                 label={locale.texts[roleName.name.toUpperCase()]}
+                                    //             />
+                                    //         )
+                                    // })}
+                                    // </RadioButtonGroup>
+                                }
+                                
                                 <hr/>
                                 <Row className="form-group my-3 text-capitalize" noGutters>
                                     <Col lg={3} className='d-flex align-items-center'>

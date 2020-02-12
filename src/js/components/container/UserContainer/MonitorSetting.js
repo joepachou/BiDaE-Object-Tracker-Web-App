@@ -18,26 +18,25 @@ class MonitorSetting extends React.Component{
         let {
             locale
         } = this.context
-        let style = {
-            container: {
-                minHeight: "100vh"
-            }
-        }
+
         let tabs = [
             config.monitorSettingType.MOVEMENT_MONITOR,
             config.monitorSettingType.LONG_STAY_IN_DANGER_MONITOR,
             config.monitorSettingType.NOT_STAY_ROOM_MONITOR,
-            // config.monitorSettingType.GEOFENCE_MONITOR
+            config.monitorSettingType.GEOFENCE_MONITOR
         ]
         return (
-            <Container className='py-2 text-capitalize' fluid>
+            <Container className='py-2 text-capitalize'>
                 <Tabs 
                     selectedIndex={this.state.tabIndex} 
-                    onSelect={tabIndex => this.setState({ tabIndex })}
+                    onSelect={tabIndex => {
+                        this.setState({ 
+                            tabIndex
+                        })
+                    }}
                 >
                     <TabList>
                         {tabs.map(tab => {
-                            console.log(tab)
                             return (
                                 <Tab
                                     key={tab}
@@ -48,41 +47,25 @@ class MonitorSetting extends React.Component{
                         })}
 
                     </TabList>
-                    {tabs.map(tabPanel => {
+                    {tabs.map((tabPanel, index) => {
                         return (
-                            <TabPanel>
-                                <MonitorSettingBlock
-                                    type={tabPanel}
-                                />
+                            <TabPanel 
+                                key={index}
+                        >
+                                {index == 3 
+                                    ?   <GeoFenceSettingBlock
+                                            type={tabPanel}
+                                        />
+                                    :   <MonitorSettingBlock
+                                            type={tabPanel}
+                                        />
+                                }
                             </TabPanel>
                         )
                     })}
-
-                    {/* <TabPanel>
-                        <MonitorSettingBlock
-                            type={config.monitorSettingType.RESIDENT_MOVEMENT_MONITOR}
-                        />
-                    </TabPanel>
-                    <TabPanel>
-                        <MonitorSettingBlock
-                            type={config.monitorSettingType.RESIDENT_LONG_STAY_IN_DANGER}
-                        />
-                    </TabPanel>
-                    <TabPanel>
-                        <MonitorSettingBlock
-                            type={config.monitorSettingType.RESIDENT_NOT_STAY_ROOM}
-                        /> 
-                    </TabPanel>
-                    <TabPanel>
-                        <GeoFenceSettingBlock
-                            type={config.monitorSettingType.GEO_FENCE_VIOLENCE}
-                        />
-                    </TabPanel> */}
                 </Tabs>
-
             </Container>
         )
-
     }
 }
 

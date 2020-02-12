@@ -4,9 +4,9 @@ import LocaleContext from '../../context/LocaleContext';
 import axios from 'axios';
 import dataSrc from '../../dataSrc';
 import { Formik, Field, Form } from 'formik';
-import RadioButtonGroup from "./RadioButtonGroup"
-import RadioButton from "../presentational/RadioButton"
-import FormikFormGroup from '../presentational/FormikFormGroup'
+import RadioButtonGroup from "../container/RadioButtonGroup"
+import RadioButton from "./RadioButton"
+import FormikFormGroup from './FormikFormGroup'
 
 /**
  * EditLbeaconForm will update if user selects one of the object table.

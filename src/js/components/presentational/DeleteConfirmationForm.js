@@ -1,7 +1,12 @@
 import React from 'react';
-import { Modal, Button, Row, Col } from 'react-bootstrap'
-import { Formik, Field, Form, ErrorMessage } from 'formik';
-import { AppContext } from '../../context/AppContext';
+import { 
+    Modal, 
+    Button
+} from 'react-bootstrap'
+import { 
+    Formik,
+    Form
+} from 'formik';
 import LocaleContext from '../../context/LocaleContext';
 
 const DeleteConfirmationForm = ({
@@ -18,17 +23,16 @@ const DeleteConfirmationForm = ({
             onHide={handleClose} 
             size="md" 
             id='DeleteConfirmationForm' 
-            enforceFocus={false}
+            className='text-capitalize'
         >
             <Modal.Header 
                 closeButton 
-                className='font-weight-bold text-capitalize'
             >
                 {locale.texts.WARNING}
             </Modal.Header >
             <Modal.Body>
                 <Formik
-                    onSubmit={(values, { setStatus, setSubmitting }) => {
+                    onSubmit={() => {
                         handleSubmit()
                     }}
                     render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
@@ -59,7 +63,6 @@ const DeleteConfirmationForm = ({
             </Modal.Body>
         </Modal>
     );
-    
 }
   
 export default DeleteConfirmationForm;

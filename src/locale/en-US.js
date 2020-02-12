@@ -196,6 +196,11 @@ const en =  {
     ADD_GEOFENCE_CONFIG: "add geofence config",
     WARNING: "warning",
     PROCESS_IS_COMPLETED: "process is completed",
+    EDIT_MOVEMENT_MONITOR: 'edit movement monitor',
+    EDIT_LONG_STAY_IN_DANGER_MONITOR: "edit long stay in dangen monitor",
+    EDIT_NOT_STAY_ROOM_MONITOR: "edit not stay room monitor",
+    
+
 
     /** Error Message */
     GENDER_IS_REQUIRED: "Gender is required",

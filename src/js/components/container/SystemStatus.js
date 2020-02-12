@@ -2,7 +2,7 @@ import React from 'react';
 import { Container,  Nav, Button, ButtonToolbar } from 'react-bootstrap';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
-import EditLbeaconForm from './EditLbeaconForm'
+import EditLbeaconForm from './../presentational/EditLbeaconForm'
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
 import axios from 'axios';
 import dataSrc from '../../dataSrc';
