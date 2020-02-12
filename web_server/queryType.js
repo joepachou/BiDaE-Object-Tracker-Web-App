@@ -735,7 +735,7 @@ function signin(username) {
 				SELECT role_name FROM roles
 			) as roles,
 			array(
-				SELECT permission_name FROM permissions 
+				SELECT DISTINCT permission_name FROM permissions 
 			) as permissions, 
 			array (
 				SELECT area_id FROM areas
