@@ -492,6 +492,54 @@ function editImport (formOption) {
 }
 
 
+
+const getLocaleID = (lang) => {
+	const text = `
+		SELECT 
+			id
+		FROM
+			locale
+		WHERE name = $1
+	`
+
+	const values = [
+		lang
+	]
+
+	const query = {
+		text, 
+		values
+	}
+	return query
+}
+
+
+
+function setLocaleID (userID,lang) {
+
+	let text = 
+		`
+		Update user_table 
+		SET locale_id = $1
+		WHERE id = $2
+		`
+	const values = [
+	lang,
+	userID,
+	];
+
+	const query = {
+		text,
+		values
+	};
+
+	return query;
+}
+
+
+
+
+
 function editObject (formOption) {
 	let text = 
 		`
@@ -689,67 +737,30 @@ function signin(username) {
 
 	const text =
 		`
-		WITH 
-		user_info
-			AS
-				(
-					SELECT name, password, mydevice, search_history, id, main_area
-					FROM user_table
-					WHERE name =$1
-				)
-		,
-		roles
-			AS
-				(
-					SELECT user_roles.user_id, user_roles.role_id, roles.name as role_name 
-					FROM user_roles
-					INNER JOIN roles
-					ON roles.id = user_roles.role_id
-					WHERE user_roles.user_id = (SELECT id FROM user_info)
-				),
-		permissions
-			AS
-				(
-					SELECT roles_permission.role_id, roles_permission.permission_id, permission_table.name as permission_name 
-					FROM roles_permission
-					INNER JOIN permission_table
-					ON roles_permission.permission_id = permission_table.id
-					WHERE roles_permission.role_id in (SELECT role_id FROM roles)
-				),
-		areas
-			AS
-				(
-					SELECT area_id
-					FROM user_areas
-					WHERE user_areas.user_id = (SELECT id FROM user_info)
-				)
-
 		SELECT 
-			user_info.name, 
-			user_info.password,
-			user_info.mydevice, 
-			user_info.search_history,
-			user_info.id,
-			user_info.id,
-			array(
-				SELECT role_name FROM roles
-			) as roles,
-			array(
-				SELECT DISTINCT permission_name FROM permissions 
-			) as permissions, 
+			user_table.name, 
+			user_table.password,
+			roles.name as role, 
+			user_table.mydevice, 
+			user_table.search_history,
+			user_table.id,
 			array (
-				SELECT area_id FROM areas
-			) as areas_id
+				SELECT area_id
+				FROM user_areas
+				WHERE user_areas.user_id = user_table.id
+			) as areas_id,
+			main_area
+		FROM user_table
 
-		FROM user_info
+		LEFT JOIN user_roles
+		ON user_roles.user_id = user_table.id
+
+		LEFT JOIN roles
+		ON user_roles.role_id = roles.id
+
+		WHERE user_table.name = $1
 		
 		`;
-		
-
-
-
-
-		
 
 	const values = [username];
 
@@ -891,6 +902,8 @@ function getShiftChangeRecord(){
 	return query
 }
 
+
+
 const validateUsername = (username) => {
 	const text = `
 		SELECT 
@@ -919,7 +932,7 @@ const getUserList = () => {
 			user_table.name, 
 			user_table.registered_timestamp,
 			user_table.last_visit_timestamp,
-			array_agg(roles.name) AS role_type 
+			roles.name AS role_type 
 		FROM user_table  
 		INNER JOIN (
 			SELECT * 
@@ -927,18 +940,15 @@ const getUserList = () => {
 			INNER JOIN roles ON user_roles.role_id = roles.id
 		) roles
 		ON user_table.id = roles.user_id
-		GROUP BY user_table.id, user_table.name,user_table.registered_timestamp, user_table.last_visit_timestamp
 		ORDER BY user_table.name DESC
 	`
 	return query
 }
 
 const getUserRole = (username) => {
-	const query = `select array_agg(name)  as roles from roles 
-		where id in
-			(select role_id from user_roles 
-		where user_roles.user_id in 
-			(select id from user_table where name='${username}'))`;
+	const query = `select name      from roles      where 
+		id=(       select role_id   from user_roles where 
+		user_id=(  select id        from user_table where name='${username}'));`
 	return query
 }
 
@@ -980,51 +990,24 @@ const deleteUser = (username) => {
 	return query
 }
 
-const setUserRole = (username, roles, shift) => {
-	// console.log(roleSelect)
+const setUserRole = (username, roleSelect, shiftSelect) => {
 	const query = `
-		DELETE FROM user_roles WHERE user_roles.user_id = (
-				SELECT id 
-				FROM user_table 
-				WHERE name='${username}'
-			);
-		
-		INSERT INTO user_roles (user_id, role_id)
-			VALUES 
-			${
-				roles.map(role => `((
-					SELECT id
-					FROM user_table
-					WHERE name='${username}'
-				), 
-				(
-					SELECT id 
-					FROM roles
-					WHERE name='${role}'
-				))`).join(',')
-			};
-
+		UPDATE user_roles
+		SET role_id = (
+			SELECT id 
+			FROM roles 
+			where name='${roleSelect}'
+		)
+		WHERE user_roles.user_id = (
+			SELECT id 
+			FROM user_table 
+			WHERE name='${username}'
+		);
 		UPDATE user_table
-			SET shift = '${shift.value}'
-			WHERE name = '${username}';
-		
+		SET shift = '${shiftSelect.value}'
+		WHERE name = '${username}';
 	`
-	// DELETE FROM user_areas WHERE user_areas.user_id = (
-	// 		SELECT id 
-	// 		FROM user_table 
-	// 		WHERE name='${username}'
-	// 	);
-	// INSERT INTO user_areas (user_id, area_id)
-	// 	VALUES (
-	// 		(
-	// 			SELECT id
-	// 			FROM user_table
-	// 			WHERE name='${username}'
-	// 		), 
-	// 		${area_id}
-	// 	);
 	return query
-	
 }
 
 const getEditObjectRecord = () => {
@@ -1131,12 +1114,11 @@ const setVisitTimestamp = (username) => {
 	`
 }
 
-const insertUserData = (username, roles, area_id) => {
+const insertUserData = (username, role, area_id) => {
 	return `
 		INSERT INTO user_roles (user_id, role_id)
-		VALUES 
-		${
-			roles.map(role => `((
+		VALUES (
+			(
 				SELECT id
 				FROM user_table
 				WHERE name='${username}'
@@ -1145,10 +1127,8 @@ const insertUserData = (username, roles, area_id) => {
 				SELECT id 
 				FROM roles
 				WHERE name='${role}'
-			))`).join(',')
-		}
-			
-		;
+			)
+		);
 		INSERT INTO user_areas (user_id, area_id)
 		VALUES (
 			(
@@ -1188,7 +1168,6 @@ const addEditObjectRecord = (formOption, username, filePath) => {
 		)
 		RETURNING id;
 	`
-	// console.log(item)
 	const values = [
 		username,
 		item.notes,
@@ -1645,7 +1624,6 @@ function backendSearch_writeQueue(keyType, keyWord, mac_addresses, pin_color_ind
 		text,
 		values
 	}
-	console.log(123)
 	
 	return query
 }
@@ -1825,7 +1803,8 @@ module.exports = {
 	addAssociation_Patient,
 	cleanBinding,
 	getImportData,
-	editObject,
+	setLocaleID,
+	getLocaleID,
 	addImport,
 	getImportPatient,
 	addGeofenceConfig,
