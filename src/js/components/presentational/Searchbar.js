@@ -45,7 +45,7 @@ class Searchbar extends React.Component {
         const { value } = this.state;
 
         return (            
-            <Form className="d-flex justify-content-around" style={style.form}>
+            <Form className={"d-flex " + this.props.className} style={style.form}>
                 <Form.Group className='flex-grow-1 mb-0'>
                     <Form.Control 
                         id='searchbarText' 

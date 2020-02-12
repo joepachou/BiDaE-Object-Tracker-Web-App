@@ -816,6 +816,7 @@ class ObjectManagementContainer extends React.Component{
                         </Col>
                         <Col lg={4} xl={4}>
                             <Searchbar 
+                                className={'float-right'}
                                 placeholder={''}
                                 getSearchKey={this.filterObjects}
                                 clearSearchResult={null}    
@@ -901,6 +902,7 @@ class ObjectManagementContainer extends React.Component{
                         </Col>
                         <Col lg={4} xl={4}>
                             <Searchbar 
+                                className={'float-right'}
                                 placeholder={''}
                                 getSearchKey={this.filterPatients}
                                 clearSearchResult={null}    
