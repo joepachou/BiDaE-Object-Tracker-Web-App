@@ -1,12 +1,8 @@
 import React from 'react';
-
-/** Import Presentational Component */
 import { 
-    getAreaTable,
     getObjectTable,
     editObject,
     editPatient,
-    editImport,
     addObject,
     addPatient,
     deletePatient,
@@ -22,7 +18,11 @@ import {
 import axios from 'axios';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
-import { Col, Row, Button, Nav, Container,ButtonToolbar} from 'react-bootstrap';
+import { 
+    Button, 
+    Container,
+    ButtonToolbar
+} from 'react-bootstrap';
 import EditObjectForm from './EditObjectForm'
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
 import config from '../../config'
@@ -33,7 +33,6 @@ import EditPatientForm from './EditPatientForm'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import { AppContext } from '../../context/AppContext';
-import AddAllForm from './AddAllForm';
 import XLSX from "xlsx";
 import InputFiles from "react-input-files";
 import BindForm from './BindForm'
