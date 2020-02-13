@@ -304,20 +304,6 @@ const getGatewayTable = (request, response) => {
         })
 }
 
-
-
-const getLocaleID = (request, response) => {
-    const lang = request.body.lang
-    pool.query(queryType.getLocaleID(lang))
-        .then(res => {
-            console.log("get Locale ID success");
-            response.status(200).json(res)
-        })
-        .catch(err => {
-            console.log("get Locale ID Fails: " + err)
-        })
-}
-
 const setLocaleID = (request, response) => {
     const userID = request.body.userID
     const lang = request.body.lang
@@ -459,7 +445,7 @@ const signin = (request, response) => {
     pool.query(queryType.signin(username))
         .then(res => {
             if (res.rowCount < 1) {
-                console.log(`Sign in fail: username or password is incorrect`)
+                console.log(`sign in fail: username or password is incorrect`)
                 response.json({
                     authentication: false,
                     message: "Username or password is incorrect"
@@ -475,13 +461,12 @@ const signin = (request, response) => {
                         search_history,
                         freq_search_count,
                         areas_id,
-                        shift,
                         id,
                         main_area,
                         locale_id,
-                        locale_area
+                        locale
                     } = res.rows[0]
-                    console.log(search_history)
+
                     let userInfo = {
                         name,
                         myDevice: mydevice,
@@ -489,13 +474,13 @@ const signin = (request, response) => {
                         permissions,
                         searchHistory: search_history,
                         freqSearchCount: freq_search_count,
-                        shift,
                         id,
                         areas_id,
                         main_area,
                         locale_id,
-                        locale_area
+                        locale
                     }
+                    
                     request.session.userInfo = userInfo
                     response.json({
                         authentication: true,
@@ -503,11 +488,9 @@ const signin = (request, response) => {
                     })
                     pool.query(queryType.setVisitTimestamp(username))
                         .catch(err => console.log(err))
-                    // pool.query(queryType.setShift(shift, username))
-                    //     .catch(err => console.log(err))
-                    console.log(`Sign in success: ${name}`)
+
+                    console.log(`sign in success: ${name}`)
                 } else {
-                    console.log(`Sign in fail: password is incorrect`)
                     response.json({
                         authentication: false,
                         message: "password is incorrect"
@@ -516,7 +499,8 @@ const signin = (request, response) => {
             }
         })
         .catch(err => {
-            console.log("Login Fails: " + err)       })
+            console.log("sigin fails" + err)       
+        })
 }
 
 const signup = (request, response) => {
@@ -1340,7 +1324,6 @@ module.exports = {
     cleanBinding,
     editObject,
     setLocaleID,
-    getLocaleID,
     editImport,
     editPatient,
     objectImport,

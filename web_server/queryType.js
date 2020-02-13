@@ -492,41 +492,21 @@ function editImport (formOption) {
 	return query;
 }
 
-
-
-const getLocaleID = (lang) => {
-	const text = `
-		SELECT 
-			id
-		FROM
-			locale
-		WHERE name = $1
-	`
-
-	const values = [
-		lang
-	]
-
-	const query = {
-		text, 
-		values
-	}
-	return query
-}
-
-
-
 function setLocaleID (userID,lang) {
 
 	let text = 
 		`
-		Update user_table 
-		SET locale_id = $1
+		UPDATE user_table 
+		SET locale_id = (
+			SELECT id 
+			FROM locale
+			WHERE name = $1
+		)
 		WHERE id = $2
 		`
 	const values = [
-	lang,
-	userID,
+		lang,
+		userID,
 	];
 
 	const query = {
@@ -536,10 +516,6 @@ function setLocaleID (userID,lang) {
 
 	return query;
 }
-
-
-
-
 
 function editObject (formOption) {
 	let text = 
@@ -783,34 +759,37 @@ function signin(username) {
 			user_info.name, 
 			user_info.password,
 			user_info.mydevice, 
-			array(select row_to_json(search_histories) FROM search_histories) AS search_history,
+			user_info.locale_id,
+			array (
+				SELECT row_to_json(search_histories) 
+				FROM search_histories
+			) AS search_history,
 			user_info.id,
 			user_info.id,
 			user_info.locale_id,
 			user_info.main_area,
 			user_info.max_search_history_count as freq_search_count,
-			array(
-				SELECT role_name FROM roles
-			) as roles,
-			array(
-				SELECT DISTINCT permission_name FROM permissions 
-			) as permissions, 
 			array (
-				SELECT area_id FROM areas
-			) as areas_id,
+				SELECT role_name 
+				FROM roles
+			) AS roles,
+			array ( 
+				SELECT DISTINCT permission_name 
+				FROM permissions 
+			) AS permissions, 
+			array (
+				SELECT area_id 
+				FROM areas
+			) AS areas_id,
 			(
-                SELECT locale.name FROM locale WHERE user_info.locale_id = locale.id
-			) as locale_area
+				SELECT locale.name 
+				FROM locale 
+				WHERE user_info.locale_id = locale.id
+			) AS locale
 
 		FROM user_info
 
         `;
-
-
-
-
-
-
 
     const values = [username];
 
@@ -1871,7 +1850,6 @@ module.exports = {
 	cleanBinding,
 	getImportData,
 	setLocaleID,
-	getLocaleID,
 	addImport,
 	getImportPatient,
 	addGeofenceConfig,
