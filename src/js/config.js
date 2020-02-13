@@ -9,6 +9,8 @@ import BOT_LOGO from "../img//logo/BOT_LOGO_RED.png";
 import moment from 'moment'
 import patientP from "../img//logo/pic.png"
 import { isTablet, isBrowser, isMobileOnly } from "react-device-detect";
+import Cookies from 'js-cookie';
+
 
 const config = {
     
@@ -56,7 +58,7 @@ const config = {
     },
     
     locale: {
-        defaultLocale: "tw",
+        defaultLocale: 'tw' ,
     },
 
     defaultRSSIThreshold: 1,

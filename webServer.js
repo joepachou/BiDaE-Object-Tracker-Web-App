@@ -105,6 +105,8 @@ app.post('/data/getTrackingData', db.getTrackingData);
 
 app.post('/data/editObject', db.editObject);
 
+app.post('/data/setLocaleID', db.setLocaleID);
+
 app.post('/data/editImport', db.editImport);
 
 

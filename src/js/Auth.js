@@ -4,13 +4,15 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import dataSrc from './dataSrc';
 import config from './config';
+import { locale } from 'moment';
 
 let defaultUser = {
     roles: "guest",
     areas_id: [config.mapConfig.defaultAreaId.toString()],
     permissions:[
         "form:view",
-    ]
+    ],
+    locale: config.locale.defaultLocale,
 }
 
 class Auth extends React.Component {
@@ -24,7 +26,6 @@ class Auth extends React.Component {
     signin = (userInfo) => {
         Cookies.set('authenticated', true)
         Cookies.set('user', userInfo)
-
         this.setState({
             authenticated: true,
             user: userInfo
@@ -43,21 +44,25 @@ class Auth extends React.Component {
 
     async signup (values) {
         let { 
-            username, 
+            name, 
             password, 
-            role, 
-            areaSelect, 
-            shiftSelect = ''
+            roles, 
+            area, 
         } = values
 
-        let result = await axios.post(dataSrc.signup, {
-            username: username.toLowerCase(),
+        return await axios.post(dataSrc.signup, {
+            name: name.toLowerCase(),
             password,
-            role,
-            area_id: config.mapConfig.areaModules[areaSelect].id,
-            shiftSelect
+            roles,
+            area_id: config.mapConfig.areaModules[area].id,
         })
-        return result
+    }
+
+    async setUser (values) {
+        return await axios.post(dataSrc.setUserRole, {
+            name: values.name,
+            ...values
+        })
     }
   
     handleAuthentication = () => {
@@ -120,6 +125,7 @@ class Auth extends React.Component {
             setMyDevice: this.setMyDevice,
             setUserInfo: this.setUserInfo,
             setCookies: this.setCookies,
+            setUser: this.setUser
         };
 
         return (

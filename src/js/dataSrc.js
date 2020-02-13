@@ -10,6 +10,7 @@ const getLbeaconTable = `${protocol}://${dataSrcIP}/data/getLbeaconTable`;
 const getGatewayTable = `${protocol}://${dataSrcIP}/data/getGatewayTable`;
 const searchResult = `${protocol}://${dataSrcIP}/data/searchResult`;
 const editObject = `${protocol}://${dataSrcIP}/data/editObject`;
+const setLocaleID = `${protocol}://${dataSrcIP}/data/setLocaleID`;
 const editImport = `${protocol}://${dataSrcIP}/data/editImport`;
 const editPatient = `${protocol}://${dataSrcIP}/data/editPatient`;
 const addObject = `${protocol}://${dataSrcIP}/data/addObject`;
@@ -58,7 +59,6 @@ const backendSearch = `${protocol}://${dataSrcIP}/data/backendSearch`
 const getSearchQueue = `${protocol}://${dataSrcIP}/data/getSearchQueue`
 const objectImport = `${protocol}://${dataSrcIP}/data/objectImport`
 const getImportPatient = `${protocol}://${dataSrcIP}/data/getImportPatient`
-const addBulkObject = `${protocol}://${dataSrcIP}/data/addBulkObject`
 const pinImage = `${protocol}://${dataSrcIP}/image/pinImage`
 const getTransferredLocation = `${protocol}://${dataSrcIP}/data/getTransferredLocation`
 const getUserArea= `${protocol}://${dataSrcIP}/data/getUserArea`
@@ -87,6 +87,7 @@ module.exports = {
     getTransferredLocation,
     searchResult,
     editObject,
+    setLocaleID,
     deletePatient,
     editPatient,
     addObject,

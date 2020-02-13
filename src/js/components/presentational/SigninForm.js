@@ -10,16 +10,17 @@ import config from '../../config';
 import LocaleContext from '../../context/LocaleContext'
 import axios from 'axios';
 import dataSrc from '../../dataSrc'
+import Cookies from 'js-cookie';
+import AuthenticationContext from '../../context/AuthenticationContext';
 
 const SiginForm = ({
     show,
     handleClose,
-    signin,
     handleSubmit
 }) => {
 
     let locale = React.useContext(LocaleContext)
-
+    let auth = React.useContext(AuthenticationContext)
 
     return (
         <Modal 
@@ -58,7 +59,11 @@ const SiginForm = ({
                                 setStatus(res.data.message)
                                 setSubmitting(false)
                             } else {
-                                signin(res.data.userInfo)
+                                let {
+                                    userInfo
+                                } = res.data
+                                auth.signin(userInfo)
+                                locale.reSetState(userInfo.locale)
                                 handleSubmit()
                             }
                         }).catch(error => {

@@ -80,6 +80,7 @@ const getTrackingData = (request, response) => {
             /** Filter the objects that do no belong the area */
             const toReturn = res.rows
             .filter(item => item.mac_address)
+            // .filter(item => item.type !== "生理訊號傳導器")
             .map((item, index) => {
 
                 /** Flag the object that belongs to the current area or to the user's authenticated area */
@@ -303,6 +304,21 @@ const getGatewayTable = (request, response) => {
         })
 }
 
+const setLocaleID = (request, response) => {
+    const userID = request.body.userID
+    const lang = request.body.lang
+
+    pool.query(queryType.setLocaleID(userID,lang))
+        .then(res => {
+            console.log("set Locale ID success");
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log("set Locale ID Fails: " + err)
+        })
+}
+
+
 const editObject = (request, response) => {
     const formOption = request.body.formOption
     pool.query(queryType.editObject(formOption))
@@ -429,7 +445,7 @@ const signin = (request, response) => {
     pool.query(queryType.signin(username))
         .then(res => {
             if (res.rowCount < 1) {
-                console.log(`Sign in fail: username or password is incorrect`)
+                console.log(`sign in fail: username or password is incorrect`)
                 response.json({
                     authentication: false,
                     message: "Username or password is incorrect"
@@ -445,9 +461,10 @@ const signin = (request, response) => {
                         search_history,
                         freq_search_count,
                         areas_id,
-                        shift,
                         id,
-                        main_area
+                        main_area,
+                        locale_id,
+                        locale
                     } = res.rows[0]
 
                     let userInfo = {
@@ -457,12 +474,13 @@ const signin = (request, response) => {
                         permissions,
                         searchHistory: search_history,
                         freqSearchCount: freq_search_count,
-                        shift,
                         id,
                         areas_id,
-                        main_area
+                        main_area,
+                        locale_id,
+                        locale
                     }
-
+                    
                     request.session.userInfo = userInfo
                     response.json({
                         authentication: true,
@@ -470,11 +488,9 @@ const signin = (request, response) => {
                     })
                     pool.query(queryType.setVisitTimestamp(username))
                         .catch(err => console.log(err))
-                    // pool.query(queryType.setShift(shift, username))
-                    //     .catch(err => console.log(err))
-                    console.log(`Sign in success: ${name}`)
+
+                    console.log(`sign in success: ${name}`)
                 } else {
-                    console.log(`Sign in fail: password is incorrect`)
                     response.json({
                         authentication: false,
                         message: "password is incorrect"
@@ -483,14 +499,15 @@ const signin = (request, response) => {
             }
         })
         .catch(err => {
-            console.log("Login Fails: " + err)       })
+            console.log("sigin fails" + err)       
+        })
 }
 
 const signup = (request, response) => {
     const { 
-        username, 
+        name, 
         password, 
-        role,
+        roles,
         area_id,
         shiftSelect
     } = request.body;
@@ -498,13 +515,13 @@ const signup = (request, response) => {
     const hash = bcrypt.hashSync(password, saltRounds);
 
     const signupPackage = {
-        username,
+        name,
         password: hash,
         shiftSelect
     }
     pool.query(queryType.signup(signupPackage))
         .then(res => {
-            pool.query(queryType.insertUserData(username, role, area_id))
+            pool.query(queryType.insertUserData(name, roles, area_id))
                 .then(res => {
                     console.log('sign up success')
                     response.status(200).json(res)
@@ -593,7 +610,6 @@ const modifyUserDevices = (request, response) => {
             
         } else {
             console.log('Modify Success')
-            // console.log('Get user info success')
         }
         
         response.status(200).json(results)
@@ -663,7 +679,6 @@ const getUserRole = (request, response) => {
     var { username } = request.body
     pool.query(queryType.getUserRole(username))
         .then(res => {
-            console.log(res.rows)
             response.status(200).json(res.rows[0].roles)
         })
         .catch(err => {
@@ -697,11 +712,11 @@ const deleteUser = (request, response) => {
 
 const setUserRole = (request, response) => {
     var {
-        username,
-        roleSelect,
+        name,
+        roles,
         shiftSelect
     } = request.body
-    pool.query(queryType.setUserRole(username, roleSelect, shiftSelect))
+    pool.query(queryType.setUserRole(name, roles, shiftSelect))
         .then(res => {
             console.log(`set user success`)
             response.status(200).json(res)
@@ -790,38 +805,38 @@ const deletePatient = (request, response) => {
 const deleteLBeacon = (request, response) => {
     const { idPackage } = request.body
     pool.query(queryType.deleteLBeacon(idPackage))
-    .then(res => {
-                console.log('delete LBeacon record success')
-                response.status(200).json(res)
-    })
-    .catch(err => {
-        console.log(err)
-    })
+        .then(res => {
+            console.log('delete LBeacon record success')
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(err)
+        })
 }
 
 const deleteGateway = (request, response) => {
     const { idPackage } = request.body
     pool.query(queryType.deleteGateway(idPackage))
-    .then(res => {
-        console.log('delete Gateway record success')
-        response.status(200).json(res)
-    })
-    .catch(err => {
-        console.log(err)
-    })
+        .then(res => {
+            console.log('delete Gateway record success')
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(err)
+        })
 }
 
 
 const deleteDevice = (request, response) => {
     const { idPackage, formOption } = request.body
     pool.query(queryType.deleteDevice(idPackage, formOption))
-    .then(res => {
-        console.log('delete Device success')
-        response.status(200).json(res)
-    })
-    .catch(err => {
-        console.log(err)
-    })
+        .then(res => {
+            console.log('delete Device success')
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(err)
+        })
 }
 
 const deleteImportData = (request, response) => {
@@ -1330,6 +1345,7 @@ module.exports = {
     addAssociation_Patient,
     cleanBinding,
     editObject,
+    setLocaleID,
     editImport,
     editPatient,
     objectImport,
