@@ -25,13 +25,12 @@ const supportedLocale = {
     }
 }
 
-
 class Locale extends React.Component {
 
     state = {
         lang:  Cookies.get('locale') ? Cookies.get('locale') : config.locale.defaultLocale,
-        texts: supportedLocale[Cookies.get('locale')].texts,
-        abbr: supportedLocale[Cookies.get('locale')].abbr
+        texts: Cookies.get('locale') ? supportedLocale[Cookies.get('locale')].texts : supportedLocale[config.locale.defaultLocale].texts,
+        abbr:  Cookies.get('locale') ? supportedLocale[Cookies.get('locale')].abbr : supportedLocale[config.locale.defaultLocale].abbr,
     }
 
     changeTexts = (lang) => {
@@ -98,6 +97,7 @@ class Locale extends React.Component {
             toggleLang: this.toggleLang,
             reSetState : this.reSetState,
         };
+
        
         return (
             <LocaleContext.Provider value={localeProviderValue}>
