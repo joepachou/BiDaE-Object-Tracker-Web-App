@@ -135,7 +135,6 @@ class UserProfile extends React.Component{
                 res_UserArea.data.rows.map(nowArea => {
                     noteArray[parseInt(nowArea.area_id)] =locale.texts.ALREADY_CHOOSE
                 })
-
                 noteArray[parseInt(auth.user.main_area)] = locale.texts.MAIN_AREA
                 mainAreaBtn[parseInt(auth.user.main_area)] = true
                

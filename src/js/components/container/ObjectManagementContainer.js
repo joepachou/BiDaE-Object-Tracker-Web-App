@@ -21,7 +21,9 @@ import 'react-table/react-table.css';
 import { 
     Button, 
     Container,
-    ButtonToolbar
+    ButtonToolbar,
+    Row,
+    Col
 } from 'react-bootstrap';
 import EditObjectForm from './EditObjectForm'
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
