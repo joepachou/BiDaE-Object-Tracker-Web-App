@@ -119,3 +119,4 @@ class FrequentSearch extends React.Component {
 }
 
 export default FrequentSearch;
+

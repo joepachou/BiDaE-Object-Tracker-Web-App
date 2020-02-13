@@ -38,6 +38,7 @@ app.use(function(req, res, next) {
     next();
 });
 
+setInterval(db.clearSearchHistory, 86400*process.env.CLEAR_SEARCH_HISTORY_INTERVAL)
 // app.get('/', (req,res) => {
 //     if (req.session.userInfo) {
 //         res.write('views: ' + req.session.userInfo + req.sessionID)
@@ -103,6 +104,10 @@ app.post('/data/getGatewayTable', db.getGatewayTable);
 app.post('/data/getTrackingData', db.getTrackingData);
 
 app.post('/data/editObject', db.editObject);
+
+app.post('/data/setLocaleID', db.setLocaleID);
+
+app.post('/data/getLocaleID', db.getLocaleID);
 
 app.post('/data/editImport', db.editImport);
 
@@ -193,16 +198,7 @@ app.post('/data/getSearchQueue', db.getBackendSearchQueue)
 
 app.post('/data/getAreaTable', db.getAreaTable)
 
-app.get('/data/getTransferredLocation', (req, res) => {
-    csv()
-    .fromFile('transferred_location.csv')
-    .then(jsonObj => {
-        res.status(200).json(jsonObj)
-    })
-    .catch(err => {
-        console.log(`get tranferred location data error: ${err}`)
-    })
-})
+app.get('/data/getTransferredLocation', db.getTransferredLocation)
 
 app.get(`/${process.env.DEFAULT_FOLDER}/shift_record/:file`, (req, res) =>{
 	res.sendFile(path.join(`${process.env.LOCAL_FILE_PATH}`, `${process.env.DEFAULT_FOLDER}/shift_record`,req.params['file']));

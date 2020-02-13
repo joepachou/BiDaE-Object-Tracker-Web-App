@@ -304,6 +304,35 @@ const getGatewayTable = (request, response) => {
         })
 }
 
+
+
+const getLocaleID = (request, response) => {
+    const lang = request.body.lang
+    pool.query(queryType.getLocaleID(lang))
+        .then(res => {
+            console.log("get Locale ID success");
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log("get Locale ID Fails: " + err)
+        })
+}
+
+const setLocaleID = (request, response) => {
+    const userID = request.body.userID
+    const lang = request.body.lang
+
+    pool.query(queryType.setLocaleID(userID,lang))
+        .then(res => {
+            console.log("set Locale ID success");
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log("set Locale ID Fails: " + err)
+        })
+}
+
+
 const editObject = (request, response) => {
     const formOption = request.body.formOption
     pool.query(queryType.editObject(formOption))
@@ -448,9 +477,11 @@ const signin = (request, response) => {
                         areas_id,
                         shift,
                         id,
-                        main_area
+                        main_area,
+                        locale_id,
+                        locale_area
                     } = res.rows[0]
-
+                    console.log(search_history)
                     let userInfo = {
                         name,
                         myDevice: mydevice,
@@ -461,9 +492,10 @@ const signin = (request, response) => {
                         shift,
                         id,
                         areas_id,
-                        main_area
+                        main_area,
+                        locale_id,
+                        locale_area
                     }
-
                     request.session.userInfo = userInfo
                     response.json({
                         authentication: true,
@@ -532,9 +564,9 @@ const getUserInfo = (request, response) => {
 }
 
 const addUserSearchHistory = (request, response) => {
-    let { username, searchHistory } = request.body;
-    searchHistory = JSON.stringify(searchHistory)
-    pool.query(queryType.addUserSearchHistory(username, searchHistory))
+    let { username, keyType, keyWord } = request.body;
+    // searchHistory = JSON.stringify(s)
+    pool.query(queryType.addUserSearchHistory(username, keyType, keyWord))
         .then(res => {
             console.log('Add user searech history success')
             response.status(200).json(res)
@@ -1261,6 +1293,23 @@ const DeleteUserArea = (request, response) => {
             console.log("Delete UserArea fails: " + err)
         })
 }
+const clearSearchHistory = () => {
+    pool.query(queryType.clearSearchHistory()).then(res => {
+
+    }).catch(err => {
+        console.log(err)
+    })
+}
+const getTransferredLocation = (request, response) => {
+    pool.query(queryType.getTransferredLocation())
+        .then(res => {
+            console.log(res.rows)
+            response.status(200).json(res.rows)
+        })
+        .catch(err => {
+            console.log('err: ', err)
+        })
+}
 
 module.exports = {
     getTrackingData,
@@ -1289,6 +1338,8 @@ module.exports = {
     addAssociation_Patient,
     cleanBinding,
     editObject,
+    setLocaleID,
+    getLocaleID,
     editImport,
     editPatient,
     objectImport,
@@ -1321,5 +1372,10 @@ module.exports = {
     addMonitorConfig,
     getUserArea,
     addUserArea,
-    DeleteUserArea
+    DeleteUserArea,
+    getTransferredLocation,
+
+
+
+    clearSearchHistory
 }

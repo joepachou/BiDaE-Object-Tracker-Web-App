@@ -1,3 +1,4 @@
+require('dotenv').config();
 function getTrackingData () {
 	const query = `
 		SELECT 
@@ -492,6 +493,54 @@ function editImport (formOption) {
 }
 
 
+
+const getLocaleID = (lang) => {
+	const text = `
+		SELECT 
+			id
+		FROM
+			locale
+		WHERE name = $1
+	`
+
+	const values = [
+		lang
+	]
+
+	const query = {
+		text, 
+		values
+	}
+	return query
+}
+
+
+
+function setLocaleID (userID,lang) {
+
+	let text = 
+		`
+		Update user_table 
+		SET locale_id = $1
+		WHERE id = $2
+		`
+	const values = [
+	lang,
+	userID,
+	];
+
+	const query = {
+		text,
+		values
+	};
+
+	return query;
+}
+
+
+
+
+
 function editObject (formOption) {
 	let text = 
 		`
@@ -684,7 +733,6 @@ const editObjectPackage = (formOption, username, record_id, reservedTimestamp) =
 	`
 	return text
 }
-
 function signin(username) {
 
 	const text =
@@ -693,7 +741,7 @@ function signin(username) {
 		user_info
 			AS
 				(
-					SELECT name, password, mydevice, search_history, id, main_area, max_search_history_count
+					SELECT name, password, mydevice, id, main_area, max_search_history_count, locale_id
 					FROM user_table
 					WHERE name =$1
 				)
@@ -722,15 +770,23 @@ function signin(username) {
 					SELECT area_id
 					FROM user_areas
 					WHERE user_areas.user_id = (SELECT id FROM user_info)
+				),
+		search_histories
+			AS
+				(
+					SELECT keyword as name, COUNT(id) as value
+					FROM search_history where user_id = (SELECT id FROM user_info)
+					GROUP BY keyWord
 				)
 
 		SELECT 
 			user_info.name, 
 			user_info.password,
 			user_info.mydevice, 
-			user_info.search_history,
+			array(select row_to_json(search_histories) FROM search_histories) AS search_history,
 			user_info.id,
 			user_info.id,
+			user_info.locale_id,
 			user_info.max_search_history_count as freq_search_count,
 			array(
 				SELECT role_name FROM roles
@@ -740,29 +796,31 @@ function signin(username) {
 			) as permissions, 
 			array (
 				SELECT area_id FROM areas
-			) as areas_id
+			) as areas_id,
+			(
+                SELECT locale.name FROM locale WHERE user_info.locale_id = locale.id
+			) as locale_area
 
 		FROM user_info
-		
-		`;
-		
+
+        `;
 
 
 
 
-		
 
-	const values = [username];
 
-	const query = {
-		text,
-		values
-	};
 
-	return query;
-	
+    const values = [username];
+
+    const query = {
+        text,
+        values
+    };
+
+    return query;
+
 }
-
 function signup(signupPackage) {
 
 	const text = 
@@ -807,14 +865,24 @@ function getUserInfo(username) {
 	return query
 }
 
-function addUserSearchHistory (username, searchHistory) {
+function addUserSearchHistory (username, keyType, keyWord) {
+	// const text = `
+	// 	UPDATE user_table
+	// 	SET search_history = $1
+	// 	WHERE name = $2
+	// `;
 	const text = `
-		UPDATE user_table
-		SET search_history = $1
-		WHERE name = $2
+		INSERT INTO search_history(search_time, keyWord, key_type, user_id)
+		VALUES(
+			now(),
+			$1,
+			$2,
+			(SELECT id from user_table where name = $3)
+		) 
+			
 	`;
 
-	const values = [searchHistory, username];
+	const values = [keyWord, keyType, username];
 
 	const query = {
 		text, 
@@ -899,6 +967,8 @@ function getShiftChangeRecord(){
 	return query
 }
 
+
+
 const validateUsername = (username) => {
 	const text = `
 		SELECT 
@@ -927,7 +997,7 @@ const getUserList = () => {
 			user_table.name, 
 			user_table.registered_timestamp,
 			user_table.last_visit_timestamp,
-			array_agg(roles.name) AS role_type 
+			roles.name AS role_type 
 		FROM user_table  
 		INNER JOIN (
 			SELECT * 
@@ -935,18 +1005,15 @@ const getUserList = () => {
 			INNER JOIN roles ON user_roles.role_id = roles.id
 		) roles
 		ON user_table.id = roles.user_id
-		GROUP BY user_table.id, user_table.name,user_table.registered_timestamp, user_table.last_visit_timestamp
 		ORDER BY user_table.name DESC
 	`
 	return query
 }
 
 const getUserRole = (username) => {
-	const query = `select array_agg(name)  as roles from roles 
-		where id in
-			(select role_id from user_roles 
-		where user_roles.user_id in 
-			(select id from user_table where name='${username}'))`;
+	const query = `select name      from roles      where 
+		id=(       select role_id   from user_roles where 
+		user_id=(  select id        from user_table where name='${username}'));`
 	return query
 }
 
@@ -988,52 +1055,24 @@ const deleteUser = (username) => {
 	return query
 }
 
-const setUserRole = (name, roles, shift) => {
-	// console.log(roleSelect)
+const setUserRole = (username, roleSelect, shiftSelect) => {
 	const query = `
-		DELETE FROM user_roles WHERE user_roles.user_id = (
-				SELECT id 
-				FROM user_table 
-				WHERE name='${name}'
-			);
-		
-		INSERT INTO user_roles (user_id, role_id)
-			VALUES 
-			${
-				roles.map(role => `((
-					SELECT id
-					FROM user_table
-					WHERE name='${name}'
-				), 
-				(
-					SELECT id 
-					FROM roles
-					WHERE name='${role}'
-				))`).join(',')
-			};
+		UPDATE user_roles
+		SET role_id = (
+			SELECT id 
+			FROM roles 
+			where name='${roleSelect}'
+		)
+		WHERE user_roles.user_id = (
+			SELECT id 
+			FROM user_table 
+			WHERE name='${username}'
+		);
+		UPDATE user_table
+		SET shift = '${shiftSelect.value}'
+		WHERE name = '${username}';
 	`
-
-		// UPDATE user_table
-		// 	SET shift = '${shift.value}'
-		// 	WHERE name = '${name}';
-		
-	
-	// DELETE FROM user_areas WHERE user_areas.user_id = (
-	// 		SELECT id 
-	// 		FROM user_table 
-	// 		WHERE name='${username}'
-	// 	);
-	// INSERT INTO user_areas (user_id, area_id)
-	// 	VALUES (
-	// 		(
-	// 			SELECT id
-	// 			FROM user_table
-	// 			WHERE name='${username}'
-	// 		), 
-	// 		${area_id}
-	// 	);
 	return query
-	
 }
 
 const getEditObjectRecord = () => {
@@ -1149,19 +1188,21 @@ const insertUserData = (name, roles, area_id) => {
 		)
 		VALUES 
 		${
-			roles.map(role => `((
-				SELECT id
-				FROM user_table
-				WHERE name='${name}'
-			), 
-			(
-				SELECT id 
-				FROM roles
-				WHERE name='${role}'
-			))`).join(',')
-		}
-			
-		;
+			roles.map(role => `(
+				(
+
+					SELECT id
+					FROM user_table
+					WHERE name='${name}'
+				), 
+				(
+					SELECT id 
+					FROM roles
+					WHERE name='${role}'
+				)
+			)`
+		)};
+
 		INSERT INTO user_areas (user_id, area_id)
 		VALUES (
 			(
@@ -1201,7 +1242,6 @@ const addEditObjectRecord = (formOption, username, filePath) => {
 		)
 		RETURNING id;
 	`
-	// console.log(item)
 	const values = [
 		username,
 		item.notes,
@@ -1658,7 +1698,6 @@ function backendSearch_writeQueue(keyType, keyWord, mac_addresses, pin_color_ind
 		text,
 		values
 	}
-	console.log(123)
 	
 	return query
 }
@@ -1757,6 +1796,17 @@ function DeleteUserArea (user_id,area_id){
     return query
 
 }
+function clearSearchHistory(){
+	const query = `
+		DELETE FROM search_history WHERE now() > search_time + interval ${process.env.SEARCH_HISTORY_VALIDATE_DURATION}
+	`
+	return query
+}
+
+function getTransferredLocation() {
+	const query = `SELECT branch_name, offices FROM branch_and_office`
+	return query
+}
 
 module.exports = {
 	getTrackingData,
@@ -1815,7 +1865,8 @@ module.exports = {
 	addAssociation_Patient,
 	cleanBinding,
 	getImportData,
-	editObject,
+	setLocaleID,
+	getLocaleID,
 	addImport,
 	getImportPatient,
 	addGeofenceConfig,
@@ -1823,7 +1874,13 @@ module.exports = {
 	addMonitorConfig,
 	getUserArea,
 	addUserArea,
-	DeleteUserArea
+	DeleteUserArea,
+	getTransferredLocation,
+
+
+
+
+	clearSearchHistory
 }
 
 
