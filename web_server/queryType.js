@@ -997,7 +997,7 @@ const getUserList = () => {
 			user_table.name, 
 			user_table.registered_timestamp,
 			user_table.last_visit_timestamp,
-			roles.name AS role_type 
+			array_agg(roles.name) AS role_type 
 		FROM user_table  
 		INNER JOIN (
 			SELECT * 
@@ -1005,6 +1005,7 @@ const getUserList = () => {
 			INNER JOIN roles ON user_roles.role_id = roles.id
 		) roles
 		ON user_table.id = roles.user_id
+		GROUP BY user_table.id, user_table.name,user_table.registered_timestamp, user_table.last_visit_timestamp
 		ORDER BY user_table.name DESC
 	`
 	return query
