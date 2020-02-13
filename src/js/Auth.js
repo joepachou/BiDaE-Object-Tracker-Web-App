@@ -4,13 +4,15 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import dataSrc from './dataSrc';
 import config from './config';
+import { locale } from 'moment';
 
 let defaultUser = {
     roles: "guest",
     areas_id: [config.mapConfig.defaultAreaId.toString()],
     permissions:[
         "form:view",
-    ]
+    ],
+    locale: config.locale.defaultLocale,
 }
 
 class Auth extends React.Component {
@@ -24,13 +26,10 @@ class Auth extends React.Component {
     signin = (userInfo) => {
         Cookies.set('authenticated', true)
         Cookies.set('user', userInfo)
-        Cookies.set('locale', userInfo.locale)
-
         this.setState({
             authenticated: true,
             user: userInfo
         })
-
     };
   
     signout = () => {

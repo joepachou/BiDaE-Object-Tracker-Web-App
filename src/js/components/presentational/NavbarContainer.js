@@ -206,9 +206,7 @@ class NavbarContainer extends React.Component {
                         <Nav.Item 
                             className="nav-link nav-route" 
                             name={'en'}
-                            onClick={(e) => locale.changeLocale(e,auth)}
-                              //locale會做的事
-                         
+                            onClick={(e) => locale.changeLocale(e, auth)}                         
                         >
                             {locale.toggleLang().nextLangName}
                         </Nav.Item>

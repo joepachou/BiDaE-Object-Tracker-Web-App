@@ -25,12 +25,13 @@ const supportedLocale = {
     }
 }
 
+
 class Locale extends React.Component {
 
     state = {
-        lang:  Cookies.get('locale') ? Cookies.get('locale') : config.locale.defaultLocale,
-        texts: Cookies.get('locale') ? supportedLocale[Cookies.get('locale')].texts : supportedLocale[config.locale.defaultLocale].texts,
-        abbr:  Cookies.get('locale') ? supportedLocale[Cookies.get('locale')].abbr : supportedLocale[config.locale.defaultLocale].abbr,
+        lang:  Cookies.get('authenticated') ? JSON.parse(Cookies.get('user')).locale : config.locale.defaultLocale,
+        texts: Cookies.get('authenticated') ? supportedLocale[JSON.parse(Cookies.get('user')).locale].texts : supportedLocale[config.locale.defaultLocale].texts,
+        abbr:  Cookies.get('authenticated') ? supportedLocale[JSON.parse(Cookies.get('user')).locale].abbr : supportedLocale[config.locale.defaultLocale].abbr,
     }
 
     changeTexts = (lang) => {
@@ -53,23 +54,19 @@ class Locale extends React.Component {
 
     changeLocale = (e,auth) => {
         const nextLang = this.toggleLang().nextLang
-        axios.post(getLocaleID, {
+
+        axios.post(setLocaleID, {
+            userID: auth.user.id,
             lang: nextLang
         })
-        .then(resGet => {
-                axios.post(setLocaleID, {
-                    userID: auth.user.id,
-                    lang: resGet.data.rows[0].id
-                })
-                .then(resSet => {
-                    Cookies.set('locale', nextLang)
-                })
-                .catch(errSet => {
-                    console.log(errSet)
-                })
+        .then(resSet => {
+            Cookies.set('user', {
+                ...JSON.parse(Cookies.get('user')),
+                locale: nextLang
+            })
         })
         .catch(err => {
-            console.log(err)
+            console.log(`set locale fail ${err}`)
         })
 
         this.setState({
@@ -77,15 +74,14 @@ class Locale extends React.Component {
             texts: this.changeTexts(nextLang),
             abbr: this.changeAbbr(nextLang),            
         })
-
     }
     
 
-    reSetState = () => {
+    reSetState = (lang) => {
         this.setState({
-            lang: Cookies.get('locale'),
-            texts: this.changeTexts(Cookies.get('locale')),
-            abbr: this.changeAbbr(Cookies.get('locale')),            
+            lang,
+            texts: this.changeTexts(lang),
+            abbr: this.changeAbbr(lang),            
         })
     }
 
