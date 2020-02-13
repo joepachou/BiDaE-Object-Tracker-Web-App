@@ -21,18 +21,15 @@ class AdminManagementContainer extends React.Component{
     static contextType = AppContext
 
     state = {
-           data: [],
-           columns: [],
-           selectedUser: null,
-           userRole: null,
-           locale: this.context.abbr,
-           showModifyUserInfo: false,
-           showAddUserForm: false,
-           roleName: [],
-           areaList: [],
-           title: '',
-           locale: this.context.locale.abbr,
-        }
+        showAddUserForm: false,
+        data: [],
+        columns: [],
+        selectedUser: null,
+        roleName: [],
+        areaList: [],
+        title: '',
+        locale: this.context.locale.abbr,
+    }
 
     componentDidUpdate = (prevProps, prevState) => {
         if (this.context.locale.abbr !== prevState.locale) {
@@ -74,19 +71,6 @@ class AdminManagementContainer extends React.Component{
             })
         })
     }
-    getUserRole = (selectedUser, callBack) => {
-        if(selectedUser){
-            axios.post(getUserRole,{
-                username: selectedUser.name
-            }).then((res) => {
-                var userRole = ''
-                if(res.data.length !== 0){
-                    userRole = res.data[0]
-                }
-                callBack(userRole)
-            })
-        }
-    }
 
     getRoleNameList = () => {
         axios.post(getRoleNameList,{
@@ -100,7 +84,6 @@ class AdminManagementContainer extends React.Component{
     }
 
     handleSubmit = (values) => {
-
         let {
             auth
         } = this.context
@@ -141,8 +124,7 @@ class AdminManagementContainer extends React.Component{
     handleClose = () => {
         this.setState({
             showAddUserForm: false,
-            selectedUser: '',
-            userRole: null,
+            selectedUser: null,
             title: '',
             api: '',
         })
@@ -151,21 +133,15 @@ class AdminManagementContainer extends React.Component{
     onRowClick = (state, rowInfo, column, instance) => {
         return {
             onClick: (e, handleOriginal) => {
-                this.onClickUser(rowInfo.index)
+                console.log()
+                this.setState({
+                    showAddUserForm: true,
+                    selectedUser: rowInfo.original,
+                    title: 'edit user',
+                    api: 'setUser',
+                })
             }
         }
-    }
-
-    onClickUser = (index) => {
-        this.getUserRole(this.state.data[index], (userRole) => {
-            this.setState({
-                showAddUserForm: true,
-                selectedUser: this.state.data[index],
-                userRole: userRole,
-                title: 'edit user',
-                api: 'setUser',
-            })
-        })
     }
 
     handleClick = (e, value) => {
