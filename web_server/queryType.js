@@ -1036,28 +1036,39 @@ const deleteUser = (username) => {
 	return query
 }
 
-const setUserRole = (username, roleSelect,areaNumber) => {
+const setUserRole = (name, roles,areaNumber) => {
 
 	const query = `
-		UPDATE user_roles
-		SET role_id = (
-			SELECT id 
-			FROM roles 
-			where name='${roleSelect}'
-		)
-		WHERE user_roles.user_id = (
+
+		DELETE FROM user_roles WHERE user_roles.user_id = (
 			SELECT id 
 			FROM user_table 
-			WHERE name='${username}'
+			WHERE name='${name}'
 		);
+
+		INSERT INTO user_roles (user_id, role_id)
+			VALUES 
+			${
+				roles.map(role => `((
+					SELECT id
+					FROM user_table
+					WHERE name='${name}'
+				), 
+				(
+					SELECT id 
+					FROM roles
+					WHERE name='${role}'
+				))`).join(',')
+			};
 
 
 		UPDATE user_table
 		SET main_area = '${areaNumber.id}'
-		WHERE name = '${username}';
+		WHERE name = '${name}';
 	`
 	return query
 }
+
 
 const getEditObjectRecord = () => {
 	const query = `
