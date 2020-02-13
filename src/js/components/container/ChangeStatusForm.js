@@ -49,21 +49,30 @@ class ChangeStatusForm extends React.Component {
         let { locale } = this.context
         axios.get(dataSrc.getTransferredLocation)
             .then(res => {
+                console.log(res.data)
             const transferredLocationOptions = res.data.map(loc => {
+                console.log(loc)
+                // Object.values(loc)
+                //         .filter((item, index) => index > 0)
+                //         .map(branch => {
+                //             return {
+                //                 value: `${loc.transferred_location},${branch}`,
+                //                 label: locale.texts[branch.toUpperCase().replace(/ /g, '_')],
+                //             }
                 return {          
-                    value: loc.transferred_location,
-                    label: locale.texts[loc.transferred_location.toUpperCase().replace(/ /g, '_')],
-                    options: Object.values(loc)
-                        .filter((item, index) => index > 0)
-                        .map(branch => {
-                            return {
-                                value: `${loc.transferred_location},${branch}`,
-                                label: locale.texts[branch.toUpperCase().replace(/ /g, '_')],
-                            }
+                    value: loc.branch_name,
+                    label: locale.texts[loc.branch_name.toUpperCase().replace(/ /g, '_')],
+                    options: loc.offices.map(office => {
+                        return {
+                            value: `${office['en']},${loc.branch_name}`,
+                            label: locale.texts[office['en'].toUpperCase().replace(/ /g, '_')],
+                        }
                     })
-                }
+                    }
+                })
 
-            })
+            
+            console.log(transferredLocationOptions)
             this.setState({
                 transferredLocationOptions
             })

@@ -1272,6 +1272,16 @@ const clearSearchHistory = () => {
         console.log(err)
     })
 }
+const getTransferredLocation = (request, response) => {
+    pool.query(queryType.getTransferredLocation())
+        .then(res => {
+            console.log(res.rows)
+            response.status(200).json(res.rows)
+        })
+        .catch(err => {
+            console.log('err: ', err)
+        })
+}
 
 module.exports = {
     getTrackingData,
@@ -1333,6 +1343,7 @@ module.exports = {
     getUserArea,
     addUserArea,
     DeleteUserArea,
+    getTransferredLocation,
 
 
 

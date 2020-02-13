@@ -194,16 +194,7 @@ app.post('/data/getSearchQueue', db.getBackendSearchQueue)
 
 app.post('/data/getAreaTable', db.getAreaTable)
 
-app.get('/data/getTransferredLocation', (req, res) => {
-    csv()
-    .fromFile('transferred_location.csv')
-    .then(jsonObj => {
-        res.status(200).json(jsonObj)
-    })
-    .catch(err => {
-        console.log(`get tranferred location data error: ${err}`)
-    })
-})
+app.get('/data/getTransferredLocation', db.getTransferredLocation)
 
 app.get(`/${process.env.DEFAULT_FOLDER}/shift_record/:file`, (req, res) =>{
 	res.sendFile(path.join(`${process.env.LOCAL_FILE_PATH}`, `${process.env.DEFAULT_FOLDER}/shift_record`,req.params['file']));

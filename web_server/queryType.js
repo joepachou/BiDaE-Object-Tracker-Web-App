@@ -1802,6 +1802,11 @@ function clearSearchHistory(){
 	return query
 }
 
+function getTransferredLocation() {
+	const query = `SELECT branch_name, offices FROM branch_and_office`
+	return query
+}
+
 module.exports = {
 	getTrackingData,
 	getTrackingTableByMacAddress,
@@ -1868,6 +1873,11 @@ module.exports = {
 	getUserArea,
 	addUserArea,
 	DeleteUserArea,
+	getTransferredLocation,
+
+
+
+
 	clearSearchHistory
 }
 
