@@ -87,18 +87,19 @@ class AdminManagementContainer extends React.Component{
         let {
             auth
         } = this.context
+
         let {
             api
         } = this.state
-
+        console.log(values)
+        console.log(api)
         auth[api](values)
             .then(res => {
-                this.getUserList()
-
                 this.setState({
                     showModifyUserInfo: false,
                     showAddUserForm: false,
                 })
+                // this.getUserList()
             })
             .catch(err => {
                 console.log(err)
