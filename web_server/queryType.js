@@ -1803,10 +1803,28 @@ function clearSearchHistory(){
 }
 
 function getTransferredLocation() {
-	const query = `SELECT branch_name, offices FROM branch_and_office`
+	const query = `SELECT id, branch_name, offices FROM branch_and_office ORDER BY id`
 	return query
 }
-
+function modifyTransferredLocation(type, data){
+	var query;
+	if(type == 'add branch'){
+        query = `insert into branch_and_office(branch_name) values('${data.name}')`
+    }else if(type == 'rename branch'){
+        query = `update branch_and_office set branch_name = '${data.name}' where id = ${data.branch_id} `
+    }else if(type == 'remove branch'){
+        query = `delete from branch_and_office where id = ${data.branch_id} `
+    }else if(type == 'add department'){
+        query = `update branch_and_office set offices = array_append(offices, '{"english":"${data.english_name}","chinese":"${data.chinese_name}"}'::jsonb) where id = ${data.branch_id}`
+    }else if(type == 'rename department'){
+        query = queryType.modifyTransferredLocation('rename department', data)
+    }else if(type == 'remove department'){
+        query = `update branch_and_office set offices = array_remove(offices, offices[${data.departmentIndex + 1}]) where id = ${data.branch_id}`
+    }else{
+        console.log('modifyTransferredLocation: unrecognized command type')
+    }
+    return query
+}
 module.exports = {
 	getTrackingData,
 	getTrackingTableByMacAddress,
@@ -1874,7 +1892,7 @@ module.exports = {
 	addUserArea,
 	DeleteUserArea,
 	getTransferredLocation,
-
+	modifyTransferredLocation,
 
 
 

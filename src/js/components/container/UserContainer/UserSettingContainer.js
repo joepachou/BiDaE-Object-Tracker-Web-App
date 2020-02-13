@@ -10,6 +10,7 @@ import MyDeviceManager from './MyDeviceManager';
 import MyPatientManager from './MyPatientManager';
 import MonitorSetting from "./MonitorSetting";
 import UserProfile from "./UserProfile";
+import TransferredLocationManagement from "./TransferredLocationManagement";
 import { AppContext } from '../../../context/AppContext';
 
 class UserSettingContainer extends React.Component{
@@ -58,6 +59,12 @@ class UserSettingContainer extends React.Component{
             path: "monitorSetting",
             href: "#MonitorSetting",
             component: <MonitorSetting />
+        },
+        {
+            name: "Transferred Location Management",
+            path: "transferredLocationManagement",
+            href: "#TransferredLocationManagement",
+            component: <TransferredLocationManagement />
         }
     ]
     

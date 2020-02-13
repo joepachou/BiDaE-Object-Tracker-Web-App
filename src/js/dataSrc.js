@@ -64,6 +64,7 @@ const getTransferredLocation = `${protocol}://${dataSrcIP}/data/getTransferredLo
 const getUserArea= `${protocol}://${dataSrcIP}/data/getUserArea`
 const addUserArea= `${protocol}://${dataSrcIP}/data/addUserArea`
 const DeleteUserArea= `${protocol}://${dataSrcIP}/data/DeleteUserArea`
+const modifyTransferredLocation= `${protocol}://${dataSrcIP}/data/modifyTransferredLocation`
 const pdfUrl = function(path){
     return `${protocol}://${dataSrcIP}:${port}/${path}`
 }
@@ -130,5 +131,6 @@ module.exports = {
     addMonitorConfig,
     getUserArea,
     addUserArea,
-    DeleteUserArea
+    DeleteUserArea, 
+    modifyTransferredLocation
 };

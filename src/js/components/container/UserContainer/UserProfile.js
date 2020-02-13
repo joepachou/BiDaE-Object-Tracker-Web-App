@@ -173,13 +173,12 @@ class UserProfile extends React.Component{
         this.setState({
           userInfo: userInfo
         })
-        console.log(userInfo)
+
         axios.post(modifyUserInfo, {
           info: userInfo,
           username: userInfo['name']
         }).then(res => {
           auth.setUserInfo('freqSearchCount', value)
-          console.log(res)
         }) 
       }
       generateSettingBlock = () => {

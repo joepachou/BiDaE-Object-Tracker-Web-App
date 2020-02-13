@@ -449,7 +449,7 @@ const signin = (request, response) => {
                         id,
                         main_area
                     } = res.rows[0]
-                    console.log(search_history)
+
                     let userInfo = {
                         name,
                         myDevice: mydevice,
@@ -494,7 +494,6 @@ const signup = (request, response) => {
         area_id,
         shiftSelect
     } = request.body;
-    console.log(role)
     const saltRounds = 10;
     const hash = bcrypt.hashSync(password, saltRounds);
 
@@ -646,7 +645,6 @@ const getUserList = (request, response) => {
     let { locale } = request.body
     pool.query(queryType.getUserList())
         .then(res => {
-            console.log(res.rows)
             console.log('get user list success')
             res.rows.map(item => {
                 item.last_visit_timestamp = 
@@ -703,7 +701,6 @@ const setUserRole = (request, response) => {
         roleSelect,
         shiftSelect
     } = request.body
-    console.log(username, roleSelect)
     pool.query(queryType.setUserRole(username, roleSelect, shiftSelect))
         .then(res => {
             console.log(`set user success`)
@@ -1275,14 +1272,37 @@ const clearSearchHistory = () => {
 const getTransferredLocation = (request, response) => {
     pool.query(queryType.getTransferredLocation())
         .then(res => {
-            console.log(res.rows)
             response.status(200).json(res.rows)
         })
         .catch(err => {
             console.log('err: ', err)
         })
 }
-
+const modifyTransferredLocation = (request, response) => {
+    const {type, data} = request.body
+    let query = null
+    if(type == 'add branch'){
+        query = queryType.modifyTransferredLocation('add branch', data)
+    }else if(type == 'rename branch'){
+        query = queryType.modifyTransferredLocation('rename branch', data)
+    }else if(type == 'remove branch'){
+        query = queryType.modifyTransferredLocation('remove branch', data)
+    }else if(type == 'add department'){
+        query = queryType.modifyTransferredLocation('add department', data)
+    }else if(type == 'rename department'){
+        query = queryType.modifyTransferredLocation('rename department', data)
+    }else if(type == 'remove department'){
+        query = queryType.modifyTransferredLocation('remove department', data)
+    }else{
+        console.log('modifyTransferredLocation: unrecognized command type')
+    }
+    pool.query(query)
+        .then(res => {
+            response.status(200).json('ok')
+        }).catch(err => {
+            console.log(err)
+        })
+}
 module.exports = {
     getTrackingData,
     getObjectTable,
@@ -1344,6 +1364,7 @@ module.exports = {
     addUserArea,
     DeleteUserArea,
     getTransferredLocation,
+    modifyTransferredLocation,
 
 
 
