@@ -27,7 +27,8 @@ const EditUserForm = ({
     selectedUser,
     handleSubmit,
     handleClose,
-    roleName
+    roleName,
+    areaList
 }) => {
 
     let locale = React.useContext(LocaleContext)
@@ -38,7 +39,7 @@ const EditUserForm = ({
             label: locale.texts[name.toUpperCase().replace(/ /g, '_')]
         };
     })
-
+ 
     return (
         <Modal 
             show={show} 
@@ -57,6 +58,7 @@ const EditUserForm = ({
                         name: selectedUser ? selectedUser.name : '',
                         password: '',
                         roles: selectedUser ? selectedUser.role_type : config.defaultRole,
+                        secondArea:'',
                         area: '',
                     }}
 
@@ -88,6 +90,9 @@ const EditUserForm = ({
                     }
 
                     onSubmit={(values, { setStatus, setSubmitting }) => {
+                        values.mainAreaNumber = config.mapConfig.areaModules[values.area]
+                        console.log(values)
+                        console.log('fuck')
                         handleSubmit(values)
                     }}
 
@@ -143,7 +148,7 @@ const EditUserForm = ({
                             <FormikFormGroup 
                                 type="text"
                                 name="area"
-                                label={locale.texts.AUTH_AREA}
+                                label={locale.texts.MAIN_AREA}
                                 error={errors.area}
                                 touched={touched.area}
                                 placeholder={locale.texts.USERNAME}
@@ -161,6 +166,85 @@ const EditUserForm = ({
                                     />
                                 )}
                             />
+
+
+
+
+
+
+
+{/* 
+                            <hr/>
+                            <FormikFormGroup 
+                                name="roles"
+                                label={locale.texts.ROLES}
+                                error={errors.roles}
+                                touched={touched.roles}
+                                component={() => (
+                                    <CheckboxGroup
+                                        id="roles"
+                                        value={values.roles}
+                                        onChange={setFieldValue}                                            
+                                    >
+                                        {roleName
+                                            .filter(roleName => roleName.name !== 'guest' && roleName.name !== 'dev')
+                                            .map((roleName, index) => {
+                                                return (
+                                                    <Field
+                                                        component={Checkbox}
+                                                        key={index}
+                                                        name="roles"
+                                                        id={roleName.name}
+                                                        label={locale.texts[roleName.name.toUpperCase()]}
+                                                    />
+                                                )
+                                        })}
+                                    </CheckboxGroup>
+                                )}
+                            />
+                            <hr/>
+ */}
+
+
+                            <hr/>
+                            <FormikFormGroup 
+                                name="secondArea"
+                                label={'次要地區'}
+                                error={errors.secondArea}
+                                touched={touched.secondArea}
+                                component={() => (
+                                    <CheckboxGroup
+                                        id="secondArea"
+                                        value={values.secondArea}
+                                        onChange={setFieldValue}                                            
+                                    >
+                                        {areaList
+                                            .filter(areaList => process.env.SITES_GROUP.includes(parseInt(areaList.area_id)))
+                                            .map((areaList, index) => {
+                                                return (
+                                                    <Field
+                                                        component={Checkbox}
+                                                        key={index}
+                                                        name="secondArea"
+                                                        id={areaList.area_id}
+                                                        label={ locale.texts[config.mapConfig.areaList[parseInt(areaList.area_id)]]  }
+                                                    />
+                                                )
+                                        })}
+                                    </CheckboxGroup>
+                                )}
+                            />
+                            <hr/>
+
+
+
+
+
+
+
+
+
+
                             <Modal.Footer>
                                 <Button 
                                     variant="outline-secondary" 

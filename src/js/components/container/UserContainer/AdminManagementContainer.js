@@ -10,6 +10,7 @@ import {
     getUserRole,
     getRoleNameList,
     deleteUser,
+    getUserArea
 } from "../../../dataSrc";
 import { userInfoTableColumn } from '../../../tables'
 import EditUserForm from './EditUserForm';
@@ -35,6 +36,7 @@ class AdminManagementContainer extends React.Component{
         if (this.context.locale.abbr !== prevState.locale) {
             this.getRoleNameList()
             this.getUserList()
+            this.getAreaList()
             this.setState({
                 locale: this.context.locale.abbr
             })
@@ -44,6 +46,7 @@ class AdminManagementContainer extends React.Component{
     componentDidMount = () => {
         this.getRoleNameList()
         this.getUserList()
+        this.getAreaList()
     }
 
     getUserList = () => {
@@ -61,6 +64,7 @@ class AdminManagementContainer extends React.Component{
                     textTransform: 'capitalize'
                 }
             })
+           
             res.data.rows.map((item, index) => {
                 item.id = index + 1
                 item.roles = item.role_type.map(role => locale.texts[role.toUpperCase()]).join(',')
@@ -83,6 +87,17 @@ class AdminManagementContainer extends React.Component{
             })
     }
 
+
+    getAreaList = () => {
+        let {auth} = this.context
+        axios.post(getUserArea,{
+            user_id: auth.user.id
+        }).then(res => {
+           this.setState({  areaList: res.data.rows  })
+        })
+    }
+
+
     handleSubmit = (values) => {
         let {
             auth
@@ -95,6 +110,7 @@ class AdminManagementContainer extends React.Component{
         console.log(api)
         auth[api](values)
             .then(res => {
+                this.getUserList()
                 this.setState({
                     showModifyUserInfo: false,
                     showAddUserForm: false,
@@ -189,6 +205,7 @@ class AdminManagementContainer extends React.Component{
                     title={title}
                     selectedUser={this.state.selectedUser}
                     roleName={this.state.roleName}
+                    areaList={this.state.areaList}
                 />
             </Fragment>
         )
