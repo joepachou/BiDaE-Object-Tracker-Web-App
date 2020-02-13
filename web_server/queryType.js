@@ -787,6 +787,7 @@ function signin(username) {
 			user_info.id,
 			user_info.id,
 			user_info.locale_id,
+			user_info.main_area,
 			user_info.max_search_history_count as freq_search_count,
 			array(
 				SELECT role_name FROM roles
@@ -1056,7 +1057,8 @@ const deleteUser = (username) => {
 	return query
 }
 
-const setUserRole = (username, roleSelect, shiftSelect) => {
+const setUserRole = (username, roleSelect,areaNumber) => {
+
 	const query = `
 		UPDATE user_roles
 		SET role_id = (
@@ -1069,8 +1071,10 @@ const setUserRole = (username, roleSelect, shiftSelect) => {
 			FROM user_table 
 			WHERE name='${username}'
 		);
+
+
 		UPDATE user_table
-		SET shift = '${shiftSelect.value}'
+		SET main_area = '${areaNumber.id}'
 		WHERE name = '${username}';
 	`
 	return query

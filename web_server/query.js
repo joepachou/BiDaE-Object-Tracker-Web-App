@@ -465,8 +465,8 @@ const signin = (request, response) => {
                     message: "Username or password is incorrect"
                 })
             } else {
-                const hash = res.rows[0].password
-                if (bcrypt.compareSync(password, hash)) {
+             
+                if (bcrypt.compareSync(password, res.rows[0].password)) {
                     let { 
                         name, 
                         roles, 
@@ -730,9 +730,10 @@ const setUserRole = (request, response) => {
     var {
         name,
         roles,
-        shiftSelect
+        areaNumber
     } = request.body
-    pool.query(queryType.setUserRole(name, roles, shiftSelect))
+
+    pool.query(queryType.setUserRole(name, roles, areaNumber))
         .then(res => {
             console.log(`set user success`)
             response.status(200).json(res)

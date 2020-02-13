@@ -43,6 +43,8 @@ class Auth extends React.Component {
         });
     };
 
+
+     //  auth[api](values)有兩種 singup  setUser
     async signup (values) {
         let { 
             name, 
@@ -55,12 +57,14 @@ class Auth extends React.Component {
             name: name.toLowerCase(),
             password,
             roles,
-            area_id: config.mapConfig.areaModules[area].id,
+            area_id: config.mapConfig.areaModules[area].id
         })
     }
 
     async setUser (values) {
+        console.log(values)
         return await axios.post(dataSrc.setUserRole, {
+            areaNumber : config.mapConfig.areaModules[values.area],
             name: values.name,
             ...values
         })
