@@ -1288,14 +1288,37 @@ const clearSearchHistory = () => {
 const getTransferredLocation = (request, response) => {
     pool.query(queryType.getTransferredLocation())
         .then(res => {
-            console.log(res.rows)
             response.status(200).json(res.rows)
         })
         .catch(err => {
             console.log('err: ', err)
         })
 }
-
+const modifyTransferredLocation = (request, response) => {
+    const {type, data} = request.body
+    let query = null
+    if(type == 'add branch'){
+        query = queryType.modifyTransferredLocation('add branch', data)
+    }else if(type == 'rename branch'){
+        query = queryType.modifyTransferredLocation('rename branch', data)
+    }else if(type == 'remove branch'){
+        query = queryType.modifyTransferredLocation('remove branch', data)
+    }else if(type == 'add department'){
+        query = queryType.modifyTransferredLocation('add department', data)
+    }else if(type == 'rename department'){
+        query = queryType.modifyTransferredLocation('rename department', data)
+    }else if(type == 'remove department'){
+        query = queryType.modifyTransferredLocation('remove department', data)
+    }else{
+        console.log('modifyTransferredLocation: unrecognized command type')
+    }
+    pool.query(query)
+        .then(res => {
+            response.status(200).json('ok')
+        }).catch(err => {
+            console.log(err)
+        })
+}
 module.exports = {
     getTrackingData,
     getObjectTable,
@@ -1358,6 +1381,7 @@ module.exports = {
     addUserArea,
     DeleteUserArea,
     getTransferredLocation,
+    modifyTransferredLocation,
 
 
 

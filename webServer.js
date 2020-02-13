@@ -198,6 +198,8 @@ app.post('/data/getAreaTable', db.getAreaTable)
 
 app.get('/data/getTransferredLocation', db.getTransferredLocation)
 
+app.post('/data/modifyTransferredLocation', db.modifyTransferredLocation)
+
 app.get(`/${process.env.DEFAULT_FOLDER}/shift_record/:file`, (req, res) =>{
 	res.sendFile(path.join(`${process.env.LOCAL_FILE_PATH}`, `${process.env.DEFAULT_FOLDER}/shift_record`,req.params['file']));
 })
