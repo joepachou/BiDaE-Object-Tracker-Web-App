@@ -80,6 +80,7 @@ const getTrackingData = (request, response) => {
             /** Filter the objects that do no belong the area */
             const toReturn = res.rows
             .filter(item => item.mac_address)
+            // .filter(item => item.type !== "生理訊號傳導器")
             .map((item, index) => {
 
                 /** Flag the object that belongs to the current area or to the user's authenticated area */
@@ -488,9 +489,9 @@ const signin = (request, response) => {
 
 const signup = (request, response) => {
     const { 
-        username, 
+        name, 
         password, 
-        role,
+        roles,
         area_id,
         shiftSelect
     } = request.body;
@@ -498,13 +499,13 @@ const signup = (request, response) => {
     const hash = bcrypt.hashSync(password, saltRounds);
 
     const signupPackage = {
-        username,
+        name,
         password: hash,
         shiftSelect
     }
     pool.query(queryType.signup(signupPackage))
         .then(res => {
-            pool.query(queryType.insertUserData(username, role, area_id))
+            pool.query(queryType.insertUserData(name, roles, area_id))
                 .then(res => {
                     console.log('sign up success')
                     response.status(200).json(res)
@@ -695,11 +696,11 @@ const deleteUser = (request, response) => {
 
 const setUserRole = (request, response) => {
     var {
-        username,
-        roleSelect,
+        name,
+        roles,
         shiftSelect
     } = request.body
-    pool.query(queryType.setUserRole(username, roleSelect, shiftSelect))
+    pool.query(queryType.setUserRole(name, roles, shiftSelect))
         .then(res => {
             console.log(`set user success`)
             response.status(200).json(res)

@@ -780,7 +780,7 @@ function signup(signupPackage) {
 		);
 		`;
 	const values = [
-		signupPackage.username, 
+		signupPackage.name, 
 		signupPackage.password,
 	];
 
@@ -988,13 +988,13 @@ const deleteUser = (username) => {
 	return query
 }
 
-const setUserRole = (username, roles, shift) => {
+const setUserRole = (name, roles, shift) => {
 	// console.log(roleSelect)
 	const query = `
 		DELETE FROM user_roles WHERE user_roles.user_id = (
 				SELECT id 
 				FROM user_table 
-				WHERE name='${username}'
+				WHERE name='${name}'
 			);
 		
 		INSERT INTO user_roles (user_id, role_id)
@@ -1003,7 +1003,7 @@ const setUserRole = (username, roles, shift) => {
 				roles.map(role => `((
 					SELECT id
 					FROM user_table
-					WHERE name='${username}'
+					WHERE name='${name}'
 				), 
 				(
 					SELECT id 
@@ -1011,12 +1011,13 @@ const setUserRole = (username, roles, shift) => {
 					WHERE name='${role}'
 				))`).join(',')
 			};
-
-		UPDATE user_table
-			SET shift = '${shift.value}'
-			WHERE name = '${username}';
-		
 	`
+
+		// UPDATE user_table
+		// 	SET shift = '${shift.value}'
+		// 	WHERE name = '${name}';
+		
+	
 	// DELETE FROM user_areas WHERE user_areas.user_id = (
 	// 		SELECT id 
 	// 		FROM user_table 
@@ -1140,15 +1141,18 @@ const setVisitTimestamp = (username) => {
 	`
 }
 
-const insertUserData = (username, roles, area_id) => {
+const insertUserData = (name, roles, area_id) => {
 	return `
-		INSERT INTO user_roles (user_id, role_id)
+		INSERT INTO user_roles (
+			user_id, 
+			role_id
+		)
 		VALUES 
 		${
 			roles.map(role => `((
 				SELECT id
 				FROM user_table
-				WHERE name='${username}'
+				WHERE name='${name}'
 			), 
 			(
 				SELECT id 
@@ -1163,7 +1167,7 @@ const insertUserData = (username, roles, area_id) => {
 			(
 				SELECT id
 				FROM user_table
-				WHERE name='${username}'
+				WHERE name='${name}'
 			), 
 			${area_id}
 		)

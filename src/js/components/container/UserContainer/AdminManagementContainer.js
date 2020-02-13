@@ -1,49 +1,45 @@
 import React from 'react';
 import { 
-    Col, 
-    Row, 
-    ListGroup,
     ButtonToolbar,
     Button
 } from 'react-bootstrap';
 import ReactTable from 'react-table'
 import axios from 'axios';
-import Cookies from 'js-cookie'
-import LocaleContext from '../../../context/LocaleContext';
 import {
     getUserList,
     getUserRole,
     getRoleNameList,
-    setUserRole,
     deleteUser,
-    getAreaTable
 } from "../../../dataSrc";
-import AddableList from './AddableList'
-import ModifyUserInfo from './ModifyUserInfo'
 import { userInfoTableColumn } from '../../../tables'
-import AddUserForm from '../AddUserForm';
+import EditUserForm from './EditUserForm';
+import { AppContext } from '../../../context/AppContext';
 const Fragment = React.Fragment;
 
 class AdminManagementContainer extends React.Component{
+
+    static contextType = AppContext
+
     state = {
            data: [],
            columns: [],
-           selectedUser: '',
+           selectedUser: null,
            userRole: null,
            locale: this.context.abbr,
            showModifyUserInfo: false,
            showAddUserForm: false,
            roleName: [],
-           areaList: []
-    }
+           areaList: [],
+           title: '',
+           locale: this.context.locale.abbr,
+        }
 
     componentDidUpdate = (prevProps, prevState) => {
-        if (this.context.abbr !== prevState.locale) {
+        if (this.context.locale.abbr !== prevState.locale) {
             this.getRoleNameList()
             this.getUserList()
-            // this.getAreaList()
             this.setState({
-                locale: this.context.abbr
+                locale: this.context.locale.abbr
             })
         }
     }
@@ -51,25 +47,12 @@ class AdminManagementContainer extends React.Component{
     componentDidMount = () => {
         this.getRoleNameList()
         this.getUserList()
-        // this.getAreaList()
     }
 
-    // getAreaList = () => {
-    //     axios.post(getAreaTable, {
-    //     })
-    //     .then(res => {
-    //         console.log(res)
-    //         this.setState({
-    //             areaList: res.data.rows
-    //         })
-    //     })
-    //     .catch(err => {
-    //         console.log(err)
-    //     })
-    // }
-
     getUserList = () => {
-        let locale = this.context
+        let { 
+            locale
+        } = this.context
         axios.post(getUserList,{
             locale: locale.abbr 
         }).then(res => {
@@ -81,14 +64,9 @@ class AdminManagementContainer extends React.Component{
                     textTransform: 'capitalize'
                 }
             })
-
             res.data.rows.map((item, index) => {
                 item.id = index + 1
-                item.role_type = item.role_type.map(role => locale.texts[role.toUpperCase()]).join(',')
-                item.shift = item.shift ? {
-                    value: item.shift, 
-                    label: locale.texts[item.shift.toUpperCase().replace(/ /g, '_')]
-                } : ''
+                item.roles = item.role_type.map(role => locale.texts[role.toUpperCase()]).join(',')
             })
             this.setState({
                 data: res.data.rows,
@@ -108,64 +86,42 @@ class AdminManagementContainer extends React.Component{
                 callBack(userRole)
             })
         }
-        
     }
 
     getRoleNameList = () => {
         axios.post(getRoleNameList,{
-        }).then(res => {
-            let rows = _.cloneDeep(res.data.rows)
-            rows.filter(item => item.name !== "guest" )
-            this.setState({
-                roleName: res.data.rows
+            }).then(res => {
+                let rows = _.cloneDeep(res.data.rows)
+                rows.filter(item => item.name !== "guest" )
+                this.setState({
+                    roleName: res.data.rows
+                })
             })
-            // this.staticParamter.roleName = res.data.rows
-        })
     }
-    
-    onClickUser = (index) => {
-        this.getUserRole(this.state.data[index], (userRole) => {
-            this.setState({
-                showModifyUserInfo: true,
-                selectedUser: this.state.data[index],
-                userRole: userRole
+
+    handleSubmit = (values) => {
+
+        let {
+            auth
+        } = this.context
+        let {
+            api
+        } = this.state
+
+        auth[api](values)
+            .then(res => {
+                this.getUserList()
+
+                this.setState({
+                    showModifyUserInfo: false,
+                    showAddUserForm: false,
+                })
             })
-        })
-    }
-
-    onCloseModifyUserInfo = () => {
-        this.setState({
-            showModifyUserInfo: false, 
-            selectedUser: '',
-            userRole: null,
-        })
-    }
-
-    onSubmitModifyUserInfo = (newInfo) => {
-        axios.post(setUserRole, {
-            username: this.state.selectedUser.name,
-            ...newInfo
-        }).then(res => {
-            this.setState({
-                showModifyUserInfo: false,
-                selectedUser: null,
-                userRole: null,
+            .catch(err => {
+                console.log(err)
             })
-            setTimeout(
-                this.getUserList(),1500
-            )
-
-        })
     }
 
-    // deleteUser = (e) => {
-    //     e.preventDefault()
-    //     var username = e.target.getAttribute('name')
-    //     this.setState({
-    //         removeCandidate: username,
-    //         showRemoveUserConfirm: true
-    //     })
-    // }
 
     submitDeleteUserForm = () => {
         axios.post(deleteUser, {
@@ -173,8 +129,6 @@ class AdminManagementContainer extends React.Component{
         }).then((res)=>{
             this.setState({
                 showModifyUserInfo: false, 
-
-                // showRemoveUserConfirm: false
             });
             setTimeout(
                 this.getUserList(),1000
@@ -184,26 +138,14 @@ class AdminManagementContainer extends React.Component{
         })
     }
 
-    // closeRemoveUserConfirm = () => {
-    //     this.setState({
-    //         removeCandidate: null,
-    //         showRemoveUserConfirm: false
-    //     })
-    // }
-
-    addUser = () => {
+    handleClose = () => {
         this.setState({
-            showAddUserForm: true
+            showAddUserForm: false,
+            selectedUser: '',
+            userRole: null,
+            title: '',
+            api: '',
         })
-    }
-
-    onCloseAddUserForm = () => {
-        this.setState({
-            showAddUserForm: false
-        })
-        setTimeout(
-            this.getUserList(), 1500
-        )
     }
 
     onRowClick = (state, rowInfo, column, instance) => {
@@ -214,16 +156,43 @@ class AdminManagementContainer extends React.Component{
         }
     }
 
+    onClickUser = (index) => {
+        this.getUserRole(this.state.data[index], (userRole) => {
+            this.setState({
+                showAddUserForm: true,
+                selectedUser: this.state.data[index],
+                userRole: userRole,
+                title: 'edit user',
+                api: 'setUser',
+            })
+        })
+    }
+
+    handleClick = (e, value) => {
+        this.setState({
+            showAddUserForm: true,
+            title: 'add user',
+            api: 'signup',
+        })
+    }
+
     render(){
-        const locale = this.context
+        const {
+            locale
+        } = this.context
+
+        const {
+            title
+        } = this.state
 
         return (
             <Fragment>
                 <ButtonToolbar>
                     <Button 
                         variant="outline-primary" 
-                        className='mb-1 text-capitalize'
-                        onClick={this.addUser}    
+                        className='mb-1'
+                        name="add user"
+                        onClick={this.handleClick}    
                     >
                         {locale.texts.ADD_USER}
                     </Button>
@@ -236,26 +205,17 @@ class AdminManagementContainer extends React.Component{
                     style={{height:'75vh'}}
                     getTrProps={this.onRowClick}
                 />
-                <ModifyUserInfo
-                    roleName = {this.state.roleName}
-                    show = {this.state.showModifyUserInfo}
-                    user={this.state.selectedUser}
-                    userRole = {this.state.userRole}
-                    onClose = {this.onCloseModifyUserInfo}
-                    onSubmit = {this.onSubmitModifyUserInfo}
-                    deleteUser={this.submitDeleteUserForm}
-                />
-                <AddUserForm
-                    roleName={this.state.roleName}
-                    // areaList={this.state.areaList}
+                <EditUserForm
                     show={this.state.showAddUserForm}
-                    onClose={this.onCloseAddUserForm}
-                    title={'add user'}
+                    handleClose={this.handleClose}
+                    handleSubmit={this.handleSubmit}
+                    title={title}
+                    selectedUser={this.state.selectedUser}
+                    roleName={this.state.roleName}
                 />
             </Fragment>
         )
     }
 }
-AdminManagementContainer.contextType = LocaleContext;
 
 export default AdminManagementContainer

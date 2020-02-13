@@ -43,21 +43,25 @@ class Auth extends React.Component {
 
     async signup (values) {
         let { 
-            username, 
+            name, 
             password, 
-            role, 
-            areaSelect, 
-            shiftSelect = ''
+            roles, 
+            area, 
         } = values
 
-        let result = await axios.post(dataSrc.signup, {
-            username: username.toLowerCase(),
+        return await axios.post(dataSrc.signup, {
+            name: name.toLowerCase(),
             password,
-            role,
-            area_id: config.mapConfig.areaModules[areaSelect].id,
-            shiftSelect
+            roles,
+            area_id: config.mapConfig.areaModules[area].id,
         })
-        return result
+    }
+
+    async setUser (values) {
+        return await axios.post(dataSrc.setUserRole, {
+            name: values.name,
+            ...values
+        })
     }
   
     handleAuthentication = () => {
@@ -120,6 +124,7 @@ class Auth extends React.Component {
             setMyDevice: this.setMyDevice,
             setUserInfo: this.setUserInfo,
             setCookies: this.setCookies,
+            setUser: this.setUser
         };
 
         return (

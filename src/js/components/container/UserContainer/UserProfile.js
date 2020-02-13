@@ -173,13 +173,11 @@ class UserProfile extends React.Component{
         this.setState({
           userInfo: userInfo
         })
-        console.log(userInfo)
         axios.post(modifyUserInfo, {
           info: userInfo,
           username: userInfo['name']
         }).then(res => {
           auth.setUserInfo('freqSearchCount', value)
-          console.log(res)
         }) 
       }
       generateSettingBlock = () => {
@@ -340,7 +338,6 @@ class UserProfile extends React.Component{
         // const key = Object.keys(config.mapConfig.areaOptions)
         // const value = Object.values(config.mapConfig.areaOptions)
    
-        console.log(this.state.rows_data)
         return(
              //    頭像
             // <div className='d-flex flex-row'style={style.userProfileContainer}>
