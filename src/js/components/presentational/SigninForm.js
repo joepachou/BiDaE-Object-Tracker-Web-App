@@ -10,7 +10,7 @@ import config from '../../config';
 import LocaleContext from '../../context/LocaleContext'
 import axios from 'axios';
 import dataSrc from '../../dataSrc'
-
+import Cookies from 'js-cookie';
 const SiginForm = ({
     show,
     handleClose,
@@ -58,7 +58,9 @@ const SiginForm = ({
                                 setStatus(res.data.message)
                                 setSubmitting(false)
                             } else {
+                                res.data.userInfo.locale = res.data.userInfo.locale_area
                                 signin(res.data.userInfo)
+                                locale.reSetState()
                                 handleSubmit()
                             }
                         }).catch(error => {

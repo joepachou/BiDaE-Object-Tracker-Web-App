@@ -3,6 +3,12 @@ import en from '../locale/en-US';
 import React from 'react'
 import LocaleContext from './context/LocaleContext'
 import config from './config';
+import { 
+    setLocaleID,
+    getLocaleID
+} from "../js/dataSrc"
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const supportedLocale = {
     tw: {
@@ -21,10 +27,11 @@ const supportedLocale = {
 
 
 class Locale extends React.Component {
+
     state = {
-        lang: config.locale.defaultLocale,
-        texts: supportedLocale[config.locale.defaultLocale].texts,
-        abbr: supportedLocale[config.locale.defaultLocale].abbr
+        lang:  Cookies.get('locale') ? Cookies.get('locale') : config.locale.defaultLocale,
+        texts: supportedLocale[Cookies.get('locale')].texts,
+        abbr: supportedLocale[Cookies.get('locale')].abbr
     }
 
     changeTexts = (lang) => {
@@ -44,8 +51,28 @@ class Locale extends React.Component {
         }
     }
 
-    changeLocale = (e) => {
+
+    changeLocale = (e,auth) => {
         const nextLang = this.toggleLang().nextLang
+        axios.post(getLocaleID, {
+            lang: nextLang
+        })
+        .then(resGet => {
+                axios.post(setLocaleID, {
+                    userID: auth.user.id,
+                    lang: resGet.data.rows[0].id
+                })
+                .then(resSet => {
+                    Cookies.set('locale', nextLang)
+                })
+                .catch(errSet => {
+                    console.log(errSet)
+                })
+        })
+        .catch(err => {
+            console.log(err)
+        })
+
         this.setState({
             lang: nextLang,
             texts: this.changeTexts(nextLang),
@@ -54,12 +81,24 @@ class Locale extends React.Component {
 
     }
     
+
+    reSetState = () => {
+        this.setState({
+            lang: Cookies.get('locale'),
+            texts: this.changeTexts(Cookies.get('locale')),
+            abbr: this.changeAbbr(Cookies.get('locale')),            
+        })
+    }
+
+
     render() {
         const localeProviderValue = {
             ...this.state,
             changeLocale: this.changeLocale,
             toggleLang: this.toggleLang,
+            reSetState : this.reSetState,
         };
+       
         return (
             <LocaleContext.Provider value={localeProviderValue}>
                 {this.props.children}
