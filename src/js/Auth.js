@@ -24,11 +24,13 @@ class Auth extends React.Component {
     signin = (userInfo) => {
         Cookies.set('authenticated', true)
         Cookies.set('user', userInfo)
+        Cookies.set('locale', userInfo.locale)
 
         this.setState({
             authenticated: true,
             user: userInfo
         })
+
     };
   
     signout = () => {

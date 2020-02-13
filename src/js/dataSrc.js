@@ -10,6 +10,8 @@ const getLbeaconTable = `${protocol}://${dataSrcIP}/data/getLbeaconTable`;
 const getGatewayTable = `${protocol}://${dataSrcIP}/data/getGatewayTable`;
 const searchResult = `${protocol}://${dataSrcIP}/data/searchResult`;
 const editObject = `${protocol}://${dataSrcIP}/data/editObject`;
+const setLocaleID = `${protocol}://${dataSrcIP}/data/setLocaleID`;
+const getLocaleID = `${protocol}://${dataSrcIP}/data/getLocaleID`;
 const editImport = `${protocol}://${dataSrcIP}/data/editImport`;
 const editPatient = `${protocol}://${dataSrcIP}/data/editPatient`;
 const addObject = `${protocol}://${dataSrcIP}/data/addObject`;
@@ -85,6 +87,7 @@ module.exports = {
     getTransferredLocation,
     searchResult,
     editObject,
+    setLocaleID,
     deletePatient,
     editPatient,
     addObject,
@@ -128,5 +131,6 @@ module.exports = {
     addMonitorConfig,
     getUserArea,
     addUserArea,
-    DeleteUserArea
+    DeleteUserArea,
+    getLocaleID
 };

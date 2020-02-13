@@ -303,6 +303,35 @@ const getGatewayTable = (request, response) => {
         })
 }
 
+
+
+const getLocaleID = (request, response) => {
+    const lang = request.body.lang
+    pool.query(queryType.getLocaleID(lang))
+        .then(res => {
+            console.log("get Locale ID success");
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log("get Locale ID Fails: " + err)
+        })
+}
+
+const setLocaleID = (request, response) => {
+    const userID = request.body.userID
+    const lang = request.body.lang
+
+    pool.query(queryType.setLocaleID(userID,lang))
+        .then(res => {
+            console.log("set Locale ID success");
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log("set Locale ID Fails: " + err)
+        })
+}
+
+
 const editObject = (request, response) => {
     const formOption = request.body.formOption
     pool.query(queryType.editObject(formOption))
@@ -435,6 +464,8 @@ const signin = (request, response) => {
                     message: "Username or password is incorrect"
                 })
             } else {
+                console.log('fuckkkkkkkkkkkssss')
+                console.log(res)
                 const hash = res.rows[0].password
                 if (bcrypt.compareSync(password, hash)) {
                     let { 
@@ -446,7 +477,9 @@ const signin = (request, response) => {
                         areas_id,
                         shift,
                         id,
-                        main_area
+                        main_area,
+                        locale_id,
+                        locale_area
                     } = res.rows[0]
 
                     let userInfo = {
@@ -458,9 +491,10 @@ const signin = (request, response) => {
                         shift,
                         id,
                         areas_id,
-                        main_area
+                        main_area,
+                        locale_id,
+                        locale_area
                     }
-
                     request.session.userInfo = userInfo
                     response.json({
                         authentication: true,
@@ -1279,6 +1313,8 @@ module.exports = {
     addAssociation_Patient,
     cleanBinding,
     editObject,
+    setLocaleID,
+    getLocaleID,
     editImport,
     editPatient,
     objectImport,
