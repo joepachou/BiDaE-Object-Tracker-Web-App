@@ -304,20 +304,6 @@ const getGatewayTable = (request, response) => {
         })
 }
 
-
-
-const getLocaleID = (request, response) => {
-    const lang = request.body.lang
-    pool.query(queryType.getLocaleID(lang))
-        .then(res => {
-            console.log("get Locale ID success");
-            response.status(200).json(res)
-        })
-        .catch(err => {
-            console.log("get Locale ID Fails: " + err)
-        })
-}
-
 const setLocaleID = (request, response) => {
     const userID = request.body.userID
     const lang = request.body.lang
@@ -1337,7 +1323,6 @@ module.exports = {
     cleanBinding,
     editObject,
     setLocaleID,
-    getLocaleID,
     editImport,
     editPatient,
     objectImport,

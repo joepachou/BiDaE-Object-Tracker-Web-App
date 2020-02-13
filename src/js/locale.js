@@ -5,7 +5,6 @@ import LocaleContext from './context/LocaleContext'
 import config from './config';
 import { 
     setLocaleID,
-    getLocaleID
 } from "../js/dataSrc"
 import axios from 'axios';
 import Cookies from 'js-cookie';

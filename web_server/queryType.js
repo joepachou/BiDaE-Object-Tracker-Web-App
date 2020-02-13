@@ -492,30 +492,6 @@ function editImport (formOption) {
 	return query;
 }
 
-
-
-const getLocaleID = (lang) => {
-	const text = `
-		SELECT 
-			id
-		FROM
-			locale
-		WHERE name = $1
-	`
-
-	const values = [
-		lang
-	]
-
-	const query = {
-		text, 
-		values
-	}
-	return query
-}
-
-
-
 function setLocaleID (userID,lang) {
 
 	let text = 
@@ -540,10 +516,6 @@ function setLocaleID (userID,lang) {
 
 	return query;
 }
-
-
-
-
 
 function editObject (formOption) {
 	let text = 
@@ -1874,7 +1846,6 @@ module.exports = {
 	cleanBinding,
 	getImportData,
 	setLocaleID,
-	getLocaleID,
 	addImport,
 	getImportPatient,
 	addGeofenceConfig,
