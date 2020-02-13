@@ -474,6 +474,7 @@ const signin = (request, response) => {
                         permissions,
                         mydevice, 
                         search_history,
+                        freq_search_count,
                         areas_id,
                         shift,
                         id,
@@ -481,13 +482,14 @@ const signin = (request, response) => {
                         locale_id,
                         locale_area
                     } = res.rows[0]
-
+                    console.log(search_history)
                     let userInfo = {
                         name,
                         myDevice: mydevice,
                         roles,
                         permissions,
                         searchHistory: search_history,
+                        freqSearchCount: freq_search_count,
                         shift,
                         id,
                         areas_id,
@@ -564,9 +566,9 @@ const getUserInfo = (request, response) => {
 }
 
 const addUserSearchHistory = (request, response) => {
-    let { username, searchHistory } = request.body;
-    searchHistory = JSON.stringify(searchHistory)
-    pool.query(queryType.addUserSearchHistory(username, searchHistory))
+    let { username, keyType, keyWord } = request.body;
+    // searchHistory = JSON.stringify(s)
+    pool.query(queryType.addUserSearchHistory(username, keyType, keyWord))
         .then(res => {
             console.log('Add user searech history success')
             response.status(200).json(res)
@@ -630,6 +632,18 @@ const modifyUserDevices = (request, response) => {
         }
         
         response.status(200).json(results)
+    })
+}
+
+const modifyUserInfo = (request, response) => {
+    const {username, info} = request.body
+    pool.query(queryType.modifyUserInfo(username, info), (error, results) => {
+        if(error){
+            console.log(error)
+        }else{
+            console.log('modify user info success')
+            response.status(200).send('ok')
+        }
     })
 }
 
@@ -1285,6 +1299,23 @@ const DeleteUserArea = (request, response) => {
             console.log("Delete UserArea fails: " + err)
         })
 }
+const clearSearchHistory = () => {
+    pool.query(queryType.clearSearchHistory()).then(res => {
+
+    }).catch(err => {
+        console.log(err)
+    })
+}
+const getTransferredLocation = (request, response) => {
+    pool.query(queryType.getTransferredLocation())
+        .then(res => {
+            console.log(res.rows)
+            response.status(200).json(res.rows)
+        })
+        .catch(err => {
+            console.log('err: ', err)
+        })
+}
 
 module.exports = {
     getTrackingData,
@@ -1332,6 +1363,7 @@ module.exports = {
     signup,
     generatePDF,
     modifyUserDevices,
+    modifyUserInfo,
     validateUsername,
     setUserRole,
     setMonitorConfig,
@@ -1346,5 +1378,10 @@ module.exports = {
     addMonitorConfig,
     getUserArea,
     addUserArea,
-    DeleteUserArea
+    DeleteUserArea,
+    getTransferredLocation,
+
+
+
+    clearSearchHistory
 }

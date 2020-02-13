@@ -1,3 +1,4 @@
+require('dotenv').config();
 function getTrackingData () {
 	const query = `
 		SELECT 
@@ -734,60 +735,67 @@ const editObjectPackage = (formOption, username, record_id, reservedTimestamp) =
 }
 function signin(username) {
 
-    const text =
-        `
-        WITH
-        user_info
-            AS
-                (
-                    SELECT name, password, mydevice, search_history, id, main_area, locale_id
-                    FROM user_table
-                    WHERE name =$1
-                )
-        ,
-        roles
-            AS
-                (
-                    SELECT user_roles.user_id, user_roles.role_id, roles.name as role_name
-                    FROM user_roles
-                    INNER JOIN roles
-                    ON roles.id = user_roles.role_id
-                    WHERE user_roles.user_id = (SELECT id FROM user_info)
-                ),
-        permissions
-            AS
-                (
-                    SELECT roles_permission.role_id, roles_permission.permission_id, permission_table.name as permission_name
-                    FROM roles_permission
-                    INNER JOIN permission_table
-                    ON roles_permission.permission_id = permission_table.id
-                    WHERE roles_permission.role_id in (SELECT role_id FROM roles)
-                ),
-        areas
-            AS
-                (
-                    SELECT area_id
-                    FROM user_areas
-                    WHERE user_areas.user_id = (SELECT id FROM user_info)
+	const text =
+		`
+		WITH 
+		user_info
+			AS
+				(
+					SELECT name, password, mydevice, id, main_area, max_search_history_count, locale_id
+					FROM user_table
+					WHERE name =$1
+				)
+		,
+		roles
+			AS
+				(
+					SELECT user_roles.user_id, user_roles.role_id, roles.name as role_name 
+					FROM user_roles
+					INNER JOIN roles
+					ON roles.id = user_roles.role_id
+					WHERE user_roles.user_id = (SELECT id FROM user_info)
+				),
+		permissions
+			AS
+				(
+					SELECT roles_permission.role_id, roles_permission.permission_id, permission_table.name as permission_name 
+					FROM roles_permission
+					INNER JOIN permission_table
+					ON roles_permission.permission_id = permission_table.id
+					WHERE roles_permission.role_id in (SELECT role_id FROM roles)
+				),
+		areas
+			AS
+				(
+					SELECT area_id
+					FROM user_areas
+					WHERE user_areas.user_id = (SELECT id FROM user_info)
+				),
+		search_histories
+			AS
+				(
+					SELECT keyword as name, COUNT(id) as value
+					FROM search_history where user_id = (SELECT id FROM user_info)
+					GROUP BY keyWord
 				)
 
-				
-
-        SELECT
-            user_info.name,
-            user_info.password,
-            user_info.mydevice,
-            user_info.search_history,
-            user_info.id,
+		SELECT 
+			user_info.name, 
+			user_info.password,
+			user_info.mydevice, 
+			array(select row_to_json(search_histories) FROM search_histories) AS search_history,
+			user_info.id,
+			user_info.id,
 			user_info.locale_id,
-            array(
-                SELECT role_name FROM roles
-            ) as roles,
-            array(
-                SELECT DISTINCT permission_name FROM permissions
-            ) as permissions,
-            array (
-                SELECT area_id FROM areas
+			user_info.max_search_history_count as freq_search_count,
+			array(
+				SELECT role_name FROM roles
+			) as roles,
+			array(
+				SELECT DISTINCT permission_name FROM permissions 
+			) as permissions, 
+			array (
+				SELECT area_id FROM areas
 			) as areas_id,
 			(
                 SELECT locale.name FROM locale WHERE user_info.locale_id = locale.id
@@ -844,7 +852,7 @@ function signup(signupPackage) {
 
 function getUserInfo(username) {
 	const text =  `
-	SELECT name, mydevice, search_history from user_table where name= $1
+	SELECT name, mydevice, search_history, max_search_history_count as freqSearchCount from user_table where name= $1
 	`;
 
 	const values = [username];
@@ -857,14 +865,24 @@ function getUserInfo(username) {
 	return query
 }
 
-function addUserSearchHistory (username, searchHistory) {
+function addUserSearchHistory (username, keyType, keyWord) {
+	// const text = `
+	// 	UPDATE user_table
+	// 	SET search_history = $1
+	// 	WHERE name = $2
+	// `;
 	const text = `
-		UPDATE user_table
-		SET search_history = $1
-		WHERE name = $2
+		INSERT INTO search_history(search_time, keyWord, key_type, user_id)
+		VALUES(
+			now(),
+			$1,
+			$2,
+			(SELECT id from user_table where name = $3)
+		) 
+			
 	`;
 
-	const values = [searchHistory, username];
+	const values = [keyWord, keyType, username];
 
 	const query = {
 		text, 
@@ -919,6 +937,13 @@ function modifyUserDevices(username, mode, acn){
 		text = ""
 	}
 
+	return text
+	
+}
+function modifyUserInfo(username, info){
+	console.log(username)
+	const {freqSearchCount} = info
+	text = `UPDATE user_table SET max_search_history_count = ${freqSearchCount} WHERE name='${username}'`
 	return text
 	
 }
@@ -1787,6 +1812,17 @@ function DeleteUserArea (user_id,area_id){
     return query
 
 }
+function clearSearchHistory(){
+	const query = `
+		DELETE FROM search_history WHERE now() > search_time + interval ${process.env.SEARCH_HISTORY_VALIDATE_DURATION}
+	`
+	return query
+}
+
+function getTransferredLocation() {
+	const query = `SELECT branch_name, offices FROM branch_and_office`
+	return query
+}
 
 module.exports = {
 	getTrackingData,
@@ -1811,6 +1847,7 @@ module.exports = {
 	addUserSearchHistory,
 	editLbeacon,
 	modifyUserDevices,
+	modifyUserInfo,
 	getShiftChangeRecord,
 	validateUsername,
 	getUserList,
@@ -1853,7 +1890,13 @@ module.exports = {
 	addMonitorConfig,
 	getUserArea,
 	addUserArea,
-	DeleteUserArea
+	DeleteUserArea,
+	getTransferredLocation,
+
+
+
+
+	clearSearchHistory
 }
 
 

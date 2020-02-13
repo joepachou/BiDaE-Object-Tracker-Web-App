@@ -105,6 +105,10 @@ class Auth extends React.Component {
                 [status]: value,
             }
         })
+        this.setCookies('user', {
+                ...this.state.user,
+                [status]: value,
+            })
     }
 
     render() {

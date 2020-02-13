@@ -58,6 +58,7 @@ class EditObjectForm extends React.Component {
         let { locale } = this.context
         axios.get(dataSrc.getTransferredLocation)
         .then(res => {
+            // console.log(res.data)
             const transferredLocationOptions = res.data.map(loc => {
                 return {          
                     value: loc.transferred_location,
