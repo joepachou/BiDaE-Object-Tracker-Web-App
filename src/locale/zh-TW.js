@@ -196,7 +196,7 @@ const tw = {
     EDIT_GEOFENCE_CONFIG: "編輯電子圍籬設定",
     ADD_GEOFENCE_CONFIG: "新增電子圍籬設定",
     WARNING: "警告",
-    PROCESS_IS_COMPLETED: "完成!",
+    PROCESS_IS_COMPLETED: "完成",
     EDIT_MOVEMENT_MONITOR: "編輯移動監控",
     EDIT_LONG_STAY_IN_DANGER_MONITOR: "編輯久留監控",
     EDIT_NOT_STAY_ROOM_MONITOR: "編輯房間監控",
