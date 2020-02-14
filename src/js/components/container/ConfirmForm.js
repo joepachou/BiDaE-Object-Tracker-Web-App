@@ -145,9 +145,7 @@ class ConfirmForm extends React.Component {
 
                                                 {isTransferObject
                                                     ?   <h6>
-                                                            <div>{selectedObjectData[0].transferred_location.value.split(',').map(item => {
-                                                                        return locale.texts[item.toUpperCase().replace(/ /g, '_')]
-                                                                    }).join('/')}
+                                                            <div>{selectedObjectData[0].transferred_location.label}
                                                             </div>
                                                         </h6>
                                                     : null

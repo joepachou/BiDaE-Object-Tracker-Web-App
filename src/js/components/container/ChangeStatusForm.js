@@ -47,32 +47,27 @@ class ChangeStatusForm extends React.Component {
 
     getTransferredLocation = () => {
         let { locale } = this.context
+        let  lang    = locale.lang == 'tw' ? 'chinese' : 'english'
         axios.get(dataSrc.getTransferredLocation)
-            .then(res => {
-                console.log(res.data)
-            const transferredLocationOptions = res.data.map(loc => {
-                console.log(loc)
-                // Object.values(loc)
-                //         .filter((item, index) => index > 0)
-                //         .map(branch => {
-                //             return {
-                //                 value: `${loc.transferred_location},${branch}`,
-                //                 label: locale.texts[branch.toUpperCase().replace(/ /g, '_')],
-                //             }
+        .then(res => {
+            const transferredLocationOptions = res.data.map(branch => {
+                console.log(branch, lang)
                 return {          
-                    value: loc.branch_name,
-                    label: locale.texts[loc.branch_name.toUpperCase().replace(/ /g, '_')],
-                    options: loc.offices.map(office => {
-                        return {
-                            value: `${office['en']},${loc.branch_name}`,
-                            label: locale.texts[office['en'].toUpperCase().replace(/ /g, '_')],
-                        }
+                    label: branch.branch_name[lang],
+                    value: branch.branch_name['english'],
+                    options: branch.offices
+                        .map(department => {
+                            return {
+                                label: `${department[lang]},${branch.branch_name[lang]}`,
+                                value: {
+                                    chinese: `${department['chinese']},${branch.branch_name['chinese']}`,
+                                    english: `${department['english']},${branch.branch_name['english']}`
+                                }
+                            }
                     })
-                    }
-                })
+                }
 
-            
-            console.log(transferredLocationOptions)
+            })
             this.setState({
                 transferredLocationOptions
             })

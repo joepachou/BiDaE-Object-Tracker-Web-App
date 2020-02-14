@@ -1894,8 +1894,9 @@ function DeleteUserArea (user_id,area_id){
 }
 function clearSearchHistory(){
 	const query = `
-		DELETE FROM search_history WHERE now() > search_time + interval ${process.env.SEARCH_HISTORY_VALIDATE_DURATION}
+		DELETE FROM search_history WHERE now() > search_time + interval '${process.env.SEARCH_HISTORY_VALIDATE_DURATION}'
 	`
+	console.log(query)
 	return query
 }
 
@@ -1906,20 +1907,21 @@ function getTransferredLocation() {
 function modifyTransferredLocation(type, data){
 	var query;
 	if(type == 'add branch'){
-        query = `insert into branch_and_office(branch_name) values('${data.name}')`
+        query = `insert into branch_and_office(branch_name) values('${JSON.stringify(data.name)}'::json)`
     }else if(type == 'rename branch'){
-        query = `update branch_and_office set branch_name = '${data.name}' where id = ${data.branch_id} `
+        query = `update branch_and_office set branch_name = '${JSON.stringify(data.name)}' where id = ${data.branch_id} `
     }else if(type == 'remove branch'){
         query = `delete from branch_and_office where id = ${data.branch_id} `
     }else if(type == 'add department'){
-        query = `update branch_and_office set offices = array_append(offices, '{"english":"${data.english_name}","chinese":"${data.chinese_name}"}'::jsonb) where id = ${data.branch_id}`
+        query = `update branch_and_office set offices = array_append(offices, '${JSON.stringify(data.name)}'::jsonb) where id = ${data.branch_id}`
     }else if(type == 'rename department'){
-        query = queryType.modifyTransferredLocation('rename department', data)
+        query = `update branch_and_office set offices[${data.departmentIndex + 1}] = '${JSON.stringify(data.name)}'::jsonb where id = ${data.branch_id}`
     }else if(type == 'remove department'){
         query = `update branch_and_office set offices = array_remove(offices, offices[${data.departmentIndex + 1}]) where id = ${data.branch_id}`
     }else{
         console.log('modifyTransferredLocation: unrecognized command type')
     }
+    console.log(query)
     return query
 }
 module.exports = {
