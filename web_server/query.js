@@ -419,7 +419,7 @@ const editObjectPackage = (request, response) => {
                     console.log('Edit object package success')
                     if (pdfPackage) {
                         pdf.create(pdfPackage.pdf, pdfPackage.options).toFile(path.join(process.env.LOCAL_FILE_PATH, pdfPackage.path), function(err, result) {
-                            if (err) return console.log(err);
+                            if (err) return console.log("editObjectPackage error: ",err);
                         
                             console.log("pdf create success");
                             response.status(200).json(pdfPackage.path)
@@ -487,7 +487,7 @@ const signin = (request, response) => {
                         userInfo
                     })
                     pool.query(queryType.setVisitTimestamp(username))
-                        .catch(err => console.log(err))
+                        .catch(err => console.log("set visit timestamp: ",err))
 
                     console.log(`sign in success: ${name}`)
                 } else {
@@ -527,7 +527,7 @@ const signup = (request, response) => {
                     response.status(200).json(res)
                 })
                 .catch(err => {
-                    console.log(err)
+                    console.log("sinup error:", err)
                 })
         })
         .catch(err => {
@@ -576,7 +576,7 @@ const generatePDF = (request, response) => {
     let { pdfPackage } = request.body
     /** If there are some trouble when download pdf, try npm rebuild phantomjs-prebuilt */
     pdf.create(pdfPackage.pdf, pdfPackage.options).toFile(pdfPackage.path, function(err, result) {
-        if (err) return console.log(err);
+        if (err) return console.log("generate pdf error: ",err);
     
         console.log("pdf create");
         response.status(200).json(pdfPackage.path)
@@ -591,7 +591,7 @@ const addShiftChangeRecord = (request, response) => {
         .then(res => {
              /** If there are some trouble when download pdf, try npm rebuild phantomjs-prebuilt */
             pdf.create(pdfPackage.pdf, pdfPackage.options).toFile(path.join(process.env.LOCAL_FILE_PATH, pdfPackage.path), function(err, result) {
-                if (err) return console.log(err);
+                if (err) return console.log("addShiftChangeRecord error: ",err);
             
                 console.log("pdf create");
                 response.status(200).json(pdfPackage.path)
@@ -607,7 +607,7 @@ const modifyUserDevices = (request, response) => {
     const {username, mode, acn} = request.body
     pool.query(queryType.modifyUserDevices(username, mode, acn), (error, results) => {
         if (error) {
-            
+            console.log("modifyUserDevices error: ", err)
         } else {
             console.log('Modify Success')
         }
@@ -620,7 +620,7 @@ const modifyUserInfo = (request, response) => {
     const {username, info} = request.body
     pool.query(queryType.modifyUserInfo(username, info), (error, results) => {
         if(error){
-            console.log(error)
+            console.log("modifyUserInfo error: ", err)
         }else{
             console.log('modify user info success')
             response.status(200).send('ok')
@@ -639,7 +639,7 @@ const getPDFInfo = (request, response) => {
             response.status(200).json(res)
         })
         .catch(err => {
-            console.log(err)
+            console.log('getPDFInfo error: ', err)
         })
 }
 
@@ -652,7 +652,7 @@ const validateUsername = (request, response) => {
             response.status(200).json({precheck})
         })
         .catch(err => {
-            console.log(err)
+            console.log('validateUsername error: ', err)
         })
 }
 
@@ -692,7 +692,7 @@ const getRoleNameList = (request, response) => {
             response.status(200).json(res)
         })
         .catch(err => {
-            console.log(err)
+            console.log('getRoleNameList error: ', err)
         })
     
 }
@@ -739,7 +739,7 @@ const getEditObjectRecord = (request, response) => {
             response.status(200).json(res)
         })
         .catch(err => {
-            console.log(err)
+            console.log('getEditObjectRecord error: ', err)
         })
 }
 
@@ -763,7 +763,7 @@ const deleteEditObjectRecord = (request, response) => {
                 })
         })
         .catch(err => {
-            console.log(err)
+            console.log('deleteEditObjectRecord error: ', err)
         })
 }
 
@@ -785,7 +785,7 @@ const deleteShiftChangeRecord = (request, response) => {
                 
     })
     .catch(err => {
-        console.log(err)
+        console.log('deleteShiftChangeRecord error: ', err)
     })
 }
 
@@ -798,7 +798,7 @@ const deletePatient = (request, response) => {
                 response.status(200).json(res)
     })
     .catch(err => {
-        console.log(err)
+        console.log('deletePatient error: ', err)
     })
 }
 
@@ -811,7 +811,7 @@ const deleteLBeacon = (request, response) => {
             response.status(200).json(res)
         })
         .catch(err => {
-            console.log(err)
+            console.log('deleteLBeacon error: ', err)
         })
 }
 
@@ -823,7 +823,7 @@ const deleteGateway = (request, response) => {
             response.status(200).json(res)
         })
         .catch(err => {
-            console.log(err)
+            console.log('deleteGateway error: ', err)
         })
 }
 
@@ -836,7 +836,7 @@ const deleteDevice = (request, response) => {
             response.status(200).json(res)
         })
         .catch(err => {
-            console.log(err)
+            console.log('deleteDevice error: ', err)
         })
 }
 
@@ -849,7 +849,7 @@ const deleteImportData = (request, response) => {
                     response.status(200).json(res)
         })
         .catch(err => {
-            console.log(err)
+            console.log('deleteImportData error: ', err)
         })
 }
 
@@ -1282,7 +1282,7 @@ const clearSearchHistory = () => {
     pool.query(queryType.clearSearchHistory()).then(res => {
 
     }).catch(err => {
-        console.log(err)
+        console.log('clearSearchHistory error: ', err)
     })
 }
 const getTransferredLocation = (request, response) => {
@@ -1291,7 +1291,7 @@ const getTransferredLocation = (request, response) => {
             response.status(200).json(res.rows)
         })
         .catch(err => {
-            console.log('err: ', err)
+            console.log('getTransferredLocation error: ', err)
         })
 }
 const modifyTransferredLocation = (request, response) => {
@@ -1316,7 +1316,7 @@ const modifyTransferredLocation = (request, response) => {
         .then(res => {
             response.status(200).json('ok')
         }).catch(err => {
-            console.log(err)
+            console.log('modifyTransferredLocation error: ', err)
         })
 }
 module.exports = {

@@ -1793,8 +1793,9 @@ function DeleteUserArea (user_id,area_id){
 }
 function clearSearchHistory(){
 	const query = `
-		DELETE FROM search_history WHERE now() > search_time + interval ${process.env.SEARCH_HISTORY_VALIDATE_DURATION}
+		DELETE FROM search_history WHERE now() > search_time + interval '${process.env.SEARCH_HISTORY_VALIDATE_DURATION}'
 	`
+	console.log(query)
 	return query
 }
 
