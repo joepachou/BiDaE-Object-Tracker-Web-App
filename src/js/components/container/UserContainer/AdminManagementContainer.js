@@ -10,7 +10,8 @@ import {
     getUserRole,
     getRoleNameList,
     deleteUser,
-    getUserArea
+    getUserArea,
+    getMainSecondArea
 } from "../../../dataSrc";
 import { userInfoTableColumn } from '../../../tables'
 import EditUserForm from './EditUserForm';
@@ -106,8 +107,7 @@ class AdminManagementContainer extends React.Component{
         let {
             api
         } = this.state
-        console.log(values)
-        console.log(api)
+ 
         auth[api](values)
             .then(res => {
                 this.getUserList()
@@ -150,13 +150,24 @@ class AdminManagementContainer extends React.Component{
     onRowClick = (state, rowInfo, column, instance) => {
         return {
             onClick: (e, handleOriginal) => {
-                console.log()
-                this.setState({
-                    showAddUserForm: true,
-                    selectedUser: rowInfo.original,
-                    title: 'edit user',
-                    api: 'setUser',
+     
+                axios.post(getMainSecondArea, {
+                    username: rowInfo.original.name
+                }).then((res)=>{ //抓主要跟次要地區
+                    rowInfo.original.second_area = res.data.rows[0].second_area
+                    rowInfo.original.main_area = res.data.rows[0].main_area
+                    this.setState({
+                            showAddUserForm: true,
+                            selectedUser: rowInfo.original,
+                            title: 'edit user',
+                            api: 'setUser',
+                    })
+                }).catch(err => {
+                    console.log(`get Main Second Area fail! ${err}`)
                 })
+
+              
+
             }
         }
     }

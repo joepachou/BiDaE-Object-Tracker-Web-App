@@ -204,6 +204,7 @@ const tw = {
 
     /** Error Message */
     GENDER_IS_REQUIRED: "請選擇性別",
+    ROLE_IS_REQUIRED: "請選擇至少一個權限",
     NAME_IS_REQUIRED: "請填入名字",
     NUMBER_IS_REQUIRED:"請輸入病人編號",
     ROOMNUMBER_IS_REQUIRED: "請輸入病房編號",

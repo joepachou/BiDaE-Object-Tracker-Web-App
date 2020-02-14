@@ -504,24 +504,28 @@ const signin = (request, response) => {
 }
 
 const signup = (request, response) => {
+
     const { 
         name, 
         password, 
         roles,
         area_id,
-        shiftSelect
+        shiftSelect,
+        secondArea
     } = request.body;
+
     const saltRounds = 10;
     const hash = bcrypt.hashSync(password, saltRounds);
 
     const signupPackage = {
         name,
         password: hash,
-        shiftSelect
+        shiftSelect,
+        area_id
     }
     pool.query(queryType.signup(signupPackage))
         .then(res => {
-            pool.query(queryType.insertUserData(name, roles, area_id))
+            pool.query(queryType.insertUserData(name, roles, area_id,secondArea))
                 .then(res => {
                     console.log('sign up success')
                     response.status(200).json(res)
@@ -709,15 +713,30 @@ const deleteUser = (request, response) => {
         })  
 }
 
+const getMainSecondArea = (request, response) => { 
+    var {
+        username
+    } = request.body
 
-const setUserRole = (request, response) => {
+    pool.query(queryType.getMainSecondArea(username))
+        .then(res => {
+            console.log(`get Main Second Area success`)
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(`get Main Second Area ${err}`)
+        })
+}
+
+const setUserRole = (request, response) => { 
     var {
         name,
         roles,
-        areaNumber
+        areaNumber,
+        secondArea
     } = request.body
 
-    pool.query(queryType.setUserRole(name, roles, areaNumber))
+    pool.query(queryType.setUserRole(name, roles, areaNumber,secondArea))
         .then(res => {
             console.log(`set user success`)
             response.status(200).json(res)
@@ -1367,6 +1386,7 @@ module.exports = {
     modifyUserInfo,
     validateUsername,
     setUserRole,
+    getMainSecondArea,
     setMonitorConfig,
     setGeofenceConfig,
     checkoutViolation,
