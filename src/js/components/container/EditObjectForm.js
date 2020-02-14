@@ -43,6 +43,7 @@ class EditObjectForm extends React.Component {
     }
     
     handleSubmit = (postOption) => {
+        console.log('post')
         const path = this.props.formPath
         axios.post(path, {
             formOption: postOption
@@ -56,19 +57,22 @@ class EditObjectForm extends React.Component {
         
     getTransferredLocation = () => {
         let { locale } = this.context
+        let  lang    = locale.lang == 'tw' ? 'chinese' : 'english'
         axios.get(dataSrc.getTransferredLocation)
         .then(res => {
-            // console.log(res.data)
-            const transferredLocationOptions = res.data.map(loc => {
+            const transferredLocationOptions = res.data.map(branch => {
+                console.log(branch, lang)
                 return {          
-                    value: loc.transferred_location,
-                    label: locale.texts[loc.transferred_location.toUpperCase().replace(/ /g, '_')],
-                    options: Object.values(loc)
-                        .filter((item, index) => index > 0)
-                        .map(branch => {
+                    label: branch.branch_name[lang],
+                    value: branch.branch_name['english'],
+                    options: branch.offices
+                        .map(department => {
                             return {
-                                value: `${loc.transferred_location},${branch}`,
-                                label: locale.texts[branch.toUpperCase().replace(/ /g, '_')],
+                                label: `${department[lang]},${branch.branch_name[lang]}`,
+                                value: {
+                                    chinese: `${department['chinese']},${branch.branch_name['chinese']}`,
+                                    english: `${department['english']},${branch.branch_name['english']}`
+                                },
                             }
                     })
                 }
