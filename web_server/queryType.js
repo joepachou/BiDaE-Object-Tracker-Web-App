@@ -809,17 +809,20 @@ function signup(signupPackage) {
 			(
 				name, 
 				password,
-				registered_timestamp
+				registered_timestamp,
+				main_area
 			)
 		VALUES (
 			$1, 
 			$2, 
-			now()
+			now(),
+			$3
 		);
 		`;
 	const values = [
 		signupPackage.name, 
 		signupPackage.password,
+		signupPackage.area_id
 	];
 
 	const query = {
@@ -970,6 +973,33 @@ const validateUsername = (username) => {
 }
 
 
+const getMainSecondArea = (username) => {
+	const query = `
+		SELECT
+
+			(
+				SELECT user_table.main_area
+				FROM user_table
+				WHERE user_table.name='${username}'
+			) as main_area,
+
+			array (
+				SELECT area_id
+				FROM user_areas
+	     		WHERE user_areas.user_id = (
+					SELECT id 
+					FROM user_table 
+					WHERE name='${username}'
+				)
+
+			) as second_area
+
+		FROM user_table 
+
+	`
+	return query
+}
+
 const getUserList = () => {
 	const query = `
 		SELECT
@@ -1036,9 +1066,12 @@ const deleteUser = (username) => {
 	return query
 }
 
-const setUserRole = (name, roles,areaNumber) => {
 
-	const query = `
+
+const setUserRole = (name, roles,areaNumber,secondArea) => {
+	
+	 if (secondArea == '') { //如果沒有選secondArea 就是''
+			const query = `
 
 		DELETE FROM user_roles WHERE user_roles.user_id = (
 			SELECT id 
@@ -1060,13 +1093,75 @@ const setUserRole = (name, roles,areaNumber) => {
 					WHERE name='${role}'
 				))`).join(',')
 			};
+		
+		
+		DELETE FROM user_areas WHERE user_id = (
+			SELECT id 
+			FROM user_table 
+			WHERE name='${name}'
+		);
+
+		UPDATE user_table
+		SET main_area = '${areaNumber.id}'
+		WHERE name = '${name}'
+	`
+	return query
+	 }
+	 else
+	 {
+		const query = `
+
+		DELETE FROM user_roles WHERE user_roles.user_id = (
+			SELECT id 
+			FROM user_table 
+			WHERE name='${name}'
+		);
+
+		INSERT INTO user_roles (user_id, role_id)
+			VALUES 
+			${
+				roles.map(role => `((
+					SELECT id
+					FROM user_table
+					WHERE name='${name}'
+				), 
+				(
+					SELECT id 
+					FROM roles
+					WHERE name='${role}'
+				))`).join(',')
+			};
+		
+		
+		DELETE FROM user_areas WHERE user_id = (
+			SELECT id 
+			FROM user_table 
+			WHERE name='${name}'
+		);
+
+		INSERT INTO user_areas (user_id, area_id)
+			VALUES 
+			${
+				secondArea.map(sA => `((
+					SELECT id
+					FROM user_table
+					WHERE name='${name}'
+				), 
+				(
+					'${sA}'
+				))`).join(',')
+			};
 
 
 		UPDATE user_table
 		SET main_area = '${areaNumber.id}'
 		WHERE name = '${name}';
 	`
-	return query
+		return query
+	 }
+
+
+
 }
 
 
@@ -1175,7 +1270,7 @@ const setVisitTimestamp = (username) => {
 	`
 }
 
-const insertUserData = (name, roles, area_id) => {
+const insertUserData = (name, roles, area_id,secondArea) => {
 	return `
 		INSERT INTO user_roles (
 			user_id, 
@@ -1185,7 +1280,6 @@ const insertUserData = (name, roles, area_id) => {
 		${
 			roles.map(role => `(
 				(
-
 					SELECT id
 					FROM user_table
 					WHERE name='${name}'
@@ -1197,16 +1291,23 @@ const insertUserData = (name, roles, area_id) => {
 				)
 			)`
 		)};
-
-		INSERT INTO user_areas (user_id, area_id)
-		VALUES (
-			(
-				SELECT id
-				FROM user_table
-				WHERE name='${name}'
-			), 
-			${area_id}
+		
+		INSERT INTO user_areas (
+			user_id, 
+			area_id
 		)
+		VALUES 
+		${
+			secondArea.map(sA => `(
+				(
+					SELECT id
+					FROM user_table
+					WHERE name='${name}'
+				), 
+				'${sA}'
+			)`
+		)};
+	
 	`
 }
 
@@ -1863,6 +1964,7 @@ module.exports = {
 	getRoleNameList,
 	deleteUser,
 	setUserRole,
+	getMainSecondArea,
 	getEditObjectRecord,
 	deleteEditObjectRecord,
 	deleteShiftChangeRecord,

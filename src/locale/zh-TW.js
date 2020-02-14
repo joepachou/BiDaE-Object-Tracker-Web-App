@@ -122,7 +122,8 @@ const tw = {
     ADD_RULE: "增加設定",
     ADD:"新增",
     REMOVE:"移除",
-    
+    DELETE_USER:"刪除使用者",
+
     /* Form Field */
     NAME: "名稱",
     TYPE: "類別",
@@ -204,6 +205,7 @@ const tw = {
 
     /** Error Message */
     GENDER_IS_REQUIRED: "請選擇性別",
+    ROLE_IS_REQUIRED: "請選擇至少一個權限",
     NAME_IS_REQUIRED: "請填入名字",
     NUMBER_IS_REQUIRED:"請輸入病人編號",
     ROOMNUMBER_IS_REQUIRED: "請輸入病房編號",
@@ -335,6 +337,7 @@ const tw = {
     API_VERSION: "api version",
     SERVER_TIME_OFFSET: "server time offset",
     ACTION: "action",
+    
 
     /** message */
     ARE_YOU_SURE_TO_DELETE: "確定要刪除 ?",

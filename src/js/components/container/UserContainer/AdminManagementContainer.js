@@ -10,11 +10,13 @@ import {
     getUserRole,
     getRoleNameList,
     deleteUser,
-    getUserArea
+    getUserArea,
+    getMainSecondArea
 } from "../../../dataSrc";
 import { userInfoTableColumn } from '../../../tables'
 import EditUserForm from './EditUserForm';
 import { AppContext } from '../../../context/AppContext';
+import DeleteUserForm from './DeleteUserForm';
 const Fragment = React.Fragment;
 
 class AdminManagementContainer extends React.Component{
@@ -23,6 +25,7 @@ class AdminManagementContainer extends React.Component{
 
     state = {
         showAddUserForm: false,
+        showDeleteUserForm:false,
         data: [],
         columns: [],
         selectedUser: null,
@@ -48,6 +51,7 @@ class AdminManagementContainer extends React.Component{
         this.getUserList()
         this.getAreaList()
     }
+
 
     getUserList = () => {
         let { 
@@ -106,14 +110,14 @@ class AdminManagementContainer extends React.Component{
         let {
             api
         } = this.state
-        console.log(values)
-        console.log(api)
+ 
         auth[api](values)
             .then(res => {
                 this.getUserList()
                 this.setState({
                     showModifyUserInfo: false,
                     showAddUserForm: false,
+                    showDeleteUserForm:false
                 })
                 // this.getUserList()
             })
@@ -141,6 +145,7 @@ class AdminManagementContainer extends React.Component{
     handleClose = () => {
         this.setState({
             showAddUserForm: false,
+            showDeleteUserForm:false,
             selectedUser: null,
             title: '',
             api: '',
@@ -150,23 +155,45 @@ class AdminManagementContainer extends React.Component{
     onRowClick = (state, rowInfo, column, instance) => {
         return {
             onClick: (e, handleOriginal) => {
-                console.log()
-                this.setState({
-                    showAddUserForm: true,
-                    selectedUser: rowInfo.original,
-                    title: 'edit user',
-                    api: 'setUser',
+     
+                axios.post(getMainSecondArea, {
+                    username: rowInfo.original.name
+                }).then((res)=>{ //抓主要跟次要地區
+                    rowInfo.original.second_area = res.data.rows[0].second_area
+                    rowInfo.original.main_area = res.data.rows[0].main_area
+                    this.setState({
+                            showAddUserForm: true,
+                            selectedUser: rowInfo.original,
+                            title: 'edit user',
+                            api: 'setUser',
+                    })
+                }).catch(err => {
+                    console.log(`get Main Second Area fail! ${err}`)
                 })
+
+              
+
             }
         }
     }
 
     handleClick = (e, value) => {
-        this.setState({
-            showAddUserForm: true,
-            title: 'add user',
-            api: 'signup',
-        })
+
+        switch (e.target.name) {
+            case "add user":
+                this.setState({
+                    showAddUserForm: true,
+                    title: 'add user',
+                    api: 'signup',
+                })
+              break;
+
+            case "delete user":
+              this.setState({
+                showDeleteUserForm:true
+              })
+              break;
+          }
     }
 
     render(){
@@ -183,13 +210,22 @@ class AdminManagementContainer extends React.Component{
                 <ButtonToolbar>
                     <Button 
                         variant="outline-primary" 
-                        className='mb-1'
+                        className='mb-1 mr-1'
                         name="add user"
                         onClick={this.handleClick}    
                     >
                         {locale.texts.ADD_USER}
                     </Button>
+                    <Button 
+                        variant="outline-primary" 
+                        className='mb-1'
+                        name="delete user"
+                        onClick={this.handleClick}    
+                    >
+                        {locale.texts.DELETE_USER}
+                    </Button>
                 </ButtonToolbar>
+                
                 <ReactTable 
                     data = {this.state.data} 
                     columns = {this.state.columns} 
@@ -206,6 +242,14 @@ class AdminManagementContainer extends React.Component{
                     selectedUser={this.state.selectedUser}
                     roleName={this.state.roleName}
                     areaList={this.state.areaList}
+                />
+
+                <DeleteUserForm
+                    show={this.state.showDeleteUserForm}
+                    title={locale.texts.DELETE_USER}
+                    handleClose={this.handleClose}
+                    data = {this.state.data}
+                    handleSubmit = {this.getUserList}
                 />
             </Fragment>
         )

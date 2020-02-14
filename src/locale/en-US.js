@@ -120,7 +120,7 @@ const en =  {
     ADD_RULE: "add rule",
     ADD:"Add",
     REMOVE:"Remove",
-
+    DELETE_USER:"Delete user",
 
     /* Form Field */
     NAME: "name",
@@ -204,6 +204,7 @@ const en =  {
 
     /** Error Message */
     GENDER_IS_REQUIRED: "Gender is required",
+    ROLE_IS_REQUIRED: "role is required",
     NAME_IS_REQUIRED: "Name is required",
     NUMBER_IS_REQUIRED:"Number is required",
     ROOMNUMBER_IS_REQUIRED: "Room Number is required",

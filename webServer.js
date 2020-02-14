@@ -154,6 +154,8 @@ app.post('/test/deleteUser', db.deleteUser)
 
 app.post('/test/setUserRole', db.setUserRole)
 
+app.post('/data/getMainSecondArea', db.getMainSecondArea)
+
 app.post('/test/getEditObjectRecord', db.getEditObjectRecord)
 
 app.post('/test/deleteEditObjectRecord', db.deleteEditObjectRecord)

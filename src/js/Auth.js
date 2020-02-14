@@ -50,18 +50,19 @@ class Auth extends React.Component {
             password, 
             roles, 
             area, 
+            secondArea
         } = values
 
         return await axios.post(dataSrc.signup, {
             name: name.toLowerCase(),
             password,
             roles,
-            area_id: config.mapConfig.areaModules[area].id
+            area_id: config.mapConfig.areaModules[area].id,
+            ...values
         })
     }
 
     async setUser (values) {
-        console.log(values)
         return await axios.post(dataSrc.setUserRole, {
             areaNumber : config.mapConfig.areaModules[values.area],
             name: values.name,
