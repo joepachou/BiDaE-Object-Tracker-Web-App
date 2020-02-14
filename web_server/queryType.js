@@ -1823,6 +1823,15 @@ function modifyTransferredLocation(type, data){
     console.log(query)
     return query
 }
+
+const setGeofenceEnable = (enable, areaId) => {
+	return `
+		UPDATE geo_fence_config 
+		SET enable = ${enable} 
+		WHERE area_id = ${areaId}
+	`
+}
+
 module.exports = {
 	getTrackingData,
 	getTrackingTableByMacAddress,
@@ -1891,9 +1900,7 @@ module.exports = {
 	DeleteUserArea,
 	getTransferredLocation,
 	modifyTransferredLocation,
-
-
-
+	setGeofenceEnable,
 	clearSearchHistory
 }
 

@@ -15,6 +15,7 @@ import {
     isBrowser,
     isTablet
 } from 'react-device-detect'
+
 class Map extends React.Component {
     
     static contextType = AppContext
@@ -25,7 +26,6 @@ class Map extends React.Component {
         hasErrorCircle: false,
         hasInvisibleCircle: false,       
         hasIniLbeaconPosition: false,
-        hasGeoFenceMaker: false,
         pathMacAddress: ''
     }
     map = null;
@@ -50,26 +50,20 @@ class Map extends React.Component {
         if (parseInt(process.env.IS_LBEACON_MARK) && this.props.lbeaconPosition.length !== 0 && !this.state.hasIniLbeaconPosition) {
             this.createLbeaconMarkers()
         }
-        if (this.props.geofenceConfig.length !== 0 && !this.state.hasGeoFenceMaker && this.props.isOpenFence) {
+
+        if (!(_.isEqual(prevProps.geofenceConfig, this.props.geofenceConfig))) {
             this.createGeoFenceMarkers()
         }
 
         if (prevProps.areaId !== this.props.areaId) { 
             this.setMap()
         }
-
-        // if (this.state.hasIniLbeaconPosition && (prevProps.isOpenFence !== this.props.isOpenFence)) {
-        //     this.props.isOpenFence ? this.createLbeaconMarkers() : this.lbeaconsPosition.clearLayers()
-        // }
-
-        if (this.state.hasGeoFenceMaker && (prevProps.isOpenFence !== this.props.isOpenFence)) {
-            this.props.isOpenFence ? this.createGeoFenceMarkers() : this.geoFenceLayer.clearLayers()
-        }
     }
 
     /** Set the search map configuration establishing in config.js  */
     initMap = () => {
         let [{areaId}] = this.context.stateReducer
+
         let { 
             areaModules,
             areaOptions,
@@ -235,29 +229,34 @@ class Map extends React.Component {
 
     /** Create the lbeacon and invisibleCircle markers */
     createGeoFenceMarkers = () => {     
-        this.geoFenceLayer.clearLayers()
 
         let {
             geofenceConfig,
             mapConfig
         } = this.props
 
-        /** Creat the marker of all lbeacons onto the map  */
-        geofenceConfig[0].parsePerimeters.coordinates.map(item => {
-            let perimeters = L.circleMarker(item, mapConfig.geoFenceMarkerOption).addTo(this.geoFenceLayer);
-        })
-        geofenceConfig[0].parseFences.coordinates.map(item => {
-            let fences = L.circleMarker(item, mapConfig.geoFenceMarkerOption).addTo(this.geoFenceLayer);
-        })
+        let {
+            stateReducer
+        } = this.context
+
+        let [{areaId}] = stateReducer
+
+        this.geoFenceLayer.clearLayers()
+
+        /** Create the markers of lbeacons of perimeters and fences
+         *  and onto the map  */
+        if (geofenceConfig[areaId].enable) {
+            ['parsePerimeters', 'parseFences'].map(type => {
+                geofenceConfig[areaId].rules.map(rule => {
+                    rule[type].coordinates.map(item => {
+                        L.circleMarker(item, mapConfig.geoFenceMarkerOption).addTo(this.geoFenceLayer);
+                    })   
+                })
+            })
+        }
         
         /** Add the new markerslayers to the map */
         this.geoFenceLayer.addTo(this.map);
-
-        if (!this.state.hasGeoFenceMaker){
-            this.setState({
-                hasGeoFenceMaker: true,
-            })
-        }
     }
 
     /** Create the lbeacon and invisibleCircle markers */
@@ -269,7 +268,6 @@ class Map extends React.Component {
         } = this.props
 
         /** Creat the marker of all lbeacons onto the map  */
-
         lbeaconPosition.map(pos => {
             //console.log(lbeaconPosition)
             let latLng = pos.split(',')
@@ -344,11 +342,45 @@ class Map extends React.Component {
         const iconSize = [this.scalableIconSize, this.scalableIconSize];
         const numberSize = this.scalableNumberSize;
         let counter = 0;
-        //console.log(this.props.proccessedTrackingData)
         this.filterTrackingData(_.cloneDeep(this.props.proccessedTrackingData))
-        .map(item => {
+        // .filter(item => item.type !== 'TAG0116')
+        .map((item, index)  => {
+            // if (index <= 1) {
+            //     item.currentPosition = [10000, 20000, 1]
+            // } else if (index > 1 && index <= 2) {
+            //     item.currentPosition = [15656, 39563, 1]
+            // } else if (index > 2 && index <= 5) {
+            //     item.currentPosition = [10000, 46000, 1]
+            // } else if (index > 5 && index <= 8) {
+            //     item.currentPosition = [20000, 30000, 1]
+            // } else if (index > 8 && index <= 10) {
+            //     item.currentPosition = [18000, 40000, 1]
+            // } else if (index > 10 && index <= 13) {
+            //     item.currentPosition = [19000, 20000, 1]
+            // } else if (index > 13 && index <= 16) {
+            //     item.currentPosition = [20000, 10000, 1]
+            // } else if (index > 16 && index <= 19) {
+            //     item.currentPosition = [30000, 43000, 1]
+            // } else if (index > 19 && index <= 22) {
+            //     item.currentPosition = [14000, 39000, 1]
+            // } else if (index > 22 && index <= 24) {
+            //     item.currentPosition = [20000, 39000, 1]
+            // } else if (index > 24 && index <= 25) {
+            //     item.currentPosition = [11355, 23640, 1]
+            // } else if (index > 25 && index <= 27) {
+            //     item.currentPosition = [7000, 30000, 1]
+            // } else if (index > 27 && index <= 29) {
+            //     item.currentPosition = [20000, 10000, 1]
+            // }  else if (index > 29 && index <= 31) {
+            //     item.currentPosition = [22568, 12435, 1]
+            // } 
+            // console.log(item.type)
+            // if (item.type == "TAG0116") {
+            //     console.log(index)
+            // }
             let position = this.macAddressToCoordinate(item.mac_address,item.currentPosition);
-            
+
+
             /** Set the Marker's popup 
              * popupContent (objectName, objectImg, objectImgWidth)
              * More Style sheet include in Map.css */
@@ -426,9 +458,13 @@ class Map extends React.Component {
     collectObjectsByLatLng = (lbPosition) => {
         let objectList = []
         this.filterTrackingData(this.props.proccessedTrackingData)
-        .map(item => {
-            item.lbeacon_coordinate && item.lbeacon_coordinate.toString() === lbPosition.toString() && item.isMatchedObject ? objectList.push(item) : null;
-        })
+            .map(item => {
+                item.lbeacon_coordinate && 
+                item.lbeacon_coordinate.toString() === lbPosition.toString() 
+                && item.isMatchedObject 
+                    ? objectList.push(item) 
+                    : null;
+            })
 
         return objectList 
     }
@@ -439,7 +475,6 @@ class Map extends React.Component {
     macAddressToCoordinate = (mac_address, lbeacon_coordinate) => {
         const xx = mac_address.slice(15,16);
         const yy = mac_address.slice(16,17);
-
         const multiplier = this.props.mapConfig.markerDispersity; // 1m = 100cm = 1000mm, multipler = 1000/16*16 = 3
 		const origin_x = lbeacon_coordinate[1] - parseInt(8, 16) * multiplier ; 
 		const origin_y = lbeacon_coordinate[0] - parseInt(8, 16) * multiplier ;

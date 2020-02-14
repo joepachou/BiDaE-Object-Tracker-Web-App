@@ -1319,6 +1319,23 @@ const modifyTransferredLocation = (request, response) => {
             console.log('modifyTransferredLocation error: ', err)
         })
 }
+
+const setGeofenceEnable = (request, response) => {
+    const {
+        enable,
+        areaId
+    } = request.body
+
+    pool.query(queryType.setGeofenceEnable(enable, areaId))
+        .then(res => {
+            console.log(`set geofence enable success`)
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
 module.exports = {
     getTrackingData,
     getObjectTable,
@@ -1382,8 +1399,6 @@ module.exports = {
     DeleteUserArea,
     getTransferredLocation,
     modifyTransferredLocation,
-
-
-
-    clearSearchHistory
+    clearSearchHistory,
+    setGeofenceEnable
 }

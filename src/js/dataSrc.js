@@ -65,6 +65,8 @@ const getUserArea= `${protocol}://${dataSrcIP}/data/getUserArea`
 const addUserArea= `${protocol}://${dataSrcIP}/data/addUserArea`
 const DeleteUserArea= `${protocol}://${dataSrcIP}/data/DeleteUserArea`
 const modifyTransferredLocation= `${protocol}://${dataSrcIP}/data/modifyTransferredLocation`
+const setGeofenceEnable = `${protocol}://${dataSrcIP}/data/setGeofenceEnable`
+
 const pdfUrl = function(path){
     return `${protocol}://${dataSrcIP}:${port}/${path}`
 }
@@ -133,5 +135,6 @@ module.exports = {
     getUserArea,
     addUserArea,
     DeleteUserArea, 
-    modifyTransferredLocation
+    modifyTransferredLocation,
+    setGeofenceEnable
 };
