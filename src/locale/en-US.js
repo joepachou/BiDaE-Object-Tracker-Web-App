@@ -120,7 +120,7 @@ const en =  {
     ADD_RULE: "add rule",
     ADD:"Add",
     REMOVE:"Remove",
-
+    DELETE_USER:"Delete user",
 
     /* Form Field */
     NAME: "name",

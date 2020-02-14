@@ -100,8 +100,7 @@ const EditUserForm = ({
                     }
 
                     onSubmit={(values, { setStatus, setSubmitting }) => {
-                        console.log(values)
-                        // handleSubmit(values)
+                        handleSubmit(values)
                     }}
 
                     render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (

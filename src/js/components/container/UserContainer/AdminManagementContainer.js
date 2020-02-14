@@ -16,6 +16,7 @@ import {
 import { userInfoTableColumn } from '../../../tables'
 import EditUserForm from './EditUserForm';
 import { AppContext } from '../../../context/AppContext';
+import DeleteUserForm from './DeleteUserForm';
 const Fragment = React.Fragment;
 
 class AdminManagementContainer extends React.Component{
@@ -24,6 +25,7 @@ class AdminManagementContainer extends React.Component{
 
     state = {
         showAddUserForm: false,
+        showDeleteUserForm:false,
         data: [],
         columns: [],
         selectedUser: null,
@@ -49,6 +51,7 @@ class AdminManagementContainer extends React.Component{
         this.getUserList()
         this.getAreaList()
     }
+
 
     getUserList = () => {
         let { 
@@ -114,6 +117,7 @@ class AdminManagementContainer extends React.Component{
                 this.setState({
                     showModifyUserInfo: false,
                     showAddUserForm: false,
+                    showDeleteUserForm:false
                 })
                 // this.getUserList()
             })
@@ -141,6 +145,7 @@ class AdminManagementContainer extends React.Component{
     handleClose = () => {
         this.setState({
             showAddUserForm: false,
+            showDeleteUserForm:false,
             selectedUser: null,
             title: '',
             api: '',
@@ -173,11 +178,22 @@ class AdminManagementContainer extends React.Component{
     }
 
     handleClick = (e, value) => {
-        this.setState({
-            showAddUserForm: true,
-            title: 'add user',
-            api: 'signup',
-        })
+
+        switch (e.target.name) {
+            case "add user":
+                this.setState({
+                    showAddUserForm: true,
+                    title: 'add user',
+                    api: 'signup',
+                })
+              break;
+
+            case "delete user":
+              this.setState({
+                showDeleteUserForm:true
+              })
+              break;
+          }
     }
 
     render(){
@@ -194,13 +210,22 @@ class AdminManagementContainer extends React.Component{
                 <ButtonToolbar>
                     <Button 
                         variant="outline-primary" 
-                        className='mb-1'
+                        className='mb-1 mr-1'
                         name="add user"
                         onClick={this.handleClick}    
                     >
                         {locale.texts.ADD_USER}
                     </Button>
+                    <Button 
+                        variant="outline-primary" 
+                        className='mb-1'
+                        name="delete user"
+                        onClick={this.handleClick}    
+                    >
+                        {locale.texts.DELETE_USER}
+                    </Button>
                 </ButtonToolbar>
+                
                 <ReactTable 
                     data = {this.state.data} 
                     columns = {this.state.columns} 
@@ -217,6 +242,14 @@ class AdminManagementContainer extends React.Component{
                     selectedUser={this.state.selectedUser}
                     roleName={this.state.roleName}
                     areaList={this.state.areaList}
+                />
+
+                <DeleteUserForm
+                    show={this.state.showDeleteUserForm}
+                    title={locale.texts.DELETE_USER}
+                    handleClose={this.handleClose}
+                    data = {this.state.data}
+                    handleSubmit = {this.getUserList}
                 />
             </Fragment>
         )
