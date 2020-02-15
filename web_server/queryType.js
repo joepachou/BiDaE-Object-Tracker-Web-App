@@ -1336,7 +1336,7 @@ const addEditObjectRecord = (formOption, username, filePath) => {
 			$2,
 			$3,
 			'${JSON.stringify(item.transferred_location)}'::jsonb,
-			ARRAY [${formOption.asset_control_number}],
+			ARRAY ['${formOption.asset_control_number}'],
 			$4
 		)
 		RETURNING id;
