@@ -125,8 +125,6 @@ class SearchResult extends React.Component {
             showEditObjectForm: false,
             editedObjectPackage :editedObjectPackage ,
         })
-        console.log('fuck')
-        console.log(this.state.editedObjectPackage)
         if (values.status == 'transferred') { //秀簽名
             this.setState({
                 showSignatureForm:true
@@ -145,8 +143,7 @@ class SearchResult extends React.Component {
     }
 
     handleSignatureSubmit = values => {
-        console.log('goddamn')
-        console.log(this.state.editedObjectPackage)
+        
         // let editedObjectPackage = _.cloneDeep(this.state.selectedObjectData).map(item => {
         //     item.signature = values.name
         //     return item
@@ -171,11 +168,7 @@ class SearchResult extends React.Component {
 
 
     handleConfirmFormSubmit = (isDelayTime) => {
-        console.log('shit')
-        console.log(this.state.editedObjectPackage)
-        console.log(this.state.signatureName)
         let signatureName = this.state.signatureName
-        console.log()
         let { editedObjectPackage } = this.state;
         let { locale, auth, stateReducer } = this.context
         let [{}, dispatch] = stateReducer
@@ -185,7 +178,7 @@ class SearchResult extends React.Component {
         let reservedTimestamp = isDelayTime ? moment().add(10, 'minutes').format() : moment().format()
         /** Create the pdf package, including pdf, pdf setting and path */
 
-        let pdfPackage = shouldCreatePdf && config.getPdfPackage(status, auth.user, this.state.editedObjectPackage, locale)
+        let pdfPackage = shouldCreatePdf && config.getPdfPackage(status, auth.user, this.state.editedObjectPackage, locale,signatureName)
 
         axios.post(dataSrc.editObjectPackage, {
             locale,
