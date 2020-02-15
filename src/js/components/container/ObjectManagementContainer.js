@@ -275,7 +275,8 @@ class ObjectManagementContainer extends React.Component{
                                 }
                             return false
                         })
-                        let department = branch ? branch[0].options[item.transferred_location.departmentId] : null
+                        console.log(branch)
+                        let department = branch[0] ? branch[0].options[item.transferred_location.departmentId] : null
                         item.transferred_location = department
                     }
                     
