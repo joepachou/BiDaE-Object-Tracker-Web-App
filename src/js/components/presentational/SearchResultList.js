@@ -22,6 +22,7 @@ import {
 } from 'react-device-detect'
 import moment from 'moment'
 import ScrollArea from 'react-scrollbar'
+import { sign } from 'crypto';
 
 
 class SearchResult extends React.Component {
@@ -39,7 +40,8 @@ class SearchResult extends React.Component {
         editedObjectPackage: [],
         showAddDevice: false,
         showDownloadPdfRequest: false,
-        showPath: false
+        showPath: false,
+        signatureName:''
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -145,13 +147,15 @@ class SearchResult extends React.Component {
     handleSignatureSubmit = values => {
         console.log('goddamn')
         console.log(this.state.editedObjectPackage)
-        let editedObjectPackage = _.cloneDeep(this.state.selectedObjectData).map(item => {
-            item.signature = values.name
-            return item
-        })
+        // let editedObjectPackage = _.cloneDeep(this.state.selectedObjectData).map(item => {
+        //     item.signature = values.name
+        //     return item
+        // })
+        
         this.setState({
             showSignatureForm:false,
-            editedObjectPackage : editedObjectPackage
+            signatureName : values.name
+            // editedObjectPackage : editedObjectPackage
         })
     
         setTimeout(
@@ -167,7 +171,11 @@ class SearchResult extends React.Component {
 
 
     handleConfirmFormSubmit = (isDelayTime) => {
+        console.log('shit')
         console.log(this.state.editedObjectPackage)
+        console.log(this.state.signatureName)
+        let signatureName = this.state.signatureName
+        console.log()
         let { editedObjectPackage } = this.state;
         let { locale, auth, stateReducer } = this.context
         let [{}, dispatch] = stateReducer
@@ -175,15 +183,13 @@ class SearchResult extends React.Component {
         let shouldCreatePdf = config.statusToCreatePdf.includes(editedObjectPackage[0].status)
         let status = editedObjectPackage[0].status
         let reservedTimestamp = isDelayTime ? moment().add(10, 'minutes').format() : moment().format()
-        console.log(status)
-        console.log('xxooss')
         /** Create the pdf package, including pdf, pdf setting and path */
 
         let pdfPackage = shouldCreatePdf && config.getPdfPackage(status, auth.user, this.state.editedObjectPackage, locale)
-     
+
         axios.post(dataSrc.editObjectPackage, {
             locale,
-            formOption: editedObjectPackage,
+            formOption: editedObjectPackage[0],
             username,
             pdfPackage,
             reservedTimestamp

@@ -128,6 +128,7 @@ class ChangeStatusForm extends React.Component {
                 </Modal.Header >
                 <Modal.Body>
                     <Formik
+                 
                         initialValues = {{
                             name: selectedObjectData.length != 0 ? selectedObjectData[0].name : '',
                             type: selectedObjectData.length != 0 ? selectedObjectData[0].type : '',
@@ -136,7 +137,7 @@ class ChangeStatusForm extends React.Component {
                             transferred_location: selectedObjectData.length != 0 && selectedObjectData[0].status == config.objectStatus.TRANSFERRED
                                 ? { 
                                     value: selectedObjectData[0].transferred_location,
-                                    label: selectedObjectData[0].transferred_location.toUpperCase().split(',').map(item => locale.texts[item]).join('/')
+                                    label:selectedObjectData[0].transferred_location ? selectedObjectData[0].transferred_location.toUpperCase().split(',').map(item => locale.texts[item]).join('/') : ''
                                 }
                                 : '', 
                             notes: selectedObjectData.length != 0 ? selectedObjectData[0].notes ? selectedObjectData[0].notes : "" : "",
