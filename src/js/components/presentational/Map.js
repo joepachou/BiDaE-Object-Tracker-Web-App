@@ -7,6 +7,7 @@ import { AppContext } from '../../context/AppContext';
 import axios from 'axios';
 import dataSrc from '../../dataSrc'
 import polylineDecorator from 'leaflet-polylinedecorator'
+
 import {
     BrowserView,
     TabletView,
@@ -21,13 +22,10 @@ class Map extends React.Component {
     static contextType = AppContext
 
     state = {
-        lbeaconsPosition: null,
         objectInfo: [],
-        hasErrorCircle: false,
-        hasInvisibleCircle: false,       
-        hasIniLbeaconPosition: false,
         pathMacAddress: ''
     }
+
     map = null;
     image = null;
     pathOfDevice = L.layerGroup();
@@ -44,10 +42,11 @@ class Map extends React.Component {
     }
 
     componentDidUpdate = (prevProps) => {
+        
         this.handleObjectMarkers();
         this.drawPolyline();
 
-        if (parseInt(process.env.IS_LBEACON_MARK) && this.props.lbeaconPosition.length !== 0 && !this.state.hasIniLbeaconPosition) {
+        if (parseInt(process.env.IS_LBEACON_MARK) && !(_.isEqual(prevProps.lbeaconPosition, this.props.lbeaconPosition))) {
             this.createLbeaconMarkers()
         }
 
@@ -71,13 +70,13 @@ class Map extends React.Component {
             mapOptions, 
         } = this.props.mapConfig
 
-        if(isBrowser) {
+        if (isBrowser) {
             mapOptions.minZoom = mapOptions.minZoom
             mapOptions.zoom = mapOptions.zoom
-        }else if(isTablet) {
+        } else if (isTablet) {
             mapOptions.minZoom = mapOptions.minZoomForTablet
             mapOptions.zoom = mapOptions.minZoomForTablet
-        }else{
+        } else {
             mapOptions.minZoom = mapOptions.minZoomForMobile
             mapOptions.zoom = mapOptions.minZoomForMobile
         }
@@ -85,7 +84,9 @@ class Map extends React.Component {
         /** Error handler of the user's auth area does not include the group of sites */
         let areaOption = areaOptions[areaId] || areaOptions[defaultAreaId] || Object.values(areaOptions)[0]
 
+        /** set the map's config */
         let { url, bounds } = areaModules[areaOption]
+        mapOptions.maxBounds = bounds.map((latLng, index) => latLng.map(axis => axis + mapOptions.maxBoundsOffset[index]))
         let map = L.map('mapid', mapOptions);
         let image = L.imageOverlay(url, bounds).addTo(map);
         map.addLayer(image)
@@ -98,6 +99,29 @@ class Map extends React.Component {
         
         /** Set the map's events */
         this.map.on('zoomend', this.resizeMarkers)
+    }
+
+    /** Set the overlay image when changing area */
+    setMap = () => {
+        let [{areaId}] = this.context.stateReducer
+        let { 
+            areaModules,
+            areaOptions,
+            defaultAreaId,
+            mapOptions
+        } = this.props.mapConfig
+
+        /** Error handler of the user's auth area does not include the group of sites */
+        let areaOption = areaOptions[areaId] || areaOptions[defaultAreaId] || Object.values(areaOptions)[0]
+
+        /** set the map's config */
+        let { url, bounds } = areaModules[areaOption]
+        mapOptions.maxBounds = bounds.map((latLng, index) => latLng.map(axis => axis + mapOptions.maxBoundsOffset[index]))
+        this.image.setUrl(url)
+        this.image.setBounds(bounds)
+        this.map.fitBounds(bounds)    
+        
+        this.createGeoFenceMarkers()
     }
 
     /** init path */
@@ -175,6 +199,7 @@ class Map extends React.Component {
         this.prevZoom = this.currentZoom
         this.currentZoom = this.map.getZoom();
         this.calculateScale();
+        
         this.markersLayer.eachLayer( marker => {
             let icon = marker.options.icon;
             icon.options.iconSize = [this.scalableIconSize, this.scalableIconSize]
@@ -187,27 +212,6 @@ class Map extends React.Component {
         this.errorCircle.eachLayer( circle => {
             circle.setRadius(this.scalableErrorCircleRadius)
         })
-    }
-
-    /** Set the overlay image */
-    setMap = () => {
-        let [{areaId}] = this.context.stateReducer
-        let { 
-            areaModules,
-            areaOptions,
-            defaultAreaId,
-            mapOptions
-        } = this.props.mapConfig
-
-        /** Error handler of the user's auth area does not include the group of sites */
-        let areaOption = areaOptions[areaId] || areaOptions[defaultAreaId] || Object.values(areaOptions)[0]
-
-        let { url, bounds } = areaModules[areaOption]
-        this.image.setUrl(url)
-        this.image.setBounds(bounds)
-        this.map.fitBounds(bounds)        
-
-        this.createGeoFenceMarkers()
     }
 
     /** Calculate the current scale for creating markers and resizing. */
@@ -229,7 +233,6 @@ class Map extends React.Component {
 
     /** Create the lbeacon and invisibleCircle markers */
     createGeoFenceMarkers = () => {     
-
         let {
             geofenceConfig,
             mapConfig
@@ -272,35 +275,20 @@ class Map extends React.Component {
             //console.log(lbeaconPosition)
             let latLng = pos.split(',')
             let lbeacon = L.circleMarker(latLng, mapConfig.lbeaconMarkerOption).addTo(this.lbeaconsPosition);
-
-        /** Creat the invisible Circle marker of all lbeacons onto the map */
-            // let invisibleCircle = L.circleMarker(pos,{
-            //     color: 'rgba(0, 0, 0, 0',
-            //     fillColor: 'rgba(0, 76, 238, 0.995)',
-            //     fillOpacity: 0,
-            //     radius: 60,
-            // }).addTo(this.map);
-
             // invisibleCircle.on('mouseover', this.handlemenu)
             // invisibleCircle.on('mouseout', function() {this.closePopup();})
         })
 
         /** Add the new markerslayers to the map */
         this.lbeaconsPosition.addTo(this.map);
-
-        if (!this.state.hasIniLbeaconPosition){
-            this.setState({
-                hasIniLbeaconPosition: true,
-            })
-        }
     }
+    
     /**
      * When user click the coverage of one lbeacon, it will retrieve the object data from this.state.pbjectInfo.
      * It will use redux's dispatch to transfer datas, including isObjectListShown and selectObjectList
      * @param e the object content of the mouse clicking. 
      */
     handlemenu = (e) => {
-        //console.log("handleMenu")
         const { objectInfo } = this.state
         const lbeacon_coorinate = Object.values(e.target._latlng).toString();
         let objectList = [], key;
@@ -470,12 +458,12 @@ class Map extends React.Component {
     }
 
     /** Retrieve the object's offset from object's mac_address.
-     * @param   mac_address The mac_address of the object retrieved from DB. 
+     * @param   mac_address The Mac address of the object retrieved from DB. 
      * @param   lbeacon_coordinate The lbeacon's coordinate processed by createLbeaconCoordinate().*/
     macAddressToCoordinate = (mac_address, lbeacon_coordinate) => {
         const xx = mac_address.slice(15,16);
         const yy = mac_address.slice(16,17);
-        const multiplier = this.props.mapConfig.markerDispersity; // 1m = 100cm = 1000mm, multipler = 1000/16*16 = 3
+        const multiplier = this.props.mapConfig.markerDispersity; 
 		const origin_x = lbeacon_coordinate[1] - parseInt(8, 16) * multiplier ; 
 		const origin_y = lbeacon_coordinate[0] - parseInt(8, 16) * multiplier ;
 		const xxx = origin_x + parseInt(xx, 16) * multiplier;

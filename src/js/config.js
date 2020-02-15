@@ -495,7 +495,9 @@ const config = {
             attributionControl: false,
             dragging: true,
             doubleClickZoom: false,
-            scrollWheelZoom: false
+            scrollWheelZoom: false,
+            maxBoundsOffset: [-10000, 10000],
+            maxBoundsViscosity: 0.0
         },
 
         /** Set the icon option */
@@ -769,6 +771,7 @@ const config = {
             dragging: false,
             doubleClickZoom: false,
             scrollWheelZoom: false
+
         },
 
 
