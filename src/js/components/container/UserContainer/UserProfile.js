@@ -190,7 +190,7 @@ class UserProfile extends React.Component{
                         value={this.state.userInfo['freqSearchCount']} 
                         min="1" 
                         max="10" 
-                        onChange = {this.resetFreqSearchCount}/> : null
+                        onBlur = {this.resetFreqSearchCount}/> : null
         }]
         return rows_data
       }
