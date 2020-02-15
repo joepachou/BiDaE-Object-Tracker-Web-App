@@ -518,23 +518,23 @@ function setLocaleID (userID,lang) {
 }
 
 function editObject (formOption) {
+	console.log(formOption)
 	let text = 
 		`
 		Update object_table 
 		SET type = $1,
 			status = $2,
-			transferred_location = $3,
-			asset_control_number = $4,
-			name = $5,
-			monitor_type = $6,
-			area_id = $7,
-			mac_address = $8
-		WHERE asset_control_number = $4
+			transferred_location = '${JSON.stringify(formOption.transferred_location)}'::jsonb,
+			asset_control_number = $3,
+			name = $4,
+			monitor_type = $5,
+			area_id = $6,
+			mac_address = $7
+		WHERE asset_control_number = $3
 		`
 	const values = [
 		formOption.type, 
 		formOption.status, 
-		formOption.transferred_location ? formOption.transferred_location.value : null, 
 		formOption.asset_control_number, 
 		formOption.name,
 		formOption.monitor_type,
@@ -693,12 +693,14 @@ const addImport = (formOption) => {
 }
 
 const editObjectPackage = (formOption, username, record_id, reservedTimestamp) => {
+	
 	let item = formOption[0]
+	console.log(item.transferred_location)
 	let text = `
 		UPDATE object_table
 		SET 
 			status = '${item.status}',
-			transferred_location = '${item.transferred_location ? item.transferred_location.value : ' '}',
+			transferred_location = '${JSON.Stringify(item.transferred_location)}'::jsonb,
 			note_id = ${record_id},
 			reserved_timestamp = ${item.status == 'reserve' ? `'${reservedTimestamp}'` : null},
 			reserved_user_id = (SELECT id
@@ -1332,7 +1334,7 @@ const addEditObjectRecord = (formOption, username, filePath) => {
 			now(),
 			$2,
 			$3,
-			'${item.transferred_location ? item.transferred_location.value : ' '}',
+			'${JSON.stringify(item.transferred_location)}'::jsonb,
 			ARRAY [${formOption.map(item => `'${item.asset_control_number}'`)}],
 			$4
 		)

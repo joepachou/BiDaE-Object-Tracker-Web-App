@@ -142,7 +142,7 @@ class SearchResult extends React.Component {
 
         /** Create the pdf package, including pdf, pdf setting and path */
         let pdfPackage = shouldCreatePdf && config.getPdfPackage(status, auth.user, this.state.editedObjectPackage, locale)
-     
+        console.log(editedObjectPackage)
         axios.post(dataSrc.editObjectPackage, {
             locale,
             formOption: editedObjectPackage,

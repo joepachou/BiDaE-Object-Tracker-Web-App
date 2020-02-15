@@ -320,7 +320,16 @@ const setLocaleID = (request, response) => {
 
 
 const editObject = (request, response) => {
-    const formOption = request.body.formOption
+    var formOption = request.body.formOption
+    // console.log(formOption)
+    // if (formOption.transferred_location){
+    //     formOption.transferred_location = {
+    //         branchId: formOption.transferred_location.value.branchId,
+    //         departmentId: formOption.transferred_location.value.departmentId
+    //     }
+    // }
+    
+
     pool.query(queryType.editObject(formOption))
         .then(res => {
             console.log("Edit object success");
@@ -409,7 +418,13 @@ const addPatient = (request, response) => {
 
 
 const editObjectPackage = (request, response) => {
-    const { formOption, username, pdfPackage, reservedTimestamp, locale} = request.body
+    var { formOption, username, pdfPackage, reservedTimestamp, locale} = request.body
+    if (formOption[0].transferred_location){
+        formOption[0].transferred_location = {
+            branchId: formOption[0].transferred_location.value.branchId,
+            departmentId: formOption[0].transferred_location.value.departmentId
+        }
+    }
     pool.query(queryType.addEditObjectRecord(formOption, username, pdfPackage.path))
         .then(res => {
             const record_id = res.rows[0].id

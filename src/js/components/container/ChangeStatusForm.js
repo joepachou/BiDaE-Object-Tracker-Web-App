@@ -51,20 +51,24 @@ class ChangeStatusForm extends React.Component {
         axios.get(dataSrc.getTransferredLocation)
         .then(res => {
             const transferredLocationOptions = res.data.map(branch => {
-                console.log(branch, lang)
+
                 return {          
                     label: branch.branch_name[lang],
                     value: branch.branch_name['english'],
                     options: branch.offices
-                        .map(department => {
+                        .map((department, index) => {
                             return {
                                 label: `${department[lang]},${branch.branch_name[lang]}`,
                                 value: {
                                     chinese: `${department['chinese']},${branch.branch_name['chinese']}`,
-                                    english: `${department['english']},${branch.branch_name['english']}`
-                                }
+                                    english: `${department['english']},${branch.branch_name['english']}`,
+                                    departmentId: index,
+                                    branchId: branch.id
+                                },
+
                             }
-                    })
+                    }),
+                    id: branch.id
                 }
 
             })
@@ -121,11 +125,13 @@ class ChangeStatusForm extends React.Component {
                 <Modal.Header 
                     closeButton 
                 >
+
                     {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
                     {process.env.IS_TRACKING_PATH_ON == 1 && 
                         <Button variant="link" style={style.buttonPath} onClick={this.pathOnClickHandler}>追蹤路徑</Button>                        
                     }
                 </Modal.Header >
+                {console.log(selectedObjectData[0])}
                 <Modal.Body>
                     <Formik
                         initialValues = {{
@@ -134,12 +140,11 @@ class ChangeStatusForm extends React.Component {
                             asset_control_number: selectedObjectData.length != 0 ? selectedObjectData[0].asset_control_number : '',
                             status: selectedObjectData.length != 0 ? selectedObjectData[0].status : '',
                             transferred_location: selectedObjectData.length != 0 && selectedObjectData[0].status == config.objectStatus.TRANSFERRED
-                                ? { 
-                                    value: selectedObjectData[0].transferred_location,
-                                    label: selectedObjectData[0].transferred_location.toUpperCase().split(',').map(item => locale.texts[item]).join('/')
-                                }
-                                : '', 
-                            notes: selectedObjectData.length != 0 ? selectedObjectData[0].notes ? selectedObjectData[0].notes : "" : "",
+                                ? this.state.transferredLocationOptions
+                                            .filter(branch => branch.id == selectedObjectData[0].transferred_location.branchId)[0]
+                                            .options[selectedObjectData[0].transferred_location.departmentId]
+                                : null,
+                            notes: selectedObjectData.length != 0 ? selectedObjectData[0].notes : "" ,
                         }}
 
                         validationSchema = {
