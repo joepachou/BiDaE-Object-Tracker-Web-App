@@ -269,6 +269,7 @@ const tw = {
     DEVICES_MANAGEMENT: "儀器管理",
     USER_PROFILE: "個人資料",
     TRANSFERRED_LOCATION_MANAGEMENT: "轉移單位管理",
+    ROLE_PERMISSION_MANAGEMENT: "身分權限管理",
     PATIENT_MANAGEMENT: "病人管理",
     SHIFT_CHANGE_RECORD: "交班紀錄",
     EDIT_OBJECT_MANAGEMENT: "儀器狀態更改紀錄",

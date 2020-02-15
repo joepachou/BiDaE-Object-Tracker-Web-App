@@ -1823,6 +1823,58 @@ function modifyTransferredLocation(type, data){
     console.log(query)
     return query
 }
+
+function getRolesPermission(){
+	// const query = `SELECT array(SELECT json_build_object('id',roles.id,'name',roles.name) as role, array_agg(json_build_object('id',permission_table.id,'name',permission_table.name)) as permissions FROM permission_table
+	// 					INNER JOIN roles_permission ON roles_permission.permission_id = permission_table.id
+	// 					INNER JOIN roles ON roles.id = roles_permission.role_id
+	// 					GROUP BY roles.name, roles.id)`
+	const query = `SELECT
+					(ARRAY(SELECT json_build_object('id',id,'name',name) FROM permission_table ORDER BY id)) as permission_list,
+					(ARRAY(SELECT json_build_object('id',id,'name',name) FROM roles ORDER BY id)) as roles_list,
+					(ARRAY(
+
+						SELECT json_build_object('role', json_build_object('id',roles.id,'name',roles.name), 'permissions', array_agg(json_build_object('id',permission_table.id,'name',permission_table.name))) FROM permission_table
+						INNER JOIN roles_permission ON roles_permission.permission_id = permission_table.id
+						INNER JOIN roles ON roles.id = roles_permission.role_id
+						GROUP BY roles.name, roles.id
+
+					)) as roles_permission
+					
+	`
+	
+	return query
+}
+function modifyPermission(type, data){
+	if(type == 'add permission'){
+        const query = `INSERT INTO permission_table(type, name) VALUES ('${data.permissionType}', '${data.permissionType}:${data.name}')`
+        return query
+    }else if(type == 'rename permission'){
+        const query = `UPDATE permission_table SET name = '${data.permissionType}:${data.name}' WHERE id=${data.id}`
+        return query
+    }else if(type == 'remove permission'){
+        const query = `DELETE FROM permission_table WHERE id=${data.id}`
+        return query
+    }else{
+        console.log('modifyPermission: unrecognized command type')
+    }
+}
+
+function modifyRolesPermission(type, data){
+	// type: 'remove permission', 'add permission'
+	// data.roleId, data.PermissionId
+	console.log('data',  data)
+	if(type == 'add permission'){
+        const query = `INSERT INTO roles_permission(role_id, permission_id) VALUES ('${data.roleId}', '${data.permissionId}')`
+        return query
+    }else if(type == 'remove permission'){
+        const query = `DELETE FROM roles_permission WHERE role_id=${data.roleId} AND permission_id=${data.permissionId}`
+        return query
+    }else{
+        console.log('modifyRolesPermission: unrecognized command type')
+    }
+}
+
 module.exports = {
 	getTrackingData,
 	getTrackingTableByMacAddress,
@@ -1892,6 +1944,9 @@ module.exports = {
 	getTransferredLocation,
 	modifyTransferredLocation,
 
+	getRolesPermission,
+	modifyPermission,
+	modifyRolesPermission,
 
 
 	clearSearchHistory

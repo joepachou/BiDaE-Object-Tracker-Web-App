@@ -13,7 +13,8 @@ const FormikFormGroup = ({
    disabled,
    placeholder,
    component,
-   display = true
+   display = true,
+   className
 }) => {
     let style = {
         container: {
@@ -26,7 +27,7 @@ const FormikFormGroup = ({
     }
     return (
         <div 
-            className="form-group mb-3"
+            className={`form-group mb-3 ${className}`}
             style={style.container}
         >
             <small 

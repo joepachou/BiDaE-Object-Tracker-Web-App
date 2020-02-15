@@ -11,6 +11,7 @@ import MyPatientManager from './MyPatientManager';
 import MonitorSetting from "./MonitorSetting";
 import UserProfile from "./UserProfile";
 import TransferredLocationManagement from "./TransferredLocationManagement";
+import RolePermissionManagement from "./RolePermissionManagement"
 import { AppContext } from '../../../context/AppContext';
 
 class UserSettingContainer extends React.Component{
@@ -65,6 +66,12 @@ class UserSettingContainer extends React.Component{
             path: "transferredLocationManagement",
             href: "#TransferredLocationManagement",
             component: <TransferredLocationManagement />
+        },
+        {
+            name: "Role Permission Management",
+            path: "rolePermissionManagement",
+            href: "#RolePermissionManagement",
+            component: <RolePermissionManagement />
         }
     ]
     

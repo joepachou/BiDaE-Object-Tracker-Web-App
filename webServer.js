@@ -200,6 +200,13 @@ app.get('/data/getTransferredLocation', db.getTransferredLocation)
 
 app.post('/data/modifyTransferredLocation', db.modifyTransferredLocation)
 
+app.get('/data/getRolesPermission', db.getRolesPermission)
+
+// modify permissionList
+app.post('/data/modifyPermission', db.modifyPermission)
+// modify rolesPermission
+app.post('/data/modifyRolesPermission', db.modifyRolesPermission)
+
 app.get(`/${process.env.DEFAULT_FOLDER}/shift_record/:file`, (req, res) =>{
 	res.sendFile(path.join(`${process.env.LOCAL_FILE_PATH}`, `${process.env.DEFAULT_FOLDER}/shift_record`,req.params['file']));
 })
