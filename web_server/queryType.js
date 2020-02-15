@@ -1928,6 +1928,14 @@ function modifyTransferredLocation(type, data){
     return query
 }
 
+const setGeofenceEnable = (enable, areaId) => {
+	return `
+		UPDATE geo_fence_config 
+		SET enable = ${enable} 
+		WHERE area_id = ${areaId}
+	`
+} 
+
 function getRolesPermission(){
 	// const query = `SELECT array(SELECT json_build_object('id',roles.id,'name',roles.name) as role, array_agg(json_build_object('id',permission_table.id,'name',permission_table.name)) as permissions FROM permission_table
 	// 					INNER JOIN roles_permission ON roles_permission.permission_id = permission_table.id
@@ -2052,8 +2060,7 @@ module.exports = {
 	getRolesPermission,
 	modifyPermission,
 	modifyRolesPermission,
-
-
+	setGeofenceEnable,
 	clearSearchHistory
 }
 
