@@ -837,9 +837,9 @@ function signup(signupPackage) {
 
 function getUserInfo(username) {
 	const text =  `
-	SELECT name, mydevice, search_history, max_search_history_count as freqSearchCount from user_table where name= $1
+	SELECT name, mydevice, max_search_history_count as freqSearchCount from user_table where name= $1
 	`;
-
+	console.log(username)
 	const values = [username];
 
 	const query = {
@@ -926,9 +926,9 @@ function modifyUserDevices(username, mode, acn){
 	
 }
 function modifyUserInfo(username, info){
-	console.log(username)
+		
 	const {freqSearchCount} = info
-	text = `UPDATE user_table SET max_search_history_count = ${freqSearchCount} WHERE name='${username}'`
+	text = `UPDATE user_table SET max_search_history_count = ${parseInt(freqSearchCount[0])} WHERE name='${username}'`
 	return text
 	
 }

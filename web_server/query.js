@@ -637,7 +637,7 @@ const modifyUserInfo = (request, response) => {
     const {username, info} = request.body
     pool.query(queryType.modifyUserInfo(username, info), (error, results) => {
         if(error){
-            console.log("modifyUserInfo error: ", err)
+            console.log("modifyUserInfo error: ", error)
         }else{
             console.log('modify user info success')
             response.status(200).send('ok')
