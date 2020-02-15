@@ -269,6 +269,8 @@ const en =  {
     DEVICES_MANAGEMENT: "Devices Management",
     PATIENT_MANAGEMENT: "Patient Management",
     USER_PROFILE: "User Profile",
+    TRANSFERRED_LOCATION_MANAGEMENT: "Transferred Location Management",
+    ROLE_PERMISSION_MANAGEMENT: "Role Permission Management",
     SHIFT_CHANGE_RECORD: "Shift change record",
     EDIT_OBJECT_MANAGEMENT: "Edit Object Record",
     MONITOR_SETTING: "monitor setting",
