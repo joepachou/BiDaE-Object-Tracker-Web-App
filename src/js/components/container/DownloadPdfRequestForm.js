@@ -27,6 +27,7 @@ const DownloadPdfRequestForm = ({
         downloadPdfRequest: {
             zIndex: 6000,
             padding: 0,
+            top: '2%',
         },
     }
 
@@ -34,13 +35,11 @@ const DownloadPdfRequestForm = ({
     const handleClickButton = e => {
         
         let { name } = e.target
-        console.log(name)
         switch(name) {
             case "viewReport":
                 window.open(dataSrc.pdfUrl(pdfPath));
                 break;
             case "downloadReport":
-            console.log(dataSrc.pdfUrl(pdfPath))
                 var link = document.createElement('a');
                 link.href = dataSrc.pdfUrl(pdfPath);
                 link.download = "";
@@ -51,6 +50,7 @@ const DownloadPdfRequestForm = ({
                 break;
         }
     }
+
 
     
     return (
@@ -71,34 +71,34 @@ const DownloadPdfRequestForm = ({
                 <Formik    
                     render={() => (
                         <Form>
-                            <div className="mb-3">
-                                <div className="mb-3">
-                                    {locale.texts.NOW_YOU_CAN_DO_THE_FOllOWING_ACTION}
-                                </div>
-                                <div className="d-flex justify-content-around">
-                                    <Button 
-                                        variant="outline-secondary" 
-                                        onClick={handleClickButton}
-                                        name="viewReport"
-                                    >
-                                        {locale.texts.VIEW_REPORT}
-                                    </Button>
-                                    <Button 
-                                        variant="outline-secondary" 
-                                        onClick={handleClickButton}
-                                        name="downloadReport"
-                                    >
-                                        {locale.texts.DOWNLOAD_REPORT}
-                                    </Button>
-                                    <Button 
-                                        variant="outline-secondary" 
-                                        onClick={handleClickButton}
-                                        name="close"
-                                    >
-                                        {locale.texts.CLOSE}
-                                </Button>
-                                </div>
+                            <div className="mb-5">
+                                {locale.texts.NOW_YOU_CAN_DO_THE_FOllOWING_ACTION}
                             </div>
+                            <Modal.Footer>
+
+                                <Button 
+                                    variant="outline-secondary" 
+                                    onClick={handleClickButton}
+                                    name="close"
+                                >
+                                    {locale.texts.CLOSE}
+                                </Button>
+                                <Button 
+                                    variant="primary" 
+                                    onClick={handleClickButton}
+                                    name="viewReport"
+                                    className="mx-3"
+                                >
+                                    {locale.texts.VIEW_REPORT}
+                                </Button>
+                                <Button 
+                                    variant="primary" 
+                                    onClick={handleClickButton}
+                                    name="downloadReport"
+                                >
+                                    {locale.texts.DOWNLOAD_REPORT}
+                                </Button>
+                            </Modal.Footer>
                         </Form>
                     )}
                 />

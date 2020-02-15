@@ -320,7 +320,16 @@ const setLocaleID = (request, response) => {
 
 
 const editObject = (request, response) => {
-    const formOption = request.body.formOption
+    var formOption = request.body.formOption
+    // console.log(formOption)
+    // if (formOption.transferred_location){
+    //     formOption.transferred_location = {
+    //         branchId: formOption.transferred_location.value.branchId,
+    //         departmentId: formOption.transferred_location.value.departmentId
+    //     }
+    // }
+    
+
     pool.query(queryType.editObject(formOption))
         .then(res => {
             console.log("Edit object success");
@@ -409,7 +418,13 @@ const addPatient = (request, response) => {
 
 
 const editObjectPackage = (request, response) => {
-    const { formOption, username, pdfPackage, reservedTimestamp, locale} = request.body
+    var { formOption, username, pdfPackage, reservedTimestamp, locale} = request.body
+    if (formOption[0].transferred_location){
+        formOption[0].transferred_location = {
+            branchId: formOption[0].transferred_location.value.branchId,
+            departmentId: formOption[0].transferred_location.value.departmentId
+        }
+    }
     pool.query(queryType.addEditObjectRecord(formOption, username, pdfPackage.path))
         .then(res => {
             const record_id = res.rows[0].id
@@ -451,14 +466,14 @@ const signin = (request, response) => {
                     message: "Username or password is incorrect"
                 })
             } else {
-             
+                
+
                 if (bcrypt.compareSync(password, res.rows[0].password)) {
                     let { 
                         name, 
                         roles, 
                         permissions,
                         mydevice, 
-                        search_history,
                         freq_search_count,
                         areas_id,
                         id,
@@ -466,13 +481,11 @@ const signin = (request, response) => {
                         locale_id,
                         locale
                     } = res.rows[0]
-
                     let userInfo = {
                         name,
                         myDevice: mydevice,
                         roles,
                         permissions,
-                        searchHistory: search_history,
                         freqSearchCount: freq_search_count,
                         id,
                         areas_id,
@@ -1339,6 +1352,22 @@ const modifyTransferredLocation = (request, response) => {
         })
 }
 
+const setGeofenceEnable = (request, response) => {
+    const {
+        enable,
+        areaId
+    } = request.body
+
+    pool.query(queryType.setGeofenceEnable(enable, areaId))
+        .then(res => {
+            console.log(`set geofence enable success`)
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
 const getRolesPermission = (request, response) => {
     let query = queryType.getRolesPermission()
     pool.query(query).then(res => {
@@ -1468,11 +1497,10 @@ module.exports = {
     DeleteUserArea,
     getTransferredLocation,
     modifyTransferredLocation,
+    clearSearchHistory,
+    setGeofenceEnable,
     getRolesPermission,
     modifyPermission,
     modifyRolesPermission,
-
-
-
     clearSearchHistory
 }

@@ -61,20 +61,25 @@ class EditObjectForm extends React.Component {
         axios.get(dataSrc.getTransferredLocation)
         .then(res => {
             const transferredLocationOptions = res.data.map(branch => {
-                console.log(branch, lang)
+                // console.log(branch, lang)
+                console.log(branch)
                 return {          
                     label: branch.branch_name[lang],
                     value: branch.branch_name['english'],
                     options: branch.offices
-                        .map(department => {
+                        .map((department, index) => {
                             return {
                                 label: `${department[lang]},${branch.branch_name[lang]}`,
                                 value: {
                                     chinese: `${department['chinese']},${branch.branch_name['chinese']}`,
-                                    english: `${department['english']},${branch.branch_name['english']}`
+                                    english: `${department['english']},${branch.branch_name['english']}`,
+                                    departmentId: index,
+                                    branchId: branch.id
                                 },
+
                             }
-                    })
+                    }),
+                    id: branch.id
                 }
 
             })
@@ -220,12 +225,16 @@ class EditObjectForm extends React.Component {
                                         return sum
                                     },0)      
                             }
+                            console.log(values.transferred_location)
                             const postOption = {
                                 id,
                                 ...values,
                                 status: values.status,
                                 transferred_location: values.status === config.objectStatus.TRANSFERRED 
-                                    ? values.transferred_location.value
+                                    ? {
+                                        branchId: values.transferred_location.value.branchId,
+                                        departmentId: values.transferred_location.value.departmentId
+                                    }
                                     : '',
                                 monitor_type: monitor_type || 0,
                                 area_id: config.mapConfig.areaModules[values.area.value].id || 0

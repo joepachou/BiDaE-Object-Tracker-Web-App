@@ -19,6 +19,7 @@ import {
 import { AppContext } from '../../context/AppContext';
 import {Tabs, Tab,TabList, TabPanel } from 'react-tabs';
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
+import retrieveDataHelper from '../../helper/retrieveDataHelper'
 const SelectTable = selecTableHOC(ReactTable);
 
 class SystemStatus extends React.Component{
@@ -116,12 +117,12 @@ class SystemStatus extends React.Component{
     getTrackingData = () => {
         let { locale, auth, stateReducer } = this.context
         let [{areaId}] = stateReducer
-        axios.post(dataSrc.getTrackingData,{
-            rssiThreshold: config.mapConfig.locationAccuracyMapToDefault[config.objectManage.objectManagementRSSIThreshold],
-            locale: locale.abbr,
-            user: auth.user,
-            areaId: areaId,
-        })
+
+        retrieveDataHelper.getTrackingData(
+            locale.abbr,
+            auth.user,
+            areaId
+        )
         .then(res => {
             let column = _.cloneDeep(trackingTableColumn)
             column.map(field => {

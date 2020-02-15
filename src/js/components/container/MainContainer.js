@@ -41,7 +41,7 @@ class MainContainer extends React.Component{
         trackingData: [],
         proccessedTrackingData: [],
         lbeaconPosition: [],
-        geofenceConfig: [],
+        geofenceConfig: null,
         violatedObjects: {},
         hasSearchKey: false,
         searchKey: '',
@@ -87,6 +87,7 @@ class MainContainer extends React.Component{
         if (isTrackingDataChange && this.state.hasSearchKey) {
             this.handleRefreshSearchResult()
         }
+
         if (!(_.isEqual(prevState.authenticated, this.context.auth.authenticated))) {
             this.getTrackingData(this.context.stateReducer[0].areaId)
             this.setState({
@@ -146,7 +147,9 @@ class MainContainer extends React.Component{
     }
 
     getToastType = (type, data, option, time) => {
-        return toast[config.toastMonitorMap[type]](<ToastNotification data={data} time={time} type={type}/>, option)
+        return toast[config.toastMonitorMap[type]](
+            <ToastNotification data={data} time={time} type={type}/>, option
+        )
     }
 
     onCloseToast = (toast) => {
@@ -155,8 +158,6 @@ class MainContainer extends React.Component{
         axios.post(dataSrc.checkoutViolation, {
             mac_address,
             monitor_type
-        })
-        .then(res => {
         })
         .catch(err => {
             console.log(`checkout violation fail: ${err}`)
@@ -187,19 +188,37 @@ class MainContainer extends React.Component{
         this.getSearchKey(searchKey, colorPanel, searchValue, markerClickPackage)
     }
 
-    async setFence (value, areaId, monitorConfigPackage) {
-        monitorConfigPackage = {
-            ...monitorConfigPackage[0],
-            type: 'geo_fence_config',
-            enable: value,
-        }
-        let result = await axios.post(dataSrc.setGeofenceConfig, {
-            monitorConfigPackage
+    setFence = () => {
+        let { 
+            stateReducer 
+        } = this.context
+
+        let [
+            {areaId}, 
+        ] = stateReducer
+
+        let cloneConfig = _.cloneDeep(this.state.geofenceConfig)
+
+        let enable = + !cloneConfig[areaId].enable
+        cloneConfig[areaId].enable = enable
+
+        axios.post(dataSrc.setGeofenceEnable, {
+            enable,
+            areaId,
         })
-        return result
+        .then(res => {
+            console.log(`set geofence enable success`)
+            this.setState({
+                geofenceConfig: cloneConfig,
+            })
+        })
+        .catch(err => {
+            console.log(`set geofence enable fail ${err}`)
+        })
     }
 
     getTrackingData = () => {
+        
         let { auth, locale, stateReducer } = this.context
         let [{areaId, violatedObjects}, dispatch] = stateReducer
         axios.post(dataSrc.getTrackingData,{
@@ -249,7 +268,7 @@ class MainContainer extends React.Component{
         })
     }
 
-    /** Retrieve geo fence data from database */
+    /** Retrieve geofence data from database */
     getGeofenceConfig = () => {
         let { stateReducer } = this.context
         let [{areaId}] = stateReducer
@@ -257,9 +276,16 @@ class MainContainer extends React.Component{
             areaId
         })
         .then(res => {
-            let geofenceConfig = res.data.rows.filter(item => {
-                return parseInt(item.area_id) == areaId
-            })
+            let geofenceConfig = res.data.rows.reduce((config, item) => {
+                if (!config[item.area_id]) {
+                    config[item.area_id] = {
+                        enable: item.enable,
+                        rules: [item]
+                    }
+                }
+                else config[item.area_id].push(item)
+                return config
+            }, {})
             this.setState({
                 geofenceConfig,
             })
@@ -282,6 +308,7 @@ class MainContainer extends React.Component{
     /** Transfer the search result, not found list and color panel from SearchContainer, GridButton to MainContainer 
      *  The three variable will then pass into SurveillanceContainer */
     processSearchResult = (searchResult, colorPanel, searchKey, searchValue, markerClickPackage) => {
+        
         /** Count the number of found object type */
         let duplicateSearchKey = []
 

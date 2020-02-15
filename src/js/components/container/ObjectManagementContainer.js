@@ -14,6 +14,7 @@ import {
     deleteImportData,
     cleanBinding,
     getImportPatient,
+    getTransferredLocation
 } from "../../dataSrc"
 import axios from 'axios';
 import ReactTable from 'react-table';
@@ -78,6 +79,7 @@ class ObjectManagementContainer extends React.Component{
         physicianName:'',
         physicianIDNumber:0,
         disableASN:false,
+        transferredLocationList: []
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -91,10 +93,12 @@ class ObjectManagementContainer extends React.Component{
     }
 
     componentDidMount = () => {
+        this.getTransferredLocation();
         this.getData();
         this.getDataImport()
         this.getUserList();
         this.getLbeaconData();
+        
     }
 
     getUserList = () => {
@@ -176,6 +180,40 @@ class ObjectManagementContainer extends React.Component{
        
     }
 
+    getTransferredLocation = () => {
+        let { locale } = this.context
+        let  lang    = locale.lang == 'tw' ? 'chinese' : 'english'
+        axios.get(getTransferredLocation)
+        .then(res => {
+            const transferredLocationOptions = res.data.map(branch => {
+                // console.log(branch, lang)
+                console.log(branch)
+                return {          
+                    label: branch.branch_name[lang],
+                    value: branch.branch_name['english'],
+                    options: branch.offices
+                        .map((department, index) => {
+                            return {
+                                label: `${department[lang]},${branch.branch_name[lang]}`,
+                                value: {
+                                    chinese: `${department['chinese']},${branch.branch_name['chinese']}`,
+                                    english: `${department['english']},${branch.branch_name['english']}`,
+                                    departmentId: index,
+                                    branchId: branch.id
+                                },
+
+                            }
+                    }),
+                    id: branch.id
+                }
+
+            })
+            this.setState({
+                transferredLocationList: transferredLocationOptions
+            })
+        })
+    }
+
     getData = () => {
         let { locale } = this.context
         axios.post(getObjectTable, {
@@ -230,15 +268,17 @@ class ObjectManagementContainer extends React.Component{
                         value: item.status,
                         label: item.status ? locale.texts[item.status.toUpperCase()] : null,
                     }
-                    item.transferred_location = item.transferred_location 
-                        ? {
-                            value: item.transferred_location,
-                            label: locale.texts[item.transferred_location.toUpperCase().replace(/ /g, '_')],
-                            label: item.transferred_location.toUpperCase().split(',').map(item => {
-                                return locale.texts[item]
-                            }).join()
-                        }
-                        : ''
+                    if (item.transferred_location){
+                        let branch = this.state.transferredLocationList.filter(branch => {
+                                if (branch.id == item.transferred_location.branchId){
+                                    return true
+                                }
+                            return false
+                        })
+                        let department = branch ? branch[0].options[item.transferred_location.departmentId] : null
+                        item.transferred_location = department
+                    }
+                    
                     data.push(item)
                 }
 

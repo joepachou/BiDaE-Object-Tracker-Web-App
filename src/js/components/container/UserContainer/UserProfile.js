@@ -95,19 +95,16 @@ class UserProfile extends React.Component{
             user_id: auth.user.id
         })
         .then(res => {
-           this.setState({userData : res.data.rows})
+
            let updataAuthAreas_ID = [] //因為auth裡面是陣列 res抓出來是json 轉一下
            res.data.rows.map(item=>{
                updataAuthAreas_ID.push(item.area_id)
            })
            auth.user.areas_id =updataAuthAreas_ID
 
-           let { stateReducer } = this.context
-           let [{areaId}, dispatch] = stateReducer
-           dispatch({
-               type: 'setArea',
-               value: updataAuthAreas_ID
-           })
+           this.setState({
+                userData : res.data.rows
+            })
 
         })
         .catch(err => {

@@ -22,23 +22,13 @@ class SurveillanceContainer extends React.Component {
     state = {
         selectedObjectData: [],
         showPdfDownloadForm: false,
-        isOpenFence: false,
         searchedObjectType: [],
         showObjects: [],
         showConfirmForm: false,
     }
 
-
-    componentDidMount = () => {
-        
-    }
     componentDidUpdate = (prevProps, prevState) => {
 
-        if (this.props.geofenceConfig.length !== 0 && !(_.isEqual(prevProps.geofenceConfig, this.props.geofenceConfig))) {
-            this.setState({
-                isOpenFence: this.props.geofenceConfig[0].enable
-            })
-        }
         var searchedObjectType = this.state.searchedObjectType
         var showObjects = this.state.showObjects
         
@@ -95,19 +85,16 @@ class SurveillanceContainer extends React.Component {
     }
 
     handleConfirmFormSubmit = (e) => {
-        
-        let { stateReducer } = this.context
-        let [{areaId}, dispatch] = stateReducer
-        let {  value }  = +!this.state.isOpenFence
-        this.props.setFence(value, areaId, this.props.geofenceConfig)
-        .then(res => {
-            this.setState({
-                isOpenFence: !this.state.isOpenFence
-            })
-        })
-        .catch(err => {
-            console.log(`set geofence config fail ${err}`)
-        })
+        let { 
+            stateReducer 
+        } = this.context
+
+        let [
+            {areaId}, 
+        ] = stateReducer
+
+        this.props.setFence()
+
         this.handleClosePdfForm()
     }
 
@@ -117,11 +104,6 @@ class SurveillanceContainer extends React.Component {
         let { stateReducer } = this.context
         let [{areaId}, dispatch] = stateReducer
         switch(name) {
-            // case "show devices":
-            //     this.setState({
-            //         showDevice: !this.state.showDevice
-            //     })
-            //     break;
             case "clear":
                 this.props.handleClearButton();
                 this.setState({
@@ -139,21 +121,6 @@ class SurveillanceContainer extends React.Component {
                 this.setState({
                     showConfirmForm: true
                 })
-
-                // this.props.setFence(value, areaId, this.props.geofenceConfig)
-                // .then(res => {
-                //     this.setState({
-                //         isOpenFence: !this.state.isOpenFence
-                //     })
-                // })
-                // .catch(err => {
-                //     console.log(`set geofence config fail ${err}`)
-                // })
-
-            
-            
-
-
                 break;
             case "clearAlerts":
                 this.props.clearAlerts()
@@ -200,11 +167,6 @@ class SurveillanceContainer extends React.Component {
                 height: "5rem",
                 lineHeight: "3rem"
             },
-            titleForTablet: {
-                color: "grey",
-                fontSize: "1rem",
-            },
-
             mapForMobile: {
                 // width: '90vw',
                 border: "solid 2px rgba(227, 222, 222, 0.619)",
@@ -213,9 +175,6 @@ class SurveillanceContainer extends React.Component {
             mapBlock: {
                 border: "solid 2px rgba(227, 222, 222, 0.619)",
                 padding: "5px",
-            },
-            gridButton: {
-                display: this.state.showDevice ? null : "none"
             },
             MapAndQrcode: {
                 height: '42vh'
@@ -247,199 +206,9 @@ class SurveillanceContainer extends React.Component {
 
         return(
             <div>
-            <BrowserView>
-            <div id="surveillanceContainer" style={style.surveillanceContainer} className="overflow-hidden">
-                <div style={style.mapBlock}>
-                    <Map
-                        pathMacAddress={this.props.pathMacAddress}
-                        hasSearchKey={hasSearchKey}
-                        colorPanel={this.props.colorPanel}
-                        proccessedTrackingData={this.props.proccessedTrackingData}
-                        lbeaconPosition={this.props.lbeaconPosition}
-                        geofenceConfig={this.props.geofenceConfig}
-                        getSearchKey={this.props.getSearchKey}
-                        areaId={areaId}
-                        isOpenFence={this.state.isOpenFence}
-                        searchedObjectType={this.state.showObjects}
-                        mapConfig={config.mapConfig}
-                        pathData={this.state.pathData}
-                        handleClosePath={this.props.handleClosePath}
-                        handleShowPath={this.props.handleShowPath}
-                        showPath={this.props.showPath}
-                    />
-                </div>
-                <div style={style.navBlock}>
-                    <Nav className="d-flex align-items-start text-capitalize bd-highlight">
-                        <Nav.Item className="mt-2">
-                            <Button 
-                                variant="outline-primary" 
-                                className="mr-1 ml-2 text-capitalize" 
-                                onClick={this.handleClickButton} 
-                                name="clear"
-                                disabled={!this.props.hasSearchKey}
-                            >
-                                {locale.texts.CLEAR}
-                            </Button>
-                        </Nav.Item>
-                        <AccessControl
-                            permission={"user:saveSearchRecord"}
-                            renderNoAccess={() => null}
-                        >
-                            <Nav.Item className="mt-2">
-                                <Button 
-                                    variant="outline-primary" 
-                                    className="mr-1 ml-2 text-capitalize" 
-                                    onClick={this.handleClickButton} 
-                                    name="save"
-                                    disabled={!this.props.hasSearchKey || this.state.showPdfDownloadForm}
-                                >
-                                    {locale.texts.SAVE}
-                                </Button>
-                            </Nav.Item>
-                        </AccessControl>
-                        <AccessControl
-                            permission={"user:toggleShowDevices"}
-                            renderNoAccess={() => null}
-                        >
-                            <Nav.Item className="mt-2">
-                                <Button 
-                                    variant="primary" 
-                                    className="mr-1 ml-2 text-capitalize" 
-                                    onClick={this.handleClickButton} 
-                                    name="searchedObjectType"
-                                    value={[-1, 0]}
-                                    active={(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) }
-                                    disabled={
-                                        !(this.state.searchedObjectType.includes(-1) ||
-                                        this.state.searchedObjectType.includes(0))
-                                    }
-                                >
-                                    {!(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) 
-                                        ?   locale.texts.SHOW_DEVICES 
-                                        :   locale.texts.HIDE_DEVICES 
-                                    }
-                                </Button>
-                            </Nav.Item>
-                        </AccessControl>
-                        <AccessControl
-                            permission={"user:toggleShowResidents"}
-                            renderNoAccess={() => null}
-                        >
-                            <Nav.Item className="mt-2">
-                                <Button 
-                                    variant="primary" 
-                                    className="mr-1 ml-2 text-capitalize" 
-                                    onClick={this.handleClickButton} 
-                                    name="searchedObjectType"
-                                    value={[-2, 1, 2]}
-                                    active={(this.state.showObjects.includes(1) || this.state.showObjects.includes(2))}
-                                    disabled={
-                                        !(this.state.searchedObjectType.includes(1) ||
-                                        this.state.searchedObjectType.includes(2))
-                                    }
-                                >
-                                    {!(this.state.showObjects.includes(1) || this.state.showObjects.includes(2)) 
-                                        ?   locale.texts.SHOW_RESIDENTS
-                                        :   locale.texts.HIDE_RESIDENTS 
-                                    }
-                                </Button>
-                            </Nav.Item>
-                        </AccessControl>
-                        {process.env.IS_TRACKING_PATH_ON == 1 && 
-                            <AccessControl
-                                permission={"user:cleanPath"}
-                                renderNoAccess={()=>null}
-                            >
-                                <Nav.Item className="mt-2">
-                                    <Button
-                                        variant="primary"
-                                        className="mr-1 ml-2 text-capitalize" 
-                                        onClick={this.handleClickButton}
-                                        name="cleanPath"
-                                        active={(this.props.showPath)}
-                                        disabled={!(this.props.showPath)}
-                                    >
-                                        {locale.texts.CLEAN_PATH}
-                                    </Button>
-                                </Nav.Item>
-                            </AccessControl>
-                        }
-                        {geofenceConfig.map((item, index) => {
-                            return (
-                                <Fragment
-                                    key={index}
-                                >
-                                    <Nav.Item className="mt-2 bd-highligh ml-auto">
-                                        
-                                       
-                                        <GeneralConfirmForm
-                                            show={this.state.showConfirmForm}
-                                            handleSubmit={this.handleConfirmFormSubmit}
-                                            handleClose={this.handleClosePdfForm}
-                                            signin={auth.signin}
-                                            stateReducer ={stateReducer[0].areaId}
-                                            auth={auth}
-                                        />        
-
-
-                                        
-                                        <Button 
-                                            variant="warning" 
-                                            className="mr-1 ml-2" 
-                                            onClick={this.handleClickButton} 
-                                            name="fence"
-                                            value={+!this.state.isOpenFence}
-                                            active={!this.state.isOpenFence}
-                                        >
-                                            {this.state.isOpenFence ? locale.texts.FENCE_ON : locale.texts.FENCE_OFF}
-                                        </Button>
-                                    </Nav.Item>
-                                    <Nav.Item className="mt-2">
-                                        <Button 
-                                            variant="outline-primary" 
-                                            className="mr-1 ml-2" 
-                                            onClick={this.handleClickButton} 
-                                            name="clearAlerts"
-                                        >
-                                            {locale.texts.CLEAR_ALERTS}
-                                        </Button>
-                                    </Nav.Item>
-                                </Fragment>
-                            )
-                        })}
-                    </Nav>
-                </div>
-                <PdfDownloadForm 
-                    show={this.state.showPdfDownloadForm}
-                    data={this.props.searchResult}
-                    handleClose = {this.handleClosePdfForm}
-                    userInfo={auth.user}
-                />
-            </div>
-            </BrowserView>
-            <TabletView>
-            <div id="surveillanceContainer" className="w-100 h-100 d-flex flex-column">
-                <div className="d-flex w-100 h-100 flex-column">
-                    <div>
-                        <div className="w-100 d-flex flex-row align-items justify-content" style={style.MapAndQrcode}>
-                            <div style={style.qrBlock} className="d-flex flex-column align-items">
-                                <div>
-                                    
-                                    <QRcodeContainer
-                                        data={this.props.proccessedTrackingData.filter(item => item.searched)}
-                                        userInfo={auth.user}
-                                        searchKey={this.props.searchKey}
-                                        isSearched = {this.props.isSearched}
-                                    /> 
-                                    <InfoPrompt
-                                        searchKey={this.props.searchKey}
-                                        searchResult={this.props.searchResult}
-                                        title={locale.texts.FOUND} 
-                                        title2={locale.texts.NOT_FOUND} 
-                                    />
-                                </div>
-                            </div>
-                            <div style={style.mapBlockForTablet}>
+                <BrowserView>
+                    <div id="surveillanceContainer" style={style.surveillanceContainer} className="overflow-hidden">
+                        <div style={style.mapBlock}>
                             <Map
                                 pathMacAddress={this.props.pathMacAddress}
                                 hasSearchKey={hasSearchKey}
@@ -449,7 +218,6 @@ class SurveillanceContainer extends React.Component {
                                 geofenceConfig={this.props.geofenceConfig}
                                 getSearchKey={this.props.getSearchKey}
                                 areaId={areaId}
-                                isOpenFence={this.state.isOpenFence}
                                 searchedObjectType={this.state.showObjects}
                                 mapConfig={config.mapConfig}
                                 pathData={this.state.pathData}
@@ -457,170 +225,319 @@ class SurveillanceContainer extends React.Component {
                                 handleShowPath={this.props.handleShowPath}
                                 showPath={this.props.showPath}
                             />
-                            </div>
                         </div>
-                        
                         <div style={style.navBlock}>
-                    <Nav style={style.button} className="d-flex align-items-start text-capitalize bd-highlight">
-                        
-                        <Nav.Item className="mt-2">
-                            <Button 
-                                variant="outline-primary" 
-                                className="mr-1 ml-2 text-capitalize" 
-                                onClick={this.handleClickButton} 
-                                name="clear"
-                                disabled={!this.props.hasSearchKey}
-                            >
-                                {locale.texts.CLEAR}
-                            </Button>
-                        </Nav.Item>
-                        <AccessControl
-                            permission={"user:saveSearchRecord"}
-                            renderNoAccess={() => null}
-                        >
-                            <Nav.Item className="mt-2">
-                                <Button 
-                                    variant="outline-primary" 
-                                    className="mr-1 ml-2 text-capitalize" 
-                                    onClick={this.handleClickButton} 
-                                    name="save"
-                                    disabled={!this.props.hasSearchKey || this.state.showPdfDownloadForm}
-                                >
-                                    {locale.texts.SAVE}
-                                </Button>
-                            </Nav.Item>
-                        </AccessControl>
-                        <AccessControl
-                            permission={"user:toggleShowDevices"}
-                            renderNoAccess={() => null}
-                        >
-                            <Nav.Item className="mt-2">
-                                <Button 
-                                    variant="primary" 
-                                    className="mr-1 ml-2 text-capitalize" 
-                                    onClick={this.handleClickButton} 
-                                    name="searchedObjectType"
-                                    value={[-1, 0]}
-                                    active={(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) }
-                                    disabled={
-                                        !(this.state.searchedObjectType.includes(-1) ||
-                                        this.state.searchedObjectType.includes(0))
-                                    }
-                                >
-                                    {!(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) 
-                                        ?   locale.texts.SHOW_DEVICES 
-                                        :   locale.texts.HIDE_DEVICES 
-                                    }
-                                </Button>
-                            </Nav.Item>
-                        </AccessControl>
-                        <AccessControl
-                            permission={"user:toggleShowResidents"}
-                            renderNoAccess={() => null}
-                        >
-                            <Nav.Item className="mt-2">
-                                <Button 
-                                    variant="primary" 
-                                    className="mr-1 ml-2 text-capitalize" 
-                                    onClick={this.handleClickButton} 
-                                    name="searchedObjectType"
-                                    value={[-2, 1, 2]}
-                                    active={(this.state.showObjects.includes(1) || this.state.showObjects.includes(2))}
-                                    disabled={
-                                        !(this.state.searchedObjectType.includes(1) ||
-                                        this.state.searchedObjectType.includes(2))
-                                    }
-                                >
-                                    {!(this.state.showObjects.includes(1) || this.state.showObjects.includes(2)) 
-                                        ?   locale.texts.SHOW_RESIDENTS
-                                        :   locale.texts.HIDE_RESIDENTS 
-                                    }
-                                </Button>
-                            </Nav.Item>
-                        </AccessControl>
-                        {process.env.IS_TRACKING_PATH_ON == 1 && 
-                            <AccessControl
-                                permission={"user:cleanPath"}
-                                renderNoAccess={()=>null}
-                            >
+                            <Nav className="d-flex align-items-start text-capitalize bd-highlight">
                                 <Nav.Item className="mt-2">
-                                    <Button
-                                        variant="primary"
+                                    <Button 
+                                        variant="outline-primary" 
                                         className="mr-1 ml-2 text-capitalize" 
-                                        onClick={this.handleClickButton}
-                                        name="cleanPath"
-                                        active={(this.props.showPath)}
-                                        disabled={!(this.props.showPath)}
+                                        onClick={this.handleClickButton} 
+                                        name="clear"
+                                        disabled={!this.props.hasSearchKey}
                                     >
-                                        {locale.texts.CLEAN_PATH}
+                                        {locale.texts.CLEAR}
                                     </Button>
                                 </Nav.Item>
-                            </AccessControl>
-                        }
-                        {this.props.geofenceConfig.map((item, index) => {
-                            return ( parseInt(item.unique_key) == areaId && 
-                                <Fragment
-                                    key={index}
+                                <AccessControl
+                                    permission={"user:saveSearchRecord"}
+                                    renderNoAccess={() => null}
                                 >
-                                    <Nav.Item className="mt-2 bd-highligh ml-auto">
-                                        <Button 
-                                            variant="warning" 
-                                            className="mr-1 ml-2 text-capitalize" 
-                                            onClick={this.handleClickButton} 
-                                            name="fence"
-                                            value={+!this.state.isOpenFence}
-                                            active={!this.state.isOpenFence}
-                                        >
-                                            {this.state.isOpenFence ? locale.texts.FENCE_ON : locale.texts.FENCE_OFF}
-                                        </Button>
-                                    </Nav.Item>
                                     <Nav.Item className="mt-2">
                                         <Button 
                                             variant="outline-primary" 
                                             className="mr-1 ml-2 text-capitalize" 
                                             onClick={this.handleClickButton} 
-                                            name="clearAlerts"
+                                            name="save"
+                                            disabled={!this.props.hasSearchKey || this.state.showPdfDownloadForm}
                                         >
-                                            {locale.texts.CLEAR_ALERTS}
+                                            {locale.texts.SAVE}
                                         </Button>
                                     </Nav.Item>
-                                </Fragment>
-                            )
-                        })}
-                    </Nav>
-                </div>
-                    <PdfDownloadFormForTablet 
-                        show={this.state.showPdfDownloadForm}
-                        data={this.props.searchResult}
-                        handleClose = {this.handleClosePdfForm}
-                        userInfo={auth.user}
-                    />
+                                </AccessControl>
+                                <AccessControl
+                                    permission={"user:toggleShowDevices"}
+                                    renderNoAccess={() => null}
+                                >
+                                    <Nav.Item className="mt-2">
+                                        <Button 
+                                            variant="primary" 
+                                            className="mr-1 ml-2 text-capitalize" 
+                                            onClick={this.handleClickButton} 
+                                            name="searchedObjectType"
+                                            value={[-1, 0]}
+                                            active={(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) }
+                                            disabled={
+                                                !(this.state.searchedObjectType.includes(-1) ||
+                                                this.state.searchedObjectType.includes(0))
+                                            }
+                                        >
+                                            {!(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) 
+                                                ?   locale.texts.SHOW_DEVICES 
+                                                :   locale.texts.HIDE_DEVICES 
+                                            }
+                                        </Button>
+                                    </Nav.Item>
+                                </AccessControl>
+                                <AccessControl
+                                    permission={"user:toggleShowResidents"}
+                                    renderNoAccess={() => null}
+                                >
+                                    <Nav.Item className="mt-2">
+                                        <Button 
+                                            variant="primary" 
+                                            className="mr-1 ml-2 text-capitalize" 
+                                            onClick={this.handleClickButton} 
+                                            name="searchedObjectType"
+                                            value={[-2, 1, 2]}
+                                            active={(this.state.showObjects.includes(1) || this.state.showObjects.includes(2))}
+                                            disabled={
+                                                !(this.state.searchedObjectType.includes(1) ||
+                                                this.state.searchedObjectType.includes(2))
+                                            }
+                                        >
+                                            {!(this.state.showObjects.includes(1) || this.state.showObjects.includes(2)) 
+                                                ?   locale.texts.SHOW_RESIDENTS
+                                                :   locale.texts.HIDE_RESIDENTS 
+                                            }
+                                        </Button>
+                                    </Nav.Item>
+                                </AccessControl>
+                                {process.env.IS_TRACKING_PATH_ON == 1 && 
+                                    <AccessControl
+                                        permission={"user:cleanPath"}
+                                        renderNoAccess={()=>null}
+                                    >
+                                        <Nav.Item className="mt-2">
+                                            <Button
+                                                variant="primary"
+                                                className="mr-1 ml-2 text-capitalize" 
+                                                onClick={this.handleClickButton}
+                                                name="cleanPath"
+                                                active={(this.props.showPath)}
+                                                disabled={!(this.props.showPath)}
+                                            >
+                                                {locale.texts.CLEAN_PATH}
+                                            </Button>
+                                        </Nav.Item>
+                                    </AccessControl>
+                                }
+                                {geofenceConfig &&
+                                    Object.keys(geofenceConfig).includes(areaId.toString()) &&
+                                    geofenceConfig[areaId].rules
+                                        .map((item, index) => {
+                                            return (
+                                                <Fragment
+                                                    key={index}
+                                                >
+                                                    <Nav.Item className="mt-2 bd-highligh ml-auto">    
+                                                        <Button 
+                                                            variant="warning" 
+                                                            className="mr-1 ml-2" 
+                                                            onClick={this.handleClickButton} 
+                                                            name="fence"
+                                                            value={geofenceConfig[areaId].enable}
+                                                            active={!geofenceConfig[areaId].enable}                                                            
+                                                        >
+                                                            {geofenceConfig[areaId].enable 
+                                                                ? locale.texts.FENCE_ON 
+                                                                : locale.texts.FENCE_OFF
+                                                            }
+                                                        </Button>
+                                                    </Nav.Item>
+                                                    <Nav.Item className="mt-2">
+                                                        <Button 
+                                                            variant="outline-primary" 
+                                                            className="mr-1 ml-2" 
+                                                            onClick={this.handleClickButton} 
+                                                            name="clearAlerts"
+                                                        >
+                                                            {locale.texts.CLEAR_ALERTS}
+                                                        </Button>
+                                                    </Nav.Item>
+                                                </Fragment>
+                                            )
+                                })}
+                            </Nav>
+                        </div>
                     </div>
-                </div>
-            </div>
-            </TabletView>
-            <MobileOnlyView>
-                <div style={style.mapForMobile}>
-                    <Map
-                        pathMacAddress={this.props.pathMacAddress}
-                        hasSearchKey={hasSearchKey}
-                        colorPanel={this.props.colorPanel}
-                        proccessedTrackingData={this.props.proccessedTrackingData}
-                        lbeaconPosition={this.props.lbeaconPosition}
-                        geofenceConfig={this.props.geofenceConfig}
-                        getSearchKey={this.props.getSearchKey}
-                        areaId={areaId}
-                        isOpenFence={this.state.isOpenFence}
-                        searchedObjectType={this.state.showObjects}
-                        mapConfig={config.mapConfig}
-                        pathData={this.state.pathData}
-                        handleClosePath={this.props.handleClosePath}
-                        handleShowPath={this.props.handleShowPath}
-                        showPath={this.props.showPath}
-                        style={{border:'solid'}}
-                    />
-                </div>
-            </MobileOnlyView>
+                </BrowserView>
+                <TabletView>
+                    <div id="surveillanceContainer" className="w-100 h-100 d-flex flex-column">
+                        <div className="d-flex w-100 h-100 flex-column">
+                            <div className="w-100 d-flex flex-row align-items justify-content" style={style.MapAndQrcode}>
+                                <div style={style.qrBlock} className="d-flex flex-column align-items">
+                                    <div>
+                                        <QRcodeContainer
+                                            data={this.props.proccessedTrackingData.filter(item => item.searched)}
+                                            userInfo={auth.user}
+                                            searchKey={this.props.searchKey}
+                                            isSearched = {this.props.isSearched}
+                                        /> 
+                                        <InfoPrompt
+                                            searchKey={this.props.searchKey}
+                                            searchResult={this.props.searchResult}
+                                            title={locale.texts.FOUND} 
+                                            title2={locale.texts.NOT_FOUND} 
+                                        />
+                                    </div>
+                                </div>
+                                <div style={style.mapBlockForTablet}>
+                                    <Map
+                                        pathMacAddress={this.props.pathMacAddress}
+                                        hasSearchKey={hasSearchKey}
+                                        colorPanel={this.props.colorPanel}
+                                        proccessedTrackingData={this.props.proccessedTrackingData}
+                                        lbeaconPosition={this.props.lbeaconPosition}
+                                        geofenceConfig={this.props.geofenceConfig}
+                                        getSearchKey={this.props.getSearchKey}
+                                        areaId={areaId}
+                                        searchedObjectType={this.state.showObjects}
+                                        mapConfig={config.mapConfig}
+                                        pathData={this.state.pathData}
+                                        handleClosePath={this.props.handleClosePath}
+                                        handleShowPath={this.props.handleShowPath}
+                                        showPath={this.props.showPath}
+                                    />
+                                </div>
+                            </div>
+                            
+                            <div style={style.navBlock}>
+                                <Nav style={style.button} className="d-flex align-items-start text-capitalize bd-highlight">
+                                    <Nav.Item className="mt-2">
+                                        <Button 
+                                            variant="outline-primary" 
+                                            className="mr-1 ml-2 text-capitalize" 
+                                            onClick={this.handleClickButton} 
+                                            name="clear"
+                                            disabled={!this.props.hasSearchKey}
+                                        >
+                                            {locale.texts.CLEAR}
+                                        </Button>
+                                    </Nav.Item>
+                                    <AccessControl
+                                        permission={"user:saveSearchRecord"}
+                                        renderNoAccess={() => null}
+                                    >
+                                        <Nav.Item className="mt-2">
+                                            <Button 
+                                                variant="outline-primary" 
+                                                className="mr-1 ml-2 text-capitalize" 
+                                                onClick={this.handleClickButton} 
+                                                name="save"
+                                                disabled={!this.props.hasSearchKey || this.state.showPdfDownloadForm}
+                                            >
+                                                {locale.texts.SAVE}
+                                            </Button>
+                                        </Nav.Item>
+                                    </AccessControl>
+                                    <AccessControl
+                                        permission={"user:toggleShowDevices"}
+                                        renderNoAccess={() => null}
+                                    >
+                                        <Nav.Item className="mt-2">
+                                            <Button 
+                                                variant="primary" 
+                                                className="mr-1 ml-2 text-capitalize" 
+                                                onClick={this.handleClickButton} 
+                                                name="searchedObjectType"
+                                                value={[-1, 0]}
+                                                active={(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) }
+                                                disabled={
+                                                    !(this.state.searchedObjectType.includes(-1) ||
+                                                    this.state.searchedObjectType.includes(0))
+                                                }
+                                            >
+                                                {!(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) 
+                                                    ?   locale.texts.SHOW_DEVICES 
+                                                    :   locale.texts.HIDE_DEVICES 
+                                                }
+                                            </Button>
+                                        </Nav.Item>
+                                    </AccessControl>
+                                    <AccessControl
+                                        permission={"user:toggleShowResidents"}
+                                        renderNoAccess={() => null}
+                                    >
+                                        <Nav.Item className="mt-2">
+                                            <Button 
+                                                variant="primary" 
+                                                className="mr-1 ml-2 text-capitalize" 
+                                                onClick={this.handleClickButton} 
+                                                name="searchedObjectType"
+                                                value={[-2, 1, 2]}
+                                                active={(this.state.showObjects.includes(1) || this.state.showObjects.includes(2))}
+                                                disabled={
+                                                    !(this.state.searchedObjectType.includes(1) ||
+                                                    this.state.searchedObjectType.includes(2))
+                                                }
+                                            >
+                                                {!(this.state.showObjects.includes(1) || this.state.showObjects.includes(2)) 
+                                                    ?   locale.texts.SHOW_RESIDENTS
+                                                    :   locale.texts.HIDE_RESIDENTS 
+                                                }
+                                            </Button>
+                                        </Nav.Item>
+                                    </AccessControl>
+                                    {process.env.IS_TRACKING_PATH_ON == 1 && 
+                                        <AccessControl
+                                            permission={"user:cleanPath"}
+                                            renderNoAccess={()=>null}
+                                        >
+                                            <Nav.Item className="mt-2">
+                                                <Button
+                                                    variant="primary"
+                                                    className="mr-1 ml-2 text-capitalize" 
+                                                    onClick={this.handleClickButton}
+                                                    name="cleanPath"
+                                                    active={(this.props.showPath)}
+                                                    disabled={!(this.props.showPath)}
+                                                >
+                                                    {locale.texts.CLEAN_PATH}
+                                                </Button>
+                                            </Nav.Item>
+                                        </AccessControl>
+                                    }
+                                </Nav>
+                            </div>
+                        </div>
+                    </div>
+                </TabletView>
+                <MobileOnlyView>
+                    <div style={style.mapForMobile}>
+                        <Map
+                            pathMacAddress={this.props.pathMacAddress}
+                            hasSearchKey={hasSearchKey}
+                            colorPanel={this.props.colorPanel}
+                            proccessedTrackingData={this.props.proccessedTrackingData}
+                            lbeaconPosition={this.props.lbeaconPosition}
+                            geofenceConfig={this.props.geofenceConfig}
+                            getSearchKey={this.props.getSearchKey}
+                            areaId={areaId}
+                            searchedObjectType={this.state.showObjects}
+                            mapConfig={config.mapConfig}
+                            pathData={this.state.pathData}
+                            handleClosePath={this.props.handleClosePath}
+                            handleShowPath={this.props.handleShowPath}
+                            showPath={this.props.showPath}
+                            style={{border:'solid'}}
+                        />
+                    </div>
+                </MobileOnlyView>
+                <PdfDownloadForm 
+                    show={this.state.showPdfDownloadForm}
+                    data={this.props.searchResult}
+                    handleClose = {this.handleClosePdfForm}
+                    userInfo={auth.user}
+                />
+                <GeneralConfirmForm
+                    show={this.state.showConfirmForm}
+                    handleSubmit={this.handleConfirmFormSubmit}
+                    handleClose={this.handleClosePdfForm}
+                    signin={auth.signin}
+                    stateReducer ={stateReducer[0].areaId}
+                    auth={auth}
+                />    
             </div>
         )
     }
