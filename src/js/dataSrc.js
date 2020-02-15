@@ -66,6 +66,10 @@ const getUserArea= `${protocol}://${dataSrcIP}/data/getUserArea`
 const addUserArea= `${protocol}://${dataSrcIP}/data/addUserArea`
 const DeleteUserArea= `${protocol}://${dataSrcIP}/data/DeleteUserArea`
 const modifyTransferredLocation= `${protocol}://${dataSrcIP}/data/modifyTransferredLocation`
+const getRolesPermission= `${protocol}://${dataSrcIP}/data/getRolesPermission`
+const modifyPermission= `${protocol}://${dataSrcIP}/data/modifyPermission`
+const modifyRolesPermission= `${protocol}://${dataSrcIP}/data/modifyRolesPermission`
+
 const pdfUrl = function(path){
     return `${protocol}://${dataSrcIP}:${port}/${path}`
 }
@@ -135,5 +139,8 @@ module.exports = {
     getUserArea,
     addUserArea,
     DeleteUserArea, 
-    modifyTransferredLocation
+    modifyTransferredLocation, 
+    getRolesPermission,
+    modifyPermission,
+    modifyRolesPermission
 };

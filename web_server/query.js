@@ -1242,7 +1242,7 @@ const addBulkObject = (req, res) => {
         .then((jsonObj) => {
             pool.query(queryType.addBulkObject(jsonObj))
                 .then(res => {
-                    console.log(res)
+                    // console.log(res)
                 })
                 .catch(err => {
                     console.log(err)
@@ -1338,6 +1338,72 @@ const modifyTransferredLocation = (request, response) => {
             console.log('modifyTransferredLocation error: ', err)
         })
 }
+
+const getRolesPermission = (request, response) => {
+    let query = queryType.getRolesPermission()
+    pool.query(query).then(res => {
+        response.status(200).json(res.rows[0])
+    }).catch(err => {
+        console.log('getRolesPermission error: ', err)
+    })
+}
+
+const modifyPermission = (request, response) => {
+    console.log(request.body)
+    const {type, permissionType, id, name} = request.body
+    let query = null
+    if(type == 'add permission'){
+        query = queryType.modifyPermission('add permission', 
+        {
+            permissionType,
+            name
+        })
+    }else if(type == 'rename permission'){
+        query = queryType.modifyPermission('rename permission', {
+            permissionType,
+            id,
+            name
+        })
+    }else if(type == 'remove permission'){
+        query = queryType.modifyPermission('remove permission', {
+            id
+        })
+    }else{
+        console.log('modifyPermission: unrecognized command type')
+    }
+    pool.query(query)
+        .then(res => {
+            response.status(200).json('ok')
+        }).catch(err => {
+            console.log('modifyPermission error: ', err)
+        })
+}
+
+const modifyRolesPermission = (request, response) => {
+
+    const {type, roleId, permissionId} = request.body
+    let query = null
+    if(type == 'add permission'){
+        query = queryType.modifyRolesPermission('add permission', {
+                roleId,
+                permissionId
+            })
+        console.log('add')
+    }else if(type == 'remove permission'){
+        query = queryType.modifyRolesPermission('remove permission', {
+                roleId,
+                permissionId
+            })
+    }else{
+        console.log('modifyPermission: unrecognized command type')
+    }
+    pool.query(query)
+        .then(res => {
+            response.status(200).json('ok')
+        }).catch(err => {
+            console.log('modifyPermission error: ', err)
+        })
+}
 module.exports = {
     getTrackingData,
     getObjectTable,
@@ -1402,6 +1468,9 @@ module.exports = {
     DeleteUserArea,
     getTransferredLocation,
     modifyTransferredLocation,
+    getRolesPermission,
+    modifyPermission,
+    modifyRolesPermission,
 
 
 

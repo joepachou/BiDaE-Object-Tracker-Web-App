@@ -10,7 +10,7 @@ const AccessControl = ({
 }) => {
     const auth = React.useContext(AuthContext);
     let ownedPermissions = auth.user.permissions
-    const permitted = ownedPermissions.includes(permission)
+    const permitted = ownedPermissions.includes(permission) 
     if (permitted) {
         return children;
     }
