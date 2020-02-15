@@ -39,7 +39,15 @@ const EditUserForm = ({
             label: locale.texts[name.toUpperCase().replace(/ /g, '_')]
         };
     })
- 
+
+
+    const mainAreaDefault = 
+        { 
+            value: selectedUser ?  selectedUser.main_area : null,
+            label:selectedUser ?  locale.texts[config.mapConfig.areaList[selectedUser.main_area]] : null
+        }
+    
+    
     return (
         <Modal 
             show={show} 
@@ -52,14 +60,15 @@ const EditUserForm = ({
             >
                 {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
             </Modal.Header >
+
             <Modal.Body>
                 <Formik                    
                     initialValues = {{
                         name: selectedUser ? selectedUser.name : '',
                         password: '',
                         roles: selectedUser ? selectedUser.role_type : config.defaultRole,
-                        secondArea:'',
-                        area: '',
+                        area: selectedUser ? mainAreaDefault : null,
+                        secondArea:selectedUser  ? selectedUser.second_area  : '',
                     }}
 
                     validationSchema = {
@@ -86,13 +95,11 @@ const EditUserForm = ({
                                 .max(100),
                             area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
                             password: selectedUser ? '' : Yup.string().required(locale.texts.PASSWORD_IS_REQUIRED),
+                            roles: Yup.string().required(locale.texts.ROLE_IS_REQUIRED)
                         })
                     }
 
                     onSubmit={(values, { setStatus, setSubmitting }) => {
-                        values.mainAreaNumber = config.mapConfig.areaModules[values.area]
-                        console.log(values)
-                        console.log('fuck')
                         handleSubmit(values)
                     }}
 
@@ -145,19 +152,20 @@ const EditUserForm = ({
                                 )}
                             />
                             <hr/>
+                            
                             <FormikFormGroup 
                                 type="text"
-                                name="area"
+                                name="areaName"
                                 label={locale.texts.MAIN_AREA}
-                                error={errors.area}
-                                touched={touched.area}
+                                error={errors.areaName}
+                                touched={touched.areaName}
                                 placeholder={locale.texts.USERNAME}
                                 component={() => (
                                     <Select
                                         placeholder = {locale.texts.SELECT_AREA}
                                         name="area"
-                                        value = {values.area.value}
-                                        onChange={value => setFieldValue("area", value.value)}
+                                        value = {values.area}
+                                        onChange={value => setFieldValue("area", value)}
                                         options={areaOptions}
                                         styles={styleConfig.reactSelect}
                                         components={{
