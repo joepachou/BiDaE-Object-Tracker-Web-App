@@ -700,7 +700,7 @@ const editObjectPackage = (formOption, username, record_id, reservedTimestamp) =
 		UPDATE object_table
 		SET 
 			status = '${item.status}',
-			transferred_location = '${JSON.Stringify(item.transferred_location)}'::jsonb,
+			transferred_location = '${JSON.stringify(item.transferred_location)}'::jsonb,
 			note_id = ${record_id},
 			reserved_timestamp = ${item.status == 'reserve' ? `'${reservedTimestamp}'` : null},
 			reserved_user_id = (SELECT id
@@ -837,10 +837,7 @@ function signup(signupPackage) {
 
 function getUserInfo(username) {
 	const text =  `
-		SELECT 
-			name, 
-			mydevice, 
-			max_search_history_count AS freqSearchCount FROM user_table where name= $1
+	SELECT name, mydevice, search_history, max_search_history_count as freqSearchCount from user_table where name= $1
 	`;
 
 	const values = [username];
@@ -1930,14 +1927,6 @@ function modifyTransferredLocation(type, data){
     return query
 }
 
-const setGeofenceEnable = (enable, areaId) => {
-	return `
-		UPDATE geo_fence_config 
-		SET enable = ${enable} 
-		WHERE area_id = ${areaId}
-	`
-} 
-
 function getRolesPermission(){
 	// const query = `SELECT array(SELECT json_build_object('id',roles.id,'name',roles.name) as role, array_agg(json_build_object('id',permission_table.id,'name',permission_table.name)) as permissions FROM permission_table
 	// 					INNER JOIN roles_permission ON roles_permission.permission_id = permission_table.id
@@ -2058,10 +2047,12 @@ module.exports = {
 	DeleteUserArea,
 	getTransferredLocation,
 	modifyTransferredLocation,
-	setGeofenceEnable,
+
 	getRolesPermission,
 	modifyPermission,
 	modifyRolesPermission,
+
+
 	clearSearchHistory
 }
 
