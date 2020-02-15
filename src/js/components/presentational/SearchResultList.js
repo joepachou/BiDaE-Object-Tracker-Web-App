@@ -6,6 +6,7 @@ import {
 } from 'react-bootstrap'
 import ChangeStatusForm from '../container/ChangeStatusForm';
 import ConfirmForm from '../container/ConfirmForm';
+import SignatureForm from '../container/UserContainer/SignatureForm';
 import dataSrc from '../../dataSrc';
 import _ from 'lodash';
 import axios from 'axios';
@@ -21,6 +22,7 @@ import {
 } from 'react-device-detect'
 import moment from 'moment'
 import ScrollArea from 'react-scrollbar'
+import { sign } from 'crypto';
 
 
 class SearchResult extends React.Component {
@@ -29,6 +31,7 @@ class SearchResult extends React.Component {
 
     state = {
         showEditObjectForm: false,
+        showSignatureForm:false,
         showConfirmForm: false,
         selectedObjectData: [],
         showNotFoundResult: false,
@@ -37,7 +40,8 @@ class SearchResult extends React.Component {
         editedObjectPackage: [],
         showAddDevice: false,
         showDownloadPdfRequest: false,
-        showPath: false
+        showPath: false,
+        signatureName:''
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -97,6 +101,7 @@ class SearchResult extends React.Component {
         let [{}, dispatch] = stateReducer
         this.setState({
             showEditObjectForm: false,
+            showSignatureForm:false,
             showConfirmForm: false,
             selection: [],
             selectedObjectData: [],
@@ -118,8 +123,41 @@ class SearchResult extends React.Component {
         })
         this.setState({
             showEditObjectForm: false,
-            editedObjectPackage,
+            editedObjectPackage :editedObjectPackage ,
         })
+        console.log('fuck')
+        console.log(this.state.editedObjectPackage)
+        if (values.status == 'transferred') { //秀簽名
+            this.setState({
+                showSignatureForm:true
+            })
+        }else{
+            setTimeout(
+                function() {
+                    this.setState({
+                        showConfirmForm: true,
+                    })
+                    this.props.highlightSearchPanel(false)
+                }.bind(this),
+                500
+            )
+        }
+    }
+
+    handleSignatureSubmit = values => {
+        console.log('goddamn')
+        console.log(this.state.editedObjectPackage)
+        // let editedObjectPackage = _.cloneDeep(this.state.selectedObjectData).map(item => {
+        //     item.signature = values.name
+        //     return item
+        // })
+        
+        this.setState({
+            showSignatureForm:false,
+            signatureName : values.name
+            // editedObjectPackage : editedObjectPackage
+        })
+    
         setTimeout(
             function() {
                 this.setState({
@@ -131,7 +169,13 @@ class SearchResult extends React.Component {
         )
     }
 
+
     handleConfirmFormSubmit = (isDelayTime) => {
+        console.log('shit')
+        console.log(this.state.editedObjectPackage)
+        console.log(this.state.signatureName)
+        let signatureName = this.state.signatureName
+        console.log()
         let { editedObjectPackage } = this.state;
         let { locale, auth, stateReducer } = this.context
         let [{}, dispatch] = stateReducer
@@ -139,13 +183,13 @@ class SearchResult extends React.Component {
         let shouldCreatePdf = config.statusToCreatePdf.includes(editedObjectPackage[0].status)
         let status = editedObjectPackage[0].status
         let reservedTimestamp = isDelayTime ? moment().add(10, 'minutes').format() : moment().format()
-
         /** Create the pdf package, including pdf, pdf setting and path */
+
         let pdfPackage = shouldCreatePdf && config.getPdfPackage(status, auth.user, this.state.editedObjectPackage, locale)
-        console.log(editedObjectPackage)
+
         axios.post(dataSrc.editObjectPackage, {
             locale,
-            formOption: editedObjectPackage,
+            formOption: editedObjectPackage[0],
             username,
             pdfPackage,
             reservedTimestamp
@@ -214,6 +258,12 @@ class SearchResult extends React.Component {
         this.setState({
             showDownloadPdfRequest: false,
             showConfirmForm: false
+        })
+    }
+
+    handleShowSignatureForm = () =>{
+        this.setState({
+            showSignatureForm:true
         })
     }
 
@@ -437,6 +487,7 @@ class SearchResult extends React.Component {
                         </Row>
                     </div>
                 </MobileOnlyView>
+
                 <ChangeStatusForm
                     handleShowPath={this.props.handleShowPath} 
                     show={this.state.showEditObjectForm} 
@@ -449,6 +500,14 @@ class SearchResult extends React.Component {
                     showAddDevice={this.state.showAddDevice}
                     handleRemoveButton={this.handleRemoveButton}
                 />
+                
+                <SignatureForm
+                     show={this.state.showSignatureForm} 
+                     title={locale.texts.SIGNATURE} 
+                     handleClose={this.handleChangeObjectStatusFormClose}
+                     handleSubmit= {this.handleSignatureSubmit}
+                />
+
                 <ConfirmForm 
                     show={this.state.showConfirmForm}  
                     title={'thank you for reporting'}

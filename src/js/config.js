@@ -208,9 +208,9 @@ const config = {
     /** Create pdf package, including header, body and the pdf path
      * options include shiftChange, searchResult, broken report, transffered report
      */
-    getPdfPackage: (option, user, data, locale, location, name) => {
+    getPdfPackage: (option, user, data, locale, signatureName) => {
         const header = config.pdfFormat.getHeader(user, locale, option, name)
-        const body = config.pdfFormat.getBody[option](data, locale, user, location)
+        const body = config.pdfFormat.getBody[option](data, locale, user, location,signatureName)
         const path = config.pdfFormat.getPath(option, user)
         const pdf = header + body
 
@@ -294,12 +294,13 @@ const config = {
                 let notes = config.pdfFormat.getBodyItem.getNotes(data, locale)
                 return title + list + notes
             },
-            transferred: (data, locale) => {
+            transferred: (data, locale,signatureName) => {
+             
                 // console.log(data[0].transferred_location.value.split(','))
                 let area = data[0].transferred_location.label
                 let signature_title = config.pdfFormat.getBodyItem.getBodyTitle("transferred to", locale, area)
                 let list_title = config.pdfFormat.getBodyItem.getBodyTitle("transferred device list", locale)
-                let signature = config.pdfFormat.getBodyItem.getSignature(locale)
+                let signature = config.pdfFormat.getBodyItem.getSignature(locale,signatureName)
                 let list = config.pdfFormat.getBodyItem.getDataContent(data, locale)
                 let notes = config.pdfFormat.getBodyItem.getNotes(data, locale)
                 return signature_title + signature + list_title + list + notes
@@ -374,7 +375,7 @@ const config = {
                 `
             },
 
-            getSignature: (locale) => {
+            getSignature: (locale,signatureName) => {
                 return `
                     <div style="text-transform: capitalize; margin: 10px width: 200px;">
                         <div style="text-transform: capitalize; margin: 10px width: 100%;">
@@ -410,7 +411,8 @@ const config = {
                                     border-top: 0;
                                     border-left: 0;
                                     border-right: 0;
-                                    display: inline-block"
+                                    display: inline-block";
+                                    value = ${signatureName}
                             />                  
                         </div>
                     </div>

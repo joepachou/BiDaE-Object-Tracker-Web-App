@@ -16,7 +16,7 @@ import {
 import { userInfoTableColumn } from '../../../tables'
 import EditUserForm from './EditUserForm';
 import { AppContext } from '../../../context/AppContext';
-import DeleteForm from '../DeleteForm';
+import DeleteUserForm from '../UserContainer/DeleteUserForm'
 const Fragment = React.Fragment;
 
 class AdminManagementContainer extends React.Component{
@@ -244,7 +244,7 @@ class AdminManagementContainer extends React.Component{
                     areaList={this.state.areaList}
                 />
 
-                <DeleteForm
+                <DeleteUserForm
                     show={this.state.showDeleteUserForm}
                     title={locale.texts.DELETE_USER}
                     handleClose={this.handleClose}

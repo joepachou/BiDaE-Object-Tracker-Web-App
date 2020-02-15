@@ -134,12 +134,14 @@ class ChangeStatusForm extends React.Component {
                 {console.log(selectedObjectData[0])}
                 <Modal.Body>
                     <Formik
+                 
                         initialValues = {{
                             name: selectedObjectData.length != 0 ? selectedObjectData[0].name : '',
                             type: selectedObjectData.length != 0 ? selectedObjectData[0].type : '',
                             asset_control_number: selectedObjectData.length != 0 ? selectedObjectData[0].asset_control_number : '',
                             status: selectedObjectData.length != 0 ? selectedObjectData[0].status : '',
                             transferred_location: selectedObjectData.length != 0 && selectedObjectData[0].status == config.objectStatus.TRANSFERRED
+
                                 ? this.state.transferredLocationOptions
                                             .filter(branch => branch.id == selectedObjectData[0].transferred_location.branchId)[0]
                                             .options[selectedObjectData[0].transferred_location.departmentId]

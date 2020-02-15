@@ -201,6 +201,8 @@ const tw = {
     EDIT_MOVEMENT_MONITOR: "編輯移動監控",
     EDIT_LONG_STAY_IN_DANGER_MONITOR: "編輯久留監控",
     EDIT_NOT_STAY_ROOM_MONITOR: "編輯房間監控",
+    SIGNATURE:"簽名",
+
 
 
     /** Error Message */

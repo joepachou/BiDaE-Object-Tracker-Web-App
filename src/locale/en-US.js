@@ -168,6 +168,7 @@ const en =  {
     YES: 'yes',
     NO: 'no',
     IS_GLOBAL_FENCE: 'global fence',
+    SIGNATURE:'signature',
 
     /** form title */
     EDIT_LBEACON: "edit lbeacon",
