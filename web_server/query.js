@@ -459,7 +459,6 @@ const signin = (request, response) => {
                         roles, 
                         permissions,
                         mydevice, 
-                        search_history,
                         freq_search_count,
                         areas_id,
                         id,
@@ -467,13 +466,11 @@ const signin = (request, response) => {
                         locale_id,
                         locale
                     } = res.rows[0]
-                    console.log(permissions)
                     let userInfo = {
                         name,
                         myDevice: mydevice,
                         roles,
                         permissions,
-                        searchHistory: search_history,
                         freqSearchCount: freq_search_count,
                         id,
                         areas_id,

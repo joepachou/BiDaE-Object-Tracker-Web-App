@@ -835,7 +835,10 @@ function signup(signupPackage) {
 
 function getUserInfo(username) {
 	const text =  `
-	SELECT name, mydevice, search_history, max_search_history_count as freqSearchCount from user_table where name= $1
+		SELECT 
+			name, 
+			mydevice, 
+			max_search_history_count AS freqSearchCount FROM user_table where name= $1
 	`;
 
 	const values = [username];
