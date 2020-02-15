@@ -474,7 +474,6 @@ const signin = (request, response) => {
                         roles, 
                         permissions,
                         mydevice, 
-                        search_history,
                         freq_search_count,
                         areas_id,
                         id,
@@ -482,13 +481,11 @@ const signin = (request, response) => {
                         locale_id,
                         locale
                     } = res.rows[0]
-                    console.log(permissions)
                     let userInfo = {
                         name,
                         myDevice: mydevice,
                         roles,
                         permissions,
-                        searchHistory: search_history,
                         freqSearchCount: freq_search_count,
                         id,
                         areas_id,
@@ -1355,6 +1352,22 @@ const modifyTransferredLocation = (request, response) => {
         })
 }
 
+const setGeofenceEnable = (request, response) => {
+    const {
+        enable,
+        areaId
+    } = request.body
+
+    pool.query(queryType.setGeofenceEnable(enable, areaId))
+        .then(res => {
+            console.log(`set geofence enable success`)
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
 const getRolesPermission = (request, response) => {
     let query = queryType.getRolesPermission()
     pool.query(query).then(res => {
@@ -1484,11 +1497,10 @@ module.exports = {
     DeleteUserArea,
     getTransferredLocation,
     modifyTransferredLocation,
+    clearSearchHistory,
+    setGeofenceEnable,
     getRolesPermission,
     modifyPermission,
     modifyRolesPermission,
-
-
-
     clearSearchHistory
 }
