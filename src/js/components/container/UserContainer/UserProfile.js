@@ -164,17 +164,23 @@ class UserProfile extends React.Component{
       resetFreqSearchCount = (e) => {
         const {auth} = this.context;
         let value = e.target.value
-        let userInfo = this.state.userInfo
-        userInfo.freqSearchCount = value
-        this.setState({
-          userInfo: userInfo
-        })
-        axios.post(modifyUserInfo, {
-          info: userInfo,
-          username: userInfo['name']
-        }).then(res => {
-          auth.setUserInfo('freqSearchCount', value)
-        }) 
+        console.log(value)
+        if (value !== ''){
+          value=Math.min(value, 10)
+          value=Math.max(value, 1)
+            let userInfo = this.state.userInfo
+          userInfo.freqSearchCount = value
+          this.setState({
+            userInfo: userInfo
+          })
+          axios.post(modifyUserInfo, {
+            info: userInfo,
+            username: userInfo['name']
+          }).then(res => {
+            auth.setUserInfo('freqSearchCount', value)
+          }) 
+        }
+        
       }
       generateSettingBlock = () => {
         let rows_data = [{
