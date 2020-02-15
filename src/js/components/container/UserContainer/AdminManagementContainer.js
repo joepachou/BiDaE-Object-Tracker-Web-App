@@ -16,7 +16,7 @@ import {
 import { userInfoTableColumn } from '../../../tables'
 import EditUserForm from './EditUserForm';
 import { AppContext } from '../../../context/AppContext';
-import DeleteUserForm from './DeleteUserForm';
+import DeleteForm from '../DeleteForm';
 const Fragment = React.Fragment;
 
 class AdminManagementContainer extends React.Component{
