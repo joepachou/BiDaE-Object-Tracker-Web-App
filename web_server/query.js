@@ -419,7 +419,7 @@ const addPatient = (request, response) => {
 
 const editObjectPackage = (request, response) => {
     var { formOption, username, pdfPackage, reservedTimestamp, locale} = request.body
-    console.log(formOption)
+
     if (formOption.transferred_location){
         formOption.transferred_location = {
             branchId: formOption.transferred_location.value.branchId,
