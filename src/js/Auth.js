@@ -26,6 +26,7 @@ class Auth extends React.Component {
     signin = (userInfo) => {
         Cookies.set('authenticated', true)
         Cookies.set('user', userInfo)
+        console.log(userInfo)
         this.setState({
             authenticated: true,
             user: userInfo

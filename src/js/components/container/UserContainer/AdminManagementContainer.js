@@ -244,7 +244,7 @@ class AdminManagementContainer extends React.Component{
                     areaList={this.state.areaList}
                 />
 
-                <DeleteUserForm
+                <DeleteForm
                     show={this.state.showDeleteUserForm}
                     title={locale.texts.DELETE_USER}
                     handleClose={this.handleClose}
