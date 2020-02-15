@@ -17,11 +17,12 @@ import {
 import { 
     Modal, 
     Button, 
-    Row, 
-    Col, 
     ButtonToolbar ,
     Form as BootstrapForm
 } from 'react-bootstrap'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import FormikFormGroup from '../../presentational/FormikFormGroup'
 function Checkbox(props) {
   return (
@@ -213,55 +214,59 @@ class RolePermissionManagement extends React.Component{
                                         setFieldValue("selectedPermission", selectedPermission)
                                     }}
                                 />
-                                <Row>
+                                <Container>
+                                <Row >
                                     {
                                         this.state.permissionType.map(type => {
                                             return   (
-
-                                            <Col className="m-4" key={type}>
-                                                <h5 className="d-flex justify-content-center">{type}</h5>
-                                                {
-                                                    this.state.permissionList
-                                                    .filter(permission => permission.name.split(':')[0] == type)
-                                                    .map((permission) => {
-                                                        return (
-                                                            <Row key={permission.name}>
-                                                                <BootstrapForm.Check 
-                                                                    custom
-                                                                    type={'switch'}
-                                                                    id={`custom-${permission.name}`}
-                                                                    label={permission.name.split(':')[1]}
-                                                                    checked={values.selectedPermission.includes(permission.name)}
-                                                                     onChange={(e)=> {
-                                                                            let commandType = null
-                                                                            if (values.selectedPermission.includes(permission.name)){
-                                                                                values.selectedPermission.splice(values.selectedPermission.indexOf(permission.name), 1)
-                                                                                commandType='remove permission'
-                                                                            }else{
-                                                                                values.selectedPermission.push(permission.name)
-                                                                                commandType = 'add permission'
-                                                                            }
-                                                                            setFieldValue("selectedPermission", values.selectedPermission)
-                                                                            let roleId = values.selectedRole.id, permissionId = permission.id
-                                                                            this.onChangeRolesPermission({
-                                                                                type: commandType,
-                                                                                permissionId,
-                                                                                roleId
-                                                                            })
-                                                                        }} />
+                                                <>
+                                                    <Col md={4}></Col>
+                                                    <Col md={4} className="m-4 " key={type}>
+                                                        <h4 className="d-flex justify-content-center m-4">{type}</h4>
+                                                        {
+                                                            this.state.permissionList
+                                                            .filter(permission => permission.name.split(':')[0] == type)
+                                                            .map((permission) => {
+                                                                return (
+                                                                    <Row key={permission.name}>
+                                                                        <BootstrapForm.Check 
+                                                                            disabled={!values.selectedRole}
+                                                                            custom
+                                                                            type={'switch'}
+                                                                            id={`custom-${permission.name}`}
+                                                                            label={permission.name.split(':')[1]}
+                                                                            checked={values.selectedPermission.includes(permission.name)}
+                                                                             onChange={(e)=> {
+                                                                                    let commandType = null
+                                                                                    if (values.selectedPermission.includes(permission.name)){
+                                                                                        values.selectedPermission.splice(values.selectedPermission.indexOf(permission.name), 1)
+                                                                                        commandType='remove permission'
+                                                                                    }else{
+                                                                                        values.selectedPermission.push(permission.name)
+                                                                                        commandType = 'add permission'
+                                                                                    }
+                                                                                    setFieldValue("selectedPermission", values.selectedPermission)
+                                                                                    let roleId = values.selectedRole.id, permissionId = permission.id
+                                                                                    this.onChangeRolesPermission({
+                                                                                        type: commandType,
+                                                                                        permissionId,
+                                                                                        roleId
+                                                                                    })
+                                                                                }} />
+                                                                            
+                                                                    </Row>
+                                                                )
                                                                     
-                                                            </Row>
-                                                        )
-                                                            
-                                                    })
-                                                }
-                                            </Col>
-
+                                                            })
+                                                        }
+                                                    </Col>
+                                                </>
                                             ) 
                                             
                                         })
                                     }
                                 </Row>
+                                </Container>
                             </Form>
                         )}
                     />
@@ -289,7 +294,7 @@ class RolePermissionManagement extends React.Component{
                                         this.state.permissionType.map(type => {
                                             return   (
 
-                                            <Col className="m-4" key={type}>
+                                            <Col lg={12} className="m-4" key={type}>
                                                 <h5 className="d-flex justify-content-center">{type}</h5>
                                                 {
                                                     this.state.permissionList

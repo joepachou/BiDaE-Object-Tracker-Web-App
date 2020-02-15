@@ -112,7 +112,10 @@ class TranferredLocationManagement extends React.Component{
                     onClick={() => {this.removeBranch(branch.id)}}/>,
                 add: <i 
                     className="fas fa-plus d-flex justify-content-center" 
-                    onClick={() => {this.addDepartment(branch.id)}}></i>,
+                    onClick={() => {
+                        this.addDepartment(branch.id)
+                        this.changeFold(branch.id)
+                    }}></i>,
             })
             if (this.state.unFoldBranches.includes(branch.id)) {
                 let {departments} = branch
