@@ -419,10 +419,11 @@ const addPatient = (request, response) => {
 
 const editObjectPackage = (request, response) => {
     var { formOption, username, pdfPackage, reservedTimestamp, locale} = request.body
-    if (formOption[0].transferred_location){
-        formOption[0].transferred_location = {
-            branchId: formOption[0].transferred_location.value.branchId,
-            departmentId: formOption[0].transferred_location.value.departmentId
+
+    if (formOption.transferred_location){
+        formOption.transferred_location = {
+            branchId: formOption.transferred_location.value.branchId,
+            departmentId: formOption.transferred_location.value.departmentId
         }
     }
     pool.query(queryType.addEditObjectRecord(formOption, username, pdfPackage.path))

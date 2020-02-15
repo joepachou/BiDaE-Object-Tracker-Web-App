@@ -694,7 +694,7 @@ const addImport = (formOption) => {
 
 const editObjectPackage = (formOption, username, record_id, reservedTimestamp) => {
 	
-	let item = formOption[0]
+	let item = formOption
 	console.log(item.transferred_location)
 	let text = `
 		UPDATE object_table
@@ -707,7 +707,7 @@ const editObjectPackage = (formOption, username, record_id, reservedTimestamp) =
 				FROM user_table
 				WHERE user_table.name='${username}')
 								
-		WHERE asset_control_number IN (${formOption.map(item => `'${item.asset_control_number}'`)});
+		WHERE asset_control_number IN (${[formOption].map(item => `'${item.asset_control_number}'`)});
 	`
 	return text
 }
@@ -1314,7 +1314,8 @@ const insertUserData = (name, roles, area_id,secondArea) => {
 }
 
 const addEditObjectRecord = (formOption, username, filePath) => {
-	let item = formOption[0]
+	let item = formOption
+	console.log(formOption)
 	const text = `
 		INSERT INTO edit_object_record (
 			edit_user_id, 
@@ -1335,7 +1336,7 @@ const addEditObjectRecord = (formOption, username, filePath) => {
 			$2,
 			$3,
 			'${JSON.stringify(item.transferred_location)}'::jsonb,
-			ARRAY [${formOption.map(item => `'${item.asset_control_number}'`)}],
+			ARRAY ['${formOption.asset_control_number}'],
 			$4
 		)
 		RETURNING id;

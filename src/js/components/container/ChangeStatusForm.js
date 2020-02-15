@@ -131,7 +131,6 @@ class ChangeStatusForm extends React.Component {
                         <Button variant="link" style={style.buttonPath} onClick={this.pathOnClickHandler}>追蹤路徑</Button>                        
                     }
                 </Modal.Header >
-                {console.log(selectedObjectData[0])}
                 <Modal.Body>
                     <Formik
                  
@@ -156,7 +155,7 @@ class ChangeStatusForm extends React.Component {
                                 transferred_location: Yup.string()
                                     .when('status', {
                                         is: config.objectStatus.TRANSFERRED,
-                                        then: Yup.string().required(locale.texts.LOCATION_IS_REQUIRED)
+                                        then: Yup.object().required(locale.texts.LOCATION_IS_REQUIRED)
                                     })
                         })}
 
@@ -166,6 +165,7 @@ class ChangeStatusForm extends React.Component {
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
                             <Form className="text-capitalize">
+                                {console.log(values)}
                                 <div className='modalDeviceListGroup' style={style.deviceList}>
                                     {this.props.selectedObjectData.map((item,index) => {
                                         return (
