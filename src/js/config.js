@@ -360,7 +360,7 @@ const config = {
                         <div key=${index} style="text-transform: capitalize; margin: 10px;">
                             ${index + 1}.${item.name}, 
                             ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}: ${item.last_four_acn.slice(-4)}, 
-                            ${locale.texts.NEAR}${item.location_description},
+                            ${locale.texts.NEAR} ${item.location_description},
                             ${item.residence_time}
                         </div>
                     `
