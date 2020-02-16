@@ -70,7 +70,6 @@ const getTrackingData = (request, response) => {
     const userAuthenticatedAreaId= request.body.user.areas_id
     /** The UI's current area id */
     const currentAreaId = request.body.areaId.toString()
-    let counter = 0
 
     pool.query(queryType.getTrackingData())        
         .then(res => {
@@ -80,9 +79,8 @@ const getTrackingData = (request, response) => {
             /** Filter the objects that do no belong the area */
             const toReturn = res.rows
             .filter(item => item.mac_address)
-            // .filter(item => item.type !== "生理訊號傳導器")
             .map((item, index) => {
-
+                
                 /** Flag the object that belongs to the current area or to the user's authenticated area */
                 item.isMatchedObject = checkMatchedObject(item, userAuthenticatedAreaId, currentAreaId)
 
@@ -95,8 +93,7 @@ const getTrackingData = (request, response) => {
 
                 /** Flag the object that satisfied the time period and rssi threshold */
                 item.found = isInTheTimePeriod && isMatchRssi 
-
-                item.id = item.found ? ++counter : ""
+                
                 /** Set the residence time of the object */
                 item.residence_time =  item.found 
                     ? moment(item.last_seen_timestamp).locale(locale).from(moment(item.first_seen_timestamp)) 
@@ -320,16 +317,7 @@ const setLocaleID = (request, response) => {
 
 
 const editObject = (request, response) => {
-    var formOption = request.body.formOption
-    // console.log(formOption)
-    // if (formOption.transferred_location){
-    //     formOption.transferred_location = {
-    //         branchId: formOption.transferred_location.value.branchId,
-    //         departmentId: formOption.transferred_location.value.departmentId
-    //     }
-    // }
-    
-
+    const formOption = request.body.formOption
     pool.query(queryType.editObject(formOption))
         .then(res => {
             console.log("Edit object success");
@@ -418,14 +406,7 @@ const addPatient = (request, response) => {
 
 
 const editObjectPackage = (request, response) => {
-    var { formOption, username, pdfPackage, reservedTimestamp, locale} = request.body
-
-    if (formOption.transferred_location){
-        formOption.transferred_location = {
-            branchId: formOption.transferred_location.value.branchId,
-            departmentId: formOption.transferred_location.value.departmentId
-        }
-    }
+    const { formOption, username, pdfPackage, reservedTimestamp, locale} = request.body
     pool.query(queryType.addEditObjectRecord(formOption, username, pdfPackage.path))
         .then(res => {
             const record_id = res.rows[0].id
@@ -638,7 +619,7 @@ const modifyUserInfo = (request, response) => {
     const {username, info} = request.body
     pool.query(queryType.modifyUserInfo(username, info), (error, results) => {
         if(error){
-            console.log("modifyUserInfo error: ", error)
+            console.log("modifyUserInfo error: ", err)
         }else{
             console.log('modify user info success')
             response.status(200).send('ok')
