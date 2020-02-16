@@ -294,15 +294,15 @@ const config = {
                 let notes = config.pdfFormat.getBodyItem.getNotes(data, locale)
                 return title + list + notes
             },
-            transferred: (data, locale,signatureName) => {
+            transferred: (data, locale,nn,nnn,signatureName) => {
              
                 // console.log(data[0].transferred_location.value.split(','))
                 let area = data[0].transferred_location.label
                 let signature_title = config.pdfFormat.getBodyItem.getBodyTitle("transferred to", locale, area)
                 let list_title = config.pdfFormat.getBodyItem.getBodyTitle("transferred device list", locale)
                 let signature = config.pdfFormat.getBodyItem.getSignature(locale,signatureName)
-                let list = config.pdfFormat.getBodyItem.getDataContent(data, locale)
-                let notes = config.pdfFormat.getBodyItem.getNotes(data, locale)
+                let list = config.pdfFormat.getBodyItem.getDataContent(data, locale,signatureName)
+                let notes = config.pdfFormat.getBodyItem.getNotes(data, locale,signatureName)
                 return signature_title + signature + list_title + list + notes
             },
             shiftChange: (data, locale, user) => {

@@ -518,7 +518,7 @@ function setLocaleID (userID,lang) {
 }
 
 function editObject (formOption) {
-	console.log(formOption)
+	 
 	let text = 
 		`
 		Update object_table 
