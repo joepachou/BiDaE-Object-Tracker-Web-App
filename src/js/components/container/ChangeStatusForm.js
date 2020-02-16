@@ -106,7 +106,7 @@ class ChangeStatusForm extends React.Component {
             },
             buttonPath: {
                 fontSize: '0.5rem'
-            }
+            },
         }
 
         let { 
@@ -121,6 +121,7 @@ class ChangeStatusForm extends React.Component {
                 id='changeStatusForm' 
                 className='text-capitalize'
                 enforceFocus={false}
+                style={style.modal}
             >
                 <Modal.Header 
                     closeButton 
@@ -144,7 +145,7 @@ class ChangeStatusForm extends React.Component {
                                 ? this.state.transferredLocationOptions
                                             .filter(branch => branch.id == selectedObjectData[0].transferred_location.branchId)[0]
                                             .options[selectedObjectData[0].transferred_location.departmentId]
-                                : null,
+                                : '',
                             notes: selectedObjectData.length != 0 ? selectedObjectData[0].notes : "" ,
                         }}
 
@@ -165,7 +166,6 @@ class ChangeStatusForm extends React.Component {
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
                             <Form className="text-capitalize">
-                                {console.log(values)}
                                 <div className='modalDeviceListGroup' style={style.deviceList}>
                                     {this.props.selectedObjectData.map((item,index) => {
                                         return (
