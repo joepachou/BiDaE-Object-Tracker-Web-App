@@ -1,4 +1,4 @@
-import Main from "./Main";
+import MainContainer from "./components/container/MainContainer";
 import SystemStatus from "./components/container/SystemStatus";
 import ObjectManagementContainer from "./components/container/ObjectManagementContainer";
 import UserSettingContainer from "./components/container/UserContainer/UserSettingContainer";
@@ -7,7 +7,7 @@ import BigScreenContainer from "./components/container/BigScreen/BigScreenContai
 const routes = [
     {
         path: '/',
-        component: Main,
+        component: MainContainer,
         exact: true,
     },
     {
