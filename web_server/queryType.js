@@ -735,13 +735,13 @@ const signin = (username) => {
 			AS
 				(
 					SELECT 
-						user_roles.user_id, 
-						user_roles.role_id, 
+						user_role.user_id, 
+						user_role.role_id, 
 						roles.name as role_name 
-					FROM user_roles
+					FROM user_role
 					INNER JOIN roles
-					ON roles.id = user_roles.role_id
-					WHERE user_roles.user_id = (
+					ON roles.id = user_role.role_id
+					WHERE user_role.user_id = (
 						SELECT id 
 						FROM user_info
 					)
@@ -750,8 +750,8 @@ const signin = (username) => {
 			AS
 				(
 					SELECT area_id
-					FROM user_areas
-					WHERE user_areas.user_id = (
+					FROM user_area
+					WHERE user_area.user_id = (
 						SELECT id 
 						FROM user_info
 					)
@@ -1001,8 +1001,8 @@ const getMainSecondArea = (username) => {
 
 			array (
 				SELECT area_id
-				FROM user_areas
-	     		WHERE user_areas.user_id = (
+				FROM user_area
+	     		WHERE user_area.user_id = (
 					SELECT id 
 					FROM user_table 
 					WHERE name='${username}'
@@ -1027,8 +1027,8 @@ const getUserList = () => {
 		FROM user_table  
 		INNER JOIN (
 			SELECT * 
-			FROM user_roles
-			INNER JOIN roles ON user_roles.role_id = roles.id
+			FROM user_role
+			INNER JOIN roles ON user_role.role_id = roles.id
 		) roles
 		ON user_table.id = roles.user_id
 		GROUP BY user_table.id, user_table.name,user_table.registered_timestamp, user_table.last_visit_timestamp
@@ -1039,7 +1039,7 @@ const getUserList = () => {
 
 const getUserRole = (username) => {
 	const query = `select name      from roles      where 
-		id=(       select role_id   from user_roles where 
+		id=(       select role_id   from user_role where 
 		user_id=(  select id        from user_table where name='${username}'));`
 	return query
 }
@@ -1058,14 +1058,14 @@ const deleteUser = (username) => {
 	
 	const query = `
 		
-		DELETE FROM user_roles 
+		DELETE FROM user_role 
 		WHERE user_id = (
 			SELECT id 
 			FROM user_table 
 			WHERE name='${username}'
 		); 
 
-		DELETE FROM user_areas
+		DELETE FROM user_area
 		WHERE user_id = (
 			SELECT id
 			FROM user_table
@@ -1094,13 +1094,13 @@ const setUserRole = (name, roles,areaNumber,secondArea) => {
 	if (secondArea == '') { //如果沒有選secondArea 就是''
 			const query = `
 
-		DELETE FROM user_roles WHERE user_roles.user_id = (
+		DELETE FROM user_role WHERE user_role.user_id = (
 			SELECT id 
 			FROM user_table 
 			WHERE name='${name}'
 		);
 
-		INSERT INTO user_roles (user_id, role_id)
+		INSERT INTO user_role (user_id, role_id)
 			VALUES 
 			${
 				roles.map(role => `((
@@ -1116,7 +1116,7 @@ const setUserRole = (name, roles,areaNumber,secondArea) => {
 			};
 		
 		
-		DELETE FROM user_areas WHERE user_id = (
+		DELETE FROM user_area WHERE user_id = (
 			SELECT id 
 			FROM user_table 
 			WHERE name='${name}'
@@ -1132,13 +1132,13 @@ const setUserRole = (name, roles,areaNumber,secondArea) => {
 	 {
 		const query = `
 
-		DELETE FROM user_roles WHERE user_roles.user_id = (
+		DELETE FROM user_role WHERE user_role.user_id = (
 			SELECT id 
 			FROM user_table 
 			WHERE name='${name}'
 		);
 
-		INSERT INTO user_roles (user_id, role_id)
+		INSERT INTO user_role (user_id, role_id)
 			VALUES 
 			${
 				roles.map(role => `((
@@ -1154,13 +1154,13 @@ const setUserRole = (name, roles,areaNumber,secondArea) => {
 			};
 		
 		
-		DELETE FROM user_areas WHERE user_id = (
+		DELETE FROM user_area WHERE user_id = (
 			SELECT id 
 			FROM user_table 
 			WHERE name='${name}'
 		);
 
-		INSERT INTO user_areas (user_id, area_id)
+		INSERT INTO user_area (user_id, area_id)
 			VALUES 
 			${
 				secondArea.map(sA => `((
@@ -1295,7 +1295,7 @@ const insertUserData = (name, roles, area_id,secondArea) => {
 
 	if (secondArea =='') {
 		return `
-		INSERT INTO user_roles (
+		INSERT INTO user_role (
 			user_id, 
 			role_id
 		)
@@ -1317,7 +1317,7 @@ const insertUserData = (name, roles, area_id,secondArea) => {
 	`
 	}else{
 		return `
-		INSERT INTO user_roles (
+		INSERT INTO user_role (
 			user_id, 
 			role_id
 		)
@@ -1337,7 +1337,7 @@ const insertUserData = (name, roles, area_id,secondArea) => {
 			)`
 		)};
 		
-		INSERT INTO user_areas (
+		INSERT INTO user_area (
 			user_id, 
 			area_id
 		)
@@ -1507,11 +1507,11 @@ const confirmValidation = (username) => {
 			user_table.name, 
 			user_table.password,
 			roles.name as role,
-			user_roles.role_id as role_id,
+			user_role.role_id as role_id,
 			array (
 				SELECT area_id
-				FROM user_areas
-				WHERE user_areas.user_id = user_table.id
+				FROM user_area
+				WHERE user_area.user_id = user_table.id
 			) as areas_id,
 			(
 				SELECT id
@@ -1521,14 +1521,14 @@ const confirmValidation = (username) => {
 
 		FROM user_table
 
-		LEFT JOIN user_roles
-		ON user_roles.user_id = user_table.id
+		LEFT JOIN user_role
+		ON user_role.user_id = user_table.id
 
 		LEFT JOIN roles
-		ON user_roles.role_id = roles.id
+		ON user_role.role_id = roles.id
 		
-		LEFT JOIN user_areas
-		ON user_areas.user_id = user_table.id
+		LEFT JOIN user_area
+		ON user_area.user_id = user_table.id
 		
 		WHERE user_table.name = $1;
 	`
@@ -1889,7 +1889,7 @@ function getUserArea(user_id){
     const text =  `
     SELECT 
         area_id
-    FROM user_areas WHERE user_areas.user_id = $1;
+    FROM user_area WHERE user_area.user_id = $1;
     `;
 
     const values = [user_id];
@@ -1905,7 +1905,7 @@ function getUserArea(user_id){
 
 function addUserArea (user_id,area_id){
     const text = `
-    INSERT INTO user_areas (
+    INSERT INTO user_area (
         user_id,
         area_id
     )
@@ -1933,7 +1933,7 @@ function DeleteUserArea (user_id,area_id){
 
     const query = `
         
-        DELETE FROM user_areas
+        DELETE FROM user_area
         WHERE user_id = '${user_id}' AND area_id = '${area_id}'
     
     `
