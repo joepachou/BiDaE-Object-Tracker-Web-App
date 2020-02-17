@@ -80,7 +80,7 @@ const getTrackingData = (request, response) => {
             const toReturn = res.rows
             .filter(item => item.mac_address)
             .map((item, index) => {
-                
+
                 /** Flag the object that belongs to the current area or to the user's authenticated area */
                 item.isMatchedObject = checkMatchedObject(item, userAuthenticatedAreaId, currentAreaId)
 
@@ -617,14 +617,15 @@ const modifyUserDevices = (request, response) => {
 
 const modifyUserInfo = (request, response) => {
     const {username, info} = request.body
-    pool.query(queryType.modifyUserInfo(username, info), (error, results) => {
-        if(error){
-            console.log("modifyUserInfo error: ", err)
-        }else{
+    pool.query(queryType.modifyUserInfo(username, info))
+        .then(res => {
             console.log('modify user info success')
             response.status(200).send('ok')
-        }
-    })
+        })
+        .catch(err => {
+            console.log(`modify user info fail ${err}`)
+        })
+    
 }
 
 const getPDFInfo = (request, response) => {

@@ -925,11 +925,16 @@ function modifyUserDevices(username, mode, acn){
 	return text
 	
 }
-function modifyUserInfo(username, info){
-		
-	const {freqSearchCount} = info
-	text = `UPDATE user_table SET max_search_history_count = ${parseInt(freqSearchCount[0])} WHERE name='${username}'`
-	return text
+const modifyUserInfo = (username, info) => {	
+	const {
+		freqSearchCount
+	} = info
+
+	return `
+		UPDATE user_table 
+		SET max_search_history_count = ${freqSearchCount} 
+		WHERE name='${username}'
+	`
 	
 }
 
