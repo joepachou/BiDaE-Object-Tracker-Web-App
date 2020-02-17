@@ -4,19 +4,18 @@ import React from 'react'
 import NotificationBadge from 'react-notification-badge';
 import { Effect } from 'react-notification-badge';
 import { NavDropdown, Row } from 'react-bootstrap'
-import axios from 'axios';
 import _ from 'lodash'
 import { AppContext } from '../../context/AppContext'
-import dataSrc from '../../dataSrc'
 import config from '../../config'
 import { getDescription } from '../../helper/descriptionGenerator'
+import retrieveDataHelper from '../../helper/retrieveDataHelper'
 
 class BatteryLevelNotification extends React.Component {
     
     static contextType = AppContext
     
     state = {
-        count:0,
+        count: 0,
         runOutPowerItems: [],
         locale: this.context.locale.abbr,
     }
@@ -37,12 +36,11 @@ class BatteryLevelNotification extends React.Component {
     getTrackingData = () => {
         let { auth, locale, stateReducer } = this.context
         let [{areaId, violatedObjects}, dispatch] = stateReducer
-        axios.post(dataSrc.getTrackingData,{
-            rssiThreshold: -50,
-            locale: locale.abbr,
-            user: auth.user,
+        retrieveDataHelper.getTrackingData(
+            locale.abbr,
+            auth.user,
             areaId,
-        })
+        )
         .then(res => {
             this.setState({
                 runOutPowerItems: res.data.filter(item => item.battery_indicator == 2)
@@ -51,9 +49,14 @@ class BatteryLevelNotification extends React.Component {
     }
 
     render() {
-        const {runOutPowerItems} = this.state
+        const {
+            runOutPowerItems,
+            count
+        } = this.state
 
-        let { locale } = this.context
+        let { 
+            locale 
+        } = this.context
 
         const style = {
             list: {
@@ -78,6 +81,7 @@ class BatteryLevelNotification extends React.Component {
         return (
             <NavDropdown 
                 alignRight
+                disabled={!count}
                 title={
                     <i className="fas fa-bell" style={style.icon}>
                         <NotificationBadge 
@@ -131,4 +135,5 @@ class BatteryLevelNotification extends React.Component {
         )
     }
 };
+
 export default BatteryLevelNotification
