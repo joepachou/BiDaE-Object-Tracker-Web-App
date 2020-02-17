@@ -12,12 +12,6 @@ const https = require('https');
 const session = require('express-session')
 // const csv = require('csv-parse')
 const csv =require('csvtojson')
-const {
-    PRIVATE_KEY,
-    CERTIFICATE,
-    CA_BUNDLE
-} = process.env
-
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true,}));
@@ -239,11 +233,11 @@ app.get('/download/com.beditech.IndoorNavigation.apk', (req, res) => {
  * If it is window os, please refer to https://tecadmin.net/install-openssl-on-windows/ install openssl 
  * and set the environment variables*/
 
-var privateKey = PRIVATE_KEY ? fs.readFileSync(__dirname + `/ssl/${PRIVATE_KEY}`) : null
-var certificate = CERTIFICATE ? fs.readFileSync(__dirname + `/ssl/${CERTIFICATE}`) : null
-var ca_bundle = CA_BUNDLE ? fs.readFileSync(__dirname + `/ssl/${CA_BUNDLE}`) : null
+ var privateKey = process.env.PRIVATE_KEY && fs.readFileSync(__dirname + `/ssl/${process.env.PRIVATE_KEY}`)
+var certificate = process.env.CERTIFICATE && fs.readFileSync(__dirname + `/ssl/${process.env.CERTIFICATE}`) 
+var ca_bundle = process.env.CA_BUNDLE && fs.readFileSync(__dirname + `/ssl/${process.env.CA_BUNDLE}`) 
 
-var credentials = PRIVATE_KEY ? { 
+var credentials = process.env.PRIVATE_KEY ? { 
     key: privateKey, 
     cert: certificate,
     ca: ca_bundle
@@ -254,7 +248,7 @@ const httpsServer = https.createServer(credentials, app)
 const httpServer = http.createServer(app);
 
 /** Enable HTTPS server */
-PRIVATE_KEY ? httpsServer.listen(httpsPort, () => {
+process.env.PRIVATE_KEY ? httpsServer.listen(httpsPort, () => {
     console.log(`HTTPS Server running on PORT ${httpsPort}`)
 }) : null
 
