@@ -28,7 +28,8 @@ const EditUserForm = ({
     handleSubmit,
     handleClose,
     roleName,
-    areaList
+    areaList,
+    data
 }) => {
 
     let locale = React.useContext(LocaleContext)
@@ -47,7 +48,7 @@ const EditUserForm = ({
             label:selectedUser ?  locale.texts[config.mapConfig.areaList[selectedUser.main_area]] : null
         }
     
-    
+
     return (
         <Modal 
             show={show} 
@@ -60,7 +61,7 @@ const EditUserForm = ({
             >
                 {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
             </Modal.Header >
-
+           
             <Modal.Body>
                 <Formik                    
                     initialValues = {{
@@ -79,17 +80,11 @@ const EditUserForm = ({
                                     name: 'name', 
                                     message: locale.texts.THE_USERNAME_IS_ALREADY_TAKEN,
                                     test: value => {
-                                        return value !== undefined && new Promise((resolve, reject) => {
-                                            axios.post(dataSrc.validateUsername, {
-                                                name: value.toLowerCase()
-                                            })
-                                            .then(res => {
-                                                resolve(res.data.precheck)
-                                            })
-                                            .catch(err => {
-                                                console.log(err)
-                                            })
+                                        let reapeatFlag = true
+                                        data.map(item => {
+                                            item.name == value ? reapeatFlag = false : null
                                         })
+                                      return reapeatFlag
                                     },
                                 })
                                 .max(100),

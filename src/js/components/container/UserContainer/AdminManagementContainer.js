@@ -257,7 +257,6 @@ class AdminManagementContainer extends React.Component{
                         {locale.texts.DELETE_USER}
                     </Button>
                 </ButtonToolbar>
-                
                 <ReactTable 
                     data = {this.state.data} 
                     columns = {this.state.columns} 
@@ -266,6 +265,8 @@ class AdminManagementContainer extends React.Component{
                     style={{height:'75vh'}}
                     getTrProps={this.onRowClick}
                 />
+
+
                 <EditUserForm
                     show={this.state.showAddUserForm}
                     handleClose={this.handleClose}
@@ -274,6 +275,7 @@ class AdminManagementContainer extends React.Component{
                     selectedUser={this.state.selectedUser}
                     roleName={this.state.roleName}
                     areaList={this.state.areaList}
+                    data = {this.state.data} 
                 />
 
                 <DeleteUserForm
