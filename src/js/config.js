@@ -481,14 +481,13 @@ const config = {
     mapConfig: {
         mapOptions: {
             crs: L.CRS.Simple,
-            // center: L.latLng(-2000, -4000),
             zoom: -5.5,
+            minZoom: -5.61,
+            maxZoom: -5,
             zoomForTablet: -6,
             zoomForMobile: -7.25,
-            minZoom: -6,
             minZoomForTablet: -7,
             minZoomForMobile: -7.25,
-            maxZoom: -5,
             zoomDelta: 0.25,
             zoomSnap: 0,
             zoomControl: true,
