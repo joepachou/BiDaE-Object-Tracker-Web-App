@@ -23,15 +23,15 @@ import {
     Button, 
     Container,
     ButtonToolbar,
-    Row,
-    Col
 } from 'react-bootstrap';
 import EditObjectForm from './EditObjectForm'
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
 import config from '../../config'
-import { objectTableColumn } from '../../tables'
-import { patientTableColumn } from '../../tables'
-import { importTableColumn } from '../../tables'
+import { 
+    objectTableColumn,
+    patientTableColumn,
+    importTableColumn
+ } from '../../tables'
 import EditPatientForm from './EditPatientForm'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
@@ -41,16 +41,14 @@ import InputFiles from "react-input-files";
 import BindForm from './BindForm'
 import DissociationForm from './DissociationForm'
 import AccessControl from '../presentational/AccessControl'
-import styleConfig from '../../styleConfig'
-import Searchbar from '../presentational/Searchbar';
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
 
 const SelectTable = selecTableHOC(ReactTable);
-let deleteFlag = false;
+
 
 class ObjectManagementContainer extends React.Component{
     static contextType = AppContext
-
+    
     state = {
         column:[],
         columnImport:[],
@@ -72,7 +70,7 @@ class ObjectManagementContainer extends React.Component{
         formPath: '',
         selectAll: false,
         locale: this.context.locale.abbr,
-        tabIndex: 1,
+        tabIndex: 0,
         roomOptions: {},
         isShowBind:false,
         isShowEditImportTable:false,
@@ -82,7 +80,8 @@ class ObjectManagementContainer extends React.Component{
         physicianIDNumber:0,
         disableASN:false,
         transferredLocationList: [],
-        showDeleteConfirmation: false
+        showDeleteConfirmation: false,
+        warningSelect : 0, //if 0 ，就warn完就執行delete patien 否則delete object
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -357,7 +356,8 @@ class ObjectManagementContainer extends React.Component{
             isShowBind:false,
             bindCase:0,
             isShowEditImportTable:false,
-            showDeleteConfirmation: false
+            showDeleteConfirmation: false,
+            warningSelect:0
         })
     }
 
@@ -388,8 +388,11 @@ class ObjectManagementContainer extends React.Component{
                 })
             break;
 
-            case "delete object":
-                this.deleteRecordDevice();
+            case "deleteObject":
+                this.setState({
+                     showDeleteConfirmation: true,
+                     warningSelect : 1
+                })
                 break;
 
             case "add all":
@@ -410,6 +413,7 @@ class ObjectManagementContainer extends React.Component{
             case "deletePatient":
                 this.setState({
                     showDeleteConfirmation: true,
+                    warningSelect : 0
                 })
         }
 
@@ -470,6 +474,7 @@ class ObjectManagementContainer extends React.Component{
             showDeleteConfirmation: false,
             selection: [],
             selectAll: false,
+            warningSelect:0,
         })
     }
 
@@ -556,15 +561,16 @@ class ObjectManagementContainer extends React.Component{
     }
 
 
-    deleteRecordDevice = () => {
+    objectMultipleDelete = () => {
         let idPackage = []
         var deleteArray = [];
         var deleteCount = 0;
+ 
         this.state.data.map (item => {
          
             this.state.selection.map(itemSelect => {
                 
-                itemSelect === item.name
+                itemSelect === item.id
                 ? 
                  deleteArray.push(deleteCount.toString()) 
                 : 
@@ -572,12 +578,14 @@ class ObjectManagementContainer extends React.Component{
             })
                  deleteCount +=1
         })
+        
         deleteArray.map( item => {
             this.state.data[item] === undefined ?
                 null
                 :
                 idPackage.push(parseInt(this.state.data[item].id))
             })
+ 
         axios.post(deleteDevice, {
             idPackage
         })
@@ -845,7 +853,15 @@ class ObjectManagementContainer extends React.Component{
                             >
                                 {locale.texts.DISSOCIATE}
                             </Button>
-
+                            <Button 
+                                variant="outline-primary" 
+                                className='text-capitalize mr-2 mb-1'
+                                name="deleteObject"
+                                onClick={this.handleClickButton}
+                                // onClick={this.deleteRecordPatient}    
+                            >
+                                {locale.texts.MULTIPLEDELETE}
+                            </Button>
                         </ButtonToolbar>
                         {/* <Searchbar 
                             className={'float-right'}
@@ -1090,7 +1106,7 @@ class ObjectManagementContainer extends React.Component{
                 <DeleteConfirmationForm
                     show={this.state.showDeleteConfirmation} 
                     handleClose={this.handleClose}
-                    handleSubmit={this.deleteRecordPatient}
+                    handleSubmit={this.state.warningSelect == 0 ?  this.deleteRecordPatient :  this.objectMultipleDelete}
                 />
             </Container>
         )
