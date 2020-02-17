@@ -23,15 +23,15 @@ import {
     Button, 
     Container,
     ButtonToolbar,
-    Row,
-    Col
 } from 'react-bootstrap';
 import EditObjectForm from './EditObjectForm'
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
 import config from '../../config'
-import { objectTableColumn } from '../../tables'
-import { patientTableColumn } from '../../tables'
-import { importTableColumn } from '../../tables'
+import { 
+    objectTableColumn,
+    patientTableColumn,
+    importTableColumn
+ } from '../../tables'
 import EditPatientForm from './EditPatientForm'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
@@ -41,16 +41,14 @@ import InputFiles from "react-input-files";
 import BindForm from './BindForm'
 import DissociationForm from './DissociationForm'
 import AccessControl from '../presentational/AccessControl'
-import styleConfig from '../../styleConfig'
-import Searchbar from '../presentational/Searchbar';
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
 
 const SelectTable = selecTableHOC(ReactTable);
-let deleteFlag = false;
+
 
 class ObjectManagementContainer extends React.Component{
     static contextType = AppContext
-
+    
     state = {
         column:[],
         columnImport:[],
@@ -82,7 +80,8 @@ class ObjectManagementContainer extends React.Component{
         physicianIDNumber:0,
         disableASN:false,
         transferredLocationList: [],
-        showDeleteConfirmation: false
+        showDeleteConfirmation: false,
+        warningSelect : 0, //if 0 ，就warn完就執行delete patien 否則delete object
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -357,7 +356,8 @@ class ObjectManagementContainer extends React.Component{
             isShowBind:false,
             bindCase:0,
             isShowEditImportTable:false,
-            showDeleteConfirmation: false
+            showDeleteConfirmation: false,
+            warningSelect:0
         })
     }
 
@@ -389,7 +389,10 @@ class ObjectManagementContainer extends React.Component{
             break;
 
             case "deleteObject":
-                this.objectMultipleDelete();
+                this.setState({
+                     showDeleteConfirmation: true,
+                     warningSelect : 1
+                })
                 break;
 
             case "add all":
@@ -410,6 +413,7 @@ class ObjectManagementContainer extends React.Component{
             case "deletePatient":
                 this.setState({
                     showDeleteConfirmation: true,
+                    warningSelect : 0
                 })
         }
 
@@ -470,6 +474,7 @@ class ObjectManagementContainer extends React.Component{
             showDeleteConfirmation: false,
             selection: [],
             selectAll: false,
+            warningSelect:0,
         })
     }
 
@@ -1101,7 +1106,7 @@ class ObjectManagementContainer extends React.Component{
                 <DeleteConfirmationForm
                     show={this.state.showDeleteConfirmation} 
                     handleClose={this.handleClose}
-                    handleSubmit={this.deleteRecordPatient}
+                    handleSubmit={this.state.warningSelect == 0 ?  this.deleteRecordPatient :  this.objectMultipleDelete}
                 />
             </Container>
         )
