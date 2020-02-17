@@ -43,7 +43,6 @@ class EditObjectForm extends React.Component {
     }
     
     handleSubmit = (postOption) => {
-        console.log('post')
         const path = this.props.formPath
         axios.post(path, {
             formOption: postOption
@@ -61,8 +60,6 @@ class EditObjectForm extends React.Component {
         axios.get(dataSrc.getTransferredLocation)
         .then(res => {
             const transferredLocationOptions = res.data.map(branch => {
-                // console.log(branch, lang)
-                console.log(branch)
                 return {          
                     label: branch.branch_name[lang],
                     value: branch.branch_name['english'],
