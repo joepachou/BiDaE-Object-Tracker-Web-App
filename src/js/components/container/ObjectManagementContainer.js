@@ -43,6 +43,8 @@ import DissociationForm from './DissociationForm'
 import AccessControl from '../presentational/AccessControl'
 import styleConfig from '../../styleConfig'
 import Searchbar from '../presentational/Searchbar';
+import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
+
 const SelectTable = selecTableHOC(ReactTable);
 let deleteFlag = false;
 
@@ -79,7 +81,8 @@ class ObjectManagementContainer extends React.Component{
         physicianName:'',
         physicianIDNumber:0,
         disableASN:false,
-        transferredLocationList: []
+        transferredLocationList: [],
+        showDeleteConfirmation: false
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -186,8 +189,7 @@ class ObjectManagementContainer extends React.Component{
         axios.get(getTransferredLocation)
         .then(res => {
             const transferredLocationOptions = res.data.map(branch => {
-                // console.log(branch, lang)
-                console.log(branch)
+
                 return {          
                     label: branch.branch_name[lang],
                     value: branch.branch_name['english'],
@@ -275,7 +277,6 @@ class ObjectManagementContainer extends React.Component{
                                 }
                             return false
                         })
-                        console.log(branch)
                         let department = branch[0] ? branch[0].options[item.transferred_location.departmentId] : null
                         item.transferred_location = department
                     }
@@ -355,7 +356,8 @@ class ObjectManagementContainer extends React.Component{
             isShowAddAll: false,
             isShowBind:false,
             bindCase:0,
-            isShowEditImportTable:false
+            isShowEditImportTable:false,
+            showDeleteConfirmation: false
         })
     }
 
@@ -404,6 +406,11 @@ class ObjectManagementContainer extends React.Component{
                     formTitle: name,
                     isShowEditImportTable: true
                 })
+                break;
+            case "deletePatient":
+                this.setState({
+                    showDeleteConfirmation: true,
+                })
         }
 
     }
@@ -422,13 +429,9 @@ class ObjectManagementContainer extends React.Component{
             })
         })
         .catch(err => {
-            console.log("clean Binding fail : " + err);
-        })
-    
-        // this.handleSubmitForm()
+            console.log("clean Binding fail" + err);
+        })    
     }
-
-
 
     deleteRecordImport = () => {
         let idPackage = []
@@ -463,7 +466,10 @@ class ObjectManagementContainer extends React.Component{
             isPatientShowEdit: false,
             isShowBind:false,
             bindCase:0,
-            isShowEditImportTable:false
+            isShowEditImportTable:false,
+            showDeleteConfirmation: false,
+            selection: [],
+            selectAll: false,
         })
     }
 
@@ -517,8 +523,6 @@ class ObjectManagementContainer extends React.Component{
 
     deleteRecordPatient = () => {
         let idPackage = []
-
-
         var deleteArray = [];
         var deleteCount = 0;
 
@@ -526,20 +530,17 @@ class ObjectManagementContainer extends React.Component{
          
             this.state.selection.map(itemSelect => {
                 itemSelect === item.name
-                ? 
-                 deleteArray.push(deleteCount.toString())
-                : 
-                null          
+                    ?   deleteArray.push(deleteCount.toString())
+                    :   null          
             })
-                 deleteCount +=1
+            deleteCount +=1
         })
 
         this.state.dataPatient.map(dataItem => {
             this.state.selection.map(deleteItem =>{
-                dataItem.id == deleteItem ?
-                idPackage.push(parseInt(dataItem.id))
-                :
-                null
+                dataItem.id == deleteItem 
+                    ?   idPackage.push(parseInt(dataItem.id))
+                    :   null
             })
         })
 
@@ -547,16 +548,11 @@ class ObjectManagementContainer extends React.Component{
             idPackage
         })
         .then(res => {
-            this.setState({
-                selection: [],
-                selectAll: false,
-            })
+            this.handleSubmitForm()
         })
         .catch(err => {
             console.log(err)
         })
-        this.handleSubmitForm()
-
     }
 
 
@@ -720,41 +716,42 @@ class ObjectManagementContainer extends React.Component{
     filterData = (data, key, filteredAttribute) => {
         
         let filteredData = data.filter(obj => {
-                                if(filteredAttribute.includes('name')){
-                                    let keyRex = new RegExp(key)
-                                    if(obj.name.toLowerCase().match(keyRex)){
-                                        return true
-                                    }
-                                }
-                                if(filteredAttribute.includes('type')){
-                                    let keyRex = new RegExp(key)
-                                    if(obj.type.toLowerCase().match(keyRex)){
-                                        return true
-                                    }
-                                }
-                                if(filteredAttribute.includes('acn')){
-                                    let keyRex = new RegExp(key)
-                                    if(obj.asset_control_number.toLowerCase().match(keyRex)){
-                                        return true
-                                    }
-                                }
-                                if(filteredAttribute.includes('status')){
-                                    // statement
-                                }
-                                if(filteredAttribute.includes('area')){
-                                    // statement
-                                }
-                                if(filteredAttribute.includes('monitor type')){
-                                    // statement
-                                }
-                                if(filteredAttribute.includes('mac address')){
-                                    // statement
-                                }
-                                return false
-                            })
+            if(filteredAttribute.includes('name')){
+                let keyRex = new RegExp(key)
+                if(obj.name.toLowerCase().match(keyRex)){
+                    return true
+                }
+            }
+            if(filteredAttribute.includes('type')){
+                let keyRex = new RegExp(key)
+                if(obj.type.toLowerCase().match(keyRex)){
+                    return true
+                }
+            }
+            if(filteredAttribute.includes('acn')){
+                let keyRex = new RegExp(key)
+                if(obj.asset_control_number.toLowerCase().match(keyRex)){
+                    return true
+                }
+            }
+            if(filteredAttribute.includes('status')){
+                // statement
+            }
+            if(filteredAttribute.includes('area')){
+                // statement
+            }
+            if(filteredAttribute.includes('monitor type')){
+                // statement
+            }
+            if(filteredAttribute.includes('mac address')){
+                // statement
+            }
+            return false
+        })
         return filteredData
         
     }
+
     filterObjects = (key) => {
         let filteredAttribute = ['name', 'type','acn']
         let filteredData = this.filterData(this.state.data, key, filteredAttribute)
@@ -762,6 +759,7 @@ class ObjectManagementContainer extends React.Component{
             filteredData
         })
     }
+
     filterPatients = (key) => {
         let filteredAttribute = ['name', 'type','acn']
         let filteredPatient = this.filterData(this.state.dataPatient, key, filteredAttribute)
@@ -807,14 +805,12 @@ class ObjectManagementContainer extends React.Component{
                     <TabList>
                         <Tab>{locale.texts.DEVICE_FORM}</Tab>
                         <Tab>{locale.texts.PATIENT_FORM}</Tab>
-                        
                         <AccessControl
                             permission={"user:importTable"}
                             renderNoAccess={() => null}
                         >
                             <Tab>{locale.texts.TOTAL_DATA}</Tab>
                         </AccessControl>
-
                         <AccessControl
                             permission={"user:importTable"}
                             renderNoAccess={() => null}
@@ -824,49 +820,41 @@ class ObjectManagementContainer extends React.Component{
                     </TabList>
 
                     <TabPanel>
-                    <Row>
-                        <Col lg={8} xl={8}>
-                            <ButtonToolbar>
-                                <Button 
-                                    variant="outline-primary" 
-                                    className='text-capitalize mr-2 mb-1'
-                                    name="associate"
-                                    onClick={this.handleClickButton}
-                                >
-                                    {locale.texts.ASSOCIATE}
-                                </Button>
-                                <Button 
-                                    variant="outline-primary" 
-                                    className='text-capitalize mr-2 mb-1'
-                                    name="add object"
-                                    onClick={this.handleClickButton}
-                                >
-                                    {locale.texts.ADD_OBJECT}
-                                </Button>
-                                <Button 
-                                    variant="outline-primary" 
-                                    className='text-capitalize mr-2 mb-1'
-                                    name="dissociation"
-                                    onClick={this.handleClickButton}
-                                >
-                                    {locale.texts.DISSOCIATE}
-                                </Button>
+                        <ButtonToolbar>
+                            <Button 
+                                variant="outline-primary" 
+                                className='text-capitalize mr-2 mb-1'
+                                name="associate"
+                                onClick={this.handleClickButton}
+                            >
+                                {locale.texts.ASSOCIATE}
+                            </Button>
+                            <Button 
+                                variant="outline-primary" 
+                                className='text-capitalize mr-2 mb-1'
+                                name="add object"
+                                onClick={this.handleClickButton}
+                            >
+                                {locale.texts.ADD_OBJECT}
+                            </Button>
+                            <Button 
+                                variant="outline-primary" 
+                                className='text-capitalize mr-2 mb-1'
+                                name="dissociation"
+                                onClick={this.handleClickButton}
+                            >
+                                {locale.texts.DISSOCIATE}
+                            </Button>
 
-                            </ButtonToolbar>
+                        </ButtonToolbar>
+                        {/* <Searchbar 
+                            className={'float-right'}
+                            placeholder={''}
+                            getSearchKey={this.filterObjects}
+                            clearSearchResult={null}    
+                        /> */}
 
-                        
-                        </Col>
-                        <Col lg={4} xl={4}>
-                            <Searchbar 
-                                className={'float-right'}
-                                placeholder={''}
-                                getSearchKey={this.filterObjects}
-                                clearSearchResult={null}    
-                            />
-                        </Col>
-                    </Row>
-                        {/* <SelectTable */}
-                        <ReactTable
+                        <SelectTable
                             keyField='id'
                             data={this.state.filteredData}
                             columns={this.state.column}
@@ -912,45 +900,38 @@ class ObjectManagementContainer extends React.Component{
                     </TabPanel>
 
                     <TabPanel>
-                        
-                        <Row>
-                        <Col lg={8} xl={8}>
-                            <ButtonToolbar>
-                                <Button 
-                                    variant="outline-primary" 
-                                    className='text-capitalize mr-2 mb-1'
-                                    name="associate_patient"
-                                    onClick={this.handleClickButton}
-                                >
-                                    {locale.texts.ASSOCIATE}
-                                </Button>
-                                <Button 
-                                    variant="outline-primary" 
-                                    className='text-capitalize mr-2 mb-1'
-                                    onClick={this.handlePatientClick}
-                                >
-                                    {locale.texts.ADD_INPATIENT}
-                                </Button>
-                                <Button 
-                                    variant="outline-primary" 
-                                    className='text-capitalize mr-2 mb-1'
-                                    onClick={this.deleteRecordPatient}    
-                                >
-                                    {locale.texts.DELETE}
-                                </Button>
-                            </ButtonToolbar>
-
-                        
-                        </Col>
-                        <Col lg={4} xl={4}>
-                            <Searchbar 
-                                className={'float-right'}
-                                placeholder={''}
-                                getSearchKey={this.filterPatients}
-                                clearSearchResult={null}    
-                            />
-                        </Col>
-                    </Row>
+                        <ButtonToolbar>
+                            <Button 
+                                variant="outline-primary" 
+                                className='text-capitalize mr-2 mb-1'
+                                name="associate_patient"
+                                onClick={this.handleClickButton}
+                            >
+                                {locale.texts.ASSOCIATE}
+                            </Button>
+                            <Button 
+                                variant="outline-primary" 
+                                className='text-capitalize mr-2 mb-1'
+                                onClick={this.handlePatientClick}
+                            >
+                                {locale.texts.ADD_INPATIENT}
+                            </Button>
+                            <Button 
+                                variant="outline-primary" 
+                                className='text-capitalize mr-2 mb-1'
+                                name="deletePatient"
+                                onClick={this.handleClickButton}
+                                // onClick={this.deleteRecordPatient}    
+                            >
+                                {locale.texts.DELETE}
+                            </Button>
+                        </ButtonToolbar>
+                        {/* <Searchbar 
+                            className={'float-right'}
+                            placeholder={''}
+                            getSearchKey={this.filterPatients}
+                            clearSearchResult={null}    
+                        /> */}
                         <SelectTable
                             keyField='id'
                             data={this.state.filteredPatient}
@@ -1076,7 +1057,6 @@ class ObjectManagementContainer extends React.Component{
                     objectTable={this.state.objectTable}
                     disableASN = {this.state.disableASN}
                 />
-
                 <BindForm
                     show = {isShowBind} 
                     bindCase = {this.state.bindCase}
@@ -1093,9 +1073,6 @@ class ObjectManagementContainer extends React.Component{
                         }, {})
                     }
                 />
-
-
-
                 <DissociationForm
                     show={isShowEditImportTable} 
                     title={this.state.formTitle} 
@@ -1109,6 +1086,11 @@ class ObjectManagementContainer extends React.Component{
                         return dataMap
                         }, {})
                     }
+                />
+                <DeleteConfirmationForm
+                    show={this.state.showDeleteConfirmation} 
+                    handleClose={this.handleClose}
+                    handleSubmit={this.deleteRecordPatient}
                 />
             </Container>
         )
