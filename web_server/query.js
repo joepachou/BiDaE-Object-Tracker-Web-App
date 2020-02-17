@@ -526,11 +526,11 @@ const signup = (request, response) => {
                     response.status(200).json(res)
                 })
                 .catch(err => {
-                    console.log("sinup error:", err)
+                    console.log("sinup 2 error:", err)
                 })
         })
         .catch(err => {
-            console.log("signup fails" + err)
+            console.log("signup 1 fails" + err)
         })
 }
 

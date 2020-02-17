@@ -1076,8 +1076,7 @@ const deleteUser = (username) => {
 
 
 const setUserRole = (name, roles,areaNumber,secondArea) => {
-	
-	 if (secondArea == '') { //如果沒有選secondArea 就是''
+	if (secondArea == '') { //如果沒有選secondArea 就是''
 			const query = `
 
 		DELETE FROM user_roles WHERE user_roles.user_id = (
@@ -1278,7 +1277,31 @@ const setVisitTimestamp = (username) => {
 }
 
 const insertUserData = (name, roles, area_id,secondArea) => {
-	return `
+
+	if (secondArea =='') {
+		return `
+		INSERT INTO user_roles (
+			user_id, 
+			role_id
+		)
+		VALUES 
+		${
+			roles.map(role => `(
+				(
+					SELECT id
+					FROM user_table
+					WHERE name='${name}'
+				), 
+				(
+					SELECT id 
+					FROM roles
+					WHERE name='${role}'
+				)
+			)`
+		)};
+	`
+	}else{
+		return `
 		INSERT INTO user_roles (
 			user_id, 
 			role_id
@@ -1316,6 +1339,8 @@ const insertUserData = (name, roles, area_id,secondArea) => {
 		)};
 	
 	`
+	}
+
 }
 
 const addEditObjectRecord = (formOption, username, filePath) => {

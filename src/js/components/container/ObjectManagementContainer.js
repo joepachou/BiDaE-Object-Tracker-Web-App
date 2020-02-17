@@ -24,14 +24,14 @@ import {
     Container,
     ButtonToolbar,
 } from 'react-bootstrap';
-import EditObjectForm from './EditObjectForm'
-import selecTableHOC from 'react-table/lib/hoc/selectTable';
-import config from '../../config'
 import { 
     objectTableColumn,
     patientTableColumn,
     importTableColumn
  } from '../../tables'
+import EditObjectForm from './EditObjectForm'
+import selecTableHOC from 'react-table/lib/hoc/selectTable';
+import config from '../../config'
 import EditPatientForm from './EditPatientForm'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
@@ -50,37 +50,33 @@ class ObjectManagementContainer extends React.Component{
     static contextType = AppContext
     
     state = {
-        column:[],
-        columnImport:[],
-        columnPatient:[],
-        data:[],
-        dataImport: [],
-        dataPatient:[],
-        dataImportPatient:[],
-        objectTable: [],
-        isShowEdit: false,
-        isPatientShowEdit: false,
-        isShowAddAll: false,
-        selection: [],
-        selectedRowData: [],
-        selectedRowData_Patient: [],
-        selectedRowData_Import: [],
-        areaList: [],
-        formTitle: '',
+        column:[], //設備列表的欄位設定
+        columnImport:[],//匯入的欄位設定
+        columnPatient:[],//病人列表的欄位設定
+        data:[],//object data
+        dataImport: [],//object import data
+        dataPatient:[],//patient data
+        dataImportPatient:[],// patient import data
+        objectTable: [],//ＤＢ抓出來的object table data
+        isShowEdit: false, //點資料後的編輯視窗 object
+        isPatientShowEdit: false, //點資料後的編輯視窗 patient
+        selection: [], //存勾選的資料
+        selectedRowData: [], // onclick的資料
+        selectedRowData_Patient: [], // onclick的資料
+        formTitle: '', //表單的標題
         formPath: '',
         selectAll: false,
         locale: this.context.locale.abbr,
-        tabIndex: 0,
+        tabIndex: 0, 
         roomOptions: {},
         isShowBind:false,
-        isShowEditImportTable:false,
+        isShowEditImportTable:false, //DissociationForm的show
         bindCase:0, // １是Object 2是Patient
-        dataImportThis:[],
-        physicianName:'',
-        physicianIDNumber:0,
-        disableASN:false,
+        physicianName:'',//存onclick後的醫生資料
+        physicianIDNumber:0,//存onclick後的醫生ID
+        disableASN:false,//編輯不能更改ASN,新增可以
         transferredLocationList: [],
-        showDeleteConfirmation: false,
+        showDeleteConfirmation: false, //確定刪除的form
         warningSelect : 0, //if 0 ，就warn完就執行delete patien 否則delete object
     }
 
@@ -100,12 +96,10 @@ class ObjectManagementContainer extends React.Component{
         this.getDataImport()
         this.getUserList();
         this.getLbeaconData();
-        
     }
 
     getUserList = () => {
         let { locale } = this.context
-
         axios.post(getUserList, {
             locale: locale.abbr 
         })
@@ -338,21 +332,10 @@ class ObjectManagementContainer extends React.Component{
         })
     }
 
-    handleModalForm = () => {
-        this.setState({
-            isShowEdit: true,
-            isPatientShowEdit: true,
-            isShowBind:true,
-            bindCase:0,
-            isShowEditImportTable:true
-        })
-    }
-
     handleClose = () => {
         this.setState({
             isShowEdit: false,
             isPatientShowEdit: false,
-            isShowAddAll: false,
             isShowBind:false,
             bindCase:0,
             isShowEditImportTable:false,
@@ -370,7 +353,6 @@ class ObjectManagementContainer extends React.Component{
                     formTitle: name,
                     selectedRowData: [],
                     selectedRowData_Patient:[],
-                    selectedRowData_Import:[],
                     formPath: addObject,
                     disableASN:false
                 })
@@ -402,7 +384,10 @@ class ObjectManagementContainer extends React.Component{
                 })
                 break;
             case "delete import data":
-                this.deleteRecordImport();
+                    this.setState({
+                        showDeleteConfirmation: true,
+                        warningSelect : 2
+                   })
                 break;  
             case "dissociation":
                 this.setState({
@@ -607,7 +592,6 @@ class ObjectManagementContainer extends React.Component{
             isPatientShowEdit: true, 
             selectedRowData: [],
             selectedRowData_Patient:[],
-            selectedRowData_Import:[],
             formTitle: 'add inpatient',
             formPath: addPatient,
             physicianName:'',
@@ -651,10 +635,7 @@ class ObjectManagementContainer extends React.Component{
                             XLSX.utils.sheet_to_json(workbook.Sheets[sheet])
                         ); // break; // 如果只取第一張表，就取消註釋這行
                     }
-                }
-                this.setState({
-                    dataImportThis: data
-                })
+                } 
 
                 
 
@@ -782,7 +763,6 @@ class ObjectManagementContainer extends React.Component{
             isShowEdit, 
             selectedRowData,
             selectedRowData_Patient,
-            selectedRowData_Import,
             isPatientShowEdit,
             selectAll,
             selectType,
@@ -1029,7 +1009,7 @@ class ObjectManagementContainer extends React.Component{
                             <Button 
                                 variant="outline-primary" 
                                 className='text-capitalize mr-2 mb-1'
-                                name="delete import patient"
+                                name="delete import data"
                                 onClick={this.handleClickButton}
                             >
                                 {locale.texts.DELETE}
@@ -1106,7 +1086,11 @@ class ObjectManagementContainer extends React.Component{
                 <DeleteConfirmationForm
                     show={this.state.showDeleteConfirmation} 
                     handleClose={this.handleClose}
-                    handleSubmit={this.state.warningSelect == 0 ?  this.deleteRecordPatient :  this.objectMultipleDelete}
+                    handleSubmit={
+                        this.state.warningSelect == 0 ? this.deleteRecordPatient  
+                    :this.state.warningSelect ==1 ?  this.objectMultipleDelete 
+                    : this.state.warningSelect ==2 ?  this.deleteRecordImport : null 
+                    }
                 />
             </Container>
         )

@@ -57,16 +57,17 @@ const DeleteUserForm = ({
                     }
 
                     onSubmit={(values, { setStatus, setSubmitting }) => {
-                        axios.post(dataSrc.deleteUser, {
-                            username: values.name.label
-                        })
-                        .then(res => {
-                            handleSubmit()
-                            handleClose()
-                        })
-                        .catch(err => {
-                            console.log("delete User fail : " + err);
-                        })
+                        handleSubmit(values)
+                        // axios.post(dataSrc.deleteUser, {
+                        //     username: values.name.label
+                        // })
+                        // .then(res => {
+                        //     handleSubmit()
+                        //     handleClose()
+                        // })
+                        // .catch(err => {
+                        //     console.log("delete User fail : " + err);
+                        // })
                       
                     }}
 
