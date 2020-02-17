@@ -17,9 +17,13 @@ import {
     Row,
     Col,
 } from "react-bootstrap"
+import { Select } from 'semantic-ui-react';
 import NumberPicker from '../NumberPicker';
+
+
 let elseArray = []
 let  rows_data = []
+
 
 class UserProfile extends React.Component{
 
@@ -115,50 +119,58 @@ class UserProfile extends React.Component{
 
       }
 
-      getAreaTable = () => {
-          let { locale } = this.context
-          const {auth} = this.context
-          rows_data = []
-          this.setState({rows_data})
-          axios.post(getAreaTable, {
-              locale: locale.abbr
-          })
-          .then(res => {
-                axios.post(getUserArea, {
-                user_id: auth.user.id
-                })
-                .then(res_UserArea => {
-                    let noteCount =0;
-                    let mainAreaBtn = []
-                    let noteArray = []
-                    res_UserArea.data.rows.map(nowArea => {
-                        noteArray[parseInt(nowArea.area_id)] =locale.texts.ALREADY_CHOOSE
-                    })
-                    noteArray[parseInt(auth.user.main_area)] = locale.texts.MAIN_AREA
-                    mainAreaBtn[parseInt(auth.user.main_area)] = true
-                
-                    if (rows_data == ''){//避免有兩個一樣的資料，像是２筆變４筆
-                        res.data.rows.map(item=>{
-                        if (process.env.SITES_GROUP.includes(parseInt(item.id)) ){
+    getAreaTable = () => {
+        let { locale } = this.context
+        const {auth} = this.context
+        rows_data = []
+
+        this.setState({
+            rows_data
+        })
+
+        axios.post(getAreaTable, {
+            locale: locale.abbr
+        })
+        .then(res => {
+            axios.post(getUserArea, {
+            user_id: auth.user.id
+        })
+        .then(res_UserArea => {
+            let noteCount =0;
+            let mainAreaBtn = []
+            let noteArray = []
+            res_UserArea.data.rows.map(nowArea => {
+                noteArray[parseInt(nowArea.area_id)] =locale.texts.ALREADY_CHOOSE
+            })
+            noteArray[parseInt(auth.user.main_area)] = locale.texts.MAIN_AREA
+            mainAreaBtn[parseInt(auth.user.main_area)] = true
+        
+            if (rows_data == ''){//避免有兩個一樣的資料，像是２筆變４筆
+                res.data.rows.map(item=>{
+                    if (process.env.SITES_GROUP.includes(parseInt(item.id)) ) {
                         noteCount +=1    
                         rows_data.push({
-                            area : locale.texts[item.name],
-                            add :   <Button  name={item.name} disabled={mainAreaBtn[noteCount]} variant="outline-success" className="text-capitalize"  onClick={this.handleAddArea}>{locale.texts.ADD}</Button>,
-                            remove :   <Button  name={item.name} disabled={mainAreaBtn[noteCount]}  variant="outline-info" className="text-capitalize"  onClick={this.handleRemoveArea}>{locale.texts.REMOVE}</Button>,
-                            note : noteArray[noteCount]
-                            })
-                        }
+                        area : locale.texts[item.name],
+                        add :   <Button  name={item.name} disabled={mainAreaBtn[noteCount]} variant="outline-success" className="text-capitalize"  onClick={this.handleAddArea}>{locale.texts.ADD}</Button>,
+                        remove :   <Button  name={item.name} disabled={mainAreaBtn[noteCount]}  variant="outline-info" className="text-capitalize"  onClick={this.handleRemoveArea}>{locale.texts.REMOVE}</Button>,
+                        note : noteArray[noteCount]
                         })
                     }
                 })
-                .catch(err => {
-                    console.log(err)
-                })
-          })
-          .catch(err => {
-              console.log(err)
-          })
-      }
+                this.setState({
+                    rows_data
+                }) 
+            }
+        
+        })
+        .catch(err => {
+            console.log(err)
+        })
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
     resetFreqSearchCount = (value) => {
         const {
             auth
