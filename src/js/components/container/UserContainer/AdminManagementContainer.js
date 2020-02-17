@@ -114,8 +114,7 @@ class AdminManagementContainer extends React.Component{
 
         let {
             api
-        } = this.state
- 
+        } = this.state 
         auth[api](values)
             .then(res => {
                 this.getUserList()
