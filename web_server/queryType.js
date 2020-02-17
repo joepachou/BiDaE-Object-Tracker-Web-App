@@ -1111,7 +1111,8 @@ const setUserRole = (name, roles,areaNumber,secondArea) => {
 			};
 		
 		
-		DELETE FROM user_area WHERE user_id = (
+		DELETE FROM user_area 
+		WHERE user_id = (
 			SELECT id 
 			FROM user_table 
 			WHERE name='${name}'
@@ -1149,7 +1150,8 @@ const setUserRole = (name, roles,areaNumber,secondArea) => {
 			};
 		
 		
-		DELETE FROM user_area WHERE user_id = (
+		DELETE FROM user_area 
+		WHERE user_id = (
 			SELECT id 
 			FROM user_table 
 			WHERE name='${name}'
