@@ -123,7 +123,8 @@ const tw = {
     ADD:"新增",
     REMOVE:"移除",
     DELETE_USER:"刪除使用者",
-
+    MULTIPLEDELETE:"多選刪除",
+    
     /* Form Field */
     NAME: "名稱",
     TYPE: "類別",

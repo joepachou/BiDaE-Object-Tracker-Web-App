@@ -121,6 +121,7 @@ const en =  {
     ADD:"Add",
     REMOVE:"Remove",
     DELETE_USER:"Delete user",
+    MULTIPLEDELETE:"multiple delete",
 
     /* Form Field */
     NAME: "name",
@@ -169,6 +170,7 @@ const en =  {
     NO: 'no',
     IS_GLOBAL_FENCE: 'global fence',
     SIGNATURE:'signature',
+
 
     /** form title */
     EDIT_LBEACON: "edit lbeacon",

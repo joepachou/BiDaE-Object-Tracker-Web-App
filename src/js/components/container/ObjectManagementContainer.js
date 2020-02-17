@@ -72,7 +72,7 @@ class ObjectManagementContainer extends React.Component{
         formPath: '',
         selectAll: false,
         locale: this.context.locale.abbr,
-        tabIndex: 1,
+        tabIndex: 0,
         roomOptions: {},
         isShowBind:false,
         isShowEditImportTable:false,
@@ -388,8 +388,8 @@ class ObjectManagementContainer extends React.Component{
                 })
             break;
 
-            case "delete object":
-                this.deleteRecordDevice();
+            case "deleteObject":
+                this.objectMultipleDelete();
                 break;
 
             case "add all":
@@ -556,15 +556,16 @@ class ObjectManagementContainer extends React.Component{
     }
 
 
-    deleteRecordDevice = () => {
+    objectMultipleDelete = () => {
         let idPackage = []
         var deleteArray = [];
         var deleteCount = 0;
+ 
         this.state.data.map (item => {
          
             this.state.selection.map(itemSelect => {
                 
-                itemSelect === item.name
+                itemSelect === item.id
                 ? 
                  deleteArray.push(deleteCount.toString()) 
                 : 
@@ -572,12 +573,14 @@ class ObjectManagementContainer extends React.Component{
             })
                  deleteCount +=1
         })
+        
         deleteArray.map( item => {
             this.state.data[item] === undefined ?
                 null
                 :
                 idPackage.push(parseInt(this.state.data[item].id))
             })
+ 
         axios.post(deleteDevice, {
             idPackage
         })
@@ -845,7 +848,15 @@ class ObjectManagementContainer extends React.Component{
                             >
                                 {locale.texts.DISSOCIATE}
                             </Button>
-
+                            <Button 
+                                variant="outline-primary" 
+                                className='text-capitalize mr-2 mb-1'
+                                name="deleteObject"
+                                onClick={this.handleClickButton}
+                                // onClick={this.deleteRecordPatient}    
+                            >
+                                {locale.texts.MULTIPLEDELETE}
+                            </Button>
                         </ButtonToolbar>
                         {/* <Searchbar 
                             className={'float-right'}
