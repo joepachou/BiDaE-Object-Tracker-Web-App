@@ -17,6 +17,7 @@ import { userInfoTableColumn } from '../../../tables'
 import EditUserForm from './EditUserForm';
 import { AppContext } from '../../../context/AppContext';
 import DeleteUserForm from '../UserContainer/DeleteUserForm'
+import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm';
 const Fragment = React.Fragment;
 
 class AdminManagementContainer extends React.Component{
@@ -33,6 +34,8 @@ class AdminManagementContainer extends React.Component{
         areaList: [],
         title: '',
         locale: this.context.locale.abbr,
+        showDeleteConfirmation:false,
+        deleteUserName:''
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -54,6 +57,8 @@ class AdminManagementContainer extends React.Component{
 
 
     getUserList = () => {
+
+
         let { 
             locale
         } = this.context
@@ -117,7 +122,9 @@ class AdminManagementContainer extends React.Component{
                 this.setState({
                     showModifyUserInfo: false,
                     showAddUserForm: false,
-                    showDeleteUserForm:false
+                    showDeleteUserForm:false,
+                    showDeleteConfirmation:false,
+                    deleteUserName:''
                 })
                 // this.getUserList()
             })
@@ -126,8 +133,32 @@ class AdminManagementContainer extends React.Component{
             })
     }
 
+    handleDeleteUserSubmit = (e) => {
+        this.setState({   
+            showDeleteConfirmation : true, 
+            deleteUserName : e.name.label
+        })
+    }
+
+    handleWarningChecked = () => [
+
+
+        axios.post(deleteUser, {
+            username: this.state.deleteUserName
+        })
+        .then(res => {
+            this.getUserList()
+            this.handleClose()
+        })
+        .catch(err => {
+            console.log("delete User fail : " + err);
+        })
+
+
+    ]
 
     submitDeleteUserForm = () => {
+
         axios.post(deleteUser, {
             username: this.state.selectedUser.name
         }).then((res)=>{
@@ -149,6 +180,8 @@ class AdminManagementContainer extends React.Component{
             selectedUser: null,
             title: '',
             api: '',
+            showDeleteConfirmation:false,
+            deleteUserName:''
         })
     }
 
@@ -249,8 +282,16 @@ class AdminManagementContainer extends React.Component{
                     title={locale.texts.DELETE_USER}
                     handleClose={this.handleClose}
                     data = {this.state.data}
-                    handleSubmit = {this.getUserList}
+                    handleSubmit = { this.handleDeleteUserSubmit}
                 />
+
+                <DeleteConfirmationForm
+                    show={this.state.showDeleteConfirmation} 
+                    handleClose={this.handleClose}
+                    handleSubmit={this.handleWarningChecked}
+                />
+
+
             </Fragment>
         )
     }
