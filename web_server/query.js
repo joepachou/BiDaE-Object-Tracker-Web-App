@@ -68,6 +68,16 @@ const getTrackingData = (request, response) => {
    
     /** The user's authenticated area id */
     const userAuthenticatedAreaId= request.body.user.areas_id
+
+    const {
+        main_area,
+        areas_id
+    } = request.body.user
+
+    /** Allow user to access the info of objects in secondary areas */
+    areas_id.push(main_area)
+
+
     /** The UI's current area id */
     const currentAreaId = request.body.areaId.toString()
 
@@ -1115,7 +1125,6 @@ const parseGeoFenceConfig = (field = []) => {
 
 /** Check tracking data match the current UI area */
 const checkMatchedObject = (item, userAuthenticatedAreaId, currentAreaId) => {
-
     /** If the current area id is the user's authenticated area id */
     let isInUserSAuthArea = userAuthenticatedAreaId.includes(currentAreaId)
 

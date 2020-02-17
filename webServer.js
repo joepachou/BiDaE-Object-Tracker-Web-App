@@ -233,7 +233,7 @@ app.get('/download/com.beditech.IndoorNavigation.apk', (req, res) => {
  * If it is window os, please refer to https://tecadmin.net/install-openssl-on-windows/ install openssl 
  * and set the environment variables*/
 
- var privateKey = process.env.PRIVATE_KEY && fs.readFileSync(__dirname + `/ssl/${process.env.PRIVATE_KEY}`)
+var privateKey = process.env.PRIVATE_KEY && fs.readFileSync(__dirname + `/ssl/${process.env.PRIVATE_KEY}`)
 var certificate = process.env.CERTIFICATE && fs.readFileSync(__dirname + `/ssl/${process.env.CERTIFICATE}`) 
 var ca_bundle = process.env.CA_BUNDLE && fs.readFileSync(__dirname + `/ssl/${process.env.CA_BUNDLE}`) 
 
