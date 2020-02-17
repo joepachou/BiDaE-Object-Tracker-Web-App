@@ -77,7 +77,6 @@ const getTrackingData = (request, response) => {
     /** Allow user to access the info of objects in secondary areas */
     areas_id.push(main_area)
 
-
     /** The UI's current area id */
     const currentAreaId = request.body.areaId.toString()
 
