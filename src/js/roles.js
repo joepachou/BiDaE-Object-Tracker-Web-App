@@ -3,13 +3,6 @@ const rules = {
         permission: [  
             "form:view",
         ],
-        routes: [
-            {
-              component: 'OnlyForHeadOfOperation', 
-              url: '/only-for-head-of-operation'
-            },
-        ],
-
       
     },
     care_provider: {
@@ -74,4 +67,3 @@ const rules = {
   };
   
   export default rules;
-  // module.exports = {rules}
