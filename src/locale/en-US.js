@@ -41,6 +41,7 @@ const en =  {
     SCAN_TAG:"Please Scan TAG",
     ALREADY_CHOOSE:"Already choose",
     MAIN_AREA:"Main area",
+    SECONDARY_AREAS: "secondary areas",
 
     /* Location accuracy */
     LOCATION_ACCURACY: "Location Accuracy",
@@ -65,6 +66,9 @@ const en =  {
     TOTAL_DATA: "HIS Data",
     IMPORT_PATIENT_DATA:"HIS Patient",
     BATTERY_NOTIFICATION: "battery notification",
+    ABOUT_YOU: "about you",
+    YOUR_SERVICE_AREAS: "your service areas",
+    PREFERENCE: "preference",
 
     /* Button */
     CLEAR : "clear",
@@ -170,6 +174,7 @@ const en =  {
     NO: 'no',
     IS_GLOBAL_FENCE: 'global fence',
     SIGNATURE:'signature',
+    NUMBER_OF_SEARCH_HISTORY: "number of search history",
 
 
     /** form title */

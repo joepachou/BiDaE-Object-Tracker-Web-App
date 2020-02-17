@@ -39,6 +39,7 @@ const tw = {
     SCAN_TAG:"請掃描TAG",
     ALREADY_CHOOSE:"已選擇",
     MAIN_AREA:"主要地區",
+    SECONDARY_AREAS: "次要地區",
 
     /* Location accuracy */
     LOCATION_ACCURACY: "位置精準度",
@@ -63,6 +64,10 @@ const tw = {
     TOTAL_DATA:"匯入資料",
     IMPORT_PATIENT_DATA:"匯入病人",
     BATTERY_NOTIFICATION: "電量通知",
+    ABOUT_YOU: "關於",
+    YOUR_SERVICE_AREAS: "服務區域",
+    PREFERENCE: "偏好設定",
+
 
     /* Button */
     CLEAR : "清除",
@@ -171,6 +176,7 @@ const tw = {
     YES: '是',
     NO: '否',
     IS_GLOBAL_FENCE: '全境電子圍籬',
+    NUMBER_OF_SEARCH_HISTORY: "常用搜尋筆數",
        
     /** form title */
     EDIT_LBEACON: "編輯 lbeacon",

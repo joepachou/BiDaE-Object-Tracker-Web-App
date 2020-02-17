@@ -17,10 +17,10 @@ import {
     Row,
     Col,
 } from "react-bootstrap"
-
-
+import NumberPicker from '../NumberPicker';
 let elseArray = []
 let  rows_data = []
+
 class UserProfile extends React.Component{
 
     static contextType = AppContext
@@ -81,7 +81,9 @@ class UserProfile extends React.Component{
     }
 
     componentDidMount = () => {
-        const {auth} = this.context
+        const {
+            auth
+        } = this.context
         this.setState({
           userInfo: auth.user
         })
@@ -126,32 +128,28 @@ class UserProfile extends React.Component{
                 user_id: auth.user.id
                 })
                 .then(res_UserArea => {
-                let noteCount =0;
-                let mainAreaBtn = []
-                let noteArray = []
-                res_UserArea.data.rows.map(nowArea => {
-                    noteArray[parseInt(nowArea.area_id)] =locale.texts.ALREADY_CHOOSE
-                })
-                noteArray[parseInt(auth.user.main_area)] = locale.texts.MAIN_AREA
-                mainAreaBtn[parseInt(auth.user.main_area)] = true
-               
-                if (rows_data == ''){//避免有兩個一樣的資料，像是２筆變４筆
-                    res.data.rows.map(item=>{
-                    if (process.env.SITES_GROUP.includes(parseInt(item.id)) ){
-                       noteCount +=1    
-                      rows_data.push({
-                        area : locale.texts[item.name],
-                        add :   <Button  name={item.name} disabled={mainAreaBtn[noteCount]} variant="outline-success" className="text-capitalize"  onClick={this.handleAddArea}>{locale.texts.ADD}</Button>,
-                        remove :   <Button  name={item.name} disabled={mainAreaBtn[noteCount]}  variant="outline-info" className="text-capitalize"  onClick={this.handleRemoveArea}>{locale.texts.REMOVE}</Button>,
-                        note : noteArray[noteCount]
+                    let noteCount =0;
+                    let mainAreaBtn = []
+                    let noteArray = []
+                    res_UserArea.data.rows.map(nowArea => {
+                        noteArray[parseInt(nowArea.area_id)] =locale.texts.ALREADY_CHOOSE
+                    })
+                    noteArray[parseInt(auth.user.main_area)] = locale.texts.MAIN_AREA
+                    mainAreaBtn[parseInt(auth.user.main_area)] = true
+                
+                    if (rows_data == ''){//避免有兩個一樣的資料，像是２筆變４筆
+                        res.data.rows.map(item=>{
+                        if (process.env.SITES_GROUP.includes(parseInt(item.id)) ){
+                        noteCount +=1    
+                        rows_data.push({
+                            area : locale.texts[item.name],
+                            add :   <Button  name={item.name} disabled={mainAreaBtn[noteCount]} variant="outline-success" className="text-capitalize"  onClick={this.handleAddArea}>{locale.texts.ADD}</Button>,
+                            remove :   <Button  name={item.name} disabled={mainAreaBtn[noteCount]}  variant="outline-info" className="text-capitalize"  onClick={this.handleRemoveArea}>{locale.texts.REMOVE}</Button>,
+                            note : noteArray[noteCount]
+                            })
+                        }
                         })
                     }
-                    })
-                this.setState({rows_data})
-
-                    
-                }
-               
                 })
                 .catch(err => {
                     console.log(err)
@@ -161,51 +159,24 @@ class UserProfile extends React.Component{
               console.log(err)
           })
       }
-      resetFreqSearchCount = (e) => {
-        const {auth} = this.context;
-        let value = e.target.value
-        console.log(value)
-        if (value !== ''){
-          value=Math.min(value, 10)
-          value=Math.max(value, 1)
-            let userInfo = this.state.userInfo
-          userInfo.freqSearchCount = value
-          this.setState({
-            userInfo: userInfo
-          })
-          axios.post(modifyUserInfo, {
-            info: userInfo,
-            username: userInfo['name']
-          }).then(res => {
-            auth.setUserInfo('freqSearchCount', value)
-          }) 
-        }
+    resetFreqSearchCount = (value) => {
+        const {
+            auth
+        } = this.context;
         
-      }
-      generateSettingBlock = () => {
-        let rows_data = [{
-          setting: '# of search history',
-          choice: this.state.userInfo ? <input type="number" 
-                        placeholder={this.state.userInfo['freqSearchCount']} 
-                        value={this.state.userInfo['freqSearchCount']} 
-                        min="1" 
-                        max="10" 
-                        onBlur = {this.resetFreqSearchCount}/> : null
-        }]
-        return rows_data
-      }
- 
-
- 
-
-    constructor(props){
-        super(props);
-
-        this.upDate = this.upDate.bind(this);
-    }
-
-    upDate(picture){
-       
+        if (value) {
+            let userInfo = this.state.userInfo
+            userInfo.freqSearchCount = value
+            this.setState({
+                userInfo: userInfo
+            })
+            axios.post(modifyUserInfo, {
+                info: userInfo,
+                username: userInfo['name']
+            }).then(res => {
+                auth.setUserInfo('freqSearchCount', value)
+            }) 
+        }
     }
 
     handleAddArea =(e) =>{
@@ -308,64 +279,51 @@ class UserProfile extends React.Component{
 
     }
 
-   
-
-
-
     render(){
-        const { locale } = this.context
-        const {auth} = this.context;
-        //console.log(config.mapConfig.areaModules)
-        const style = {
-            userProfileContainer: {
-                height: '250px',
-                //border: 'solid'
-            },
-            userImageAndUpload: {
-                height: '250px',
-                //border: 'solid',
-                width:'220px'
-            },
-            userImage:{
-                height: '220px',
-               
-                width: '220px',
-                //border: 'solid',
-                borderRadius: '99rem',
-            },
-            uploadButton: {
-                color: "black"
-            }
-        }
-        // const key = Object.keys(config.mapConfig.areaOptions)
-        // const value = Object.values(config.mapConfig.areaOptions)
-   
+        const { 
+            locale,
+            auth 
+        } = this.context
+
+        const { 
+            areaOptions
+        } = config.mapConfig
+
         return(
-             //    頭像
-            // <div className='d-flex flex-row'style={style.userProfileContainer}>
-            //     <div className='d-flex flex-column' style={style.userImageAndUpload}>
-            //         <Image src={userProfileImg} style={style.userImage} />  
-            //     </div>
-            //     <div className='d-flex flex-column'>
-            //         <p>名字 : {auth.user.name}</p>
-            //         <p>職位 : {auth.user.role}</p>
-            //         <p>ID編號 ：{auth.user.id}</p>
-            //         {
-            //             key.map(function(item, index, array){
-            //                 if(item == auth.user.areas_id){
-            //                     return <p>地區 : {value[index]}</p>
-            //                 }
-            //             })
-            //         }
-            //     </div>
-
-            // </div>
-
-           
-
-            <div className=''>
-     
-
+            <div
+                className="text-capitalize d-flex flex-column"
+            >
+                <div>
+                    <div className="title ">
+                        {locale.texts.ABOUT_YOU}
+                    </div>
+                    <div>
+                        <p>
+                            {locale.texts.ID}:{auth.user.id}
+                        </p>
+                        <p>
+                            {locale.texts.NAME}: {auth.user.name}
+                        </p>
+                    </div>
+                </div>
+                <hr/>
+                <div>
+                    <div className="title ">
+                        {locale.texts.YOUR_SERVICE_AREAS}
+                    </div>
+                    <div>
+                        <p>
+                            {locale.texts.MAIN_AREA}: {locale.texts[areaOptions[auth.user.main_area]]}
+                        </p>
+                        <p>
+                            {locale.texts.SECONDARY_AREAS}: {
+                                auth.user.areas_id.map(id => {
+                                    return locale.texts[areaOptions[id]]
+                                }).join('/')
+                            }
+                        </p>
+                    </div>
+                </div>
                 <Row className="m-3" style={{width: '100%'}}>
                     <Col>
                         <MDBTable>
@@ -374,21 +332,27 @@ class UserProfile extends React.Component{
                         </MDBTable>
                     </Col>
                 </Row>
-                <Row id="Setting" className="m-3" style={{width: '100%'}}>
-                    <Col> 
-                        <MDBTable>
-                        <MDBTableHead columns={this.state.settingColumns} />
-                        <MDBTableBody rows={this.generateSettingBlock()} />
-                        </MDBTable>
-                    </Col>
-                </Row>
-   
-           
+                <hr/>
+                <div>
+                    <div 
+                        className="title"
+                    >
+                        {locale.texts.PREFERENCE}
+                    </div>
+                    <div 
+                        className="d-flex justify-content-start align-items-center"
+                    >
+                        {locale.texts.NUMBER_OF_SEARCH_HISTORY}: 
+                        <NumberPicker
+                            name="numberPicker"
+                            value={auth.user.freqSearchCount}
+                            onChange={this.resetFreqSearchCount}
+                            length={10}
+                        />
+                    </div>
 
+                </div>
             </div>
-
-
-
         )
     }
 }
