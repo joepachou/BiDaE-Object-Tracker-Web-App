@@ -789,7 +789,7 @@ const signin = (username) => {
 			) AS roles,
 			array (
 				SELECT area_id 
-				FROM areas
+				FROM area_table
 			) AS areas_id,
 			(
 				SELECT locales.name 
@@ -1428,7 +1428,7 @@ const getAreaTable = () => {
 		SELECT 
 			id,
 			name
-		FROM areas;
+		FROM area_table;
 	`
 }
 
