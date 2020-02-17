@@ -499,7 +499,7 @@ function setLocaleID (userID,lang) {
 		UPDATE user_table 
 		SET locale_id = (
 			SELECT id 
-			FROM locale
+			FROM locales
 			WHERE name = $1
 		)
 		WHERE id = $2
@@ -792,9 +792,9 @@ const signin = (username) => {
 				FROM areas
 			) AS areas_id,
 			(
-				SELECT locale.name 
-				FROM locale 
-				WHERE user_info.locale_id = locale.id
+				SELECT locales.name 
+				FROM locales
+				WHERE user_info.locale_id = locales.id
 			) AS locale
 
 		FROM user_info
@@ -1422,7 +1422,7 @@ const getAreaTable = () => {
 		SELECT 
 			id,
 			name
-		FROM area_table
+		FROM areas;
 	`
 }
 
