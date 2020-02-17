@@ -695,7 +695,6 @@ const addImport = (formOption) => {
 const editObjectPackage = (formOption, username, record_id, reservedTimestamp) => {
 	
 	let item = formOption
-	console.log(item.transferred_location)
 	let text = `
 		UPDATE object_table
 		SET 
@@ -711,7 +710,8 @@ const editObjectPackage = (formOption, username, record_id, reservedTimestamp) =
 	`
 	return text
 }
-function signin(username) {
+
+const signin = (username) => {
 
 	const text =
 		`
@@ -719,7 +719,14 @@ function signin(username) {
 		user_info
 			AS
 				(
-					SELECT name, password, mydevice, id, main_area, max_search_history_count, locale_id
+					SELECT 
+						name, 
+						password, 
+						mydevice, 
+						id, 
+						main_area, 
+						max_search_history_count, 
+						locale_id
 					FROM user_table
 					WHERE name =$1
 				)
@@ -727,33 +734,39 @@ function signin(username) {
 		roles
 			AS
 				(
-					SELECT user_roles.user_id, user_roles.role_id, roles.name as role_name 
+					SELECT 
+						user_roles.user_id, 
+						user_roles.role_id, 
+						roles.name as role_name 
 					FROM user_roles
 					INNER JOIN roles
 					ON roles.id = user_roles.role_id
-					WHERE user_roles.user_id = (SELECT id FROM user_info)
-				),
-		permissions
-			AS
-				(
-					SELECT roles_permission.role_id, roles_permission.permission_id, permission_table.name as permission_name 
-					FROM roles_permission
-					INNER JOIN permission_table
-					ON roles_permission.permission_id = permission_table.id
-					WHERE roles_permission.role_id in (SELECT role_id FROM roles)
+					WHERE user_roles.user_id = (
+						SELECT id 
+						FROM user_info
+					)
 				),
 		areas
 			AS
 				(
 					SELECT area_id
 					FROM user_areas
-					WHERE user_areas.user_id = (SELECT id FROM user_info)
+					WHERE user_areas.user_id = (
+						SELECT id 
+						FROM user_info
+					)
 				),
 		search_histories
 			AS
 				(
-					SELECT keyword as name, COUNT(id) as value
-					FROM search_history where user_id = (SELECT id FROM user_info)
+					SELECT 
+						keyword as name, 
+						COUNT(id) as value
+					FROM search_history 
+					WHERE user_id = (
+						SELECT id 
+						FROM user_info
+					)
 					GROUP BY keyWord
 				)
 
@@ -767,7 +780,6 @@ function signin(username) {
 				FROM search_histories
 			) AS search_history,
 			user_info.id,
-			user_info.id,
 			user_info.locale_id,
 			user_info.main_area,
 			user_info.max_search_history_count as freq_search_count,
@@ -775,10 +787,6 @@ function signin(username) {
 				SELECT role_name 
 				FROM roles
 			) AS roles,
-			array ( 
-				SELECT DISTINCT permission_name 
-				FROM permissions 
-			) AS permissions, 
 			array (
 				SELECT area_id 
 				FROM areas
@@ -803,6 +811,7 @@ function signin(username) {
     return query;
 
 }
+
 function signup(signupPackage) {
 
 	const text = 

@@ -448,8 +448,6 @@ const signin = (request, response) => {
                     message: "Username or password is incorrect"
                 })
             } else {
-                
-
                 if (bcrypt.compareSync(password, res.rows[0].password)) {
                     let { 
                         name, 

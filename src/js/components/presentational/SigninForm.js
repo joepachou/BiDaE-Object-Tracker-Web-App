@@ -12,6 +12,7 @@ import axios from 'axios';
 import dataSrc from '../../dataSrc'
 import Cookies from 'js-cookie';
 import AuthenticationContext from '../../context/AuthenticationContext';
+import permissionsTable from '../../roles'
 
 const SiginForm = ({
     show,
@@ -62,6 +63,16 @@ const SiginForm = ({
                                 let {
                                     userInfo
                                 } = res.data
+
+                                userInfo.permissions = userInfo.roles.reduce((permissions, role) => {
+                                    permissionsTable[role].permission.map(item => {
+                                        if (!permissions.includes(item)) {
+                                            permissions.push(item)
+                                        }
+                                    })
+                                    return permissions
+                                }, [])
+
                                 auth.signin(userInfo)
                                 locale.reSetState(userInfo.locale)
                                 handleSubmit()
