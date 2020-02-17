@@ -461,6 +461,7 @@ const signin = (request, response) => {
                         locale_id,
                         locale
                     } = res.rows[0]
+
                     let userInfo = {
                         name,
                         myDevice: mydevice,
@@ -492,7 +493,7 @@ const signin = (request, response) => {
             }
         })
         .catch(err => {
-            console.log(`sigin fails + ${err}`)       
+            console.log(`sigin fails ${err}`)       
         })
 }
 

@@ -746,7 +746,7 @@ const signin = (username) => {
 						FROM user_info
 					)
 				),
-		areas
+		area_table
 			AS
 				(
 					SELECT area_id
