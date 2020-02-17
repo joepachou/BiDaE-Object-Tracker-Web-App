@@ -152,7 +152,6 @@ const EditUserForm = ({
                                 )}
                             />
                             <hr/>
-                            
                             <FormikFormGroup 
                                 type="text"
                                 name="areaName"
@@ -174,46 +173,6 @@ const EditUserForm = ({
                                     />
                                 )}
                             />
-
-
-
-
-
-
-
-{/* 
-                            <hr/>
-                            <FormikFormGroup 
-                                name="roles"
-                                label={locale.texts.ROLES}
-                                error={errors.roles}
-                                touched={touched.roles}
-                                component={() => (
-                                    <CheckboxGroup
-                                        id="roles"
-                                        value={values.roles}
-                                        onChange={setFieldValue}                                            
-                                    >
-                                        {roleName
-                                            .filter(roleName => roleName.name !== 'guest' && roleName.name !== 'dev')
-                                            .map((roleName, index) => {
-                                                return (
-                                                    <Field
-                                                        component={Checkbox}
-                                                        key={index}
-                                                        name="roles"
-                                                        id={roleName.name}
-                                                        label={locale.texts[roleName.name.toUpperCase()]}
-                                                    />
-                                                )
-                                        })}
-                                    </CheckboxGroup>
-                                )}
-                            />
-                            <hr/>
- */}
-
-
                             <hr/>
                             <FormikFormGroup 
                                 name="secondArea"
@@ -242,17 +201,6 @@ const EditUserForm = ({
                                     </CheckboxGroup>
                                 )}
                             />
-                            <hr/>
-
-
-
-
-
-
-
-
-
-
                             <Modal.Footer>
                                 <Button 
                                     variant="outline-secondary" 
