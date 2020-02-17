@@ -248,7 +248,7 @@ class Map extends React.Component {
 
         /** Create the markers of lbeacons of perimeters and fences
          *  and onto the map  */
-        if (geofenceConfig[areaId].enable) {
+        if (geofenceConfig[areaId] && geofenceConfig[areaId].enable) {
             ['parsePerimeters', 'parseFences'].map(type => {
                 geofenceConfig[areaId].rules.map(rule => {
                     rule[type].coordinates.map(item => {
@@ -331,41 +331,7 @@ class Map extends React.Component {
         const numberSize = this.scalableNumberSize;
         let counter = 0;
         this.filterTrackingData(_.cloneDeep(this.props.proccessedTrackingData))
-        // .filter(item => item.type !== 'TAG0116')
         .map((item, index)  => {
-            // if (index <= 1) {
-            //     item.currentPosition = [10000, 20000, 1]
-            // } else if (index > 1 && index <= 2) {
-            //     item.currentPosition = [15656, 39563, 1]
-            // } else if (index > 2 && index <= 5) {
-            //     item.currentPosition = [10000, 46000, 1]
-            // } else if (index > 5 && index <= 8) {
-            //     item.currentPosition = [20000, 30000, 1]
-            // } else if (index > 8 && index <= 10) {
-            //     item.currentPosition = [18000, 40000, 1]
-            // } else if (index > 10 && index <= 13) {
-            //     item.currentPosition = [19000, 20000, 1]
-            // } else if (index > 13 && index <= 16) {
-            //     item.currentPosition = [20000, 10000, 1]
-            // } else if (index > 16 && index <= 19) {
-            //     item.currentPosition = [30000, 43000, 1]
-            // } else if (index > 19 && index <= 22) {
-            //     item.currentPosition = [14000, 39000, 1]
-            // } else if (index > 22 && index <= 24) {
-            //     item.currentPosition = [20000, 39000, 1]
-            // } else if (index > 24 && index <= 25) {
-            //     item.currentPosition = [11355, 23640, 1]
-            // } else if (index > 25 && index <= 27) {
-            //     item.currentPosition = [7000, 30000, 1]
-            // } else if (index > 27 && index <= 29) {
-            //     item.currentPosition = [20000, 10000, 1]
-            // }  else if (index > 29 && index <= 31) {
-            //     item.currentPosition = [22568, 12435, 1]
-            // } 
-            // console.log(item.type)
-            // if (item.type == "TAG0116") {
-            //     console.log(index)
-            // }
             let position = this.macAddressToCoordinate(item.mac_address,item.currentPosition);
 
 
