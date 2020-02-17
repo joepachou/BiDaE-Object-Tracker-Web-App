@@ -1071,6 +1071,12 @@ const deleteUser = (username) => {
 
 
 const setUserRole = (name, roles,areaNumber,secondArea) => {
+	console.log('========')
+	console.log(name)
+	console.log(roles)
+	console.log(areaNumber)
+	console.log(secondArea)
+
 	if (secondArea == '') { //如果沒有選secondArea 就是''
 			const query = `
 

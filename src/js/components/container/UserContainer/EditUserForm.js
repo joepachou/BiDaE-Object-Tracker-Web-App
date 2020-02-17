@@ -37,7 +37,8 @@ const EditUserForm = ({
     const areaOptions = Object.values(config.mapConfig.areaOptions).map(name => {
         return {
             value: name,
-            label: locale.texts[name.toUpperCase().replace(/ /g, '_')]
+            label: locale.texts[name.toUpperCase().replace(/ /g, '_')],
+            name :name
         };
     })
 
@@ -45,10 +46,10 @@ const EditUserForm = ({
     const mainAreaDefault = 
         { 
             value: selectedUser ?  selectedUser.main_area : null,
-            label:selectedUser ?  locale.texts[config.mapConfig.areaList[selectedUser.main_area]] : null
+            label:selectedUser ?  locale.texts[config.mapConfig.areaList[selectedUser.main_area]] : null,
+            name : selectedUser ?  config.mapConfig.areaList[selectedUser.main_area] : null,
         }
-    
-
+ 
     return (
         <Modal 
             show={show} 
@@ -84,6 +85,7 @@ const EditUserForm = ({
                                         data.map(item => {
                                             item.name == value ? reapeatFlag = false : null
                                         })
+                                         if (selectedUser) { selectedUser.name == value ? reapeatFlag = true : null }
                                       return reapeatFlag
                                     },
                                 })
