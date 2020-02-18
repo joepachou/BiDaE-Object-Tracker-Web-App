@@ -407,6 +407,11 @@ button:focus {
     padding: .2rem .75rem;
 }
 
+.btn.btn-link.btn-sm {
+    padding: 0;
+    font-size: 0.9rem
+}
+
 button.close {
     font-weight: 400;
 }
@@ -483,6 +488,10 @@ button.close {
 
 .modal-dialog-centered {
     top: -30%;
+}
+
+.modal-header {
+    color: black;
 }
 
 /** react-select */
@@ -622,7 +631,8 @@ p {
 } 
 
 .dropdownWrapper {
-    padding: .5rem 0
+    padding: .5rem 0;
+    right: -10%
 }
 
 /** bootstrap gutters */
