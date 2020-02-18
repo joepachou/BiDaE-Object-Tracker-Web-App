@@ -693,9 +693,8 @@ class ObjectManagementContainer extends React.Component{
     };
 
     handleRemove = (key) => {
-        deleteFlag = true 
-
         this.setState({
+            deleteFlag : true, 
             selectedObjectData: key.original,
             isShowEditImportTable: true,
             formTitle: "dissociation" 
