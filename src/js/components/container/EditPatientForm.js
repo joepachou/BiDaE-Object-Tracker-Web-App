@@ -51,14 +51,10 @@ class EditPatientForm extends React.Component {
 
         const { 
             name,
-            physician_id,
             area_name,
-            room_number,
-            id,
             mac_address,
             asset_control_number,
             object_type,
-            physician_name,
             monitor_type = [],
             room,
             physicianName
@@ -117,18 +113,17 @@ class EditPatientForm extends React.Component {
                                 }
                                 : null,
 
-                             physician : this.props.physicianName ?
-                             {
-                                    value:this.props.physicianName,
-                                    label:this.props.physicianName
-                             }
+                             physician: physicianName 
+                             ?  {
+                                    value: physicianName,
+                                    label: physicianName
+                                }
                              : ''
                         }}
                        
                         validationSchema = {
                             Yup.object().shape({
                                 name: Yup.string().required(locale.texts.NAME_IS_REQUIRED),
-                                // roomNumber: Yup.string().required(locale.texts.ROOMNUMBER_IS_REQUIRED),
                                 physician: Yup.string().required(locale.texts.ATTENDING_IS_REQUIRED),
                                 area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
                                 gender: Yup.string().required(locale.texts.GENDER_IS_REQUIRED),
@@ -232,8 +227,8 @@ class EditPatientForm extends React.Component {
                                         <FormikFormGroup 
                                             name="gender"
                                             label={locale.texts.PATIENT_GENDER}
-                                            error={errors.asset_control_number}
-                                            touched={touched.asset_control_number}
+                                            error={errors.gender}
+                                            touched={touched.gender}
                                             component={() => (
                                                 <Select 
                                                     placeholder={locale.texts.CHOOSE_GENDER}
@@ -303,8 +298,8 @@ class EditPatientForm extends React.Component {
                                             type="text"
                                             name="physician"
                                             label={locale.texts.ATTENDING_PHYSICIAN}
-                                            error={errors.asset_control_number}
-                                            touched={touched.asset_control_number}
+                                            error={errors.physician}
+                                            touched={touched.physician}
                                             component={() => (
                                                 <Select
                                                     placeholder = {locale.texts.SELECT_PHYSICIAN}
