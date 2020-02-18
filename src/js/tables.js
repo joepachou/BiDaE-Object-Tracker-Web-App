@@ -370,7 +370,7 @@ const userInfoTableColumn = [
     },
     {
         Header: "Roles",
-        accessor: "role_type",
+        accessor: "roles",
         width: 150,
     },
     {
