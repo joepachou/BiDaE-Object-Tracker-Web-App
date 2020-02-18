@@ -858,8 +858,8 @@ const deleteGateway = (request, response) => {
 
 
 const deleteDevice = (request, response) => {
-    const { idPackage, formOption } = request.body
-    pool.query(queryType.deleteDevice(idPackage, formOption))
+    const { formOption } = request.body
+    pool.query(queryType.deleteDevice(formOption))
         .then(res => {
             console.log('delete Device success')
             response.status(200).json(res)

@@ -1231,8 +1231,9 @@ const deletePatient = (idPackage) => {
 	`
 	return query
 }
+ 
 
-const deleteDevice = (idPackage, formOption) => {
+const deleteDevice = (formOption) => {
 	const query = `
 		DELETE FROM object_table
 		WHERE mac_address IN (${formOption.map(item => `'${item}'`)});
@@ -2072,7 +2073,7 @@ module.exports = {
 	deleteEditObjectRecord,
 	deleteShiftChangeRecord,
 	deletePatient,
-	deleteDevice,
+	deleteDevice, 
 	deleteImportData,
 	setShift,
 	deleteLBeacon,
