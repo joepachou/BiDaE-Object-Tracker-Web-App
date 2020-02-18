@@ -74,8 +74,6 @@ class TranferredLocationManagement extends React.Component{
                         branch.department = []                       
                     }
                 })
-
-                console.log(res.data)
                 this.setState({
                     transferredLocationOptions: res.data
                 })
@@ -109,7 +107,6 @@ class TranferredLocationManagement extends React.Component{
             })
             if (this.state.unFoldBranches.includes(branch.id)) {
                 let {department} = branch
-                console.log(department)
                 department.map( (department, index) => {
                     rows.push({
                         fold: null,
@@ -190,7 +187,6 @@ class TranferredLocationManagement extends React.Component{
         })
     }
     addDepartment = (branch_id) => {
-        console.log(defaultDepartmentName)
         axios.post(dataSrc.modifyTransferredLocation, {
             type: 'add department',
             data: {
@@ -236,7 +232,6 @@ class TranferredLocationManagement extends React.Component{
     }
 
     render(){
-        console.log(this.state.unFoldBranches)
         let dataRows = this.generateDataRows()
         return(
             <Col lg={8}>

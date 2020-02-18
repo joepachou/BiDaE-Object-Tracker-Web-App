@@ -112,7 +112,6 @@ class ChangeStatusForm extends React.Component {
                 initValues.transferred_location = department
             }
         }
-        console.log(initValues)
         return initValues
     }
     render() {
