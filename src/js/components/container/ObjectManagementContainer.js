@@ -1,6 +1,7 @@
 import React from 'react';
 import { 
     getObjectTable,
+    getAreaTable,
     editObject,
     editPatient,
     addObject,
@@ -44,6 +45,8 @@ import BindForm from './BindForm'
 import DissociationForm from './DissociationForm'
 import AccessControl from '../presentational/AccessControl'
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 const SelectTable = selecTableHOC(ReactTable);
 
@@ -80,11 +83,8 @@ class ObjectManagementContainer extends React.Component{
         transferredLocationList: [],
         showDeleteConfirmation: false, //確定刪除的form
         warningSelect : 0, //if 0 ，就warn完就執行delete patien 否則delete object,
-        objectFilterSelectOption: [
-            {
-                label: '種類',
-                value: 'type',
-                options: [
+        objectFilterSelectOption: {
+            type: [
                     {
                         label: 'cpm',
                         value: 'cpm'
@@ -101,24 +101,16 @@ class ObjectManagementContainer extends React.Component{
                         label: '烤燈',
                         value: '烤燈'
                     },
-                ]
-            },
-            {
-                label: '所屬地區',
-                value: 'area',
-                options: [
+                ],
+            area: [
                     {
                         label: '急診室',
                         value: '急診室'
                     },
                 ]
-            },
-        ],
-        patientFilterSelectOption: [
-            {
-                label: '性別',
-                value: '性別',
-                options: [
+        },
+        patientFilterSelectOption: {
+            sex: [
                     {
                         label: '男',
                         value: '男'
@@ -127,20 +119,16 @@ class ObjectManagementContainer extends React.Component{
                         label: '女',
                         value: '女'
                     },
-                    
-                ]
-            },
-            {
-                label: '所屬地區',
-                value: 'area',
-                options: [
+                ],
+            area: [
                     {
                         label: '急診室',
                         value: '急診室'
                     },
                 ]
-            },
-        ]
+        }, 
+        objectFilter: [],
+        patientFilter: []
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -159,6 +147,20 @@ class ObjectManagementContainer extends React.Component{
         this.getDataImport()
         this.getUserList();
         this.getLbeaconData();
+        this.getAreaTable()
+    }
+
+    getAreaTable = () => {
+        axios.post(getAreaTable, {})
+        .then(res => {
+            this.setState({
+                areaTable: res.data.rows
+            })
+            // console.log(res.data.rows)
+        })
+        .catch(err => {
+            console.log(err)
+        })
     }
 
     getUserList = () => {
@@ -763,7 +765,8 @@ class ObjectManagementContainer extends React.Component{
         })
     }
     filterData = (data, key, filteredAttribute) => {
-        
+        const { locale } = this.context
+
         let filteredData = data.filter(obj => {
             if(filteredAttribute.includes('name')){
                 let keyRex = new RegExp(key)
@@ -772,7 +775,9 @@ class ObjectManagementContainer extends React.Component{
                 }
             }
             if(filteredAttribute.includes('type')){
-                let keyRex = new RegExp(key)
+
+                let keyRex = new RegExp(key.toLowerCase())
+
                 if(obj.type.toLowerCase().match(keyRex)){
                     return true
                 }
@@ -780,6 +785,7 @@ class ObjectManagementContainer extends React.Component{
             if(filteredAttribute.includes('acn')){
                 let keyRex = new RegExp(key)
                 if(obj.asset_control_number.toLowerCase().match(keyRex)){
+
                     return true
                 }
             }
@@ -787,8 +793,11 @@ class ObjectManagementContainer extends React.Component{
                 // statement
             }
             if(filteredAttribute.includes('area')){
-                console.log(obj)
-                // if(obj.area_id == )
+                let area_name = this.state.areaTable.filter(area => area.id == obj.area_id)[0].name
+                let text = locale.texts[area_name]
+                if(text == key){
+                    return true
+                }
             }
             if(filteredAttribute.includes('monitor type')){
                 // statement
@@ -797,7 +806,7 @@ class ObjectManagementContainer extends React.Component{
                 // statement
             }
             if(filteredAttribute.includes('sex')){
-                console.log(key)
+               
                 if(obj.object_type == key){
                     return true
                 }
@@ -807,25 +816,48 @@ class ObjectManagementContainer extends React.Component{
         return filteredData
         
     }
-    generatefilterSelectType = () => {
+    
 
+    addObjectFilter = (key, attribute, source) => {
+        this.state.objectFilter = this.state.objectFilter.filter(filter => source != filter.source)
+        this.state.objectFilter.push({
+            key, attribute, source
+        })
+        this.filterObjects()
+    }
+    removeObjectFilter = (source) => {
+        this.state.objectFilter = this.state.objectFilter.filter(filter => source != filter.source)
+        this.filterObjects()
     }
 
-    filterObjects = (key) => {
-        let filteredAttribute = ['name', 'type','acn', 'area']
-        let filteredData = this.filterData(this.state.data, key, filteredAttribute)
+    filterObjects = () => {
+        let filteredData = this.state.objectFilter.reduce((acc, curr) => {
+            return this.filterData(acc, curr.key, curr.attribute)
+        }, this.state.data)
         this.setState({
             filteredData
         })
     }
 
-    filterPatients = (key) => {
-        let filteredAttribute = ['name', 'type','acn', 'area', 'sex']
-        let filteredPatient = this.filterData(this.state.dataPatient, key, filteredAttribute)
+    addPatientFilter = (key, attribute, source) => {
+        this.state.patientFilter = this.state.patientFilter.filter(filter => source != filter.source)
+        this.state.patientFilter.push({
+            key, attribute, source
+        })
+        this.filterPatients()
+    }
+    removePatientFilter = (source) => {
+        this.state.patientFilter = this.state.patientFilter.filter(filter => source != filter.source)
+        this.filterPatients()
+    }
+
+    filterPatients = () => {
+        let filteredPatient = this.state.patientFilter.reduce((acc, curr) => {
+            return this.filterData(acc, curr.key, curr.attribute)
+        }, this.state.dataPatient)
         this.setState({
             filteredPatient
         })
-
     }
 
     render(){
@@ -913,28 +945,60 @@ class ObjectManagementContainer extends React.Component{
                                 {locale.texts.MULTIPLEDELETE}
                             </Button>
                             <div style={{width: '200px'}}>
-                                <Select
-                                    className={'float-right w-100'}
-                                    onChange={(value) => {
-                                        console.log()
-                                        this.filterObjects(value.label)
-                                    }}
-                                    options={this.state.objectFilterSelectOption}
-                                    isSearchable={false}
-                                    placeholder={'Search...'}
-                                    
-                                />
-                            </div>
-                            <Searchbar 
-                                className={'float-right'}
                                 
-                                placeholder={''}
-                                getSearchKey={this.filterObjects}
-                                clearSearchResult={null}    
-                            />
+                            </div>
+                            
 
                         </ButtonToolbar>
-                        
+                        <Row>
+                            <Col>
+                                <Select
+                                    name={"Select Type"}
+                                    className={'float-right w-100'}
+                                    onChange={(value) => {
+                                        if(value){
+                                            this.addObjectFilter(value.label, ['type'], 'type select' )
+                                        }else{
+                                            this.removeObjectFilter('type select')
+                                        }
+                                    }}
+                                    options={this.state.objectFilterSelectOption.type}
+                                    isClearable={true}
+                                    isSearchable={false}
+                                    placeholder={'Select Type...'}
+                                    
+                                />
+                            </Col>
+                            <Col>
+                                <Select
+                                    name={"Select Area"}
+                                    className={'float-right w-100'}
+                                    onChange={(value) => {
+                                        if(value){
+                                            this.addObjectFilter(value.label, ['area'], 'area select')
+                                        }else{
+                                            this.removeObjectFilter('area select')
+                                        }
+                                    }}
+                                    options={this.state.objectFilterSelectOption.area}
+                                    isClearable={true}
+                                    isSearchable={false}
+                                    placeholder={'Select Area...'}
+                                />
+                            </Col>
+
+                            <Col>
+                                <Searchbar 
+                                    className={'float-right'}
+                                    
+                                    placeholder={''}
+                                    getSearchKey={(key) => {
+                                        this.addObjectFilter(key, ['type', 'area', 'status'], 'search bar')
+                                    }}
+                                    clearSearchResult={null}    
+                                />
+                            </Col>
+                        </Row>
                         
 
                         <SelectTable
@@ -1008,26 +1072,56 @@ class ObjectManagementContainer extends React.Component{
                             >
                                 {locale.texts.DELETE}
                             </Button>
-                            <div style={{width: '200px'}}>
+                        </ButtonToolbar>
+                        <Row>
+                            <Col>
                                 <Select
+                                    name={"Select Sex"}
                                     className={'float-right w-100'}
                                     onChange={(value) => {
-                                        this.filterPatients(value.label)
+                                        if(value){
+                                            this.addPatientFilter(value.label, ['sex'], 'sex select' )
+                                        }else{
+                                            this.removePatientFilter('sex select')
+                                        }
                                     }}
-                                    options={this.state.patientFilterSelectOption}
+                                    options={this.state.patientFilterSelectOption.sex}
+                                    isClearable={true}
                                     isSearchable={false}
-                                    placeholder={'Search...'}
+                                    placeholder={'Select Sex...'}
                                     
                                 />
-                            </div>
-                            <Searchbar 
-                                className={'float-right'}
-                                
-                                placeholder={''}
-                                getSearchKey={this.filterPatients}
-                                clearSearchResult={null}    
-                            />
-                        </ButtonToolbar>
+                            </Col>
+                            <Col>
+                                <Select
+                                    name={"Select Area"}
+                                    className={'float-right w-100'}
+                                    onChange={(value) => {
+                                        if(value){
+                                            this.addPatientFilter(value.label, ['area'], 'area select' )
+                                        }else{
+                                            this.removePatientFilter('area select')
+                                        }
+                                    }}
+                                    options={this.state.objectFilterSelectOption.area}
+                                    isClearable={true}
+                                    isSearchable={false}
+                                    placeholder={'Select Area...'}
+                                />
+                            </Col>
+
+                            <Col>
+                                <Searchbar 
+                                    className={'float-right'}
+                                    
+                                    placeholder={''}
+                                    getSearchKey={(key) => {
+                                        this.addPatientFilter(key, ['type', 'area', 'status'], 'search bar')
+                                    }}
+                                    clearSearchResult={null}    
+                                />
+                            </Col>
+                        </Row>
                         {/* <Searchbar 
                             className={'float-right'}
                             placeholder={''}
