@@ -104,7 +104,7 @@ class EditPatientForm extends React.Component {
                             name: name || '' ,
                             mac_address: mac_address || '',
                             asset_control_number:asset_control_number|| '',
-                            gender :   object_type == locale.texts.FEMALE ? genderOptions[1] : genderOptions[0],
+                            gender :   object_type == locale.texts.FEMALE.toLowerCase() ? genderOptions[1] : genderOptions[0],
                             monitorType: selectedObjectData.length !== 0 ? monitor_type.split('/') : [],
                             room: room 
                                 ? {
