@@ -137,10 +137,7 @@ class EditObjectForm extends React.Component {
             mac_address,
             transferred_location,
             area_name,
-        } = selectedObjectData
-        console.log(area_name)
-        console.log(transferred_location ? transferred_location.label : '')
-
+        } = selectedObjectData 
         return (
             <Modal 
                 show={show} 
@@ -251,7 +248,7 @@ class EditObjectForm extends React.Component {
                                         return sum
                                     },0)      
                             }
-                            console.log(values.transferred_location)
+                             
                             const postOption = {
                                 id,
                                 ...values,
@@ -274,7 +271,7 @@ class EditObjectForm extends React.Component {
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm }) => (
                             <Form className="text-capitalize">
-                            {console.log(values)}
+                       
                                 <Row noGutters>
                                     <Col>
                                         <FormikFormGroup 
