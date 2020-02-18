@@ -114,8 +114,6 @@ class MainContainer extends React.Component{
         let hasSearchKey = nextState.hasSearchKey !== this.state.hasSearchKey
         let isSearchKeyChange = this.state.searchKey !== nextState.searchKey
         let isSearchResultChange = !(_.isEqual(this.state.searchResult, nextState.searchResult))
-        let isStateChange = !(_.isEqual(this.state, nextState))
-        let isLbeaconDataChange = !(_.isEqual(this.state.lbeaconPosition, nextState.lbeaconPosition))
         let isGeoFenceDataChange = !(_.isEqual(this.state.geofenceConfig, nextState.geofenceConfig))
         let isViolatedObjectChange = !(_.isEqual(this.state.isViolatedObjectChange, nextState.isViolatedObjectChange))
 
