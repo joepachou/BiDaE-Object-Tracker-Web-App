@@ -133,11 +133,14 @@ class MyDeviceManager extends React.Component{
                     >   
                         <div 
                             style={style.item}
+                            name={item.asset_control_number}
                             className="d-flex justify-content-center"
                         >
-                            <div className='d-inline-block'>&bull;</div>
+                            <div name={item.asset_control_number} className='d-inline-block'>&bull;</div>
                         </div>
-                        <div>
+                        <div
+                            name={item.asset_control_number}
+                        >
                             {getName(item, locale)}
                             {getType(item, locale)}
                             {getACN(item, locale).replace(/,/, '')}
