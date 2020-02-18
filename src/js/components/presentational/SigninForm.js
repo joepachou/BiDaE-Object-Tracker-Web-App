@@ -63,18 +63,16 @@ const SiginForm = ({
                                 let {
                                     userInfo
                                 } = res.data
-                                console.log(userInfo)
 
-                                userInfo.permissions = userInfo.permissions 
-                                    ?   userInfo.permissions
-                                    :   userInfo.roles.reduce((permissions, role) => {
-                                            permissionsTable[role].permission.map(item => {
-                                                if (!permissions.includes(item)) {
-                                                    permissions.push(item)
-                                                }
-                                            })
-                                            return permissions
-                                        }, [])
+                                userInfo.permissions = 
+                                    userInfo.roles.reduce((permissions, role) => {
+                                        permissionsTable[role].permission.map(item => {
+                                            if (!permissions.includes(item)) {
+                                                permissions.push(item)
+                                            }
+                                        })
+                                        return permissions
+                                    }, [])
 
                                 auth.signin(userInfo)
                                 locale.reSetState(userInfo.locale)
