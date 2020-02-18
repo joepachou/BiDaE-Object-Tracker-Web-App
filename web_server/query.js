@@ -557,15 +557,19 @@ const getUserInfo = (request, response) => {
 }
 
 const addUserSearchHistory = (request, response) => {
-    let { username, keyType, keyWord } = request.body;
-    // searchHistory = JSON.stringify(s)
+    let { 
+        username, 
+        keyType, 
+        keyWord 
+    } = request.body;
+
     pool.query(queryType.addUserSearchHistory(username, keyType, keyWord))
         .then(res => {
-            console.log('Add user searech history success')
+            console.log('add user searech history success')
             response.status(200).json(res)
         })
         .catch(err => {
-            console.log('Add user search history fails: ' + err)
+            console.log(`add user search history fails ${err}`)
         })
 }
 

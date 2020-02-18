@@ -754,7 +754,7 @@ function signin(username) {
 				(
 					SELECT keyword as name, COUNT(id) as value
 					FROM search_history where user_id = (SELECT id FROM user_info)
-					GROUP BY keyWord
+					GROUP BY keyword
 				)
 		SELECT 
 			user_info.name, 
@@ -835,10 +835,16 @@ function signup(signupPackage) {
 }
 
 function getUserInfo(username) {
+
 	const text =  `
-	SELECT name, mydevice, max_search_history_count as freqSearchCount from user_table where name= $1
+		SELECT 
+			name, 
+			mydevice, 
+			max_search_history_count as freqSearchCount 
+		FROM user_table 
+		WHERE name= $1
 	`;
-	console.log(username)
+
 	const values = [username];
 
 	const query = {
@@ -849,24 +855,28 @@ function getUserInfo(username) {
 	return query
 }
 
-function addUserSearchHistory (username, keyType, keyWord) {
-	// const text = `
-	// 	UPDATE user_table
-	// 	SET search_history = $1
-	// 	WHERE name = $2
-	// `;
+const addUserSearchHistory = (username, keyType, keyWord) => {
+
 	const text = `
 		INSERT INTO search_history(search_time, keyWord, key_type, user_id)
 		VALUES(
 			now(),
 			$1,
 			$2,
-			(SELECT id from user_table where name = $3)
+			(
+				SELECT id 
+				FROM user_table 
+				WHERE name = $3
+			)
 		) 
 			
 	`;
 
-	const values = [keyWord, keyType, username];
+	const values = [
+		keyWord, 
+		keyType, 
+		username
+	];
 
 	const query = {
 		text, 
@@ -1933,7 +1943,8 @@ function DeleteUserArea (user_id,area_id){
 }
 function clearSearchHistory(){
 	const query = `
-		DELETE FROM search_history WHERE now() > search_time + interval '${process.env.SEARCH_HISTORY_VALIDATE_DURATION}'
+		DELETE FROM search_history 
+		WHERE now() > search_time + interval '${process.env.SEARCH_HISTORY_VALIDATE_DURATION}'
 	`
 	return query
 }
@@ -1942,6 +1953,7 @@ function getTransferredLocation() {
 	const query = `SELECT id, branch_name, offices FROM branch_and_office ORDER BY id`
 	return query
 }
+
 function modifyTransferredLocation(type, data){
 	var query;
 	if(type == 'add branch'){
