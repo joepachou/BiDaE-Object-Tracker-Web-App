@@ -4,7 +4,6 @@
 @media (max-width: 575.98px) {
     html, body {
         font-size: 14px;
-        position: static;
     }
 
     #searchMap {
@@ -25,15 +24,7 @@
         margin: 0 5px 0 5px;
     }
 
-    .searchResultListGroupForTablet {
-        overflow: hidden auto;
-    }
-
-    .searchResultListGroupForMobile {
-        overflow: hidden auto;
-    }
     #navbar {
-        /* height: 5vh !important; */
         font-size: 0.78rem;
     }
     .navbar-brand {
@@ -43,10 +34,6 @@
     .navbar img {
         width: 25px;
     }
-
-    /* #mapid {
-        height: 40vh;
-    }  */
 
     .modal {
         z-Index: 1080;
@@ -61,10 +48,6 @@
         width: 100%
     }
 
-    #mainContainer {
-        
-    }
-
     #downloadPdfRequest {
         top: 50%;
         /* left: -10%; */
@@ -76,10 +59,6 @@
 
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) and (max-width: 767.98px) { 
-    html, body {
-        /* font-size: 14px; */
-    }
-
     #searchMap {
         display: none;
     }
@@ -87,10 +66,6 @@
     .navbar-brand {
         font-size: 1rem;
     }
-
-    /* #mapid {
-        height: 45vh;
-    }  */
 
  }
 
@@ -115,9 +90,7 @@
         height: 55px;
         font-size: 14px;
     }
-    /* #mapid {
-        //height: 75vh;
-    }  */
+
 }
 
 /* Extra large devices (large desktops, 1200px and up) */
@@ -125,18 +98,6 @@
     
     #navbar {
         height: 65px;
-    }
-    /* #mapid {
-        height: 75vh;
-    }  */
-
-    #changeStatusForm {
-        z-Index: 1050;
-        top: 10%;
-        left: -10%;
-        right: auto;
-        bottom: auto;
-        padding: 0;
     }
 
     #searchPanel {

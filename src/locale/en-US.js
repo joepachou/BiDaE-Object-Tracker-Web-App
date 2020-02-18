@@ -208,9 +208,12 @@ const en =  {
     EDIT_MOVEMENT_MONITOR: 'edit movement monitor',
     EDIT_LONG_STAY_IN_DANGER_MONITOR: "edit long stay in dangen monitor",
     EDIT_NOT_STAY_ROOM_MONITOR: "edit not stay room monitor",
+    MOVEMENT: "movement alert",
+    LOCATION: "location alert",
+    GEOFENCE: "geofence alert",
+    PANIC: "emergency",
+
     
-
-
     /** Error Message */
     GENDER_IS_REQUIRED: "Gender is required",
     ROLE_IS_REQUIRED: "role is required",
@@ -317,7 +320,7 @@ const en =  {
     BATTERY_INDICATOR: "batter indicator",
     REMAINING_BATTERY_VOLTAGE: 'remaining battery voltage  ',
     BATTERY: "battery",
-    PANIC: "panic",
+    PANIC: "emergency",
     GEOFENCE_TYPE: "geofence type",
     ALERT: "alert",
     TRANSFERRED_LOCATION: "transferred Location",

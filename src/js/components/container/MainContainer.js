@@ -12,6 +12,7 @@ import dataSrc from '../../dataSrc'
 import { AppContext } from '../../context/AppContext'
 import { toast } from 'react-toastify';
 import ToastNotification from '../presentational/ToastNotification'
+
 import {
     BrowserView,
     MobileOnlyView,
@@ -75,8 +76,10 @@ class MainContainer extends React.Component{
 
     componentDidUpdate = (prevProps, prevState) => {
         let isTrackingDataChange = !(_.isEqual(this.state.trackingData, prevState.trackingData))
-        let { stateReducer } = this.context
-        let [{violatedObjects}] = stateReducer
+        let { 
+            stateReducer
+         } = this.context
+
         if (stateReducer[0].shouldUpdateTrackingData !== this.state.shouldUpdateTrackingData) {
             let [{shouldUpdateTrackingData}] = stateReducer
             this.interval = shouldUpdateTrackingData ? setInterval(this.getTrackingData, config.mapConfig.intervalTime) : clearInterval(this.interval);
@@ -111,8 +114,6 @@ class MainContainer extends React.Component{
         let hasSearchKey = nextState.hasSearchKey !== this.state.hasSearchKey
         let isSearchKeyChange = this.state.searchKey !== nextState.searchKey
         let isSearchResultChange = !(_.isEqual(this.state.searchResult, nextState.searchResult))
-        let isStateChange = !(_.isEqual(this.state, nextState))
-        let isLbeaconDataChange = !(_.isEqual(this.state.lbeaconPosition, nextState.lbeaconPosition))
         let isGeoFenceDataChange = !(_.isEqual(this.state.geofenceConfig, nextState.geofenceConfig))
         let isViolatedObjectChange = !(_.isEqual(this.state.isViolatedObjectChange, nextState.isViolatedObjectChange))
 
@@ -134,7 +135,6 @@ class MainContainer extends React.Component{
 
     getToastNotification = (item) => {
         item.notification.map(event => {
-            if (event.type == 2) return 
             let toastId = `${item.id}:${event.type}`
             let toastOptions = {
                 hideProgressBar: true,
@@ -147,8 +147,10 @@ class MainContainer extends React.Component{
     }
 
     getToastType = (type, data, option, time) => {
+        console.log(config.toastMonitorMap[type])
         return toast[config.toastMonitorMap[type]](
-            <ToastNotification data={data} time={time} type={type}/>, option
+            <ToastNotification data={data} time={time} type={type}/>, 
+            option
         )
     }
 
@@ -219,7 +221,12 @@ class MainContainer extends React.Component{
 
     getTrackingData = () => {
         
-        let { auth, locale, stateReducer } = this.context
+        let { 
+            auth, 
+            locale, 
+            stateReducer 
+        } = this.context
+
         let [{areaId, violatedObjects}, dispatch] = stateReducer
         axios.post(dataSrc.getTrackingData,{
             locale: locale.abbr,
@@ -227,14 +234,12 @@ class MainContainer extends React.Component{
             areaId,
         })
         .then(res => {
-
             let violatedObjects = res.data.reduce((violatedObjects, item) => {
                 if (!(item.mac_address in violatedObjects) && item.isViolated) {
                     violatedObjects[item.mac_address] = item
                 } 
                 return violatedObjects
             }, _.cloneDeep(this.state.violatedObjects))
-
             this.setState({
                 trackingData: res.data,
                 violatedObjects,
@@ -638,10 +643,7 @@ class MainContainer extends React.Component{
             auth,
             stateReducer,
         } = this.context
-        let [{areaId}] = stateReducer
-        let deviceNum = this.state.trackingData.filter(item => item.found).length
-        let devicePlural = deviceNum === 1 ? locale.texts.DEVICE : locale.texts.DEVICES
-
+        
         return (
             /** "page-wrap" the default id named by react-burget-menu */
             <div>

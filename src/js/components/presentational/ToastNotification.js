@@ -8,11 +8,24 @@ const ToastNotification = ({
     time,
     type
 }) => {
-    const { locale }= React.useContext(AppContext);
+    const { 
+        locale 
+    }= React.useContext(AppContext);
+    
     return (
-        <div>
-            {data.name} {config.monitorType[type]} {data.location_description} {moment(time).format(config.geoFenceViolationTimeFormat)}
+        <div >
+            <div className="text-capitalize">
+                {locale.texts[config.monitorType[type].toUpperCase().replace(/ /g, '_')]}
+            </div>
+            <hr/>
+            <div>
+                {locale.lang == 'en'
+                    ?   `${data.name} ${locale.texts.NEAR} ${data.location_description} ${moment(time).format(config.geoFenceViolationTimeFormat)}`
+                    :   `${data.name} ${locale.texts.NEAR}${data.location_description} ${moment(time).format(config.geoFenceViolationTimeFormat)}`
+                }
+            </div>
         </div>
+
     )
 }
 
