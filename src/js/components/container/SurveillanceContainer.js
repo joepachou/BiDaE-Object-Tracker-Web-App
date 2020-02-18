@@ -314,8 +314,7 @@ class SurveillanceContainer extends React.Component {
                                                 className="mr-1 ml-2 text-capitalize" 
                                                 onClick={this.handleClickButton}
                                                 name="cleanPath"
-                                                active={(this.props.showPath)}
-                                                disabled={!(this.props.showPath)}
+                                                disabled={(this.props.pathMacAddress==='')}
                                             >
                                                 {locale.texts.CLEAN_PATH}
                                             </Button>
@@ -490,8 +489,7 @@ class SurveillanceContainer extends React.Component {
                                                     className="mr-1 ml-2 text-capitalize" 
                                                     onClick={this.handleClickButton}
                                                     name="cleanPath"
-                                                    active={(this.props.showPath)}
-                                                    disabled={!(this.props.showPath)}
+                                                    disabled={(this.props.pathMacAddress==='')}
                                                 >
                                                     {locale.texts.CLEAN_PATH}
                                                 </Button>

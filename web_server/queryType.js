@@ -86,24 +86,19 @@ function getTrackingData () {
 	return query;
 }
 
-const getTrackingTableByMacAddress = (object_mac_address,i,second) => {
+const getTrackingTableByMacAddress = (object_mac_address) => {
 	let text = '';
 
 		text += `
 			SELECT
-				object_mac_address,
-				lbeacon_uuid,
-				avg(rssi)
-			FROM tracking_table
-			WHERE object_mac_address = '
+				*
+			FROM location_history_table
+			WHERE mac_address = '
 			`;
 		text += object_mac_address;
 		text +=`'
-			AND final_timestamp > now() - interval '${(i+1)*second}seconds' 
-			AND final_timestamp < now() - interval '${i*second}seconds'
-			GROUP BY object_mac_address, lbeacon_uuid
-			ORDER BY avg(rssi) DESC 
-			LIMIT 1
+			AND  record_timestamp > now() - interval '1 hour'
+			ORDER BY  record_timestamp ASC
 			`;
 	//console.log(text)
 	return text;

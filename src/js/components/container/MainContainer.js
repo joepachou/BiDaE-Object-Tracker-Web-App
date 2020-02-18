@@ -119,7 +119,8 @@ class MainContainer extends React.Component{
 
         let showMobileMap = !(_.isEqual(this.state.showMobileMap, nextState.showMobileMap))
         let display = !(_.isEqual(this.state.display, nextState.display)) 
-        
+        let pathMacAddress = !(_.isEqual(this.state.pathMacAddress, nextState.pathMacAddress)) 
+
         let isHighlightSearchPanelChange = !(_.isEqual(this.state.isHighlightSearchPanel, nextState.isHighlightSearchPanel))
         let shouldUpdate = isTrackingDataChange || 
                                 hasSearchKey || 
@@ -129,7 +130,8 @@ class MainContainer extends React.Component{
                                 isGeoFenceDataChange ||
                                 isViolatedObjectChange ||
                                 showMobileMap ||
-                                display
+                                display ||
+                                pathMacAddress
         return shouldUpdate
     }
 
@@ -532,14 +534,13 @@ class MainContainer extends React.Component{
 
     handleShowPath = (mac_address) => {
         this.setState({
-            showPath: true,
             pathMacAddress: mac_address
         })
     }
 
     handleClosePath = () => {
         this.setState({
-            showPath: false
+            pathMacAddress: ''
         })
     }
 

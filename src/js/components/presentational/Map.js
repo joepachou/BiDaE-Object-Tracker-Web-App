@@ -23,7 +23,6 @@ class Map extends React.Component {
 
     state = {
         objectInfo: [],
-        pathMacAddress: ''
     }
 
     map = null;
@@ -44,7 +43,7 @@ class Map extends React.Component {
     componentDidUpdate = (prevProps) => {
         
         this.handleObjectMarkers();
-        this.drawPolyline();
+        //this.drawPolyline();
 
         if (parseInt(process.env.IS_LBEACON_MARK) && !(_.isEqual(prevProps.lbeaconPosition, this.props.lbeaconPosition))) {
             this.createLbeaconMarkers()
@@ -52,6 +51,11 @@ class Map extends React.Component {
 
         if (!(_.isEqual(prevProps.geofenceConfig, this.props.geofenceConfig))) {
             this.createGeoFenceMarkers()
+        }
+
+        if(!(_.isEqual(prevProps.pathMacAddress, this.props.pathMacAddress))){
+            //console.log(this.props.pathMacAddress)
+            this.drawPolyline();
         }
 
         if (prevProps.areaId !== this.props.areaId) { 
@@ -126,74 +130,59 @@ class Map extends React.Component {
 
     /** init path */
     drawPolyline = () => {
-        if(this.props.showPath){
-            if(this.state.pathMacAddress === ''){
-                let i=4;
-                let numberOfData = 100; // data you want to draw on map
-                let route = []
-                for(i=numberOfData;i>=0;i--){
-                    axios.post(dataSrc.getTrackingTableByMacAddress, {
-                        object_mac_address : this.props.pathMacAddress,
-                        i: i,
-                        second: 10
-                    })
-                    .then(res => {
-                        res.data.rows.map(item => {
-                            //console.log(item.lbeacon_uuid)
-                            let latLngY = item.lbeacon_uuid.slice( 17, 18)+item.lbeacon_uuid.slice( 19, 23)
-                            let latLngX = item.lbeacon_uuid.slice( 31, 37)
-                            //console.log(latLngX + "," + latLngY)
-                            let latLng = [latLngX,latLngY]
-                            let pos = this.macAddressToCoordinate(item.object_mac_address,latLng);
-                            var marker = L.circleMarker(pos, {radius:3,color:'darkgray'});
-                            this.pathOfDevice.addLayer(marker)
-                            route.push(pos)
-                        })
 
-                        var polyline = L.polyline(route,{
-                            color: 'black',
-                            dashArray: '1,1'
-                        })
-                        var decorator = L.polylineDecorator( polyline, {
-                            patterns: [
-                                {
-                                    offset: '100%',
-                                    repeat: 0,
-                                    symbol: L.Symbol.arrowHead({
-                                        weight: 3,
-                                        pixelSize: 10,
-                                        polygon: false,
-                                        pathOptions: {
-                                            color: 'black',
-                                            stroke:true
-                                        }
-                                    })
+
+        this.pathOfDevice.clearLayers();
+        
+        if(this.props.pathMacAddress !== ''){
+            
+            let route = []
+
+            axios.post(dataSrc.getTrackingTableByMacAddress, {
+                object_mac_address : this.props.pathMacAddress
+            })
+            .then(res => {
+                res.data.rows.map(item => {
+                    //console.log(item.record_timestamp);
+                    let latLng = [item.base_y,item.base_x]
+                    let pos = this.macAddressToCoordinate(item.mac_address,latLng);
+                    var marker = L.circleMarker(pos, {radius:3,color:'lightgrey'});
+                    this.pathOfDevice.addLayer(marker)
+                    route.push(pos)
+                })
+
+                var polyline = L.polyline(route,{
+                    color: 'black',
+                    dashArray: '1,1'
+                })
+                var decorator = L.polylineDecorator( polyline, {
+                    patterns: [
+                        {
+                            offset: '100%',
+                            repeat: 0,
+                            symbol: L.Symbol.arrowHead({
+                                weight: 3,
+                                pixelSize: 10,
+                                polygon: false,
+                                pathOptions: {
+                                    color: 'black',
+                                    stroke:true
                                 }
-                            ]
-                        })
-                        this.pathOfDevice.addLayer(polyline)
-                        this.pathOfDevice.addLayer(decorator)
-                        this.pathOfDevice.addTo(this.map)
-                    })
-                    .catch(err => {
-                        console.log(`get tracking table by mac address fail: ${err}`)
-                    })
-                }
-
-                this.setState({
-                    pathMacAddress: this.props.pathMacAddress
+                            })
+                        }
+                    ]
                 })
-            }
-        }else{
-            if(this.state.pathMacAddress !== ''){
-                this.pathOfDevice.clearLayers()
+                this.pathOfDevice.addLayer(polyline)
+                this.pathOfDevice.addLayer(decorator)
                 this.pathOfDevice.addTo(this.map)
-                this.setState({
-                    pathMacAddress: ''
-                })
-            }
+                //console.log(route)
+            })
+            .catch(err => {
+                console.log(`get tracking table by mac address fail: ${err}`)
+            })
         }
     }
+
     /** Resize the markers and errorCircles when the view is zoomend. */
     resizeMarkers = () => {
         this.prevZoom = this.currentZoom

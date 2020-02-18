@@ -168,8 +168,8 @@ const getObjectTable = (request, response) => {
 }
 
 const getTrackingTableByMacAddress = (request, response) => {
-    let{ locale, object_mac_address, i, second} = request.body
-    pool.query(queryType.getTrackingTableByMacAddress(object_mac_address, i, second))
+    let{ locale, object_mac_address} = request.body
+    pool.query(queryType.getTrackingTableByMacAddress(object_mac_address))
         .then(res => {
             console.log("get tracking table by mac address")
             response.status(200).json(res)
