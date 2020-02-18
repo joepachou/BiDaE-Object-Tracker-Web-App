@@ -1,6 +1,4 @@
 import React from 'react'
-
-
 import NotificationBadge from 'react-notification-badge';
 import { Effect } from 'react-notification-badge';
 import { NavDropdown, Row } from 'react-bootstrap'
@@ -15,7 +13,6 @@ class BatteryLevelNotification extends React.Component {
     static contextType = AppContext
     
     state = {
-        count: 0,
         runOutPowerItems: [],
         locale: this.context.locale.abbr,
     }
@@ -34,8 +31,16 @@ class BatteryLevelNotification extends React.Component {
     }
 
     getTrackingData = () => {
-        let { auth, locale, stateReducer } = this.context
-        let [{areaId, violatedObjects}, dispatch] = stateReducer
+        let { 
+            auth, 
+            locale, 
+            stateReducer 
+        } = this.context
+
+        let [
+            {areaId}, 
+        ] = stateReducer
+
         retrieveDataHelper.getTrackingData(
             locale.abbr,
             auth.user,
@@ -51,7 +56,6 @@ class BatteryLevelNotification extends React.Component {
     render() {
         const {
             runOutPowerItems,
-            count
         } = this.state
 
         let { 
@@ -81,7 +85,7 @@ class BatteryLevelNotification extends React.Component {
         return (
             <NavDropdown 
                 alignRight
-                disabled={!count}
+                disabled={runOutPowerItems.length == 0}
                 title={
                     <i className="fas fa-bell" style={style.icon}>
                         <NotificationBadge 
