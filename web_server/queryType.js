@@ -1235,7 +1235,7 @@ const deletePatient = (idPackage) => {
 const deleteDevice = (idPackage, formOption) => {
 	const query = `
 		DELETE FROM object_table
-		WHERE id IN (${idPackage.map(item => `'${item}'`)});
+		WHERE mac_address IN (${formOption.map(item => `'${item}'`)});
 	`
 	return query
 }
