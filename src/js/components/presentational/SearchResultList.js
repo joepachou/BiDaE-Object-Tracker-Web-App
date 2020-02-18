@@ -181,9 +181,12 @@ class SearchResult extends React.Component {
         console.log(editedObjectPackage)
 
         editedObjectPackage.map(editedObject => {
-            let transferred_location = editedObject.transferred_location.value
-            editedObject.transferred_location_label = editedObject.transferred_location.label
-            editedObject.transferred_location = `${transferred_location.branch.id},${transferred_location.departmentId}`
+            if(editedObject.transferred_location){
+                let transferred_location = editedObject.transferred_location.value
+                editedObject.transferred_location_label = editedObject.transferred_location.label
+                editedObject.transferred_location = `${transferred_location.branch.id},${transferred_location.departmentId}`
+            }
+            
 
         })
 
