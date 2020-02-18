@@ -2,22 +2,27 @@ import React from 'react'
 import { ListGroup } from 'react-bootstrap'
 import config from '../../config';
 import { AppContext } from '../../context/AppContext'
-import { getDescription } from '../../helper/descriptionGenerator'
+import { 
+    getDescription, 
+    getMacaddress 
+} from '../../helper/descriptionGenerator'
+import AccessControl from './AccessControl'
 
 
 const SearchResultListGroup = ({
-        data,
-        handleSelectResultItem,
-        selection,
-        disabled,
-        action
+    data,
+    handleSelectResultItem,
+    selection,
+    disabled,
+    action
 }) => {
 
     const { locale } = React.useContext(AppContext);
    
     const style = {
         icon: {
-            color: '#007bff'
+            color: '#007bff',
+            top: 10
         },
         item: {
             minWidth: 35,
@@ -49,7 +54,7 @@ const SearchResultListGroup = ({
                         >
                             {selection.indexOf(item.mac_address) >= 0 
                                 ?   <i 
-                                        className="fas fa-check d-flex align-items-center" 
+                                        className="fas fa-check d-inline-block" 
                                         style={style.icon}
                                     /> 
                                 : config.mapConfig.iconOptions.showNumber
@@ -58,6 +63,15 @@ const SearchResultListGroup = ({
                             }
                         </div>
                         {getDescription(item, locale, config)}
+                        
+                        {
+                            <AccessControl
+                                permission={'form:develop'}
+                                renderNoAccess={() => null}
+                            >
+                                {`|${getMacaddress(item, locale)}`}
+                            </AccessControl>
+                        }
                     </ListGroup.Item>
                 return element
             })}

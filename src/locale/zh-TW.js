@@ -363,6 +363,7 @@ const tw = {
     /** User Roles */
     CARE_PROVIDER: "護理人員",
     SYSTEM_ADMIN: "系統管理員",
+    DEV: '開發人員',
 
     TO: "至",
     SHIFT_TO: "交接給",

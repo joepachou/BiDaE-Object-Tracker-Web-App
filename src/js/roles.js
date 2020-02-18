@@ -52,16 +52,23 @@ const rules = {
     dev: {
         permission: [
             "form:edit",
+            "form:develop",
             "route:systemStatus",
+            "route:userProfile",
             "route:objectManagement",
             "route:editObjectManagement",
             "user:mydevice",
+            "user:mypatient",
             "user:saveSearchRecord",
             "route:userManager",
             "route:shiftChangeRecord",
-            // "user:toggleArea",
+            "user:cleanPath",
             "user:toggleShowDevices",
             "user:toggleShowResidents",
+            "route:monitorSetting",
+            "user:importTable",
+            "user:batteryNotice",
+            "user:shiftChange",
         ]
     }
   };
