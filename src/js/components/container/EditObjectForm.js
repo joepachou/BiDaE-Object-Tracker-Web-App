@@ -218,7 +218,7 @@ class EditObjectForm extends React.Component {
                                         return sum
                                     },0)      
                             }
-                            console.log(values.transferred_location)
+                             
                             const postOption = {
                                 id,
                                 ...values,
