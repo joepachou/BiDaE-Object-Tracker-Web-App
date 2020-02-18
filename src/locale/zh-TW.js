@@ -210,7 +210,10 @@ const tw = {
     EDIT_LONG_STAY_IN_DANGER_MONITOR: "編輯久留監控",
     EDIT_NOT_STAY_ROOM_MONITOR: "編輯房間監控",
     SIGNATURE:"簽名",
-
+    MOVEMENT: "移動警告",
+    LOCATION: "位置警告",
+    GEOFENCE: "電子圍籬警告",
+    PANIC: "緊急",
 
 
     /** Error Message */
@@ -322,7 +325,7 @@ const tw = {
     BATTERY_INDICATOR: "電量",
     REMAIN_BATTERY_VOLUMN: "剩餘電量",
     BATTERY: "電量",
-    PANIC: "求救",
+    PANIC: "緊急",
     GEOFENCE_TYPE: "geofence類別",
     ALERT: "警告",
     TRANSFERRED_LOCATION: "轉移單位",

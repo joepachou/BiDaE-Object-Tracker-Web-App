@@ -53,7 +53,7 @@ class ChangeStatusForm extends React.Component {
                 return {          
                     label: branch.branch_name,
                     value: branch,
-                    options: branch.department
+                    options: branch.department ? branch.department
                         .map((department, index) => {
                             return {
                                 label: `${department},${branch.branch_name}`,
@@ -62,7 +62,7 @@ class ChangeStatusForm extends React.Component {
                                     departmentId: index,
                                 }
                             }
-                    }),
+                    }) : [],
                     id: branch.id
                 }
 
@@ -86,7 +86,34 @@ class ChangeStatusForm extends React.Component {
                 break;
         }
     }
+    initValues = () => {
+        let {selectedObjectData} = this.props
+        let {transferredLocationOptions} = this.state
+        let initValues = {
+            name: selectedObjectData.length != 0 ? selectedObjectData[0].name : '',
+            type: selectedObjectData.length != 0 ? selectedObjectData[0].type : '',
+            asset_control_number: selectedObjectData.length != 0 ? selectedObjectData[0].asset_control_number : '',
+            status: selectedObjectData.length != 0 ? selectedObjectData[0].status : '',
+            transferred_location: selectedObjectData.length != 0 && selectedObjectData[0].status == config.objectStatus.TRANSFERRED
 
+                ? null
+                
+                : '',
+            notes: selectedObjectData.length != 0 ? selectedObjectData[0].notes : "" ,
+        }
+        
+        if(selectedObjectData.length != 0 && selectedObjectData[0].status == config.objectStatus.TRANSFERRED){
+            let ids = selectedObjectData[0].transferred_location.split(',')
+            let branchId = ids[0], departmentId = ids[1]
+            let branch = this.state.transferredLocationOptions.filter(branch => branch.id == branchId)[0] 
+            let department = null
+            if(branch){
+                department = departmentId ? branch.options[departmentId]: ''
+                initValues.transferred_location = department
+            }
+        }
+        return initValues
+    }
     render() {
 
         const { locale } = this.context
@@ -108,6 +135,7 @@ class ChangeStatusForm extends React.Component {
             title,
             selectedObjectData 
         } = this.props
+        console.log(this.state.transferredLocationOptions, selectedObjectData)
         return (
             <Modal  
                 show={this.props.show}
@@ -130,20 +158,7 @@ class ChangeStatusForm extends React.Component {
                 <Modal.Body>
                     <Formik
                  
-                        initialValues = {{
-                            name: selectedObjectData.length != 0 ? selectedObjectData[0].name : '',
-                            type: selectedObjectData.length != 0 ? selectedObjectData[0].type : '',
-                            asset_control_number: selectedObjectData.length != 0 ? selectedObjectData[0].asset_control_number : '',
-                            status: selectedObjectData.length != 0 ? selectedObjectData[0].status : '',
-                            transferred_location: selectedObjectData.length != 0 && selectedObjectData[0].status == config.objectStatus.TRANSFERRED
-
-                                ? ''
-                                // this.state.transferredLocationOptions
-                                //             .filter(branch => branch.id == selectedObjectData[0].transferred_location.branchId)[0]
-                                //             .options[selectedObjectData[0].transferred_location.departmentId]
-                                : '',
-                            notes: selectedObjectData.length != 0 ? selectedObjectData[0].notes : "" ,
-                        }}
+                        initialValues = {this.initValues()}
 
                         validationSchema = {
                             Yup.object().shape({
