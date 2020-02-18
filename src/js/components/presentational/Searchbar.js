@@ -33,25 +33,29 @@ class Searchbar extends React.Component {
             form: {
                 border: "2px solid rgba(227, 222, 222, 0.447)",
                 borderRadius : '25px',
-                fontSize: '20px',
+                fontSize: '0.8rem',
                 width:300,
+                minHeight: '1.2rem',
+                position: 'relative'
             },
             input: {
                 background: 'rgba(0,0,0,0)',
-                fontSize: '1rem'
+                fontSize: '1rem',
             }
         }
 
         const { value } = this.state;
-
         return (            
-            <Form className={"d-flex " + this.props.className} style={style.form}>
-                <Form.Group className='flex-grow-1 mb-0'>
+            <Form className="d-flex justify-content-around" style={style.form}>
+                <Form.Group 
+                    className='flex-grow-1 mb-0'
+                    style={{maxWidth: 250}}
+                >
                     <Form.Control 
                         id='searchbarText' 
                         type='text' 
                         style={style.input} 
-                        className='border-0 pl-3 w-100 pb-0' 
+                        className='border-0 pl-3 w-90 pb-0' 
                         value={value} 
                         onChange={this.handleChange}
                     />
@@ -59,10 +63,11 @@ class Searchbar extends React.Component {
                 <Button 
                     type="submit" 
                     variant='link' 
-                    className="btn btn-link btn-sm text-uppercase bd-highlight" 
+                    className="btn btn-link btn-sm bd-highlight" 
                     onClick={this.handleSubmit}
+                    style={{left: '100px'}}
                 >
-                    <img src={searchIcon} width="25px" />
+                    <img src={searchIcon} width="23px" />
                 </Button>
             </Form>
         );
