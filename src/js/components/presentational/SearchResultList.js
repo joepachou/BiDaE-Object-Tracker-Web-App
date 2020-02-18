@@ -115,6 +115,7 @@ class SearchResult extends React.Component {
     }
 
     handleChangeObjectStatusFormSubmit = values => {
+
         let editedObjectPackage = _.cloneDeep(this.state.selectedObjectData).map(item => {
             item.status = values.status.toLowerCase(),
             item.transferred_location = values.transferred_location ? values.transferred_location : '';
@@ -177,6 +178,14 @@ class SearchResult extends React.Component {
         let status = editedObjectPackage[0].status
         let reservedTimestamp = isDelayTime ? moment().add(10, 'minutes').format() : moment().format()
         /** Create the pdf package, including pdf, pdf setting and path */
+        console.log(editedObjectPackage)
+
+        editedObjectPackage.map(editedObject => {
+            let transferred_location = editedObject.transferred_location.value
+            editedObject.transferred_location_label = editedObject.transferred_location.label
+            editedObject.transferred_location = `${transferred_location.branch.id},${transferred_location.departmentId}`
+
+        })
 
         let pdfPackage = shouldCreatePdf && config.getPdfPackage(status, auth.user, this.state.editedObjectPackage, locale,signatureName)
 

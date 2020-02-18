@@ -47,25 +47,20 @@ class ChangeStatusForm extends React.Component {
 
     getTransferredLocation = () => {
         let { locale } = this.context
-        let  lang    = locale.lang == 'tw' ? 'chinese' : 'english'
         axios.get(dataSrc.getTransferredLocation)
         .then(res => {
             const transferredLocationOptions = res.data.map(branch => {
-
                 return {          
-                    label: branch.branch_name[lang],
-                    value: branch.branch_name['english'],
-                    options: branch.offices
+                    label: branch.branch_name,
+                    value: branch,
+                    options: branch.department
                         .map((department, index) => {
                             return {
-                                label: `${department[lang]},${branch.branch_name[lang]}`,
+                                label: `${department},${branch.branch_name}`,
                                 value: {
-                                    chinese: `${department['chinese']},${branch.branch_name['chinese']}`,
-                                    english: `${department['english']},${branch.branch_name['english']}`,
+                                    branch,
                                     departmentId: index,
-                                    branchId: branch.id
-                                },
-
+                                }
                             }
                     }),
                     id: branch.id
@@ -142,9 +137,10 @@ class ChangeStatusForm extends React.Component {
                             status: selectedObjectData.length != 0 ? selectedObjectData[0].status : '',
                             transferred_location: selectedObjectData.length != 0 && selectedObjectData[0].status == config.objectStatus.TRANSFERRED
 
-                                ? this.state.transferredLocationOptions
-                                            .filter(branch => branch.id == selectedObjectData[0].transferred_location.branchId)[0]
-                                            .options[selectedObjectData[0].transferred_location.departmentId]
+                                ? ''
+                                // this.state.transferredLocationOptions
+                                //             .filter(branch => branch.id == selectedObjectData[0].transferred_location.branchId)[0]
+                                //             .options[selectedObjectData[0].transferred_location.departmentId]
                                 : '',
                             notes: selectedObjectData.length != 0 ? selectedObjectData[0].notes : "" ,
                         }}

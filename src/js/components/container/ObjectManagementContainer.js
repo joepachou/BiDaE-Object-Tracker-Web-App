@@ -92,7 +92,7 @@ class ObjectManagementContainer extends React.Component{
 
     componentDidMount = () => {
         this.getTransferredLocation();
-        this.getData();
+        // this.getData();
         this.getDataImport()
         this.getUserList();
         this.getLbeaconData();
@@ -178,25 +178,20 @@ class ObjectManagementContainer extends React.Component{
 
     getTransferredLocation = () => {
         let { locale } = this.context
-        let  lang    = locale.lang == 'tw' ? 'chinese' : 'english'
         axios.get(getTransferredLocation)
         .then(res => {
             const transferredLocationOptions = res.data.map(branch => {
-
                 return {          
-                    label: branch.branch_name[lang],
-                    value: branch.branch_name['english'],
-                    options: branch.offices
+                    label: branch.branch_name,
+                    value: branch,
+                    options: branch.department
                         .map((department, index) => {
                             return {
-                                label: `${department[lang]},${branch.branch_name[lang]}`,
+                                label: `${department},${branch.branch_name}`,
                                 value: {
-                                    chinese: `${department['chinese']},${branch.branch_name['chinese']}`,
-                                    english: `${department['english']},${branch.branch_name['english']}`,
+                                    branch,
                                     departmentId: index,
-                                    branchId: branch.id
-                                },
-
+                                }
                             }
                     }),
                     id: branch.id
@@ -206,6 +201,7 @@ class ObjectManagementContainer extends React.Component{
             this.setState({
                 transferredLocationList: transferredLocationOptions
             })
+            this.getData()
         })
     }
 
@@ -263,17 +259,20 @@ class ObjectManagementContainer extends React.Component{
                         value: item.status,
                         label: item.status ? locale.texts[item.status.toUpperCase()] : null,
                     }
-                    if (item.transferred_location){
-                        let branch = this.state.transferredLocationList.filter(branch => {
-                                if (branch.id == item.transferred_location.branchId){
-                                    return true
-                                }
-                            return false
-                        })
-                        let department = branch[0] ? branch[0].options[item.transferred_location.departmentId] : null
-                        item.transferred_location = department
+                    if(item.transferred_location){
+                        let ids = item.transferred_location.split(',')
+                        let branchId = ids[0], departmentId = ids[1]
+                        if (item.transferred_location){
+                            let branch = this.state.transferredLocationList.filter(branch => {
+                                    if (branch.id == branchId){
+                                        return true
+                                    }
+                                return false
+                            })
+                            let department = branch[0] ? branch[0].options[departmentId] : null
+                            item.transferred_location = department
+                        }
                     }
-                    
                     data.push(item)
                 }
 

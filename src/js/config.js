@@ -295,9 +295,8 @@ const config = {
                 return title + list + notes
             },
             transferred: (data, locale,nn,nnn,signatureName) => {
-             
-                // console.log(data[0].transferred_location.value.split(','))
-                let area = data[0].transferred_location.label
+
+                let area = data[0].transferred_location_label
                 let signature_title = config.pdfFormat.getBodyItem.getBodyTitle("transferred to", locale, area)
                 let list_title = config.pdfFormat.getBodyItem.getBodyTitle("transferred device list", locale)
                 let signature = config.pdfFormat.getBodyItem.getSignature(locale,signatureName)

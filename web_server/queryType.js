@@ -524,7 +524,7 @@ function editObject (formOption) {
 		Update object_table 
 		SET type = $1,
 			status = $2,
-			transferred_location = '${JSON.stringify(formOption.transferred_location)}'::jsonb,
+			transferred_location = '${formOption.transferred_location}',
 			asset_control_number = $3,
 			name = $4,
 			monitor_type = $5,
@@ -699,7 +699,7 @@ const editObjectPackage = (formOption, username, record_id, reservedTimestamp) =
 		UPDATE object_table
 		SET 
 			status = '${item.status}',
-			transferred_location = '${JSON.stringify(item.transferred_location)}'::jsonb,
+			transferred_location = '${item.transferred_location}',
 			note_id = ${record_id},
 			reserved_timestamp = ${item.status == 'reserve' ? `'${reservedTimestamp}'` : null},
 			reserved_user_id = (SELECT id
@@ -708,6 +708,7 @@ const editObjectPackage = (formOption, username, record_id, reservedTimestamp) =
 								
 		WHERE asset_control_number IN (${[formOption].map(item => `'${item.asset_control_number}'`)});
 	`
+	console.log(editObjectPackage)
 	return text
 }
 
@@ -1367,7 +1368,7 @@ const addEditObjectRecord = (formOption, username, filePath) => {
 			now(),
 			$2,
 			$3,
-			'${JSON.stringify(item.transferred_location)}'::jsonb,
+			'${item.transferred_location}',
 			ARRAY ['${formOption.asset_control_number}'],
 			$4
 		)
@@ -1935,23 +1936,23 @@ function clearSearchHistory(){
 }
 
 function getTransferredLocation() {
-	const query = `SELECT id, branch_name, offices FROM branch_and_office ORDER BY id`
+	const query = `SELECT id, branch_name, department FROM branch_and_department ORDER BY id`
 	return query
 }
 function modifyTransferredLocation(type, data){
 	var query;
 	if(type == 'add branch'){
-        query = `insert into branch_and_office(branch_name) values('${JSON.stringify(data.name)}'::json)`
+        query = `insert into branch_and_department(branch_name) values('${data.name}')`
     }else if(type == 'rename branch'){
-        query = `update branch_and_office set branch_name = '${JSON.stringify(data.name)}' where id = ${data.branch_id} `
+        query = `update branch_and_department set branch_name = '${data.name}' where id = ${data.branch_id} `
     }else if(type == 'remove branch'){
-        query = `delete from branch_and_office where id = ${data.branch_id} `
+        query = `delete from branch_and_department where id = ${data.branch_id} `
     }else if(type == 'add department'){
-        query = `update branch_and_office set offices = array_append(offices, '${JSON.stringify(data.name)}'::jsonb) where id = ${data.branch_id}`
+        query = `update branch_and_department set department = array_append(department, '${data.name}') where id = ${data.branch_id}`
     }else if(type == 'rename department'){
-        query = `update branch_and_office set offices[${data.departmentIndex + 1}] = '${JSON.stringify(data.name)}'::jsonb where id = ${data.branch_id}`
+        query = `update branch_and_department set department[${data.departmentIndex + 1}] = '${data.name}' where id = ${data.branch_id}`
     }else if(type == 'remove department'){
-        query = `update branch_and_office set offices = array_remove(offices, offices[${data.departmentIndex + 1}]) where id = ${data.branch_id}`
+        query = `update branch_and_department set department = array_remove(department, department[${data.departmentIndex + 1}]) where id = ${data.branch_id}`
     }else{
         console.log('modifyTransferredLocation: unrecognized command type')
     }

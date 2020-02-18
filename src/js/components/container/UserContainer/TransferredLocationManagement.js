@@ -13,6 +13,11 @@ import {
     Col,
 } from "react-bootstrap"
 
+
+const defaultBranchName = 'new branch'
+const defaultDepartmentName = 'new department'
+
+
 class TranferredLocationManagement extends React.Component{
 
     static contextType = AppContext
@@ -37,15 +42,10 @@ class TranferredLocationManagement extends React.Component{
               width: 200
             },
             {
-              label: 'chinese',
-              field: 'chinese',
+              label: 'name',
+              field: 'name',
               width: 200
             },
-            {
-                label: 'english',
-                field: 'english',
-                width: 200
-              },
             {
                 label: 'remove',
                 field: 'remove',
@@ -70,15 +70,12 @@ class TranferredLocationManagement extends React.Component{
         axios.get(dataSrc.getTransferredLocation)
             .then(res => {
                 res.data.map(branch => {
-
-                    if(!branch.offices){
-                        branch.offices = []
-                        
+                    if(!branch.department){
+                        branch.department = []                       
                     }
-                    branch.english = branch.branch_name
-                    branch.chinese = branch.branch_name,
-                    branch.departments = branch.offices
                 })
+
+                console.log(res.data)
                 this.setState({
                     transferredLocationOptions: res.data
                 })
@@ -95,18 +92,11 @@ class TranferredLocationManagement extends React.Component{
                     style={{lineHeight:'100%', fontSize:'30px'}}
                     onClick = {this.changeFold.bind(this, branch.id)}></i>,
                 level: <h6>branch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h6>,
-                chinese: <input 
+                name: <input 
                     type="text" 
-                    value={branch.branch_name.chinese} 
-                    onBlur={this.renameBranchToBackend.bind(this, branch.id, 'chinese')} 
-                    onChange={this.renameBranchToState.bind(this, branch.id, 'chinese')} />,
-                english: <input 
-                    type="text" 
-                    value={branch.branch_name.english} 
-                    onBlur={this.renameBranchToBackend.bind(this, branch.id, 'english')} 
-                    onChange={this.renameBranchToState.bind(this, branch.id, 'english')} />,
-                
-                
+                    value={branch.branch_name} 
+                    onBlur={this.renameBranchToBackend.bind(this, branch.id)} 
+                    onChange={this.renameBranchToState.bind(this, branch.id)} />,
                 remove: <i 
                     className="fas fa-minus d-flex justify-content-center" 
                     onClick={() => {this.removeBranch(branch.id)}}/>,
@@ -114,27 +104,21 @@ class TranferredLocationManagement extends React.Component{
                     className="fas fa-plus d-flex justify-content-center" 
                     onClick={() => {
                         this.addDepartment(branch.id)
-                        this.changeFold(branch.id)
+                        this.unfold(branch.id)
                     }}></i>,
             })
             if (this.state.unFoldBranches.includes(branch.id)) {
-                let {departments} = branch
-                departments.map( (department, index) => {
+                let {department} = branch
+                console.log(department)
+                department.map( (department, index) => {
                     rows.push({
                         fold: null,
                         level: <h6>department</h6>,
-                        chinese: <input 
+                        name: <input 
                             type="text" 
-                            value={department.chinese} 
-                            onBlur={this.renameDepartmentToBackend.bind(this, branch.id, index, 'chinese')} 
-                            onChange={this.renameDepartmentToState.bind(this, branch.id, index, 'chinese')}/>,
-                        english: <input 
-                            type="text" 
-                            value={department.english} 
-                            onBlur={this.renameDepartmentToBackend.bind(this, branch.id, index, 'english')} 
-                            onChange={this.renameDepartmentToState.bind(this, branch.id, index, 'english')}/>,
-                        
-                        
+                            value={department} 
+                            onBlur={this.renameDepartmentToBackend.bind(this, branch.id, index)} 
+                            onChange={this.renameDepartmentToState.bind(this, branch.id, index)}/>,
                         remove: <i 
                             className="fas fa-minus d-flex justify-content-center" 
                             onClick={() => {this.removeDepartment(branch.id, index)}} />,
@@ -146,49 +130,50 @@ class TranferredLocationManagement extends React.Component{
         })
         return rows
     }
-    changeFold = (id, e) => {
-        if(this.state.unFoldBranches.includes(id)){
-            this.setState({
-                unFoldBranches:  this.state.unFoldBranches.filter(branch_id => branch_id !== id)  
-            })
-        }else{
+    unfold = (id) => {
+        if(!this.state.unFoldBranches.includes(id)){
             this.state.unFoldBranches.push(id)
             this.setState({})
         }
+    }
+    fold = (id) => {
+        this.setState({
+            unFoldBranches:  this.state.unFoldBranches.filter(branch_id => branch_id !== id)  
+        })
+    }
+    changeFold = (id) => {
+        if(this.state.unFoldBranches.includes(id)){
+            this.fold(id)
+        }else{
+            this.unfold(id)
+        }      
     }
     addBranch = (e) => {
         axios.post(dataSrc.modifyTransferredLocation, {
             type: 'add branch',
             data: {
-                name: {
-                    chinese: '新醫院',
-                    english: 'new hospital'
-                }
+                name: defaultBranchName
             }
         }).then(res => {
             this.getTransferredLocation()
         })
     }
-    renameBranchToState = (branch_id, language, e) => {
+    renameBranchToState = (branch_id, e) => {
         let newName = e.target.value
         this.state.transferredLocationOptions.map(branch => {
             if (branch.id == branch_id){
-                branch.branch_name[language] = newName
+                branch.branch_name = newName
             }
         })
         this.setState({})
     }
-    renameBranchToBackend = (branch_id, language, e) => {
+    renameBranchToBackend = (branch_id, e) => {
         const newName = e.target.value
         axios.post(dataSrc.modifyTransferredLocation, {
             type: 'rename branch',
             data: {
                 branch_id: branch_id,
-                name: {
-                    ...this.state.transferredLocationOptions.filter(branch => branch.id == branch_id)[0].branch_name,
-                    [language]: newName
-                }
-                
+                name: newName
             }
         }).then(res => {
             this.getTransferredLocation()
@@ -205,38 +190,34 @@ class TranferredLocationManagement extends React.Component{
         })
     }
     addDepartment = (branch_id) => {
+        console.log(defaultDepartmentName)
         axios.post(dataSrc.modifyTransferredLocation, {
             type: 'add department',
             data: {
                 branch_id,
-                name: {
-                    chinese: '新單位',
-                    english: 'new department'
-                }
+                name: defaultDepartmentName
             }
         }).then(res => {
             this.getTransferredLocation()
         })
     }
-    renameDepartmentToState = (branch_id, index, language, e) => {
+    renameDepartmentToState = (branch_id, index, e) => {
         let newName = e.target.value
         this.state.transferredLocationOptions.map(branch => {
             if (branch.id == branch_id){
-                branch.offices[index][language] = newName
+                branch.department[index] = newName
             }
         })
         this.setState({})
     }
-    renameDepartmentToBackend = (branch_id, index, language, e) => {
+    renameDepartmentToBackend = (branch_id, index, e) => {
         let newName = e.target.value
-        let newNamePacakge = this.state.transferredLocationOptions.filter(branch => branch.id == branch_id)[0].offices[index]
-        newNamePacakge[language] = newName
         axios.post(dataSrc.modifyTransferredLocation, {
             type: 'rename department',
             data: {
                 branch_id,
                 departmentIndex: index,
-                name: newNamePacakge
+                name: newName
             }
         }).then(res => {
             this.getTransferredLocation()
@@ -255,6 +236,7 @@ class TranferredLocationManagement extends React.Component{
     }
 
     render(){
+        console.log(this.state.unFoldBranches)
         let dataRows = this.generateDataRows()
         return(
             <Col lg={8}>

@@ -133,9 +133,10 @@ class SystemStatus extends React.Component{
             })
             res.data.map(item => {
                 item.status = locale.texts[item.status.toUpperCase()]
-                item.transferred_location = item.transferred_location 
-                    ? locale.texts[item.transferred_location.toUpperCase().replace(/ /g, '_')]
-                    : ''
+                item.transferred_location = ''
+                // item.transferred_location 
+                //     ? locale.texts[item.transferred_location.toUpperCase().replace(/ /g, '_')]
+                //     : ''
             })
             this.setState({
                 trackingData: res.data,
