@@ -611,14 +611,13 @@ class ObjectManagementContainer extends React.Component{
 
 
     objectMultipleDelete = () => {
-        let idPackage = []
+        let formOption = []
         var deleteArray = [];
         var deleteCount = 0;
  
         this.state.data.map (item => {
          
             this.state.selection.map(itemSelect => {
-                
                 itemSelect === item.id
                 ? 
                  deleteArray.push(deleteCount.toString()) 
@@ -629,14 +628,14 @@ class ObjectManagementContainer extends React.Component{
         })
         
         deleteArray.map( item => {
+         
             this.state.data[item] === undefined ?
                 null
                 :
-                idPackage.push(parseInt(this.state.data[item].id))
+                formOption.push(this.state.data[item].mac_address)
             })
- 
         axios.post(deleteDevice, {
-            idPackage
+            formOption
         })
         .then(res => {
             this.setState({

@@ -46,6 +46,7 @@ class DissociationForm extends React.Component {
     }
 
     handleSubmit = (postOption) => {
+ 
         axios.post(deleteDevice, {
             formOption: [postOption]
         }).then(res => {
