@@ -135,7 +135,6 @@ class ChangeStatusForm extends React.Component {
             title,
             selectedObjectData 
         } = this.props
-        console.log(this.state.transferredLocationOptions, selectedObjectData)
         return (
             <Modal  
                 show={this.props.show}

@@ -13,13 +13,16 @@ const ToastNotification = ({
     }= React.useContext(AppContext);
     
     return (
-        <div className="text-capitalize">
-            <div >
+        <div >
+            <div className="text-capitalize">
                 {locale.texts[config.monitorType[type].toUpperCase().replace(/ /g, '_')]}
             </div>
             <hr/>
             <div>
-                {data.name} {data.location_description} {moment(time).format(config.geoFenceViolationTimeFormat)}
+                {locale.lang == 'en'
+                    ?   `${data.name} ${locale.texts.NEAR} ${data.location_description} ${moment(time).format(config.geoFenceViolationTimeFormat)}`
+                    :   `${data.name} ${locale.texts.NEAR}${data.location_description} ${moment(time).format(config.geoFenceViolationTimeFormat)}`
+                }
             </div>
         </div>
 

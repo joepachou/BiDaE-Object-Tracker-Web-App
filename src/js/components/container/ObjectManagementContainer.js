@@ -19,6 +19,7 @@ import {
 import axios from 'axios';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
+import Select from 'react-select';
 import { 
     Button, 
     Container,
@@ -29,6 +30,7 @@ import {
     patientTableColumn,
     importTableColumn
  } from '../../tables'
+import Searchbar from '../presentational/Searchbar'
 import EditObjectForm from './EditObjectForm'
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
 import config from '../../config'
@@ -77,7 +79,68 @@ class ObjectManagementContainer extends React.Component{
         disableASN:false,//編輯不能更改ASN,新增可以
         transferredLocationList: [],
         showDeleteConfirmation: false, //確定刪除的form
-        warningSelect : 0, //if 0 ，就warn完就執行delete patien 否則delete object
+        warningSelect : 0, //if 0 ，就warn完就執行delete patien 否則delete object,
+        objectFilterSelectOption: [
+            {
+                label: '種類',
+                value: 'type',
+                options: [
+                    {
+                        label: 'cpm',
+                        value: 'cpm'
+                    },
+                    {
+                        label: 'iv pump',
+                        value: 'iv pump'
+                    },
+                    {
+                        label: '五合一自動傳輸生理監視器',
+                        value: '五合一自動傳輸生理監視器'
+                    },
+                    {
+                        label: '烤燈',
+                        value: '烤燈'
+                    },
+                ]
+            },
+            {
+                label: '所屬地區',
+                value: 'area',
+                options: [
+                    {
+                        label: '急診室',
+                        value: '急診室'
+                    },
+                ]
+            },
+        ],
+        patientFilterSelectOption: [
+            {
+                label: '性別',
+                value: '性別',
+                options: [
+                    {
+                        label: '男',
+                        value: '男'
+                    },
+                    {
+                        label: '女',
+                        value: '女'
+                    },
+                    
+                ]
+            },
+            {
+                label: '所屬地區',
+                value: 'area',
+                options: [
+                    {
+                        label: '急診室',
+                        value: '急診室'
+                    },
+                ]
+            },
+        ]
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -546,14 +609,13 @@ class ObjectManagementContainer extends React.Component{
 
 
     objectMultipleDelete = () => {
-        let idPackage = []
+        let formOption = []
         var deleteArray = [];
         var deleteCount = 0;
  
         this.state.data.map (item => {
          
             this.state.selection.map(itemSelect => {
-                
                 itemSelect === item.id
                 ? 
                  deleteArray.push(deleteCount.toString()) 
@@ -564,14 +626,14 @@ class ObjectManagementContainer extends React.Component{
         })
         
         deleteArray.map( item => {
+         
             this.state.data[item] === undefined ?
                 null
                 :
-                idPackage.push(parseInt(this.state.data[item].id))
+                formOption.push(this.state.data[item].mac_address)
             })
- 
         axios.post(deleteDevice, {
-            idPackage
+            formOption
         })
         .then(res => {
             this.setState({
@@ -725,7 +787,8 @@ class ObjectManagementContainer extends React.Component{
                 // statement
             }
             if(filteredAttribute.includes('area')){
-                // statement
+                console.log(obj)
+                // if(obj.area_id == )
             }
             if(filteredAttribute.includes('monitor type')){
                 // statement
@@ -733,14 +796,23 @@ class ObjectManagementContainer extends React.Component{
             if(filteredAttribute.includes('mac address')){
                 // statement
             }
+            if(filteredAttribute.includes('sex')){
+                console.log(key)
+                if(obj.object_type == key){
+                    return true
+                }
+            }
             return false
         })
         return filteredData
         
     }
+    generatefilterSelectType = () => {
+
+    }
 
     filterObjects = (key) => {
-        let filteredAttribute = ['name', 'type','acn']
+        let filteredAttribute = ['name', 'type','acn', 'area']
         let filteredData = this.filterData(this.state.data, key, filteredAttribute)
         this.setState({
             filteredData
@@ -748,7 +820,7 @@ class ObjectManagementContainer extends React.Component{
     }
 
     filterPatients = (key) => {
-        let filteredAttribute = ['name', 'type','acn']
+        let filteredAttribute = ['name', 'type','acn', 'area', 'sex']
         let filteredPatient = this.filterData(this.state.dataPatient, key, filteredAttribute)
         this.setState({
             filteredPatient
@@ -840,13 +912,30 @@ class ObjectManagementContainer extends React.Component{
                             >
                                 {locale.texts.MULTIPLEDELETE}
                             </Button>
+                            <div style={{width: '200px'}}>
+                                <Select
+                                    className={'float-right w-100'}
+                                    onChange={(value) => {
+                                        console.log()
+                                        this.filterObjects(value.label)
+                                    }}
+                                    options={this.state.objectFilterSelectOption}
+                                    isSearchable={false}
+                                    placeholder={'Search...'}
+                                    
+                                />
+                            </div>
+                            <Searchbar 
+                                className={'float-right'}
+                                
+                                placeholder={''}
+                                getSearchKey={this.filterObjects}
+                                clearSearchResult={null}    
+                            />
+
                         </ButtonToolbar>
-                        {/* <Searchbar 
-                            className={'float-right'}
-                            placeholder={''}
-                            getSearchKey={this.filterObjects}
-                            clearSearchResult={null}    
-                        /> */}
+                        
+                        
 
                         <SelectTable
                             keyField='id'
@@ -919,6 +1008,25 @@ class ObjectManagementContainer extends React.Component{
                             >
                                 {locale.texts.DELETE}
                             </Button>
+                            <div style={{width: '200px'}}>
+                                <Select
+                                    className={'float-right w-100'}
+                                    onChange={(value) => {
+                                        this.filterPatients(value.label)
+                                    }}
+                                    options={this.state.patientFilterSelectOption}
+                                    isSearchable={false}
+                                    placeholder={'Search...'}
+                                    
+                                />
+                            </div>
+                            <Searchbar 
+                                className={'float-right'}
+                                
+                                placeholder={''}
+                                getSearchKey={this.filterPatients}
+                                clearSearchResult={null}    
+                            />
                         </ButtonToolbar>
                         {/* <Searchbar 
                             className={'float-right'}
