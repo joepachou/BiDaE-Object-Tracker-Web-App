@@ -7,7 +7,6 @@ import {
     Formik, 
     Form 
 } from 'formik';
-import { AppContext } from '../../context/AppContext';
 import dataSrc from '../../dataSrc'
 import LocaleContext from '../../context/LocaleContext';
   
@@ -27,7 +26,6 @@ const DownloadPdfRequestForm = ({
         downloadPdfRequest: {
             zIndex: 6000,
             padding: 0,
-            top: '2%',
         },
     }
 
