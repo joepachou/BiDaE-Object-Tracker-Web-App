@@ -1,31 +1,15 @@
-// import React from 'react';
-// import SearchContainer from './SearchContainer';
-// import 'react-table/react-table.css';
-// import SearchResultList from '../presentational/SearchResultList'
-// import { Row, Col, Toast } from 'react-bootstrap'
-// import SurveillanceContainer from './SurveillanceContainer';
-// import config from '../../../config';
-// import InfoPrompt from '../presentational/InfoPrompt';
-// import _ from 'lodash'
-// import axios from 'axios';
-// import dataSrc from '../../dataSrc'
-// import { AppContext } from '../../context/AppContext'
-// import { toast } from 'react-toastify';
-// import ToastNotification from '../presentational/ToastNotification'
-// import SearchResult from '../presentational/SearchResultList';
-
-
 import React from 'react';
 import 'react-table/react-table.css';
-import { Row, Col, Toast } from 'react-bootstrap'
+import { 
+    Row, 
+    Col 
+} from 'react-bootstrap'
 import SurveillanceContainer from './SurveillanceContainer';
 import config from '../../../config';
 import _ from 'lodash'
 import axios from 'axios';
 import dataSrc from '../../../dataSrc'
 import { AppContext } from '../../../context/AppContext'
-import { toast } from 'react-toastify';
-import ToastNotification from '../../presentational/ToastNotification'
 
 const {
     ALL_DEVICES,
@@ -41,7 +25,6 @@ class MainContainer extends React.Component{
     state = {
         trackingData: [],
         proccessedTrackingData: [],
-        lbeaconPosition: [],
         geoFenceConfig: [],
         violatedObjects: {},
         hasSearchKey: false,
@@ -54,24 +37,19 @@ class MainContainer extends React.Component{
         clearSearchResult: false,
         hasGridButton: false,
         isHighlightSearchPanel: false,
-        rssiThreshold: window.innerWidth < config.mobileWidowWidth
-            ? config.mapConfig.locationAccuracyMapToDefault[0]
-            : config.mapConfig.locationAccuracyMapToDefault[1],
         auth: this.context.auth,
         shouldUpdateTrackingData: true,
     }
 
     componentDidMount = () => {
         this.getTrackingData();
-        this.getLbeaconPosition();
-        this.getGeoFenceConfig()
         this.interval = setInterval(this.getTrackingData, config.mapConfig.intervalTime)
     }
 
     componentDidUpdate = (prevProps, prevState) => {
         let isTrackingDataChange = !(_.isEqual(this.state.trackingData, prevState.trackingData))
         let { stateReducer } = this.context
-        let [{violatedObjects}] = stateReducer
+        
         if (stateReducer[0].shouldUpdateTrackingData !== this.state.shouldUpdateTrackingData) {
             let [{shouldUpdateTrackingData}] = stateReducer
             this.interval = shouldUpdateTrackingData ? setInterval(this.getTrackingData, config.mapConfig.intervalTime) : clearInterval(this.interval);
@@ -88,58 +66,6 @@ class MainContainer extends React.Component{
                 auth: this.context.auth,
             })
         } 
-        // console.log(violatedObjects)
-        let newViolatedObject = Object.keys(this.state.violatedObjects).filter(item => !Object.keys(prevState.violatedObjects).includes(item))
-        // console.log(newViolatedObject)
-        if (newViolatedObject.length !== 0 ) {
-            newViolatedObject.map(item => {
-                this.getToastNotification(this.state.violatedObjects[item])
-            })
-        }
-    }
-
-    getToastNotification = (item) => {
-        switch(item.monitor_type) {
-            case 1:
-                toast.warn(<ToastNotification data={item} />, {
-                    hideProgressBar: true,
-                    autoClose: false,
-                    onClose: this.onCloseToast
-                })
-            break;
-            case 4:
-                toast.error(<ToastNotification data={item} />, {
-                    hideProgressBar: true,
-                    autoClose: false,
-                    onClose: this.onCloseToast
-                })
-            break;
-            case 8:
-                toast.info(<ToastNotification data={item} />, {
-                    hideProgressBar: true,
-                    autoClose: false,
-                    onClose: this.onCloseToast
-                })
-            break;
-        }
-    }
-
-    onCloseToast = (toast) => {
-        let mac_address = toast.data ? toast.data.mac_address : toast.mac_address
-        axios.post(dataSrc.checkoutViolation, {
-            mac_address,
-        })
-        .then(res => {
-        })
-        .catch(err => {
-            console.log(`checkout violation fail: ${err}`)
-        })
-    }
-
-    /** Clear the record violated object */
-    clearAlerts = () => {
-        Object.values(this.state.violatedObjects).map(item => this.onCloseToast(item))
-        toast.dismiss()
     }
 
     shouldComponentUpdate = (nextProps,nextState) => {
@@ -147,8 +73,6 @@ class MainContainer extends React.Component{
         let hasSearchKey = nextState.hasSearchKey !== this.state.hasSearchKey
         let isSearchKeyChange = this.state.searchKey !== nextState.searchKey
         let isSearchResultChange = !(_.isEqual(this.state.searchResult, nextState.searchResult))
-        let isStateChange = !(_.isEqual(this.state, nextState))
-        let isLbeaconDataChange = !(_.isEqual(this.state.lbeaconPosition, nextState.lbeaconPosition))
         let isGeoFenceDataChange = !(_.isEqual(this.state.geoFenceConfig, nextState.geoFenceConfig))
         let isViolatedObjectChange = !(_.isEqual(this.state.isViolatedObjectChange, nextState.isViolatedObjectChange))
 
@@ -172,21 +96,6 @@ class MainContainer extends React.Component{
         this.getSearchKey(searchKey, colorPanel, searchValue)
     }
 
-    changeLocationAccuracy = (locationAccuracy) => {
-        const rssiThreshold = config.surveillanceMap.locationAccuracyMapToDefault[locationAccuracy]
-        this.setState({
-            rssiThreshold
-        })
-    }
-
-  
-    async setFence (value, areaId) {
-        let result = await axios.post(dataSrc.setGeoFenceConfig, {
-            value,
-            areaId,
-        })
-        return result
-    }
 
     addSearchedIndex = (trackingData, queue) => {
         for(var i in queue){
@@ -215,7 +124,6 @@ class MainContainer extends React.Component{
         var count = data.filter(item => {
             return item.searched == index + 1
         }).length
-        // console.log(count)
         return count
     }
 
@@ -223,7 +131,6 @@ class MainContainer extends React.Component{
         let { auth, locale, stateReducer } = this.context
         let [{areaId}] = stateReducer
         axios.post(dataSrc.getTrackingData,{
-            rssiThreshold: this.state.rssiThreshold,
             locale: locale.abbr,
             user: auth.user,
             areaId,
@@ -240,15 +147,10 @@ class MainContainer extends React.Component{
                 var legendDescriptor = queue.map((queue1, index) => {
                     return {
                         text: queue1.key_word,
-                        pinColor: config.bigScreenConfig.iconColor.pinColorArray[queue1.pin_color_index],
+                        pinColor: config.mapConfig.iconColor.pinColorArray[queue1.pin_color_index],
                         itemCount:  this.countItemsInQueue(trackingData, index)
                     }    
-                })
-
-                // add the attribute "searched" in item to check whether it has searched in the search history list
-                
-
-                
+                })                
 
                 let violatedObjects = trackingData.reduce((violatedObjects, item) => {
                     if (!(item.mac_address in violatedObjects) && item.isViolated) {
@@ -268,55 +170,6 @@ class MainContainer extends React.Component{
         })
     }
 
-    getLbeaconPosition = () => {
-        let { auth, locale } = this.context
-
-        axios.post(dataSrc.getLbeaconTable, {
-            locale: locale.abbr
-        })
-        .then(res => {
-            let lbeaconPosition = res.data.rows.reduce((activatedLbeacons, item) => {
-                let coordinate = this.createLbeaconCoordinate(item.uuid).toString()
-                if (item.health_status && !activatedLbeacons.includes(coordinate)) {
-                    activatedLbeacons.push(coordinate)
-                }
-                return activatedLbeacons
-            }, [])
-            this.setState({
-                lbeaconPosition
-            })
-        })
-        .catch(err => {
-            console.log(err)
-        })
-    }
-
-    /** Retrieve geo fence data from database */
-    getGeoFenceConfig = () => {
-        let { stateReducer } = this.context
-        let [{areaId}] = stateReducer
-        axios.post(dataSrc.getGeoFenceConfig, {
-            areaId
-        })
-        .then(res => {
-            this.setState({
-                geoFenceConfig: res.data.rows
-            })
-        })
-        .catch(err => {
-            console.log(`get geo fence data fail: ${err}`)
-        })
-    }
-
-    /** Parsing the lbeacon's location coordinate from lbeacon_uuid*/
-    createLbeaconCoordinate = (lbeacon_uuid) => {
-
-        /** Example of lbeacon_uuid: 00000018-0000-0000-7310-000000004610 */
-        const zz = lbeacon_uuid.slice(0,4);
-        const xx = parseInt(lbeacon_uuid.slice(14,18) + lbeacon_uuid.slice(19,23));
-        const yy = parseInt(lbeacon_uuid.slice(-8));
-        return [yy, xx, zz];
-    }
 
     /** Transfer the search result, not found list and color panel from SearchContainer, GridButton to MainContainer 
      *  The three variable will then pass into SurveillanceContainer */
@@ -373,28 +226,6 @@ class MainContainer extends React.Component{
                 searchValue
             })
         }
-    }
-
-    clearGridButtonBGColor = () => {
-        var gridbuttons = document.getElementsByClassName('gridbutton')
-        for(let button of gridbuttons) {
-            button.style.background = ''
-        }
-    }
-
-    handleClearButton = () => {
-        this.clearGridButtonBGColor();
-        this.setState({
-            hasSearchKey: false,
-            searchKey: '',
-            lastsearchKey: '',
-            searchResult: [],
-            colorPanel: null,
-            clearColorPanel: true,
-            searchResultObjectTypeMap: {},
-            clearSearchResult: this.state.hasSearchKey ? true : false,
-            proccessedTrackingData: []
-        })
     }
 
     /** Fired once the user click the item in object type list or in frequent seaerch */
@@ -492,9 +323,6 @@ class MainContainer extends React.Component{
                     keyWord : searchKey,
                     mac_address : searchResultMac
                 })
-                .then(res => {
-                    // console.log(res)
-                })
                 .catch(err =>{
                     console.log(err)
                 })
@@ -502,7 +330,6 @@ class MainContainer extends React.Component{
                     lastsearchKey: searchKey
                 })
             }
-            //console.log('here')
         }
 
         this.setState({
@@ -511,20 +338,6 @@ class MainContainer extends React.Component{
         return searchResult
     }
 
-    collectObjectsByLatLng = (lbPosition, proccessedTrackingData) => {
-        let objectList = []
-        proccessedTrackingData.map(item => {
-            if (item.currentPosition && 
-                item.currentPosition.toString() === lbPosition.toString() &&
-                item.area_id == lbPosition[2]    
-            ) {
-                item.searched = true;
-                item.searchedType = -1;
-                objectList.push(item);
-            }
-        })
-        return objectList 
-    }
 
     highlightSearchPanel = (boolean) => {
         this.setState({
@@ -539,52 +352,27 @@ class MainContainer extends React.Component{
             colorPanel, 
             clearColorPanel,
             trackingData,
-            proccessedTrackingData,
-            searchResult,
-            searchResultObjectTypeMap,
-            searchKey
+
         } = this.state;
-        // console.log(proccessedTrackingData)
+
         const style = {
             pageWrap: {
                 overflow: "hidden hidden",
             },
-
-            container: {
-                /** The height: 100vh will cause the page can only have 100vh height.
-                 * In other word, if the seaerch result is too long and have to scroll down, the page cannot scroll down
-                 */
-                // height: '100vh'
-                
-            },
-            searchResultDiv: {
-                display: this.state.hasSearchKey ? null : 'none',
-                // paddingTop: 30,
-            },
-            
-            searchPanel: {
-                zIndex: this.state.isHighlightSearchPanel ? 1060 : 1,
-                background: 'white',
-                borderRadius: 10,
-                // height: '90vh'
-            }
         }
+
         const { 
             locale, 
             auth,
             stateReducer,
         } = this.context
 
-        let [{areaId}] = stateReducer
-        // console.log(trackingData)
-
-        let deviceNum = this.state.trackingData.filter(item => item.found).length
-        let devicePlural = deviceNum === 1 ? locale.texts.DEVICE : locale.texts.DEVICES
+        
         return(
             /** "page-wrap" the default id named by react-burget-menu */
             <div id="page-wrap" className='mx-1 my-2 overflow-hidden' style={style.pageWrap} >
                 <Row id="mainContainer" className='d-flex w-100 justify-content-around mx-0 overflow-hidden' style={style.container}>
-                    <Col sm={7} md={9} lg={8} xl={12} id='searchMap' className="pl-2 pr-1" >
+                    <Col id='searchMap' className="pl-2 pr-1" >
                         <SurveillanceContainer 
                             proccessedTrackingData={trackingData}
                             hasSearchKey={hasSearchKey}
@@ -592,16 +380,11 @@ class MainContainer extends React.Component{
                             handleClearButton={this.handleClearButton}
                             getSearchKey={this.getSearchKey}
                             clearColorPanel={clearColorPanel}
-                            changeLocationAccuracy={this.changeLocationAccuracy}
-                            setFence={this.setFence}
                             auth={auth}
-                            lbeaconPosition={this.state.lbeaconPosition}
-                            geoFenceConfig={this.state.geoFenceConfig.filter(item => parseInt(item.unique_key) == areaId)}
                             clearAlerts={this.clearAlerts}
                             legendDescriptor = {this.state.legendDescriptor}
                         />
                     </Col>
-                    
                 </Row>
             </div>
         )
