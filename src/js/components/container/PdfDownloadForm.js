@@ -15,8 +15,7 @@ import {
     MobileOnlyView,
     TabletView
 } from 'react-device-detect'
-// need Inputs : search Result
-// this component will send json to back end, backend will return a url, and the component generate a qrcode
+
 class PdfDownloadForm extends React.Component {
 
     static contextType = AppContext
@@ -30,13 +29,6 @@ class PdfDownloadForm extends React.Component {
         isDone: false,
     }
 
-    shouldComponentUpdate = (nextProps, nextState) => {
-        if(nextProps.show || nextState.show){
-            return true;
-        }else{
-            return true;
-        }
-    }
 
     sendSearchResultToBackend = (searchResultInfo, callBack) => {
         axios.post(dataSrc.generatePDF ,searchResultInfo)
@@ -47,6 +39,7 @@ class PdfDownloadForm extends React.Component {
                 console.log(err)
             })
     }
+
     componentDidUpdate = (preProps) => {
         if(this.props.show && !this.state.show){
 
@@ -79,6 +72,7 @@ class PdfDownloadForm extends React.Component {
             })
         }
     }
+    
     handleClose = () => {
         this.props.handleClose()
         this.setState({
@@ -94,13 +88,11 @@ class PdfDownloadForm extends React.Component {
     render() {
         const {
             hasData, 
-            show, 
             savePath, 
-            isDone
         } = this.state
 
         const { locale } = this.context
-        //console.log(this.state.data)
+
         return (
             <Modal 
                 show={this.state.show}  
