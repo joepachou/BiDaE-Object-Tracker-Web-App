@@ -950,7 +950,7 @@ class ObjectManagementContainer extends React.Component{
                             
 
                         </ButtonToolbar>
-                        <Row>
+                        {/* <Row>
                             <Col>
                                 <Select
                                     name={"Select Type"}
@@ -998,7 +998,7 @@ class ObjectManagementContainer extends React.Component{
                                     clearSearchResult={null}    
                                 />
                             </Col>
-                        </Row>
+                        </Row> */}
                         
 
                         <SelectTable
@@ -1073,7 +1073,7 @@ class ObjectManagementContainer extends React.Component{
                                 {locale.texts.DELETE}
                             </Button>
                         </ButtonToolbar>
-                        <Row>
+                        {/* <Row>
                             <Col>
                                 <Select
                                     name={"Select Sex"}
@@ -1121,13 +1121,8 @@ class ObjectManagementContainer extends React.Component{
                                     clearSearchResult={null}    
                                 />
                             </Col>
-                        </Row>
-                        {/* <Searchbar 
-                            className={'float-right'}
-                            placeholder={''}
-                            getSearchKey={this.filterPatients}
-                            clearSearchResult={null}    
-                        /> */}
+                        </Row> */}
+
                         <SelectTable
                             keyField='id'
                             data={this.state.filteredPatient}
