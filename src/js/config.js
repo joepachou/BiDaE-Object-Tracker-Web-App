@@ -117,7 +117,6 @@ const config = {
     searchResultProportion: '32vh',
 
     monitorType: {
-        // 0: "normal",
         1: "geofence",
         2: "panic",
         4: "movement",
