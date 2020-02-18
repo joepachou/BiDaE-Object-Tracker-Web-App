@@ -46,7 +46,7 @@ export const getDescription = (item, locale) => {
             foundDeviceDescription += `
                 ${getName(item, locale)}
                 ${locale.texts.PHYSICIAN_NAME}: ${item.physician_name},
-                ${getPosition(item, locale)},
+                ${getPosition(item, locale)}
                 ${item.residence_time} 
 
             `    

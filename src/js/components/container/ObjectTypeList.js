@@ -1,7 +1,5 @@
 import React  from 'react';
-import { Col, ListGroup, Row, Button } from 'react-bootstrap';
-import config from '../../config';
-import AccessControl from '../presentational/AccessControl';
+import { Button } from 'react-bootstrap';
 import { AppContext } from '../../context/AppContext';
 import axios from 'axios'
 import { addUserSearchHistory } from '../../dataSrc'
@@ -29,28 +27,12 @@ class ObjectTypeList extends React.Component {
 
     handleClick = (e) => {
         const itemName = e.target.name;
-        this.getSearchKey(itemName)
+        this.props.getSearchKey(itemName)        
         this.addSearchHistory(itemName)
-
+        this.checkInSearchHistory(itemName)
     }
 
-    getSearchKey = (itemName) => {
-        const {auth} = this.context
-        this.props.getSearchKey(itemName)
-        axios.post(addUserSearchHistory, {
-            username: auth.user.name,
-            keyType: 'object type search',// keyType
-            keyWord: itemName
-        }).then(res => {
-            this.setState({
-                searchKey: itemName
-            })
-        }).catch(err => {
-            console.log(err)
-        })
-        
-    }
-
+    /** Set search history to auth */
     addSearchHistory(searchKey) {
         let { auth } = this.context
         if (!auth.authenticated) return;
@@ -66,7 +48,6 @@ class ObjectTypeList extends React.Component {
         flag === false ? toReturnSearchHistory.push({name: searchKey, value: 1}) : null;
         const sortedSearchHistory = this.sortSearchHistory(toReturnSearchHistory)
         auth.setSearchHistory(sortedSearchHistory)
-        this.checkInSearchHistory(auth.user.name, sortedSearchHistory)
     }
 
     /** Sort the user search history and limit the history number */
@@ -77,15 +58,23 @@ class ObjectTypeList extends React.Component {
         return toReturn
     }
 
-    checkInSearchHistory(username, searchHistory) {
-        // axios.post(addUserSearchHistory, {
-        //     username,
-        //     searchHistory,
-        // }).then(res => {
+    /** Insert search history to database */
+    checkInSearchHistory(itemName) {
+        let { 
+            auth 
+        } = this.context
 
-        // }).catch(err => {
-        //     console.log(err)
-        // })
+        axios.post(addUserSearchHistory, {
+            username: auth.user.name,
+            keyType: 'object type search',
+            keyWord: itemName
+        }).then(res => {
+            this.setState({
+                searchKey: itemName
+            })
+        }).catch(err => {
+            console.log(`check in search history fail ${err}`)
+        })
     }
 
     render() {
@@ -99,24 +88,29 @@ class ObjectTypeList extends React.Component {
             },
         }
 
-        const { locale, auth } = this.context
-  
+        const { 
+            locale, 
+        } = this.context
+
         return (
-            <div id='objectTypeList' style={style.container} >
-                <div className='text-capitalize title'>{locale.texts.OBJECT_TYPE}</div>
+            <div className='text-capitalize'>
+                <div className='title'>
+                    {locale.texts.OBJECT_TYPE}
+                </div>
                 <div style={style.list} className="d-inline-flex flex-column searchOption">
-                    {this.props.objectTypeList.map((item, index) => {
-                        return ( 
-                            <Button
-                                variant="outline-custom"
-                                onClick={this.handleClick} 
-                                // active={this.state.searchKey === item.toLowerCase()} 
-                                key={index}
-                                name={item}
-                            >
-                                {item}
-                            </Button>
-                        )
+                    {this.props.objectTypeList
+                        .map((item, index) => {
+                            return ( 
+                                <Button
+                                    variant="outline-custom"
+                                    onClick={this.handleClick} 
+                                    // active={this.state.searchKey === item.toLowerCase()} 
+                                    key={index}
+                                    name={item}
+                                >
+                                    {item}
+                                </Button>
+                            )
                     })}
                 </div>
             </div>

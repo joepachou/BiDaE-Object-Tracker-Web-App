@@ -12,6 +12,9 @@ import { AppContext } from '../../context/AppContext'
 import GeneralConfirmForm from '../container/GeneralConfirmForm'
 import retrieveDataHelper from '../../helper/retrieveDataHelper'
 import DownloadPdfRequestForm from './DownloadPdfRequestForm'
+import {
+    getStatus
+} from '../../helper/descriptionGenerator'
 
 const style = {
     modalBody: {
@@ -137,11 +140,13 @@ class ShiftChange extends React.Component {
             showConfirmForm: false
         })
     }
+
     handlePdfDownloadFormClose = () => {
         this.setState({
             showDownloadPdfRequest: false
         })
     }
+    
     render() {
 
         const { 
@@ -155,7 +160,10 @@ class ShiftChange extends React.Component {
             handleClose
         } = this.props
 
-        const { foundResult, notFoundResult } = this.state.searchResult
+        const { 
+            foundResult, 
+            notFoundResult 
+        } = this.state.searchResult
 
         const nowTime = moment().locale(locale.abbr)
         const hasFoundResult = foundResult.length !== 0;
@@ -165,7 +173,7 @@ class ShiftChange extends React.Component {
             <Fragment>
                 <Modal 
                     show={show} 
-                    size="md" 
+                    size="lg" 
                     onHide={handleClose}
                     className='text-capitalize'
                 >
@@ -290,6 +298,7 @@ const TypeBlock = ({
                             {item.name}, 
                             {locale.texts.LAST_FOUR_DIGITS_IN_ACN}: {item.last_four_acn}, 
                             {locale.texts.NEAR}{item.location_description}
+                            {item.status !== 'normal' && `,${getStatus(item, locale)}`}
                         </div>
                     </div>
                 )
