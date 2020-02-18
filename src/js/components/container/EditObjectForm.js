@@ -81,34 +81,7 @@ class EditObjectForm extends React.Component {
             })
         })
     }
-    initValues = () => {
-        let {selectedObjectData} = this.props
-        let {transferredLocationOptions} = this.state
-        let initValues = {
-            name: selectedObjectData.length != 0 ? selectedObjectData[0].name : '',
-            type: selectedObjectData.length != 0 ? selectedObjectData[0].type : '',
-            asset_control_number: selectedObjectData.length != 0 ? selectedObjectData[0].asset_control_number : '',
-            status: selectedObjectData.length != 0 ? selectedObjectData[0].status : '',
-            transferred_location: selectedObjectData.length != 0 && selectedObjectData[0].status == config.objectStatus.TRANSFERRED
 
-                ? null
-                
-                : '',
-            notes: selectedObjectData.length != 0 ? selectedObjectData[0].notes : "" ,
-        }
-        
-        if(selectedObjectData.length != 0 && selectedObjectData[0].status == config.objectStatus.TRANSFERRED){
-            let ids = selectedObjectData[0].transferred_location.split(',')
-            let branchId = ids[0], departmentId = ids[1]
-            let branch = this.state.transferredLocationOptions.filter(branch => branch.id == branchId)[0] 
-            let department = null
-            if(branch){
-                department = departmentId ? branch.options[departmentId]: ''
-                initValues.transferred_location = department
-            }
-        }
-        return initValues
-    }
     render() {
         const { locale } = this.context
 
@@ -137,7 +110,8 @@ class EditObjectForm extends React.Component {
             mac_address,
             transferred_location,
             area_name,
-        } = selectedObjectData 
+        } = selectedObjectData
+
         return (
             <Modal 
                 show={show} 
@@ -158,19 +132,15 @@ class EditObjectForm extends React.Component {
                             asset_control_number: asset_control_number || '',
                             mac_address: mac_address || '',
                             status: status.value ,
-                            area:  area_name || '',
+                            area: area_name || '',
                             select: status.value === config.objectStatus.TRANSFERRED 
-                                ? transferred_location.label 
-                                : null,
+                                ? transferred_location 
+                                : '',
                             checkboxGroup: selectedObjectData.length !== 0 
                                 ?   selectedObjectData.monitor_type == 0 
                                     ? null
                                     : selectedObjectData.monitor_type.split('/') 
-                                : [],
-                            transferred_location: transferred_location ?{
-                                label: transferred_location.label,
-                                value: ''
-                            }: null
+                                : []
                         }}
 
                         validationSchema = {
@@ -248,7 +218,7 @@ class EditObjectForm extends React.Component {
                                         return sum
                                     },0)      
                             }
-                             
+                            console.log(values.transferred_location)
                             const postOption = {
                                 id,
                                 ...values,
@@ -271,7 +241,6 @@ class EditObjectForm extends React.Component {
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm }) => (
                             <Form className="text-capitalize">
-                       
                                 <Row noGutters>
                                     <Col>
                                         <FormikFormGroup 
