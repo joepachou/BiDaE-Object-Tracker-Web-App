@@ -160,7 +160,7 @@ const config = {
 
     shiftRecordFileNameTimeFormat: "MM_DD_YYYY",
     shiftRecordPdfContentTimeoFrmat: "MM/DD/YYYY",
-    geoFenceViolationTimeFormat: "h:mm MM/DD/YYYY",
+    geoFenceViolationTimeFormat: "H:mm MM/DD",
     confirmFormTimeFormat: "LLLL",
     shiftChangeRecordTimeFormat: "LLL",
     pdfFileContentTimeFormat: "LLL",
@@ -194,9 +194,9 @@ const config = {
 
     toastMonitorMap: {
         1: "warn",
-        2: "info",
+        2: "error",
         4: "error",
-        8: "info",
+        8: "error",
     },
 
     statusToCreatePdf: [
