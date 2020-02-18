@@ -1,4 +1,6 @@
 import config from '../config'
+import AccessControl from '../components/presentational/AccessControl'
+import React from 'react'
 
 export const getDescription = (item, locale) => {
     var foundDeviceDescription = ``;
@@ -148,5 +150,12 @@ export const getPosition = (item, locale) => {
                 : `${locale.texts.NEAR}${item.location_description},` 
             : `${locale.texts.NOT_AVAILABLE} `
         }   
+    `
+}
+
+export const getMacaddress = (item, locale) => {
+    return `
+        ${locale.texts.MAC_ADDRESS}:
+        ${item.mac_address}
     `
 }

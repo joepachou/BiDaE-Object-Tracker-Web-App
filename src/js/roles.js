@@ -11,17 +11,14 @@ const rules = {
             "route:devicesManagement",
             "route:patientManagement",
             "route:userProfile",
-            // "route:systemStatus",
-            // "route:objectManagement",
-            // "route:bigScreen",
-            // "route:shiftChangeRecord",
+            "route:monitorSetting",
+            "route:bigScreen",
+
             "user:mydevice",
             "user:mypatient",
             "user:shiftChange",
             "user:saveSearchRecord",
             "user:cleanPath",
-            // "route:userManager",
-            // "user:toggleArea",
             "user:toggleShowDevices",
             "user:toggleShowResidents",
             "route:monitorSetting",
@@ -31,17 +28,21 @@ const rules = {
     system_admin: {
         permission: [
             "form:edit",
+
             "route:systemStatus",
             "route:userProfile",
             "route:objectManagement",
             "route:editObjectManagement",
+            "route:userManager",
+            "route:shiftChangeRecord",
+            "route:rolePermissionManagement",
+            "route:transferredLocationManagement",
+            "route:monitorSetting",
+
             "user:mydevice",
             "user:mypatient",
             "user:saveSearchRecord",
-            "route:userManager",
-            "route:shiftChangeRecord",
             "user:cleanPath",
-            // "user:toggleArea",
             "user:toggleShowDevices",
             "user:toggleShowResidents",
             "route:monitorSetting",
@@ -52,16 +53,28 @@ const rules = {
     dev: {
         permission: [
             "form:edit",
+            "form:develop",
+
             "route:systemStatus",
+            "route:userProfile",
             "route:objectManagement",
             "route:editObjectManagement",
-            "user:mydevice",
-            "user:saveSearchRecord",
-            "route:userManager",
+            "route:monitorSetting",
             "route:shiftChangeRecord",
-            // "user:toggleArea",
+            "route:userManager",
+            "route:rolePermissionManagement",
+            "route:transferredLocationManagement",
+            "route:bigScreen",
+
+            "user:mydevice",
+            "user:mypatient",
+            "user:saveSearchRecord",
+            "user:cleanPath",
             "user:toggleShowDevices",
             "user:toggleShowResidents",
+            "user:importTable",
+            "user:batteryNotice",
+            "user:shiftChange",
         ]
     }
   };

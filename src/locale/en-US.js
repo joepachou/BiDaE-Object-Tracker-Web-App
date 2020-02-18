@@ -358,6 +358,7 @@ const en =  {
     /** User Roles */
     CARE_PROVIDER: "care provider",
     SYSTEM_ADMIN: "system admin",
+    DEV: 'dev',
 
     TO: "to",
     SHIFT_TO: "to",

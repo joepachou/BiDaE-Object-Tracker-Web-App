@@ -149,7 +149,6 @@ class MainContainer extends React.Component{
     }
 
     getToastType = (type, data, option, time) => {
-        console.log(config.toastMonitorMap[type])
         return toast[config.toastMonitorMap[type]](
             <ToastNotification data={data} time={time} type={type}/>, 
             option

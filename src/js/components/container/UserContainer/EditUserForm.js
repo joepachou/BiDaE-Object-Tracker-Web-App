@@ -133,7 +133,7 @@ const EditUserForm = ({
                                         onChange={setFieldValue}                                            
                                     >
                                         {roleName
-                                            .filter(roleName => roleName.name !== 'guest' && roleName.name !== 'dev')
+                                            .filter(roleName => roleName.name !== 'guest')
                                             .map((roleName, index) => {
                                                 return (
                                                     <Field
