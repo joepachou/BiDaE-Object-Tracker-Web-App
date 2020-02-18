@@ -148,6 +148,7 @@ const en =  {
     NIGHT_SHIFT: "night shift",
     SELECT_SHIFT: "select shift",
     SELECT_AREA: "select area",
+    SELECT_USER:"select user",
     SELECT_LOCATION: "select location",
     SELECT_PHYSICIAN: "select physician",
     SELECT_ROOM: "select room",

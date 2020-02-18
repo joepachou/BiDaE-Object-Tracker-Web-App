@@ -151,6 +151,7 @@ const tw = {
     NIGHT_SHIFT: "大夜班",
     SELECT_SHIFT: "選擇班別",
     SELECT_AREA: "選擇地區",
+    SELECT_USER:"選擇使用者",
     SELECT_LOCATION: "選擇地點",
     SELECT_PHYSICIAN: "選擇醫師",
     SELECT_ROOM: "選擇房號",

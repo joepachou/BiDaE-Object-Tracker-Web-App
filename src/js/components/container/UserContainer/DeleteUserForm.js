@@ -83,7 +83,7 @@ const DeleteUserForm = ({
                                 placeholder={locale.texts.USERNAME}
                                 component={() => (
                                     <Select
-                                        placeholder = {locale.texts.SELECT_AREA}
+                                        placeholder = {locale.texts.SELECT_USER}
                                         name="name"
                                         value = {values.name}
                                         onChange={value => setFieldValue("name", value)}
