@@ -52,6 +52,8 @@ const EditGeofenceConfig = ({
             }        
         })
 
+        console.lo
+
     return (
         <Modal  
             show={show} 
@@ -70,7 +72,7 @@ const EditGeofenceConfig = ({
             <Modal.Body>
                 <Formik
                     initialValues = {{
-                        enable: selectedData ? selectedData.enable : '',
+                        enable: selectedData ? selectedData.enable : 1,
                         name: selectedData ? selectedData.name : '',
                         area: selectedData ? selectedData.area : '',
                         start_time: selectedData ? selectedData.start_time : '',
@@ -81,7 +83,7 @@ const EditGeofenceConfig = ({
                         f_rssi: selectedData ? selectedData.parseFences.rssi : '',
                         selected_p_lbeacon: null,
                         selected_f_lbeacon: null,
-                        isGlobal: selectedData ? selectedData.is_global_fence : '',
+                        isGlobal: selectedData ? selectedData.is_global_fence : 1,
                     }}
 
                     validationSchema = {
@@ -204,7 +206,9 @@ const EditGeofenceConfig = ({
                                     <small  className="form-text text-muted">{locale.texts.ENABLE_END_TIME}</small>
                                     <DateTimePicker
                                         value={values.end_time}
-                                        getValue={value => setFieldValue("end_time", value.value)}
+                                        getValue={value => {
+                                            setFieldValue("end_time", value.value)
+                                        }}
                                         name="end_time"
                                         start="0"
                                         end="24"

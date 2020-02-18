@@ -1635,7 +1635,8 @@ const addGeofenceConfig = (monitorConfigPackage) => {
 		enable,
 		perimeters,
 		fences,
-		area_id
+		area_id,
+		is_global_fence
 	} = monitorConfigPackage
 
 	let text = `
@@ -1647,7 +1648,8 @@ const addGeofenceConfig = (monitorConfigPackage) => {
 				enable,
 				perimeters,
 				fences,
-				area_id
+				area_id,
+				is_global_fence
 			)
 		VALUES 
 			(
@@ -1657,7 +1659,8 @@ const addGeofenceConfig = (monitorConfigPackage) => {
 				$4,
 				$5,
 				$6,
-				$7
+				$7,
+				$8
 			)
 	`
 
@@ -1669,6 +1672,7 @@ const addGeofenceConfig = (monitorConfigPackage) => {
 		perimeters,
 		fences,
 		area_id,
+		is_global_fence
 	]
 
 	return {
