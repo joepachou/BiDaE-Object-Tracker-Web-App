@@ -113,11 +113,11 @@ class EditPatientForm extends React.Component {
                                 }
                                 : null,
 
-                             physician: physicianName 
-                             ?  {
-                                    value: physicianName,
-                                    label: physicianName
-                                }
+                             physician : this.props.physicianName ?
+                             {
+                                    value:this.props.physicianName,
+                                    label:this.props.physicianName
+                             }
                              : ''
                         }}
                        
