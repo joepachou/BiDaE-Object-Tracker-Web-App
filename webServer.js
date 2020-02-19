@@ -235,9 +235,9 @@ app.get('/download/com.beditech.IndoorNavigation.apk', (req, res) => {
 
 var privateKey = process.env.PRIVATE_KEY && fs.readFileSync(__dirname + `/ssl/${process.env.PRIVATE_KEY}`)
 var certificate = process.env.CERTIFICATE && fs.readFileSync(__dirname + `/ssl/${process.env.CERTIFICATE}`) 
-var ca_bundle = process.env.CA_BUNDLE && fs.readFileSync(__dirname + `/ssl/${process.env.CA_BUNDLE}`) 
+var ca_bundle = process.env.CA_BUNDLE && fs.readFileSync(__dirname + `/ssl/${process.env.CA_BUNDLE}`)
 
-var credentials = process.env.PRIVATE_KEY ? { 
+var credentials = process.env.CA_BUNDLE ? { 
     key: privateKey, 
     cert: certificate,
     ca: ca_bundle
