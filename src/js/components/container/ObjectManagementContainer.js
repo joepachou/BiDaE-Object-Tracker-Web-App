@@ -47,6 +47,9 @@ import AccessControl from '../presentational/AccessControl'
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import styleConfig from '../../styleConfig';
+import FormikFormGroup from '../presentational/FormikFormGroup'
+import BOTInput from '../presentational/BOTInput'
 
 const SelectTable = selecTableHOC(ReactTable);
 
@@ -83,50 +86,14 @@ class ObjectManagementContainer extends React.Component{
         transferredLocationList: [],
         showDeleteConfirmation: false, //確定刪除的form
         warningSelect : 0, //if 0 ，就warn完就執行delete patien 否則delete object,
-        objectFilterSelectOption: {
-            type: [
-                    {
-                        label: 'cpm',
-                        value: 'cpm'
-                    },
-                    {
-                        label: 'iv pump',
-                        value: 'iv pump'
-                    },
-                    {
-                        label: '五合一自動傳輸生理監視器',
-                        value: '五合一自動傳輸生理監視器'
-                    },
-                    {
-                        label: '烤燈',
-                        value: '烤燈'
-                    },
-                ],
-            area: [
-                    {
-                        label: '急診室',
-                        value: '急診室'
-                    },
-                ]
+        filterSelection: {
+            statusOptions: config.statusOptions.map(item => {
+                return {
+                    value: item,
+                    label: this.context.locale.texts[item.replace(/ /g, '_').toUpperCase()]
+                }
+            })
         },
-        patientFilterSelectOption: {
-            sex: [
-                    {
-                        label: '男',
-                        value: '男'
-                    },
-                    {
-                        label: '女',
-                        value: '女'
-                    },
-                ],
-            area: [
-                    {
-                        label: '急診室',
-                        value: '急診室'
-                    },
-                ]
-        }, 
         objectFilter: [],
         patientFilter: []
     }
@@ -151,12 +118,24 @@ class ObjectManagementContainer extends React.Component{
     }
 
     getAreaTable = () => {
+        let {
+            locale
+        } = this.context
         axios.post(getAreaTable, {})
         .then(res => {
-            this.setState({
-                areaTable: res.data.rows
+            let areaSelection = res.data.rows.map(item => {
+                return {
+                    value: item.name,
+                    label: locale.texts[item.name]
+                }
             })
-            // console.log(res.data.rows)
+            this.setState({
+                areaTable: res.data.rows,
+                filterSelection: {
+                    ...this.state.filterSelection,
+                    areaSelection,
+                }
+            })
         })
         .catch(err => {
             console.log(err)
@@ -280,7 +259,9 @@ class ObjectManagementContainer extends React.Component{
           
             let column = _.cloneDeep(objectTableColumn)
             let columnPatient = _.cloneDeep(patientTableColumn)
-            let data = [], dataPatient = []
+            let data = [] 
+            let dataPatient = []
+            let typeList = {}
 
             column.push({
                 // Header: locale.texts['remove'.toUpperCase().replace(/ /g, '_')],
@@ -324,6 +305,7 @@ class ObjectManagementContainer extends React.Component{
                         value: item.status,
                         label: item.status ? locale.texts[item.status.toUpperCase()] : null,
                     }
+
                     if(item.transferred_location){
                         let ids = item.transferred_location.split(',')
                         let branchId = ids[0], departmentId = ids[1]
@@ -338,6 +320,14 @@ class ObjectManagementContainer extends React.Component{
                             item.transferred_location = department
                         }
                     }
+
+                    if (!Object.keys(typeList).includes(item.type)) {
+                       typeList[item.type] = {
+                           value: item.type,
+                           label: item.type
+                       }
+                    }
+
                     data.push(item)
                 }
 
@@ -354,7 +344,11 @@ class ObjectManagementContainer extends React.Component{
                 dataPatient,
                 filteredPatient: dataPatient,
                 columnPatient,
-                objectTable: res.data.rows
+                objectTable: res.data.rows,
+                filterSelection: {
+                    ...this.state.filterSelection,
+                    typeList,
+                }
             })
         })
         .catch(err => {
@@ -507,8 +501,6 @@ class ObjectManagementContainer extends React.Component{
 
         this.handleSubmitForm()
     }
-
-
 
     handleSubmitForm = () => {
         setTimeout(this.getData, 500) 
@@ -700,8 +692,6 @@ class ObjectManagementContainer extends React.Component{
                     }
                 } 
 
-                
-
                 // ＩＭＰＯＲＴ時把ＡＣＮ重複的擋掉
                 let newData = []
                 let reapetFlag = false;
@@ -764,6 +754,7 @@ class ObjectManagementContainer extends React.Component{
             formTitle: "dissociation" 
         })
     }
+
     filterData = (data, key, filteredAttribute) => {
         const { locale } = this.context
 
@@ -777,33 +768,42 @@ class ObjectManagementContainer extends React.Component{
             if(filteredAttribute.includes('type')){
 
                 let keyRex = new RegExp(key.toLowerCase())
-
+                
                 if(obj.type.toLowerCase().match(keyRex)){
                     return true
                 }
             }
+
             if(filteredAttribute.includes('acn')){
                 let keyRex = new RegExp(key)
-                if(obj.asset_control_number.toLowerCase().match(keyRex)){
+                if(obj.asset_control_number.toLowerCase().match(keyRex)) return true
 
+            }
+
+            if  (filteredAttribute.includes('status')){
+                
+                let keyRex = new RegExp(key.toLowerCase())
+
+                if(obj.status.label.toLowerCase().match(keyRex)){
                     return true
                 }
             }
-            if(filteredAttribute.includes('status')){
-                // statement
-            }
+
             if(filteredAttribute.includes('area')){
                 let area_name = this.state.areaTable.filter(area => area.id == obj.area_id)[0].name
                 let text = locale.texts[area_name]
-                if(text == key){
-                    return true
-                }
+                if (text == key) return true
+
             }
-            if(filteredAttribute.includes('monitor type')){
+
+            if  (filteredAttribute.includes('monitor type')){
                 // statement
             }
-            if(filteredAttribute.includes('mac address')){
-                // statement
+
+            if  (filteredAttribute.includes('macAddress')){
+
+                let keyRex = key.replace(/:/g, '').toLowerCase()
+                if (obj.mac_address.replace(/:/g, '').toLowerCase().match(keyRex)) return true
             }
             if(filteredAttribute.includes('sex')){
                
@@ -819,21 +819,26 @@ class ObjectManagementContainer extends React.Component{
     
 
     addObjectFilter = (key, attribute, source) => {
+
         this.state.objectFilter = this.state.objectFilter.filter(filter => source != filter.source)
+        
         this.state.objectFilter.push({
             key, attribute, source
         })
         this.filterObjects()
     }
+    
     removeObjectFilter = (source) => {
         this.state.objectFilter = this.state.objectFilter.filter(filter => source != filter.source)
         this.filterObjects()
     }
 
     filterObjects = () => {
+
         let filteredData = this.state.objectFilter.reduce((acc, curr) => {
             return this.filterData(acc, curr.key, curr.attribute)
         }, this.state.data)
+
         this.setState({
             filteredData
         })
@@ -871,6 +876,7 @@ class ObjectManagementContainer extends React.Component{
             isShowBind,
             bindCase,
             isShowEditImportTable,
+            filterSelection
         } = this.state
 
         const { locale } = this.context
@@ -888,6 +894,8 @@ class ObjectManagementContainer extends React.Component{
             toggleSelection,
             selectType
         };
+
+        let typeSelection = filterSelection.typeList ? Object.values(filterSelection.typeList) : null;
 
         return (
             <Container className='py-2 text-capitalize' fluid>
@@ -915,6 +923,7 @@ class ObjectManagementContainer extends React.Component{
                                 variant="outline-primary" 
                                 className='text-capitalize mr-2 mb-1'
                                 name="associate"
+                                size="sm"
                                 onClick={this.handleClickButton}
                             >
                                 {locale.texts.ASSOCIATE}
@@ -922,6 +931,7 @@ class ObjectManagementContainer extends React.Component{
                             <Button 
                                 variant="outline-primary" 
                                 className='text-capitalize mr-2 mb-1'
+                                size="sm"
                                 name="add object"
                                 onClick={this.handleClickButton}
                             >
@@ -930,6 +940,7 @@ class ObjectManagementContainer extends React.Component{
                             <Button 
                                 variant="outline-primary" 
                                 className='text-capitalize mr-2 mb-1'
+                                size="sm"
                                 name="dissociation"
                                 onClick={this.handleClickButton}
                             >
@@ -938,9 +949,9 @@ class ObjectManagementContainer extends React.Component{
                             <Button 
                                 variant="outline-primary" 
                                 className='text-capitalize mr-2 mb-1'
+                                size="sm"
                                 name="deleteObject"
                                 onClick={this.handleClickButton}
-                                // onClick={this.deleteRecordPatient}    
                             >
                                 {locale.texts.MULTIPLEDELETE}
                             </Button>
@@ -948,13 +959,13 @@ class ObjectManagementContainer extends React.Component{
                                 
                             </div>
                             
-
                         </ButtonToolbar>
-                        {/* <Row>
+                        <Row className="my-1" noGutters>
                             <Col>
                                 <Select
                                     name={"Select Type"}
                                     className={'float-right w-100'}
+                                    styles={styleConfig.reactSelect}
                                     onChange={(value) => {
                                         if(value){
                                             this.addObjectFilter(value.label, ['type'], 'type select' )
@@ -962,10 +973,10 @@ class ObjectManagementContainer extends React.Component{
                                             this.removeObjectFilter('type select')
                                         }
                                     }}
-                                    options={this.state.objectFilterSelectOption.type}
+                                    options={typeSelection}
                                     isClearable={true}
                                     isSearchable={false}
-                                    placeholder={'Select Type...'}
+                                    placeholder={'Select Type'}
                                     
                                 />
                             </Col>
@@ -973,6 +984,7 @@ class ObjectManagementContainer extends React.Component{
                                 <Select
                                     name={"Select Area"}
                                     className={'float-right w-100'}
+                                    styles={styleConfig.reactSelect}
                                     onChange={(value) => {
                                         if(value){
                                             this.addObjectFilter(value.label, ['area'], 'area select')
@@ -980,25 +992,47 @@ class ObjectManagementContainer extends React.Component{
                                             this.removeObjectFilter('area select')
                                         }
                                     }}
-                                    options={this.state.objectFilterSelectOption.area}
+                                    options={this.state.filterSelection.areaSelection}
                                     isClearable={true}
                                     isSearchable={false}
-                                    placeholder={'Select Area...'}
+                                    placeholder={'Select Area'}
+                                />
+                            </Col>
+                            <Col>
+                                <Select
+                                    name={"Select Status"}
+                                    className={'float-right w-100'}
+                                    styles={styleConfig.reactSelect}
+                                    onChange={(value) => {
+                                        if(value){
+                                            this.addObjectFilter(value.label, ['status'], 'status select')
+                                        }else{
+                                            this.removeObjectFilter('status select')
+                                        }
+                                    }}
+                                    options={this.state.filterSelection.statusOptions}
+                                    isClearable={true}
+                                    isSearchable={false}
+                                    placeholder={'Select Status'}
                                 />
                             </Col>
 
                             <Col>
-                                <Searchbar 
+                                <BOTInput
                                     className={'float-right'}
                                     
                                     placeholder={''}
                                     getSearchKey={(key) => {
-                                        this.addObjectFilter(key, ['type', 'area', 'status'], 'search bar')
+                                        this.addObjectFilter(
+                                            key, 
+                                            ['type', 'area', 'status', 'macAddress', 'acn'], 
+                                            'search bar'
+                                        )
                                     }}
                                     clearSearchResult={null}    
                                 />
                             </Col>
-                        </Row> */}
+                        </Row>
                         
 
                         <SelectTable
@@ -1051,6 +1085,7 @@ class ObjectManagementContainer extends React.Component{
                             <Button 
                                 variant="outline-primary" 
                                 className='text-capitalize mr-2 mb-1'
+                                size="sm"
                                 name="associate_patient"
                                 onClick={this.handleClickButton}
                             >
@@ -1059,6 +1094,7 @@ class ObjectManagementContainer extends React.Component{
                             <Button 
                                 variant="outline-primary" 
                                 className='text-capitalize mr-2 mb-1'
+                                size="sm"
                                 onClick={this.handlePatientClick}
                             >
                                 {locale.texts.ADD_INPATIENT}
@@ -1066,6 +1102,7 @@ class ObjectManagementContainer extends React.Component{
                             <Button 
                                 variant="outline-primary" 
                                 className='text-capitalize mr-2 mb-1'
+                                size="sm"
                                 name="deletePatient"
                                 onClick={this.handleClickButton}
                                 // onClick={this.deleteRecordPatient}    

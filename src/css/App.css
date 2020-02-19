@@ -226,10 +226,13 @@ a:hover {
 /** React Bootstrap button variant outline-primary */
 
 .btn {
-    font-size: 1rem;
     transition: none;
-    padding: .3rem .75rem;
     text-transform: capitalize;
+}
+
+.btn.btn-sm {
+    padding: .1rem .3rem;
+    height: 2rem;
 }
 
 .btn:focus {
@@ -244,7 +247,6 @@ button:focus {
     background-color: white;
     color: rgb(0, 123, 255, 1);
     border-color: rgb(0, 123, 255, 0.6);
-    font-size: 1rem;
 }
 
 .btn-outline-primary:hover {
@@ -362,14 +364,6 @@ button:focus {
 
 .btn-outline-custom {
     font-size: 0.8rem;
-}
-
-.btn.btn-primary {
-    font-size: 1rem
-}
-
-.btn.btn-outline-secondary {
-    font-size: 1rem
 }
 
 /** React Bootstrap button variant primary */
@@ -638,8 +632,13 @@ p {
 /** bootstrap gutters */
 .no-gutters>.col:first-child {
     padding-right: 5px;
-
 }
+
 .no-gutters>.col:last-child {
+    padding-left: 5px;
+}
+
+.no-gutters>.col {
+    padding-right: 5px;
     padding-left: 5px;
 }

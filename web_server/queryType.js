@@ -1417,12 +1417,14 @@ const addShiftChangeRecord = (userInfo, file_path) => {
 	return query
 }
 
-const getAreaTable = () => {
+const getAreaTable = (sitesGroup) => {
 	return `
 		SELECT 
 			id,
 			name
-		FROM area_table;
+		FROM area_table
+		WHERE id in (${sitesGroup})
+		;
 	`
 }
 

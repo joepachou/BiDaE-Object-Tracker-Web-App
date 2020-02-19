@@ -62,8 +62,6 @@ moment.updateLocale('zh-tw', {
 
 const getTrackingData = (request, response) => {
 
-    const rssiThreshold = process.env.RSSI_THRESHOLD
-
     const locale = request.body.locale || 'en'
    
     /** The user's authenticated area id */
@@ -100,11 +98,11 @@ const getTrackingData = (request, response) => {
                     < process.env.OBJECT_FOUND_TIME_INTERVAL_IN_SEC;
 
                 /** Set the boolean if its rssi is below the specific rssi threshold  */
-                let isMatchRssi = item.rssi > rssiThreshold ? 1 : 0;
-
+                let isMatchRssi = item.rssi > process.env.RSSI_THRESHOLD ? 1 : 0;
+                
                 /** Flag the object that satisfied the time period and rssi threshold */
                 item.found = isInTheTimePeriod && isMatchRssi 
-                
+
                 /** Set the residence time of the object */
                 item.residence_time =  item.found 
                     ? moment(item.last_seen_timestamp).locale(locale).from(moment(item.first_seen_timestamp)) 

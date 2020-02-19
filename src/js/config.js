@@ -23,6 +23,13 @@ const config = {
         TRANSFERRED: "transferred",   
     },
 
+    statusOptions: [
+        'normal',
+        'broken',
+        'reserve',
+        'transferred'
+    ],
+
     /** Reserved Object interval time in minutes */
     reservedInterval: 30,
 
@@ -38,7 +45,6 @@ const config = {
     gender:{
         GENDER:"Gender",
         MAN:"man",
-        GIRL:"girl",
     },
 
 
@@ -171,7 +177,6 @@ const config = {
         "care_provider",
         "system_admin"
     ],
-
 
     defaultRole: ["care_provider"], 
 
