@@ -4,7 +4,8 @@ import config from '../../config';
 import { AppContext } from '../../context/AppContext'
 import { 
     getDescription, 
-    getMacaddress 
+    getMacaddress,
+    getRSSI 
 } from '../../helper/descriptionGenerator'
 import AccessControl from './AccessControl'
 
@@ -63,13 +64,20 @@ const SearchResultListGroup = ({
                             }
                         </div>
                         {getDescription(item, locale, config)}
-                        
                         {
                             <AccessControl
                                 permission={'form:develop'}
                                 renderNoAccess={() => null}
                             >
                                 {`|${getMacaddress(item, locale)}`}
+                            </AccessControl>
+                        }
+                        {
+                            <AccessControl
+                                permission={'form:develop'}
+                                renderNoAccess={() => null}
+                            >
+                                {`|${getRSSI(item, locale)}`}
                             </AccessControl>
                         }
                     </ListGroup.Item>

@@ -133,7 +133,6 @@ const getTrackingData = (request, response) => {
                 delete item.first_seen_timestamp
                 delete item.last_seen_timestamp
                 delete item.panic_violation_timestamp
-                delete item.rssi
                 delete item.lbeacon_uuid
                 delete item.monitor_type
                 delete item.base_x
@@ -1274,13 +1273,14 @@ const getUserArea = (request, response) =>{
 }
 
 const getAreaTable = (request, response) => {
-    pool.query(queryType.getAreaTable())
+    let sitesGroup = process.env.SITES_GROUP.split(',')
+    pool.query(queryType.getAreaTable(sitesGroup))
         .then(res => {
             console.log("get area table")
             response.status(200).json(res)
         })
         .catch(err => {
-            console.log("get area table fail: "+ err)
+            console.log(`get area table fail ${err}`)
         })
 }
 

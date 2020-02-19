@@ -159,3 +159,10 @@ export const getMacaddress = (item, locale) => {
         ${item.mac_address}
     `
 }
+
+export const getRSSI = (item, locale) => {
+    return `
+        ${locale.texts.RSSI}:
+        ${item.rssi}
+    `
+}
