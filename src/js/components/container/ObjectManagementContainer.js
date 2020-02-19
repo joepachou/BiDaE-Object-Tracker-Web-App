@@ -92,7 +92,14 @@ class ObjectManagementContainer extends React.Component{
                     value: item,
                     label: this.context.locale.texts[item.replace(/ /g, '_').toUpperCase()]
                 }
+            }),
+            monitorTypeOptions: config.monitorOptions.map(item => {
+                return {
+                    value: item,
+                    label: item 
+                }
             })
+           
         },
         objectFilter: [],
         patientFilter: []
@@ -756,9 +763,8 @@ class ObjectManagementContainer extends React.Component{
     }
 
     filterData = (data, key, filteredAttribute) => {
-        const { locale } = this.context
-
-        let filteredData = data.filter(obj => {
+        const { locale } = this.context  
+        let filteredData = data.filter(obj => { 
             if(filteredAttribute.includes('name')){
                 let keyRex = new RegExp(key)
                 if(obj.name.toLowerCase().match(keyRex)){
@@ -792,12 +798,14 @@ class ObjectManagementContainer extends React.Component{
             if(filteredAttribute.includes('area')){
                 let area_name = this.state.areaTable.filter(area => area.id == obj.area_id)[0].name
                 let text = locale.texts[area_name]
-                if (text == key) return true
-
+                if (text == key) return true 
             }
 
-            if  (filteredAttribute.includes('monitor type')){
-                // statement
+            if  (filteredAttribute.includes('monitor')){
+                let keyRex = new RegExp(key.toLowerCase())
+                if(obj.monitor_type.toLowerCase().match(keyRex)){
+                    return true
+                }
             }
 
             if  (filteredAttribute.includes('macAddress')){
@@ -811,6 +819,15 @@ class ObjectManagementContainer extends React.Component{
                     return true
                 }
             }
+ 
+            if(filteredAttribute.includes('physician_name')){
+              
+                let keyRex = new RegExp(key)
+                if(obj.physician_name.toLowerCase().match(keyRex)){
+                    return true
+                }
+            }
+
             return false
         })
         return filteredData
@@ -848,7 +865,7 @@ class ObjectManagementContainer extends React.Component{
         this.state.patientFilter = this.state.patientFilter.filter(filter => source != filter.source)
         this.state.patientFilter.push({
             key, attribute, source
-        })
+        }) 
         this.filterPatients()
     }
     removePatientFilter = (source) => {
@@ -857,6 +874,7 @@ class ObjectManagementContainer extends React.Component{
     }
 
     filterPatients = () => {
+ 
         let filteredPatient = this.state.patientFilter.reduce((acc, curr) => {
             return this.filterData(acc, curr.key, curr.attribute)
         }, this.state.dataPatient)
@@ -1025,7 +1043,7 @@ class ObjectManagementContainer extends React.Component{
                                     getSearchKey={(key) => {
                                         this.addObjectFilter(
                                             key, 
-                                            ['type', 'area', 'status', 'macAddress', 'acn'], 
+                                            ['type', 'area', 'status', 'macAddress', 'acn' ], 
                                             'search bar'
                                         )
                                     }}
@@ -1080,6 +1098,8 @@ class ObjectManagementContainer extends React.Component{
                         />
                     </TabPanel>
 
+
+
                     <TabPanel>
                         <ButtonToolbar>
                             <Button 
@@ -1110,26 +1130,70 @@ class ObjectManagementContainer extends React.Component{
                                 {locale.texts.DELETE}
                             </Button>
                         </ButtonToolbar>
-                        {/* <Row>
+  
+
+
+                       
+                        <Row className="my-1" noGutters> 
                             <Col>
                                 <Select
-                                    name={"Select Sex"}
+                                    name={"Select Area Patient"}
                                     className={'float-right w-100'}
+                                    styles={styleConfig.reactSelect}
                                     onChange={(value) => {
                                         if(value){
-                                            this.addPatientFilter(value.label, ['sex'], 'sex select' )
+                                            this.addPatientFilter(value.label, ['area'], 'area select')
                                         }else{
-                                            this.removePatientFilter('sex select')
+                                            this.removePatientFilter('area select')
                                         }
                                     }}
-                                    options={this.state.patientFilterSelectOption.sex}
+                                    options={this.state.filterSelection.areaSelection}
                                     isClearable={true}
                                     isSearchable={false}
-                                    placeholder={'Select Sex...'}
-                                    
+                                    placeholder={'Select Area'}
+                                />
+                            </Col> 
+
+                            
+                            <Col>
+                                <Select
+                                    name={"Select Status"}
+                                    className={'float-right w-100'}
+                                    styles={styleConfig.reactSelect}
+                                    onChange={(value) => {
+                                        if(value){
+                                            this.addPatientFilter(value.label, ['monitor'], 'monitor select')
+                                        }else{
+                                            this.removePatientFilter('monitor select')
+                                        }
+                                    }}
+                                    options={this.state.filterSelection.monitorTypeOptions}
+                                    isClearable={true}
+                                    isSearchable={false}
+                                    placeholder={'Monitor Status'}
                                 />
                             </Col>
+
+
                             <Col>
+                                <BOTInput
+                                    className={'float-right'}
+                                    placeholder={''}
+                                    getSearchKey={(key) => {
+                                        this.addPatientFilter(
+                                            key, 
+                                            ['name', 'area' , 'macAddress', 'acn','monitor','physician_name'], 
+                                            'search bar'
+                                        )
+                                    }}
+                                    clearSearchResult={null}                                        
+                                />
+                            </Col>
+                        </Row>
+
+ 
+                            
+                            {/* <Col>
                                 <Select
                                     name={"Select Area"}
                                     className={'float-right w-100'}
@@ -1157,8 +1221,8 @@ class ObjectManagementContainer extends React.Component{
                                     }}
                                     clearSearchResult={null}    
                                 />
-                            </Col>
-                        </Row> */}
+                            </Col> */}
+                    
 
                         <SelectTable
                             keyField='id'

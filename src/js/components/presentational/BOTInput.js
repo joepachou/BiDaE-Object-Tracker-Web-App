@@ -21,10 +21,11 @@ class Searchbar extends React.Component {
         this.props.getSearchKey(this.state.value);
     }
 
-    handleChange = (e) => {
+    handleChange = (e) => { 
         this.setState({
             value: e.target.value
-        })
+        })  
+        this.props.getSearchKey(e.target.value);
     }
 
     render() {
@@ -43,10 +44,10 @@ class Searchbar extends React.Component {
                 <Button 
                     type="submit" 
                     variant='link' 
-                    size="sm"
+                    size="sm" 
                     onClick={this.handleSubmit}
                 >
-                </Button>
+                </Button> 
             </Form>
         );
     }

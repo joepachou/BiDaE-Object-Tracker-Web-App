@@ -129,6 +129,14 @@ const config = {
         8: "location",
     },
 
+
+    monitorOptions: [
+        'geofence',
+        'panic',
+        'movement',
+        'location'
+    ],
+
     monitorTypeMap: {
         object: [1],
         patient: [1,2,4,8]
