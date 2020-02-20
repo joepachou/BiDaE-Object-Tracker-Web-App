@@ -135,6 +135,8 @@ class UserProfile extends React.Component{
             this.setState({
                 otherAreaId: otherAreaIdList,
             })
+            console.log(this.state.otherAreaId)
+            console.log(this.state.secondaryAreaId)
 
         })
         .catch(err => {
@@ -175,7 +177,6 @@ class UserProfile extends React.Component{
         })
         .then(res => {
             console.log('query:已新增,' + areaId )
-            this.getUserData()
         })
         .catch(errr => {
             console.log(errr)
@@ -195,7 +196,6 @@ class UserProfile extends React.Component{
         })
         .then(res => {
             console.log('query:已刪除,' + areaId )
-            this.getUserData()
         })
         .catch(errr => {
             console.log(errr)
@@ -234,6 +234,8 @@ class UserProfile extends React.Component{
             if( check == true) this.handleRemoveArea(item)
         })
         this.setState({
+            secondaryAreaId : this.state.secondaryAreaIdBeforUpdate,
+            otherAreaId: this.state.otherAreaIdBeforUpdate,
             show: false
         })
     }
