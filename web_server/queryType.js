@@ -7,6 +7,7 @@ function getTrackingData () {
 			object_summary_table.uuid as lbeacon_uuid,
 			object_summary_table.first_seen_timestamp,
 			object_summary_table.last_seen_timestamp,
+			object_summary_table.last_reported_timestamp,
 			object_summary_table.panic_violation_timestamp,
 			object_summary_table.rssi,
 			object_summary_table.battery_voltage,
@@ -34,10 +35,7 @@ function getTrackingData () {
 				WHERE user_table.id = object_table.reserved_user_id
 			) as reserved_user_name
 		
-
-
 		FROM object_summary_table
-
 
 		LEFT JOIN object_table
 		ON object_table.mac_address = object_summary_table.mac_address
@@ -77,6 +75,8 @@ function getTrackingData () {
 			GROUP BY mac_address
 		) as notification
 		ON notification.mac_address = object_summary_table.mac_address
+
+		WHERE object_summary_table.last_reported_timestamp IS NOT NULL
 
 		ORDER BY 
 			object_table.type, 
