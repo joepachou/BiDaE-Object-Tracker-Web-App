@@ -7,7 +7,7 @@ import { AppContext } from '../../context/AppContext';
 import axios from 'axios';
 import dataSrc from '../../dataSrc'
 import polylineDecorator from 'leaflet-polylinedecorator'
-
+import moment from 'moment'
 import {
     BrowserView,
     TabletView,
@@ -240,9 +240,12 @@ class Map extends React.Component {
         if (geofenceConfig[areaId] && geofenceConfig[areaId].enable) {
             ['parsePerimeters', 'parseFences'].map(type => {
                 geofenceConfig[areaId].rules.map(rule => {
-                    rule[type].coordinates.map(item => {
-                        L.circleMarker(item, mapConfig.geoFenceMarkerOption).addTo(this.geoFenceLayer);
-                    })   
+                    if (rule.is_active) {
+                        rule[type].coordinates.map(item => {
+                            L.circleMarker(item, mapConfig.geoFenceMarkerOption).addTo(this.geoFenceLayer);
+                            
+                        })  
+                    }
                 })
             })
         }
@@ -366,7 +369,7 @@ class Map extends React.Component {
 
             /** Set the z-index offset of the searhed object so that
              * the searched object icon will be on top of all others */
-            if (item.searched) marker.setZIndexOffset(1000);
+            if (item.searched || item.panic) marker.setZIndexOffset(1000);
         
             /** Set the marker's event. */
             marker.on('mouseover', function () { this.openPopup(); })
