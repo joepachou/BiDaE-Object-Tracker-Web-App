@@ -326,13 +326,28 @@ const setLocaleID = (request, response) => {
 
 const editObject = (request, response) => {
     const formOption = request.body.formOption
+    let {
+        area_id
+    } = formOption
     pool.query(queryType.editObject(formOption))
         .then(res => {
-            console.log("Edit object success");
-            response.status(200).json(res)
+            console.log("edit object success");
+            if (process.env.RELOAD_GEO_CONFIG_PATH) {
+                exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 9999 -c cmd_reload_geo_fence_setting -r geofence_object -f area_one -a ${area_id}`.split(' '), function(err, data){
+                    if(err){
+                        console.log(`execute reload geofence setting fails ${err}`)
+                    }else{
+                        console.log(`execute reload geofence setting success`)
+                        response.status(200).json(res)
+                    }
+                })
+            } else {
+                response.status(200).json(res)
+                console.log('IPC has not set')
+            }
         })
         .catch(err => {
-            console.log("Edit Object Fails: " + err)
+            console.log(`edit object fails ${err}`)
         })
 }
 
