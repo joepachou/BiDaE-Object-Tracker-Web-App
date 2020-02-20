@@ -7,10 +7,6 @@ import VETERAN_HOME_THIRD_FLOOR_MAP from "../img/map/veteran_home_third_floor.pn
 import NTUH_MAP from "../img/map/ntuh_map.png"
 import BOT_LOGO from "../img//logo/BOT_LOGO_RED.png";
 import moment from 'moment'
-import patientP from "../img//logo/pic.png"
-import { isTablet, isBrowser, isMobileOnly } from "react-device-detect";
-import Cookies from 'js-cookie';
-
 
 const config = {
     
@@ -73,13 +69,6 @@ const config = {
         logo: BOT_LOGO,
     },
 
-    patientPicture:
-    {
-       logo :  patientP,
-    },
-
-    companyName: "BeDITech",
-
     systemAdmin: {
 
         openGlobalStateMonitor: !true,
@@ -92,18 +81,6 @@ const config = {
         startInteval: false,
         pollLbeaconTabelIntevalTime: 5000,
         pollGatewayTableIntevalTime: 5000,
-    },
-
-    userPreference: {
-        searchHistoryNumber: 4,
-        cookies: {
-            userInfo: {
-                NAME: name,
-                SEARCH_HISTORY: "search_history",
-                MY_DEVICES: "mydevice"
-            }
-        },
-        searchResultForm: "List"
     },
 
     frequentSearchOption: {
@@ -494,7 +471,7 @@ const config = {
             crs: L.CRS.Simple,
             zoom: -5.5,
             minZoom: -5.61,
-            maxZoom: -5,
+            maxZoom: -4,
             zoomForTablet: -6,
             zoomForMobile: -7.25,
             minZoomForTablet: -7,
