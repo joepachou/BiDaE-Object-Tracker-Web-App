@@ -140,11 +140,12 @@ class MyPatientManager extends React.Component{
                     >   
                         <div 
                             style={style.item}
+                            name={item.asset_control_number}
                             className="d-flex justify-content-center"
                         >
-                            <div className='d-inline-block'>&bull;</div>
+                            <div  name={item.asset_control_number} className='d-inline-block'>&bull;</div>
                         </div>
-                        <div>
+                        <div    name={item.asset_control_number}>
                             {getName(item, locale)}
                             {getPatientID(item, locale)}
                             {getPhysicianName(item, locale).replace(/,/, '')}
@@ -233,8 +234,7 @@ class MyPatientManager extends React.Component{
         const { locale } = this.context
         const style = {
             AddableListStyle: {
-                height: "35vh",
-                overflow: "scroll"
+                height: "35vh"
             }
         }
         return (
