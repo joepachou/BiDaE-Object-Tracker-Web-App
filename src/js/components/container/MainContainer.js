@@ -115,7 +115,7 @@ class MainContainer extends React.Component{
         let isSearchKeyChange = this.state.searchKey !== nextState.searchKey
         let isSearchResultChange = !(_.isEqual(this.state.searchResult, nextState.searchResult))
         let isGeoFenceDataChange = !(_.isEqual(this.state.geofenceConfig, nextState.geofenceConfig))
-        let isViolatedObjectChange = !(_.isEqual(this.state.isViolatedObjectChange, nextState.isViolatedObjectChange))
+        let isViolatedObjectChange = !(_.isEqual(this.state.violatedObjects, nextState.violatedObjects))
 
         let showMobileMap = !(_.isEqual(this.state.showMobileMap, nextState.showMobileMap))
         let display = !(_.isEqual(this.state.display, nextState.display)) 
@@ -137,7 +137,7 @@ class MainContainer extends React.Component{
 
     getToastNotification = (item) => {
         item.notification.map(event => {
-            let toastId = `${item.id}:${event.type}`
+            let toastId = `${item.mac_address}-${event.type}`
             let toastOptions = {
                 hideProgressBar: true,
                 autoClose: false,
@@ -158,9 +158,17 @@ class MainContainer extends React.Component{
     onCloseToast = (toast) => {
         let mac_address = toast.data ? toast.data.mac_address : toast.mac_address;
         let monitor_type = toast.type
+        let toastId = `${mac_address}-${monitor_type}`
+        let violatedObjects = this.state.violatedObjects
+        delete violatedObjects[toastId]
         axios.post(dataSrc.checkoutViolation, {
             mac_address,
             monitor_type
+        })
+        .then(res => {
+            this.setState({
+                violatedObjects
+            })
         })
         .catch(err => {
             console.log(`checkout violation fail: ${err}`)
@@ -236,11 +244,19 @@ class MainContainer extends React.Component{
         })
         .then(res => {
             let violatedObjects = res.data.reduce((violatedObjects, item) => {
-                if (!(item.mac_address in violatedObjects) && item.isViolated) {
-                    violatedObjects[item.mac_address] = item
-                } 
+                
+                if (item.isViolated) {
+                    item.notification.map(notice => {
+                        let toastId = `${item.mac_address}-${notice.type}`
+                        if (!(toastId in violatedObjects)) {
+                            violatedObjects[toastId] = item
+                        }
+                    })
+                }
                 return violatedObjects
+
             }, _.cloneDeep(this.state.violatedObjects))
+
             this.setState({
                 trackingData: res.data,
                 violatedObjects,
@@ -796,7 +812,12 @@ class MainContainer extends React.Component{
                                         ?   <Button variant='outline-primary' onClick={this.mapButtonHandler}>{locale.texts.HIDE_MAP}</Button>
                                         :   <Button variant='outline-primary' onClick={this.mapButtonHandler}>{locale.texts.SHOW_MAP}</Button>
                                     }
-                                    <Button variant='outline-primary' onClick={this.clearResultHandler}>{locale.texts.CLEAR_RESULT}</Button>
+                                    <Button 
+                                        variant='outline-primary' 
+                                        onClick={this.clearResultHandler}
+                                    >
+                                        {locale.texts.CLEAR_RESULT}
+                                    </Button>
                                 </ButtonGroup>
                                 <div className='d-flex justify-content-center'>
                                     <SearchResultList
