@@ -547,8 +547,7 @@ function editObject (formOption) {
 
 
 
-function editPatient (formOption) {
-	// console.log(formOption)
+const editPatient = (formOption) => {
 	const text = `
 		Update object_table 
 		SET name = $1,
@@ -556,7 +555,7 @@ function editPatient (formOption) {
 			physician_id = $4,
 			area_id = $5,
 			object_type = $6,
-			room_number = $7,
+			room = $7,
 			monitor_type = $8
 		WHERE asset_control_number = $3
 	`;

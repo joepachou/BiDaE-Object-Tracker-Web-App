@@ -94,7 +94,7 @@ const getTrackingData = (request, response) => {
                 item.isMatchedObject = checkMatchedObject(item, userAuthenticatedAreaId, currentAreaId)
 
                 /** Set the boolean if the object's last_seen_timestamp is in the specific time period */
-                let isInTheTimePeriod = moment().diff(item.last_seen_timestamp, 'seconds') 
+                let isInTheTimePeriod = moment().diff(item.last_reported_timestamp, 'seconds') 
                     < process.env.OBJECT_FOUND_TIME_INTERVAL_IN_SEC;
 
                 /** Set the boolean if its rssi is below the specific rssi threshold  */
@@ -129,7 +129,7 @@ const getTrackingData = (request, response) => {
 
                 /** Delete the unused field of the object */
                 delete item.first_seen_timestamp
-                delete item.last_seen_timestamp
+                // delete item.last_seen_timestamp
                 delete item.panic_violation_timestamp
                 delete item.lbeacon_uuid
                 delete item.monitor_type
@@ -350,13 +350,28 @@ const editImport = (request, response) => {
 
 const editPatient = (request, response) => {
     const formOption = request.body.formOption
+    let {
+        area_id
+    } = formOption
     pool.query(queryType.editPatient(formOption))
         .then(res => {
-            console.log("edit Patient success");
-            response.status(200).json(res)
+            console.log("edit patient success");
+            if (process.env.RELOAD_GEO_CONFIG_PATH) {
+                exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 9999 -c cmd_reload_geo_fence_setting -r geofence_object -f area_one -a ${area_id}`.split(' '), function(err, data){
+                    if(err){
+                        console.log(`execute reload geofence setting fails ${err}`)
+                    }else{
+                        console.log(`execute reload geofence setting success`)
+                        response.status(200).json(res)
+                    }
+                })
+            } else {
+                response.status(200).json(res)
+                console.log('IPC has not set')
+            }
         })
         .catch(err => {
-            console.log("edit Patient Fails: " + err)
+            console.log(`edit patient fails ${err}`)
         })
 }
 
@@ -1009,11 +1024,11 @@ const setGeofenceConfig = (request, response) => {
         .then(res => {
             console.log(`set geofence config success`)
             if (process.env.RELOAD_GEO_CONFIG_PATH) {
-                exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 5432 -c cmd_reload_geo_fence_setting -r geofence_list -f area_one -a ${area_id}`.split(' '), function(err, data){
+                exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 9999 -c cmd_reload_geo_fence_setting -r geofence_list -f area_one -a ${area_id}`.split(' '), function(err, data){
                     if(err){
-                        console.log('err', err)
+                        console.log(`execute reload geofence setting fails ${err}`)
                     }else{
-                        console.log('data', data)
+                        console.log(`execute reload geofence setting success`)
                         response.status(200).json(res)
                     }
                 })
@@ -1029,6 +1044,7 @@ const setGeofenceConfig = (request, response) => {
 }
 
 const addGeofenceConfig = (request, response) => {
+
     let {
         monitorConfigPackage,
     } = request.body
@@ -1038,11 +1054,11 @@ const addGeofenceConfig = (request, response) => {
         .then(res => {
             console.log(`add geofence config success`)
             if (process.env.RELOAD_GEO_CONFIG_PATH) {
-                exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 5432 -c cmd_reload_geo_fence_setting -r geofence_list -f area_one -a ${area_id}`.split(' '), function(err, data){
+                exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 9999 -c cmd_reload_geo_fence_setting -r geofence_list -f area_one -a ${area_id}`.split(' '), function(err, data){
                     if(err){
-                        console.log('err', err)
+                        console.log(`execute reload geofence setting fails ${err}`)
                     }else{
-                        console.log('data', data)
+                        console.log(`execute reload geofence setting success`)
                         response.status(200).json(res)
                     }
                 })
@@ -1053,6 +1069,34 @@ const addGeofenceConfig = (request, response) => {
         })
         .catch(err => {
             console.log(`add geofence config fail: ${err}`)
+        })
+}
+
+const setGeofenceEnable = (request, response) => {
+    const {
+        enable,
+        areaId
+    } = request.body
+
+    pool.query(queryType.setGeofenceEnable(enable, areaId))
+        .then(res => {
+            console.log(`set geofence enable success`)
+            if (process.env.RELOAD_GEO_CONFIG_PATH) {
+                exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 9999 -c cmd_reload_geo_fence_setting -r geofence_list -f area_one -a ${areaId}`.split(' '), function(err, data){
+                    if(err){
+                        console.log(`execute reload geofence setting fails ${err}`)
+                    }else{
+                        console.log(`execute reload geofence setting success`)
+                        response.status(200).json(res)
+                    }
+                })
+            } else {
+                response.status(200).json(res)
+                console.log('IPC has not set')
+            }
+        })
+        .catch(err => {
+            console.log(err)
         })
 }
 
@@ -1343,22 +1387,6 @@ const modifyTransferredLocation = (request, response) => {
             response.status(200).json('ok')
         }).catch(err => {
             console.log('modifyTransferredLocation error: ', err)
-        })
-}
-
-const setGeofenceEnable = (request, response) => {
-    const {
-        enable,
-        areaId
-    } = request.body
-
-    pool.query(queryType.setGeofenceEnable(enable, areaId))
-        .then(res => {
-            console.log(`set geofence enable success`)
-            response.status(200).json(res)
-        })
-        .catch(err => {
-            console.log(err)
         })
 }
 
