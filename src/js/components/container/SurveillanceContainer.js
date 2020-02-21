@@ -215,6 +215,7 @@ class SurveillanceContainer extends React.Component {
                                 proccessedTrackingData={this.props.proccessedTrackingData}
                                 lbeaconPosition={this.props.lbeaconPosition}
                                 geofenceConfig={this.props.geofenceConfig}
+                                locationMonitorConfig={this.props.locationMonitorConfig}
                                 getSearchKey={this.props.getSearchKey}
                                 areaId={areaId}
                                 searchedObjectType={this.state.showObjects}
@@ -339,7 +340,7 @@ class SurveillanceContainer extends React.Component {
                                             </Button>
                                     </Nav.Item>                              
                                 }
-                                
+
                                 {geofenceConfig &&
                                     Object.keys(geofenceConfig).includes(areaId.toString()) &&
                                     geofenceConfig[areaId].rules

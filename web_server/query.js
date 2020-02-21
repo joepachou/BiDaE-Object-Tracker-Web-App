@@ -913,12 +913,13 @@ const deleteImportData = (request, response) => {
 const getMonitorConfig = (request, response) => {
     let {
         type,
-        areasId
+        areasId,
+        isGetLbeaconPosition
     } = request.body
 
     let sitesGroup = process.env.SITES_GROUP.split(',')
 
-    pool.query(queryType.getMonitorConfig(type, sitesGroup))
+    pool.query(queryType.getMonitorConfig(type, sitesGroup, isGetLbeaconPosition))
         .then(res => {
             console.log(`get ${type} success`)
             let toReturn = res.rows

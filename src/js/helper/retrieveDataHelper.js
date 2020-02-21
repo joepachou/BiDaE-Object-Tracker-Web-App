@@ -19,10 +19,10 @@ const retrieveDataHelper = {
     },
 
     getObjectTable: async function(
-            locale, 
-            areaId, 
-            objectType
-        ) {
+        locale, 
+        areaId, 
+        objectType
+    ){
         return await axios.post(dataSrc.getObjectTable, {
             locale,
             areaId,
@@ -35,11 +35,16 @@ const retrieveDataHelper = {
         })
     },
 
-    getMonitorConfig: async function(type, areasId) {
+    getMonitorConfig: async function(
+        type, 
+        areasId,
+        isGetLbeaconPosition
+    ) {
         
         return await axios.post(dataSrc.getMonitorConfig, {
             type: config.monitorSettingUrlMap[type],
-            areasId
+            areasId,
+            isGetLbeaconPosition,
         })
     },
 

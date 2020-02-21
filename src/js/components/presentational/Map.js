@@ -32,6 +32,7 @@ class Map extends React.Component {
     errorCircle = L.layerGroup();
     lbeaconsPosition = L.layerGroup();
     geoFenceLayer = L.layerGroup()
+    locationMonitorLayer = L.layerGroup()
     currentZoom = 0
     prevZoom = 0
     pin_shift_scale = [0, -150]
@@ -46,11 +47,15 @@ class Map extends React.Component {
         //this.drawPolyline();
 
         if (parseInt(process.env.IS_LBEACON_MARK) && !(_.isEqual(prevProps.lbeaconPosition, this.props.lbeaconPosition))) {
-            this.createLbeaconMarkers()
+            this.createLbeaconMarkers(this.props.lbeaconPosition, this.lbeaconsPosition)
         }
 
         if (!(_.isEqual(prevProps.geofenceConfig, this.props.geofenceConfig))) {
-            this.createGeoFenceMarkers()
+            this.createGeofenceMarkers()
+        }
+
+        if (!(_.isEqual(prevProps.locationMonitorConfig, this.props.locationMonitorConfig))) {
+            this.createLocationMonitorMarkers()
         }
 
         if(!(_.isEqual(prevProps.pathMacAddress, this.props.pathMacAddress))){
@@ -125,7 +130,7 @@ class Map extends React.Component {
         this.image.setBounds(bounds)
         this.map.fitBounds(bounds)    
         
-        this.createGeoFenceMarkers()
+        this.createGeofenceMarkers()
     }
 
     /** init path */
@@ -220,8 +225,8 @@ class Map extends React.Component {
             this.scalableNumberSize = Math.floor(this.scalableIconSize / 3);
     }
 
-    /** Create the lbeacon and invisibleCircle markers */
-    createGeoFenceMarkers = () => {     
+    /** Create the geofence-related lbeacons markers */
+    createGeofenceMarkers = () => {     
         let {
             geofenceConfig,
             mapConfig
@@ -254,25 +259,49 @@ class Map extends React.Component {
         this.geoFenceLayer.addTo(this.map);
     }
 
-    /** Create the lbeacon and invisibleCircle markers */
-    createLbeaconMarkers = () => {
+    /** Create the geofence-related lbeacons markers */
+    createLocationMonitorMarkers = () => {     
+        let {
+            locationMonitorConfig,
+        } = this.props
 
         let {
-            lbeaconPosition,
+            stateReducer
+        } = this.context
+
+        let [{areaId}] = stateReducer
+
+        this.locationMonitorLayer.clearLayers()
+        
+        /** Create the markers of lbeacons of perimeters and fences
+         *  and onto the map  */
+        if (locationMonitorConfig[areaId] 
+            && locationMonitorConfig[areaId].enable 
+            && locationMonitorConfig[areaId].rule.is_active) {
+            this.createLbeaconMarkers(
+                locationMonitorConfig[areaId].rule.lbeacons,
+                this.locationMonitorLayer
+            )                            
+        }
+    }
+
+    /** Create the lbeacon and invisibleCircle markers */
+    createLbeaconMarkers = (parseUUIDArray, layer) => {
+        let {
             mapConfig,
         } = this.props
 
         /** Creat the marker of all lbeacons onto the map  */
-        lbeaconPosition.map(pos => {
-            //console.log(lbeaconPosition)
+        parseUUIDArray.map(pos => {
+
             let latLng = pos.split(',')
-            let lbeacon = L.circleMarker(latLng, mapConfig.lbeaconMarkerOption).addTo(this.lbeaconsPosition);
+            let lbeacon = L.circleMarker(latLng, mapConfig.lbeaconMarkerOption).addTo(layer);
             // invisibleCircle.on('mouseover', this.handlemenu)
             // invisibleCircle.on('mouseout', function() {this.closePopup();})
         })
 
         /** Add the new markerslayers to the map */
-        this.lbeaconsPosition.addTo(this.map);
+        layer.addTo(this.map);
     }
     
     /**

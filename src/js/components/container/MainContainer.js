@@ -69,7 +69,10 @@ class MainContainer extends React.Component{
 
         let targetElement = document.querySelector('body')
         disableBodyScroll(targetElement);
+
         this.getTrackingData();
+
+        /** Get lbeacon position */
         this.getLbeaconPosition();
         this.getGeofenceConfig();
         this.getLocationMonitorConfig()
@@ -118,6 +121,7 @@ class MainContainer extends React.Component{
         let isSearchResultChange = !(_.isEqual(this.state.searchResult, nextState.searchResult))
         let isGeoFenceDataChange = !(_.isEqual(this.state.geofenceConfig, nextState.geofenceConfig))
         let isLocationConfigChange = !(_.isEqual(this.state.locationMonitorConfig, nextState.locationMonitorConfig))
+        let isLbeaconPositionChange = !(_.isEqual(this.state.lbeaconPosition, nextState.lbeaconPosition))
 
         let isViolatedObjectChange = !(_.isEqual(this.state.violatedObjects, nextState.violatedObjects))
 
@@ -136,7 +140,8 @@ class MainContainer extends React.Component{
                                 showMobileMap ||
                                 display ||
                                 pathMacAddress ||
-                                isLocationConfigChange
+                                isLocationConfigChange ||
+                                isLbeaconPositionChange
         return shouldUpdate
     }
 
@@ -334,23 +339,28 @@ class MainContainer extends React.Component{
 
         retrieveDataHelper.getMonitorConfig(
             'not stay room monitor',
-            auth.user.areas_id
+            auth.user.areas_id,
+            true,
         )
         .then(res => {
             let locationMonitorConfig = res.data.reduce((config, rule) => {
                 config[rule.area_id] = {
                     enable: rule.enable,
-                    rule,
+                    rule: {
+                        ...rule,
+                        lbeacons: rule.lbeacons.map(uuid => {
+                            return this.createLbeaconCoordinate(uuid).toString()
+                        })
+                    }
                 }
                 return config
             }, {})
-            console.log(locationMonitorConfig)
             this.setState({
                 locationMonitorConfig
             })
         })
         .catch(err => {
-            console.log(`get geofence data fail ${err}`)
+            console.log(`get location monitor config fail ${err}`)
         })
     }
 
@@ -696,7 +706,6 @@ class MainContainer extends React.Component{
             auth,
             stateReducer,
         } = this.context
-        console.log(this.state.locationMonitorConfig)
         
         return (
             /** "page-wrap" the default id named by react-burget-menu */
