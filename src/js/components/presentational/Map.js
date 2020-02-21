@@ -32,6 +32,7 @@ class Map extends React.Component {
     errorCircle = L.layerGroup();
     lbeaconsPosition = L.layerGroup();
     geoFenceLayer = L.layerGroup()
+    locationMonitorLayer = L.layerGroup()
     currentZoom = 0
     prevZoom = 0
     pin_shift_scale = [0, -150]
@@ -46,11 +47,15 @@ class Map extends React.Component {
         //this.drawPolyline();
 
         if (parseInt(process.env.IS_LBEACON_MARK) && !(_.isEqual(prevProps.lbeaconPosition, this.props.lbeaconPosition))) {
-            this.createLbeaconMarkers()
+            this.createLbeaconMarkers(this.props.lbeaconPosition, this.lbeaconsPosition)
         }
 
         if (!(_.isEqual(prevProps.geofenceConfig, this.props.geofenceConfig))) {
-            this.createGeoFenceMarkers()
+            this.createGeofenceMarkers()
+        }
+
+        if (!(_.isEqual(prevProps.locationMonitorConfig, this.props.locationMonitorConfig))) {
+            this.createLocationMonitorMarkers()
         }
 
         if(!(_.isEqual(prevProps.pathMacAddress, this.props.pathMacAddress))){
@@ -125,7 +130,47 @@ class Map extends React.Component {
         this.image.setBounds(bounds)
         this.map.fitBounds(bounds)    
         
-        this.createGeoFenceMarkers()
+    }
+
+
+    /** Resize the markers and errorCircles when the view is zoomend. */
+    resizeMarkers = () => {
+        this.prevZoom = this.currentZoom
+        this.currentZoom = this.map.getZoom();
+        this.calculateScale();
+        this.markersLayer.eachLayer( marker => {
+            let icon = marker.options.icon;
+            icon.options.iconSize = [this.scalableIconSize, this.scalableIconSize]
+            icon.options.numberSize = this.scalableNumberSize
+            var pos = marker.getLatLng()
+            marker.setLatLng([pos.lat - this.prevZoom * this.pin_shift_scale[0] + this.currentZoom* this.pin_shift_scale[0], pos.lng - this.pin_shift_scale[1]* this.prevZoom + this.currentZoom* this.pin_shift_scale[1]])
+            marker.setIcon(icon);
+        })
+
+        this.geoFenceLayer.eachLayer( circle => {
+            circle.setRadius(this.scalableCircleRadius)
+        })
+    }
+
+    /** Calculate the current scale for creating markers and resizing. */
+    calculateScale = () => {
+        
+        this.minZoom = this.map.getMinZoom();
+        this.zoomDiff = this.currentZoom - this.minZoom;
+        this.resizeFactor = Math.pow(2, (this.zoomDiff));
+        this.resizeConst = Math.floor(this.zoomDiff * 30);
+        if (isBrowser) {
+            this.scalableIconSize = parseInt(this.props.mapConfig.iconOptions.iconSize) + this.resizeConst
+            this.scalableCircleRadius = parseInt(this.props.mapConfig.iconOptions.circleRadius) * this.resizeFactor
+        } else if(isTablet) {
+            this.scalableIconSize = parseInt(this.props.mapConfig.iconOptions.iconSizeForTablet) + this.resizeConst
+            this.scalableCircleRadius = 15 * this.resizeFactor
+            this.scalableCircleRadius = parseInt(this.props.mapConfig.iconOptions.circleRadiusForTablet) * this.resizeFactor
+        } else {
+            this.scalableIconSize = parseInt(this.props.mapConfig.iconOptions.iconSizeForMobile) + this.resizeConst
+            this.scalableNumberSize = Math.floor(this.scalableIconSize / 3);
+            this.scalableCircleRadius = parseInt(this.props.mapConfig.iconOptions.circleRadiusForMobile) * this.resizeFactor
+        }
     }
 
     /** init path */
@@ -183,45 +228,8 @@ class Map extends React.Component {
         }
     }
 
-    /** Resize the markers and errorCircles when the view is zoomend. */
-    resizeMarkers = () => {
-        this.prevZoom = this.currentZoom
-        this.currentZoom = this.map.getZoom();
-        this.calculateScale();
-        
-        this.markersLayer.eachLayer( marker => {
-            let icon = marker.options.icon;
-            icon.options.iconSize = [this.scalableIconSize, this.scalableIconSize]
-            icon.options.numberSize = this.scalableNumberSize
-            var pos = marker.getLatLng()
-            marker.setLatLng([pos.lat - this.prevZoom * this.pin_shift_scale[0] + this.currentZoom* this.pin_shift_scale[0], pos.lng - this.pin_shift_scale[1]* this.prevZoom + this.currentZoom* this.pin_shift_scale[1]])
-            marker.setIcon(icon);
-        })
-
-        this.errorCircle.eachLayer( circle => {
-            circle.setRadius(this.scalableErrorCircleRadius)
-        })
-    }
-
-    /** Calculate the current scale for creating markers and resizing. */
-    calculateScale = () => {
-        
-        this.minZoom = this.map.getMinZoom();
-        this.zoomDiff = this.currentZoom - this.minZoom;
-        this.resizeFactor = Math.pow(2, (this.zoomDiff));
-        this.resizeConst = Math.floor(this.zoomDiff * 30);
-        this.scalableErrorCircleRadius = 200 * this.resizeFactor;
-        if(isBrowser)
-            this.scalableIconSize = parseInt(this.props.mapConfig.iconOptions.iconSize) + this.resizeConst
-        else if(isTablet)
-            this.scalableIconSize = parseInt(this.props.mapConfig.iconOptions.iconSizeForTablet) + this.resizeConst
-        else 
-            this.scalableIconSize = parseInt(this.props.mapConfig.iconOptions.iconSizeForMobile) + this.resizeConst
-            this.scalableNumberSize = Math.floor(this.scalableIconSize / 3);
-    }
-
-    /** Create the lbeacon and invisibleCircle markers */
-    createGeoFenceMarkers = () => {     
+    /** Create the geofence-related lbeacons markers */
+    createGeofenceMarkers = () => {     
         let {
             geofenceConfig,
             mapConfig
@@ -230,6 +238,13 @@ class Map extends React.Component {
         let {
             stateReducer
         } = this.context
+
+        this.calculateScale()
+
+        mapConfig.geoFenceMarkerOption = {
+            ...mapConfig.geoFenceMarkerOption,
+            radius: this.scalableCircleRadius
+        }
 
         let [{areaId}] = stateReducer
 
@@ -254,25 +269,57 @@ class Map extends React.Component {
         this.geoFenceLayer.addTo(this.map);
     }
 
-    /** Create the lbeacon and invisibleCircle markers */
-    createLbeaconMarkers = () => {
+    /** Create the geofence-related lbeacons markers */
+    createLocationMonitorMarkers = () => {     
+        let {
+            locationMonitorConfig,
+        } = this.props
 
         let {
-            lbeaconPosition,
+            stateReducer
+        } = this.context
+
+        let [{areaId}] = stateReducer
+        
+        /** Create the markers of lbeacons of perimeters and fences
+         *  and onto the map  */
+        if (locationMonitorConfig[areaId] 
+            && locationMonitorConfig[areaId].enable 
+            && locationMonitorConfig[areaId].rule.is_active) {
+            this.createLbeaconMarkers(
+                locationMonitorConfig[areaId].rule.lbeacons,
+                this.locationMonitorLayer
+            )                            
+        }
+    }
+
+    /** Create the lbeacon and invisibleCircle markers */
+    createLbeaconMarkers = (parseUUIDArray, layer) => {
+
+        let {
             mapConfig,
         } = this.props
 
+        layer.clearLayers()
+
+        this.calculateScale()
+
+        mapConfig.lbeaconMarkerOption = {
+            ...mapConfig.lbeaconMarkerOption,
+            radius: this.scalableCircleRadius
+        }
+
         /** Creat the marker of all lbeacons onto the map  */
-        lbeaconPosition.map(pos => {
-            //console.log(lbeaconPosition)
+        parseUUIDArray.map(pos => {
+
             let latLng = pos.split(',')
-            let lbeacon = L.circleMarker(latLng, mapConfig.lbeaconMarkerOption).addTo(this.lbeaconsPosition);
+            let lbeacon = L.circleMarker(latLng, mapConfig.lbeaconMarkerOption).addTo(layer);
             // invisibleCircle.on('mouseover', this.handlemenu)
             // invisibleCircle.on('mouseout', function() {this.closePopup();})
         })
 
         /** Add the new markerslayers to the map */
-        this.lbeaconsPosition.addTo(this.map);
+        layer.addTo(this.map);
     }
     
     /**
@@ -324,8 +371,7 @@ class Map extends React.Component {
         let counter = 0;
         this.filterTrackingData(_.cloneDeep(this.props.proccessedTrackingData))
         .map((item, index)  => {
-            let position = this.macAddressToCoordinate(item.mac_address,item.currentPosition);
-
+            let position = this.macAddressToCoordinate(item.mac_address, item.currentPosition);
 
             /** Set the Marker's popup 
              * popupContent (objectName, objectImg, objectImgWidth)
@@ -421,7 +467,7 @@ class Map extends React.Component {
     macAddressToCoordinate = (mac_address, lbeacon_coordinate) => {
         const xx = mac_address.slice(15,16);
         const yy = mac_address.slice(16,17);
-        const multiplier = this.props.mapConfig.markerDispersity; 
+        const multiplier = this.props.mapConfig.iconOptions.markerDispersity; 
 		const origin_x = lbeacon_coordinate[1] - parseInt(8, 16) * multiplier ; 
 		const origin_y = lbeacon_coordinate[0] - parseInt(8, 16) * multiplier ;
 		const xxx = origin_x + parseInt(xx, 16) * multiplier;

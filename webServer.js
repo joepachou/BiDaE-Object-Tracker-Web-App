@@ -184,7 +184,7 @@ app.post('/data/getGeofenceConfig', db.getGeofenceConfig)
 
 app.post('/data/setGeofenceConfig', db.setGeofenceConfig)
 
-app.post('/data/setGeofenceEnable', db.setGeofenceEnable)
+app.post('/data/setMonitorEnable', db.setMonitorEnable)
 
 app.post('/data/deleteMonitorConfig', db.deleteMonitorConfig)
 

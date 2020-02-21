@@ -100,6 +100,8 @@ const en =  {
     SWITCH_AREA: "switch area",
     FENCE_ON: "fence on",
     FENCE_OFF: "fence off",
+    LOCATION_MONITOR_ON: "loc. Monitor on",
+    LOCATION_MONITOR_OFF: "loc. Monitor off",
     CLEAR_ALERTS: "clear alerts",
     SHOW_RESIDENTS: "show residents",
     HIDE_RESIDENTS: "hide residents",

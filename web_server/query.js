@@ -913,12 +913,13 @@ const deleteImportData = (request, response) => {
 const getMonitorConfig = (request, response) => {
     let {
         type,
-        areasId
+        areasId,
+        isGetLbeaconPosition
     } = request.body
 
     let sitesGroup = process.env.SITES_GROUP.split(',')
 
-    pool.query(queryType.getMonitorConfig(type, sitesGroup))
+    pool.query(queryType.getMonitorConfig(type, sitesGroup, isGetLbeaconPosition))
         .then(res => {
             console.log(`get ${type} success`)
             let toReturn = res.rows
@@ -1087,13 +1088,14 @@ const addGeofenceConfig = (request, response) => {
         })
 }
 
-const setGeofenceEnable = (request, response) => {
+const setMonitorEnable = (request, response) => {
     const {
         enable,
-        areaId
+        areaId,
+        type
     } = request.body
 
-    pool.query(queryType.setGeofenceEnable(enable, areaId))
+    pool.query(queryType.setMonitorEnable(enable, areaId, type))
         .then(res => {
             console.log(`set geofence enable success`)
             if (process.env.RELOAD_GEO_CONFIG_PATH) {
@@ -1535,7 +1537,7 @@ module.exports = {
     getTransferredLocation,
     modifyTransferredLocation,
     clearSearchHistory,
-    setGeofenceEnable,
+    setMonitorEnable,
     getRolesPermission,
     modifyPermission,
     modifyRolesPermission,

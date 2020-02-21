@@ -85,16 +85,7 @@ class SurveillanceContainer extends React.Component {
     }
 
     handleConfirmFormSubmit = (e) => {
-        let { 
-            stateReducer 
-        } = this.context
-
-        let [
-            {areaId}, 
-        ] = stateReducer
-
-        this.props.setFence()
-
+        this.props.setFence(this.state.type)
         this.handleClosePdfForm()
     }
 
@@ -117,9 +108,16 @@ class SurveillanceContainer extends React.Component {
                 })
                 break;
                 
-            case "fence":
+            case "geofence":
                 this.setState({
-                    showConfirmForm: true
+                    showConfirmForm: true,
+                    type: name
+                })
+                break;
+            case "location":
+                this.setState({
+                    showConfirmForm: true,
+                    type: name
                 })
                 break;
             case "clearAlerts":
@@ -199,7 +197,8 @@ class SurveillanceContainer extends React.Component {
 
         const { 
             hasSearchKey,
-            geofenceConfig
+            geofenceConfig,
+            locationMonitorConfig
         } = this.props;
 
         let [{areaId}] = stateReducer
@@ -216,6 +215,7 @@ class SurveillanceContainer extends React.Component {
                                 proccessedTrackingData={this.props.proccessedTrackingData}
                                 lbeaconPosition={this.props.lbeaconPosition}
                                 geofenceConfig={this.props.geofenceConfig}
+                                locationMonitorConfig={this.props.locationMonitorConfig}
                                 getSearchKey={this.props.getSearchKey}
                                 areaId={areaId}
                                 searchedObjectType={this.state.showObjects}
@@ -321,6 +321,26 @@ class SurveillanceContainer extends React.Component {
                                         </Nav.Item>
                                     </AccessControl>
                                 }
+
+                                {locationMonitorConfig &&
+                                    Object.keys(locationMonitorConfig).includes(areaId.toString()) &&
+                                        <Nav.Item className="mt-2 bd-highligh ml-auto">    
+                                            <Button 
+                                                variant="warning" 
+                                                className="mr-1 ml-2" 
+                                                onClick={this.handleClickButton} 
+                                                name="location"
+                                                value={locationMonitorConfig[areaId].enable}
+                                                active={!locationMonitorConfig[areaId].enable}                                                            
+                                            >
+                                                {locationMonitorConfig[areaId].enable 
+                                                    ? locale.texts.LOCATION_MONITOR_ON 
+                                                    : locale.texts.LOCATION_MONITOR_OFF
+                                                }
+                                            </Button>
+                                    </Nav.Item>                              
+                                }
+
                                 {geofenceConfig &&
                                     Object.keys(geofenceConfig).includes(areaId.toString()) &&
                                     geofenceConfig[areaId].rules
@@ -329,12 +349,12 @@ class SurveillanceContainer extends React.Component {
                                                 <Fragment
                                                     key={index}
                                                 >
-                                                    <Nav.Item className="mt-2 bd-highligh ml-auto">    
+                                                    <Nav.Item className="mt-2 bd-highligh">    
                                                         <Button 
                                                             variant="warning" 
                                                             className="mr-1 ml-2" 
                                                             onClick={this.handleClickButton} 
-                                                            name="fence"
+                                                            name="geofence"
                                                             value={geofenceConfig[areaId].enable}
                                                             active={!geofenceConfig[areaId].enable}                                                            
                                                         >
@@ -357,6 +377,7 @@ class SurveillanceContainer extends React.Component {
                                                 </Fragment>
                                             )
                                 })}
+
                             </Nav>
                         </div>
                     </div>

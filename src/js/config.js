@@ -106,6 +106,33 @@ const config = {
         8: "location",
     },
 
+    monitor: {
+        geofence: {
+            typeId: 1,
+            name: "geofence",
+            readableName: "geofence",
+            api: "geo_fence_config",
+        },
+        panic: {
+            typeId: 2,
+            name: "panic",
+            readableName: "panic",
+            api: null,
+        },
+        movement: {
+            typeId: 4,
+            name: "movement",
+            readableName: "movement monitor",
+            api: "location_not_stay_room_config",
+        },
+        location: {
+            typeId: 8,
+            name: "locationMonitor",
+            readableName: "not stay room monitor",
+            api: "location_not_stay_room_config"
+        }
+    },
+
 
     monitorOptions: [
         'geofence',
@@ -131,6 +158,13 @@ const config = {
         "long stay in danger monitor": "location_long_stay_in_danger_config",
         "not stay room monitor": "location_not_stay_room_config",
         "geofence monitor": "geo_fence_config"
+    },
+
+    monitorSetting: {
+        "movement monitor": "movement_config",
+        "long stay in danger monitor": "location_long_stay_in_danger_config",
+        location: "location_not_stay_room_config",
+        geo: "geo_fence_config"
     },
 
     shiftOption: [
@@ -508,12 +542,24 @@ const config = {
             iconSize: process.env.MARKER_SIZE_IN_DESKTOP || 1,
             iconSizeForTablet: process.env.MARKER_SIZE_IN_TABLET || 1,
             iconSizeForMobile: process.env.MARKER_SIZE_IN_MOBILE || 1,
+            circleRadius: 25,
+            circleRadiusForTablet: 15,
+            circleRadiusForMobile: 8,
             showNumber: !false,
+
+            /* Set the Marker dispersity that can be any positive number */
+            markerDispersity: process.env.MARKER_DISPERSITY || 100,
+
+            markerDispersityInBigScreen: process.env.MARKER_DISPERSITY_IN_BIG_SCREEN || 13,
         },
 
         iconOptionsInBigScreen: {
             iconSize: 30,
             showNumber: false,
+
+            /* Set the Marker dispersity that can be any positive number */
+            markerDispersity: process.env.MARKER_DISPERSITY_IN_BIG_SCREEN || 13,
+
         }, 
 
         /** Set the representation of color pin 
@@ -562,14 +608,14 @@ const config = {
             color: 'rgba(0, 0, 0, 0)',
             fillColor: 'orange',
             fillOpacity: 0.4,
-            radius: 25,
+            radius: 20,
         },
 
         lbeaconMarkerOption: {
             color: 'rgba(0, 0, 0, 0)',
             fillColor: 'orange',
             fillOpacity: 0.4,
-            radius: 15,
+            radius: 50,
         },
 
         /** Set the schema to select the color pin */
@@ -698,9 +744,6 @@ const config = {
             RESERVE: "reserve",
             TRANSFERRED: "transferred",   
         },
-
-        /* Set the Marker dispersity that can be any positive number */
-        markerDispersity: process.env.MARKER_DISPERSITY || 100,
 
         popupOptions: {
             minWidth: "500",
