@@ -83,7 +83,7 @@ class Map extends React.Component {
         this.resizeFactor = Math.pow(2, (this.zoomDiff));
         this.resizeConst = Math.floor(this.zoomDiff * 30);
         this.scalableErrorCircleRadius = 200 * this.resizeFactor;
-        this.scalableIconSize = 30 + this.resizeConst
+        this.scalableIconSize = this.props.mapConfig.iconOptionsInBigScreen + this.resizeConst
         this.scalableNumberSize = Math.floor(this.scalableIconSize / 3);
     }
 
@@ -234,7 +234,7 @@ class Map extends React.Component {
         
         const xx = mac_address.slice(12,14);
         const yy = mac_address.slice(15,17);
-        const multiplier = 13;
+        const multiplier = this.props.mapConfig.iconOptionsInBigScreen.markerDispersity;
         const origin_x = lbeacon_coordinate[1] - parseInt(80, 16) * multiplier ; 
         const origin_y = lbeacon_coordinate[0] - parseInt(80, 16) * multiplier ;
         const xxx = origin_x + parseInt(xx, 16) * multiplier;

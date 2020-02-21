@@ -324,8 +324,7 @@ class Map extends React.Component {
         let counter = 0;
         this.filterTrackingData(_.cloneDeep(this.props.proccessedTrackingData))
         .map((item, index)  => {
-            let position = this.macAddressToCoordinate(item.mac_address,item.currentPosition);
-
+            let position = this.macAddressToCoordinate(item.mac_address, item.currentPosition);
 
             /** Set the Marker's popup 
              * popupContent (objectName, objectImg, objectImgWidth)
@@ -421,7 +420,7 @@ class Map extends React.Component {
     macAddressToCoordinate = (mac_address, lbeacon_coordinate) => {
         const xx = mac_address.slice(15,16);
         const yy = mac_address.slice(16,17);
-        const multiplier = this.props.mapConfig.markerDispersity; 
+        const multiplier = this.props.mapConfig.iconOptions.markerDispersity; 
 		const origin_x = lbeacon_coordinate[1] - parseInt(8, 16) * multiplier ; 
 		const origin_y = lbeacon_coordinate[0] - parseInt(8, 16) * multiplier ;
 		const xxx = origin_x + parseInt(xx, 16) * multiplier;

@@ -507,13 +507,22 @@ const config = {
         iconOptions: {
             iconSize: process.env.MARKER_SIZE_IN_DESKTOP || 1,
             iconSizeForTablet: process.env.MARKER_SIZE_IN_TABLET || 1,
-            iconSizeForMobile: process.env.MARKER_SIZE_IN_MOBILE || 1,
+            iconSizeForMobile: 20 || process.env.MARKER_SIZE_IN_MOBILE || 1,
             showNumber: !false,
+
+            /* Set the Marker dispersity that can be any positive number */
+            markerDispersity: process.env.MARKER_DISPERSITY || 100,
+
+            markerDispersityInBigScreen: process.env.MARKER_DISPERSITY_IN_BIG_SCREEN || 13,
         },
 
         iconOptionsInBigScreen: {
             iconSize: 30,
             showNumber: false,
+
+            /* Set the Marker dispersity that can be any positive number */
+            markerDispersity: process.env.MARKER_DISPERSITY_IN_BIG_SCREEN || 13,
+
         }, 
 
         /** Set the representation of color pin 
@@ -698,9 +707,6 @@ const config = {
             RESERVE: "reserve",
             TRANSFERRED: "transferred",   
         },
-
-        /* Set the Marker dispersity that can be any positive number */
-        markerDispersity: process.env.MARKER_DISPERSITY || 100,
 
         popupOptions: {
             minWidth: "500",
