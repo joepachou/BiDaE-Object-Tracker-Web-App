@@ -86,6 +86,7 @@ class EditPatientForm extends React.Component {
         }) 
 
         return (
+            
             <Modal 
                 show={show} 
                 onHide={handleClose} 
