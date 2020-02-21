@@ -1,58 +1,34 @@
 import React from 'react';
 import { 
     getObjectTable,
-    getAreaTable,
-    editObject,
-    editPatient,
-    addObject,
-    addPatient,
-    deletePatient,
-    deleteDevice,
+    getAreaTable, 
     getUserList,
-    getLbeaconTable,
-    objectImport,
-    getImportTable,
-    deleteImportData,
-    cleanBinding,
+    getLbeaconTable, 
+    getImportTable,  
     getImportPatient,
     getTransferredLocation
 } from "../../dataSrc"
-import axios from 'axios';
-import ReactTable from 'react-table';
-import 'react-table/react-table.css';
-import Select from 'react-select';
+import axios from 'axios'; 
+import 'react-table/react-table.css'; 
 import { 
     Button, 
-    Container,
-    ButtonToolbar,
+    Container, 
 } from 'react-bootstrap';
 import { 
     objectTableColumn,
     patientTableColumn,
     importTableColumn
- } from '../../tables'
-import Searchbar from '../presentational/Searchbar'
-import EditObjectForm from './EditObjectForm'
-import selecTableHOC from 'react-table/lib/hoc/selectTable';
-import config from '../../config'
-import EditPatientForm from './EditPatientForm'
+ } from '../../tables' 
+import config from '../../config' 
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import { AppContext } from '../../context/AppContext';
-import XLSX from "xlsx";
-import InputFiles from "react-input-files";
-import BindForm from './BindForm'
-import DissociationForm from './DissociationForm'
 import AccessControl from '../presentational/AccessControl'
-import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import styleConfig from '../../styleConfig';
-import FormikFormGroup from '../presentational/FormikFormGroup'
-import BOTInput from '../presentational/BOTInput'
-
-const SelectTable = selecTableHOC(ReactTable);
-
+import ObjectTable from '../presentational/ObjectTable'
+import PatientTable from '../presentational/PatientTable'
+import ImportObjectTable from '../presentational/ImportObjectTable'
+import ImportPatientTable from '../presentational/ImportPatientTable' 
+import DissociationForm from '../container/DissociationForm'
 
 class ObjectManagementContainer extends React.Component{
     static contextType = AppContext
@@ -65,27 +41,11 @@ class ObjectManagementContainer extends React.Component{
         dataImport: [],//object import data
         dataPatient:[],//patient data
         dataImportPatient:[],// patient import data
-        objectTable: [],//ＤＢ抓出來的object table data
-        isShowEdit: false, //點資料後的編輯視窗 object
-        isPatientShowEdit: false, //點資料後的編輯視窗 patient
-        selection: [], //存勾選的資料
-        selectedRowData: [], // onclick的資料
-        selectedRowData_Patient: [], // onclick的資料
-        formTitle: '', //表單的標題
-        formPath: '',
-        selectAll: false,
+        objectTable: [],//ＤＢ抓出來的object table data   
         locale: this.context.locale.abbr,
         tabIndex: 0, 
-        roomOptions: {},
-        isShowBind:false,
-        isShowEditImportTable:false, //DissociationForm的show
-        bindCase:0, // １是Object 2是Patient
-        physicianName:'',//存onclick後的醫生資料
-        physicianIDNumber:0,//存onclick後的醫生ID
-        disableASN:false,//編輯不能更改ASN,新增可以
-        transferredLocationList: [],
-        showDeleteConfirmation: false, //確定刪除的form
-        warningSelect : 0, //if 0 ，就warn完就執行delete patien 否則delete object,
+        roomOptions: {}, 
+        transferredLocationList: [], 
         filterSelection: {
             statusOptions: config.statusOptions.map(item => {
                 return {
@@ -102,7 +62,8 @@ class ObjectManagementContainer extends React.Component{
            
         },
         objectFilter: [],
-        patientFilter: []
+        patientFilter: [],
+        formTitle:''
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -148,7 +109,6 @@ class ObjectManagementContainer extends React.Component{
             console.log(err)
         })
     }
-
     getUserList = () => {
         let { locale } = this.context
         axios.post(getUserList, {
@@ -166,7 +126,6 @@ class ObjectManagementContainer extends React.Component{
             console.log(err)
         })
     }
-
     getDataImport = () => {
         let { locale } = this.context
         axios.post(getImportTable, {
@@ -226,7 +185,6 @@ class ObjectManagementContainer extends React.Component{
 
        
     }
-
     getTransferredLocation = () => {
         let { locale } = this.context
         axios.get(getTransferredLocation)
@@ -255,7 +213,6 @@ class ObjectManagementContainer extends React.Component{
             this.getData()
         })
     }
-
     getData = () => {
         let { locale } = this.context
         axios.post(getObjectTable, {
@@ -362,7 +319,6 @@ class ObjectManagementContainer extends React.Component{
             console.log(err);
         })
     }
-
     getMonitorTypeArray = (item, type) => {
         return Object.keys(config.monitorType)
             .reduce((checkboxGroup, index) => {
@@ -372,7 +328,6 @@ class ObjectManagementContainer extends React.Component{
                 return checkboxGroup
             }, [])
     }
-
     getLbeaconData = () => {
         let { locale } = this.context
         axios.post(getLbeaconTable, {
@@ -396,369 +351,29 @@ class ObjectManagementContainer extends React.Component{
             console.log("get lbeacon data fail : " + err);
         })
     }
+ 
+ 
+ 
 
-    handleClose = () => {
-        this.setState({
-            isShowEdit: false,
-            isPatientShowEdit: false,
-            isShowBind:false,
-            bindCase:0,
-            isShowEditImportTable:false,
-            showDeleteConfirmation: false,
-            warningSelect:0
-        })
-    }
-
-    handleClickButton = (e) => {
-        let { name } = e.target
-        switch(name) {
-            case "add object": 
-                this.setState({
-                    isShowEdit: true,
-                    formTitle: name,
-                    selectedRowData: [],
-                    selectedRowData_Patient:[],
-                    formPath: addObject,
-                    disableASN:false
-                })
-                break;
-            case "associate":
-                this.setState({
-                    isShowBind: true,
-                    bindCase:1,
-                })
-            break;
-            case "associate_patient":
-                this.setState({
-                    isShowBind: true,
-                    bindCase:2,
-                })
-            break;
-
-            case "deleteObject":
-                this.setState({
-                     showDeleteConfirmation: true,
-                     warningSelect : 1
-                })
-                break;
-
-            case "add all":
-                this.setState({
-                    formTitle: name,
-                    formPath: addObject
-                })
-                break;
-            case "delete import data":
-                    this.setState({
-                        showDeleteConfirmation: true,
-                        warningSelect : 2
-                   })
-                break;  
-            case "dissociation":
-                this.setState({
-                    formTitle: name,
-                    isShowEditImportTable: true
-                })
-                break;
-            case "deletePatient":
-                this.setState({
-                    showDeleteConfirmation: true,
-                    warningSelect : 0
-                })
-        }
-
-    }
-
-    deleteBinding = () => {
-        let { locale } = this.context
-       
-        axios.post(cleanBinding, {
-            locale: locale.abbr,
-            formOption:this.state.selection
-        })
-        .then(res => {
-            this.setState({
-                selection: [],
-                selectAll: false,
-            })
-        })
-        .catch(err => {
-            console.log("clean Binding fail" + err);
-        })    
-    }
-
-    deleteRecordImport = () => {
-        let idPackage = []
-        var deleteArray = [];
-        var deleteCount = 0;
-    
-     
-        axios.post(deleteImportData, {
-           idPackage: this.state.selection
-        })
-        .then(res => {
-            this.setState({
-                selection: [],
-                selectAll: false,
-            })
-        })
-        .catch(err => {
-            console.log(err)
-        })
-
-        this.handleSubmitForm()
-    }
-
-    handleSubmitForm = () => {
+    handleSubmitForm = () => { //重整用
         setTimeout(this.getData, 500) 
         setTimeout(this.getDataPatient, 500) 
-        setTimeout(this.getDataImport, 500) 
-        this.setState({
-            isShowEdit: false,
-            isPatientShowEdit: false,
-            isShowBind:false,
-            bindCase:0,
-            isShowEditImportTable:false,
-            showDeleteConfirmation: false,
-            selection: [],
-            selectAll: false,
-            warningSelect:0,
-        })
+        setTimeout(this.getDataImport, 500)  
     }
-
-    getMonitorTypeGroup = () => {
-        return Object.keys(config.monitorType).map((checkboxGroup, index) => {
-            if (item.monitor_type & index) {
-                checkboxGroup.push(config.monitorType[index])
-            }
-            return checkboxGroup
-        }, [])
-    }
-
-    toggleSelection = (key, shift, row) => {
-        let selection = [...this.state.selection];
-        key = key.split('-')[1] ? key.split('-')[1] : key
-        const keyIndex = selection.indexOf(key);
-        if (keyIndex >= 0) {
-            selection = [
-            ...selection.slice(0, keyIndex),
-            ...selection.slice(keyIndex + 1)
-            ];
-        } else {
-            selection.push(key);
-        }
-        this.setState({ 
-            selection 
-        });
-    };
-
-    toggleAll = () => {
-        const selectAll = this.state.selectAll ? false : true;
-        const selection = [];
-        if (selectAll) {
-            const wrappedInstance = this.selectTable.getWrappedInstance();
-  
-            const currentRecords = wrappedInstance.props.data
-            // const currentRecords = wrappedInstance.getResolvedState().sortedData;
-           
-            currentRecords.forEach(item => {
-                selection.push(item.id);
-            });
-        }
-         
-         this.setState({ selectAll, selection });
-
-    };
-
-    isSelected = (key) => {
-        return this.state.selection.includes(key);
-    };
-
-    deleteRecordPatient = () => {
-        let idPackage = []
-        var deleteArray = [];
-        var deleteCount = 0;
-
-        this.state.dataPatient.map (item => {
-         
-            this.state.selection.map(itemSelect => {
-                itemSelect === item.name
-                    ?   deleteArray.push(deleteCount.toString())
-                    :   null          
-            })
-            deleteCount +=1
-        })
-
-        this.state.dataPatient.map(dataItem => {
-            this.state.selection.map(deleteItem =>{
-                dataItem.id == deleteItem 
-                    ?   idPackage.push(parseInt(dataItem.id))
-                    :   null
-            })
-        })
-
-        axios.post(deletePatient, {
-            idPackage
-        })
-        .then(res => {
-            this.handleSubmitForm()
-        })
-        .catch(err => {
-            console.log(err)
-        })
-    }
-
-
-    objectMultipleDelete = () => {
-        let formOption = []
-        var deleteArray = [];
-        var deleteCount = 0;
  
-        this.state.data.map (item => {
-         
-            this.state.selection.map(itemSelect => {
-                itemSelect === item.id
-                ? 
-                 deleteArray.push(deleteCount.toString()) 
-                : 
-                null          
-            })
-                 deleteCount +=1
-        })
-        
-        deleteArray.map( item => {
-         
-            this.state.data[item] === undefined ?
-                null
-                :
-                formOption.push(this.state.data[item].mac_address)
-            })
-        axios.post(deleteDevice, {
-            formOption
-        })
-        .then(res => {
-            this.setState({
-                selection: [],
-                selectAll: false,
-            })
-        })
-        .catch(err => {
-            console.log(err)
-        })
 
-        this.handleSubmitForm()
-    }
-
-    handlePatientClick = (e) => {
-        this.setState({
-            isPatientShowEdit: true, 
-            selectedRowData: [],
-            selectedRowData_Patient:[],
-            formTitle: 'add inpatient',
-            formPath: addPatient,
-            physicianName:'',
-            physicianIDNumber:0,
-            disableASN:false,
-        })
-    }
-
-    onImportExcel = files => {
-     
-        // 獲取上傳的文件對象
-        //const { files } = file.target; // 通過FileReader對象讀取文件
-        const fileReader = new FileReader();
-        //console.log(fileReader);
-        for (let index = 0; index < files.length; index++) {
-            fileReader.name = files[index].name;
-        }
-      
-        fileReader.onload = event => {
-            try {
-                // 判斷上傳檔案的類型 可接受的附檔名
-                const validExts = new Array(".xlsx", ".xls");
-                const fileExt = event.target.name;
-     
-                if (fileExt == null) {
-                    throw "檔案為空值";
-                }
-    
-                const fileExtlastof = fileExt.substring(fileExt.lastIndexOf("."));
-                if (validExts.indexOf(fileExtlastof) == -1) {
-                    throw "檔案類型錯誤，可接受的副檔名有：" + validExts.toString();
-                }
-  
-                const { result } = event.target; // 以二進制流方式讀取得到整份excel表格對象
-                const workbook = XLSX.read(result, { type: "binary" });
-                let data = []; // 存儲獲取到的數據 // 遍歷每張工作表進行讀取（這裡默認只讀取第一張表）
-                for (const sheet in workbook.Sheets) {
-                    if (workbook.Sheets.hasOwnProperty(sheet)) {
-                        // 利用 sheet_to_json 方法將 excel 轉成 json 數據
-                        data = data.concat(
-                            XLSX.utils.sheet_to_json(workbook.Sheets[sheet])
-                        ); // break; // 如果只取第一張表，就取消註釋這行
-                    }
-                } 
-
-                // ＩＭＰＯＲＴ時把ＡＣＮ重複的擋掉
-                let newData = []
-                let reapetFlag = false;
-                let DataNameIsNull = '';
-                let ReapeName = '';
-
-                data.map(importData =>{
-                    reapetFlag = false;
-                    this.state.dataImport.map(dataOrigin=>{
-                       importData.asset_control_number === dataOrigin.asset_control_number ? reapetFlag=true : null
-                       importData.asset_control_number == dataOrigin.asset_control_number ? reapetFlag=true : null
-                    })
-                   if( reapetFlag == false) {
-                       if(importData.asset_control_number !=undefined ){
-                             newData.push(importData) 
-                       }else{
-                           DataNameIsNull += importData.name + ','
-                       }
-                    }else{
-                        ReapeName += importData.name   + ','
-                    }
-                })
-
-
-
-                DataNameIsNull!='' ? alert('ASN必須不等於空:' + DataNameIsNull) : null 
-                ReapeName!='' ?    alert(ReapeName + '的ASN與其他筆資料重複')  : null
-                //沒被擋掉的存到newData後輸出
-        
-                 let { locale } = this.context
-                
-                axios.post(objectImport, {
-                    locale: locale.abbr ,
-                    newData
-                })
-                .then(res => {
-                })
-                .catch(err => {
-                    console.log(err)
-                    
-                })
-            this.handleSubmitForm()
-
-            } catch (e) {
-                // 這裡可以拋出文件類型錯誤不正確的相關提示
-                alert(e);
-                //console.log("文件類型不正確");
-                return;
-            }
-       
-        }; // 以二進制方式打開文件
-         fileReader.readAsBinaryString(files[0]);
-    };
-
-    handleRemove = (key) => {
-        this.setState({
-            deleteFlag : true, 
+    handleRemove = (key) => { //button在欄位裡，欄位在OBJECT MANAGER裡創的
+        this.setState({ 
             selectedObjectData: key.original,
             isShowEditImportTable: true,
-            formTitle: "dissociation" 
+            formTitle: "dissociation"
+        })
+    }
+    handleClose =() =>{
+        this.setState({ 
+            selectedObjectData: '',
+            isShowEditImportTable: false,
+            formTitle: ""
         })
     }
 
@@ -833,8 +448,6 @@ class ObjectManagementContainer extends React.Component{
         return filteredData
         
     }
-    
-
     addObjectFilter = (key, attribute, source) => {
 
         this.state.objectFilter = this.state.objectFilter.filter(filter => source != filter.source)
@@ -844,12 +457,10 @@ class ObjectManagementContainer extends React.Component{
         })
         this.filterObjects()
     }
-    
     removeObjectFilter = (source) => {
         this.state.objectFilter = this.state.objectFilter.filter(filter => source != filter.source)
         this.filterObjects()
     }
-
     filterObjects = () => {
 
         let filteredData = this.state.objectFilter.reduce((acc, curr) => {
@@ -860,65 +471,42 @@ class ObjectManagementContainer extends React.Component{
             filteredData
         })
     }
-
     addPatientFilter = (key, attribute, source) => {
         this.state.patientFilter = this.state.patientFilter.filter(filter => source != filter.source)
         this.state.patientFilter.push({
             key, attribute, source
         }) 
+       
         this.filterPatients()
     }
     removePatientFilter = (source) => {
         this.state.patientFilter = this.state.patientFilter.filter(filter => source != filter.source)
         this.filterPatients()
     }
-
     filterPatients = () => {
- 
         let filteredPatient = this.state.patientFilter.reduce((acc, curr) => {
             return this.filterData(acc, curr.key, curr.attribute)
         }, this.state.dataPatient)
         this.setState({
             filteredPatient
-        })
+        }) 
     }
 
     render(){
-        const { 
-            isShowEdit, 
-            selectedRowData,
-            selectedRowData_Patient,
-            isPatientShowEdit,
-            selectAll,
-            selectType,
-            isShowBind,
-            bindCase,
-            isShowEditImportTable,
+        const {  
             filterSelection
         } = this.state
 
         const { locale } = this.context
-
-        const {
-            toggleSelection,
-            toggleAll,
-            isSelected,
-        } = this;
-
-        const extraProps = {
-            selectAll,
-            isSelected,
-            toggleAll,
-            toggleSelection,
-            selectType
-        };
+ 
 
         let typeSelection = filterSelection.typeList ? Object.values(filterSelection.typeList) : null;
-
+    
         return (
             <Container className='py-2 text-capitalize' fluid>
                 <Tabs selectedIndex={this.state.tabIndex} onSelect={tabIndex => this.setState({ tabIndex })}>
                     <TabList>
+                       
                         <Tab>{locale.texts.DEVICE_FORM}</Tab>
                         <Tab>{locale.texts.PATIENT_FORM}</Tab>
                         <AccessControl
@@ -935,440 +523,62 @@ class ObjectManagementContainer extends React.Component{
                         </AccessControl>
                     </TabList>
 
-                    <TabPanel>
-                        <ButtonToolbar>
-                            <Button 
-                                variant="outline-primary" 
-                                className='text-capitalize mr-2 mb-1'
-                                name="associate"
-                                size="sm"
-                                onClick={this.handleClickButton}
-                            >
-                                {locale.texts.ASSOCIATE}
-                            </Button>
-                            <Button 
-                                variant="outline-primary" 
-                                className='text-capitalize mr-2 mb-1'
-                                size="sm"
-                                name="add object"
-                                onClick={this.handleClickButton}
-                            >
-                                {locale.texts.ADD_OBJECT}
-                            </Button>
-                            <Button 
-                                variant="outline-primary" 
-                                className='text-capitalize mr-2 mb-1'
-                                size="sm"
-                                name="dissociation"
-                                onClick={this.handleClickButton}
-                            >
-                                {locale.texts.DISSOCIATE}
-                            </Button>
-                            <Button 
-                                variant="outline-primary" 
-                                className='text-capitalize mr-2 mb-1'
-                                size="sm"
-                                name="deleteObject"
-                                onClick={this.handleClickButton}
-                            >
-                                {locale.texts.MULTIPLEDELETE}
-                            </Button>
-                            <div style={{width: '200px'}}>
-                                
-                            </div>
-                            
-                        </ButtonToolbar>
-                        <Row className="my-1" noGutters>
-                            <Col>
-                                <Select
-                                    name={"Select Type"}
-                                    className={'float-right w-100'}
-                                    styles={styleConfig.reactSelect}
-                                    onChange={(value) => {
-                                        if(value){
-                                            this.addObjectFilter(value.label, ['type'], 'type select' )
-                                        }else{
-                                            this.removeObjectFilter('type select')
-                                        }
-                                    }}
-                                    options={typeSelection}
-                                    isClearable={true}
-                                    isSearchable={false}
-                                    placeholder={'Select Type'}
-                                    
-                                />
-                            </Col>
-                            <Col>
-                                <Select
-                                    name={"Select Area"}
-                                    className={'float-right w-100'}
-                                    styles={styleConfig.reactSelect}
-                                    onChange={(value) => {
-                                        if(value){
-                                            this.addObjectFilter(value.label, ['area'], 'area select')
-                                        }else{
-                                            this.removeObjectFilter('area select')
-                                        }
-                                    }}
-                                    options={this.state.filterSelection.areaSelection}
-                                    isClearable={true}
-                                    isSearchable={false}
-                                    placeholder={'Select Area'}
-                                />
-                            </Col>
-                            <Col>
-                                <Select
-                                    name={"Select Status"}
-                                    className={'float-right w-100'}
-                                    styles={styleConfig.reactSelect}
-                                    onChange={(value) => {
-                                        if(value){
-                                            this.addObjectFilter(value.label, ['status'], 'status select')
-                                        }else{
-                                            this.removeObjectFilter('status select')
-                                        }
-                                    }}
-                                    options={this.state.filterSelection.statusOptions}
-                                    isClearable={true}
-                                    isSearchable={false}
-                                    placeholder={'Select Status'}
-                                />
-                            </Col>
 
-                            <Col>
-                                <BOTInput
-                                    className={'float-right'}
-                                    
-                                    placeholder={''}
-                                    getSearchKey={(key) => {
-                                        this.addObjectFilter(
-                                            key, 
-                                            ['type', 'area', 'status', 'macAddress', 'acn' ], 
-                                            'search bar'
-                                        )
-                                    }}
-                                    clearSearchResult={null}    
-                                />
-                            </Col>
-                        </Row>
-                        
-
-                        <SelectTable
-                            keyField='id'
+                    <TabPanel> 
+                        <ObjectTable
                             data={this.state.filteredData}
                             columns={this.state.column}
-                            ref={r => (this.selectTable = r)}
-                            className="-highlight"
-                            style={{height:'75vh'}}
-                            {...extraProps}
-
-                            getTrProps={(state, rowInfo, column, instance) => {
-                                return {
-                                    onClick: (e) => {
-                                        if (!e.target.type) {
-                                            this.setState({
-                                                selectedRowData: this.state.filteredData[rowInfo.index],
-                                                isShowEdit: true,
-                                                isPatientShowEdit: false,
-                                                formTitle: 'edit object',
-                                                formPath: editObject,
-                                                disableASN:'true'
-                                            })
-                                        }
-              
-                                        let id = (rowInfo.index+1).toString()
-                                        this.toggleSelection(id)
-                                    },
-                                }
-                            }}
-                            getTdProps={() => {
-                                return {
-                                    style: {
-                                        borderRight: 'none'
-                                    }
-                                }
-                            }}
-                            getTheadThProps={() => {
-                                return {
-                                    style: {
-                                        borderRight: 'none'
-                                    }
-                                }
-                            }}
-                        />
+                            handleSubmitForm={this.handleSubmitForm}  
+                            importData={this.state.dataImport}
+                            objectTable={this.state.objectTable} 
+                            addObjectFilter = {this.addObjectFilter}
+                            removeObjectFilter ={ this.removeObjectFilter}
+                            typeSelection = {typeSelection}
+                            filterSelection={this.state.filterSelection}
+                        /> 
                     </TabPanel>
 
 
 
                     <TabPanel>
-                        <ButtonToolbar>
-                            <Button 
-                                variant="outline-primary" 
-                                className='text-capitalize mr-2 mb-1'
-                                size="sm"
-                                name="associate_patient"
-                                onClick={this.handleClickButton}
-                            >
-                                {locale.texts.ASSOCIATE}
-                            </Button>
-                            <Button 
-                                variant="outline-primary" 
-                                className='text-capitalize mr-2 mb-1'
-                                size="sm"
-                                onClick={this.handlePatientClick}
-                            >
-                                {locale.texts.ADD_INPATIENT}
-                            </Button>
-                            <Button 
-                                variant="outline-primary" 
-                                className='text-capitalize mr-2 mb-1'
-                                size="sm"
-                                name="deletePatient"
-                                onClick={this.handleClickButton}
-                                // onClick={this.deleteRecordPatient}    
-                            >
-                                {locale.texts.DELETE}
-                            </Button>
-                        </ButtonToolbar>
-  
-
-
-                       
-                        <Row className="my-1" noGutters> 
-                            <Col>
-                                <Select
-                                    name={"Select Area Patient"}
-                                    className={'float-right w-100'}
-                                    styles={styleConfig.reactSelect}
-                                    onChange={(value) => {
-                                        if(value){
-                                            this.addPatientFilter(value.label, ['area'], 'area select')
-                                        }else{
-                                            this.removePatientFilter('area select')
-                                        }
-                                    }}
-                                    options={this.state.filterSelection.areaSelection}
-                                    isClearable={true}
-                                    isSearchable={false}
-                                    placeholder={'Select Area'}
-                                />
-                            </Col> 
-
-                            
-                            <Col>
-                                <Select
-                                    name={"Select Status"}
-                                    className={'float-right w-100'}
-                                    styles={styleConfig.reactSelect}
-                                    onChange={(value) => {
-                                        if(value){
-                                            this.addPatientFilter(value.label, ['monitor'], 'monitor select')
-                                        }else{
-                                            this.removePatientFilter('monitor select')
-                                        }
-                                    }}
-                                    options={this.state.filterSelection.monitorTypeOptions}
-                                    isClearable={true}
-                                    isSearchable={false}
-                                    placeholder={'Monitor Status'}
-                                />
-                            </Col>
-
-
-                            <Col>
-                                <BOTInput
-                                    className={'float-right'}
-                                    placeholder={''}
-                                    getSearchKey={(key) => {
-                                        this.addPatientFilter(
-                                            key, 
-                                            ['name', 'area' , 'macAddress', 'acn','monitor','physician_name'], 
-                                            'search bar'
-                                        )
-                                    }}
-                                    clearSearchResult={null}                                        
-                                />
-                            </Col>
-                        </Row>
-
- 
-                            
-                            {/* <Col>
-                                <Select
-                                    name={"Select Area"}
-                                    className={'float-right w-100'}
-                                    onChange={(value) => {
-                                        if(value){
-                                            this.addPatientFilter(value.label, ['area'], 'area select' )
-                                        }else{
-                                            this.removePatientFilter('area select')
-                                        }
-                                    }}
-                                    options={this.state.objectFilterSelectOption.area}
-                                    isClearable={true}
-                                    isSearchable={false}
-                                    placeholder={'Select Area...'}
-                                />
-                            </Col>
-
-                            <Col>
-                                <Searchbar 
-                                    className={'float-right'}
-                                    
-                                    placeholder={''}
-                                    getSearchKey={(key) => {
-                                        this.addPatientFilter(key, ['type', 'area', 'status'], 'search bar')
-                                    }}
-                                    clearSearchResult={null}    
-                                />
-                            </Col> */}
-                    
-
-                        <SelectTable
-                            keyField='id'
+                        <PatientTable
                             data={this.state.filteredPatient}
-                            columns={this.state.columnPatient}
-                            ref={r => (this.selectTable = r)}
-                            className="-highlight"
-                            style={{height:'75vh'}}
-                            {...extraProps}
-                            getTrProps={(state, rowInfo, column, instance) => {
-                            
-                                return {
-                                    onClick: (e, handleOriginal) => {
-
-                                        this.setState({
-                                            physicianName:this.state.filteredPatient[rowInfo.index].physician_name,
-                                            physicianIDNumber:this.state.filteredPatient[rowInfo.index].physician_id,
-                                            selectedRowData_Patient: this.state.filteredPatient[rowInfo.index],
-                                            isShowEdit: false,
-                                            isPatientShowEdit: true,
-                                            formTitle: 'edit patient',
-                                            formPath: editPatient,
-                                            disableASN:true,
-                                        })
-                                        let id = (rowInfo.index+1).toString()
-                                        this.toggleSelection(id)
-                                        if (handleOriginal) {
-                                            handleOriginal()
-                                        }
-
-                                            
-                                    }
-                                }
-                            }}
+                            columns={this.state.columnPatient} 
+                            handleSubmitForm={this.handleSubmitForm}  
+                            importData={this.state.dataImport}
+                            objectTable={this.state.objectTable} 
+                            addPatientFilter = {this.addPatientFilter}
+                            removePatientFilter = {this.removePatientFilter}
+                            typeSelection = {typeSelection}
+                            filterSelection={this.state.filterSelection}
+                            dataImportPatient = {this.state.dataImportPatient}
+                            physicianList={this.state.physicianList}
+                            roomOptions={this.state.roomOptions} 
                         />
                     </TabPanel>
-
-                    <TabPanel> 
-                        <ButtonToolbar>
-                            <InputFiles accept=".xlsx, .xls" onChange={this.onImportExcel}>
-                                <Button 
-                                variant="outline-primary" 
-                                className="btn btn-primary mr-2 mb-1"
-                                >
-                                {locale.texts.IMPORT_OBJECT}
-                                </Button>
-                            </InputFiles>
-                            <Button 
-                                variant="outline-primary" 
-                                className='text-capitalize mr-2 mb-1'
-                                name="delete import data"
-                                onClick={this.handleClickButton}
-                            >
-                                {locale.texts.DELETE}
-                            </Button>
-                        </ButtonToolbar>
-                        <SelectTable
-                            keyField='id'
-                            data={this.state.dataImport}
-                            columns={this.state.columnImport}
-                            ref={r => (this.selectTable = r)}
-                            className="-highlight"
-                            style={{height:'75vh'}}
-                            {...extraProps}
-                        />
-                    </TabPanel>
-
                     
+                    <TabPanel>  
+                        <ImportObjectTable
+                            dataImport = {this.state.dataImport}
+                            columnImport = {this.state.columnImport}
+                            handleSubmitForm={this.handleSubmitForm}
+                        />
+                    </TabPanel>
 
-                    <TabPanel> 
-                        <ButtonToolbar>
-                            <InputFiles accept=".xlsx, .xls" name="import_patient" onChange={this.onImportExcel}>
-                                <Button 
-                                variant="outline-primary" 
-                                className="btn btn-primary mr-2 mb-1"
-                                >
-                                {locale.texts.IMPORT_OBJECT}
-                                </Button>
-                            </InputFiles>
-                            <Button 
-                                variant="outline-primary" 
-                                className='text-capitalize mr-2 mb-1'
-                                name="delete import data"
-                                onClick={this.handleClickButton}
-                            >
-                                {locale.texts.DELETE}
-                            </Button>
-                        </ButtonToolbar>
-                        <SelectTable
-                            keyField='id'
-                            data={this.state.dataImportPatient}
-                            columns={this.state.columnImport}
-                            ref={r => (this.selectTable = r)}
-                            className="-highlight"
-                            style={{height:'75vh'}}
-                            {...extraProps}
+                    <TabPanel>  
+                        <ImportPatientTable
+                            dataImportPatient = {this.state.dataImportPatient}
+                            columnImport = {this.state.columnImport}
+                            handleSubmitForm={this.handleSubmitForm}
                         />
                     </TabPanel>
                 </Tabs>
-                <EditPatientForm
-                    show = {isPatientShowEdit && !this.state.DeleteFlag} 
-                    title= {this.state.formTitle} 
-                    selectedObjectData={selectedRowData_Patient || null} 
-                    handleSubmitForm={this.handleSubmitForm}
-                    formPath={this.state.formPath}
-                    handleClose={this.handleClose}
-                    data={this.state.dataPatient}
-                    objectData = {this.state.data}
-                    physicianList={this.state.physicianList}
-                    roomOptions={this.state.roomOptions}
-                    physicianName = {this.state.physicianName}
-                    physicianIDNumber = {this.state.physicianIDNumber}
-                    disableASN = {this.state.disableASN}
-                />  
-                <EditObjectForm 
-                    show={isShowEdit} 
-                    title={this.state.formTitle} 
-                    selectedObjectData={selectedRowData || null} 
-                    handleSubmitForm={this.handleSubmitForm}
-                    formPath={this.state.formPath}
-                    handleClose={this.handleClose}
-                    data={this.state.data}
-                    importData={this.state.dataImport}
-                    objectTable={this.state.objectTable}
-                    disableASN = {this.state.disableASN}
-                />
-                <BindForm
-                    show = {isShowBind} 
-                    bindCase = {this.state.bindCase}
-                    title={this.state.formTitle} 
-                    handleSubmitForm={this.handleSubmitForm}
-                    formPath={this.state.formPath}
-                    handleClose={this.handleClose}
-                    objectTable={this.state.objectTable}
-                    ImportData= {this.state.dataImport}
-                    PatientImportData = {this.state.dataImportPatient}
-                    data={this.state.dataImport.reduce((dataMap, item) => {
-                        dataMap[item.asset_control_number] = item
-                        return dataMap
-                        }, {})
-                    }
-                />
+
+
                 <DissociationForm
-                    show={isShowEditImportTable} 
-                    title={this.state.formTitle} 
-                    selectedObjectData={this.state.selectedObjectData || 'handleAllDelete'} 
+                    show={this.state.isShowEditImportTable}
+                    title={this.state.formTitle}
+                    selectedObjectData={this.state.selectedObjectData || 'handleAllDelete'}
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={this.state.formPath}
                     objectTable={this.state.objectTable}
@@ -1379,15 +589,7 @@ class ObjectManagementContainer extends React.Component{
                         }, {})
                     }
                 />
-                <DeleteConfirmationForm
-                    show={this.state.showDeleteConfirmation} 
-                    handleClose={this.handleClose}
-                    handleSubmit={
-                        this.state.warningSelect == 0 ? this.deleteRecordPatient  
-                    :this.state.warningSelect ==1 ?  this.objectMultipleDelete 
-                    : this.state.warningSelect ==2 ?  this.deleteRecordImport : null 
-                    }
-                />
+
             </Container>
         )
     }

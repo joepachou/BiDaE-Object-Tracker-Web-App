@@ -43,7 +43,7 @@ class EditObjectForm extends React.Component {
     }
     
     handleSubmit = (postOption) => {
-        const path = this.props.formPath
+        const path = this.props.formPath 
         axios.post(path, {
             formOption: postOption
         }).then(res => {
@@ -100,7 +100,7 @@ class EditObjectForm extends React.Component {
             show,
             handleClose
         } = this.props;
-
+ 
         const { 
             id,
             name,
@@ -110,8 +110,7 @@ class EditObjectForm extends React.Component {
             mac_address,
             transferred_location,
             area_name,
-        } = selectedObjectData
-
+        } = selectedObjectData 
         return (
             <Modal 
                 show={show} 
@@ -187,9 +186,12 @@ class EditObjectForm extends React.Component {
                                         value =>{
                                             let repeatFlag = false
                                             this.props.data.map(item => {
-                                                if (item.asset_control_number != this.props.selectedObjectData.asset_control_number){
+                                                if(this.props.selectedObjectData.length != 0){
+                                                    if (item.asset_control_number != this.props.selectedObjectData.asset_control_number){
                                                      item.mac_address == value ?  repeatFlag = true : null
-                                                }
+                                                    }
+                                                } 
+                                            
                                             })
                                             return !repeatFlag
                                            
@@ -235,7 +237,7 @@ class EditObjectForm extends React.Component {
                             }
                             while(postOption.name[postOption.name.length-1] == " "){
                                 postOption.name = postOption.name.substring(0,postOption.name.length-1);       
-                            }
+                            } 
                             this.handleSubmit(postOption)                            
                         }}
 
