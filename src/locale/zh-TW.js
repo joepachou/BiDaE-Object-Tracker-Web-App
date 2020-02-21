@@ -100,6 +100,8 @@ const tw = {
     SWITCH_AREA: "切換地點",
     FENCE_ON: "圍籬已開啟",
     FENCE_OFF: "圍籬已關閉",
+    LOCATION_MONITOR_ON: "位置監視已開啟",
+    LOCATION_MONITOR_OFF: "位置監視已關閉",
     CLEAR_ALERTS: "清除警告",
     SHOW_RESIDENTS: "顯示居民",
     HIDE_RESIDENTS: "隱藏居民",

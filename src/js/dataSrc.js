@@ -66,7 +66,7 @@ const getUserArea= `${protocol}://${dataSrcIP}/data/getUserArea`
 const addUserArea= `${protocol}://${dataSrcIP}/data/addUserArea`
 const DeleteUserArea= `${protocol}://${dataSrcIP}/data/DeleteUserArea`
 const modifyTransferredLocation= `${protocol}://${dataSrcIP}/data/modifyTransferredLocation`
-const setGeofenceEnable = `${protocol}://${dataSrcIP}/data/setGeofenceEnable`
+const setMonitorEnable = `${protocol}://${dataSrcIP}/data/setMonitorEnable`
 const getRolesPermission= `${protocol}://${dataSrcIP}/data/getRolesPermission`
 const modifyPermission= `${protocol}://${dataSrcIP}/data/modifyPermission`
 const modifyRolesPermission= `${protocol}://${dataSrcIP}/data/modifyRolesPermission`
@@ -141,7 +141,7 @@ module.exports = {
     addUserArea,
     DeleteUserArea, 
     modifyTransferredLocation,
-    setGeofenceEnable,
+    setMonitorEnable,
     modifyTransferredLocation, 
     getRolesPermission,
     modifyPermission,

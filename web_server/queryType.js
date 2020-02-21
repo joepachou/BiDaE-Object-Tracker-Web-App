@@ -1585,7 +1585,8 @@ const getMonitorConfig = (type, sitesGroup) => {
 			area_id,
 			enable,
 			start_time,
-			end_time
+			end_time,
+			is_active
 		FROM ${type}
 
 		WHERE area_id IN (${sitesGroup.map(item => item)})
@@ -1974,9 +1975,9 @@ function modifyTransferredLocation(type, data){
     return query
 }
 
-const setGeofenceEnable = (enable, areaId) => {
+const setMonitorEnable = (enable, areaId, type) => {
 	return `
-		UPDATE geo_fence_config 
+		UPDATE ${type}
 		SET enable = ${enable} 
 		WHERE area_id = ${areaId}
 	`
@@ -2106,7 +2107,7 @@ module.exports = {
 	getRolesPermission,
 	modifyPermission,
 	modifyRolesPermission,
-	setGeofenceEnable,
+	setMonitorEnable,
 	clearSearchHistory
 }
 

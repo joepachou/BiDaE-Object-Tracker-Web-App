@@ -1087,13 +1087,14 @@ const addGeofenceConfig = (request, response) => {
         })
 }
 
-const setGeofenceEnable = (request, response) => {
+const setMonitorEnable = (request, response) => {
     const {
         enable,
-        areaId
+        areaId,
+        type
     } = request.body
 
-    pool.query(queryType.setGeofenceEnable(enable, areaId))
+    pool.query(queryType.setMonitorEnable(enable, areaId, type))
         .then(res => {
             console.log(`set geofence enable success`)
             if (process.env.RELOAD_GEO_CONFIG_PATH) {
@@ -1535,7 +1536,7 @@ module.exports = {
     getTransferredLocation,
     modifyTransferredLocation,
     clearSearchHistory,
-    setGeofenceEnable,
+    setMonitorEnable,
     getRolesPermission,
     modifyPermission,
     modifyRolesPermission,

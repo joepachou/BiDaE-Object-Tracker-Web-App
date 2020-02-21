@@ -106,6 +106,33 @@ const config = {
         8: "location",
     },
 
+    monitor: {
+        geofence: {
+            typeId: 1,
+            name: "geofence",
+            readableName: "geofence",
+            api: "geo_fence_config",
+        },
+        panic: {
+            typeId: 2,
+            name: "panic",
+            readableName: "panic",
+            api: null,
+        },
+        movement: {
+            typeId: 4,
+            name: "movement",
+            readableName: "movement monitor",
+            api: "location_not_stay_room_config",
+        },
+        location: {
+            typeId: 8,
+            name: "locationMonitor",
+            readableName: "not stay room monitor",
+            api: "location_not_stay_room_config"
+        }
+    },
+
 
     monitorOptions: [
         'geofence',
@@ -131,6 +158,13 @@ const config = {
         "long stay in danger monitor": "location_long_stay_in_danger_config",
         "not stay room monitor": "location_not_stay_room_config",
         "geofence monitor": "geo_fence_config"
+    },
+
+    monitorSetting: {
+        "movement monitor": "movement_config",
+        "long stay in danger monitor": "location_long_stay_in_danger_config",
+        location: "location_not_stay_room_config",
+        geo: "geo_fence_config"
     },
 
     shiftOption: [

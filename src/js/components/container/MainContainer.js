@@ -25,6 +25,7 @@ import {
 import { 
     disableBodyScroll, 
 } from 'body-scroll-lock';
+import retrieveDataHelper from '../../helper/retrieveDataHelper';
 
 const {
     ALL_DEVICES,
@@ -43,6 +44,7 @@ class MainContainer extends React.Component{
         proccessedTrackingData: [],
         lbeaconPosition: [],
         geofenceConfig: null,
+        locationMonitorConfig: null,
         violatedObjects: {},
         hasSearchKey: false,
         searchKey: '',
@@ -67,10 +69,10 @@ class MainContainer extends React.Component{
 
         let targetElement = document.querySelector('body')
         disableBodyScroll(targetElement);
-
         this.getTrackingData();
         this.getLbeaconPosition();
         this.getGeofenceConfig();
+        this.getLocationMonitorConfig()
         this.interval = setInterval(this.getTrackingData, config.mapConfig.intervalTime)
     }
 
@@ -115,6 +117,8 @@ class MainContainer extends React.Component{
         let isSearchKeyChange = this.state.searchKey !== nextState.searchKey
         let isSearchResultChange = !(_.isEqual(this.state.searchResult, nextState.searchResult))
         let isGeoFenceDataChange = !(_.isEqual(this.state.geofenceConfig, nextState.geofenceConfig))
+        let isLocationConfigChange = !(_.isEqual(this.state.locationMonitorConfig, nextState.locationMonitorConfig))
+
         let isViolatedObjectChange = !(_.isEqual(this.state.violatedObjects, nextState.violatedObjects))
 
         let showMobileMap = !(_.isEqual(this.state.showMobileMap, nextState.showMobileMap))
@@ -131,7 +135,8 @@ class MainContainer extends React.Component{
                                 isViolatedObjectChange ||
                                 showMobileMap ||
                                 display ||
-                                pathMacAddress
+                                pathMacAddress ||
+                                isLocationConfigChange
         return shouldUpdate
     }
 
@@ -199,7 +204,8 @@ class MainContainer extends React.Component{
         this.getSearchKey(searchKey, colorPanel, searchValue, markerClickPackage)
     }
 
-    setFence = () => {
+    setFence = (type) => {
+
         let { 
             stateReducer 
         } = this.context
@@ -207,24 +213,26 @@ class MainContainer extends React.Component{
         let [
             {areaId}, 
         ] = stateReducer
-
-        let cloneConfig = _.cloneDeep(this.state.geofenceConfig)
+        
+        let configName = `${config.monitor[type].name}Config`
+        let cloneConfig = _.cloneDeep(this.state[configName])
 
         let enable = + !cloneConfig[areaId].enable
         cloneConfig[areaId].enable = enable
 
-        axios.post(dataSrc.setGeofenceEnable, {
+        retrieveDataHelper.setMonitorEnable(
             enable,
             areaId,
-        })
+            config.monitor[type].api
+        )
         .then(res => {
-            console.log(`set geofence enable success`)
+            console.log(`set ${type} enable success`)
             this.setState({
-                geofenceConfig: cloneConfig,
+                [configName]: cloneConfig,
             })
         })
         .catch(err => {
-            console.log(`set geofence enable fail ${err}`)
+            console.log(`set ${type} enable fails ${err}`)
         })
     }
 
@@ -298,18 +306,47 @@ class MainContainer extends React.Component{
             areaId
         })
         .then(res => {
-            let geofenceConfig = res.data.rows.reduce((config, item) => {
-                if (!config[item.area_id]) {
-                    config[item.area_id] = {
-                        enable: item.enable,
-                        rules: [item]
+            let geofenceConfig = res.data.rows.reduce((config, rule) => {
+                if (!config[rule.area_id]) {
+                    config[rule.area_id] = {
+                        enable: rule.enable,
+                        rules: [rule]
                     }
                 }
-                else config[item.area_id].push(item)
+                else config[rule.area_id].push(rule)
                 return config
             }, {})
             this.setState({
                 geofenceConfig,
+            })
+        })
+        .catch(err => {
+            console.log(`get geofence data fail ${err}`)
+        })
+    }
+
+    /** Retrieve location monitor data from database */
+    getLocationMonitorConfig = () => {
+        let { 
+            stateReducer,
+            auth
+        } = this.context
+
+        retrieveDataHelper.getMonitorConfig(
+            'not stay room monitor',
+            auth.user.areas_id
+        )
+        .then(res => {
+            let locationMonitorConfig = res.data.reduce((config, rule) => {
+                config[rule.area_id] = {
+                    enable: rule.enable,
+                    rule,
+                }
+                return config
+            }, {})
+            console.log(locationMonitorConfig)
+            this.setState({
+                locationMonitorConfig
             })
         })
         .catch(err => {
@@ -659,6 +696,7 @@ class MainContainer extends React.Component{
             auth,
             stateReducer,
         } = this.context
+        console.log(this.state.locationMonitorConfig)
         
         return (
             /** "page-wrap" the default id named by react-burget-menu */
@@ -685,6 +723,7 @@ class MainContainer extends React.Component{
                                     auth={auth}
                                     lbeaconPosition={this.state.lbeaconPosition}
                                     geofenceConfig={this.state.geofenceConfig}
+                                    locationMonitorConfig={this.state.locationMonitorConfig}
                                     clearAlerts={this.clearAlerts}
                                     searchKey={this.state.searchKey}
                                     authenticated={this.state.authenticated}
