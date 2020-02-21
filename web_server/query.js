@@ -502,7 +502,7 @@ const signin = (request, response) => {
 
                     let userInfo = {
                         name,
-                        myDevice: mydevice,
+                        myDevice: mydevice || [],
                         roles,
                         permissions,
                         freqSearchCount: freq_search_count,
@@ -512,16 +512,16 @@ const signin = (request, response) => {
                         locale_id,
                         locale
                     }
-                    
+
                     request.session.userInfo = userInfo
                     response.json({
                         authentication: true,
                         userInfo
                     })
                     pool.query(queryType.setVisitTimestamp(username))
-                        .catch(err => console.log("set visit timestamp: ",err))
+                        .then(res =>  console.log(`sign in success: ${name}`))
+                        .catch(err => console.log(`set visit timestamp fails ${err}`))
 
-                    console.log(`sign in success: ${name}`)
                 } else {
                     response.json({
                         authentication: false,

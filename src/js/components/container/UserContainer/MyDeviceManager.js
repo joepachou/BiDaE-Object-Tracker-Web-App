@@ -51,6 +51,7 @@ class MyDeviceManager extends React.Component{
                 } = this.context;
                 let userInfo = auth.user
                 let myDevice = userInfo.myDevice || []
+                console.log(myDevice)
 
                 let {
                     myDevices,
@@ -189,7 +190,7 @@ class MyDeviceManager extends React.Component{
 
             let myDevices = {}
             let notMyDevices = {}
-
+            console.log(auth.user)
             res.data.rows.map(item => {
                 if (auth.user.myDevice.includes(item.asset_control_number)) {
                     myDevices[item.asset_control_number] = item
