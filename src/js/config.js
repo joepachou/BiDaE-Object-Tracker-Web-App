@@ -541,7 +541,10 @@ const config = {
         iconOptions: {
             iconSize: process.env.MARKER_SIZE_IN_DESKTOP || 1,
             iconSizeForTablet: process.env.MARKER_SIZE_IN_TABLET || 1,
-            iconSizeForMobile: 20 || process.env.MARKER_SIZE_IN_MOBILE || 1,
+            iconSizeForMobile: process.env.MARKER_SIZE_IN_MOBILE || 1,
+            circleRadius: 25,
+            circleRadiusForTablet: 15,
+            circleRadiusForMobile: 8,
             showNumber: !false,
 
             /* Set the Marker dispersity that can be any positive number */
@@ -605,14 +608,14 @@ const config = {
             color: 'rgba(0, 0, 0, 0)',
             fillColor: 'orange',
             fillOpacity: 0.4,
-            radius: 25,
+            radius: 20,
         },
 
         lbeaconMarkerOption: {
             color: 'rgba(0, 0, 0, 0)',
             fillColor: 'orange',
             fillOpacity: 0.4,
-            radius: 15,
+            radius: 50,
         },
 
         /** Set the schema to select the color pin */
