@@ -15,7 +15,8 @@ import axios from 'axios';
 import BOTInput from '../presentational/BOTInput'
 import { 
     addObject,
-    deleteDevice
+    deleteDevice,
+    editObject
 } from "../../dataSrc"
 
 const SelectTable = selecTableHOC(ReactTable);
@@ -371,6 +372,7 @@ class ObjectTable extends React.Component{
                                             isShowEdit:true,
                                             selectedRowData: this.props.data[rowInfo.index],
                                             formTitle: 'edit object',
+                                            formPath: editObject,
                                             disableASN:true
                                         })
                                         }
