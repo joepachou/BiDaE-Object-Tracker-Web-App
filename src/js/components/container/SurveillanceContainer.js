@@ -311,7 +311,7 @@ class SurveillanceContainer extends React.Component {
                                         <Nav.Item className="mt-2">
                                             <Button
                                                 variant="primary"
-                                                className="mr-1 ml-2 text-capitalize" 
+                                                className="mr-1 ml-2 text-capitalize"
                                                 onClick={this.handleClickButton}
                                                 name="cleanPath"
                                                 disabled={(this.props.pathMacAddress==='')}
