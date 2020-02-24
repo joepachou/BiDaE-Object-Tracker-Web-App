@@ -237,11 +237,11 @@ var privateKey = process.env.PRIVATE_KEY && fs.readFileSync(__dirname + `/ssl/${
 var certificate = process.env.CERTIFICATE && fs.readFileSync(__dirname + `/ssl/${process.env.CERTIFICATE}`) 
 var ca_bundle = process.env.CA_BUNDLE && fs.readFileSync(__dirname + `/ssl/${process.env.CA_BUNDLE}`)
 
-var credentials = process.env.CA_BUNDLE ? { 
+var credentials = { 
     key: privateKey, 
     cert: certificate,
     ca: ca_bundle
-} : null
+}
 
 const httpsServer = https.createServer(credentials, app)
 
