@@ -533,17 +533,13 @@ class MainContainer extends React.Component{
         } else {
             
             let searchResultMac = [];
-
+            
             proccessedTrackingData.map(item => {
-                if (item.object_type == 0 && (item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0
-                    // fix 4.7.3
-                    || item.asset_control_number.indexOf(searchKey) >= 0
-                    // original
-                    // || item.asset_control_number.slice(10,14).indexOf(searchKey) >= 0
-                    // 
-                    || item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0) 
+                if (
+                    item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0 ||
+                    item.asset_control_number.indexOf(searchKey) >= 0 ||
+                    item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0 
                 ) {
-
                     item.searched = true
                     item.searchedType = -1;
                     searchResult.push(item)
@@ -714,6 +710,7 @@ class MainContainer extends React.Component{
                     <div id="page-wrap" className='mx-1 my-2 overflow-hidden' style={style.pageWrap} >
                         <Row id="mainContainer" className='d-flex w-100 justify-content-around mx-0' style={style.container}>
                             <Col sm={7} md={9} lg={8} xl={8} id='searchMap' className="pl-2 pr-1" >
+
                                 <InfoPrompt 
                                     searchKey={searchKey}
                                     searchResult={searchResult}

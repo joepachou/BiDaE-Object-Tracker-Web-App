@@ -504,7 +504,7 @@ const signin = (request, response) => {
 
                     let userInfo = {
                         name,
-                        myDevice: mydevice,
+                        myDevice: mydevice || [],
                         roles,
                         permissions,
                         freqSearchCount: freq_search_count,
@@ -514,16 +514,16 @@ const signin = (request, response) => {
                         locale_id,
                         locale
                     }
-                    
+
                     request.session.userInfo = userInfo
                     response.json({
                         authentication: true,
                         userInfo
                     })
                     pool.query(queryType.setVisitTimestamp(username))
-                        .catch(err => console.log("set visit timestamp: ",err))
+                        .then(res =>  console.log(`sign in success: ${name}`))
+                        .catch(err => console.log(`set visit timestamp fails ${err}`))
 
-                    console.log(`sign in success: ${name}`)
                 } else {
                     response.json({
                         authentication: false,
@@ -538,13 +538,13 @@ const signin = (request, response) => {
 }
 
 const signup = (request, response) => {
+    console.log(request.body)
 
     const { 
         name, 
         password, 
         roles,
         area_id,
-        shiftSelect,
         secondArea
     } = request.body;
 
@@ -554,22 +554,22 @@ const signup = (request, response) => {
     const signupPackage = {
         name,
         password: hash,
-        shiftSelect,
         area_id
     }
+
     pool.query(queryType.signup(signupPackage))
         .then(res => {
-            pool.query(queryType.insertUserData(name, roles, area_id,secondArea))
+            pool.query(queryType.insertUserData(name, roles, area_id, secondArea))
                 .then(res => {
                     console.log('sign up success')
                     response.status(200).json(res)
                 })
                 .catch(err => {
-                    console.log("sinup 2 error:", err)
+                    console.log(`sinup error ${err}`)
                 })
         })
         .catch(err => {
-            console.log("signup 1 fails" + err)
+            console.log(`signup fails ${err}`)
         })
 }
 

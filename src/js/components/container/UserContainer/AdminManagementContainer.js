@@ -115,6 +115,7 @@ class AdminManagementContainer extends React.Component{
         let {
             api
         } = this.state 
+
         auth[api](values)
             .then(res => {
                 this.getUserList()
@@ -125,7 +126,6 @@ class AdminManagementContainer extends React.Component{
                     showDeleteConfirmation:false,
                     deleteUserName:''
                 })
-                // this.getUserList()
             })
             .catch(err => {
                 console.log(err)

@@ -809,8 +809,7 @@ function signin(username) {
 
 }
 	
-
-function signup(signupPackage) {
+const signup = (signupPackage) => {
 
 	const text = 
 		`
@@ -1297,7 +1296,7 @@ const setVisitTimestamp = (username) => {
 	`
 }
 
-const insertUserData = (name, roles, area_id,secondArea) => {
+const insertUserData = (name, roles, area_id, secondArea) => {
 
 	if (secondArea =='') {
 		return `
@@ -1320,6 +1319,20 @@ const insertUserData = (name, roles, area_id,secondArea) => {
 				)
 			)`
 		)};
+
+		INSERT INTO user_area (
+			user_id, 
+			area_id
+		)
+		VALUES 
+			(
+				(
+					SELECT id 
+					FROM user_table 
+					WHERE name ='${name}'
+				),
+				${area_id}
+			)
 	`
 	}else{
 		return `
@@ -1358,10 +1371,22 @@ const insertUserData = (name, roles, area_id,secondArea) => {
 				'${sA}'
 			)`
 		)};
-	
+
+		INSERT INTO user_area (
+			user_id, 
+			area_id
+		)
+		VALUES 
+			(
+				(
+					SELECT id 
+					FROM user_table 
+					WHERE name ='${name}'
+				),
+				${area_id}
+			)
 	`
 	}
-
 }
 
 const addEditObjectRecord = (formOption, username, filePath) => {
