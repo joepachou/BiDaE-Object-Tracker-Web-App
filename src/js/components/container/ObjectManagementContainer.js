@@ -119,7 +119,7 @@ class ObjectManagementContainer extends React.Component{
 
             let physicianList = res.data.rows
                 .filter(user => {
-                    return user.role_type == "care_provider"
+                    return user.role_type.includes("care_provider")
                 })
 
             this.setState({
