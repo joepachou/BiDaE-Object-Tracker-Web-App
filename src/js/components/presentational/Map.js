@@ -162,7 +162,7 @@ class Map extends React.Component {
         if (isBrowser) {
             this.scalableIconSize = parseInt(this.props.mapConfig.iconOptions.iconSize) + this.resizeConst
             this.scalableCircleRadius = parseInt(this.props.mapConfig.iconOptions.circleRadius) * this.resizeFactor
-            this.scalableNumberSize = Math.floor(this.scalableIconSize / 3);
+            this.scalableNumberSize = Math.floor(this.scalableIconSize / 2.5);
 
         } else if(isTablet) {
             this.scalableIconSize = parseInt(this.props.mapConfig.iconOptions.iconSizeForTablet) + this.resizeConst
@@ -285,6 +285,7 @@ class Map extends React.Component {
 
         let [{areaId}] = stateReducer
         
+        this.locationMonitorLayer.clearLayers()
         /** Create the markers of lbeacons of perimeters and fences
          *  and onto the map  */
         if (locationMonitorConfig[areaId] 
@@ -303,8 +304,6 @@ class Map extends React.Component {
         let {
             mapConfig,
         } = this.props
-
-        layer.clearLayers()
 
         this.calculateScale()
 
@@ -372,6 +371,7 @@ class Map extends React.Component {
 
         const iconSize = [this.scalableIconSize, this.scalableIconSize];
         const numberSize = this.scalableNumberSize;
+
         let counter = 0;
         this.filterTrackingData(_.cloneDeep(this.props.proccessedTrackingData))
         .map((item, index)  => {
@@ -469,13 +469,15 @@ class Map extends React.Component {
      * @param   mac_address The Mac address of the object retrieved from DB. 
      * @param   lbeacon_coordinate The lbeacon's coordinate processed by createLbeaconCoordinate().*/
     macAddressToCoordinate = (mac_address, lbeacon_coordinate) => {
-        const xx = mac_address.slice(15,16);
-        const yy = mac_address.slice(16,17);
-        const multiplier = this.props.mapConfig.iconOptions.markerDispersity; 
-		const origin_x = lbeacon_coordinate[1] - parseInt(8, 16) * multiplier ; 
-		const origin_y = lbeacon_coordinate[0] - parseInt(8, 16) * multiplier ;
-		const xxx = origin_x + parseInt(xx, 16) * multiplier;
-        const yyy = origin_y + parseInt(yy, 16) * multiplier;
+        // const xx = mac_address.slice(15,16);
+        // const yy = mac_address.slice(16,17);
+        // const multiplier = this.props.mapConfig.iconOptions.markerDispersity; 
+		// const origin_x = lbeacon_coordinate[1] - parseInt(8, 16) * multiplier ; 
+		// const origin_y = lbeacon_coordinate[0] - parseInt(8, 16) * multiplier ;
+		// const xxx = origin_x + parseInt(xx, 16) * multiplier;
+        // const yyy = origin_y + parseInt(yy, 16) * multiplier;
+        const xxx = lbeacon_coordinate[1]
+        const yyy = lbeacon_coordinate[0]
         return [yyy, xxx];
     }
     

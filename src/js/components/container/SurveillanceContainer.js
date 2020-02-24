@@ -85,7 +85,7 @@ class SurveillanceContainer extends React.Component {
     }
 
     handleConfirmFormSubmit = (e) => {
-        this.props.setFence(this.state.type)
+        this.props.setMonitor(this.state.type)
         this.handleClosePdfForm()
     }
 
