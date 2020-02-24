@@ -536,13 +536,13 @@ const signin = (request, response) => {
 }
 
 const signup = (request, response) => {
+    console.log(request.body)
 
     const { 
         name, 
         password, 
         roles,
         area_id,
-        shiftSelect,
         secondArea
     } = request.body;
 
@@ -552,22 +552,22 @@ const signup = (request, response) => {
     const signupPackage = {
         name,
         password: hash,
-        shiftSelect,
         area_id
     }
+
     pool.query(queryType.signup(signupPackage))
         .then(res => {
-            pool.query(queryType.insertUserData(name, roles, area_id,secondArea))
+            pool.query(queryType.insertUserData(name, roles, area_id, secondArea))
                 .then(res => {
                     console.log('sign up success')
                     response.status(200).json(res)
                 })
                 .catch(err => {
-                    console.log("sinup 2 error:", err)
+                    console.log(`sinup error ${err}`)
                 })
         })
         .catch(err => {
-            console.log("signup 1 fails" + err)
+            console.log(`signup fails ${err}`)
         })
 }
 
