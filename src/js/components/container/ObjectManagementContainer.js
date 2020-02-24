@@ -78,9 +78,8 @@ class ObjectManagementContainer extends React.Component{
 
     componentDidMount = () => {
         this.getTransferredLocation();
-        // this.getData();
         this.getDataImport()
-        this.getUserList();
+        this.getPhysicianList();
         this.getLbeaconData();
         this.getAreaTable()
     }
@@ -110,7 +109,7 @@ class ObjectManagementContainer extends React.Component{
         })
     }
 
-    getUserList = () => {
+    getPhysicianList = () => {
         let { locale } = this.context
         axios.post(getUserList, {
             locale: locale.abbr 
@@ -190,6 +189,7 @@ class ObjectManagementContainer extends React.Component{
 
        
     }
+    
     getTransferredLocation = () => {
         let { locale } = this.context
         axios.get(getTransferredLocation)
@@ -234,7 +234,6 @@ class ObjectManagementContainer extends React.Component{
             let typeList = {}
 
             column.push({
-                // Header: locale.texts['remove'.toUpperCase().replace(/ /g, '_')],
                 Header: "",
                 accessor: "Delete Option",
                 minWidth: 60,
@@ -327,6 +326,7 @@ class ObjectManagementContainer extends React.Component{
             console.log(err);
         })
     }
+
     getMonitorTypeArray = (item, type) => {
         return Object.keys(config.monitorType)
             .reduce((checkboxGroup, index) => {
@@ -336,6 +336,7 @@ class ObjectManagementContainer extends React.Component{
                 return checkboxGroup
             }, [])
     }
+
     getLbeaconData = () => {
         let { locale } = this.context
         axios.post(getLbeaconTable, {
@@ -360,10 +361,7 @@ class ObjectManagementContainer extends React.Component{
         })
     }
  
- 
- 
-
-    handleSubmitForm = () => { //重整用
+    refreshData = () => { //重整用
         setTimeout(this.getData, 500) 
         setTimeout(this.getDataPatient, 500) 
         setTimeout(this.getDataImport, 500)  
@@ -456,6 +454,7 @@ class ObjectManagementContainer extends React.Component{
         return filteredData
         
     }
+
     addObjectFilter = (key, attribute, source) => {
 
         this.state.objectFilter = this.state.objectFilter.filter(filter => source != filter.source)
@@ -465,10 +464,12 @@ class ObjectManagementContainer extends React.Component{
         })
         this.filterObjects()
     }
+
     removeObjectFilter = (source) => {
         this.state.objectFilter = this.state.objectFilter.filter(filter => source != filter.source)
         this.filterObjects()
     }
+
     filterObjects = () => {
 
         let filteredData = this.state.objectFilter.reduce((acc, curr) => {
@@ -479,6 +480,7 @@ class ObjectManagementContainer extends React.Component{
             filteredData
         })
     }
+
     addPatientFilter = (key, attribute, source) => {
         this.state.patientFilter = this.state.patientFilter.filter(filter => source != filter.source)
         this.state.patientFilter.push({
@@ -487,10 +489,12 @@ class ObjectManagementContainer extends React.Component{
        
         this.filterPatients()
     }
+
     removePatientFilter = (source) => {
         this.state.patientFilter = this.state.patientFilter.filter(filter => source != filter.source)
         this.filterPatients()
     }
+
     filterPatients = () => {
         let filteredPatient = this.state.patientFilter.reduce((acc, curr) => {
             return this.filterData(acc, curr.key, curr.attribute)
@@ -506,7 +510,6 @@ class ObjectManagementContainer extends React.Component{
         } = this.state
 
         const { locale } = this.context
- 
 
         let typeSelection = filterSelection.typeList ? Object.values(filterSelection.typeList) : null;
     
@@ -531,12 +534,11 @@ class ObjectManagementContainer extends React.Component{
                         </AccessControl>
                     </TabList>
 
-
                     <TabPanel> 
                         <ObjectTable
                             data={this.state.filteredData}
                             columns={this.state.column}
-                            handleSubmitForm={this.handleSubmitForm}  
+                            refreshData={this.refreshData}  
                             importData={this.state.dataImport}
                             objectTable={this.state.objectTable} 
                             addObjectFilter = {this.addObjectFilter}
@@ -550,7 +552,7 @@ class ObjectManagementContainer extends React.Component{
                         <PatientTable
                             data={this.state.filteredPatient}
                             columns={this.state.columnPatient} 
-                            handleSubmitForm={this.handleSubmitForm}  
+                            refreshData={this.refreshData}  
                             importData={this.state.dataImport}
                             objectTable={this.state.objectTable} 
                             addPatientFilter = {this.addPatientFilter}
@@ -567,7 +569,7 @@ class ObjectManagementContainer extends React.Component{
                         <ImportObjectTable
                             dataImport = {this.state.dataImport}
                             columnImport = {this.state.columnImport}
-                            handleSubmitForm={this.handleSubmitForm}
+                            refreshData={this.refreshData}
                         />
                     </TabPanel>
 
@@ -575,17 +577,15 @@ class ObjectManagementContainer extends React.Component{
                         <ImportPatientTable
                             dataImportPatient = {this.state.dataImportPatient}
                             columnImport = {this.state.columnImport}
-                            handleSubmitForm={this.handleSubmitForm}
+                            refreshData={this.refreshData}
                         />
                     </TabPanel>
                 </Tabs>
-
-
                 <DissociationForm
                     show={this.state.isShowEditImportTable}
                     title={this.state.formTitle}
                     selectedObjectData={this.state.selectedObjectData || 'handleAllDelete'}
-                    handleSubmitForm={this.handleSubmitForm}
+                    refreshData={this.refreshData}
                     formPath={this.state.formPath}
                     objectTable={this.state.objectTable}
                     handleClose={this.handleClose}
@@ -595,7 +595,6 @@ class ObjectManagementContainer extends React.Component{
                         }, {})
                     }
                 />
-
             </Container>
         )
     }

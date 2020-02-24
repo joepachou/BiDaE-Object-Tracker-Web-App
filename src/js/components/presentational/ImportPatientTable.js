@@ -39,7 +39,7 @@ class ImportObjectTable extends React.Component{
         this.setState({
             showDeleteConfirmation:false
         })
-        this.props.handleSubmitForm()
+        this.props.refreshData()
     }
 
 

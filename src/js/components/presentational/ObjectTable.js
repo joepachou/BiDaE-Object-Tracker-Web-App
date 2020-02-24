@@ -1,6 +1,12 @@
 import React from 'react';
-import { Form, Button,Container,   ButtonToolbar,Row,Col } from 'react-bootstrap';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import { 
+    Form, 
+    Button, 
+    Container, 
+    ButtonToolbar,
+    Row,
+    Col 
+} from 'react-bootstrap';
 import { AppContext } from '../../context/AppContext';
 import ReactTable from 'react-table'; 
 import styleConfig from '../../styleConfig';
@@ -10,7 +16,6 @@ import BindForm from '../container/BindForm'
 import DissociationForm from '../container/DissociationForm'
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
 import Select from 'react-select';
-import config from '../../config'
 import axios from 'axios';
 import BOTInput from '../presentational/BOTInput'
 import { 
@@ -21,9 +26,10 @@ import {
 
 const SelectTable = selecTableHOC(ReactTable);
 
-
 class ObjectTable extends React.Component{
+
     static contextType = AppContext
+
     state = {
         tabIndex:'', 
         isShowEdit:false,
@@ -33,31 +39,13 @@ class ObjectTable extends React.Component{
         isShowBind:false,
         showDeleteConfirmation:false,
         isShowEditImportTable:false,
-        bindCase:0,
+        bindCase: 0,
         warningSelect : 0,
-        filterSelection: {
-            statusOptions: config.statusOptions.map(item => {
-                return {
-                    value: item,
-                    label: this.context.locale.texts[item.replace(/ /g, '_').toUpperCase()]
-                }
-            }),
-            monitorTypeOptions: config.monitorOptions.map(item => {
-                return {
-                    value: item,
-                    label: item 
-                }
-            })
-        },
         selectAll: false,
         selection: [],
         formPath:'',
         formTitle:'',
-        disableASN:false
-    }
-
-    componentDidUpdate = (prevProps, prevState) => {
-       
+        disableASN: false
     }
 
     handleClose = () => {
@@ -117,7 +105,7 @@ class ObjectTable extends React.Component{
             showDeleteConfirmation: false,
             disableASN:false,
         })
-        this.props.handleSubmitForm()
+        this.props.refreshData()
     }
 
 
@@ -204,7 +192,6 @@ class ObjectTable extends React.Component{
     render(){
         const {  
             selectedRowData,
-            filterSelection ,
             selectAll,
             selectType,
         } = this.state
@@ -421,9 +408,7 @@ class ObjectTable extends React.Component{
                     show={this.state.showDeleteConfirmation} 
                     handleClose={this.handleClose}
                     handleSubmit={
-             
-                    this.state.warningSelect ==1 ?  this.objectMultipleDelete :null
-              
+                        this.state.warningSelect == 1 ?  this.objectMultipleDelete :null
                     }
                 />
             </div>
