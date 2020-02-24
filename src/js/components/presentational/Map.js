@@ -162,10 +162,14 @@ class Map extends React.Component {
         if (isBrowser) {
             this.scalableIconSize = parseInt(this.props.mapConfig.iconOptions.iconSize) + this.resizeConst
             this.scalableCircleRadius = parseInt(this.props.mapConfig.iconOptions.circleRadius) * this.resizeFactor
+            this.scalableNumberSize = Math.floor(this.scalableIconSize / 3);
+
         } else if(isTablet) {
             this.scalableIconSize = parseInt(this.props.mapConfig.iconOptions.iconSizeForTablet) + this.resizeConst
             this.scalableCircleRadius = 15 * this.resizeFactor
             this.scalableCircleRadius = parseInt(this.props.mapConfig.iconOptions.circleRadiusForTablet) * this.resizeFactor
+            this.scalableNumberSize = Math.floor(this.scalableIconSize / 3);
+
         } else {
             this.scalableIconSize = parseInt(this.props.mapConfig.iconOptions.iconSizeForMobile) + this.resizeConst
             this.scalableNumberSize = Math.floor(this.scalableIconSize / 3);
