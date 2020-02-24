@@ -336,6 +336,7 @@ const editObject = (request, response) => {
                 exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 9999 -c cmd_reload_geo_fence_setting -r geofence_object -f area_one -a ${area_id}`.split(' '), function(err, data){
                     if(err){
                         console.log(`execute reload geofence setting fails ${err}`)
+                        response.status(200).json(res)
                     }else{
                         console.log(`execute reload geofence setting success`)
                         response.status(200).json(res)
@@ -375,6 +376,7 @@ const editPatient = (request, response) => {
                 exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 9999 -c cmd_reload_geo_fence_setting -r geofence_object -f area_one -a ${area_id}`.split(' '), function(err, data){
                     if(err){
                         console.log(`execute reload geofence setting fails ${err}`)
+                        response.status(200).json(res)
                     }else{
                         console.log(`execute reload geofence setting success`)
                         response.status(200).json(res)
@@ -1043,6 +1045,7 @@ const setGeofenceConfig = (request, response) => {
                 exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 9999 -c cmd_reload_geo_fence_setting -r geofence_list -f area_one -a ${area_id}`.split(' '), function(err, data){
                     if(err){
                         console.log(`execute reload geofence setting fails ${err}`)
+                        response.status(200).json(res)
                     }else{
                         console.log(`execute reload geofence setting success`)
                         response.status(200).json(res)
@@ -1073,6 +1076,7 @@ const addGeofenceConfig = (request, response) => {
                 exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 9999 -c cmd_reload_geo_fence_setting -r geofence_list -f area_one -a ${area_id}`.split(' '), function(err, data){
                     if(err){
                         console.log(`execute reload geofence setting fails ${err}`)
+                        response.status(200).json(res)
                     }else{
                         console.log(`execute reload geofence setting success`)
                         response.status(200).json(res)
@@ -1102,6 +1106,7 @@ const setMonitorEnable = (request, response) => {
                 exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 9999 -c cmd_reload_geo_fence_setting -r geofence_list -f area_one -a ${areaId}`.split(' '), function(err, data){
                     if(err){
                         console.log(`execute reload geofence setting fails ${err}`)
+                        response.status(200).json(res)
                     }else{
                         console.log(`execute reload geofence setting success`)
                         response.status(200).json(res)
