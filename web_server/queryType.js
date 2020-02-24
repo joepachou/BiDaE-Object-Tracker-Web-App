@@ -545,32 +545,29 @@ function editObject (formOption) {
 	return query;
 }
 
-
-
 const editPatient = (formOption) => {
 	const text = `
 		Update object_table 
-		SET name = $1,
-			mac_address = $2,
+		SET name = $2,
+			mac_address = $3,
 			physician_id = $4,
 			area_id = $5,
 			object_type = $6,
 			room = $7,
 			monitor_type = $8
-		WHERE asset_control_number = $3
+		WHERE asset_control_number = $1
 	`;
 		
 	const values = [
+		formOption.asset_control_number,
 		formOption.name,
 		formOption.mac_address,
-		formOption.asset_control_number,
 		formOption.physicianIDNumber,
 		formOption.area_id,
 		formOption.gender_id,
 		formOption.room,
 		formOption.monitor_type
 	];
-
 
 	const query = {
 		text,
@@ -579,8 +576,6 @@ const editPatient = (formOption) => {
 
 	return query;
 }
-
-
 
 function addObject (formOption) {
 	const text = `

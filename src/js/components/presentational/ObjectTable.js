@@ -172,7 +172,6 @@ class ObjectTable extends React.Component{
                     isShowEdit: true,
                     formTitle: name,
                     selectedRowData: [],
-                    selectedRowData_Patient:[],
                     formPath: addObject,
                     disableASN:false
                 })
@@ -180,7 +179,7 @@ class ObjectTable extends React.Component{
             case "associate":
                 this.setState({
                     isShowBind: true,
-                    bindCase:1,
+                    bindCase: 1,
                 })
             break; 
 
@@ -223,173 +222,163 @@ class ObjectTable extends React.Component{
             toggleSelection,
             selectType
         };
+
         const { locale } = this.context 
+
         return(
             <div> 
-                        <ButtonToolbar>
-                            <Button 
-                                variant="outline-primary" 
-                                className='text-capitalize mr-2 mb-1'
-                                name="associate"
-                                size="sm"
-                                onClick={this.handleClickButton}
-                            >
-                                {locale.texts.ASSOCIATE}
-                            </Button>
-                            <Button 
-                                variant="outline-primary" 
-                                className='text-capitalize mr-2 mb-1'
-                                size="sm"
-                                name="add object"
-                                onClick={this.handleClickButton}
-                            >
-                                {locale.texts.ADD_OBJECT}
-                            </Button>
-                            <Button 
-                                variant="outline-primary" 
-                                className='text-capitalize mr-2 mb-1'
-                                size="sm"
-                                name="dissociation"
-                                onClick={this.handleClickButton}
-                            >
-                                {locale.texts.DISSOCIATE}
-                            </Button>
-                            <Button 
-                                variant="outline-primary" 
-                                className='text-capitalize mr-2 mb-1'
-                                size="sm"
-                                name="deleteObject"
-                                onClick={this.handleClickButton}
-                            >
-                                {locale.texts.MULTIPLEDELETE}
-                            </Button>
-                            <div style={{width: '200px'}}>
-                                
-                            </div>
+                <ButtonToolbar>
+                    <Button 
+                        variant="outline-primary" 
+                        className='text-capitalize mr-2 mb-1'
+                        name="associate"
+                        size="sm"
+                        onClick={this.handleClickButton}
+                    >
+                        {locale.texts.ASSOCIATE}
+                    </Button>
+                    <Button 
+                        variant="outline-primary" 
+                        className='text-capitalize mr-2 mb-1'
+                        size="sm"
+                        name="add object"
+                        onClick={this.handleClickButton}
+                    >
+                        {locale.texts.ADD_OBJECT}
+                    </Button>
+                    <Button 
+                        variant="outline-primary" 
+                        className='text-capitalize mr-2 mb-1'
+                        size="sm"
+                        name="dissociation"
+                        onClick={this.handleClickButton}
+                    >
+                        {locale.texts.DISSOCIATE}
+                    </Button>
+                    <Button 
+                        variant="outline-primary" 
+                        className='text-capitalize mr-2 mb-1'
+                        size="sm"
+                        name="deleteObject"
+                        onClick={this.handleClickButton}
+                    >
+                        {locale.texts.MULTIPLEDELETE}
+                    </Button>
+                    <div style={{width: '200px'}}>
+                        
+                    </div>
+                    
+                </ButtonToolbar>
+
                             
-                        </ButtonToolbar>
-
-                       
-                        
-                                  
-                        <Row className="my-1" noGutters>
-                            <Col>
-                                <Select
-                                    name={"Select Type"}
-                                    className={'float-right w-100'}
-                                    styles={styleConfig.reactSelect}
-                                    onChange={(value) => { 
-                                        if(value){
-                                            this.props.addObjectFilter(value.label, ['type'], 'type select' )
-                                        }else{
-                                            this.props.removeObjectFilter('type select')
-                                        }
-                                    }}
-                                    options={this.props.typeSelection}
-                                    isClearable={true}
-                                    isSearchable={false}
-                                    placeholder={'Select Type'}
-                                    
-                                />
-                            </Col>
-                            <Col>
-                                <Select
-                                    name={"Select Area"}
-                                    className={'float-right w-100'}
-                                    styles={styleConfig.reactSelect}
-                                    onChange={(value) => {
-                                        if(value){
-                                            this.props.addObjectFilter(value.label, ['area'], 'area select')
-                                        }else{
-                                            this.props.removeObjectFilter('area select')
-                                        }
-                                    }}
-                                    options={this.props.filterSelection.areaSelection}
-                                    isClearable={true}
-                                    isSearchable={false}
-                                    placeholder={'Select Area'}
-                                />
-                            </Col>
-                            <Col>
-                                <Select
-                                    name={"Select Status"}
-                                    className={'float-right w-100'}
-                                    styles={styleConfig.reactSelect}
-                                    onChange={(value) => {
-                                        if(value){
-                                            this.props.addObjectFilter(value.label, ['status'], 'status select')
-                                        }else{
-                                            this.props.removeObjectFilter('status select')
-                                        }
-                                    }}
-                                    options={this.props.filterSelection.statusOptions}
-                                    isClearable={true}
-                                    isSearchable={false}
-                                    placeholder={'Select Status'}
-                                />
-                            </Col>
-
-                            <Col>
-                                <BOTInput
-                                    className={'float-right'}
-                                    
-                                    placeholder={''}
-                                    getSearchKey={(key) => {
-                                        this.props.addObjectFilter(
-                                            key, 
-                                            ['type', 'area', 'status', 'macAddress', 'acn' ], 
-                                            'search bar'
-                                        )
-                                    }}
-                                    clearSearchResult={null}    
-                                />
-                            </Col>
-                        </Row>
-                        
-
-
-
-
-
-
-                        <SelectTable
-                            keyField='id'
-                            data={this.props.data}
-                            columns={this.props.columns}
-                            ref={r => (this.selectTable = r)}
-                            className="-highlight"
-                            name={'obj_table'}
-                            style={{height:'75vh'}}
-                            {...extraProps}
-         
-                
-                            getTrProps={(state, rowInfo, column, instance) => {
-                                return {
-                                          
-                                    onClick: (e) => { 
-                                        if (!e.target.type) {
-                                            this.setState({
-                                            isShowEdit:true,
-                                            selectedRowData: this.props.data[rowInfo.index],
-                                            formTitle: 'edit object',
-                                            formPath: editObject,
-                                            disableASN:true
-                                        })
-                                        }
-                                        let id = (rowInfo.index+1).toString()
-                                        this.toggleSelection(id)
-                                    },
+                <Row className="my-1" noGutters>
+                    <Col>
+                        <Select
+                            name={"Select Type"}
+                            className={'float-right w-100'}
+                            styles={styleConfig.reactSelect}
+                            onChange={(value) => { 
+                                if(value){
+                                    this.props.addObjectFilter(value.label, ['type'], 'type select' )
+                                }else{
+                                    this.props.removeObjectFilter('type select')
                                 }
-                            }} 
+                            }}
+                            options={this.props.typeSelection}
+                            isClearable={true}
+                            isSearchable={false}
+                            placeholder={'Select Type'}
+                            
                         />
+                    </Col>
+                    <Col>
+                        <Select
+                            name={"Select Area"}
+                            className={'float-right w-100'}
+                            styles={styleConfig.reactSelect}
+                            onChange={(value) => {
+                                if(value){
+                                    this.props.addObjectFilter(value.label, ['area'], 'area select')
+                                }else{
+                                    this.props.removeObjectFilter('area select')
+                                }
+                            }}
+                            options={this.props.filterSelection.areaSelection}
+                            isClearable={true}
+                            isSearchable={false}
+                            placeholder={'Select Area'}
+                        />
+                    </Col>
+                    <Col>
+                        <Select
+                            name={"Select Status"}
+                            className={'float-right w-100'}
+                            styles={styleConfig.reactSelect}
+                            onChange={(value) => {
+                                if(value){
+                                    this.props.addObjectFilter(value.label, ['status'], 'status select')
+                                }else{
+                                    this.props.removeObjectFilter('status select')
+                                }
+                            }}
+                            options={this.props.filterSelection.statusOptions}
+                            isClearable={true}
+                            isSearchable={false}
+                            placeholder={'Select Status'}
+                        />
+                    </Col>
 
-            
-  
-
+                    <Col>
+                        <BOTInput
+                            className={'float-right'}
+                            
+                            placeholder={''}
+                            getSearchKey={(key) => {
+                                this.props.addObjectFilter(
+                                    key, 
+                                    ['type', 'area', 'status', 'macAddress', 'acn' ], 
+                                    'search bar'
+                                )
+                            }}
+                            clearSearchResult={null}    
+                        />
+                    </Col>
+                </Row>
+                
+                <SelectTable
+                    keyField='id'
+                    data={this.props.data}
+                    columns={this.props.columns}
+                    ref={r => (this.selectTable = r)}
+                    className="-highlight"
+                    name={'obj_table'}
+                    style={{height:'75vh'}}
+                    {...extraProps}
+    
+        
+                    getTrProps={(state, rowInfo, column, instance) => {
+                        return {
+                                    
+                            onClick: (e) => { 
+                                if (!e.target.type) {
+                                    this.setState({
+                                    isShowEdit:true,
+                                    selectedRowData: this.props.data[rowInfo.index],
+                                    formTitle: 'edit object',
+                                    formPath: editObject,
+                                    disableASN:true
+                                })
+                                }
+                                let id = (rowInfo.index+1).toString()
+                                this.toggleSelection(id)
+                            },
+                        }
+                    }} 
+                />
                 <EditObjectForm 
                     show={this.state.isShowEdit} 
                     title={this.state.formTitle} 
-                    selectedObjectData={selectedRowData || ''} 
+                    selectedRowData={selectedRowData || ''} 
                     handleSubmitForm={this.handleSubmitForm}
                     handleClose={this.handleClose}
                     formPath={this.state.formPath}
@@ -398,9 +387,7 @@ class ObjectTable extends React.Component{
                     objectTable={this.props.objectTable}
                     disableASN = {this.state.disableASN  }
                 />     
- 
-                
-                     <BindForm
+                <BindForm
                     show = {this.state.isShowBind} 
                     bindCase = {this.state.bindCase}
                     title={this.state.formTitle} 
@@ -419,7 +406,7 @@ class ObjectTable extends React.Component{
                 <DissociationForm
                     show={this.state.isShowEditImportTable} 
                     title={this.state.formTitle} 
-                    selectedObjectData={this.state.selectedObjectData || 'handleAllDelete'} 
+                    selectedRowData={this.state.selectedRowData || 'handleAllDelete'} 
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={'xx'}
                     objectTable={this.props.objectTable}

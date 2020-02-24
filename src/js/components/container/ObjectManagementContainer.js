@@ -109,15 +109,19 @@ class ObjectManagementContainer extends React.Component{
             console.log(err)
         })
     }
+
     getUserList = () => {
         let { locale } = this.context
         axios.post(getUserList, {
             locale: locale.abbr 
         })
         .then(res => {
-            let physicianList = res.data.rows.filter(user => {
-                return user.role_type == "care_provider"
-            })
+
+            let physicianList = res.data.rows
+                .filter(user => {
+                    return user.role_type == "care_provider"
+                })
+
             this.setState({
                 physicianList,
             })
@@ -126,6 +130,7 @@ class ObjectManagementContainer extends React.Component{
             console.log(err)
         })
     }
+
     getDataImport = () => {
         let { locale } = this.context
         axios.post(getImportTable, {
@@ -213,6 +218,7 @@ class ObjectManagementContainer extends React.Component{
             this.getData()
         })
     }
+
     getData = () => {
         let { locale } = this.context
         axios.post(getObjectTable, {
@@ -259,9 +265,11 @@ class ObjectManagementContainer extends React.Component{
 
             res.data.rows.map(item => {
                 if (item.object_type != 0) {
+
                     item.monitor_type = this.getMonitorTypeArray(item, 'patient').join('/')
                     item.object_type = locale.texts.genderSelect[item.object_type]
                     dataPatient.push(item)
+
                 } else {
                     item.monitor_type = this.getMonitorTypeArray(item, 'object').join('/')
 
@@ -537,8 +545,6 @@ class ObjectManagementContainer extends React.Component{
                             filterSelection={this.state.filterSelection}
                         /> 
                     </TabPanel>
-
-
 
                     <TabPanel>
                         <PatientTable
