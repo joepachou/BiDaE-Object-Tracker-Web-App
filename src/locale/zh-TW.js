@@ -245,7 +245,7 @@ const tw = {
     ASSET_CONTROL_NUMBER_IS_NOT_FOUND: "未有符合的財產編號",
     INCORRECT:"帳號錯誤",
     PASSWORD_INCORRECT:"密碼錯誤",
-    AUTHORITY_NOT_ENOUGH:"權限不足",
+    AUTHORITY_IS_NOT_ENOUGH:"權限不足",
     ACCOUNT_NOT_BELONG_THIS_AREA:"該帳號不屬於此區域",
 
     /** Place Holder */

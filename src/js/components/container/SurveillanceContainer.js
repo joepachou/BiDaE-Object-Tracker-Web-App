@@ -13,7 +13,7 @@ import { BrowserView, TabletView, MobileOnlyView, isBrowser, isTablet, isMobileO
 import QRcodeContainer from './QRcode'
 import InfoPrompt from '../presentational/InfoPrompt'
 import PdfDownloadFormForTablet from './PdfDownloadFormForTablet'
-import GeneralConfirmForm from '../container/GeneralConfirmForm'
+import GeneralConfirmForm from '../presentational/GeneralConfirmForm'
 
 class SurveillanceContainer extends React.Component {
 

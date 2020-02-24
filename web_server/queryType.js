@@ -100,29 +100,8 @@ const getTrackingTableByMacAddress = (object_mac_address) => {
 			AND  record_timestamp > now() - interval '1 hour'
 			ORDER BY  record_timestamp ASC
 			`;
-	//console.log(text)
 	return text;
 }
-const getImportDataFromBinding = () => {
-
-	let text = '';
-	
-		text +=`
-			SELECT 
-				object_import_table.name, 
-				object_import_table.asset_control_number,
-				object_import_table.type,
-				object_import_table.id,
-				object_import_table.bindflag,
-				object_import_table.mac_address
-			FROM object_import_table
-			Where object_import_table.bindflag = 'Already Binding'
-
-			ORDER BY object_import_table.asset_control_number ASC	
-		`;
-	
-	return text
-} 
 
 const getObjectTable = (area_id, objectType ) => {
 
@@ -730,7 +709,10 @@ function signin(username) {
 		roles
 			AS
 				(
-					SELECT user_role.user_id, user_role.role_id, roles.name as role_name 
+					SELECT 
+						user_role.user_id, 
+						user_role.role_id, 
+						roles.name as role_name 
 					FROM user_role
 					INNER JOIN roles
 					ON roles.id = user_role.role_id
@@ -1385,8 +1367,8 @@ const insertUserData = (name, roles, area_id, secondArea) => {
 }
 
 const addEditObjectRecord = (formOption, username, filePath) => {
+
 	let item = formOption
-	console.log(formOption)
 	const text = `
 		INSERT INTO edit_object_record (
 			edit_user_id, 
@@ -1545,7 +1527,16 @@ const confirmValidation = (username) => {
 				SELECT id
 				FROM user_table
 				WHERE user_table.name = $1
-			) as user_id
+			) as user_id,
+			ARRAY (
+				SELECT role_id
+				FROM user_role
+				WHERE user_role.user_id = (
+					SELECT id
+					FROM user_table 
+					WHERE user_table.name = '${username}'
+				)
+			) as roles
 
 		FROM user_table
 
@@ -1883,7 +1874,6 @@ function deleteSameNameSearchQueue(keyType, keyWord){
 	var text = `DELETE FROM search_result_queue where (key_type = '${keyType}' AND key_word = '${keyWord}') 
 	OR 
 		id NOT IN (SELECT id FROM search_result_queue ORDER BY query_time desc LIMIT 5) RETURNING *;`
-	// console.log(text)
 	return text
 }
 function backendSearch_writeQueue(keyType, keyWord, mac_addresses, pin_color_index){
@@ -2027,8 +2017,8 @@ function modifyTransferredLocation(type, data){
     }else{
         console.log('modifyTransferredLocation: unrecognized command type')
     }
-    console.log(query)
-    return query
+
+	return query
 }
 
 const setMonitorEnable = (enable, areaId, type) => {

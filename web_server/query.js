@@ -430,12 +430,12 @@ const addPatient = (request, response) => {
     const formOption = request.body.formOption
     pool.query(queryType.addPatient(formOption))
         .then(res => {
-            console.log("Add Patient Success");
+            console.log("add patient success");
             response.status(200).json(res)
         })
         .catch(err => {
  
-            console.log("Add Patient Fails: " + err)
+            console.log(`add patient fails ${err}`)
             response.status(500).json({
                 message:'not good'
             })
@@ -481,6 +481,7 @@ const signin = (request, response) => {
 
     pool.query(queryType.signin(username))
         .then(res => {
+            console.log(res.rows[0])
             if (res.rowCount < 1) {
                 console.log(`sign in fail: username or password is incorrect`)
                 response.json({
@@ -967,47 +968,46 @@ const checkoutViolation = (request, response) => {
 }
 
 const confirmValidation = (request, response) => {
-    const locale = request.body.locale
-    let { username, password } = request.body
+    let { 
+        username, 
+        password 
+    } = request.body
     pool.query(queryType.confirmValidation(username))
         .then(res => {
             if (res.rowCount < 1) {
                 response.json({
                     confirmation: false,
-                    message: locale.texts.INCORRECT
+                    message: 'incorrect'
                 })
             } else {
                 const hash = res.rows[0].password
                 
                 if (bcrypt.compareSync(password, hash)) {
                     let { 
-                        name, 
-                        role, 
-                        id
+                        roles, 
                     } = res.rows[0]
-
-                    let userInfo = {
-                        name,
-                        role,
-                        id,
+                    
+                    /** authenticate if user is care provider */
+                    if (roles.includes('3')) {
+                        response.json({
+                            confirmation: true,
+                        })
+                    } else {
+                        response.json({
+                            confirmation: false,
+                            message: 'authority is not enough'
+                        })
                     }
-                    request.session.userInfo = userInfo
-                    response.json({
-                        confirmation: true,
-                        user_id:res.rows[0].user_id,
-                        role_id:res.rows[0].role_id,
-                        areas_id:res.rows[0].areas_id
-                    })
                 } else {
                     response.json({
                         confirmation: false,
-                        message: locale.texts.PASSWORD_INCORRECT
+                        message: 'password incorrect'
                     })
                 }
             }
         })
         .catch(err => {
-            console.log(`confirm validation fail: ${err}`)
+            console.log(`confirm validation fails ${err}`)
         })
 }
 
