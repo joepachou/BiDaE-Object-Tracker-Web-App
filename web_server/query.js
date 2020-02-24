@@ -538,7 +538,6 @@ const signin = (request, response) => {
 }
 
 const signup = (request, response) => {
-    console.log(request.body)
 
     const { 
         name, 
