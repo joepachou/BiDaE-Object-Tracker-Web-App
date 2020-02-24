@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SelectInputCheckbox = (props) => {
+const BOTCheckbox = (props) => {
     return (
         <label className="container">
             <input 
@@ -14,7 +14,6 @@ const SelectInputCheckbox = (props) => {
                 className="checkmark"
                 onClick={e => {
                     const { shiftKey } = e
-                    console.log(props)
                     e.stopPropagation()
                     props.onClick(props.id, shiftKey, props.row)
                 }}
@@ -25,4 +24,4 @@ const SelectInputCheckbox = (props) => {
     );
 };
 
-export default SelectInputCheckbox;
+export default BOTCheckbox;
