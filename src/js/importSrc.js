@@ -11,6 +11,9 @@ import 'react-toastify/dist/ReactToastify.min.css';
 /** General customized css */
 import "../css/App.css"
 
+/** SelectInputCheckbox */
+import "../css/SelectInputCheckbox.css"
+
 /** ObjectListMenu Component customized css */
 import "../css/ObjectListMenu.css"
 
