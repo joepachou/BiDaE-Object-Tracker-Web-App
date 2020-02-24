@@ -591,7 +591,8 @@ function addObject (formOption) {
 			mac_address,
 			status,
 			area_id,
-			object_type
+			object_type,
+			registered_timestamp
 		)
 		VALUES (
 			$1, 
@@ -600,7 +601,8 @@ function addObject (formOption) {
 			$4,
 			$5,
 			$6,
-			0
+			0,
+			now()
 		);
 	`;
 		
