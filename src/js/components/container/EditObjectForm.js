@@ -110,7 +110,7 @@ class EditObjectForm extends React.Component {
             mac_address,
             transferred_location,
             area_name,
-        } = selectedObjectData 
+        } = selectedObjectData  
         return (
             <Modal 
                 show={show} 
@@ -139,7 +139,10 @@ class EditObjectForm extends React.Component {
                                 ?   selectedObjectData.monitor_type == 0 
                                     ? null
                                     : selectedObjectData.monitor_type.split('/') 
-                                : []
+                                : [],
+                            transferred_location:status.value === config.objectStatus.TRANSFERRED 
+                                ? transferred_location 
+                                : '',
                         }}
 
                         validationSchema = {
@@ -203,7 +206,7 @@ class EditObjectForm extends React.Component {
                                 transferred_location: Yup.string()
                                     .when('status', {
                                         is: config.objectStatus.TRANSFERRED,
-                                        then: Yup.string().required(locale.texts.LOCATION_IS_REQUIRED)
+                                        then: Yup.string().required('locale.texts.LOCATION_IS_REQUIRED')
                                     }),
                                 area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
                         })}
