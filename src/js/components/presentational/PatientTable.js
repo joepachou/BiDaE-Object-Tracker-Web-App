@@ -15,22 +15,10 @@ import BOTInput from '../presentational/BOTInput'
 import axios from 'axios';
 import EditPatientForm from '../container/EditPatientForm'
 import { 
-    getObjectTable,
-    getAreaTable,
-    editObject,
     editPatient,
-    addObject,
     addPatient,
     deletePatient,
     deleteDevice,
-    getUserList,
-    getLbeaconTable,
-    objectImport,
-    getImportTable,
-    deleteImportData,
-    cleanBinding,
-    getImportPatient,
-    getTransferredLocation
 } from "../../dataSrc"
 const SelectTable = selecTableHOC(ReactTable);
 
@@ -361,6 +349,7 @@ class PatientTable extends React.Component{
                                             physicianIDNumber:this.props.data[rowInfo.index].physician_id,
                                             formTitle: 'edit patient',
                                             disableASN:true,
+                                            formPath: editPatient,
                                         })
                                         }
                                         let id = (rowInfo.index+1).toString()
