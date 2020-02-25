@@ -21,7 +21,7 @@ import { AppContext } from '../../context/AppContext';
 import dataSrc from '../../dataSrc'
 import styleConfig from '../../styleConfig';
 import FormikFormGroup from '../presentational/FormikFormGroup'
-
+import { toast } from 'react-toastify';
 
 let monitorTypeMap = {};
 
@@ -47,7 +47,11 @@ class EditObjectForm extends React.Component {
         axios.post(path, {
             formOption: postOption
         }).then(res => {
-           
+           toast.success("Edit Object Success", {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 5000,
+                hideProgressBar: true
+            });
         }).catch( error => {
             console.log(error)
         })

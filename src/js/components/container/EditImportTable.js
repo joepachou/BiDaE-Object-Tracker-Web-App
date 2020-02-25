@@ -6,7 +6,7 @@ import LocaleContext from '../../context/LocaleContext';
 import axios from 'axios';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-
+import { toast } from 'react-toastify';
 import { 
     cleanImportData,
     deleteImportData
@@ -47,6 +47,11 @@ class EditImportTable extends React.Component {
                 {
                     idPackage: this.props.selectedObjectData.id
                 }).then(res => {
+                        toast.success("Edit Import Table Success", {
+                            position: toast.POSITION.TOP_RIGHT,
+                            autoClose: 5000,
+                            hideProgressBar: true
+                        });
                         setTimeout(this.props.handleSubmitForm(),500)
                 }).catch( error => {
                     console.log(error)
