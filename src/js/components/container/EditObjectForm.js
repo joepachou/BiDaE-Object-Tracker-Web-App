@@ -111,6 +111,7 @@ class EditObjectForm extends React.Component {
             transferred_location,
             area_name,
         } = selectedObjectData  
+ 
         return (
             <Modal 
                 show={show} 
@@ -156,7 +157,10 @@ class EditObjectForm extends React.Component {
                                         locale.texts.THE_ASSET_CONTROL_NUMBER_IS_ALREADY_USED,
                                         value => {
                                             if (this.props.selectedObjectData.length == 0) {
-                                                return (!(importData.map(item => item.asset_control_number).includes(value)))
+                                                return (!(this.props.data.map(item => item.asset_control_number).includes(value)))
+                                            } 
+                                            if (this.props.selectedObjectData.length == 0) {
+                                                return (!(this.props.objectTable.map(item => item.asset_control_number).includes(value)))
                                             } 
                                             return true
                                         }
@@ -206,7 +210,7 @@ class EditObjectForm extends React.Component {
                                 transferred_location: Yup.string()
                                     .when('status', {
                                         is: config.objectStatus.TRANSFERRED,
-                                        then: Yup.string().required('locale.texts.LOCATION_IS_REQUIRED')
+                                        then: Yup.string().required(locale.texts.LOCATION_IS_REQUIRED)
                                     }),
                                 area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
                         })}

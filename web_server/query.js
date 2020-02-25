@@ -898,9 +898,21 @@ const deleteDevice = (request, response) => {
         })
 }
 
-const deleteImportData = (request, response) => {
-    const { idPackage } = request.body
 
+const deleteObjectWithImport = (request, response) => {
+    const { idPackage } = request.body 
+        pool.query(queryType.deleteObjectWithImport(idPackage))
+        .then(res => {
+                    console.log('deleteObjectWithImport success')
+                    response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log('deleteObjectWithImport error: ', err)
+        })
+}
+
+const deleteImportData = (request, response) => {
+    const { idPackage } = request.body 
         pool.query(queryType.deleteImportData(idPackage))
         .then(res => {
                     console.log('delete ImportData success')
@@ -1515,6 +1527,7 @@ module.exports = {
     deletePatient,
     deleteDevice,
     deleteImportData,
+    deleteObjectWithImport,
     deleteLBeacon,
     deleteGateway,
     deleteUser,

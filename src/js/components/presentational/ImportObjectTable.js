@@ -12,6 +12,7 @@ const SelectTable = selecTableHOC(ReactTable);
 import { 
     objectImport,
     deleteImportData,
+    deleteObjectWithImport
 } from "../../dataSrc"
 
 
@@ -88,8 +89,7 @@ class ImportObjectTable extends React.Component{
             let idPackage = []
             var deleteArray = [];
             var deleteCount = 0;
-        
-         
+             
             axios.post(deleteImportData, {
                idPackage: this.state.selection
             })
@@ -103,6 +103,20 @@ class ImportObjectTable extends React.Component{
                 console.log(err)
             })
     
+            axios.post(deleteObjectWithImport, { //object table 跟著刪
+                idPackage: this.state.selection
+             })
+             .then(res => {
+                 this.setState({
+                     selection: [],
+                     selectAll: false,
+                 })
+             })
+             .catch(err => {
+                 console.log(err)
+             })
+
+        
             this.handleSubmitForm()
         }
  
@@ -122,15 +136,16 @@ class ImportObjectTable extends React.Component{
     }
 
 
-        onImportExcel = files => {
-     
+        onImportExcel = files => { 
             // 獲取上傳的文件對象
-            //const { files } = file.target; // 通過FileReader對象讀取文件
+            //const { files } = file.target; // 通過FileReader對象讀取文件 
             const fileReader = new FileReader();
-            //console.log(fileReader);
-            for (let index = 0; index < files.length; index++) {
-                fileReader.name = files[index].name;
-            }
+            if (files.length !=0 ) { //避免按下取消後的bug
+                for (let index = 0; index < files.length; index++) {
+                      fileReader.name = files[index].name;
+                 }
+            } 
+
           
             fileReader.onload = event => {
                 try {
@@ -141,7 +156,6 @@ class ImportObjectTable extends React.Component{
                     if (fileExt == null) {
                         throw "檔案為空值";
                     }
-        
                     const fileExtlastof = fileExt.substring(fileExt.lastIndexOf("."));
                     if (validExts.indexOf(fileExtlastof) == -1) {
                         throw "檔案類型錯誤，可接受的副檔名有：" + validExts.toString();
@@ -158,7 +172,6 @@ class ImportObjectTable extends React.Component{
                             ); // break; // 如果只取第一張表，就取消註釋這行
                         }
                     } 
-    
                     // ＩＭＰＯＲＴ時把ＡＣＮ重複的擋掉
                     let newData = []
                     let reapetFlag = false;
@@ -188,7 +201,7 @@ class ImportObjectTable extends React.Component{
                     //沒被擋掉的存到newData後輸出
             
                      let { locale } = this.context
-                 
+                   
                     axios.post(objectImport, {
                         locale: locale.abbr ,
                         newData
@@ -208,8 +221,9 @@ class ImportObjectTable extends React.Component{
                     return;
                 }
            
-            }; // 以二進制方式打開文件
-             fileReader.readAsBinaryString(files[0]);
+            }; // 以二進制方式打開文件 
+             fileReader.readAsBinaryString(files[0]); 
+             
         };
     
 
@@ -235,8 +249,7 @@ class ImportObjectTable extends React.Component{
             toggleSelection,
             selectType
         };
-
-       
+ 
         return(
             <div> 
                          <ButtonToolbar>
@@ -258,7 +271,7 @@ class ImportObjectTable extends React.Component{
                             </Button>
                         </ButtonToolbar>
                         <SelectTable
-                            keyField='id'
+                            keyField='asset_control_number'
                             data={this.props.dataImport}
                             columns={this.props.columnImport}
                             ref={r => (this.selectTable = r)}
