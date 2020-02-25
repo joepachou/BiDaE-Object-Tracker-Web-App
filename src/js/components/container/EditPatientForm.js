@@ -11,7 +11,7 @@ import CheckboxGroup from './CheckboxGroup'
 import Checkbox from '../presentational/Checkbox'
 import FormikFormGroup from '../presentational/FormikFormGroup'
 import styleConfig from '../../styleConfig'
-
+import { toast } from 'react-toastify';
 
 let monitorTypeMap = {};
 Object.keys(config.monitorType)
@@ -26,7 +26,11 @@ class EditPatientForm extends React.Component {
         axios.post(path, {
             formOption: postOption
         }).then(res => {
-       
+            toast.success("Edit Patient Success", {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 5000,
+                hideProgressBar: true
+            });
         }).catch( error => {
             console.log(error)
         })
