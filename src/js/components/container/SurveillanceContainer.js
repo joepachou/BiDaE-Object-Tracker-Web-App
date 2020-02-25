@@ -13,7 +13,7 @@ import { BrowserView, TabletView, MobileOnlyView, isBrowser, isTablet, isMobileO
 import QRcodeContainer from './QRcode'
 import InfoPrompt from '../presentational/InfoPrompt'
 import PdfDownloadFormForTablet from './PdfDownloadFormForTablet'
-import GeneralConfirmForm from '../container/GeneralConfirmForm'
+import GeneralConfirmForm from '../presentational/GeneralConfirmForm'
 
 class SurveillanceContainer extends React.Component {
 
@@ -85,7 +85,7 @@ class SurveillanceContainer extends React.Component {
     }
 
     handleConfirmFormSubmit = (e) => {
-        this.props.setFence(this.state.type)
+        this.props.setMonitor(this.state.type)
         this.handleClosePdfForm()
     }
 
@@ -311,7 +311,7 @@ class SurveillanceContainer extends React.Component {
                                         <Nav.Item className="mt-2">
                                             <Button
                                                 variant="primary"
-                                                className="mr-1 ml-2 text-capitalize" 
+                                                className="mr-1 ml-2 text-capitalize"
                                                 onClick={this.handleClickButton}
                                                 name="cleanPath"
                                                 disabled={(this.props.pathMacAddress==='')}
@@ -321,63 +321,65 @@ class SurveillanceContainer extends React.Component {
                                         </Nav.Item>
                                     </AccessControl>
                                 }
-
-                                {locationMonitorConfig &&
-                                    Object.keys(locationMonitorConfig).includes(areaId.toString()) &&
-                                        <Nav.Item className="mt-2 bd-highligh ml-auto">    
-                                            <Button 
-                                                variant="warning" 
-                                                className="mr-1 ml-2" 
-                                                onClick={this.handleClickButton} 
-                                                name="location"
-                                                value={locationMonitorConfig[areaId].enable}
-                                                active={!locationMonitorConfig[areaId].enable}                                                            
-                                            >
-                                                {locationMonitorConfig[areaId].enable 
-                                                    ? locale.texts.LOCATION_MONITOR_ON 
-                                                    : locale.texts.LOCATION_MONITOR_OFF
-                                                }
-                                            </Button>
-                                    </Nav.Item>                              
-                                }
-
-                                {geofenceConfig &&
-                                    Object.keys(geofenceConfig).includes(areaId.toString()) &&
-                                    geofenceConfig[areaId].rules
-                                        .map((item, index) => {
-                                            return (
-                                                <Fragment
-                                                    key={index}
+                                <div
+                                    className="d-flex bd-highligh ml-auto"
+                                >
+                                    {locationMonitorConfig &&
+                                        Object.keys(locationMonitorConfig).includes(areaId.toString()) &&
+                                            <Nav.Item className="mt-2 bd-highligh">    
+                                                <Button 
+                                                    variant="warning" 
+                                                    className="mr-1 ml-2" 
+                                                    onClick={this.handleClickButton} 
+                                                    name="location"
+                                                    value={locationMonitorConfig[areaId].enable}
+                                                    active={!locationMonitorConfig[areaId].enable}                                                            
                                                 >
-                                                    <Nav.Item className="mt-2 bd-highligh">    
-                                                        <Button 
-                                                            variant="warning" 
-                                                            className="mr-1 ml-2" 
-                                                            onClick={this.handleClickButton} 
-                                                            name="geofence"
-                                                            value={geofenceConfig[areaId].enable}
-                                                            active={!geofenceConfig[areaId].enable}                                                            
-                                                        >
-                                                            {geofenceConfig[areaId].enable 
-                                                                ? locale.texts.FENCE_ON 
-                                                                : locale.texts.FENCE_OFF
-                                                            }
-                                                        </Button>
-                                                    </Nav.Item>
-                                                    <Nav.Item className="mt-2">
-                                                        <Button 
-                                                            variant="outline-primary" 
-                                                            className="mr-1 ml-2" 
-                                                            onClick={this.handleClickButton} 
-                                                            name="clearAlerts"
-                                                        >
-                                                            {locale.texts.CLEAR_ALERTS}
-                                                        </Button>
-                                                    </Nav.Item>
-                                                </Fragment>
-                                            )
-                                })}
+                                                    {locationMonitorConfig[areaId].enable 
+                                                        ? locale.texts.LOCATION_MONITOR_ON 
+                                                        : locale.texts.LOCATION_MONITOR_OFF
+                                                    }
+                                                </Button>
+                                        </Nav.Item>                              
+                                    }
 
+                                    {geofenceConfig &&
+                                        Object.keys(geofenceConfig).includes(areaId.toString()) &&
+                                        geofenceConfig[areaId].rules
+                                            .map((item, index) => {
+                                                return (
+                                                    <Fragment
+                                                        key={index}
+                                                    >
+                                                        <Nav.Item className="mt-2 bd-highligh">    
+                                                            <Button 
+                                                                variant="warning" 
+                                                                className="mr-1 ml-2" 
+                                                                onClick={this.handleClickButton} 
+                                                                name="geofence"
+                                                                value={geofenceConfig[areaId].enable}
+                                                                active={!geofenceConfig[areaId].enable}                                                            
+                                                            >
+                                                                {geofenceConfig[areaId].enable 
+                                                                    ? locale.texts.FENCE_ON 
+                                                                    : locale.texts.FENCE_OFF
+                                                                }
+                                                            </Button>
+                                                        </Nav.Item>
+                                                        <Nav.Item className="mt-2">
+                                                            <Button 
+                                                                variant="outline-primary" 
+                                                                className="mr-1 ml-2" 
+                                                                onClick={this.handleClickButton} 
+                                                                name="clearAlerts"
+                                                            >
+                                                                {locale.texts.CLEAR_ALERTS}
+                                                            </Button>
+                                                        </Nav.Item>
+                                                    </Fragment>
+                                                )
+                                    })}
+                                </div>
                             </Nav>
                         </div>
                     </div>

@@ -26,6 +26,7 @@ import {
     disableBodyScroll, 
 } from 'body-scroll-lock';
 import retrieveDataHelper from '../../helper/retrieveDataHelper';
+import { createHash } from 'crypto';
 
 const {
     ALL_DEVICES,
@@ -209,7 +210,7 @@ class MainContainer extends React.Component{
         this.getSearchKey(searchKey, colorPanel, searchValue, markerClickPackage)
     }
 
-    setFence = (type) => {
+    setMonitor = (type) => {
 
         let { 
             stateReducer 
@@ -220,10 +221,12 @@ class MainContainer extends React.Component{
         ] = stateReducer
         
         let configName = `${config.monitor[type].name}Config`
+        let triggerFuncName = `get${configName.replace(/^\w/, (chr) => {
+            return chr.toUpperCase()
+        })}`
         let cloneConfig = _.cloneDeep(this.state[configName])
 
         let enable = + !cloneConfig[areaId].enable
-        cloneConfig[areaId].enable = enable
 
         retrieveDataHelper.setMonitorEnable(
             enable,
@@ -232,9 +235,9 @@ class MainContainer extends React.Component{
         )
         .then(res => {
             console.log(`set ${type} enable success`)
-            this.setState({
-                [configName]: cloneConfig,
-            })
+            setTimeout(() => {
+                this[triggerFuncName]()
+            }, 1000)
         })
         .catch(err => {
             console.log(`set ${type} enable fails ${err}`)
@@ -700,7 +703,6 @@ class MainContainer extends React.Component{
         const { 
             locale, 
             auth,
-            stateReducer,
         } = this.context
         
         return (
@@ -725,7 +727,7 @@ class MainContainer extends React.Component{
                                     handleClearButton={this.handleClearButton}
                                     getSearchKey={this.getSearchKey}
                                     clearColorPanel={clearColorPanel}
-                                    setFence={this.setFence}
+                                    setMonitor={this.setMonitor}
                                     auth={auth}
                                     lbeaconPosition={this.state.lbeaconPosition}
                                     geofenceConfig={this.state.geofenceConfig}
@@ -780,7 +782,7 @@ class MainContainer extends React.Component{
                                         handleClearButton={this.handleClearButton}
                                         getSearchKey={this.getSearchKey}
                                         clearColorPanel={clearColorPanel}
-                                        setFence={this.setFence}
+                                        setMonitor={this.setMonitor}
                                         auth={auth}
                                         lbeaconPosition={this.state.lbeaconPosition}
                                         geofenceConfig={this.state.geofenceConfig}
@@ -839,7 +841,7 @@ class MainContainer extends React.Component{
                                         handleClearButton={this.handleClearButton}
                                         getSearchKey={this.getSearchKey}
                                         clearColorPanel={clearColorPanel}
-                                        setFence={this.setFence}
+                                        setMonitor={this.setMonitor}
                                         auth={auth}
                                         lbeaconPosition={this.state.lbeaconPosition}
                                         geofenceConfig={this.state.geofenceConfig}

@@ -40,7 +40,7 @@ class ImportObjectTable extends React.Component{
         this.setState({
             showDeleteConfirmation:false
         })
-        this.props.handleSubmitForm()
+        this.props.refreshData()
     }
 
 
@@ -85,7 +85,7 @@ class ImportObjectTable extends React.Component{
         return this.state.selection.includes(key);
     };
 
- deleteRecordImport = () => {
+    deleteRecordImport = () => {
             let idPackage = []
             var deleteArray = [];
             var deleteCount = 0;

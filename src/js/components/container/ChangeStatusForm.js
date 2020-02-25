@@ -130,7 +130,6 @@ class ChangeStatusForm extends React.Component {
                 fontSize: '0.5rem'
             },
         }
-
         let { 
             title,
             selectedObjectData 
@@ -156,7 +155,7 @@ class ChangeStatusForm extends React.Component {
                 </Modal.Header >
                 <Modal.Body>
                     <Formik
-                 
+                        enableReinitialize = {true}
                         initialValues = {this.initValues()}
 
                         validationSchema = {
@@ -201,6 +200,7 @@ class ChangeStatusForm extends React.Component {
                                                                     type="text"
                                                                     name="name"
                                                                     label={locale.texts.NAME}
+                                                                    value={item.name}
                                                                     error={errors.name}
                                                                     touched={touched.name}
                                                                     placeholder=""
@@ -212,6 +212,7 @@ class ChangeStatusForm extends React.Component {
                                                                     type="text"
                                                                     name="type"
                                                                     label={locale.texts.TYPE}
+                                                                    value={item.type}
                                                                     error={errors.type}
                                                                     touched={touched.type}
                                                                     placeholder=""
@@ -224,6 +225,7 @@ class ChangeStatusForm extends React.Component {
                                                             name="asset_control_number"
                                                             label={locale.texts.ACN}
                                                             error={errors.asset_control_number}
+                                                            value={item.asset_control_number}
                                                             touched={touched.asset_control_number}
                                                             placeholder=""
                                                             disabled

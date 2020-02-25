@@ -24,37 +24,19 @@ const SelectTable = selecTableHOC(ReactTable);
 
 
 class PatientTable extends React.Component{
+    
     static contextType = AppContext
+    
     state = {
         isShowBind:false,
         isPatientShowEdit:false,
         showDeleteConfirmation:false,
         selectedRowData:'',
-        filterSelection: {
-            statusOptions: config.statusOptions.map(item => {
-                return {
-                    value: item,
-                    label: this.context.locale.texts[item.replace(/ /g, '_').toUpperCase()]
-                }
-            }),
-            monitorTypeOptions: config.monitorOptions.map(item => {
-                return {
-                    value: item,
-                    label: item 
-                }
-            })
-        },
-        physicianName:"",
-        physicianIDNumber:"",
         selectAll: false,
         selection: [],
         formPath:'',
         formTitle:'',
-        disableASN:false,
-    }
-
-    componentDidUpdate = (prevProps, prevState) => {
-       
+        disableASN: false,
     }
 
     handleClose = () => {
@@ -63,22 +45,12 @@ class PatientTable extends React.Component{
             isPatientShowEdit:false,
             showDeleteConfirmation:false,
             selectedRowData:'',
-            physicianName:"",
-            physicianIDNumber:"",
             disableASN:false,
         })
     }
 
-
-    handlePatientClick = (e) => {
+    handleClick = (e) => {
         this.setState({
-            // isPatientShowEdit: true, 
-            // selectedRowData: [],
-            // selectedRowData_Patient:[],
-            // formTitle: 'add inpatient',
-            // formPath: addPatient,
-            // physicianName:'',
-            // physicianIDNumber:0,
             disableASN:false,
             isPatientShowEdit:true,
             formTitle: 'add inpatient',
@@ -92,7 +64,7 @@ class PatientTable extends React.Component{
             showDeleteConfirmation:false,
             disableASN:false,
         })
-        this.props.handleSubmitForm()
+        this.props.refreshData()
     }
 
 
@@ -146,10 +118,9 @@ class PatientTable extends React.Component{
             case "associate_patient":
                 this.setState({
                     isShowBind: true,
-                    bindCase:2,
+                    bindCase: 2,
                 })
             break;
-
             case "deletePatient":
                 this.setState({
                     showDeleteConfirmation: true,
@@ -204,12 +175,9 @@ class PatientTable extends React.Component{
     render(){
         const {  
             selectedRowData,
-            filterSelection ,
             selectAll,
             selectType,
         } = this.state
- 
-
 
         const {
             toggleSelection,
@@ -228,150 +196,119 @@ class PatientTable extends React.Component{
         const { locale } = this.context 
         return(
             <div> 
-                        <ButtonToolbar>
-                        <Button 
-                                variant="outline-primary" 
-                                className='text-capitalize mr-2 mb-1'
-                                size="sm"
-                                name="associate_patient"
-                                onClick={this.handleClickButton}
-                            >
-                                {locale.texts.ASSOCIATE}
-                            </Button>
-                            <Button 
-                                variant="outline-primary" 
-                                className='text-capitalize mr-2 mb-1'
-                                size="sm"
-                                onClick={this.handlePatientClick}
-                            >
-                                {locale.texts.ADD_INPATIENT}
-                            </Button>
-                            <Button 
-                                variant="outline-primary" 
-                                className='text-capitalize mr-2 mb-1'
-                                size="sm"
-                                name="deletePatient"
-                                onClick={this.handleClickButton}
-                                // onClick={this.deleteRecordPatient}    
-                            >
-                                {locale.texts.DELETE}
-                            </Button>
-                            <div style={{width: '200px'}}>
-                                
-                            </div>
-                            
-                        </ButtonToolbar>
-
-                       
-                        
-                                  
-                        <Row className="my-1" noGutters> 
-                            <Col>
-                                <Select
-                                    name={"Select Area Patient"}
-                                    className={'float-right w-100'}
-                                    styles={styleConfig.reactSelect}
-                                    onChange={(value) => {
-                                        if(value){
-                                            this.props.addPatientFilter(value.label, ['area'], 'area select')
-                                        }else{
-                                            this.props.removePatientFilter('area select')
-                                        }
-                                    }}
-                                    options={this.props.filterSelection.areaSelection}
-                                    isClearable={true}
-                                    isSearchable={false}
-                                    placeholder={'Select Area'}
-                                />
-                            </Col> 
-
-                            
-                            <Col>
-                                <Select
-                                    name={"Select Status"}
-                                    className={'float-right w-100'}
-                                    styles={styleConfig.reactSelect}
-                                    onChange={(value) => {
-                                        if(value){
-                                            this.props.addPatientFilter(value.label, ['monitor'], 'monitor select')
-                                        }else{
-                                            this.props.removePatientFilter('monitor select')
-                                        }
-                                    }}
-                                    options={this.props.filterSelection.monitorTypeOptions}
-                                    isClearable={true}
-                                    isSearchable={false}
-                                    placeholder={'Monitor Status'}
-                                />
-                            </Col>
-
-
-                            <Col>
-                                <BOTInput
-                                    className={'float-right'}
-                                    placeholder={''}
-                                    getSearchKey={(key) => {
-                                        this.props.addPatientFilter(
-                                            key, 
-                                            ['name', 'area' , 'macAddress', 'acn','monitor','physician_name'], 
-                                            'search bar'
-                                        )
-                                    }}
-                                    clearSearchResult={null}                                        
-                                />
-                            </Col>
-                        </Row>
-
- 
-                            
-
-                      
-                        <SelectTable
-                            keyField='id'
-                            data={this.props.data}
-                            columns={this.props.columns}
-                            ref={r => (this.selectTable = r)}
-                            className="-highlight"
-                            name={'obj_table'}
-                            style={{height:'75vh'}}
-                            {...extraProps}
-         
-                
-                            getTrProps={(state, rowInfo, column, instance) => {
-                                return {
-                                          
-                                    onClick: (e) => { 
-                                        if (!e.target.type) { 
-                                            this.setState({
-                                            isPatientShowEdit:true,
-                                            selectedRowData: this.props.data[rowInfo.index],
-                                            physicianName:this.props.data[rowInfo.index].physician_name,
-                                            physicianIDNumber:this.props.data[rowInfo.index].physician_id,
-                                            formTitle: 'edit patient',
-                                            disableASN:true,
-                                            formPath: editPatient,
-                                        })
-                                        }
-                                        let id = (rowInfo.index+1).toString()
-                                        this.toggleSelection(id)
-                                    },
+                <ButtonToolbar>
+                    <Button 
+                        variant="outline-primary" 
+                        className='text-capitalize mr-2 mb-1'
+                        size="sm"
+                        name="associate_patient"
+                        onClick={this.handleClickButton}
+                    >
+                        {locale.texts.ASSOCIATE}
+                    </Button>
+                    <Button 
+                        variant="outline-primary" 
+                        className='text-capitalize mr-2 mb-1'
+                        size="sm"
+                        onClick={this.handleClick}
+                    >
+                        {locale.texts.ADD_INPATIENT}
+                    </Button>
+                    <Button 
+                        variant="outline-primary" 
+                        className='text-capitalize mr-2 mb-1'
+                        size="sm"
+                        name="deletePatient"
+                        onClick={this.handleClickButton}
+                    >
+                        {locale.texts.DELETE}
+                    </Button>
+                </ButtonToolbar>
+                <Row className="my-1" noGutters> 
+                    <Col>
+                        <Select
+                            name={"Select Area Patient"}
+                            className={'float-right w-100'}
+                            styles={styleConfig.reactSelect}
+                            onChange={(value) => {
+                                if(value){
+                                    this.props.addPatientFilter(value.label, ['area'], 'area select')
+                                }else{
+                                    this.props.removePatientFilter('area select')
                                 }
-                            }} 
+                            }}
+                            options={this.props.filterSelection.areaSelection}
+                            isClearable={true}
+                            isSearchable={false}
+                            placeholder={'Select Area'}
                         />
-
-
-
-
-
-
-
-
- 
+                    </Col> 
+                    <Col>
+                        <Select
+                            name={"Select Status"}
+                            className={'float-right w-100'}
+                            styles={styleConfig.reactSelect}
+                            onChange={(value) => {
+                                if(value){
+                                    this.props.addPatientFilter(value.label, ['monitor'], 'monitor select')
+                                }else{
+                                    this.props.removePatientFilter('monitor select')
+                                }
+                            }}
+                            options={this.props.filterSelection.monitorTypeOptions}
+                            isClearable={true}
+                            isSearchable={false}
+                            placeholder={'Monitor Status'}
+                        />
+                    </Col>
+                    <Col>
+                        <BOTInput
+                            className={'float-right'}
+                            placeholder={''}
+                            getSearchKey={(key) => {
+                                this.props.addPatientFilter(
+                                    key, 
+                                    ['name', 'area' , 'macAddress', 'acn','monitor','physician_name'], 
+                                    'search bar'
+                                )
+                            }}
+                            clearSearchResult={null}                                        
+                        />
+                    </Col>
+                </Row>
+                
+                <SelectTable
+                    keyField='id'
+                    data={this.props.data}
+                    columns={this.props.columns}
+                    ref={r => (this.selectTable = r)}
+                    className="-highlight"
+                    name={'obj_table'}
+                    style={{height:'75vh'}}
+                    {...extraProps}
+                    getTrProps={(state, rowInfo, column, instance) => {
+                        return {
+                            onClick: (e) => { 
+                                if (!e.target.type) { 
+                                    this.setState({
+                                    isPatientShowEdit:true,
+                                    selectedRowData: this.props.data[rowInfo.index],
+                                    formTitle: 'edit patient',
+                                    disableASN: true,
+                                    formPath: editPatient,
+                                })
+                                }
+                                let id = (rowInfo.index+1).toString()
+                                this.toggleSelection(id)
+                            },
+                        }
+                    }} 
+                />
 
                 <EditPatientForm
                     show = {this.state.isPatientShowEdit} 
                     title= {this.state.formTitle} 
-                    selectedObjectData={selectedRowData  || ''} 
+                    selectedRowData={selectedRowData  || ''} 
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={this.state.formPath}
                     handleClose={this.handleClose}
@@ -379,14 +316,10 @@ class PatientTable extends React.Component{
                     objectData = {this.props.objectTable}
                     physicianList={this.props.physicianList}
                     roomOptions={this.props.roomOptions}
-                    physicianName = {this.state.physicianName}
-                    physicianIDNumber = {this.state.physicianIDNumber}
                     disableASN = {this.state.disableASN}
-
                 />  
  
-                
-                    <BindForm
+                <BindForm
                     show = {this.state.isShowBind} 
                     bindCase = {this.state.bindCase}
                     title={this.state.formTitle} 
@@ -405,7 +338,7 @@ class PatientTable extends React.Component{
                 <DissociationForm
                     show={this.state.isShowEditImportTable} 
                     title={this.state.formTitle} 
-                    selectedObjectData={this.state.selectedObjectData || 'handleAllDelete'} 
+                    selectedRowData={this.state.selectedRowData || 'handleAllDelete'} 
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={this.state.formPath}
                     objectTable={this.props.objectTable}
@@ -421,7 +354,7 @@ class PatientTable extends React.Component{
                     handleClose={this.handleClose}
                     handleSubmit={
              
-                    this.state.warningSelect ==0 ?  this.objectMultipleDelete :null
+                    this.state.warningSelect == 0 ?  this.objectMultipleDelete :null
               
                     }
                 />

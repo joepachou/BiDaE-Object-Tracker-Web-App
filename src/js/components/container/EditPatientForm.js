@@ -9,9 +9,6 @@ import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
 import CheckboxGroup from './CheckboxGroup'
 import Checkbox from '../presentational/Checkbox'
-import { 
-    addPatient,
-} from "../../dataSrc"
 import FormikFormGroup from '../presentational/FormikFormGroup'
 import styleConfig from '../../styleConfig'
 
@@ -42,11 +39,10 @@ class EditPatientForm extends React.Component {
 
         const { 
             title, 
-            selectedObjectData,
+            selectedRowData,
             physicianList = [],
             show,
             handleClose
-
         } = this.props;
 
         const { 
@@ -57,9 +53,7 @@ class EditPatientForm extends React.Component {
             object_type,
             monitor_type = [],
             room,
-            physicianName
-        } = selectedObjectData
-     
+        } = selectedRowData
         const areaOptions = Object.values(config.mapConfig.areaOptions).map(area => {
             return {
                 value: area,
@@ -85,6 +79,15 @@ class EditPatientForm extends React.Component {
             }
         }) 
 
+        physicianList.map(user => {
+            selectedRowData.physician_id == user.id
+                ?   selectedRowData['physician']  = {
+                        value: user.id,
+                        label: user.name
+                    }
+                :   null
+        })
+
         return (
             
             <Modal 
@@ -105,8 +108,8 @@ class EditPatientForm extends React.Component {
                             name: name || '' ,
                             mac_address: mac_address || '',
                             asset_control_number:asset_control_number|| '',
-                            gender :   object_type == locale.texts.FEMALE.toLowerCase() ? genderOptions[1] : genderOptions[0],
-                            monitorType: selectedObjectData.length !== 0 ? monitor_type.split('/') : [],
+                            gender: object_type == locale.texts.FEMALE.toLowerCase() ? genderOptions[1] : genderOptions[0],
+                            monitorType: selectedRowData.length !== 0 ? monitor_type.split('/') : [],
                             room: room 
                                 ? {
                                     value: room,
@@ -114,12 +117,7 @@ class EditPatientForm extends React.Component {
                                 }
                                 : null,
 
-                             physician : this.props.physicianName ?
-                             {
-                                    value:this.props.physicianName,
-                                    label:this.props.physicianName
-                             }
-                             : ''
+                            physician : selectedRowData ? selectedRowData.physician : null
                         }}
                        
                         validationSchema = {
@@ -136,7 +134,7 @@ class EditPatientForm extends React.Component {
                                         'asset_control_number',
                                         locale.texts.THE_Patient_Number_IS_ALREADY_USED,
                                             value => {
-                                                return value === selectedObjectData.asset_control_number ||
+                                                return value === selectedRowData.asset_control_number ||
                                                     !this.props.data.map(item => item.asset_control_number).includes(value)
                                         }
                                     )
@@ -144,7 +142,7 @@ class EditPatientForm extends React.Component {
                                         'asset_control_number',
                                         locale.texts.THE_Patient_Number_IS_ALREADY_USED,
                                             value => {
-                                                return value === selectedObjectData.asset_control_number ||
+                                                return value === selectedRowData.asset_control_number ||
                                                     !this.props.objectData.map(item => item.asset_control_number).includes(value)
                                         }
                                     ),
@@ -156,7 +154,7 @@ class EditPatientForm extends React.Component {
                                         'mac_address',
                                         locale.texts.THE_MAC_ADDRESS_IS_ALREADY_USED,
                                         value => {
-                                            return value === selectedObjectData.mac_address ||
+                                            return value === selectedRowData.mac_address ||
                                                 !this.props.data.map(item => item.mac_address.toUpperCase().replace(/:/g, '')).includes(value.toUpperCase().replace(/:/g, ''))
                                         }
                                         
@@ -164,7 +162,7 @@ class EditPatientForm extends React.Component {
                                         'mac_address',
                                         locale.texts.THE_MAC_ADDRESS_IS_ALREADY_USED,
                                         value => {
-                                            return value === selectedObjectData.mac_address ||
+                                            return value === selectedRowData.mac_address ||
                                                 !this.props.objectData.map(item => item.mac_address.toUpperCase().replace(/:/g, '')).includes(value.toUpperCase().replace(/:/g, ''))
                                         }
                                         
@@ -183,20 +181,18 @@ class EditPatientForm extends React.Component {
 
                         onSubmit={(values, { setStatus, setSubmitting }) => {
                
-                           
                             let monitor_type = values.monitorType
-                            .filter(item => item)
-                            .reduce((sum, item) => {
-                                sum += parseInt(monitorTypeMap[item])
-                                return sum
+                                .filter(item => item)
+                                .reduce((sum, item) => {
+                                    sum += parseInt(monitorTypeMap[item])
+                                    return sum
                             },0)
                             
                             physicianList.map(item => {
-                              item.name == values.physician.value ?
-                              values.physician.value = item.id
-                              :
-                                null
-                            })
+                                item.name == values.physician.value 
+                                    ?   values.physician.value = item.id
+                                    :   null
+                                })
 
                             const postOption = {
                                 ...values,
@@ -205,8 +201,9 @@ class EditPatientForm extends React.Component {
                                 monitor_type, 
                                 room: values.room ? values.room.label : '',
                                 object_type:values.gender.value,
-                                physicianIDNumber : values.physician.value ? values.physician.value :this.props.physicianIDNumber
+                                physicianIDNumber : values.physician.value ? values.physician.value : this.props.physicianIDNumber
                             }
+
                             this.handleSubmit(postOption)                            
                         }}
 
