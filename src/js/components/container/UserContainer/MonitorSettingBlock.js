@@ -219,6 +219,18 @@ class MonitorSettingBlock extends React.Component{
                     className="-highlight"
                     minRows={0}
                     {...styleConfig.reactTable}
+                    getTrProps={(state, rowInfo, column, instance) => {   
+                          return {
+                              onClick: (e, handleOriginal) => { 
+                                  this.setState({ 
+                                    show: true,
+                                    selectedData: rowInfo.row._original,
+                                    isEdited: true,
+                                    path: 'setMonitorConfig'
+                                })
+                              }
+                          }
+                      }}
                 />
                 <EditMonitorConfigForm
                     handleShowPath={this.props.handleShowPath} 
