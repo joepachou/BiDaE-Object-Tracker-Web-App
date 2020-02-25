@@ -162,8 +162,7 @@ class EditObjectForm extends React.Component {
                                             } 
                                             if (this.props.selectedRowData.length == 0) {
                                                 return (!(this.props.objectTable.map(item => item.asset_control_number).includes(value)))
-                                
-                                            return true
+                                            }
                                         }
                                     ),
                                 mac_address: Yup.string()
