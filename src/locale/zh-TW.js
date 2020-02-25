@@ -132,7 +132,7 @@ const tw = {
     DELETE_USER:"刪除使用者",
     MULTIPLEDELETE:"多選刪除",
     
-    /* Form Field */
+    /* Field */
     NAME: "名稱",
     TYPE: "類別",
     ASSET_CONTROL_NUMBER: "財產編號",
@@ -180,6 +180,9 @@ const tw = {
     NO: '否',
     IS_GLOBAL_FENCE: '全境電子圍籬',
     NUMBER_OF_SEARCH_HISTORY: "常用搜尋筆數",
+    SELECTED_AREAS: "已選取區域",
+    NOT_SELECTED_AREAS: "未選取區域",
+
        
     /** form title */
     EDIT_LBEACON: "編輯 lbeacon",
@@ -216,6 +219,7 @@ const tw = {
     LOCATION: "位置警告",
     GEOFENCE: "電子圍籬警告",
     PANIC: "緊急",
+    EDIT_SECONDARY_AREAS: "編輯次要區域",
 
 
     /** Error Message */

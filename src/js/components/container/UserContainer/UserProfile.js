@@ -1,10 +1,7 @@
 import React from 'react';
 import { Button, Image, ListGroup} from 'react-bootstrap';
-import userProfileImg from '../../../../img/icon/userProfile.png';
 import { AppContext } from '../../../context/AppContext';
-import ImageUploader from 'react-images-upload';
 import config from '../../../config';
-import { MDBBtn, MDBTable, MDBTableBody, MDBTableHead  } from 'mdbreact';
 import axios from 'axios';
 import {
     getAreaTable,
@@ -19,9 +16,9 @@ import {
     Modal,
     InputGroup
 } from "react-bootstrap"
-import { Select } from 'semantic-ui-react';
 import NumberPicker from '../NumberPicker';
 import cloneDeep from 'lodash/cloneDeep';
+import EditAreasForm from '../../presentational/EditAreasForm'
 
 let elseArray = []
 let  rows_data = []
@@ -39,24 +36,21 @@ class UserProfile extends React.Component{
         elseArea:[],
         userInfo: null,
         upadateAreaId: [],
-
         totalAreaId: [],
-        
         secondaryAreaId: [],
         secondaryAreaIdBeforUpdate:[],
-        
         otherAreaId: [],
         otherAreaIdBeforUpdate: []
     }
 
     componentDidUpdate = (prevProps, prevState) => {
-        // if (this.context.locale.abbr !== prevState.locale) {
-        //     this.setState({
-        //         locale: this.context.locale.abbr,
-        //         rows_data:[]
-        //     })
-        //     this.getAreaTable();
-        // }
+        if (this.context.locale.abbr !== prevState.locale) {
+            this.setState({
+                locale: this.context.locale.abbr,
+                rows_data:[]
+            })
+            this.getAreaTable();
+        }
     }
 
     componentDidMount = () => {
@@ -68,33 +62,35 @@ class UserProfile extends React.Component{
         })
         this.getUserData()
         this.getAreaTable()
-      }
+    }
    
     getUserData =() =>{
-    const { 
-        areaOptions
-    } = config.mapConfig
-    const {auth} = this.context
-    let userIdList = []
-    axios.post(getUserArea, {
-        user_id: auth.user.id
-    })
-    .then(res => {
-    
-        res.data.rows.map(item=>{
-            userIdList.push(item.area_id)
-        })
+        const { 
+            areaOptions
+        } = config.mapConfig
 
-        auth.user.areas_id = userIdList
+        const {auth} = this.context
+        let userIdList = []
 
-        this.setState({
-            userData : res.data.rows,
-            secondaryAreaId : userIdList
+        axios.post(getUserArea, {
+            user_id: auth.user.id
         })
-    })
-    .catch(err => {
-        console.log(err)
-    })
+        .then(res => {
+        
+            res.data.rows.map(item=>{
+                userIdList.push(item.area_id)
+            })
+
+            auth.user.areas_id = userIdList
+
+            this.setState({
+                userData : res.data.rows,
+                secondaryAreaId : userIdList
+            })
+        })
+        .catch(err => {
+            console.log(err)
+        })
     
     }
 
@@ -135,8 +131,6 @@ class UserProfile extends React.Component{
             this.setState({
                 otherAreaId: otherAreaIdList,
             })
-            console.log(this.state.otherAreaId)
-            console.log(this.state.secondaryAreaId)
 
         })
         .catch(err => {
@@ -144,25 +138,25 @@ class UserProfile extends React.Component{
         })
     }
 
-    // resetFreqSearchCount = (value) => {
-    //     const {
-    //         auth
-    //     } = this.context;
+    resetFreqSearchCount = (value) => {
+        const {
+            auth
+        } = this.context;
         
-    //     if (value) {
-    //         let userInfo = this.state.userInfo
-    //         userInfo.freqSearchCount = value
-    //         this.setState({
-    //             userInfo: userInfo
-    //         })
-    //         axios.post(modifyUserInfo, {
-    //             info: userInfo,
-    //             username: userInfo['name']
-    //         }).then(res => {
-    //             auth.setUserInfo('freqSearchCount', value)
-    //         }) 
-    //     }
-    // }
+        if (value) {
+            let userInfo = this.state.userInfo
+            userInfo.freqSearchCount = value
+            this.setState({
+                userInfo: userInfo
+            })
+            axios.post(modifyUserInfo, {
+                info: userInfo,
+                username: userInfo['name']
+            }).then(res => {
+                auth.setUserInfo('freqSearchCount', value)
+            }) 
+        }
+    }
 
     handleAddArea =(areaId) =>{
 
@@ -300,51 +294,6 @@ class UserProfile extends React.Component{
                     <div className="title ">
                         {locale.texts.YOUR_SERVICE_AREAS}
                     </div>
-                    <Modal show={this.state.show} onHide={this.handleCloseModal}>
-                        <Modal.Header closeButton>
-                        <Modal.Title>編輯次要區域</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <h4>以選取區域</h4>
-                            <ListGroup>
-                            {
-                                this.state.secondaryAreaIdBeforUpdate.map((item,index) => {
-                                    let element = 
-                                        <ListGroup.Item
-                                            key = {index}
-                                        >
-                                            {locale.texts[areaOptions[item]]}
-                                            <Button variant='link' onClick={()=>this.handleBeforUpdateDele(item)}>刪除</Button>
-                                        </ListGroup.Item>
-                                    return element
-                                })
-                            }
-                            </ListGroup>
-                            <h4>未選取區域</h4>
-                            <ListGroup>
-                            {
-                                this.state.otherAreaIdBeforUpdate.map((item,index) => {
-                                    let element = 
-                                        <ListGroup.Item
-                                            key = {index}
-                                        >
-                                            {locale.texts[areaOptions[item]]}
-                                            <Button variant='link' onClick={()=>this.handleBeforUpdateAdd(item)}>新增</Button>
-                                        </ListGroup.Item>
-                                    return element
-                                })
-                            }
-                            </ListGroup>
-                        </Modal.Body>
-                        <Modal.Footer>
-                        <Button variant="secondary" onClick={this.handleCloseModal}>
-                            Close
-                        </Button>
-                        <Button variant="primary" onClick={this.handleCloseModalwithSave}>
-                            Save Changes
-                        </Button>
-                        </Modal.Footer>
-                    </Modal>
                     <div>
                         <p>
                             {locale.texts.MAIN_AREA}: {locale.texts[areaOptions[auth.user.main_area]]}
@@ -355,7 +304,12 @@ class UserProfile extends React.Component{
                                     return locale.texts[areaOptions[id]]
                                 }).join('/')
                             }
-                            <Button variant='link' onClick={this.handleShowModal}>編輯</Button>
+                            <Button 
+                                variant='link' 
+                                onClick={this.handleShowModal}
+                            >
+                                {locale.texts.EDIT}
+                            </Button>
                         </p>
                     </div>
                 </div>
@@ -379,6 +333,15 @@ class UserProfile extends React.Component{
                     </div>
 
                 </div>
+                <EditAreasForm 
+                    show={this.state.show} 
+                    handleClose={this.handleCloseModal}
+                    otherAreaIdBeforUpdate={this.state.otherAreaIdBeforUpdate}
+                    secondaryAreaIdBeforUpdate={this.state.secondaryAreaIdBeforUpdate}
+                    handleSubmit={this.handleCloseModalwithSave}
+                    handleBeforUpdateDele={this.handleBeforUpdateDele}
+                    handleBeforUpdateAdd={this.handleBeforUpdateAdd}
+                />
             </div>
         )
     }

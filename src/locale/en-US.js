@@ -129,7 +129,7 @@ const en =  {
     DELETE_USER:"Delete user",
     MULTIPLEDELETE:"multiple delete",
 
-    /* Form Field */
+    /* Field */
     NAME: "name",
     TYPE: "type",
     ASSET_CONTROL_NUMBER: "Asset ID",
@@ -178,7 +178,8 @@ const en =  {
     IS_GLOBAL_FENCE: 'global fence',
     SIGNATURE:'signature',
     NUMBER_OF_SEARCH_HISTORY: "number of search history",
-
+    SELECTED_AREAS: "selected areas",
+    NOT_SELECTED_AREAS: "not selected areas",
 
     /** form title */
     EDIT_LBEACON: "edit lbeacon",
@@ -214,7 +215,7 @@ const en =  {
     LOCATION: "location alert",
     GEOFENCE: "geofence alert",
     PANIC: "emergency",
-
+    EDIT_SECONDARY_AREAS: "edit secondary areas",
     
     /** Error Message */
     GENDER_IS_REQUIRED: "Gender is required",
