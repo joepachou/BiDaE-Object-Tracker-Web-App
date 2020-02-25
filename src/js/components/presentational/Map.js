@@ -35,7 +35,7 @@ class Map extends React.Component {
     locationMonitorLayer = L.layerGroup()
     currentZoom = 0
     prevZoom = 0
-    pin_shift_scale = [0, -150]
+    pin_shift_scale = [500, -400]
 
     componentDidMount = () => {
         this.initMap();

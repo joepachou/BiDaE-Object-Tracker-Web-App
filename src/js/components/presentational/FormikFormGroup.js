@@ -14,7 +14,8 @@ const FormikFormGroup = ({
    placeholder,
    component,
    display = true,
-   className
+   className, 
+   value
 }) => {
     let style = {
         container: {

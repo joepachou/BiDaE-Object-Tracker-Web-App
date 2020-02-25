@@ -130,7 +130,6 @@ class ChangeStatusForm extends React.Component {
                 fontSize: '0.5rem'
             },
         }
-
         let { 
             title,
             selectedObjectData 
@@ -156,7 +155,7 @@ class ChangeStatusForm extends React.Component {
                 </Modal.Header >
                 <Modal.Body>
                     <Formik
-                 
+                        enableReinitialize = {true}
                         initialValues = {this.initValues()}
 
                         validationSchema = {
