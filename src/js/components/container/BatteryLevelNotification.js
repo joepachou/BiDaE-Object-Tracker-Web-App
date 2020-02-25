@@ -1,12 +1,13 @@
 import React from 'react'
 import NotificationBadge from 'react-notification-badge';
 import { Effect } from 'react-notification-badge';
-import { NavDropdown, Row } from 'react-bootstrap'
+import { NavDropdown, Row, Dropdown, NavLink, DropdownButton } from 'react-bootstrap'
 import _ from 'lodash'
 import { AppContext } from '../../context/AppContext'
 import config from '../../config'
 import { getDescription } from '../../helper/descriptionGenerator'
 import retrieveDataHelper from '../../helper/retrieveDataHelper'
+import '../../../css/CustomizedLayout.css'
 
 class BatteryLevelNotification extends React.Component {
     
@@ -82,62 +83,75 @@ class BatteryLevelNotification extends React.Component {
             }
         }
 
+
         return (
-            <NavDropdown 
-                alignRight
-                disabled={runOutPowerItems.length == 0}
-                title={
-                    <i className="fas fa-bell" style={style.icon}>
-                        <NotificationBadge 
-                            count={runOutPowerItems.length} 
-                            effect={Effect.SCALE}
-                            style={{
-                                top: '-28px',
-                                right: '-10px',    
-                            }}
-                        />
-                    </i>
-                }
-            >
-                <div
-                    className="px-5 py-2"
-                    style={style.title}
+            <Dropdown
+                    disabled={runOutPowerItems.length == 0}
                 >
-                    <Row>
-                        <div 
-                            className='d-inline-flex justify-content-start' 
-                        >   
-                            {locale.texts.BATTERY_NOTIFICATION}
-                        </div>
-                    </Row>
-                </div>
-                <div 
-                    id="batteryNoticeDiv"
-                    style={style.dropdown}
-                >
-                    {runOutPowerItems.map(item => {
-                        return (
-                            <NavDropdown.Item 
-                                key={item.mac_address}
-                                disabled
-                                style={{color: "black"}}
-                            >
-                                <div 
-                                    className='d-inline-flex justify-content-start text-left' 
-                                    style={style.list}
-                                >   
-                                    <p className='d-inline-block mx-2'>&#8729;</p>
-                                    {getDescription(item, locale, config)}
-                                    {locale.texts.BATTERY_VOLTAGE}:{(item.battery_voltage/10).toFixed(1)}
-                                </div>
-                            </NavDropdown.Item>
-                        )
-                    })}
-                </div>
-            </NavDropdown> 
+                    
+                    <Dropdown.Toggle variant='light'>
+                        <i className="fas fa-bell" style={style.icon}>
+                            <NotificationBadge 
+                                count={runOutPowerItems.length} 
+                                effect={Effect.SCALE}
+                                style={{
+                                    top: '-28px',
+                                    right: '-10px',    
+                                }}
+                            />
+                        </i>
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu
+                        alignRight
+                        bsPrefix = 'wayne-dropdown-menu-right  dropdown-menu '
+                    >
+                        <div
+                        className="px-5 py-2"
+                        style={style.title}
+                    >
+                        <Row>
+                            <div 
+                                className='d-inline-flex justify-content-start' 
+                            >   
+                                {locale.texts.BATTERY_NOTIFICATION}
+                            </div>
+                        </Row>
+                    </div>
+                    <div 
+                        id="batteryNoticeDiv"
+                        style={style.dropdown}
+                    >
+                        {runOutPowerItems.map(item => {
+                            return (
+                                <Dropdown.Item 
+                                    key={item.mac_address}
+                                    disabled
+                                    style={{color: "black"}}
+                                >
+                                    <div 
+                                        className={
+                                            null
+                                            // 'd-inline-flex justify-content-start text-left' 
+                                        }
+                                        style={style.list}
+                                    >   
+                                        <p className='d-inline-block mx-2'>&#8729;</p>
+                                        {getDescription(item, locale, config)}
+                                        {locale.texts.BATTERY_VOLTAGE}:{(item.battery_voltage/10).toFixed(1)}
+                                    </div>
+                                </Dropdown.Item>
+                            )
+                        })}
+                    </div>
+                    
+                    </Dropdown.Menu>
+                    
+                    
+                </Dropdown> 
             
         )
     }
 };
 
 export default BatteryLevelNotification
+
