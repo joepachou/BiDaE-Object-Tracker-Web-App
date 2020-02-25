@@ -37,6 +37,7 @@ const deleteShiftChangeRecord = `${protocol}://${dataSrcIP}/test/deleteShiftChan
 const deletePatient = `${protocol}://${dataSrcIP}/test/deletePatient`
 const deleteDevice = `${protocol}://${dataSrcIP}/test/deleteDevice`
 const deleteImportData = `${protocol}://${dataSrcIP}/test/deleteImportData`
+const deleteObjectWithImport = `${protocol}://${dataSrcIP}/test/deleteObjectWithImport`
 const deleteLBeacon= `${protocol}://${dataSrcIP}/test/deleteLBeacon`
 const deleteGateway= `${protocol}://${dataSrcIP}/test/deleteGateway`
 const getUserList = `${protocol}://${dataSrcIP}/test/getUserList`
@@ -91,6 +92,7 @@ module.exports = {
     getGatewayTable,
     getMonitorConfig,
     getTransferredLocation,
+    deleteObjectWithImport,
     searchResult,
     editObject,
     setLocaleID,

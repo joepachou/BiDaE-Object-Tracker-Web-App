@@ -12,6 +12,7 @@ const SelectTable = selecTableHOC(ReactTable);
 import { 
     objectImport,
     deleteImportData,
+    deleteObjectWithImport
 } from "../../dataSrc"
 
 
@@ -102,7 +103,20 @@ class ImportObjectTable extends React.Component{
             .catch(err => {
                 console.log(err)
             })
-    
+        
+            axios.post(deleteObjectWithImport, { //object table 跟著刪
+                idPackage: this.state.selection
+             })
+             .then(res => {
+                 this.setState({
+                     selection: [],
+                     selectAll: false,
+                 })
+             })
+             .catch(err => {
+                 console.log(err)
+             })
+
             this.handleSubmitForm()
         }
  
@@ -258,7 +272,7 @@ class ImportObjectTable extends React.Component{
                             </Button>
                         </ButtonToolbar>
                         <SelectTable
-                            keyField='id'
+                            keyField='asset_control_number'
                             data={this.props.dataImportPatient}
                             columns={this.props.columnImport}
                             ref={r => (this.selectTable = r)}

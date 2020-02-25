@@ -256,7 +256,8 @@ function addAssociation (formOption) {
 			mac_address,
 			area_id,
 			status,
-			object_type
+			object_type,
+			registered_timestamp
 		)
 		VALUES (
 			$1,
@@ -265,7 +266,8 @@ function addAssociation (formOption) {
 			$4,
 			$5,
 			'normal',
-			0
+			0,
+			now()
 		)
 	`
 	;
@@ -298,7 +300,8 @@ function addAssociation_Patient (formOption) {
 			mac_address,
 			area_id,
 			status,
-			object_type
+			object_type,
+			registered_timestamp
 		)
 		VALUES (
 			$1,
@@ -307,7 +310,8 @@ function addAssociation_Patient (formOption) {
 			$4,
 			$5,
 			'Patient',
-			1
+			1,
+			now()
 		)
 	`
 	;
@@ -556,6 +560,7 @@ const editPatient = (formOption) => {
 	return query;
 }
 
+ 
 function addObject (formOption) {
 	const text = `
 		INSERT INTO object_table (
@@ -1224,10 +1229,18 @@ const deleteDevice = (formOption) => {
 	return query
 }
 
+const deleteObjectWithImport = (idPackage) => {
+	const query = `
+		DELETE FROM object_table
+		WHERE asset_control_number IN (${idPackage.map(item => `'${item}'`)});
+	`
+	return query
+}
+
 const deleteImportData = (idPackage) => {
 	const query = `
 		DELETE FROM import_table
-		WHERE id IN (${idPackage.map(item => `'${item}'`)});
+		WHERE asset_control_number IN (${idPackage.map(item => `'${item}'`)});
 	`
 	return query
 }
@@ -2118,6 +2131,7 @@ module.exports = {
 	deletePatient,
 	deleteDevice, 
 	deleteImportData,
+	deleteObjectWithImport,
 	setShift,
 	deleteLBeacon,
 	deleteGateway,

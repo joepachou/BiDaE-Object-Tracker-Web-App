@@ -160,10 +160,13 @@ class EditObjectForm extends React.Component {
                                         'asset_control_number', 
                                         locale.texts.THE_ASSET_CONTROL_NUMBER_IS_ALREADY_USED,
                                         value => {
+
                                             if (this.props.selectedRowData.length == 0) {
-                                                return (!(importData.map(item => item.asset_control_number).includes(value)))
+                                                return (!(this.props.data.map(item => item.asset_control_number).includes(value)))
                                             } 
-                                            return true
+                                            if (this.props.selectedRowData.length == 0) {
+                                                return (!(this.props.objectTable.map(item => item.asset_control_number).includes(value)))
+                                            }
                                         }
                                     ),
                                 mac_address: Yup.string()
@@ -211,7 +214,7 @@ class EditObjectForm extends React.Component {
                                 transferred_location: Yup.string()
                                     .when('status', {
                                         is: config.objectStatus.TRANSFERRED,
-                                        then: Yup.string().required('locale.texts.LOCATION_IS_REQUIRED')
+                                        then: Yup.string().required(locale.texts.LOCATION_IS_REQUIRED)
                                     }),
                                 area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
                         })}
