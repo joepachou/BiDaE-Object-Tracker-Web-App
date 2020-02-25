@@ -38,9 +38,9 @@ class NumberPicker extends React.Component {
 
         return (
             <Select
-                name="timepicker"
                 placeholder={locale.texts.SELECT_TIME}
                 value={this.state.value}
+                className="ml-2"
                 onChange={value => this.onChange(value)}
                 options={options}
                 isSearchable={false}
