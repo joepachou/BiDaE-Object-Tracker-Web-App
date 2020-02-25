@@ -68,6 +68,7 @@ class BindForm extends React.Component {
             objectTable,
             show
         } = this.props
+    
         return (
             <Modal 
                 show={show} 
@@ -102,13 +103,15 @@ class BindForm extends React.Component {
                                     'acn', 
                                     locale.texts.ASSET_CONTROL_NUMBER_IS_NOT_FOUND,
                                     value => {
+                                      
                                     let findFlag = false
                                     let DeviceOrPatient= ''
                                     this.props.bindCase == 1 ? DeviceOrPatient =this.props.ImportData :  DeviceOrPatient =this.props.PatientImportData
                                     //等於１就是儀器 所以只拿object的data
-                                    //等於２就是病人 拿patient的data
+                                    //等於２就是病人 拿patient的data 
+                                
                                     DeviceOrPatient.map(item =>{
-                                      if( item.asset_control_number == value ){
+                                      if( item.asset_control_number.toUpperCase() == value.toUpperCase() ){
                                         this.setState({bindData:item})
                                         findFlag = true
                                       } 

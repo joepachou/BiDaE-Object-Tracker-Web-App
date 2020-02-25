@@ -15,6 +15,7 @@ import EditGeofenceConfig from '../../presentational/EditGeofenceConfig'
 import retrieveDataHelper from '../../../helper/retrieveDataHelper'
 import styleConfig from '../../../styleConfig';
 import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm'
+import { Select } from 'semantic-ui-react';
 
 
 class GeoFenceSettingBlock extends React.Component{
@@ -128,6 +129,8 @@ class GeoFenceSettingBlock extends React.Component{
     }
 
     handleClickButton = (e, value) => {
+ 
+
         let { name } = e.target
         switch(name) {
             case "add rule": 
@@ -232,7 +235,19 @@ class GeoFenceSettingBlock extends React.Component{
                     className="-highlight"
                     minRows={0}
                     {...styleConfig.reactTable}
-                />
+                    getTrProps={(state, rowInfo, column, instance) => {   
+                          return {
+                              onClick: (e, handleOriginal) => { 
+                                  this.setState({
+                                    show: true,
+                                    selectedData: rowInfo.row._original,
+                                    isEdited: true,
+                                    path: 'setGeofenceConfig'
+                                })
+                              }
+                          }
+                      }}
+                /> 
                 <EditGeofenceConfig
                     handleShowPath={this.props.handleShowPath} 
                     selectedData={this.state.selectedData}

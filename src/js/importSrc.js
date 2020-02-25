@@ -11,6 +11,9 @@ import 'react-toastify/dist/ReactToastify.min.css';
 /** General customized css */
 import "../css/App.css"
 
+/** BOTCheckbox */
+import "../css/BOTCheckbox.css"
+
 /** ObjectListMenu Component customized css */
 import "../css/ObjectListMenu.css"
 

@@ -21,7 +21,7 @@ import { AppContext } from '../../context/AppContext';
 import dataSrc from '../../dataSrc'
 import styleConfig from '../../styleConfig';
 import FormikFormGroup from '../presentational/FormikFormGroup'
-
+import { toast } from 'react-toastify';
 
 let monitorTypeMap = {};
 
@@ -43,11 +43,15 @@ class EditObjectForm extends React.Component {
     }
     
     handleSubmit = (postOption) => {
-        const path = this.props.formPath
+        const path = this.props.formPath 
         axios.post(path, {
             formOption: postOption
         }).then(res => {
-           
+           toast.success("Edit Object Success", {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 5000,
+                hideProgressBar: true
+            });
         }).catch( error => {
             console.log(error)
         })
@@ -94,13 +98,13 @@ class EditObjectForm extends React.Component {
 
         const { 
             title, 
-            selectedObjectData,
+            selectedRowData,
             importData,
             objectTable,
             show,
             handleClose
         } = this.props;
-
+ 
         const { 
             id,
             name,
@@ -110,7 +114,7 @@ class EditObjectForm extends React.Component {
             mac_address,
             transferred_location,
             area_name,
-        } = selectedObjectData
+        } = selectedRowData  
 
         return (
             <Modal 
@@ -136,11 +140,14 @@ class EditObjectForm extends React.Component {
                             select: status.value === config.objectStatus.TRANSFERRED 
                                 ? transferred_location 
                                 : '',
-                            checkboxGroup: selectedObjectData.length !== 0 
-                                ?   selectedObjectData.monitor_type == 0 
+                            checkboxGroup: selectedRowData.length !== 0 
+                                ?   selectedRowData.monitor_type == 0 
                                     ? null
-                                    : selectedObjectData.monitor_type.split('/') 
-                                : []
+                                    : selectedRowData.monitor_type.split('/') 
+                                : [],
+                            transferred_location:status.value === config.objectStatus.TRANSFERRED 
+                                ? transferred_location 
+                                : '',
                         }}
 
                         validationSchema = {
@@ -153,10 +160,13 @@ class EditObjectForm extends React.Component {
                                         'asset_control_number', 
                                         locale.texts.THE_ASSET_CONTROL_NUMBER_IS_ALREADY_USED,
                                         value => {
-                                            if (this.props.selectedObjectData.length == 0) {
-                                                return (!(importData.map(item => item.asset_control_number).includes(value)))
+
+                                            if (this.props.selectedRowData.length == 0) {
+                                                return (!(this.props.data.map(item => item.asset_control_number).includes(value)))
                                             } 
-                                            return true
+                                            if (this.props.selectedRowData.length == 0) {
+                                                return (!(this.props.objectTable.map(item => item.asset_control_number).includes(value)))
+                                            }
                                         }
                                     ),
                                 mac_address: Yup.string()
@@ -168,7 +178,7 @@ class EditObjectForm extends React.Component {
                                         locale.texts.THE_MAC_ADDRESS_FORM_IS_WRONG,
                                         value => {
                                             if (value == undefined) return false
-                                            if (this.props.selectedObjectData.length != 0) {
+                                            if (this.props.selectedRowData.length != 0) {
                                                 return true
                                             } else {
                                                 var pattern = new RegExp("^[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}$");
@@ -187,9 +197,12 @@ class EditObjectForm extends React.Component {
                                         value =>{
                                             let repeatFlag = false
                                             this.props.data.map(item => {
-                                                if (item.asset_control_number != this.props.selectedObjectData.asset_control_number){
+                                                if(this.props.selectedRowData.length != 0){
+                                                    if (item.asset_control_number != this.props.selectedRowData.asset_control_number){
                                                      item.mac_address == value ?  repeatFlag = true : null
-                                                }
+                                                    }
+                                                } 
+                                            
                                             })
                                             return !repeatFlag
                                            
@@ -235,7 +248,7 @@ class EditObjectForm extends React.Component {
                             }
                             while(postOption.name[postOption.name.length-1] == " "){
                                 postOption.name = postOption.name.substring(0,postOption.name.length-1);       
-                            }
+                            } 
                             this.handleSubmit(postOption)                            
                         }}
 

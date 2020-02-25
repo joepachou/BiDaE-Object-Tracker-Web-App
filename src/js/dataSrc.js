@@ -37,6 +37,7 @@ const deleteShiftChangeRecord = `${protocol}://${dataSrcIP}/test/deleteShiftChan
 const deletePatient = `${protocol}://${dataSrcIP}/test/deletePatient`
 const deleteDevice = `${protocol}://${dataSrcIP}/test/deleteDevice`
 const deleteImportData = `${protocol}://${dataSrcIP}/test/deleteImportData`
+const deleteObjectWithImport = `${protocol}://${dataSrcIP}/test/deleteObjectWithImport`
 const deleteLBeacon= `${protocol}://${dataSrcIP}/test/deleteLBeacon`
 const deleteGateway= `${protocol}://${dataSrcIP}/test/deleteGateway`
 const getUserList = `${protocol}://${dataSrcIP}/test/getUserList`
@@ -66,7 +67,7 @@ const getUserArea= `${protocol}://${dataSrcIP}/data/getUserArea`
 const addUserArea= `${protocol}://${dataSrcIP}/data/addUserArea`
 const DeleteUserArea= `${protocol}://${dataSrcIP}/data/DeleteUserArea`
 const modifyTransferredLocation= `${protocol}://${dataSrcIP}/data/modifyTransferredLocation`
-const setGeofenceEnable = `${protocol}://${dataSrcIP}/data/setGeofenceEnable`
+const setMonitorEnable = `${protocol}://${dataSrcIP}/data/setMonitorEnable`
 const getRolesPermission= `${protocol}://${dataSrcIP}/data/getRolesPermission`
 const modifyPermission= `${protocol}://${dataSrcIP}/data/modifyPermission`
 const modifyRolesPermission= `${protocol}://${dataSrcIP}/data/modifyRolesPermission`
@@ -91,6 +92,7 @@ module.exports = {
     getGatewayTable,
     getMonitorConfig,
     getTransferredLocation,
+    deleteObjectWithImport,
     searchResult,
     editObject,
     setLocaleID,
@@ -141,7 +143,7 @@ module.exports = {
     addUserArea,
     DeleteUserArea, 
     modifyTransferredLocation,
-    setGeofenceEnable,
+    setMonitorEnable,
     modifyTransferredLocation, 
     getRolesPermission,
     modifyPermission,

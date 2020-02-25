@@ -9,13 +9,13 @@ import GetResultData from './GetResultData'
 import moment from 'moment'
 import config from '../../config';
 import { AppContext } from '../../context/AppContext'
-import GeneralConfirmForm from '../container/GeneralConfirmForm'
+import GeneralConfirmForm from '../presentational/GeneralConfirmForm'
 import retrieveDataHelper from '../../helper/retrieveDataHelper'
 import DownloadPdfRequestForm from './DownloadPdfRequestForm'
 import {
     getStatus
 } from '../../helper/descriptionGenerator'
-
+import { toast } from 'react-toastify';
 const style = {
     modalBody: {
         height: '60vh',
@@ -123,6 +123,11 @@ class ShiftChange extends React.Component {
             pdfPackage,
         }).then(res => {
             this.props.handleSubmit()
+            toast.success("Shift Change Success", {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 5000,
+                hideProgressBar: true
+            });
             this.setState({
                 fileUrl: pdfPackage.path,
                 showConfirmForm: false,

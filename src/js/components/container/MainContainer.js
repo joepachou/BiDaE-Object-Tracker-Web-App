@@ -25,6 +25,8 @@ import {
 import { 
     disableBodyScroll, 
 } from 'body-scroll-lock';
+import retrieveDataHelper from '../../helper/retrieveDataHelper';
+import { createHash } from 'crypto';
 
 const {
     ALL_DEVICES,
@@ -43,6 +45,7 @@ class MainContainer extends React.Component{
         proccessedTrackingData: [],
         lbeaconPosition: [],
         geofenceConfig: null,
+        locationMonitorConfig: null,
         violatedObjects: {},
         hasSearchKey: false,
         searchKey: '',
@@ -69,8 +72,11 @@ class MainContainer extends React.Component{
         disableBodyScroll(targetElement);
 
         this.getTrackingData();
+
+        /** Get lbeacon position */
         this.getLbeaconPosition();
         this.getGeofenceConfig();
+        this.getLocationMonitorConfig()
         this.interval = setInterval(this.getTrackingData, config.mapConfig.intervalTime)
     }
 
@@ -115,7 +121,10 @@ class MainContainer extends React.Component{
         let isSearchKeyChange = this.state.searchKey !== nextState.searchKey
         let isSearchResultChange = !(_.isEqual(this.state.searchResult, nextState.searchResult))
         let isGeoFenceDataChange = !(_.isEqual(this.state.geofenceConfig, nextState.geofenceConfig))
-        let isViolatedObjectChange = !(_.isEqual(this.state.isViolatedObjectChange, nextState.isViolatedObjectChange))
+        let isLocationConfigChange = !(_.isEqual(this.state.locationMonitorConfig, nextState.locationMonitorConfig))
+        let isLbeaconPositionChange = !(_.isEqual(this.state.lbeaconPosition, nextState.lbeaconPosition))
+
+        let isViolatedObjectChange = !(_.isEqual(this.state.violatedObjects, nextState.violatedObjects))
 
         let showMobileMap = !(_.isEqual(this.state.showMobileMap, nextState.showMobileMap))
         let display = !(_.isEqual(this.state.display, nextState.display)) 
@@ -131,13 +140,15 @@ class MainContainer extends React.Component{
                                 isViolatedObjectChange ||
                                 showMobileMap ||
                                 display ||
-                                pathMacAddress
+                                pathMacAddress ||
+                                isLocationConfigChange ||
+                                isLbeaconPositionChange
         return shouldUpdate
     }
 
     getToastNotification = (item) => {
         item.notification.map(event => {
-            let toastId = `${item.id}:${event.type}`
+            let toastId = `${item.mac_address}-${event.type}`
             let toastOptions = {
                 hideProgressBar: true,
                 autoClose: false,
@@ -158,9 +169,17 @@ class MainContainer extends React.Component{
     onCloseToast = (toast) => {
         let mac_address = toast.data ? toast.data.mac_address : toast.mac_address;
         let monitor_type = toast.type
+        let toastId = `${mac_address}-${monitor_type}`
+        let violatedObjects = this.state.violatedObjects
+        delete violatedObjects[toastId]
         axios.post(dataSrc.checkoutViolation, {
             mac_address,
             monitor_type
+        })
+        .then(res => {
+            this.setState({
+                violatedObjects
+            })
         })
         .catch(err => {
             console.log(`checkout violation fail: ${err}`)
@@ -191,7 +210,8 @@ class MainContainer extends React.Component{
         this.getSearchKey(searchKey, colorPanel, searchValue, markerClickPackage)
     }
 
-    setFence = () => {
+    setMonitor = (type) => {
+
         let { 
             stateReducer 
         } = this.context
@@ -199,24 +219,28 @@ class MainContainer extends React.Component{
         let [
             {areaId}, 
         ] = stateReducer
-
-        let cloneConfig = _.cloneDeep(this.state.geofenceConfig)
+        
+        let configName = `${config.monitor[type].name}Config`
+        let triggerFuncName = `get${configName.replace(/^\w/, (chr) => {
+            return chr.toUpperCase()
+        })}`
+        let cloneConfig = _.cloneDeep(this.state[configName])
 
         let enable = + !cloneConfig[areaId].enable
-        cloneConfig[areaId].enable = enable
 
-        axios.post(dataSrc.setGeofenceEnable, {
+        retrieveDataHelper.setMonitorEnable(
             enable,
             areaId,
-        })
+            config.monitor[type].api
+        )
         .then(res => {
-            console.log(`set geofence enable success`)
-            this.setState({
-                geofenceConfig: cloneConfig,
-            })
+            console.log(`set ${type} enable success`)
+            setTimeout(() => {
+                this[triggerFuncName]()
+            }, 1000)
         })
         .catch(err => {
-            console.log(`set geofence enable fail ${err}`)
+            console.log(`set ${type} enable fails ${err}`)
         })
     }
 
@@ -236,11 +260,19 @@ class MainContainer extends React.Component{
         })
         .then(res => {
             let violatedObjects = res.data.reduce((violatedObjects, item) => {
-                if (!(item.mac_address in violatedObjects) && item.isViolated) {
-                    violatedObjects[item.mac_address] = item
-                } 
+                
+                if (item.isViolated) {
+                    item.notification.map(notice => {
+                        let toastId = `${item.mac_address}-${notice.type}`
+                        if (!(toastId in violatedObjects)) {
+                            violatedObjects[toastId] = item
+                        }
+                    })
+                }
                 return violatedObjects
+
             }, _.cloneDeep(this.state.violatedObjects))
+
             this.setState({
                 trackingData: res.data,
                 violatedObjects,
@@ -282,14 +314,14 @@ class MainContainer extends React.Component{
             areaId
         })
         .then(res => {
-            let geofenceConfig = res.data.rows.reduce((config, item) => {
-                if (!config[item.area_id]) {
-                    config[item.area_id] = {
-                        enable: item.enable,
-                        rules: [item]
+            let geofenceConfig = res.data.rows.reduce((config, rule) => {
+                if (!config[rule.area_id]) {
+                    config[rule.area_id] = {
+                        enable: rule.enable,
+                        rules: [rule]
                     }
                 }
-                else config[item.area_id].push(item)
+                else config[rule.area_id].push(rule)
                 return config
             }, {})
             this.setState({
@@ -298,6 +330,40 @@ class MainContainer extends React.Component{
         })
         .catch(err => {
             console.log(`get geofence data fail ${err}`)
+        })
+    }
+
+    /** Retrieve location monitor data from database */
+    getLocationMonitorConfig = () => {
+        let { 
+            stateReducer,
+            auth
+        } = this.context
+
+        retrieveDataHelper.getMonitorConfig(
+            'not stay room monitor',
+            auth.user.areas_id,
+            true,
+        )
+        .then(res => {
+            let locationMonitorConfig = res.data.reduce((config, rule) => {
+                config[rule.area_id] = {
+                    enable: rule.enable,
+                    rule: {
+                        ...rule,
+                        lbeacons: rule.lbeacons.map(uuid => {
+                            return this.createLbeaconCoordinate(uuid).toString()
+                        })
+                    }
+                }
+                return config
+            }, {})
+            this.setState({
+                locationMonitorConfig
+            })
+        })
+        .catch(err => {
+            console.log(`get location monitor config fail ${err}`)
         })
     }
 
@@ -470,17 +536,13 @@ class MainContainer extends React.Component{
         } else {
             
             let searchResultMac = [];
-
+            
             proccessedTrackingData.map(item => {
-                if (item.object_type == 0 && (item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0
-                    // fix 4.7.3
-                    || item.asset_control_number.indexOf(searchKey) >= 0
-                    // original
-                    // || item.asset_control_number.slice(10,14).indexOf(searchKey) >= 0
-                    // 
-                    || item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0) 
+                if (
+                    item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0 ||
+                    item.asset_control_number.indexOf(searchKey) >= 0 ||
+                    item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0 
                 ) {
-
                     item.searched = true
                     item.searchedType = -1;
                     searchResult.push(item)
@@ -641,7 +703,6 @@ class MainContainer extends React.Component{
         const { 
             locale, 
             auth,
-            stateReducer,
         } = this.context
         
         return (
@@ -651,6 +712,7 @@ class MainContainer extends React.Component{
                     <div id="page-wrap" className='mx-1 my-2 overflow-hidden' style={style.pageWrap} >
                         <Row id="mainContainer" className='d-flex w-100 justify-content-around mx-0' style={style.container}>
                             <Col sm={7} md={9} lg={8} xl={8} id='searchMap' className="pl-2 pr-1" >
+
                                 <InfoPrompt 
                                     searchKey={searchKey}
                                     searchResult={searchResult}
@@ -665,10 +727,11 @@ class MainContainer extends React.Component{
                                     handleClearButton={this.handleClearButton}
                                     getSearchKey={this.getSearchKey}
                                     clearColorPanel={clearColorPanel}
-                                    setFence={this.setFence}
+                                    setMonitor={this.setMonitor}
                                     auth={auth}
                                     lbeaconPosition={this.state.lbeaconPosition}
                                     geofenceConfig={this.state.geofenceConfig}
+                                    locationMonitorConfig={this.state.locationMonitorConfig}
                                     clearAlerts={this.clearAlerts}
                                     searchKey={this.state.searchKey}
                                     authenticated={this.state.authenticated}
@@ -719,7 +782,7 @@ class MainContainer extends React.Component{
                                         handleClearButton={this.handleClearButton}
                                         getSearchKey={this.getSearchKey}
                                         clearColorPanel={clearColorPanel}
-                                        setFence={this.setFence}
+                                        setMonitor={this.setMonitor}
                                         auth={auth}
                                         lbeaconPosition={this.state.lbeaconPosition}
                                         geofenceConfig={this.state.geofenceConfig}
@@ -778,7 +841,7 @@ class MainContainer extends React.Component{
                                         handleClearButton={this.handleClearButton}
                                         getSearchKey={this.getSearchKey}
                                         clearColorPanel={clearColorPanel}
-                                        setFence={this.setFence}
+                                        setMonitor={this.setMonitor}
                                         auth={auth}
                                         lbeaconPosition={this.state.lbeaconPosition}
                                         geofenceConfig={this.state.geofenceConfig}
@@ -796,7 +859,12 @@ class MainContainer extends React.Component{
                                         ?   <Button variant='outline-primary' onClick={this.mapButtonHandler}>{locale.texts.HIDE_MAP}</Button>
                                         :   <Button variant='outline-primary' onClick={this.mapButtonHandler}>{locale.texts.SHOW_MAP}</Button>
                                     }
-                                    <Button variant='outline-primary' onClick={this.clearResultHandler}>{locale.texts.CLEAR_RESULT}</Button>
+                                    <Button 
+                                        variant='outline-primary' 
+                                        onClick={this.clearResultHandler}
+                                    >
+                                        {locale.texts.CLEAR_RESULT}
+                                    </Button>
                                 </ButtonGroup>
                                 <div className='d-flex justify-content-center'>
                                     <SearchResultList

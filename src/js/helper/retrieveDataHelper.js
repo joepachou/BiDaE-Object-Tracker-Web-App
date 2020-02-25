@@ -1,5 +1,6 @@
 import dataSrc from '../dataSrc'
 import axios from 'axios'
+import config from '../config'
 
 const retrieveDataHelper = {
     
@@ -17,7 +18,11 @@ const retrieveDataHelper = {
         })
     },
 
-    getObjectTable: async function(locale, areaId, objectType) {
+    getObjectTable: async function(
+        locale, 
+        areaId, 
+        objectType
+    ){
         return await axios.post(dataSrc.getObjectTable, {
             locale,
             areaId,
@@ -28,7 +33,32 @@ const retrieveDataHelper = {
         return await axios.post(dataSrc.getLbeaconTable, {
             locale,
         })
-    }
+    },
+
+    getMonitorConfig: async function(
+        type, 
+        areasId,
+        isGetLbeaconPosition
+    ) {
+        
+        return await axios.post(dataSrc.getMonitorConfig, {
+            type: config.monitorSettingUrlMap[type],
+            areasId,
+            isGetLbeaconPosition,
+        })
+    },
+
+    setMonitorEnable: async function(
+        enable,
+        areaId,
+        type
+    ){
+        return await axios.post(dataSrc.setMonitorEnable, {
+            enable,
+            areaId,
+            type
+        })
+    },
 }
 
 

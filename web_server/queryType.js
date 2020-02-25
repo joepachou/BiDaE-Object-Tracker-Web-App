@@ -7,6 +7,7 @@ function getTrackingData () {
 			object_summary_table.uuid as lbeacon_uuid,
 			object_summary_table.first_seen_timestamp,
 			object_summary_table.last_seen_timestamp,
+			object_summary_table.last_reported_timestamp,
 			object_summary_table.panic_violation_timestamp,
 			object_summary_table.rssi,
 			object_summary_table.battery_voltage,
@@ -34,10 +35,7 @@ function getTrackingData () {
 				WHERE user_table.id = object_table.reserved_user_id
 			) as reserved_user_name
 		
-
-
 		FROM object_summary_table
-
 
 		LEFT JOIN object_table
 		ON object_table.mac_address = object_summary_table.mac_address
@@ -62,7 +60,7 @@ function getTrackingData () {
 				SELECT 
 					mac_address,
 					monitor_type,
-					MIN(violation_timestamp) as violation_timestamp
+					MIN(violation_timestamp) AS violation_timestamp
 				FROM (
 					SELECT 
 						mac_address,
@@ -70,13 +68,15 @@ function getTrackingData () {
 						violation_timestamp
 					FROM notification_table
 					WHERE 
-						web_processed is null
+						web_processed IS NULL
 				)	as tmp_1
 				GROUP BY mac_address, monitor_type
 			) as tmp_2
 			GROUP BY mac_address
 		) as notification
 		ON notification.mac_address = object_summary_table.mac_address
+
+		WHERE object_summary_table.last_reported_timestamp IS NOT NULL
 
 		ORDER BY 
 			object_table.type, 
@@ -100,29 +100,8 @@ const getTrackingTableByMacAddress = (object_mac_address) => {
 			AND  record_timestamp > now() - interval '1 hour'
 			ORDER BY  record_timestamp ASC
 			`;
-	//console.log(text)
 	return text;
 }
-const getImportDataFromBinding = () => {
-
-	let text = '';
-	
-		text +=`
-			SELECT 
-				object_import_table.name, 
-				object_import_table.asset_control_number,
-				object_import_table.type,
-				object_import_table.id,
-				object_import_table.bindflag,
-				object_import_table.mac_address
-			FROM object_import_table
-			Where object_import_table.bindflag = 'Already Binding'
-
-			ORDER BY object_import_table.asset_control_number ASC	
-		`;
-	
-	return text
-} 
 
 const getObjectTable = (area_id, objectType ) => {
 
@@ -277,7 +256,8 @@ function addAssociation (formOption) {
 			mac_address,
 			area_id,
 			status,
-			object_type
+			object_type,
+			registered_timestamp
 		)
 		VALUES (
 			$1,
@@ -286,7 +266,8 @@ function addAssociation (formOption) {
 			$4,
 			$5,
 			'normal',
-			0
+			0,
+			now()
 		)
 	`
 	;
@@ -319,7 +300,8 @@ function addAssociation_Patient (formOption) {
 			mac_address,
 			area_id,
 			status,
-			object_type
+			object_type,
+			registered_timestamp
 		)
 		VALUES (
 			$1,
@@ -328,7 +310,8 @@ function addAssociation_Patient (formOption) {
 			$4,
 			$5,
 			'Patient',
-			1
+			1,
+			now()
 		)
 	`
 	;
@@ -545,33 +528,29 @@ function editObject (formOption) {
 	return query;
 }
 
-
-
-function editPatient (formOption) {
-	// console.log(formOption)
+const editPatient = (formOption) => {
 	const text = `
 		Update object_table 
-		SET name = $1,
-			mac_address = $2,
+		SET name = $2,
+			mac_address = $3,
 			physician_id = $4,
 			area_id = $5,
 			object_type = $6,
-			room_number = $7,
+			room = $7,
 			monitor_type = $8
-		WHERE asset_control_number = $3
+		WHERE asset_control_number = $1
 	`;
 		
 	const values = [
+		formOption.asset_control_number,
 		formOption.name,
 		formOption.mac_address,
-		formOption.asset_control_number,
 		formOption.physicianIDNumber,
 		formOption.area_id,
 		formOption.gender_id,
 		formOption.room,
 		formOption.monitor_type
 	];
-
 
 	const query = {
 		text,
@@ -581,8 +560,7 @@ function editPatient (formOption) {
 	return query;
 }
 
-
-
+ 
 function addObject (formOption) {
 	const text = `
 		INSERT INTO object_table (
@@ -592,7 +570,8 @@ function addObject (formOption) {
 			mac_address,
 			status,
 			area_id,
-			object_type
+			object_type,
+			registered_timestamp
 		)
 		VALUES (
 			$1, 
@@ -601,7 +580,8 @@ function addObject (formOption) {
 			$4,
 			$5,
 			$6,
-			0
+			0,
+			now()
 		);
 	`;
 		
@@ -623,8 +603,7 @@ function addObject (formOption) {
 	return query;
 }
 
-function addPatient (formOption) {
-	// console.log(formOption)
+const addPatient = (formOption) => {
 	const text = 
 		`
 		INSERT INTO object_table (
@@ -634,12 +613,25 @@ function addPatient (formOption) {
 			physician_id,
 			area_id,
 			object_type,
-			room_number,
+			room,
 			monitor_type,
 			type,
-			status
+			status,
+			registered_timestamp
 		)
-		VALUES($1,$2,$3,$4,$5,$6,$7,$8,'Patient','normal')
+		VALUES (
+			$1,
+			$2,
+			$3,
+			$4,
+			$5,
+			$6,
+			$7,
+			$8,
+			'Patient',
+			'normal',
+			now()
+		)
 		`;
 	const values = [
 		formOption.name,
@@ -703,7 +695,6 @@ const editObjectPackage = (formOption, username, record_id, reservedTimestamp) =
 								
 		WHERE asset_control_number IN (${[formOption].map(item => `'${item.asset_control_number}'`)});
 	`
-	console.log(editObjectPackage)
 	return text
 }
 
@@ -723,7 +714,10 @@ function signin(username) {
 		roles
 			AS
 				(
-					SELECT user_role.user_id, user_role.role_id, roles.name as role_name 
+					SELECT 
+						user_role.user_id, 
+						user_role.role_id, 
+						roles.name as role_name 
 					FROM user_role
 					INNER JOIN roles
 					ON roles.id = user_role.role_id
@@ -797,8 +791,7 @@ function signin(username) {
 
 }
 	
-
-function signup(signupPackage) {
+const signup = (signupPackage) => {
 
 	const text = 
 		`
@@ -1236,10 +1229,18 @@ const deleteDevice = (formOption) => {
 	return query
 }
 
+const deleteObjectWithImport = (idPackage) => {
+	const query = `
+		DELETE FROM object_table
+		WHERE asset_control_number IN (${idPackage.map(item => `'${item}'`)});
+	`
+	return query
+}
+
 const deleteImportData = (idPackage) => {
 	const query = `
 		DELETE FROM import_table
-		WHERE id IN (${idPackage.map(item => `'${item}'`)});
+		WHERE asset_control_number IN (${idPackage.map(item => `'${item}'`)});
 	`
 	return query
 }
@@ -1285,7 +1286,7 @@ const setVisitTimestamp = (username) => {
 	`
 }
 
-const insertUserData = (name, roles, area_id,secondArea) => {
+const insertUserData = (name, roles, area_id, secondArea) => {
 
 	if (secondArea =='') {
 		return `
@@ -1308,6 +1309,20 @@ const insertUserData = (name, roles, area_id,secondArea) => {
 				)
 			)`
 		)};
+
+		INSERT INTO user_area (
+			user_id, 
+			area_id
+		)
+		VALUES 
+			(
+				(
+					SELECT id 
+					FROM user_table 
+					WHERE name ='${name}'
+				),
+				${area_id}
+			)
 	`
 	}else{
 		return `
@@ -1346,15 +1361,27 @@ const insertUserData = (name, roles, area_id,secondArea) => {
 				'${sA}'
 			)`
 		)};
-	
+
+		INSERT INTO user_area (
+			user_id, 
+			area_id
+		)
+		VALUES 
+			(
+				(
+					SELECT id 
+					FROM user_table 
+					WHERE name ='${name}'
+				),
+				${area_id}
+			)
 	`
 	}
-
 }
 
 const addEditObjectRecord = (formOption, username, filePath) => {
+
 	let item = formOption
-	console.log(formOption)
 	const text = `
 		INSERT INTO edit_object_record (
 			edit_user_id, 
@@ -1513,7 +1540,16 @@ const confirmValidation = (username) => {
 				SELECT id
 				FROM user_table
 				WHERE user_table.name = $1
-			) as user_id
+			) as user_id,
+			ARRAY (
+				SELECT role_id
+				FROM user_role
+				WHERE user_role.user_id = (
+					SELECT id
+					FROM user_table 
+					WHERE user_table.name = '${username}'
+				)
+			) as roles
 
 		FROM user_table
 
@@ -1579,18 +1615,42 @@ const addMonitorConfig = (monitorConfigPackage) => {
 	}
 }
 
-const getMonitorConfig = (type, sitesGroup) => {
+const getMonitorConfig = (type, sitesGroup, isGetLbeaconPosition) => {
 	let text =  `
 		SELECT 
-			id, 
-			area_id,
-			enable,
-			start_time,
-			end_time
+			${type}.id, 
+			${type}.area_id,
+			${type}.enable,
+			${type}.start_time,
+			${type}.end_time,
+			${type}.is_active,
+			lbeacon_temp_table.lbeacons
+
 		FROM ${type}
 
-		WHERE area_id IN (${sitesGroup.map(item => item)})
+		LEFT JOIN (
 
+			SELECT 
+				lbeacon_area_id,
+				ARRAY_AGG(uuid) AS lbeacons
+			FROM (
+
+				SELECT 
+
+					SUBSTRING(uuid::text, 1, 4)::INTEGER AS lbeacon_area_id,
+					uuid,
+					room
+
+				FROM lbeacon_table
+				WHERE room IS NOT NULL
+				
+			) AS temp
+			GROUP BY lbeacon_area_id
+		) as lbeacon_temp_table
+		ON lbeacon_temp_table.lbeacon_area_id IN (${sitesGroup.map(item => item)})
+
+		WHERE area_id IN (${sitesGroup.map(item => item)})
+		
 		ORDER BY id;
 	`
 	return text
@@ -1827,7 +1887,6 @@ function deleteSameNameSearchQueue(keyType, keyWord){
 	var text = `DELETE FROM search_result_queue where (key_type = '${keyType}' AND key_word = '${keyWord}') 
 	OR 
 		id NOT IN (SELECT id FROM search_result_queue ORDER BY query_time desc LIMIT 5) RETURNING *;`
-	// console.log(text)
 	return text
 }
 function backendSearch_writeQueue(keyType, keyWord, mac_addresses, pin_color_index){
@@ -1971,13 +2030,13 @@ function modifyTransferredLocation(type, data){
     }else{
         console.log('modifyTransferredLocation: unrecognized command type')
     }
-    console.log(query)
-    return query
+
+	return query
 }
 
-const setGeofenceEnable = (enable, areaId) => {
+const setMonitorEnable = (enable, areaId, type) => {
 	return `
-		UPDATE geo_fence_config 
+		UPDATE ${type}
 		SET enable = ${enable} 
 		WHERE area_id = ${areaId}
 	`
@@ -2072,6 +2131,7 @@ module.exports = {
 	deletePatient,
 	deleteDevice, 
 	deleteImportData,
+	deleteObjectWithImport,
 	setShift,
 	deleteLBeacon,
 	deleteGateway,
@@ -2107,7 +2167,7 @@ module.exports = {
 	getRolesPermission,
 	modifyPermission,
 	modifyRolesPermission,
-	setGeofenceEnable,
+	setMonitorEnable,
 	clearSearchHistory
 }
 

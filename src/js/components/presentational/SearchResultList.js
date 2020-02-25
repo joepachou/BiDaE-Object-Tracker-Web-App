@@ -23,6 +23,8 @@ import {
 import moment from 'moment'
 import ScrollArea from 'react-scrollbar'
 import { sign } from 'crypto';
+import { toast } from 'react-toastify';
+import ToastNotification from '../presentational/ToastNotification'
 
 
 class SearchResult extends React.Component {
@@ -212,6 +214,11 @@ class SearchResult extends React.Component {
                         type: 'setUpdateTrackingData',
                         value: true
                     })
+                    toast.success("Change Status Success", {
+                        position: toast.POSITION.TOP_RIGHT,
+                        autoClose: 5000,
+                        hideProgressBar: true
+                    });
                 }
                 .bind(this),
                 1000

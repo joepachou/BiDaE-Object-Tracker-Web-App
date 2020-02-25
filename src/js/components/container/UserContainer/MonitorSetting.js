@@ -29,6 +29,7 @@ class MonitorSetting extends React.Component{
             <Container className='py-2 text-capitalize'>
                 <Tabs 
                     selectedIndex={this.state.tabIndex} 
+                    className="w-100"
                     onSelect={tabIndex => {
                         this.setState({ 
                             tabIndex

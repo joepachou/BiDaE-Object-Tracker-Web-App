@@ -20,6 +20,7 @@ import { AppContext } from '../../context/AppContext';
 import {Tabs, Tab,TabList, TabPanel } from 'react-tabs';
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
 import retrieveDataHelper from '../../helper/retrieveDataHelper'
+import { toast } from 'react-toastify';
 const SelectTable = selecTableHOC(ReactTable);
 
 class SystemStatus extends React.Component{
@@ -157,8 +158,14 @@ class SystemStatus extends React.Component{
     }
 
     handleSubmitForm = () => {
+        toast.success("Edit LBeacon or Gateway Success", {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            hideProgressBar: true
+        });
         setTimeout(this.getLbeaconData(), 500) 
         setTimeout(this.getGatewayData(), 500) 
+
         this.setState({
             showEdit: false
         })

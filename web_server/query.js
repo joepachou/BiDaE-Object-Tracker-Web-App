@@ -94,7 +94,7 @@ const getTrackingData = (request, response) => {
                 item.isMatchedObject = checkMatchedObject(item, userAuthenticatedAreaId, currentAreaId)
 
                 /** Set the boolean if the object's last_seen_timestamp is in the specific time period */
-                let isInTheTimePeriod = moment().diff(item.last_seen_timestamp, 'seconds') 
+                let isInTheTimePeriod = moment().diff(item.last_reported_timestamp, 'seconds') 
                     < process.env.OBJECT_FOUND_TIME_INTERVAL_IN_SEC;
 
                 /** Set the boolean if its rssi is below the specific rssi threshold  */
@@ -129,7 +129,7 @@ const getTrackingData = (request, response) => {
 
                 /** Delete the unused field of the object */
                 delete item.first_seen_timestamp
-                delete item.last_seen_timestamp
+                // delete item.last_seen_timestamp
                 delete item.panic_violation_timestamp
                 delete item.lbeacon_uuid
                 delete item.monitor_type
@@ -326,13 +326,29 @@ const setLocaleID = (request, response) => {
 
 const editObject = (request, response) => {
     const formOption = request.body.formOption
+    let {
+        area_id
+    } = formOption
     pool.query(queryType.editObject(formOption))
         .then(res => {
-            console.log("Edit object success");
-            response.status(200).json(res)
+            console.log("edit object success");
+            if (process.env.RELOAD_GEO_CONFIG_PATH) {
+                exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 9999 -c cmd_reload_geo_fence_setting -r geofence_object -f area_one -a ${area_id}`.split(' '), function(err, data){
+                    if(err){
+                        console.log(`execute reload geofence setting fails ${err}`)
+                        response.status(200).json(res)
+                    }else{
+                        console.log(`execute reload geofence setting success`)
+                        response.status(200).json(res)
+                    }
+                })
+            } else {
+                response.status(200).json(res)
+                console.log('IPC has not set')
+            }
         })
         .catch(err => {
-            console.log("Edit Object Fails: " + err)
+            console.log(`edit object fails ${err}`)
         })
 }
 
@@ -350,13 +366,29 @@ const editImport = (request, response) => {
 
 const editPatient = (request, response) => {
     const formOption = request.body.formOption
+    let {
+        area_id
+    } = formOption
     pool.query(queryType.editPatient(formOption))
         .then(res => {
-            console.log("edit Patient success");
-            response.status(200).json(res)
+            console.log("edit patient success");
+            if (process.env.RELOAD_GEO_CONFIG_PATH) {
+                exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 9999 -c cmd_reload_geo_fence_setting -r geofence_object -f area_one -a ${area_id}`.split(' '), function(err, data){
+                    if(err){
+                        console.log(`execute reload geofence setting fails ${err}`)
+                        response.status(200).json(res)
+                    }else{
+                        console.log(`execute reload geofence setting success`)
+                        response.status(200).json(res)
+                    }
+                })
+            } else {
+                response.status(200).json(res)
+                console.log('IPC has not set')
+            }
         })
         .catch(err => {
-            console.log("edit Patient Fails: " + err)
+            console.log(`edit patient fails ${err}`)
         })
 }
 
@@ -398,12 +430,12 @@ const addPatient = (request, response) => {
     const formOption = request.body.formOption
     pool.query(queryType.addPatient(formOption))
         .then(res => {
-            console.log("Add Patient Success");
+            console.log("add patient success");
             response.status(200).json(res)
         })
         .catch(err => {
  
-            console.log("Add Patient Fails: " + err)
+            console.log(`add patient fails ${err}`)
             response.status(500).json({
                 message:'not good'
             })
@@ -449,6 +481,7 @@ const signin = (request, response) => {
 
     pool.query(queryType.signin(username))
         .then(res => {
+            console.log(res.rows[0])
             if (res.rowCount < 1) {
                 console.log(`sign in fail: username or password is incorrect`)
                 response.json({
@@ -472,7 +505,7 @@ const signin = (request, response) => {
 
                     let userInfo = {
                         name,
-                        myDevice: mydevice,
+                        myDevice: mydevice || [],
                         roles,
                         permissions,
                         freqSearchCount: freq_search_count,
@@ -482,16 +515,16 @@ const signin = (request, response) => {
                         locale_id,
                         locale
                     }
-                    
+
                     request.session.userInfo = userInfo
                     response.json({
                         authentication: true,
                         userInfo
                     })
                     pool.query(queryType.setVisitTimestamp(username))
-                        .catch(err => console.log("set visit timestamp: ",err))
+                        .then(res =>  console.log(`sign in success: ${name}`))
+                        .catch(err => console.log(`set visit timestamp fails ${err}`))
 
-                    console.log(`sign in success: ${name}`)
                 } else {
                     response.json({
                         authentication: false,
@@ -512,7 +545,6 @@ const signup = (request, response) => {
         password, 
         roles,
         area_id,
-        shiftSelect,
         secondArea
     } = request.body;
 
@@ -522,22 +554,22 @@ const signup = (request, response) => {
     const signupPackage = {
         name,
         password: hash,
-        shiftSelect,
         area_id
     }
+
     pool.query(queryType.signup(signupPackage))
         .then(res => {
-            pool.query(queryType.insertUserData(name, roles, area_id,secondArea))
+            pool.query(queryType.insertUserData(name, roles, area_id, secondArea))
                 .then(res => {
                     console.log('sign up success')
                     response.status(200).json(res)
                 })
                 .catch(err => {
-                    console.log("sinup 2 error:", err)
+                    console.log(`sinup error ${err}`)
                 })
         })
         .catch(err => {
-            console.log("signup 1 fails" + err)
+            console.log(`signup fails ${err}`)
         })
 }
 
@@ -866,9 +898,21 @@ const deleteDevice = (request, response) => {
         })
 }
 
-const deleteImportData = (request, response) => {
-    const { idPackage } = request.body
 
+const deleteObjectWithImport = (request, response) => {
+    const { idPackage } = request.body 
+        pool.query(queryType.deleteObjectWithImport(idPackage))
+        .then(res => {
+                    console.log('deleteObjectWithImport success')
+                    response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log('deleteObjectWithImport error: ', err)
+        })
+}
+
+const deleteImportData = (request, response) => {
+    const { idPackage } = request.body 
         pool.query(queryType.deleteImportData(idPackage))
         .then(res => {
                     console.log('delete ImportData success')
@@ -883,12 +927,13 @@ const deleteImportData = (request, response) => {
 const getMonitorConfig = (request, response) => {
     let {
         type,
-        areasId
+        areasId,
+        isGetLbeaconPosition
     } = request.body
 
     let sitesGroup = process.env.SITES_GROUP.split(',')
 
-    pool.query(queryType.getMonitorConfig(type, sitesGroup))
+    pool.query(queryType.getMonitorConfig(type, sitesGroup, isGetLbeaconPosition))
         .then(res => {
             console.log(`get ${type} success`)
             let toReturn = res.rows
@@ -935,47 +980,46 @@ const checkoutViolation = (request, response) => {
 }
 
 const confirmValidation = (request, response) => {
-    const locale = request.body.locale
-    let { username, password } = request.body
+    let { 
+        username, 
+        password 
+    } = request.body
     pool.query(queryType.confirmValidation(username))
         .then(res => {
             if (res.rowCount < 1) {
                 response.json({
                     confirmation: false,
-                    message: locale.texts.INCORRECT
+                    message: 'incorrect'
                 })
             } else {
                 const hash = res.rows[0].password
                 
                 if (bcrypt.compareSync(password, hash)) {
                     let { 
-                        name, 
-                        role, 
-                        id
+                        roles, 
                     } = res.rows[0]
-
-                    let userInfo = {
-                        name,
-                        role,
-                        id,
+                    
+                    /** authenticate if user is care provider */
+                    if (roles.includes('3')) {
+                        response.json({
+                            confirmation: true,
+                        })
+                    } else {
+                        response.json({
+                            confirmation: false,
+                            message: 'authority is not enough'
+                        })
                     }
-                    request.session.userInfo = userInfo
-                    response.json({
-                        confirmation: true,
-                        user_id:res.rows[0].user_id,
-                        role_id:res.rows[0].role_id,
-                        areas_id:res.rows[0].areas_id
-                    })
                 } else {
                     response.json({
                         confirmation: false,
-                        message: locale.texts.PASSWORD_INCORRECT
+                        message: 'password incorrect'
                     })
                 }
             }
         })
         .catch(err => {
-            console.log(`confirm validation fail: ${err}`)
+            console.log(`confirm validation fails ${err}`)
         })
 }
 
@@ -1009,11 +1053,12 @@ const setGeofenceConfig = (request, response) => {
         .then(res => {
             console.log(`set geofence config success`)
             if (process.env.RELOAD_GEO_CONFIG_PATH) {
-                exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 5432 -c cmd_reload_geo_fence_setting -r geofence_list -f area_one -a ${area_id}`.split(' '), function(err, data){
+                exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 9999 -c cmd_reload_geo_fence_setting -r geofence_list -f area_one -a ${area_id}`.split(' '), function(err, data){
                     if(err){
-                        console.log('err', err)
+                        console.log(`execute reload geofence setting fails ${err}`)
+                        response.status(200).json(res)
                     }else{
-                        console.log('data', data)
+                        console.log(`execute reload geofence setting success`)
                         response.status(200).json(res)
                     }
                 })
@@ -1029,6 +1074,7 @@ const setGeofenceConfig = (request, response) => {
 }
 
 const addGeofenceConfig = (request, response) => {
+
     let {
         monitorConfigPackage,
     } = request.body
@@ -1038,11 +1084,12 @@ const addGeofenceConfig = (request, response) => {
         .then(res => {
             console.log(`add geofence config success`)
             if (process.env.RELOAD_GEO_CONFIG_PATH) {
-                exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 5432 -c cmd_reload_geo_fence_setting -r geofence_list -f area_one -a ${area_id}`.split(' '), function(err, data){
+                exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 9999 -c cmd_reload_geo_fence_setting -r geofence_list -f area_one -a ${area_id}`.split(' '), function(err, data){
                     if(err){
-                        console.log('err', err)
+                        console.log(`execute reload geofence setting fails ${err}`)
+                        response.status(200).json(res)
                     }else{
-                        console.log('data', data)
+                        console.log(`execute reload geofence setting success`)
                         response.status(200).json(res)
                     }
                 })
@@ -1053,6 +1100,36 @@ const addGeofenceConfig = (request, response) => {
         })
         .catch(err => {
             console.log(`add geofence config fail: ${err}`)
+        })
+}
+
+const setMonitorEnable = (request, response) => {
+    const {
+        enable,
+        areaId,
+        type
+    } = request.body
+
+    pool.query(queryType.setMonitorEnable(enable, areaId, type))
+        .then(res => {
+            console.log(`set geofence enable success`)
+            if (process.env.RELOAD_GEO_CONFIG_PATH) {
+                exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 9999 -c cmd_reload_geo_fence_setting -r geofence_list -f area_one -a ${areaId}`.split(' '), function(err, data){
+                    if(err){
+                        console.log(`execute reload geofence setting fails ${err}`)
+                        response.status(200).json(res)
+                    }else{
+                        console.log(`execute reload geofence setting success`)
+                        response.status(200).json(res)
+                    }
+                })
+            } else {
+                response.status(200).json(res)
+                console.log('IPC has not set')
+            }
+        })
+        .catch(err => {
+            console.log(err)
         })
 }
 
@@ -1346,22 +1423,6 @@ const modifyTransferredLocation = (request, response) => {
         })
 }
 
-const setGeofenceEnable = (request, response) => {
-    const {
-        enable,
-        areaId
-    } = request.body
-
-    pool.query(queryType.setGeofenceEnable(enable, areaId))
-        .then(res => {
-            console.log(`set geofence enable success`)
-            response.status(200).json(res)
-        })
-        .catch(err => {
-            console.log(err)
-        })
-}
-
 const getRolesPermission = (request, response) => {
     let query = queryType.getRolesPermission()
     pool.query(query).then(res => {
@@ -1465,6 +1526,7 @@ module.exports = {
     deletePatient,
     deleteDevice,
     deleteImportData,
+    deleteObjectWithImport,
     deleteLBeacon,
     deleteGateway,
     deleteUser,
@@ -1492,7 +1554,7 @@ module.exports = {
     getTransferredLocation,
     modifyTransferredLocation,
     clearSearchHistory,
-    setGeofenceEnable,
+    setMonitorEnable,
     getRolesPermission,
     modifyPermission,
     modifyRolesPermission,

@@ -69,7 +69,7 @@ const EditUserForm = ({
                         name: selectedUser ? selectedUser.name : '',
                         password: '',
                         roles: selectedUser ? selectedUser.role_type : config.defaultRole,
-                        area: selectedUser ? mainAreaDefault : null,
+                        area: selectedUser ? mainAreaDefault : '',
                         secondArea:selectedUser  ? selectedUser.second_area  : '',
                     }}
 
@@ -90,7 +90,7 @@ const EditUserForm = ({
                                     },
                                 })
                                 .max(100),
-                            area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
+                            area: selectedUser ? null : Yup.object().required(locale.texts.AREA_IS_REQUIRED),
                             password: selectedUser ? '' : Yup.string().required(locale.texts.PASSWORD_IS_REQUIRED),
                             roles: Yup.string().required(locale.texts.ROLE_IS_REQUIRED)
                         })
@@ -153,14 +153,13 @@ const EditUserForm = ({
                                 type="text"
                                 name="areaName"
                                 label={locale.texts.MAIN_AREA}
-                                error={errors.areaName}
-                                touched={touched.areaName}
-                                placeholder={locale.texts.USERNAME}
+                                error={errors.area}
+                                touched={touched.area}
                                 component={() => (
                                     <Select
                                         placeholder = {locale.texts.SELECT_AREA}
                                         name="area"
-                                        value = {values.area}
+                                        value={values.area}
                                         onChange={value => setFieldValue("area", value)}
                                         options={areaOptions}
                                         styles={styleConfig.reactSelect}
@@ -170,8 +169,7 @@ const EditUserForm = ({
                                     />
                                 )}
                             />
-                            <hr/>
-                            <FormikFormGroup 
+                            {/* <FormikFormGroup 
                                 name="secondArea"
                                 label={'次要地區'}
                                 error={errors.secondArea}
@@ -197,7 +195,7 @@ const EditUserForm = ({
                                         })}
                                     </CheckboxGroup>
                                 )}
-                            />
+                            /> */}
                             <Modal.Footer>
                                 <Button 
                                     variant="outline-secondary" 

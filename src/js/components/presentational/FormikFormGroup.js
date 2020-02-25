@@ -14,7 +14,8 @@ const FormikFormGroup = ({
    placeholder,
    component,
    display = true,
-   className
+   className, 
+   value
 }) => {
     let style = {
         container: {
@@ -37,13 +38,25 @@ const FormikFormGroup = ({
             </small>
             {component 
                 ?   component()
-                :   <Field  
-                        name={name} 
-                        type={type} 
-                        className={'form-control' + (error ? ' is-invalid' : '')} 
-                        placeholder={placeholder}
-                        disabled={disabled}
-                    />
+                :   (
+                        value ?
+                            <Field  
+                                name={name} 
+                                type={type} 
+                                value={value}
+                                className={'form-control' + (error ? ' is-invalid' : '')} 
+                                placeholder={placeholder}
+                                disabled={disabled}
+                            />
+                        :
+                            <Field  
+                                name={name} 
+                                type={type} 
+                                className={'form-control' + (error ? ' is-invalid' : '')} 
+                                placeholder={placeholder}
+                                disabled={disabled}
+                            />
+                    )
             }
             {error && touched && 
                 <small 
