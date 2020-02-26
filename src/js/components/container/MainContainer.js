@@ -606,6 +606,7 @@ class MainContainer extends React.Component{
     }
 
     handleShowResultListForMobile = () => {
+        console.log('click')
         this.setState({
             display: false
         })
