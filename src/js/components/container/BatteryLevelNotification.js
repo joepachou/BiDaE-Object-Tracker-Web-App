@@ -86,26 +86,28 @@ class BatteryLevelNotification extends React.Component {
 
         return (
             <Dropdown
+            >
+                <Dropdown.Toggle 
+                    variant='light'
+                    id="battery-notice-btn"
                     disabled={runOutPowerItems.length == 0}
                 >
-                    
-                    <Dropdown.Toggle variant='light'>
-                        <i className="fas fa-bell" style={style.icon}>
-                            <NotificationBadge 
-                                count={runOutPowerItems.length} 
-                                effect={Effect.SCALE}
-                                style={{
-                                    top: '-28px',
-                                    right: '-10px',    
-                                }}
-                            />
-                        </i>
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu
-                        alignRight
-                        bsPrefix = 'wayne-dropdown-menu-right  dropdown-menu '
-                    >
-                        <div
+                    <i className="fas fa-bell" style={style.icon}>
+                        <NotificationBadge 
+                            count={runOutPowerItems.length} 
+                            effect={Effect.SCALE}
+                            style={{
+                                top: '-28px',
+                                right: '-10px',    
+                            }}
+                        />
+                    </i>
+                </Dropdown.Toggle>
+                <Dropdown.Menu
+                    alignRight
+                    bsPrefix = 'wayne-dropdown-menu-right  dropdown-menu '
+                >
+                    <div
                         className="px-5 py-2"
                         style={style.title}
                     >
@@ -143,12 +145,8 @@ class BatteryLevelNotification extends React.Component {
                             )
                         })}
                     </div>
-                    
-                    </Dropdown.Menu>
-                    
-                    
-                </Dropdown> 
-            
+                </Dropdown.Menu>
+            </Dropdown> 
         )
     }
 };
