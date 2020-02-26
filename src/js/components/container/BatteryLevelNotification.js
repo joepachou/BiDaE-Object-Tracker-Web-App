@@ -7,7 +7,6 @@ import { AppContext } from '../../context/AppContext'
 import config from '../../config'
 import { getDescription } from '../../helper/descriptionGenerator'
 import retrieveDataHelper from '../../helper/retrieveDataHelper'
-import '../../../css/CustomizedLayout.css'
 
 class BatteryLevelNotification extends React.Component {
     
@@ -83,10 +82,8 @@ class BatteryLevelNotification extends React.Component {
             }
         }
 
-
         return (
-            <Dropdown
-            >
+            <Dropdown>
                 <Dropdown.Toggle 
                     variant='light'
                     id="battery-notice-btn"
@@ -105,7 +102,7 @@ class BatteryLevelNotification extends React.Component {
                 </Dropdown.Toggle>
                 <Dropdown.Menu
                     alignRight
-                    bsPrefix = 'wayne-dropdown-menu-right  dropdown-menu '
+                    bsPrefix='bot-dropdown-menu-right dropdown-menu '
                 >
                     <div
                         className="px-5 py-2"

@@ -642,3 +642,33 @@ p {
     padding-right: 5px;
     padding-left: 5px;
 }
+
+.btn.btn-light {
+    background-color: inherit;
+    border: none;
+
+}
+.btn.btn-light:hover {
+    background-color: inherit;
+    border: none;
+}
+.btn.btn-light:active {
+    background-color: inherit;
+    border: none;
+}
+.btn.btn-light:focus {
+    background-color: inherit;
+    border: none;
+}
+
+.btn-light:not(:disabled):not(.disabled).active:focus, 
+.btn-light:not(:disabled):not(.disabled):active:focus, 
+.show>.btn-light.dropdown-toggle:focus {
+    background-color: inherit;
+    box-shadow: none
+}
+
+.bot-dropdown-menu-right{
+    right: 0 !important;
+    left: auto !important;
+}

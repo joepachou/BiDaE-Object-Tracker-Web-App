@@ -20,12 +20,6 @@ class NavbarContainer extends React.Component {
         showShiftChange: false,
     }
 
-    handleSigninFormShowUp = () => {
-        this.setState({
-            showSignin: true,
-        })
-    }
-
     handleSigninFormSubmit = () => {
         this.setState({
             showSignin: false,
@@ -39,10 +33,20 @@ class NavbarContainer extends React.Component {
         })
     }
 
-    handleShiftChangeRecordShowUp = () => {
-        this.setState({
-            showShiftChange: true
-        })
+    handleClick = (e) => {
+        let name = e.target.getAttribute('name')
+        switch(name) {
+            case "shiftChange":
+            this.setState({
+                showShiftChange: true
+            })
+            break;
+            case "signin":
+            this.setState({
+                showSignin: true,
+            })
+            break;
+        }
     }
 
     handleShiftChangeRecordSubmit = () => {
@@ -183,7 +187,8 @@ class NavbarContainer extends React.Component {
                         >
                             <Nav.Item
                                 className="nav-link nav-route" 
-                                onClick={this.handleShiftChangeRecordShowUp}
+                                name="shiftChange"
+                                onClick={this.handleClick}
                             >
                                 {locale.texts.SHIFT_CHANGE_RECORD}
                             </Nav.Item>
@@ -211,20 +216,43 @@ class NavbarContainer extends React.Component {
                             {locale.toggleLang().nextLangName}
                         </Nav.Item>
                         {auth.authenticated
-                            ? 
-                                <NavDropdown title={<i className="fas fa-user-alt"></i> }id="collasible-nav-dropdown" alignRight>
-                                    <div className="dropdownWrapper">
-                                        <LinkContainer to="/page/userSetting" className="bg-white">
-                                            <NavDropdown.Item className="lang-select">{auth.user.name}</NavDropdown.Item>
-                                        </LinkContainer>
-                                        <Dropdown.Divider />
-                                        <LinkContainer to="/" className="bg-white">
-                                            <NavDropdown.Item className="lang-select" onClick={auth.signout}>{locale.texts.SIGN_OUT}</NavDropdown.Item>
-                                        </LinkContainer>
-                                    </div>
-                                </NavDropdown> 
-                            : 
-                                <Nav.Item className="nav-link nav-route" onClick={this.handleSigninFormShowUp}>{locale.texts.SIGN_IN}</Nav.Item>
+                            ?   (
+                                <Dropdown>
+                                    <Dropdown.Toggle 
+                                        variant='light'
+                                        id="collasible-nav-dropdown" 
+                                    >
+                                        <i className="fas fa-user-alt" />
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu
+                                        bsPrefix='bot-dropdown-menu-right  dropdown-menu '
+                                    >
+                                        <div className="dropdownWrapper">
+                                            <LinkContainer to="/page/userSetting" className="bg-white">
+                                                <Dropdown.Item className="lang-select">
+                                                    {auth.user.name}
+                                                </Dropdown.Item>
+                                            </LinkContainer>
+                                            <Dropdown.Divider />
+                                            <LinkContainer to="/" className="bg-white">
+                                                <Dropdown.Item className="lang-select" onClick={auth.signout}>
+                                                    {locale.texts.SIGN_OUT}
+                                                </Dropdown.Item>
+                                            </LinkContainer>
+                                        </div>
+                                    </Dropdown.Menu>
+                                </Dropdown> 
+                            )
+
+                            :   (
+                                <Nav.Item 
+                                    className="nav-link nav-route" 
+                                    onClick={this.handleClick}
+                                    name="signin"
+                                >
+                                    {locale.texts.SIGN_IN}
+                                </Nav.Item>
+                            )
                         }
                     </Nav>
                 </Navbar.Collapse>
