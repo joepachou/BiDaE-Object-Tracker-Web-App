@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
+const httpPort = process.env.HTTP_PORT || 80;
 const httpsPort = process.env.HTTPS_PORT || 443;
 const db = require('./web_server/query')
 const path = require('path');
@@ -31,7 +32,7 @@ app.use(function(req, res, next) {
     next();
 });
 
-setInterval(db.clearSearchHistory, 86400 * process.env.CLEAR_SEARCH_HISTORY_INTERVAL)
+setInterval(db.clearSearchHistory, 86400*process.env.CLEAR_SEARCH_HISTORY_INTERVAL)
 
 app.get('/image/pinImage/:pinImage', (req, res) => {
     res.sendFile(path.join(__dirname, 'src','img','colorPin',req.params['pinImage']));
@@ -218,11 +219,17 @@ var credentials = {
 
 const httpsServer = https.createServer(credentials, app)
 
+const httpServer = http.createServer(app);
+
 /** Enable HTTPS server */
 httpsServer.listen(httpsPort, () => {
     console.log(`HTTPS Server running on PORT ${httpsPort}`)
 })
 
+/** Enable HTTP server */
+httpServer.listen(httpPort, () =>{
+    console.log(`HTTP Server running on port ${httpPort}`)
+})
 
 
 
