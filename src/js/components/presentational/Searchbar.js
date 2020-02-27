@@ -19,6 +19,7 @@ class Searchbar extends React.Component {
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.getSearchKey(this.state.value);
+        this.props.handleShowResultListForMobile();
     }
 
     handleChange = (e) => {

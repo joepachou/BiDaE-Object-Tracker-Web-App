@@ -66,6 +66,7 @@ class Auth extends React.Component {
  
         return await axios.post(dataSrc.setUserRole, {
             areaNumber : config.mapConfig.areaModules[values.area.name],
+            originalName:values.originalName,
             name: values.name,
             ...values
         })

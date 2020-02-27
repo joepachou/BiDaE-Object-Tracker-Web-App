@@ -1073,10 +1073,14 @@ const deleteUser = (username) => {
 
 
 
-const setUserRole = (name, roles,areaNumber,secondArea) => {
-
+const setUserRole = (name, roles,areaNumber,secondArea,originalName) => {
+ 
 	if (secondArea == '') { //如果沒有選secondArea 就是''
 			const query = `
+
+		UPDATE user_table
+		SET name = '${name}'
+		WHERE name = '${originalName}';
 
 		DELETE FROM user_role WHERE user_role.user_id = (
 			SELECT id 
@@ -1116,6 +1120,9 @@ const setUserRole = (name, roles,areaNumber,secondArea) => {
 	 else
 	 {
 		const query = `
+		UPDATE user_table
+		SET name = '${name}'
+		WHERE name = '${originalName}';
 
 		DELETE FROM user_role WHERE user_role.user_id = (
 			SELECT id 
@@ -1692,8 +1699,7 @@ const setMonitorConfig = (monitorConfigPackage) => {
 	return query
 }
 
-const addGeofenceConfig = (monitorConfigPackage) => {
-
+const addGeofenceConfig = (monitorConfigPackage) => { 
 	let {
 		type,
 		id,

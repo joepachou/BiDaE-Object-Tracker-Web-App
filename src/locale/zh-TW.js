@@ -251,6 +251,8 @@ const tw = {
     PASSWORD_INCORRECT:"密碼錯誤",
     AUTHORITY_IS_NOT_ENOUGH:"權限不足",
     ACCOUNT_NOT_BELONG_THIS_AREA:"該帳號不屬於此區域",
+    START_TIME_IS_REQUIRED:"請填入啟動時間",
+    END_TIME_IS_REQUIRED:"請填入結束時間",
 
     /** Place Holder */
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "請輸入或掃描mac address",

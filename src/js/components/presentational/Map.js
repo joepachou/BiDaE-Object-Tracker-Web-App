@@ -191,16 +191,20 @@ class Map extends React.Component {
                 object_mac_address : this.props.pathMacAddress
             })
             .then(res => {
+                var preUUID = ''
                 res.data.rows.map(item => {
-                    //console.log(item.record_timestamp);
-                    let latLng = [item.base_y,item.base_x]
-                    let pos = this.macAddressToCoordinate(item.mac_address,latLng);
-    
                     
-                    var marker = L.circleMarker(pos, {radius:3,color:'lightgrey'});
-                    
-                    this.pathOfDevice.addLayer(marker)
-                    route.push(pos)
+                    if(item.uuid != preUUID){
+                        preUUID = item.uuid;
+                        let latLng = [item.base_y,item.base_x]
+                        let pos = this.macAddressToCoordinate(item.mac_address,latLng);
+        
+                        
+                        var marker = L.circleMarker(pos, {radius:3,color:'lightgrey'});
+                        
+                        this.pathOfDevice.addLayer(marker)
+                        route.push(pos)
+                    }
                 })
 
                 var polyline = L.polyline(route,{

@@ -68,7 +68,7 @@ const EditGeofenceConfig = ({
                 closeButton 
             >
                 {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
-            </Modal.Header >
+            </Modal.Header > 
             <Modal.Body>
                 <Formik
                     initialValues = {{
@@ -85,15 +85,19 @@ const EditGeofenceConfig = ({
                         selected_f_lbeacon: null,
                         isGlobal: selectedData ? selectedData.is_global_fence : 1,
                     }}
-
+                    
                     validationSchema = {
                         Yup.object().shape({
                             name: Yup.string().required(locale.texts.NAME_IS_REQUIRED),   
                             p_rssi: Yup.string().required("must be negative number"),   
                             f_rssi: Yup.string().required("must be negative number"),   
+                            start_time:  Yup.string().required(locale.texts.NAME_IS_REQUIRED),   
+                            end_time:  Yup.string().required(locale.texts.NAME_IS_REQUIRED),   
+                            area:  Yup.string().required(locale.texts.AREA_IS_REQUIRED),   
                     })}
 
-                    onSubmit={(values, { setStatus, setSubmitting }) => {
+                    onSubmit={(values, { setStatus, setSubmitting },error ) => {
+          
                         let monitorConfigPackage = {
                             ...values,
                             id: isEdited ? selectedData.id : '',
@@ -196,10 +200,12 @@ const EditGeofenceConfig = ({
                                         value={values.start_time}
                                         getValue={value => {
                                             setFieldValue("start_time", value.value)
-                                        }}
+                                        }} 
                                         name="start_time"
                                         start="0"
-                                        end="23"
+                                        end="23" 
+                                        error = {errors.start_time}
+                                        error_tip = {locale.texts.START_TIME_IS_REQUIRED}
                                     />
                                 </Col>
                                 <Col>
@@ -212,6 +218,8 @@ const EditGeofenceConfig = ({
                                         name="end_time"
                                         start="0"
                                         end="24"
+                                        error = {errors.end_time}
+                                        error_tip = {locale.texts.END_TIME_IS_REQUIRED}
                                     />
                                 </Col>
                             </Row>
