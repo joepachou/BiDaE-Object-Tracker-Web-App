@@ -22,7 +22,8 @@ class ImportObjectTable extends React.Component{
     state = { 
         selection: [],
         selectAll: false,
-        showDeleteConfirmation:false
+        showDeleteConfirmation:false,
+        filetext:''
     }
 
 
@@ -222,7 +223,10 @@ class ImportObjectTable extends React.Component{
                 }
            
             }; // 以二進制方式打開文件 
-             fileReader.readAsBinaryString(files[0]); 
+
+            if (files.length !=0 ) { //避免按下取消後的bug
+                fileReader.readAsBinaryString(files[0]);  
+            }  
              
         };
     

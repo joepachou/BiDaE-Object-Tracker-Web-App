@@ -17,7 +17,7 @@ import styleConfig from '../../../styleConfig';
 import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm'
 import { Select } from 'semantic-ui-react';
 
-
+let lock = false
 class GeoFenceSettingBlock extends React.Component{
 
     static contextType = AppContext
@@ -149,11 +149,12 @@ class GeoFenceSettingBlock extends React.Component{
                 })
                 break;
             case "delete":
-                this.setState({
+                this.setState({ 
                     showDeleteConfirmation: true,
                     selectedData: value.original,
-                    path: 'deleteMonitorConfig'
-                })
+                    path: 'deleteMonitorConfig',  
+                }) 
+                lock = true  
                 break;
         }
     }
@@ -164,9 +165,11 @@ class GeoFenceSettingBlock extends React.Component{
             showDeleteConfirmation: false,
             selectedData: null,
         })
+        lock=false 
     }
 
     handleSubmit = (pack) => {
+        lock=true
         let configPackage = pack ? pack : {}
         let { 
             path,
@@ -184,8 +187,9 @@ class GeoFenceSettingBlock extends React.Component{
                     this.setState({
                         show: false,
                         showDeleteConfirmation: false,
-                        selectedData: null,
+                        selectedData: null, 
                     })
+                   
                 },
                 300
             )
@@ -238,16 +242,18 @@ class GeoFenceSettingBlock extends React.Component{
                     getTrProps={(state, rowInfo, column, instance) => {   
                           return {
                               onClick: (e, handleOriginal) => { 
-                                  this.setState({
+                                lock ? null :  //才不會edit跟delete一起顯示
+                                   this.setState({
                                     show: true,
                                     selectedData: rowInfo.row._original,
                                     isEdited: true,
                                     path: 'setGeofenceConfig'
-                                })
+                                }) 
                               }
                           }
                       }}
-                /> 
+                />
+            
                 <EditGeofenceConfig
                     handleShowPath={this.props.handleShowPath} 
                     selectedData={this.state.selectedData}

@@ -35,7 +35,8 @@ class AdminManagementContainer extends React.Component{
         title: '',
         locale: this.context.locale.abbr,
         showDeleteConfirmation:false,
-        deleteUserName:''
+        deleteUserName:'',
+        originalName:''
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -64,7 +65,7 @@ class AdminManagementContainer extends React.Component{
         } = this.context
         axios.post(getUserList,{
             locale: locale.abbr 
-        }).then(res => {
+        }).then(res => { 
             let columns = _.cloneDeep(userInfoTableColumn)
             columns.map((field, index) => {
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
@@ -115,7 +116,7 @@ class AdminManagementContainer extends React.Component{
         let {
             api
         } = this.state 
-
+        values.originalName = this.state.originalName
         auth[api](values)
             .then(res => {
                 this.getUserList()
@@ -187,17 +188,18 @@ class AdminManagementContainer extends React.Component{
     onRowClick = (state, rowInfo, column, instance) => {
         return {
             onClick: (e, handleOriginal) => {
-     
+                
                 axios.post(getMainSecondArea, {
                     username: rowInfo.original.name
                 }).then((res)=>{ //抓主要跟次要地區
                     rowInfo.original.second_area = res.data.rows[0].second_area
-                    rowInfo.original.main_area = res.data.rows[0].main_area
+                    rowInfo.original.main_area = res.data.rows[0].main_area 
                     this.setState({
                             showAddUserForm: true,
                             selectedUser: rowInfo.original,
                             title: 'edit user',
                             api: 'setUser',
+                            originalName:rowInfo.original.name
                     })
                 }).catch(err => {
                     console.log(`get Main Second Area fail! ${err}`)

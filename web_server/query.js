@@ -772,10 +772,11 @@ const setUserRole = (request, response) => {
         name,
         roles,
         areaNumber,
-        secondArea
+        secondArea,
+        originalName
     } = request.body
 
-    pool.query(queryType.setUserRole(name, roles, areaNumber,secondArea))
+    pool.query(queryType.setUserRole(name, roles, areaNumber,secondArea,originalName))
         .then(res => {
             console.log(`set user success`)
             response.status(200).json(res)

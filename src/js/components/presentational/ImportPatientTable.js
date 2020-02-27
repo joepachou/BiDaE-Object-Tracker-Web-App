@@ -22,7 +22,8 @@ class ImportObjectTable extends React.Component{
     state = { 
         selection: [],
         selectAll: false,
-        showDeleteConfirmation:false
+        showDeleteConfirmation:false,
+        filetext:''
     }
 
 
@@ -142,10 +143,12 @@ class ImportObjectTable extends React.Component{
             //const { files } = file.target; // 通過FileReader對象讀取文件
             const fileReader = new FileReader();
             //console.log(fileReader);
-            for (let index = 0; index < files.length; index++) {
-                fileReader.name = files[index].name;
-            }
-          
+ 
+            if (files.length !=0 ) { //避免按下取消後的bug
+                for (let index = 0; index < files.length; index++) {
+                    fileReader.name = files[index].name;
+                }
+            } 
             fileReader.onload = event => {
                 try {
                     // 判斷上傳檔案的類型 可接受的附檔名
@@ -202,7 +205,10 @@ class ImportObjectTable extends React.Component{
                     //沒被擋掉的存到newData後輸出
             
                      let { locale } = this.context
-                 
+                newData.map(item =>{
+                    item.type = 'patient'
+                })
+                
                     axios.post(objectImport, {
                         locale: locale.abbr ,
                         newData
@@ -223,7 +229,16 @@ class ImportObjectTable extends React.Component{
                 }
            
             }; // 以二進制方式打開文件
-             fileReader.readAsBinaryString(files[0]);
+
+
+            if (files.length !=0 ) { //避免按下取消後的bug
+                fileReader.readAsBinaryString(files[0]);
+                fileReader.onloadend = () => {
+                    this.setState({filetext : fileReader.result})
+                }
+            } 
+
+
         };
     
 
