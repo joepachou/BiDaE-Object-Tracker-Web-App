@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
-const httpPort = process.env.HTTP_PORT || 80;
 const httpsPort = process.env.HTTPS_PORT || 443;
 const db = require('./web_server/query')
 const path = require('path');
@@ -32,34 +31,7 @@ app.use(function(req, res, next) {
     next();
 });
 
-setInterval(db.clearSearchHistory, 86400*process.env.CLEAR_SEARCH_HISTORY_INTERVAL)
-// app.get('/', (req,res) => {
-//     if (req.session.userInfo) {
-//         res.write('views: ' + req.session.userInfo + req.sessionID)
-//         res.end()
-//     } else {
-//         req.session.userInfo = 'joechou'
-//         res.end('welcome to the session demo. refresh!')
-//     }
-// })
-// fs.createReadStream('transferred_location.csv')
-// .pipe(csv())
-// .on('data', function(data){
-//     try {
-//         console.log(data)
-//     }
-//     catch(err) {
-//         console.log(err)
-//     }
-// })
-
-// csv()
-// .fromFile('transferred_location.csv')
-// .then( jsonObj => {
-//     console.log(jsonObj)
-// })
-
-
+setInterval(db.clearSearchHistory, 86400 * process.env.CLEAR_SEARCH_HISTORY_INTERVAL)
 
 app.get('/image/pinImage/:pinImage', (req, res) => {
     res.sendFile(path.join(__dirname, 'src','img','colorPin',req.params['pinImage']));
@@ -202,9 +174,8 @@ app.post('/data/modifyTransferredLocation', db.modifyTransferredLocation)
 
 app.get('/data/getRolesPermission', db.getRolesPermission)
 
-// modify permissionList
 app.post('/data/modifyPermission', db.modifyPermission)
-// modify rolesPermission
+
 app.post('/data/modifyRolesPermission', db.modifyRolesPermission)
 
 app.get(`/${process.env.DEFAULT_FOLDER}/shift_record/:file`, (req, res) =>{
@@ -247,17 +218,11 @@ var credentials = {
 
 const httpsServer = https.createServer(credentials, app)
 
-const httpServer = http.createServer(app);
-
 /** Enable HTTPS server */
-process.env.PRIVATE_KEY ? httpsServer.listen(httpsPort, () => {
+httpsServer.listen(httpsPort, () => {
     console.log(`HTTPS Server running on PORT ${httpsPort}`)
-}) : null
-
-/** Enable HTTP server */
-httpServer.listen(httpPort, () =>{
-    console.log(`HTTP Server running on port ${httpPort}`)
 })
+
 
 
 

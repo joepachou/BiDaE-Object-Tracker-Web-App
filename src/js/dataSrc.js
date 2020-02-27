@@ -72,8 +72,8 @@ const getRolesPermission= `${protocol}://${dataSrcIP}/data/getRolesPermission`
 const modifyPermission= `${protocol}://${dataSrcIP}/data/modifyPermission`
 const modifyRolesPermission= `${protocol}://${dataSrcIP}/data/modifyRolesPermission`
 
-const pdfUrl = function(path){
-    return `${protocol}://${dataSrcIP}:${port}/${path}`
+const pdfUrl = function (path) {
+    return `${protocol}://${dataSrcIP}/${path}`
 }
 module.exports = {
     domain,
