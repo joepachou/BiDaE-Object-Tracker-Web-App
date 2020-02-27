@@ -245,6 +245,9 @@ const en =  {
     PASSWORD_INCORRECT:"password incorrect",
     AUTHORITY_IS_NOT_ENOUGH:"Authority is not enough",
     ACCOUNT_NOT_BELONG_THIS_AREA:"This account not belong this area",
+    START_TIME_IS_REQUIRED:"Start time is required",
+    END_TIME_IS_REQUIRED:"End time is required",
+
 
     /** Place Holder */
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "please enter or scan mac address",

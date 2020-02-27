@@ -4,6 +4,12 @@ import Select from 'react-select';
 import { AppContext } from '../../context/AppContext';
 import styleConfig from "../../styleConfig"
 
+let style = { 
+    error: {
+        color: "#dc3545"
+    }
+}
+
 class DateTimePicker extends React.Component {
 
     static contextType = AppContext
@@ -24,7 +30,9 @@ class DateTimePicker extends React.Component {
         } = this.context
 
         let {
-            value
+            value,
+            error,
+            error_tip
         } = this.props
 
         let options = Array.from(Array(this.state.length + 1).keys())
@@ -41,9 +49,11 @@ class DateTimePicker extends React.Component {
             value: value,
             label: value
         } : "";
+ 
+        return ( 
+            <div>
 
 
-        return (
             <Select
                 name="timepicker"
                 placeholder={locale.texts.SELECT_TIME}
@@ -55,8 +65,19 @@ class DateTimePicker extends React.Component {
                 controlHeigh={20}
                 components={{
                     IndicatorSeparator: () => null
-                }}
+                }} 
             />
+            {error   && 
+                <small 
+                    className="form-text text-capitaliz"
+                    style={style.error}
+                >
+                    {error_tip}
+                </small>
+            }
+
+            </div>
+
         )
     }
 }
