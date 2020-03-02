@@ -369,7 +369,7 @@ const TypeGroup = ({
                     className="form-text text-capitaliz"
                     style={smallstyle.error}
                 >
-                    {RSSIwarning}
+                    {locale.texts.MUST_BE_NEGATIVE_NUMBER}
                 </small>
             }
 
