@@ -297,9 +297,7 @@ class PatientTable extends React.Component{
                                     disableASN: true,
                                     formPath: editPatient,
                                 })
-                                }
-                                let id = (rowInfo.index+1).toString()
-                                this.toggleSelection(id)
+                                } 
                             },
                         }
                     }} 
