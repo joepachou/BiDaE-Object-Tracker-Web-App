@@ -326,7 +326,7 @@ const TypeGroup = ({
     lbeaconsTable
 }) => { 
     const locale = React.useContext(LocaleContext);
-    let RSSIwarning = (error.p_rssi || error.f_rssi)
+ 
 
     let lbeaconOptions = lbeaconsTable.filter(item => {
         let uuid = item.uuid.replace(/-/g, '')
@@ -343,15 +343,11 @@ const TypeGroup = ({
     }, [])
 
 
-    let typeRssi = `${abbr}_rssi`
-    let smallstyle = { 
-        error: {
-            color: "#dc3545"
-        }
-    }
-
+    let typeRssi = `${abbr}_rssi` 
     return (
+        
         <div className="form-group">
+            {console.log(error)}
             <small className="form-text">
                 {title}
             </small>
@@ -360,18 +356,9 @@ const TypeGroup = ({
                 name={typeRssi}
                 label={locale.texts.RSSI}
                 error={error[typeRssi]}
-                touched={null}
+                touched={error[typeRssi]}
                 placeholder=""
             />
-           
-            {RSSIwarning   && 
-                <small 
-                    className="form-text text-capitaliz"
-                    style={smallstyle.error}
-                >
-                    {locale.texts.MUST_BE_NEGATIVE_NUMBER}
-                </small>
-            }
 
             <small className="form-text text-muted">
                 UUID
