@@ -129,7 +129,7 @@ const en =  {
     DELETE_USER:"Delete user",
     MULTIPLEDELETE:"multiple delete",
 
-    /* Field */
+    /* field */
     NAME: "name",
     TYPE: "type",
     ASSET_CONTROL_NUMBER: "Asset ID",
@@ -180,6 +180,7 @@ const en =  {
     NUMBER_OF_SEARCH_HISTORY: "number of search history",
     SELECTED_AREAS: "selected areas",
     NOT_SELECTED_AREAS: "not selected areas",
+    LOCATION_SELECTION: "location",
 
     /** form title */
     EDIT_LBEACON: "edit lbeacon",

@@ -95,7 +95,7 @@ const EditLbeaconForm = ({
                             <FormikFormGroup 
                                 type="text"
                                 name="description"
-                                label={locale.texts.LOCATION}
+                                label={locale.texts.LOCATION_SELECTION}
                                 error={errors.description}
                                 touched={touched.description}
                                 placeholder=""

@@ -143,7 +143,10 @@ class Map extends React.Component {
             icon.options.iconSize = [this.scalableIconSize, this.scalableIconSize]
             icon.options.numberSize = this.scalableNumberSize
             var pos = marker.getLatLng()
-            marker.setLatLng([pos.lat - this.prevZoom * this.pin_shift_scale[0] + this.currentZoom* this.pin_shift_scale[0], pos.lng - this.pin_shift_scale[1]* this.prevZoom + this.currentZoom* this.pin_shift_scale[1]])
+            marker.setLatLng([
+                pos.lat - this.prevZoom * this.pin_shift_scale[0] + this.currentZoom * this.pin_shift_scale[0], 
+                pos.lng - this.prevZoom * this.pin_shift_scale[1] + this.currentZoom * this.pin_shift_scale[1]
+            ])
             marker.setIcon(icon);
         })
 
@@ -311,6 +314,10 @@ class Map extends React.Component {
         let {
             mapConfig,
         } = this.props
+        let {
+            stateReducer
+        } = this.context
+        let [{areaId}] = stateReducer
 
         this.calculateScale()
 
@@ -320,7 +327,9 @@ class Map extends React.Component {
         }
 
         /** Creat the marker of all lbeacons onto the map  */
-        parseUUIDArray.map(pos => {
+        parseUUIDArray
+            .filter(pos => pos[2] == areaId)
+            .map(pos => {
 
             let latLng = pos.split(',')
             let lbeacon = L.circleMarker(latLng, mapConfig.lbeaconMarkerOption).addTo(layer);
@@ -407,7 +416,6 @@ class Map extends React.Component {
 
                 /** Show the ordered on location pin */
                 number: this.props.mapConfig.iconOptions.showNumber && 
-                        // this.props.mapConfig.isObjectShowNumber.includes(item.searchedObjectType) && 
                         item.searched 
                         ? ++counter 
                         : '',

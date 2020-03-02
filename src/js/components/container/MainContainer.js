@@ -26,7 +26,6 @@ import {
     disableBodyScroll, 
 } from 'body-scroll-lock';
 import retrieveDataHelper from '../../helper/retrieveDataHelper';
-import { createHash } from 'crypto';
 
 const {
     ALL_DEVICES,
@@ -321,7 +320,7 @@ class MainContainer extends React.Component{
                         rules: [rule]
                     }
                 }
-                else config[rule.area_id].push(rule)
+                else config[rule.area_id].rules.push(rule)
                 return config
             }, {})
             this.setState({

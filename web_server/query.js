@@ -475,13 +475,15 @@ const editObjectPackage = (request, response) => {
 }
 
 const signin = (request, response) => {
-    const username = request.body.username.toLowerCase()
-    const { password, shift } = request.body
-    
+    let { 
+        password,
+        username
+    } = request.body
+    username = username.toLowerCase()
+
 
     pool.query(queryType.signin(username))
         .then(res => {
-            console.log(res.rows[0])
             if (res.rowCount < 1) {
                 console.log(`sign in fail: username or password is incorrect`)
                 response.json({

@@ -132,7 +132,7 @@ const tw = {
     DELETE_USER:"刪除使用者",
     MULTIPLEDELETE:"多選刪除",
     
-    /* Field */
+    /* field */
     NAME: "名稱",
     TYPE: "類別",
     ASSET_CONTROL_NUMBER: "財產編號",
@@ -182,6 +182,7 @@ const tw = {
     NUMBER_OF_SEARCH_HISTORY: "常用搜尋筆數",
     SELECTED_AREAS: "已選取區域",
     NOT_SELECTED_AREAS: "未選取區域",
+    LOCATION_SELECTION: "區域",
 
        
     /** form title */
@@ -220,7 +221,6 @@ const tw = {
     GEOFENCE: "電子圍籬警告",
     PANIC: "緊急",
     EDIT_SECONDARY_AREAS: "編輯次要區域",
-
 
     /** Error Message */
     GENDER_IS_REQUIRED: "請選擇性別",
