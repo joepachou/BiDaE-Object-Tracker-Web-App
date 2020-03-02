@@ -14,7 +14,8 @@ import {
     MobileOnlyView,
     isMobileOnly,
     isBrowser,
-    isTablet
+    isTablet,
+    isMobile
 } from 'react-device-detect'
 
 class Map extends React.Component {
@@ -72,22 +73,22 @@ class Map extends React.Component {
     initMap = () => {
         let [{areaId}] = this.context.stateReducer
 
+        let {
+            mapConfig
+        } = this.props
+
         let { 
             areaModules,
             areaOptions,
             defaultAreaId,
-            mapOptions, 
-        } = this.props.mapConfig
+        } = mapConfig
 
         if (isBrowser) {
-            mapOptions.minZoom = mapOptions.minZoom
-            mapOptions.zoom = mapOptions.zoom
+            var mapOptions = mapConfig.browserMapOptions
         } else if (isTablet) {
-            mapOptions.minZoom = mapOptions.minZoomForTablet
-            mapOptions.zoom = mapOptions.minZoomForTablet
-        } else {
-            mapOptions.minZoom = mapOptions.minZoomForMobile
-            mapOptions.zoom = mapOptions.minZoomForMobile
+            var mapOptions = mapConfig.tabletMapOptiions
+        } else if (isMobileOnly) {
+            var mapOptions = mapConfig.mobileMapOptions
         }
 
         /** Error handler of the user's auth area does not include the group of sites */
@@ -132,9 +133,9 @@ class Map extends React.Component {
         
     }
 
-
     /** Resize the markers and errorCircles when the view is zoomend. */
     resizeMarkers = () => {
+
         this.prevZoom = this.currentZoom
         this.currentZoom = this.map.getZoom();
         this.calculateScale();
@@ -153,6 +154,7 @@ class Map extends React.Component {
         this.geoFenceLayer.eachLayer( circle => {
             circle.setRadius(this.scalableCircleRadius)
         })
+        
     }
 
     /** Calculate the current scale for creating markers and resizing. */
@@ -161,22 +163,22 @@ class Map extends React.Component {
         this.minZoom = this.map.getMinZoom();
         this.zoomDiff = this.currentZoom - this.minZoom;
         this.resizeFactor = Math.pow(2, (this.zoomDiff));
-        this.resizeConst = Math.floor(this.zoomDiff * 30);
+        this.resizeConst = Math.floor(this.zoomDiff * 20);
+
         if (isBrowser) {
             this.scalableIconSize = parseInt(this.props.mapConfig.iconOptions.iconSize) + this.resizeConst
             this.scalableCircleRadius = parseInt(this.props.mapConfig.iconOptions.circleRadius) * this.resizeFactor
-            this.scalableNumberSize = Math.floor(this.scalableIconSize / 2.5);
+            this.scalableNumberSize = Math.floor(this.scalableIconSize / 10);
 
-        } else if(isTablet) {
+        } else if (isTablet) {
             this.scalableIconSize = parseInt(this.props.mapConfig.iconOptions.iconSizeForTablet) + this.resizeConst
-            this.scalableCircleRadius = 15 * this.resizeFactor
             this.scalableCircleRadius = parseInt(this.props.mapConfig.iconOptions.circleRadiusForTablet) * this.resizeFactor
             this.scalableNumberSize = Math.floor(this.scalableIconSize / 3);
 
-        } else {
+        } else if (isMobileOnly) {
             this.scalableIconSize = parseInt(this.props.mapConfig.iconOptions.iconSizeForMobile) + this.resizeConst
-            this.scalableNumberSize = Math.floor(this.scalableIconSize / 3);
             this.scalableCircleRadius = parseInt(this.props.mapConfig.iconOptions.circleRadiusForMobile) * this.resizeFactor
+            this.scalableNumberSize = 0.5
         }
     }
 
@@ -328,7 +330,7 @@ class Map extends React.Component {
 
         /** Creat the marker of all lbeacons onto the map  */
         parseUUIDArray
-            .filter(pos => pos[2] == areaId)
+            .filter(pos => parseInt(pos.split(',')[2]) == areaId)
             .map(pos => {
 
             let latLng = pos.split(',')
@@ -423,7 +425,7 @@ class Map extends React.Component {
                 /** Set the color of ordered number */
                 numberColor: this.props.mapConfig.iconColor.number,
 
-                numberSize,
+                numberSize: 0.5,
             }
 
             const option = new L.AwesomeNumberMarkers (item.iconOption)
