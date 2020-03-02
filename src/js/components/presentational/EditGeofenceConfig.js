@@ -400,7 +400,7 @@ const TypeGroup = ({
                             <Field  
                                 name={`p-${index + 1}-uuid`} 
                                 type="text" 
-                                className={'form-control' + (errors.name ? ' is-invalid' : '')} 
+                                className={'form-control' + (error.name ? ' is-invalid' : '')} 
                                 placeholder={item}
                                 value={item}
                                 disabled
