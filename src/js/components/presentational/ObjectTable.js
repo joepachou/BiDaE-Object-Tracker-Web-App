@@ -41,8 +41,7 @@ class ObjectTable extends React.Component{
         isShowEditImportTable:false,
         bindCase: 0,
         warningSelect : 0,
-        selectAll: false,
-        selection: [],
+        selectAll: false, 
         formPath:'',
         formTitle:'',
         disableASN: false
@@ -62,7 +61,6 @@ class ObjectTable extends React.Component{
         let formOption = []
         var deleteArray = [];
         var deleteCount = 0;
- 
         this.props.data.map (item => {
          
             this.state.selection.map(itemSelect => {
@@ -123,7 +121,7 @@ class ObjectTable extends React.Component{
         }
         this.setState({ 
             selection 
-        });
+        });  
     };
 
     toggleAll = () => {
@@ -145,7 +143,7 @@ class ObjectTable extends React.Component{
 
     };
 
-    isSelected = (key) => {
+    isSelected = (key) => { 
         return this.state.selection.includes(key);
     };
 
@@ -355,9 +353,7 @@ class ObjectTable extends React.Component{
                                     formPath: editObject,
                                     disableASN:true
                                 })
-                                }
-                                let id = (rowInfo.index+1).toString()
-                                this.toggleSelection(id)
+                                } 
                             },
                         }
                     }} 

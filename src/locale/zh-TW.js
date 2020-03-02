@@ -253,7 +253,7 @@ const tw = {
     ACCOUNT_NOT_BELONG_THIS_AREA:"該帳號不屬於此區域",
     START_TIME_IS_REQUIRED:"請填入啟動時間",
     END_TIME_IS_REQUIRED:"請填入結束時間",
-
+    MUST_BE_NEGATIVE_NUMBER:"必須是負數",
     /** Place Holder */
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "請輸入或掃描mac address",
     PLEASE_ENTER_OR_SCAN_ASSET_CONTROL_NUMBER: "請輸入或掃描財產編號",

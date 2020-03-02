@@ -20,6 +20,21 @@ import LocaleContext from '../../context/LocaleContext';
 import FormikFormGroup from './FormikFormGroup'
 import RadioButtonGroup from '../container/RadioButtonGroup';
 import RadioButton from './RadioButton'
+ 
+ 
+let style = {
+    icon: {
+        minus: {
+           color: 'red',
+           cursor: 'pointer'
+        },
+        add: {
+            color: 'rgb(0, 123, 255, 0.6)',
+            cursor: 'pointer'
+        }, 
+    },
+}
+
 
 const EditGeofenceConfig = ({
     selectedData,
@@ -52,7 +67,7 @@ const EditGeofenceConfig = ({
             }        
         })
 
-        console.lo
+    
 
     return (
         <Modal  
@@ -89,8 +104,20 @@ const EditGeofenceConfig = ({
                     validationSchema = {
                         Yup.object().shape({
                             name: Yup.string().required(locale.texts.NAME_IS_REQUIRED),   
-                            p_rssi: Yup.string().required("must be negative number"),   
-                            f_rssi: Yup.string().required("must be negative number"),   
+                            p_rssi: Yup.string()
+                            .required("must be negative number")
+                            .test(
+                                'p_rssi', 
+                                "must be negative number",
+                                value => { if (value < 0) return true   }
+                            ),
+                            f_rssi: Yup.string()
+                            .required("must be negative number")
+                            .test(
+                                'f_rssi',
+                                "must be negative number",
+                                value => { if (value < 0) return true   }
+                            ) ,  
                             start_time:  Yup.string().required(locale.texts.NAME_IS_REQUIRED),   
                             end_time:  Yup.string().required(locale.texts.NAME_IS_REQUIRED),   
                             area:  Yup.string().required(locale.texts.AREA_IS_REQUIRED),   
@@ -112,7 +139,8 @@ const EditGeofenceConfig = ({
                     }}
 
                     render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
-                        <Form>
+                    
+                        <Form> 
                             <Row className="d-flex align-items-center">
                                 <Col>
                                     <Switcher
@@ -230,11 +258,12 @@ const EditGeofenceConfig = ({
                                 title={locale.texts.PERIMETERS_GROUP}
                                 repository={values.p_lbeacon}
                                 values={values}
-                                errors={errors}
+                                error={errors}
                                 setFieldValue={setFieldValue}
                                 parseLbeaconsGroup={parseLbeaconsGroup}
                                 lbeaconsTable={lbeaconsTable}
-                            />
+                            /> 
+
                             <hr/>
                             <TypeGroup 
                                 type='fences'
@@ -242,7 +271,7 @@ const EditGeofenceConfig = ({
                                 title={locale.texts.FENCES_GROUP}
                                 repository={values.f_lbeacon}
                                 values={values}
-                                errors={errors}
+                                error={errors}
                                 setFieldValue={setFieldValue}
                                 parseLbeaconsGroup={parseLbeaconsGroup}
                                 lbeaconsTable={lbeaconsTable}
@@ -291,12 +320,13 @@ const TypeGroup = ({
     title,
     repository,
     values,
-    errors,
+    error,
     setFieldValue,
     parseLbeaconsGroup,
     lbeaconsTable
-}) => {
+}) => { 
     const locale = React.useContext(LocaleContext);
+ 
 
     let lbeaconOptions = lbeaconsTable.filter(item => {
         let uuid = item.uuid.replace(/-/g, '')
@@ -312,23 +342,12 @@ const TypeGroup = ({
         return options
     }, [])
 
-    let style = {
-        icon: {
-            minus: {
-               color: 'red',
-               cursor: 'pointer'
-            },
-            add: {
-                color: 'rgb(0, 123, 255, 0.6)',
-                cursor: 'pointer'
-            }
-        },
-    }
 
-    let typeRssi = `${abbr}_rssi`
-    
+    let typeRssi = `${abbr}_rssi` 
     return (
+        
         <div className="form-group">
+            {console.log(error)}
             <small className="form-text">
                 {title}
             </small>
@@ -336,10 +355,11 @@ const TypeGroup = ({
                 type="text"
                 name={typeRssi}
                 label={locale.texts.RSSI}
-                error={errors[typeRssi]}
-                touched={null}
+                error={error[typeRssi]}
+                touched={error[typeRssi]}
                 placeholder=""
             />
+
             <small className="form-text text-muted">
                 UUID
             </small>
@@ -367,7 +387,7 @@ const TypeGroup = ({
                             <Field  
                                 name={`p-${index + 1}-uuid`} 
                                 type="text" 
-                                className={'form-control' + (errors.name ? ' is-invalid' : '')} 
+                                className={'form-control' + (error.name ? ' is-invalid' : '')} 
                                 placeholder={item}
                                 value={item}
                                 disabled
@@ -395,7 +415,8 @@ const TypeGroup = ({
                             setFieldValue(typeGroup, group)
                             setFieldValue(`selected_${abbr}_lbeacon`, null)
                         }}
-                    ></i>
+                    >
+                    </i>
                 </Col>
                 <Col lg={11} className="pr-1">
                     <Select
