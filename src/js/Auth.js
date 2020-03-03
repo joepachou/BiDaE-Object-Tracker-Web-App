@@ -4,7 +4,6 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import dataSrc from './dataSrc';
 import config from './config';
-import { locale } from 'moment';
 
 let defaultUser = {
     roles: "guest",
@@ -43,15 +42,12 @@ class Auth extends React.Component {
         });
     };
 
-
-     //  auth[api](values)有兩種 singup  setUser
     async signup (values) {
         let { 
             name, 
             password, 
             roles, 
             area, 
-            secondArea
         } = values
         return await axios.post(dataSrc.signup, {
             name: name.toLowerCase(),
@@ -65,9 +61,6 @@ class Auth extends React.Component {
     async setUser (values) {
  
         return await axios.post(dataSrc.setUserRole, {
-            areaNumber : config.mapConfig.areaModules[values.area.name],
-            originalName:values.originalName,
-            name: values.name,
             ...values
         })
     }

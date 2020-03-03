@@ -374,6 +374,11 @@ const userInfoTableColumn = [
         width: 150,
     },
     {
+        Header: "Main Area",
+        accessor: "main_area",
+        width: 150,
+    },
+    {
         Header: "last visit timestamp",
         accessor: "last_visit_timestamp",
         width: 250

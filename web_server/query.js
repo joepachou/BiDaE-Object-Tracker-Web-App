@@ -547,9 +547,7 @@ const signup = (request, response) => {
         password, 
         roles,
         area_id,
-        secondArea
-    } = request.body;
-
+    } = request.body;    
     const saltRounds = 10;
     const hash = bcrypt.hashSync(password, saltRounds);
 
@@ -561,17 +559,78 @@ const signup = (request, response) => {
 
     pool.query(queryType.signup(signupPackage))
         .then(res => {
-            pool.query(queryType.insertUserData(name, roles, area_id, secondArea))
+            pool.query(queryType.insertUserData(name, roles, area_id))
                 .then(res => {
-                    console.log('sign up success')
+                    console.log('sign up succeed')
                     response.status(200).json(res)
                 })
                 .catch(err => {
-                    console.log(`sinup error ${err}`)
+                    console.log(`sinup failed ${err}`)
                 })
         })
         .catch(err => {
-            console.log(`signup fails ${err}`)
+            console.log(`signup failed ${err}`)
+        })
+}
+
+
+const deleteUser = (request, response) => {
+    var username = request.body.username
+    pool.query(queryType.deleteUser(username))
+        .then(res => {
+            console.log('delete user success')
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(`delete user failer ${err}`)
+        })  
+}
+
+const getMainSecondArea = (request, response) => { 
+    var {
+        username
+    } = request.body
+
+    pool.query(queryType.getMainSecondArea(username))
+        .then(res => {
+            console.log(`get Main Second Area success`)
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(`get Main Second Area ${err}`)
+        })
+}
+
+const setUserRole = (request, response) => { 
+    var {
+        name,
+        roles,
+        area,
+        id
+    } = request.body
+    pool.query(queryType.setUserRole(name, roles, area, id))
+        .then(res => {
+            console.log(`set user succeed`)
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(`set user failed ${err}`)
+        })
+}
+
+const getEditObjectRecord = (request, response) => {
+    const { locale } = request.body
+    pool.query(queryType.getEditObjectRecord())
+        .then(res => {
+            console.log('get edit object record')
+
+            res.rows.map(item => {
+                item.edit_time = moment.tz(item.edit_time, process.env.TZ).locale(locale).format('LLL');
+            })
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log('getEditObjectRecord error: ', err)
         })
 }
 
@@ -740,68 +799,6 @@ const getRoleNameList = (request, response) => {
             console.log('getRoleNameList error: ', err)
         })
     
-}
-
-const deleteUser = (request, response) => {
-    var username = request.body.username
-    pool.query(queryType.deleteUser(username))
-        .then(res => {
-            console.log('delete user success')
-            response.status(200).json(res)
-        })
-        .catch(err => {
-            console.log(`delete user failer ${err}`)
-        })  
-}
-
-const getMainSecondArea = (request, response) => { 
-    var {
-        username
-    } = request.body
-
-    pool.query(queryType.getMainSecondArea(username))
-        .then(res => {
-            console.log(`get Main Second Area success`)
-            response.status(200).json(res)
-        })
-        .catch(err => {
-            console.log(`get Main Second Area ${err}`)
-        })
-}
-
-const setUserRole = (request, response) => { 
-    var {
-        name,
-        roles,
-        areaNumber,
-        secondArea,
-        originalName
-    } = request.body
-
-    pool.query(queryType.setUserRole(name, roles, areaNumber,secondArea,originalName))
-        .then(res => {
-            console.log(`set user success`)
-            response.status(200).json(res)
-        })
-        .catch(err => {
-            console.log(`set user fail ${err}`)
-        })
-}
-
-const getEditObjectRecord = (request, response) => {
-    const { locale } = request.body
-    pool.query(queryType.getEditObjectRecord())
-        .then(res => {
-            console.log('get edit object record')
-
-            res.rows.map(item => {
-                item.edit_time = moment.tz(item.edit_time, process.env.TZ).locale(locale).format('LLL');
-            })
-            response.status(200).json(res)
-        })
-        .catch(err => {
-            console.log('getEditObjectRecord error: ', err)
-        })
 }
 
 const deleteEditObjectRecord = (request, response) => {

@@ -13,8 +13,6 @@ import {
 import Select from 'react-select';
 import * as Yup from 'yup';
 import config from '../../../config';
-import axios from 'axios';
-import dataSrc from '../../../dataSrc';
 import CheckboxGroup from '../CheckboxGroup'
 import Checkbox from '../../presentational/Checkbox'
 import FormikFormGroup from '../../presentational/FormikFormGroup'
@@ -38,16 +36,16 @@ const EditUserForm = ({
         return {
             value: name,
             label: locale.texts[name.toUpperCase().replace(/ /g, '_')],
-            name :name
+            id: config.mapConfig.areaModules[name].id
         };
     })
-
 
     const mainAreaDefault = 
         { 
             value: selectedUser ?  selectedUser.main_area : null,
-            label:selectedUser ?  locale.texts[config.mapConfig.areaList[selectedUser.main_area]] : null,
-            name : selectedUser ?  config.mapConfig.areaList[selectedUser.main_area] : null,
+            label: selectedUser ?  locale.texts[config.mapConfig.areaList[selectedUser.main_area]] : null,
+            name: selectedUser ?  config.mapConfig.areaList[selectedUser.main_area] : null,
+            id: selectedUser ?  selectedUser.main_area : null,
         }
  
     return (
@@ -70,7 +68,6 @@ const EditUserForm = ({
                         password: '',
                         roles: selectedUser ? selectedUser.role_type : config.defaultRole,
                         area: selectedUser ? mainAreaDefault : '',
-                        secondArea:selectedUser  ? selectedUser.second_area  : '',
                     }}
 
                     validationSchema = {
@@ -169,33 +166,6 @@ const EditUserForm = ({
                                     />
                                 )}
                             />
-                            {/* <FormikFormGroup 
-                                name="secondArea"
-                                label={'次要地區'}
-                                error={errors.secondArea}
-                                touched={touched.secondArea}
-                                component={() => (
-                                    <CheckboxGroup
-                                        id="secondArea"
-                                        value={values.secondArea}
-                                        onChange={setFieldValue}                                            
-                                    >
-                                        {areaList
-                                            .filter(areaList => process.env.SITES_GROUP.includes(parseInt(areaList.area_id)))
-                                            .map((areaList, index) => {
-                                                return (
-                                                    <Field
-                                                        component={Checkbox}
-                                                        key={index}
-                                                        name="secondArea"
-                                                        id={areaList.area_id}
-                                                        label={ locale.texts[config.mapConfig.areaList[parseInt(areaList.area_id)]]  }
-                                                    />
-                                                )
-                                        })}
-                                    </CheckboxGroup>
-                                )}
-                            /> */}
                             <Modal.Footer>
                                 <Button 
                                     variant="outline-secondary" 

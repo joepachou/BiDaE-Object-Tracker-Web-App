@@ -18,6 +18,7 @@ import EditUserForm from './EditUserForm';
 import { AppContext } from '../../../context/AppContext';
 import DeleteUserForm from '../UserContainer/DeleteUserForm'
 import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm';
+import config from '../../../config';
 const Fragment = React.Fragment;
 
 class AdminManagementContainer extends React.Component{
@@ -36,7 +37,6 @@ class AdminManagementContainer extends React.Component{
         locale: this.context.locale.abbr,
         showDeleteConfirmation:false,
         deleteUserName:'',
-        originalName:''
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -56,10 +56,7 @@ class AdminManagementContainer extends React.Component{
         this.getAreaList()
     }
 
-
     getUserList = () => {
-
-
         let { 
             locale
         } = this.context
@@ -74,10 +71,9 @@ class AdminManagementContainer extends React.Component{
                     textTransform: 'capitalize'
                 }
             })
-           
             res.data.rows.map((item, index) => {
-                item.id = index + 1
                 item.roles = item.role_type.map(role => locale.texts[role.toUpperCase()]).join(',')
+                item.main_area = locale.texts[config.mapConfig.areaOptions[item.main_area]]
             })
             this.setState({
                 data: res.data.rows,
@@ -97,7 +93,6 @@ class AdminManagementContainer extends React.Component{
             })
     }
 
-
     getAreaList = () => {
         let {auth} = this.context
         axios.post(getUserArea,{
@@ -107,16 +102,18 @@ class AdminManagementContainer extends React.Component{
         })
     }
 
-
     handleSubmit = (values) => {
         let {
             auth
         } = this.context
 
         let {
-            api
+            api,
+            selectedUser
         } = this.state 
-        values.originalName = this.state.originalName
+
+        values.id = selectedUser ? selectedUser.id : null
+        
         auth[api](values)
             .then(res => {
                 this.getUserList()
@@ -125,7 +122,8 @@ class AdminManagementContainer extends React.Component{
                     showAddUserForm: false,
                     showDeleteUserForm:false,
                     showDeleteConfirmation:false,
-                    deleteUserName:''
+                    deleteUserName:'',
+                    selectedUser: null,
                 })
             })
             .catch(err => {
@@ -140,9 +138,7 @@ class AdminManagementContainer extends React.Component{
         })
     }
 
-    handleWarningChecked = () => [
-
-
+    handleWarningChecked = () => {
         axios.post(deleteUser, {
             username: this.state.deleteUserName
         })
@@ -153,35 +149,17 @@ class AdminManagementContainer extends React.Component{
         .catch(err => {
             console.log("delete User fail : " + err);
         })
-
-
-    ]
-
-    submitDeleteUserForm = () => {
-
-        axios.post(deleteUser, {
-            username: this.state.selectedUser.name
-        }).then((res)=>{
-            this.setState({
-                showModifyUserInfo: false, 
-            });
-            setTimeout(
-                this.getUserList(),1000
-            )
-        }).catch(err => {
-            console.log(`delete user fail! ${err}`)
-        })
     }
 
     handleClose = () => {
         this.setState({
             showAddUserForm: false,
-            showDeleteUserForm:false,
+            showDeleteUserForm: false,
             selectedUser: null,
             title: '',
             api: '',
-            showDeleteConfirmation:false,
-            deleteUserName:''
+            showDeleteConfirmation: false,
+            deleteUserName:'',
         })
     }
 
@@ -191,22 +169,20 @@ class AdminManagementContainer extends React.Component{
                 
                 axios.post(getMainSecondArea, {
                     username: rowInfo.original.name
-                }).then((res)=>{ //抓主要跟次要地區
+                })
+                .then(res => { 
                     rowInfo.original.second_area = res.data.rows[0].second_area
                     rowInfo.original.main_area = res.data.rows[0].main_area 
                     this.setState({
-                            showAddUserForm: true,
-                            selectedUser: rowInfo.original,
-                            title: 'edit user',
-                            api: 'setUser',
-                            originalName:rowInfo.original.name
+                        showAddUserForm: true,
+                        selectedUser: rowInfo.original,
+                        title: 'edit user',
+                        api: 'setUser',
                     })
-                }).catch(err => {
+                })
+                .catch(err => {
                     console.log(`get Main Second Area fail! ${err}`)
                 })
-
-              
-
             }
         }
     }
@@ -220,13 +196,12 @@ class AdminManagementContainer extends React.Component{
                     title: 'add user',
                     api: 'signup',
                 })
-              break;
-
+                break;
             case "delete user":
-              this.setState({
-                showDeleteUserForm:true
-              })
-              break;
+                this.setState({
+                    showDeleteUserForm:true
+                })
+                break;
           }
     }
 
@@ -268,7 +243,6 @@ class AdminManagementContainer extends React.Component{
                     getTrProps={this.onRowClick}
                 />
 
-
                 <EditUserForm
                     show={this.state.showAddUserForm}
                     handleClose={this.handleClose}
@@ -285,7 +259,7 @@ class AdminManagementContainer extends React.Component{
                     title={locale.texts.DELETE_USER}
                     handleClose={this.handleClose}
                     data = {this.state.data}
-                    handleSubmit = { this.handleDeleteUserSubmit}
+                    handleSubmit = {this.handleDeleteUserSubmit}
                 />
 
                 <DeleteConfirmationForm
@@ -293,7 +267,6 @@ class AdminManagementContainer extends React.Component{
                     handleClose={this.handleClose}
                     handleSubmit={this.handleWarningChecked}
                 />
-
 
             </Fragment>
         )

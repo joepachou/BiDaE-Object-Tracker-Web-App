@@ -1012,6 +1012,7 @@ const getUserList = () => {
 			user_table.name, 
 			user_table.registered_timestamp,
 			user_table.last_visit_timestamp,
+			user_table.main_area,
 			array_agg(roles.name) AS role_type 
 		FROM user_table  
 		INNER JOIN (
@@ -1073,109 +1074,47 @@ const deleteUser = (username) => {
 
 
 
-const setUserRole = (name, roles,areaNumber,secondArea,originalName) => {
- 
-	if (secondArea == '') { //如果沒有選secondArea 就是''
-			const query = `
+const setUserRole = (name, roles, area, id) => {
+	return `
 
-		UPDATE user_table
-		SET name = '${name}'
-		WHERE name = '${originalName}';
+		DELETE FROM user_role 
+		WHERE user_id = ${id};
 
-		DELETE FROM user_role WHERE user_role.user_id = (
-			SELECT id 
-			FROM user_table 
-			WHERE name='${name}'
+		DELETE FROM user_area
+		WHERE user_id = ${id}
+		AND area_id = ${area.id};
+
+		UPDATE user_area
+		SET area_id = ${area.id}
+		WHERE user_id = ${id}
+		AND area_id = (	
+			SELECT main_area
+			FROM user_table
+			WHERE id = ${id}
 		);
 
-		INSERT INTO user_role (user_id, role_id)
+		UPDATE user_table
+		SET 
+			name='${name}',
+			main_area='${area.id}'
+		WHERE id=${id};
+
+		INSERT INTO user_role (
+			user_id, 
+			role_id
+		)
 			VALUES 
 			${
-				roles.map(role => `((
-					SELECT id
-					FROM user_table
-					WHERE name='${name}'
-				), 
-				(
-					SELECT id 
-					FROM roles
-					WHERE name='${role}'
-				))`).join(',')
+				roles.map(role => `(
+					${id}, 
+					(
+						SELECT id 
+						FROM roles
+						WHERE name='${role}'
+					)
+				)`).join(',')
 			};
-		
-		
-		DELETE FROM user_area 
-		WHERE user_id = (
-			SELECT id 
-			FROM user_table 
-			WHERE name='${name}'
-		);
-
-		UPDATE user_table
-		SET main_area = '${areaNumber.id}'
-		WHERE name = '${name}'
 	`
-	return query
-	 }
-	 else
-	 {
-		const query = `
-		UPDATE user_table
-		SET name = '${name}'
-		WHERE name = '${originalName}';
-
-		DELETE FROM user_role WHERE user_role.user_id = (
-			SELECT id 
-			FROM user_table 
-			WHERE name='${name}'
-		);
-
-		INSERT INTO user_role (user_id, role_id)
-			VALUES 
-			${
-				roles.map(role => `((
-					SELECT id
-					FROM user_table
-					WHERE name='${name}'
-				), 
-				(
-					SELECT id 
-					FROM roles
-					WHERE name='${role}'
-				))`).join(',')
-			};
-		
-		
-		DELETE FROM user_area 
-		WHERE user_id = (
-			SELECT id 
-			FROM user_table 
-			WHERE name='${name}'
-		);
-
-		INSERT INTO user_area (user_id, area_id)
-			VALUES 
-			${
-				secondArea.map(sA => `((
-					SELECT id
-					FROM user_table
-					WHERE name='${name}'
-				), 
-				(
-					'${sA}'
-				))`).join(',')
-			};
-
-
-		UPDATE user_table
-		SET main_area = '${areaNumber.id}'
-		WHERE name = '${name}';
-	`
-		return query
-	 }
-
-
-
 }
 
 
@@ -1293,10 +1232,9 @@ const setVisitTimestamp = (username) => {
 	`
 }
 
-const insertUserData = (name, roles, area_id, secondArea) => {
+const insertUserData = (name, roles, area_id) => {
 
-	if (secondArea =='') {
-		return `
+	return `
 		INSERT INTO user_role (
 			user_id, 
 			role_id
@@ -1307,12 +1245,12 @@ const insertUserData = (name, roles, area_id, secondArea) => {
 				(
 					SELECT id
 					FROM user_table
-					WHERE name='${name}'
+					WHERE name = '${name}'
 				), 
 				(
 					SELECT id 
 					FROM roles
-					WHERE name='${role}'
+					WHERE name = '${role}'
 				)
 			)`
 		)};
@@ -1331,59 +1269,6 @@ const insertUserData = (name, roles, area_id, secondArea) => {
 				${area_id}
 			)
 	`
-	}else{
-		return `
-		INSERT INTO user_role (
-			user_id, 
-			role_id
-		)
-		VALUES 
-		${
-			roles.map(role => `(
-				(
-					SELECT id
-					FROM user_table
-					WHERE name='${name}'
-				), 
-				(
-					SELECT id 
-					FROM roles
-					WHERE name='${role}'
-				)
-			)`
-		)};
-		
-		INSERT INTO user_area (
-			user_id, 
-			area_id
-		)
-		VALUES 
-		${
-			secondArea.map(sA => `(
-				(
-					SELECT id
-					FROM user_table
-					WHERE name='${name}'
-				), 
-				'${sA}'
-			)`
-		)};
-
-		INSERT INTO user_area (
-			user_id, 
-			area_id
-		)
-		VALUES 
-			(
-				(
-					SELECT id 
-					FROM user_table 
-					WHERE name ='${name}'
-				),
-				${area_id}
-			)
-	`
-	}
 }
 
 const addEditObjectRecord = (formOption, username, filePath) => {
