@@ -160,13 +160,18 @@ class EditObjectForm extends React.Component {
                                         'asset_control_number', 
                                         locale.texts.THE_ASSET_CONTROL_NUMBER_IS_ALREADY_USED,
                                         value => {
-
+                                        
                                             if (this.props.selectedRowData.length == 0) {
-                                                return (!(this.props.data.map(item => item.asset_control_number).includes(value)))
+                                             if (!(this.props.data.map(item => item.asset_control_number).includes(value))){
+                                                if (item.asset_control_number != value ) { return false;} 
+                                             } 
                                             } 
                                             if (this.props.selectedRowData.length == 0) {
-                                                return (!(this.props.objectTable.map(item => item.asset_control_number).includes(value)))
+                                                if (!(this.props.objectTable.map(item => item.asset_control_number).includes(value))){
+                                                    if (item.asset_control_number != value ) { return false;} 
+                                                }
                                             }
+                                            return true;
                                         }
                                     ),
                                 mac_address: Yup.string()
