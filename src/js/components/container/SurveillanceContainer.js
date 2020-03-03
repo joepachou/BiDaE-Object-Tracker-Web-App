@@ -1,6 +1,5 @@
-import React, { Fragment } from "react";
+import React from "react";
 import Map from "../presentational/Map";
-import ToggleSwitch from "./ToggleSwitch";
 import { 
     Nav, 
     Button,
@@ -9,10 +8,13 @@ import PdfDownloadForm from "./PdfDownloadForm"
 import config from "../../config";
 import AccessControl from "../presentational/AccessControl"
 import { AppContext } from "../../context/AppContext";
-import { BrowserView, TabletView, MobileOnlyView, isBrowser, isTablet, isMobileOnly } from "react-device-detect";
+import { 
+    BrowserView, 
+    TabletView, 
+    MobileOnlyView, 
+} from "react-device-detect";
 import QRcodeContainer from './QRcode'
 import InfoPrompt from '../presentational/InfoPrompt'
-import PdfDownloadFormForTablet from './PdfDownloadFormForTablet'
 import GeneralConfirmForm from '../presentational/GeneralConfirmForm'
 
 class SurveillanceContainer extends React.Component {
@@ -20,87 +22,20 @@ class SurveillanceContainer extends React.Component {
     static contextType = AppContext
 
     state = {
-        selectedObjectData: [],
         showPdfDownloadForm: false,
-        searchedObjectType: [],
-        showObjects: [],
         showConfirmForm: false,
-    }
-
-    componentDidUpdate = (prevProps, prevState) => {
-
-        var searchedObjectType = this.state.searchedObjectType
-        var showObjects = this.state.showObjects
-        
-        if (!(_.isEqual(prevProps.authenticated, this.props.authenticated))) {
-            this.setState({
-                searchedObjectType: [],
-                showObjects: [],
-            })
-        } 
-
-        if (prevProps.searchKey !== this.props.searchKey && this.props.searchKey == "all devices") {
-            if (searchedObjectType.includes(0)) return 
-            else {
-                searchedObjectType.push(0)
-                showObjects.push(0)
-            }
-            this.setState({
-                searchedObjectType,
-                showObjects,
-            })
-        }  else if (prevProps.searchKey !== this.props.searchKey && this.props.searchKey == "all patients") {
-            if (searchedObjectType.includes(1) || searchedObjectType.includes(2)) return 
-            else { 
-                searchedObjectType.push(1)
-                searchedObjectType.push(2)
-                showObjects.push(1)
-                showObjects.push(2)
-            }
-            this.setState({
-                searchedObjectType,
-                showObjects
-            })
-        } else if (prevProps.searchKey !== this.props.searchKey && this.props.searchKey == "my patients") {
-            if ( searchedObjectType.includes(-2)) return 
-            else { 
-                searchedObjectType.push(-2)
-                showObjects.push(-2)
-            }
-            this.setState({
-                searchedObjectType,
-                showObjects
-            })
-        } else if (prevProps.searchKey !== this.props.searchKey && this.props.searchKey) {
-            if (searchedObjectType.includes(-1)) return 
-            else { 
-                searchedObjectType.push(-1)
-                showObjects.push(-1)
-            }
-            this.setState({
-                searchedObjectType,
-                showObjects
-            })
-        }
     }
 
     handleConfirmFormSubmit = (e) => {
         this.props.setMonitor(this.state.type)
-        this.handleClosePdfForm()
+        this.handleCloseModal()
     }
 
-    
     handleClickButton = (e) => {
         const { name, value } = e.target
-        let { stateReducer } = this.context
-        let [{areaId}, dispatch] = stateReducer
         switch(name) {
             case "clear":
                 this.props.handleClearButton();
-                this.setState({
-                    searchedObjectType: [],
-                    showObjects: []
-                })
                 break;
             case "save":
                 this.setState({
@@ -124,32 +59,16 @@ class SurveillanceContainer extends React.Component {
                 this.props.clearAlerts()
                 break;
             case "searchedObjectType":
-
-                let showObjects = value.split(',').reduce((showObjects, number) => {   
-                    number = parseInt(number)                
-                    if (!this.state.searchedObjectType.includes(number)) return showObjects
-                    else if (this.state.showObjects.includes(number)) {
-                        let index = showObjects.indexOf(number)
-                        showObjects = [...showObjects.slice(0, index), ...showObjects.slice(index + 1)]
-                    } else {
-                        showObjects.push(number)
-                    }
-                    return showObjects
-
-                }, this.state.showObjects)
-
-                this.setState({
-                    showObjects
-                })
+                console.log('button')
+                this.props.setShowedObjects(value)
                 break;
             case "cleanPath":
-                    this.props.handleClosePath();
+                this.props.handleClosePath();
                 break;
         }
-
     }
 
-    handleClosePdfForm = () => {
+    handleCloseModal = () => {
         this.setState({
             showPdfDownloadForm: false,
             showConfirmForm: false
@@ -198,11 +117,13 @@ class SurveillanceContainer extends React.Component {
         const { 
             hasSearchKey,
             geofenceConfig,
-            locationMonitorConfig
+            locationMonitorConfig,
+            searchedObjectType,
+            showedObjects
         } = this.props;
 
         let [{areaId}] = stateReducer
-
+        // console.log(showedObjects)
         return(
             <div>
                 <BrowserView>
@@ -218,7 +139,7 @@ class SurveillanceContainer extends React.Component {
                                 locationMonitorConfig={this.props.locationMonitorConfig}
                                 getSearchKey={this.props.getSearchKey}
                                 areaId={areaId}
-                                searchedObjectType={this.state.showObjects}
+                                searchedObjectType={this.props.showedObjects}
                                 mapConfig={config.mapConfig}
                                 pathData={this.state.pathData}
                                 handleClosePath={this.props.handleClosePath}
@@ -266,13 +187,13 @@ class SurveillanceContainer extends React.Component {
                                             onClick={this.handleClickButton} 
                                             name="searchedObjectType"
                                             value={[-1, 0]}
-                                            active={(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) }
+                                            active={(this.props.showedObjects.includes(0) || this.props.showedObjects.includes(-1)) }
                                             disabled={
-                                                !(this.state.searchedObjectType.includes(-1) ||
-                                                this.state.searchedObjectType.includes(0))
+                                                !(searchedObjectType.includes(-1) ||
+                                                searchedObjectType.includes(0))
                                             }
                                         >
-                                            {!(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) 
+                                            {!(showedObjects.includes(0) || showedObjects.includes(-1)) 
                                                 ?   locale.texts.SHOW_DEVICES 
                                                 :   locale.texts.HIDE_DEVICES 
                                             }
@@ -290,19 +211,20 @@ class SurveillanceContainer extends React.Component {
                                             onClick={this.handleClickButton} 
                                             name="searchedObjectType"
                                             value={[-2, 1, 2]}
-                                            active={(this.state.showObjects.includes(1) || this.state.showObjects.includes(2))}
+                                            active={(this.props.showedObjects.includes(1) || this.props.showedObjects.includes(2))}
                                             disabled={
-                                                !(this.state.searchedObjectType.includes(1) ||
-                                                this.state.searchedObjectType.includes(2))
+                                                !(searchedObjectType.includes(1) ||
+                                                searchedObjectType.includes(2))
                                             }
                                         >
-                                            {!(this.state.showObjects.includes(1) || this.state.showObjects.includes(2)) 
+                                            {!(showedObjects.includes(1) || showedObjects.includes(2)) 
                                                 ?   locale.texts.SHOW_RESIDENTS
                                                 :   locale.texts.HIDE_RESIDENTS 
                                             }
                                         </Button>
                                     </Nav.Item>
                                 </AccessControl>
+
                                 {process.env.IS_TRACKING_PATH_ON == 1 && 
                                     <AccessControl
                                         permission={"user:cleanPath"}
@@ -314,13 +236,14 @@ class SurveillanceContainer extends React.Component {
                                                 className="mr-1 ml-2 text-capitalize"
                                                 onClick={this.handleClickButton}
                                                 name="cleanPath"
-                                                disabled={(this.props.pathMacAddress==='')}
+                                                disabled={(this.props.pathMacAddress == '')}
                                             >
                                                 {locale.texts.CLEAN_PATH}
                                             </Button>
                                         </Nav.Item>
                                     </AccessControl>
                                 }
+
                                 <div
                                     className="d-flex bd-highligh ml-auto"
                                 >
@@ -408,7 +331,7 @@ class SurveillanceContainer extends React.Component {
                                         geofenceConfig={this.props.geofenceConfig}
                                         getSearchKey={this.props.getSearchKey}
                                         areaId={areaId}
-                                        searchedObjectType={this.state.showObjects}
+                                        searchedObjectType={this.props.showedObjects}
                                         mapConfig={config.mapConfig}
                                         pathData={this.state.pathData}
                                         handleClosePath={this.props.handleClosePath}
@@ -458,13 +381,13 @@ class SurveillanceContainer extends React.Component {
                                                 onClick={this.handleClickButton} 
                                                 name="searchedObjectType"
                                                 value={[-1, 0]}
-                                                active={(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) }
+                                                active={(this.props.showedObjects.includes(0) || this.props.showedObjects.includes(-1)) }
                                                 disabled={
-                                                    !(this.state.searchedObjectType.includes(-1) ||
-                                                    this.state.searchedObjectType.includes(0))
+                                                    !(this.props.searchedObjectType.includes(-1) ||
+                                                    this.props.searchedObjectType.includes(0))
                                                 }
                                             >
-                                                {!(this.state.showObjects.includes(0) || this.state.showObjects.includes(-1)) 
+                                                {!(this.props.showedObjects.includes(0) || this.props.showedObjects.includes(-1)) 
                                                     ?   locale.texts.SHOW_DEVICES 
                                                     :   locale.texts.HIDE_DEVICES 
                                                 }
@@ -482,13 +405,13 @@ class SurveillanceContainer extends React.Component {
                                                 onClick={this.handleClickButton} 
                                                 name="searchedObjectType"
                                                 value={[-2, 1, 2]}
-                                                active={(this.state.showObjects.includes(1) || this.state.showObjects.includes(2))}
+                                                active={(this.props.showedObjects.includes(1) || this.props.showedObjects.includes(2))}
                                                 disabled={
-                                                    !(this.state.searchedObjectType.includes(1) ||
-                                                    this.state.searchedObjectType.includes(2))
+                                                    !(this.props.searchedObjectType.includes(1) ||
+                                                    this.props.searchedObjectType.includes(2))
                                                 }
                                             >
-                                                {!(this.state.showObjects.includes(1) || this.state.showObjects.includes(2)) 
+                                                {!(this.props.showedObjects.includes(1) || this.props.showedObjects.includes(2)) 
                                                     ?   locale.texts.SHOW_RESIDENTS
                                                     :   locale.texts.HIDE_RESIDENTS 
                                                 }
@@ -529,7 +452,7 @@ class SurveillanceContainer extends React.Component {
                             geofenceConfig={this.props.geofenceConfig}
                             getSearchKey={this.props.getSearchKey}
                             areaId={areaId}
-                            searchedObjectType={this.state.showObjects}
+                            searchedObjectType={this.props.showedObjects}
                             mapConfig={config.mapConfig}
                             pathData={this.state.pathData}
                             handleClosePath={this.props.handleClosePath}
@@ -542,13 +465,13 @@ class SurveillanceContainer extends React.Component {
                 <PdfDownloadForm 
                     show={this.state.showPdfDownloadForm}
                     data={this.props.searchResult}
-                    handleClose = {this.handleClosePdfForm}
+                    handleClose={this.handleCloseModal}
                     userInfo={auth.user}
                 />
                 <GeneralConfirmForm
                     show={this.state.showConfirmForm}
                     handleSubmit={this.handleConfirmFormSubmit}
-                    handleClose={this.handleClosePdfForm}
+                    handleClose={this.handleCloseModal}
                     signin={auth.signin}
                     stateReducer ={stateReducer[0].areaId}
                     auth={auth}

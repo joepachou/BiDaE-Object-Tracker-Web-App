@@ -2,7 +2,13 @@ import React from 'react';
 import SearchContainer from './SearchContainer';
 import 'react-table/react-table.css';
 import SearchResultList from '../presentational/SearchResultList'
-import { Row, Col, Toast } from 'react-bootstrap'
+import { 
+    Row, 
+    Col, 
+    Toast,
+    Button,
+    ButtonGroup
+} from 'react-bootstrap'
 import SurveillanceContainer from './SurveillanceContainer';
 import config from '../../config';
 import InfoPrompt from '../presentational/InfoPrompt';
@@ -12,19 +18,12 @@ import dataSrc from '../../dataSrc'
 import { AppContext } from '../../context/AppContext'
 import { toast } from 'react-toastify';
 import ToastNotification from '../presentational/ToastNotification'
-
 import {
     BrowserView,
     MobileOnlyView,
     TabletView
 } from 'react-device-detect'
-import {
-    Button,
-    ButtonGroup
-} from 'react-bootstrap'
-import { 
-    disableBodyScroll, 
-} from 'body-scroll-lock';
+import { disableBodyScroll } from 'body-scroll-lock';
 import retrieveDataHelper from '../../helper/retrieveDataHelper';
 
 const {
@@ -52,7 +51,6 @@ class MainContainer extends React.Component{
         searchResult: [],
         colorPanel: null,
         clearColorPanel: false,
-        searchResultObjectTypeMap: {},
         clearSearchResult: false,
         hasGridButton: false,
         isHighlightSearchPanel: false,
@@ -62,17 +60,18 @@ class MainContainer extends React.Component{
         showPath: false,
         pathMacAddress:'',
         display: true,
-        showMobileMap: true
+        showMobileMap: true,
+        searchedObjectType: [],
+        showedObjects: [],
     }
 
     componentDidMount = () => {
 
+        /** set the scrollability in body disabled */
         let targetElement = document.querySelector('body')
         disableBodyScroll(targetElement);
 
         this.getTrackingData();
-
-        /** Get lbeacon position */
         this.getLbeaconPosition();
         this.getGeofenceConfig();
         this.getLocationMonitorConfig()
@@ -92,6 +91,7 @@ class MainContainer extends React.Component{
                 shouldUpdateTrackingData
             })
         }
+
         if (isTrackingDataChange && this.state.hasSearchKey) {
             this.handleRefreshSearchResult()
         }
@@ -102,7 +102,9 @@ class MainContainer extends React.Component{
                 authenticated: this.context.auth.authenticated,
                 searchResult: [],
                 searchKey: '',
-                hasSearchKey: false
+                hasSearchKey: false,
+                searchedObjectType: [],
+                showedObjects: [],
             })
         } 
 
@@ -122,15 +124,14 @@ class MainContainer extends React.Component{
         let isGeoFenceDataChange = !(_.isEqual(this.state.geofenceConfig, nextState.geofenceConfig))
         let isLocationConfigChange = !(_.isEqual(this.state.locationMonitorConfig, nextState.locationMonitorConfig))
         let isLbeaconPositionChange = !(_.isEqual(this.state.lbeaconPosition, nextState.lbeaconPosition))
-
+        let isShowedObjectsChange = !(_.isEqual(this.state.showedObjects, nextState.showedObjects))
         let isViolatedObjectChange = !(_.isEqual(this.state.violatedObjects, nextState.violatedObjects))
-
         let showMobileMap = !(_.isEqual(this.state.showMobileMap, nextState.showMobileMap))
         let display = !(_.isEqual(this.state.display, nextState.display)) 
         let pathMacAddress = !(_.isEqual(this.state.pathMacAddress, nextState.pathMacAddress)) 
-
         let isHighlightSearchPanelChange = !(_.isEqual(this.state.isHighlightSearchPanel, nextState.isHighlightSearchPanel))
         let shouldUpdate = isTrackingDataChange || 
+                                isShowedObjectsChange ||
                                 hasSearchKey || 
                                 isSearchKeyChange || 
                                 isSearchResultChange || 
@@ -141,7 +142,7 @@ class MainContainer extends React.Component{
                                 display ||
                                 pathMacAddress ||
                                 isLocationConfigChange ||
-                                isLbeaconPositionChange
+                                isLbeaconPositionChange 
         return shouldUpdate
     }
 
@@ -204,11 +205,13 @@ class MainContainer extends React.Component{
         clearInterval(this.interval);
     }
 
+    /** get the latest search results */
     handleRefreshSearchResult = () => {
         let { searchKey, colorPanel, searchValue, markerClickPackage } = this.state
         this.getSearchKey(searchKey, colorPanel, searchValue, markerClickPackage)
     }
 
+    /** set the geofence and location monitor enable */
     setMonitor = (type) => {
 
         let { 
@@ -243,6 +246,8 @@ class MainContainer extends React.Component{
         })
     }
 
+    /** Get tracking data from database.
+     *  Once get the tracking data, violated objects would be collected. */ 
     getTrackingData = () => {
         
         let { 
@@ -376,66 +381,7 @@ class MainContainer extends React.Component{
         return [yy, xx, zz];
     }
 
-    /** Transfer the search result, not found list and color panel from SearchContainer, GridButton to MainContainer 
-     *  The three variable will then pass into SurveillanceContainer */
-    processSearchResult = (searchResult, colorPanel, searchKey, searchValue, markerClickPackage) => {
-        
-        /** Count the number of found object type */
-        let duplicateSearchKey = []
-
-        if (typeof searchKey !== 'string') {
-            duplicateSearchKey = [...searchKey]
-        }
-
-        duplicateSearchKey.filter(key => {
-            return key !== 'all devices' || key !== 'my devices'
-        })
-
-        let searchResultObjectTypeMap = searchResult
-            .filter(item => item.found)
-            .reduce((allObjectTypes, item) => {
-                if (item.type in allObjectTypes) allObjectTypes[item.type]++
-                else {
-                    allObjectTypes[item.type] = 1
-                    let index = duplicateSearchKey.indexOf(item.type)
-                    if (index > -1) {
-                        duplicateSearchKey.splice(index, 1)
-                    }
-                }
-                return allObjectTypes
-        }, {})
-
-        duplicateSearchKey.map(key => searchResultObjectTypeMap[key] = 0)
-        
-        if(colorPanel) {
-            this.setState({
-                hasSearchKey: Object.keys(colorPanel).length === 0 ? false : true,
-                searchResult: searchResult,
-                searchKey,
-                colorPanel: colorPanel,
-                clearColorPanel: false,
-                searchResultObjectTypeMap: searchResultObjectTypeMap, 
-                clearSearchResult: false,
-                hasGridButton: true,
-                markerClickPackage,
-            })
-        } else {
-            this.clearGridButtonBGColor();
-            this.setState({
-                hasSearchKey: true,
-                searchKey: searchKey,
-                searchResult: searchResult,
-                colorPanel: null,
-                clearColorPanel: true,
-                searchResultObjectTypeMap: searchResultObjectTypeMap, 
-                clearSearchResult: false,
-                hasGridButton: false,
-                searchValue,
-                markerClickPackage
-            })
-        }
-    }
-
+    /** remove the background color of grid button */
     clearGridButtonBGColor = () => {
         var gridbuttons = document.getElementsByClassName('gridbutton')
         for(let button of gridbuttons) {
@@ -452,23 +398,40 @@ class MainContainer extends React.Component{
             searchResult: [],
             colorPanel: null,
             clearColorPanel: true,
-            searchResultObjectTypeMap: {},
             clearSearchResult: this.state.hasSearchKey ? true : false,
-            proccessedTrackingData: []
+            proccessedTrackingData: [],
+            display: true,
+            searchedObjectType: [],
+            showedObjects: [],
         })
     }
 
     /** Fired once the user click the item in object type list or in frequent seaerch */
     getSearchKey = (searchKey, colorPanel = null, searchValue = null, markerClickPackage = {}) => {
-        const searchResult = this.getResultBySearchKey(searchKey, colorPanel, searchValue, markerClickPackage)
-        this.processSearchResult(searchResult, colorPanel, searchKey, searchValue, markerClickPackage)
+        this.getResultBySearchKey(searchKey, colorPanel, searchValue, markerClickPackage)
+        // this.processSearchResult(searchResult, colorPanel, searchKey, searchValue, markerClickPackage)
     }
 
+    /** Process the search result by the search key.
+     *  The search key would be:
+     *  1. all devices
+     *  2. my devices
+     *  3. all patients
+     *  4. my patients
+     *  5. specific object term,
+     *  6. coordinate(disable now)
+     *  7. multiple selected object(gridbutton)(disable now)
+     */
     getResultBySearchKey = (searchKey, colorPanel, searchValue, markerClickPackage) => {
         let searchResult = [];
+        let {
+            searchedObjectType,
+            showedObjects,
+            trackingData
+        } = this.state
         let { auth } = this.context
+        let proccessedTrackingData = _.cloneDeep(trackingData)
 
-        let proccessedTrackingData = _.cloneDeep(this.state.trackingData)
         if (searchKey === MY_DEVICES) {
 
             const devicesAccessControlNumber = auth.user.myDevice || []
@@ -481,6 +444,11 @@ class MainContainer extends React.Component{
                         searchResult.push(item)
                     }
                 })
+            if (!searchedObjectType.includes(-1)) { 
+                searchedObjectType.push(-1)
+                showedObjects.push(-1)
+            }
+
         } else if (searchKey === ALL_DEVICES) {
             searchResult = proccessedTrackingData
                 .filter(item => item.object_type == 0)
@@ -490,6 +458,11 @@ class MainContainer extends React.Component{
                     }
                     return item
                 })
+            if (!searchedObjectType.includes(0)) {
+                searchedObjectType.push(0)
+                showedObjects.push(0)
+            }
+
 
         } else if (searchKey === MY_PATIENTS){
             const devicesAccessControlNumber = auth.user.myDevice || []
@@ -499,26 +472,36 @@ class MainContainer extends React.Component{
                 .map(item => {
                     if (devicesAccessControlNumber.includes(item.asset_control_number)) {
                         item.searched = true;
-                        // item.searched = auth.user.areas_id.includes(item.area_id) ? true : false
                         item.searchedType = -2;
                         searchResult.push(item)
                     }
                 })
+            if (!searchedObjectType.includes(-2)) { 
+                searchedObjectType.push(-2)
+                showedObjects.push(-2)
+            }
+
 
         } else if (searchKey === ALL_PATIENTS) {
 
             searchResult = proccessedTrackingData
                 .filter(item => item.object_type != 0)
                 .map(item => {
-                    // item.searched = auth.user.areas_id.includes(item.area_id) ? true : false
                     item.searchedType = 1;
                     return item
                 })
+            if (!searchedObjectType.includes(1) || !searchedObjectType.includes(2)) { 
+                searchedObjectType.push(1)
+                searchedObjectType.push(2)
+                showedObjects.push(1)
+                showedObjects.push(2)
+            }
+
 
         } else if (searchKey == OBJECTS) {
             searchResult = this.collectObjectsByLatLng(searchValue, proccessedTrackingData, markerClickPackage)
-        } else if (typeof searchKey === 'object') {
 
+        } else if (typeof searchKey === 'object') {
             proccessedTrackingData.map(item => {
                 if (searchKey.includes(item.type)) {
                     item.searched = true;
@@ -528,10 +511,6 @@ class MainContainer extends React.Component{
                 } 
             })
 
-            let searchResultMac = [];
-            searchResult.map(item => {
-                searchResultMac.push(item.mac_address)
-            })
         } else {
             
             let searchResultMac = [];
@@ -555,8 +534,6 @@ class MainContainer extends React.Component{
                     keyWord : searchKey,
                     mac_address : searchResultMac
                 })
-                .then(res => {
-                })
                 .catch(err =>{
                     console.log(err)
                 })
@@ -564,12 +541,51 @@ class MainContainer extends React.Component{
                     lastsearchKey: searchKey
                 })
             }
+            if (!searchedObjectType.includes(-1)) { 
+                searchedObjectType.push(-1)
+                showedObjects.push(-1)
+            }
         }
 
         this.setState({
-            proccessedTrackingData
+            proccessedTrackingData,
+            searchedObjectType,
+            showedObjects,
+            searchResult,
+            hasSearchKey: true,
+            searchKey,
+
         })
-        return searchResult
+    }
+
+    /** Transfer the search result, not found list and color panel from SearchContainer, GridButton to MainContainer 
+     *  The three variable will then pass into SurveillanceContainer */
+    processSearchResult = (searchResult, colorPanel, searchKey, searchValue, markerClickPackage) => {
+        if(colorPanel) {
+            this.setState({
+                hasSearchKey: Object.keys(colorPanel).length === 0 ? false : true,
+                searchResult,
+                searchKey,
+                colorPanel: colorPanel,
+                clearColorPanel: false,
+                clearSearchResult: false,
+                hasGridButton: true,
+                markerClickPackage,
+            })
+        } else {
+            this.clearGridButtonBGColor();
+            this.setState({
+                hasSearchKey: true,
+                searchKey,
+                searchResult: searchResult,
+                colorPanel: null,
+                clearColorPanel: true,
+                clearSearchResult: false,
+                hasGridButton: false,
+                searchValue,
+                markerClickPackage
+            })
+        }
     }
 
     collectObjectsByLatLng = (lbPosition, proccessedTrackingData, markerClickPackage) => {
@@ -605,7 +621,6 @@ class MainContainer extends React.Component{
     }
 
     handleShowResultListForMobile = () => {
-        console.log('click')
         this.setState({
             display: false
         })
@@ -616,10 +631,22 @@ class MainContainer extends React.Component{
             showMobileMap: !this.state.showMobileMap
         })
     }
+    
+    setShowedObjects = (value) => {
+        let showedObjects = value.split(',').reduce((showedObjects, number) => {   
+            number = parseInt(number)                
+            if (!this.state.searchedObjectType.includes(number)) return showedObjects
+            else if (this.state.showedObjects.includes(number)) {
+                let index = showedObjects.indexOf(number)
+                showedObjects = [...showedObjects.slice(0, index), ...showedObjects.slice(index + 1)]
+            } else {
+                showedObjects.push(number)
+            }
+            return showedObjects
 
-    clearResultHandler = () => {
+        }, _.cloneDeep(this.state.showedObjects))
         this.setState({
-            display: true
+            showedObjects
         })
     }
 
@@ -632,7 +659,6 @@ class MainContainer extends React.Component{
             trackingData,
             proccessedTrackingData,
             searchResult,
-            searchResultObjectTypeMap,
             searchKey
         } = this.state;
 
@@ -704,7 +730,7 @@ class MainContainer extends React.Component{
             locale, 
             auth,
         } = this.context
-        
+
         return (
             /** "page-wrap" the default id named by react-burget-menu */
             <div>
@@ -712,7 +738,6 @@ class MainContainer extends React.Component{
                     <div id="page-wrap" className='mx-1 my-2 overflow-hidden' style={style.pageWrap} >
                         <Row id="mainContainer" className='d-flex w-100 justify-content-around mx-0' style={style.container}>
                             <Col sm={7} md={9} lg={8} xl={8} id='searchMap' className="pl-2 pr-1" >
-
                                 <InfoPrompt 
                                     searchKey={searchKey}
                                     searchResult={searchResult}
@@ -737,7 +762,9 @@ class MainContainer extends React.Component{
                                     authenticated={this.state.authenticated}
                                     handleClosePath={this.handleClosePath}
                                     handleShowPath={this.handleShowPath}
-                                    rssi={this.state.rssi}
+                                    searchedObjectType={this.state.searchedObjectType}
+                                    showedObjects={this.state.showedObjects}
+                                    setShowedObjects={this.setShowedObjects}
                                 />
                             </Col>
 
@@ -791,7 +818,8 @@ class MainContainer extends React.Component{
                                         authenticated={this.state.authenticated}
                                         handleClosePath={this.handleClosePath}
                                         handleShowPath={this.handleShowPath}
-                                        rssi={this.state.rssi}
+                                        searchedObjectType={this.state.searchedObjectType}
+                                        showedObjects={this.state.showedObjects}
                                     />
                                 </div>
                                 <div id="searchResult" className="d-flex" style={{justifyContent: 'center'}}>
@@ -850,18 +878,20 @@ class MainContainer extends React.Component{
                                         authenticated={this.state.authenticated}
                                         handleClosePath={this.handleClosePath}
                                         handleShowPath={this.handleShowPath}
-                                        rssi={this.state.rssi}
+                                        searchedObjectType={this.state.searchedObjectType}
+                                        showedObjects={this.state.showedObjects}
                                     />
                                 </div>
                                 <ButtonGroup style={{marginTop:'5px',marginBottom:'5px'}}>
-                                    {
-                                        this.state.showMobileMap 
-                                        ?   <Button variant='outline-primary' onClick={this.mapButtonHandler}>{locale.texts.HIDE_MAP}</Button>
-                                        :   <Button variant='outline-primary' onClick={this.mapButtonHandler}>{locale.texts.SHOW_MAP}</Button>
-                                    }
                                     <Button 
                                         variant='outline-primary' 
-                                        onClick={this.clearResultHandler}
+                                        onClick={this.mapButtonHandler}
+                                    >
+                                        {this.state.showMobileMap ? locale.texts.HIDE_MAP : locale.texts.SHOW_MAP}
+                                    </Button>
+                                    <Button 
+                                        variant='outline-primary' 
+                                        onClick={this.handleClearButton}
                                     >
                                         {locale.texts.CLEAR_RESULT}
                                     </Button>
