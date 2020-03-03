@@ -504,12 +504,74 @@ const config = {
         mapOptions: {
             crs: L.CRS.Simple,
             zoom: -5.5,
-            minZoom: -5.61,
-            maxZoom: -4,
+            minZoom: -5.46,
+            maxZoom: -5,
+            zoomDelta: 0.25,
+            zoomSnap: 0,
+            zoomControl: true,
+            attributionControl: false,
+            dragging: true,
+            doubleClickZoom: false,
+            scrollWheelZoom: false,
+            maxBoundsOffset: [-10000, 10000],
+            maxBoundsViscosity: 0.0
+        },
+
+        browserMapOptions: {
+            crs: L.CRS.Simple,
+            zoom: -5.5,
+            minZoom: -5.46,
+            maxZoom: -5,
+
             zoomForTablet: -6,
-            zoomForMobile: -7.25,
             minZoomForTablet: -7,
+            maxZoomForTablet: -7,
+
+            zoomForMobile: -7.25,
             minZoomForMobile: -7.25,
+            maxZoomForMobile: -7,
+
+            zoomDelta: 0.25,
+            zoomSnap: 0,
+            zoomControl: true,
+            attributionControl: false,
+            dragging: true,
+            doubleClickZoom: false,
+            scrollWheelZoom: false,
+            maxBoundsOffset: [-10000, 10000],
+            maxBoundsViscosity: 0.0
+        },
+
+        tabletMapOptions: {
+            crs: L.CRS.Simple,
+            zoom: -5.5,
+            minZoom: -5.46,
+            maxZoom: -5,
+
+            zoomForTablet: -6,
+            minZoomForTablet: -7,
+            maxZoomForTablet: -7,
+
+            zoomForMobile: -7.25,
+            minZoomForMobile: -7.25,
+            maxZoomForMobile: -7,
+
+            zoomDelta: 0.25,
+            zoomSnap: 0,
+            zoomControl: true,
+            attributionControl: false,
+            dragging: true,
+            doubleClickZoom: false,
+            scrollWheelZoom: false,
+            maxBoundsOffset: [-10000, 10000],
+            maxBoundsViscosity: 0.0
+        },
+        
+        mobileMapOptions: {
+            crs: L.CRS.Simple,
+            zoom: -7.25,
+            minZoom: -7.4,
+            maxZoom: -7,
             zoomDelta: 0.25,
             zoomSnap: 0,
             zoomControl: true,
@@ -534,21 +596,20 @@ const config = {
             dragging: false,
             doubleClickZoom: false,
             scrollWheelZoom: false
-
         },
 
         /** Set the icon option */
         iconOptions: {
-            iconSize: process.env.MARKER_SIZE_IN_DESKTOP || 1,
+            iconSize: 35 || process.env.MARKER_SIZE_IN_DESKTOP || 1,
             iconSizeForTablet: process.env.MARKER_SIZE_IN_TABLET || 1,
-            iconSizeForMobile: process.env.MARKER_SIZE_IN_MOBILE || 1,
+            iconSizeForMobile: 25 || process.env.MARKER_SIZE_IN_MOBILE || 1,
             circleRadius: 25,
             circleRadiusForTablet: 15,
             circleRadiusForMobile: 8,
             showNumber: !false,
 
             /* Set the Marker dispersity that can be any positive number */
-            markerDispersity: process.env.MARKER_DISPERSITY || 100,
+            markerDispersity: 1 || process.env.MARKER_DISPERSITY || 100,
 
             markerDispersityInBigScreen: process.env.MARKER_DISPERSITY_IN_BIG_SCREEN || 13,
         },
@@ -559,7 +620,6 @@ const config = {
 
             /* Set the Marker dispersity that can be any positive number */
             markerDispersity: process.env.MARKER_DISPERSITY_IN_BIG_SCREEN || 13,
-
         }, 
 
         /** Set the representation of color pin 
