@@ -59,7 +59,6 @@ class SurveillanceContainer extends React.Component {
                 this.props.clearAlerts()
                 break;
             case "searchedObjectType":
-                console.log('button')
                 this.props.setShowedObjects(value)
                 break;
             case "cleanPath":
@@ -123,7 +122,6 @@ class SurveillanceContainer extends React.Component {
         } = this.props;
 
         let [{areaId}] = stateReducer
-        // console.log(showedObjects)
         return(
             <div>
                 <BrowserView>
@@ -147,7 +145,7 @@ class SurveillanceContainer extends React.Component {
                                 showPath={this.props.showPath}
                             />
                         </div>
-                        <div style={style.navBlock}>
+                        <div>
                             <Nav className="d-flex align-items-start text-capitalize bd-highlight">
                                 <Nav.Item className="mt-2">
                                     <Button 
@@ -341,7 +339,7 @@ class SurveillanceContainer extends React.Component {
                                 </div>
                             </div>
                             
-                            <div style={style.navBlock}>
+                            <div>
                                 <Nav style={style.button} className="d-flex align-items-start text-capitalize bd-highlight">
                                     <Nav.Item className="mt-2">
                                         <Button 
