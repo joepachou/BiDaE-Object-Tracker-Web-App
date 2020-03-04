@@ -85,11 +85,12 @@ class SystemStatus extends React.Component{
             this.setState({
                 lbeaconData: res.data.rows,
                 lbeaconColumn: column
-            })
+            }) 
         })
         .catch(err => {
             console.log("get lbeacon data fail : " + err);
         })
+
     }
 
     getGatewayData = () => {
@@ -314,11 +315,12 @@ class SystemStatus extends React.Component{
             toggleAll,
             toggleSelection,
             selectType
-        };
-
+        }; 
         return(
             <Container className='py-2 text-capitalize' fluid>
+         
                 <br/>
+ 
                 <Nav
                     activeKey="/home"
                     onSelect={selectedKey => alert(`selected ${selectedKey}`)}
@@ -333,7 +335,7 @@ class SystemStatus extends React.Component{
                         <Tab>{'LBeacon'}</Tab>
                         <Tab>{'Gateway'}</Tab>
                         <Tab>{locale.texts.TRACKING}</Tab>
-                    </TabList>
+                    </TabList> 
                     <TabPanel>
                         <ButtonToolbar>
                             <Button 

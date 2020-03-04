@@ -274,10 +274,12 @@ const getLbeaconTable = (request, response) => {
 
     let { locale } = request.body 
     pool.query(queryType.getLbeaconTable)
-        .then(res => {
-            console.log('Get lbeaconTable data')
-            res.rows.map(item => {
-                item.health_status =  moment().diff(item.last_report_timestamp, 'days') < 1 ? 1 : 0 
+        .then(res => { 
+            console.log('Get lbeaconTable data') 
+            res.rows.map(item => { 
+               if (item.health_status == 1) {
+                       item.health_status =  moment().diff(item.last_report_timestamp, 'days') < 1 ? 1 : 0 
+               }  
                 item.last_report_timestamp = moment.tz(item.last_report_timestamp, process.env.TZ).locale(locale).format('lll');
             })
             response.status(200).json(res)
