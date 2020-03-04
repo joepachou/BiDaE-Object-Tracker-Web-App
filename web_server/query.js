@@ -59,14 +59,11 @@ moment.updateLocale('zh-tw', {
         future: "已 %s",
     }
 });
-
 const getTrackingData = (request, response) => {
-
     const locale = request.body.locale || 'en'
-   
+    
     /** The user's authenticated area id */
     const userAuthenticatedAreaId= request.body.user.areas_id
-
     const {
         main_area,
         areas_id
@@ -97,7 +94,7 @@ const getTrackingData = (request, response) => {
                 let isInTheTimePeriod = moment().diff(item.last_reported_timestamp, 'seconds') 
                     < process.env.OBJECT_FOUND_TIME_INTERVAL_IN_SEC;
 
-                /** Set the boolean if its rssi is below the specific rssi threshold  */
+                    /** Set the boolean if its rssi is below the specific rssi threshold  */
                 let isMatchRssi = item.rssi > process.env.RSSI_THRESHOLD ? 1 : 0;
                 
                 /** Flag the object that satisfied the time period and rssi threshold */
@@ -277,7 +274,7 @@ const getLbeaconTable = (request, response) => {
         .then(res => {
             console.log('Get lbeaconTable data')
             res.rows.map(item => {
-                item.health_status =  moment().diff(item.last_report_timestamp, 'days') < 1 ? 1 : 0 
+                item.health_status =  !item.health_status && moment().diff(item.last_report_timestamp, 'days') < 1 ? 1 : 0 
                 item.last_report_timestamp = moment.tz(item.last_report_timestamp, process.env.TZ).locale(locale).format('lll');
             })
             response.status(200).json(res)
