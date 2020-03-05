@@ -72,12 +72,12 @@ class ImportObjectTable extends React.Component{
             
             // const currentRecords = wrappedInstance.getResolvedState().sortedData;
            
-            currentRecords.forEach(item => {
-                selection.push(item.id);
+            currentRecords.forEach(item => { 
+                selection.push(item.asset_control_number);
             });
         }else{
             selection = [];
-        }
+        } 
          this.setState({ selectAll, selection });
 
     };
@@ -205,10 +205,9 @@ class ImportObjectTable extends React.Component{
                     //沒被擋掉的存到newData後輸出
             
                      let { locale } = this.context
-                newData.map(item =>{
+                    newData.map(item =>{
                     item.type = 'patient'
-                })
-                
+                }) 
                     axios.post(objectImport, {
                         locale: locale.abbr ,
                         newData

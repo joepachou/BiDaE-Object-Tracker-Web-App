@@ -73,7 +73,7 @@ class ImportObjectTable extends React.Component{
             // const currentRecords = wrappedInstance.getResolvedState().sortedData;
            
             currentRecords.forEach(item => {
-                selection.push(item.id);
+                selection.push(item.asset_control_number);
             });
         }else{
             selection = [];
