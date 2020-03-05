@@ -522,15 +522,6 @@ const config = {
             zoom: -5.5,
             minZoom: -5.46,
             maxZoom: -5,
-
-            zoomForTablet: -6,
-            minZoomForTablet: -7,
-            maxZoomForTablet: -7,
-
-            zoomForMobile: -7.25,
-            minZoomForMobile: -7.25,
-            maxZoomForMobile: -7,
-
             zoomDelta: 0.25,
             zoomSnap: 0,
             zoomControl: true,
@@ -544,18 +535,9 @@ const config = {
 
         tabletMapOptions: {
             crs: L.CRS.Simple,
-            zoom: -5.5,
-            minZoom: -5.46,
-            maxZoom: -5,
-
-            zoomForTablet: -6,
-            minZoomForTablet: -7,
-            maxZoomForTablet: -7,
-
-            zoomForMobile: -7.25,
-            minZoomForMobile: -7.25,
-            maxZoomForMobile: -7,
-
+            zoom: -6.6,
+            minZoom: -6.8,
+            maxZoom: -6,
             zoomDelta: 0.25,
             zoomSnap: 0,
             zoomControl: true,
@@ -603,19 +585,16 @@ const config = {
 
             iconSize: [process.env.MARKER_SIZE_IN_DESKTOP, process.env.MARKER_SIZE_IN_DESKTOP] || 1,
 
-            iconSizeForTablet: process.env.MARKER_SIZE_IN_TABLET || 1,
-
             iconAnchor: [process.env.MARKER_SIZE_IN_DESKTOP / 2, process.env.MARKER_SIZE_IN_DESKTOP],
 
-            circleRadius: 25,
-
-            circleRadiusForTablet: 15,
-
-            showNumber: !false,
+            showNumber: true,
 
             numberSize: 10, 
-            // numberShiftTop: '10%',
-            // numberShiftLeft: '2%',
+
+            numberShiftTop: '',
+
+            numberShiftLeft: '',
+
             /* Set the Marker dispersity that can be any positive number */
             markerDispersity: process.env.MARKER_DISPERSITY || 100,
 
@@ -644,25 +623,102 @@ const config = {
 
         /** Set the icon option for mobile */
         iconOptionsInMobile: {
-            iconSize: process.env.MARKER_SIZE_IN_MOBILE || 1,
+
+            iconSize: [process.env.MARKER_SIZE_IN_MOBILE, process.env.MARKER_SIZE_IN_MOBILE] || 1,
+
+            iconAnchor: [process.env.MARKER_SIZE_IN_MOBILE / 2, process.env.MARKER_SIZE_IN_MOBILE],
+
             circleRadius: 8,
+
             circleRadiusForTablet: 15,
-            showNumber: !false,
-            numberShiftTop: '',
-            numberShiftLeft: '',
+
+            showNumber: true,
+
+            numberShiftTop: '-25%',
+
+            numberShiftLeft: '5%',
+
+            numberSize: 8, 
 
             /* Set the Marker dispersity that can be any positive number */
             markerDispersity: 1 || process.env.MARKER_DISPERSITY || 100,
+
+            geoFenceMarkerOptions: {
+
+                color: 'rgba(0, 0, 0, 0)',
+
+                fillColor: 'orange',
+
+                fillOpacity: 0.4,
+
+                radius: 8,
+            },
+
+            lbeaconMarkerOptions: {
+
+                color: 'rgba(0, 0, 0, 0)',
+
+                fillColor: 'orange',
+
+                fillOpacity: 0.4,
+
+                radius: 8,
+            },
         },
 
         /** Set the icon options for big screen */
         iconOptionsInBigScreen: {
-            iconSize: 30,
+
+            iconSize: [50, 50] || 1,
+
+            iconAnchor: [25, 50],
+
             showNumber: false,
 
             /* Set the Marker dispersity that can be any positive number */
             markerDispersity: process.env.MARKER_DISPERSITY_IN_BIG_SCREEN || 13,
         }, 
+
+        /** Set the icon option for tablet */
+        iconOptionsInTablet: {
+
+            iconSize: [process.env.MARKER_SIZE_IN_TABLET, process.env.MARKER_SIZE_IN_TABLET],
+
+            iconAnchor: [process.env.MARKER_SIZE_IN_TABLET / 2, process.env.MARKER_SIZE_IN_TABLET],
+
+            showNumber: true,
+
+            numberShiftTop: '-25%',
+
+            numberShiftLeft: '5%',
+
+            numberSize: 8, 
+
+            /* Set the Marker dispersity that can be any positive number */
+            markerDispersity: 1 || process.env.MARKER_DISPERSITY || 100,
+
+            geoFenceMarkerOptions: {
+
+                color: 'rgba(0, 0, 0, 0)',
+
+                fillColor: 'orange',
+
+                fillOpacity: 0.4,
+
+                radius: 10,
+            },
+
+            lbeaconMarkerOptions: {
+
+                color: 'rgba(0, 0, 0, 0)',
+
+                fillColor: 'orange',
+
+                fillOpacity: 0.4,
+
+                radius: 10,
+            },
+        },
 
         /** Set the representation of color pin 
          * Icon options for AwesomeNumberMarkers 

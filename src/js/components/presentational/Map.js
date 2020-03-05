@@ -38,6 +38,7 @@ class Map extends React.Component {
     prevZoom = 0
     pin_shift_scale = [500, -400]
     iconOption = {};
+    mapOptions = {};
 
     componentDidMount = () => {
         this.initMap();
@@ -84,17 +85,16 @@ class Map extends React.Component {
         } = mapConfig
 
         if (isBrowser) {
-            var mapOptions = mapConfig.browserMapOptions
-            this.iconOption = mapConfig.iconOptions
+            this.mapOptions = mapConfig.browserMapOptions
+            this.iconOptions = mapConfig.iconOptions
 
         } else if (isTablet) {
-            var mapOptions = mapConfig.tabletMapOptiions
-            this.iconOption = mapConfig.iconOptions
+            this.mapOptions = mapConfig.tabletMapOptions
+            this.iconOptions = mapConfig.iconOptionsInTablet
 
         } else if (isMobileOnly) {
-            var mapOptions = mapConfig.mobileMapOptions
-            this.iconOption = mapConfig.iconOptionsInMobile
-
+            this.mapOptions = mapConfig.mobileMapOptions
+            this.iconOptions = mapConfig.iconOptionsInMobile
         }
 
         /** Error handler of the user's auth area does not include the group of sites */
@@ -102,8 +102,8 @@ class Map extends React.Component {
 
         /** set the map's config */
         let { url, bounds } = areaModules[areaOption]
-        mapOptions.maxBounds = bounds.map((latLng, index) => latLng.map(axis => axis + mapOptions.maxBoundsOffset[index]))
-        let map = L.map('mapid', mapOptions);
+        this.mapOptions.maxBounds = bounds.map((latLng, index) => latLng.map(axis => axis + this.mapOptions.maxBoundsOffset[index]))
+        let map = L.map('mapid', this.mapOptions);
         let image = L.imageOverlay(url, bounds).addTo(map);
         map.addLayer(image)
         map.fitBounds(bounds);
@@ -273,7 +273,7 @@ class Map extends React.Component {
                 geofenceConfig[areaId].rules.map(rule => {
                     if (rule.is_active) {
                         rule[type].coordinates.map(item => {
-                            L.circleMarker(item, this.iconOption.geoFenceMarkerOptions).addTo(this.geoFenceLayer);
+                            L.circleMarker(item, this.iconOptions.geoFenceMarkerOptions).addTo(this.geoFenceLayer);
                             
                         })  
                     }
@@ -326,7 +326,7 @@ class Map extends React.Component {
             .map(pos => {
 
             let latLng = pos.split(',')
-            let lbeacon = L.circleMarker(latLng, this.iconOption.lbeaconMarkerOptions).addTo(layer);
+            let lbeacon = L.circleMarker(latLng, this.iconOptions.lbeaconMarkerOptions).addTo(layer);
             // invisibleCircle.on('mouseover', this.handlemenu)
             // invisibleCircle.on('mouseout', function() {this.closePopup();})
         })
@@ -395,7 +395,7 @@ class Map extends React.Component {
             /** Set the icon option*/
             item.iconOption = {
 
-                ...this.iconOption,
+                ...this.iconOptions,
 
                 /** Set the pin color */
                 markerColor: this.props.mapConfig.getIconColor(item, this.props.colorPanel),

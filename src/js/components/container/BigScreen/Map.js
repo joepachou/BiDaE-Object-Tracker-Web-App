@@ -18,6 +18,7 @@ class Map extends React.Component {
 
     map = null;
     image = null;
+    iconOptions = {};
     markersLayer = L.layerGroup();
 
     componentDidMount = () => {
@@ -37,6 +38,7 @@ class Map extends React.Component {
     initMap = () => {
         let [{areaId}] = this.context.stateReducer
 
+        this.iconOptions = this.props.mapConfig.iconOptionsInBigScreen
 
         let areaModules =  this.props.mapConfig.areaModules
         let areaOption = this.props.mapConfig.areaOptions[areaId]    
@@ -49,7 +51,7 @@ class Map extends React.Component {
         this.map = map;
 
         /** Set the map's events */
-        this.map.on('zoomend', this.resizeMarkers)
+        // this.map.on('zoomend', this.resizeMarkers)
         this.createLegend(this.createLegendJSX())
     }
 
@@ -154,18 +156,18 @@ class Map extends React.Component {
         this.markersLayer.clearLayers();
 
         /** Mark the objects onto the map  */
-        this.calculateScale();
+        // this.calculateScale();
 
-        const iconSize = [this.scalableIconSize, this.scalableIconSize];
-        const numberSize = this.scalableNumberSize;
         let counter = 0;
 
         this.props.proccessedTrackingData
         .filter(item => {
-            return item.currentPosition
-        })
-        .filter(item => {
-            return parseInt(item.area_id) === parseInt(this.props.areaId) && item.found && item.object_type == 0
+            return ( parseInt(item.area_id) === parseInt(this.props.areaId) && 
+                item.found && 
+                item.object_type == 0 &&
+                item.currentPosition && 
+                item.searched != -1
+            )
         })
         .map(item => {
 
@@ -176,11 +178,13 @@ class Map extends React.Component {
 
             item.iconOption = {
 
+                ...this.iconOptions,
+
                 /** Set the pin color */
                 markerColor: this.props.mapConfig.getIconColorInBigScreen(item, this.props.colorPanel),
 
                 /** Set the pin size */
-                iconSize,
+                // iconSize,
 
                 /** Insert the object's mac_address to be the data when clicking the object's marker */
                 macAddress: item.mac_address,
@@ -195,8 +199,6 @@ class Map extends React.Component {
 
                 /** Set the color of ordered number */
                 numberColor: this.props.mapConfig.iconColor.number,
-
-                numberSize,
             }
 
             const option = new L.AwesomeNumberMarkers (item.iconOption)
@@ -231,16 +233,16 @@ class Map extends React.Component {
      * @param   mac_address The mac_address of the object retrieved from DB. 
      * @param   lbeacon_coordinate The lbeacon's coordinate processed by createLbeaconCoordinate().*/
     macAddressToCoordinate = (mac_address, lbeacon_coordinate) => {
-        
-        const xx = mac_address.slice(12,14);
-        const yy = mac_address.slice(15,17);
-        const multiplier = this.props.mapConfig.iconOptionsInBigScreen.markerDispersity;
-        const origin_x = lbeacon_coordinate[1] - parseInt(80, 16) * multiplier ; 
-        const origin_y = lbeacon_coordinate[0] - parseInt(80, 16) * multiplier ;
-        const xxx = origin_x + parseInt(xx, 16) * multiplier;
-        const yyy = origin_y + parseInt(yy, 16) * multiplier;
+        // const xx = mac_address.slice(15,16);
+        // const yy = mac_address.slice(16,17);
+        // const multiplier = this.props.mapConfig.iconOptions.markerDispersity; 
+		// const origin_x = lbeacon_coordinate[1] - parseInt(8, 16) * multiplier ; 
+		// const origin_y = lbeacon_coordinate[0] - parseInt(8, 16) * multiplier ;
+		// const xxx = origin_x + parseInt(xx, 16) * multiplier;
+        // const yyy = origin_y + parseInt(yy, 16) * multiplier;
+        const xxx = lbeacon_coordinate[1]
+        const yyy = lbeacon_coordinate[0]
         return [yyy, xxx];
-
     }
 
     render(){
