@@ -47,7 +47,17 @@ class ImportObjectTable extends React.Component{
 
     toggleSelection = (key, shift, row) => {
         let selection = [...this.state.selection];
-        key = key.split('-')[1] ? key.split('-')[1] : key
+
+
+        let splitKey =""
+        if (key.split('-')[1]){
+            for ( var i = 1 ; i < key.split('-').length ; i++){
+                splitKey += key.split('-')[i] 
+                i != key.split('-').length-1 ? splitKey+= "-" : null
+            }            
+        }
+
+        key = key.split('-')[1] ? splitKey : key
         const keyIndex = selection.indexOf(key);
         if (keyIndex >= 0) {
             selection = [
@@ -72,12 +82,12 @@ class ImportObjectTable extends React.Component{
             
             // const currentRecords = wrappedInstance.getResolvedState().sortedData;
            
-            currentRecords.forEach(item => {
-                selection.push(item.id);
+            currentRecords.forEach(item => { 
+                selection.push(item.asset_control_number);
             });
         }else{
             selection = [];
-        }
+        } 
          this.setState({ selectAll, selection });
 
     };
@@ -116,8 +126,7 @@ class ImportObjectTable extends React.Component{
              })
              .catch(err => {
                  console.log(err)
-             })
-
+             }) 
             this.handleSubmitForm()
         }
  
@@ -205,10 +214,9 @@ class ImportObjectTable extends React.Component{
                     //沒被擋掉的存到newData後輸出
             
                      let { locale } = this.context
-                newData.map(item =>{
+                    newData.map(item =>{
                     item.type = 'patient'
-                })
-                
+                }) 
                     axios.post(objectImport, {
                         locale: locale.abbr ,
                         newData

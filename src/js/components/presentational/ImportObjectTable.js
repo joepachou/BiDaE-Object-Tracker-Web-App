@@ -47,7 +47,17 @@ class ImportObjectTable extends React.Component{
 
     toggleSelection = (key, shift, row) => {
         let selection = [...this.state.selection];
-        key = key.split('-')[1] ? key.split('-')[1] : key
+ 
+
+        let splitKey =""
+        if (key.split('-')[1]){
+            for ( var i = 1 ; i < key.split('-').length ; i++){
+                splitKey += key.split('-')[i] 
+                i != key.split('-').length-1 ? splitKey+= "-" : null
+            }            
+        }
+
+        key = key.split('-')[1] ? splitKey : key
         const keyIndex = selection.indexOf(key);
         if (keyIndex >= 0) {
             selection = [
@@ -56,7 +66,7 @@ class ImportObjectTable extends React.Component{
             ];
         } else {
             selection.push(key);
-        }
+        } 
         this.setState({ 
             selection 
         });
@@ -73,7 +83,7 @@ class ImportObjectTable extends React.Component{
             // const currentRecords = wrappedInstance.getResolvedState().sortedData;
            
             currentRecords.forEach(item => {
-                selection.push(item.id);
+                selection.push(item.asset_control_number);
             });
         }else{
             selection = [];

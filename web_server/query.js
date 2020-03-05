@@ -272,19 +272,18 @@ const getLbeaconTable = (request, response) => {
     let { locale } = request.body 
     pool.query(queryType.getLbeaconTable)
         .then(res => {
-            console.log('Get lbeaconTable data')
+            console.log('get lbeacon table data succeed')
             res.rows.map(item => {
                 item.health_status =  !item.health_status && moment().diff(item.last_report_timestamp, 'days') < 1 ? 1 : 0 
+
                 item.last_report_timestamp = moment.tz(item.last_report_timestamp, process.env.TZ).locale(locale).format('lll');
             })
             response.status(200).json(res)
 
         })
         .catch(err => {
-            console.log("Get lbeaconTable fails: " + err)
+            console.log(`get lbeacon table failed ${err}`)
         })        
-
-
 }
 
 const getGatewayTable = (request, response) => {

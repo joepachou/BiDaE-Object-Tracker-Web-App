@@ -361,7 +361,16 @@ class ObjectManagementContainer extends React.Component{
         })
     }
  
-    refreshData = () => { //重整用
+    refreshData = () => { //重整用 
+        if (this.state.tabIndex >=2){
+            this.setState({
+                tabIndex : (this.state.tabIndex -1)
+            })
+            this.setState({
+                tabIndex : (this.state.tabIndex +1)
+            })           
+        }
+
         setTimeout(this.getData, 500) 
         setTimeout(this.getDataPatient, 500) 
         setTimeout(this.getDataImport, 500)  
@@ -503,6 +512,7 @@ class ObjectManagementContainer extends React.Component{
             filteredPatient
         }) 
     }
+ 
 
     render(){
         const {  
@@ -577,7 +587,7 @@ class ObjectManagementContainer extends React.Component{
                         <ImportPatientTable
                             dataImportPatient = {this.state.dataImportPatient}
                             columnImport = {this.state.columnImport}
-                            refreshData={this.refreshData}
+                            refreshData={this.refreshData} 
                         />
                     </TabPanel>
                 </Tabs>

@@ -159,19 +159,18 @@ class EditObjectForm extends React.Component {
                                     .test(
                                         'asset_control_number', 
                                         locale.texts.THE_ASSET_CONTROL_NUMBER_IS_ALREADY_USED,
-                                        value => {
-                                        
-                                            if (this.props.selectedRowData.length == 0) {
-                                             if (!(this.props.data.map(item => item.asset_control_number).includes(value))){
-                                                if (item.asset_control_number != value ) { return false;} 
-                                             } 
+                                        value => {  
+                                            if(!this.props.disableASN){
+                                                if (value != null){
+                                                   if ((this.props.data.map(item => item.asset_control_number.toUpperCase()).includes(value.toUpperCase()))  ){
+                                                        return false;
+                                                    }  
+                                                    if ((this.props.objectTable.map(item => item.asset_control_number.toUpperCase()).includes(value.toUpperCase()))){
+                                                        return false ;
+                                                    } 
+                                                } 
                                             } 
-                                            if (this.props.selectedRowData.length == 0) {
-                                                if (!(this.props.objectTable.map(item => item.asset_control_number).includes(value))){
-                                                    if (item.asset_control_number != value ) { return false;} 
-                                                }
-                                            }
-                                            return true;
+                                            return true; 
                                         }
                                     ),
                                 mac_address: Yup.string()
