@@ -116,8 +116,7 @@ class ImportObjectTable extends React.Component{
              })
              .catch(err => {
                  console.log(err)
-             })
-
+             }) 
             this.handleSubmitForm()
         }
  
