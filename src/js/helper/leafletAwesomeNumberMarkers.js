@@ -36,13 +36,22 @@
     
         _createInner: function() {
             var iconColorStyle = ""
+            var specifiedNumberTop = ""
             var options = this.options;
+            var numberShiftTop = ""
 
             if(options.numberColor) {
                 iconColorStyle = "color: " + options.numberColor + "; font-size: " + options.numberSize + 'px' + ";' ";          
             }
+            console.log(options.markerColor)
 
-            let numberShiftTop = "top: " + options.numberShiftTop + ";";
+            numberShiftTop = "top: " + options.numberShiftTop + ";";
+
+            if (options.markerColor == 'male') {
+                console.log(123)
+                numberShiftTop = "top: " + options.specifiedNumberTop + ";";
+            }
+
             let numberPosition = "position: relative;"
             let numberShiftLeft = "left: " + options.numberShiftLeft + ";";
 

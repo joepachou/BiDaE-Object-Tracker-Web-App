@@ -32,38 +32,11 @@ const config = {
     /** Extend object reserved time in minutes  */
     reservedDelayTime: 10,
 
-    patientStatus:{
-        BATTERY_CHANGE:"Change",
-        BATTERY_NORMAL:"Normal",
-    },
-
-
-    gender:{
-        GENDER:"Gender",
-        MAN:"man",
-    },
-
-
     ACNOmitsymbol: 'XXXXXX',
-
-    objectManage: {
-
-        /* The definition of the time period that the object is not scanned by lbeacon
-         * The time period unit is seconds */
-        notFoundObjectTimePeriod: 30,
-
-        geofenceViolationTimePeriod: 300,
-
-        sosTimePeriod: 300,
-
-        objectManagementRSSIThreshold: 0
-    },
     
     locale: {
         defaultLocale: 'tw' ,
     },
-
-    defaultRSSIThreshold: 1,
 
     image: {
         logo: BOT_LOGO,
@@ -593,7 +566,9 @@ const config = {
 
             numberShiftTop: '',
 
-            numberShiftLeft: '',
+            numberShiftLeft: '2%',
+
+            specifiedNumberTop: '8%',
 
             /* Set the Marker dispersity that can be any positive number */
             markerDispersity: process.env.MARKER_DISPERSITY || 100,
@@ -636,7 +611,9 @@ const config = {
 
             numberShiftTop: '-25%',
 
-            numberShiftLeft: '5%',
+            numberShiftLeft: '3%',
+
+            specifiedNumberTop: '-20%',
 
             numberSize: 8, 
 
@@ -690,7 +667,9 @@ const config = {
 
             numberShiftTop: '-25%',
 
-            numberShiftLeft: '5%',
+            numberShiftLeft: '3%',
+
+            specifiedNumberTop: '-20%',
 
             numberSize: 8, 
 
