@@ -47,7 +47,17 @@ class ImportObjectTable extends React.Component{
 
     toggleSelection = (key, shift, row) => {
         let selection = [...this.state.selection];
-        key = key.split('-')[1] ? key.split('-')[1] : key
+
+
+        let splitKey =""
+        if (key.split('-')[1]){
+            for ( var i = 1 ; i < key.split('-').length ; i++){
+                splitKey += key.split('-')[i] 
+                i != key.split('-').length-1 ? splitKey+= "-" : null
+            }            
+        }
+
+        key = key.split('-')[1] ? splitKey : key
         const keyIndex = selection.indexOf(key);
         if (keyIndex >= 0) {
             selection = [
