@@ -3,7 +3,7 @@ const styleConfig = {
         option: (provided, state) => ({
             ...provided,
             padding: '0.5rem',
-            fontSize: '0.8rem',
+            fontSize: '1rem',
         }),
         valueContainer: (provided) => ({
             ...provided,
@@ -12,7 +12,7 @@ const styleConfig = {
         }),
         indicatorsContainer: (provided) => ({
             ...provided,
-            height: 30
+            // height: 30
         }),
         menu: (provided) => ({
             ...provided,
@@ -20,8 +20,8 @@ const styleConfig = {
         }),
         control: (provided) => ({
             ...provided,
-            fontSize: '0.8rem',
-            minHeight: 1,
+            fontSize: '1rem',
+            // minHeight: 1,
             height:  'calc(1.75rem + 2px)',
             position: 'none',
 
@@ -38,7 +38,9 @@ const styleConfig = {
             return {
                 style: {
                     borderRight: 'none',
-                    fontSize: '0.9rem'
+                    fontSize: '0.9rem',
+                    display: 'flex',
+                    alignItems: 'center',
                 }
             }
         },
@@ -46,9 +48,12 @@ const styleConfig = {
         getTheadThProps: () => {
             return {
                 style: {
+                    display: 'flex',
+                    alignItems: 'center',
                     borderRight: 'none',
                     textAlign: 'left',
-                    fontSize: '0.9rem',
+                    fontSize: '1rem',
+                    minHeight: '3rem'
                     // fontWeight: 500
                 }
             }
@@ -57,6 +62,7 @@ const styleConfig = {
             return {
                 style: {
                     border: 'none',
+                    borderTop: '1px solid grey',
                 }
             }
         },
@@ -65,6 +71,7 @@ const styleConfig = {
             return {
                 style: {
                     boxShadow: 'rgba(32, 33, 36, 0.28) 0px 1px 6px 0px',
+                    // height: '1rem'
                 }
             }
         },

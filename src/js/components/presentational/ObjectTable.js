@@ -321,8 +321,8 @@ class ObjectTable extends React.Component{
                             getSearchKey={(key) => {
                                 this.props.addObjectFilter(
                                     key, 
-                                    ['type', 'area', 'status', 'macAddress', 'acn' ], 
-                                    'search bar'
+                                    ['name', 'type', 'area', 'status', 'macAddress', 'acn'], 
+                                    'search bar',
                                 )
                             }}
                             clearSearchResult={null}    
