@@ -505,8 +505,8 @@ const config = {
             crs: L.CRS.Simple,
             zoom: -5.5,
             minZoom: -5.46,
-            maxZoom: -5,
-            zoomDelta: 0.25,
+            maxZoom: 0,
+            // zoomDelta: 1,
             zoomSnap: 0,
             zoomControl: true,
             attributionControl: false,
@@ -598,22 +598,64 @@ const config = {
             scrollWheelZoom: false
         },
 
-        /** Set the icon option */
+        /** Set the icon option for browser */
         iconOptions: {
-            iconSize: 35 || process.env.MARKER_SIZE_IN_DESKTOP || 1,
+
+            iconSize: [process.env.MARKER_SIZE_IN_DESKTOP, process.env.MARKER_SIZE_IN_DESKTOP] || 1,
+
             iconSizeForTablet: process.env.MARKER_SIZE_IN_TABLET || 1,
-            iconSizeForMobile: 25 || process.env.MARKER_SIZE_IN_MOBILE || 1,
+
+            iconAnchor: [process.env.MARKER_SIZE_IN_DESKTOP / 2, process.env.MARKER_SIZE_IN_DESKTOP],
+
             circleRadius: 25,
+
             circleRadiusForTablet: 15,
-            circleRadiusForMobile: 8,
+
             showNumber: !false,
+
+            numberSize: 10, 
+            // numberShiftTop: '10%',
+            // numberShiftLeft: '2%',
+            /* Set the Marker dispersity that can be any positive number */
+            markerDispersity: process.env.MARKER_DISPERSITY || 100,
+
+            geoFenceMarkerOptions: {
+
+                color: 'rgba(0, 0, 0, 0)',
+
+                fillColor: 'orange',
+
+                fillOpacity: 0.4,
+
+                radius: 20,
+            },
+
+            lbeaconMarkerOptions: {
+
+                color: 'rgba(0, 0, 0, 0)',
+
+                fillColor: 'orange',
+
+                fillOpacity: 0.4,
+
+                radius: 20,
+            },
+        },
+
+        /** Set the icon option for mobile */
+        iconOptionsInMobile: {
+            iconSize: process.env.MARKER_SIZE_IN_MOBILE || 1,
+            circleRadius: 8,
+            circleRadiusForTablet: 15,
+            showNumber: !false,
+            numberShiftTop: '',
+            numberShiftLeft: '',
 
             /* Set the Marker dispersity that can be any positive number */
             markerDispersity: 1 || process.env.MARKER_DISPERSITY || 100,
-
-            markerDispersityInBigScreen: process.env.MARKER_DISPERSITY_IN_BIG_SCREEN || 13,
         },
 
+        /** Set the icon options for big screen */
         iconOptionsInBigScreen: {
             iconSize: 30,
             showNumber: false,
@@ -662,20 +704,6 @@ const config = {
             // ["slateblue", "tan", "lightyellow", "lavender", "orange","lightblue", "mistyrose", "yellowgreen", "darkseagreen", "orchid"]
             pinColorArray: ["orchid", "tan", "lightyellow", "lavender","lightblue", "yellowgreen"]
 
-        },
-
-        geoFenceMarkerOption: {
-            color: 'rgba(0, 0, 0, 0)',
-            fillColor: 'orange',
-            fillOpacity: 0.4,
-            radius: 20,
-        },
-
-        lbeaconMarkerOption: {
-            color: 'rgba(0, 0, 0, 0)',
-            fillColor: 'orange',
-            fillOpacity: 0.4,
-            radius: 50,
         },
 
         /** Set the schema to select the color pin */

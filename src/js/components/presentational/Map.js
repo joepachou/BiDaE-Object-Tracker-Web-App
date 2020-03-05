@@ -1,7 +1,7 @@
 import React from 'react';
 import L from 'leaflet';
 import 'leaflet.markercluster';
-import '../../helper/leaflet_awesome_number_markers';
+import '../../helper/leafletAwesomeNumberMarkers';
 import _ from 'lodash'
 import { AppContext } from '../../context/AppContext';
 import axios from 'axios';
@@ -37,6 +37,7 @@ class Map extends React.Component {
     currentZoom = 0
     prevZoom = 0
     pin_shift_scale = [500, -400]
+    iconOption = {};
 
     componentDidMount = () => {
         this.initMap();
@@ -60,7 +61,6 @@ class Map extends React.Component {
         }
 
         if(!(_.isEqual(prevProps.pathMacAddress, this.props.pathMacAddress))){
-            //console.log(this.props.pathMacAddress)
             this.drawPolyline();
         }
 
@@ -85,10 +85,16 @@ class Map extends React.Component {
 
         if (isBrowser) {
             var mapOptions = mapConfig.browserMapOptions
+            this.iconOption = mapConfig.iconOptions
+
         } else if (isTablet) {
             var mapOptions = mapConfig.tabletMapOptiions
+            this.iconOption = mapConfig.iconOptions
+
         } else if (isMobileOnly) {
             var mapOptions = mapConfig.mobileMapOptions
+            this.iconOption = mapConfig.iconOptionsInMobile
+
         }
 
         /** Error handler of the user's auth area does not include the group of sites */
@@ -108,7 +114,7 @@ class Map extends React.Component {
         this.prevZoom = this.map.getZoom();
         
         /** Set the map's events */
-        this.map.on('zoomend', this.resizeMarkers)
+        // this.map.on('zoomend', this.resizeMarkers)
     }
 
     /** Set the overlay image when changing area */
@@ -135,25 +141,25 @@ class Map extends React.Component {
 
     /** Resize the markers and errorCircles when the view is zoomend. */
     resizeMarkers = () => {
-
         this.prevZoom = this.currentZoom
         this.currentZoom = this.map.getZoom();
-        this.calculateScale();
-        this.markersLayer.eachLayer( marker => {
-            let icon = marker.options.icon;
-            icon.options.iconSize = [this.scalableIconSize, this.scalableIconSize]
-            icon.options.numberSize = this.scalableNumberSize
-            var pos = marker.getLatLng()
-            marker.setLatLng([
-                pos.lat - this.prevZoom * this.pin_shift_scale[0] + this.currentZoom * this.pin_shift_scale[0], 
-                pos.lng - this.prevZoom * this.pin_shift_scale[1] + this.currentZoom * this.pin_shift_scale[1]
-            ])
-            marker.setIcon(icon);
+        // this.calculateScale();
+        this.markersLayer.eachLayer(marker => {
+            // let icon = marker.options.icon;
+            // icon.options.iconSize = [this.scalableIconSize, this.scalableIconSize]
+            // icon.options.numberSize = this.scalableNumberSize
+            // icon.options.iconAnchor = [this.scalableIconSize / 2, this.scalableIconSize / 2]
+            // var pos = marker.getLatLng()
+            // marker.setLatLng([
+            //     pos.lat - this.prevZoom * this.pin_shift_scale[0] + this.currentZoom * this.pin_shift_scale[0], 
+            //     pos.lng - this.prevZoom * this.pin_shift_scale[1] + this.currentZoom * this.pin_shift_scale[1]
+            // ])
+            // marker.setIcon(icon);
         })
 
-        this.geoFenceLayer.eachLayer( circle => {
-            circle.setRadius(this.scalableCircleRadius)
-        })
+        // this.geoFenceLayer.eachLayer( circle => {
+        //     circle.setRadius(this.scalableCircleRadius)
+        // })
         
     }
 
@@ -168,7 +174,7 @@ class Map extends React.Component {
         if (isBrowser) {
             this.scalableIconSize = parseInt(this.props.mapConfig.iconOptions.iconSize) + this.resizeConst
             this.scalableCircleRadius = parseInt(this.props.mapConfig.iconOptions.circleRadius) * this.resizeFactor
-            this.scalableNumberSize = Math.floor(this.scalableIconSize / 10);
+            this.scalableNumberSize = this.scalableIconSize / 3;
 
         } else if (isTablet) {
             this.scalableIconSize = parseInt(this.props.mapConfig.iconOptions.iconSizeForTablet) + this.resizeConst
@@ -176,9 +182,9 @@ class Map extends React.Component {
             this.scalableNumberSize = Math.floor(this.scalableIconSize / 3);
 
         } else if (isMobileOnly) {
-            this.scalableIconSize = parseInt(this.props.mapConfig.iconOptions.iconSizeForMobile) + this.resizeConst
-            this.scalableCircleRadius = parseInt(this.props.mapConfig.iconOptions.circleRadiusForMobile) * this.resizeFactor
-            this.scalableNumberSize = 0.5
+            this.scalableIconSize = parseInt(this.props.mapConfig.iconOptionsInMobile.iconSize) + this.resizeConst
+            this.scalableCircleRadius = parseInt(this.props.mapConfig.iconOptionsInMobile.circleRadius) * this.resizeFactor
+            this.scalableNumberSize = this.scalableIconSize / 3;
         }
     }
 
@@ -248,19 +254,13 @@ class Map extends React.Component {
     createGeofenceMarkers = () => {     
         let {
             geofenceConfig,
-            mapConfig
         } = this.props
 
         let {
             stateReducer
         } = this.context
 
-        this.calculateScale()
-
-        mapConfig.geoFenceMarkerOption = {
-            ...mapConfig.geoFenceMarkerOption,
-            radius: this.scalableCircleRadius
-        }
+        // this.calculateScale()
 
         let [{areaId}] = stateReducer
 
@@ -273,7 +273,7 @@ class Map extends React.Component {
                 geofenceConfig[areaId].rules.map(rule => {
                     if (rule.is_active) {
                         rule[type].coordinates.map(item => {
-                            L.circleMarker(item, mapConfig.geoFenceMarkerOption).addTo(this.geoFenceLayer);
+                            L.circleMarker(item, this.iconOption.geoFenceMarkerOptions).addTo(this.geoFenceLayer);
                             
                         })  
                     }
@@ -314,19 +314,11 @@ class Map extends React.Component {
     createLbeaconMarkers = (parseUUIDArray, layer) => {
 
         let {
-            mapConfig,
-        } = this.props
-        let {
             stateReducer
         } = this.context
         let [{areaId}] = stateReducer
 
-        this.calculateScale()
-
-        mapConfig.lbeaconMarkerOption = {
-            ...mapConfig.lbeaconMarkerOption,
-            radius: this.scalableCircleRadius
-        }
+        // this.calculateScale()
 
         /** Creat the marker of all lbeacons onto the map  */
         parseUUIDArray
@@ -334,7 +326,7 @@ class Map extends React.Component {
             .map(pos => {
 
             let latLng = pos.split(',')
-            let lbeacon = L.circleMarker(latLng, mapConfig.lbeaconMarkerOption).addTo(layer);
+            let lbeacon = L.circleMarker(latLng, this.iconOption.lbeaconMarkerOptions).addTo(layer);
             // invisibleCircle.on('mouseover', this.handlemenu)
             // invisibleCircle.on('mouseout', function() {this.closePopup();})
         })
@@ -385,14 +377,14 @@ class Map extends React.Component {
         this.errorCircle .clearLayers();
 
         /** Mark the objects onto the map  */
-        this.calculateScale();
+        // this.calculateScale();
 
-        const iconSize = [this.scalableIconSize, this.scalableIconSize];
-        const numberSize = this.scalableNumberSize;
-
+        // const iconSize = [this.scalableIconSize, this.scalableIconSize];
+        // const numberSize = this.scalableNumberSize;
         let counter = 0;
         this.filterTrackingData(_.cloneDeep(this.props.proccessedTrackingData))
         .map((item, index)  => {
+            /** Calculate the position of the object  */
             let position = this.macAddressToCoordinate(item.mac_address, item.currentPosition);
 
             /** Set the Marker's popup 
@@ -403,11 +395,13 @@ class Map extends React.Component {
             /** Set the icon option*/
             item.iconOption = {
 
+                ...this.iconOption,
+
                 /** Set the pin color */
                 markerColor: this.props.mapConfig.getIconColor(item, this.props.colorPanel),
 
                 /** Set the pin size */
-                iconSize,
+                // iconSize,
 
                 /** Insert the object's mac_address to be the data when clicking the object's marker */
                 macAddress: item.mac_address,
@@ -416,22 +410,17 @@ class Map extends React.Component {
 
                 currentPosition: item.currentPosition,
 
-                /** Show the ordered on location pin */
-                number: this.props.mapConfig.iconOptions.showNumber && 
-                        item.searched 
-                        ? ++counter 
-                        : '',
+                /** Set the ordered number on location pin */
+                number: this.props.mapConfig.iconOptions.showNumber && item.searched 
+                            ? ++counter
+                            : '',
 
-                /** Set the color of ordered number */
+                /** Set the color of the ordered number */
                 numberColor: this.props.mapConfig.iconColor.number,
-
-                numberSize: 0.5,
             }
 
             const option = new L.AwesomeNumberMarkers (item.iconOption)
-            let marker =  L.marker(position, {icon: option}).bindPopup(popupContent, this.props.mapConfig.popupOptions).openPopup();
-            var pos = marker.getLatLng()
-            marker.setLatLng([pos.lat - this.prevZoom * this.pin_shift_scale[0] + this.currentZoom* this.pin_shift_scale[0], pos.lng - this.pin_shift_scale[1]* this.prevZoom + this.currentZoom* this.pin_shift_scale[1]])
+            let marker = L.marker(position, {icon: option}).bindPopup(popupContent, this.props.mapConfig.popupOptions).openPopup();
             marker.addTo(this.markersLayer)
 
             /** Set the z-index offset of the searhed object so that
@@ -450,7 +439,6 @@ class Map extends React.Component {
 
     /** Fire when clicing marker */
     handleMarkerClick = (e) => {
-        //console.log("handle marker click")
         const lbPosition =  e.target.options.icon.options.lbeacon_coordinate
         this.props.getSearchKey('objects', null, lbPosition, )
     }

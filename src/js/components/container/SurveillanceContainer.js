@@ -3,6 +3,7 @@ import Map from "../presentational/Map";
 import { 
     Nav, 
     Button,
+    ButtonGroup
 }  from "react-bootstrap";
 import PdfDownloadForm from "./PdfDownloadForm"
 import config from "../../config";
@@ -459,6 +460,20 @@ class SurveillanceContainer extends React.Component {
                             style={{border:'solid'}}
                         />
                     </div>
+                    <ButtonGroup style={{marginTop:'5px',marginBottom:'5px'}}>
+                        <Button 
+                            variant='outline-primary' 
+                            onClick={this.props.mapButtonHandler}
+                        >
+                            {this.state.showMobileMap ? locale.texts.HIDE_MAP : locale.texts.SHOW_MAP}
+                        </Button>
+                        <Button 
+                            variant='outline-primary' 
+                            onClick={this.props.handleClearButton}
+                        >
+                            {locale.texts.CLEAR_RESULT}
+                        </Button>
+                    </ButtonGroup>
                 </MobileOnlyView>
                 <PdfDownloadForm 
                     show={this.state.showPdfDownloadForm}

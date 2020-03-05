@@ -71,33 +71,42 @@ class MainContainer extends React.Component{
         let targetElement = document.querySelector('body')
         disableBodyScroll(targetElement);
 
-        this.getTrackingData();
+        // this.getTrackingData();
         this.getLbeaconPosition();
         this.getGeofenceConfig();
         this.getLocationMonitorConfig()
-        this.interval = setInterval(this.getTrackingData, config.mapConfig.intervalTime)
+        this.interval = setInterval(() => {
+            this.getTrackingData()
+        }, config.mapConfig.intervalTime)
     }
 
     componentDidUpdate = (prevProps, prevState) => {
         let isTrackingDataChange = !(_.isEqual(this.state.trackingData, prevState.trackingData))
+
         let { 
             stateReducer
          } = this.context
 
+        /** stop getTrackingData when editing object status  */
         if (stateReducer[0].shouldUpdateTrackingData !== this.state.shouldUpdateTrackingData) {
             let [{shouldUpdateTrackingData}] = stateReducer
-            this.interval = shouldUpdateTrackingData ? setInterval(this.getTrackingData, config.mapConfig.intervalTime) : clearInterval(this.interval);
+            this.interval = shouldUpdateTrackingData 
+                ?   setInterval(() => {
+                        this.getTrackingData()
+                    }, config.mapConfig.intervalTime) 
+                :   clearInterval(this.interval);
             this.setState({
                 shouldUpdateTrackingData
             })
         }
 
+        /** refresh search result if the search results are change */
         if (isTrackingDataChange && this.state.hasSearchKey) {
             this.handleRefreshSearchResult()
         }
 
+        /** clear out search result when user sign out */
         if (!(_.isEqual(prevState.authenticated, this.context.auth.authenticated))) {
-            this.getTrackingData(this.context.stateReducer[0].areaId)
             this.setState({
                 authenticated: this.context.auth.authenticated,
                 searchResult: [],
@@ -108,6 +117,7 @@ class MainContainer extends React.Component{
             })
         } 
 
+        /** send toast if there are latest violated notification */
         let newViolatedObject = Object.keys(this.state.violatedObjects).filter(item => !Object.keys(prevState.violatedObjects).includes(item))
         if (newViolatedObject.length !== 0 ) {
             newViolatedObject.map(item => {
@@ -186,7 +196,7 @@ class MainContainer extends React.Component{
         })
     }
 
-    /** Clear the record violated object */
+    /** Clear the recorded violated object */
     clearAlerts = () => {
         Object.values(this.state.violatedObjects).map(item => {
             item.notification.map(event => {
@@ -255,7 +265,6 @@ class MainContainer extends React.Component{
             locale, 
             stateReducer 
         } = this.context
-
         let [{areaId, violatedObjects}, dispatch] = stateReducer
         axios.post(dataSrc.getTrackingData,{
             locale: locale.abbr,
@@ -287,6 +296,7 @@ class MainContainer extends React.Component{
         })
     }
 
+    /** Retrieve lbeacon data from database */
     getLbeaconPosition = () => {
         let { auth, locale } = this.context
 
@@ -759,7 +769,6 @@ class MainContainer extends React.Component{
                                     locationMonitorConfig={this.state.locationMonitorConfig}
                                     clearAlerts={this.clearAlerts}
                                     searchKey={this.state.searchKey}
-                                    authenticated={this.state.authenticated}
                                     handleClosePath={this.handleClosePath}
                                     handleShowPath={this.handleShowPath}
                                     searchedObjectType={this.state.searchedObjectType}
@@ -875,27 +884,14 @@ class MainContainer extends React.Component{
                                         geofenceConfig={this.state.geofenceConfig}
                                         clearAlerts={this.clearAlerts}
                                         searchKey={this.state.searchKey}
-                                        authenticated={this.state.authenticated}
                                         handleClosePath={this.handleClosePath}
                                         handleShowPath={this.handleShowPath}
                                         searchedObjectType={this.state.searchedObjectType}
                                         showedObjects={this.state.showedObjects}
+                                        handleClearButton={this.handleClearButton}
+                                        mapButtonHandler={this.mapButtonHandler}
                                     />
                                 </div>
-                                <ButtonGroup style={{marginTop:'5px',marginBottom:'5px'}}>
-                                    <Button 
-                                        variant='outline-primary' 
-                                        onClick={this.mapButtonHandler}
-                                    >
-                                        {this.state.showMobileMap ? locale.texts.HIDE_MAP : locale.texts.SHOW_MAP}
-                                    </Button>
-                                    <Button 
-                                        variant='outline-primary' 
-                                        onClick={this.handleClearButton}
-                                    >
-                                        {locale.texts.CLEAR_RESULT}
-                                    </Button>
-                                </ButtonGroup>
                                 <div className='d-flex justify-content-center'>
                                     <SearchResultList
                                         searchResult={this.state.searchResult} 

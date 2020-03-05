@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import L from 'leaflet';
 import 'leaflet.markercluster';
-import '../../../helper/leaflet_awesome_number_markers';
+import '../../../helper/leafletAwesomeNumberMarkers';
 import _ from 'lodash'
 import { AppContext } from '../../../context/AppContext';
 import  pinImage from "./pinImage"
