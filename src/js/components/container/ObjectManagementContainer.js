@@ -394,8 +394,10 @@ class ObjectManagementContainer extends React.Component{
 
     filterData = (data, key, filteredAttribute) => {
         const { locale } = this.context  
+        key = key.toLowerCase()
         let filteredData = data.filter(obj => { 
             if(filteredAttribute.includes('name')){
+
                 let keyRex = new RegExp(key)
                 if(obj.name.toLowerCase().match(keyRex)){
                     return true
@@ -403,7 +405,7 @@ class ObjectManagementContainer extends React.Component{
             }
             if(filteredAttribute.includes('type')){
 
-                let keyRex = new RegExp(key.toLowerCase())
+                let keyRex = new RegExp(key)
                 
                 if(obj.type.toLowerCase().match(keyRex)){
                     return true
@@ -434,7 +436,7 @@ class ObjectManagementContainer extends React.Component{
             }
 
             if (filteredAttribute.includes('monitor')){
-                let keyRex = new RegExp(key.toLowerCase())
+                let keyRex = new RegExp(key)
                 if(obj.monitor_type.toLowerCase().match(keyRex)){
                     return true
                 }
