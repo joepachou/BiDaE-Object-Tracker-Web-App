@@ -268,7 +268,7 @@ class PatientTable extends React.Component{
                             getSearchKey={(key) => {
                                 this.props.addPatientFilter(
                                     key, 
-                                    ['name', 'area' , 'macAddress', 'acn','monitor','physician_name'], 
+                                    ['name', 'area', 'macAddress', 'acn', 'monitor', 'physician_name'], 
                                     'search bar'
                                 )
                             }}

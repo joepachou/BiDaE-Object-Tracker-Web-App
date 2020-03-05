@@ -425,13 +425,15 @@ class ObjectManagementContainer extends React.Component{
                 }
             }
 
-            if(filteredAttribute.includes('area')){
-                let area_name = this.state.areaTable.filter(area => area.id == obj.area_id)[0].name
-                let text = locale.texts[area_name]
-                if (text == key) return true 
+            if (filteredAttribute.includes('area')){
+
+                let keyRex = new RegExp(key)
+                if (obj.area_name.label.match(keyRex)) {
+                    return true 
+                }
             }
 
-            if  (filteredAttribute.includes('monitor')){
+            if (filteredAttribute.includes('monitor')){
                 let keyRex = new RegExp(key.toLowerCase())
                 if(obj.monitor_type.toLowerCase().match(keyRex)){
                     return true
@@ -445,7 +447,7 @@ class ObjectManagementContainer extends React.Component{
             }
             if(filteredAttribute.includes('sex')){
                
-                if(obj.object_type == key){
+                if (obj.object_type == key){
                     return true
                 }
             }
@@ -453,9 +455,10 @@ class ObjectManagementContainer extends React.Component{
             if(filteredAttribute.includes('physician_name')){
               
                 let keyRex = new RegExp(key)
-                if(obj.physician_name.toLowerCase().match(keyRex)){
+
+                if (obj.physician_name && obj.physician_name.toLowerCase().match(keyRex)){
                     return true
-                }
+                } 
             }
 
             return false
