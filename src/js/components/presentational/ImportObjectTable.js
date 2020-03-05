@@ -66,8 +66,7 @@ class ImportObjectTable extends React.Component{
             ];
         } else {
             selection.push(key);
-        }
-        console.log(selection)
+        } 
         this.setState({ 
             selection 
         });
