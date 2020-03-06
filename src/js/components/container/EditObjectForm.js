@@ -247,11 +247,17 @@ class EditObjectForm extends React.Component {
                                 area_id: config.mapConfig.areaModules[values.area.value].id || 0
                             }
 
-                            while(postOption.type[postOption.type.length-1] == " "){
-                                postOption.type = postOption.type.substring(0,postOption.type.length-1);       
+                            while (postOption.type[postOption.type.length - 1] == " "){
+                                postOption.type = postOption.type.substring(0, postOption.type.length - 1);       
                             }
-                            while(postOption.name[postOption.name.length-1] == " "){
-                                postOption.name = postOption.name.substring(0,postOption.name.length-1);       
+                            while (postOption.type[0] == " "){
+                                postOption.type = postOption.type.substring(1, postOption.type.length );       
+                            }
+                            while (postOption.name[postOption.name.length - 1] == " "){
+                                postOption.name = postOption.name.substring(0,postOption.name.length - 1);       
+                            } 
+                            while (postOption.name[0] == " "){
+                                postOption.name = postOption.name.substring(1 ,postOption.name.length);       
                             } 
                             this.handleSubmit(postOption)                            
                         }}

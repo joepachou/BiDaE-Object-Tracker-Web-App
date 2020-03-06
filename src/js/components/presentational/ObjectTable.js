@@ -18,11 +18,7 @@ import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
 import Select from 'react-select';
 import axios from 'axios';
 import BOTInput from '../presentational/BOTInput'
-import { 
-    addObject,
-    deleteDevice,
-    editObject
-} from "../../dataSrc"
+import dataSrc from "../../dataSrc"
 
 const SelectTable = selecTableHOC(ReactTable);
 
@@ -81,7 +77,7 @@ class ObjectTable extends React.Component{
                 formOption.push(this.props.data[item].mac_address)
             })
            
-        axios.post(deleteDevice, {
+        axios.post(dataSrc.deleteDevice, {
             formOption
         })
         .then(res => {
@@ -158,7 +154,7 @@ class ObjectTable extends React.Component{
                     isShowEdit: true,
                     formTitle: name,
                     selectedRowData: [],
-                    formPath: addObject,
+                    formPath: dataSrc.addObject,
                     disableASN:false
                 })
                 break;
@@ -350,7 +346,7 @@ class ObjectTable extends React.Component{
                                     isShowEdit:true,
                                     selectedRowData: this.props.data[rowInfo.index],
                                     formTitle: 'edit object',
-                                    formPath: editObject,
+                                    formPath: dataSrc.editObject,
                                     disableASN:true
                                 })
                                 } 

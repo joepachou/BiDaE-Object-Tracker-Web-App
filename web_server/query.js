@@ -256,8 +256,6 @@ const addAssociation_Patient = (request, response) => {
         })     
 }
 
-
-
 const cleanBinding = (request, response) => {
     let { locale, areaId } = request.body
     const formOption = request.body.formOption
@@ -272,7 +270,6 @@ const cleanBinding = (request, response) => {
         })      
     })
 }
-
 
 const getLbeaconTable = (request, response) => {
 
@@ -335,16 +332,17 @@ const editObject = (request, response) => {
     let {
         area_id
     } = formOption
+
     pool.query(queryType.editObject(formOption))
         .then(res => {
-            console.log("edit object success");
+            console.log("edit object succeed");
             if (process.env.RELOAD_GEO_CONFIG_PATH) {
                 exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 9999 -c cmd_reload_geo_fence_setting -r geofence_object -f area_one -a ${area_id}`.split(' '), function(err, data){
                     if(err){
-                        console.log(`execute reload geofence setting fails ${err}`)
+                        console.log(`execute reload geofence setting failed ${err}`)
                         response.status(200).json(res)
                     }else{
-                        console.log(`execute reload geofence setting success`)
+                        console.log(`execute reload geofence setting succeed`)
                         response.status(200).json(res)
                     }
                 })
@@ -354,7 +352,7 @@ const editObject = (request, response) => {
             }
         })
         .catch(err => {
-            console.log(`edit object fails ${err}`)
+            console.log(`edit object failed ${err}`)
         })
 }
 
@@ -414,20 +412,21 @@ const objectImport = (request, response) => {
 
 const addObject = (request, response) => {
     const formOption = request.body.formOption
+    
     pool.query(queryType.addObject(formOption))
         .then(res => {
-            console.log("add object success");
+            console.log("add object succeed");
             pool.query(queryType.addImport(formOption))
                 .then(res => {
-                    console.log("add import success");
+                    console.log("add import succeed");
                     response.status(200).json(res)
                 })
                 .catch(err => {
-                    console.log("add object fails: " + err)
+                    console.log(`add object failed ${err}`)
                 })
         })
         .catch(err => {
-            console.log("add object fails: " + err)
+            console.log(`add object failed ${err}`)
 
         })
 }
