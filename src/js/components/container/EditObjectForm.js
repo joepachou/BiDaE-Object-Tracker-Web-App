@@ -199,14 +199,15 @@ class EditObjectForm extends React.Component {
                                         'mac_address',
                                         locale.texts.THE_MAC_ADDRESS_IS_ALREADY_USED ,
                                         value =>{
-                                            let repeatFlag = false
-                                            this.props.data.map(item => {
-                                                if(this.props.selectedRowData.length != 0){
+                                            let repeatFlag = false  
+                                            this.props.data.map(item => { 
+                                                if(this.props.selectedRowData.length != 0){ 
                                                     if (item.asset_control_number != this.props.selectedRowData.asset_control_number){
                                                      item.mac_address == value ?  repeatFlag = true : null
                                                     }
+                                                }else{ 
+                                                 item.mac_address.replace(/:/g,'') == value.replace(/:/g,'')  ? repeatFlag = true : null
                                                 } 
-                                            
                                             })
                                             return !repeatFlag
                                            
