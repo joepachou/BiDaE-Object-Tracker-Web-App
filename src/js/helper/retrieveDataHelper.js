@@ -29,8 +29,15 @@ const retrieveDataHelper = {
             objectType,
         })
     },
+
     getLbeaconTable: async function(locale) {
         return await axios.post(dataSrc.getLbeaconTable, {
+            locale,
+        })
+    },
+
+    getGatewayTable: async function(locale) {
+        return await axios.post(dataSrc.getGatewayTable, {
             locale,
         })
     },

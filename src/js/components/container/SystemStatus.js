@@ -5,7 +5,6 @@ import 'react-table/react-table.css';
 import EditLbeaconForm from './../presentational/EditLbeaconForm'
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
 import axios from 'axios';
-import dataSrc from '../../dataSrc';
 import config from '../../config';
 import { 
     deleteLBeacon,
@@ -17,7 +16,12 @@ import {
     gatewayTableColumn
 } from '../../tables';
 import { AppContext } from '../../context/AppContext';
-import {Tabs, Tab,TabList, TabPanel } from 'react-tabs';
+import {
+    Tabs, 
+    Tab,
+    TabList, 
+    TabPanel 
+} from 'react-tabs';
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
 import retrieveDataHelper from '../../helper/retrieveDataHelper'
 import { toast } from 'react-toastify';
@@ -71,9 +75,9 @@ class SystemStatus extends React.Component{
 
     getLbeaconData = () => {
         let { locale } = this.context
-        axios.post(dataSrc.getLbeaconTable, {
-            locale: locale.abbr
-        })
+        retrieveDataHelper.getLbeaconTable(
+            locale.abbr
+        )
         .then(res => {
             let column = _.cloneDeep(lbeaconTableColumn)
             column.map(field => {
@@ -88,16 +92,16 @@ class SystemStatus extends React.Component{
             }) 
         })
         .catch(err => {
-            console.log("get lbeacon data fail : " + err);
+            console.log(`get lbeacon data failed ${err}`);
         })
 
     }
 
     getGatewayData = () => {
         let { locale } = this.context
-        axios.post(dataSrc.getGatewayTable, {
-            locale: locale.abbr
-        })
+        retrieveDataHelper.getGatewayTable(
+            locale.abbr
+        )
         .then(res => {
             let column = _.cloneDeep(gatewayTableColumn)
             column.map(field => {
@@ -112,7 +116,7 @@ class SystemStatus extends React.Component{
             })
         })
         .catch(err => {
-            console.log("get gateway data fail : " + err);
+            console.log(`get gateway data failed ${err}`);
         })
     }
 
@@ -146,7 +150,7 @@ class SystemStatus extends React.Component{
             })
         })
         .catch(err => {
-            console.log("get tracking data fail : " + err);
+            console.log(`get tracking data failed ${err}`);
         })
     }
 
@@ -366,11 +370,6 @@ class SystemStatus extends React.Component{
                                             selectedRowData: rowInfo.original,
                                             showEdit: true,
                                         })
-                                        let id = (rowInfo.index+1).toString()
-                                        this.toggleSelection(id)
-                                        if (handleOriginal) {
-                                            handleOriginal()
-                                        }
                                     }
                                 }
                             }}
