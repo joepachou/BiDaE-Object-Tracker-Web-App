@@ -51,7 +51,6 @@ class MyDeviceManager extends React.Component{
                 } = this.context;
                 let userInfo = auth.user
                 let myDevice = userInfo.myDevice || []
-                console.log(myDevice)
 
                 let {
                     myDevices,

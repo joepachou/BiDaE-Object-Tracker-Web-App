@@ -115,9 +115,18 @@ class ShiftChange extends React.Component {
     }
 
     handleConfirmFormSubmit = (name) => {
-        let { locale, auth } = this.context   
-      
-        let pdfPackage = config.getPdfPackage('shiftChange', auth.user, this.state.searchResult ,locale,'', name)
+        let { 
+            locale, 
+            auth 
+        } = this.context   
+
+        let pdfPackage = config.getPdfPackage(
+            'shiftChange', 
+            auth.user, 
+            this.state.searchResult, 
+            locale,
+            name,
+        )
         axios.post(dataSrc.addShiftChangeRecord, {
             userInfo: auth.user,
             pdfPackage,
@@ -278,7 +287,7 @@ const TypeBlock = ({
                 <div
                     className="subtitle"
                 >
-                    {locale.texts.DEVICES_FOUND_IN} {auth.user.areas_id.map(id => {
+                    {locale.texts[title]} {auth.user.areas_id.map(id => {
                         return locale.texts[config.mapConfig.areaOptions[id]]
                     })}
                 </div>

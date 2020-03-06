@@ -291,7 +291,6 @@ class ChangeStatusForm extends React.Component {
                                             name="transferred_location"
                                             value={values.transferred_location}
                                             onChange={value => {
-                                                console.log(value, 'transferred_location')
                                                 setFieldValue("transferred_location", value)}}
                                             options={this.state.transferredLocationOptions}
                                             isSearchable={false}

@@ -204,9 +204,9 @@ const config = {
     /** Create pdf package, including header, body and the pdf path
      * options include shiftChange, searchResult, broken report, transffered report
      */
-    getPdfPackage: (option, user, data, locale, signatureName) => {
-        const header = config.pdfFormat.getHeader(user, locale, option, name)
-        const body = config.pdfFormat.getBody[option](data, locale, user, location,signatureName)
+    getPdfPackage: (option, user, data, locale, signature) => {
+        const header = config.pdfFormat.getHeader(user, locale, option, signature)
+        const body = config.pdfFormat.getBody[option](data, locale, user, location,signature)
         const path = config.pdfFormat.getPath(option, user)
         const pdf = header + body
 
@@ -290,15 +290,15 @@ const config = {
                 let notes = config.pdfFormat.getBodyItem.getNotes(data, locale)
                 return title + list + notes
             },
-            transferred: (data, locale,nn,nnn,signatureName) => {
+            transferred: (data, locale, user, location,signature) => {
 
                 let area = data[0].transferred_location_label
                 let signature_title = config.pdfFormat.getBodyItem.getBodyTitle("transferred to", locale, area)
                 let list_title = config.pdfFormat.getBodyItem.getBodyTitle("transferred device list", locale)
-                let signature = config.pdfFormat.getBodyItem.getSignature(locale,signatureName)
-                let list = config.pdfFormat.getBodyItem.getDataContent(data, locale,signatureName)
-                let notes = config.pdfFormat.getBodyItem.getNotes(data, locale,signatureName)
-                return signature_title + signature + list_title + list + notes
+                let signatureName = config.pdfFormat.getBodyItem.getSignature(locale,signature)
+                let list = config.pdfFormat.getBodyItem.getDataContent(data, locale,signature)
+                let notes = config.pdfFormat.getBodyItem.getNotes(data, locale,signature)
+                return signature_title + signatureName + list_title + list + notes
             },
             shiftChange: (data, locale, user) => {
                 let area =  locale.texts[config.mapConfig.areaOptions[parseInt(user.areas_id[0])]]
@@ -370,7 +370,7 @@ const config = {
                 `
             },
 
-            getSignature: (locale,signatureName) => {
+            getSignature: (locale,signature) => {
                 return `
                     <div style="text-transform: capitalize; margin: 10px width: 200px;">
                         <div style="text-transform: capitalize; margin: 10px width: 100%;">
@@ -407,7 +407,7 @@ const config = {
                                     border-left: 0;
                                     border-right: 0;
                                     display: inline-block";
-                                    value = ${signatureName}
+                                    value = ${signature}
                             />                  
                         </div>
                     </div>

@@ -180,7 +180,6 @@ class SearchResult extends React.Component {
         let status = editedObjectPackage[0].status
         let reservedTimestamp = isDelayTime ? moment().add(10, 'minutes').format() : moment().format()
         /** Create the pdf package, including pdf, pdf setting and path */
-        console.log(editedObjectPackage)
 
         editedObjectPackage.map(editedObject => {
             if(editedObject.transferred_location){
