@@ -413,6 +413,7 @@ class MainContainer extends React.Component{
             display: true,
             searchedObjectType: [],
             showedObjects: [],
+            showMobileMap: true,
         })
     }
 
@@ -721,10 +722,6 @@ class MainContainer extends React.Component{
                 height: '90vh',
                 // width:'90vw'
             },
-            searchResultForMobile: {
-                // width: '90vw',
-                // display: this.state.display ? 'none' : null,
-            },
             searchResultList: {
                 dispaly: this.state.hasSearchKey ? null : 'none',
                 maxHeight: '28vh'
@@ -866,41 +863,53 @@ class MainContainer extends React.Component{
                                     handleShowResultListForMobile={this.handleShowResultListForMobile}
                                 />
                             </div>
-                            <div style={style.searchResultForMobile} className="m-1">
-                                <div style={style.mapForMobile}>
-                                    <SurveillanceContainer
-                                        showPath={this.state.showPath}
-                                        pathMacAddress={this.state.pathMacAddress} 
-                                        proccessedTrackingData={proccessedTrackingData.length === 0 ? trackingData : proccessedTrackingData}
-                                        hasSearchKey={hasSearchKey}
-                                        colorPanel={colorPanel}
-                                        searchResult={this.state.searchResult}
-                                        handleClearButton={this.handleClearButton}
-                                        getSearchKey={this.getSearchKey}
-                                        clearColorPanel={clearColorPanel}
-                                        setMonitor={this.setMonitor}
-                                        auth={auth}
-                                        lbeaconPosition={this.state.lbeaconPosition}
-                                        geofenceConfig={this.state.geofenceConfig}
-                                        clearAlerts={this.clearAlerts}
-                                        searchKey={this.state.searchKey}
-                                        handleClosePath={this.handleClosePath}
-                                        handleShowPath={this.handleShowPath}
-                                        searchedObjectType={this.state.searchedObjectType}
-                                        showedObjects={this.state.showedObjects}
-                                        handleClearButton={this.handleClearButton}
-                                        mapButtonHandler={this.mapButtonHandler}
-                                    />
-                                </div>
-                                <div className='d-flex justify-content-center'>
-                                    <SearchResultList
-                                        searchResult={this.state.searchResult} 
-                                        searchKey={this.state.searchKey}
-                                        highlightSearchPanel={this.highlightSearchPanel}
-                                        handleShowPath={this.handleShowPath}
-                                        showMobileMap={this.state.showMobileMap}
-                                    />
-                                </div>
+                            <div style={style.mapForMobile} className="m-1">
+                                <SurveillanceContainer
+                                    showPath={this.state.showPath}
+                                    pathMacAddress={this.state.pathMacAddress} 
+                                    proccessedTrackingData={proccessedTrackingData.length === 0 ? trackingData : proccessedTrackingData}
+                                    hasSearchKey={hasSearchKey}
+                                    colorPanel={colorPanel}
+                                    searchResult={this.state.searchResult}
+                                    handleClearButton={this.handleClearButton}
+                                    getSearchKey={this.getSearchKey}
+                                    clearColorPanel={clearColorPanel}
+                                    setMonitor={this.setMonitor}
+                                    auth={auth}
+                                    lbeaconPosition={this.state.lbeaconPosition}
+                                    geofenceConfig={this.state.geofenceConfig}
+                                    clearAlerts={this.clearAlerts}
+                                    searchKey={this.state.searchKey}
+                                    handleClosePath={this.handleClosePath}
+                                    handleShowPath={this.handleShowPath}
+                                    searchedObjectType={this.state.searchedObjectType}
+                                    showedObjects={this.state.showedObjects}
+                                    handleClearButton={this.handleClearButton}
+                                    mapButtonHandler={this.mapButtonHandler}
+                                />
+                            </div>
+                            <ButtonGroup style={{marginTop:'5px',marginBottom:'5px'}}>
+                                <Button 
+                                    variant='outline-primary' 
+                                    onClick={this.mapButtonHandler}
+                                >
+                                    {this.state.showMobileMap ? locale.texts.HIDE_MAP : locale.texts.SHOW_MAP}
+                                </Button>
+                                <Button 
+                                    variant='outline-primary' 
+                                    onClick={this.handleClearButton}
+                                >
+                                    {locale.texts.CLEAR_RESULT}
+                                </Button>
+                            </ButtonGroup>
+                            <div className='d-flex justify-content-center'>
+                                <SearchResultList
+                                    searchResult={this.state.searchResult} 
+                                    searchKey={this.state.searchKey}
+                                    highlightSearchPanel={this.highlightSearchPanel}
+                                    handleShowPath={this.handleShowPath}
+                                    showMobileMap={this.state.showMobileMap}
+                                />
                             </div>
                         </div>
                     </div>
