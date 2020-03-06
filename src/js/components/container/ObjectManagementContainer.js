@@ -444,9 +444,10 @@ class ObjectManagementContainer extends React.Component{
 
             if  (filteredAttribute.includes('macAddress')){
 
-                let keyRex = key.replace(/:/g, '').toLowerCase()
+                let keyRex = key.replace(/:/g, '')
                 if (obj.mac_address.replace(/:/g, '').toLowerCase().match(keyRex)) return true
             }
+
             if(filteredAttribute.includes('sex')){
                
                 if (obj.object_type == key){
@@ -539,13 +540,13 @@ class ObjectManagementContainer extends React.Component{
                             permission={"user:importTable"}
                             renderNoAccess={() => null}
                         >
-                            <Tab>{locale.texts.TOTAL_DATA}</Tab>
+                            <Tab>{locale.texts.IMPORT_DEVICES_DATA}</Tab>
                         </AccessControl>
                         <AccessControl
                             permission={"user:importTable"}
                             renderNoAccess={() => null}
                         >
-                             <Tab>{locale.texts.IMPORT_PATIENT_DATA}</Tab>
+                             <Tab>{locale.texts.IMPORT_PATIENTS_DATA}</Tab>
                         </AccessControl>
                     </TabList>
 
