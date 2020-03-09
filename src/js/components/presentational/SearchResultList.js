@@ -132,7 +132,7 @@ class SearchResult extends React.Component {
             this.setState({
                 showSignatureForm:true
             })
-        }else{
+        }else{ 
             setTimeout(
                 function() {
                     this.setState({
@@ -192,7 +192,7 @@ class SearchResult extends React.Component {
         })
 
         let pdfPackage = shouldCreatePdf && config.getPdfPackage(status, auth.user, this.state.editedObjectPackage, locale,signatureName)
-
+ 
         axios.post(dataSrc.editObjectPackage, {
             locale,
             formOption: editedObjectPackage[0],

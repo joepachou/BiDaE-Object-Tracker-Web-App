@@ -28,7 +28,6 @@ function getTrackingData () {
 			object_table.reserved_timestamp,
 			notification.json_agg as notification,
 			object_table.reserved_user_id,
-
 			(
 				SELECT name
 				FROM user_table

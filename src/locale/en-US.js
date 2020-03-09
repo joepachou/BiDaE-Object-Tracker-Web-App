@@ -380,6 +380,8 @@ const en =  {
     WAS: "was",
     FROM: "from",
     MINUTES: "minutes",
+    IS_RESERVED_FOR:"is reserved for",
+
     // BEING_HERE: "being here",
 
     /** Test */

@@ -78,7 +78,7 @@ class ChangeStatusForm extends React.Component {
     }
   
 
-    handleClick = (e) => {
+    handleClick = (e) => { 
         const item = e.target.name
         switch(item) {
             case 'add device':
