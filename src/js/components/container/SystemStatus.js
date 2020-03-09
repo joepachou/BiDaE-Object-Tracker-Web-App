@@ -25,6 +25,9 @@ import {
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
 import retrieveDataHelper from '../../helper/retrieveDataHelper'
 import { toast } from 'react-toastify';
+import LBeaconTable from './LBeaconTable'
+import GatewayTable from './GatewayTable' 
+ 
 const SelectTable = selecTableHOC(ReactTable);
 
 class SystemStatus extends React.Component{
@@ -153,6 +156,14 @@ class SystemStatus extends React.Component{
             console.log(`get tracking data failed ${err}`);
         })
     }
+     
+    
+    refreshData = () => {  
+        setTimeout(this.getTrackingData, 500) 
+        setTimeout(this.getGatewayData, 500) 
+        setTimeout( this.getLbeaconData, 500)  
+    }
+
 
     handleSubmitDeleteConfirmForm  = (pack) => {
         if (this.state.deleteObjectType == 'lbeacon'){
@@ -338,9 +349,39 @@ class SystemStatus extends React.Component{
                     <TabList>
                         <Tab>{'LBeacon'}</Tab>
                         <Tab>{'Gateway'}</Tab>
-                        <Tab>{locale.texts.TRACKING}</Tab>
-                    </TabList> 
+                        <Tab>{locale.texts.TRACKING}</Tab> 
+                    </TabList>
                     <TabPanel>
+                        <LBeaconTable
+                            lbeaconData = {this.state.lbeaconData}
+                            lbeaconColumn = {this.state.lbeaconColumn}
+                            refreshData  = {this.refreshData}
+                        /> 
+                    </TabPanel> 
+
+                    <TabPanel>
+                        <GatewayTable
+                            gatewayData = {this.state.gatewayData}
+                            gatewayColunm = {this.state.gatewayColunm}
+                            refreshData  = {this.refreshData}
+                        /> 
+                    </TabPanel> 
+
+
+                    <TabPanel>
+                        <ReactTable 
+                            minRows={6} 
+                            defaultPageSize={15} 
+                            data={this.state.trackingData} 
+                            columns={this.state.trackingColunm} 
+                            pageSizeOptions={[5, 10]}
+                            resizable={true}
+                            freezeWhenExpanded={false}
+                        />
+                    </TabPanel> 
+
+
+                    {/* <TabPanel>
                         <ButtonToolbar>
                             <Button 
                                 variant="outline-primary" 
@@ -422,7 +463,9 @@ class SystemStatus extends React.Component{
                             resizable={true}
                             freezeWhenExpanded={false}
                         />
-                    </TabPanel>
+                    </TabPanel> */}
+
+
                 </Tabs>
                 <EditLbeaconForm 
                     show= {this.state.showEdit} 
