@@ -15,9 +15,8 @@ import DownloadPdfRequestForm from './DownloadPdfRequestForm'
 import {
     getStatus
 } from '../../helper/descriptionGenerator'
-import { toast } from 'react-toastify';
 import Select from 'react-select';
-import styleConfig from "../../styleConfig" 
+import messageGenerator from '../../helper/messageGenerator'
 
 const style = {
     modalBody: {
@@ -34,8 +33,6 @@ const style = {
         control: (provided) => ({
             ...provided,
             fontSize: '1rem',
-            // maxHeight: '20px',
-            // minHeight: '20px',
             height:  'calc(2px)',
             position: 'none',
             width: 200,
@@ -150,17 +147,14 @@ class ShiftChange extends React.Component {
             shift:this.state.selectValue,
         }).then(res => {
             this.props.handleSubmit()
-            toast.success("Shift Change Success", {
-                position: toast.POSITION.TOP_RIGHT,
-                autoClose: 5000,
-                hideProgressBar: true
-            });
+            messageGenerator.setSuccessMessage(
+                'save shift change success'
+            )
             this.setState({
                 fileUrl: pdfPackage.path,
                 showConfirmForm: false,
                 showDownloadPdfRequest: true
             })
-
             // this.refs.download.click()
         }).catch(err => {
             console.log(err)

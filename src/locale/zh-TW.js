@@ -381,6 +381,8 @@ const tw = {
     EDIT_OBJECT_SUCCESS: "編輯物件成功",
     DELETE_LBEACON_SUCCESS: "刪除Lbeacon成功",
     DELETE_GATEWAY_SUCCESS: "刪除Gateway成功",
+    SAVE_SHIFT_CHANGE_SUCCESS: "儲存交班報表成功",
+
 
     /** User Roles */
     CARE_PROVIDER: "護理人員",

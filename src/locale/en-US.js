@@ -371,7 +371,7 @@ const en =  {
     EDIT_OBJECT_SUCCESS: "edit object success",
     DELETE_LBEACON_SUCCESS: "delete lbeacon success",
     DELETE_GATEWAY_SUCCESS: "delete gateway success",
-
+    SAVE_SHIFT_CHANGE_SUCCESS: "save shift change success",
 
     /** User Roles */
     CARE_PROVIDER: "care provider",
