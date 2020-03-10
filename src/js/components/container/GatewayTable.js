@@ -8,16 +8,14 @@ import config from '../../config';
 import {  
     deleteGateway
 } from "../../dataSrc" 
+import { 
+    gatewayTableColumn
+} from '../../tables';
 import { AppContext } from '../../context/AppContext';
-import {
-    Tabs, 
-    Tab,
-    TabList, 
-    TabPanel 
-} from 'react-tabs';
+import retrieveDataHelper from '../../helper/retrieveDataHelper'
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm' 
-const SelectTable = selecTableHOC(ReactTable);
 
+const SelectTable = selecTableHOC(ReactTable);
 
 
 class GatewayTable extends React.Component{
@@ -27,10 +25,48 @@ class GatewayTable extends React.Component{
     state = {  
         showDeleteConfirmation:false,
         selectedRowData: '',
+        gatewayData: [],
+        gatewayColunm: [],
         showEdit: false,
         selection:[],
         selectAll :false,
         selectType:''
+    }
+
+    componentDidMount = () => {
+        this.getGatewayData();
+        this.getGatewayDataInterval = this.startSetInterval ? setInterval(this.getGatewayData, config.healthReport.pollGatewayTableIntevalTime) : null;
+    }
+
+    componentWillUnmount = () => {
+        clearInterval(this.getGatewayDataInterval);
+    }
+
+    getGatewayData = () => {
+        let { 
+            locale
+        } = this.context
+        retrieveDataHelper.getGatewayTable(
+            locale.abbr
+        )
+        .then(res => {
+            this.props.setErrorMessage(false)
+            let column = _.cloneDeep(gatewayTableColumn)
+            column.map(field => {
+                field.headerStyle = {
+                    textAlign: 'left',
+                }
+                field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
+            })
+            this.setState({
+                gatewayData: res.data.rows,
+                gatewayColunm: column
+            })
+        })
+        .catch(err => {
+            this.props.setErrorMessage(true)
+            console.log(`get gateway data failed ${err}`);
+        })
     }
 
     handleClose = () => {
@@ -43,14 +79,6 @@ class GatewayTable extends React.Component{
             selectType:''
         })
     }  
-
-    handleSubmitForm = () => {
-        this.setState({
-            showDeleteConfirmation:true
-        })
-        this.props.refreshData()
-    }
-
 
     toggleSelection = (key, shift, row) => {
          
@@ -99,28 +127,26 @@ class GatewayTable extends React.Component{
         let idPackage = []
         var deleteArray = [];
         var deleteCount = 0;
-        this.props.gatewayData.map (item => {
+        this.state.gatewayData.map (item => {
             this.state.selection.map(itemSelect => {
                 itemSelect === item.id
-                ? 
-                deleteArray.push(deleteCount.toString())
-                : 
-                null          
+                ?   deleteArray.push(deleteCount.toString())
+                :   null          
             })
                 deleteCount +=1
         })
 
         deleteArray.map( item => {
-            this.props.gatewayData[item] === undefined ?
-                null
-                :
-                idPackage.push(parseInt(this.props.gatewayData[item].id))
+            this.state.gatewayData[item] === undefined 
+                ?   null
+                :   idPackage.push(parseInt(this.state.gatewayData[item].id))
             }) 
-
             axios.post(deleteGateway, {
                 idPackage
             })
             .then(res => {
+                this.props.setMessage('success', 'delete gateway success')
+                this.getGatewayData()
                 this.setState({
                     selection: [],
                     selectAll: false,
@@ -130,8 +156,6 @@ class GatewayTable extends React.Component{
             .catch(err => {
                 console.log(err)
             })
-
-            this.handleSubmitForm()
     }
 
 
@@ -157,48 +181,48 @@ class GatewayTable extends React.Component{
         };
        
         const { locale } = this.context 
+
         return(
             <div> 
                 <ButtonToolbar>
-                            <Button 
-                                variant="outline-primary" 
-                                className='mb-1 text-capitalize mr-2'
-                                onClick={() => {
-                                    this.setState({
-                                        deleteObjectType: 'gateway',
-                                        showDeleteConfirmation: true
-                                    })
-                                }}
-                            >
-                                {locale.texts.DELECT_GATEWAY}
-                            </Button>
-                        </ButtonToolbar>
-                        <SelectTable
-                            keyField='id'
-                            data={this.props.gatewayData} 
-                            columns={this.props.gatewayColunm}
-                            ref={r => (this.selectTable = r)}
-                            className="-highlight"
-                            style={{height:'75vh'}}
-                            {...extraProps}
-                            getTrProps={(state, rowInfo, column, instance) => {
-                                return {
-                                    onClick: (e, handleOriginal) => {
-                                        this.setState({
-                                            selectedRowData: rowInfo.original,
-                                        })
-                                        if (handleOriginal) {
-                                            handleOriginal()
-                                        }
-                                    }
+                    <Button 
+                        variant="outline-primary" 
+                        className='mb-1 text-capitalize mr-2'
+                        onClick={() => {
+                            this.setState({
+                                deleteObjectType: 'gateway',
+                                showDeleteConfirmation: true
+                            })
+                        }}
+                    >
+                        {locale.texts.DELECT_GATEWAY}
+                    </Button>
+                </ButtonToolbar>
+                <SelectTable
+                    keyField='id'
+                    data={this.state.gatewayData} 
+                    columns={this.state.gatewayColunm}
+                    ref={r => (this.selectTable = r)}
+                    className="-highlight"
+                    style={{height:'75vh'}}
+                    {...extraProps}
+                    getTrProps={(state, rowInfo, column, instance) => {
+                        return {
+                            onClick: (e, handleOriginal) => {
+                                this.setState({
+                                    selectedRowData: rowInfo.original,
+                                })
+                                if (handleOriginal) {
+                                    handleOriginal()
                                 }
-                            }}
-                    />
- 
+                            }
+                        }
+                    }}
+                />
                 <DeleteConfirmationForm
                     show={this.state.showDeleteConfirmation} 
                     handleClose={this.handleClose}
-                    handleSubmit={  this.deleteRecordGateway }
+                    handleSubmit={this.deleteRecordGateway}
                 />
             </div>
 
