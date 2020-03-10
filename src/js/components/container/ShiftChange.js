@@ -30,6 +30,17 @@ const style = {
     item: {
         minWidth: 30,
     },
+    select: {
+        control: (provided) => ({
+            ...provided,
+            fontSize: '1rem',
+            // maxHeight: '20px',
+            // minHeight: '20px',
+            height:  'calc(2px)',
+            position: 'none',
+            width: 200,
+        }),
+    }
 }
 
 class ShiftChange extends React.Component {
@@ -174,22 +185,7 @@ class ShiftChange extends React.Component {
         this.setState({ selectValue : val });
     }
 
-    render( values) {   
-        
-        const style = {
-            select:{
-                option: (provided, state) => ({
-                    ...provided,
-                    margin:'0.5rem',
-                    padding: '0.5rem',
-                    fontSize: '0.8rem',
-                    cursor: 'pointer', 
-                }),
-                control: () => ({
-                    width: 200, 
-                }),
-            }
-        }
+    render() {   
 
         const { 
             locale, 
@@ -218,7 +214,6 @@ class ShiftChange extends React.Component {
             };
         })
 
-
         return (
             <Fragment>
                 <Modal 
@@ -242,17 +237,17 @@ class ShiftChange extends React.Component {
                         </div>
                         {this.state.selectValue ? null : this.setState({selectValue:shiftOptions[0]})}
                         <div 
+                            className="d-flex align-items-center"
                         >   
                             {locale.texts.SHIFT }: 
 
-                             <Select 
-                                  name = "shiftSelect"
-                                  options={shiftOptions} 
-                                  value = {this.state.selectValue}
-                                  onChange={this.handleSelectChange}  
-                                  styles = {style.select}
+                            <Select 
+                                name = "shiftSelect"
+                                options={shiftOptions} 
+                                value = {this.state.selectValue}
+                                onChange={this.handleSelectChange}  
+                                styles={style.select}
                             />  
-
                         </div>
 
  
