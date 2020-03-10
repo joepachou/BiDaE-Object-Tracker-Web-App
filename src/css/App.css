@@ -674,3 +674,27 @@ p {
     right: 0 !important;
     left: auto !important;
 }
+
+.toast-success-notice-container { 
+    background: #dbf8d1;
+    color: black;
+    display: flex;
+    justify-content: center;
+    top: 80%;
+}
+.toast-error-notice-container { 
+    background: #f8d7da;
+    color: #721c24;
+    display: flex;
+    justify-content: center;
+    top: 80%;
+}
+
+.toast-notice-body {
+    display: flex;
+    justify-content: center;
+}
+
+.toast-success-notice {
+    top: 60%;
+}
