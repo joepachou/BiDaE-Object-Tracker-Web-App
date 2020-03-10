@@ -194,6 +194,7 @@ class PatientTable extends React.Component{
                             ref={r => (this.selectTable = r)}
                             className="-highlight"
                             style={{height:'75vh'}}
+                            onPageChange={(e) => {this.setState({selectAll:false,selection:''})}} 
                             {...extraProps}
                             getTrProps={(state, rowInfo, column, instance) => {
                                 return {
