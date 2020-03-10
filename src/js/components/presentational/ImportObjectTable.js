@@ -76,6 +76,7 @@ class ImportObjectTable extends React.Component{
 
         const selectAll = this.state.selectAll ? false : true;
         let selection = [];
+        let rowsCount = 0 ; 
         if (selectAll) {
             const wrappedInstance = this.selectTable.getWrappedInstance();
             const currentRecords = wrappedInstance.props.data
@@ -83,7 +84,8 @@ class ImportObjectTable extends React.Component{
             // const currentRecords = wrappedInstance.getResolvedState().sortedData;
            
             currentRecords.forEach(item => {
-                selection.push(item.asset_control_number);
+                rowsCount++; 
+                rowsCount <= wrappedInstance.state.pageSize ?   selection.push(item.asset_control_number) : null
             });
         }else{
             selection = [];

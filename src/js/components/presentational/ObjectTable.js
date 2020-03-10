@@ -124,13 +124,14 @@ class ObjectTable extends React.Component{
 
         const selectAll = this.state.selectAll ? false : true;
         let selection = [];
+        let rowsCount = 0 ; 
         if (selectAll) {
             const wrappedInstance = this.selectTable.getWrappedInstance();
             const currentRecords = wrappedInstance.props.data 
-            // const currentRecords = wrappedInstance.getResolvedState().sortedData;
-           
-            currentRecords.forEach(item => {
-                selection.push(item.id);
+            // const currentRecords = wrappedInstance.getResolvedState().sortedData;    
+            currentRecords.forEach(item =>{
+                rowsCount++; 
+                rowsCount <= wrappedInstance.state.pageSize ? selection.push(item.id) : null
             });
         }else{
             selection = [];

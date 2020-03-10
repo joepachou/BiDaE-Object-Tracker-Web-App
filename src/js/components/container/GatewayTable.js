@@ -74,6 +74,7 @@ class GatewayTable extends React.Component{
       
         const selectAll = this.state.selectAll ? false : true;
         let selection = [];
+        let rowsCount = 0 ; 
         if (selectAll) {
             const wrappedInstance = this.selectTable.getWrappedInstance();
             const currentRecords = wrappedInstance.props.data
@@ -81,7 +82,7 @@ class GatewayTable extends React.Component{
             // const currentRecords = wrappedInstance.getResolvedState().sortedData;
            
             currentRecords.forEach(item => {
-                selection.push(item.id);
+                rowsCount <= wrappedInstance.state.pageSize ?      selection.push(item.id) : null
             });
         }else{
             selection = [];
