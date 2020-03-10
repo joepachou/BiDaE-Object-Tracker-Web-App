@@ -292,7 +292,7 @@ const TypeBlock = ({
                     })}
                 </div>
             }     
-            {hasType && typeArray.map((item, index) => {
+            {hasType && typeArray.map((item, index) => { 
                 return (
                     <div 
                         className='d-flex justify-content-start'

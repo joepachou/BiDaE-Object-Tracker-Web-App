@@ -393,7 +393,8 @@ const tw = {
     BEING_HERE: "已",
     FROM: "",
     MINUTES: "分鐘",
-
+    IS_RESERVED_FOR:"預約者：",
+   
     /** Test */
     IIS_SINICA_FOURTH_FLOOR: "中研院4樓",
     NTUH_YUNLIN_WARD_FIVE_B: "雲林台大醫院5B病房",

@@ -6,7 +6,7 @@ import 'babel-polyfill'
 // searchableObjectList is the found data list
 // viaMethod is the components call this function, such as frequent search and searchableObjectType
 export default async function GetResultData(SearchKey, searchableObjectList, user){
-	// console.log(searchableObjectList)
+ 
     var searchResult = []
 	if(typeof SearchKey === 'string'){
 		if(SearchKey === 'my devices'){

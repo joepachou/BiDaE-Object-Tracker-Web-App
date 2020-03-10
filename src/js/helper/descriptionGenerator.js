@@ -3,7 +3,7 @@ import AccessControl from '../components/presentational/AccessControl'
 import React from 'react'
 
 export const getDescription = (item, locale) => {
-    var foundDeviceDescription = ``;
+    var foundDeviceDescription = ``; 
     switch(item.object_type) {
         case '0':
             foundDeviceDescription += 
@@ -28,8 +28,17 @@ export const getDescription = (item, locale) => {
                         ${item.status == "reserve" 
                             ? `~ ${item.reserved_timestamp_final}`
                             : ''
-                        }
+                        } 
 
+                        ${item.status == "reserve" 
+                            ? ` ${locale.texts.IS_RESERVED_FOR}`
+                            : ''
+                        } 
+
+                        ${item.status == "reserve" 
+                            ? `${item.reserved_user_name}`
+                            : ''
+                        } 
                     `
                     :   `
                         ${getType(item, locale)}
