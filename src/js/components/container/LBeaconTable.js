@@ -1,5 +1,8 @@
 import React from 'react';
-import { Container,  Nav, Button, ButtonToolbar } from 'react-bootstrap';
+import { 
+    Button, 
+    ButtonToolbar 
+} from 'react-bootstrap';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import EditLbeaconForm from './../presentational/EditLbeaconForm'
@@ -8,39 +11,65 @@ import axios from 'axios';
 import config from '../../config';
 import { 
     deleteLBeacon,
-    deleteGateway
 } from "../../dataSrc"
 import { 
-    trackingTableColumn,
     lbeaconTableColumn,
-    gatewayTableColumn
 } from '../../tables';
 import { AppContext } from '../../context/AppContext';
-import {
-    Tabs, 
-    Tab,
-    TabList, 
-    TabPanel 
-} from 'react-tabs';
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
 import retrieveDataHelper from '../../helper/retrieveDataHelper'
-import { toast } from 'react-toastify';
-import LBeaconTable from './LBeaconTable'
 const SelectTable = selecTableHOC(ReactTable);
 
-
-
-class PatientTable extends React.Component{
+class LbeaconTable extends React.Component{
     
     static contextType = AppContext
     
     state = {  
+        lbeaconData: [],
+        lbeaconColumn: [],
         showDeleteConfirmation:false,
         selectedRowData: '',
         showEdit: false,
         selection:[],
         selectAll :false,
         selectType:''
+    }
+
+    componentDidMount = () => {
+        this.getLbeaconData();
+        this.getLbeaconDataInterval = this.startSetInterval ? setInterval(this.getLbeaconData, config.healthReport.pollLbeaconTabelIntevalTime) : null;
+    }
+
+    componentWillUnmount = () => {
+        clearInterval(this.getLbeaconDataInterval);
+    }
+
+    getLbeaconData = () => {
+
+        let { locale } = this.context
+        retrieveDataHelper.getLbeaconTable(
+            locale.abbr
+        )
+        .then(res => {
+            this.props.setErrorMessage(false)
+            let column = _.cloneDeep(lbeaconTableColumn)
+            column.map(field => {
+                field.headerStyle = {
+                    textAlign: 'left',
+                }
+                field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
+            })
+            this.setState({
+                lbeaconData: res.data.rows,
+                lbeaconColumn: column,
+                showEdit: false
+            }) 
+        })
+        .catch(err => {
+            this.props.setErrorMessage(true)
+            console.log(`get lbeacon data failed ${err}`);
+        })
+
     }
 
     handleClose = () => {
@@ -54,10 +83,8 @@ class PatientTable extends React.Component{
     }  
 
     handleSubmitForm = () => {
-        this.setState({
-            showDeleteConfirmation:true
-        })
-        this.props.refreshData()
+        this.props.setMessage('success', 'edit lbeacon success')
+        this.getLbeaconData()
     }
 
 
@@ -86,22 +113,17 @@ class PatientTable extends React.Component{
         let rowsCount = 0 ; 
         if (selectAll) {
             const wrappedInstance = this.selectTable.getWrappedInstance();
-            const currentRecords = wrappedInstance.props.data
- 
-            // const currentRecords = wrappedInstance.getResolvedState().sortedData;
-            
-
+            const currentRecords = wrappedInstance.props.data        
             currentRecords.forEach(item =>{
                 rowsCount++; 
                 if ((rowsCount > wrappedInstance.state.pageSize * wrappedInstance.state.page) && ( rowsCount <= wrappedInstance.state.pageSize +wrappedInstance.state.pageSize * wrappedInstance.state.page) ){
                     selection.push(item.id)
                 } 
             });
-            
-        }else{
+        } else {
             selection = [];
         }
-         this.setState({ selectAll, selection });
+        this.setState({ selectAll, selection });
 
     };
 
@@ -113,14 +135,12 @@ class PatientTable extends React.Component{
         let idPackage = []
         var deleteArray = [];
         var deleteCount = 0;
-        this.props.lbeaconData.map (item => {
+        this.state.lbeaconData.map (item => {
         
             this.state.selection.map(itemSelect => {
                 itemSelect === item.id
-                ? 
-                deleteArray.push(deleteCount.toString())
-                : 
-                null          
+                    ?   deleteArray.push(deleteCount.toString())
+                    :   null          
             })
                 deleteCount +=1
         })
@@ -128,15 +148,16 @@ class PatientTable extends React.Component{
        
 
         deleteArray.map( item => {
-            this.props.lbeaconData[item] === undefined ?
-                null
-                :
-                idPackage.push(parseInt(this.props.lbeaconData[item].id))
+            this.state.lbeaconData[item] === undefined 
+                ?   null
+                :   idPackage.push(parseInt(this.state.lbeaconData[item].id))
             }) 
             axios.post(deleteLBeacon, {
                 idPackage
             })
             .then(res => {
+                this.getLbeaconData()
+                this.props.setMessage('success', 'delete lbeacon success')
                 this.setState({
                     selection: [],
                     selectAll: false,
@@ -146,7 +167,6 @@ class PatientTable extends React.Component{
             .catch(err => {
                 console.log(err)
             }) 
-        this.props.refreshData()
     }
 
 
@@ -175,41 +195,43 @@ class PatientTable extends React.Component{
         return(
             <div> 
                  <ButtonToolbar>
-                            <Button 
-                                variant="outline-primary" 
-                                className='mb-1 text-capitalize mr-2'
-                                onClick={() => {
-                                    this.setState({
-                                        showDeleteConfirmation: true
-                                    })
-                                }}
-                            >
-                                {locale.texts.DELECT_LBEACON}
-                            </Button>
-                        </ButtonToolbar>
-                        <SelectTable
-                            keyField='id'
-                            data={this.props.lbeaconData}
-                            columns={this.props.lbeaconColumn}
-                            ref={r => (this.selectTable = r)}
-                            className="-highlight"
-                            style={{height:'75vh'}}
-                            onPageChange={(e) => {this.setState({selectAll:false,selection:''})}} 
-                            {...extraProps}
-                            getTrProps={(state, rowInfo, column, instance) => {
-                                return {
-                                    onClick: (e, handleOriginal) => {
-                                        this.setState({
-                                            selectedRowData: rowInfo.original,
-                                            showEdit: true,
-                                        })
-                                    }
-                                }
-                            }}
+                    <Button 
+                        variant="outline-primary" 
+                        className='mb-1 text-capitalize mr-2'
+                        onClick={() => {
+                            this.setState({
+                                showDeleteConfirmation: true
+                            })
+                        }}
+                    >
+                        {locale.texts.DELECT_LBEACON}
+                    </Button>
+                </ButtonToolbar>
+                <SelectTable
+                    keyField='id'
+                    data={this.state.lbeaconData}
+                    columns={this.state.lbeaconColumn}
+                    ref={r => (this.selectTable = r)}
+                    className="-highlight"
+                    style={{height:'75vh'}}
+                    onPageChange={(e) => {
+                        this.setState({
+                            selectAll:false,
+                            selection:''
+                        })
+                    }} 
+                    {...extraProps}
+                    getTrProps={(state, rowInfo, column, instance) => {
+                        return {
+                            onClick: (e, handleOriginal) => {
+                                this.setState({
+                                    selectedRowData: rowInfo.original,
+                                    showEdit: true,
+                                })
+                            }
+                        }
+                    }}
                 />
-
-
-
                 <EditLbeaconForm 
                     show= {this.state.showEdit} 
                     title={'edit lbeacon'}
@@ -221,11 +243,11 @@ class PatientTable extends React.Component{
                 <DeleteConfirmationForm
                     show={this.state.showDeleteConfirmation} 
                     handleClose={this.handleClose}
-                    handleSubmit={  this.deleteRecord }
+                    handleSubmit={this.deleteRecord}
                 />
             </div>
 
         )
     }
 }
-export default PatientTable
+export default LbeaconTable

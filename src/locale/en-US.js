@@ -262,7 +262,6 @@ const en =  {
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "please enter or scan mac address",
     PLEASE_ENTER_OR_SCAN_ASSET_CONTROL_NUMBER: "please enter or scan asset control number",
 
-
     /* Object Status */
     STATUS: "status",
     NORMAL: "normal",
@@ -368,6 +367,9 @@ const en =  {
     USERNAME_OR_PASSWORD_IS_INCORRECT: "Username or password is incorrect",
     PASSWORD_IS_INCORRECT: "password is incorrect",
     PLEASE_ENTER_ID_AND_PASSWORD: "please enter Admin's info",
+    EDIT_LBEACON_SUCCESS: "edit lbeacon success",
+    DELETE_LBEACON_SUCCESS: "delete lbeacon success",
+    DELETE_GATEWAY_SUCCESS: "delete gateway success",
 
 
     /** User Roles */
