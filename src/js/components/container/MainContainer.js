@@ -899,7 +899,7 @@ class MainContainer extends React.Component{
                                     variant='outline-primary' 
                                     onClick={this.handleClearButton}
                                 >
-                                    {locale.texts.CLEAR_RESULT}
+                                    {locale.texts.NEW_SEARCH}
                                 </Button>
                             </ButtonGroup>
                             <div className='d-flex justify-content-center'>
