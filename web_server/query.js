@@ -692,13 +692,13 @@ const generatePDF = (request, response) => {
 }
 
 const addShiftChangeRecord = (request, response) => {
-    let { userInfo, pdfPackage } = request.body
+    let { userInfo, pdfPackage,shift } = request.body
 
     /** If there are some trouble when download pdf, try npm rebuild phantomjs-prebuilt */
-    pool.query(queryType.addShiftChangeRecord(userInfo, pdfPackage.path))
+    pool.query(queryType.addShiftChangeRecord(userInfo, pdfPackage.path,shift))
         .then(res => {
              /** If there are some trouble when download pdf, try npm rebuild phantomjs-prebuilt */
-            pdf.create(pdfPackage.pdf, pdfPackage.options).toFile(path.join(process.env.LOCAL_FILE_PATH, pdfPackage.path), function(err, result) {
+            pdf.create(pdfPackage.pdf, pdfPackage.options ).toFile(path.join(process.env.LOCAL_FILE_PATH, pdfPackage.path), function(err, result) {
                 if (err) return console.log("addShiftChangeRecord error: ",err);
             
                 console.log("pdf create");

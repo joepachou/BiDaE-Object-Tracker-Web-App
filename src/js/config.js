@@ -204,8 +204,9 @@ const config = {
     /** Create pdf package, including header, body and the pdf path
      * options include shiftChange, searchResult, broken report, transffered report
      */
-    getPdfPackage: (option, user, data, locale, signature) => {
-        const header = config.pdfFormat.getHeader(user, locale, option, signature)
+    getPdfPackage: (option, user, data, locale, signature ,selectValue ) => {
+    
+        const header = config.pdfFormat.getHeader(user, locale, option, signature,selectValue )
         const body = config.pdfFormat.getBody[option](data, locale, user, location,signature)
         const path = config.pdfFormat.getPath(option, user)
         const pdf = header + body
@@ -229,10 +230,10 @@ const config = {
     },
     /** Pdf format config */
     pdfFormat: {
-        getHeader: (user, locale, option, name) => {
+        getHeader: (user, locale, option, name,selectValue) => {
             let title = config.pdfFormat.getTitle(option, locale)
             let timestamp = config.pdfFormat.getTimeStamp(locale)
-            let titleInfo = config.pdfFormat.getSubTitle[option](locale, user, name)
+            let titleInfo = config.pdfFormat.getSubTitle[option](locale, user, name,selectValue)
             return title + timestamp + titleInfo
         },
     
@@ -416,7 +417,7 @@ const config = {
         },
     
         getSubTitle: {
-            shiftChange: (locale, user, name) => {
+            shiftChange: (locale, user, name ,selectValue ) => {
                 const nextShiftIndex = (config.shiftOption.indexOf(config.getShift(locale.abbr)) + 2) % config.shiftOption.length
 
                 const nextShift = locale.texts[config.shiftOption[nextShiftIndex].toUpperCase().replace(/ /g, "_")]
@@ -431,7 +432,7 @@ const config = {
                     }
                 </div>`
                 let checkby = `<div style="text-transform: capitalize;">
-                        ${locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: ${user.name}, ${thisShift}
+                        ${locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: ${user.name}, ${selectValue.label}
                     </div>`
                 return confirmedBy + shift + checkby
             },

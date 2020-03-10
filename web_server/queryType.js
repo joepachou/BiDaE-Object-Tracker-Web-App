@@ -1314,7 +1314,8 @@ const addEditObjectRecord = (formOption, username, filePath) => {
 
 }
 
-const addShiftChangeRecord = (userInfo, file_path) => {
+const addShiftChangeRecord = (userInfo, file_path,shift) => {
+ 
 	const query = `
 		INSERT INTO shift_change_record (
 			user_id, 
@@ -1328,7 +1329,7 @@ const addShiftChangeRecord = (userInfo, file_path) => {
 				FROM user_table
 				WHERE name='${userInfo.name}'
 			), 
-			'${userInfo.shift}',
+			'${shift.value}',
 			now(), 
 			'${file_path}'
 		);
