@@ -18,6 +18,7 @@ import retrieveDataHelper from '../../helper/retrieveDataHelper'
 import { toast } from 'react-toastify';
 import LBeaconTable from './LBeaconTable'
 import GatewayTable from './GatewayTable' 
+import messageGenerator from '../../helper/messageGenerator';
  
 
 class SystemStatus extends React.Component{
@@ -59,6 +60,7 @@ class SystemStatus extends React.Component{
             areaId
         )
         .then(res => {
+            this.setMessage('clear')
             let column = _.cloneDeep(trackingTableColumn)
             column.map(field => {
                 field.headerStyle = {
@@ -73,56 +75,39 @@ class SystemStatus extends React.Component{
                 //     ? locale.texts[item.transferred_location.toUpperCase().replace(/ /g, '_')]
                 //     : ''
             })
-            this.setErrorMessage(false)
             this.setState({
                 trackingData: res.data,
                 trackingColunm: column
             })
         })
         .catch(err => {
-            this.setErrorMessage(true)
+            this.setMessage(true)
+            this.setMessage(
+                'error',
+                true,
+                'connect to database failed'
+            )
+
             console.log(`get tracking data failed ${err}`);
         })
     }
 
-    setErrorMessage = (isSetting) => {
-        const {
-            locale
-        } = this.context
-        if (isSetting && !this.toastId) {
-            this.toastId = toast(locale.texts.CONNECT_TO_DATABASE_FAILED, {
-                position: toast.POSITION.TOP_CENTER,
-                autoClose: false,
-                className: 'toast-error-notice-container',
-                bodyClassName: "toast-notice-body",
-                hideProgressBar: true,
-                closeButton: false,
-                draggable: false,
-                closeOnClick: false,
-            });
-        } else if (!isSetting) {
-            this.toastId = null;
-        }
-    }
+    setMessage = (type, isSetting, msg) => {
 
-    setMessage = (type, msg, isSet) => {
-        const {
-            locale
-        } = this.context
         switch(type) {
-            case "success": 
-            toast.success(locale.texts[msg.toUpperCase().replace(/ /g, '_')], {
-                position: toast.POSITION.TOP_CENTER,
-                autoClose: 2000,
-                className: 'toast-success-notice-container',
-                bodyClassName: "toast-notice-body",
-                hideProgressBar: true,
-                closeButton: false,
-                draggable: false,
-                closeOnClick: false,
-            });
+            case 'success':
+                messageGenerator.setSuccessMessage(msg)
+                break;
+            case 'error':
+                if (isSetting && !this.toastId) {
+                    this.toastId = messageGenerator.setErrorMessage(msg)
+                } 
+                break;
+            case 'clear':
+                this.toastId = null;
+                toast.dismiss(this.toastId)
+                break;
         }
-
     }
 
     render(){
@@ -153,7 +138,6 @@ class SystemStatus extends React.Component{
                             lbeaconData = {this.state.lbeaconData}
                             lbeaconColumn = {this.state.lbeaconColumn}
                             refreshData  = {this.refreshData}
-                            setErrorMessage={this.setErrorMessage}
                             setMessage={this.setMessage}
                         /> 
                     </TabPanel> 
@@ -162,7 +146,6 @@ class SystemStatus extends React.Component{
                             gatewayData = {this.state.gatewayData}
                             gatewayColunm = {this.state.gatewayColunm}
                             refreshData  = {this.refreshData}
-                            setErrorMessage={this.setErrorMessage}
                             setMessage={this.setMessage}
                         /> 
                     </TabPanel> 

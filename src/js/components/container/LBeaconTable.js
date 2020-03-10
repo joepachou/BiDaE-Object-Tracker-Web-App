@@ -18,6 +18,7 @@ import {
 import { AppContext } from '../../context/AppContext';
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
 import retrieveDataHelper from '../../helper/retrieveDataHelper'
+
 const SelectTable = selecTableHOC(ReactTable);
 
 class LbeaconTable extends React.Component{
@@ -51,7 +52,7 @@ class LbeaconTable extends React.Component{
             locale.abbr
         )
         .then(res => {
-            this.props.setErrorMessage(false)
+            this.props.setMessage('clear')
             let column = _.cloneDeep(lbeaconTableColumn)
             column.map(field => {
                 field.headerStyle = {
@@ -66,7 +67,11 @@ class LbeaconTable extends React.Component{
             }) 
         })
         .catch(err => {
-            this.props.setErrorMessage(true)
+            this.props.setMessage(
+                'error', 
+                true,
+                'connect to database failed'
+            )
             console.log(`get lbeacon data failed ${err}`);
         })
 
@@ -83,7 +88,10 @@ class LbeaconTable extends React.Component{
     }  
 
     handleSubmitForm = () => {
-        this.props.setMessage('success', 'edit lbeacon success')
+        this.props.setMessage(
+            'success', 
+            'edit lbeacon success'
+        )
         this.getLbeaconData()
     }
 
@@ -157,7 +165,11 @@ class LbeaconTable extends React.Component{
             })
             .then(res => {
                 this.getLbeaconData()
-                this.props.setMessage('success', 'delete lbeacon success')
+                this.props.setMessage(
+                    'success', 
+                    null,
+                    'delete lbeacon success'
+                )
                 this.setState({
                     selection: [],
                     selectAll: false,

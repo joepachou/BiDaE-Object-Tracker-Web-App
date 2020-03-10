@@ -14,6 +14,8 @@ import {
 import { AppContext } from '../../context/AppContext';
 import retrieveDataHelper from '../../helper/retrieveDataHelper'
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm' 
+import messageGenerator from '../../helper/messageGenerator'
+
 
 const SelectTable = selecTableHOC(ReactTable);
 
@@ -50,7 +52,7 @@ class GatewayTable extends React.Component{
             locale.abbr
         )
         .then(res => {
-            this.props.setErrorMessage(false)
+            this.props.setMessage('clear')
             let column = _.cloneDeep(gatewayTableColumn)
             column.map(field => {
                 field.headerStyle = {
@@ -64,7 +66,11 @@ class GatewayTable extends React.Component{
             })
         })
         .catch(err => {
-            this.props.setErrorMessage(true)
+            this.props.setMessage(
+                'error', 
+                true,
+                'connect to database failed'
+            )
             console.log(`get gateway data failed ${err}`);
         })
     }
@@ -149,7 +155,10 @@ class GatewayTable extends React.Component{
                 idPackage
             })
             .then(res => {
-                this.props.setMessage('success', 'delete gateway success')
+                this.props.setMessage(
+                    'success', 
+                    'delete gateway success'
+                )
                 this.getGatewayData()
                 this.setState({
                     selection: [],
