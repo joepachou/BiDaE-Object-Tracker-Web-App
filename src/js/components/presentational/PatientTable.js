@@ -1,23 +1,24 @@
 import React from 'react';
-import { Form, Button,Container,   ButtonToolbar,Row,Col } from 'react-bootstrap';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import { 
+    Button, 
+    ButtonToolbar,
+    Row,
+    Col 
+} from 'react-bootstrap';
 import { AppContext } from '../../context/AppContext';
 import ReactTable from 'react-table'; 
 import styleConfig from '../../styleConfig';
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
-import EditObjectForm from '../container/EditObjectForm';
 import BindForm from '../container/BindForm'
 import DissociationForm from '../container/DissociationForm'
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
 import Select from 'react-select';
-import config from '../../config'
 import BOTInput from '../presentational/BOTInput'
 import axios from 'axios';
 import EditPatientForm from '../container/EditPatientForm'
 import { 
     editPatient,
     addPatient,
-    deletePatient,
     deleteDevice,
 } from "../../dataSrc"
 const SelectTable = selecTableHOC(ReactTable);
@@ -227,8 +228,8 @@ class PatientTable extends React.Component{
                 <Row className="my-1" noGutters> 
                     <Col>
                         <Select
-                            name={"Select Area Patient"}
-                            className={'float-right w-100'}
+                            name="Select Area Patient"
+                            className='float-right w-100'
                             styles={styleConfig.reactSelect}
                             onChange={(value) => {
                                 if(value){
@@ -240,13 +241,13 @@ class PatientTable extends React.Component{
                             options={this.props.filterSelection.areaSelection}
                             isClearable={true}
                             isSearchable={false}
-                            placeholder={'Select Area'}
+                            placeholder={locale.texts.SELECT_AREA}
                         />
                     </Col> 
                     <Col>
                         <Select
-                            name={"Select Status"}
-                            className={'float-right w-100'}
+                            name="Select Status"
+                            className='float-right w-100'
                             styles={styleConfig.reactSelect}
                             onChange={(value) => {
                                 if(value){
@@ -258,13 +259,13 @@ class PatientTable extends React.Component{
                             options={this.props.filterSelection.monitorTypeOptions}
                             isClearable={true}
                             isSearchable={false}
-                            placeholder={'Monitor Status'}
+                            placeholder={locale.texts.SELECT_MONITOR_TYPE}
                         />
                     </Col>
                     <Col>
                         <BOTInput
                             className={'float-right'}
-                            placeholder={''}
+                            placeholder={locale.texts.TYPE_SEARCH_KEYWORD}
                             getSearchKey={(key) => {
                                 this.props.addPatientFilter(
                                     key, 

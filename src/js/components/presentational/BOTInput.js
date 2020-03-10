@@ -31,6 +31,9 @@ class Searchbar extends React.Component {
     render() {
 
         const { value } = this.state;
+        const {
+            placeholder
+        } = this.props
 
         return (            
             <Form className="d-flex" >
@@ -39,6 +42,7 @@ class Searchbar extends React.Component {
                         type='text' 
                         value={value} 
                         onChange={this.handleChange}
+                        placeholder={placeholder}
                     />
                 </Form.Group>
                 <Button 

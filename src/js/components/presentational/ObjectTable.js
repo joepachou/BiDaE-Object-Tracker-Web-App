@@ -1,8 +1,6 @@
 import React from 'react';
 import { 
-    Form, 
     Button, 
-    Container, 
     ButtonToolbar,
     Row,
     Col 
@@ -255,8 +253,8 @@ class ObjectTable extends React.Component{
                 <Row className="my-1" noGutters>
                     <Col>
                         <Select
-                            name={"Select Type"}
-                            className={'float-right w-100'}
+                            name="Select Type"
+                            className="float-right w-100"
                             styles={styleConfig.reactSelect}
                             onChange={(value) => { 
                                 if(value){
@@ -268,14 +266,14 @@ class ObjectTable extends React.Component{
                             options={this.props.typeSelection}
                             isClearable={true}
                             isSearchable={false}
-                            placeholder={'Select Type'}
+                            placeholder={locale.texts.SELECT_TYPE}
                             
                         />
                     </Col>
                     <Col>
                         <Select
-                            name={"Select Area"}
-                            className={'float-right w-100'}
+                            name="Select Area"
+                            className='float-right w-100'
                             styles={styleConfig.reactSelect}
                             onChange={(value) => {
                                 if(value){
@@ -287,13 +285,13 @@ class ObjectTable extends React.Component{
                             options={this.props.filterSelection.areaSelection}
                             isClearable={true}
                             isSearchable={false}
-                            placeholder={'Select Area'}
+                            placeholder={locale.texts.SELECT_AREA}
                         />
                     </Col>
                     <Col>
                         <Select
-                            name={"Select Status"}
-                            className={'float-right w-100'}
+                            name="Select Status"
+                            className='float-right w-100'
                             styles={styleConfig.reactSelect}
                             onChange={(value) => {
                                 if(value){
@@ -305,15 +303,13 @@ class ObjectTable extends React.Component{
                             options={this.props.filterSelection.statusOptions}
                             isClearable={true}
                             isSearchable={false}
-                            placeholder={'Select Status'}
+                            placeholder={locale.texts.SELECT_STATUS}
                         />
                     </Col>
-
                     <Col>
                         <BOTInput
-                            className={'float-right'}
-                            
-                            placeholder={''}
+                            className='float-right'
+                            placeholder={locale.texts.TYPE_SEARCH_KEYWORD}
                             getSearchKey={(key) => {
                                 this.props.addObjectFilter(
                                     key, 
