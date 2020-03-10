@@ -6,7 +6,6 @@ const ToastMessage = ({
 
 }) => {
     const locale = React.useContext(LocaleContext);
-    
     return (
         <div >
             {locale.texts[msg.toUpperCase().replace(/ /g, '_')]}

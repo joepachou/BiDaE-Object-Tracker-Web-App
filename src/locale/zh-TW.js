@@ -378,6 +378,7 @@ const tw = {
     PASSWORD_IS_INCORRECT: "密碼錯誤",
     PLEASE_ENTER_ID_AND_PASSWORD: "請輸入管理者的ID及密碼",
     EDIT_LBEACON_SUCCESS: "編輯Lbeacon成功",
+    EDIT_OBJECT_SUCCESS: "編輯物件成功",
     DELETE_LBEACON_SUCCESS: "刪除Lbeacon成功",
     DELETE_GATEWAY_SUCCESS: "刪除Gateway成功",
 
