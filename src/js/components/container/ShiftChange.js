@@ -16,6 +16,9 @@ import {
     getStatus
 } from '../../helper/descriptionGenerator'
 import { toast } from 'react-toastify';
+import Select from 'react-select';
+import styleConfig from "../../styleConfig" 
+
 const style = {
     modalBody: {
         height: '60vh',
@@ -32,7 +35,7 @@ const style = {
 class ShiftChange extends React.Component {
 
     static contextType = AppContext
-
+ 
     state = {
         searchResult: {
             foundResult: [],
@@ -44,6 +47,7 @@ class ShiftChange extends React.Component {
         showConfirmForm: false,
         devicesArray: [],
         showDownloadPdfRequest: false,
+        selectValue:'',
     }
     APIforTable = null
 
@@ -104,7 +108,8 @@ class ShiftChange extends React.Component {
 
     handleClosePdfForm = () => {
         this.setState({
-            showPdfDownloadForm: false
+            showPdfDownloadForm: false,
+            selectValue:''
         })
     }
 
@@ -126,10 +131,12 @@ class ShiftChange extends React.Component {
             this.state.searchResult, 
             locale,
             name,
+             this.state.selectValue
         )
         axios.post(dataSrc.addShiftChangeRecord, {
             userInfo: auth.user,
             pdfPackage,
+            shift:this.state.selectValue,
         }).then(res => {
             this.props.handleSubmit()
             toast.success("Shift Change Success", {
@@ -151,17 +158,38 @@ class ShiftChange extends React.Component {
 
     handleSignFormClose = () => {
         this.setState({
-            showConfirmForm: false
+            showConfirmForm: false,
+            selectValue:''
         })
     }
 
     handlePdfDownloadFormClose = () => {
         this.setState({
+            selectValue:'',
             showDownloadPdfRequest: false
         })
     }
-    
-    render() {
+
+    handleSelectChange = (val) => { 
+        this.setState({ selectValue : val });
+    }
+
+    render( values) {   
+        
+        const style = {
+            select:{
+                option: (provided, state) => ({
+                    ...provided,
+                    margin:'0.5rem',
+                    padding: '0.5rem',
+                    fontSize: '0.8rem',
+                    cursor: 'pointer', 
+                }),
+                control: () => ({
+                    width: 200, 
+                }),
+            }
+        }
 
         const { 
             locale, 
@@ -183,6 +211,14 @@ class ShiftChange extends React.Component {
         const hasFoundResult = foundResult.length !== 0;
         const hasNotFoundResult = notFoundResult.length !== 0;
 
+        const shiftOptions = Object.values(config.shiftOption).map(shift => {
+            return {
+                value: shift,
+                label: locale.texts[shift.toUpperCase().replace(/ /g, '_')]
+            };
+        })
+
+
         return (
             <Fragment>
                 <Modal 
@@ -202,13 +238,24 @@ class ShiftChange extends React.Component {
                         </div>
                         <div 
                         >
-                            {locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: {auth.user.name}
+                            {locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: {auth.user.name} 
                         </div>
+                        {this.state.selectValue ? null : this.setState({selectValue:shiftOptions[0]})}
                         <div 
-                        >
-                            {locale.texts.SHIFT}: {locale.texts[config.getShift(locale.abbr).toUpperCase().replace(/ /g, '_')]}
+                        >   
+                            {locale.texts.SHIFT }: 
+
+                             <Select 
+                                  name = "shiftSelect"
+                                  options={shiftOptions} 
+                                  value = {this.state.selectValue}
+                                  onChange={this.handleSelectChange}  
+                                  styles = {style.select}
+                            />  
+
                         </div>
 
+ 
                     </Modal.Header>
                     <Modal.Body  
                         style ={style.modalBody}
