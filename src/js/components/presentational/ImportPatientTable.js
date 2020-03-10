@@ -83,10 +83,15 @@ class ImportObjectTable extends React.Component{
             
             // const currentRecords = wrappedInstance.getResolvedState().sortedData;
            
-            currentRecords.forEach(item => { 
+      
+
+            currentRecords.forEach(item =>{
                 rowsCount++; 
-                rowsCount <= wrappedInstance.state.pageSize ?  selection.push(item.asset_control_number) : null
+                if ((rowsCount > wrappedInstance.state.pageSize * wrappedInstance.state.page) && ( rowsCount <= wrappedInstance.state.pageSize +wrappedInstance.state.pageSize * wrappedInstance.state.page) ){
+                    selection.push(item.asset_control_number)
+                } 
             });
+
         }else{
             selection = [];
         } 

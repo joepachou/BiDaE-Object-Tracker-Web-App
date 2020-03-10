@@ -80,9 +80,12 @@ class GatewayTable extends React.Component{
             const currentRecords = wrappedInstance.props.data
  
             // const currentRecords = wrappedInstance.getResolvedState().sortedData;
-           
-            currentRecords.forEach(item => {
-                rowsCount <= wrappedInstance.state.pageSize ?      selection.push(item.id) : null
+            
+            currentRecords.forEach(item =>{
+                rowsCount++; 
+                if ((rowsCount > wrappedInstance.state.pageSize * wrappedInstance.state.page) && ( rowsCount <= wrappedInstance.state.pageSize +wrappedInstance.state.pageSize * wrappedInstance.state.page) ){
+                    selection.push(item.id)
+                } 
             });
         }else{
             selection = [];
