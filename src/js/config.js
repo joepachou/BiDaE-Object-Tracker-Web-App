@@ -423,7 +423,7 @@ const config = {
                 const nextShift = locale.texts[config.shiftOption[nextShiftIndex].toUpperCase().replace(/ /g, "_")]
                 const thisShift = locale.texts[config.getShift(locale.abbr).toUpperCase().replace(/ /g, "_")]
                 let shift = `<div style="text-transform: capitalize;">
-                        ${locale.texts.SHIFT}: ${nextShift} ${locale.texts.SHIFT_TO} ${thisShift}
+                        ${locale.texts.SHIFT}: ${selectValue.label} ${locale.texts.SHIFT_TO} ${thisShift}
                     </div>`
                 let confirmedBy = `<div style="text-transform: capitalize;">
                     ${locale.abbr == 'en' 

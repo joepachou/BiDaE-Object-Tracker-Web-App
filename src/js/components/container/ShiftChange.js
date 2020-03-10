@@ -243,19 +243,19 @@ class ShiftChange extends React.Component {
                         {this.state.selectValue ? null : this.setState({selectValue:shiftOptions[0]})}
                         <div 
                         >   
-                            {locale.texts.SHIFT
-                            
-                            }: 
-                            <Select
-                                //  defaultValue={'shift'}  
+                            {locale.texts.SHIFT }: 
+
+                             <Select 
                                   name = "shiftSelect"
                                   options={shiftOptions} 
                                   value = {this.state.selectValue}
                                   onChange={this.handleSelectChange}  
                                   styles = {style.select}
-                            /> 
+                            />  
+
                         </div>
 
+ 
                     </Modal.Header>
                     <Modal.Body  
                         style ={style.modalBody}
