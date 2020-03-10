@@ -69,7 +69,7 @@ const tw = {
     PREFERENCE: "偏好設定",
 
 
-    /* Button */
+    /* buttons */
     CLEAR : "清除",
     SAVE : "儲存",
     EDIT: "編輯",
@@ -131,6 +131,9 @@ const tw = {
     REMOVE:"移除",
     DELETE_USER:"刪除使用者",
     MULTIPLEDELETE:"多選刪除",
+    SHOW_MAP : "顯示地圖",
+    HIDE_MAP : "隱藏地圖",
+    NEW_SEARCH: "重新搜尋",
     
     /* field */
     NAME: "名稱",
@@ -254,6 +257,9 @@ const tw = {
     START_TIME_IS_REQUIRED:"請填入啟動時間",
     END_TIME_IS_REQUIRED:"請填入結束時間",
     MUST_BE_NEGATIVE_NUMBER:"必須是負數",
+    CONNECT_TO_DATABASE_FAILED: "連線失敗",
+
+
     /** Place Holder */
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "請輸入或掃描mac address",
     PLEASE_ENTER_OR_SCAN_ASSET_CONTROL_NUMBER: "請輸入或掃描財產編號",
@@ -395,11 +401,6 @@ const tw = {
     VETERAN_HOME_FIRST_FLOOR: "榮民之家1樓",
     VETERAN_HOME_THIRD_FLOOR: "榮民之家3樓",
     NTUH_EMERGENCY_ROOM: "急診室",
-
-    /** 手機版本按鈕 */
-    SHOW_MAP : "顯示地圖",
-    HIDE_MAP : "隱藏地圖",
-    CLEAR_RESULT: "重新搜尋",
 
     DEVICE_FOUND: function (length){
         return "發現"+length.toString()+"個儀器"

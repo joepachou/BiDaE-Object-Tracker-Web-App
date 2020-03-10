@@ -70,7 +70,7 @@ const en =  {
     YOUR_SERVICE_AREAS: "your service areas",
     PREFERENCE: "preference",
 
-    /* Button */
+    /* buttons */
     CLEAR : "clear",
     SAVE : "save",
     EDIT: "edit",
@@ -128,6 +128,9 @@ const en =  {
     REMOVE:"Remove",
     DELETE_USER:"Delete user",
     MULTIPLEDELETE:"multiple delete",
+    SHOW_MAP : "show map",
+    HIDE_MAP : "hide map",
+    NEW_SEARCH: "new search",
 
     /* field */
     NAME: "name",
@@ -249,6 +252,7 @@ const en =  {
     START_TIME_IS_REQUIRED:"Start time is required",
     END_TIME_IS_REQUIRED:"End time is required",
     MUST_BE_NEGATIVE_NUMBER:"must be negative number",
+    CONNECT_TO_DATABASE_FAILED: "connect to database failed",
 
     /** Place Holder */
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "please enter or scan mac address",
@@ -388,12 +392,6 @@ const en =  {
     VETERAN_HOME_FIRST_FLOOR: "veteran home floor 1",
     VETERAN_HOME_THIRD_FLOOR: "veteran home floor 3",
     NTUH_EMERGENCY_ROOM: "emergency room",
-
-    /** Mobile Button */
-
-    SHOW_MAP : "Show the Map",
-    HIDE_MAP : "Hide the Map",
-    CLEAR_RESULT: "Clear the search result",
 
     DEVICE_FOUND: function (length){
         return length.toString()+" devices are found"
