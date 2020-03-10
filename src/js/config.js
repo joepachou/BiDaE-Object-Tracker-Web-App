@@ -904,7 +904,7 @@ const config = {
                                                         : `${item.residence_time}`    
                                                     }
                                                     ${item.status == "reserve" 
-                                                        ? ` ${item.reserved_timestamp_final}`
+                                                        ? `~ ${item.reserved_timestamp_final}`
                                                         : ''
                                                     }
                                                     ${item.status == "reserve" 

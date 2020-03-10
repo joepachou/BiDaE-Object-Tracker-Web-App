@@ -16,15 +16,11 @@ import {
     lbeaconTableColumn,
 } from '../../tables';
 import { AppContext } from '../../context/AppContext';
-
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
 import retrieveDataHelper from '../../helper/retrieveDataHelper'
-
 const SelectTable = selecTableHOC(ReactTable);
 
-
-
-class PatientTable extends React.Component{
+class LbeaconTable extends React.Component{
     
     static contextType = AppContext
     
@@ -114,19 +110,20 @@ class PatientTable extends React.Component{
       
         const selectAll = this.state.selectAll ? false : true;
         let selection = [];
+        let rowsCount = 0 ; 
         if (selectAll) {
             const wrappedInstance = this.selectTable.getWrappedInstance();
-            const currentRecords = wrappedInstance.props.data
- 
-            // const currentRecords = wrappedInstance.getResolvedState().sortedData;
-           
-            currentRecords.forEach(item => {
-                selection.push(item.id);
+            const currentRecords = wrappedInstance.props.data        
+            currentRecords.forEach(item =>{
+                rowsCount++; 
+                if ((rowsCount > wrappedInstance.state.pageSize * wrappedInstance.state.page) && ( rowsCount <= wrappedInstance.state.pageSize +wrappedInstance.state.pageSize * wrappedInstance.state.page) ){
+                    selection.push(item.id)
+                } 
             });
-        }else{
+        } else {
             selection = [];
         }
-         this.setState({ selectAll, selection });
+        this.setState({ selectAll, selection });
 
     };
 
@@ -217,6 +214,12 @@ class PatientTable extends React.Component{
                     ref={r => (this.selectTable = r)}
                     className="-highlight"
                     style={{height:'75vh'}}
+                    onPageChange={(e) => {
+                        this.setState({
+                            selectAll:false,
+                            selection:''
+                        })
+                    }} 
                     {...extraProps}
                     getTrProps={(state, rowInfo, column, instance) => {
                         return {
@@ -247,4 +250,4 @@ class PatientTable extends React.Component{
         )
     }
 }
-export default PatientTable
+export default LbeaconTable

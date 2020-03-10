@@ -91,15 +91,20 @@ class PatientTable extends React.Component{
       
         const selectAll = this.state.selectAll ? false : true;
         let selection = [];
+        let rowsCount = 0 ; 
         if (selectAll) {
             const wrappedInstance = this.selectTable.getWrappedInstance();
             const currentRecords = wrappedInstance.props.data
  
             // const currentRecords = wrappedInstance.getResolvedState().sortedData;
            
-            currentRecords.forEach(item => {
-                selection.push(item.id);
+            currentRecords.forEach(item =>{
+                rowsCount++; 
+                if ((rowsCount > wrappedInstance.state.pageSize * wrappedInstance.state.page) && ( rowsCount <= wrappedInstance.state.pageSize +wrappedInstance.state.pageSize * wrappedInstance.state.page) ){
+                    selection.push(item.id)
+                } 
             });
+ 
         }else{
             selection = [];
         }
@@ -286,6 +291,7 @@ class PatientTable extends React.Component{
                     className="-highlight"
                     name={'obj_table'}
                     style={{height:'75vh'}}
+                    onPageChange={(e) => {this.setState({selectAll:false,selection:''})}} 
                     {...extraProps}
                     getTrProps={(state, rowInfo, column, instance) => {
                         return {

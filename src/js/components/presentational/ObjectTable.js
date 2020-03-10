@@ -117,18 +117,21 @@ class ObjectTable extends React.Component{
             selection 
         });  
     };
-
+ 
     toggleAll = () => {
 
         const selectAll = this.state.selectAll ? false : true;
         let selection = [];
+        let rowsCount = 0 ; 
         if (selectAll) {
             const wrappedInstance = this.selectTable.getWrappedInstance();
             const currentRecords = wrappedInstance.props.data 
-            // const currentRecords = wrappedInstance.getResolvedState().sortedData;
-           
-            currentRecords.forEach(item => {
-                selection.push(item.id);
+            // const currentRecords = wrappedInstance.getResolvedState().sortedData;      
+            currentRecords.forEach(item =>{
+                rowsCount++; 
+                if ((rowsCount > wrappedInstance.state.pageSize * wrappedInstance.state.page) && ( rowsCount <= wrappedInstance.state.pageSize +wrappedInstance.state.pageSize * wrappedInstance.state.page) ){
+                    selection.push(item.id)
+                } 
             });
         }else{
             selection = [];
@@ -329,8 +332,10 @@ class ObjectTable extends React.Component{
                     ref={r => (this.selectTable = r)}
                     className="-highlight"
                     name={'obj_table'}
-                    style={{height:'75vh'}}
+                    style={{height:'75vh'}} 
+                    onPageChange={(e) => {this.setState({selectAll:false,selection:''})}} 
                     {...extraProps}
+                  
     
         
                     getTrProps={(state, rowInfo, column, instance) => {
