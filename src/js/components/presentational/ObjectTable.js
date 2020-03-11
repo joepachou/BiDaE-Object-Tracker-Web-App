@@ -390,6 +390,7 @@ class ObjectTable extends React.Component{
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={'xx'}
                     objectTable={this.props.objectTable}
+                    refreshData = {this.props.refreshData}
                     handleClose={this.handleClose}
                     data={this.props.objectTable.reduce((dataMap, item) => {
                         dataMap[item.mac_address] = item

@@ -259,6 +259,7 @@ const en =  {
     END_TIME_IS_REQUIRED:"End time is required",
     MUST_BE_NEGATIVE_NUMBER:"must be negative number",
     CONNECT_TO_DATABASE_FAILED: "connect to database failed",
+    THE_ASSET_CONTROL_NUMBER_IS_ALREADY_LINK:"this asn already linked",
 
     /** Place Holder */
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "please enter or scan mac address",
