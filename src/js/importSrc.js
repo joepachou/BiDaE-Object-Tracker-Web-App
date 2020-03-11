@@ -14,6 +14,8 @@ import "../css/App.css"
 /** BOTCheckbox */
 import "../css/BOTCheckbox.css"
 
+import "../css/BOTsidenav.css"
+
 /** ObjectListMenu Component customized css */
 import "../css/ObjectListMenu.css"
 
