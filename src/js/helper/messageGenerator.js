@@ -2,7 +2,10 @@ import React from 'react'
 import ToastMessage from '../components/presentational/ToastMessage'
 import { toast } from 'react-toastify';
 
-const setSuccessMessage = (msg) => {
+const setSuccessMessage = (
+    msg 
+) => {
+    console.log(msg)
     return (
         toast.success(<ToastMessage msg={msg} />, {
             position: toast.POSITION.TOP_CENTER,
@@ -17,7 +20,9 @@ const setSuccessMessage = (msg) => {
     )
 }
 
-const setErrorMessage = (msg) => {
+const setErrorMessage = (
+    msg = 'connect to database failed'
+) => {
     return (
         toast.success(<ToastMessage msg={msg} />, {
             position: toast.POSITION.TOP_CENTER,
