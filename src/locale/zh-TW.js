@@ -11,6 +11,8 @@ const tw = {
     GEOFENCE: "Geofence",
     OBJECT_MANAGEMENT: "物件管理",
     BIG_SCREEN: "大螢幕",
+    ABOUT: "關於",
+    SETTINGS: "設定",
     SEARCH_RESULT: "搜尋結果",
     NO_RESULT: "無搜尋結果",
     FREQUENT_SEARCH: "常用搜尋",

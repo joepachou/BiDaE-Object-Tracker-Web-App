@@ -11,6 +11,8 @@ const en =  {
     GEOFENCE: "geofence",
     OBJECT_MANAGEMENT: "object management",
     BIG_SCREEN: "big screen",
+    ABOUT: "about",
+    SETTINGS: "settings",
     SEARCH_RESULT: "search results",
     NO_RESULT: "no result",
     FREQUENT_SEARCH: "frequent searches",
