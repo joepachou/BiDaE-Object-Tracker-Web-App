@@ -32,9 +32,6 @@ const style = {
     select: {
         control: (provided) => ({
             ...provided,
-            fontSize: '1rem',
-            height:  'calc(2px)',
-            position: 'none',
             width: 200,
         }),
     }
