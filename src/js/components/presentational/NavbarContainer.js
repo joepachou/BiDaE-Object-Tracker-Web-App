@@ -245,6 +245,7 @@ class NavbarContainer extends React.Component {
                                                     {locale.texts.ABOUT}
                                                 </Dropdown.Item>
                                             </LinkContainer>
+                                            <Dropdown.Divider />
                                             <LinkContainer to="/" className="bg-white">
                                                 <Dropdown.Item className="lang-select" onClick={auth.signout}>
                                                     {locale.texts.SIGN_OUT}
