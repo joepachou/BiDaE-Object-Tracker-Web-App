@@ -121,13 +121,13 @@ class EditPatientForm extends React.Component {
                                 }
                                 : null,
 
-                            physician : selectedRowData ? selectedRowData.physician : null
+                            
                         }}
                        
                         validationSchema = {
                             Yup.object().shape({
                                 name: Yup.string().required(locale.texts.NAME_IS_REQUIRED),
-                                physician: Yup.string().required(locale.texts.ATTENDING_IS_REQUIRED),
+                                 
                                 area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
                                 gender: Yup.string().required(locale.texts.GENDER_IS_REQUIRED),
              
