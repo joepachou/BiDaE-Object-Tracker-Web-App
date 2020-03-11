@@ -198,6 +198,7 @@ class EditObjectForm extends React.Component {
                                         'mac_address',
                                         locale.texts.THE_MAC_ADDRESS_IS_ALREADY_USED ,
                                         value =>{
+                                            if (value == undefined) return false
                                             let repeatFlag = false  
                                             this.props.data.map(item => { 
                                                 if(this.props.selectedRowData.length != 0){ 
