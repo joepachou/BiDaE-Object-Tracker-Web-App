@@ -187,12 +187,6 @@ class NavbarContainer extends React.Component {
                             <Nav.Item><Link to="/page/objectManagement" className="nav-link nav-route" >{locale.texts.OBJECT_MANAGEMENT}</Link></Nav.Item>
                         </AccessControl>
                         <AccessControl
-                            permission={'route:systemStatus'}
-                            renderNoAccess={() => null}
-                        >
-                            <Nav.Item><Link to="/page/systemStatus" className="nav-link nav-route" >{locale.texts.SYSTEM_STATUS}</Link></Nav.Item>
-                        </AccessControl>
-                        <AccessControl
                             permission={'user:shiftChange'}
                             renderNoAccess={() => null}
                         >

@@ -74,25 +74,28 @@ class UserSettingContainer extends React.Component{
             name: 'Shift Change Record',
             path: 'shiftChangeRecord',
             href: '#ShiftChangeRecord',
-            component: <ShiftChangeRecord />
+            component: <ShiftChangeRecord />,
         },
         {
             name: "Monitor Setting",
             path: "monitorSetting",
             href: "#MonitorSetting",
-            component: <MonitorSetting />
+            component: <MonitorSetting />,
+            platform: ['browser', 'tablet']
         },
         {
             name: "Transferred Location Management",
             path: "transferredLocationManagement",
             href: "#TransferredLocationManagement",
-            component: <TransferredLocationManagement />
+            component: <TransferredLocationManagement />,
+            platform: ['browser', 'tablet']
         },
         {
             name: "Role Permission Management",
             path: "rolePermissionManagement",
             href: "#RolePermissionManagement",
-            component: <RolePermissionManagement />
+            component: <RolePermissionManagement />,
+            platform: ['browser', 'tablet']
         }
     ]
     
@@ -132,6 +135,7 @@ class UserSettingContainer extends React.Component{
                                     permission={'route:'+ page.path}
                                     renderNoAccess={() => null}
                                     key={index}
+                                    platform={page.platform}
                                 >
                                     <a
                                         key={index}
@@ -157,6 +161,7 @@ class UserSettingContainer extends React.Component{
                                 permission={'route:'+ page.path}
                                 renderNoAccess={() => null}
                                 key={index}
+                                platform={page.platform}
                             >
                                 <div className='mb-5'>
                                     <a 
