@@ -102,10 +102,7 @@ class BindForm extends React.Component {
                                 .test(
                                     'acn', 
                                     locale.texts.THE_ASSET_CONTROL_NUMBER_IS_ALREADY_LINK,
-                                    value => { 
-                                        console.log(value)
-                                    
-
+                                    value => {  
                                     let findFlag = true 
                                     this.props.objectTable.map(item =>{ 
                                      ( (item.asset_control_number.toUpperCase() == value.toUpperCase()) ) ? findFlag =false : null  
