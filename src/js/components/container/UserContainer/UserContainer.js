@@ -164,7 +164,7 @@ class UserSettingContainer extends React.Component{
                                         id={page.name.replace(/ /g, '')}
                                     />
                                     <div
-                                        className='h4'
+                                        className='h5'
                                     >
                                         {locale.texts[page.name.toUpperCase().replace(/ /g, '_')]}
                                     </div>
