@@ -1,8 +1,19 @@
 /** React Plugin */
 import React from 'react';
-import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom";
+import { 
+    BrowserRouter as Router, 
+    Route, 
+    Link, 
+    NavLink 
+} from "react-router-dom";
 import { LinkContainer } from 'react-router-bootstrap';
-import { Navbar, Nav, NavDropdown, Image, Dropdown  } from 'react-bootstrap'
+import { 
+    Navbar, 
+    Nav, 
+
+    Image, 
+    Dropdown  
+} from 'react-bootstrap'
 import SiginForm from './SigninForm';
 import config from '../../config';
 import AccessControl from './AccessControl';
@@ -170,16 +181,16 @@ class NavbarContainer extends React.Component {
                             <Nav.Item><Link to="/page/geofence" className="nav-link nav-route" >{locale.texts.GEOFENCE}</Link></Nav.Item>
                         </AccessControl>
                         <AccessControl
-                            permission={'route:systemStatus'}
-                            renderNoAccess={() => null}
-                        >
-                            <Nav.Item><Link to="/page/systemStatus" className="nav-link nav-route" >{locale.texts.SYSTEM_STATUS}</Link></Nav.Item>
-                        </AccessControl>
-                        <AccessControl
                             permission={'route:objectManagement'}
                             renderNoAccess={() => null}
                         >
                             <Nav.Item><Link to="/page/objectManagement" className="nav-link nav-route" >{locale.texts.OBJECT_MANAGEMENT}</Link></Nav.Item>
+                        </AccessControl>
+                        <AccessControl
+                            permission={'route:systemStatus'}
+                            renderNoAccess={() => null}
+                        >
+                            <Nav.Item><Link to="/page/systemStatus" className="nav-link nav-route" >{locale.texts.SYSTEM_STATUS}</Link></Nav.Item>
                         </AccessControl>
                         <AccessControl
                             permission={'user:shiftChange'}
@@ -234,6 +245,11 @@ class NavbarContainer extends React.Component {
                                                 </Dropdown.Item>
                                             </LinkContainer>
                                             <Dropdown.Divider />
+                                            <LinkContainer to='/page/about' className="bg-white">
+                                                <Dropdown.Item className="lang-select">
+                                                    {locale.texts.ABOUT}
+                                                </Dropdown.Item>
+                                            </LinkContainer>
                                             <LinkContainer to="/" className="bg-white">
                                                 <Dropdown.Item className="lang-select" onClick={auth.signout}>
                                                     {locale.texts.SIGN_OUT}
