@@ -21,7 +21,7 @@ class BindForm extends React.Component {
         objectName:'',
         objectType:'',
         alertText:'',
-        bindData:'',
+        bindData:'', 
     };
   
     handleClose = () => {
@@ -68,7 +68,7 @@ class BindForm extends React.Component {
             objectTable,
             show
         } = this.props
-    
+        let lock = 0 
         return (
             <Modal 
                 show={show} 
@@ -101,6 +101,27 @@ class BindForm extends React.Component {
                                     // }),
                                 .test(
                                     'acn', 
+                                    locale.texts.THE_ASSET_CONTROL_NUMBER_IS_ALREADY_LINK,
+                                    value => { 
+                                   
+                                    
+
+                                    let findFlag = true 
+                                    this.props.objectTable.map(item =>{ 
+                                        if ( this.props.bindCase == 1){
+                                            ( (item.asset_control_number.toUpperCase() == value.toUpperCase())) ? findFlag =false : null  
+                                        }else{
+                                        ((item.asset_control_number.toUpperCase() == value.toUpperCase()) && item.type.toUpperCase() == "PATIENT") ? findFlag =false : null  
+                                        }
+                                       
+                                    }) 
+                                    if (findFlag == false ) {lock = 0 }
+                                    else {  lock = 1}
+                                    return  findFlag
+                                    }
+                                ) 
+                                .test(
+                                    'acn', 
                                     locale.texts.ASSET_CONTROL_NUMBER_IS_NOT_FOUND,
                                     value => {
                                       
@@ -116,10 +137,10 @@ class BindForm extends React.Component {
                                         findFlag = true
                                       } 
                                      })
-                                     findFlag == true ?  this.setState({showDetail:true}) :  this.setState({showDetail:false})
+                                     findFlag == true && lock ?  this.setState({showDetail:true}) :  this.setState({showDetail:false})
                                      return findFlag
                                     }
-                                ),
+                                ) ,
 
 
                                 mac: Yup.string()

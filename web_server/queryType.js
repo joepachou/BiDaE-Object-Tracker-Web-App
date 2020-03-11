@@ -529,6 +529,8 @@ function editObject (formOption) {
 }
 
 const editPatient = (formOption) => {
+	console.log('+-----------------------------+')
+	console.log(formOption)
 	const text = `
 		Update object_table 
 		SET name = $2,

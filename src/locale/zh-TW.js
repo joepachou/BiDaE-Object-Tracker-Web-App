@@ -262,6 +262,7 @@ const tw = {
     END_TIME_IS_REQUIRED:"請填入結束時間",
     MUST_BE_NEGATIVE_NUMBER:"必須是負數",
     CONNECT_TO_DATABASE_FAILED: "連線失敗",
+    THE_ASSET_CONTROL_NUMBER_IS_ALREADY_LINK:"此編號已綁定",
 
 
     /** Place Holder */

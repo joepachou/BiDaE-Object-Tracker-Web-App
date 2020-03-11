@@ -45,15 +45,12 @@ class DissociationForm extends React.Component {
         this.props.handleClose()
     }
 
-    handleSubmit = (postOption) => {
- 
+    handleSubmit = (postOption) => { 
         axios.post(deleteDevice, {
             formOption: [postOption]
-        }).then(res => {
-            setTimeout(function() { 
-                this.props.handleSubmitForm()
-                this.handleClose()
-            }.bind(this),1000)
+        }).then(res => { 
+                this.props.refreshData()
+                this.handleClose() 
         }).catch( error => {
             console.log(error)
         })
@@ -134,38 +131,42 @@ class DissociationForm extends React.Component {
                                         'mac', 
                                         locale.texts.MAC_DO_NOT_MATCH ,
                                         
-                                        value => {
+                                        value => { 
+                                        if (value == undefined) return false
                                         value != undefined   ?   value = value.toString().toLowerCase() :null  
-                                        if (this.props.selectedObjectData == 'handleAllDelete'){
-                                            if(value != undefined){
-                                                if (value.length ==17 || value.length ==12) {
-                                                    this.setState({  returnFlag:false }) 
-                                                    this.props.objectTable.map(item =>{
-                                                        if (value == item.mac_address){
-                                                            this.setState({ returnFlag:true,  valueForDataArray:value}) 
-                                                        }  else if(item.mac_address== value.match(/.{1,2}/g).join(':')) {
-                                                        this.setState({
-                                                            returnFlag:true,
-                                                            valueForDataArray:value.match(/.{1,2}/g).join(':')
-                                                            }) 
-                                                        }           
-                                                })
-                                              }
-                                            }
-                                        } else{
-                                            
-                                            if (value == undefined) return false
-                                            if (this.props.selectedObjectData.mac_address == value) {
-                                                this.setState({ returnFlag:true,valueForDataArray:value   }) 
-                                            } else if(this.props.selectedObjectData.mac_address == value.match(/.{1,2}/g).join(':')) {
-                                                this.setState({returnFlag:true, valueForDataArray:value.match(/.{1,2}/g).join(':')  }) 
-                                            } else {
-                                                this.setState({ 
-                                                    returnFlag:false
-                                                }) 
-                                            }  
+                                        if (this.props.selectedObjectData){
+                                            if (this.props.selectedObjectData == 'handleAllDelete'){
+                                                if(value != undefined){
+                                                    if (value.length ==17 || value.length ==12) {
+                                                        this.setState({  returnFlag:false }) 
+                                                        this.props.objectTable.map(item =>{
+                                                            if (value == item.mac_address){
+                                                                this.setState({ returnFlag:true,  valueForDataArray:value}) 
+                                                            }  else if(item.mac_address== value.match(/.{1,2}/g).join(':')) {
+                                                            this.setState({
+                                                                returnFlag:true,
+                                                                valueForDataArray:value.match(/.{1,2}/g).join(':')
+                                                                }) 
+                                                            }           
+                                                    })
+                                                }
+                                                }
+                                            } else{ 
+                                                if (value == undefined) return false
+                                                if (this.props.selectedObjectData.mac_address == value) {
+                                                    this.setState({ returnFlag:true,valueForDataArray:value   }) 
+                                                } else if(this.props.selectedObjectData.mac_address == value.match(/.{1,2}/g).join(':')) {
+                                                    this.setState({returnFlag:true, valueForDataArray:value.match(/.{1,2}/g).join(':')  }) 
+                                                } else {
+                                                    this.setState({ 
+                                                        returnFlag:false
+                                                    }) 
+                                                }  
 
-                                        }
+                                            }
+
+                                        } 
+                                       
                                           
                                             if (this.state.returnFlag == true) {
                                                 this.setState({
@@ -193,6 +194,7 @@ class DissociationForm extends React.Component {
                         }
 
                         onSubmit={(values, { setStatus, setSubmitting }) => {
+                 
                             this.handleSubmit(values.mac)
                         }}
 

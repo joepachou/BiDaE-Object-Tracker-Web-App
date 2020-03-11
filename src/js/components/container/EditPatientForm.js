@@ -22,7 +22,7 @@ Object.keys(config.monitorType)
 class EditPatientForm extends React.Component {
   
     handleSubmit = (postOption) => {
-        const path = this.props.formPath
+        const path = this.props.formPath  
         axios.post(path, {
             formOption: postOption
         }).then(res => {
@@ -184,7 +184,7 @@ class EditPatientForm extends React.Component {
 
 
                         onSubmit={(values, { setStatus, setSubmitting }) => {
-               
+                         
                             let monitor_type = values.monitorType
                                 .filter(item => item)
                                 .reduce((sum, item) => {
@@ -198,8 +198,7 @@ class EditPatientForm extends React.Component {
                                     ?   values.physician.value = item.id
                                     :   null
                                 )    })
-                            
-
+                             
                             const postOption = {
                                 ...values,
                                 area_id: config.mapConfig.areaModules[values.area.value].id,
@@ -208,8 +207,7 @@ class EditPatientForm extends React.Component {
                                 room: values.room ? values.room.label : '',
                                 object_type:values.gender.value,
                                 physicianIDNumber : values.physician  ? values.physician.value : this.props.physicianIDNumber
-                            }
-
+                            } 
                             this.handleSubmit(postOption)                            
                         }}
 

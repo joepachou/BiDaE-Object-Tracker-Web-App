@@ -225,7 +225,7 @@ class EditObjectForm extends React.Component {
                         })}
                        
                         onSubmit={(values, { setStatus, setSubmitting }) => {
-                            let monitor_type  = 0
+                            let monitor_type  = 0 
                             if ( isNull(values.checkboxGroup)){
 
                             }else{

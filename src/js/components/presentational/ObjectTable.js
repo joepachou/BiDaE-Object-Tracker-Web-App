@@ -228,7 +228,7 @@ class ObjectTable extends React.Component{
                     >
                         {locale.texts.ADD_OBJECT}
                     </Button>
-                    <Button 
+                    {/* <Button 
                         variant="outline-primary" 
                         className='text-capitalize mr-2 mb-1'
                         size="sm"
@@ -236,7 +236,7 @@ class ObjectTable extends React.Component{
                         onClick={this.handleClickButton}
                     >
                         {locale.texts.DISSOCIATE}
-                    </Button>
+                    </Button> */}
                     <Button 
                         variant="outline-primary" 
                         className='text-capitalize mr-2 mb-1'
