@@ -103,17 +103,12 @@ class BindForm extends React.Component {
                                     'acn', 
                                     locale.texts.THE_ASSET_CONTROL_NUMBER_IS_ALREADY_LINK,
                                     value => { 
-                                   
+                                        console.log(value)
                                     
 
                                     let findFlag = true 
                                     this.props.objectTable.map(item =>{ 
-                                        if ( this.props.bindCase == 1){
-                                            ( (item.asset_control_number.toUpperCase() == value.toUpperCase())) ? findFlag =false : null  
-                                        }else{
-                                        ((item.asset_control_number.toUpperCase() == value.toUpperCase()) && item.type.toUpperCase() == "PATIENT") ? findFlag =false : null  
-                                        }
-                                       
+                                     ( (item.asset_control_number.toUpperCase() == value.toUpperCase()) ) ? findFlag =false : null  
                                     }) 
                                     if (findFlag == false ) {lock = 0 }
                                     else {  lock = 1}
@@ -150,9 +145,8 @@ class BindForm extends React.Component {
                                 .test(
                                     'mac_address',
                                     locale.texts.THE_MAC_ADDRESS_IS_ALREADY_USED_OR_FORMAT_IS_NOT_CORRECT,
-                                    value => {
-                                        if (value == undefined) return false
-
+                                    value => { 
+                                        if (value == undefined) return false 
                                         var pattern = new RegExp("^[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}$");
                                         if(value.match(pattern)) {
                                             return (!objectTable.map(item => item.mac_address).includes(value.match(/.{1,2}/g).join(':')))
