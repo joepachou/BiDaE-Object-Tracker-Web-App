@@ -3,6 +3,7 @@ import SystemStatus from "./components/container/SystemStatus";
 import ObjectManagementContainer from "./components/container/ObjectManagementContainer";
 import UserSettingContainer from "./components/container/UserContainer/UserSettingContainer";
 import BigScreenContainer from "./components/container/BigScreen/BigScreenContainer";
+import About from "./components/container/About"
 
 const routes = [
     {
@@ -28,6 +29,11 @@ const routes = [
     {
         path: '/page/bigScreen',
         component: BigScreenContainer,
+        exact: true,
+    },
+    {
+        path: '/page/about',
+        component: About,
         exact: true,
     },
 ];

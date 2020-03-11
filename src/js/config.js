@@ -9,6 +9,8 @@ import BOT_LOGO from "../img//logo/BOT_LOGO_RED.png";
 import moment from 'moment'
 
 const config = {
+
+    version: 1890,
     
     objectStatus: {
         PERIMETER: "perimeter",
