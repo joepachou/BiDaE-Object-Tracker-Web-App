@@ -43,6 +43,8 @@ const style = {
     item: {
         minWidth: 35,
     },
+    
+     
 }
 
 class MyPatientManager extends React.Component{
@@ -234,7 +236,8 @@ class MyPatientManager extends React.Component{
         const { locale } = this.context
         const style = {
             AddableListStyle: {
-                height: "35vh"
+                height: "35vh",
+                overflow: "scroll"
             }
         }
         return (
