@@ -5,7 +5,6 @@ import SearchResultList from '../presentational/SearchResultList'
 import { 
     Row, 
     Col, 
-    Toast,
     Button,
     ButtonGroup
 } from 'react-bootstrap'
@@ -25,6 +24,7 @@ import {
 } from 'react-device-detect'
 import { disableBodyScroll } from 'body-scroll-lock';
 import retrieveDataHelper from '../../helper/retrieveDataHelper';
+import messageGenerator from '../../helper/messageGenerator';
 
 const {
     ALL_DEVICES,
@@ -64,6 +64,8 @@ class MainContainer extends React.Component{
         searchedObjectType: [],
         showedObjects: [],
     }
+
+    errorToast = null
 
     componentDidMount = () => {
 
@@ -272,6 +274,14 @@ class MainContainer extends React.Component{
             areaId,
         })
         .then(res => {
+
+            /** dismiss error message when the database is connected */
+            if (this.errorToast) {
+                this.errorToast = null;
+                toast.dismiss(this.errorToast)
+            }
+
+            /** collect violated objects as violatedObjects */
             let violatedObjects = res.data.reduce((violatedObjects, item) => {
                 
                 if (item.isViolated) {
@@ -291,8 +301,13 @@ class MainContainer extends React.Component{
                 violatedObjects,
             })
         })
-        .catch(error => {
-            console.log(error)
+        .catch(err => {
+            console.log(`get tracking data failed ${err}`)
+
+            /** sent error message when database is not connected */
+            if (!this.errorToast) {
+                this.errorToast = messageGenerator.setErrorMessage()
+            }
         })
     }
 

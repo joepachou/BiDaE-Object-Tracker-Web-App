@@ -3,7 +3,6 @@ import LocaleContext from '../../context/LocaleContext'
 
 const ToastMessage = ({
     msg,
-
 }) => {
     const locale = React.useContext(LocaleContext);
     return (
