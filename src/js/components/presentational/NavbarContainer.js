@@ -210,6 +210,7 @@ class NavbarContainer extends React.Component {
                         <AccessControl
                             permission={'user:batteryNotice'}
                             renderNoAccess={() => null}
+                            platform={['browser', 'tablet']}
                         >
                             <BatteryLevelNotification />
                         </AccessControl>
