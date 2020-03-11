@@ -54,7 +54,6 @@ const rules = {
         permission: [
             "form:edit",
             "form:develop",
-
             "route:systemStatus",
             "route:userProfile",
             "route:objectManagement",
@@ -65,7 +64,6 @@ const rules = {
             "route:rolePermissionManagement",
             "route:transferredLocationManagement",
             "route:bigScreen",
-
             "user:mydevice",
             "user:mypatient",
             "user:saveSearchRecord",

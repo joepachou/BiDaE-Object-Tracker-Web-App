@@ -1,7 +1,6 @@
 import MainContainer from "./components/container/MainContainer";
 import SystemStatus from "./components/container/SystemStatus";
 import ObjectManagementContainer from "./components/container/ObjectManagementContainer";
-import UserSettingContainer from "./components/container/UserContainer/UserSettingContainer";
 import UserContainer from "./components/container/UserContainer/UserContainer"
 import BigScreenContainer from "./components/container/BigScreen/BigScreenContainer";
 import About from "./components/container/About"
