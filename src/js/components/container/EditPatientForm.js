@@ -192,11 +192,13 @@ class EditPatientForm extends React.Component {
                                     return sum
                             },0)
                             
-                            physicianList.map(item => {
+                            physicianList.map(item => { 
+                                if (values.physician)(
                                 item.name == values.physician.value 
                                     ?   values.physician.value = item.id
                                     :   null
-                                })
+                                )    })
+                            
 
                             const postOption = {
                                 ...values,
@@ -205,7 +207,7 @@ class EditPatientForm extends React.Component {
                                 monitor_type, 
                                 room: values.room ? values.room.label : '',
                                 object_type:values.gender.value,
-                                physicianIDNumber : values.physician.value ? values.physician.value : this.props.physicianIDNumber
+                                physicianIDNumber : values.physician  ? values.physician.value : this.props.physicianIDNumber
                             }
 
                             this.handleSubmit(postOption)                            
