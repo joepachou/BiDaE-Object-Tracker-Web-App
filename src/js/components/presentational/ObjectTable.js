@@ -228,7 +228,7 @@ class ObjectTable extends React.Component{
                     >
                         {locale.texts.ADD_OBJECT}
                     </Button>
-                    {/* <Button 
+                    <Button 
                         variant="outline-primary" 
                         className='text-capitalize mr-2 mb-1'
                         size="sm"
@@ -236,7 +236,7 @@ class ObjectTable extends React.Component{
                         onClick={this.handleClickButton}
                     >
                         {locale.texts.DISSOCIATE}
-                    </Button> */}
+                    </Button>
                     <Button 
                         variant="outline-primary" 
                         className='text-capitalize mr-2 mb-1'
@@ -390,6 +390,7 @@ class ObjectTable extends React.Component{
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={'xx'}
                     objectTable={this.props.objectTable}
+                    refreshData = {this.props.refreshData}
                     handleClose={this.handleClose}
                     data={this.props.objectTable.reduce((dataMap, item) => {
                         dataMap[item.mac_address] = item

@@ -165,7 +165,18 @@ class DissociationForm extends React.Component {
 
                                             }
 
-                                        } 
+                                        } else{ 
+                                            this.props.objectTable.map(item =>{
+                                                            if (value == item.mac_address){
+                                                                this.setState({ returnFlag:true,  valueForDataArray:value}) 
+                                                            }  else if(item.mac_address== value.match(/.{1,2}/g).join(':')) {
+                                                            this.setState({
+                                                                returnFlag:true,
+                                                                valueForDataArray:value.match(/.{1,2}/g).join(':')
+                                                                }) 
+                                                            }           
+                                                    })
+                                        }
                                        
                                           
                                             if (this.state.returnFlag == true) {

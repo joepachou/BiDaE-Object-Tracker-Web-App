@@ -353,6 +353,7 @@ class PatientTable extends React.Component{
                         return dataMap
                         }, {})
                     }
+                    refreshData={this.props.refreshData}  
                 />
                 <DeleteConfirmationForm
                     show={this.state.showDeleteConfirmation} 
