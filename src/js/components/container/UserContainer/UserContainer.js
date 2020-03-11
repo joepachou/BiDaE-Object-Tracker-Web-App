@@ -28,10 +28,10 @@ class UserSettingContainer extends React.Component{
     static contextType = AppContext
 
     componentDidMount = () => {
+
         /** set the scrollability in body disabled */
         let targetElement = document.querySelector('body')
         enableBodyScroll(targetElement);
-
     }
 
     componentWillUnmount = () => {
@@ -142,7 +142,6 @@ class UserSettingContainer extends React.Component{
                                         style={style.item}
                                         className="border-0 m-0 my-1" 
                                         href={page.href}
-                                        action
                                     >
                                         {locale.texts[page.name.toUpperCase().replace(/ /g, '_')]}
                                     </a>
