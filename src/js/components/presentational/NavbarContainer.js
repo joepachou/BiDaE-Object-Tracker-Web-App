@@ -173,18 +173,30 @@ class NavbarContainer extends React.Component {
                 <Navbar.Toggle aria-controls="responisve-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">  
                     <Nav className="mr-auto text-capitalize my-auto" >
-                        <Nav.Item><Link to="/" className="nav-link nav-route" >{locale.texts.HOME}</Link></Nav.Item>
-                        <AccessControl
-                            permission={'route:geofence'}
-                            renderNoAccess={() => null}
-                        >
-                            <Nav.Item><Link to="/page/geofence" className="nav-link nav-route" >{locale.texts.GEOFENCE}</Link></Nav.Item>
-                        </AccessControl>
+                        <Nav.Item>
+                            <Link to="/" className="nav-link nav-route" >
+                                {locale.texts.HOME}
+                            </Link>
+                        </Nav.Item>
                         <AccessControl
                             permission={'route:objectManagement'}
                             renderNoAccess={() => null}
                         >
-                            <Nav.Item><Link to="/page/objectManagement" className="nav-link nav-route" >{locale.texts.OBJECT_MANAGEMENT}</Link></Nav.Item>
+                            <Nav.Item>
+                                <Link to="/page/objectManagement" className="nav-link nav-route" >
+                                    {locale.texts.OBJECT_MANAGEMENT}
+                                </Link>
+                            </Nav.Item>
+                        </AccessControl>
+                        <AccessControl
+                            permission={'route:systemStatus'}
+                            renderNoAccess={() => null}
+                        >
+                            <Nav.Item>
+                                <Link to="/page/systemStatus" className="nav-link nav-route" >
+                                    {locale.texts.SYSTEM_STATUS}
+                                </Link>
+                            </Nav.Item>
                         </AccessControl>
                         <AccessControl
                             permission={'user:shiftChange'}
