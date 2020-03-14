@@ -138,7 +138,6 @@ const getLocationHistory = (key, startTime, endTime, mode) => {
 
 		ORDER BY location_history_table.record_timestamp ASC
 	`
-	console.log(query)
 	return query
 }
 

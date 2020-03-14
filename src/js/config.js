@@ -10,7 +10,7 @@ import moment from 'moment'
 
 const config = {
 
-    version: 1890,
+    version: 1891,
     
     objectStatus: {
         PERIMETER: "perimeter",

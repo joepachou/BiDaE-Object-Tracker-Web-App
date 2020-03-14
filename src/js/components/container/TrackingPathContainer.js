@@ -11,24 +11,17 @@ import {
     Col,
     Nav
 } from 'react-bootstrap';
-
-import Select from 'react-select'
 import config from '../../config' 
 import styleConfig from '../../styleConfig'
 import 'react-tabs/style/react-tabs.css';
 import { AppContext } from '../../context/AppContext';
-import BOTInput from '../presentational/BOTInput'
 import ReactTable from 'react-table'
 import {
     locationHistoryByMacColumns,
     locationHistoryByUUIDColumns,
 } from '../../tables'
 import moment from 'moment'
-
 import {
-    BrowserView,
-    MobileOnlyView,
-    TabletView,
     isBrowser
 } from 'react-device-detect'
 import FormikFormGroup from '../presentational/FormikFormGroup'
@@ -53,7 +46,6 @@ class TrackingPathContainer extends React.Component{
     getLocationHistory = (
         fields
     ) => {
-
         const {
             locale
         } = this.context
@@ -83,7 +75,6 @@ class TrackingPathContainer extends React.Component{
                 let prevUUID = "";
                 let data = []
                 let selectedData = null;
-                console.log(res)
                 switch(fields.mode) {
                     case 'mac':
                         res.data.rows
@@ -118,10 +109,6 @@ class TrackingPathContainer extends React.Component{
                 console.log(`get location history failed ${err}`)
             })
     }
-
-    handleSelect = (eventKey) => {
-        console.log(eventKey)
-    }
  
     render(){
 
@@ -142,7 +129,6 @@ class TrackingPathContainer extends React.Component{
 
         const timeTypeExample = "ex: YYYY/MM/DD HH:MM:SS"
         const timeValidatedFormat = 'YYYY/MM/DD HH:mm:ss'
-        console.log(styleConfig.reactTable)
         return (
             <Container 
                 className='mt-5' 
@@ -199,7 +185,6 @@ class TrackingPathContainer extends React.Component{
                 
                     render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm, setErrors, setTouched }) => (
                         <div>
-                            {console.log(errors)}
                             <div 
                                 className="border-0 BOTsidenav"
                                 style={style.sidenav}
@@ -337,8 +322,11 @@ class TrackingPathContainer extends React.Component{
                                                     case 'mac':
                                                         setFieldValue('key', rowInfo.original.uuid)
                                                         setFieldValue('mode', 'uuid')
+                                                        setFieldValue('startTime', rowInfo.original.startTime)
+                                                        setFieldValue('endTime', rowInfo.original.endTime)
                                                         this.getLocationHistory({
                                                             ...values,
+                                                            ...rowInfo.original,
                                                             key: rowInfo.original.uuid,
                                                             mode: 'uuid'
                                                         })
@@ -346,13 +334,17 @@ class TrackingPathContainer extends React.Component{
                                                     case 'uuid':
                                                         setFieldValue('key', rowInfo.original.mac_address)
                                                         setFieldValue('mode', 'mac')
+                                                        setFieldValue('startTime', values.startTime)
+                                                        setFieldValue('endTime', values.endTime)
                                                         this.getLocationHistory({
                                                             ...values,
+                                                            ...rowInfo.original,
                                                             key: rowInfo.original.mac_address,
                                                             mode: 'mac'
                                                         })
                                                         break;
                                                 }
+
                                             },
                                         }
                                     }}                                     
