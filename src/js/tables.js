@@ -529,6 +529,42 @@ const monitorConfigColumn = [
     },
 ]
 
+const locationHistoryByMacColumns = [
+    {
+        Header: "description",
+        accessor: "description",
+        width: 180,
+    },
+    {
+        Header: "UUID",
+        accessor: "uuid",
+        width: 400,
+    },
+    {
+        Header: "start time",
+        accessor: "startTime",
+        width: 250,
+    },
+    {
+        Header: "end time",
+        accessor: "endTime",
+        width: 250,
+    },
+]
+
+const locationHistoryByUUIDColumns = [
+    {
+        Header: "name",
+        accessor: "name",
+        width: 250,
+    },
+    {
+        Header: "mac address",
+        accessor: "mac_address",
+        width: 180,
+    },
+]
+
 
 
 export { 
@@ -546,5 +582,7 @@ export {
     deviceManagerTableColumn,
     geofenceConfigColumn,
     monitorConfigColumn,
+    locationHistoryByMacColumns,
+    locationHistoryByUUIDColumns
 
 }

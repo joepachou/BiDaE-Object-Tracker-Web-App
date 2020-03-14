@@ -12,6 +12,7 @@ const en =  {
     OBJECT_MANAGEMENT: "object management",
     BIG_SCREEN: "big screen",
     ABOUT: "about",
+    TRACKING_HISTORY: "tracking history",
     SETTINGS: "settings",
     SEARCH_RESULT: "search results",
     NO_RESULT: "no result",
@@ -133,12 +134,14 @@ const en =  {
     SHOW_MAP : "show map",
     HIDE_MAP : "hide map",
     NEW_SEARCH: "new search",
+    SEARCH: "search",
 
     /* field */
     NAME: "name",
     TYPE: "type",
     ASSET_CONTROL_NUMBER: "Asset ID",
     MAC_ADDRESS: "mac address",
+    LBEACON: "lbeacon",
     STATUS: "status",
     MONITOR_TYPE: "monitor type",
     ACN: "ACN",
@@ -178,6 +181,8 @@ const en =  {
     DISABLE: "disable",
     ENABLE_START_TIME: "start time",
     ENABLE_END_TIME: "end time",
+    START_TIME: "start time",
+    END_TIME: "end time",
     BINDFLAG:"Binding Status",
     PERIMETERS_GROUP: "perimeters group",
     FENCES_GROUP: "fences group",
@@ -227,7 +232,7 @@ const en =  {
     PANIC: "emergency",
     EDIT_SECONDARY_AREAS: "edit secondary areas",
     
-    /** Error Message */
+    /** error message */
     GENDER_IS_REQUIRED: "Gender is required",
     ROLE_IS_REQUIRED: "role is required",
     NAME_IS_REQUIRED: "Name is required",
@@ -250,6 +255,8 @@ const en =  {
     NOT_ASSIGNED_TO_ANY_DEVICES: "Not assigned to any devices",
     MAC_DO_NOT_MATCH:"Mac address do not match",
     THE_MAC_ADDRESS_IS_ALREADY_USED_OR_FORMAT_IS_NOT_CORRECT: 'Mac Address is already used or the format is wrong',
+    MAC_ADDRESS_FORMAT_IS_NOT_CORRECT: "mac address format is not correct",
+    TIME_FORMAT_IS_NOT_CORRECT: "time format is not correct",
     ASSET_CONTROL_NUMBER_IS_NOT_FOUND: "asset control number is not found",
     INCORRECT:"username incorrect",
     PASSWORD_INCORRECT:"password incorrect",
@@ -264,6 +271,7 @@ const en =  {
     /** Place Holder */
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "please enter or scan mac address",
     PLEASE_ENTER_OR_SCAN_ASSET_CONTROL_NUMBER: "please enter or scan asset control number",
+    TYPE_MAC_OR_NAME: "type mac address or name",
 
     /* Object Status */
     STATUS: "status",

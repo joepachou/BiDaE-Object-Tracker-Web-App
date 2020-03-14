@@ -180,6 +180,24 @@ const getTrackingTableByMacAddress = (request, response) => {
         })
 }
 
+const getLocationHistory = (request, response) => {
+    let {
+        key,
+        startTime,
+        endTime,
+        mode
+    } = request.body
+
+    pool.query(queryType.getLocationHistory(key, startTime, endTime, mode))
+    .then(res => {
+        console.log("get location history succeed")
+        response.status(200).json(res)
+    })
+    .catch(err => {
+        console.log(`get location history failed ${err}`)
+    })
+}
+
 const getPatientTable = (request, response) => {
     let { locale, areaId } = request.body
     pool.query(queryType.getPatientTable(areaId))       
@@ -1563,5 +1581,6 @@ module.exports = {
     getRolesPermission,
     modifyPermission,
     modifyRolesPermission,
-    clearSearchHistory
+    clearSearchHistory,
+    getLocationHistory
 }

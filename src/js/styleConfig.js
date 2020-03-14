@@ -53,7 +53,7 @@ const styleConfig = {
                     borderRight: 'none',
                     textAlign: 'left',
                     fontSize: '1rem',
-                    minHeight: '3rem'
+                    minHeight: '2rem'
                     // fontWeight: 500
                 }
             }
@@ -62,7 +62,7 @@ const styleConfig = {
             return {
                 style: {
                     border: 'none',
-                    borderTop: '1px solid grey',
+                    borderTop: '1px solid #cec7c7',
                 }
             }
         },

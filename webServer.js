@@ -179,6 +179,8 @@ app.post('/data/modifyPermission', db.modifyPermission)
 
 app.post('/data/modifyRolesPermission', db.modifyRolesPermission)
 
+app.post('/data/getLocationHistory', db.getLocationHistory)
+
 app.get(`/${process.env.DEFAULT_FOLDER}/shift_record/:file`, (req, res) =>{
 	res.sendFile(path.join(`${process.env.LOCAL_FILE_PATH}`, `${process.env.DEFAULT_FOLDER}/shift_record`,req.params['file']));
 })

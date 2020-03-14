@@ -12,6 +12,7 @@ const tw = {
     OBJECT_MANAGEMENT: "物件管理",
     BIG_SCREEN: "大螢幕",
     ABOUT: "關於",
+    TRACKING_HISTORY: "追蹤紀錄",
     SETTINGS: "設定",
     SEARCH_RESULT: "搜尋結果",
     NO_RESULT: "無搜尋結果",
@@ -136,12 +137,14 @@ const tw = {
     SHOW_MAP : "顯示地圖",
     HIDE_MAP : "隱藏地圖",
     NEW_SEARCH: "重新搜尋",
+    SEARCH: "查詢",
     
     /* field */
     NAME: "名稱",
     TYPE: "類別",
     ASSET_CONTROL_NUMBER: "財產編號",
     MAC_ADDRESS: "mac address",
+    LBEACON: "lbeacon",
     STATUS: "儀器狀態",
     MONITOR_TYPE: "監控類別",
     ACN: "財產編號",
@@ -181,6 +184,8 @@ const tw = {
     DISABLE: "關閉",
     ENABLE_START_TIME: "啟動時間",
     ENABLE_END_TIME: "結束時間",
+    START_TIME: "起始時間",
+    END_TIME: "結束時間",
     BINDFLAG:"綁定狀態",
     PERIMETERS_GROUP: "perimeters group",
     FENCES_GROUP: "fences group",
@@ -254,13 +259,15 @@ const tw = {
     AREA_IS_REQUIRED: "請選擇地區",
     NOT_ASSIGNED_TO_ANY_DEVICES: "尚未指定任何儀器",
     MAC_DO_NOT_MATCH:"不符合當前Mac",
-    THE_MAC_ADDRESS_IS_ALREADY_USED_OR_FORMAT_IS_NOT_CORRECT: 'Mac Address已被使用或形式錯誤',
+    THE_MAC_ADDRESS_IS_ALREADY_USED_OR_FORMAT_IS_NOT_CORRECT: 'Mac Address已被使用或格式錯誤',
+    MAC_ADDRESS_FORMAT_IS_NOT_CORRECT: "mac address格式錯誤",
+    TIME_FORMAT_IS_NOT_CORRECT: "時間格式錯誤",
     ASSET_CONTROL_NUMBER_IS_NOT_FOUND: "未有符合的財產編號",
     INCORRECT:"帳號錯誤",
     PASSWORD_INCORRECT:"密碼錯誤",
     AUTHORITY_IS_NOT_ENOUGH:"權限不足",
     ACCOUNT_NOT_BELONG_THIS_AREA:"該帳號不屬於此區域",
-    START_TIME_IS_REQUIRED:"請填入啟動時間",
+    START_TIME_IS_REQUIRED:"請填入起始時間",
     END_TIME_IS_REQUIRED:"請填入結束時間",
     MUST_BE_NEGATIVE_NUMBER:"必須是負數",
     CONNECT_TO_DATABASE_FAILED: "連線失敗",
@@ -270,7 +277,7 @@ const tw = {
     /** Place Holder */
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "請輸入或掃描mac address",
     PLEASE_ENTER_OR_SCAN_ASSET_CONTROL_NUMBER: "請輸入或掃描財產編號",
-
+    TYPE_MAC_OR_NAME: "輸入 mac address 或是 名字",
 
     /* Object Status */
     STATUS: "狀態",

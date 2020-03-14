@@ -216,7 +216,16 @@ class NavbarContainer extends React.Component {
                         >
                             <Nav.Item><Link to="/page/bigScreen" className="nav-link nav-route" >{locale.texts.BIG_SCREEN}</Link></Nav.Item>
                         </AccessControl>
-
+                        <AccessControl
+                            permission={'route:trackingPath'}
+                            renderNoAccess={() => null}
+                        >
+                            <Nav.Item>
+                                <Link to="/page/trackingPath" className="nav-link nav-route" >
+                                    {locale.texts.TRACKING_HISTORY}
+                                </Link>
+                            </Nav.Item>
+                        </AccessControl>
                     </Nav>
                     <Nav className='text-capitalize'>
                         <AccessControl

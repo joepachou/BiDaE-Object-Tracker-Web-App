@@ -4,6 +4,7 @@ import ObjectManagementContainer from "./components/container/ObjectManagementCo
 import UserContainer from "./components/container/UserContainer/UserContainer"
 import BigScreenContainer from "./components/container/BigScreen/BigScreenContainer";
 import About from "./components/container/About"
+import TrackingPathContainer from "./components/container/TrackingPathContainer"
 
 const routes = [
     {
@@ -34,6 +35,11 @@ const routes = [
     {
         path: '/page/about',
         component: About,
+        exact: true,
+    },
+    {
+        path: '/page/trackingPath',
+        component: TrackingPathContainer,
         exact: true,
     },
 ];

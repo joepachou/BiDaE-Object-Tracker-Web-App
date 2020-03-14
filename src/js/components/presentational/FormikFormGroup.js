@@ -15,20 +15,24 @@ const FormikFormGroup = ({
    component,
    display = true,
    className, 
-   value
+   value,
+   onChange,
+   example = null
 }) => {
     let style = {
         container: {
             display: display ? null : 'none',
         },
-        
         error: {
             color: "#dc3545"
+        },
+        example: {
+            color: 'grey'
         }
     }
     return (
         <div 
-            className={`form-group mb-3 ${className}`}
+            className={`form-group ${className}`}
             style={style.container}
         >
             <small 
@@ -44,18 +48,20 @@ const FormikFormGroup = ({
                                 name={name} 
                                 type={type} 
                                 value={value}
-                                className={'form-control' + (error ? ' is-invalid' : '')} 
+                                className={'form-control' + (error && touched ? ' is-invalid' : '')} 
                                 placeholder={placeholder}
                                 disabled={disabled}
                             />
                         :
+                        <div>
                             <Field  
                                 name={name} 
                                 type={type} 
-                                className={'form-control' + (error ? ' is-invalid' : '')} 
+                                className={'form-control' + (error && touched ? ' is-invalid' : '')} 
                                 placeholder={placeholder}
                                 disabled={disabled}
                             />
+                        </div>
                     )
             }
             {error && touched && 
@@ -64,6 +70,14 @@ const FormikFormGroup = ({
                     style={style.error}
                 >
                     {error}
+                </small>
+            }
+            {example && !error && !touched &&
+                <small 
+                    className="form-text text-capitaliz"
+                    style={style.example}
+                >
+                    {example}
                 </small>
             }
         </div>

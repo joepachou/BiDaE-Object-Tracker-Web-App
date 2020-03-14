@@ -71,6 +71,7 @@ const setMonitorEnable = `${protocol}://${dataSrcIP}/data/setMonitorEnable`
 const getRolesPermission= `${protocol}://${dataSrcIP}/data/getRolesPermission`
 const modifyPermission= `${protocol}://${dataSrcIP}/data/modifyPermission`
 const modifyRolesPermission= `${protocol}://${dataSrcIP}/data/modifyRolesPermission`
+const getLocationHistory = `${protocol}://${dataSrcIP}/data/getLocationHistory`
 
 const pdfUrl = function (path) {
     return `${protocol}://${dataSrcIP}/${path}`
@@ -147,5 +148,6 @@ module.exports = {
     modifyTransferredLocation, 
     getRolesPermission,
     modifyPermission,
-    modifyRolesPermission
+    modifyRolesPermission,
+    getLocationHistory
 };

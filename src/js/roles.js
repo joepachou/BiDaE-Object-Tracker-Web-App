@@ -13,6 +13,7 @@ const rules = {
             "route:userProfile",
             "route:monitorSetting",
             "route:bigScreen",
+            "route:trackingPath",
 
             "user:mydevice",
             "user:mypatient",
@@ -38,6 +39,7 @@ const rules = {
             "route:rolePermissionManagement",
             "route:transferredLocationManagement",
             "route:monitorSetting",
+            "route:trackingPath",
 
             "user:mydevice",
             "user:mypatient",
@@ -63,6 +65,7 @@ const rules = {
             "route:userManager",
             "route:rolePermissionManagement",
             "route:transferredLocationManagement",
+            "route:trackingPath",
             "route:bigScreen",
             "user:mydevice",
             "user:mypatient",

@@ -22,6 +22,15 @@
     display: block;
 }
 
+/* The navigation menu links */
+.BOTsidenav a.active {
+    padding: 6px 8px 6px 0px;
+    text-decoration: none;
+    font-size: 1rem;
+    color: black;
+    display: block;
+}
+
 a.anchor {
     display: block;
     position: relative;
