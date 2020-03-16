@@ -52,11 +52,10 @@ const config = {
 
     },
 
-    healthReport: {
-        startInteval: false,
-        pollLbeaconTabelIntevalTime: 5000,
-        pollGatewayTableIntevalTime: 5000,
-    },
+
+    getLbeaconDataIntervalTime: process.env.GET_LBEACON_DATA_INTERVAL_TIME_IN_MILLI_SEC || 3600000,
+
+    getGatewayDataIntervalTime: process.env.GET_GATEWAY_DATA_INTERVAL_TIME_IN_MILLI_SEC || 3600000,
 
     frequentSearchOption: {
         MY_DEVICES: "my devices",

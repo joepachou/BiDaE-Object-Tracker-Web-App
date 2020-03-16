@@ -195,7 +195,7 @@ class Map extends React.Component {
         this.pathOfDevice.clearLayers();
         
         if(this.props.pathMacAddress !== ''){
-            
+
             let route = []
 
             axios.post(dataSrc.getTrackingTableByMacAddress, {
@@ -474,15 +474,15 @@ class Map extends React.Component {
      * @param   mac_address The Mac address of the object retrieved from DB. 
      * @param   lbeacon_coordinate The lbeacon's coordinate processed by createLbeaconCoordinate().*/
     macAddressToCoordinate = (mac_address, lbeacon_coordinate) => {
-        // const xx = mac_address.slice(15,16);
-        // const yy = mac_address.slice(16,17);
-        // const multiplier = this.props.mapConfig.iconOptions.markerDispersity; 
-		// const origin_x = lbeacon_coordinate[1] - parseInt(8, 16) * multiplier ; 
-		// const origin_y = lbeacon_coordinate[0] - parseInt(8, 16) * multiplier ;
-		// const xxx = origin_x + parseInt(xx, 16) * multiplier;
-        // const yyy = origin_y + parseInt(yy, 16) * multiplier;
-        const xxx = lbeacon_coordinate[1]
-        const yyy = lbeacon_coordinate[0]
+        const xx = mac_address.slice(15,16);
+        const yy = mac_address.slice(16,17);
+        const multiplier = this.props.mapConfig.iconOptions.markerDispersity; 
+		const origin_x = lbeacon_coordinate[1] 
+		const origin_y = lbeacon_coordinate[0]
+		const xxx = origin_x + parseInt(xx, 16) * multiplier;
+        const yyy = origin_y + parseInt(yy, 16) * multiplier;
+        // const xxx = lbeacon_coordinate[1]
+        // const yyy = lbeacon_coordinate[0]
         return [yyy, xxx];
     }
     
