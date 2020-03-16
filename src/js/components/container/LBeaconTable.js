@@ -38,7 +38,7 @@ class LbeaconTable extends React.Component{
 
     componentDidMount = () => {
         this.getLbeaconData();
-        this.getLbeaconDataInterval = this.startSetInterval ? setInterval(this.getLbeaconData, config.healthReport.pollLbeaconTabelIntevalTime) : null;
+        this.getLbeaconDataInterval = setInterval(this.getLbeaconData, config.getLbeaconDataIntervalTime)
     }
 
     componentWillUnmount = () => {
@@ -69,8 +69,8 @@ class LbeaconTable extends React.Component{
         .catch(err => {
             this.props.setMessage(
                 'error', 
+                'connect to database failed',
                 true,
-                'connect to database failed'
             )
             console.log(`get lbeacon data failed ${err}`);
         })
@@ -92,7 +92,9 @@ class LbeaconTable extends React.Component{
             'success', 
             'edit lbeacon success'
         )
-        this.getLbeaconData()
+        setInterval(() => {
+            this.getLbeaconData()
+        }, 4000)
     }
 
 
@@ -167,7 +169,6 @@ class LbeaconTable extends React.Component{
                 this.getLbeaconData()
                 this.props.setMessage(
                     'success', 
-                    null,
                     'delete lbeacon success'
                 )
                 this.setState({
@@ -181,8 +182,8 @@ class LbeaconTable extends React.Component{
             }) 
     }
 
-
     render(){
+
         const {  
             selectedRowData,
             selectAll,
