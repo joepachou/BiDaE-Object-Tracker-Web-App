@@ -190,11 +190,11 @@ const getLocationHistory = (request, response) => {
 
     pool.query(queryType.getLocationHistory(key, startTime, endTime, mode))
     .then(res => {
-        console.log("get location history succeed")
+        console.log(`get location history by ${mode} succeed`)
         response.status(200).json(res)
     })
     .catch(err => {
-        console.log(`get location history failed ${err}`)
+        console.log(`get location history by ${mode} failed ${err}`)
     })
 }
 

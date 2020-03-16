@@ -19,7 +19,7 @@ html,body {
 :focus {
     outline: 0;
 }
-
+/* 
 ::-webkit-input-placeholder {
     text-transform: capitalize
  }
@@ -34,7 +34,7 @@ html,body {
  
  :-ms-input-placeholder { 
     text-transform: capitalize
- }
+ } */
 
 
 input {

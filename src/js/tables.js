@@ -531,6 +531,11 @@ const monitorConfigColumn = [
 
 const locationHistoryByMacColumns = [
     {
+        Header: "area",
+        accessor: "area",
+        width: 180,
+    },
+    {
         Header: "description",
         accessor: "description",
         width: 180,
@@ -553,6 +558,11 @@ const locationHistoryByMacColumns = [
 ]
 
 const locationHistoryByUUIDColumns = [
+    {
+        Header: "No",
+        accessor: "id",
+        width: 50,
+    },
     {
         Header: "name",
         accessor: "name",

@@ -262,6 +262,7 @@ const tw = {
     THE_MAC_ADDRESS_IS_ALREADY_USED_OR_FORMAT_IS_NOT_CORRECT: 'Mac Address已被使用或格式錯誤',
     MAC_ADDRESS_FORMAT_IS_NOT_CORRECT: "mac address格式錯誤",
     TIME_FORMAT_IS_NOT_CORRECT: "時間格式錯誤",
+    LBEACON_FORMAT_IS_NOT_CORRECT: "Lbeacon格式錯誤",
     ASSET_CONTROL_NUMBER_IS_NOT_FOUND: "未有符合的財產編號",
     INCORRECT:"帳號錯誤",
     PASSWORD_INCORRECT:"密碼錯誤",

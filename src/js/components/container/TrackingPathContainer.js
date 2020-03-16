@@ -32,7 +32,7 @@ class TrackingPathContainer extends React.Component{
     state = {
         columns:[], 
         data:[],
-        selectedData: null,
+        additionalData: null,
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -49,11 +49,10 @@ class TrackingPathContainer extends React.Component{
         const {
             locale
         } = this.context
-    
+            console.log(fields)
             let key = null
             let columns = null;
             let timeValidatedFormat = 'YYYY/MM/DD HH:mm:ss'
-
             switch(fields.mode) {
                 case "mac":
                     key = fields.key.toLowerCase().replace(/[: ]/g, '').match(/.{1,2}/g).join(':')
@@ -74,7 +73,7 @@ class TrackingPathContainer extends React.Component{
             .then(res => {
                 let prevUUID = "";
                 let data = []
-                let selectedData = null;
+                let additionalData = null;
                 switch(fields.mode) {
                     case 'mac':
                         res.data.rows
@@ -91,18 +90,27 @@ class TrackingPathContainer extends React.Component{
                             data[data.length - 1].endTime = moment(pt.record_timestamp).locale(locale.abbr).format(timeValidatedFormat)
         
                         })
-                        selectedData = res.data.rows[0].name
+                        additionalData = {
+                            name: res.data.rows[0].name,
+                            area: res.data.rows[0].area
+                        }
                         break;
                     case "uuid":
-                        data = res.data.rows
-                        selectedData = res.data.rows[0].description
+                        data = res.data.rows.map((item, index) => {
+                            item.id = index + 1
+                            return item
+                        })
+                        additionalData = {
+                            description: res.data.rows[0].description,
+                            area: res.data.rows[0].area
+                        }                        
                         break;
                 }
 
                 this.setState({
                     data,
                     columns,
-                    selectedData,
+                    additionalData,
                 })
             })
             .catch(err => {
@@ -126,6 +134,10 @@ class TrackingPathContainer extends React.Component{
                 overflowX: 'hide'
             }
         }
+
+        const {
+            additionalData
+        } = this.state
 
         const timeTypeExample = "ex: YYYY/MM/DD HH:MM:SS"
         const timeValidatedFormat = 'YYYY/MM/DD HH:mm:ss'
@@ -155,6 +167,18 @@ class TrackingPathContainer extends React.Component{
                                         value => {  
                                             if (value == undefined) return false
                                             let pattern = new RegExp("^[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}$");
+                                            return value.match(pattern)
+                                        }
+                                    )
+                                })
+                                .when('mode', {
+                                    is: 'uuid',
+                                    then: Yup.string().test(
+                                        'uuid', 
+                                        locale.texts.LBEACON_FORMAT_IS_NOT_CORRECT,
+                                        value => {  
+                                            if (value == undefined) return false
+                                            let pattern = new RegExp("^[0-9]{8}-?[0-9]{4}-?[0-9]{4}-?[0-9]{4}-?[0-9]{12}$");
                                             return value.match(pattern)
                                         }
                                     )
@@ -199,12 +223,14 @@ class TrackingPathContainer extends React.Component{
                                         onClick={() => {
                                             setFieldValue('key', "")
                                             setFieldValue('mode', 'mac')
+                                            setFieldValue('startTime', '')
+                                            setFieldValue('endTime', '')
                                             setErrors({})
                                             setTouched({})
                                             this.setState({
                                                 data: [],
                                                 columns: [],
-                                                selectedData: null
+                                                additionalData: null
                                             })
                                         }}
                                         active={values.mode == "mac"}
@@ -216,12 +242,14 @@ class TrackingPathContainer extends React.Component{
                                         onClick={() => {
                                             setFieldValue('key', "")
                                             setFieldValue('mode', 'uuid')
+                                            setFieldValue('startTime', '')
+                                            setFieldValue('endTime', '')
                                             setErrors({})
                                             setTouched({})
                                             this.setState({
                                                 data: [],
                                                 columns: [],
-                                                selectedData: null
+                                                additionalData: null
 
                                             })
                                         }}  
@@ -295,18 +323,29 @@ class TrackingPathContainer extends React.Component{
                                         </Button>
                                     </Col>
                                 </Row>
-                                <Row>
-                                    <Col xl={3}>
-                                        <FormikFormGroup 
-                                            type="text"
-                                            value={this.state.selectedData}
-                                            label={values.mode == 'mac' ? locale.texts.NAME : locale.texts.DESCRIPTION}
-                                            disabled={true}
-                                            display={this.state.selectedData}
-                                        />
-                                    </Col>
-                                </Row>
+                                {additionalData &&
+                                    <Row>
+                                        <Col xl={3}>
+                                            <FormikFormGroup 
+                                                type="text"
+                                                value={values.mode == 'mac' ? additionalData.name : locale.texts[additionalData.area]}
+                                                label={values.mode == 'mac' ? locale.texts.NAME : locale.texts.AREA}
+                                                disabled={true}
+                                            />
+                                        </Col>
+                                        {additionalData.description &&
 
+                                            <Col xl={3}>
+                                                <FormikFormGroup 
+                                                    type="text"
+                                                    value={additionalData.description}
+                                                    label={locale.texts.DESCRIPTION}
+                                                    disabled={true}
+                                                />
+                                            </Col>
+                                        }
+                                    </Row>
+                                }
                                 <ReactTable
                                     keyField='id'
                                     data={this.state.data}

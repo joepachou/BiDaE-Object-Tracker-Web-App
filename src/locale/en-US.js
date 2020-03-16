@@ -257,6 +257,7 @@ const en =  {
     THE_MAC_ADDRESS_IS_ALREADY_USED_OR_FORMAT_IS_NOT_CORRECT: 'Mac Address is already used or the format is wrong',
     MAC_ADDRESS_FORMAT_IS_NOT_CORRECT: "mac address format is not correct",
     TIME_FORMAT_IS_NOT_CORRECT: "time format is not correct",
+    LBEACON_FORMAT_IS_NOT_CORRECT: "mac address format is not correct",
     ASSET_CONTROL_NUMBER_IS_NOT_FOUND: "asset control number is not found",
     INCORRECT:"username incorrect",
     PASSWORD_INCORRECT:"password incorrect",
