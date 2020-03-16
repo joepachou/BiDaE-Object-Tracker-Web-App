@@ -951,17 +951,19 @@ const getMonitorConfig = (request, response) => {
     let {
         type,
         areasId,
-        isGetLbeaconPosition
+        isGetLbeaconPosition,
+        roles
     } = request.body
 
     let sitesGroup = process.env.SITES_GROUP.split(',')
-
+   
     pool.query(queryType.getMonitorConfig(type, sitesGroup, isGetLbeaconPosition))
         .then(res => {
             console.log(`get ${type} success`)
             let toReturn = res.rows
-            .filter(item => {
-                return areasId.includes(item.area_id)
+            .filter(item => { // 是系統管理員就顯示全部
+             if  ( roles.includes("system_admin") ){ return  item.area_id } 
+             else {return areasId.includes(item.area_id) }
             })
             .map(item => {
                 item.start_time = item.start_time.split(':').filter((item,index) => index < 2).join(':')

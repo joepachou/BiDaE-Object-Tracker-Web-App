@@ -34,14 +34,13 @@ class MonitorSettingBlock extends React.Component{
         let { 
             auth,
             locale
-        } = this.context
-
+        } = this.context 
         axios.post(dataSrc.getMonitorConfig, {
             type: config.monitorSettingUrlMap[this.props.type],
-            areasId: auth.user.areas_id
+            areasId: auth.user.areas_id,
+            roles:auth.user.roles
         })
-        .then(res => {
-
+        .then(res => { 
             let columns = _.cloneDeep(monitorConfigColumn)
 
             columns.push({
@@ -103,13 +102,14 @@ class MonitorSettingBlock extends React.Component{
                         id,
                     })
                     return options
-                }, [])
-
+                }, []) 
             this.setState({
                 data: res.data,
                 columns,
                 areaOptions
             })
+            
+
         })
         .catch(err => {
             console.log(err)
