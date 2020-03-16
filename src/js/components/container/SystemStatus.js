@@ -31,6 +31,8 @@ class SystemStatus extends React.Component{
         locale: this.context.locale.lang,
     }
 
+    toastId = null;
+
     componentDidUpdate = (prevProps, prevState) => {
         let { locale } = this.context
         if (locale.lang !== prevState.locale) {
@@ -84,19 +86,19 @@ class SystemStatus extends React.Component{
             this.setMessage(true)
             this.setMessage(
                 'error',
+                'connect to database failed',
                 true,
-                'connect to database failed'
             )
 
             console.log(`get tracking data failed ${err}`);
         })
     }
 
-    setMessage = (type, isSetting, msg) => {
+    setMessage = (type, msg, isSetting) => {
 
         switch(type) {
             case 'success':
-                messageGenerator.setSuccessMessage(msg)
+                this.toastId = messageGenerator.setSuccessMessage(msg)
                 break;
             case 'error':
                 if (isSetting && !this.toastId) {

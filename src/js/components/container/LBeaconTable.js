@@ -92,7 +92,9 @@ class LbeaconTable extends React.Component{
             'success', 
             'edit lbeacon success'
         )
-        this.getLbeaconData()
+        setInterval(() => {
+            this.getLbeaconData()
+        }, 4000)
     }
 
 
@@ -181,8 +183,8 @@ class LbeaconTable extends React.Component{
             }) 
     }
 
-
     render(){
+
         const {  
             selectedRowData,
             selectAll,
