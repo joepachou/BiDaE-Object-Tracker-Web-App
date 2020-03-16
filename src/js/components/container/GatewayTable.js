@@ -14,11 +14,7 @@ import {
 import { AppContext } from '../../context/AppContext';
 import retrieveDataHelper from '../../helper/retrieveDataHelper'
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm' 
-import messageGenerator from '../../helper/messageGenerator'
-
-
 const SelectTable = selecTableHOC(ReactTable);
-
 
 class GatewayTable extends React.Component{
     
@@ -37,7 +33,7 @@ class GatewayTable extends React.Component{
 
     componentDidMount = () => {
         this.getGatewayData();
-        this.getGatewayDataInterval = this.startSetInterval ? setInterval(this.getGatewayData, config.healthReport.pollGatewayTableIntevalTime) : null;
+        this.getGatewayDataInterval = setInterval(this.getGatewayData, config.getGatewayDataIntervalTime);
     }
 
     componentWillUnmount = () => {
@@ -68,8 +64,8 @@ class GatewayTable extends React.Component{
         .catch(err => {
             this.props.setMessage(
                 'error', 
+                'connect to database failed',
                 true,
-                'connect to database failed'
             )
             console.log(`get gateway data failed ${err}`);
         })
