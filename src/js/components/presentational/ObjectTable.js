@@ -376,6 +376,7 @@ class ObjectTable extends React.Component{
                     handleClose={this.handleClose}
                     objectTable={this.props.objectTable}
                     ImportData= {this.props.importData}
+                    areaTable={this.props.areaTable}
                     PatientImportData = {this.props.dataImportPatient}
                     data={this.props.importData.reduce((dataMap, item) => {
                         dataMap[item.asset_control_number] = item 

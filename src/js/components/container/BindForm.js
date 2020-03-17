@@ -39,10 +39,11 @@ class BindForm extends React.Component {
     render() {
         const { locale } = this.context
 
-        const areaOptions = Object.values(config.mapConfig.areaOptions).map(area => {
+        const areaOptions = this.props.areaTable.map(area => {
             return {
-                value: area,
-                label: locale.texts[area.toUpperCase().replace(/ /g, '_')]
+                value: area.name,
+                label: locale.texts[area.name.toUpperCase().replace(/ /g, '_')],
+                id: area.id
             };
         })
 
@@ -162,7 +163,7 @@ class BindForm extends React.Component {
                             formOption = {
                                 ...formOption,
                                 mac_address: values.mac,
-                                area_id: config.mapConfig.areaModules[values.area.value].id || 0
+                                area_id: values.area.id || 0
                             }
                             if (this.props.bindCase == 1) 
                             {
