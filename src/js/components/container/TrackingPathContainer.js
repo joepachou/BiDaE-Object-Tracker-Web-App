@@ -49,7 +49,6 @@ class TrackingPathContainer extends React.Component{
         const {
             locale
         } = this.context
-            console.log(fields)
             let key = null
             let columns = null;
             let timeValidatedFormat = 'YYYY/MM/DD HH:mm:ss'
