@@ -367,8 +367,11 @@ const config = {
             getNotes: (data, locale) => {
                 return `
                     <h3 style="text-transform: capitalize; margin-bottom: 5px; font-weight: bold">
-                        ${data[0].notes ? `${locale.texts.NOTE}: ${data[0].notes}` : ''}
+                        ${data[0].notes ? `${locale.texts.NOTE}:` : ''}
                     </h3>
+                    <div style="margin: 10px;">
+                        ${data[0].notes ? data[0].notes : ""}
+                    </div>
                 `
             },
 
@@ -804,8 +807,22 @@ const config = {
         ],
         
         areaModules: {
-            NTUH_EMERGENCY_ROOM: {
+
+            NEW_SITE: {
                 id: 1,
+
+                hasMap: false,
+
+                name: "NTUH",
+
+                url: null,
+
+                /** set bounds of the map  */
+                bounds: [[0, 0], [33660,57514]],
+            },
+
+            NTUH_EMERGENCY_ROOM: {
+                id: 8,
                 name: "NTUH",
                 url: NTUH_MAP,
                 bounds: [[0, 0], [33660,57514]],
