@@ -29,10 +29,12 @@ const siteConfig = {
             /** The name would be the field name in area_table  */
             name: "IIS_SINICA_FOURTH_FLOOR",
 
-            /** Flag the area if there is map image in the map folder */
-            hasMap: 0,
+            /** Flag the area if there is map image of this area in the map folder 
+             *  Set false if the mag image is not ready
+            */
+            hasMap: false,
 
-            /** The source of the area map */
+            /** The source of the area map. It can put NULL if the map image is not ready */
             url: IIS_SINICA_FOURTH_FLOORTH_MAP,
 
             /** The relative value of latitude and longitude of the area
@@ -40,7 +42,7 @@ const siteConfig = {
             bounds: [[0,0], [21130,35710]],
         },
 
-        NTUH_EMERGENCY_ROOM: {
+        EMERGENCY_ROOM: {
             id: 1,
             name: "NTUH",
             hasMap: 1,
