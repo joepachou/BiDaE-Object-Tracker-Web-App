@@ -6,6 +6,7 @@ import '../../../helper/leafletAwesomeNumberMarkers';
 import _ from 'lodash'
 import { AppContext } from '../../../context/AppContext';
 import  pinImage from "./pinImage"
+import siteConfig from '../../../../../site_module/siteConfig'
 
 class Map extends React.Component {
     
@@ -23,7 +24,6 @@ class Map extends React.Component {
 
     componentDidMount = () => {
         this.initMap();  
-        this.setMap();
     }
 
     componentDidUpdate = (prevProps) => {
@@ -38,43 +38,63 @@ class Map extends React.Component {
     initMap = () => {
         let [{areaId}] = this.context.stateReducer
 
-        this.iconOptions = this.props.mapConfig.iconOptionsInBigScreen
+        let {
+            areaModules
+        } = siteConfig
 
-        let areaModules =  this.props.mapConfig.areaModules
-        let areaOption = this.props.mapConfig.areaOptions[areaId]    
-        let { url, bounds } = areaModules[areaOption]
+        this.iconOptions = this.props.mapConfig.iconOptionsInBigScreen
+        let areaOption = this.props.mapConfig.areaOptions[areaId]   
+
+        /** set the map's config */
+        let { 
+            url, 
+            bounds,
+            hasMap
+        } = areaModules[areaOption]
 
         let map = L.map('mapid', this.props.mapConfig.bigScreenMapOptions);
-        let image = L.imageOverlay(url, bounds).addTo(map);
-        map.addLayer(image)
-        this.image = image
-        this.map = map;
+
+        if (hasMap) {
+            let image = L.imageOverlay(url, bounds);
+            map.addLayer(image)
+            map.fitBounds(bounds);
+            this.image = image
+            this.map = map;
+        } else {
+            let image = L.imageOverlay(null, null);
+            this.image = image
+            map.addLayer(image)
+            this.map = map;
+        }
 
         /** Set the map's events */
         // this.map.on('zoomend', this.resizeMarkers)
         this.createLegend(this.createLegendJSX())
     }
 
-    /** Resize the markers and errorCircles when the view is zoomend. */
-    resizeMarkers = () => {
-        this.calculateScale();
-        this.markersLayer.eachLayer( marker => {
-            let icon = marker.options.icon;
-            icon.options.iconSize = [this.scalableIconSize, this.scalableIconSize]
-            icon.options.numberSize = this.scalableNumberSize
-            marker.setIcon(icon);
-        })
-    }
-
     /** Set the overlay image */
     setMap = () => {
         let [{areaId}] = this.context.stateReducer
-        let areaModules =  this.props.mapConfig.areaModules
+        let {
+            areaModules
+        } = siteConfig        
+        
         let areaOption = this.props.mapConfig.areaOptions[areaId]
-        let { url, bounds } = areaModules[areaOption]
-        this.image.setUrl(url)
-        this.image.setBounds(bounds)
-        this.map.fitBounds(bounds)        
+
+        /** set the map's config */
+        let { 
+            url, 
+            bounds,
+            hasMap
+        } = areaModules[areaOption]
+
+        if (hasMap) {
+            this.image.setUrl(url)
+            this.image.setBounds(bounds)
+            this.map.fitBounds(bounds)  
+        } else {
+            this.image.setUrl(null)
+        }        
     }
 
     /** Calculate the current scale for creating markers and resizing. */
