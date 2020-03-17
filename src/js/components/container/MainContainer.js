@@ -462,7 +462,9 @@ class MainContainer extends React.Component{
 
             const devicesAccessControlNumber = auth.user.myDevice || []
             proccessedTrackingData
-                .filter(item => item.object_type == 0)
+                .filter(item => {
+                    return item.object_type == 0 && auth.user.areas_id.includes(item.area_id)
+                })
                 .map(item => {
                     if (devicesAccessControlNumber.includes(item.asset_control_number)) {
                         item.searched = true;
@@ -477,11 +479,11 @@ class MainContainer extends React.Component{
 
         } else if (searchKey === ALL_DEVICES) {
             searchResult = proccessedTrackingData
-                .filter(item => item.object_type == 0)
+                .filter(item => {
+                    return item.object_type == 0 && auth.user.areas_id.includes(item.area_id)
+                })
                 .map(item => {
-                    if (auth.user.areas_id.includes(item.area_id)) {
-                        item.searchedType = 0
-                    }
+                    item.searchedType = 0
                     return item
                 })
             if (!searchedObjectType.includes(0)) {
@@ -494,7 +496,9 @@ class MainContainer extends React.Component{
             const devicesAccessControlNumber = auth.user.myDevice || []
 
             proccessedTrackingData
-                .filter(item => item.object_type != 0)
+                .filter(item => {
+                    return item.object_type == 0 && auth.user.areas_id.includes(item.area_id)
+                })
                 .map(item => {
                     if (devicesAccessControlNumber.includes(item.asset_control_number)) {
                         item.searched = true;
@@ -511,7 +515,9 @@ class MainContainer extends React.Component{
         } else if (searchKey === ALL_PATIENTS) {
 
             searchResult = proccessedTrackingData
-                .filter(item => item.object_type != 0)
+                .filter(item => {
+                    return item.object_type == 0 && auth.user.areas_id.includes(item.area_id)
+                })
                 .map(item => {
                     item.searchedType = 1;
                     return item
