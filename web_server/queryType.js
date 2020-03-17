@@ -189,6 +189,7 @@ const getObjectTable = (area_id, objectType ) => {
 				object_table.mac_address,
 				object_table.monitor_type,
 				object_table.area_id,
+				area_table.name as area_name,
 				object_table.object_type,
 				object_table.id,
 				object_table.room,
@@ -198,8 +199,12 @@ const getObjectTable = (area_id, objectType ) => {
 					FROM user_table
 					WHERE user_table.id = object_table.physician_id
 				) as physician_name
-				
+
 			FROM object_table 
+
+			LEFT JOIN area_table
+			ON area_table.id = object_table.area_id
+				
 			WHERE object_table.object_type IN (${objectType.map(type => type)})
 			ORDER BY object_table.name ASC;
 		`;
@@ -215,6 +220,7 @@ const getObjectTable = (area_id, objectType ) => {
 				object_table.mac_address,
 				object_table.monitor_type,
 				object_table.area_id,
+				area_table.name as area_name,
 				object_table.object_type,
 				object_table.id,
 				object_table.room,
@@ -224,8 +230,11 @@ const getObjectTable = (area_id, objectType ) => {
 					FROM user_table
 					WHERE user_table.id = object_table.physician_id
 				) as physician_name
+			
+			FROM object_table 				
+			LEFT JOIN area_table
+			ON area_table.id = object_table.area_id
 
-			FROM object_table 
 			WHERE object_table.object_type IN (${objectType.map(type => type)})
 					
 			ORDER BY object_table.type DESC;
@@ -1082,20 +1091,33 @@ const getMainSecondArea = (username) => {
 const getUserList = () => {
 	const query = `
 		SELECT
+
 			user_table.id,
 			user_table.name, 
 			user_table.registered_timestamp,
 			user_table.last_visit_timestamp,
 			user_table.main_area,
+			area_table.name as area_name,
 			array_agg(roles.name) AS role_type 
+
 		FROM user_table  
+
 		INNER JOIN (
 			SELECT * 
 			FROM user_role
 			INNER JOIN roles ON user_role.role_id = roles.id
 		) roles
 		ON user_table.id = roles.user_id
-		GROUP BY user_table.id, user_table.name,user_table.registered_timestamp, user_table.last_visit_timestamp
+
+		LEFT JOIN area_table
+		ON area_table.id = user_table.main_area
+
+		GROUP BY 
+			user_table.id, 
+			user_table.name,
+			user_table.registered_timestamp, 
+			user_table.last_visit_timestamp,
+			area_table.name
 		ORDER BY user_table.name DESC
 	`
 	return query

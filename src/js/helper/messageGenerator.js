@@ -5,7 +5,6 @@ import { toast } from 'react-toastify';
 const setSuccessMessage = (
     msg 
 ) => {
-    console.log(msg)
     return (
         toast.success(<ToastMessage msg={msg} />, {
             position: toast.POSITION.TOP_CENTER,

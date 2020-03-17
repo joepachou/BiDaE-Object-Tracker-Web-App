@@ -58,7 +58,7 @@ class AdminManagementContainer extends React.Component{
         let { 
             locale
         } = this.context
-        axios.post(getUserList,{
+        axios.post(getUserList, {
             locale: locale.abbr 
         }).then(res => { 
             let columns = _.cloneDeep(userInfoTableColumn)
@@ -71,7 +71,7 @@ class AdminManagementContainer extends React.Component{
             })
             res.data.rows.map((item, index) => {
                 item.roles = item.role_type.map(role => locale.texts[role.toUpperCase()]).join(',')
-                item.main_area = locale.texts[config.mapConfig.areaOptions[item.main_area]]
+                item.main_area = locale.texts[item.area_name]
             })
             this.setState({
                 data: res.data.rows,

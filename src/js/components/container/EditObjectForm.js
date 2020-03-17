@@ -236,7 +236,6 @@ class EditObjectForm extends React.Component {
                                         return sum
                                     },0)      
                             }
-                            console.log(selectedRowData)
                             const postOption = {
                                 id,
                                 ...values,
