@@ -280,27 +280,6 @@ const en =  {
     BROKEN: "broken",
     TRANSFERRED: "transferred",
     RESERVE: "reserve",
-  
-    /** Area and Transferred Location */
-    YUANLIN_CHRISTIAN_HOSPITAL: "Yuanlin Christian Hospital",
-    YUNLIN_CHRISTIAN_HOSPITAL: "Yunlin Christian Hospital",
-    PINGTUNG_CHRISTIAN_HOSPITAL: "Pingtung Christian Hospital",
-    CHANGHUA_CHRISTIAN_HOSPITAL: "Changhua Christian Hospital",
-    NTU_HOSPITAL_YUNLIN_BRANCH: "NTU Hospital Yunlin Branch",
-    NTU_HOSPITAL_TAIPEI: "NTU Hospital Taipei",
-    NTU_HOSPITAL_YUNLIN_BRANCH_WARD_5B: "NTU Hospital Yunlin branch ward 5B",
-    WARD_1: "ward 1",
-    WARD_2: "ward 2",
-    WARD_5B: "ward 5B",
-    WARD_5A: "ward 5A",
-    WARD_7A: "ward 7A",
-    WARD_7B: "ward 7B",
-    WARD_6A: "ward 6A",
-    WARD_6B: "ward 6B",
-    ICU: "ICU",
-    OP: "OP",
-    NURSING_HOME: "nursing home",
-    EMERGENCY_ROOM: "emergency room",
 
     /** User Setting */
     USER_SETTING: "User Setting",
@@ -406,13 +385,6 @@ const en =  {
     IS_RESERVED_FOR:"is reserved for",
 
     // BEING_HERE: "being here",
-
-    /** Test */
-    IIS_SINICA_FOURTH_FLOOR: "IIS sinica floor 4",
-    NTUH_YUNLIN_WARD_FIVE_B: "ward 5B",
-    VETERAN_HOME_FIRST_FLOOR: "veteran home floor 1",
-    VETERAN_HOME_THIRD_FLOOR: "veteran home floor 3",
-    NTUH_EMERGENCY_ROOM: "emergency room",
 
     DEVICE_FOUND: function (length){
         return length.toString()+" devices are found"

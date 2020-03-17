@@ -1,11 +1,13 @@
 import tw from '../locale/zh-TW';
 import en from '../locale/en-US';
+import siteModuleLocaleEn from '../../site_module/locale/en-US'
+import siteModuleLocaleTw from '../../site_module/locale/zh-TW'
 import React from 'react'
 import LocaleContext from './context/LocaleContext'
 import config from './config';
 import { 
     setLocaleID,
-} from "../js/dataSrc"
+} from "./dataSrc"
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
@@ -14,16 +16,21 @@ const supportedLocale = {
         name:'中文',
         lang: 'tw',
         abbr: 'zh-tw',
-        texts: tw,
+        texts: {
+            ...tw,
+            ...siteModuleLocaleTw,
+        }
     },
     en: {
         name:'English',
         lang: 'en',
         abbr: 'en',
-        texts: en,
+        texts: {
+            ...en,
+            ...siteModuleLocaleEn,
+        }
     }
 }
-
 
 class Locale extends React.Component {
 
@@ -49,7 +56,6 @@ class Locale extends React.Component {
             nextLangName: supportedLocale[nextLang].name
         }
     }
-
 
     changeLocale = (e,auth) => {
         const nextLang = this.toggleLang().nextLang

@@ -287,27 +287,6 @@ const tw = {
     TRANSFERRED: "轉移",
     RESERVE: "預約",
 
-    /** Area and Transferred Location */
-    YUANLIN_CHRISTIAN_HOSPITAL: "員林基督教醫院",
-    YUNLIN_CHRISTIAN_HOSPITAL: "雲林基督教醫院",
-    PINGTUNG_CHRISTIAN_HOSPITAL: "屏東基督教醫院",
-    CHANGHUA_CHRISTIAN_HOSPITAL: "彰化基督教醫院總院",
-    NTU_HOSPITAL_YUNLIN_BRANCH: "台大醫院雲林分院",
-    NTU_HOSPITAL_TAIPEI: "台大醫院台北總院",
-    NTU_HOSPITAL_YUNLIN_BRANCH_WARD_5B: "台大醫院雲林分院5B病房",
-    WARD_1: "病房 1",
-    WARD_2: "病房 2",
-    WARD_5B: "病房 5B",
-    WARD_5A: "病房 5A",    
-    WARD_7A: "病房 7A",
-    WARD_7B: "病房 7B",
-    WARD_6A: "病房 6A",
-    WARD_6B: "病房 6B",
-    ICU: "ICU",
-    OP: "OP",
-    NURSING_HOME: "護理之家",
-    EMERGENCY_ROOM: "急症室",
-
     /** User Setting */
     USER_SETTING: "帳戶設定",
     DEVICES_MANAGEMENT: "儀器管理",
@@ -416,13 +395,6 @@ const tw = {
     MINUTES: "分鐘",
     IS_RESERVED_FOR:"預約者：",
    
-    /** Test */
-    IIS_SINICA_FOURTH_FLOOR: "中研院4樓",
-    NTUH_YUNLIN_WARD_FIVE_B: "雲林台大醫院5B病房",
-    NTUH_YUNLIN_WARD_FIVE_B: "5B病房",
-    VETERAN_HOME_FIRST_FLOOR: "榮民之家1樓",
-    VETERAN_HOME_THIRD_FLOOR: "榮民之家3樓",
-    NTUH_EMERGENCY_ROOM: "急診室",
 
     DEVICE_FOUND: function (length){
         return "發現"+length.toString()+"個儀器"

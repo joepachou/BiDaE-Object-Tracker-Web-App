@@ -1,3 +1,12 @@
+/**
+ * Area modules for specific site.
+ * Follow the steps below to create your area modules.
+ * 
+ * 1. Place your area map image in the folder named map located in /site_module/img.
+ * 2. Import the area map image from the folder. The image name should include extension.
+ * 3. Set the modules as the example below. 
+ */
+
 import IIS_SINICA_FOURTH_FLOORTH_MAP from "../site_module/img/map/iis_new_building_fourth_floor.png";
 import NTUH_YUNLIN_WARD_FIVE_B_MAP from "../site_module/img/map/ntuh_yunlin_branch_ward_five_b.png";
 import NURSING_HOME_MAP from "../site_module/img/map/nursing_home.png"
@@ -11,20 +20,32 @@ const siteConfig = {
 
     areaModules: {
 
+        /** The key must be as same as the field name in area_table in database */
+        IIS_SINICA_FOURTH_FLOOR: {
+
+            /** The id would be the field id in area_table */
+            id: 2,
+
+            /** The name would be the field name in area_table  */
+            name: "IIS_SINICA_FOURTH_FLOOR",
+
+            /** Flag the area if there is map image in the map folder */
+            hasMap: 0,
+
+            /** The source of the area map */
+            url: IIS_SINICA_FOURTH_FLOORTH_MAP,
+
+            /** The relative value of latitude and longitude of the area
+             *  The elements would be the points of left-bottom and right-upper, respectively. */
+            bounds: [[0,0], [21130,35710]],
+        },
+
         NTUH_EMERGENCY_ROOM: {
             id: 1,
             name: "NTUH",
             hasMap: 1,
             url: NTUH_MAP,
             bounds: [[0, 0], [33660,57514]],
-        },
-
-        IIS_SINICA_FOURTH_FLOOR: {
-            id: 2,
-            name: "IIS_SINICA_FOURTH_FLOOR",
-            hasMap: 0,
-            url: IIS_SINICA_FOURTH_FLOORTH_MAP,
-            bounds: [[0,0], [21130,35710]],
         },
 
         NTUH_YUNLIN_WARD_FIVE_B: {
