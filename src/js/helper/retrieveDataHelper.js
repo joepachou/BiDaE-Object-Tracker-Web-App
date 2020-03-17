@@ -30,6 +30,10 @@ const retrieveDataHelper = {
         })
     },
 
+    getAreaTable: async function() {
+        return await axios.post(dataSrc.getAreaTable)
+    },
+
     getLbeaconTable: async function(locale) {
         return await axios.post(dataSrc.getLbeaconTable, {
             locale,

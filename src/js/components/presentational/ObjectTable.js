@@ -335,8 +335,7 @@ class ObjectTable extends React.Component{
                     style={{height:'75vh'}} 
                     onPageChange={(e) => {this.setState({selectAll:false,selection:''})}} 
                     {...extraProps}
-                  
-    
+                    defaultPageSize={100}
         
                     getTrProps={(state, rowInfo, column, instance) => {
                         return {
@@ -366,6 +365,7 @@ class ObjectTable extends React.Component{
                     importData={this.props.importData}
                     objectTable={this.props.objectTable}
                     disableASN = {this.state.disableASN  }
+                    areaTable={this.props.areaTable}
                 />     
                 <BindForm
                     show = {this.state.isShowBind} 

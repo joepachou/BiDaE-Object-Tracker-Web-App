@@ -322,6 +322,7 @@ class PatientTable extends React.Component{
                     physicianList={this.props.physicianList}
                     roomOptions={this.props.roomOptions}
                     disableASN = {this.state.disableASN}
+                    areaTable={this.props.areaTable}
                 />  
  
                 <BindForm

@@ -82,7 +82,8 @@ class TrackingPathContainer extends React.Component{
                                 data.push({
                                     uuid: pt.uuid,
                                     startTime: moment(pt.record_timestamp).locale(locale.abbr).format(timeValidatedFormat),
-                                    description: pt.description
+                                    description: pt.description,
+                                    area: locale.texts[pt.area]
                                 })
                                 prevUUID = pt.uuid
                             }

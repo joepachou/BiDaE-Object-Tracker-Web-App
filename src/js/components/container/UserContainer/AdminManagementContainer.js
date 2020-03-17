@@ -7,10 +7,8 @@ import ReactTable from 'react-table'
 import axios from 'axios';
 import {
     getUserList,
-    getUserRole,
     getRoleNameList,
     deleteUser,
-    getUserArea,
     getMainSecondArea
 } from "../../../dataSrc";
 import { userInfoTableColumn } from '../../../tables'
@@ -19,6 +17,7 @@ import { AppContext } from '../../../context/AppContext';
 import DeleteUserForm from '../UserContainer/DeleteUserForm'
 import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm';
 import config from '../../../config';
+import retrieveDataHelper from '../../../helper/retrieveDataHelper';
 const Fragment = React.Fragment;
 
 class AdminManagementContainer extends React.Component{
@@ -32,18 +31,17 @@ class AdminManagementContainer extends React.Component{
         columns: [],
         selectedUser: null,
         roleName: [],
-        areaList: [],
         title: '',
         locale: this.context.locale.abbr,
         showDeleteConfirmation:false,
         deleteUserName:'',
+        areaTable: [],
     }
 
     componentDidUpdate = (prevProps, prevState) => {
         if (this.context.locale.abbr !== prevState.locale) {
             this.getRoleNameList()
             this.getUserList()
-            this.getAreaList()
             this.setState({
                 locale: this.context.locale.abbr
             })
@@ -53,7 +51,7 @@ class AdminManagementContainer extends React.Component{
     componentDidMount = () => {
         this.getRoleNameList()
         this.getUserList()
-        this.getAreaList()
+        this.getAreaTable()
     }
 
     getUserList = () => {
@@ -93,13 +91,16 @@ class AdminManagementContainer extends React.Component{
             })
     }
 
-    getAreaList = () => {
-        let {auth} = this.context
-        axios.post(getUserArea,{
-            user_id: auth.user.id
-        }).then(res => {
-           this.setState({  areaList: res.data.rows  })
-        })
+    getAreaTable = () => {
+        retrieveDataHelper.getAreaTable()
+            .then(res => {
+                this.setState({
+                    areaTable: res.data.rows
+                })
+            })
+            .catch(err => {
+                console.log(`get area table failed ${err}`)
+            })
     }
 
     handleSubmit = (values) => {
@@ -111,9 +112,8 @@ class AdminManagementContainer extends React.Component{
             api,
             selectedUser
         } = this.state 
-
         values.id = selectedUser ? selectedUser.id : null
-        
+
         auth[api](values)
             .then(res => {
                 this.getUserList()
@@ -127,7 +127,7 @@ class AdminManagementContainer extends React.Component{
                 })
             })
             .catch(err => {
-                console.log(err)
+                console.log(`${api} failed ${err}`)
             })
     }
 
@@ -250,8 +250,8 @@ class AdminManagementContainer extends React.Component{
                     title={title}
                     selectedUser={this.state.selectedUser}
                     roleName={this.state.roleName}
-                    areaList={this.state.areaList}
                     data = {this.state.data} 
+                    areaTable={this.state.areaTable}
                 />
 
                 <DeleteUserForm

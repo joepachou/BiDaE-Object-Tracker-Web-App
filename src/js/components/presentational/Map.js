@@ -8,6 +8,7 @@ import axios from 'axios';
 import dataSrc from '../../dataSrc'
 import polylineDecorator from 'leaflet-polylinedecorator'
 import moment from 'moment'
+import siteConfig from '../../../../site_module/siteConfig'
 import {
     BrowserView,
     TabletView,
@@ -79,10 +80,14 @@ class Map extends React.Component {
         } = this.props
 
         let { 
-            areaModules,
             areaOptions,
             defaultAreaId,
         } = mapConfig
+
+        let {
+            areaModules
+        } = siteConfig
+
 
         if (isBrowser) {
             this.mapOptions = mapConfig.browserMapOptions
@@ -101,17 +106,30 @@ class Map extends React.Component {
         let areaOption = areaOptions[areaId] || areaOptions[defaultAreaId] || Object.values(areaOptions)[0]
 
         /** set the map's config */
-        let { url, bounds } = areaModules[areaOption]
+        let { 
+            url, 
+            bounds,
+            hasMap
+        } = areaModules[areaOption]
         this.mapOptions.maxBounds = bounds.map((latLng, index) => latLng.map(axis => axis + this.mapOptions.maxBoundsOffset[index]))
-        let map = L.map('mapid', this.mapOptions);
-        let image = L.imageOverlay(url, bounds).addTo(map);
-        map.addLayer(image)
-        map.fitBounds(bounds);
-        this.image = image
-        this.map = map;
-        this.originalZoom = this.map.getZoom()
-        this.currentZoom = this.map.getZoom();
-        this.prevZoom = this.map.getZoom();
+        var map = L.map('mapid', this.mapOptions);
+
+        if (hasMap) {
+            let image = L.imageOverlay(url, bounds);
+            map.addLayer(image)
+            map.fitBounds(bounds);
+            this.image = image
+            this.map = map;
+        } else {
+            let image = L.imageOverlay(null, null);
+            this.image = image
+            map.addLayer(image)
+            this.map = map;
+        }
+
+        // this.originalZoom = this.map.getZoom()
+        // this.currentZoom = this.map.getZoom();
+        // this.prevZoom = this.map.getZoom();
         
         /** Set the map's events */
         // this.map.on('zoomend', this.resizeMarkers)
@@ -120,8 +138,12 @@ class Map extends React.Component {
     /** Set the overlay image when changing area */
     setMap = () => {
         let [{areaId}] = this.context.stateReducer
+
+        let {
+            areaModules
+        } = siteConfig
+
         let { 
-            areaModules,
             areaOptions,
             defaultAreaId,
             mapOptions
@@ -131,12 +153,19 @@ class Map extends React.Component {
         let areaOption = areaOptions[areaId] || areaOptions[defaultAreaId] || Object.values(areaOptions)[0]
 
         /** set the map's config */
-        let { url, bounds } = areaModules[areaOption]
+        let { 
+            url, 
+            bounds,
+            hasMap
+        } = areaModules[areaOption]
         mapOptions.maxBounds = bounds.map((latLng, index) => latLng.map(axis => axis + mapOptions.maxBoundsOffset[index]))
-        this.image.setUrl(url)
-        this.image.setBounds(bounds)
-        this.map.fitBounds(bounds)    
-        
+        if (hasMap) {
+            this.image.setUrl(url)
+            this.image.setBounds(bounds)
+            this.map.fitBounds(bounds)  
+        } else {
+            this.image.setUrl(null)
+        }   
     }
 
     /** Resize the markers and errorCircles when the view is zoomend. */
@@ -384,6 +413,7 @@ class Map extends React.Component {
         let counter = 0;
         this.filterTrackingData(_.cloneDeep(this.props.proccessedTrackingData))
         .map((item, index)  => {
+
             /** Calculate the position of the object  */
             let position = this.macAddressToCoordinate(item.mac_address, item.currentPosition);
 

@@ -58,10 +58,12 @@ class EditPatientForm extends React.Component {
             monitor_type = [],
             room,
         } = selectedRowData
-        const areaOptions = Object.values(config.mapConfig.areaOptions).map(area => {
+
+        const areaOptions = this.props.areaTable.map(area => {
             return {
-                value: area,
-                label: locale.texts[area.toUpperCase().replace(/ /g, '_')]
+                value: area.name,
+                label: locale.texts[area.name.toUpperCase().replace(/ /g, '_')],
+                id: area.id
             };
         })
 
@@ -201,7 +203,7 @@ class EditPatientForm extends React.Component {
                              
                             const postOption = {
                                 ...values,
-                                area_id: config.mapConfig.areaModules[values.area.value].id,
+                                area_id: values.area.id,
                                 gender_id : values.gender.value,
                                 monitor_type, 
                                 room: values.room ? values.room.label : '',

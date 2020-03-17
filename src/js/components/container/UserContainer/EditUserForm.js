@@ -26,28 +26,28 @@ const EditUserForm = ({
     handleSubmit,
     handleClose,
     roleName,
-    areaList,
-    data
+    data,
+    areaTable
 }) => {
 
     let locale = React.useContext(LocaleContext)
 
-    const areaOptions = Object.values(config.mapConfig.areaOptions).map(name => {
+    const areaOptions = areaTable.map(area => {
         return {
-            value: name,
-            label: locale.texts[name.toUpperCase().replace(/ /g, '_')],
-            id: config.mapConfig.areaModules[name].id
+            value: area.name,
+            label: locale.texts[area.name.toUpperCase().replace(/ /g, '_')],
+            id: area.id
         };
     })
 
-    const mainAreaDefault = 
-        { 
-            value: selectedUser ?  selectedUser.main_area : null,
-            label: selectedUser ?  locale.texts[config.mapConfig.areaList[selectedUser.main_area]] : null,
-            name: selectedUser ?  config.mapConfig.areaList[selectedUser.main_area] : null,
-            id: selectedUser ?  selectedUser.main_area : null,
-        }
- 
+    const areaDefault = selectedUser 
+        ?   areaOptions.reduce((areaDefault, option) => {
+                if (option.id == selectedUser.main_area) {
+                    return option
+                }
+                return areaDefault
+            }, {})
+        :   {}
     return (
         <Modal 
             show={show} 
@@ -67,7 +67,7 @@ const EditUserForm = ({
                         name: selectedUser ? selectedUser.name : '',
                         password: '',
                         roles: selectedUser ? selectedUser.role_type : config.defaultRole,
-                        area: selectedUser ? mainAreaDefault : '',
+                        area: selectedUser ? areaDefault : '',
                     }}
 
                     validationSchema = {

@@ -392,7 +392,7 @@ class MainContainer extends React.Component{
             })
         })
         .catch(err => {
-            console.log(`get location monitor config fail ${err}`)
+            console.log(`get location monitor config failed ${err}`)
         })
     }
 
@@ -494,10 +494,10 @@ class MainContainer extends React.Component{
 
         } else if (searchKey === MY_PATIENTS){
             const devicesAccessControlNumber = auth.user.myDevice || []
-
+            
             proccessedTrackingData
                 .filter(item => {
-                    return item.object_type == 0 && auth.user.areas_id.includes(item.area_id)
+                    return item.object_type != 0 && auth.user.areas_id.includes(item.area_id)
                 })
                 .map(item => {
                     if (devicesAccessControlNumber.includes(item.asset_control_number)) {
@@ -513,10 +513,9 @@ class MainContainer extends React.Component{
 
 
         } else if (searchKey === ALL_PATIENTS) {
-
             searchResult = proccessedTrackingData
                 .filter(item => {
-                    return item.object_type == 0 && auth.user.areas_id.includes(item.area_id)
+                    return item.object_type != 0 && auth.user.areas_id.includes(item.area_id)
                 })
                 .map(item => {
                     item.searchedType = 1;

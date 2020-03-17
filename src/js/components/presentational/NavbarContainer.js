@@ -21,6 +21,8 @@ import ShiftChange from '../container/ShiftChange'
 import { AppContext } from '../../context/AppContext';
 import Select from 'react-select';
 import BatteryLevelNotification from "../container/BatteryLevelNotification"
+import retrieveDataHelper from '../../helper/retrieveDataHelper';
+import siteConfig from '../../../../site_module/siteConfig';
 
 class NavbarContainer extends React.Component {
 
@@ -29,6 +31,23 @@ class NavbarContainer extends React.Component {
     state = {
         showSignin: false,
         showShiftChange: false,
+        areaTable: [],
+    }
+
+    componentDidMount = () => {
+        this.getAreaTable()
+    }
+
+    getAreaTable = () => {
+        retrieveDataHelper.getAreaTable()
+            .then(res => {
+                this.setState({
+                    areaTable: res.data.rows
+                })
+            })
+            .catch(err => {
+                console.log(`get area table failed ${err}`)
+            })
     }
 
     handleSigninFormSubmit = () => {
@@ -104,6 +123,7 @@ class NavbarContainer extends React.Component {
             auth, 
             stateReducer 
         } = this.context;
+
         const [{ areaId }, dispatch] = stateReducer
         const { 
             showSignin, 
@@ -157,7 +177,7 @@ class NavbarContainer extends React.Component {
                                 let [{areaId}, dispatch] = stateReducer
                                 dispatch({
                                     type: 'setArea',
-                                    value: config.mapConfig.areaModules[value.value].id
+                                    value: siteConfig.areaModules[value.value].id
                                 })
                             }}
                             styles={style.customStyles}

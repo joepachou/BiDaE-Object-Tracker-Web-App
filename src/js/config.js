@@ -1,12 +1,6 @@
-import IIS_SINICA_FOURTH_FLOORTH_MAP from "../img/map/iis_new_building_fourth_floor.png";
-import NTUH_YUNLIN_WARD_FIVE_B_MAP from "../img/map/ntuh_yunlin_branch_ward_five_b.png";
-import NURSING_HOME_MAP from "../img/map/nursing_home.png"
-import YUANLIN_CHRISTIAN_HOSPITAL_MAP from "../img/map/yuanlin_christian_hospital.png"
-import VETERAN_HOME_FIRST_FLOOR_MAP from "../img/map/veteran_home_first_floor.png"
-import VETERAN_HOME_THIRD_FLOOR_MAP from "../img/map/veteran_home_third_floor.png"
-import NTUH_MAP from "../img/map/ntuh_map.png"
 import BOT_LOGO from "../img//logo/BOT_LOGO_RED.png";
 import moment from 'moment'
+import siteConfig from '../../site_module/siteConfig'
 
 const config = {
 
@@ -780,97 +774,11 @@ const config = {
             },
         },
 
-        areaOptions: process.env.SITES_GROUP
-            .split(',')
+        areaOptions: Object.keys(siteConfig.areaModules)
             .reduce((res, item) => {
-                res[item] = {
-                    1: "NTUH_EMERGENCY_ROOM",
-                    2: "IIS_SINICA_FOURTH_FLOOR",
-                    3: "NTUH_YUNLIN_WARD_FIVE_B",
-                    4: "NURSING_HOME",
-                    5: "YUANLIN_CHRISTIAN_HOSPITAL",
-                    6: "VETERAN_HOME_FIRST_FLOOR",
-                    7: "VETERAN_HOME_THIRD_FLOOR",
-                }[item]
+                res[siteConfig.areaModules[item].id] = item
                 return res
             }, {}),
-    
-        areaList : [
-            "none",
-            "NTUH_EMERGENCY_ROOM",
-            "IIS_SINICA_FOURTH_FLOOR",
-            "NTUH_YUNLIN_WARD_FIVE_B",
-            "NURSING_HOME",
-            "YUANLIN_CHRISTIAN_HOSPITAL",
-            "VETERAN_HOME_FIRST_FLOOR",
-            "VETERAN_HOME_THIRD_FLOOR",
-        ],
-        
-        areaModules: {
-
-            NEW_SITE: {
-                id: 1,
-
-                hasMap: false,
-
-                name: "NTUH",
-
-                url: null,
-
-                /** set bounds of the map  */
-                bounds: [[0, 0], [33660,57514]],
-            },
-
-            NTUH_EMERGENCY_ROOM: {
-                id: 8,
-                name: "NTUH",
-                url: NTUH_MAP,
-                bounds: [[0, 0], [33660,57514]],
-            },
-
-            IIS_SINICA_FOURTH_FLOOR: {
-                id: 2,
-                name: "IIS_SINICA_FOURTH_FLOOR",
-                url: IIS_SINICA_FOURTH_FLOORTH_MAP,
-                bounds: [[0,0], [21130,35710]],
-            },
-
-            NTUH_YUNLIN_WARD_FIVE_B: {
-                id: 3,
-                name: "NTUH_YUNLIN_WARD_FIVE_B",
-                url: NTUH_YUNLIN_WARD_FIVE_B_MAP,
-                bounds: [[0, 0], [26067,36928]],
-
-            },
-            NURSING_HOME: {
-                id: 4,
-                name: "NURSING_HOME",
-                url: NURSING_HOME_MAP,
-                bounds: [[0,0], [20000,45000]],
-            },
-            
-            YUANLIN_CHRISTIAN_HOSPITAL: {
-                id: 5,
-                name: "YUANLIN_CHRISTIAN_HOSPITAL",
-                url: YUANLIN_CHRISTIAN_HOSPITAL_MAP,
-                bounds: [[0, 0], [27000,27000]],
-
-            },
-
-            VETERAN_HOME_FIRST_FLOOR: {
-                id: 6,
-                name: "VETERAN_HOME_FIRST_FLOOR",
-                url: VETERAN_HOME_FIRST_FLOOR_MAP,
-                bounds: [[0,0], [21000,26000]],
-            },
-
-            VETERAN_HOME_THIRD_FLOOR: {
-                id: 7,
-                name: "VETERAN_HOME_THIRD_FLOOR",
-                url: VETERAN_HOME_THIRD_FLOOR_MAP,
-                bounds: [[0,0], [21000,26000]],
-            },
-        },
 
         /* For test. To start object tracking*/
         startInteval: true,

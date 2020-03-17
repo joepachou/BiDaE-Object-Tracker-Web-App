@@ -5,13 +5,31 @@ import GeoFenceSettingBlock from './GeoFenceSettingBlock'
 import { Container } from 'react-bootstrap';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import config from '../../../config';
+import retrieveDataHelper from '../../../helper/retrieveDataHelper';
 
 class MonitorSetting extends React.Component{
 
     static contextType = AppContext
 
     state = {
-        tabIndex: 0
+        tabIndex: 0,
+        areaTable: []
+    }
+
+    componentDidMount = () => {
+        this.getAreaTable()
+    }
+
+    getAreaTable = () => {
+        retrieveDataHelper.getAreaTable()
+            .then(res => {
+                this.setState({
+                    areaTable: res.data.rows
+                })
+            })
+            .catch(err => {
+                console.log(`get area table failed ${err}`)
+            })
     }
 
     render() {
@@ -59,6 +77,7 @@ class MonitorSetting extends React.Component{
                                         />
                                     :   <MonitorSettingBlock
                                             type={tabPanel}
+                                            areaTable={this.state.areaTable}
                                         />
                                 }
                             </TabPanel>

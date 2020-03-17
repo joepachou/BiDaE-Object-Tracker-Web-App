@@ -29,6 +29,7 @@ import PatientTable from '../presentational/PatientTable'
 import ImportObjectTable from '../presentational/ImportObjectTable'
 import ImportPatientTable from '../presentational/ImportPatientTable' 
 import DissociationForm from '../container/DissociationForm'
+import retrieveDataHelper from '../../helper/retrieveDataHelper'
 
 class ObjectManagementContainer extends React.Component{
     static contextType = AppContext
@@ -63,7 +64,8 @@ class ObjectManagementContainer extends React.Component{
         },
         objectFilter: [],
         patientFilter: [],
-        formTitle:''
+        formTitle:'',
+        areaTable: [],
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -88,12 +90,12 @@ class ObjectManagementContainer extends React.Component{
         let {
             locale
         } = this.context
-        axios.post(getAreaTable, {})
+        retrieveDataHelper.getAreaTable()
         .then(res => {
-            let areaSelection = res.data.rows.map(item => {
+            let areaSelection = res.data.rows.map(area => {
                 return {
-                    value: item.name,
-                    label: locale.texts[item.name]
+                    value: area.name,
+                    label: locale.texts[area.name]
                 }
             })
             this.setState({
@@ -105,7 +107,7 @@ class ObjectManagementContainer extends React.Component{
             })
         })
         .catch(err => {
-            console.log(err)
+            console.log(`get area table failed ${err}`)
         })
     }
 
@@ -466,6 +468,7 @@ class ObjectManagementContainer extends React.Component{
 
             return false
         })
+
         return filteredData
         
     }
@@ -486,7 +489,6 @@ class ObjectManagementContainer extends React.Component{
     }
 
     filterObjects = () => {
-
         let filteredData = this.state.objectFilter.reduce((acc, curr) => {
             return this.filterData(acc, curr.key, curr.attribute)
         }, this.state.data)
@@ -561,6 +563,7 @@ class ObjectManagementContainer extends React.Component{
                             removeObjectFilter ={ this.removeObjectFilter}
                             typeSelection = {typeSelection}
                             filterSelection={this.state.filterSelection}
+                            areaTable={this.state.areaTable}
                         /> 
                     </TabPanel>
 
@@ -578,6 +581,7 @@ class ObjectManagementContainer extends React.Component{
                             dataImportPatient = {this.state.dataImportPatient}
                             physicianList={this.state.physicianList}
                             roomOptions={this.state.roomOptions} 
+                            areaTable={this.state.areaTable}
                         />
                     </TabPanel>
                     

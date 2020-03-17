@@ -631,6 +631,7 @@ const setUserRole = (request, response) => {
         area,
         id
     } = request.body
+
     pool.query(queryType.setUserRole(name, roles, area, id))
         .then(res => {
             console.log(`set user succeed`)
@@ -950,21 +951,12 @@ const deleteImportData = (request, response) => {
 const getMonitorConfig = (request, response) => {
     let {
         type,
-        areasId,
-        isGetLbeaconPosition,
-        roles
     } = request.body
-
-    let sitesGroup = process.env.SITES_GROUP.split(',')
    
-    pool.query(queryType.getMonitorConfig(type, sitesGroup, isGetLbeaconPosition))
+    pool.query(queryType.getMonitorConfig(type))
         .then(res => {
             console.log(`get ${type} success`)
             let toReturn = res.rows
-            .filter(item => { // 是系統管理員就顯示全部
-             if  ( roles.includes("system_admin") ){ return  item.area_id } 
-             else {return areasId.includes(item.area_id) }
-            })
             .map(item => {
                 item.start_time = item.start_time.split(':').filter((item,index) => index < 2).join(':')
                 item.end_time = item.end_time.split(':').filter((item,index) => index < 2).join(':')
@@ -1373,14 +1365,13 @@ const getUserArea = (request, response) =>{
 }
 
 const getAreaTable = (request, response) => {
-    let sitesGroup = process.env.SITES_GROUP.split(',')
-    pool.query(queryType.getAreaTable(sitesGroup))
+    pool.query(queryType.getAreaTable())
         .then(res => {
-            console.log("get area table")
+            console.log("get area table succeed")
             response.status(200).json(res)
         })
         .catch(err => {
-            console.log(`get area table fail ${err}`)
+            console.log(`get area table failed ${err}`)
         })
 }
 

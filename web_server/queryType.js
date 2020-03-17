@@ -1154,12 +1154,8 @@ const setUserRole = (name, roles, area, id) => {
 		DELETE FROM user_role 
 		WHERE user_id = ${id};
 
-		DELETE FROM user_area
-		WHERE user_id = ${id}
-		AND area_id = ${area.id};
-
 		UPDATE user_area
-		SET area_id = ${area.id}
+		SET area_id = '${area.id}'
 		WHERE user_id = ${id}
 		AND area_id = (	
 			SELECT main_area
@@ -1169,9 +1165,9 @@ const setUserRole = (name, roles, area, id) => {
 
 		UPDATE user_table
 		SET 
-			name='${name}',
-			main_area='${area.id}'
-		WHERE id=${id};
+			name = '${name}',
+			main_area = ${area.id}
+		WHERE id = ${id};
 
 		INSERT INTO user_role (
 			user_id, 
@@ -1411,13 +1407,12 @@ const addShiftChangeRecord = (userInfo, file_path,shift) => {
 	return query
 }
 
-const getAreaTable = (sitesGroup) => {
+const getAreaTable = () => {
 	return `
 		SELECT 
 			id,
 			name
 		FROM area_table
-		WHERE id in (${sitesGroup})
 		;
 	`
 }
@@ -1582,7 +1577,7 @@ const addMonitorConfig = (monitorConfigPackage) => {
 	}
 }
 
-const getMonitorConfig = (type, sitesGroup, isGetLbeaconPosition) => {
+const getMonitorConfig = (type) => {
 	let text =  `
 		SELECT 
 			${type}.id, 
@@ -1614,9 +1609,7 @@ const getMonitorConfig = (type, sitesGroup, isGetLbeaconPosition) => {
 			) AS temp
 			GROUP BY lbeacon_area_id
 		) as lbeacon_temp_table
-		ON lbeacon_temp_table.lbeacon_area_id IN (${sitesGroup.map(item => item)})
-
-		WHERE area_id IN (${sitesGroup.map(item => item)})
+		ON lbeacon_temp_table.lbeacon_area_id = ${type}.area_id
 		
 		ORDER BY id;
 	`
