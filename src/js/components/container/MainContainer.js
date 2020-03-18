@@ -267,12 +267,13 @@ class MainContainer extends React.Component{
             locale, 
             stateReducer 
         } = this.context
-        let [{areaId, violatedObjects}, dispatch] = stateReducer
-        axios.post(dataSrc.getTrackingData,{
-            locale: locale.abbr,
-            user: auth.user,
-            areaId,
-        })
+        let [{areaId}] = stateReducer
+
+        retrieveDataHelper.getTrackingData(
+            locale.abbr,
+            auth.user,
+            areaId
+        )
         .then(res => {
 
             /** dismiss error message when the database is connected */

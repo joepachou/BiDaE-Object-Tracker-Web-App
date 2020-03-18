@@ -188,8 +188,7 @@ class ObjectManagementContainer extends React.Component{
         .catch(err => {
             console.log(err);
         })
-
-       
+    
     }
     
     getTransferredLocation = () => {
@@ -222,13 +221,17 @@ class ObjectManagementContainer extends React.Component{
     }
 
     getData = () => {
-        let { locale } = this.context
-        axios.post(getObjectTable, {
-            locale: locale.abbr,
-            objectType: [0, 1, 2]
-        })
+        let { 
+            locale,
+            auth
+        } = this.context
+
+        retrieveDataHelper.getObjectTable(
+            locale.abbr,
+            auth.user.areas_id,
+            [0, 1, 2]
+        )
         .then(res => {
-          
             let column = _.cloneDeep(objectTableColumn)
             let columnPatient = _.cloneDeep(patientTableColumn)
             let data = [] 

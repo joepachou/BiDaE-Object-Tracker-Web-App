@@ -64,18 +64,6 @@ class UserSettingContainer extends React.Component{
             component: <AdminManagementContainer />
         },
         {
-            name: 'Edit Object Management',
-            path: 'editObjectManagement',
-            href: '#EditObjectManagement',
-            component: <EditObjectManagement />
-        },
-        {
-            name: 'Shift Change Record',
-            path: 'shiftChangeRecord',
-            href: '#ShiftChangeRecord',
-            component: <ShiftChangeRecord />,
-        },
-        {
             name: "Transferred Location Management",
             path: "transferredLocationManagement",
             href: "#TransferredLocationManagement",

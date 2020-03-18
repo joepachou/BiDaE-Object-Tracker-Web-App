@@ -4,7 +4,7 @@ import siteConfig from '../../site_module/siteConfig'
 
 const config = {
 
-    version: 1891,
+    version: 1892,
     
     objectStatus: {
         PERIMETER: "perimeter",

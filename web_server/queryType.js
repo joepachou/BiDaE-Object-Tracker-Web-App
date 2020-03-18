@@ -1,5 +1,5 @@
 require('dotenv').config();
-function getTrackingData () {
+function getTrackingData (areas_id) {
 	const query = `
 		SELECT 
 			object_table.mac_address,
@@ -75,7 +75,7 @@ function getTrackingData () {
 		) as notification
 		ON notification.mac_address = object_summary_table.mac_address
 
-		WHERE object_summary_table.last_reported_timestamp IS NOT NULL
+		WHERE object_table.area_id IN (${areas_id.map(id => id)})
 
 		ORDER BY 
 			object_table.type, 
@@ -174,9 +174,9 @@ const getLocationHistory = (key, startTime, endTime, mode) => {
 	return query
 }
 
-const getObjectTable = (objectType ) => {
+const getObjectTable = (objectType, areas_id) => {
 
-	return `
+	let text =  `
 		SELECT 
 			object_table.id,
 			object_table.name, 
@@ -204,8 +204,10 @@ const getObjectTable = (objectType ) => {
 		ON area_table.id = object_table.area_id
 			
 		WHERE object_table.object_type IN (${objectType.map(type => type)})
+		${areas_id ? `AND object_table.area_id IN (${areas_id.map(id => id)})` : ''}
 		ORDER BY object_table.name ASC;
-	`;
+	`
+	return text
 } 
 
 
@@ -1135,7 +1137,7 @@ const deleteUser = (username) => {
 
 
 
-const setUserRole = (name, roles, area, id) => {
+const setUserInfo = (name, roles, area, id) => {
 	return `
 
 		DELETE FROM user_role 
@@ -1881,20 +1883,13 @@ const setSearchRssi = (rssi) => {
 	return query
 }
 
-const getSearchRssi = () =>{
-	let text = `
-		SELECT search_rssi
-		FROM search_criteria
-	`
-	return text
-}
-
 function getUserArea(user_id){
 
     const text =  `
     SELECT 
         area_id
-    FROM user_area WHERE user_area.user_id = $1;
+	FROM user_area 
+	WHERE user_area.user_id = $1;
     `;
 
     const values = [user_id];
@@ -1910,25 +1905,25 @@ function getUserArea(user_id){
 
 function addUserArea (user_id,area_id){
     const text = `
-    INSERT INTO user_area (
-        user_id,
-        area_id
-    )
-    VALUES (
-        $1, 
-        $2
-    );
-`;
-    
-const values = [
-    user_id,
-    area_id
-];
+		INSERT INTO user_area (
+			user_id,
+			area_id
+		)
+		VALUES (
+			$1, 
+			$2
+		);
+	`;
+		
+	const values = [
+		user_id,
+		area_id
+	];
 
 
-const query = {
-    text,
-    values
+	const query = {
+		text,
+		values
 };
 
 return query;
@@ -2069,7 +2064,7 @@ module.exports = {
 	getUserRole,
 	getRoleNameList,
 	deleteUser,
-	setUserRole,
+	setUserInfo,
 	getMainSecondArea,
 	getEditObjectRecord,
 	deleteEditObjectRecord,

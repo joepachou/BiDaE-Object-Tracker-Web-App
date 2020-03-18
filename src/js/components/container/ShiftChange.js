@@ -73,7 +73,7 @@ class ShiftChange extends React.Component {
         }
     }
 
-    getTrackingData = (update) => {
+    getTrackingData = () => {
         let { 
             locale, 
             auth, 
@@ -81,34 +81,38 @@ class ShiftChange extends React.Component {
         } = this.context
         let [{areaId}] = stateReducer
 
-        retrieveDataHelper.getTrackingData(locale.abbr, auth.user, areaId)
-            .then(res => {
-                GetResultData('my devices', res.data, auth.user)
-                    .then(result => {
-                        var foundResult = []
-                        var notFoundResult = []
-                        for(var i in result){
-                            if(result[i].found){
-                                foundResult.push(result[i])
-                            }else{
-                                notFoundResult.push(result[i])
-                            }
+        retrieveDataHelper.getTrackingData(
+            locale.abbr, 
+            auth.user, 
+            areaId
+        )
+        .then(res => {
+            GetResultData('my devices', res.data, auth.user)
+                .then(result => {
+                    var foundResult = []
+                    var notFoundResult = []
+                    for(var i in result){
+                        if(result[i].found){
+                            foundResult.push(result[i])
+                        }else{
+                            notFoundResult.push(result[i])
                         }
-                        
-                        this.setState({
-                            searchResult: {
-                                foundResult: foundResult,
-                                notFoundResult: notFoundResult,
-                            }
-                        })
-                    }) 
-                    .catch(err => {
-                        console.log(`get myDevice data fail ${err}`)
+                    }
+                    
+                    this.setState({
+                        searchResult: {
+                            foundResult: foundResult,
+                            notFoundResult: notFoundResult,
+                        }
                     })
-            })
-            .catch(err => {
-                console.log(`get tracking data fail: ${err}`)
-            })
+                }) 
+                .catch(err => {
+                    console.log(`get myDevice data fail ${err}`)
+                })
+        })
+        .catch(err => {
+            console.log(`get tracking data fail: ${err}`)
+        })
     }
 
     handleClosePdfForm = () => {

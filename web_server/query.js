@@ -68,23 +68,25 @@ moment.updateLocale('zh-tw', {
 });
 const getTrackingData = (request, response) => {
     const locale = request.body.locale || 'en'
-    
+    let {
+        user,
+        areaId
+    } = request.body
+
     /** The user's authenticated area id */
-    const userAuthenticatedAreaId= request.body.user.areas_id
-    const {
-        main_area,
-        areas_id
-    } = request.body.user
+    let userAuthenticatedAreasId= user.areas_id
 
     /** Allow user to access the info of objects in secondary areas */
-    if (!areas_id.includes(main_area)) {
-        areas_id.push(main_area)
+    if (user.main_area.toString() && !userAuthenticatedAreasId.includes(user.main_area.toString())) {
+        userAuthenticatedAreasId.push(user.main_area.toString())
     }
 
-    /** The UI's current area id */
-    const currentAreaId = request.body.areaId.toString()
+    /** User interface's current area id */
+    const currentAreaId = areaId.toString()
 
-    pool.query(queryType.getTrackingData())        
+    pool.query(queryType.getTrackingData(
+        userAuthenticatedAreasId,
+    ))        
         .then(res => {
 
             console.log('get tracking data')
@@ -95,7 +97,7 @@ const getTrackingData = (request, response) => {
             .map((item, index) => {
 
                 /** Flag the object that belongs to the current area or to the user's authenticated area */
-                item.isMatchedObject = checkMatchedObject(item, userAuthenticatedAreaId, currentAreaId)
+                item.isMatchedObject = checkMatchedObject(item, userAuthenticatedAreasId, currentAreaId)
 
                 /** Set the boolean if the object's last_seen_timestamp is in the specific time period */
                 let isInTheTimePeriod = moment().diff(item.last_reported_timestamp, 'seconds') 
@@ -159,9 +161,10 @@ const getTrackingData = (request, response) => {
 const getObjectTable = (request, response) => {
     let { 
         locale, 
+        areas_id,
         objectType 
     } = request.body
-    pool.query(queryType.getObjectTable(objectType))       
+    pool.query(queryType.getObjectTable(objectType, areas_id))       
         .then(res => {
             console.log('Get objectTable data')
             response.status(200).json(res)
@@ -511,7 +514,7 @@ const signin = (request, response) => {
     pool.query(queryType.signin(username))
         .then(res => {
             if (res.rowCount < 1) {
-                console.log(`sign in fail: username or password is incorrect`)
+                console.log(`signin failed: username or password is incorrect`)
                 response.json({
                     authentication: false,
                     message: "Username or password is incorrect"
@@ -530,6 +533,10 @@ const signin = (request, response) => {
                         locale_id,
                         locale
                     } = res.rows[0]
+
+                    if (!areas_id.includes(main_area)) {
+                        areas_id.push(main_area.toString())
+                    }
 
                     let userInfo = {
                         name,
@@ -627,7 +634,7 @@ const getMainSecondArea = (request, response) => {
         })
 }
 
-const setUserRole = (request, response) => { 
+const setUserInfo = (request, response) => { 
     var {
         name,
         roles,
@@ -635,7 +642,7 @@ const setUserRole = (request, response) => {
         id
     } = request.body
 
-    pool.query(queryType.setUserRole(name, roles, area, id))
+    pool.query(queryType.setUserInfo(name, roles, area, id))
         .then(res => {
             console.log(`set user succeed`)
             response.status(200).json(res)
@@ -1223,9 +1230,10 @@ const parseGeoFenceConfig = (field = []) => {
 }
 
 /** Check tracking data match the current UI area */
-const checkMatchedObject = (item, userAuthenticatedAreaId, currentAreaId) => {
+const checkMatchedObject = (item, userAuthenticatedAreasId, currentAreaId) => {
+
     /** If the current area id is the user's authenticated area id */
-    let isInUserSAuthArea = userAuthenticatedAreaId.includes(currentAreaId)
+    let isInUserSAuthArea = userAuthenticatedAreasId.includes(currentAreaId)
 
     /** Parse lbeacon uuid into three field in an array: area id, latitude, longtitude */
     let lbeacon_coordinate = item.lbeacon_uuid ? parseLbeaconCoordinate(item.lbeacon_uuid) : null;
@@ -1242,7 +1250,7 @@ const checkMatchedObject = (item, userAuthenticatedAreaId, currentAreaId) => {
     let isMatchedArea = lbeacon_area_id == parseInt(currentAreaId)
 
     /** Set the boolean if the object belong to the user's authenticated area id */
-    let isUserSObject = userAuthenticatedAreaId.includes(item.area_id)
+    let isUserSObject = userAuthenticatedAreasId.includes(item.area_id)
 
     /** Set the boolean if the object belong to the current area */
     let isAreaSObject = item.area_id == parseInt(currentAreaId)
@@ -1555,7 +1563,7 @@ module.exports = {
     modifyUserDevices,
     modifyUserInfo,
     validateUsername,
-    setUserRole,
+    setUserInfo,
     getMainSecondArea,
     setMonitorConfig,
     setGeofenceConfig,

@@ -44,7 +44,7 @@ const getUserList = `${protocol}://${dataSrcIP}/test/getUserList`
 const getUserRole = `${protocol}://${dataSrcIP}/test/getUserRole`
 const getRoleNameList = `${protocol}://${dataSrcIP}/test/getRoleNameList`
 const deleteUser = `${protocol}://${dataSrcIP}/test/deleteUser`
-const setUserRole = `${protocol}://${dataSrcIP}/test/setUserRole`
+const setUserInfo = `${protocol}://${dataSrcIP}/test/setUserInfo`
 const getMainSecondArea = `${protocol}://${dataSrcIP}/data/getMainSecondArea`
 const getAreaTable = `${protocol}://${dataSrcIP}/data/getAreaTable`
 const getGeofenceConfig = `${protocol}://${dataSrcIP}/data/getGeofenceConfig`
@@ -125,7 +125,7 @@ module.exports = {
     getUserRole,
     getRoleNameList,
     deleteUser,
-    setUserRole,
+    setUserInfo,
     getMainSecondArea,
     getAreaTable,
     getGeofenceConfig,

@@ -119,7 +119,7 @@ app.post('/test/getRoleNameList', db.getRoleNameList)
 
 app.post('/test/deleteUser', db.deleteUser)
 
-app.post('/test/setUserRole', db.setUserRole)
+app.post('/test/setUserInfo', db.setUserInfo)
 
 app.post('/data/getMainSecondArea', db.getMainSecondArea)
 

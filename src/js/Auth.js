@@ -12,6 +12,7 @@ let defaultUser = {
         "form:view",
     ],
     locale: config.locale.defaultLocale,
+    main_area: config.mapConfig.defaultAreaId.toString(),
 }
 
 class Auth extends React.Component {
@@ -59,7 +60,7 @@ class Auth extends React.Component {
     }
 
     async setUser (values) {
-        return await axios.post(dataSrc.setUserRole, {
+        return await axios.post(dataSrc.setUserInfo, {
             ...values
         })
     }

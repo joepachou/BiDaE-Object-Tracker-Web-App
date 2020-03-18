@@ -153,8 +153,7 @@ class SystemStatus extends React.Component{
                     </TabPanel> 
                     <TabPanel>
                         <ReactTable 
-                            minRows={6} 
-                            defaultPageSize={15} 
+                            style={{height:'75vh'}}
                             data={this.state.trackingData} 
                             columns={this.state.trackingColunm} 
                             pageSizeOptions={[5, 10]}

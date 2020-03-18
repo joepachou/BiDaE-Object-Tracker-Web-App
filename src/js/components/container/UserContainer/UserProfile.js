@@ -1,5 +1,9 @@
 import React from 'react';
-import { Button, Image, ListGroup} from 'react-bootstrap';
+import { 
+    Button, 
+    Image, 
+    ListGroup
+} from 'react-bootstrap';
 import { AppContext } from '../../../context/AppContext';
 import config from '../../../config';
 import axios from 'axios';
@@ -10,19 +14,10 @@ import {
     DeleteUserArea,
     modifyUserInfo
 } from "../../../dataSrc"
-import {
-    Row,
-    Col,
-    Modal,
-    InputGroup
-} from "react-bootstrap"
 import NumberPicker from '../NumberPicker';
 import cloneDeep from 'lodash/cloneDeep';
 import EditAreasForm from '../../presentational/EditAreasForm'
-
-let elseArray = []
-let  rows_data = []
-
+import retrieveDataHelper from '../../../helper/retrieveDataHelper';
 
 class UserProfile extends React.Component{
 
@@ -45,11 +40,10 @@ class UserProfile extends React.Component{
 
     componentDidUpdate = (prevProps, prevState) => {
         if (this.context.locale.abbr !== prevState.locale) {
+            this.getAreaTable();
             this.setState({
                 locale: this.context.locale.abbr,
-                rows_data:[]
             })
-            this.getAreaTable();
         }
     }
 
@@ -57,11 +51,12 @@ class UserProfile extends React.Component{
         const {
             auth
         } = this.context
+        this.getUserData()
+        this.getAreaTable()
         this.setState({
           userInfo: auth.user
         })
-        this.getUserData()
-        this.getAreaTable()
+
     }
    
     getUserData =() =>{
@@ -69,7 +64,9 @@ class UserProfile extends React.Component{
             areaOptions
         } = config.mapConfig
 
-        const {auth} = this.context
+        const {
+            auth
+        } = this.context
         let userIdList = []
 
         axios.post(getUserArea, {
@@ -95,47 +92,45 @@ class UserProfile extends React.Component{
     }
 
     getAreaTable = () => {
-        let { locale } = this.context
-        const {auth} = this.context
+
+        const {
+            auth
+        } = this.context
         const { 
             areaOptions
         } = config.mapConfig
-        rows_data = []
 
-        axios.post(getAreaTable, {
-            locale: locale.abbr
-        })
-        .then(res => {
-            let totalAreaIdList = []
+        retrieveDataHelper.getAreaTable()
+            .then(res => {
+                let totalAreaIdList = []
 
+                res.data.rows.map( item =>{
+                    totalAreaIdList.push(item.id)
+                })
 
-            res.data.rows.map( item =>{
-                totalAreaIdList.push(item.id)
-            })
-            this.setState({
-                totalAreaId: totalAreaIdList,
-            })
-            let otherAreaIdList = []
-            this.state.totalAreaId.map( item => {
-                let check = true
-                this.state.secondaryAreaId.map( item2=> {
-                    if( item == item2){
-                        check = false
+                let otherAreaIdList = []
+                totalAreaIdList.map( item => {
+                    let check = true
+
+                    auth.user.areas_id.map( item2=> {
+                        if( item == item2){
+                            check = false
+                        }
+                    })
+                    if(check == true){
+                        otherAreaIdList.push(item)
                     }
                 })
-                if(check == true){
-                    otherAreaIdList.push(item)
-                }
-            })
 
-            this.setState({
-                otherAreaId: otherAreaIdList,
-            })
+                this.setState({
+                    otherAreaId: otherAreaIdList,
+                    totalAreaId: totalAreaIdList,
+                })
 
-        })
-        .catch(err => {
-            console.log(err)
-        })
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 
     resetFreqSearchCount = (value) => {
