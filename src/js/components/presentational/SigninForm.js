@@ -64,16 +64,27 @@ const SiginForm = ({
                                     userInfo
                                 } = res.data
 
-                                userInfo.permissions = 
-                                    userInfo.roles.reduce((permissions, role) => {
-                                        permissionsTable[role].permission.map(item => {
-                                            if (!permissions.includes(item)) {
-                                                permissions.push(item)
-                                            }
-                                        })
-                                        return permissions
-                                    }, [])
-
+                                if (userInfo.roles.includes("dev")) {
+                                    userInfo.permissions = 
+                                        Object.keys(permissionsTable).reduce((permissions, role) => {
+                                            permissionsTable[role].permission.map(item => {
+                                                if (!permissions.includes(item)) {
+                                                    permissions.push(item)
+                                                }
+                                            })
+                                            return permissions
+                                        }, [])
+                                } else {
+                                    userInfo.permissions = 
+                                        userInfo.roles.reduce((permissions, role) => {
+                                            permissionsTable[role].permission.map(item => {
+                                                if (!permissions.includes(item)) {
+                                                    permissions.push(item)
+                                                }
+                                            })
+                                            return permissions
+                                        }, [])
+                                }
                                 auth.signin(userInfo)
                                 locale.reSetState(userInfo.locale)
                                 handleSubmit()
