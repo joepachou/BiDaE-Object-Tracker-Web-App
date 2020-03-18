@@ -759,18 +759,18 @@ const modifyUserInfo = (request, response) => {
     
 }
 
-const getPDFInfo = (request, response) => {
+const getShiftChangeRecord = (request, response) => {
     let { locale } = request.body
     pool.query(queryType.getShiftChangeRecord())
         .then(res => {
-            console.log('get shift change record success')
+            console.log('get shift change record succeed')
             res.rows.map(item => {
                 item.submit_timestamp = moment.tz(item.submit_timestamp, process.env.TZ).locale(locale).format('LLL');
             })
             response.status(200).json(res)
         })
         .catch(err => {
-            console.log('getPDFInfo error: ', err)
+            console.log(`get shift change record failed ${err}`)
         })
 }
 
@@ -1522,7 +1522,7 @@ module.exports = {
     getAreaTable,
     getGeofenceConfig,
     getUserInfo,
-    getPDFInfo,
+    getShiftChangeRecord,
     getEditObjectRecord,
     getMonitorConfig,
     addShiftChangeRecord,

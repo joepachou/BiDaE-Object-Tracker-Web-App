@@ -101,7 +101,7 @@ app.post('/data/editLbeacon', db.editLbeacon)
 
 app.post('/data/generatePDF',db.generatePDF)
 
-app.post('/data/PDFInfo',db.getPDFInfo)
+app.post('/data/PDFInfo',db.getShiftChangeRecord)
 
 app.post('/data/modifyMyDevice', db.modifyUserDevices)
 

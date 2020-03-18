@@ -5,21 +5,17 @@ import {
 } from 'react-bootstrap';
 import ReactTable from 'react-table'
 import axios from 'axios';
-import Cookies from 'js-cookie'
-import moment from 'moment'
-import LocaleContext from '../../../context/LocaleContext';
-import { getEditObjectRecord } from "../../../dataSrc";
-import AxiosFunction from './AxiosFunction'
-import { editObjectRecordTableColumn } from '../../../tables';
-import DeleteForm from '../DeleteForm'
-import { deleteEditObjectRecord } from '../../../dataSrc'
-import { deleteShiftChangeRecord } from '../../../dataSrc'
+import dataSrc from "../../../dataSrc"
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
 const SelectTable = selecTableHOC(ReactTable);
-import { getPDFInfo } from "../../../dataSrc";
 import { shiftChangeRecordTableColumn } from '../../../tables'
 import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm'
-class EditObjectManagement extends React.Component{
+import { AppContext } from '../../../context/AppContext';
+import retrieveDataHelper from '../../../helper/retrieveDataHelper';
+
+class ShiftChangeRecord extends React.Component{
+
+    static contextType = AppContext
 
     state = {
         data: [],
@@ -33,36 +29,42 @@ class EditObjectManagement extends React.Component{
 
     componentDidUpdate = (prevProps, prevState) => {
         if (this.context.abbr !== prevState.locale) {
-            this.getPDFInfo()
+            this.getShiftChangeRecord()
                 this.setState({
                 locale: this.context.abbr
             })
         }
     }
 
-
-
-    getEditObjectRecord = () => {
-        let locale = this.context
-    }
-
     componentDidMount = () => {
-        this.getPDFInfo()
+        this.getShiftChangeRecord()
     }
 
-    itemLayout = (record, index) => {
-        return(
-            <h5 name={record.id}>
-                User {record.edit_user_id}, Edit at {moment(record.edit_time).format('LLLL')}
-            </h5>
-        ) 
-    }
+    getShiftChangeRecord(){
+        let {
+            locale
+        } = this.context
 
-
-    onCloseForm = () => {
-        this.setState({
-            showForm: false
-        })
+        retrieveDataHelper.getShiftChangeRecord(locale.abbr)
+            .then(res => {
+                let columns = _.cloneDeep(shiftChangeRecordTableColumn)
+                columns.map(field => {
+                    field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
+                    field.headerStyle = {
+                        textAlign: 'left'
+                    }
+                })
+                res.data.rows.map(item => {
+                    item.shift = item.shift && locale.texts[item.shift.toUpperCase().replace(/ /g, '_')]
+                })
+                this.setState({
+                    data: res.data.rows,
+                    columns,
+                })
+            })
+            .catch(err => {
+                console.log(`get shift change record failed ${err}`)
+            })
     }
 
     toggleAll = () => {
@@ -104,9 +106,6 @@ class EditObjectManagement extends React.Component{
         this.setState({ selectThis, selection });
         }
 
-      
-        
-
     };
 
     isSelected = (key) => {
@@ -117,13 +116,11 @@ class EditObjectManagement extends React.Component{
 
 
         let idPackage = []
-       
-
         var deleteArray = [];
         var deleteCount = 0;
 
         this.state.data.map (item => {
-          
+    
             this.state.selection.map(itemSelect => {
                 itemSelect === item.id 
                 ? 
@@ -135,8 +132,6 @@ class EditObjectManagement extends React.Component{
                  deleteCount +=1
         })
 
-        // console.log(deleteArray)
-        // console.log(this.state.data)
         deleteArray.map( item => {
         this.state.data[item] === undefined ?
               null
@@ -144,11 +139,11 @@ class EditObjectManagement extends React.Component{
             idPackage.push(parseInt(this.state.data[item].id))
         })
 
-        axios.post(deleteShiftChangeRecord, {
+        axios.post(dataSrc.deleteShiftChangeRecord, {
             idPackage
         })
         .then(res => {
-            this.getPDFInfo()
+            this.getShiftChangeRecord()
             this.setState({
                 selection: [],
                 selectAll: false,
@@ -158,48 +153,6 @@ class EditObjectManagement extends React.Component{
         .catch(err => {
             console.log(err)
         })
-    }
-
-
-
-
-
-
-
-    //shift change merge
-    getPDFInfo(){
-        let locale = this.context
-        axios.post(getPDFInfo, {
-            locale: locale.abbr
-        })
-        .then(res => {
-            let columns = _.cloneDeep(shiftChangeRecordTableColumn)
-            columns.map(field => {
-                field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
-                field.headerStyle = {
-                    textAlign: 'left'
-                }
-            })
-            res.data.rows.map(item => {
-                item.shift = item.shift && locale.texts[item.shift.toUpperCase().replace(/ /g, '_')]
-            })
-            // this.API.setShiftChangeRecord(res.data.rows)
-            this.setState({
-                data: res.data.rows,
-                columns,
-            })
-        })
-    }
-    //
-
-    onRowClick = (state, rowInfo, column, instance) => {
-        return {
-            onClick: e => {
-                let file_path = rowInfo.original.file_path
-                let path = `http://${process.env.DATASRC_IP}/${file_path}`
-                window.open(path);
-            }
-        }
     }
 
     handleCloseDeleteConfirmForm = () => {
@@ -213,8 +166,9 @@ class EditObjectManagement extends React.Component{
     }
 
     render(){
-        const { record } = this.state
-        const locale = this.context
+        const {
+            locale
+         } = this.context
 
         const {
             toggleSelection,
@@ -235,7 +189,6 @@ class EditObjectManagement extends React.Component{
 
 
         return (
-            
             <>
                 <ButtonToolbar>
                     <Button 
@@ -250,8 +203,7 @@ class EditObjectManagement extends React.Component{
                         {locale.texts.DELETE}
                     </Button>
                 </ButtonToolbar>
-                {this.state.data ? (
-                
+                {this.state.data && (
                     <SelectTable
                         keyField='id'
                         data={this.state.data}
@@ -269,28 +221,20 @@ class EditObjectManagement extends React.Component{
                                     if (handleOriginal) {
                                         handleOriginal()
                                     }
-                                    window.open(`http://${process.env.DATASRC_IP}/${rowInfo.original.file_path}`);
-                                
-                            //開pdf的功能看有沒有要
-                            //  window.open(`http://${process.env.DATASRC_IP}/${rowInfo.original.file_path}`);
+                                    window.open(dataSrc.pdfUrl(rowInfo.original.file_path));
                                 }
                             }
-                        }
-                        }
-                    />
-                    ) : null
+                        }}
+                    />)
                 }
-            <DeleteConfirmationForm
-                show={this.state.showDeleteConfirmation} 
-                handleClose={this.handleCloseDeleteConfirmForm}
-                handleSubmit={this.handleSubmitDeleteConfirmForm}
-            />
-                
+                <DeleteConfirmationForm
+                    show={this.state.showDeleteConfirmation} 
+                    handleClose={this.handleCloseDeleteConfirmForm}
+                    handleSubmit={this.handleSubmitDeleteConfirmForm}
+                />
             </>
-            
         )
     }
 }
-EditObjectManagement.contextType = LocaleContext;
 
-export default EditObjectManagement
+export default ShiftChangeRecord

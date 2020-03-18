@@ -14,7 +14,9 @@ const rules = {
             "route:monitorSetting",
             "route:bigScreen",
             "route:trackingPath",
-
+            "route:monitor",
+            "route:report",
+            
             "user:mydevice",
             "user:mypatient",
             "user:shiftChange",
@@ -40,6 +42,8 @@ const rules = {
             "route:transferredLocationManagement",
             "route:monitorSetting",
             "route:trackingPath",
+            "route:monitor",
+            "route:report",
 
             "user:mydevice",
             "user:mypatient",
@@ -67,6 +71,9 @@ const rules = {
             "route:transferredLocationManagement",
             "route:trackingPath",
             "route:bigScreen",
+            "route:monitor",
+            "route:report",
+
             "user:mydevice",
             "user:mypatient",
             "user:saveSearchRecord",

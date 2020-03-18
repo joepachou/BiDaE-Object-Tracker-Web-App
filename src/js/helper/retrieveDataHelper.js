@@ -59,6 +59,18 @@ const retrieveDataHelper = {
         })
     },
 
+    getEditObjectRecord: async function(locale) {
+        return await axios.post(dataSrc.getEditObjectRecord,{
+            locale
+        })
+    },
+
+    getShiftChangeRecord: async function(locale) {
+        return await axios.post(dataSrc.getShiftChangeRecord,{
+            locale
+        })
+    },
+
     setMonitorEnable: async function(
         enable,
         areaId,
