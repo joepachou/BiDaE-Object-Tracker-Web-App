@@ -1853,7 +1853,7 @@ function backendSearch_writeQueue(keyType, keyWord, mac_addresses, pin_color_ind
 	return query
 }
 
-function getBackendSearchQueue(){
+function getSearchQueue(){
 	var query = 
 		`
 			SELECT 
@@ -2088,7 +2088,7 @@ module.exports = {
 	backendSearch,
 	backendSearch_writeQueue,
 	deleteSameNameSearchQueue,
-	getBackendSearchQueue,
+	getSearchQueue,
 	addAssociation,
 	addAssociation_Patient,
 	cleanBinding,

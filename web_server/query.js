@@ -95,7 +95,6 @@ const getTrackingData = (request, response) => {
             const toReturn = res.rows
             .filter(item => item.mac_address)
             .map((item, index) => {
-
                 /** Flag the object that belongs to the current area or to the user's authenticated area */
                 item.isMatchedObject = checkMatchedObject(item, userAuthenticatedAreasId, currentAreaId)
 
@@ -1324,19 +1323,23 @@ const backendSearch = (request, response) => {
                     })
                         
                 }
-                
-                
             })
         }
         
     })
 
 }
-const getBackendSearchQueue = (request, response) => {
-    var query = queryType.getBackendSearchQueue()
-    pool.query(query, (err, res) => {
-        response.send(res.rows)
-    })
+const getSearchQueue = (request, response) => {
+
+    pool.query(queryType.getSearchQueue())
+        .then(res => {
+            console.log(`get search queue succeed`)
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(`get search queue failed ${err}`)
+        })
+    
 }
 
 const addBulkObject = (req, res) => {
@@ -1570,7 +1573,7 @@ module.exports = {
     checkoutViolation,
     confirmValidation,
     backendSearch,
-    getBackendSearchQueue,
+    getSearchQueue,
     getTrackingTableByMacAddress,
     addGeofenceConfig,
     deleteMonitorConfig,

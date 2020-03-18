@@ -165,7 +165,7 @@ app.post('/data/deleteMonitorConfig', db.deleteMonitorConfig)
 
 app.post('/data/backendSearch', db.backendSearch)
 
-app.post('/data/getSearchQueue', db.getBackendSearchQueue)
+app.post('/data/getSearchQueue', db.getSearchQueue)
 
 app.post('/data/getAreaTable', db.getAreaTable)
 
