@@ -230,7 +230,7 @@ class ShiftChange extends React.Component {
                         >
                             {locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: {auth.user.name} 
                         </div>
-                        {this.state.selectValue ? null : this.setState({selectValue:shiftOptions[0]})}
+                        {this.state.selectValue == '' ? null : this.setState({selectValue:shiftOptions[0]})}
                         <div 
                             className="d-flex align-items-center"
                         >   
