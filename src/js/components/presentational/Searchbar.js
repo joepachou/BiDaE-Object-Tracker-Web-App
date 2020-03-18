@@ -1,6 +1,9 @@
 import React from 'react';
 import searchIcon from '../../../img/icon/search.png';
 import { Form, Button } from 'react-bootstrap';
+import {
+    isMobileOnly
+} from 'react-device-detect'
 
 class Searchbar extends React.Component {
     
@@ -19,7 +22,7 @@ class Searchbar extends React.Component {
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.getSearchKey(this.state.value);
-        this.props.handleShowResultListForMobile();
+        if (isMobileOnly) this.props.handleShowResultListForMobile();
     }
 
     handleChange = (e) => {

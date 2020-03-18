@@ -226,8 +226,8 @@ a:hover {
 /** React Bootstrap button variant outline-primary */
 
 .btn {
-    transition: none;
-    text-transform: capitalize;
+    /* transition: none;
+    text-transform: capitalize; */
 }
 
 .btn.btn-sm {

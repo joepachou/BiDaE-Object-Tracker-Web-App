@@ -5,21 +5,19 @@ import FrequentSearch from './FrequentSearch';
 import config from '../../config';
 import ObjectTypeList from './ObjectTypeList'
 import ObjectTypeListForTablet from './ObjectTypeListForTablet'
-import axios from 'axios';
-import { getObjectTable } from '../../dataSrc'
 import { AppContext } from '../../context/AppContext';
 import {
     BrowserView,
     TabletView,
     MobileOnlyView
 } from 'react-device-detect'
+import retrieveDataHelper from '../../helper/retrieveDataHelper';
 
 class SearchContainer extends React.Component {
 
     static contextType = AppContext
 
     state = {
-        sectionIndexList:['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'],
         isShowSectionTitle: false,
         hasSearchKey: false,
         isShowSearchOption: false,
@@ -32,7 +30,7 @@ class SearchContainer extends React.Component {
     }
 
     componentDidMount = () => {
-        this.getObjectType()
+        this.getObjectTable()
     }
 
     componentDidUpdate = (prepProps) => {
@@ -56,12 +54,18 @@ class SearchContainer extends React.Component {
         }
 
     }
-    /* Get the searchable object type. 
-     * The data is retrieving from Surveillance -> MainContain -> SearchContainer */
-    getObjectType = () => {
-        axios.post(getObjectTable, {
-            objectType: [0]
-        })
+    /** Get the searchable object type. */
+    getObjectTable = () => {
+        const {
+            locale,
+            auth
+        } = this.context
+
+        retrieveDataHelper.getObjectTable(
+            locale.abbr,
+            null,
+            [0]
+        )
         .then(res => {
             let objectTypeList = res.data.rows.reduce((objectTypeList, item) => {
                 if (!objectTypeList.includes(item.type)) {

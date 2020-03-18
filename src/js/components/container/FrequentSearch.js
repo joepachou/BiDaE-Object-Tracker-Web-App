@@ -1,6 +1,7 @@
 import React  from 'react';
-import { Col, ListGroup, Row, Button } from 'react-bootstrap';
-import config from '../../config';
+import { 
+    Button 
+} from 'react-bootstrap';
 import AccessControl from '../presentational/AccessControl';
 import { AppContext } from '../../context/AppContext';
 
@@ -26,7 +27,7 @@ class FrequentSearch extends React.Component {
     }
 
     handleClick = (e) => {
-        const itemName = e.target.name.toLowerCase();
+        const itemName = e.target.name
         this.getSearchKey(itemName)
     }
 
@@ -38,7 +39,10 @@ class FrequentSearch extends React.Component {
     }
 
     render() {
-        const { locale, auth } = this.context
+        const { 
+            locale, 
+            auth 
+        } = this.context
 
         const style = {
             list: {

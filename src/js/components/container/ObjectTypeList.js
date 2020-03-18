@@ -93,8 +93,8 @@ class ObjectTypeList extends React.Component {
         } = this.context
 
         return (
-            <div className='text-capitalize'>
-                <div className='title'>
+            <div>
+                <div className='text-capitalize title'>
                     {locale.texts.OBJECT_TYPE}
                 </div>
                 <div style={style.list} className="d-inline-flex flex-column searchOption">
