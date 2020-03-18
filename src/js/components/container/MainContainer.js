@@ -546,18 +546,22 @@ class MainContainer extends React.Component{
             
             let searchResultMac = [];
             
-            proccessedTrackingData.map(item => {
-                if (
-                    item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0 ||
-                    item.asset_control_number.indexOf(searchKey) >= 0 ||
-                    item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0 
-                ) {
-                    item.searched = true
-                    item.searchedType = -1;
-                    searchResult.push(item)
-                    searchResultMac.push(item.mac_address)
-                }
-            })
+            proccessedTrackingData
+                .filter(item => {
+                    return item.object_type == 0 && auth.user.areas_id.includes(item.area_id)
+                })
+                .map(item => {
+                    if (
+                        item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0 ||
+                        item.asset_control_number.indexOf(searchKey) >= 0 ||
+                        item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0 
+                    ) {
+                        item.searched = true
+                        item.searchedType = -1;
+                        searchResult.push(item)
+                        searchResultMac.push(item.mac_address)
+                    }
+                })
 
             if(this.state.lastsearchKey != searchKey){
                 axios.post(dataSrc.backendSearch,{

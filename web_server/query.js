@@ -157,8 +157,11 @@ const getTrackingData = (request, response) => {
 }
 
 const getObjectTable = (request, response) => {
-    let { locale, areaId, objectType } = request.body
-    pool.query(queryType.getObjectTable(areaId, objectType))       
+    let { 
+        locale, 
+        objectType 
+    } = request.body
+    pool.query(queryType.getObjectTable(objectType))       
         .then(res => {
             console.log('Get objectTable data')
             response.status(200).json(res)
