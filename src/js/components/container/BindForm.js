@@ -93,45 +93,43 @@ class BindForm extends React.Component {
                         }}
                         validationSchema = {
                             Yup.object().shape({
-                                acn: Yup.string()
+                                acn: Yup.string() 
                                 .required(locale.texts.ASSET_CONTROL_NUMBER_IS_REQUIRED)
-                                    // .test({
-                                    //     name: 'acn', 
-                                    //     message: locale.texts.ASSET_CONTROL_NUMBER_IS_NOT_FOUND,
-                                     
-                                    // }),
                                 .test(
                                     'acn', 
                                     locale.texts.THE_ASSET_CONTROL_NUMBER_IS_ALREADY_LINK,
                                     value => {  
-                                    let findFlag = true 
-                                    this.props.objectTable.map(item =>{ 
-                                     ( (item.asset_control_number.toUpperCase() == value.toUpperCase()) ) ? findFlag =false : null  
-                                    }) 
-                                    if (findFlag == false ) {lock = 0 }
-                                    else {  lock = 1}
-                                    return  findFlag
+                                        if (value != undefined){
+                                            let findFlag = true 
+                                            this.props.objectTable.map(item =>{ 
+                                            ( (item.asset_control_number.toUpperCase() == value.toUpperCase()) ) ? findFlag =false : null  
+                                            }) 
+                                            if (findFlag == false ) {lock = 0 }
+                                            else {  lock = 1}
+                                            return  findFlag
+                                        }
                                     }
                                 ) 
                                 .test(
                                     'acn', 
                                     locale.texts.ASSET_CONTROL_NUMBER_IS_NOT_FOUND,
                                     value => {
-                                      
-                                    let findFlag = false
-                                    let DeviceOrPatient= ''
-                                    this.props.bindCase == 1 ? DeviceOrPatient =this.props.ImportData :  DeviceOrPatient =this.props.PatientImportData
-                                    //等於１就是儀器 所以只拿object的data
-                                    //等於２就是病人 拿patient的data 
-                                
-                                    DeviceOrPatient.map(item =>{
-                                      if( item.asset_control_number.toUpperCase() == value.toUpperCase() ){
-                                        this.setState({bindData:item})
-                                        findFlag = true
-                                      } 
-                                     })
-                                     findFlag == true && lock ?  this.setState({showDetail:true}) :  this.setState({showDetail:false})
-                                     return findFlag
+                                        if (value != undefined){
+                                            let findFlag = false
+                                            let DeviceOrPatient= ''
+                                            this.props.bindCase == 1 ? DeviceOrPatient =this.props.ImportData :  DeviceOrPatient =this.props.PatientImportData
+                                            //等於１就是儀器 所以只拿object的data
+                                            //等於２就是病人 拿patient的data 
+                                        
+                                            DeviceOrPatient.map(item =>{
+                                            if( item.asset_control_number.toUpperCase() == value.toUpperCase() ){
+                                                this.setState({bindData:item})
+                                                findFlag = true
+                                            } 
+                                            })
+                                            findFlag == true && lock ?  this.setState({showDetail:true}) :  this.setState({showDetail:false})
+                                            return findFlag
+                                        }
                                     }
                                 ) ,
 
