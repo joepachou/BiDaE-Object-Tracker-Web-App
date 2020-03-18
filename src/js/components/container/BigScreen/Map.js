@@ -220,21 +220,6 @@ class Map extends React.Component {
         this.createLegend(this.createLegendJSX());
     }
 
-    collectObjectsByLatLng = (lbPosition) => {
-        let objectList = []
-        this.props.proccessedTrackingData
-        .filter(item => {
-            return item.currentPosition
-        })
-        .filter(item => {
-            return parseInt(item.area_id) === parseInt(this.props.areaId) && item.found && item.object_type == 0
-        })
-        .map(item => {
-            item.currentPosition && item.currentPosition.toString() === lbPosition.toString() && item.isMatchedObject ? objectList.push(item) : null;
-        })
-        return objectList 
-    }
-
     /** Retrieve the object's offset from object's mac_address.
      * @param   mac_address The mac_address of the object retrieved from DB. 
      * @param   lbeacon_coordinate The lbeacon's coordinate processed by createLbeaconCoordinate().*/

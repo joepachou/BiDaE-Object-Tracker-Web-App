@@ -73,13 +73,11 @@ class MainContainer extends React.Component{
         let targetElement = document.querySelector('body')
         disableBodyScroll(targetElement);
 
-        // this.getTrackingData();
+        this.getTrackingData();
         this.getLbeaconPosition();
         this.getGeofenceConfig();
         this.getLocationMonitorConfig()
-        this.interval = setInterval(() => {
-            this.getTrackingData()
-        }, config.mapConfig.intervalTime)
+        this.interval = setInterval(this.getTrackingData, config.mapConfig.intervalTime)
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -93,9 +91,7 @@ class MainContainer extends React.Component{
         if (stateReducer[0].shouldUpdateTrackingData !== this.state.shouldUpdateTrackingData) {
             let [{shouldUpdateTrackingData}] = stateReducer
             this.interval = shouldUpdateTrackingData 
-                ?   setInterval(() => {
-                        this.getTrackingData()
-                    }, config.mapConfig.intervalTime) 
+                ?   setInterval(this.getTrackingData, config.mapConfig.intervalTime)
                 :   clearInterval(this.interval);
             this.setState({
                 shouldUpdateTrackingData
@@ -436,7 +432,6 @@ class MainContainer extends React.Component{
     /** Fired once the user click the item in object type list or in frequent seaerch */
     getSearchKey = (searchKey, colorPanel = null, searchValue = null, markerClickPackage = {}) => {
         this.getResultBySearchKey(searchKey, colorPanel, searchValue, markerClickPackage)
-        // this.processSearchResult(searchResult, colorPanel, searchKey, searchValue, markerClickPackage)
     }
 
     /** Process the search result by the search key.
@@ -451,6 +446,7 @@ class MainContainer extends React.Component{
      */
     getResultBySearchKey = (searchKey, colorPanel, searchValue, markerClickPackage) => {
         let searchResult = [];
+        let hasSearchKey = true
         let {
             searchedObjectType,
             showedObjects,
@@ -464,7 +460,7 @@ class MainContainer extends React.Component{
             const devicesAccessControlNumber = auth.user.myDevice || []
             proccessedTrackingData
                 .filter(item => {
-                    return item.object_type == 0 && auth.user.areas_id.includes(item.area_id)
+                    return item.object_type == 0
                 })
                 .map(item => {
                     if (devicesAccessControlNumber.includes(item.asset_control_number)) {
@@ -481,7 +477,7 @@ class MainContainer extends React.Component{
         } else if (searchKey === ALL_DEVICES) {
             searchResult = proccessedTrackingData
                 .filter(item => {
-                    return item.object_type == 0 && auth.user.areas_id.includes(item.area_id)
+                    return item.object_type == 0 
                 })
                 .map(item => {
                     item.searchedType = 0
@@ -498,7 +494,7 @@ class MainContainer extends React.Component{
             
             proccessedTrackingData
                 .filter(item => {
-                    return item.object_type != 0 && auth.user.areas_id.includes(item.area_id)
+                    return item.object_type != 0 
                 })
                 .map(item => {
                     if (devicesAccessControlNumber.includes(item.asset_control_number)) {
@@ -516,7 +512,7 @@ class MainContainer extends React.Component{
         } else if (searchKey === ALL_PATIENTS) {
             searchResult = proccessedTrackingData
                 .filter(item => {
-                    return item.object_type != 0 && auth.user.areas_id.includes(item.area_id)
+                    return item.object_type != 0 
                 })
                 .map(item => {
                     item.searchedType = 1;
@@ -543,16 +539,15 @@ class MainContainer extends React.Component{
                 } 
             })
 
+        } else if (searchKey == "") {
+            searchResult = []
+            hasSearchKey = false
         } else {
-            
             let searchResultMac = [];
             
             proccessedTrackingData
-                .filter(item => {
-                    return item.object_type == 0 && auth.user.areas_id.includes(item.area_id)
-                })
                 .map(item => {
-                    if (
+                     if (
                         item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0 ||
                         item.asset_control_number.indexOf(searchKey) >= 0 ||
                         item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0 
@@ -564,18 +559,21 @@ class MainContainer extends React.Component{
                     }
                 })
 
-            if(this.state.lastsearchKey != searchKey){
+                if(this.state.lastsearchKey != searchKey){
                 axios.post(dataSrc.backendSearch,{
                     keyType : 'all attributes',
                     keyWord : searchKey,
                     mac_address : searchResultMac
                 })
+                .then(res => {
+                    this.setState({
+                        lastsearchKey: searchKey
+                    })
+                })
                 .catch(err =>{
                     console.log(err)
                 })
-                this.setState({
-                    lastsearchKey: searchKey
-                })
+
             }
             if (!searchedObjectType.includes(-1)) { 
                 searchedObjectType.push(-1)
@@ -588,7 +586,7 @@ class MainContainer extends React.Component{
             searchedObjectType,
             showedObjects,
             searchResult,
-            hasSearchKey: true,
+            hasSearchKey,
             searchKey,
 
         })
