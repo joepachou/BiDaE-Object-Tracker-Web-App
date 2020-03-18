@@ -300,13 +300,12 @@ class ObjectManagementContainer extends React.Component{
                            label: item.type
                        }
                     }
-
                     data.push(item)
                 }
-
                 item.area_name = {
                     value: item.area_name,
                     label: locale.texts[item.area_name],
+                    id: item.area_id
                 }
             })
 

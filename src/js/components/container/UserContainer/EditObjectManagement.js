@@ -5,20 +5,17 @@ import {
 } from 'react-bootstrap';
 import ReactTable from 'react-table'
 import axios from 'axios';
-import Cookies from 'js-cookie'
-import moment from 'moment'
-import LocaleContext from '../../../context/LocaleContext';
-import { getEditObjectRecord } from "../../../dataSrc";
-import AxiosFunction from './AxiosFunction'
 import { editObjectRecordTableColumn } from '../../../tables';
-import DeleteForm from '../DeleteForm'
-import { deleteEditObjectRecord } from '../../../dataSrc'
+import dataSrc from '../../../dataSrc'
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
 import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm'
 const SelectTable = selecTableHOC(ReactTable);
-
+import { AppContext } from '../../../context/AppContext'
+import retrieveDataHelper from '../../../helper/retrieveDataHelper'
 
 class EditObjectManagement extends React.Component{
+
+    static contextType = AppContext
 
     state = {
         data: [],
@@ -28,6 +25,10 @@ class EditObjectManagement extends React.Component{
         selectAll: false,
         selection: [],
         showDeleteConfirmation: false,
+    }
+
+    componentDidMount = () => {
+        this.getEditObjectRecord()
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -40,69 +41,33 @@ class EditObjectManagement extends React.Component{
     }
 
     getEditObjectRecord = () => {
-        let locale = this.context
-        axios.post(getEditObjectRecord, {
-            locale: this.context.abbr
-        })
-        .then(res => {
-            let columns = _.cloneDeep(editObjectRecordTableColumn)
-            columns.map(field => {
-                field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
-                field.headerStyle = {
-                    textAlign: 'left',
-                    textTransform: 'capitalize'
-                }
-            })
-            res.data.rows.map((item, index) => {
-                item._id = index + 1
-                item.new_status = locale.texts[item.new_status.toUpperCase().replace(/ /g, '_')]
-            })
-            this.setState({
-                data: res.data.rows,
-                columns,
-            })
-        })
-        .catch(err => {
-            console.log(err)
-        })
-    }
+        let {
+            locale
+        } = this.context
 
-    componentDidMount = () => {
-        this.getEditObjectRecord()
-    }
-
-    itemLayout = (record, index) => {
-        return(
-            <h5 name={record.id}>
-                User {record.edit_user_id}, Edit at {moment(record.edit_time).format('LLLL')}
-            </h5>
-        ) 
-    }
-
-    onRowClick = (state, rowInfo, column, instance) => {
-        return {
-            onClick: e => {
-                this.setState({
-                    showForm: true
+        retrieveDataHelper.getEditObjectRecord(locale.abbr)
+            .then(res => {
+                let columns = _.cloneDeep(editObjectRecordTableColumn)
+                columns.map(field => {
+                    field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
+                    field.headerStyle = {
+                        textAlign: 'left',
+                        textTransform: 'capitalize'
+                    }
                 })
-            }
-        }
+                res.data.rows.map((item, index) => {
+                    item._id = index + 1
+                    item.new_status = locale.texts[item.new_status.toUpperCase().replace(/ /g, '_')]
+                })
+                this.setState({
+                    data: res.data.rows,
+                    columns,
+                })
+            })
+            .catch(err => {
+                console.log(`get edited object record failed ${err}`)
+            })
     }
-
-    onCloseForm = () => {
-        this.setState({
-            showForm: false
-        })
-    }
-    // <ListGroup className="w-100 shadow" style={{overflowY:'scroll', height: '75vh'}}>
-    //     {this.state.record.map((record, index)=>{
-    //         return (
-    //             <ListGroup.Item key={index} onClick={this.onClickFile} name={record.id} style={{cursor: 'grab'}}>
-    //                 {this.itemLayout(record, index)}
-    //             </ListGroup.Item>
-    //         )   
-    //     })}
-    // </ListGroup>
 
     toggleAll = () => {
         /*
@@ -146,24 +111,22 @@ class EditObjectManagement extends React.Component{
           This implementation uses an array stored in the component state.
           Other implementations could use object keys, a Javascript Set, or Redux... etc.
         */
-        // start off with the existing state
+
         let selection = [...this.state.selection];
      
         key = typeof key === 'number' ? key : parseInt(key.split('-')[1])
         const keyIndex = selection.indexOf(key);
-        // check to see if the key exists
+
         if (keyIndex >= 0) {
-            // it does exist so we will remove it using destructing
+
             selection = [
             ...selection.slice(0, keyIndex),
             ...selection.slice(keyIndex + 1)
             ];
         } else {
-            // it does not exist so add it
             selection.push(key);
         }
-        {console.log(selection)}
-        // update the state
+
         this.setState({ 
             selection 
         });
@@ -180,13 +143,12 @@ class EditObjectManagement extends React.Component{
     }
 
     deleteRecord = () => {
-        // console.log(this.state.selection)
-        // console.log(this.state.data)
+
         let idPackage = []
         this.state.selection.map( item => {
             idPackage.push(parseInt(this.state.data[item - 1].id))
         })
-        axios.post(deleteEditObjectRecord, {
+        axios.post(dataSrc.deleteEditObjectRecord, {
             idPackage
         })
         .then(res => {
@@ -213,31 +175,10 @@ class EditObjectManagement extends React.Component{
     }
 
     render(){
-        // User {record.edit_user_id}, Edit at {moment(record.edit_time).format('LLLL')}
-        // console.log('renderrrrrrr')
-        // console.log(this.state.record)
-        const { record } = this.state
-        const locale = this.context
-        // const column = [
-        //     {
-        //         Header: 'No.',
-        //         Cell: ({row}) => {
-        //             return <div className="d-flex justify-content-center w-100 h-100">{row._index}</div>
-        //         },
-        //     },
-        //     {
-        //         Header: 'User',
-        //         Cell: ({row}) => {
-        //             return <div className="d-flex justify-content-center w-100 h-100">{row._original.edit_user_id}</div>
-        //         }
-        //     },
-        //     {
-        //         Header: 'Edit Time',
-        //         Cell: ({row}) => {
-        //             return <div className="d-flex justify-content-center w-100 h-100">{moment(row._original.edit_time).format('LLLL')}</div>
-        //         }
-        //     },
-        // ]
+
+        const { 
+            locale 
+        } = this.context
 
         const {
             toggleSelection,
@@ -257,7 +198,6 @@ class EditObjectManagement extends React.Component{
         };
 
         return (
-            
             <>
                 <ButtonToolbar>
                     <Button 
@@ -272,15 +212,8 @@ class EditObjectManagement extends React.Component{
                         {locale.texts.DELETE}
                     </Button>
                 </ButtonToolbar>
-                {/* <ReactTable 
-                    data={this.state.data} 
-                    columns={this.state.columns} 
-                    noDataText={locale.texts.NO_DATA_AVALIABLE}
-                    className="-highlight w-100"
-                    style={{height:'75vh'}}
-                    // getTrProps={this.onRowClick}
-                /> */}
-                {this.state.data ? (
+
+                {this.state.data && (
                 
                     <SelectTable
                         keyField='_id'
@@ -289,15 +222,12 @@ class EditObjectManagement extends React.Component{
                         ref={r => (this.selectTable = r)}
                         className="-highlight"
                         style={{height:'75vh'}}
-                        // showPagination = {false}
                         {...extraProps}
                         getTrProps={(state, rowInfo, column, instance) => {
                           
                             return {
                                 onClick: (e, handleOriginal) => {
                                     let id = rowInfo.original._id
-                                    {console.log('dd')}
-                                    {console.log(rowInfo)}
                                     this.toggleSelection(id)
                             
                                     // IMPORTANT! React-Table uses onClick internally to trigger
@@ -308,28 +238,20 @@ class EditObjectManagement extends React.Component{
                                     if (handleOriginal) {
                                         handleOriginal()
                                     }
-                                    window.open(`http://${process.env.DATASRC_IP}/${rowInfo.original.file_path}`);
+                                    window.open(dataSrc.pdfUrl(rowInfo.original.file_path));
                                 }
                             }
                         }}
-                    />
-                    ) : null
+                    />)
                 }
                 <DeleteConfirmationForm
                     show={this.state.showDeleteConfirmation} 
                     handleClose={this.handleCloseDeleteConfirmForm}
                     handleSubmit={this.handleSubmitDeleteConfirmForm}
                 />
-                {/* <DeleteForm
-                    roleName={this.state.roleName}
-                    show={this.state.showForm}
-                    onClose={this.onCloseForm}
-                    title={'edit record'}
-                /> */}
             </>
         )
     }
 }
-EditObjectManagement.contextType = LocaleContext;
 
 export default EditObjectManagement

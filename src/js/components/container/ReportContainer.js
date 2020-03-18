@@ -1,28 +1,22 @@
 import React from 'react';
-import ListGroup from 'react-bootstrap/ListGroup';
-import { Tab, Col, Row, Button, Nav, Container} from 'react-bootstrap';
-import ShiftChangeRecord from './ShiftChangeRecord'
-import AdminManagementContainer from './AdminManagementContainer'
-import EditObjectManagement from './EditObjectManagement'
-import AccessControl from '../../presentational/AccessControl'
-import MyDeviceManager from './MyDeviceManager';
-import MyPatientManager from './MyPatientManager';
-import UserProfile from "./UserProfile";
-import TransferredLocationManagement from "./TransferredLocationManagement";
-import RolePermissionManagement from "./RolePermissionManagement"
-import { AppContext } from '../../../context/AppContext';
+import { 
+    Col, 
+    Row, 
+    Container
+} from 'react-bootstrap';
+import ShiftChangeRecord from './UserContainer/ShiftChangeRecord'
+import EditObjectManagement from './UserContainer/EditObjectManagement'
+import AccessControl from '../presentational/AccessControl'
+import { AppContext } from '../../context/AppContext';
 import { 
     disableBodyScroll,
     enableBodyScroll,
 } from 'body-scroll-lock';
 import {
-    BrowserView,
-    MobileOnlyView,
-    TabletView,
     isBrowser
 } from 'react-device-detect'
 
-class UserSettingContainer extends React.Component{
+class ReportContainer extends React.Component{
 
     static contextType = AppContext
 
@@ -39,30 +33,7 @@ class UserSettingContainer extends React.Component{
     }
 
     pageList = [
-        {
-            name: 'User Profile',
-            path: 'userProfile',
-            href: '#UserProfile',
-            component: <UserProfile />
-        },
-        {
-            name: 'Devices Management',
-            path: 'devicesManagement',
-            href: '#DevicesManagement',
-            component: <MyDeviceManager />
-        },
-        {
-            name: 'Patient Management',
-            path: 'patientManagement',
-            href: '#PatientManagement',
-            component: <MyPatientManager />
-        },
-        {
-            name: 'User Manager',
-            path: 'userManager',
-            href: '#UserManager',
-            component: <AdminManagementContainer />
-        },
+
         {
             name: 'Edit Object Management',
             path: 'editObjectManagement',
@@ -75,20 +46,7 @@ class UserSettingContainer extends React.Component{
             href: '#ShiftChangeRecord',
             component: <ShiftChangeRecord />,
         },
-        {
-            name: "Transferred Location Management",
-            path: "transferredLocationManagement",
-            href: "#TransferredLocationManagement",
-            component: <TransferredLocationManagement />,
-            platform: ['browser', 'tablet']
-        },
-        {
-            name: "Role Permission Management",
-            path: "rolePermissionManagement",
-            href: "#RolePermissionManagement",
-            component: <RolePermissionManagement />,
-            platform: ['browser', 'tablet']
-        }
+
     ]
     
     render(){
@@ -118,7 +76,7 @@ class UserSettingContainer extends React.Component{
                     style={style.sidenav}
                 >
                     <div className="border-0 h5 mt-0 mb-1">
-                        {locale.texts.USER_SETTING}
+                        {/* {locale.texts.USER_SETTING} */}
                     </div>
                     <div>
                         {this.pageList.map((page, index) => {
@@ -180,4 +138,4 @@ class UserSettingContainer extends React.Component{
     }
 }
 
-export default UserSettingContainer
+export default ReportContainer

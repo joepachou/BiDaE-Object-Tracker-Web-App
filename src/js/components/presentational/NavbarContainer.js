@@ -233,6 +233,7 @@ class NavbarContainer extends React.Component {
                         <AccessControl
                             permission={'route:bigScreen'}
                             renderNoAccess={() => null}
+                            platform={['browser']}
                         >
                             <Nav.Item><Link to="/page/bigScreen" className="nav-link nav-route" >{locale.texts.BIG_SCREEN}</Link></Nav.Item>
                         </AccessControl>
@@ -243,6 +244,28 @@ class NavbarContainer extends React.Component {
                             <Nav.Item>
                                 <Link to="/page/trackingPath" className="nav-link nav-route" >
                                     {locale.texts.TRACKING_HISTORY}
+                                </Link>
+                            </Nav.Item>
+                        </AccessControl>
+                        <AccessControl
+                            permission={'route:monitor'}
+                            renderNoAccess={() => null}
+                            platform={['browser', 'tablet']}
+                        >
+                            <Nav.Item>
+                                <Link to="/page/monitor" className="nav-link nav-route" >
+                                    {locale.texts.MONITOR_SETTING}
+                                </Link>
+                            </Nav.Item>
+                        </AccessControl>
+                        <AccessControl
+                            permission={'route:report'}
+                            renderNoAccess={() => null}
+                            platform={['browser', 'tablet']}
+                        >
+                            <Nav.Item>
+                                <Link to="/page/report" className="nav-link nav-route" >
+                                    {locale.texts.REPORT}
                                 </Link>
                             </Nav.Item>
                         </AccessControl>

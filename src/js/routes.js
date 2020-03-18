@@ -5,6 +5,8 @@ import UserContainer from "./components/container/UserContainer/UserContainer"
 import BigScreenContainer from "./components/container/BigScreen/BigScreenContainer";
 import About from "./components/container/About"
 import TrackingPathContainer from "./components/container/TrackingPathContainer"
+import MonitorSetting from "./components/container/UserContainer/MonitorSetting"
+import ReportContainer from "./components/container/ReportContainer"
 
 const routes = [
     {
@@ -40,6 +42,16 @@ const routes = [
     {
         path: '/page/trackingPath',
         component: TrackingPathContainer,
+        exact: true,
+    },
+    {
+        path: '/page/monitor',
+        component: MonitorSetting,
+        exact: true,
+    },
+    {
+        path: '/page/report',
+        component: ReportContainer,
         exact: true,
     },
 ];

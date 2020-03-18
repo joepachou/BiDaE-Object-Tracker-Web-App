@@ -29,7 +29,7 @@ const editLbeacon = `${protocol}://${dataSrcIP}/data/editLbeacon`;
 const modifyMyDevice = `${protocol}://${dataSrcIP}/data/modifyMyDevice`;
 const modifyUserInfo = `${protocol}://${dataSrcIP}/data/modifyUserInfo`;
 const generatePDF = `${protocol}://${dataSrcIP}/data/generatePDF`;
-const getPDFInfo = `${protocol}://${dataSrcIP}/data/PDFInfo`;
+const getShiftChangeRecord = `${protocol}://${dataSrcIP}/data/PDFInfo`;
 const validateUsername = `${protocol}://${dataSrcIP}/validation/username`;
 const getEditObjectRecord = `${protocol}://${dataSrcIP}/test/getEditObjectRecord`;
 const deleteEditObjectRecord = `${protocol}://${dataSrcIP}/test/deleteEditObjectRecord`
@@ -116,7 +116,7 @@ module.exports = {
     deleteImportData,
     deleteLBeacon,
     deleteGateway,
-    getPDFInfo,
+    getShiftChangeRecord,
     validateUsername,    
     getEditObjectRecord,
     deleteEditObjectRecord,

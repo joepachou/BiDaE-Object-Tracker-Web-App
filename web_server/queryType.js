@@ -174,73 +174,38 @@ const getLocationHistory = (key, startTime, endTime, mode) => {
 	return query
 }
 
-const getObjectTable = (area_id, objectType ) => {
+const getObjectTable = (objectType ) => {
 
-	let text = '';
-	if (!area_id) {
-		text += `
-			SELECT 
-				object_table.id,
-				object_table.name, 
-				object_table.type, 
-				object_table.asset_control_number, 
-				object_table.status, 
-				object_table.transferred_location, 
-				object_table.mac_address,
-				object_table.monitor_type,
-				object_table.area_id,
-				area_table.name as area_name,
-				object_table.object_type,
-				object_table.id,
-				object_table.room,
-				object_table.physician_id,
-				(
-					SELECT name
-					FROM user_table
-					WHERE user_table.id = object_table.physician_id
-				) as physician_name
+	return `
+		SELECT 
+			object_table.id,
+			object_table.name, 
+			object_table.type, 
+			object_table.asset_control_number, 
+			object_table.status, 
+			object_table.transferred_location, 
+			object_table.mac_address,
+			object_table.monitor_type,
+			object_table.area_id,
+			area_table.name as area_name,
+			object_table.object_type,
+			object_table.id,
+			object_table.room,
+			object_table.physician_id,
+			(
+				SELECT name
+				FROM user_table
+				WHERE user_table.id = object_table.physician_id
+			) as physician_name
 
-			FROM object_table 
+		FROM object_table 
 
-			LEFT JOIN area_table
-			ON area_table.id = object_table.area_id
-				
-			WHERE object_table.object_type IN (${objectType.map(type => type)})
-			ORDER BY object_table.name ASC;
-		`;
-	} else {
-		text +=`
-			SELECT 
-				object_table.id,
-				object_table.name, 
-				object_table.type, 
-				object_table.asset_control_number, 
-				object_table.status, 
-				object_table.transferred_location, 
-				object_table.mac_address,
-				object_table.monitor_type,
-				object_table.area_id,
-				area_table.name as area_name,
-				object_table.object_type,
-				object_table.id,
-				object_table.room,
-				object_table.physician_id,
-				(
-					SELECT name
-					FROM user_table
-					WHERE user_table.id = object_table.physician_id
-				) as physician_name
+		LEFT JOIN area_table
+		ON area_table.id = object_table.area_id
 			
-			FROM object_table 				
-			LEFT JOIN area_table
-			ON area_table.id = object_table.area_id
-
-			WHERE object_table.object_type IN (${objectType.map(type => type)})
-					
-			ORDER BY object_table.type DESC;
-		`;
-	}
-	return text
+		WHERE object_table.object_type IN (${objectType.map(type => type)})
+		ORDER BY object_table.name ASC;
+	`;
 } 
 
 
