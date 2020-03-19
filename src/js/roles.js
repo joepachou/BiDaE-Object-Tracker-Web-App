@@ -11,11 +11,8 @@ const rules = {
             "route:devicesManagement",
             "route:patientManagement",
             "route:userProfile",
-            "route:monitorSetting",
             "route:bigScreen",
             "route:trackingPath",
-            "route:monitor",
-            "route:report",
             
             "user:mydevice",
             "user:mypatient",
@@ -40,10 +37,11 @@ const rules = {
             "route:shiftChangeRecord",
             "route:rolePermissionManagement",
             "route:transferredLocationManagement",
-            "route:monitorSetting",
             "route:trackingPath",
             "route:monitor",
             "route:report",
+            "route:bigScreen",
+
 
             "user:mydevice",
             "user:mypatient",
@@ -64,7 +62,6 @@ const rules = {
             "route:userProfile",
             "route:objectManagement",
             "route:editObjectManagement",
-            "route:monitorSetting",
             "route:shiftChangeRecord",
             "route:userManager",
             "route:rolePermissionManagement",

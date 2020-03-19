@@ -99,26 +99,6 @@ class NavbarContainer extends React.Component {
 
         },
         {
-            name: "system status",
-            alias: "systemStatus",
-            path: "/page/systemStatus",
-            permission: "route:systemStatus"
-        },
-        {
-            name: "big screen",
-            alias: "bigScreen",
-            path: "/page/bigScreen",
-            permission: "route:bigScreen",
-            platform: ['browser']
-        },
-        {
-            name: "tracking history",
-            alias: "trackingPath",
-            path: "/page/trackingPath",
-            permission: "route:trackingPath"
-
-        },
-        {
             name: "monitor setting",
             alias: "monitor",
             path: "/page/monitor",
@@ -139,9 +119,27 @@ class NavbarContainer extends React.Component {
             permission: "user:shiftChange",
             platform: ['browser', 'tablet'],
             event: this.handleClick
+        },
+        {
+            name: "system status",
+            alias: "systemStatus",
+            path: "/page/systemStatus",
+            permission: "route:systemStatus"
+        },
+        {
+            name: "tracking history",
+            alias: "trackingPath",
+            path: "/page/trackingPath",
+            permission: "route:trackingPath"
 
         },
-
+        {
+            name: "big screen",
+            alias: "bigScreen",
+            path: "/page/bigScreen",
+            permission: "route:bigScreen",
+            platform: ['browser']
+        },
     ]
 
     render= () => {
