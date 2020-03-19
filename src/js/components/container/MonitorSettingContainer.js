@@ -13,6 +13,19 @@ import {
     Container
 } from 'react-bootstrap';
 
+const style = {
+
+    sidenav: {
+        width: 150,
+    },
+    sidemain:{
+        marginLeft: 150
+    },
+    container: {
+        overflowX: 'hide'
+    },
+}
+
 class MonitorSetting extends React.Component{
 
     static contextType = AppContext
@@ -39,8 +52,9 @@ class MonitorSetting extends React.Component{
             name: config.monitorSettingType.GEOFENCE_MONITOR,
             component: (props) => <GeoFenceSettingBlock {...props}/>
         },
-
     ]
+
+    defaultActiveKey = "movement_monitor"
 
     componentDidMount = () => {
         this.getAreaTable()
@@ -63,19 +77,6 @@ class MonitorSetting extends React.Component{
             locale
         } = this.context
 
-        const style = {
-
-            sidenav: {
-                width: isBrowser ? 150 : 0,
-            },
-            sidemain:{
-                marginLeft: isBrowser ? 150 : 0
-            },
-            container: {
-                overflowX: 'hide'
-            },
-        }
-
         return (
             <Container 
                 fluid 
@@ -84,14 +85,17 @@ class MonitorSetting extends React.Component{
             >     
                 <Tab.Container 
                     transition={false} 
-                    defaultActiveKey="movement_monitor"
+                    defaultActiveKey={this.defaultActiveKey}
                     className='mt-5' 
                 >
                     <div 
                         className="border-0 BOTsidenav"
                         style={style.sidenav}
                     >            
-                        <ListGroup variant="flush" className="border-0 text-capitalize">
+                        <ListGroup 
+                            variant="flush" 
+                            className="border-0"
+                        >
                             {this.tabList.map((tab, index) => {
                                 return (
                                     <ListGroup.Item 
