@@ -37,6 +37,8 @@ class MonitorSettingBlock extends React.Component{
         } = this.context 
         axios.post(dataSrc.getMonitorConfig, {
             type: config.monitorSettingUrlMap[this.props.type],
+            areasId: auth.user.areas_id,
+            roles:auth.user.roles
         })
         .then(res => { 
             let columns = _.cloneDeep(monitorConfigColumn)
@@ -88,13 +90,19 @@ class MonitorSettingBlock extends React.Component{
                 }
             })
 
-            let areaOptions = this.props.areaTable
-                .map(area => {
-                    area['value'] = area.name,
-                    area['label'] = locale.texts[area.name]
-                    return area
+            let areaOptions = auth.user.areas_id
+                .filter(id => {
+                    return Object.keys(config.mapConfig.areaOptions).includes(id) 
+                        && !res.data.map(item => item.area_id).includes(id)
                 })
-
+                .reduce((options, id) => {
+                    options.push({
+                        value: config.mapConfig.areaOptions[id],
+                        label: locale.texts[config.mapConfig.areaOptions[id]],
+                        id,
+                    })
+                    return options
+                }, []) 
             this.setState({
                 data: res.data,
                 columns,
@@ -235,7 +243,7 @@ class MonitorSettingBlock extends React.Component{
                     areaOptions={this.state.areaOptions}
                     isEdited={isEdited}
                 />
-                <DeleteConfirmationForm
+                <DeleteConfirmationForm 
                     show={this.state.showDeleteConfirmation} 
                     handleClose={this.handleClose}
                     handleSubmit={this.handleSubmit}

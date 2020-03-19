@@ -140,6 +140,7 @@ const tw = {
     HIDE_MAP : "隱藏地圖",
     NEW_SEARCH: "重新搜尋",
     SEARCH: "查詢",
+    EDIT_PASSWORD:"更改密碼",
     
     /* field */
     NAME: "名稱",
@@ -237,6 +238,8 @@ const tw = {
     GEOFENCE: "電子圍籬警告",
     PANIC: "緊急",
     EDIT_SECONDARY_AREAS: "編輯次要區域",
+    NEW_PASSWORD:"新密碼",
+    CHECK_PASSWORD:"確認新密碼",
 
     /** Error Message */
     GENDER_IS_REQUIRED: "請選擇性別",
@@ -275,7 +278,8 @@ const tw = {
     MUST_BE_NEGATIVE_NUMBER:"必須是負數",
     CONNECT_TO_DATABASE_FAILED: "連線失敗",
     THE_ASSET_CONTROL_NUMBER_IS_ALREADY_LINK:"此編號已綁定",
-
+    ENTER_THE_PASSWORD:"請輸入新密碼",
+    PASSWORD_NOT_FIT:"密碼需要相符",
 
     /** Place Holder */
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "請輸入或掃描mac address",

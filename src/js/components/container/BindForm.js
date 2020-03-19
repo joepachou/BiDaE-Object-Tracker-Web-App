@@ -35,7 +35,7 @@ class BindForm extends React.Component {
         })
         this.props.handleClose()
     }
-
+ 
     render() {
         const { locale } = this.context
 

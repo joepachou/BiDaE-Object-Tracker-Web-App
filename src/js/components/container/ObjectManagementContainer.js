@@ -236,8 +236,7 @@ class ObjectManagementContainer extends React.Component{
             let columnPatient = _.cloneDeep(patientTableColumn)
             let data = [] 
             let dataPatient = []
-            let typeList = {}
-
+            let typeList = {} 
             column.push({
                 Header: "",
                 accessor: "Delete Option",
@@ -296,8 +295,8 @@ class ObjectManagementContainer extends React.Component{
                             item.transferred_location = department
                         }
                     }
-
-                    if (!Object.keys(typeList).includes(item.type)) {
+ 
+                    if (!Object.keys(typeList).includes(item.type)) { 
                        typeList[item.type] = {
                            value: item.type,
                            label: item.type

@@ -91,6 +91,8 @@ app.post('/user/signin', db.signin)
 
 app.post('/user/signup', db.signup);
 
+app.post('/user/editPassword', db.editPassword)
+
 app.post('/data/getImportPatient', db.getImportPatient);
 
 app.post('/user/getUserInfo', db.getUserInfo)

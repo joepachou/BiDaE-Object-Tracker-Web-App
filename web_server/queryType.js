@@ -840,7 +840,34 @@ function signin(username) {
     return query;
 
 }
-	
+
+
+const editPassword = (user_id,password) => {
+	const text =
+		`
+		UPDATE user_table
+		SET 
+			password = $2
+		WHERE id = $1
+	`;
+
+	const values = [
+		user_id,
+		password
+	];
+
+	const query = {
+		text,
+		values
+	};
+
+	return query
+}
+
+
+
+
+
 const signup = (signupPackage) => {
 
 	const text = 
@@ -2053,6 +2080,7 @@ module.exports = {
 	editObjectPackage,
 	signin,
 	signup,
+	editPassword,
 	getUserInfo,
 	addUserSearchHistory,
 	editLbeacon,

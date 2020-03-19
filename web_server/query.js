@@ -572,6 +572,28 @@ const signin = (request, response) => {
         })
 }
 
+const editPassword = (request, response) => {
+    const { 
+        user_id, 
+        password
+    } = request.body;    
+
+    const saltRounds = 10;
+    const hash = bcrypt.hashSync(password, saltRounds);
+
+    pool.query(queryType.editPassword(user_id,hash)) 
+        .then(res => {
+            console.log('edit Password success')
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(`edit Password failer ${err}`)
+        })  
+ 
+}
+
+
+
 const signup = (request, response) => {
 
     const { 
@@ -1562,6 +1584,7 @@ module.exports = {
     deleteUser,
     signin,
     signup,
+    editPassword,
     generatePDF,
     modifyUserDevices,
     modifyUserInfo,

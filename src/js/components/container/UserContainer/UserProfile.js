@@ -18,6 +18,8 @@ import NumberPicker from '../NumberPicker';
 import cloneDeep from 'lodash/cloneDeep';
 import EditAreasForm from '../../presentational/EditAreasForm'
 import retrieveDataHelper from '../../../helper/retrieveDataHelper';
+import EditPwdForm from '../../presentational/EditPwdForm'
+ 
 
 class UserProfile extends React.Component{
 
@@ -25,6 +27,7 @@ class UserProfile extends React.Component{
 
     state= {
         show: false,
+        editpwd:false,
         locale: '',
         userData:[],
         mainArea:'',
@@ -200,9 +203,15 @@ class UserProfile extends React.Component{
         })
     }
 
+    handleShowEditPwd = () => { 
+        this.setState({ 
+            editpwd: true
+        })
+    } 
     handleCloseModal = () => {
         this.setState({
-            show: false
+            show: false,
+            editpwd:false
         })
     }
 
@@ -225,7 +234,8 @@ class UserProfile extends React.Component{
         this.setState({
             secondaryAreaId : this.state.secondaryAreaIdBeforUpdate,
             otherAreaId: this.state.otherAreaIdBeforUpdate,
-            show: false
+            show: false,
+            editpwd:false
         })
     }
 
@@ -325,9 +335,23 @@ class UserProfile extends React.Component{
                             onChange={this.resetFreqSearchCount}
                             length={10}
                         />
-                    </div>
-
+                    </div> 
                 </div>
+                <hr/>
+                <div>
+                    <div className="title ">
+                        {locale.texts.EDIT_PASSWORD}
+                    </div>
+                    <div>  
+                            <Button 
+                                variant='link' 
+                                onClick={this.handleShowEditPwd}
+                            >
+                                {locale.texts.EDIT}
+                            </Button> 
+                    </div>
+                </div>
+                
                 <EditAreasForm 
                     show={this.state.show} 
                     handleClose={this.handleCloseModal}
@@ -336,6 +360,12 @@ class UserProfile extends React.Component{
                     handleSubmit={this.handleCloseModalwithSave}
                     handleBeforUpdateDele={this.handleBeforUpdateDele}
                     handleBeforUpdateAdd={this.handleBeforUpdateAdd}
+                />
+
+                <EditPwdForm
+                    show={this.state.editpwd} 
+                    handleClose={this.handleCloseModal}
+                    handleSubmit={this.handleCloseModalwithSave}
                 />
             </div>
         )

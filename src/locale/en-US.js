@@ -137,6 +137,7 @@ const en =  {
     HIDE_MAP : "hide map",
     NEW_SEARCH: "new search",
     SEARCH: "search",
+    EDIT_PASSWORD:"edit password",
 
     /* field */
     NAME: "name",
@@ -233,7 +234,9 @@ const en =  {
     GEOFENCE: "geofence alert",
     PANIC: "emergency",
     EDIT_SECONDARY_AREAS: "edit secondary areas",
-    
+    NEW_PASSWORD:"New password",
+    CHECK_PASSWORD:"Check password",
+
     /** error message */
     GENDER_IS_REQUIRED: "Gender is required",
     ROLE_IS_REQUIRED: "role is required",
@@ -270,6 +273,8 @@ const en =  {
     MUST_BE_NEGATIVE_NUMBER:"must be negative number",
     CONNECT_TO_DATABASE_FAILED: "connect to database failed",
     THE_ASSET_CONTROL_NUMBER_IS_ALREADY_LINK:"this asn already linked",
+    ENTER_THE_PASSWORD:"enter new password",
+    PASSWORD_NOT_FIT:"password not fit",
 
     /** Place Holder */
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "please enter or scan mac address",

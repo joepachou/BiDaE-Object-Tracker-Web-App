@@ -23,6 +23,7 @@ const cleanBinding = `${protocol}://${dataSrcIP}/data/cleanBinding`;
 const editObjectPackage = `${protocol}://${dataSrcIP}/data/editObjectPackage`;
 const signin = `${protocol}://${dataSrcIP}/user/signin`;
 const signup = `${protocol}://${dataSrcIP}/user/signup`;
+const editPassword = `${protocol}://${dataSrcIP}/user/editPassword`; 
 const getUserInfo = `${protocol}://${dataSrcIP}/user/getUserInfo`;
 const addUserSearchHistory = `${protocol}://${dataSrcIP}/user/addUserSearchHistory`;
 const editLbeacon = `${protocol}://${dataSrcIP}/data/editLbeacon`;
@@ -104,6 +105,7 @@ module.exports = {
     editObjectPackage,
     signin,
     signup,
+    editPassword,
     getUserInfo,
     objectImport,
     addUserSearchHistory,
