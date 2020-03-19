@@ -10,6 +10,7 @@ const tw = {
     MONITOR_MANAGEMENT: "偵測裝置管理",
     GEOFENCE: "Geofence",
     OBJECT_MANAGEMENT: "物件管理",
+    MANAGEMENT: "管理",
     BIG_SCREEN: "大螢幕",
     ABOUT: "關於",
     TRACKING_HISTORY: "追蹤紀錄",

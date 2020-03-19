@@ -92,10 +92,10 @@ class NavbarContainer extends React.Component {
             path: "/",
         },
         {
-            name: "object management",
-            alias: "objectManagement",
-            path: "/page/objectManagement",
-            permission: "route:objectManagement"
+            name: "management",
+            alias: "management",
+            path: "/page/management",
+            permission: "route:management"
 
         },
         {

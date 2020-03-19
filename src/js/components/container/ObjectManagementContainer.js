@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { 
     getObjectTable,
     getAreaTable, 
@@ -534,7 +534,7 @@ class ObjectManagementContainer extends React.Component{
         let typeSelection = filterSelection.typeList ? Object.values(filterSelection.typeList) : null;
     
         return (
-            <Container className='py-2 text-capitalize' fluid>
+            <Fragment>
                 <Tabs selectedIndex={this.state.tabIndex} onSelect={tabIndex => this.setState({ tabIndex })}>
                     <TabList>
                        
@@ -617,7 +617,7 @@ class ObjectManagementContainer extends React.Component{
                         }, {})
                     }
                 />
-            </Container>
+            </Fragment>
         )
     }
 }
