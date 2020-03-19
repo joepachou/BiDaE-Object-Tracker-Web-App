@@ -26,20 +26,6 @@ class MainContainer extends React.Component{
         this.interval = setInterval(this.getTrackingData, config.mapConfig.intervalTime)
     }
 
-    componentDidUpdate = (prevProps, prevState) => {
-        let { stateReducer } = this.context
-        
-        if (stateReducer[0].shouldUpdateTrackingData !== this.state.shouldUpdateTrackingData) {
-            let [{shouldUpdateTrackingData}] = stateReducer
-            this.interval = shouldUpdateTrackingData 
-                ? setInterval(this.getTrackingData, config.mapConfig.intervalTime) 
-                : clearInterval(this.interval);
-            this.setState({
-                shouldUpdateTrackingData
-            })
-        }
-    }
-
     componentWillUnmount = () => {
         clearInterval(this.interval);
     }
