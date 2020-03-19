@@ -12,13 +12,8 @@ const tw = {
     */
 
     IIS_SINICA_FOURTH_FLOOR: "中研院4樓",
-    NTUH_YUNLIN_WARD_FIVE_B: "5B病房",
-    VETERAN_HOME_FIRST_FLOOR: "榮民之家1樓",
-    VETERAN_HOME_THIRD_FLOOR: "榮民之家3樓",
-    YUANLIN_CHRISTIAN_HOSPITAL: "員林基督教醫院",
-    NURSING_HOME: "護理之家",
-    EMERGENCY_ROOM: "急診室",
-    WHOLE_SITE: "全院不分區"
+
+    /** Your locale area name */
 
 }
 
