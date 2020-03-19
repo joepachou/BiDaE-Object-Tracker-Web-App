@@ -1,9 +1,5 @@
 import React from 'react';
-import ListGroup from 'react-bootstrap/ListGroup';
 import { Tab, Col, Row, Button, Nav, Container} from 'react-bootstrap';
-import ShiftChangeRecord from './ShiftChangeRecord'
-import AdminManagementContainer from './AdminManagementContainer'
-import EditObjectManagement from './EditObjectManagement'
 import AccessControl from '../../presentational/AccessControl'
 import MyDeviceManager from './MyDeviceManager';
 import MyPatientManager from './MyPatientManager';
@@ -58,12 +54,6 @@ class UserSettingContainer extends React.Component{
             component: <MyPatientManager />
         },
         {
-            name: 'User Manager',
-            path: 'userManager',
-            href: '#UserManager',
-            component: <AdminManagementContainer />
-        },
-        {
             name: "Transferred Location Management",
             path: "transferredLocationManagement",
             href: "#TransferredLocationManagement",
@@ -85,10 +75,10 @@ class UserSettingContainer extends React.Component{
         const style = {
 
             sidenav: {
-                width: isBrowser ? 180 : 0,
+                width: isBrowser ? 200 : 0,
             },
             sidemain:{
-                marginLeft: isBrowser ? 180 : 0
+                marginLeft: isBrowser ? 200 : 0
             },
             container: {
                 overflowX: 'hide'

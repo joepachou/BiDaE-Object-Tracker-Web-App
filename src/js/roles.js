@@ -41,6 +41,7 @@ const rules = {
             "route:monitor",
             "route:report",
             "route:bigScreen",
+            "route:management",
 
 
             "user:mydevice",
@@ -70,6 +71,8 @@ const rules = {
             "route:bigScreen",
             "route:monitor",
             "route:report",
+            "route:management",
+
 
             "user:mydevice",
             "user:mypatient",

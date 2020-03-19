@@ -10,6 +10,7 @@ const en =  {
     MONITOR_MANAGEMENT: "monitor management",
     GEOFENCE: "geofence",
     OBJECT_MANAGEMENT: "object management",
+    MANAGEMENT: "management",
     BIG_SCREEN: "big screen",
     ABOUT: "about",
     TRACKING_HISTORY: "tracking history",
