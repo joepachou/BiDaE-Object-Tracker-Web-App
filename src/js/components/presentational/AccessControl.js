@@ -14,7 +14,7 @@ const AccessControl = ({
 }) => {
     const auth = React.useContext(AuthContext);
     let ownedPermissions = auth.user.permissions
-    const permitted = ownedPermissions.includes(permission) 
+    const permitted = permission ? ownedPermissions.includes(permission) : true
     const platformSupported = platform.map(item => {
         switch(item) {
             case 'browser': 

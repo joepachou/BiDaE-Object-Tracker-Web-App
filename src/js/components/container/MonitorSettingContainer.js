@@ -26,7 +26,7 @@ const style = {
     },
 }
 
-class MonitorSetting extends React.Component{
+class MonitorSettingContainer extends React.Component{
 
     static contextType = AppContext
 
@@ -143,4 +143,4 @@ class MonitorSetting extends React.Component{
     }
 }
 
-export default MonitorSetting
+export default MonitorSettingContainer

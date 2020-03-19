@@ -67,6 +67,7 @@ class NavbarContainer extends React.Component {
         let name = e.target.getAttribute('name')
         switch(name) {
             case "shiftChange":
+            e.preventDefault()
             this.setState({
                 showShiftChange: true
             })
@@ -84,6 +85,65 @@ class NavbarContainer extends React.Component {
             showShiftChange: false
         })
     }
+
+    navList = [
+        {
+            name: "home",
+            alias: "home",
+            path: "/",
+        },
+        {
+            name: "object management",
+            alias: "objectManagement",
+            path: "/page/objectManagement",
+            permission: "route:objectManagement"
+
+        },
+        {
+            name: "system status",
+            alias: "systemStatus",
+            path: "/page/systemStatus",
+            permission: "route:systemStatus"
+        },
+        {
+            name: "big screen",
+            alias: "bigScreen",
+            path: "/page/bigScreen",
+            permission: "route:bigScreen",
+            platform: ['browser']
+        },
+        {
+            name: "tracking history",
+            alias: "trackingPath",
+            path: "/page/trackingPath",
+            permission: "route:trackingPath"
+
+        },
+        {
+            name: "monitor setting",
+            alias: "monitor",
+            path: "/page/monitor",
+            permission: "route:monitor",
+            platform: ['browser']
+        },
+        {
+            name: "report",
+            alias: "report",
+            path: "/page/report",
+            permission: "route:report",
+            platform: ['browser', 'tablet']
+        },
+        {
+            name: "shift change record",
+            alias: "shiftChange",
+            path: "/",
+            permission: "user:shiftChange",
+            platform: ['browser', 'tablet'],
+            event: this.handleClick
+
+        },
+
+    ]
 
     render= () => {
         const style = {
@@ -193,83 +253,29 @@ class NavbarContainer extends React.Component {
                 <Navbar.Toggle aria-controls="responisve-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">  
                     <Nav className="mr-auto text-capitalize my-auto" >
-                        <Nav.Item>
-                            <Link to="/" className="nav-link nav-route" >
-                                {locale.texts.HOME}
-                            </Link>
-                        </Nav.Item>
-                        <AccessControl
-                            permission={'route:objectManagement'}
-                            renderNoAccess={() => null}
-                        >
-                            <Nav.Item>
-                                <Link to="/page/objectManagement" className="nav-link nav-route" >
-                                    {locale.texts.OBJECT_MANAGEMENT}
-                                </Link>
-                            </Nav.Item>
-                        </AccessControl>
-                        <AccessControl
-                            permission={'route:systemStatus'}
-                            renderNoAccess={() => null}
-                        >
-                            <Nav.Item>
-                                <Link to="/page/systemStatus" className="nav-link nav-route" >
-                                    {locale.texts.SYSTEM_STATUS}
-                                </Link>
-                            </Nav.Item>
-                        </AccessControl>
-                        <AccessControl
-                            permission={'user:shiftChange'}
-                            renderNoAccess={() => null}
-                        >
-                            <Nav.Item
-                                className="nav-link nav-route" 
-                                name="shiftChange"
-                                onClick={this.handleClick}
-                            >
-                                {locale.texts.SHIFT_CHANGE_RECORD}
-                            </Nav.Item>
-                        </AccessControl>
-                        <AccessControl
-                            permission={'route:bigScreen'}
-                            renderNoAccess={() => null}
-                            platform={['browser']}
-                        >
-                            <Nav.Item><Link to="/page/bigScreen" className="nav-link nav-route" >{locale.texts.BIG_SCREEN}</Link></Nav.Item>
-                        </AccessControl>
-                        <AccessControl
-                            permission={'route:trackingPath'}
-                            renderNoAccess={() => null}
-                        >
-                            <Nav.Item>
-                                <Link to="/page/trackingPath" className="nav-link nav-route" >
-                                    {locale.texts.TRACKING_HISTORY}
-                                </Link>
-                            </Nav.Item>
-                        </AccessControl>
-                        <AccessControl
-                            permission={'route:monitor'}
-                            renderNoAccess={() => null}
-                            platform={['browser', 'tablet']}
-                        >
-                            <Nav.Item>
-                                <Link to="/page/monitor" className="nav-link nav-route" >
-                                    {locale.texts.MONITOR_SETTING}
-                                </Link>
-                            </Nav.Item>
-                        </AccessControl>
-                        <AccessControl
-                            permission={'route:report'}
-                            renderNoAccess={() => null}
-                            platform={['browser', 'tablet']}
-                        >
-                            <Nav.Item>
-                                <Link to="/page/report" className="nav-link nav-route" >
-                                    {locale.texts.REPORT}
-                                </Link>
-                            </Nav.Item>
-                        </AccessControl>
+                        {this.navList.map(nav => {
+                            return (
+                                <AccessControl
+                                    permission={nav.permission}
+                                    renderNoAccess={() => null}
+                                    platform={nav.platform}
+                                    key={nav.alias}
+                                >
+                                    <Nav.Item>
+                                        <Link 
+                                            to={nav.path} 
+                                            className="nav-link nav-route"
+                                            name={nav.alias}
+                                            onClick={nav.event}
+                                        >
+                                            {locale.texts[nav.name.toUpperCase().replace(/ /g, '_')]}
+                                        </Link>
+                                    </Nav.Item>
+                                </AccessControl>
+                            )
+                        })}
                     </Nav>
+
                     <Nav className='text-capitalize'>
                         <AccessControl
                             permission={'user:batteryNotice'}

@@ -86,7 +86,6 @@ class ReportContainer extends React.Component{
                             let props = {
                                 type: tab.name,
                             }
-                            console.log(tab.name.replace(/ /g, '_'))
                             return (
                                 <Tab.Pane 
                                     eventKey={tab.name.replace(/ /g, '_')}
