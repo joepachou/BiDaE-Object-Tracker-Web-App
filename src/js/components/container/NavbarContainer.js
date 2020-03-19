@@ -10,17 +10,16 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { 
     Navbar, 
     Nav, 
-
     Image, 
     Dropdown  
 } from 'react-bootstrap'
-import SiginForm from './SigninForm';
+import SiginForm from '../presentational/SigninForm';
 import config from '../../config';
-import AccessControl from './AccessControl';
-import ShiftChange from '../container/ShiftChange'
+import AccessControl from '../presentational/AccessControl';
+import ShiftChange from './ShiftChange'
 import { AppContext } from '../../context/AppContext';
 import Select from 'react-select';
-import BatteryLevelNotification from "../container/BatteryLevelNotification"
+import BatteryLevelNotification from "./BatteryLevelNotification"
 import retrieveDataHelper from '../../helper/retrieveDataHelper';
 import siteConfig from '../../../../site_module/siteConfig';
 

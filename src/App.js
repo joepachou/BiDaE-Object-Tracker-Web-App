@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router,Switch, Route,  } from "react-router-dom";
-import NavbarContainer from './js/components/presentational/NavbarContainer'
+import NavbarContainer from './js/components/container/NavbarContainer'
 import { renderRoutes } from 'react-router-config';
 import routes from './js/routes';
 import CombinedContext from './js/context/AppContext'

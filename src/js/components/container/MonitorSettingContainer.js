@@ -131,6 +131,7 @@ class MonitorSettingContainer extends React.Component{
                                         >
                                             {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
                                         </div>
+                                        <hr/>
                                         {tab.component(props)}
                                     </Tab.Pane>
                                 )
