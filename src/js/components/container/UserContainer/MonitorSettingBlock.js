@@ -12,7 +12,8 @@ import styleConfig from '../../../styleConfig';
 import EditMonitorConfigForm from '../../presentational/EditMonitorConfigForm';
 import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm'
 import { monitorConfigColumn } from '../../../tables'
-
+import selecTableHOC from 'react-table/lib/hoc/selectTable';
+const SelectTable = selecTableHOC(ReactTable);
 class MonitorSettingBlock extends React.Component{
 
     static contextType = AppContext
@@ -24,6 +25,9 @@ class MonitorSettingBlock extends React.Component{
         path: '',
         areaOptions: [],
         isEdited: false,
+        selection: [],
+        selectAll: false,
+       
     }
 
     componentDidMount = () => {
@@ -48,7 +52,7 @@ class MonitorSettingBlock extends React.Component{
                 minWidth: 60,
                 Cell: props => (
                     <div className="d-flex justify-content-start">
-                        {['edit', 'delete'].map((item, index, original) => {
+                        {['edit'  ].map((item, index, original) => {
                             return  ( 
                                 <div 
                                     key={item} 
@@ -64,10 +68,10 @@ class MonitorSettingBlock extends React.Component{
                                     }} >
                                         {locale.texts[item.toUpperCase()]}
                                     </Button>
-                                    {index < original.length - 1
+                                    {/* {index < original.length - 1
                                         ? <div className="mx-1">|</div>
                                         : ""
-                                    }
+                                    } */}
                                 </div>
                             )
                         })}
@@ -88,8 +92,7 @@ class MonitorSettingBlock extends React.Component{
                     label: locale.texts[config.mapConfig.areaOptions[item.area_id]],
                     id: item.area_id
                 }
-            })
-
+            }) 
             let areaOptions = auth.user.areas_id
                 .filter(id => {
                     return Object.keys(config.mapConfig.areaOptions).includes(id) 
@@ -121,9 +124,10 @@ class MonitorSettingBlock extends React.Component{
         let { 
             path,
             selectedData
-        } = this.state
+        } = this.state 
         configPackage["type"] = config.monitorSettingUrlMap[this.props.type]
-        configPackage["id"] = selectedData ? selectedData.id : null;
+        // configPackage["id"] = selectedData ? selectedData.id : null;
+        configPackage["id"] = this.state.selection  
         axios.post(dataSrc[path], {
             monitorConfigPackage: configPackage
         })
@@ -135,6 +139,8 @@ class MonitorSettingBlock extends React.Component{
                         show: false,
                         showDeleteConfirmation: false,
                         selectedData: null,
+                        selection: '',
+                        selectAll:false
                     })
                 },
                 300
@@ -150,11 +156,13 @@ class MonitorSettingBlock extends React.Component{
             show: false,
             showDeleteConfirmation: false,
             selectedData: null,
+            selection: '',
+            selectAll:false
         })
     }
 
     handleClickButton = (e, value) => {
-        let { name } = e.target
+        let { name } = e.target   
         switch(name) {
             case "add rule": 
                 this.setState({
@@ -174,15 +182,79 @@ class MonitorSettingBlock extends React.Component{
             case "delete":
                 this.setState({
                     showDeleteConfirmation: true,
-                    selectedData: value.original,
-                    path: 'deleteMonitorConfig'
+                    path: 'deleteMonitorConfig', 
                 })
                 break;
         }
     }
 
 
+    toggleSelection = (key, shift, row) => { 
+        let selection = [...this.state.selection]; 
+        key = key.split('-')[1] ? key.split('-')[1] : key
+        const keyIndex = selection.indexOf(key);
+        if (keyIndex >= 0) {
+            selection = [
+            ...selection.slice(0, keyIndex),
+            ...selection.slice(keyIndex + 1)
+            ];
+        } else {
+            selection.push(key);
+        }
+        this.setState({ 
+            selection 
+        });  
+    };
+ 
+    toggleAll = () => { 
+        const selectAll = this.state.selectAll ? false : true;
+        let selection = [];
+        let rowsCount = 0 ; 
+       
+        if (selectAll) {
+            const wrappedInstance = this.selectTable.getWrappedInstance();
+            const currentRecords = wrappedInstance.props.data 
+            // const currentRecords = wrappedInstance.getResolvedState().sortedData;      
+            currentRecords.forEach(item =>{
+                rowsCount++; 
+                if ((rowsCount > wrappedInstance.state.pageSize * wrappedInstance.state.page) && ( rowsCount <= wrappedInstance.state.pageSize +wrappedInstance.state.pageSize * wrappedInstance.state.page) ){
+                    selection.push(item.id)
+                } 
+            });
+        }else{
+            selection = [];
+        }
+         this.setState({ selectAll, selection });
+
+    };
+
+    isSelected = (key) => {  
+        return this.state.selection.includes(key);
+    };
+
+
+
+
     render() {
+        const {  
+            selectedRowData,
+            selectAll,
+            selectType,
+        } = this.state
+       
+        const {
+            toggleSelection,
+            toggleAll,
+            isSelected,
+        } = this;
+
+        const extraProps = {
+            selectAll,
+            isSelected,
+            toggleAll,
+            toggleSelection,
+            selectType
+        };
 
         let { 
             locale 
@@ -198,8 +270,8 @@ class MonitorSettingBlock extends React.Component{
         } = this.state
         
         let title = `edit ${type}`.toUpperCase().replace(/ /g, '_')
-        return (
-            <div>
+        return ( 
+            <div> 
                 <ButtonToolbar>
                     <Button 
                         variant="outline-primary" 
@@ -210,15 +282,23 @@ class MonitorSettingBlock extends React.Component{
                     >
                         {locale.texts.ADD_RULE}
                     </Button>
-                </ButtonToolbar>
-                <ReactTable
+                    <Button 
+                        variant="outline-primary" 
+                        className='mr-2 mb-1'
+                        name="delete"
+                        onClick={this.handleClickButton} 
+                    >
+                        {locale.texts.DELETE}
+                    </Button>
+                </ButtonToolbar> 
+                <SelectTable
                     keyField='id'
                     data={this.state.data}
                     columns={this.state.columns}
                     ref={r => (this.selectTable = r)}
                     className="-highlight"
-                    minRows={0}
-                    {...styleConfig.reactTable}
+                    minRows={0} 
+                    {...extraProps}
                     getTrProps={(state, rowInfo, column, instance) => {   
                           return {
                               onClick: (e, handleOriginal) => { 

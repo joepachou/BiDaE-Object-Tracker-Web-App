@@ -1642,6 +1642,8 @@ const setMonitorConfig = (monitorConfigPackage) => {
 		area_id,
 	} = monitorConfigPackage
 
+	
+
 	let text = `
 		UPDATE ${type}
 		SET 
@@ -1728,10 +1730,10 @@ const deleteMonitorConfig = (monitorConfigPackage) => {
 	let {
 		type,
 		id
-	} = monitorConfigPackage
+	} = monitorConfigPackage  
 	return `
-		DELETE FROM ${type}
-		WHERE id = ${id}
+		DELETE FROM ${type} 
+		WHERE id IN (${id.map(id => `'${id}'`)})
 	`
 }
 

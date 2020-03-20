@@ -98,6 +98,7 @@ class MonitorSettingContainer extends React.Component{
                                         key={index}
                                         className="border-0 m-0 my-1" 
                                         eventKey={tab.name.replace(/ /g, '_')}
+                                        onClick={() => console.log('z')}
                                         action
                                     >
                                         {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
@@ -120,7 +121,7 @@ class MonitorSettingContainer extends React.Component{
                                 return (
                                     <Tab.Pane 
                                         eventKey={tab.name.replace(/ /g, '_')}
-                                        key={tab.name.replace(/ /g, '_')}
+                                        key={tab.name.replace(/ /g, '_')} 
                                     >
                                         <div
                                             className='h5'

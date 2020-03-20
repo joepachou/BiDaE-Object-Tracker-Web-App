@@ -88,9 +88,9 @@ class EditPwdForm extends React.Component {
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm }) => (
                             <Form className="text-capitalize">
                                 <div className="form-group">
-                                    <small id="TextIDsmall" className="form-text text-muted">{locale.texts.NEW_PASSWORD}</small>
+                                    <small id="TextIDsmall" className="form-text text-muted ">{locale.texts.NEW_PASSWORD}</small>
                                    <Field 
-                                        type="text"
+                                        type="password"
                                         name="new_password"
                                         // placeholder={locale.texts.ENTER_THE_PASSWORD}
                                         className={'form-control' + (errors.new_password && touched.new_password ? ' is-invalid' : '')} 
@@ -101,7 +101,7 @@ class EditPwdForm extends React.Component {
                                 <div className="form-group">
                                     <small id="TextIDsmall" className="form-text text-muted">{locale.texts.CHECK_PASSWORD}</small>
                                    <Field 
-                                        type="text"
+                                        type="password"
                                         name="check_password"
                                         // placeholder={locale.texts.ENTER_THE_PASSWORD}
                                         className={'form-control' + (errors.check_password && touched.check_password ? ' is-invalid' : '')} 
