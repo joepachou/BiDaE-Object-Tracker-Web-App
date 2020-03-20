@@ -1001,7 +1001,7 @@ const getMonitorConfig = (request, response) => {
 }
 
 const setMonitorConfig = (request, response) =>{
-    let { monitorConfigPackage } = request.body
+    let { monitorConfigPackage } = request.body 
     pool.query(queryType.setMonitorConfig(monitorConfigPackage))
         .then(res => {
             console.log(`set monitor config success`)

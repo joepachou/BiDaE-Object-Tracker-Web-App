@@ -16,7 +16,8 @@ import retrieveDataHelper from '../../../helper/retrieveDataHelper'
 import styleConfig from '../../../styleConfig';
 import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm'
 import { Select } from 'semantic-ui-react';
-
+import selecTableHOC from 'react-table/lib/hoc/selectTable';
+const SelectTable = selecTableHOC(ReactTable);
 let lock = false
 class GeoFenceSettingBlock extends React.Component{
 
@@ -32,7 +33,9 @@ class GeoFenceSettingBlock extends React.Component{
         showDeleteConfirmation: false,
         locale: this.context.locale.abbr,   
         isEdited: false,
-        path: ''     
+        path: ''   ,
+        selection: [],
+        selectAll: false,  
     }
 
     componentDidMount = () => {
@@ -77,7 +80,7 @@ class GeoFenceSettingBlock extends React.Component{
                 minWidth: 60,
                 Cell: props => (
                     <div className="d-flex justify-content-start">
-                        {['edit', 'delete'].map((item, index, original) => {
+                        {['edit'].map((item, index, original) => {
                             return   ( 
                                 <div 
                                     key={item} 
@@ -150,8 +153,7 @@ class GeoFenceSettingBlock extends React.Component{
                 break;
             case "delete":
                 this.setState({ 
-                    showDeleteConfirmation: true,
-                    selectedData: value.original,
+                    showDeleteConfirmation: true, 
                     path: 'deleteMonitorConfig',  
                 }) 
                 lock = true  
@@ -176,7 +178,8 @@ class GeoFenceSettingBlock extends React.Component{
             selectedData
         } = this.state
         configPackage["type"] = config.monitorSettingUrlMap[this.props.type]
-        configPackage["id"] = selectedData ? selectedData.id : null
+        // configPackage["id"] = selectedData ? selectedData.id : null
+        configPackage["id"] = this.state.selection    
         axios.post(dataSrc[path], {
             monitorConfigPackage: configPackage
         })
@@ -199,6 +202,50 @@ class GeoFenceSettingBlock extends React.Component{
         })
     }
 
+    toggleSelection = (key, shift, row) => { 
+        let selection = [...this.state.selection]; 
+        key = key.split('-')[1] ? key.split('-')[1] : key
+        const keyIndex = selection.indexOf(key);
+        if (keyIndex >= 0) {
+            selection = [
+            ...selection.slice(0, keyIndex),
+            ...selection.slice(keyIndex + 1)
+            ];
+        } else {
+            selection.push(key);
+        }
+        this.setState({ 
+            selection 
+        });  
+    };
+ 
+    toggleAll = () => { 
+        const selectAll = this.state.selectAll ? false : true;
+        let selection = [];
+        let rowsCount = 0 ; 
+       
+        if (selectAll) {
+            const wrappedInstance = this.selectTable.getWrappedInstance();
+            const currentRecords = wrappedInstance.props.data 
+            // const currentRecords = wrappedInstance.getResolvedState().sortedData;      
+            currentRecords.forEach(item =>{
+                rowsCount++; 
+                if ((rowsCount > wrappedInstance.state.pageSize * wrappedInstance.state.page) && ( rowsCount <= wrappedInstance.state.pageSize +wrappedInstance.state.pageSize * wrappedInstance.state.page) ){
+                    selection.push(item.id)
+                } 
+            });
+        }else{
+            selection = [];
+        }
+         this.setState({ selectAll, selection });
+
+    };
+
+    isSelected = (key) => {  
+        return this.state.selection.includes(key);
+    };
+
+
     render() {
         let style = {
             container: {
@@ -208,6 +255,26 @@ class GeoFenceSettingBlock extends React.Component{
                 fontSize: '1rem',
             },
         }
+        const {  
+            selectedRowData,
+            selectAll,
+            selectType,
+        } = this.state
+       
+        const {
+            toggleSelection,
+            toggleAll,
+            isSelected,
+        } = this;
+
+        const extraProps = {
+            selectAll,
+            isSelected,
+            toggleAll,
+            toggleSelection,
+            selectType
+        };
+
         let {
             type
         } = this.props
@@ -222,7 +289,7 @@ class GeoFenceSettingBlock extends React.Component{
         return (
             <div>
                 <ButtonToolbar>
-                    <Button 
+                <Button 
                         variant="outline-primary" 
                         className='text-capitalize mr-2 mb-1'
                         name="add rule"
@@ -230,15 +297,23 @@ class GeoFenceSettingBlock extends React.Component{
                     >
                         {locale.texts.ADD_RULE}
                     </Button>
+                    <Button 
+                        variant="outline-primary" 
+                        className='mr-2 mb-1'
+                        name="delete"
+                        onClick={this.handleClickButton} 
+                    >
+                        {locale.texts.DELETE}
+                    </Button>
                 </ButtonToolbar>
-                <ReactTable
+                <SelectTable
                     keyField='id'
                     data={this.state.data}
                     columns={this.state.columns}
                     ref={r => (this.selectTable = r)}
                     className="-highlight"
                     minRows={0}
-                    {...styleConfig.reactTable}
+                    {...extraProps}
                     getTrProps={(state, rowInfo, column, instance) => {   
                           return {
                               onClick: (e, handleOriginal) => { 
