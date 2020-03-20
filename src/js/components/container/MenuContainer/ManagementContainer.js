@@ -1,7 +1,7 @@
 import React from 'react';
-import { AppContext } from '../../context/AppContext';
+import { AppContext } from '../../../context/AppContext';
 import ObjectManagement from './ObjectManagementContainer';
-import AdminManagementContainer from './UserContainer/AdminManagementContainer'
+import AdminManagementContainer from './AdminManagementContainer'
 import { 
     Tab, 
     ListGroup,
@@ -57,21 +57,28 @@ class ManagementContainer extends React.Component{
                     <div 
                         className="border-0 BOTsidenav"
                         style={style.sidenav}
-                    >            
+                    >          
                         <ListGroup 
                             variant="flush" 
                             className="border-0"
                         >
                             {this.tabList.map((tab, index) => {
                                 return (
-                                    <ListGroup.Item 
-                                        key={index}
-                                        className="border-0 m-0 my-1 text-capitalize" 
-                                        eventKey={tab.name.replace(/ /g, '_')}
-                                        action
+                                    <AccessControl
+                                        permission={tab.permission}
+                                        renderNoAccess={() => null}
+                                        platform={tab.platform}
+                                        key={tab.name}
                                     >
-                                        {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
-                                    </ListGroup.Item>
+                                        <ListGroup.Item 
+                                            key={index}
+                                            className="border-0 m-0 my-1 text-capitalize" 
+                                            eventKey={tab.name.replace(/ /g, '_')}
+                                            action
+                                        >
+                                            {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
+                                        </ListGroup.Item>
+                                    </AccessControl>
                                 )
                             })}  
                         </ListGroup>      

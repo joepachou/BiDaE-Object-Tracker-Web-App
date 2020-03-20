@@ -1,20 +1,19 @@
 import React from 'react';
-import { Tab, Col, Row, Button, Nav, Container} from 'react-bootstrap';
+import { 
+    Col, 
+    Row, 
+    Container
+} from 'react-bootstrap';
 import AccessControl from '../../presentational/AccessControl'
-import MyDeviceManager from './MyDeviceManager';
-import MyPatientManager from './MyPatientManager';
-import UserProfile from "./UserProfile";
-import TransferredLocationManagement from "./TransferredLocationManagement";
-import RolePermissionManagement from "./RolePermissionManagement"
+import MyDeviceManager from '../UserContainer/MyDeviceManager';
+import MyPatientManager from '../UserContainer/MyPatientManager';
+import UserProfile from "../UserContainer/UserProfile";
 import { AppContext } from '../../../context/AppContext';
 import { 
     disableBodyScroll,
     enableBodyScroll,
 } from 'body-scroll-lock';
 import {
-    BrowserView,
-    MobileOnlyView,
-    TabletView,
     isBrowser
 } from 'react-device-detect'
 
@@ -53,20 +52,6 @@ class UserSettingContainer extends React.Component{
             href: '#PatientManagement',
             component: <MyPatientManager />
         },
-        {
-            name: "Transferred Location Management",
-            path: "transferredLocationManagement",
-            href: "#TransferredLocationManagement",
-            component: <TransferredLocationManagement />,
-            platform: ['browser', 'tablet']
-        },
-        {
-            name: "Role Permission Management",
-            path: "rolePermissionManagement",
-            href: "#RolePermissionManagement",
-            component: <RolePermissionManagement />,
-            platform: ['browser', 'tablet']
-        }
     ]
     
     render(){

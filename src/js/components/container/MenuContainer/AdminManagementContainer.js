@@ -12,7 +12,7 @@ import {
     getMainSecondArea
 } from "../../../dataSrc";
 import { userInfoTableColumn } from '../../../tables'
-import EditUserForm from './EditUserForm';
+import EditUserForm from '../UserContainer/EditUserForm';
 import { AppContext } from '../../../context/AppContext';
 import DeleteUserForm from '../UserContainer/DeleteUserForm'
 import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm';

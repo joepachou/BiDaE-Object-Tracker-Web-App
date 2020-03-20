@@ -21,10 +21,10 @@ class GatewayTable extends React.Component{
     static contextType = AppContext
     
     state = {  
+        data: [],
+        columns: [],
         showDeleteConfirmation:false,
         selectedRowData: '',
-        gatewayData: [],
-        gatewayColunm: [],
         showEdit: false,
         selection:[],
         selectAll :false,
@@ -32,15 +32,15 @@ class GatewayTable extends React.Component{
     }
 
     componentDidMount = () => {
-        this.getGatewayData();
-        this.getGatewayDataInterval = setInterval(this.getGatewayData, config.getGatewayDataIntervalTime);
+        this.getData();
+        this.getGatewayDataInterval = setInterval(this.getData, config.getGatewayDataIntervalTime);
     }
 
     componentWillUnmount = () => {
         clearInterval(this.getGatewayDataInterval);
     }
 
-    getGatewayData = () => {
+    getData = () => {
         let { 
             locale
         } = this.context
@@ -57,8 +57,8 @@ class GatewayTable extends React.Component{
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })
             this.setState({
-                gatewayData: res.data.rows,
-                gatewayColunm: column
+                data: res.data.rows,
+                columns: column
             })
         })
         .catch(err => {
@@ -133,7 +133,7 @@ class GatewayTable extends React.Component{
         let idPackage = []
         var deleteArray = [];
         var deleteCount = 0;
-        this.state.gatewayData.map (item => {
+        this.state.data.map (item => {
             this.state.selection.map(itemSelect => {
                 itemSelect === item.id
                 ?   deleteArray.push(deleteCount.toString())
@@ -143,9 +143,9 @@ class GatewayTable extends React.Component{
         })
 
         deleteArray.map( item => {
-            this.state.gatewayData[item] === undefined 
+            this.state.data[item] === undefined 
                 ?   null
-                :   idPackage.push(parseInt(this.state.gatewayData[item].id))
+                :   idPackage.push(parseInt(this.state.data[item].id))
             }) 
             axios.post(deleteGateway, {
                 idPackage
@@ -155,7 +155,7 @@ class GatewayTable extends React.Component{
                     'success', 
                     'delete gateway success'
                 )
-                this.getGatewayData()
+                this.getData()
                 this.setState({
                     selection: [],
                     selectAll: false,
@@ -209,8 +209,8 @@ class GatewayTable extends React.Component{
                 </ButtonToolbar>
                 <SelectTable
                     keyField='id'
-                    data={this.state.gatewayData} 
-                    columns={this.state.gatewayColunm}
+                    data={this.state.data} 
+                    columns={this.state.columns}
                     ref={r => (this.selectTable = r)}
                     className="-highlight"
                     style={{height:'75vh'}}

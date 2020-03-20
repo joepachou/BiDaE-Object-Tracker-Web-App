@@ -1,18 +1,16 @@
 import React from 'react';
-import { InputGroup, Button, Image, FormControl} from 'react-bootstrap';
-import userProfileImg from '../../../../img/icon/userProfile.png';
-import { AppContext } from '../../../context/AppContext';
-import ImageUploader from 'react-images-upload';
-import config from '../../../config';
+import { 
+    Button, 
+} from 'react-bootstrap';
+import { AppContext } from '../../context/AppContext';
+import config from '../../config';
 import { MDBBtn, MDBTable, MDBTableBody, MDBTableHead  } from 'mdbreact';
 import axios from 'axios';
-import Collapsible from './Collapsible';
-import dataSrc from "../../../dataSrc"
+import dataSrc from "../../dataSrc"
 import {
     Row,
     Col,
 } from "react-bootstrap"
-
 
 const defaultBranchName = 'new branch'
 const defaultDepartmentName = 'new department'

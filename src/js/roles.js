@@ -13,7 +13,7 @@ const rules = {
             "route:userProfile",
             "route:bigScreen",
             "route:trackingPath",
-            
+
             "user:mydevice",
             "user:mypatient",
             "user:shiftChange",
@@ -42,7 +42,7 @@ const rules = {
             "route:report",
             "route:bigScreen",
             "route:management",
-
+            "route:systemSetting",
 
             "user:mydevice",
             "user:mypatient",
@@ -72,6 +72,7 @@ const rules = {
             "route:monitor",
             "route:report",
             "route:management",
+            "route:systemSetting",
 
 
             "user:mydevice",

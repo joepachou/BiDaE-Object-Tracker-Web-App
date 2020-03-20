@@ -7,7 +7,7 @@ import {
     getImportTable,  
     getImportPatient,
     getTransferredLocation
-} from "../../dataSrc"
+} from "../../../dataSrc"
 import axios from 'axios'; 
 import 'react-table/react-table.css'; 
 import { 
@@ -18,18 +18,18 @@ import {
     objectTableColumn,
     patientTableColumn,
     importTableColumn
- } from '../../tables' 
-import config from '../../config' 
+ } from '../../../tables' 
+import config from '../../../config' 
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import { AppContext } from '../../context/AppContext';
-import AccessControl from '../presentational/AccessControl'
-import ObjectTable from '../presentational/ObjectTable'
-import PatientTable from '../presentational/PatientTable'
-import ImportObjectTable from '../presentational/ImportObjectTable'
-import ImportPatientTable from '../presentational/ImportPatientTable' 
-import DissociationForm from '../container/DissociationForm'
-import retrieveDataHelper from '../../helper/retrieveDataHelper'
+import { AppContext } from '../../../context/AppContext';
+import AccessControl from '../../presentational/AccessControl'
+import ObjectTable from '../../presentational/ObjectTable'
+import PatientTable from '../../presentational/PatientTable'
+import ImportObjectTable from '../../presentational/ImportObjectTable'
+import ImportPatientTable from '../../presentational/ImportPatientTable' 
+import DissociationForm from '../DissociationForm'
+import retrieveDataHelper from '../../../helper/retrieveDataHelper'
 
 class ObjectManagementContainer extends React.Component{
     static contextType = AppContext
@@ -530,10 +530,28 @@ class ObjectManagementContainer extends React.Component{
 
         const { locale } = this.context
 
+
+        const style = {
+
+            sidenav: {
+                width: 150,
+            },
+            sidemain:{
+                marginLeft: 150
+            },
+            container: {
+                overflowX: 'hide'
+            },
+        }
+
         let typeSelection = filterSelection.typeList ? Object.values(filterSelection.typeList) : null;
     
         return (
-            <Fragment>
+            <Container 
+                fluid 
+                className="mt-5 text-capitalize"
+                style={style.container}
+            >     
                 <Tabs selectedIndex={this.state.tabIndex} onSelect={tabIndex => this.setState({ tabIndex })}>
                     <TabList>
                        
@@ -616,7 +634,7 @@ class ObjectManagementContainer extends React.Component{
                         }, {})
                     }
                 />
-            </Fragment>
+            </Container>
         )
     }
 }

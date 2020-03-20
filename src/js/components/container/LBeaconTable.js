@@ -26,8 +26,8 @@ class LbeaconTable extends React.Component{
     static contextType = AppContext
     
     state = {  
-        lbeaconData: [],
-        lbeaconColumn: [],
+        data: [],
+        columns: [],
         showDeleteConfirmation:false,
         selectedRowData: '',
         showEdit: false,
@@ -37,15 +37,15 @@ class LbeaconTable extends React.Component{
     }
 
     componentDidMount = () => {
-        this.getLbeaconData();
-        this.getLbeaconDataInterval = setInterval(this.getLbeaconData, config.getLbeaconDataIntervalTime)
+        this.getData();
+        this.getLbeaconDataInterval = setInterval(this.getData, config.getLbeaconDataIntervalTime)
     }
 
     componentWillUnmount = () => {
         clearInterval(this.getLbeaconDataInterval);
     }
 
-    getLbeaconData = () => {
+    getData = () => {
 
         let { locale } = this.context
         retrieveDataHelper.getLbeaconTable(
@@ -61,8 +61,8 @@ class LbeaconTable extends React.Component{
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })
             this.setState({
-                lbeaconData: res.data.rows,
-                lbeaconColumn: column,
+                data: res.data.rows,
+                columns: column,
                 showEdit: false
             }) 
         })
@@ -93,7 +93,7 @@ class LbeaconTable extends React.Component{
             'edit lbeacon success'
         )
         setInterval(() => {
-            this.getLbeaconData()
+            this.getData()
         }, 4000)
     }
 
@@ -145,7 +145,7 @@ class LbeaconTable extends React.Component{
         let idPackage = []
         var deleteArray = [];
         var deleteCount = 0;
-        this.state.lbeaconData.map (item => {
+        this.state.data.map (item => {
         
             this.state.selection.map(itemSelect => {
                 itemSelect === item.id
@@ -158,15 +158,15 @@ class LbeaconTable extends React.Component{
        
 
         deleteArray.map( item => {
-            this.state.lbeaconData[item] === undefined 
+            this.state.data[item] === undefined 
                 ?   null
-                :   idPackage.push(parseInt(this.state.lbeaconData[item].id))
+                :   idPackage.push(parseInt(this.state.data[item].id))
             }) 
             axios.post(deleteLBeacon, {
                 idPackage
             })
             .then(res => {
-                this.getLbeaconData()
+                this.getData()
                 this.props.setMessage(
                     'success', 
                     'delete lbeacon success'
@@ -222,8 +222,8 @@ class LbeaconTable extends React.Component{
                 </ButtonToolbar>
                 <SelectTable
                     keyField='id'
-                    data={this.state.lbeaconData}
-                    columns={this.state.lbeaconColumn}
+                    data={this.state.data}
+                    columns={this.state.columns}
                     ref={r => (this.selectTable = r)}
                     className="-highlight"
                     style={{height:'75vh'}}

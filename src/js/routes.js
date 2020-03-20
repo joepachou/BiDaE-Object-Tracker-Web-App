@@ -1,13 +1,13 @@
 import MainContainer from "./components/container/MainContainer";
-import SystemStatus from "./components/container/SystemStatus";
-import ObjectManagementContainer from "./components/container/ObjectManagementContainer";
-import UserContainer from "./components/container/UserContainer/UserContainer"
+import SystemSetting from "./components/container/MenuContainer/SystemSetting";
+import ObjectManagementContainer from "./components/container/MenuContainer/ObjectManagementContainer";
+import UserContainer from "./components/container/MenuContainer/UserContainer"
 import BigScreenContainer from "./components/container/BigScreen/BigScreenContainer";
 import About from "./components/container/About"
 import TrackingPathContainer from "./components/container/TrackingPathContainer"
-import MonitorSettingContainer from "./components/container/MonitorSettingContainer"
-import ReportContainer from "./components/container/ReportContainer"
-import ManagementContainer from "./components/container/ManagementContainer"
+import MonitorSettingContainer from "./components/container/MenuContainer/MonitorSettingContainer"
+import ReportContainer from "./components/container/MenuContainer/ReportContainer"
+import ManagementContainer from "./components/container/MenuContainer/ManagementContainer"
 
 const routes = [
     {
@@ -16,8 +16,8 @@ const routes = [
         exact: true,
     },
     {
-        path: '/page/systemStatus',
-        component: SystemStatus,
+        path: '/page/systemSetting',
+        component: SystemSetting,
         exact: true,
     },
     {

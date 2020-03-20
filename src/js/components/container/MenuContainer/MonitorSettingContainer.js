@@ -1,12 +1,9 @@
 import React from 'react';
-import { AppContext } from '../../context/AppContext';
-import MonitorSettingBlock from './UserContainer/MonitorSettingBlock';
-import GeoFenceSettingBlock from './UserContainer/GeoFenceSettingBlock'
-import config from '../../config';
-import retrieveDataHelper from '../../helper/retrieveDataHelper';
-import {
-    isBrowser
-} from 'react-device-detect'
+import { AppContext } from '../../../context/AppContext';
+import MonitorSettingBlock from '../UserContainer/MonitorSettingBlock';
+import GeoFenceSettingBlock from '../UserContainer/GeoFenceSettingBlock'
+import config from '../../../config';
+import retrieveDataHelper from '../../../helper/retrieveDataHelper';
 import { 
     Tab, 
     ListGroup,
@@ -31,7 +28,6 @@ class MonitorSettingContainer extends React.Component{
     static contextType = AppContext
 
     state = {
-        tabIndex: 0,
         areaTable: [],
     }
 

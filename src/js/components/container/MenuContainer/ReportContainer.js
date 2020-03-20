@@ -4,9 +4,9 @@ import {
     Tab,
     ListGroup
 } from 'react-bootstrap';
-import ShiftChangeRecord from './UserContainer/ShiftChangeRecord'
-import EditObjectManagement from './UserContainer/EditObjectManagement'
-import { AppContext } from '../../context/AppContext';
+import ShiftChangeRecord from '../UserContainer/ShiftChangeRecord'
+import EditObjectManagement from '../UserContainer/EditObjectManagement'
+import { AppContext } from '../../../context/AppContext';
 
 const style = {
 

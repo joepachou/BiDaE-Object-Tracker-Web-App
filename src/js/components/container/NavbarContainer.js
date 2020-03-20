@@ -92,28 +92,7 @@ class NavbarContainer extends React.Component {
             path: "/",
         },
         {
-            name: "management",
-            alias: "management",
-            path: "/page/management",
-            permission: "route:management"
-
-        },
-        {
-            name: "monitor setting",
-            alias: "monitor",
-            path: "/page/monitor",
-            permission: "route:monitor",
-            platform: ['browser']
-        },
-        {
-            name: "report",
-            alias: "report",
-            path: "/page/report",
-            permission: "route:report",
-            platform: ['browser', 'tablet']
-        },
-        {
-            name: "shift change record",
+            name: "shift change",
             alias: "shiftChange",
             path: "/",
             permission: "user:shiftChange",
@@ -121,10 +100,10 @@ class NavbarContainer extends React.Component {
             event: this.handleClick
         },
         {
-            name: "system status",
-            alias: "systemStatus",
-            path: "/page/systemStatus",
-            permission: "route:systemStatus"
+            name: "object management",
+            alias: "objectManagement",
+            path: "/page/objectManagement",
+            permission: "route:objectManagement"
         },
         {
             name: "tracking history",
@@ -140,6 +119,28 @@ class NavbarContainer extends React.Component {
             permission: "route:bigScreen",
             platform: ['browser']
         },
+        {
+            name: "monitor setting",
+            alias: "monitor",
+            path: "/page/monitor",
+            permission: "route:monitor",
+            platform: ['browser']
+        },
+        {
+            name: "report",
+            alias: "report",
+            path: "/page/report",
+            permission: "route:report",
+            platform: ['browser', 'tablet']
+        },
+
+        {
+            name: "system setting",
+            alias: "systemSetting",
+            path: "/page/systemSetting",
+            permission: "route:systemSetting"
+        },
+
     ]
 
     render= () => {
