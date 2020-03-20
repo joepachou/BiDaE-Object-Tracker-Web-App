@@ -6,7 +6,6 @@
     left: 5%;
     overflow-x: hidden; 
     padding-top: 20px;
-    text-transform: capitalize;
 }
 
 /* Style page content */
@@ -39,4 +38,18 @@ a.anchor {
     top: -100px;
     /* margin-top: -100px   */
     visibility: hidden;
+}
+
+.BOTnav {
+    text-decoration: none;
+    font-size: 1rem;
+    color: #818181;
+}
+
+.BOTnav a {
+    padding: 6px 8px 6px 6px;
+    text-decoration: none;
+    font-size: 1rem;
+    color: #818181;
+    display: block;
 }

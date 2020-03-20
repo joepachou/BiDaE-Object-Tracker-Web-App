@@ -14,6 +14,8 @@ const tw = {
     BIG_SCREEN: "大螢幕",
     ABOUT: "關於",
     TRACKING_HISTORY: "追蹤紀錄",
+    HISTORICAL_TRACKING_RECORD: "歷史紀錄",
+    REAL_TIME_TRACKING_RECORD: "即時紀錄",
     SETTINGS: "設定",
     SHIFT_CHANGE: "交班",
     MONITOR_SETTING: "監控設定",
@@ -315,7 +317,6 @@ const tw = {
     REMOVE_USER_CONFIRM: "移除使用者",
 
     /** table Title */
-    TRACKING: "物件追蹤",
     MY_DEVICES_LIST: "我的儀器",
     MY_PATIENT_LIST: "我的病人",
     NOT_MY_DEVICES_LIST: "其他儀器",

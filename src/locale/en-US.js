@@ -14,6 +14,9 @@ const en =  {
     BIG_SCREEN: "big screen",
     ABOUT: "about",
     TRACKING_HISTORY: "tracking history",
+    HISTORICAL_TRACKING_RECORD: "historical tracking record",
+    REAL_TIME_TRACKING_RECORD: "real-time tracking record",
+    TRACKING_TABLE: "tracking table",
     SETTINGS: "settings",
     SHIFT_CHANGE: "shift change",
     MONITOR_SETTING: "monitor setting",
@@ -310,7 +313,6 @@ const en =  {
     REMOVE_USER_CONFIRM: "Remove User",
 
     /** table Title */
-    TRACKING: "tracking",
     MY_DEVICES_LIST: "my devices list",
     MY_PATIENT_LIST: "my patient list",
     NOT_MY_DEVICES_LIST: "not my devices list",

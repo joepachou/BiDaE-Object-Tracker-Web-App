@@ -4,7 +4,7 @@ import ObjectManagementContainer from "./components/container/MenuContainer/Obje
 import UserContainer from "./components/container/MenuContainer/UserContainer"
 import BigScreenContainer from "./components/container/BigScreen/BigScreenContainer";
 import About from "./components/container/About"
-import TrackingPathContainer from "./components/container/TrackingPathContainer"
+import TrackingHistoryContainer from "./components/container/menuContainer/TrackingHistoryContainer"
 import MonitorSettingContainer from "./components/container/MenuContainer/MonitorSettingContainer"
 import ReportContainer from "./components/container/MenuContainer/ReportContainer"
 import ManagementContainer from "./components/container/MenuContainer/ManagementContainer"
@@ -41,8 +41,8 @@ const routes = [
         exact: true,
     },
     {
-        path: '/page/trackingPath',
-        component: TrackingPathContainer,
+        path: '/page/trackingHistory',
+        component: TrackingHistoryContainer,
         exact: true,
     },
     {

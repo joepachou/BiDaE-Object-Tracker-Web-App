@@ -107,9 +107,9 @@ class NavbarContainer extends React.Component {
         },
         {
             name: "tracking history",
-            alias: "trackingPath",
-            path: "/page/trackingPath",
-            permission: "route:trackingPath"
+            alias: "trackinghistory",
+            path: "/page/trackingHistory",
+            permission: "route:trackingHistory"
 
         },
         {
