@@ -165,7 +165,9 @@ class GeoFenceSettingBlock extends React.Component{
         this.setState({
             show: false,
             showDeleteConfirmation: false,
-            selectedData: null,
+            selectedData: null ,
+            selection: '',
+            selectAll:false
         })
         lock=false 
     }
@@ -191,6 +193,8 @@ class GeoFenceSettingBlock extends React.Component{
                         show: false,
                         showDeleteConfirmation: false,
                         selectedData: null, 
+                        selection: '',
+                        selectAll:false
                     })
                    
                 },
@@ -313,6 +317,7 @@ class GeoFenceSettingBlock extends React.Component{
                     ref={r => (this.selectTable = r)}
                     className="-highlight"
                     minRows={0}
+                 
                     {...extraProps}
                     getTrProps={(state, rowInfo, column, instance) => {   
                           return {

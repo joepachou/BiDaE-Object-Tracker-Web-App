@@ -139,6 +139,8 @@ class MonitorSettingBlock extends React.Component{
                         show: false,
                         showDeleteConfirmation: false,
                         selectedData: null,
+                        selection: '',
+                        selectAll:false
                     })
                 },
                 300
@@ -154,6 +156,8 @@ class MonitorSettingBlock extends React.Component{
             show: false,
             showDeleteConfirmation: false,
             selectedData: null,
+            selection: '',
+            selectAll:false
         })
     }
 
@@ -266,8 +270,8 @@ class MonitorSettingBlock extends React.Component{
         } = this.state
         
         let title = `edit ${type}`.toUpperCase().replace(/ /g, '_')
-        return (
-            <div>
+        return ( 
+            <div> 
                 <ButtonToolbar>
                     <Button 
                         variant="outline-primary" 
@@ -293,7 +297,7 @@ class MonitorSettingBlock extends React.Component{
                     columns={this.state.columns}
                     ref={r => (this.selectTable = r)}
                     className="-highlight"
-                    minRows={0}
+                    minRows={0} 
                     {...extraProps}
                     getTrProps={(state, rowInfo, column, instance) => {   
                           return {
