@@ -1,6 +1,7 @@
 *.env
 *.DS_Store
 node_modules/
+site_module/
 default_folder/
 /dist/*.png
 /dist/*.svg
@@ -13,4 +14,3 @@ default_folder/
 /dist/*.js
 version.txt
 .npm_cache
-site_module/
