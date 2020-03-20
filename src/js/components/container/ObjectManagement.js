@@ -537,7 +537,7 @@ class ObjectManagementContainer extends React.Component{
             component: (props) => <ImportObjectTable {...props}/>
         },
         {
-            name: "import patient",
+            name: "import patient table",
             component: (props) => <ImportPatientTable {...props}/>
         },
     ]
@@ -567,7 +567,7 @@ class ObjectManagementContainer extends React.Component{
 
         let typeSelection = filterSelection.typeList ? Object.values(filterSelection.typeList) : null;
     
-        return (     
+        return (
             <Container 
                 fluid 
                 className="mt-5 text-capitalize"

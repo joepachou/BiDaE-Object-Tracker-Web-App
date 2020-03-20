@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppContext } from '../../../context/AppContext';
-import ObjectManagement from './ObjectManagementContainer';
+import ObjectManagementContainer from './ObjectManagementContainer';
 import AdminManagementContainer from './AdminManagementContainer'
 import { 
     Tab, 
@@ -28,7 +28,7 @@ class ManagementContainer extends React.Component{
     tabList = [
         {
             name: 'object management',
-            component: (props) => <ObjectManagement {...props}/>
+            component: (props) => <ObjectManagementContainer {...props}/>
         },
         {
             name: 'user manager',

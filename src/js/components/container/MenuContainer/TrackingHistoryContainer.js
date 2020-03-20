@@ -42,7 +42,7 @@ class TrackingHistoryContainer extends React.Component{
         },
     ]
 
-    defaultActiveKey = "historical_tracking_record"
+    defaultActiveKey = "real_time_tracking_record"
 
     render() {
         let {
