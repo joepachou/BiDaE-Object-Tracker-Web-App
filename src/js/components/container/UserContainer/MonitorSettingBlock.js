@@ -239,15 +239,7 @@ class MonitorSettingBlock extends React.Component{
         if (this.state.exIndex != this.props.nowIndex){
             this.setState({selectAll : false,selection:'',exIndex:this.props.nowIndex}) 
         }
-    }
-    componentDidMount = () =>{
-        console.log('b')
-    }
-
-    componentDidCatch = () =>{
-        console.log('c')
-    }
-
+    } 
 
     render() {
         const {  
