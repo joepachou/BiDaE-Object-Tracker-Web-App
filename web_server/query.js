@@ -77,7 +77,7 @@ const getTrackingData = (request, response) => {
     let userAuthenticatedAreasId= user.areas_id
 
     /** Allow user to access the info of objects in secondary areas */
-    if (user.main_area.toString() && !userAuthenticatedAreasId.includes(user.main_area.toString())) {
+    if (user.main_area && user.main_area.toString() && !userAuthenticatedAreasId.includes(user.main_area.toString())) {
         userAuthenticatedAreasId.push(user.main_area.toString())
     }
 
@@ -533,7 +533,7 @@ const signin = (request, response) => {
                         locale
                     } = res.rows[0]
 
-                    if (!areas_id.includes(main_area)) {
+                    if (main_area && !areas_id.includes(main_area)) {
                         areas_id.push(main_area.toString())
                     }
 
