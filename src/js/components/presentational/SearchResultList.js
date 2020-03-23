@@ -202,23 +202,24 @@ class SearchResult extends React.Component {
             reservedTimestamp
         }).then(res => {
             setTimeout(
-                function() {
+                () => {
                     this.setState ({
                         showConfirmForm: shouldCreatePdf,
                         showAddDevice: false,
                         showDownloadPdfRequest: shouldCreatePdf,
                         pdfPath: shouldCreatePdf && pdfPackage.path,
                         selection: []
+                    }, () => {
+                        dispatch({
+                            type: 'setUpdateTrackingData',
+                            value: true
+                        })
+                        messageGenerator.setSuccessMessage(
+                            'edit object success'
+                        )
                     })
-                    dispatch({
-                        type: 'setUpdateTrackingData',
-                        value: true
-                    })
-                    messageGenerator.setSuccessMessage(
-                        'edit object success'
-                    )
-                }
-                .bind(this),
+
+                },
                 1000
             )
         }).catch( error => {
