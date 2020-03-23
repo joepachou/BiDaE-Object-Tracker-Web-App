@@ -29,6 +29,7 @@ class MonitorSettingContainer extends React.Component{
 
     state = {
         areaTable: [],
+        nowIndex:0,
     }
 
     tabList = [
@@ -92,13 +93,13 @@ class MonitorSettingContainer extends React.Component{
                             variant="flush" 
                             className="border-0"
                         >
-                            {this.tabList.map((tab, index) => {
-                                return (
+                            {this.tabList.map((tab, index) => { 
+                                return ( 
                                     <ListGroup.Item 
                                         key={index}
                                         className="border-0 m-0 my-1" 
                                         eventKey={tab.name.replace(/ /g, '_')}
-                                        onClick={() => console.log('z')}
+                                        onClick={() => this.setState({nowIndex :index})}
                                         action
                                     >
                                         {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
@@ -116,10 +117,11 @@ class MonitorSettingContainer extends React.Component{
                             {this.tabList.map((tab, index) => {
                                 let props = {
                                     type: tab.name,
-                                    areaTable: this.state.areaTable
+                                    areaTable: this.state.areaTable,
+                                    nowIndex : this.state.nowIndex
                                 }
                                 return (
-                                    <Tab.Pane 
+                                    <Tab.Pane  
                                         eventKey={tab.name.replace(/ /g, '_')}
                                         key={tab.name.replace(/ /g, '_')} 
                                     >

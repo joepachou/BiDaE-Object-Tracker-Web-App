@@ -27,14 +27,15 @@ class MonitorSettingBlock extends React.Component{
         isEdited: false,
         selection: [],
         selectAll: false,
-       
+        exIndex : 9999,
     }
 
-    componentDidMount = () => {
+    componentDidMount = () => { 
         this.getMonitorConfig()
     }
+ 
 
-    getMonitorConfig = () => {
+    getMonitorConfig = () => { 
         let { 
             auth,
             locale
@@ -161,6 +162,7 @@ class MonitorSettingBlock extends React.Component{
         })
     }
 
+ 
     handleClickButton = (e, value) => {
         let { name } = e.target   
         switch(name) {
@@ -233,7 +235,11 @@ class MonitorSettingBlock extends React.Component{
     };
 
 
-
+    componentDidUpdate = () =>{ 
+        if (this.state.exIndex != this.props.nowIndex){
+            this.setState({selectAll : false,selection:'',exIndex:this.props.nowIndex}) 
+        }
+    } 
 
     render() {
         const {  
@@ -268,10 +274,11 @@ class MonitorSettingBlock extends React.Component{
             areaOptions,
             isEdited
         } = this.state
-        
+ 
         let title = `edit ${type}`.toUpperCase().replace(/ /g, '_')
         return ( 
             <div> 
+                
                 <ButtonToolbar>
                     <Button 
                         variant="outline-primary" 
