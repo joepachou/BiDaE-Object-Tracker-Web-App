@@ -1912,26 +1912,6 @@ const setSearchRssi = (rssi) => {
 	return query
 }
 
-function getUserArea(user_id){
-
-    const text =  `
-    SELECT 
-        area_id
-	FROM user_area 
-	WHERE user_area.user_id = $1;
-    `;
-
-    const values = [user_id];
-
-    const query = {
-        text,
-        values
-    };
-
-    return query
-
-}
-
 function addUserArea (user_id,area_id){
     const text = `
 		INSERT INTO user_area (
@@ -2129,7 +2109,6 @@ module.exports = {
 	addGeofenceConfig,
 	deleteMonitorConfig,
 	addMonitorConfig,
-	getUserArea,
 	addUserArea,
 	DeleteUserArea,
 	getTransferredLocation,

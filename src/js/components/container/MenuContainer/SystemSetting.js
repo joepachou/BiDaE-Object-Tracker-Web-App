@@ -59,7 +59,7 @@ class SystemSetting extends React.Component{
         },
         {
             name: "transferred location management",
-            component: (props) => <TransferredLocationManagement {...props}/>
+            component: (props) => <TransferredLocationManagement {...props}/>,
         },
         {
             name: "Role Permission Management",

@@ -60,25 +60,12 @@ const EditLbeaconForm = ({
                             room
                         } = values
                         let lbeaconSettingPackage = {
-                            uuid: selectedObjectData.uuid,
+                            ...selectedObjectData,
                             description,
                             danger_area,
                             room,
                         }
-                        axios.post(dataSrc.editLbeacon, {
-                            formOption: lbeaconSettingPackage
-                        }).then(res => {
-                            setTimeout(
-                                function() {
-                                    handleClose()
-                                    handleSubmit()
-                                }
-                                .bind(this),
-                                1000
-                            )
-                        }).catch( error => {
-                            console.log(error)
-                        })
+                        handleSubmit(lbeaconSettingPackage)
                     }}
 
                     render={({ values, errors, status, touched, isSubmitting }) => (

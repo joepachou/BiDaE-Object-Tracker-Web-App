@@ -85,7 +85,8 @@ const en =  {
     /* buttons */
     CLEAR : "clear",
     SAVE : "save",
-    EDIT: "edit",
+    EDIT_SECONDARY_AREA: "edit secondary area",
+    EDIT_PASSWORD: "edit password",
     CANCEL: "cancel",
     SEND: "send",
     SIGN_IN: "sign in",
@@ -144,7 +145,6 @@ const en =  {
     HIDE_MAP : "hide map",
     NEW_SEARCH: "new search",
     SEARCH: "search",
-    EDIT_PASSWORD:"edit password",
 
     /* field */
     NAME: "name",

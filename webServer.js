@@ -46,8 +46,6 @@ app.post('/data/DeleteUserArea', db.DeleteUserArea);
 
 app.post('/data/addUserArea', db.addUserArea);
 
-app.post('/data/getUserArea', db.getUserArea);
-
 app.post('/data/getObjectTable', db.getObjectTable);
 
 app.post('/data/getTrackingTableByMacAddress', db.getTrackingTableByMacAddress);

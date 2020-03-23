@@ -8,6 +8,7 @@ import 'react-table/react-table.css';
 import EditLbeaconForm from './../presentational/EditLbeaconForm'
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
 import axios from 'axios';
+import dataSrc from '../../dataSrc'
 import config from '../../config';
 import { 
     deleteLBeacon,
@@ -45,7 +46,7 @@ class LbeaconTable extends React.Component{
         clearInterval(this.getLbeaconDataInterval);
     }
 
-    getData = () => {
+    getData = (callback) => {
 
         let { locale } = this.context
         retrieveDataHelper.getLbeaconTable(
@@ -63,8 +64,13 @@ class LbeaconTable extends React.Component{
             this.setState({
                 data: res.data.rows,
                 columns: column,
-                showEdit: false
-            }) 
+                showEdit: false,
+                showDeleteConfirmation: false,
+                selectedRowData: '',
+                selectAll :false,
+                selectType:'',
+                selection: [],
+            }, callback) 
         })
         .catch(err => {
             this.props.setMessage(
@@ -87,14 +93,20 @@ class LbeaconTable extends React.Component{
         })
     }  
 
-    handleSubmitForm = () => {
-        this.props.setMessage(
-            'success', 
-            'edit lbeacon success'
-        )
-        setInterval(() => {
-            this.getData()
-        }, 4000)
+    handleSubmitForm = (formOption) => {
+
+        axios.post(dataSrc.editLbeacon, {
+            formOption,
+        }).then(res => {
+            this.getData(() => {
+                this.props.setMessage(
+                    'success', 
+                    'edit lbeacon success'
+                )
+            }) 
+        }).catch(err => {
+            console.log(`edit lbeacon failed ${err}`)
+        })
     }
 
 
@@ -155,8 +167,6 @@ class LbeaconTable extends React.Component{
                 deleteCount +=1
         })
 
-       
-
         deleteArray.map( item => {
             this.state.data[item] === undefined 
                 ?   null
@@ -166,23 +176,21 @@ class LbeaconTable extends React.Component{
                 idPackage
             })
             .then(res => {
-                this.getData()
-                this.props.setMessage(
-                    'success', 
-                    'delete lbeacon success'
-                )
-                this.setState({
-                    selection: [],
-                    selectAll: false,
-                    showDeleteConfirmation: false
+                this.getData(() => {
+                    this.props.setMessage(
+                        'success', 
+                        'delete lbeacon success'
+                    )
                 })
             })
             .catch(err => {
-                console.log(err)
+                console.log(`delete lbeacon failed ${err}`)
             }) 
     }
 
     render(){
+
+        const { locale } = this.context 
 
         const {  
             selectedRowData,
@@ -204,7 +212,6 @@ class LbeaconTable extends React.Component{
             selectType
         };
        
-        const { locale } = this.context 
         return(
             <div> 
                  <ButtonToolbar>
@@ -222,6 +229,7 @@ class LbeaconTable extends React.Component{
                 </ButtonToolbar>
                 <SelectTable
                     keyField='id'
+                    name="test"
                     data={this.state.data}
                     columns={this.state.columns}
                     ref={r => (this.selectTable = r)}

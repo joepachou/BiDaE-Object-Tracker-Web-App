@@ -1388,18 +1388,6 @@ const addBulkObject = (req, res) => {
     })
 }
 
-const getUserArea = (request, response) =>{
-    let { user_id } = request.body
-    pool.query(queryType.getUserArea(user_id))
-        .then(res => {
-            console.log(`get UserArea success `)
-            response.status(200).json(res)
-        })
-        .catch(err => {
-            console.log(`get UserArea fail: ${err}`)
-        })
-}
-
 const getAreaTable = (request, response) => {
     pool.query(queryType.getAreaTable())
         .then(res => {
@@ -1601,7 +1589,6 @@ module.exports = {
     addGeofenceConfig,
     deleteMonitorConfig,
     addMonitorConfig,
-    getUserArea,
     addUserArea,
     DeleteUserArea,
     getTransferredLocation,

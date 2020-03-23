@@ -49,8 +49,8 @@ const tw = {
     FEMALE:'女',
     SCAN_TAG:"請掃描TAG",
     ALREADY_CHOOSE:"已選擇",
-    MAIN_AREA:"主要地區",
-    SECONDARY_AREAS: "次要地區",
+    MAIN_AREA:"主要區域",
+    SECONDARY_AREAS: "次要區域",
 
     /* Location accuracy */
     LOCATION_ACCURACY: "位置精準度",
@@ -83,7 +83,8 @@ const tw = {
     /* buttons */
     CLEAR : "清除",
     SAVE : "儲存",
-    EDIT: "編輯",
+    EDIT_SECONDARY_AREA: "編輯次要區域",
+    EDIT_PASSWORD: "更改密碼",
     CANCEL: "取消",
     SEND: "送出",
     SIGN_IN: "登入",
@@ -146,7 +147,6 @@ const tw = {
     HIDE_MAP : "隱藏地圖",
     NEW_SEARCH: "重新搜尋",
     SEARCH: "查詢",
-    EDIT_PASSWORD:"更改密碼",
     
     /* field */
     NAME: "名稱",
