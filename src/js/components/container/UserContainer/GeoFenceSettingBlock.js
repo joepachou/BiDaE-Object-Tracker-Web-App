@@ -36,15 +36,19 @@ class GeoFenceSettingBlock extends React.Component{
         path: ''   ,
         selection: [],
         selectAll: false,  
+        exIndex:9999,
     }
+ 
 
-    componentDidMount = () => {
+    componentDidMount = () => { 
         this.getMonitorConfig()
-        this.getLbeaconTable()
-
+        this.getLbeaconTable() 
     }
 
     componentDidUpdate = (prevProps, prevState) => {
+        if (this.state.exIndex != this.props.nowIndex){
+            this.setState({selectAll : false,selection:'',exIndex:this.props.nowIndex}) 
+        }
         if (this.context.locale.abbr !== prevState.locale) {
             this.getMonitorConfig()
             this.setState({
@@ -248,8 +252,7 @@ class GeoFenceSettingBlock extends React.Component{
     isSelected = (key) => {  
         return this.state.selection.includes(key);
     };
-
-
+ 
     render() {
         let style = {
             container: {
