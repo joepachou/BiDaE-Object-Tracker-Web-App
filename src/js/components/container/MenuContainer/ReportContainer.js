@@ -5,7 +5,7 @@ import {
     ListGroup
 } from 'react-bootstrap';
 import ShiftChangeRecord from '../UserContainer/ShiftChangeRecord'
-import EditObjectManagement from '../UserContainer/EditObjectManagement'
+import ObjectEditedRecord from '../UserContainer/ObjectEditedRecord'
 import { AppContext } from '../../../context/AppContext';
 
 const style = {
@@ -27,8 +27,8 @@ class ReportContainer extends React.Component{
 
     tabList = [
         {
-            name: 'Edit Object Management',
-            component: (props) => <EditObjectManagement {...props} />
+            name: 'object edited record',
+            component: (props) => <ObjectEditedRecord {...props} />
         },
         {
             name: 'Shift Change Record',
@@ -36,7 +36,7 @@ class ReportContainer extends React.Component{
         },
     ]
 
-    defaultActiveKey = "Edit_Object_Management"
+    defaultActiveKey = "object_edited_record"
 
     render(){
         const  { 

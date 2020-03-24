@@ -13,7 +13,7 @@ const SelectTable = selecTableHOC(ReactTable);
 import { AppContext } from '../../../context/AppContext'
 import retrieveDataHelper from '../../../helper/retrieveDataHelper'
 
-class EditObjectManagement extends React.Component{
+class ObjectEditedRecord extends React.Component{
 
     static contextType = AppContext
 
@@ -254,4 +254,4 @@ class EditObjectManagement extends React.Component{
     }
 }
 
-export default EditObjectManagement
+export default ObjectEditedRecord
