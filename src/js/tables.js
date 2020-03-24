@@ -56,7 +56,7 @@ const lbeaconTableColumn = [
     {
         Header: "UUID",
         accessor: "uuid",
-        width: 330
+        width: 380
     },
     {
         Header: "description",
@@ -82,11 +82,6 @@ const lbeaconTableColumn = [
         Header: "Last Report Time",
         accessor: "last_report_timestamp",
         width: 200,
-    },
-    {
-        Header: "Note",
-        accessor: "note",
-        width: 150,
     },
     {
         Header: "api version",
@@ -122,11 +117,6 @@ const gatewayTableColumn = [
         Header: "Registered Timestamp",
         accessor: "registered_timestamp",
         width: 300,
-    },
-    {
-        Header: "Note",
-        accessor: "note",
-        width: 150,
     },
     {
         Header: "api version",
