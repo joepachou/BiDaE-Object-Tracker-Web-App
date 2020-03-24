@@ -9,7 +9,7 @@ const tw = {
     SYSTEM_SETTING: "系統設定",
     MONITOR_MANAGEMENT: "偵測裝置管理",
     GEOFENCE: "Geofence",
-    OBJECT_MANAGEMENT: "物件管理",
+    OBJECT_MANAGEMENT: "追蹤項目管理",
     MANAGEMENT: "管理",
     BIG_SCREEN: "大螢幕",
     ABOUT: "關於",
