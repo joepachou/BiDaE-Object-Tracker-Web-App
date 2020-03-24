@@ -64,14 +64,13 @@ const objectImport = `${protocol}://${dataSrcIP}/data/objectImport`
 const getImportPatient = `${protocol}://${dataSrcIP}/data/getImportPatient`
 const pinImage = `${protocol}://${dataSrcIP}/image/pinImage`
 const getTransferredLocation = `${protocol}://${dataSrcIP}/data/getTransferredLocation`
-const addUserArea= `${protocol}://${dataSrcIP}/data/addUserArea`
-const DeleteUserArea= `${protocol}://${dataSrcIP}/data/DeleteUserArea`
 const modifyTransferredLocation= `${protocol}://${dataSrcIP}/data/modifyTransferredLocation`
 const setMonitorEnable = `${protocol}://${dataSrcIP}/data/setMonitorEnable`
 const getRolesPermission= `${protocol}://${dataSrcIP}/data/getRolesPermission`
 const modifyPermission= `${protocol}://${dataSrcIP}/data/modifyPermission`
 const modifyRolesPermission= `${protocol}://${dataSrcIP}/data/modifyRolesPermission`
 const getLocationHistory = `${protocol}://${dataSrcIP}/data/getLocationHistory`
+const setUserSecondaryArea = `${protocol}://${dataSrcIP}/data/setUserSecondaryArea`
 
 const pdfUrl = function (path) {
     return `${protocol}://${dataSrcIP}/${path}`
@@ -141,13 +140,12 @@ module.exports = {
     addGeofenceConfig,
     deleteMonitorConfig,
     addMonitorConfig,
-    addUserArea,
-    DeleteUserArea, 
     modifyTransferredLocation,
     setMonitorEnable,
     modifyTransferredLocation, 
     getRolesPermission,
     modifyPermission,
     modifyRolesPermission,
-    getLocationHistory
+    getLocationHistory,
+    setUserSecondaryArea
 };

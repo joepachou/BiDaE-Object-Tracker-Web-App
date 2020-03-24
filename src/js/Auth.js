@@ -64,6 +64,26 @@ class Auth extends React.Component {
             ...values
         })
     }
+
+    setArea = (areas_id, callback) => {
+        let user = {
+            ...this.state.user,
+            areas_id
+        }
+        axios.post(dataSrc.setUserSecondaryArea, {
+            user
+        })
+        .then(res => {
+            this.setCookies('user', user)
+            this.setState({
+                ...this.state,
+                user, 
+            })
+        })
+        .catch(err => {
+            console.log(`set secondary area failed ${err}`)
+        })
+    }
   
     handleAuthentication = () => {
     };
@@ -125,7 +145,8 @@ class Auth extends React.Component {
             setMyDevice: this.setMyDevice,
             setUserInfo: this.setUserInfo,
             setCookies: this.setCookies,
-            setUser: this.setUser
+            setUser: this.setUser,
+            setArea: this.setArea
         };
 
         return (

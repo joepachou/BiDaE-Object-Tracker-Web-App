@@ -673,6 +673,20 @@ const setUserInfo = (request, response) => {
         })
 }
 
+const setUserSecondaryArea = (request, response) => {
+    const {
+        user
+    } = request.body
+    pool.query(queryType.setUserSecondaryArea(user))
+        .then(res => {
+            console.log(`set secondary area succeed`)
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(`set secondary area failed ${err}`)
+        })
+}
+
 const getEditObjectRecord = (request, response) => {
     const { locale } = request.body
     pool.query(queryType.getEditObjectRecord())
@@ -1399,28 +1413,6 @@ const getAreaTable = (request, response) => {
         })
 }
 
-const addUserArea = (request, response) => {
-    const formOption = request.body
-    pool.query(queryType.addUserArea(formOption.user_id,formOption.area_id))
-        .then(res => {
-            console.log("add UserArea success");
-            response.status(200).json(res)
-        })
-        .catch(err => {
-            console.log("add UserArea fails: " + err)
-        })
-}
-const DeleteUserArea = (request, response) => {
-    const formOption = request.body
-    pool.query(queryType.DeleteUserArea(formOption.user_id,formOption.area_id))
-        .then(res => {
-            console.log("Delete UserArea success");
-            response.status(200).json(res)
-        })
-        .catch(err => {
-            console.log("Delete UserArea fails: " + err)
-        })
-}
 const clearSearchHistory = () => {
     pool.query(queryType.clearSearchHistory()).then(res => {
 
@@ -1589,8 +1581,6 @@ module.exports = {
     addGeofenceConfig,
     deleteMonitorConfig,
     addMonitorConfig,
-    addUserArea,
-    DeleteUserArea,
     getTransferredLocation,
     modifyTransferredLocation,
     clearSearchHistory,
@@ -1599,5 +1589,6 @@ module.exports = {
     modifyPermission,
     modifyRolesPermission,
     clearSearchHistory,
-    getLocationHistory
+    getLocationHistory,
+    setUserSecondaryArea
 }

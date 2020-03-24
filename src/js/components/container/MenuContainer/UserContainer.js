@@ -75,7 +75,7 @@ class UserSettingContainer extends React.Component{
                 fluid 
                 className="mt-5 text-capitalize"
                 style={style.container}
-            >
+            >   
                 <div 
                     className="border-0 BOTsidenav"
                     style={style.sidenav}

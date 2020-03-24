@@ -12,93 +12,121 @@ import {
 } from 'react-bootstrap'
 import LocaleContext from '../../context/LocaleContext';
 import config from '../../config'
-
-const style = {
-    modal: {
-        top: '10%',
-    },
-}
+import AuthenticationContext from '../../context/AuthenticationContext';
 
 const EditAreasForm = ({
     show,
     handleClose,
     handleSubmit,
-    secondaryAreaIdBeforUpdate,
-    otherAreaIdBeforUpdate,
-    handleBeforUpdateAdd,
-    handleBeforUpdateDele,
+    areaTable,
 }) => {
         
     let locale = React.useContext(LocaleContext)
-
-    const { 
-        areaOptions
-    } = config.mapConfig
-
+    let auth = React.useContext(AuthenticationContext)
+    console.log(auth.user)
     return (
         <Modal 
             show={show} 
             size="md" 
             onHide={handleClose}
-            style={style.modal}
             className='text-capitalize'
         >
-            <Modal.Header closeButton>
+            <Modal.Header 
+                closeButton
+            >
                 {locale.texts.EDIT_SECONDARY_AREAS}
             </Modal.Header>
             <Modal.Body>
                 <Formik
                     initialValues = {{
-                        username: '',
-                        password: '',
+                        areas_id: auth.user.areas_id
                     }}
                 
-                    onSubmit={({ username, password, radioGroup }, { setStatus, setSubmitting }) => {
-                        handleSubmit()
+                    onSubmit={(values, { setStatus, setSubmitting }) => {
+                        console.log('??')
+                        handleSubmit(values.areas_id)
                     }}
 
-                    render={({ values, errors, status, touched, isSubmitting }) => (
+                    render={({ values, errors, status, touched, isSubmitting, setFieldValue}) => (
                         <Form>
                             <div
-                                className="title"
+                                className="subtitle"
                             >   
                                 {locale.texts.SELECTED_AREAS}
                             </div>
                             <ListGroup>
                                 {
-                                    secondaryAreaIdBeforUpdate.map((item,index) => {
-                                        let element = 
-                                            <ListGroup.Item
-                                                key = {index}
-                                            >
-                                                {locale.texts[areaOptions[item]]}
-                                                <Button variant='link' onClick={()=> handleBeforUpdateDele(item)}>刪除</Button>
-                                            </ListGroup.Item>
-                                        return element
-                                    })
+                                    areaTable
+                                        .filter(area => {
+                                            return (
+                                                auth.user.main_area != area.id && 
+                                                values.areas_id.includes(area.id)
+                                            )
+                                        })
+                                        .map((area,index) => {
+                                            let element = 
+                                                <ListGroup.Item
+                                                    as="a"
+                                                    key = {index}
+                                                    action
+                                                    name={area.id}
+                                                    onClick={(e) => {
+                                                        let name = e.target.getAttribute('name')
+                                                        let areasId = values.areas_id.filter(area => {
+                                                            return area != name
+                                                        })
+                                                        setFieldValue('areas_id', areasId)
+                                                    }}
+                                                >
+                                                    {locale.texts[area.name]}
+                                                </ListGroup.Item>
+                                            return element
+                                        })
                                 }
                             </ListGroup>
                             <div
-                                className="title"
+                                className="subtitle"
                             >   
                                 {locale.texts.NOT_SELECTED_AREAS}
                             </div>
                             <ListGroup>
                                 {
-                                    otherAreaIdBeforUpdate.map((item,index) => {
-                                        let element = 
-                                            <ListGroup.Item
-                                                key = {index}
-                                            >
-                                                {locale.texts[areaOptions[item]]}
-                                                <Button variant='link' onClick={() => handleBeforUpdateAdd(item)}>新增</Button>
-                                            </ListGroup.Item>
-                                        return element
-                                    })
+                                    areaTable
+                                        .filter(area => {
+                                            return (
+                                                auth.user.main_area != area.id && 
+                                                !values.areas_id.includes(area.id)
+                                            )
+                                        })
+                                        .map((area,index) => {
+                                            let element = 
+                                                <ListGroup.Item
+                                                    as="a"
+                                                    key = {index}
+                                                    action
+                                                    name={area.id}
+                                                    onClick={(e) => {
+                                                        let name = e.target.getAttribute('name')
+                                                        let areasId = values.areas_id
+                                                        areasId.push(parseInt(name))
+                                                        setFieldValue('areas_id', areasId)
+                                                    }}
+                                                >
+                                                    {locale.texts[area.name]}
+                                                </ListGroup.Item>
+                                            return element
+                                        })
                                 }
                             </ListGroup>
                             
                             <Modal.Footer>
+                                <Button 
+                                    type="button"
+                                    variant="outline-secondary" 
+                                    onClick={handleClose} 
+                                >
+                                    {locale.texts.CANCEL}
+                                </Button>
                                 <Button 
                                     type="submit" 
                                     variant="primary" 

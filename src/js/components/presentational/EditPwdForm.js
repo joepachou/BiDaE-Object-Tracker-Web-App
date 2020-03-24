@@ -11,9 +11,6 @@ import { AppContext } from '../../context/AppContext';
 class EditPwdForm extends React.Component {
 
     static contextType = AppContext
-
-    state = {   
-    };
     
     handleClose = () => { 
         this.props.handleClose()
@@ -69,20 +66,17 @@ class EditPwdForm extends React.Component {
 
                         onSubmit={(values, { setStatus, setSubmitting }) => {
                             
-                            
                                 axios.post(editPassword, {
                                     user_id: auth.user.id,
                                     password : values.check_password
                                 })
                                 .then(res => {
-                                    console.log('edit pwd done')
+                                    this.props.handleClose()
                                 })
                                 .catch(err => {
                                     console.log(err)
                                 }) 
-                                
-                                this.props.handleSubmit()
-                               
+                                                               
                         }}
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm }) => (

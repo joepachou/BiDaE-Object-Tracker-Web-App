@@ -42,10 +42,6 @@ app.get(/^\/page\/(.*)/, (req, res) => {
     res.sendFile(path.join(__dirname, 'dist','index.html'));
 })
 
-app.post('/data/DeleteUserArea', db.DeleteUserArea);
-
-app.post('/data/addUserArea', db.addUserArea);
-
 app.post('/data/getObjectTable', db.getObjectTable);
 
 app.post('/data/getTrackingTableByMacAddress', db.getTrackingTableByMacAddress);
@@ -74,6 +70,7 @@ app.post('/data/setLocaleID', db.setLocaleID);
 
 app.post('/data/editImport', db.editImport);
 
+app.post('/data/setUserSecondaryArea', db.setUserSecondaryArea)
 
 app.post('/data/editPatient', db.editPatient);
 

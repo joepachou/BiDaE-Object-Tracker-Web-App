@@ -819,7 +819,7 @@ function signin(username) {
 				FROM permissions 
 			) AS permissions, 
 			array (
-				SELECT area_id 
+				SELECT area_id::int 
 				FROM areas
 			) AS areas_id,
 			(
@@ -1200,6 +1200,23 @@ const setUserInfo = (name, roles, area, id) => {
 					)
 				)`).join(',')
 			};
+	`
+}
+
+const setUserSecondaryArea = (user) => {
+	return `
+		DELETE FROM user_area
+		WHERE user_id = ${user.id};
+
+		INSERT INTO user_area (
+			area_id,
+			user_id
+		)
+		VALUES
+		${user.areas_id.map(id => `(
+			${id},
+			${user.id}
+		)`)};
 	`
 }
 
@@ -1912,43 +1929,6 @@ const setSearchRssi = (rssi) => {
 	return query
 }
 
-function addUserArea (user_id,area_id){
-    const text = `
-		INSERT INTO user_area (
-			user_id,
-			area_id
-		)
-		VALUES (
-			$1, 
-			$2
-		);
-	`;
-		
-	const values = [
-		user_id,
-		area_id
-	];
-
-
-	const query = {
-		text,
-		values
-};
-
-return query;
-}
-
-function DeleteUserArea (user_id,area_id){
-
-    const query = `
-        
-        DELETE FROM user_area
-        WHERE user_id = '${user_id}' AND area_id = '${area_id}'
-    
-    `
-    return query
-
-}
 function clearSearchHistory(){
 	const query = `
 		DELETE FROM search_history 
@@ -2109,8 +2089,6 @@ module.exports = {
 	addGeofenceConfig,
 	deleteMonitorConfig,
 	addMonitorConfig,
-	addUserArea,
-	DeleteUserArea,
 	getTransferredLocation,
 	modifyTransferredLocation,
 	getLocationHistory,
@@ -2118,7 +2096,8 @@ module.exports = {
 	modifyPermission,
 	modifyRolesPermission,
 	setMonitorEnable,
-	clearSearchHistory
+	clearSearchHistory,
+	setUserSecondaryArea
 }
 
 
