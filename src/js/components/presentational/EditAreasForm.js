@@ -23,7 +23,7 @@ const EditAreasForm = ({
         
     let locale = React.useContext(LocaleContext)
     let auth = React.useContext(AuthenticationContext)
-    console.log(auth.user)
+
     return (
         <Modal 
             show={show} 
@@ -43,7 +43,6 @@ const EditAreasForm = ({
                     }}
                 
                     onSubmit={(values, { setStatus, setSubmitting }) => {
-                        console.log('??')
                         handleSubmit(values.areas_id)
                     }}
 
@@ -56,7 +55,7 @@ const EditAreasForm = ({
                             </div>
                             <ListGroup>
                                 {
-                                    areaTable
+                                    Object.values(areaTable)
                                         .filter(area => {
                                             return (
                                                 auth.user.main_area != area.id && 
@@ -91,7 +90,7 @@ const EditAreasForm = ({
                             </div>
                             <ListGroup>
                                 {
-                                    areaTable
+                                    Object.values(areaTable)
                                         .filter(area => {
                                             return (
                                                 auth.user.main_area != area.id && 

@@ -657,19 +657,15 @@ const getMainSecondArea = (request, response) => {
 
 const setUserInfo = (request, response) => { 
     var {
-        name,
-        roles,
-        area,
-        id
+        user
     } = request.body
-
-    pool.query(queryType.setUserInfo(name, roles, area, id))
+    pool.query(queryType.setUserInfo(user))
         .then(res => {
-            console.log(`set user succeed`)
+            console.log(`set user info succeed`)
             response.status(200).json(res)
         })
         .catch(err => {
-            console.log(`set user failed ${err}`)
+            console.log(`set user info failed ${err}`)
         })
 }
 

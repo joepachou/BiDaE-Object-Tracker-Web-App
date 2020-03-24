@@ -43,8 +43,12 @@ class UserProfile extends React.Component{
 
         retrieveDataHelper.getAreaTable()
             .then(res => {
+                let areaTable = res.data.rows.reduce((table, area) => {
+                    table[area.id] = area
+                    return table
+                }, {})
                 this.setState({
-                    areaTable: res.data.rows,
+                    areaTable,
                 })
             })
             .catch(err => {
@@ -113,9 +117,9 @@ class UserProfile extends React.Component{
             auth 
         } = this.context
 
-        const { 
-            areaOptions
-        } = config.mapConfig
+        const {
+            areaTable
+        } = this.state
 
         return(
             <div
@@ -163,11 +167,13 @@ class UserProfile extends React.Component{
                     </div>
                     <div>
                         <p>
-                            {locale.texts.MAIN_AREA}: {locale.texts[areaOptions[auth.user.main_area]]}
+                            {locale.texts.MAIN_AREA}: {areaTable.length != 0 && 
+                                locale.texts[areaTable[auth.user.main_area].name]
+                            }
                         </p>
                         <p>
                             {locale.texts.SECONDARY_AREAS}: {
-                                this.state.areaTable
+                                Object.values(this.state.areaTable)
                                     .filter(area => {
                                         return auth.user.main_area != area.id && auth.user.areas_id.includes(area.id)
                                     })

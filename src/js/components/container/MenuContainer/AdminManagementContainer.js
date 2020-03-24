@@ -76,6 +76,12 @@ class AdminManagementContainer extends React.Component{
             this.setState({
                 data: res.data.rows,
                 columns,
+                showModifyUserInfo: false,
+                showAddUserForm: false,
+                showDeleteUserForm:false,
+                showDeleteConfirmation:false,
+                deleteUserName:'',
+                selectedUser: null,
             })
         })
     }
@@ -112,23 +118,24 @@ class AdminManagementContainer extends React.Component{
             api,
             selectedUser
         } = this.state 
-        values.id = selectedUser ? selectedUser.id : null
 
-        auth[api](values)
-            .then(res => {
-                this.getUserList()
-                this.setState({
-                    showModifyUserInfo: false,
-                    showAddUserForm: false,
-                    showDeleteUserForm:false,
-                    showDeleteConfirmation:false,
-                    deleteUserName:'',
-                    selectedUser: null,
-                })
-            })
-            .catch(err => {
-                console.log(`${api} failed ${err}`)
-            })
+        let user = {
+            ...auth.user,
+            ...values,
+            id: selectedUser ? selectedUser.id : null,
+            areas_id: auth.user.areas_id,
+            main_area: values.area.id
+        }
+
+        let index = auth.user.areas_id.indexOf(auth.user.main_area)
+        user.areas_id.splice(index, 1)
+        if (!user.areas_id.includes(user.area.id)) {
+            user.areas_id.push(user.area.id)
+        }
+
+        auth[api](user, () => {
+            this.getUserList()
+        })
     }
 
     handleDeleteUserSubmit = (e) => {

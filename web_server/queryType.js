@@ -1164,26 +1164,20 @@ const deleteUser = (username) => {
 
 
 
-const setUserInfo = (name, roles, area, id) => {
+const setUserInfo = user => {
 	return `
 
 		DELETE FROM user_role 
-		WHERE user_id = ${id};
+		WHERE user_id = ${user.id};
 
-		UPDATE user_area
-		SET area_id = '${area.id}'
-		WHERE user_id = ${id}
-		AND area_id = (	
-			SELECT main_area
-			FROM user_table
-			WHERE id = ${id}
-		);
+		DELETE FROM user_area
+		WHERE user_id = ${user.id};
 
 		UPDATE user_table
 		SET 
-			name = '${name}',
-			main_area = ${area.id}
-		WHERE id = ${id};
+			name = '${user.name}',
+			main_area = ${user.main_area}
+		WHERE id = ${user.id};
 
 		INSERT INTO user_role (
 			user_id, 
@@ -1191,13 +1185,25 @@ const setUserInfo = (name, roles, area, id) => {
 		)
 			VALUES 
 			${
-				roles.map(role => `(
-					${id}, 
+				user.roles.map(roleName => `(
+					${user.id}, 
 					(
 						SELECT id 
 						FROM roles
-						WHERE name='${role}'
+						WHERE name='${roleName}'
 					)
+				)`).join(',')
+			};
+
+		INSERT INTO user_area (
+			user_id, 
+			area_id
+		)
+			VALUES 
+			${
+				user.areas_id.map(areaId => `(
+					${user.id}, 
+					${areaId}
 				)`).join(',')
 			};
 	`

@@ -59,9 +59,19 @@ class Auth extends React.Component {
         })
     }
 
-    async setUser (values) {
-        return await axios.post(dataSrc.setUserInfo, {
-            ...values
+    setUser = (user, callback) => {
+        axios.post(dataSrc.setUserInfo, {
+            user
+        })
+        .then(res => {
+            this.setCookies('user', user)
+            this.setState({
+                ...this.state,
+                user, 
+            }, callback)
+        })
+        .catch(err => {
+            console.log(`set user info failed ${err}`)
         })
     }
 
