@@ -17,7 +17,7 @@ const FormikFormGroup = ({
    className, 
    value,
    onChange,
-   example = null
+   example = null,
 }) => {
     let style = {
         container: {
@@ -30,6 +30,7 @@ const FormikFormGroup = ({
             color: 'grey'
         }
     }
+
     return (
         <div 
             className={`form-group ${className}`}
@@ -57,6 +58,7 @@ const FormikFormGroup = ({
                             <Field  
                                 name={name} 
                                 type={type} 
+                                component={type != 'text' ? type : "text"}
                                 className={'form-control' + (error && touched ? ' is-invalid' : '')} 
                                 placeholder={placeholder}
                                 disabled={disabled}

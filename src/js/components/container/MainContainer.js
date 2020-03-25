@@ -271,7 +271,6 @@ class MainContainer extends React.Component{
             areaId
         )
         .then(res => {
-
             /** dismiss error message when the database is connected */
             if (this.errorToast) {
                 this.errorToast = null;

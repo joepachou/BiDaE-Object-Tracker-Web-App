@@ -219,7 +219,7 @@ class RolePermissionManagement extends React.Component{
                                     {
                                         this.state.permissionType.map(type => {
                                             return   (
-                                                <>
+                                                <div key = {"div" + type}>
                                                     <Col md={4}></Col>
                                                     <Col md={4} className="m-4 " key={type}>
                                                         <h4 className="d-flex justify-content-center m-4">{type}</h4>
@@ -260,7 +260,7 @@ class RolePermissionManagement extends React.Component{
                                                             })
                                                         }
                                                     </Col>
-                                                </>
+                                                </div>
                                             ) 
                                             
                                         })

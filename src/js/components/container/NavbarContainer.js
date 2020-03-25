@@ -22,6 +22,9 @@ import Select from 'react-select';
 import BatteryLevelNotification from "./BatteryLevelNotification"
 import retrieveDataHelper from '../../helper/retrieveDataHelper';
 import siteConfig from '../../../../site_module/siteConfig';
+import {
+    navbarList
+} from '../../config/pages'
 
 class NavbarContainer extends React.Component {
 
@@ -265,6 +268,7 @@ class NavbarContainer extends React.Component {
                                             className="nav-link nav-route"
                                             name={nav.alias}
                                             onClick={nav.event}
+                                            key={nav.alias}
                                         >
                                             {locale.texts[nav.name.toUpperCase().replace(/ /g, '_')]}
                                         </Link>

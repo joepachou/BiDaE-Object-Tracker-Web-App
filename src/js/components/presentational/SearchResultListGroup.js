@@ -12,7 +12,7 @@ import AccessControl from './AccessControl'
 
 const SearchResultListGroup = ({
     data,
-    handleSelectResultItem,
+    onSelect,
     selection,
     disabled,
     action
@@ -35,7 +35,7 @@ const SearchResultListGroup = ({
 
     return (
         <ListGroup 
-            onSelect={handleSelectResultItem} 
+            onSelect={onSelect} 
         >
             {data.map((item,index) => {
                 let element = 

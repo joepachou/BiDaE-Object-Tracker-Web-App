@@ -156,6 +156,7 @@ const en =  {
     MONITOR_TYPE: "monitor type",
     ACN: "ACN",
     LOCATION: "location",
+    PATIENT_HISTORICAL_RECORD: "patient historical record",
     RSSI_THRESHOLD: "RSSI threshold",
     LAST_FOUR_DIGITS_IN_ACN: "last 4 digits in ACN",
     ADD_DEVICE: "add device",
@@ -211,7 +212,8 @@ const en =  {
     ADD_OBJECT: "add object",
     EDIT_OBJECT: "edit object",
     EDIT_PATIENT: "edit patient",
-    REPORT_DEVICE_STATUS: "Report device status",
+    REPORT_DEVICE_STATUS: "report device status",
+    REPORT_PATIENT_STATUS: "report patient status",
     THANK_YOU_FOR_REPORTING: "Thank you for reporting",
     PRINT_SEARCH_RESULT: "print search result",
     EDIT_USER: "edit user",
@@ -375,6 +377,7 @@ const en =  {
     DELETE_LBEACON_SUCCESS: "delete lbeacon success",
     DELETE_GATEWAY_SUCCESS: "delete gateway success",
     SAVE_SHIFT_CHANGE_SUCCESS: "save shift change success",
+    SAVE_SUCCESS: "save success",
 
     /** User Roles */
     CARE_PROVIDER: "care provider",

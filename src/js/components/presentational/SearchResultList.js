@@ -22,10 +22,9 @@ import {
 } from 'react-device-detect'
 import moment from 'moment'
 import ScrollArea from 'react-scrollbar'
-import { sign } from 'crypto';
-import { toast } from 'react-toastify';
 import ToastNotification from '../presentational/ToastNotification'
 import messageGenerator from '../../helper/messageGenerator'
+import PatientViewModal from './PatientViewModal';
 
 
 class SearchResult extends React.Component {
@@ -44,7 +43,8 @@ class SearchResult extends React.Component {
         showAddDevice: false,
         showDownloadPdfRequest: false,
         showPath: false,
-        signatureName:''
+        signatureName:'',
+        showPatientView: false,
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -55,20 +55,35 @@ class SearchResult extends React.Component {
         } 
     }
 
-    handleSelectResultItem = (eventKey) => {
+    onSelect = (eventKey) => {
+        let { 
+            stateReducer
+         } = this.context
+
+        let [{}, dispatch] = stateReducer
+
         const eventItem = eventKey.split(':');
         const isFound = parseInt(eventItem[0])
         const number = parseInt(eventItem[1])
+        let selectItem = isFound 
+                ? this.props.searchResult.filter(item => item.found)[number]
+                : this.props.searchResult.filter(item => !item.found)[number]
 
-        /** The reason using array to encapture the selectedObjectData is to have the consisten data form passed into ChangeStatusForm */
-        this.toggleSelection(number, isFound)
-        this.props.highlightSearchPanel(true)
-        let { stateReducer } = this.context
-        let [{}, dispatch] = stateReducer
-        dispatch({
-            type: 'setUpdateTrackingData',
-            value: false
-        })
+        if (selectItem.object_type == 0) {
+            /** The reason using array to encapture the selectedObjectData is to have the consisten data form passed into ChangeStatusForm */
+            this.toggleSelection(number, isFound)
+            this.props.highlightSearchPanel(true)
+            dispatch({
+                type: 'setUpdateTrackingData',
+                value: false
+            })
+        } else {
+            this.setState({
+                showPatientView: true,
+                selectedObjectData: selectItem
+            })
+        }
+
     }
 
     toggleSelection = (number, isFound) => {
@@ -129,7 +144,7 @@ class SearchResult extends React.Component {
             showEditObjectForm: false,
             editedObjectPackage :editedObjectPackage ,
         })
-        if (values.status == 'transferred') { //秀簽名
+        if (values.status == 'transferred') { 
             this.setState({
                 showSignatureForm:true
             })
@@ -268,7 +283,35 @@ class SearchResult extends React.Component {
     handleFormClose = () =>{
         this.setState({
             showDownloadPdfRequest: false,
-            showConfirmForm: false
+            showConfirmForm: false,
+            showPatientView: false,
+        })
+    }
+
+    handlePatientView = values => {
+        let {
+            auth
+        } = this.context
+        let objectPackage = {
+            userId: auth.user.id,
+            notes: values.notes,
+            id: this.state.selectedObjectData.id
+        }
+        axios.post(dataSrc.addPatientRecord, {
+            objectPackage
+        })
+        .then(res => {
+            let callback = () => messageGenerator.setSuccessMessage(
+                'save success'
+            )
+            this.setState({
+                showDownloadPdfRequest: false,
+                showConfirmForm: false,
+                showPatientView: false,
+            }, callback)
+        })
+        .catch(err => {
+            console.log(`add patient record failed ${err}`)
         })
     }
 
@@ -316,7 +359,6 @@ class SearchResult extends React.Component {
             ? locale.texts.SEARCH_RESULTS_NOT_FOUND
             : locale.texts.SEARCH_RESULTS_FOUND
 
-
         return(
             <div className='text-capitalize'>
                 <BrowserView>
@@ -333,32 +375,28 @@ class SearchResult extends React.Component {
                                     </Col> 
                                 :   
                                     <Col className="searchResultListGroup d-flex justify-content-center">
-                                        <AccessControl
-                                            permission={'form:edit'}
-                                            renderNoAccess={() => (
+                                        <ScrollArea 
+                                            smoothScrolling={true}
+                                            horizontal={false}
+                                        >                 
+                                            <AccessControl
+                                                permission={'form:edit'}
+                                                renderNoAccess={() => (
+                                                    <SearchResultListGroup 
+                                                        data={searchResult}
+                                                        selection={this.state.selection}
+                                                    />
+                                                )}
+                                            >
                                                 <SearchResultListGroup 
                                                     data={searchResult}
+                                                    onSelect={this.onSelect}
                                                     selection={this.state.selection}
+                                                    action
                                                 />
-                                            )
-                                            }
-                                        >
-                                            <SearchResultListGroup 
-                                                data={searchResult}
-                                                handleSelectResultItem={
-                                                    searchResult[0].object_type == 0 
-                                                        ? this.handleSelectResultItem
-                                                        : null
-                                                }
-                                                selection={this.state.selection}
-                                                action={
-                                                    searchResult[0].object_type == 0 
-                                                        ? true
-                                                        : false
-                                                }
-                                            />
 
-                                        </AccessControl>
+                                            </AccessControl>
+                                        </ScrollArea>
                                     </Col>
                             }
                         </Row>
@@ -391,7 +429,10 @@ class SearchResult extends React.Component {
                                     </Col> 
                                 :   
                                     <Col className="searchResultListGroupForTablet d-flex justify-content-center">
-                                        <ScrollArea style={style.searchResultListForTablet} smoothScrolling={true}>                 
+                                        <ScrollArea 
+                                            style={style.searchResultListForTablet} 
+                                            smoothScrolling={true}
+                                        >                 
                                             <AccessControl
                                                 permission={'form:edit'}
                                                 renderNoAccess={() => (
@@ -404,8 +445,8 @@ class SearchResult extends React.Component {
                                             >
                                                 <SearchResultListGroup 
                                                     data={searchResult}
-                                                    handleSelectResultItem={searchResult[0].object_type == 0 
-                                                        ? this.handleSelectResultItem
+                                                    onSelect={searchResult[0].object_type == 0 
+                                                        ? this.onSelect
                                                         : null
                                                     }
                                                     selection={this.state.selection}
@@ -465,8 +506,8 @@ class SearchResult extends React.Component {
                                         >
                                             <SearchResultListGroup 
                                                 data={searchResult}
-                                                handleSelectResultItem={searchResult[0].object_type == 0 
-                                                    ? this.handleSelectResultItem
+                                                onSelect={searchResult[0].object_type == 0 
+                                                    ? this.onSelect
                                                     : null
                                                 }
                                                 selection={this.state.selection}
@@ -502,7 +543,7 @@ class SearchResult extends React.Component {
                 <ChangeStatusForm
                     handleShowPath={this.props.handleShowPath} 
                     show={this.state.showEditObjectForm} 
-                    title={'report device status'} 
+                    title='report device status' 
                     selectedObjectData={this.state.selectedObjectData} 
                     searchKey={searchKey}
                     handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose}
@@ -511,12 +552,19 @@ class SearchResult extends React.Component {
                     showAddDevice={this.state.showAddDevice}
                     handleRemoveButton={this.handleRemoveButton}
                 />
+                <PatientViewModal
+                    show={this.state.showPatientView} 
+                    title="report patient status"
+                    handleClose={this.handleFormClose}
+                    handleSubmit={this.handlePatientView}
+                    data={this.state.selectedObjectData} 
+                />
                 
                 <SignatureForm
-                     show={this.state.showSignatureForm} 
-                     title={locale.texts.SIGNATURE} 
-                     handleClose={this.handleChangeObjectStatusFormClose}
-                     handleSubmit= {this.handleSignatureSubmit}
+                    show={this.state.showSignatureForm} 
+                    title={locale.texts.SIGNATURE} 
+                    handleClose={this.handleChangeObjectStatusFormClose}
+                    handleSubmit= {this.handleSignatureSubmit}
                 />
 
                 <ConfirmForm 

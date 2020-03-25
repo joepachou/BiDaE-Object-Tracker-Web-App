@@ -3,7 +3,6 @@ function getTrackingData (areas_id) {
 	const query = `
 		SELECT 
 			object_table.mac_address,
-			object_summary_table.id,
 			object_summary_table.uuid as lbeacon_uuid,
 			object_summary_table.first_seen_timestamp,
 			object_summary_table.last_seen_timestamp,
@@ -13,6 +12,7 @@ function getTrackingData (areas_id) {
 			object_summary_table.battery_voltage,
 			object_summary_table.base_x,
 			object_summary_table.base_y,
+			object_table.id,
 			object_table.name,
 			object_table.type,
 			object_table.status,
@@ -32,7 +32,9 @@ function getTrackingData (areas_id) {
 				SELECT name
 				FROM user_table
 				WHERE user_table.id = object_table.reserved_user_id
-			) as reserved_user_name
+			) as reserved_user_name,
+			patient_record.record
+			
 		
 		FROM object_summary_table
 
@@ -44,6 +46,19 @@ function getTrackingData (areas_id) {
 
 		LEFT JOIN edit_object_record
 		ON object_table.note_id = edit_object_record.id
+
+		LEFT JOIN (
+			SELECT 
+				object_id,
+				ARRAY_AGG(JSON_BUILD_OBJECT(
+					'create_timestamp', create_timestamp,
+					'notes', notes,
+					'editing_user_id', editing_user_id 
+				)) as record
+			FROM patient_record
+			GROUP BY object_id
+		) as patient_record
+		ON object_table.id = patient_record.object_id
 
 		LEFT JOIN user_table
 		ON user_table.id = object_table.physician_id
@@ -2029,6 +2044,37 @@ function modifyRolesPermission(type, data){
     }
 }
 
+const addPatientRecord = objectPackage => {
+	let text = `
+		INSERT INTO patient_record (
+			object_id,
+			editing_user_id, 
+			notes,
+			create_timestamp
+		) 
+		VALUES (
+			$1,
+			$2,
+			$3,
+			now()
+		)
+		
+	`
+	let values = [
+		objectPackage.id,
+		objectPackage.userId,
+		objectPackage.notes
+	]	
+
+	let query = {
+		text,
+		values
+	}
+	
+	return query
+	
+}
+
 module.exports = {
 	getTrackingData,
 	getTrackingTableByMacAddress,
@@ -2103,7 +2149,8 @@ module.exports = {
 	modifyRolesPermission,
 	setMonitorEnable,
 	clearSearchHistory,
-	setUserSecondaryArea
+	setUserSecondaryArea,
+	addPatientRecord
 }
 
 

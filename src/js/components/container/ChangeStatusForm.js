@@ -86,8 +86,14 @@ class ChangeStatusForm extends React.Component {
                 break;
         }
     }
+
     initValues = () => {
-        let {selectedObjectData} = this.props
+        let {
+            selectedObjectData
+        } = this.props
+
+        selectedObjectData = selectedObjectData.length ? selectedObjectData : []
+
         let {transferredLocationOptions} = this.state
         let initValues = {
             name: selectedObjectData.length != 0 ? selectedObjectData[0].name : '',
@@ -134,6 +140,9 @@ class ChangeStatusForm extends React.Component {
             title,
             selectedObjectData 
         } = this.props
+
+        selectedObjectData = selectedObjectData.length ? selectedObjectData : []
+
         return (
             <Modal  
                 show={this.props.show}
@@ -176,12 +185,12 @@ class ChangeStatusForm extends React.Component {
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
                             <Form className="text-capitalize">
                                 <div className='modalDeviceListGroup' style={style.deviceList}>
-                                    {this.props.selectedObjectData.map((item,index) => {
+                                    {selectedObjectData.map((item,index) => {
                                         return (
                                             <div key={index} >
                                                 {index > 0 ? <hr/> : null}
                                                 <Row noGutters className='text-capitalize'>
-                                                    {this.props.selectedObjectData.length > 1 
+                                                    {selectedObjectData.length > 1 
                                                         ? 
                                                             <Col xs={1} sm={1} className='d-flex align-items-center'>
                                                                 <i 

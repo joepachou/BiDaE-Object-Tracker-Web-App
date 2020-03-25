@@ -70,6 +70,8 @@ app.post('/data/setLocaleID', db.setLocaleID);
 
 app.post('/data/editImport', db.editImport);
 
+app.post('/data/addPatientRecord', db.addPatientRecord)
+
 app.post('/data/setUserSecondaryArea', db.setUserSecondaryArea)
 
 app.post('/data/editPatient', db.editPatient);

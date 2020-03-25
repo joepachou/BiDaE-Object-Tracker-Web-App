@@ -698,3 +698,16 @@ p {
 .toast-success-notice {
     top: 60%;
 }
+
+/** customize css class*/
+.cursor-pointer{
+    cursor: pointer;
+} 
+
+.text-none {
+    text-transform: none;
+}
+
+.font-color-black {
+    color: black
+}

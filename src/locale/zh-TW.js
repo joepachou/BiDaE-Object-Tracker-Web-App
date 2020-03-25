@@ -157,6 +157,7 @@ const tw = {
     MONITOR_TYPE: "監控類別",
     ACN: "財產編號",
     LOCATION: "地點",
+    PATIENT_HISTORICAL_RECORD: "病人歷史報告",
     RSSI_THRESHOLD: "RSSI設定",
     LAST_FOUR_DIGITS_IN_ACN: "產編後四碼",
     ADD_DEVICE: "增加儀器",
@@ -212,6 +213,7 @@ const tw = {
     ADD_OBJECT: "增加儀器",
     EDIT_OBJECT: "編輯儀器",
     REPORT_DEVICE_STATUS: "回報儀器狀態",
+    REPORT_PATIENT_STATUS: "回報病人狀態",
     THANK_YOU_FOR_REPORTING: "謝謝您的回報",
     PRINT_SEARCH_RESULT: "下載搜尋結果",
     EDIT_USER: "編輯使用者",
@@ -381,6 +383,7 @@ const tw = {
     DELETE_LBEACON_SUCCESS: "刪除Lbeacon成功",
     DELETE_GATEWAY_SUCCESS: "刪除Gateway成功",
     SAVE_SHIFT_CHANGE_SUCCESS: "儲存交班報表成功",
+    SAVE_SUCCESS: "儲存成功",
 
 
     /** User Roles */

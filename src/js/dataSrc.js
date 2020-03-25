@@ -71,6 +71,7 @@ const modifyPermission= `${protocol}://${dataSrcIP}/data/modifyPermission`
 const modifyRolesPermission= `${protocol}://${dataSrcIP}/data/modifyRolesPermission`
 const getLocationHistory = `${protocol}://${dataSrcIP}/data/getLocationHistory`
 const setUserSecondaryArea = `${protocol}://${dataSrcIP}/data/setUserSecondaryArea`
+const addPatientRecord = `${protocol}://${dataSrcIP}/data/addPatientRecord`
 
 const pdfUrl = function (path) {
     return `${protocol}://${dataSrcIP}/${path}`
@@ -147,5 +148,6 @@ module.exports = {
     modifyPermission,
     modifyRolesPermission,
     getLocationHistory,
-    setUserSecondaryArea
+    setUserSecondaryArea,
+    addPatientRecord
 };

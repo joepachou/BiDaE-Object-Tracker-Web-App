@@ -237,7 +237,7 @@ class SurveillanceContainer extends React.Component {
                                                 name="cleanPath"
                                                 disabled={(this.props.pathMacAddress == '')}
                                             >
-                                                {locale.texts.CLEAN_PATH}
+                                                {locale.texts.HIDE_PATH}
                                             </Button>
                                         </Nav.Item>
                                     </AccessControl>
