@@ -1055,10 +1055,9 @@ const confirmValidation = (request, response) => {
                 if (bcrypt.compareSync(password, hash)) {
                     let { 
                         roles, 
-                    } = res.rows[0]
-                    
+                    } = res.rows[0] 
                     /** authenticate if user is care provider */
-                    if (roles.includes('3')) {
+                    if (roles.includes('3') || roles.includes('4')) {
                         response.json({
                             confirmation: true,
                         })

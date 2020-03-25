@@ -202,14 +202,16 @@ class ShiftChange extends React.Component {
         const hasFoundResult = foundResult.length !== 0;
         const hasNotFoundResult = notFoundResult.length !== 0;
 
-        const shiftOptions = Object.values(config.shiftOption).map(shift => {
-            return {
+        const shiftOptions = Object.values(config.shiftOption).map(shift => { 
+            return { 
                 value: shift,
                 label: locale.texts[shift.toUpperCase().replace(/ /g, '_')]
             };
-        })
+        }) 
 
+        
         return (
+            
             <Fragment>
                 <Modal 
                     show={show} 
@@ -225,12 +227,12 @@ class ShiftChange extends React.Component {
                         </div>                                
                         <div>
                             {locale.texts.DATE_TIME}: {nowTime.format(config.shiftChangeRecordTimeFormat)}
-                        </div>
+                        </div> 
                         <div 
                         >
                             {locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: {auth.user.name} 
                         </div>
-                        {this.state.selectValue == '' ? null : this.setState({selectValue:shiftOptions[0]})}
+                        {/* {this.state.selectValue == '' ? null : this.setState({selectValue:shiftOptions[0]})} */}
                         <div 
                             className="d-flex align-items-center"
                         >   
@@ -239,7 +241,7 @@ class ShiftChange extends React.Component {
                             <Select 
                                 name = "shiftSelect"
                                 options={shiftOptions} 
-                                value = {this.state.selectValue}
+                                value = {this.state.selectValue || shiftOptions[0]}
                                 onChange={this.handleSelectChange}  
                                 styles={style.select}
                             />  
