@@ -223,7 +223,7 @@ const EditGeofenceConfig = ({
                             </Row>
                             <Row noGutters>
                                 <Col>
-                                    <small  className="form-text text-muted">{locale.texts.ENABLE_START_TIME}</small>
+                                    <small  className="form-text text-muted">{'locale.texts.ENABLE_START_TIME'}</small>
                                     <DateTimePicker
                                         value={values.start_time}
                                         getValue={value => {
