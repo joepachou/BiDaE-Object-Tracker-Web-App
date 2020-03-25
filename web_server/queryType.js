@@ -1665,24 +1665,23 @@ const setMonitorConfig = (monitorConfigPackage) => {
 		area_id,
 	} = monitorConfigPackage
 
-	
-
+	 
 	let text = `
-		UPDATE ${type}
+		UPDATE ${monitorConfigPackage.type}
 		SET 
-			area_id = $2,
-			start_time = $3,
-			end_time = $4,
-			enable = $5
+			area_id = $5,
+			start_time = $2,
+			end_time = $3,
+			enable = $4
 		
 		WHERE id = $1;
 	`
-	let values = [
+	let values = [ 
 		id,
-		area_id,
 		start_time,
 		end_time,
 		enable,
+		area_id,
 	]
 
 	let query = {
