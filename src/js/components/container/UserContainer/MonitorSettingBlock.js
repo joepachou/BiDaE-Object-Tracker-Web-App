@@ -275,8 +275,7 @@ class MonitorSettingBlock extends React.Component{
  
         let title = `edit ${type}`.toUpperCase().replace(/ /g, '_')
         return ( 
-            <div> 
-                {console.log(areaOptions)}
+            <div>  
                 <ButtonToolbar>
                     <Button 
                         variant="outline-primary" 
