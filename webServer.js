@@ -192,6 +192,11 @@ app.get(`/${process.env.DEFAULT_FOLDER}/edit_object_record/:file`, (req, res) =>
 	res.sendFile(path.join(`${process.env.LOCAL_FILE_PATH}`, `${process.env.DEFAULT_FOLDER}/edit_object_record`,req.params['file']));
 })
 
+app.get(`/${process.env.DEFAULT_FOLDER}/patient_record/:file`, (req, res) =>{
+	res.sendFile(path.join(`${process.env.LOCAL_FILE_PATH}`, `${process.env.DEFAULT_FOLDER}/patient_record`,req.params['file']));
+})
+
+
 app.get('/download/com.beditech.IndoorNavigation.apk', (req, res) => {
     const file = `${__dirname}/download/com.beditech.IndoorNavigation.apk`;
     res.download(file);

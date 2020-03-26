@@ -306,6 +306,7 @@ const en =  {
     ROLE_PERMISSION_MANAGEMENT: "Role Permission Management",
     SHIFT_CHANGE_RECORD: "shift change record",
     OBJECT_EDITED_RECORD: "object edited record",
+    PATIENT_RECORD: "patient record",
     ACCESS_RIGHT: "Access Right",
     MY_DEVICES: "My Devices",
     OTHER_DEVICES: "Other Devices",

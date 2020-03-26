@@ -5,7 +5,6 @@ import {
 } from 'react-bootstrap';
 import axios from 'axios';
 import dataSrc from '../../dataSrc'
-import GetResultData from './GetResultData'
 import moment from 'moment'
 import config from '../../config';
 import { AppContext } from '../../context/AppContext'
@@ -48,23 +47,9 @@ class ShiftChange extends React.Component {
         },
         fileUrl: '',
         showPdfDownloadForm: false,
-        APIforTableDone: false,
         showConfirmForm: false,
-        devicesArray: [],
         showDownloadPdfRequest: false,
         selectValue:'',
-    }
-    APIforTable = null
-
-
-    getAPIfromTable = (API) => {
-        this.APIforTable = API
-        this.APIforTable.setOnClick(this.onClickTableItem)
-        setTimeout(
-            () => {
-                this.APIforTable.updateSearchResult(this.state.searchResult)
-            }, 100
-        )
     }
 
     componentDidUpdate = (prevProps) => {
@@ -80,45 +65,47 @@ class ShiftChange extends React.Component {
             stateReducer 
         } = this.context
         let [{areaId}] = stateReducer
-
         retrieveDataHelper.getTrackingData(
             locale.abbr, 
             auth.user, 
             areaId
         )
         .then(res => {
-            GetResultData('my devices', res.data, auth.user)
-                .then(result => {
-                    var foundResult = []
-                    var notFoundResult = []
-                    for(var i in result){
-                        if(result[i].found){
-                            foundResult.push(result[i])
-                        }else{
-                            notFoundResult.push(result[i])
-                        }
-                    }
+            let {
+                myDevice
+            } = auth.user
+
+            let foundResult = []
+            let notFoundResult = []
+            let patients= []
+            res.data
+                .map(item => {
                     
-                    this.setState({
-                        searchResult: {
-                            foundResult: foundResult,
-                            notFoundResult: notFoundResult,
-                        }
-                    })
-                }) 
-                .catch(err => {
-                    console.log(`get myDevice data fail ${err}`)
-                })
+                    switch(item.object_type) {
+                        case '0':
+                            if (myDevice.includes(item.asset_control_number)) {
+                                foundResult.push(item)
+                            } else {
+                                notFoundResult.push(item)
+                            }
+                            break;
+                        case '1':
+                            if (myDevice.includes(item.asset_control_number)) {
+                                patients.push(item)
+                            }
+                            break
+                    }
+            })
+            this.setState({
+                searchResult: {
+                    foundResult: foundResult,
+                    notFoundResult: notFoundResult,
+                },
+                patients,
+            })
         })
         .catch(err => {
-            console.log(`get tracking data fail: ${err}`)
-        })
-    }
-
-    handleClosePdfForm = () => {
-        this.setState({
-            showPdfDownloadForm: false,
-            selectValue:''
+            console.log(`get tracking data failed ${err}`)
         })
     }
 
@@ -132,7 +119,7 @@ class ShiftChange extends React.Component {
         let { 
             locale, 
             auth 
-        } = this.context   
+        } = this.context  
 
         let pdfPackage = config.getPdfPackage(
             'shiftChange', 
@@ -140,48 +127,64 @@ class ShiftChange extends React.Component {
             this.state.searchResult, 
             locale,
             name,
-             this.state.selectValue
+            this.state.selectValue
         )
+
+        this.state.patients.reduce((pkg, object) => {
+            let temp = config.getPdfPackage(
+                'patientRecord', 
+                auth.user, 
+                object, 
+                locale,
+                name,
+                this.state.selectValue
+            )
+
+            if (pkg.pdf) {
+                pkg.pdf += `
+                    <div style="page-break-before:always"></div>
+                `
+                pkg.pdf += temp.pdf
+            } else {
+                pkg = temp
+            }
+            return pkg
+        }, pdfPackage)
+
         axios.post(dataSrc.addShiftChangeRecord, {
             userInfo: auth.user,
             pdfPackage,
-            shift:this.state.selectValue,
+            shift: this.state.selectValue,
         }).then(res => {
             this.props.handleSubmit()
-            messageGenerator.setSuccessMessage(
+            let callback = () => messageGenerator.setSuccessMessage(
                 'save shift change success'
             )
             this.setState({
                 fileUrl: pdfPackage.path,
                 showConfirmForm: false,
                 showDownloadPdfRequest: true
-            })
-            // this.refs.download.click()
+            }, callback)
         }).catch(err => {
-            console.log(err)
+            console.log(`add shift change record failed ${err}`)
         })
     }
 
-    handleSignFormClose = () => {
+    handleClose = () => {
         this.setState({
             showConfirmForm: false,
-            selectValue:''
-        })
-    }
-
-    handlePdfDownloadFormClose = () => {
-        this.setState({
             selectValue:'',
             showDownloadPdfRequest: false
         })
     }
 
     handleSelectChange = (val) => { 
-        this.setState({ selectValue : val });
+        this.setState({ 
+            selectValue: val 
+        });
     }
 
     render() {   
-
         const { 
             locale, 
             auth,
@@ -211,7 +214,6 @@ class ShiftChange extends React.Component {
 
         
         return (
-            
             <Fragment>
                 <Modal 
                     show={show} 
@@ -232,7 +234,6 @@ class ShiftChange extends React.Component {
                         >
                             {locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: {auth.user.name} 
                         </div>
-                        {/* {this.state.selectValue == '' ? null : this.setState({selectValue:shiftOptions[0]})} */}
                         <div 
                             className="d-flex align-items-center"
                         >   
@@ -279,7 +280,8 @@ class ShiftChange extends React.Component {
                         <Button 
                             type="submit" 
                             variant="primary" 
-                            onClick = {this.confirmShift}
+                            // onClick = {this.confirmShift}
+                            onClick={this.handleConfirmFormSubmit}
                             disabled={!hasFoundResult && !hasNotFoundResult}
                         >
                             {locale.texts.CONFIRM}
@@ -289,7 +291,7 @@ class ShiftChange extends React.Component {
                 <GeneralConfirmForm
                     show={this.state.showConfirmForm}
                     handleSubmit={this.handleConfirmFormSubmit}
-                    handleClose={this.handleSignFormClose}
+                    handleClose={this.handleClose}
                     signin={auth.signin}
                     stateReducer ={stateReducer[0].areaId}
                     auth={auth}
@@ -297,7 +299,7 @@ class ShiftChange extends React.Component {
                 <DownloadPdfRequestForm
                     show={this.state.showDownloadPdfRequest} 
                     pdfPath={this.state.fileUrl}
-                    handleClose={this.handlePdfDownloadFormClose}
+                    handleClose={this.handleClose}
                 />
             </Fragment>
         )

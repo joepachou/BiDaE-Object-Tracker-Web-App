@@ -308,6 +308,7 @@ const tw = {
     ROLE_PERMISSION_MANAGEMENT: "身分權限管理",
     PATIENT_MANAGEMENT: "病人管理",
     SHIFT_CHANGE_RECORD: "交班紀錄",
+    PATIENT_RECORD: "病人報告",
     OBJECT_EDITED_RECORD: "儀器狀態更改紀錄",
     ACCESS_RIGHT: "使用者權限",
     MY_DEVICES: "我的儀器",
