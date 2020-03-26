@@ -39,7 +39,7 @@ class AdminManagementContainer extends React.Component{
     }
 
     componentDidUpdate = (prevProps, prevState) => {
-        if (this.context.locale.abbr !== prevState.locale) { 
+        if (this.context.locale.abbr !== prevState.locale) {
             this.getRoleNameList()
             this.getUserList()
             this.setState({
@@ -131,11 +131,17 @@ class AdminManagementContainer extends React.Component{
         user.areas_id.splice(index, 1)
         if (!user.areas_id.includes(user.area.id)) {
             user.areas_id.push(user.area.id)
-        }
+        } 
+        
+        auth[api](user)              
+            .then(res => {
+                this.getUserList() 
+            })
+            .catch(err => {
+                console.log("delete User fail : " + err);
+            })
+           
 
-        auth[api](user, () => {
-            this.getUserList()
-        })
     }
 
     handleDeleteUserSubmit = (e) => {
