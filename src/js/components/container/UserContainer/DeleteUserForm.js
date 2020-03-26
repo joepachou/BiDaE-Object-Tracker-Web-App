@@ -41,7 +41,7 @@ const DeleteUserForm = ({
             <Modal.Header 
                 closeButton 
             >
-                {title.toUpperCase().replace(/ /g, '_')}
+                {title}
             </Modal.Header >
 
             <Modal.Body>

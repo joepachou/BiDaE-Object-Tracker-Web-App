@@ -28,13 +28,14 @@ class MonitorSettingBlock extends React.Component{
         selection: [],
         selectAll: false,
         exIndex : 9999,
+        locale: this.context.locale.abbr,
     }
 
     componentDidMount = () => { 
         this.getMonitorConfig()
     }
  
-
+ 
     getMonitorConfig = () => { 
         let { 
             auth,
@@ -84,9 +85,7 @@ class MonitorSettingBlock extends React.Component{
                     textAlign: 'left',
                 }
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
-            })
-
-            
+            }) 
             res.data.map((item,index) => {
                 item.area = {
                     value: config.mapConfig.areaOptions[item.area_id],
@@ -128,7 +127,7 @@ class MonitorSettingBlock extends React.Component{
         } = this.state 
         configPackage["type"] = config.monitorSettingUrlMap[this.props.type]
         // configPackage["id"] = selectedData ? selectedData.id : null;
-        configPackage["id"] = this.state.selection  
+        // configPackage["id"] = this.state.selection  
         axios.post(dataSrc[path], {
             monitorConfigPackage: configPackage
         })
@@ -235,9 +234,15 @@ class MonitorSettingBlock extends React.Component{
     };
 
 
-    componentDidUpdate = () =>{ 
+    componentDidUpdate = (prevProps, prevState) =>{ 
         if (this.state.exIndex != this.props.nowIndex){
             this.setState({selectAll : false,selection:'',exIndex:this.props.nowIndex}) 
+        }
+        if (this.context.locale.abbr !== prevState.locale) { 
+            this.getMonitorConfig()
+            this.setState({
+                locale: this.context.locale.abbr
+            })
         }
     } 
 
@@ -277,15 +282,14 @@ class MonitorSettingBlock extends React.Component{
  
         let title = `edit ${type}`.toUpperCase().replace(/ /g, '_')
         return ( 
-            <div> 
-                
+            <div>  
                 <ButtonToolbar>
                     <Button 
                         variant="outline-primary" 
                         className='mr-2 mb-1'
                         name="add rule"
                         onClick={this.handleClickButton}
-                        disabled={areaOptions.length == 0}
+                        // disabled={areaOptions.length == 0}
                     >
                         {locale.texts.ADD_RULE}
                     </Button>

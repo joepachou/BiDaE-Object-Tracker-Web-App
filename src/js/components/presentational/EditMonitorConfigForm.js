@@ -52,9 +52,10 @@ const EditMonitorConfigForm =  ({
                     }}
 
                     onSubmit={(values, { setStatus, setSubmitting }) => {
+                       
                         let monitorConfigPackage = {
                             ...values,
-                            id: isEdited ? selectedData.id : '',
+                            id: isEdited == true  ? selectedData.id : '',
                             type: type,
                             area_id: values.area.id,
                         }
@@ -77,8 +78,7 @@ const EditMonitorConfigForm =  ({
                                     />
                                 </Col>
                             </Row>
-                            <hr/>
-                            {console.log(isEdited)}
+                            <hr/> 
                             <FormikFormGroup 
                                 label={locale.texts.AREA}
                                 error={errors.area}
