@@ -28,13 +28,14 @@ class MonitorSettingBlock extends React.Component{
         selection: [],
         selectAll: false,
         exIndex : 9999,
+        locale: this.context.locale.abbr,
     }
 
     componentDidMount = () => { 
         this.getMonitorConfig()
     }
  
-
+ 
     getMonitorConfig = () => { 
         let { 
             auth,
@@ -233,9 +234,15 @@ class MonitorSettingBlock extends React.Component{
     };
 
 
-    componentDidUpdate = () =>{ 
+    componentDidUpdate = (prevProps, prevState) =>{ 
         if (this.state.exIndex != this.props.nowIndex){
             this.setState({selectAll : false,selection:'',exIndex:this.props.nowIndex}) 
+        }
+        if (this.context.locale.abbr !== prevState.locale) { 
+            this.getMonitorConfig()
+            this.setState({
+                locale: this.context.locale.abbr
+            })
         }
     } 
 

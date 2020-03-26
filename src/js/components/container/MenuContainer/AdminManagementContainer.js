@@ -39,7 +39,7 @@ class AdminManagementContainer extends React.Component{
     }
 
     componentDidUpdate = (prevProps, prevState) => {
-        if (this.context.locale.abbr !== prevState.locale) {
+        if (this.context.locale.abbr !== prevState.locale) { 
             this.getRoleNameList()
             this.getUserList()
             this.setState({
