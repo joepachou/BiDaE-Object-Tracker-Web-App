@@ -9,7 +9,9 @@ import {
     getUserList,
     getRoleNameList,
     deleteUser,
-    getMainSecondArea
+    getMainSecondArea,
+    setUser,
+    signup
 } from "../../../dataSrc";
 import { userInfoTableColumn } from '../../../tables'
 import EditUserForm from '../UserContainer/EditUserForm';
@@ -131,17 +133,17 @@ class AdminManagementContainer extends React.Component{
         user.areas_id.splice(index, 1)
         if (!user.areas_id.includes(user.area.id)) {
             user.areas_id.push(user.area.id)
-        } 
-        
-        auth[api](user)              
-            .then(res => {
-                this.getUserList() 
-            })
-            .catch(err => {
-                console.log("delete User fail : " + err);
-            })
-           
+        }
 
+        this.setState({ showAddUserForm: false  })
+ 
+        auth[api](user, () => {
+            this.getUserList()
+        }) 
+        setTimeout(function() { 
+            this.getUserList()
+        }.bind(this),500)
+        
     }
 
     handleDeleteUserSubmit = (e) => {
