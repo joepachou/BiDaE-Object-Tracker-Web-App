@@ -433,6 +433,7 @@ const config = {
                             ${locale.texts[title.toUpperCase().replace(/ /g, '_')]}
                             ${area ? area : ''}
                         </h4>
+                        <hr/>
                     `
                     : ``;
             },
@@ -454,12 +455,13 @@ const config = {
                 return data.record.map((item, index) => {
                     return `
                         <div style="margin-bottom: 10px;" key=${index}>
-                            <h6>
-                                ${moment(item.create_timestamp).locale(locale.abbr).format('YYYY/MM/DD HH:mm')}
-                            </h6>
-                            <div>
+                            <h5 style="margin-bottom: 5px; margin-top: 0px;">
+                                &bull;
+                                ${moment(item.create_timestamp).locale(locale.abbr).format('LLL')}
+                            </h5>
+                            <small class="text-muted">
                                 ${item.notes}
-                            </div>
+                            </small>
                         </div>
                     `
                 }).join(" ")

@@ -221,127 +221,114 @@ class ShiftChange extends React.Component {
 
         
         return ( 
-                <Modal 
-                    show={show} 
-                    size="lg" 
-                    onHide={handleClose}
-                    className='text-capitalize'
+            <Modal 
+                show={show} 
+                size="lg" 
+                onHide={handleClose}
+                className='text-capitalize'
+            >
+                <Modal.Header
+                    className='d-flex flex-column'
                 >
-                    <Modal.Header
-                        className='d-flex flex-column'
+                    <div className="title">
+                        {locale.texts.SHIFT_CHANGE_RECORD}
+                    </div>                                
+                    <div>
+                        {locale.texts.DATE_TIME}: {nowTime.format(config.shiftChangeRecordTimeFormat)}
+                    </div> 
+                    <div 
                     >
-                        <div className="title">
-                            {locale.texts.SHIFT_CHANGE_RECORD}
-                        </div>                                
-                        <div>
-                            {locale.texts.DATE_TIME}: {nowTime.format(config.shiftChangeRecordTimeFormat)}
-                        </div> 
-                        <div 
-                        >
-                            {locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: {auth.user.name} 
-                        </div>
-                        <div 
-                            className="d-flex align-items-center"
-                        >   
-                            {locale.texts.SHIFT }: 
+                        {locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: {auth.user.name} 
+                    </div>
+                    <div 
+                        className="d-flex align-items-center"
+                    >   
+                        {locale.texts.SHIFT }: 
 
-                            <Select 
-                                name = "shiftSelect"
-                                options={shiftOptions} 
-                                value = {this.state.selectValue || shiftOptions[0]}
-                                onChange={this.handleSelectChange}  
-                                styles={style.select}
-                            />  
-                        </div>
+                        <Select 
+                            name = "shiftSelect"
+                            options={shiftOptions} 
+                            value = {this.state.selectValue || shiftOptions[0]}
+                            onChange={this.handleSelectChange}  
+                            styles={style.select}
+                        />  
+                    </div>
 
- 
-                    </Modal.Header>
- 
 
-                    <Modal.Body       
-                        style ={style.modalBody}
-                        id="shiftChange"
-                    >
-                        <Formik            
-                            initialValues = {{
-                            
-                            }}
+                </Modal.Header>
 
-                            validationSchema = {
-                             null
-                            }
 
+                <Modal.Body       
+                    style ={style.modalBody}
+                    id="shiftChange"
+                >
+                    <Formik            
+                        initialValues = {{
                         
-                            onSubmit={(values, { setStatus, setSubmitting }) => {
-                               console.log('dsfsadfs') 
-                            }}
+                        }}
 
+                        validationSchema = {
+                            null
+                        }
 
+                    
+                        onSubmit={(values, { setStatus, setSubmitting }) => {
+                            console.log('dsfsadfs') 
+                        }}
 
-
-                            render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm }) => (
-                                <Form className="text-capitalize">
-                                    {!hasFoundResult && !hasNotFoundResult && 
-                                        <div className="d-flex justify-content-center">
-                                            <p className="font-italic ">{locale.texts.NOT_ASSIGNED_TO_ANY_DEVICES}</p>
-                                        </div>
-                                    }    
-                                        
-                                    <TypeBlock
-                                        title="found"
-                                        hasType={hasFoundResult} 
-                                        typeArray={foundResult}
-                                    /> 
-                                    <TypeBlock
-                                        title="not found"
-                                        hasType={hasNotFoundResult} 
-                                        typeArray={notFoundResult}
-                                    /> 
-        
- 
-
-
-                                </Form> 
-                            )}
-                        />
-                    </Modal.Body>
-        
-                    <Modal.Footer>
-                                        <Button 
-                                            variant="outline-secondary" 
-                                            onClick={handleClose}
-                                        >
-                                            {locale.texts.CANCEL}
-                                        </Button>
-                                        <Button 
-                                            type="submit" 
-                                            variant="primary" 
-                                            // onClick = {this.confirmShift}
-                                            onClick={this.confirmShift }
-                                            disabled={!hasFoundResult && !hasNotFoundResult}
-                                        >
-                                            {locale.texts.CONFIRM}
-                                        </Button>
-
-
-                                   <GeneralConfirmForm
-                                    show={this.state.showConfirmForm}
-                                    handleSubmit={this.handleConfirmFormSubmit}
-                                    handleClose={this.handleClose}
-                                    signin={auth.signin}
-                                    stateReducer ={stateReducer[0].areaId}
-                                    auth={auth}
-                                    />
-                                    <DownloadPdfRequestForm
-                                        show={this.state.showDownloadPdfRequest} 
-                                        pdfPath={this.state.fileUrl}
-                                        handleClose={this.handleClose}
-                                    /> 
-                    </Modal.Footer> 
- 
-                </Modal>     
- 
- 
+                        render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm }) => (
+                            <Form className="text-capitalize">
+                                {!hasFoundResult && !hasNotFoundResult && 
+                                    <div className="d-flex justify-content-center">
+                                        <p className="font-italic ">{locale.texts.NOT_ASSIGNED_TO_ANY_DEVICES}</p>
+                                    </div>
+                                }    
+                                    
+                                <TypeBlock
+                                    title="found"
+                                    hasType={hasFoundResult} 
+                                    typeArray={foundResult}
+                                /> 
+                                <TypeBlock
+                                    title="not found"
+                                    hasType={hasNotFoundResult} 
+                                    typeArray={notFoundResult}
+                                /> 
+                            </Form> 
+                        )}
+                    />
+                </Modal.Body>
+    
+                <Modal.Footer>
+                    <Button 
+                        variant="outline-secondary" 
+                        onClick={handleClose}
+                    >
+                        {locale.texts.CANCEL}
+                    </Button>
+                    <Button 
+                        type="submit" 
+                        variant="primary" 
+                        onClick={this.handleConfirmFormSubmit}
+                        disabled={!hasFoundResult && !hasNotFoundResult}
+                    >
+                        {locale.texts.CONFIRM}
+                    </Button>
+                </Modal.Footer> 
+                <GeneralConfirmForm
+                    show={this.state.showConfirmForm}
+                    handleSubmit={this.handleConfirmFormSubmit}
+                    handleClose={this.handleClose}
+                    signin={auth.signin}
+                    stateReducer ={stateReducer[0].areaId}
+                    auth={auth}
+                    />
+                <DownloadPdfRequestForm
+                    show={this.state.showDownloadPdfRequest} 
+                    pdfPath={this.state.fileUrl}
+                    handleClose={this.handleClose}
+                /> 
+            </Modal>     
         )
     }
 }
