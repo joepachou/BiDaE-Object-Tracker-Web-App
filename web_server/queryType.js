@@ -33,8 +33,7 @@ function getTrackingData (areas_id) {
 				FROM user_table
 				WHERE user_table.id = object_table.reserved_user_id
 			) as reserved_user_name,
-			patient_record.record
-			
+			COALESCE(patient_record.record, ARRAY[]::JSON[]) as record			
 		
 		FROM object_summary_table
 
@@ -54,7 +53,7 @@ function getTrackingData (areas_id) {
 					'create_timestamp', create_timestamp,
 					'notes', notes,
 					'editing_user_id', editing_user_id 
-				)) as record
+				)) as record 
 			FROM patient_record
 			GROUP BY object_id
 		) as patient_record
