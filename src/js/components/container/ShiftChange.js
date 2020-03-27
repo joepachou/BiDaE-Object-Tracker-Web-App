@@ -115,7 +115,7 @@ class ShiftChange extends React.Component {
         })
     }
 
-    handleConfirmFormSubmit = (name) => {
+    handleConfirmFormSubmit = (authentication) => {
         let { 
             locale, 
             auth 
@@ -126,7 +126,7 @@ class ShiftChange extends React.Component {
             auth.user, 
             this.state.searchResult, 
             locale,
-            name,
+            authentication = "",
             this.state.selectValue
         )
 
@@ -136,7 +136,7 @@ class ShiftChange extends React.Component {
                 auth.user, 
                 object, 
                 locale,
-                name,
+                authentication,
                 this.state.selectValue
             )
 
