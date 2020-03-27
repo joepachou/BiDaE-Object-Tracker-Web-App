@@ -307,6 +307,7 @@ const en =  {
     SHIFT_CHANGE_RECORD: "shift change record",
     OBJECT_EDITED_RECORD: "object edited record",
     PATIENT_RECORD: "patient record",
+    PATIENT_HISTORIAL_RECORD: "historical record",
     ACCESS_RIGHT: "Access Right",
     MY_DEVICES: "My Devices",
     OTHER_DEVICES: "Other Devices",

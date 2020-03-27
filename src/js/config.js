@@ -306,7 +306,7 @@ const config = {
         getTitle: (option, locale) => {
             return `
                 <h3 style="text-transform: capitalize;">
-                    ${locale.texts[config.pdfFormat.pdfTitle[option]]}
+                    ${locale.texts[config.pdfFormat.pdfTitle[option]].toUpperCase()}
                 </h3>
             `
         },
@@ -411,7 +411,7 @@ const config = {
 
             patientRecord: (data, locale, user) => {
                 let title = config.pdfFormat.getBodyItem.getBodyTitle(
-                    "patient record", 
+                    "patient historical record", 
                     locale, 
                     '',
                     true
@@ -429,11 +429,16 @@ const config = {
             getBodyTitle: (title, locale, area, hasTitle = true) => {
                 return hasTitle 
                     ?   `
-                        <h4 style="text-transform: capitalize; margin-bottom: 5px; font-weight: bold; color: #02356b">
-                            ${locale.texts[title.toUpperCase().replace(/ /g, '_')]}
+                        <h4 style="
+                            text-transform: capitalize;
+                            margin-bottom: 5px; 
+                            ;
+                            padding-bottom: 5px;
+                            border-bottom: 1px solid black;"
+                        >
+                            ${locale.texts[title.toUpperCase().replace(/ /g, '_')].toUpperCase()}
                             ${area ? area : ''}
                         </h4>
-                        <hr/>
                     `
                     : ``;
             },
@@ -441,8 +446,10 @@ const config = {
             getDataContent: (data, locale) => {
                 return data.map((item, index) => {
                     return `
-                        <div key=${index} style="text-transform: capitalize; margin: 10px;">
-                            ${index + 1}.${item.name}, 
+                        <div style="margin-bottom: 10px;" key=${index}>
+                            ${index + 1}. 
+                            &nbsp;
+                            ${item.name}, 
                             ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}: ${item.last_four_acn.slice(-4)}, 
                             ${locale.texts.NEAR} ${item.location_description},
                             ${item.residence_time}
@@ -582,7 +589,7 @@ const config = {
             patientName: (locale, object) => {
                 return `
                     <div style="text-transform: capitalize;">
-                        ${locale.texts.NAME}: ${object.name}
+                        ${locale.texts.PATIENT_NAME}: ${object.name}
                     </div>
                 `
             },

@@ -149,6 +149,7 @@ const tw = {
     
     /* field */
     NAME: "名稱",
+    PATIENT_NAME: "病人名",
     TYPE: "類別",
     ASSET_CONTROL_NUMBER: "財產編號",
     MAC_ADDRESS: "mac address",
@@ -309,6 +310,7 @@ const tw = {
     PATIENT_MANAGEMENT: "病人管理",
     SHIFT_CHANGE_RECORD: "交班紀錄",
     PATIENT_RECORD: "病人報告",
+    PATIENT_HISTORIAL_RECORD: "歷史報告",
     OBJECT_EDITED_RECORD: "儀器狀態更改紀錄",
     ACCESS_RIGHT: "使用者權限",
     MY_DEVICES: "我的儀器",
