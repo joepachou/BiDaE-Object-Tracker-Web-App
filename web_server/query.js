@@ -1045,7 +1045,7 @@ const confirmValidation = (request, response) => {
     let { 
         username, 
         password 
-    } = request.body
+    } = request.body 
     pool.query(queryType.confirmValidation(username))
         .then(res => {
             if (res.rowCount < 1) {

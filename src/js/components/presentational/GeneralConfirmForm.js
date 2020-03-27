@@ -47,17 +47,17 @@ const GeneralConfirmForm = ({
                         password: Yup.string().required(locale.texts.PASSWORD_IS_REQUIRED)
                     })}
                 
-                    onSubmit={({ username, password, radioGroup }, { setStatus, setSubmitting }) => {
+                    onSubmit={({ username, password, radioGroup }, { setStatus, setSubmitting }) => { 
                         axios.post(dataSrc.confirmValidation, {
                             username,
                             password,
                             locale
                         })
-                        .then(res => {
-                            if (!res.data.confirmation) { 
+                        .then(res => { 
+                            if (!res.data.confirmation) {  
                                 setStatus(res.data.message)
                                 setSubmitting(false)
-                            } else {   
+                            } else {    
                                 handleSubmit(username)
                             }
                         }).catch(error => {

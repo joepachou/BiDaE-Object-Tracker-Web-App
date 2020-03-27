@@ -16,6 +16,8 @@ import {
 } from '../../helper/descriptionGenerator'
 import Select from 'react-select';
 import messageGenerator from '../../helper/messageGenerator'
+import { Formik, Field, Form } from 'formik';
+import FormikFormGroup from '../presentational/FormikFormGroup'
 
 const style = {
     modalBody: {
@@ -35,11 +37,11 @@ const style = {
         }),
     }
 }
-
+let selectVal = ''
 class ShiftChange extends React.Component {
 
     static contextType = AppContext
- 
+    
     state = {
         searchResult: {
             foundResult: [],
@@ -115,22 +117,25 @@ class ShiftChange extends React.Component {
         })
     }
 
-    handleConfirmFormSubmit = (authentication) => {
+    handleConfirmFormSubmit = (authentication) => { 
+
         let { 
             locale, 
             auth 
-        } = this.context  
+        } = this.context   
+  
 
         let pdfPackage = config.getPdfPackage(
             'shiftChange', 
             auth.user, 
             this.state.searchResult, 
             locale,
-            authentication = "",
+            authentication  == "",
             this.state.selectValue
-        )
+        )  
+        
+        this.state.patients.reduce((pkg, object) => {   
 
-        this.state.patients.reduce((pkg, object) => {
             let temp = config.getPdfPackage(
                 'patientRecord', 
                 auth.user, 
@@ -139,7 +144,7 @@ class ShiftChange extends React.Component {
                 authentication,
                 this.state.selectValue
             )
-
+            
             if (pkg.pdf) {
                 pkg.pdf += `
                     <div style="page-break-before:always"></div>
@@ -156,7 +161,7 @@ class ShiftChange extends React.Component {
             pdfPackage,
             shift: this.state.selectValue,
         }).then(res => {
-            this.props.handleSubmit()
+            // this.props.handleSubmit()
             let callback = () => messageGenerator.setSuccessMessage(
                 'save shift change success'
             )
@@ -179,9 +184,11 @@ class ShiftChange extends React.Component {
     }
 
     handleSelectChange = (val) => { 
+        selectVal = val  
         this.setState({ 
-            selectValue: val 
-        });
+            selectValue: val  
+        }); 
+        
     }
 
     render() {   
@@ -213,8 +220,7 @@ class ShiftChange extends React.Component {
         }) 
 
         
-        return (
-            <Fragment>
+        return ( 
                 <Modal 
                     show={show} 
                     size="lg" 
@@ -250,58 +256,92 @@ class ShiftChange extends React.Component {
 
  
                     </Modal.Header>
-                    <Modal.Body  
+ 
+
+                    <Modal.Body       
                         style ={style.modalBody}
                         id="shiftChange"
-                     >        
-                        {!hasFoundResult && !hasNotFoundResult && 
-                            <div className="d-flex justify-content-center">
-                                <p className="font-italic ">{locale.texts.NOT_ASSIGNED_TO_ANY_DEVICES}</p>
-                            </div>
-                        }    
-                        <TypeBlock
-                            title="found"
-                            hasType={hasFoundResult} 
-                            typeArray={foundResult}
-                        /> 
-                        <TypeBlock
-                            title="not found"
-                            hasType={hasNotFoundResult} 
-                            typeArray={notFoundResult}
-                        /> 
+                    >
+                        <Formik            
+                            initialValues = {{
+                            
+                            }}
+
+                            validationSchema = {
+                             null
+                            }
+
+                        
+                            onSubmit={(values, { setStatus, setSubmitting }) => {
+                               console.log('dsfsadfs') 
+                            }}
+
+
+
+
+                            render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm }) => (
+                                <Form className="text-capitalize">
+                                    {!hasFoundResult && !hasNotFoundResult && 
+                                        <div className="d-flex justify-content-center">
+                                            <p className="font-italic ">{locale.texts.NOT_ASSIGNED_TO_ANY_DEVICES}</p>
+                                        </div>
+                                    }    
+                                        
+                                    <TypeBlock
+                                        title="found"
+                                        hasType={hasFoundResult} 
+                                        typeArray={foundResult}
+                                    /> 
+                                    <TypeBlock
+                                        title="not found"
+                                        hasType={hasNotFoundResult} 
+                                        typeArray={notFoundResult}
+                                    /> 
+        
+ 
+
+
+                                </Form> 
+                            )}
+                        />
                     </Modal.Body>
+        
                     <Modal.Footer>
-                        <Button 
-                            variant="outline-secondary" 
-                            onClick={handleClose}
-                        >
-                            {locale.texts.CANCEL}
-                        </Button>
-                        <Button 
-                            type="submit" 
-                            variant="primary" 
-                            // onClick = {this.confirmShift}
-                            onClick={this.handleConfirmFormSubmit}
-                            disabled={!hasFoundResult && !hasNotFoundResult}
-                        >
-                            {locale.texts.CONFIRM}
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
-                <GeneralConfirmForm
-                    show={this.state.showConfirmForm}
-                    handleSubmit={this.handleConfirmFormSubmit}
-                    handleClose={this.handleClose}
-                    signin={auth.signin}
-                    stateReducer ={stateReducer[0].areaId}
-                    auth={auth}
-                />
-                <DownloadPdfRequestForm
-                    show={this.state.showDownloadPdfRequest} 
-                    pdfPath={this.state.fileUrl}
-                    handleClose={this.handleClose}
-                />
-            </Fragment>
+                                        <Button 
+                                            variant="outline-secondary" 
+                                            onClick={handleClose}
+                                        >
+                                            {locale.texts.CANCEL}
+                                        </Button>
+                                        <Button 
+                                            type="submit" 
+                                            variant="primary" 
+                                            // onClick = {this.confirmShift}
+                                            onClick={this.confirmShift }
+                                            disabled={!hasFoundResult && !hasNotFoundResult}
+                                        >
+                                            {locale.texts.CONFIRM}
+                                        </Button>
+
+
+                                   <GeneralConfirmForm
+                                    show={this.state.showConfirmForm}
+                                    handleSubmit={this.handleConfirmFormSubmit}
+                                    handleClose={this.handleClose}
+                                    signin={auth.signin}
+                                    stateReducer ={stateReducer[0].areaId}
+                                    auth={auth}
+                                    />
+                                    <DownloadPdfRequestForm
+                                        show={this.state.showDownloadPdfRequest} 
+                                        pdfPath={this.state.fileUrl}
+                                        handleClose={this.handleClose}
+                                    /> 
+                    </Modal.Footer> 
+ 
+                </Modal>     
+ 
+ 
         )
     }
 }
