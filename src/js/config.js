@@ -305,9 +305,9 @@ const config = {
 
         getTitle: (option, locale) => {
             return `
-                <h2 style="text-transform: capitalize;">
+                <h3 style="text-transform: capitalize;">
                     ${locale.texts[config.pdfFormat.pdfTitle[option]]}
-                </h2>
+                </h3>
             `
         },
     
@@ -429,10 +429,10 @@ const config = {
             getBodyTitle: (title, locale, area, hasTitle = true) => {
                 return hasTitle 
                     ?   `
-                        <h3 style="text-transform: capitalize; margin-bottom: 5px; font-weight: bold">
+                        <h4 style="text-transform: capitalize; margin-bottom: 5px; font-weight: bold; color: #02356b">
                             ${locale.texts[title.toUpperCase().replace(/ /g, '_')]}
                             ${area ? area : ''}
-                        </h3>
+                        </h4>
                     `
                     : ``;
             },
@@ -453,11 +453,13 @@ const config = {
             getPatientData: (data, locale) => {
                 return data.record.map((item, index) => {
                     return `
-                        <div key=${index} style="margin: 10px;">
-                            &bull; 
-                            &nbsp;
-                            ${moment(item.create_timestamp).locale(locale.abbr).format('YYYY/MM/DD HH:mm')}, 
-                            ${item.notes}
+                        <div style="margin-bottom: 10px;" key=${index}>
+                            <h6>
+                                ${moment(item.create_timestamp).locale(locale.abbr).format('YYYY/MM/DD HH:mm')}
+                            </h6>
+                            <div>
+                                ${item.notes}
+                            </div>
                         </div>
                     `
                 }).join(" ")
