@@ -188,7 +188,8 @@ class GeoFenceSettingBlock extends React.Component{
         } = this.state 
         configPackage["type"] = config.monitorSettingUrlMap[this.props.type]
         // configPackage["id"] = selectedData ? selectedData.id : null
-        configPackage["id"] = this.state.selection    
+        // configPackage["id"] = this.state.selection  
+        path == "setGeofenceConfig" ? configPackage["id"] = selectedData.id : configPackage["id"] =  this.state.selection 
         axios.post(dataSrc[path], {
             monitorConfigPackage: configPackage
         })
@@ -327,20 +328,16 @@ class GeoFenceSettingBlock extends React.Component{
                     {...extraProps}
                     getTrProps={(state, rowInfo, column, instance) => {   
                           return {
-                              onClick: (e, handleOriginal) => { 
-                                this.setState({
-                                    show: true
-                                })
-                                lock ? null :  //才不會edit跟delete一起顯示
+                              onClick: (e, handleOriginal) => {  
                                    this.setState({
                                     show: true,
                                     selectedData: rowInfo.row._original,
                                     isEdited: true,
                                     path: 'setGeofenceConfig'
-                                }) 
-                              }
+                                })  
                           }
                       }}
+                    }
                 />
             
                 <EditGeofenceConfig
