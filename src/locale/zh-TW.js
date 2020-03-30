@@ -199,6 +199,8 @@ const tw = {
     END_TIME: "結束時間",
     BINDFLAG:"綁定狀態",
     PERIMETERS_GROUP: "perimeters group",
+    FENCE_RSSI:"fences group",
+    PERIMETER_RSSI:"perimeter rssi",
     FENCES_GROUP: "fences group",
     RSSI: "rssi",
     YES: '是',

@@ -198,6 +198,8 @@ const en =  {
     END_TIME: "end time",
     BINDFLAG:"Binding Status",
     PERIMETERS_GROUP: "perimeters group",
+    FENCE_RSSI:"fences group",
+    PERIMETER_RSSI:"perimeter rssi",
     FENCES_GROUP: "fences group",
     RSSI: "rssi",
     YES: 'yes',
