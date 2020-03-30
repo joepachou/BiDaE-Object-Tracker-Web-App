@@ -225,17 +225,18 @@ var credentials = {
 
 const httpsServer = https.createServer(credentials, app)
 
-const httpServer = http.createServer(app);
-
 /** Enable HTTPS server */
 httpsServer.listen(httpsPort, () => {
     console.log(`HTTPS Server running on PORT ${httpsPort}`)
 })
 
-/** Enable HTTP server */
-httpServer.listen(httpPort, () =>{
-    console.log(`HTTP Server running on port ${httpPort}`)
-})
+const httpServer = process.env.HTTP_PORT 
+    ?   http.createServer(app).listen(httpPort, () =>{
+        console.log(`HTTP Server running on port ${httpPort}`)
+    })
+    :   null;
+
+
 
 
 
