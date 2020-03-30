@@ -113,7 +113,6 @@ class NavbarContainer extends React.Component {
             alias: "trackinghistory",
             path: "/page/trackingHistory",
             permission: "route:trackingHistory"
-
         },
         {
             name: "big screen",
@@ -136,7 +135,6 @@ class NavbarContainer extends React.Component {
             permission: "route:report",
             platform: ['browser', 'tablet']
         },
-
         {
             name: "system setting",
             alias: "systemSetting",

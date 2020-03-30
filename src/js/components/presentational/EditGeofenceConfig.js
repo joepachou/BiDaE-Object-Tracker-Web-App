@@ -223,7 +223,7 @@ const EditGeofenceConfig = ({
                             </Row>
                             <Row noGutters>
                                 <Col>
-                                    <small  className="form-text text-muted">{'locale.texts.ENABLE_START_TIME'}</small>
+                                    <small  className="form-text text-muted">{locale.texts.ENABLE_START_TIME}</small>
                                     <DateTimePicker
                                         value={values.start_time}
                                         getValue={value => {
@@ -347,7 +347,7 @@ const TypeGroup = ({
     return (
         
         <div className="form-group">
-            {console.log(error)}
+            {/* {console.log(error)} */}
             <small className="form-text">
                 {title}
             </small>

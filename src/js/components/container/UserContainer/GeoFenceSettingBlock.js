@@ -17,6 +17,7 @@ import styleConfig from '../../../styleConfig';
 import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm'
 import { Select } from 'semantic-ui-react';
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
+
 const SelectTable = selecTableHOC(ReactTable);
 let lock = false
 class GeoFenceSettingBlock extends React.Component{
@@ -117,13 +118,15 @@ class GeoFenceSettingBlock extends React.Component{
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })
             
-            res.data.rows.map((item,index) => {
+            res.data.rows.map((item,index) => {  
                 item.key=index + 1
                 item.area = {
                     value: config.mapConfig.areaOptions[item.area_id],
                     label: locale.texts[config.mapConfig.areaOptions[item.area_id]],
                     id: item.area_id
                 }
+                item.p_rssi = item.perimeters.split(',')[item.perimeters.split(',').length-2]
+                item.f_rssi = item.fences.split(',')[item.fences.split(',').length-2] 
             })
             this.setState({
                 data: res.data.rows,
@@ -182,10 +185,11 @@ class GeoFenceSettingBlock extends React.Component{
         let { 
             path,
             selectedData
-        } = this.state
+        } = this.state 
         configPackage["type"] = config.monitorSettingUrlMap[this.props.type]
         // configPackage["id"] = selectedData ? selectedData.id : null
-        configPackage["id"] = this.state.selection    
+        // configPackage["id"] = this.state.selection  
+        path == "setGeofenceConfig" ? configPackage["id"] = selectedData.id : configPackage["id"] =  this.state.selection 
         axios.post(dataSrc[path], {
             monitorConfigPackage: configPackage
         })
@@ -324,17 +328,16 @@ class GeoFenceSettingBlock extends React.Component{
                     {...extraProps}
                     getTrProps={(state, rowInfo, column, instance) => {   
                           return {
-                              onClick: (e, handleOriginal) => { 
-                                lock ? null :  //才不會edit跟delete一起顯示
+                              onClick: (e, handleOriginal) => {  
                                    this.setState({
                                     show: true,
                                     selectedData: rowInfo.row._original,
                                     isEdited: true,
                                     path: 'setGeofenceConfig'
-                                }) 
-                              }
+                                })  
                           }
                       }}
+                    }
                 />
             
                 <EditGeofenceConfig

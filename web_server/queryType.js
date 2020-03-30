@@ -1489,6 +1489,7 @@ const getGeofenceConfig = (areaId) => {
 
 
 const setGeofenceConfig = (monitorConfigPackage) => {
+	console.log(monitorConfigPackage)
 	let {
 		type,
 		id,

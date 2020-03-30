@@ -484,6 +484,14 @@ const geofenceConfigColumn = [
         accessor: "parseFences.lbeacons"
     },
     {
+        Header: "perimeter rssi",
+        accessor: "p_rssi"
+    },
+    {
+        Header: "fence rssi",
+        accessor: "f_rssi"
+    },
+    {
         Header: "is global fence",
         accessor: "is_global_fence",
         Cell: props => props.value 
