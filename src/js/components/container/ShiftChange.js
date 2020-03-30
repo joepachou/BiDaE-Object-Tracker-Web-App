@@ -18,6 +18,9 @@ import Select from 'react-select';
 import messageGenerator from '../../helper/messageGenerator'
 import { Formik, Field, Form } from 'formik';
 import FormikFormGroup from '../presentational/FormikFormGroup'
+import {
+    getDescription
+} from '../../helper/descriptionGenerator'
 
 const style = {
     modalBody: {
@@ -47,6 +50,7 @@ class ShiftChange extends React.Component {
             foundResult: [],
             notFoundResult: [],
         },
+        patients: [],
         fileUrl: '',
         showPdfDownloadForm: false,
         showConfirmForm: false,
@@ -81,18 +85,20 @@ class ShiftChange extends React.Component {
             let notFoundResult = []
             let patients= []
             res.data
+                .filter(item => myDevice.includes(item.asset_control_number))
                 .map(item => {
                     
                     switch(item.object_type) {
                         case '0':
-                            if (myDevice.includes(item.asset_control_number)) {
+                            if (item.found) {
                                 foundResult.push(item)
                             } else {
                                 notFoundResult.push(item)
                             }
                             break;
                         case '1':
-                            if (myDevice.includes(item.asset_control_number)) {
+                        case '2':
+                            if (item.found) {
                                 patients.push(item)
                             }
                             break
@@ -198,6 +204,10 @@ class ShiftChange extends React.Component {
             stateReducer 
         } = this.context
 
+        const {
+            patients
+        } = this.state
+
         const { 
             show,
             handleClose
@@ -211,6 +221,7 @@ class ShiftChange extends React.Component {
         const nowTime = moment().locale(locale.abbr)
         const hasFoundResult = foundResult.length !== 0;
         const hasNotFoundResult = notFoundResult.length !== 0;
+        const hasFoundPatients = patients.length !== 0;
 
         const shiftOptions = Object.values(config.shiftOption).map(shift => { 
             return { 
@@ -273,7 +284,6 @@ class ShiftChange extends React.Component {
 
                     
                         onSubmit={(values, { setStatus, setSubmitting }) => {
-                            console.log('dsfsadfs') 
                         }}
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm }) => (
@@ -283,16 +293,20 @@ class ShiftChange extends React.Component {
                                         <p className="font-italic ">{locale.texts.NOT_ASSIGNED_TO_ANY_DEVICES}</p>
                                     </div>
                                 }    
-                                    
                                 <TypeBlock
-                                    title="found"
+                                    title={locale.texts.DEVICES_FOUND}
                                     hasType={hasFoundResult} 
                                     typeArray={foundResult}
                                 /> 
                                 <TypeBlock
-                                    title="not found"
+                                    title={locale.texts.DEVICES_NOT_FOUND}
                                     hasType={hasNotFoundResult} 
                                     typeArray={notFoundResult}
+                                /> 
+                                <TypeBlock
+                                    title={locale.texts.PATIENTS_FOUND}
+                                    hasType={hasFoundPatients} 
+                                    typeArray={patients}
                                 /> 
                             </Form> 
                         )}
@@ -344,10 +358,9 @@ const TypeBlock = ({
 
     let {
         locale,
-        auth
+        auth,
+        stateReducer
     } = appContext
-
-    title = `devices ${title} in`.toUpperCase().replace(/ /g, '_')
 
     return (
         <div>
@@ -355,9 +368,7 @@ const TypeBlock = ({
                 <div
                     className="subtitle"
                 >
-                    {locale.texts[title]} {auth.user.areas_id.map(id => {
-                        return locale.texts[config.mapConfig.areaOptions[id]]
-                    })}
+                    {title} 
                 </div>
             }     
             {hasType && typeArray.map((item, index) => { 
@@ -376,11 +387,8 @@ const TypeBlock = ({
                             key={index} 
                             className="pb-1"
                             style={style.row}
-                        >
-                            {item.name}, 
-                            {locale.texts.LAST_FOUR_DIGITS_IN_ACN}: {item.last_four_acn}, 
-                            {locale.texts.NEAR}{item.location_description}
-                            {item.status !== 'normal' && `,${getStatus(item, locale)}`}
+                        >     
+                            {getDescription(item, locale, config)}
                         </div>
                     </div>
                 )

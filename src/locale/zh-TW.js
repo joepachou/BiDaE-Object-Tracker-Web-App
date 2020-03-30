@@ -295,7 +295,7 @@ const tw = {
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "請輸入或掃描mac address",
     PLEASE_ENTER_OR_SCAN_ASSET_CONTROL_NUMBER: "請輸入或掃描財產編號",
     TYPE_MAC_OR_NAME: "輸入 mac address 或是 名字",
-    TYPE_RECORD_HERE: "請輸入新紀錄...",
+    ADD_A_COMMENT: "請輸入新紀錄...",
 
     /* Object Status */
     STATUS: "狀態",
@@ -367,6 +367,7 @@ const tw = {
     USER_NAME: "人員名稱",
     DEVICES_FOUND_IN: "儀器位於",
     DEVICES_NOT_FOUND_IN: "儀器不位於",
+    PATIENTS_FOUND: "找到的病人",
     CONFIRM_BY: "確認",
     NEW_STATUS: "狀態紀錄",
     PHYSICIAN_NAME: "醫護人員姓名",

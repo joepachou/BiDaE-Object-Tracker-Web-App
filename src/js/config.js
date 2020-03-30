@@ -461,14 +461,21 @@ const config = {
             getPatientData: (data, locale) => {
                 return data.record.map((item, index) => {
                     return `
-                        <div style="margin-bottom: 10px;" key=${index}>
-                            <h5 style="margin-bottom: 5px; margin-top: 0px;">
+                        <div style="margin-bottom: 15px;" key=${index}>
+                            <div 
+                                style="margin-bottom: 5px; margin-top: 0px;"
+                            >
                                 &bull;
-                                ${moment(item.create_timestamp).locale(locale.abbr).format('LLL')}
-                            </h5>
-                            <h6 style="margin-bottom: 5px; margin-top: 0px;">
-                                ${locale.texts.RECORDED_BY}: ${item.recorded_user}
-                            </h6>
+                                <div
+                                    style="display: inline-block"
+                                >
+                                    ${item.recorded_user}
+                                </div>
+                                &nbsp;
+                                <div style="font-size: 0.8em;display: inline-block;">
+                                    ${moment(item.create_timestamp).locale(locale.abbr).format('lll')}
+                                </div>
+                            </div>
                             <small class="text-muted">
                                 ${item.notes}
                             </small>
