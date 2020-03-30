@@ -200,7 +200,7 @@ const en =  {
     PERIMETERS_GROUP: "perimeters group",
     FENCE_RSSI:"fences group",
     PERIMETER_RSSI:"perimeter rssi",
-    FENCES_GROUP: "fences group",
+    FENCES_GROUP: "fences rssi",
     RSSI: "rssi",
     YES: 'yes',
     NO: 'no',

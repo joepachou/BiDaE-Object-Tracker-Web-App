@@ -201,7 +201,7 @@ const tw = {
     PERIMETERS_GROUP: "perimeters group",
     FENCE_RSSI:"fences group",
     PERIMETER_RSSI:"perimeter rssi",
-    FENCES_GROUP: "fences group",
+    FENCES_GROUP: "fences rssi",
     RSSI: "rssi",
     YES: '是',
     NO: '否',
