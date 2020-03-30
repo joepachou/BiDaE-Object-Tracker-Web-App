@@ -103,6 +103,7 @@ class ObjectTypeList extends React.Component {
                             return ( 
                                 <Button
                                     variant="outline-custom"
+                                    className="text-none"
                                     onClick={this.handleClick} 
                                     // active={this.state.searchKey === item.toLowerCase()} 
                                     key={index}

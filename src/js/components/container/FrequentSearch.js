@@ -62,6 +62,7 @@ class FrequentSearch extends React.Component {
                         return (
                             <Button
                                 variant="outline-custom"
+                                className="text-none"
                                 onClick={this.handleClick} 
                                 // active={this.state.searchKey === item.name.toLowerCase()} 
                                 key={index}

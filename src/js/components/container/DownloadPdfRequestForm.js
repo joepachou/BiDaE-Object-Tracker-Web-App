@@ -34,10 +34,10 @@ const DownloadPdfRequestForm = ({
         
         let { name } = e.target
         switch(name) {
-            case "viewReport":
+            case "view":
                 window.open(dataSrc.pdfUrl(pdfPath));
                 break;
-            case "downloadReport":
+            case "download":
                 var link = document.createElement('a');
                 link.href = dataSrc.pdfUrl(pdfPath);
                 link.download = "";
@@ -73,9 +73,9 @@ const DownloadPdfRequestForm = ({
                                 {locale.texts.NOW_YOU_CAN_DO_THE_FOllOWING_ACTION}
                             </div>
                             <Modal.Footer>
-
                                 <Button 
                                     variant="outline-secondary" 
+                                    className="text-capitalize"
                                     onClick={handleClickButton}
                                     name="close"
                                 >
@@ -83,18 +83,20 @@ const DownloadPdfRequestForm = ({
                                 </Button>
                                 <Button 
                                     variant="primary" 
+                                    className="text-capitalize"
                                     onClick={handleClickButton}
-                                    name="viewReport"
+                                    name="view"
                                     className="mx-3"
                                 >
-                                    {locale.texts.VIEW_REPORT}
+                                    {locale.texts.VIEW}
                                 </Button>
                                 <Button 
                                     variant="primary" 
+                                    className="text-capitalize"
                                     onClick={handleClickButton}
-                                    name="downloadReport"
+                                    name="download"
                                 >
-                                    {locale.texts.DOWNLOAD_REPORT}
+                                    {locale.texts.DOWNLOAD}
                                 </Button>
                             </Modal.Footer>
                         </Form>
