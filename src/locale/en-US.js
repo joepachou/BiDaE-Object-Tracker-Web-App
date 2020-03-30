@@ -297,6 +297,7 @@ const en =  {
     PLEASE_ENTER_OR_SCAN_ASSET_CONTROL_NUMBER: "please enter or scan asset control number",
     TYPE_MAC_OR_NAME: "type mac address or name",
     ADD_A_COMMENT: "Add a comment...",
+    TYPING: "typing...",
 
     /* Object Status */
     STATUS: "status",

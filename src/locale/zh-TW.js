@@ -298,6 +298,7 @@ const tw = {
     PLEASE_ENTER_OR_SCAN_ASSET_CONTROL_NUMBER: "請輸入或掃描財產編號",
     TYPE_MAC_OR_NAME: "輸入 mac address 或是 名字",
     ADD_A_COMMENT: "請輸入新紀錄...",
+    TYPING: "請輸入新紀錄...",
 
     /* Object Status */
     STATUS: "狀態",

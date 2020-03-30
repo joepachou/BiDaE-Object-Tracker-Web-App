@@ -558,7 +558,7 @@ class SearchResult extends React.Component {
                 />
                 <PatientViewModal
                     show={this.state.showPatientView} 
-                    title="report patient status"
+                    title="patient record"
                     handleClose={this.handleClose}
                     handleSubmit={this.handlePatientView}
                     data={this.state.selectedObjectData} 

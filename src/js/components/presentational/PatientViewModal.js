@@ -124,7 +124,7 @@ class PatientViewModal extends React.Component {
                                         value={values.notes}
                                         name="notes"
                                         className={'form-control' + (errors.notes && touched.notes ? ' is-invalid' : '')} 
-                                        placeholder={locale.texts.ADD_A_COMMENT}
+                                        placeholder={locale.texts.TYPING}
                                         rows={4}
                                     />
                                 </div>
