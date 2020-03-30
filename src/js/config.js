@@ -159,6 +159,7 @@ const config = {
     shiftChangeRecordTimeFormat: "LLL",
     pdfFileContentTimeFormat: "LLL",
     pdfFileNameTimeFormat: "YYYY-MM-Do_hh_mm_ss",
+    regularTimeFormat: "lll",
 
     roles: [
         "guest",
@@ -197,8 +198,8 @@ const config = {
         "transferred"
     ],
 
-    getShift: (abbr) => {
-        const hour = moment().locale(abbr).hours()
+    getShift: () => {
+        const hour = moment().hours()
         if (hour < 17 && hour > 8){
             return config.shiftOption[0]
         }else if(hour < 24 && hour > 17){
@@ -211,10 +212,9 @@ const config = {
     /** Create pdf package, including header, body and the pdf path
      * options include shiftChange, searchResult, broken report, transffered report
      */
-    getPdfPackage: (option, user, data, locale, signature ,selectValue ) => {
-    
-        const header = config.pdfFormat.getHeader(user, locale, option, signature, selectValue, data)
-        const body = config.pdfFormat.getBody[option](data, locale, user, location,signature)
+    getPdfPackage: (option, user, data, locale, signature, shiftOption) => {
+        const header = config.pdfFormat.getHeader(user, locale, option, signature, shiftOption, data)
+        const body = config.pdfFormat.getBody[option](data, locale, user, location, signature)
         const path = config.pdfFormat.getPath(option, user)
         const pdf = header + body
         
@@ -225,81 +225,12 @@ const config = {
         }
     },
 
-    getPdf: {
-        broken: () => {
-            const header = config.pdfFormat.getHeader(user, locale, option, signature, selectValue )
-            const body = config.pdfFormat.getBody[option](data, locale, user, location,signature)
-            const path = config.pdfFormat.getPath(option, user)
-            const pdf = header + body
-            
-            return {
-                pdf,
-                path,
-                options: config.pdfFormat.pdfOptions
-            }
-        },
-
-        transferred: () => {
-            const header = config.pdfFormat.getHeader(user, locale, option, signature, selectValue)
-            const body = config.pdfFormat.getBody[option](data, locale, user, location,signature)
-            const path = config.pdfFormat.getPath(option, user)
-            const pdf = header + body
-            
-            return {
-                pdf,
-                path,
-                options: config.pdfFormat.pdfOptions
-            }
-        }, 
-
-        shiftChange: () => {
-            const header = config.pdfFormat.getHeader(user, locale, option, signature,selectValue )
-            const body = config.pdfFormat.getBody[option](data, locale, user, location,signature)
-            const path = config.pdfFormat.getPath(option, user)
-            const pdf = header + body
-            
-            return {
-                pdf,
-                path,
-                options: config.pdfFormat.pdfOptions
-            }
-        },
-
-        searchResult: () => {
-            const header = config.pdfFormat.getHeader(user, locale, option, signature,selectValue )
-            const body = config.pdfFormat.getBody[option](data, locale, user, location,signature)
-            const path = config.pdfFormat.getPath(option, user)
-            const pdf = header + body
-            
-            return {
-                pdf,
-                path,
-                options: config.pdfFormat.pdfOptions
-            }
-        },
-
-        patientRecord: () => {
-            const header = config.pdfFormat.getHeader(user, locale, option, signature,selectValue )
-            const body = config.pdfFormat.getBody[option](data, locale, user, location,signature)
-            const path = config.pdfFormat.getPath(option, user)
-            const pdf = header + body
-            
-            return {
-                pdf,
-                path,
-                options: config.pdfFormat.pdfOptions
-            }
-        }
-
-
-    },
-
     /** Pdf format config */
     pdfFormat: {
 
-        getHeader: (user, locale, option, name, selectValue, data) => {
+        getHeader: (user, locale, option, signature, selectValue, data) => {
             let title = config.pdfFormat.getTitle(option, locale)
-            let subTitle = config.pdfFormat.getSubTitle[option](locale, user, name, selectValue, data)
+            let subTitle = config.pdfFormat.getSubTitle[option](locale, user, signature, selectValue, data)
             return title + subTitle
         },
 
@@ -544,24 +475,23 @@ const config = {
         },
     
         getSubTitle: {
-            shiftChange: (locale, user, name ,selectValue ) => {
+            shiftChange: (locale, user, signature, shiftOption) => {
                 let timestamp = config.pdfFormat.getTimeStamp(locale)
 
-                const nextShiftIndex = (config.shiftOption.indexOf(config.getShift(locale.abbr)) + 2) % config.shiftOption.length
-
-                const nextShift = locale.texts[config.shiftOption[nextShiftIndex].toUpperCase().replace(/ /g, "_")]
-                const thisShift = locale.texts[config.getShift(locale.abbr).toUpperCase().replace(/ /g, "_")]
+                const lastShiftIndex = (config.shiftOption.indexOf(shiftOption.value) + 2) % config.shiftOption.length
+                const lastShift = locale.texts[config.shiftOption[lastShiftIndex].toUpperCase().replace(/ /g, "_")]
+                const thisShift = shiftOption.label
                 let shift = `<div style="text-transform: capitalize;">
-                        ${locale.texts.SHIFT}: ${selectValue.label} ${locale.texts.SHIFT_TO} ${thisShift}
+                        ${locale.texts.SHIFT}: ${lastShift} ${locale.texts.SHIFT_TO} ${thisShift}
                     </div>`
                 let confirmedBy = `<div style="text-transform: capitalize;">
                     ${locale.abbr == 'en' 
-                        ? `${locale.texts.CONFIRMED_BY} ${name}`
-                        : `${locale.texts.CONFIRMED_BY}: ${name}`
+                        ? `${locale.texts.CONFIRMED_BY} ${signature}`
+                        : `${locale.texts.CONFIRMED_BY}: ${signature}`
                     }
                 </div>`
                 let checkby = `<div style="text-transform: capitalize;">
-                        ${locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: ${user.name}, ${selectValue.label}
+                        ${locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: ${user.name}, ${shiftOption.label}
                     </div>`
                 return timestamp + confirmedBy + shift + checkby
             },

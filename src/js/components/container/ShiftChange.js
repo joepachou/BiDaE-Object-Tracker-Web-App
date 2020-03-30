@@ -55,7 +55,6 @@ class ShiftChange extends React.Component {
         showPdfDownloadForm: false,
         showConfirmForm: false,
         showDownloadPdfRequest: false,
-        selectValue:'',
     }
 
     componentDidUpdate = (prevProps) => {
@@ -117,9 +116,10 @@ class ShiftChange extends React.Component {
         })
     }
 
-    confirmShift = () => {
+    confirmShift = (values) => {
         this.setState({
-            showConfirmForm: true
+            showConfirmForm: true,
+            shift: values.shift
         })
     }
 
@@ -130,16 +130,15 @@ class ShiftChange extends React.Component {
             auth 
         } = this.context   
   
-
         let pdfPackage = config.getPdfPackage(
             'shiftChange', 
             auth.user, 
             this.state.searchResult, 
             locale,
-            authentication  == "",
-            this.state.selectValue
+            authentication,
+            this.state.shift
         )  
-        
+
         this.state.patients.reduce((pkg, object) => {   
 
             let temp = config.getPdfPackage(
@@ -148,7 +147,6 @@ class ShiftChange extends React.Component {
                 object, 
                 locale,
                 authentication,
-                this.state.selectValue
             )
             
             if (pkg.pdf) {
@@ -165,7 +163,7 @@ class ShiftChange extends React.Component {
         axios.post(dataSrc.addShiftChangeRecord, {
             userInfo: auth.user,
             pdfPackage,
-            shift: this.state.selectValue,
+            shift: this.state.shift,
         }).then(res => {
             // this.props.handleSubmit()
             let callback = () => messageGenerator.setSuccessMessage(
@@ -184,17 +182,8 @@ class ShiftChange extends React.Component {
     handleClose = () => {
         this.setState({
             showConfirmForm: false,
-            selectValue:'',
             showDownloadPdfRequest: false
         })
-    }
-
-    handleSelectChange = (val) => { 
-        selectVal = val  
-        this.setState({ 
-            selectValue: val  
-        }); 
-        
     }
 
     render() {   
@@ -222,7 +211,7 @@ class ShiftChange extends React.Component {
         const hasFoundResult = foundResult.length !== 0;
         const hasNotFoundResult = notFoundResult.length !== 0;
         const hasFoundPatients = patients.length !== 0;
-
+        
         const shiftOptions = Object.values(config.shiftOption).map(shift => { 
             return { 
                 value: shift,
@@ -230,119 +219,115 @@ class ShiftChange extends React.Component {
             };
         }) 
 
-        
+        const defaultShiftOption = {
+            value: config.getShift(),
+            label: locale.texts[config.getShift().toUpperCase().replace(/ /g, '_')]
+        }
+
         return ( 
-            <Modal 
-                show={show} 
-                size="lg" 
-                onHide={handleClose}
-                className='text-capitalize'
-            >
-                <Modal.Header
-                    className='d-flex flex-column'
-                >
-                    <div className="title">
-                        {locale.texts.SHIFT_CHANGE_RECORD}
-                    </div>                                
-                    <div>
-                        {locale.texts.DATE_TIME}: {nowTime.format(config.shiftChangeRecordTimeFormat)}
-                    </div> 
-                    <div 
-                    >
-                        {locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: {auth.user.name} 
-                    </div>
-                    <div 
-                        className="d-flex align-items-center"
-                    >   
-                        {locale.texts.SHIFT }: 
-
-                        <Select 
-                            name = "shiftSelect"
-                            options={shiftOptions} 
-                            value = {this.state.selectValue || shiftOptions[0]}
-                            onChange={this.handleSelectChange}  
-                            styles={style.select}
-                        />  
-                    </div>
-
-
-                </Modal.Header>
-
-
-                <Modal.Body       
-                    style ={style.modalBody}
-                    id="shiftChange"
+            <div>
+                <Modal 
+                    show={show} 
+                    size="lg" 
+                    onHide={handleClose}
+                    className='text-capitalize'
                 >
                     <Formik            
                         initialValues = {{
-                        
+                            shift: defaultShiftOption
                         }}
 
-                        validationSchema = {
-                            null
-                        }
-
-                    
                         onSubmit={(values, { setStatus, setSubmitting }) => {
+                            this.confirmShift(values)
                         }}
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm }) => (
-                            <Form className="text-capitalize">
-                                {!hasFoundResult && !hasNotFoundResult && 
-                                    <div className="d-flex justify-content-center">
-                                        <p className="font-italic ">{locale.texts.NOT_ASSIGNED_TO_ANY_DEVICES}</p>
+                            <div>
+                                <Modal.Header
+                                    className='d-flex flex-column'
+                                >
+                                    <div className="title">
+                                        {locale.texts.SHIFT_CHANGE_RECORD}
+                                    </div>                                
+                                    <div>
+                                        {locale.texts.DATE_TIME}: {nowTime.format(config.regularTimeFormat)}
+                                    </div> 
+                                    <div 
+                                    >
+                                        {locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: {auth.user.name} 
                                     </div>
-                                }    
-                                <TypeBlock
-                                    title={locale.texts.DEVICES_FOUND}
-                                    hasType={hasFoundResult} 
-                                    typeArray={foundResult}
-                                /> 
-                                <TypeBlock
-                                    title={locale.texts.DEVICES_NOT_FOUND}
-                                    hasType={hasNotFoundResult} 
-                                    typeArray={notFoundResult}
-                                /> 
-                                <TypeBlock
-                                    title={locale.texts.PATIENTS_FOUND}
-                                    hasType={hasFoundPatients} 
-                                    typeArray={patients}
-                                /> 
-                            </Form> 
+                                    <div 
+                                        className="d-flex align-items-center"
+                                    >   
+                                        {locale.texts.SHIFT }: 
+                                        &nbsp;
+                                        <Select 
+                                            name="shift"
+                                            options={shiftOptions} 
+                                            value={values.shift}
+                                            onChange={(value) => setFieldValue('shift', value)}  
+                                            styles={style.select}
+                                        />  
+                                    </div>
+                                </Modal.Header>
+                                <Modal.Body       
+                                    style ={style.modalBody}
+                                    id="shiftChange"
+                                >
+                                    <Form className="text-capitalize">
+                                        {!hasFoundResult && !hasNotFoundResult && 
+                                            <div className="d-flex justify-content-center">
+                                                <p className="font-italic ">{locale.texts.NOT_ASSIGNED_TO_ANY_DEVICES}</p>
+                                            </div>
+                                        }    
+                                        <TypeBlock
+                                            title={locale.texts.DEVICES_FOUND}
+                                            hasType={hasFoundResult} 
+                                            typeArray={foundResult}
+                                        /> 
+                                        <TypeBlock
+                                            title={locale.texts.DEVICES_NOT_FOUND}
+                                            hasType={hasNotFoundResult} 
+                                            typeArray={notFoundResult}
+                                        /> 
+                                        <TypeBlock
+                                            title={locale.texts.PATIENTS_FOUND}
+                                            hasType={hasFoundPatients} 
+                                            typeArray={patients}
+                                        /> 
+                                    </Form> 
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                        <Button 
+                                            variant="outline-secondary" 
+                                            onClick={handleClose}
+                                        >
+                                            {locale.texts.CANCEL}
+                                        </Button>
+                                        <Button 
+                                            type="submit" 
+                                            variant="primary" 
+                                            onClick={submitForm}
+                                            disabled={!hasFoundResult && !hasNotFoundResult}
+                                        >
+                                            {locale.texts.CONFIRM}
+                                        </Button>
+                                    </Modal.Footer>   
+                                </div>
                         )}
                     />
-                </Modal.Body>
-    
-                <Modal.Footer>
-                    <Button 
-                        variant="outline-secondary" 
-                        onClick={handleClose}
-                    >
-                        {locale.texts.CANCEL}
-                    </Button>
-                    <Button 
-                        type="submit" 
-                        variant="primary" 
-                        onClick={this.handleConfirmFormSubmit}
-                        disabled={!hasFoundResult && !hasNotFoundResult}
-                    >
-                        {locale.texts.CONFIRM}
-                    </Button>
-                </Modal.Footer> 
+                </Modal>     
                 <GeneralConfirmForm
                     show={this.state.showConfirmForm}
                     handleSubmit={this.handleConfirmFormSubmit}
                     handleClose={this.handleClose}
-                    signin={auth.signin}
-                    stateReducer ={stateReducer[0].areaId}
-                    auth={auth}
-                    />
+                />
                 <DownloadPdfRequestForm
                     show={this.state.showDownloadPdfRequest} 
                     pdfPath={this.state.fileUrl}
                     handleClose={this.handleClose}
                 /> 
-            </Modal>     
+            </div>
         )
     }
 }
