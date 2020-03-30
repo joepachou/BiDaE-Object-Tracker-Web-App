@@ -280,12 +280,16 @@ class SearchResult extends React.Component {
         })
     }
 
-    handleFormClose = () =>{
+    handleClose = (callback) =>{
         this.setState({
             showDownloadPdfRequest: false,
             showConfirmForm: false,
             showPatientView: false,
-        })
+            selectedObjectData: [],
+            selection: [],
+            editedObjectPackage: [],
+            showSignatureForm: false
+        }, callback)
     }
 
     handlePatientView = values => {
@@ -555,7 +559,7 @@ class SearchResult extends React.Component {
                 <PatientViewModal
                     show={this.state.showPatientView} 
                     title="report patient status"
-                    handleClose={this.handleFormClose}
+                    handleClose={this.handleClose}
                     handleSubmit={this.handlePatientView}
                     data={this.state.selectedObjectData} 
                 />
@@ -563,7 +567,7 @@ class SearchResult extends React.Component {
                 <SignatureForm
                     show={this.state.showSignatureForm} 
                     title={locale.texts.SIGNATURE} 
-                    handleClose={this.handleChangeObjectStatusFormClose}
+                    handleClose={this.handleClose}
                     handleSubmit= {this.handleSignatureSubmit}
                 />
 
@@ -578,7 +582,7 @@ class SearchResult extends React.Component {
                 <DownloadPdfRequestForm
                     show={this.state.showDownloadPdfRequest} 
                     pdfPath={this.state.pdfPath}
-                    handleClose={this.handleFormClose}
+                    handleClose={this.handleClose}
                 />
             </div>
         )

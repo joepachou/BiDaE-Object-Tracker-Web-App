@@ -148,6 +148,7 @@ const en =  {
 
     /* field */
     NAME: "name",
+    PATIENT_NAME: "patient name",
     TYPE: "type",
     ASSET_CONTROL_NUMBER: "Asset ID",
     MAC_ADDRESS: "mac address",
@@ -156,7 +157,7 @@ const en =  {
     MONITOR_TYPE: "monitor type",
     ACN: "ACN",
     LOCATION: "location",
-    PATIENT_HISTORICAL_RECORD: "patient historical record",
+    PATIENT_HISTORICAL_RECORD: "historical record",
     RSSI_THRESHOLD: "RSSI threshold",
     LAST_FOUR_DIGITS_IN_ACN: "last 4 digits in ACN",
     ADD_DEVICE: "add device",
@@ -206,6 +207,9 @@ const en =  {
     SELECTED_AREAS: "selected areas",
     NOT_SELECTED_AREAS: "not selected areas",
     LOCATION_SELECTION: "location",
+    RECORDED_BY: "recorded by",
+    ADD_NEW_RECORD: "add new record",
+
 
     /** form title */
     EDIT_LBEACON: "edit lbeacon",
@@ -285,10 +289,11 @@ const en =  {
     ENTER_THE_PASSWORD:"enter new password",
     PASSWORD_NOT_FIT:"password not fit",
 
-    /** Place Holder */
+    /** placeholder */
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "please enter or scan mac address",
     PLEASE_ENTER_OR_SCAN_ASSET_CONTROL_NUMBER: "please enter or scan asset control number",
     TYPE_MAC_OR_NAME: "type mac address or name",
+    TYPE_RECORD_HERE: "Type new record here...",
 
     /* Object Status */
     STATUS: "status",

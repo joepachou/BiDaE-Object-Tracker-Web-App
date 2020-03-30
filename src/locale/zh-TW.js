@@ -149,7 +149,7 @@ const tw = {
     
     /* field */
     NAME: "名稱",
-    PATIENT_NAME: "病人名",
+    PATIENT_NAME: "病人姓名",
     TYPE: "類別",
     ASSET_CONTROL_NUMBER: "財產編號",
     MAC_ADDRESS: "mac address",
@@ -158,7 +158,7 @@ const tw = {
     MONITOR_TYPE: "監控類別",
     ACN: "財產編號",
     LOCATION: "地點",
-    PATIENT_HISTORICAL_RECORD: "病人歷史報告",
+    PATIENT_HISTORICAL_RECORD: "歷史報告",
     RSSI_THRESHOLD: "RSSI設定",
     LAST_FOUR_DIGITS_IN_ACN: "產編後四碼",
     ADD_DEVICE: "增加儀器",
@@ -207,7 +207,8 @@ const tw = {
     SELECTED_AREAS: "已選取區域",
     NOT_SELECTED_AREAS: "未選取區域",
     LOCATION_SELECTION: "區域",
-
+    RECORDED_BY: "紀錄",
+    ADD_NEW_RECORD: "新增紀錄",
        
     /** form title */
     EDIT_LBEACON: "編輯 lbeacon",
@@ -289,10 +290,11 @@ const tw = {
     ENTER_THE_PASSWORD:"請輸入新密碼",
     PASSWORD_NOT_FIT:"密碼需要相符",
 
-    /** Place Holder */
+    /** placeholder */
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "請輸入或掃描mac address",
     PLEASE_ENTER_OR_SCAN_ASSET_CONTROL_NUMBER: "請輸入或掃描財產編號",
     TYPE_MAC_OR_NAME: "輸入 mac address 或是 名字",
+    TYPE_RECORD_HERE: "請輸入新紀錄...",
 
     /* Object Status */
     STATUS: "狀態",

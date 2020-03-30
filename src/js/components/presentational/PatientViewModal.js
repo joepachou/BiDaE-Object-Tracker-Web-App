@@ -10,7 +10,6 @@ import {
     Form, 
 } from 'formik';
 import * as Yup from 'yup';
-import FormikFormGroup from '../presentational/FormikFormGroup'
 import moment from 'moment'
 import { AppContext } from '../../context/AppContext';
 import ScrollArea from 'react-scrollbar'
@@ -24,11 +23,12 @@ const style = {
         minWidth: 30,
     },
     scrollArea: {
-        maxHeight: 300
+        maxHeight: 500
     },
     blockOne: {
         minWidth: 'initial'
-    }
+    },
+
 }
 
 class PatientViewModal extends React.Component {
@@ -36,7 +36,15 @@ class PatientViewModal extends React.Component {
     static contextType = AppContext
 
     state = {
-        display: false,
+        display: true,
+    }
+
+    handleClose = () => {
+        this.props.handleClose(() => {
+            this.setState({
+                display: true
+            })
+        })
     }
 
     render() {
@@ -57,11 +65,12 @@ class PatientViewModal extends React.Component {
         let recordBlock = {
             display: this.state.display ? '' : 'none',
         }
+
         return (
             <Modal  
                 show={show}
-                onHide={handleClose} 
-                size="md" 
+                onHide={this.handleClose} 
+                size="lg" 
                 className='text-capitalize'
                 enforceFocus={false}
                 style={style.modal}
@@ -88,35 +97,16 @@ class PatientViewModal extends React.Component {
     
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
                             <Form>
-                                <FormikFormGroup 
-                                    type="text"
-                                    name="name"
-                                    label={locale.texts.NAME}
-                                    value={data.name}
-                                    error={errors.name}
-                                    touched={touched.name}
-                                    placeholder=""
-                                    disabled
-                                />
-                                <FormikFormGroup 
-                                    type="text"
-                                    name="asset_control_number"
-                                    label={locale.texts.PATIENT_NUMBER}
-                                    error={errors.asset_control_number}
-                                    value={data.asset_control_number}
-                                    touched={touched.asset_control_number}
-                                    placeholder=""
-                                    disabled
-                                />
-                                <hr/>
-                                <FormikFormGroup 
-                                    type="textarea"
-                                    name="notes"
-                                    label={locale.texts.NOTES}
-                                    error={errors.notes}
-                                    touched={touched.notes}
-                                />
-                                <hr/>
+                                <div
+                                    className='d-flex flex-column'
+                                >                       
+                                    <div>
+                                        {locale.texts.NAME}: {data.name} 
+                                    </div>
+                                    <div>
+                                        {locale.texts.PATIENT_NUMBER}: {data.asset_control_number} 
+                                    </div>
+                                </div>
                                 <div
                                     className="mb-2 cursor-pointer"
                                     onClick={() => {
@@ -131,10 +121,12 @@ class PatientViewModal extends React.Component {
                                         className={`fas ${this.state.display ? 'fa-angle-up' : 'fa-angle-down'}`}
                                     />
                                 </div>
+                                
                                 <div
                                     style={recordBlock}
                                 >
-                                    <hr style={{margin: 0}}></hr>
+                                    {data.record && data.record.length != 0 && <hr style={{margin: 0}}></hr>}
+
                                     <ScrollArea
                                         // smoothScrolling={true}
                                         horizontal={false}
@@ -143,20 +135,43 @@ class PatientViewModal extends React.Component {
                                         <ListGroup
                                             className='text-none px-0'
                                         >
-                                            {data.record && data.record.map((item, index) => {
-                                                return (
-                                                    recordBlockTypeTwo(item, index, locale)
+                                            {data.record && data.record.length != 0 
+                                                &&   (
+                                                    <div>
+                                                        {data.record.map((item, index) => {
+                                                            return (
+                                                                recordBlockTypeTwo(item, index, locale)
+                                                            )
+                                                        })}
+                                                    </div>
                                                 )
-                                            })}
+                                            }
                                         </ListGroup>
                                     </ScrollArea>
                                 </div>
-                                
+                                <hr/>
+                                <div 
+                                    className="mb-2 text-capitalize"
+                                >
+                                    <small 
+                                        className="form-text text-muted"
+                                    >
+                                        {locale.texts.ADD_NEW_RECORD}
+                                    </small>
+                                    <Field 
+                                        component="textarea"
+                                        value=""
+                                        name="notes"
+                                        className={'form-control' + (errors.notes && touched.notes ? ' is-invalid' : '')} 
+                                        placeholder={locale.texts.TYPE_RECORD_HERE}
+                                        rows={4}
+                                    />
+                                </div>
                                 <Modal.Footer>
                                     <Button 
                                         variant="outline-secondary" 
                                         className="text-capitalize" 
-                                        onClick={handleClose}
+                                        onClick={this.handleClose}
                                     >
                                         {locale.texts.CANCEL}
                                     </Button>
@@ -227,13 +242,35 @@ const recordBlockTypeTwo = (item, index, locale) => {
                     {moment(item.create_timestamp).locale(locale.abbr).format('YYYY/MM/DD hh:mm:ss')}
                 </div>
             </div>
-
-            <div 
-                key={index} 
-                className="pb-1"
-                style={style.row}
+            <div
+                className="d-flex justify-content-start"
             >
-                {item.notes}
+                <div 
+                    style={style.index}
+                    className="d-flex align-items-center"
+                >
+                </div>
+                <div
+                    className="font-color-black"
+                >
+                    {locale.texts.RECORDED_BY}: {item.recorded_user}
+                </div>
+            </div>
+            <div
+                className="d-flex justify-content-start"
+            >
+                <div 
+                    style={style.index}
+                    className="d-flex align-items-center"
+                >
+                </div>
+
+                <div 
+                    key={index} 
+                    className="pb-1"
+                >
+                    {item.notes}
+                </div>
             </div>
         </ListGroup.Item>
     )

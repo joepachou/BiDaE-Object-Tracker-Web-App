@@ -37,7 +37,7 @@ const FormikFormGroup = ({
             style={style.container}
         >
             <small 
-                className="form-text text-muted text-capitaliz"
+                className="form-text text-muted text-capitalize"
             >
                 {label}
             </small>
@@ -58,7 +58,6 @@ const FormikFormGroup = ({
                             <Field  
                                 name={name} 
                                 type={type} 
-                                component={type != 'text' ? type : "text"}
                                 className={'form-control' + (error && touched ? ' is-invalid' : '')} 
                                 placeholder={placeholder}
                                 disabled={disabled}
@@ -68,7 +67,7 @@ const FormikFormGroup = ({
             }
             {error && touched && 
                 <small 
-                    className="form-text text-capitaliz"
+                    className="form-text text-capitalize"
                     style={style.error}
                 >
                     {error}

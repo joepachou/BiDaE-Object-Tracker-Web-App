@@ -466,6 +466,9 @@ const config = {
                                 &bull;
                                 ${moment(item.create_timestamp).locale(locale.abbr).format('LLL')}
                             </h5>
+                            <h6 style="margin-bottom: 5px; margin-top: 0px;">
+                                ${locale.texts.RECORDED_BY}: ${item.recorded_user}
+                            </h6>
                             <small class="text-muted">
                                 ${item.notes}
                             </small>
@@ -573,7 +576,8 @@ const config = {
                 let timestamp = config.pdfFormat.getTimeStamp(locale)
                 let patientName = config.pdfFormat.getSubTitleInfo.patientName(locale, data)
                 let providerName = config.pdfFormat.getSubTitleInfo.providerName(locale, data)
-                return timestamp + patientName + providerName
+                let patientID = config.pdfFormat.getSubTitleInfo.patientID(locale, data)
+                return timestamp + patientName + patientID + providerName
             },
 
         },
@@ -590,6 +594,13 @@ const config = {
                 return `
                     <div style="text-transform: capitalize;">
                         ${locale.texts.PATIENT_NAME}: ${object.name}
+                    </div>
+                `
+            },
+            patientID: (locale, object) => {
+                return `
+                    <div style="text-transform: capitalize;">
+                        ${locale.texts.PATIENT_NUMBER}: ${object.asset_control_number}
                     </div>
                 `
             },

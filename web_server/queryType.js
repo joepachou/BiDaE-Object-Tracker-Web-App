@@ -52,10 +52,15 @@ function getTrackingData (areas_id) {
 				ARRAY_AGG(JSON_BUILD_OBJECT(
 					'create_timestamp', create_timestamp,
 					'notes', notes,
-					'editing_user_id', editing_user_id 
+					'recorded_user', (
+						SELECT name
+						FROM user_table
+						WHERE id = editing_user_id 
+					)
 				)) as record 
 			FROM patient_record
 			GROUP BY object_id
+					
 		) as patient_record
 		ON object_table.id = patient_record.object_id
 
