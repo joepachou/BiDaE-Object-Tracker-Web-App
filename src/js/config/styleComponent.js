@@ -13,3 +13,8 @@ export const Primary = styled.div`
     font-weight: 600;
     color: black;
 `
+
+export const Paragraph = styled.p`
+  text-align: justify;
+  text-justify:inter-ideograph;
+`

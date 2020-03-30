@@ -476,9 +476,12 @@ const config = {
                                     ${moment(item.create_timestamp).locale(locale.abbr).format('lll')}
                                 </div>
                             </div>
-                            <small class="text-muted">
+                            <div 
+                                style="text-align: justify;text-justify:inter-ideograph;font-size: 0.8em"
+                                class="text-muted"
+                            >
                                 ${item.notes}
-                            </small>
+                            </div>
                         </div>
                     `
                 }).join(" ")

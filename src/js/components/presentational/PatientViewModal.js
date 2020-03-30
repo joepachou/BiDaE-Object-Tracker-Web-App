@@ -16,7 +16,8 @@ import ScrollArea from 'react-scrollbar'
 import LocaleContext from '../../context/LocaleContext';
 import {
     EditedTime,
-    Primary 
+    Primary,
+    Paragraph 
 } from '../../config/styleComponent'
 
 const style = {
@@ -247,17 +248,10 @@ const recordBlockTypeTwo = (item, index, locale) => {
                     </EditedTime>
                 </div>
             </div>
+            <Paragraph>
+                {item.notes}
+            </Paragraph>
 
-            <div
-                className="d-flex justify-content-start"
-            >
-                <div 
-                    key={index} 
-                    className="pb-1 font-color-black"
-                >
-                    {item.notes}
-                </div>
-            </div>
         </ListGroup.Item>
     )
 }
