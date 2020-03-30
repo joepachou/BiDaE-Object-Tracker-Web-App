@@ -83,7 +83,7 @@ class PatientViewModal extends React.Component {
                 <Modal.Body>
                     <Formik
                         initialValues = {{
-                            notes: data ? data.notes : ""
+                            notes: ""
                         }}
     
                         validationSchema = {
@@ -160,7 +160,7 @@ class PatientViewModal extends React.Component {
                                     </small>
                                     <Field 
                                         component="textarea"
-                                        value=""
+                                        value={values.notes}
                                         name="notes"
                                         className={'form-control' + (errors.notes && touched.notes ? ' is-invalid' : '')} 
                                         placeholder={locale.texts.TYPE_RECORD_HERE}

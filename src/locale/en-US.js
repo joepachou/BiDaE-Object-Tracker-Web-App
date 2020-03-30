@@ -119,6 +119,7 @@ const en =  {
     SHOW_RESIDENTS: "show residents",
     HIDE_RESIDENTS: "hide residents",
     VIEW_REPORT: "view report",
+    VIEW: "view",
     DOWNLOAD_REPORT: "download report",
     CLOSE: "close",
     SHOW_DEVICES_NOT_FOUND: "show devices not found",

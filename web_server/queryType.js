@@ -58,9 +58,12 @@ function getTrackingData (areas_id) {
 						WHERE id = editing_user_id 
 					)
 				)) as record 
-			FROM patient_record
-			GROUP BY object_id
-					
+			FROM (
+				SELECT *
+				FROM patient_record
+				ORDER BY create_timestamp DESC
+			) as patient_record_table
+			GROUP BY object_id					
 		) as patient_record
 		ON object_table.id = patient_record.object_id
 
