@@ -87,6 +87,7 @@ class SystemSetting extends React.Component{
                                             key={index}
                                             className="border-0 m-0 my-1 text-capitalize" 
                                             eventKey={tab.name.replace(/ /g, '_')}
+                                            action
                                         >
                                             {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
                                         </ListGroup.Item>

@@ -288,7 +288,7 @@ class PatientTable extends React.Component{
                     data={this.props.data}
                     columns={this.props.columns}
                     ref={r => (this.selectTable = r)}
-                    className="-highlight"
+                    className="-highlight text-none"
                     name={'obj_table'}
                     style={{height:'75vh'}}
                     onPageChange={(e) => {this.setState({selectAll:false,selection:''})}} 

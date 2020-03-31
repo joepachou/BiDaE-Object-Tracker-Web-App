@@ -269,7 +269,7 @@ class AdminManagementContainer extends React.Component{
                     data = {this.state.data} 
                     columns = {this.state.columns} 
                     noDataText="No Data Available"
-                    className="-highlight"
+                    className="-highlight text-none"
                     style={{height:'75vh'}}
                     getTrProps={this.onRowClick}
                 />
