@@ -10,10 +10,11 @@ const rules = {
             "form:edit",
             "route:devicesManagement",
             "route:patientManagement",
+            "route:objectManagement",
+
             "route:userProfile",
             "route:bigScreen",
             "route:trackingHistory",
-
             "user:mydevice",
             "user:mypatient",
             "user:shiftChange",
@@ -46,6 +47,7 @@ const rules = {
 
             "user:mydevice",
             "user:mypatient",
+            "user:shiftChange",
             "user:saveSearchRecord",
             "user:cleanPath",
             "user:toggleShowDevices",
