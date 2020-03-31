@@ -148,11 +148,11 @@ const EditGeofenceConfig = ({
                     }}
 
                     render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
-                    
-                        <Form>  
-                        {lbeacon_error.f = errors.f_lbeacon}
-                        {lbeacon_error.p = errors.p_lbeacon}
-                            <Row className="d-flex align-items-center">
+                       
+                        <Form>    
+                          {(lbeacon_error.f = errors.f_lbeacon) && ''} 
+                          {(lbeacon_error.p = errors.p_lbeacon) && ''} 
+                            <Row className="d-flex align-items-center"> 
                                 <Col>
                                     <Switcher
                                         leftLabel="on"
@@ -445,8 +445,7 @@ const TypeGroup = ({
                         components={{
                             IndicatorSeparator: () => null,
                         }}
-                    />  
-
+                    />   
                 {(`lbeacon_error.${abbr}` )&& 
                     <small 
                         className="form-text text-capitaliz"
