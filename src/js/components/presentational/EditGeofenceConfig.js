@@ -33,8 +33,15 @@ let style = {
             cursor: 'pointer'
         }, 
     },
-}
+    error: {
+        color: "#dc3545"
+    }
 
+}
+let lbeacon_error={
+    f:"",
+    p:"",
+}
 
 const EditGeofenceConfig = ({
     selectedData,
@@ -55,6 +62,7 @@ const EditGeofenceConfig = ({
         locale
     } = appContext
 
+     
     areaOptions = auth.user.areas_id
         .filter(item => {
             return areaOptions[item]
@@ -98,11 +106,11 @@ const EditGeofenceConfig = ({
                         f_rssi: selectedData ? selectedData.parseFences.rssi : '',
                         selected_p_lbeacon: null,
                         selected_f_lbeacon: null,
-                        isGlobal: selectedData ? selectedData.is_global_fence : 1,
+                        isGlobal: selectedData ? selectedData.is_global_fence : 1,  
                     }}
                     
                     validationSchema = {
-                        Yup.object().shape({
+                        Yup.object().shape({ 
                             name: Yup.string().required(locale.texts.NAME_IS_REQUIRED),   
                             p_rssi: Yup.string()
                             .required("must be negative number")
@@ -120,11 +128,12 @@ const EditGeofenceConfig = ({
                             ) ,  
                             start_time:  Yup.string().required(locale.texts.NAME_IS_REQUIRED),   
                             end_time:  Yup.string().required(locale.texts.NAME_IS_REQUIRED),   
-                            area:  Yup.string().required(locale.texts.AREA_IS_REQUIRED),   
+                            area:  Yup.string().required(locale.texts.AREA_IS_REQUIRED),    
+                            p_lbeacon:Yup.array().required(locale.texts.ALEAST_CHOOSE_ONE_UUID),
+                            f_lbeacon:Yup.array().required(locale.texts.ALEAST_CHOOSE_ONE_UUID)
                     })}
-
-                    onSubmit={(values, { setStatus, setSubmitting },error ) => {
-          
+                    
+                    onSubmit={(values, { setStatus, setSubmitting },error ) => { 
                         let monitorConfigPackage = {
                             ...values,
                             id: isEdited ? selectedData.id : '',
@@ -140,7 +149,9 @@ const EditGeofenceConfig = ({
 
                     render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
                     
-                        <Form> 
+                        <Form>  
+                        {lbeacon_error.f = errors.f_lbeacon}
+                        {lbeacon_error.p = errors.p_lbeacon}
                             <Row className="d-flex align-items-center">
                                 <Col>
                                     <Switcher
@@ -301,6 +312,7 @@ const EditGeofenceConfig = ({
 }
   
 export default EditGeofenceConfig;
+ 
 
 const parseLbeaconsGroup = (type, index) => {
     return [...type.slice(0, index), ...type.slice(index + 1)]
@@ -327,6 +339,7 @@ const TypeGroup = ({
 }) => { 
     const locale = React.useContext(LocaleContext);
  
+
 
     let lbeaconOptions = lbeaconsTable.filter(item => {
         let uuid = item.uuid.replace(/-/g, '')
@@ -381,7 +394,7 @@ const TypeGroup = ({
                                     let value = parseLbeaconsGroup(values[typeGroup], index)
                                     setFieldValue(typeGroup, value)
                                 }}
-                            ></i>
+                            ></i>  
                         </Col>
                         <Col lg={11} className="pr-1">
                             <Field  
@@ -391,8 +404,10 @@ const TypeGroup = ({
                                 placeholder={item}
                                 value={item}
                                 disabled
-                            />
+                            />  
                         </Col>
+ 
+                        
                     </Row>
                 )
             })}
@@ -418,19 +433,30 @@ const TypeGroup = ({
                     >
                     </i>
                 </Col>
-                <Col lg={11} className="pr-1">
+                
+                <Col lg={11} className="pr-1"> 
                     <Select
                         placeholder={locale.texts.SELECT_LBEACON}
                         name={`${abbr}_lbeacon`}
-                        options={lbeaconOptions}
-                        value={values[`selected_${abbr}_lbeacon`]}
+                        options={lbeaconOptions} 
+                        value={values[`selected_${abbr}_lbeacon`]} 
                         styles={styleConfig.reactSelect}
                         onChange={value => setFieldValue(`selected_${abbr}_lbeacon`, value)}
                         components={{
                             IndicatorSeparator: () => null,
                         }}
-                    />
-                </Col>
+                    />  
+
+                {(`lbeacon_error.${abbr}` )&& 
+                    <small 
+                        className="form-text text-capitaliz"
+                        style={style.error}
+                    >
+                    {abbr == "f" ? lbeacon_error.f  : lbeacon_error.p}
+                    </small>
+                }
+                </Col> 
+ 
             </Row>
         </div>
     )
