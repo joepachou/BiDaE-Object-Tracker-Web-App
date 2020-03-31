@@ -416,7 +416,7 @@ const config = {
             },
 
             getPatientData: (data, locale) => {
-                return data.record.map((item, index) => {
+                return data.records.map((item, index) => {
                     return `
                         <div style="margin-bottom: 15px;" key=${index}>
                             <div 
@@ -430,14 +430,14 @@ const config = {
                                 </div>
                                 &nbsp;
                                 <div style="font-size: 0.8em;display: inline-block;">
-                                    ${moment(item.create_timestamp).locale(locale.abbr).format('lll')}
+                                    ${moment(item.created_timestamp).locale(locale.abbr).format('lll')}
                                 </div>
                             </div>
                             <div 
                                 style="text-align: justify;text-justify:inter-ideograph;font-size: 0.8em"
                                 class="text-muted"
                             >
-                                ${item.notes}
+                                ${item.record}
                             </div>
                         </div>
                     `

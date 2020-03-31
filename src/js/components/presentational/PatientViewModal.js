@@ -13,7 +13,6 @@ import * as Yup from 'yup';
 import moment from 'moment'
 import { AppContext } from '../../context/AppContext';
 import ScrollArea from 'react-scrollbar'
-import LocaleContext from '../../context/LocaleContext';
 import {
     EditedTime,
     Primary,
@@ -86,7 +85,7 @@ class PatientViewModal extends React.Component {
                 <Modal.Body>
                     <Formik
                         initialValues = {{
-                            notes: ""
+                            record: ""
                         }}
     
                         validationSchema = {
@@ -121,9 +120,9 @@ class PatientViewModal extends React.Component {
                                     </small>
                                     <Field 
                                         component="textarea"
-                                        value={values.notes}
-                                        name="notes"
-                                        className={'form-control' + (errors.notes && touched.notes ? ' is-invalid' : '')} 
+                                        value={values.record}
+                                        name="record"
+                                        className={'form-control' + (errors.record && touched.record ? ' is-invalid' : '')} 
                                         placeholder={locale.texts.TYPING}
                                         rows={4}
                                     />
@@ -157,10 +156,10 @@ class PatientViewModal extends React.Component {
                                         <ListGroup
                                             className='text-none px-0'
                                         >
-                                            {data.record && data.record.length != 0 
+                                            {data.records && data.records.length != 0 
                                                 &&   (
                                                     <div>
-                                                        {data.record.map((item, index) => {
+                                                        {data.records.map((item, index) => {
                                                             return (
                                                                 recordBlockTypeTwo(item, index, locale)
                                                             )
@@ -244,12 +243,12 @@ const recordBlockTypeTwo = (item, index, locale) => {
                     </Primary>
                     &nbsp;
                     <EditedTime>
-                        {moment(item.create_timestamp).locale(locale.abbr).format('lll')}
+                        {moment(item.created_timestamp).locale(locale.abbr).format('lll')}
                     </EditedTime>
                 </div>
             </div>
             <Paragraph>
-                {item.notes}
+                {item.record}
             </Paragraph>
 
         </ListGroup.Item>

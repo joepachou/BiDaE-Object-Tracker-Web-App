@@ -298,7 +298,7 @@ class SearchResult extends React.Component {
         } = this.context
         let objectPackage = {
             userId: auth.user.id,
-            notes: values.notes,
+            record: values.record,
             id: this.state.selectedObjectData.id
         }
         axios.post(dataSrc.addPatientRecord, {
