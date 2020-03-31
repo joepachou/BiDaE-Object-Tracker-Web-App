@@ -292,6 +292,7 @@ const en =  {
     ENTER_THE_PASSWORD:"enter new password",
     PASSWORD_NOT_FIT:"password not fit",
     ALEAST_CHOOSE_ONE_UUID:"aleast choose one uuid",
+    ENTER_THE_RSSI:"Enter the RSSI",
 
     /** placeholder */
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "please enter or scan mac address",
