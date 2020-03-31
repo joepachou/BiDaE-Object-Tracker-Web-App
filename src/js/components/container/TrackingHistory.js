@@ -25,8 +25,11 @@ import moment from 'moment'
 import {
     isBrowser
 } from 'react-device-detect'
-import FormikFormGroup from '../presentational/FormikFormGroup'
-
+import FormikFormGroup from '../presentational/FormikFormGroup' 
+import FadeIn from "react-fade-in";
+import Lottie from "react-lottie";
+import ReactLoading from "react-loading"; 
+import styled from 'styled-components'
 class TrackingHistory extends React.Component{
     static contextType = AppContext
     
@@ -34,6 +37,7 @@ class TrackingHistory extends React.Component{
         columns:[], 
         data:[],
         additionalData: null,
+        done:false,
     }
 
     defaultActiveKey="mac" 
@@ -53,6 +57,9 @@ class TrackingHistory extends React.Component{
         const {
             locale
         } = this.context
+        this.setState({
+            done:true
+        })
             let key = null
             let columns = null;
             let timeValidatedFormat = 'YYYY/MM/DD HH:mm:ss'
@@ -115,6 +122,7 @@ class TrackingHistory extends React.Component{
                     data,
                     columns,
                     additionalData,
+                    done:false
                 })
             })
             .catch(err => {
@@ -135,7 +143,31 @@ class TrackingHistory extends React.Component{
         const {
             additionalData
         } = this.state
-
+ 
+        const LoaderStyle = styled.div`
+            position:absolute;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            top:0;
+            bottom:0;
+            left:0;
+            right:0;
+            background-color:rgb(255,255,255,0.8);
+        `
+        ;
+        const Loader = () => {
+            return ( 
+                <LoaderStyle>
+                    <ReactLoading type={"bars"} color={"black"}  /> 
+               </LoaderStyle>
+            ) 
+        }
+        const aLoader = () => {
+            return ( 
+                    null
+            ) 
+        }
         const timeTypeExample = "ex: YYYY/MM/DD HH:MM:SS"
         const timeValidatedFormat = 'YYYY/MM/DD HH:mm:ss'
 
@@ -345,8 +377,8 @@ class TrackingHistory extends React.Component{
                                 data={this.state.data}
                                 columns={this.state.columns}
                                 className="-highlight mt-4 text-capitalize"
-                                style={{height: '70vh', overflowY: 'scroll'}}
-                                // LoadingComponent={Spinner}
+                                style={{height: '70vh', overflowY: 'scroll'}}  
+                                LoadingComponent={this.state.done ? Loader :aLoader}
                                 {...styleConfig.reactTable}
                                 getTrProps={(state, rowInfo, column, instance) => {
                                     return {
