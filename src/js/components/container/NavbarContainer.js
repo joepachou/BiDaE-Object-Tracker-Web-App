@@ -139,7 +139,10 @@ class NavbarContainer extends React.Component {
                 marginBottom: 10,
             },
             navbarBrand: {
-                color: 'black'
+                color: 'black',
+            },
+            nav: {
+                padding: '.5rem 1.4rem'
             },
             select: {
                 border: 0,
@@ -153,7 +156,7 @@ class NavbarContainer extends React.Component {
                 }),
                 
                 control: () => ({
-                    width: 200,
+                    width: 230,
                 }),
                 
                 singleValue: (provided, state) => ({
@@ -206,7 +209,10 @@ class NavbarContainer extends React.Component {
                 style={style.navbar}
             >
                 <Navbar.Brand className='px-0 mx-0'>  
-                    <Nav.Item className="nav-link nav-brand d-flex align-items-center px-0 " style={style.navbarBrand}>
+                    <Nav.Item 
+                        className="nav-link nav-brand d-flex align-items-center" 
+                        style={style.navbarBrand}
+                    >
                         <Image
                             alt=""
                             src={config.image.logo}
@@ -238,7 +244,7 @@ class NavbarContainer extends React.Component {
                 
                 <Navbar.Toggle aria-controls="responisve-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">  
-                    <Nav className="mr-auto text-capitalize my-auto" >
+                    <Nav className="mr-auto my-auto" >
                         {this.navList.map(nav => {
                             return (
                                 <AccessControl
@@ -254,6 +260,7 @@ class NavbarContainer extends React.Component {
                                             name={nav.alias}
                                             onClick={nav.event}
                                             key={nav.alias}
+                                            style={style.nav}
                                         >
                                             {locale.texts[nav.name.toUpperCase().replace(/ /g, '_')]}
                                         </Link>
@@ -263,7 +270,7 @@ class NavbarContainer extends React.Component {
                         })}
                     </Nav>
 
-                    <Nav className='text-capitalize'>
+                    <Nav>
                         <AccessControl
                             permission={'user:batteryNotice'}
                             renderNoAccess={() => null}
