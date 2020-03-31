@@ -9,6 +9,18 @@ import {
 } from 'formik';
 import dataSrc from '../../dataSrc'
 import LocaleContext from '../../context/LocaleContext';
+
+const style = {
+    modal: {
+        top: '10%',
+        zIndex: 6000,
+        padding: 0,
+    },
+    deviceList: {
+        maxHeight: '20rem',
+        overflow: 'hidden scroll' 
+    },
+}
   
 const DownloadPdfRequestForm = ({
     handleClose,
@@ -17,18 +29,6 @@ const DownloadPdfRequestForm = ({
 }) => {
     
     let locale = React.useContext(LocaleContext)
-
-    const style = {
-        deviceList: {
-            maxHeight: '20rem',
-            overflow: 'hidden scroll' 
-        },
-        downloadPdfRequest: {
-            zIndex: 6000,
-            padding: 0,
-        },
-    }
-
 
     const handleClickButton = e => {
         
@@ -50,14 +50,13 @@ const DownloadPdfRequestForm = ({
     }
 
 
-    
     return (
         <Modal 
             id='downloadPdfRequest' 
             show={show} 
             onHide={handleClose} 
             size="md"
-            style={style.downloadPdfRequest}
+            style={style.modal}
             className='text-capitalize'
         >
             <Modal.Header 
