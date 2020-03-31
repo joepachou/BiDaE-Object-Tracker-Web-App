@@ -302,36 +302,48 @@ const config = {
                     "devices found in", 
                     locale, 
                     area,
-                    data.foundResult.length !== 0
+                    data.searchResult.foundResult.length !== 0
                 )
                 let foundResultList = config.pdfFormat.getBodyItem.getDataContent(
-                    data.foundResult, 
+                    data.searchResult.foundResult, 
                     locale
                 )
                 let notFoundTitle = config.pdfFormat.getBodyItem.getBodyTitle(
                     "devices not found in", 
                     locale, 
                     area,
-                    data.notFoundResult.length !== 0
+                    data.searchResult.notFoundResult.length !== 0
                 )
                 let notFoundResultList = config.pdfFormat.getBodyItem.getDataContent(
-                    data.notFoundResult, 
+                    data.searchResult.notFoundResult, 
                     locale
                 )
-                return foundTitle + foundResultList + notFoundTitle + notFoundResultList
+                let patientFoundTitle  = config.pdfFormat.getBodyItem.getBodyTitle(
+                    "patients found", 
+                    locale, 
+                    area,
+                    data.patients.length !== 0
+                )
+
+                let foundPatientList = config.pdfFormat.getBodyItem.getPatientContent(
+                    data.patients, 
+                    locale
+                )
+
+                return foundTitle + foundResultList + notFoundTitle + notFoundResultList + patientFoundTitle + foundPatientList
             },
 
             searchResult: (data, locale, user, location) => {
                 let area =  locale.texts[config.mapConfig.areaOptions[parseInt(user.areas_id[0])]]
                 let foundTitle = config.pdfFormat.getBodyItem.getBodyTitle(
-                    "devices found in", 
+                    "devices found", 
                     locale, 
                     area, 
                     data.foundResult.length !== 0
                 )
                 let foundResultList = config.pdfFormat.getBodyItem.getDataContent(data.searchResult.foundResult, locale)
                 let notFoundTitle = config.pdfFormat.getBodyItem.getBodyTitle(
-                    "devices not found in", 
+                    "devices not found", 
                     locale, 
                     area,
                     data.notFoundResult.length !== 0
@@ -363,7 +375,6 @@ const config = {
                         <h4 style="
                             text-transform: capitalize;
                             margin-bottom: 5px; 
-                            ;
                             padding-bottom: 5px;
                             border-bottom: 1px solid black;"
                         >
@@ -375,6 +386,21 @@ const config = {
             },
     
             getDataContent: (data, locale) => {
+                return data.map((item, index) => {
+                    return `
+                        <div style="margin-bottom: 10px;" key=${index}>
+                            ${index + 1}. 
+                            &nbsp;
+                            ${item.name}, 
+                            ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}: ${item.last_four_acn.slice(-4)}, 
+                            ${locale.texts.NEAR} ${item.location_description},
+                            ${item.residence_time}
+                        </div>
+                    `
+                }).join(" ")
+            },
+
+            getPatientContent: (data, locale) => {
                 return data.map((item, index) => {
                     return `
                         <div style="margin-bottom: 10px;" key=${index}>

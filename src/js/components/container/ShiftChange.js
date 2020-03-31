@@ -129,11 +129,16 @@ class ShiftChange extends React.Component {
             locale, 
             auth 
         } = this.context   
+
+        let shiftChangeObjectPackage = {
+            searchResult: this.state.searchResult, 
+            patients: this.state.patients
+        }
   
         let pdfPackage = config.getPdfPackage(
             'shiftChange', 
             auth.user, 
-            this.state.searchResult, 
+            shiftChangeObjectPackage, 
             locale,
             authentication,
             this.state.shift
