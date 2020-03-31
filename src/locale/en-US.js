@@ -296,7 +296,8 @@ const en =  {
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "please enter or scan mac address",
     PLEASE_ENTER_OR_SCAN_ASSET_CONTROL_NUMBER: "please enter or scan asset control number",
     TYPE_MAC_OR_NAME: "type mac address or name",
-    TYPE_RECORD_HERE: "Type new record here...",
+    ADD_A_COMMENT: "Add a comment...",
+    TYPING: "typing...",
 
     /* Object Status */
     STATUS: "status",
@@ -365,7 +366,10 @@ const en =  {
     SUBMIT_TIMESTAMP: "submit time",
     USER_NAME: "user name",
     DEVICES_FOUND_IN: "devices found in",
+    DEVICES_FOUND: "devices found",
+    PATIENTS_FOUND: "patients found",
     DEVICES_NOT_FOUND_IN: "devices not found in",
+    DEVICES_NOT_FOUND: "devices not found",
     CONFIRM_BY: "confirm by",
     NEW_STATUS: "new status",
     PHYSICIAN_NAME: "physician name",

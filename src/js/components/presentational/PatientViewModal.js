@@ -14,6 +14,11 @@ import moment from 'moment'
 import { AppContext } from '../../context/AppContext';
 import ScrollArea from 'react-scrollbar'
 import LocaleContext from '../../context/LocaleContext';
+import {
+    EditedTime,
+    Primary,
+    Paragraph 
+} from '../../config/styleComponent'
 
 const style = {
     index: {
@@ -75,9 +80,7 @@ class PatientViewModal extends React.Component {
                 enforceFocus={false}
                 style={style.modal}
             >
-                <Modal.Header 
-                    closeButton 
-                >
+                <Modal.Header>
                     {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
                 </Modal.Header >
                 <Modal.Body>
@@ -107,6 +110,24 @@ class PatientViewModal extends React.Component {
                                         {locale.texts.PATIENT_NUMBER}: {data.asset_control_number} 
                                     </div>
                                 </div>
+                                <hr/>
+                                <div 
+                                    className="mb-2 text-capitalize"
+                                >
+                                    <small 
+                                        className="form-text text-muted"
+                                    >
+                                        {locale.texts.ADD_NEW_RECORD}
+                                    </small>
+                                    <Field 
+                                        component="textarea"
+                                        value={values.notes}
+                                        name="notes"
+                                        className={'form-control' + (errors.notes && touched.notes ? ' is-invalid' : '')} 
+                                        placeholder={locale.texts.TYPING}
+                                        rows={4}
+                                    />
+                                </div>
                                 <div
                                     className="mb-2 cursor-pointer"
                                     onClick={() => {
@@ -121,6 +142,7 @@ class PatientViewModal extends React.Component {
                                         className={`fas ${this.state.display ? 'fa-angle-up' : 'fa-angle-down'}`}
                                     />
                                 </div>
+                                
                                 
                                 <div
                                     style={recordBlock}
@@ -148,24 +170,6 @@ class PatientViewModal extends React.Component {
                                             }
                                         </ListGroup>
                                     </ScrollArea>
-                                </div>
-                                <hr/>
-                                <div 
-                                    className="mb-2 text-capitalize"
-                                >
-                                    <small 
-                                        className="form-text text-muted"
-                                    >
-                                        {locale.texts.ADD_NEW_RECORD}
-                                    </small>
-                                    <Field 
-                                        component="textarea"
-                                        value={values.notes}
-                                        name="notes"
-                                        className={'form-control' + (errors.notes && touched.notes ? ' is-invalid' : '')} 
-                                        placeholder={locale.texts.TYPE_RECORD_HERE}
-                                        rows={4}
-                                    />
                                 </div>
                                 <Modal.Footer>
                                     <Button 
@@ -220,58 +224,34 @@ const recordBlockTypeOne = (item, index, locale) => {
     )
 }
 
+
 const recordBlockTypeTwo = (item, index, locale) => {
 
     return (
         <ListGroup.Item
             key={index}
             style={style.blockOne}
+            className="pl-0 mb-3"
         >
             <div
                 className="d-flex justify-content-start"
             >
-                <div 
-                    style={style.index}
-                    className="d-flex align-items-center"
-                >
-                    &bull;
-                </div>
                 <div
-                    className="font-color-black"
+                    className="font-color-black d-flex justify-content-start"
                 >
-                    {moment(item.create_timestamp).locale(locale.abbr).format('YYYY/MM/DD hh:mm:ss')}
+                    <Primary>
+                        {item.recorded_user}
+                    </Primary>
+                    &nbsp;
+                    <EditedTime>
+                        {moment(item.create_timestamp).locale(locale.abbr).format('lll')}
+                    </EditedTime>
                 </div>
             </div>
-            <div
-                className="d-flex justify-content-start"
-            >
-                <div 
-                    style={style.index}
-                    className="d-flex align-items-center"
-                >
-                </div>
-                <div
-                    className="font-color-black"
-                >
-                    {locale.texts.RECORDED_BY}: {item.recorded_user}
-                </div>
-            </div>
-            <div
-                className="d-flex justify-content-start"
-            >
-                <div 
-                    style={style.index}
-                    className="d-flex align-items-center"
-                >
-                </div>
+            <Paragraph>
+                {item.notes}
+            </Paragraph>
 
-                <div 
-                    key={index} 
-                    className="pb-1"
-                >
-                    {item.notes}
-                </div>
-            </div>
         </ListGroup.Item>
     )
 }
