@@ -21,9 +21,6 @@ import Select from 'react-select';
 import BatteryLevelNotification from "./BatteryLevelNotification"
 import retrieveDataHelper from '../../helper/retrieveDataHelper';
 import siteConfig from '../../../../site_module/siteConfig';
-import {
-    navbarList
-} from '../../config/pages'
 
 class NavbarContainer extends React.Component {
 
