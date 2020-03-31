@@ -346,7 +346,6 @@ class TrackingHistory extends React.Component{
                                 columns={this.state.columns}
                                 className="-highlight mt-4 text-capitalize"
                                 style={{height: '70vh', overflowY: 'scroll'}}
-                                loading={true}
                                 // LoadingComponent={Spinner}
                                 {...styleConfig.reactTable}
                                 getTrProps={(state, rowInfo, column, instance) => {
