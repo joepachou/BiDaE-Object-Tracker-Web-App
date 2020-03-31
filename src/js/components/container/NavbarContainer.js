@@ -1,4 +1,3 @@
-/** React Plugin */
 import React from 'react';
 import { 
     BrowserRouter as Router, 
@@ -52,17 +51,11 @@ class NavbarContainer extends React.Component {
             })
     }
 
-    handleSigninFormSubmit = () => {
-        this.setState({
-            showSignin: false,
-        })
-    }
-
-    handleClose = () => {
+    handleClose = (callback) => {
         this.setState({
             showSignin: false,
             showShiftChange: false
-        })
+        }, callback)
     }
 
     handleClick = (e) => {
@@ -80,12 +73,6 @@ class NavbarContainer extends React.Component {
             })
             break;
         }
-    }
-
-    handleShiftChangeRecordSubmit = () => {
-        this.setState({
-            showShiftChange: false
-        })
     }
 
     navList = [
@@ -341,15 +328,11 @@ class NavbarContainer extends React.Component {
 
                 <SiginForm 
                     show={showSignin}
-                    handleSubmit={this.handleSigninFormSubmit}
                     handleClose={this.handleClose}
-                    signin={auth.signin}
                 />
                 <ShiftChange 
                     show={showShiftChange}
                     handleClose={this.handleClose}
-                    handleSubmit={this.handleShiftChangeRecordSubmit}
-                    userInfo={auth.user}
                 />
             </Navbar>
         );

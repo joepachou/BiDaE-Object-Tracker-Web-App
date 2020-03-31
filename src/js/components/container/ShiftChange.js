@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 import { 
     Modal, 
     Button,
@@ -11,13 +11,9 @@ import { AppContext } from '../../context/AppContext'
 import GeneralConfirmForm from '../presentational/GeneralConfirmForm'
 import retrieveDataHelper from '../../helper/retrieveDataHelper'
 import DownloadPdfRequestForm from './DownloadPdfRequestForm'
-import {
-    getStatus
-} from '../../helper/descriptionGenerator'
 import Select from 'react-select';
 import messageGenerator from '../../helper/messageGenerator'
 import { Formik, Field, Form } from 'formik';
-import FormikFormGroup from '../presentational/FormikFormGroup'
 import {
     getDescription
 } from '../../helper/descriptionGenerator'
@@ -40,7 +36,7 @@ const style = {
         }),
     }
 }
-let selectVal = ''
+
 class ShiftChange extends React.Component {
 
     static contextType = AppContext
@@ -170,10 +166,14 @@ class ShiftChange extends React.Component {
             pdfPackage,
             shift: this.state.shift,
         }).then(res => {
-            // this.props.handleSubmit()
-            let callback = () => messageGenerator.setSuccessMessage(
-                'save shift change success'
-            )
+            let callback = () => {
+                this.props.handleClose(() => {
+                    messageGenerator.setSuccessMessage(
+                        'save shift change success'
+                    )
+                })
+            }
+
             this.setState({
                 fileUrl: pdfPackage.path,
                 showConfirmForm: false,

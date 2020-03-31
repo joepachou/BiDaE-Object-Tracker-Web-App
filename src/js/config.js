@@ -299,7 +299,7 @@ const config = {
             shiftChange: (data, locale, user) => {
                 let area =  locale.texts[config.mapConfig.areaOptions[parseInt(user.areas_id[0])]]
                 let foundTitle = config.pdfFormat.getBodyItem.getBodyTitle(
-                    "devices found in", 
+                    "devices found", 
                     locale, 
                     area,
                     data.searchResult.foundResult.length !== 0
@@ -309,7 +309,7 @@ const config = {
                     locale
                 )
                 let notFoundTitle = config.pdfFormat.getBodyItem.getBodyTitle(
-                    "devices not found in", 
+                    "devices not found", 
                     locale, 
                     area,
                     data.searchResult.notFoundResult.length !== 0

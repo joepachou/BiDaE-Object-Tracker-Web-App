@@ -10,14 +10,12 @@ import config from '../../config';
 import LocaleContext from '../../context/LocaleContext'
 import axios from 'axios';
 import dataSrc from '../../dataSrc'
-import Cookies from 'js-cookie';
 import AuthenticationContext from '../../context/AuthenticationContext';
 import permissionsTable from '../../roles'
 
 const SiginForm = ({
     show,
     handleClose,
-    handleSubmit
 }) => {
 
     let locale = React.useContext(LocaleContext)
@@ -87,7 +85,7 @@ const SiginForm = ({
                                 }
                                 auth.signin(userInfo)
                                 locale.reSetState(userInfo.locale)
-                                handleSubmit()
+                                handleClose()
                             }
                         }).catch(error => {
                             console.log(error)
