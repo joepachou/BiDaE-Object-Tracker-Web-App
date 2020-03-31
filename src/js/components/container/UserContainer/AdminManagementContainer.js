@@ -10,13 +10,11 @@ import {
     getRoleNameList,
     deleteUser,
     getMainSecondArea,
-    setUser,
-    signup
 } from "../../../dataSrc";
 import { userInfoTableColumn } from '../../../tables'
-import EditUserForm from '../UserContainer/EditUserForm';
+import EditUserForm from './EditUserForm';
 import { AppContext } from '../../../context/AppContext';
-import DeleteUserForm from '../UserContainer/DeleteUserForm'
+import DeleteUserForm from './DeleteUserForm'
 import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm';
 import config from '../../../config';
 import retrieveDataHelper from '../../../helper/retrieveDataHelper';

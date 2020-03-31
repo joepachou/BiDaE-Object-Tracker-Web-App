@@ -5,7 +5,7 @@ export const EditedTime = styled.div`
     display: flex;
     align-items: flex-end;
     padding-left: 5px;
-    color: #5c5c5c;
+    color: #999;
 `;
 
 export const Primary = styled.div`

@@ -1,14 +1,11 @@
 import React from 'react';
 import { AppContext } from '../../../context/AppContext';
-import RolePermissionManagement from '../UserContainer/RolePermissionManagement'
-import AdminManagementContainer from './AdminManagementContainer'
-import TransferredLocationManagement from '../TransferredLocationManagement'
 import AccessControl from '../../presentational/AccessControl'
-import LBeaconTable from '../LBeaconTable';
-import GatewayTable from '../GatewayTable'
 import messageGenerator from '../../../helper/messageGenerator'
 import { toast } from 'react-toastify';
-
+import {
+    systemSettingPageList
+} from '../../../config/pages'
 import { 
     Tab, 
     ListGroup,
@@ -50,34 +47,7 @@ class SystemSetting extends React.Component{
         }
     }
 
-    tabList = [
-        {
-            name: 'user manager',
-            permission: "route:bigScreen",
-            component: (props) => <AdminManagementContainer {...props}/>,
-            platform: ['browser'],
-        },
-        {
-            name: "transferred location management",
-            component: (props) => <TransferredLocationManagement {...props}/>,
-        },
-        {
-            name: "Role Permission Management",
-            permission: "rolePermissionManagement",
-            component: (props) => <RolePermissionManagement {...props}/>,
-            platform: ['browser', 'tablet']
-        },
-        {
-            name: "lbeacon",
-            component: (props) => <LBeaconTable {...props}/>,
-            platform: ['browser', 'tablet']
-        },
-        {
-            name: "gateway",
-            component: (props) => <GatewayTable {...props}/>,
-            platform: ['browser', 'tablet']
-        }
-    ]
+    tabList = systemSettingPageList
 
     defaultActiveKey = "user_manager"
 

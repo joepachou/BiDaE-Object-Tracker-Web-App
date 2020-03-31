@@ -9,7 +9,8 @@ import {
     Container, 
     Row,
     Col,
-    Nav
+    Nav,
+    Spinner
 } from 'react-bootstrap';
 import config from '../../config' 
 import styleConfig from '../../styleConfig'
@@ -345,7 +346,8 @@ class TrackingHistory extends React.Component{
                                 columns={this.state.columns}
                                 className="-highlight mt-4 text-capitalize"
                                 style={{height: '70vh', overflowY: 'scroll'}}
-                                // loading={true}
+                                loading={true}
+                                // LoadingComponent={Spinner}
                                 {...styleConfig.reactTable}
                                 getTrProps={(state, rowInfo, column, instance) => {
                                     return {

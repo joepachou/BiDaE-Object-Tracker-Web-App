@@ -1,17 +1,17 @@
 import React from 'react';
-import { AppContext } from '../../../context/AppContext';
+import { AppContext } from '../../context/AppContext';
 import { 
     ButtonToolbar,
     Button
 } from "react-bootstrap"
 import axios from "axios"
-import dataSrc from "../../../dataSrc"
-import config from "../../../config"
+import dataSrc from "../../dataSrc"
+import config from "../../config"
 import ReactTable from 'react-table';
-import styleConfig from '../../../styleConfig';
-import EditMonitorConfigForm from '../../presentational/EditMonitorConfigForm';
-import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm'
-import { monitorConfigColumn } from '../../../tables'
+import styleConfig from '../../styleConfig';
+import EditMonitorConfigForm from '../presentational/EditMonitorConfigForm';
+import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
+import { monitorConfigColumn } from '../../tables'
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
 const SelectTable = selecTableHOC(ReactTable);
 class MonitorSettingBlock extends React.Component{

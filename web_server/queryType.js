@@ -33,7 +33,7 @@ function getTrackingData (areas_id) {
 				FROM user_table
 				WHERE user_table.id = object_table.reserved_user_id
 			) as reserved_user_name,
-			COALESCE(patient_record.record, ARRAY[]::JSON[]) as record			
+			COALESCE(patient_record.record, ARRAY[]::JSON[]) as records			
 		
 		FROM object_summary_table
 
@@ -50,8 +50,8 @@ function getTrackingData (areas_id) {
 			SELECT 
 				object_id,
 				ARRAY_AGG(JSON_BUILD_OBJECT(
-					'create_timestamp', create_timestamp,
-					'notes', notes,
+					'created_timestamp', created_timestamp,
+					'record', record,
 					'recorded_user', (
 						SELECT name
 						FROM user_table
@@ -61,7 +61,7 @@ function getTrackingData (areas_id) {
 			FROM (
 				SELECT *
 				FROM patient_record
-				ORDER BY create_timestamp DESC
+				ORDER BY created_timestamp DESC
 			) as patient_record_table
 			GROUP BY object_id					
 		) as patient_record
@@ -2039,7 +2039,6 @@ function modifyPermission(type, data){
 function modifyRolesPermission(type, data){
 	// type: 'remove permission', 'add permission'
 	// data.roleId, data.PermissionId
-	console.log('data',  data)
 	if(type == 'add permission'){
         const query = `INSERT INTO roles_permission(role_id, permission_id) VALUES ('${data.roleId}', '${data.permissionId}')`
         return query
@@ -2056,21 +2055,21 @@ const addPatientRecord = objectPackage => {
 		INSERT INTO patient_record (
 			object_id,
 			editing_user_id, 
-			notes,
-			create_timestamp
+			record,
+			created_timestamp
 		) 
 		VALUES (
 			$1,
 			$2,
 			$3,
-			now()
+			NOW()
 		)
 		
 	`
 	let values = [
 		objectPackage.id,
 		objectPackage.userId,
-		objectPackage.notes
+		objectPackage.record
 	]	
 
 	let query = {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppContext } from '../../../context/AppContext';
+import { AppContext } from '../../context/AppContext';
 import { 
     Row, 
     Col, 
@@ -7,15 +7,14 @@ import {
     Button
 } from "react-bootstrap"
 import axios from "axios"
-import dataSrc from "../../../dataSrc"
-import config from "../../../config"
+import dataSrc from "../../dataSrc"
+import config from "../../config"
 import ReactTable from 'react-table'
-import { geofenceConfigColumn } from '../../../tables'
-import EditGeofenceConfig from '../../presentational/EditGeofenceConfig'
-import retrieveDataHelper from '../../../helper/retrieveDataHelper'
-import styleConfig from '../../../styleConfig';
-import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm'
-import { Select } from 'semantic-ui-react';
+import { geofenceConfigColumn } from '../../tables'
+import EditGeofenceConfig from '../presentational/EditGeofenceConfig'
+import retrieveDataHelper from '../../helper/retrieveDataHelper'
+import styleConfig from '../../styleConfig';
+import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
 
 const SelectTable = selecTableHOC(ReactTable);

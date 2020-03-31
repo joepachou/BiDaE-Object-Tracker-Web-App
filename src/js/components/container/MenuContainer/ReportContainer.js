@@ -4,9 +4,8 @@ import {
     Tab,
     ListGroup
 } from 'react-bootstrap';
-import ShiftChangeRecord from '../UserContainer/ShiftChangeRecord'
-import ObjectEditedRecord from '../UserContainer/ObjectEditedRecord'
 import { AppContext } from '../../../context/AppContext';
+import { reportContainerPageList } from '../../../config/pages'
 
 const style = {
 
@@ -25,16 +24,7 @@ class ReportContainer extends React.Component{
 
     static contextType = AppContext
 
-    tabList = [
-        {
-            name: 'object edited record',
-            component: (props) => <ObjectEditedRecord {...props} />
-        },
-        {
-            name: 'Shift Change Record',
-            component: (props) => <ShiftChangeRecord {...props}/>,
-        },
-    ]
+    tabList = reportContainerPageList
 
     defaultActiveKey = "object_edited_record"
 

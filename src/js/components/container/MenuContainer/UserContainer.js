@@ -5,9 +5,6 @@ import {
     Container
 } from 'react-bootstrap';
 import AccessControl from '../../presentational/AccessControl'
-import MyDeviceManager from '../UserContainer/MyDeviceManager';
-import MyPatientManager from '../UserContainer/MyPatientManager';
-import UserProfile from "../UserContainer/UserProfile";
 import { AppContext } from '../../../context/AppContext';
 import { 
     disableBodyScroll,
@@ -16,6 +13,9 @@ import {
 import {
     isBrowser
 } from 'react-device-detect'
+import {
+    userContainerPageList
+} from '../../../config/pages'
 
 class UserSettingContainer extends React.Component{
 
@@ -33,26 +33,7 @@ class UserSettingContainer extends React.Component{
         disableBodyScroll(targetElement);
     }
 
-    pageList = [
-        {
-            name: 'User Profile',
-            path: 'userProfile',
-            href: '#UserProfile',
-            component: <UserProfile />
-        },
-        {
-            name: 'Devices Management',
-            path: 'devicesManagement',
-            href: '#DevicesManagement',
-            component: <MyDeviceManager />
-        },
-        {
-            name: 'Patient Management',
-            path: 'patientManagement',
-            href: '#PatientManagement',
-            component: <MyPatientManager />
-        },
-    ]
+    pageList = userContainerPageList
     
     render(){
         const  { locale } = this.context

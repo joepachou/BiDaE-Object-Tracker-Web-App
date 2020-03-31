@@ -1,11 +1,11 @@
 import React from 'react';
-import { Tabs, Tab, Tables} from 'react-bootstrap';
-import { AppContext } from '../../../context/AppContext';
-import ImageUploader from 'react-images-upload';
-import config from '../../../config';
+import { 
+    Tabs, 
+    Tab, 
+} from 'react-bootstrap';
+import { AppContext } from '../../context/AppContext';
 import axios from 'axios';
-import Collapsible from './Collapsible';
-import dataSrc from "../../../dataSrc"
+import dataSrc from "../../dataSrc"
 import Select from 'react-select';
 
 // import Checkbox from '../../presentational/Checkbox'
@@ -15,15 +15,13 @@ import {
     Form, 
 } from 'formik';
 import { 
-    Modal, 
     Button, 
-    ButtonToolbar ,
     Form as BootstrapForm
 } from 'react-bootstrap'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import FormikFormGroup from '../../presentational/FormikFormGroup'
+
 function Checkbox(props) {
   return (
     <Field name={props.name}>

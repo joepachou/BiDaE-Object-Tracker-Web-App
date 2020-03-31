@@ -1,14 +1,12 @@
 import React from 'react';
 import { AppContext } from '../../../context/AppContext'
 import AccessControl from '../../presentational/AccessControl'
-import config from '../../../config';
 import { 
     Tab, 
     ListGroup,
     Container
 } from 'react-bootstrap';
-import TrackingHistory from '../TrackingHistory';
-import TrackingTable from '../TrackingTable'
+import { trackingHistoryContainerPageList } from '../../../config/pages'
 
 const style = {
 
@@ -27,20 +25,7 @@ class TrackingHistoryContainer extends React.Component{
 
     static contextType = AppContext
 
-    tabList = [
-        {
-            name: 'real time tracking record',
-            permission: "route:trackingHistory",
-            component: (props) => <TrackingTable {...props}/>,
-            platform: ['browser'],
-        },
-        {
-            name: 'historical tracking record',
-            permission: "route:trackingHistory",
-            component: (props) => <TrackingHistory {...props}/>,
-            platform: ['browser'],
-        },
-    ]
+    tabList = trackingHistoryContainerPageList
 
     defaultActiveKey = "real_time_tracking_record"
 

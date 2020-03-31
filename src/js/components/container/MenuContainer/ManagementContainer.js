@@ -1,7 +1,7 @@
 import React from 'react';
 import { AppContext } from '../../../context/AppContext';
 import ObjectManagementContainer from './ObjectManagementContainer';
-import AdminManagementContainer from './AdminManagementContainer'
+import AdminManagementContainer from '../UserContainer/AdminManagementContainer'
 import { 
     Tab, 
     ListGroup,

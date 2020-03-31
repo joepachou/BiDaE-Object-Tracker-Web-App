@@ -566,7 +566,6 @@ class ObjectManagementContainer extends React.Component{
         }
 
         let typeSelection = filterSelection.typeList ? Object.values(filterSelection.typeList) : null;
-    
         return (     
             <Container 
                 fluid 
@@ -578,7 +577,6 @@ class ObjectManagementContainer extends React.Component{
                     onSelect={tabIndex => {
                         this.setState({ tabIndex })
                     }}
-                    direction="rtl"
                 >
                     <TabList>
                        

@@ -1,7 +1,5 @@
 import React from 'react';
 import { AppContext } from '../../../context/AppContext';
-import MonitorSettingBlock from '../UserContainer/MonitorSettingBlock';
-import GeoFenceSettingBlock from '../UserContainer/GeoFenceSettingBlock'
 import config from '../../../config';
 import retrieveDataHelper from '../../../helper/retrieveDataHelper';
 import { 
@@ -9,6 +7,7 @@ import {
     ListGroup,
     Container
 } from 'react-bootstrap';
+import { monitorSettingPageList } from '../../../config/pages'
 
 const style = {
 
@@ -32,24 +31,7 @@ class MonitorSettingContainer extends React.Component{
         nowIndex:0,
     }
 
-    tabList = [
-        {
-            name: config.monitorSettingType.MOVEMENT_MONITOR,
-            component: (props) => <MonitorSettingBlock {...props}/>
-        },
-        {
-            name: config.monitorSettingType.LONG_STAY_IN_DANGER_MONITOR,
-            component: (props) => <MonitorSettingBlock {...props}/>
-        },
-        {
-            name: config.monitorSettingType.NOT_STAY_ROOM_MONITOR,
-            component: (props) => <MonitorSettingBlock {...props}/>
-        },
-        {
-            name: config.monitorSettingType.GEOFENCE_MONITOR,
-            component: (props) => <GeoFenceSettingBlock {...props}/>
-        },
-    ]
+    tabList = monitorSettingPageList
 
     defaultActiveKey = "movement_monitor"
 
