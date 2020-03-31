@@ -113,17 +113,17 @@ const EditGeofenceConfig = ({
                         Yup.object().shape({ 
                             name: Yup.string().required(locale.texts.NAME_IS_REQUIRED),   
                             p_rssi: Yup.string()
-                            .required("must be negative number")
+                            .required(locale.texts.ENTER_THE_RSSI)
                             .test(
                                 'p_rssi', 
-                                "must be negative number",
+                                locale.texts.MUST_BE_NEGATIVE_NUMBER,
                                 value => { if (value < 0) return true   }
                             ),
                             f_rssi: Yup.string()
-                            .required("must be negative number")
+                            .required(locale.texts.ENTER_THE_RSSI)
                             .test(
                                 'f_rssi',
-                                "must be negative number",
+                                locale.texts.MUST_BE_NEGATIVE_NUMBER,
                                 value => { if (value < 0) return true   }
                             ) ,  
                             start_time:  Yup.string().required(locale.texts.NAME_IS_REQUIRED),   

@@ -82,6 +82,7 @@ class AdminManagementContainer extends React.Component{
                 showDeleteConfirmation:false,
                 deleteUserName:'',
                 selectedUser: null,
+
             })
         })
     }
@@ -142,6 +143,23 @@ class AdminManagementContainer extends React.Component{
             this.getUserList()
         }.bind(this),500)
         
+        // values.id = selectedUser ? selectedUser.id : null
+
+        // auth[api](values)
+        //     .then(res => {
+        //         this.getUserList()
+        //         this.setState({
+        //             showModifyUserInfo: false,
+        //             showAddUserForm: false,
+        //             showDeleteUserForm:false,
+        //             showDeleteConfirmation:false,
+        //             deleteUserName:'',
+        //             selectedUser: null,
+        //         })
+        //     })
+        //     .catch(err => {
+        //         console.log(`${api} failed ${err}`)
+        //     })
     }
 
     handleDeleteUserSubmit = (e) => {

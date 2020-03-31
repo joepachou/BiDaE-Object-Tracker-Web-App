@@ -293,6 +293,7 @@ const tw = {
     ENTER_THE_PASSWORD:"請輸入新密碼",
     PASSWORD_NOT_FIT:"密碼需要相符",
     ALEAST_CHOOSE_ONE_UUID:"至少選擇一個UUID",
+    ENTER_THE_RSSI:"請填入RSSI",
 
     /** placeholder */
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "請輸入或掃描mac address",
