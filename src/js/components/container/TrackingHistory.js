@@ -59,7 +59,8 @@ class TrackingHistory extends React.Component{
             locale
         } = this.context
         this.setState({
-            done:true
+            done:true ,
+            data : [],
         })
             let key = null
             let columns = null;
@@ -129,9 +130,9 @@ class TrackingHistory extends React.Component{
             .catch(err => {
                 this.setState({
                     errorTitle:'No data Founded',
-                    done:false
+                    done:false 
                 })
-                console.log(`get location history failed ${err}`)
+                // console.log(`get location history failed ${err}`)
             })
     }
  
@@ -377,7 +378,6 @@ class TrackingHistory extends React.Component{
                                     }
                                 </Row>
                             }
-                            {console.log(this.state.errorTitle)}
                             <ReactTable
                                 keyField='id'
                                 data={this.state.data}
