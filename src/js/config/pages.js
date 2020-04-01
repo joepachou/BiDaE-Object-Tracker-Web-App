@@ -151,7 +151,7 @@ export const trackingHistoryContainerPageList = [
         name: 'historical tracking record',
         permission: "route:trackingHistory",
         component: (props) => <TrackingHistory {...props}/>,
-        platform: ['browser'],
+        platform: ['browser', 'mobile'],
     },
 ]
 

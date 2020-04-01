@@ -272,6 +272,12 @@ class AdminManagementContainer extends React.Component{
                     className="-highlight text-none"
                     style={{height:'75vh'}}
                     getTrProps={this.onRowClick}
+                    // getTrGroupProps={(state, rowInfo, column, instance) => { 
+                    //     return { 
+                    //         onMouseEnter: (e, handleOriginal) =>{
+                    //             console.log(123)
+                    //         }}
+                    // }}
                 />
 
                 <EditUserForm
