@@ -33,13 +33,15 @@ export const navbarNavList = [
         name: "object management",
         alias: "objectManagement",
         path: "/page/objectManagement",
-        permission: "route:objectManagement"
+        permission: "route:objectManagement",
+        platform: ['browser', 'tablet', 'mobile'],
     },
     {
         name: "tracking history",
         alias: "trackinghistory",
         path: "/page/trackingHistory",
-        permission: "route:trackingHistory"
+        permission: "route:trackingHistory",
+        platform: ['browser', 'tablet', 'mobile'],
     },
     {
         name: "big screen",
@@ -53,20 +55,21 @@ export const navbarNavList = [
         alias: "monitor",
         path: "/page/monitor",
         permission: "route:monitor",
-        platform: ['browser']
+        platform: ['browser', 'tablet']
     },
     {
         name: "report",
         alias: "report",
         path: "/page/report",
         permission: "route:report",
-        platform: ['browser', 'tablet']
+        platform: ['browser', 'tablet', 'mobile'],
     },
     {
         name: "system setting",
         alias: "systemSetting",
         path: "/page/systemSetting",
-        permission: "route:systemSetting"
+        permission: "route:systemSetting",
+        platform: ['browser', 'tablet', 'mobile'],
     },
 ]
 
@@ -145,23 +148,25 @@ export const trackingHistoryContainerPageList = [
         name: 'real time tracking record',
         permission: "route:trackingHistory",
         component: (props) => <TrackingTable {...props}/>,
-        platform: ['browser', 'mobile'],
+        platform: ['browser', 'tablet', 'mobile'],
     },
     {
         name: 'historical tracking record',
         permission: "route:trackingHistory",
         component: (props) => <TrackingHistory {...props}/>,
-        platform: ['browser', 'mobile'],
+        platform: ['browser', 'tablet'],
     },
 ]
 
 export const reportContainerPageList = [
     {
         name: 'object edited record',
-        component: (props) => <ObjectEditedRecord {...props} />
+        component: (props) => <ObjectEditedRecord {...props} />,
+        platform: ['browser', 'tablet', 'mobile'],
     },
     {
         name: 'Shift Change Record',
         component: (props) => <ShiftChangeRecord {...props}/>,
+        platform: ['browser', 'tablet', 'mobile'],
     },
 ]
