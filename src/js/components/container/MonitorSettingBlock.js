@@ -114,7 +114,7 @@ class MonitorSettingBlock extends React.Component{
         } = this.state 
         configPackage["type"] = config.monitorSettingUrlMap[this.props.type]
         // configPackage["id"] = selectedData ? selectedData.id : null;
-        // configPackage["id"] = this.state.selection  
+        configPackage["id"] = this.state.selection   
         axios.post(dataSrc[path], {
             monitorConfigPackage: configPackage
         })
@@ -142,9 +142,7 @@ class MonitorSettingBlock extends React.Component{
         this.setState({
             show: false,
             showDeleteConfirmation: false,
-            selectedData: null,
-            selection: '',
-            selectAll:false
+            selectedData: null, 
         })
     }
 

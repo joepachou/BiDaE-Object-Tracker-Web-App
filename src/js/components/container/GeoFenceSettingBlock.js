@@ -171,9 +171,7 @@ class GeoFenceSettingBlock extends React.Component{
         this.setState({
             show: false,
             showDeleteConfirmation: false,
-            selectedData: null ,
-            selection: '',
-            selectAll:false
+            selectedData: null , 
         })
         lock=false 
     }
