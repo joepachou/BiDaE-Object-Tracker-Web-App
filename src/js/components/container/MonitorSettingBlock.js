@@ -93,23 +93,10 @@ class MonitorSettingBlock extends React.Component{
                     id: item.area_id
                 }
             }) 
-            let areaOptions = auth.user.areas_id
-                .filter(id => {
-                    return Object.keys(config.mapConfig.areaOptions).includes(id) 
-                        && !res.data.map(item => item.area_id).includes(id)
-                })
-                .reduce((options, id) => {
-                    options.push({
-                        value: config.mapConfig.areaOptions[id],
-                        label: locale.texts[config.mapConfig.areaOptions[id]],
-                        id,
-                    })
-                    return options
-                }, []) 
+
             this.setState({
                 data: res.data,
                 columns,
-                areaOptions
             })
             
 
@@ -276,11 +263,21 @@ class MonitorSettingBlock extends React.Component{
         } = this.props
 
         let {
-            areaOptions,
             isEdited
         } = this.state
+
+        let areaOptions = Object.values(config.mapConfig.areaModules)
+            .map((area, index) => {
+                return {
+                    value: area.name,
+                    label: locale.texts[area.name],
+                    id: area.id
+                }
+            }) 
+
  
         let title = `edit ${type}`.toUpperCase().replace(/ /g, '_')
+
         return ( 
             <div>  
                 <ButtonToolbar>
@@ -289,7 +286,6 @@ class MonitorSettingBlock extends React.Component{
                         className='mr-2 mb-1'
                         name="add rule"
                         onClick={this.handleClickButton}
-                        // disabled={areaOptions.length == 0}
                     >
                         {locale.texts.ADD_RULE}
                     </Button>
@@ -331,7 +327,7 @@ class MonitorSettingBlock extends React.Component{
                     title={title}
                     type={config.monitorSettingUrlMap[this.props.type]} 
                     handleSubmit={this.handleSubmit}
-                    areaOptions={this.state.areaOptions}
+                    areaOptions={areaOptions}
                     isEdited={isEdited}
                 />
                 <DeleteConfirmationForm 
