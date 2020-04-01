@@ -44,7 +44,7 @@ class ReportContainer extends React.Component{
     componentDidMount = () => {
 
         /** set the scrollability in body disabled */
-        if (isMobileOnly) {
+        if (isMobileOnly || isTablet) {
             let targetElement = document.querySelector('body')
             enableBodyScroll(targetElement);
         }
