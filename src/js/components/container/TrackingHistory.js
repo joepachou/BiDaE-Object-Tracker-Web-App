@@ -377,7 +377,8 @@ class TrackingHistory extends React.Component{
                                 data={this.state.data}
                                 columns={this.state.columns}
                                 className="-highlight mt-4 text-capitalize"
-                                style={{height: '70vh', overflowY: 'scroll'}}  
+                                style={{height: '70vh', overflowY: 'scroll'}} 
+                                noDataText={this.state.done ? '' :'No rows found'} 
                                 LoadingComponent={this.state.done ? Loader :aLoader}
                                 {...styleConfig.reactTable}
                                 getTrProps={(state, rowInfo, column, instance) => {
