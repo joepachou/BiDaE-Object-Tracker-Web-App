@@ -13,6 +13,7 @@ html,body {
     color: rgb(92, 92, 92);
     letter-spacing: 1px;
     height: '100vh';   
+    overflow-x: hidden;
 }
 
 /* html element */
