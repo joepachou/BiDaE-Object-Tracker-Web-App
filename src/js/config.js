@@ -4,7 +4,7 @@ import siteConfig from '../../site_module/siteConfig'
 
 const config = {
 
-    version: 1896,
+    version: 1897,
     
     objectStatus: {
         PERIMETER: "perimeter",
@@ -907,6 +907,8 @@ const config = {
                 res[siteConfig.areaModules[item].id] = item
                 return res
             }, {}),
+
+        areaModules: siteConfig.areaModules,
 
         /* For test. To start object tracking*/
         startInteval: true,

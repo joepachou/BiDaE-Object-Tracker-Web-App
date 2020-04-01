@@ -1,7 +1,5 @@
 import React from 'react';
 import { AppContext } from '../../../context/AppContext';
-import config from '../../../config';
-import retrieveDataHelper from '../../../helper/retrieveDataHelper';
 import { 
     Tab, 
     ListGroup,
@@ -27,29 +25,12 @@ class MonitorSettingContainer extends React.Component{
     static contextType = AppContext
 
     state = {
-        areaTable: [],
         nowIndex:0,
     }
 
     tabList = monitorSettingPageList
 
     defaultActiveKey = "movement_monitor"
-
-    componentDidMount = () => {
-        this.getAreaTable()
-    }
-
-    getAreaTable = () => {
-        retrieveDataHelper.getAreaTable()
-            .then(res => {
-                this.setState({
-                    areaTable: res.data.rows
-                })
-            })
-            .catch(err => {
-                console.log(`get area table failed ${err}`)
-            })
-    }
 
     render() {
         let {
@@ -99,7 +80,6 @@ class MonitorSettingContainer extends React.Component{
                             {this.tabList.map((tab, index) => {
                                 let props = {
                                     type: tab.name,
-                                    areaTable: this.state.areaTable,
                                     nowIndex : this.state.nowIndex
                                 }
                                 return (
