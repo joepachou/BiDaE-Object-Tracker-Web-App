@@ -4,16 +4,16 @@ import {
 } from 'react-bootstrap'
 import config from '../../config'
 
-class About extends React.Component {
+const About = () => {
 
-
-    render = () => {
-        return (
-            <Container fluid className="mt-5">
-                Buildv1.0 {config.version}
-            </Container>
-        )
-    }
+    return (
+        <Container fluid className="mt-5">
+            Build 
+            &nbsp;
+            {config.version}
+        </Container>
+    )
+    
 }
 
 export default About
