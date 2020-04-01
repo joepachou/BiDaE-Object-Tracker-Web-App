@@ -126,6 +126,12 @@ const gatewayTableColumn = [
 
 const trackingTableColumn = [
     {
+        Header: "POUND_SIGN",
+        accessor: "_id",
+        style: style.column,
+        width: 60,
+    },
+    {
         Header: "Found",
         accessor: "found",
         style: style.column,

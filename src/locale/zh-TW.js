@@ -418,7 +418,7 @@ const tw = {
     FROM: "",
     MINUTES: "分鐘",
     IS_RESERVED_FOR:"預約者：",
-   
+    POUND_SIGN: "#",
 
     DEVICE_FOUND: function (length){
         return "發現"+length.toString()+"個儀器"

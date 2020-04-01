@@ -414,6 +414,7 @@ const en =  {
     FROM: "from",
     MINUTES: "minutes",
     IS_RESERVED_FOR:"is reserved for",
+    POUND_SIGN: "#",
 
     // BEING_HERE: "being here",
 
