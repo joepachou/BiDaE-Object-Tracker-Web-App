@@ -1,9 +1,7 @@
 import React from 'react';
 import { 
     BrowserRouter as Router, 
-    Route, 
     Link, 
-    NavLink 
 } from "react-router-dom";
 import { LinkContainer } from 'react-router-bootstrap';
 import { 
@@ -21,6 +19,7 @@ import Select from 'react-select';
 import BatteryLevelNotification from "./BatteryLevelNotification"
 import retrieveDataHelper from '../../helper/retrieveDataHelper';
 import siteConfig from '../../../../site_module/siteConfig';
+import { navbarNavList } from '../../config/pages'
 
 class NavbarContainer extends React.Component {
 
@@ -29,24 +28,9 @@ class NavbarContainer extends React.Component {
     state = {
         showSignin: false,
         showShiftChange: false,
-        areaTable: [],
     }
 
-    componentDidMount = () => {
-        this.getAreaTable()
-    }
-
-    getAreaTable = () => {
-        retrieveDataHelper.getAreaTable()
-            .then(res => {
-                this.setState({
-                    areaTable: res.data.rows
-                })
-            })
-            .catch(err => {
-                console.log(`get area table failed ${err}`)
-            })
-    }
+    navList = navbarNavList
 
     handleClose = (callback) => {
         this.setState({
@@ -71,62 +55,6 @@ class NavbarContainer extends React.Component {
             break;
         }
     }
-
-    navList = [
-        {
-            name: "home",
-            alias: "home",
-            path: "/",
-        },
-        {
-            name: "shift change",
-            alias: "shiftChange",
-            path: "/",
-            permission: "user:shiftChange",
-            platform: ['browser', 'tablet'],
-            event: this.handleClick
-        },
-        {
-            name: "object management",
-            alias: "objectManagement",
-            path: "/page/objectManagement",
-            permission: "route:objectManagement"
-        },
-        {
-            name: "tracking history",
-            alias: "trackinghistory",
-            path: "/page/trackingHistory",
-            permission: "route:trackingHistory"
-        },
-        {
-            name: "big screen",
-            alias: "bigScreen",
-            path: "/page/bigScreen",
-            permission: "route:bigScreen",
-            platform: ['browser']
-        },
-        {
-            name: "monitor setting",
-            alias: "monitor",
-            path: "/page/monitor",
-            permission: "route:monitor",
-            platform: ['browser']
-        },
-        {
-            name: "report",
-            alias: "report",
-            path: "/page/report",
-            permission: "route:report",
-            platform: ['browser', 'tablet']
-        },
-        {
-            name: "system setting",
-            alias: "systemSetting",
-            path: "/page/systemSetting",
-            permission: "route:systemSetting"
-        },
-
-    ]
 
     render= () => {
         const style = {
@@ -153,7 +81,7 @@ class NavbarContainer extends React.Component {
                 }),
                 
                 control: () => ({
-                    width: 230,
+                    width: 200,
                 }),
                 
                 singleValue: (provided, state) => ({
@@ -226,7 +154,7 @@ class NavbarContainer extends React.Component {
                                 let [{areaId}, dispatch] = stateReducer
                                 dispatch({
                                     type: 'setArea',
-                                    value: siteConfig.areaModules[value.value].id
+                                    value: config.mapConfig.areaModules[value.value].id
                                 })
                             }}
                             styles={style.customStyles}
@@ -255,7 +183,7 @@ class NavbarContainer extends React.Component {
                                             to={nav.path} 
                                             className="nav-link nav-route"
                                             name={nav.alias}
-                                            onClick={nav.event}
+                                            onClick={nav.hasEvent && this.handleClick}
                                             key={nav.alias}
                                             style={style.nav}
                                         >

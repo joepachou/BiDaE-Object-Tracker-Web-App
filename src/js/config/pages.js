@@ -15,7 +15,7 @@ import ObjectEditedRecord from '../components/container/UserContainer/ObjectEdit
 import ShiftChangeRecord from '../components/container/UserContainer/ShiftChangeRecord'
 import config from '../config'
 
-export const navbarList = [
+export const navbarNavList = [
     {
         name: "home",
         alias: "home",
@@ -27,6 +27,7 @@ export const navbarList = [
         path: "/",
         permission: "user:shiftChange",
         platform: ['browser', 'tablet'],
+        hasEvent: true
     },
     {
         name: "object management",
@@ -39,7 +40,6 @@ export const navbarList = [
         alias: "trackinghistory",
         path: "/page/trackingHistory",
         permission: "route:trackingHistory"
-
     },
     {
         name: "big screen",
@@ -62,14 +62,12 @@ export const navbarList = [
         permission: "route:report",
         platform: ['browser', 'tablet']
     },
-
     {
         name: "system setting",
         alias: "systemSetting",
         path: "/page/systemSetting",
         permission: "route:systemSetting"
     },
-
 ]
 
 export const userContainerPageList = [
@@ -98,27 +96,28 @@ export const systemSettingPageList = [
         name: 'user manager',
         permission: "route:bigScreen",
         component: (props) => <AdminManagementContainer {...props}/>,
-        platform: ['browser'],
+        platform: ['browser', 'mobile'],
     },
     {
         name: "transferred location management",
         component: (props) => <TransferredLocationManagement {...props}/>,
+        platform: ['browser'],
     },
     {
         name: "Role Permission Management",
         permission: "rolePermissionManagement",
         component: (props) => <RolePermissionManagement {...props}/>,
-        platform: ['browser', 'tablet']
+        platform: ['browser']
     },
     {
         name: "lbeacon",
         component: (props) => <LBeaconTable {...props}/>,
-        platform: ['browser', 'tablet']
+        platform: ['browser', 'tablet', 'mobile']
     },
     {
         name: "gateway",
         component: (props) => <GatewayTable {...props}/>,
-        platform: ['browser', 'tablet']
+        platform: ['browser', 'tablet', 'mobile']
     }
 ]
 
@@ -146,7 +145,7 @@ export const trackingHistoryContainerPageList = [
         name: 'real time tracking record',
         permission: "route:trackingHistory",
         component: (props) => <TrackingTable {...props}/>,
-        platform: ['browser'],
+        platform: ['browser', 'mobile'],
     },
     {
         name: 'historical tracking record',
