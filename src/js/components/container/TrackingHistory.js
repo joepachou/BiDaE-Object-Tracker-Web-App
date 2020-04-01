@@ -38,6 +38,7 @@ class TrackingHistory extends React.Component{
         data:[],
         additionalData: null,
         done:false,
+        errorTitle:'Waiting for search...',
     }
 
     defaultActiveKey="mac" 
@@ -126,6 +127,10 @@ class TrackingHistory extends React.Component{
                 })
             })
             .catch(err => {
+                this.setState({
+                    errorTitle:'No data Founded',
+                    done:false
+                })
                 console.log(`get location history failed ${err}`)
             })
     }
@@ -342,7 +347,7 @@ class TrackingHistory extends React.Component{
                                     <Button 
                                         type="button" 
                                         variant="primary" 
-                                        // disabled={isSubmitting}
+                                       disabled={this.state.done}
                                         onClick={submitForm}
                                     >
                                         {locale.texts.SEARCH}
@@ -372,13 +377,14 @@ class TrackingHistory extends React.Component{
                                     }
                                 </Row>
                             }
+                            {console.log(this.state.errorTitle)}
                             <ReactTable
                                 keyField='id'
                                 data={this.state.data}
                                 columns={this.state.columns}
                                 className="-highlight mt-4 text-capitalize"
                                 style={{height: '70vh', overflowY: 'scroll'}} 
-                                noDataText={this.state.done ? '' :'No rows found'} 
+                                noDataText={this.state.done ? '' :this.state.errorTitle} 
                                 LoadingComponent={this.state.done ? Loader :aLoader}
                                 {...styleConfig.reactTable}
                                 getTrProps={(state, rowInfo, column, instance) => {
