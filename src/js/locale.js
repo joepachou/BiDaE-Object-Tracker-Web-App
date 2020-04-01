@@ -1,5 +1,7 @@
 import tw from '../locale/zh-TW';
 import en from '../locale/en-US';
+import siteModuleLocaleEn from '../../site_module/locale/en-US'
+import siteModuleLocaleTw from '../../site_module/locale/zh-TW'
 import React from 'react'
 import LocaleContext from './context/LocaleContext'
 import config from './config';
@@ -14,13 +16,19 @@ const supportedLocale = {
         name:'中文',
         lang: 'tw',
         abbr: 'zh-tw',
-        texts: tw,
+        texts: {
+            ...tw,
+            ...siteModuleLocaleTw,
+        },
     },
     en: {
         name:'English',
         lang: 'en',
         abbr: 'en',
-        texts: en,
+        texts: {
+            ...en,
+            ...siteModuleLocaleEn,
+        }    
     }
 }
 
