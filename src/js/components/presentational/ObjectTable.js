@@ -17,7 +17,10 @@ import Select from 'react-select';
 import axios from 'axios';
 import BOTInput from '../presentational/BOTInput'
 import dataSrc from "../../dataSrc"
-
+import FadeIn from "react-fade-in";
+import Lottie from "react-lottie";
+import ReactLoading from "react-loading"; 
+import styled from 'styled-components'
 const SelectTable = selecTableHOC(ReactTable);
 
 class ObjectTable extends React.Component{
@@ -38,7 +41,8 @@ class ObjectTable extends React.Component{
         selectAll: false, 
         formPath:'',
         formTitle:'',
-        disableASN: false
+        disableASN: false,
+        done:false,
     }
 
     handleClose = () => {
@@ -207,6 +211,30 @@ class ObjectTable extends React.Component{
 
         const { locale } = this.context 
 
+        const LoaderStyle = styled.div`
+        position:absolute;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        top:0;
+        bottom:0;
+        left:0;
+        right:0;
+        background-color:rgb(255,255,255,0.8);
+        `
+        ;
+        const Loader = () => {
+            return ( 
+                <LoaderStyle>
+                    <ReactLoading type={"bars"} color={"black"}  /> 
+            </LoaderStyle>
+            ) 
+        }
+        const aLoader = () => {
+            return ( 
+                    null
+            ) 
+        }
         return(
             <div> 
                 <ButtonToolbar>
@@ -333,6 +361,8 @@ class ObjectTable extends React.Component{
                     className="-highlight text-none"
                     name={'obj_table'}
                     style={{height:'75vh'}} 
+                    noDataText={this.props.loadingFlag ? '' :'No rows found'} 
+                    LoadingComponent={this.props.loadingFlag? Loader :aLoader}
                     onPageChange={(e) => {this.setState({selectAll:false,selection:''})}} 
                     {...extraProps}
                     defaultPageSize={100}
