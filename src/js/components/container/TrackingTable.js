@@ -68,11 +68,17 @@ class TrackingTable extends React.Component{
                 field.headerStyle = {
                     textAlign: 'left',
                 }
+                if (field.accessor == '_id') {
+                    field.headerStyle = {
+                        textAlign: 'center',
+                    }
+                }
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })
-            res.data.map(item => {
+            res.data.map((item, index) => {
                 item.status = locale.texts[item.status.toUpperCase()]
                 item.transferred_location = ''
+                item._id = index + 1;
                 // item.transferred_location 
                 //     ? locale.texts[item.transferred_location.toUpperCase().replace(/ /g, '_')]
                 //     : ''
