@@ -66,6 +66,7 @@ class ObjectManagementContainer extends React.Component{
         patientFilter: [],
         formTitle:'',
         areaTable: [],
+        loadingFlag : false,
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -396,6 +397,10 @@ class ObjectManagementContainer extends React.Component{
     }
 
     filterData = (data, key, filteredAttribute) => {
+                    
+        this.setState({
+            loadingFlag:  true
+        })
         const { locale } = this.context  
         key = key.toLowerCase()
         let filteredData = data.filter(obj => { 
@@ -430,12 +435,13 @@ class ObjectManagementContainer extends React.Component{
                 }
             }
 
-            if (filteredAttribute.includes('area')){
-
-                let keyRex = new RegExp(key)
-                if (obj.area_name.label.match(keyRex)) {
-                    return true 
-                }
+            if (filteredAttribute.includes('area')){ 
+                let keyRex = new RegExp(key) 
+                if (obj.area_name.label != undefined){
+                    if (obj.area_name.label.match(keyRex)) {
+                       return true 
+                    }
+                } 
             }
 
             if (filteredAttribute.includes('monitor')){
@@ -469,7 +475,7 @@ class ObjectManagementContainer extends React.Component{
 
             return false
         })
-
+        this.setState({ loadingFlag:  false })
         return filteredData
         
     }
@@ -608,6 +614,7 @@ class ObjectManagementContainer extends React.Component{
                             typeSelection = {typeSelection}
                             filterSelection={this.state.filterSelection}
                             areaTable={this.state.areaTable}
+                            loadingFlag = {this.state.loadingFlag}
                         /> 
                     </TabPanel>
 
@@ -626,6 +633,7 @@ class ObjectManagementContainer extends React.Component{
                             physicianList={this.state.physicianList}
                             roomOptions={this.state.roomOptions} 
                             areaTable={this.state.areaTable}
+                            loadingFlag = {this.state.loadingFlag}
                         />
                     </TabPanel>
                     
