@@ -271,41 +271,43 @@ class ImportObjectTable extends React.Component{
  
         return(
             <div> 
-                         <ButtonToolbar>
-                            <InputFiles accept=".xlsx, .xls" onChange={this.onImportExcel}>
-                                <Button 
-                                variant="outline-primary" 
-                                className="btn btn-primary mr-2 mb-1"
-                                >
-                                {locale.texts.IMPORT_OBJECT}
-                                </Button>
-                            </InputFiles>
-                            <Button 
-                                variant="outline-primary" 
-                                className='text-capitalize mr-2 mb-1'
-                                name="delete import data"
-                                onClick={this.handleClickButton}
-                            >
-                                {locale.texts.DELETE}
-                            </Button>
-                        </ButtonToolbar>
-                        <SelectTable
-                            keyField='asset_control_number'
-                            data={this.props.dataImport}
-                            columns={this.props.columnImport}
-                            ref={r => (this.selectTable = r)}
-                            className="-highlight"
-                            style={{height:'75vh'}}
-                            onPageChange={(e) => {this.setState({selectAll:false,selection:''})}} 
-                            {...extraProps}
-                        />
-                        <DeleteConfirmationForm
-                            show={this.state.showDeleteConfirmation} 
-                            handleClose={this.handleClose}
-                            handleSubmit={
-                               this.state.warningSelect ==2 ?  this.deleteRecordImport : null 
-                            }
-                        />
+                <ButtonToolbar>
+                    <InputFiles accept=".xlsx, .xls" onChange={this.onImportExcel}>
+                        <Button 
+                            variant="outline-primary" 
+                            className="mr-2 mb-1"
+                            size="sm"
+                        >
+                            {locale.texts.IMPORT_OBJECT}
+                        </Button>
+                    </InputFiles>
+                    <Button 
+                        variant="outline-primary" 
+                        className='text-capitalize mr-2 mb-1'
+                        name="delete import data"
+                        size="sm"
+                        onClick={this.handleClickButton}
+                    >
+                        {locale.texts.DELETE}
+                    </Button>
+                </ButtonToolbar>
+                <SelectTable
+                    keyField='asset_control_number'
+                    data={this.props.dataImport}
+                    columns={this.props.columnImport}
+                    ref={r => (this.selectTable = r)}
+                    className="-highlight"
+                    style={{height:'75vh'}}
+                    onPageChange={(e) => {this.setState({selectAll:false,selection:''})}} 
+                    {...extraProps}
+                />
+                <DeleteConfirmationForm
+                    show={this.state.showDeleteConfirmation} 
+                    handleClose={this.handleClose}
+                    handleSubmit={
+                        this.state.warningSelect ==2 ?  this.deleteRecordImport : null 
+                    }
+                />
             </div>
             
         )
