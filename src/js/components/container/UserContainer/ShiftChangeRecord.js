@@ -12,6 +12,8 @@ import { shiftChangeRecordTableColumn } from '../../../tables'
 import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm'
 import { AppContext } from '../../../context/AppContext';
 import retrieveDataHelper from '../../../helper/retrieveDataHelper';
+import styleConfig from '../../../styleConfig';
+import BOTCheckbox from '../../presentational/BOTCheckbox'
 
 class ShiftChangeRecord extends React.Component{
 
@@ -190,10 +192,13 @@ class ShiftChangeRecord extends React.Component{
 
         return (
             <>
-                <ButtonToolbar>
+                <ButtonToolbar
+                    className="mb-2"
+                >                    
                     <Button 
                         variant="outline-primary" 
                         className='mb-1 text-capitalize'
+                        size="sm"
                         onClick={() => {
                             this.setState({
                                 showDeleteConfirmation: true
@@ -211,7 +216,10 @@ class ShiftChangeRecord extends React.Component{
                         ref={r => (this.selectTable = r)}
                         className="-highlight"
                         style={{height:'75vh'}}
+                        SelectAllInputComponent={BOTCheckbox}
+                        SelectInputComponent={BOTCheckbox}
                         {...extraProps}
+                        {...styleConfig.reactTable}
                         getTrProps={(state, rowInfo, column, instance) => {
                            
                             return {

@@ -41,6 +41,9 @@ const styleConfig = {
                     fontSize: '0.9rem',
                     display: 'flex',
                     alignItems: 'center',
+                    color: 'black',
+                    minHeight: '3rem',
+                    height: '3rem'
                 }
             }
         },
@@ -52,17 +55,20 @@ const styleConfig = {
                     alignItems: 'center',
                     borderRight: 'none',
                     textAlign: 'left',
-                    fontSize: '1rem',
-                    minHeight: '2rem'
-                    // fontWeight: 500
+                    fontSize: '0.8rem',
+                    minHeight: '2.5rem',
+                    fontWeight: 500,
+                    color: 'black',
+                    // backgroundColor: '#80808014',
+                    // boxShadow: 'rgba(32, 33, 36, 0.28) 0px 0px 0px 0px',                    
                 }
             }
         },
         getProps: () => {
             return {
                 style: {
-                    border: 'none',
-                    borderTop: '1px solid #cec7c7',
+                    // border: 'none',
+                    // borderTop: '1px solid #cec7c7',
                 }
             }
         },
@@ -70,7 +76,7 @@ const styleConfig = {
         getTheadProps: () => {
             return {
                 style: {
-                    boxShadow: 'rgba(32, 33, 36, 0.28) 0px 1px 6px 0px',
+                    // boxShadow: 'rgba(32, 33, 36, 0.28) 0px 0px 0px 0px',
                     // height: '1rem'
                 }
             }

@@ -3,6 +3,9 @@ import {
     Field, 
     ErrorMessage 
 } from 'formik';
+import {
+    FormFieldName
+} from '../../config/styleComponent'
 
 const FormikFormGroup = ({
    name = "default",
@@ -28,7 +31,7 @@ const FormikFormGroup = ({
         },
         example: {
             color: 'grey'
-        }
+        },
     }
 
     return (
@@ -36,11 +39,9 @@ const FormikFormGroup = ({
             className={`form-group ${className}`}
             style={style.container}
         >
-            <small 
-                className="form-text text-muted text-capitalize"
-            >
+            <FormFieldName>
                 {label}
-            </small>
+            </FormFieldName>
             {component 
                 ?   component()
                 :   (

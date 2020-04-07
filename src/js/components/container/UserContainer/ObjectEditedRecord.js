@@ -12,6 +12,8 @@ import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm'
 const SelectTable = selecTableHOC(ReactTable);
 import { AppContext } from '../../../context/AppContext'
 import retrieveDataHelper from '../../../helper/retrieveDataHelper'
+import styleConfig from '../../../styleConfig';
+import BOTCheckbox from '../../presentational/BOTCheckbox'
 
 class ObjectEditedRecord extends React.Component{
 
@@ -199,10 +201,13 @@ class ObjectEditedRecord extends React.Component{
 
         return (
             <>
-                <ButtonToolbar>
+                <ButtonToolbar
+                    className="mb-2"
+                >
                     <Button 
                         variant="outline-primary" 
                         className='mb-1 text-capitalize'
+                        size="sm"
                         onClick={() => {
                             this.setState({
                                 showDeleteConfirmation: true
@@ -220,21 +225,19 @@ class ObjectEditedRecord extends React.Component{
                         data={this.state.data}
                         columns={this.state.columns}
                         ref={r => (this.selectTable = r)}
+                        SelectAllInputComponent={BOTCheckbox}
+                        SelectInputComponent={BOTCheckbox}
                         className="-highlight"
                         style={{height:'75vh'}}
                         {...extraProps}
+                        {...styleConfig.reactTable}
                         getTrProps={(state, rowInfo, column, instance) => {
                           
                             return {
                                 onClick: (e, handleOriginal) => {
                                     let id = rowInfo.original._id
                                     this.toggleSelection(id)
-                            
-                                    // IMPORTANT! React-Table uses onClick internally to trigger
-                                    // events like expanding SubComponents and pivots.
-                                    // By default a custom 'onClick' handler will override this functionality.
-                                    // If you want to fire the original onClick handler, call the
-                                    // 'handleOriginal' function.
+                        
                                     if (handleOriginal) {
                                         handleOriginal()
                                     }

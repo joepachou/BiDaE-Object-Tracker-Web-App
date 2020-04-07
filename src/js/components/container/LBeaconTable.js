@@ -19,6 +19,8 @@ import {
 import { AppContext } from '../../context/AppContext';
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
 import retrieveDataHelper from '../../helper/retrieveDataHelper'
+import BOTCheckbox from '../presentational/BOTCheckbox'
+import styleConfig from '../../styleConfig'
 
 const SelectTable = selecTableHOC(ReactTable);
 
@@ -232,6 +234,9 @@ class LbeaconTable extends React.Component{
                     name="test"
                     data={this.state.data}
                     columns={this.state.columns}
+                    SelectAllInputComponent={BOTCheckbox}
+                    SelectInputComponent={BOTCheckbox}
+                    {...styleConfig.reactTable}
                     ref={r => (this.selectTable = r)}
                     className="-highlight"
                     style={{height:'75vh'}}

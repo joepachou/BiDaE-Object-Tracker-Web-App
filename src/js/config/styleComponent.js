@@ -19,3 +19,9 @@ export const Paragraph = styled.p`
     text-justify:inter-ideograph;
     color: black;
 `
+
+export const FormFieldName = styled.div`
+    color: black;
+    font-size: .8rem;
+    margin-bottom: 5px;
+`

@@ -22,6 +22,7 @@ import Lottie from "react-lottie";
 import ReactLoading from "react-loading"; 
 import styled from 'styled-components'
 const SelectTable = selecTableHOC(ReactTable);
+import BOTCheckbox from './BOTCheckbox';
 
 class ObjectTable extends React.Component{
 
@@ -358,9 +359,12 @@ class ObjectTable extends React.Component{
                     data={this.props.data}
                     columns={this.props.columns}
                     ref={r => (this.selectTable = r)}
+                    SelectAllInputComponent={BOTCheckbox}
+                    SelectInputComponent={BOTCheckbox}
                     className="-highlight text-none"
                     name={'obj_table'}
                     style={{height:'75vh'}} 
+                    {...styleConfig.reactTable}
                     noDataText={this.props.loadingFlag ? '' :'No rows found'} 
                     LoadingComponent={this.props.loadingFlag? Loader :aLoader}
                     onPageChange={(e) => {this.setState({selectAll:false,selection:''})}} 

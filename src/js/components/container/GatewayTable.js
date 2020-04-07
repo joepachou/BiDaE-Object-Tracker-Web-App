@@ -14,6 +14,8 @@ import {
 import { AppContext } from '../../context/AppContext';
 import retrieveDataHelper from '../../helper/retrieveDataHelper'
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm' 
+import BOTCheckbox from '../presentational/BOTCheckbox'
+import styleConfig from '../../styleConfig'
 const SelectTable = selecTableHOC(ReactTable);
 
 class GatewayTable extends React.Component{
@@ -211,6 +213,9 @@ class GatewayTable extends React.Component{
                     keyField='id'
                     data={this.state.data} 
                     columns={this.state.columns}
+                    SelectAllInputComponent={BOTCheckbox}
+                    SelectInputComponent={BOTCheckbox}
+                    {...styleConfig.reactTable}
                     ref={r => (this.selectTable = r)}
                     className="-highlight"
                     style={{height:'75vh'}}

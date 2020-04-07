@@ -99,7 +99,7 @@ export const systemSettingPageList = [
         name: 'user manager',
         permission: "route:bigScreen",
         component: (props) => <AdminManagementContainer {...props}/>,
-        platform: ['browser', 'mobile'],
+        platform: ['browser', 'tablet', 'mobile'],
     },
     {
         name: "transferred location management",
