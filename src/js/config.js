@@ -4,7 +4,7 @@ import siteConfig from '../../site_module/siteConfig'
 
 const config = {
 
-    version: "v1.0 b.1897",
+    version: "v1.0 b.1898",
     
     objectStatus: {
         PERIMETER: "perimeter",
@@ -174,6 +174,15 @@ const config = {
     objectType: {
         0: "medicalDevice",
         1: "inpatient"
+    },
+
+    healthStatusMap: {
+        0: 'normal',
+        9999: 'n/a',
+    },
+
+    productVersionMap: {
+        9999: 'n/a',
     },
 
     toastProps: {

@@ -5,6 +5,9 @@ const style = {
     column: {
         textAlign: "center",
     },
+    textRight: {
+        textAlign: "right"
+    },
     icon: {
         check: {
             color: "green",
@@ -35,14 +38,21 @@ const style = {
 
 const lbeaconTableColumn = [
 
+    // {
+    //     Header: "status",
+    //     accessor: "health_status",
+    //     width: 60,
+    //     style: style.column,
+    //     Cell: props => props.value 
+    //         ? <i className="fas fa-check-circle text-center" style={style.icon.check}></i>
+    //         : <i className="fas fa-times-circle" style={style.icon.times}></i>
+    // },
     {
-        Header: "status",
+        Header: "health status",
         accessor: "health_status",
         width: 60,
-        style: style.column,
-        Cell: props => props.value 
-            ? <i className="fas fa-check-circle text-center" style={style.icon.check}></i>
-            : <i className="fas fa-times-circle" style={style.icon.times}></i>
+        style: style.textRight,
+        Cell: props => config.healthStatusMap[props.value] 
     },
     {
         Header: "danger area",
@@ -53,20 +63,21 @@ const lbeaconTableColumn = [
             ? <i className="fas fa-circle" style={style.icon.circle}></i>
             : null
     },
+
     {
         Header: "UUID",
         accessor: "uuid",
-        width: 380
+        width: 350
     },
     {
         Header: "description",
         accessor: "description",
-        width: 200
+        width: 130
     },
     {
         Header: "room",
         accessor: "room",
-        width: 100,
+        width: 60,
     },
     {
         Header: "IP Address",
@@ -90,18 +101,30 @@ const lbeaconTableColumn = [
     {
         Header: "server time offset",
         accessor: "server_time_offset",
+    },
+    {
+        Header: "product_version",
+        accessor: "product_version",
+        Cell: props => config.productVersionMap[props.value] ?  config.productVersionMap[props.value] : props.value
     }
 ]
 
 const gatewayTableColumn = [
+    // {
+    //     Header: "Status",
+    //     accessor: "health_status",
+    //     width: 60,
+    //     style: style.column,
+    //     Cell: props => !props.value 
+    //         ? <i className="fas fa-check-circle text-center" style={style.icon.check}></i> 
+    //         : <i className="fas fa-times-circle" style={style.icon.times}></i>
+    // },
     {
-        Header: "Status",
+        Header: "health status",
         accessor: "health_status",
+        style: style.textRight,
         width: 60,
-        style: style.column,
-        Cell: props => !props.value 
-            ? <i className="fas fa-check-circle text-center" style={style.icon.check}></i> 
-            : <i className="fas fa-times-circle" style={style.icon.times}></i>
+        Cell: props => config.healthStatusMap[props.value] 
     },
     {
         Header: "IP Address",
@@ -122,6 +145,15 @@ const gatewayTableColumn = [
         Header: "api version",
         accessor: 'api_version',
     },
+    {
+        Header: "product_version",
+        accessor: "product_version",
+        Cell: props => config.productVersionMap[props.value] ?  config.productVersionMap[props.value] : props.value
+    },
+    {
+        Header: "abnormal lbeacon list",
+        accessor: "abnormal_lbeacon_list",
+    }
 ]
 
 const trackingTableColumn = [
@@ -423,7 +455,7 @@ const shiftChangeRecordTableColumn = [
     {
         Header: "submit timestamp",
         accessor: "submit_timestamp",
-        width: 200,
+        // width: 200,
     }
 ]
 

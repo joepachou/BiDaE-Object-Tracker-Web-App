@@ -469,7 +469,8 @@ const getLbeaconTable =
 			danger_area,
 			room,
 			api_version,
-			server_time_offset
+			server_time_offset,
+			product_version
 		FROM lbeacon_table
 		ORDER BY last_report_timestamp DESC
 	`;
@@ -482,7 +483,9 @@ const getGatewayTable =
 		last_report_timestamp,
 		registered_timestamp,
 		id,
-		api_version
+		api_version,
+		product_version,
+		abnormal_lbeacon_list
 	FROM 
 		gateway_table 
 	ORDER BY last_report_timestamp DESC`;	

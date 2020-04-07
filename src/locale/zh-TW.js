@@ -381,6 +381,8 @@ const tw = {
     AREA: "地區",
     API_VERSION: "api version",
     SERVER_TIME_OFFSET: "server time offset",
+    PRODUCT_VERSION: "版本號",
+    ABNORMAL_LBEACON_LIST: "abnormal lbeacon list",
     ACTION: "action",
     
 

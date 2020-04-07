@@ -301,10 +301,10 @@ const getLbeaconTable = (request, response) => {
         .then(res => {
             console.log('get lbeacon table data succeed')
             res.rows.map(item => {
-                item.health_status =  
-                    !item.health_status && 
-                    moment().diff(item.last_report_timestamp, LBEACON_HEALTH_STATUS_TIME_INTERVAL_UNIT) < LBEACON_HEALTH_STATUS_TIME_INTERVAL
-                        ? 1 : 0 
+                // item.health_status =  
+                //     !item.health_status && 
+                //     moment().diff(item.last_report_timestamp, LBEACON_HEALTH_STATUS_TIME_INTERVAL_UNIT) < LBEACON_HEALTH_STATUS_TIME_INTERVAL
+                //         ? 1 : 0 
 
                 item.last_report_timestamp = moment.tz(item.last_report_timestamp, process.env.TZ).locale(locale).format('lll');
             })
@@ -321,16 +321,16 @@ const getGatewayTable = (request, response) => {
 
     pool.query(queryType.getGatewayTable)
         .then(res => {
-            console.log('Get gatewayTable data')
+            console.log(`get gateway table succeed`)
             res.rows.map(item => {
-                item.health_status =  item.health_status === 0 && moment().diff(item.last_report_timestamp, 'days') < 1 ? 0 : 1 
+                // item.health_status =  item.health_status === 0 && moment().diff(item.last_report_timestamp, 'days') < 1 ? 0 : 1 
                 item.last_report_timestamp = moment.tz(item.last_report_timestamp, process.env.TZ).locale(locale).format('lll');
                 item.registered_timestamp = moment.tz(item.registered_timestamp, process.env.TZ).locale(locale).format('lll');
             })
             response.status(200).json(res)
         })    
         .catch(err => {
-            console.log("Get gatewayTable fails: " + err)                
+            console.log(`get gateway table failed ${err}`)                
 
         })
 }

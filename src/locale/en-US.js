@@ -380,6 +380,8 @@ const en =  {
     AREA: "area",
     API_VERSION: "api version",
     SERVER_TIME_OFFSET: "server time offset",
+    PRODUCT_VERSION: "product version",
+    ABNORMAL_LBEACON_LIST: "abnormal lbeacon list",
     ACTION: "action",
 
     /** message */
