@@ -52,7 +52,7 @@ const lbeaconTableColumn = [
         accessor: "health_status",
         width: 60,
         style: style.textRight,
-        Cell: props => config.healthStatusMap[props.value] 
+        Cell: props => config.healthStatusMap[props.value] ? config.healthStatusMap[props.value] : props.value
     },
     {
         Header: "danger area",
@@ -124,7 +124,7 @@ const gatewayTableColumn = [
         accessor: "health_status",
         style: style.textRight,
         width: 60,
-        Cell: props => config.healthStatusMap[props.value] 
+        Cell: props => config.healthStatusMap[props.value] ? config.healthStatusMap[props.value] : props.value
     },
     {
         Header: "IP Address",
