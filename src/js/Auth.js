@@ -5,21 +5,11 @@ import axios from 'axios';
 import dataSrc from './dataSrc';
 import config from './config';
 
-let defaultUser = {
-    roles: "guest",
-    areas_id: [config.mapConfig.defaultAreaId.toString()],
-    permissions:[
-        "form:view",
-    ],
-    locale: config.locale.defaultLocale,
-    main_area: config.mapConfig.defaultAreaId.toString(),
-}
-
 class Auth extends React.Component {
 
     state = {
         authenticated: Cookies.get('authenticated') ? true : false,
-        user: Cookies.get('user') ? {...JSON.parse(Cookies.get('user'))} : defaultUser,
+        user: Cookies.get('user') ? {...JSON.parse(Cookies.get('user'))} : config.defaultUser,
         accessToken: ""
     }
 
@@ -38,7 +28,7 @@ class Auth extends React.Component {
         Cookies.remove('user')
         this.setState({
             authenticated: false,
-            user: defaultUser,
+            user: config.defaultUser,
             accessToken: ""
         });
     };

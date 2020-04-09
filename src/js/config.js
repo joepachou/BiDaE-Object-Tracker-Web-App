@@ -22,6 +22,16 @@ const config = {
         'transferred'
     ],
 
+    defaultUser: {
+        roles: "guest",
+        areas_id: [0],
+        permissions:[
+            "form:view",
+        ],
+        locale: 'tw',
+        main_area: 0,
+    },
+
     /** Reserved Object interval time in minutes */
     reservedInterval: 30,
 
