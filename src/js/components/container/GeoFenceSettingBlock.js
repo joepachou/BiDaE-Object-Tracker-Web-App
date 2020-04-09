@@ -13,7 +13,7 @@ import ReactTable from 'react-table'
 import { geofenceConfigColumn } from '../../tables'
 import EditGeofenceConfig from '../presentational/EditGeofenceConfig'
 import retrieveDataHelper from '../../helper/retrieveDataHelper'
-import styleConfig from '../../styleConfig';
+import styleConfig from '../../config/styleConfig';
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
 

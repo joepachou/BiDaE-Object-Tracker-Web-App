@@ -7,7 +7,7 @@ import {
 } from 'react-bootstrap';
 import { AppContext } from '../../context/AppContext';
 import ReactTable from 'react-table'; 
-import styleConfig from '../../styleConfig';
+import styleConfig from '../../config/styleConfig';
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
 import EditObjectForm from '../container/EditObjectForm';
 import BindForm from '../container/BindForm'

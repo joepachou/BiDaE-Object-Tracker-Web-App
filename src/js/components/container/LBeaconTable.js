@@ -20,7 +20,7 @@ import { AppContext } from '../../context/AppContext';
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
 import retrieveDataHelper from '../../helper/retrieveDataHelper'
 import BOTCheckbox from '../presentational/BOTCheckbox'
-import styleConfig from '../../styleConfig'
+import styleConfig from '../../config/styleConfig'
 
 const SelectTable = selecTableHOC(ReactTable);
 

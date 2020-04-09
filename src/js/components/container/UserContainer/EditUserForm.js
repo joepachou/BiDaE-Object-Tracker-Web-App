@@ -16,7 +16,7 @@ import config from '../../../config';
 import CheckboxGroup from '../CheckboxGroup'
 import Checkbox from '../../presentational/Checkbox'
 import FormikFormGroup from '../../presentational/FormikFormGroup'
-import styleConfig from '../../../styleConfig';
+import styleConfig from '../../../config/styleConfig';
 import LocaleContext from '../../../context/LocaleContext';
 
 const EditUserForm = ({

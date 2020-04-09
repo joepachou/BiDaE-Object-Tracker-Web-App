@@ -8,7 +8,7 @@ import axios from "axios"
 import dataSrc from "../../dataSrc"
 import config from "../../config"
 import ReactTable from 'react-table';
-import styleConfig from '../../styleConfig';
+import styleConfig from '../../config/styleConfig';
 import EditMonitorConfigForm from '../presentational/EditMonitorConfigForm';
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
 import { monitorConfigColumn } from '../../tables'

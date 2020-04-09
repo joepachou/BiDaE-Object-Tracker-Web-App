@@ -13,7 +13,7 @@ import {
     Spinner
 } from 'react-bootstrap';
 import config from '../../config' 
-import styleConfig from '../../styleConfig'
+import styleConfig from '../../config/styleConfig'
 import 'react-tabs/style/react-tabs.css';
 import { AppContext } from '../../context/AppContext';
 import ReactTable from 'react-table'

@@ -23,6 +23,9 @@ import {
     disableBodyScroll,
     enableBodyScroll,
 } from 'body-scroll-lock';
+import {
+    PageTitle
+} from '../../../config/styleComponent'
 
 const style = {
 
@@ -140,11 +143,9 @@ class SystemSetting extends React.Component{
                                                 eventKey={tab.name.replace(/ /g, '_')}
                                                 key={tab.name.replace(/ /g, '_')}
                                             >
-                                                <div
-                                                    className='h5'
-                                                >
+                                                <PageTitle>
                                                     {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
-                                                </div>
+                                                </PageTitle>
                                                 <hr/>
                                                 {tab.component(props)}
                                             </Tab.Pane>

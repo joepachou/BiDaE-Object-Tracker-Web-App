@@ -1,5 +1,5 @@
 import React from 'react'
-import styleConfig from '../../styleConfig'
+import styleConfig from '../../config/styleConfig'
 
 const RadioButton = ({
     field: { name, value, onChange, onBlur },

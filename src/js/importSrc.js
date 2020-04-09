@@ -19,6 +19,9 @@ import "../css/BOTsidenav.css"
 /** ObjectListMenu Component customized css */
 import "../css/ObjectListMenu.css"
 
+/** pagination */
+import "../css/Pagination.css"
+
 /** Surveillance Component customized css */
 import "../css/Leaflet.css"
 

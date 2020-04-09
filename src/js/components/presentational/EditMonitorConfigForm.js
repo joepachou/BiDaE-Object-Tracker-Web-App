@@ -12,7 +12,7 @@ import {
 } from 'formik';
 import DateTimePicker from '../container/DateTimePicker'
 import Switcher from '../container/Switcher'
-import styleConfig from '../../styleConfig';
+import styleConfig from '../../config/styleConfig';
 import FormikFormGroup from './FormikFormGroup'
 import LocaleContext from '../../context/LocaleContext';
 

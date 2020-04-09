@@ -15,7 +15,7 @@ import { AppContext } from '../../context/AppContext';
 import retrieveDataHelper from '../../helper/retrieveDataHelper'
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm' 
 import BOTCheckbox from '../presentational/BOTCheckbox'
-import styleConfig from '../../styleConfig'
+import styleConfig from '../../config/styleConfig'
 const SelectTable = selecTableHOC(ReactTable);
 
 class GatewayTable extends React.Component{

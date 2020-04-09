@@ -25,3 +25,9 @@ export const FormFieldName = styled.div`
     font-size: .8rem;
     margin-bottom: 5px;
 `
+
+export const PageTitle = styled.div`
+    color: #007bff;
+    font-size: 1.4rem;
+    font-weight: 600;
+`

@@ -12,7 +12,6 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import dataSrc from '../../../dataSrc';
 import FormikFormGroup from '../../presentational/FormikFormGroup'
-import styleConfig from '../../../styleConfig';
 import LocaleContext from '../../../context/LocaleContext';
 
 const SignatureForm = ({

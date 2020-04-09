@@ -19,7 +19,7 @@ import RadioButtonGroup from './RadioButtonGroup';
 import { AppContext } from '../../context/AppContext';
 import axios from 'axios';
 import dataSrc from '../../dataSrc'
-import styleConfig from '../../styleConfig'
+import styleConfig from '../../config/styleConfig'
 import FormikFormGroup from '../presentational/FormikFormGroup'
 
 class ChangeStatusForm extends React.Component {

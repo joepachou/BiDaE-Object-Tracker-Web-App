@@ -12,8 +12,7 @@ import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm'
 const SelectTable = selecTableHOC(ReactTable);
 import { AppContext } from '../../../context/AppContext'
 import retrieveDataHelper from '../../../helper/retrieveDataHelper'
-import styleConfig from '../../../styleConfig';
-import BOTCheckbox from '../../presentational/BOTCheckbox'
+import styleConfig from '../../../config/styleConfig';
 
 class ObjectEditedRecord extends React.Component{
 
@@ -98,6 +97,7 @@ class ObjectEditedRecord extends React.Component{
             // the 'sortedData' property contains the currently accessible records based on the filter and sort
             const currentRecords = wrappedInstance.getResolvedState().sortedData;
             // we just push all the IDs onto the selection array
+            console.log(wrappedInstance)
             currentRecords.forEach(item => {
                 if (item._original) {
                 selection.push(item._original._id);
@@ -217,16 +217,12 @@ class ObjectEditedRecord extends React.Component{
                         {locale.texts.DELETE}
                     </Button>
                 </ButtonToolbar>
-
                 {this.state.data && (
-                
                     <SelectTable
                         keyField='_id'
                         data={this.state.data}
                         columns={this.state.columns}
                         ref={r => (this.selectTable = r)}
-                        SelectAllInputComponent={BOTCheckbox}
-                        SelectInputComponent={BOTCheckbox}
                         className="-highlight"
                         style={{height:'75vh'}}
                         {...extraProps}

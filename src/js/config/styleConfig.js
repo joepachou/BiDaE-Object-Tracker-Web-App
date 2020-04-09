@@ -1,3 +1,6 @@
+import BOTCheckbox from '../components/presentational/BOTCheckbox'
+import BOTPagination from '../components/presentational/BOTPagination'
+
 const styleConfig = {
     reactSelect: {
         option: (provided, state) => ({
@@ -81,6 +84,12 @@ const styleConfig = {
                 }
             }
         },
+
+        SelectAllInputComponent: BOTCheckbox,
+
+        SelectInputComponent: BOTCheckbox,
+
+        PaginationComponent: BOTPagination,
 
         // showPagination: false
 

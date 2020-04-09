@@ -15,7 +15,7 @@ import * as Yup from 'yup';
 import DateTimePicker from '../container/DateTimePicker'
 import { AppContext } from '../../context/AppContext';
 import Switcher from '../container/Switcher'
-import styleConfig from '../../styleConfig';
+import styleConfig from '../../config/styleConfig';
 import LocaleContext from '../../context/LocaleContext';
 import FormikFormGroup from './FormikFormGroup'
 import RadioButtonGroup from '../container/RadioButtonGroup';

@@ -10,7 +10,7 @@ import * as Yup from 'yup';
 import CheckboxGroup from './CheckboxGroup'
 import Checkbox from '../presentational/Checkbox'
 import FormikFormGroup from '../presentational/FormikFormGroup'
-import styleConfig from '../../styleConfig'
+import styleConfig from '../../config/styleConfig'
 import { toast } from 'react-toastify';
 
 let monitorTypeMap = {};

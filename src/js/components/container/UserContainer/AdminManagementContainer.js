@@ -18,7 +18,7 @@ import DeleteUserForm from './DeleteUserForm'
 import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm';
 import config from '../../../config';
 import retrieveDataHelper from '../../../helper/retrieveDataHelper';
-import styleConfig from '../../../styleConfig';
+import styleConfig from '../../../config/styleConfig';
 const Fragment = React.Fragment;
 
 class AdminManagementContainer extends React.Component{

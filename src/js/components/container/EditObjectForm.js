@@ -19,7 +19,7 @@ import RadioButton from '../presentational/RadioButton'
 import { isNull } from 'util';
 import { AppContext } from '../../context/AppContext';
 import dataSrc from '../../dataSrc'
-import styleConfig from '../../styleConfig';
+import styleConfig from '../../config/styleConfig';
 import FormikFormGroup from '../presentational/FormikFormGroup'
 import { toast } from 'react-toastify';
 import messageGenerator from '../../helper/messageGenerator'

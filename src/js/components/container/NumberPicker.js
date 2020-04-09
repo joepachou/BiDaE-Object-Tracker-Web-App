@@ -2,7 +2,7 @@
 import React from 'react';
 import Select from 'react-select';
 import { AppContext } from '../../context/AppContext';
-import styleConfig from "../../styleConfig"
+import styleConfig from "../../config/styleConfig"
 
 class NumberPicker extends React.Component {
 
