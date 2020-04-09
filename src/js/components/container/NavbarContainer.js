@@ -17,8 +17,6 @@ import ShiftChange from './ShiftChange'
 import { AppContext } from '../../context/AppContext';
 import Select from 'react-select';
 import BatteryLevelNotification from "./BatteryLevelNotification"
-import retrieveDataHelper from '../../helper/retrieveDataHelper';
-import siteConfig from '../../../../site_module/siteConfig';
 import { navbarNavList } from '../../config/pages'
 
 class NavbarContainer extends React.Component {
@@ -32,11 +30,11 @@ class NavbarContainer extends React.Component {
 
     navList = navbarNavList
 
-    handleClose = (callback) => {
+    handleClose = () => {
         this.setState({
             showSignin: false,
             showShiftChange: false
-        }, callback)
+        })
     }
 
     handleClick = (e) => {
