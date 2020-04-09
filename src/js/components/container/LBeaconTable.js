@@ -15,7 +15,7 @@ import {
 } from "../../dataSrc"
 import { 
     lbeaconTableColumn,
-} from '../../tables';
+} from '../../config/tables';
 import { AppContext } from '../../context/AppContext';
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
 import retrieveDataHelper from '../../helper/retrieveDataHelper'

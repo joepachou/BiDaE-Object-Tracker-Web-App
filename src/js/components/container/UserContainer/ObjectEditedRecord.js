@@ -5,7 +5,7 @@ import {
 } from 'react-bootstrap';
 import ReactTable from 'react-table'
 import axios from 'axios';
-import { editObjectRecordTableColumn } from '../../../tables';
+import { editObjectRecordTableColumn } from '../../../config/tables';
 import dataSrc from '../../../dataSrc'
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
 import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm'

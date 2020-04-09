@@ -8,7 +8,7 @@ import axios from 'axios';
 import dataSrc from "../../../dataSrc"
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
 const SelectTable = selecTableHOC(ReactTable);
-import { shiftChangeRecordTableColumn } from '../../../tables'
+import { shiftChangeRecordTableColumn } from '../../../config/tables'
 import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm'
 import { AppContext } from '../../../context/AppContext';
 import retrieveDataHelper from '../../../helper/retrieveDataHelper';

@@ -15,7 +15,7 @@ import {
     getObjectTable
 } from "../../../dataSrc";
 import AxiosFunction from './AxiosFunction'
-import { deviceManagerTableColumn } from '../../../tables';
+import { deviceManagerTableColumn } from '../../../config/tables';
 import DeleteForm from '../DeleteForm'
 import AddDeviceForm from '../AddDeviceForm'
 import { AppContext } from '../../../context/AppContext'

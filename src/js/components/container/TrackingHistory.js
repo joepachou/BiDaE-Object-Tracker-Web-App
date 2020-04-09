@@ -20,7 +20,7 @@ import ReactTable from 'react-table'
 import {
     locationHistoryByMacColumns,
     locationHistoryByUUIDColumns,
-} from '../../tables'
+} from '../../config/tables'
 import moment from 'moment'
 import {
     isBrowser

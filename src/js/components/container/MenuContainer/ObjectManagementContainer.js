@@ -18,7 +18,7 @@ import {
     objectTableColumn,
     patientTableColumn,
     importTableColumn
- } from '../../../tables' 
+ } from '../../../config/tables' 
 import config from '../../../config' 
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';

@@ -1,13 +1,13 @@
-import MainContainer from "./components/container/MainContainer";
-import SystemSetting from "./components/container/menuContainer/SystemSetting";
-import ObjectManagementContainer from "./components/container/menuContainer/ObjectManagementContainer";
-import UserContainer from "./components/container/menuContainer/UserContainer"
-import BigScreenContainer from "./components/container/BigScreen/BigScreenContainer";
-import About from "./components/container/About"
-import TrackingHistoryContainer from "./components/container/menuContainer/TrackingHistoryContainer"
-import MonitorSettingContainer from "./components/container/menuContainer/MonitorSettingContainer"
-import ReportContainer from "./components/container/menuContainer/ReportContainer"
-import ManagementContainer from "./components/container/menuContainer/ManagementContainer"
+import MainContainer from "../components/container/MainContainer";
+import SystemSetting from "../components/container/menuContainer/SystemSetting";
+import ObjectManagementContainer from "../components/container/menuContainer/ObjectManagementContainer";
+import UserContainer from "../components/container/menuContainer/UserContainer"
+import BigScreenContainer from "../components/container/BigScreen/BigScreenContainer";
+import About from "../components/container/About"
+import TrackingHistoryContainer from "../components/container/menuContainer/TrackingHistoryContainer"
+import MonitorSettingContainer from "../components/container/menuContainer/MonitorSettingContainer"
+import ReportContainer from "../components/container/menuContainer/ReportContainer"
+import ManagementContainer from "../components/container/menuContainer/ManagementContainer"
 
 const routes = [
     {

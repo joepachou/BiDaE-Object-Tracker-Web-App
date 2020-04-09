@@ -13,7 +13,7 @@ import {
 } from 'react-tabs';
 import {
     trackingTableColumn
-} from '../../tables'
+} from '../../config/tables'
 import retrieveDataHelper from '../../helper/retrieveDataHelper'
 import { toast } from 'react-toastify';
 import LBeaconTable from './LBeaconTable'

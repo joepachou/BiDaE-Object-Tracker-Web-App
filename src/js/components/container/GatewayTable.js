@@ -10,7 +10,7 @@ import {
 } from "../../dataSrc" 
 import { 
     gatewayTableColumn
-} from '../../tables';
+} from '../../config/tables';
 import { AppContext } from '../../context/AppContext';
 import retrieveDataHelper from '../../helper/retrieveDataHelper'
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm' 

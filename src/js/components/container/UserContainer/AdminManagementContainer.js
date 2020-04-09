@@ -11,7 +11,7 @@ import {
     deleteUser,
     getMainSecondArea,
 } from "../../../dataSrc";
-import { userInfoTableColumn } from '../../../tables'
+import { userInfoTableColumn } from '../../../config/tables'
 import EditUserForm from './EditUserForm';
 import { AppContext } from '../../../context/AppContext';
 import DeleteUserForm from './DeleteUserForm'

@@ -10,7 +10,7 @@ import axios from "axios"
 import dataSrc from "../../dataSrc"
 import config from "../../config"
 import ReactTable from 'react-table'
-import { geofenceConfigColumn } from '../../tables'
+import { geofenceConfigColumn } from '../../config/tables'
 import EditGeofenceConfig from '../presentational/EditGeofenceConfig'
 import retrieveDataHelper from '../../helper/retrieveDataHelper'
 import styleConfig from '../../config/styleConfig';

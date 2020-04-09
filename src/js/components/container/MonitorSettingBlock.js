@@ -11,7 +11,7 @@ import ReactTable from 'react-table';
 import styleConfig from '../../config/styleConfig';
 import EditMonitorConfigForm from '../presentational/EditMonitorConfigForm';
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
-import { monitorConfigColumn } from '../../tables'
+import { monitorConfigColumn } from '../../config/tables'
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
 const SelectTable = selecTableHOC(ReactTable);
 class MonitorSettingBlock extends React.Component{
