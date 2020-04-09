@@ -170,8 +170,8 @@ const trackingTableColumn = [
         style: style.column,
         width: 60,
         Cell: props => props.value 
-            ? <i className="fas fa-check-circle text-center" style={style.icon.check}></i> 
-            : <i className="fas fa-times-circle" style={style.icon.times}></i>
+            ? <i className="fas fa-circle" style={style.icon.circle}></i>
+            : ""
     },
     {
         Header: "Battery",
@@ -269,12 +269,12 @@ const patientTableColumn = [
     {
         Header: "PATIENT_GENDER",
         accessor: "object_type",
-        width: 50,
+        width: 70,
     },
     {
         Header: "patient Number",
         accessor: "asset_control_number",
-        width: 100,
+        width: 200,
     },
     {
         Header: "auth Area",
@@ -294,7 +294,7 @@ const patientTableColumn = [
     {
         Header: "Mac Address",
         accessor: "mac_address",
-        width: 150,
+        width: 200,
     },
     {
         Header: "Monitor Type",

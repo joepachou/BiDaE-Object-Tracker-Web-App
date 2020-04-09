@@ -21,8 +21,6 @@ import {
     addPatient,
     deleteDevice,
 } from "../../dataSrc"
-import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
 import ReactLoading from "react-loading"; 
 import styled from 'styled-components'
 const SelectTable = selecTableHOC(ReactTable);
@@ -323,6 +321,7 @@ class PatientTable extends React.Component{
                     LoadingComponent={this.props.loadingFlag? Loader :aLoader}
                     onPageChange={(e) => {this.setState({selectAll:false,selection:''})}} 
                     {...extraProps}
+                    {...styleConfig.reactTable}
                     getTrProps={(state, rowInfo, column, instance) => {
                         return {
                             onClick: (e) => { 

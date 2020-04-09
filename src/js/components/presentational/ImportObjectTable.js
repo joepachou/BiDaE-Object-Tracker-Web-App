@@ -14,6 +14,7 @@ import {
     deleteImportData,
     deleteObjectWithImport
 } from "../../dataSrc"
+import styleConfig from '../../config/styleConfig';
 
 
 class ImportObjectTable extends React.Component{
@@ -300,6 +301,7 @@ class ImportObjectTable extends React.Component{
                     style={{height:'75vh'}}
                     onPageChange={(e) => {this.setState({selectAll:false,selection:''})}} 
                     {...extraProps}
+                    {...styleConfig.reactTable}
                 />
                 <DeleteConfirmationForm
                     show={this.state.showDeleteConfirmation} 

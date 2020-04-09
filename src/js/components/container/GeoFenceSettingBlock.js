@@ -323,6 +323,7 @@ class GeoFenceSettingBlock extends React.Component{
                     minRows={0}
                  
                     {...extraProps}
+                    {...styleConfig.reactTable}
                     getTrProps={(state, rowInfo, column, instance) => {   
                           return {
                               onClick: (e, handleOriginal) => {  

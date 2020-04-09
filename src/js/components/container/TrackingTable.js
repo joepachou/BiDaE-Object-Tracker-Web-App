@@ -16,9 +16,8 @@ import {
 } from '../../config/tables'
 import retrieveDataHelper from '../../helper/retrieveDataHelper'
 import { toast } from 'react-toastify';
-import LBeaconTable from './LBeaconTable'
-import GatewayTable from './GatewayTable' 
 import messageGenerator from '../../helper/messageGenerator';
+import styleConfig from '../../config/styleConfig';
  
 
 class TrackingTable extends React.Component{
@@ -127,6 +126,7 @@ class TrackingTable extends React.Component{
                 pageSizeOptions={[5, 10]}
                 resizable={true}
                 freezeWhenExpanded={false}
+                {...styleConfig.reactTable}
             />
         )
     }

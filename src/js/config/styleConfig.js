@@ -89,7 +89,7 @@ const styleConfig = {
 
         SelectInputComponent: BOTCheckbox,
 
-        PaginationComponent: BOTPagination,
+        // PaginationComponent: BOTPagination,
 
         // showPagination: false
 
