@@ -27,6 +27,10 @@ function getTrackingData (areas_id) {
 			user_table.name as physician_name,
 			object_table.reserved_timestamp,
 			notification.json_agg as notification,
+			JSON_BUILD_OBJECT(
+				'id', area_table.id,
+				'value', area_table.name
+			) AS area,
 			object_table.reserved_user_id,
 			(
 				SELECT name
@@ -45,6 +49,9 @@ function getTrackingData (areas_id) {
 
 		LEFT JOIN edit_object_record
 		ON object_table.note_id = edit_object_record.id
+
+		LEFT JOIN area_table
+		ON object_table.area_id = area_table.id
 
 		LEFT JOIN (
 			SELECT 

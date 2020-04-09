@@ -76,11 +76,6 @@ const getTrackingData = (request, response) => {
     /** The user's authenticated area id */
     let userAuthenticatedAreasId= user.areas_id
 
-    /** Allow user to access the info of objects in secondary areas */
-    if (user.main_area && user.main_area.toString() && !userAuthenticatedAreasId.includes(user.main_area.toString())) {
-        userAuthenticatedAreasId.push(user.main_area.toString())
-    }
-
     /** User interface's current area id */
     const currentAreaId = areaId.toString()
 
@@ -95,8 +90,22 @@ const getTrackingData = (request, response) => {
             const toReturn = res.rows
             .filter(item => item.mac_address)
             .map((item, index) => {
+
+                /** Parse lbeacon uuid into three field in an array: area id, latitude, longtitude */
+                let lbeacon_coordinate = item.lbeacon_uuid ? parseLbeaconCoordinate(item.lbeacon_uuid) : null;
+
+                item.lbeacon_coordinate = lbeacon_coordinate
+
+                item.currentPosition = item.lbeacon_uuid ? calculatePosition(item) : null;
+
+                let lbeaconAreaId = lbeacon_coordinate ? lbeacon_coordinate[2] : null
+
+                let isLbeaconMatchArea = lbeaconAreaId == currentAreaId
+
+                let isUserSObject = userAuthenticatedAreasId.includes(parseInt(item.area_id))
+
                 /** Flag the object that belongs to the current area or to the user's authenticated area */
-                item.isMatchedObject = checkMatchedObject(item, userAuthenticatedAreasId, currentAreaId)
+                item.isMatchedObject = isUserSObject && isLbeaconMatchArea
 
                 /** Set the boolean if the object's last_seen_timestamp is in the specific time period */
                 let isInTheTimePeriod = moment().diff(item.last_reported_timestamp, 'seconds') 
@@ -153,7 +162,7 @@ const getTrackingData = (request, response) => {
         response.status(200).json(toReturn)
 
     }).catch(err => {
-        console.log("Get tracking data fails: " + err)
+        console.log(`get tracking data failed ${err}`)
     })
 }
 
@@ -1266,7 +1275,7 @@ const parseGeoFenceConfig = (field = []) => {
 const checkMatchedObject = (item, userAuthenticatedAreasId, currentAreaId) => {
 
     /** If the current area id is the user's authenticated area id */
-    let isInUserSAuthArea = userAuthenticatedAreasId.includes(currentAreaId)
+    let isInUserSAuthArea = userAuthenticatedAreasId.includes(parseInt(currentAreaId))
 
     /** Parse lbeacon uuid into three field in an array: area id, latitude, longtitude */
     let lbeacon_coordinate = item.lbeacon_uuid ? parseLbeaconCoordinate(item.lbeacon_uuid) : null;
@@ -1283,7 +1292,7 @@ const checkMatchedObject = (item, userAuthenticatedAreasId, currentAreaId) => {
     let isMatchedArea = lbeacon_area_id == parseInt(currentAreaId)
 
     /** Set the boolean if the object belong to the user's authenticated area id */
-    let isUserSObject = userAuthenticatedAreasId.includes(item.area_id)
+    let isUserSObject = userAuthenticatedAreasId.includes(parseInt(item.area_id))
 
     /** Set the boolean if the object belong to the current area */
     let isAreaSObject = item.area_id == parseInt(currentAreaId)
@@ -1292,11 +1301,12 @@ const checkMatchedObject = (item, userAuthenticatedAreasId, currentAreaId) => {
     if (isMatchedArea) {
 
         /** Determine if the current area is the authenticated area */
+        return isUserSObject
         if (isInUserSAuthArea) {
 
             /** Flag the object that belongs to the current area and to the user's authenticated area,
              * if the current area is the authenticated area */
-            return isAreaSObject || isUserSObject
+            return isUserSObject
         } else {
 
             /** Flag the object that belongs to the user's authenticated area, 

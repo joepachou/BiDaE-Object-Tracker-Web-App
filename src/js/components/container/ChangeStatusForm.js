@@ -229,16 +229,29 @@ class ChangeStatusForm extends React.Component {
                                                                 />
                                                             </Col>
                                                         </Row>
-                                                        <FormikFormGroup 
-                                                            type="text"
-                                                            name="asset_control_number"
-                                                            label={locale.texts.ACN}
-                                                            error={errors.asset_control_number}
-                                                            value={item.asset_control_number}
-                                                            touched={touched.asset_control_number}
-                                                            placeholder=""
-                                                            disabled
-                                                        />
+                                                        <Row noGutters>
+                                                            <Col>
+                                                                <FormikFormGroup 
+                                                                    type="text"
+                                                                    name="asset_control_number"
+                                                                    label={locale.texts.ACN}
+                                                                    error={errors.asset_control_number}
+                                                                    value={item.asset_control_number}
+                                                                    touched={touched.asset_control_number}
+                                                                    placeholder=""
+                                                                    disabled
+                                                                />
+                                                            </Col>
+                                                            <Col>
+                                                                <FormikFormGroup 
+                                                                    type="text"
+                                                                    name="area"
+                                                                    label={locale.texts.AREA}
+                                                                    value={locale.texts[item.area.value]}
+                                                                    disabled
+                                                                />
+                                                            </Col>
+                                                        </Row>
                                                     </Col>
                                                 </Row>
                                             </div>
