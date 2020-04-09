@@ -19,7 +19,7 @@ const style = {
             color: "orange",
         },
         circle: {
-            color: "orange",
+            color: "green",
         }
     },
     battery:{
@@ -50,20 +50,25 @@ const lbeaconTableColumn = [
     {
         Header: "health status",
         accessor: "health_status",
-        width: 60,
+        width: 70,
         style: style.textRight,
         Cell: props => config.healthStatusMap[props.value] ? config.healthStatusMap[props.value] : props.value
     },
     {
+        Header: "product_version",
+        accessor: "product_version",
+        width: 130,
+        Cell: props => config.productVersionMap[props.value] ?  config.productVersionMap[props.value] : props.value
+    },
+    {
         Header: "danger area",
         accessor: "danger_area",
-        width: 60,
+        width: 100,
         style: style.column,
         Cell: props => props.value 
             ? <i className="fas fa-circle" style={style.icon.circle}></i>
             : null
     },
-
     {
         Header: "UUID",
         accessor: "uuid",
@@ -90,7 +95,7 @@ const lbeaconTableColumn = [
         width: 180
     },
     {
-        Header: "Last Report Time",
+        Header: "Last Report Timestamp",
         accessor: "last_report_timestamp",
         width: 200,
     },
@@ -102,11 +107,6 @@ const lbeaconTableColumn = [
         Header: "server time offset",
         accessor: "server_time_offset",
     },
-    {
-        Header: "product_version",
-        accessor: "product_version",
-        Cell: props => config.productVersionMap[props.value] ?  config.productVersionMap[props.value] : props.value
-    }
 ]
 
 const gatewayTableColumn = [
@@ -123,8 +123,14 @@ const gatewayTableColumn = [
         Header: "health status",
         accessor: "health_status",
         style: style.textRight,
-        width: 60,
+        width: 120,
         Cell: props => config.healthStatusMap[props.value] ? config.healthStatusMap[props.value] : props.value
+    },
+    {
+        Header: "product_version",
+        accessor: "product_version",
+        width: 170,
+        Cell: props => config.productVersionMap[props.value] ?  config.productVersionMap[props.value] : props.value
     },
     {
         Header: "IP Address",
@@ -144,11 +150,6 @@ const gatewayTableColumn = [
     {
         Header: "api version",
         accessor: 'api_version',
-    },
-    {
-        Header: "product_version",
-        accessor: "product_version",
-        Cell: props => config.productVersionMap[props.value] ?  config.productVersionMap[props.value] : props.value
     },
     {
         Header: "abnormal lbeacon list",
@@ -391,10 +392,21 @@ const geofenceTableColumn = [
 
 const userInfoTableColumn = [
     {
+        Header: "POUND_SIGN",
+        accessor: "_id",
+        style: style.column,
+        width: 60,
+    },
+    {
         Header: "Name",
         accessor: "name",
         resizable: false,
         width: 150,
+    },
+    {
+        Header: "user id",
+        accessor: 'id',
+        width: 50,
     },
     {
         Header: "Roles",
@@ -405,6 +417,11 @@ const userInfoTableColumn = [
         Header: "Main Area",
         accessor: "main_area",
         width: 150,
+    },
+    {
+        Header: "secondary areas",
+        accessor: "area_ids",
+        width: 200,
     },
     {
         Header: "last visit timestamp",

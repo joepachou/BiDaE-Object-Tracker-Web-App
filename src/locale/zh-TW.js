@@ -338,6 +338,7 @@ const tw = {
     
     /** table Field */
     ID: "ID",
+    USER_ID: "ID",
     HEALTH_STATUS: "狀態",
     UUID: "UUID",
     DESCRIPTION: "地點描述",

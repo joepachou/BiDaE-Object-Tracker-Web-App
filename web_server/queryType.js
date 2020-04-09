@@ -74,9 +74,9 @@ function getTrackingData (areas_id) {
 			SELECT 
 				mac_address,
 				json_agg(json_build_object(
-						'type', monitor_type, 
-						'time', violation_timestamp)
-					)
+					'type', monitor_type, 
+					'time', violation_timestamp
+				))
 			FROM (
 				SELECT 
 					mac_address,
@@ -456,27 +456,25 @@ function getImportData(formOption){
 
 
 
-const getLbeaconTable = 
-    `
-		SELECT 
-			id,
-			uuid, 
-			description, 
-			ip_address, 
-			health_status, 
-			gateway_ip_address, 
-			last_report_timestamp,
-			danger_area,
-			room,
-			api_version,
-			server_time_offset,
-			product_version
-		FROM lbeacon_table
-		ORDER BY last_report_timestamp DESC
-	`;
+const getLbeaconTable = `
+	SELECT 
+		id,
+		uuid, 
+		description, 
+		ip_address, 
+		health_status, 
+		gateway_ip_address, 
+		last_report_timestamp,
+		danger_area,
+		room,
+		api_version,
+		server_time_offset,
+		product_version
+	FROM lbeacon_table
+	ORDER BY ip_address DESC
+`;
 
-const getGatewayTable = 
-    `
+const getGatewayTable = `
 	SELECT 
 		ip_address, 
 		health_status, 
@@ -488,7 +486,8 @@ const getGatewayTable =
 		abnormal_lbeacon_list
 	FROM 
 		gateway_table 
-	ORDER BY last_report_timestamp DESC`;	
+	ORDER BY ip_address DESC
+`;	
 
 function objectImport (idPackage) {
 
@@ -1117,35 +1116,49 @@ const getUserList = () => {
 			user_table.last_visit_timestamp,
 			user_table.main_area,
 			area_table.name as area_name,
-			array_agg(roles.name) AS role_type 
-
+			ARRAY_AGG(roles.name) AS role_type,
+			areas.area_ids
+			
 		FROM user_table  
 
 		INNER JOIN (
 			SELECT * 
 			FROM user_role
-			INNER JOIN roles ON user_role.role_id = roles.id
+			INNER JOIN roles 
+			ON user_role.role_id = roles.id
 		) roles
 		ON user_table.id = roles.user_id
 
 		LEFT JOIN area_table
 		ON area_table.id = user_table.main_area
 
+		LEFT JOIN (
+			SELECT
+				user_id,
+				ARRAY_AGG(JSONB_BUILD_OBJECT(
+					'id', area_id::int,
+					'value', (
+						SELECT 
+							name 
+						FROM area_table
+						WHERE area_table.id = area_id
+					)
+				)) AS area_ids
+			FROM user_area
+			GROUP BY 
+				user_id
+		) AS areas
+		ON areas.user_id = user_table.id
+
 		GROUP BY 
 			user_table.id, 
 			user_table.name,
 			user_table.registered_timestamp, 
 			user_table.last_visit_timestamp,
-			area_table.name
+			area_table.name,
+			areas.area_ids
 		ORDER BY user_table.name DESC
 	`
-	return query
-}
-
-const getUserRole = (username) => {
-	const query = `select name      from roles      where 
-		id=(       select role_id   from user_role where 
-		user_id=(  select id        from user_table where name='${username}'));`
 	return query
 }
 
@@ -2112,7 +2125,6 @@ module.exports = {
 	getShiftChangeRecord,
 	validateUsername,
 	getUserList,
-	getUserRole,
 	getRoleNameList,
 	deleteUser,
 	setUserInfo,

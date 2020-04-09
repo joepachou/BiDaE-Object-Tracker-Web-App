@@ -18,6 +18,7 @@ import DeleteUserForm from './DeleteUserForm'
 import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm';
 import config from '../../../config';
 import retrieveDataHelper from '../../../helper/retrieveDataHelper';
+import styleConfig from '../../../styleConfig';
 const Fragment = React.Fragment;
 
 class AdminManagementContainer extends React.Component{
@@ -70,7 +71,14 @@ class AdminManagementContainer extends React.Component{
                 }
             })
             res.data.rows.map((item, index) => {
+                item._id = index + 1
                 item.roles = item.role_type.map(role => locale.texts[role.toUpperCase()]).join(',')
+                item.area_ids = item.area_ids
+                    .filter(area =>  area.id != item.main_area)
+                    .map(area => {
+                        return locale.texts[area.value]
+                    })
+                    .join('/')
                 item.main_area = locale.texts[item.area_name]
             })
             this.setState({
@@ -271,6 +279,7 @@ class AdminManagementContainer extends React.Component{
                     noDataText="No Data Available"
                     className="-highlight text-none"
                     style={{height:'75vh'}}
+                    {...styleConfig.reactTable}
                     getTrProps={this.onRowClick}
                     // getTrGroupProps={(state, rowInfo, column, instance) => { 
                     //     return { 

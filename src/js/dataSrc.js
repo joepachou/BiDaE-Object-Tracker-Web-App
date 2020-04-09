@@ -42,7 +42,6 @@ const deleteObjectWithImport = `${protocol}://${dataSrcIP}/test/deleteObjectWith
 const deleteLBeacon= `${protocol}://${dataSrcIP}/test/deleteLBeacon`
 const deleteGateway= `${protocol}://${dataSrcIP}/test/deleteGateway`
 const getUserList = `${protocol}://${dataSrcIP}/test/getUserList`
-const getUserRole = `${protocol}://${dataSrcIP}/test/getUserRole`
 const getRoleNameList = `${protocol}://${dataSrcIP}/test/getRoleNameList`
 const deleteUser = `${protocol}://${dataSrcIP}/test/deleteUser`
 const setUserInfo = `${protocol}://${dataSrcIP}/test/setUserInfo`
@@ -123,7 +122,6 @@ module.exports = {
     deleteEditObjectRecord,
     deleteShiftChangeRecord,
     getUserList,
-    getUserRole,
     getRoleNameList,
     deleteUser,
     setUserInfo,

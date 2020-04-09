@@ -834,28 +834,21 @@ const getUserList = (request, response) => {
     let { locale } = request.body
     pool.query(queryType.getUserList())
         .then(res => {
-            console.log('get user list success')
+            console.log('get user list succeed')
             res.rows.map(item => {
                 item.last_visit_timestamp = 
                     item.last_visit_timestamp && 
-                    moment.tz(item.last_visit_timestamp, process.env.TZ).locale(locale).format('LLLL');
-                item.registered_timestamp = moment.tz(item.registered_timestamp, process.env.TZ).locale(locale).format('LLLL');
+                    moment.tz(item.last_visit_timestamp, process.env.TZ)
+                        .locale(locale)
+                        .format(process.env.TIMESTAMP_FORMAT);
+                item.registered_timestamp = moment.tz(item.registered_timestamp, process.env.TZ)
+                    .locale(locale)
+                    .format(process.env.TIMESTAMP_FORMAT);
             })
             response.status(200).json(res)
         })
         .catch(err => {
-            console.log(`get user list fail ${err}`)
-        })
-}
-
-const getUserRole = (request, response) => {
-    var { username } = request.body
-    pool.query(queryType.getUserRole(username))
-        .then(res => {
-            response.status(200).json(res.rows[0].roles)
-        })
-        .catch(err => {
-            console.log(`get user role fail ${err}`)
+            console.log(`get user list failed ${err}`)
         })
 }
 
@@ -1553,7 +1546,6 @@ module.exports = {
     getLbeaconTable,
     getGatewayTable,
     getUserList,
-    getUserRole,
     getRoleNameList,
     getAreaTable,
     getGeofenceConfig,

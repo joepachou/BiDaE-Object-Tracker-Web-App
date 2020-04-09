@@ -112,8 +112,6 @@ app.post('/validation/username', db.validateUsername)
 
 app.post('/test/getUserList', db.getUserList)
 
-app.post('/test/getUserRole', db.getUserRole)
-
 app.post('/test/getRoleNameList', db.getRoleNameList)
 
 app.post('/test/deleteUser', db.deleteUser)
