@@ -118,10 +118,10 @@ const getTrackingData = (request, response) => {
                 item.found = isInTheTimePeriod && isMatchRssi 
 
                 /** Set the residence time of the object */
-                item.residence_time =  item.found 
+                item.residence_time = item.found 
                     ? moment(item.last_seen_timestamp).locale(locale).from(moment(item.first_seen_timestamp)) 
-                    : item.last_seen_timestamp 
-                        ? moment(item.last_seen_timestamp).locale(locale).fromNow()
+                    : item.last_reported_timestamp 
+                        ? moment(item.last_reported_timestamp).locale(locale).fromNow()
                         : 'N/A'      
 
                 /** Flag the object that is violate geofence */
