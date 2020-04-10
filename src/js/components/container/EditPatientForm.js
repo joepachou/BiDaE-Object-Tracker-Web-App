@@ -26,15 +26,12 @@ class EditPatientForm extends React.Component {
         axios.post(path, {
             formOption: postOption
         }).then(res => { 
-
-            let callback = () => messageGenerator.setSuccessMessage(
-                'save success'
-            )
+ 
             this.setState({
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: 5000,
                 hideProgressBar: true
-            }, callback)
+            } )
 
 
         }).catch( error => {
