@@ -310,12 +310,7 @@ const getLbeaconTable = (request, response) => {
         .then(res => {
             console.log('get lbeacon table data succeed')
             res.rows.map(item => {
-                // item.health_status =  
-                //     !item.health_status && 
-                //     moment().diff(item.last_report_timestamp, LBEACON_HEALTH_STATUS_TIME_INTERVAL_UNIT) < LBEACON_HEALTH_STATUS_TIME_INTERVAL
-                //         ? 1 : 0 
-
-                item.last_report_timestamp = moment.tz(item.last_report_timestamp, process.env.TZ).locale(locale).format('lll');
+                item.last_report_timestamp = moment.tz(item.last_report_timestamp, process.env.TZ).locale(locale).format(process.env.TIMESTAMP_FORMAT);
             })
             response.status(200).json(res)
 
@@ -332,9 +327,8 @@ const getGatewayTable = (request, response) => {
         .then(res => {
             console.log(`get gateway table succeed`)
             res.rows.map(item => {
-                // item.health_status =  item.health_status === 0 && moment().diff(item.last_report_timestamp, 'days') < 1 ? 0 : 1 
-                item.last_report_timestamp = moment.tz(item.last_report_timestamp, process.env.TZ).locale(locale).format('lll');
-                item.registered_timestamp = moment.tz(item.registered_timestamp, process.env.TZ).locale(locale).format('lll');
+                item.last_report_timestamp = moment.tz(item.last_report_timestamp, process.env.TZ).locale(locale).format(process.env.TIMESTAMP_FORMAT);
+                item.registered_timestamp = moment.tz(item.registered_timestamp, process.env.TZ).locale(locale).format(process.env.TIMESTAMP_FORMAT);
             })
             response.status(200).json(res)
         })    
@@ -696,15 +690,15 @@ const getEditObjectRecord = (request, response) => {
     const { locale } = request.body
     pool.query(queryType.getEditObjectRecord())
         .then(res => {
-            console.log('get edit object record')
+            console.log('get object edited record')
 
             res.rows.map(item => {
-                item.edit_time = moment.tz(item.edit_time, process.env.TZ).locale(locale).format('LLL');
+                item.edit_time = moment.tz(item.edit_time, process.env.TZ).locale(locale).format(process.env.TIMESTAMP_FORMAT);
             })
             response.status(200).json(res)
         })
         .catch(err => {
-            console.log('getEditObjectRecord error: ', err)
+            console.log(`get object edited record failed ${err}`)
         })
 }
 
@@ -816,7 +810,7 @@ const getShiftChangeRecord = (request, response) => {
         .then(res => {
             console.log('get shift change record succeed')
             res.rows.map(item => {
-                item.submit_timestamp = moment.tz(item.submit_timestamp, process.env.TZ).locale(locale).format('LLL');
+                item.submit_timestamp = moment.tz(item.submit_timestamp, process.env.TZ).locale(locale).format(process.env.TIMESTAMP_FORMAT);
             })
             response.status(200).json(res)
         })
