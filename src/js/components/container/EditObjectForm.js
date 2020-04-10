@@ -260,6 +260,8 @@ class EditObjectForm extends React.Component {
                                 postOption.name = postOption.name.substring(1 ,postOption.name.length);       
                             } 
                             this.handleSubmit(postOption)                            
+ 
+
                         }}
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm }) => (

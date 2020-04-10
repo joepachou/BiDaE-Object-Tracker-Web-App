@@ -20,7 +20,7 @@ import LocaleContext from '../../context/LocaleContext';
 import FormikFormGroup from './FormikFormGroup'
 import RadioButtonGroup from '../container/RadioButtonGroup';
 import RadioButton from './RadioButton'
- 
+import messageGenerator from '../../helper/messageGenerator'
  
 let style = {
     icon: {
@@ -144,7 +144,12 @@ const EditGeofenceConfig = ({
                             action: isEdited ? 'set' : 'add',
                             is_global_fence: values.isGlobal
                         }
+
+                        let callback = () => messageGenerator.setSuccessMessage(
+                                            'save success'
+                                        )  
                         handleSubmit(monitorConfigPackage)
+                        callback()
                     }}
 
                     render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (

@@ -23,7 +23,7 @@ import ReactLoading from "react-loading";
 import styled from 'styled-components'
 const SelectTable = selecTableHOC(ReactTable);
 import BOTCheckbox from './BOTCheckbox';
-
+import messageGenerator from '../../helper/messageGenerator'
 class ObjectTable extends React.Component{
 
     static contextType = AppContext
@@ -97,11 +97,15 @@ class ObjectTable extends React.Component{
     }
 
     handleSubmitForm = () => {
+
+        let callback = () => messageGenerator.setSuccessMessage(
+            'save success'
+        )
         this.setState({
             isShowEdit: false,
             showDeleteConfirmation: false,
             disableASN:false,
-        })
+        }, callback) 
         this.props.refreshData()
     }
 

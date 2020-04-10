@@ -7,7 +7,7 @@ import { Formik, Field, Form } from 'formik';
 import RadioButtonGroup from "../container/RadioButtonGroup"
 import RadioButton from "./RadioButton"
 import FormikFormGroup from './FormikFormGroup'
-
+import messageGenerator from '../../helper/messageGenerator'
 /**
  * EditLbeaconForm will update if user selects one of the object table.
  * The selected object data will transfer from ObjectMangentContainer to EditLbeaconForm
@@ -65,7 +65,11 @@ const EditLbeaconForm = ({
                             danger_area,
                             room,
                         }
+                        let callback = () => messageGenerator.setSuccessMessage(
+                                            'save success'
+                                        )  
                         handleSubmit(lbeaconSettingPackage)
+                        callback()
                     }}
 
                     render={({ values, errors, status, touched, isSubmitting }) => (

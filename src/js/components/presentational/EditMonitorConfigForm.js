@@ -15,7 +15,7 @@ import Switcher from '../container/Switcher'
 import styleConfig from '../../config/styleConfig';
 import FormikFormGroup from './FormikFormGroup'
 import LocaleContext from '../../context/LocaleContext';
-
+import messageGenerator from '../../helper/messageGenerator'
 const EditMonitorConfigForm =  ({
     selectedData,
     isEdited,
@@ -58,7 +58,11 @@ const EditMonitorConfigForm =  ({
                             type: type,
                             area_id: values.area.id,
                         }
+                        let callback = () => messageGenerator.setSuccessMessage(
+                                            'save success'
+                                        )   
                         handleSubmit(monitorConfigPackage)
+                        callback()
                     }}
 
                     render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (

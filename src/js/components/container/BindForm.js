@@ -10,6 +10,7 @@ import {
 import { AppContext } from '../../context/AppContext';
 import Select from 'react-select';
 import config from '../../config'
+import messageGenerator from '../../helper/messageGenerator'
 
 class BindForm extends React.Component {
 
@@ -168,9 +169,9 @@ class BindForm extends React.Component {
                                 axios.post(addAssociation, {
                                     formOption
                                 }).then(res => {
-                                    setTimeout(function() { 
-                                        this.props.handleSubmitForm()
-                                        this.handleClose()
+                                    setTimeout(function() {  
+                                       this.props.handleSubmitForm()
+                                        this.handleClose() 
                                     }.bind(this),1000)
                                 }).catch( error => {
                                     console.log(error)

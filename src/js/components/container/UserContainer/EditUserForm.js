@@ -18,7 +18,7 @@ import Checkbox from '../../presentational/Checkbox'
 import FormikFormGroup from '../../presentational/FormikFormGroup'
 import styleConfig from '../../../config/styleConfig';
 import LocaleContext from '../../../context/LocaleContext';
-
+import messageGenerator from '../../../helper/messageGenerator'
 const EditUserForm = ({
     show,
     title,
@@ -94,7 +94,12 @@ const EditUserForm = ({
                     }
 
                     onSubmit={(values, { setStatus, setSubmitting }) => {
+                        
+                        let callback = () => messageGenerator.setSuccessMessage(
+                                            'save success'
+                                        )  
                         handleSubmit(values)
+                        callback()
                     }}
 
                     render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
