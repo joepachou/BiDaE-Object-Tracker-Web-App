@@ -51,8 +51,7 @@ const EditMonitorConfigForm =  ({
                         end_time: selectedData ? selectedData.end_time : '',
                     }}
 
-                    onSubmit={(values, { setStatus, setSubmitting }) => {
-                       
+                    onSubmit={(values, { setStatus, setSubmitting }) => { 
                         let monitorConfigPackage = {
                             ...values,
                             id: isEdited == true  ? selectedData.id : '',

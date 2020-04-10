@@ -106,7 +106,7 @@ class MonitorSettingBlock extends React.Component{
         })
     }
 
-    handleSubmit = (pack) => {
+    handleSubmit = (pack) => { 
         let configPackage = pack ? pack : {}
         let { 
             path,
@@ -115,6 +115,7 @@ class MonitorSettingBlock extends React.Component{
         configPackage["type"] = config.monitorSettingUrlMap[this.props.type]
         // configPackage["id"] = selectedData ? selectedData.id : null;
         configPackage["id"] = this.state.selection   
+        if (configPackage["id"] == null && this.state.selectedData != null){configPackage["id"] = this.state.selectedData.id } 
         axios.post(dataSrc[path], {
             monitorConfigPackage: configPackage
         })
@@ -307,10 +308,10 @@ class MonitorSettingBlock extends React.Component{
                     {...styleConfig.reactTable}
                     getTrProps={(state, rowInfo, column, instance) => {   
                           return {
-                              onClick: (e, handleOriginal) => { 
+                              onClick: (e, handleOriginal) => {  
                                   this.setState({ 
-                                    show: true,
                                     selectedData: rowInfo.row._original,
+                                    show: true, 
                                     isEdited: true,
                                     path: 'setMonitorConfig'
                                 })
