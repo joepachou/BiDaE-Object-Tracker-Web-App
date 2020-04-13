@@ -22,7 +22,8 @@ import {
 import {
     BOTContainer,
     BOTSideNav,
-    PageTitle
+    PageTitle,
+    BOTSideNavTitle
 } from '../../../config/styleComponent'
 
 const style = {
@@ -68,61 +69,57 @@ class ReportContainer extends React.Component{
         return (
             <Fragment>
                 <BrowserView>
-                    <>
-                        <Tab.Container 
-                            transition={false} 
-                            defaultActiveKey={this.defaultActiveKey}
+                    <Tab.Container 
+                        transition={false} 
+                        defaultActiveKey={this.defaultActiveKey}
+                    >
+                        <div 
+                            className="BOTsidenav"
+                            style={style.sidenav}
                         >
-                            <div 
-                                className="BOTsidenav"
-                                style={style.sidenav}
-                            >
-                                <div className="h5 mb-3 d-flex justify-content-center font-color-black">
-                                    {locale.texts.USER_SETTING}
-                                </div>
-                                <ListGroup variant="flush">
-                                    {this.tabList.map((tab, index) => {
-                                        return (
-                                            <BOTSideNav
-                                                key={index}
-                                                eventKey={tab.name.replace(/ /g, '_')}
-                                                action
-                                            >
-                                                {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
-                                            </BOTSideNav>
-                                        )
-                                    })}  
-                                </ListGroup>  
-                                
-                            </div>
-                            <div
-                                className="BOTsidemain"
-                                style={style.sidemain}
-                            >
-                                <Tab.Content>
+                            <BOTSideNavTitle>
+                                {locale.texts.REPORT}
+                            </BOTSideNavTitle>
+                            <ListGroup variant="flush">
                                 {this.tabList.map((tab, index) => {
-                                    let props = {
-                                        type: tab.name,
-                                    }
                                     return (
-                                        <Tab.Pane 
+                                        <BOTSideNav
+                                            key={index}
                                             eventKey={tab.name.replace(/ /g, '_')}
-                                            key={tab.name.replace(/ /g, '_')}
+                                            action
                                         >
-                                            <PageTitle
-                                                className="mb-3"
-                                            >                                            
-                                                {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
-                                            </PageTitle>
-                                            <hr/>
-                                            {tab.component(props)}
-                                        </Tab.Pane>
+                                            {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
+                                        </BOTSideNav>
                                     )
-                                })}
-                                </Tab.Content>         
-                            </div>
-                        </Tab.Container>
-                    </>
+                                })}  
+                            </ListGroup>  
+                            
+                        </div>
+                        <div
+                            className="BOTsidemain"
+                            style={style.sidemain}
+                        >
+                            <Tab.Content>
+                            {this.tabList.map((tab, index) => {
+                                let props = {
+                                    type: tab.name,
+                                }
+                                return (
+                                    <Tab.Pane 
+                                        eventKey={tab.name.replace(/ /g, '_')}
+                                        key={tab.name.replace(/ /g, '_')}
+                                    >
+                                        <PageTitle>
+                                            {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
+                                        </PageTitle>
+                                        <hr/>
+                                        {tab.component(props)}
+                                    </Tab.Pane>
+                                )
+                            })}
+                            </Tab.Content>         
+                        </div>
+                    </Tab.Container>
                 </BrowserView>
                 <TabletView>
                     <Container 

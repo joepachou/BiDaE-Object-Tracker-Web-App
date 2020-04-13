@@ -19,14 +19,19 @@ import {
     disableBodyScroll,
     enableBodyScroll,
 } from 'body-scroll-lock';
+import {
+    BOTSideNav,
+    PageTitle
+} from '../../../config/styleComponent'
+import styleSheet from '../../../config/styleSheet'
 
 const style = {
 
     sidenav: {
-        width: isBrowser ? 150 : 0,
+        width: isBrowser ? 250 : 0,
     },
     sidemain:{
-        marginLeft: isBrowser ? 150 : 0
+        marginLeft: isBrowser ? 250 : 0
     },
     container: {
         overflowX: 'hide'
@@ -66,70 +71,65 @@ class MonitorSettingContainer extends React.Component{
 
         return (
             <Fragment>
-                <BrowserView>
-                    <Container 
-                        fluid 
-                        className="mt-5 text-capitalize"
-                        style={style.container}
-                    >     
-                        <Tab.Container 
-                            transition={false} 
-                            defaultActiveKey={this.defaultActiveKey}
-                            className='mt-5' 
-                        >
-                            <div 
-                                className="border-0 BOTsidenav"
-                                style={style.sidenav}
-                            >            
-                                <ListGroup 
-                                    variant="flush" 
-                                    className="border-0"
-                                >
-                                    {this.tabList.map((tab, index) => { 
-                                        return ( 
-                                            <ListGroup.Item 
-                                                key={index}
-                                                className="border-0 m-0 my-1" 
-                                                eventKey={tab.name.replace(/ /g, '_')}
-                                                onClick={() => this.setState({nowIndex :index})}
-                                                action
-                                            >
+                <BrowserView>  
+                    <Tab.Container 
+                        transition={false} 
+                        defaultActiveKey={this.defaultActiveKey}
+                        className='mt-5' 
+                    >
+                        <div 
+                            className="border-0 BOTsidenav"
+                            style={style.sidenav}
+                        >            
+                            <div className="h5 mb-3 d-flex justify-content-center font-color-black text-capitalize">
+                                {locale.texts.MONITOR_SETTING}
+                            </div>
+                            <ListGroup 
+                                variant="flush" 
+                                className="border-0"
+                            >
+                                {this.tabList.map((tab, index) => { 
+                                    return ( 
+                                        <BOTSideNav
+                                            key={index}
+                                            className="border-0 m-0 my-1" 
+                                            eventKey={tab.name.replace(/ /g, '_')}
+                                            onClick={() => this.setState({nowIndex :index})}
+                                            action
+                                        >
+                                            {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
+                                        </BOTSideNav>
+                                    )
+                                })}  
+                            </ListGroup>      
+                                        
+                        </div>
+                        <div
+                            className="BOTsidemain"
+                            style={style.sidemain}
+                        >           
+                            <Tab.Content>
+                                {this.tabList.map((tab, index) => {
+                                    let props = {
+                                        type: tab.name,
+                                        nowIndex : this.state.nowIndex
+                                    }
+                                    return (
+                                        <Tab.Pane  
+                                            eventKey={tab.name.replace(/ /g, '_')}
+                                            key={tab.name.replace(/ /g, '_')} 
+                                        >
+                                            <PageTitle>
                                                 {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
-                                            </ListGroup.Item>
-                                        )
-                                    })}  
-                                </ListGroup>      
-                                            
-                            </div>
-                            <div
-                                className="BOTsidemain"
-                                style={style.sidemain}
-                            >           
-                                <Tab.Content>
-                                    {this.tabList.map((tab, index) => {
-                                        let props = {
-                                            type: tab.name,
-                                            nowIndex : this.state.nowIndex
-                                        }
-                                        return (
-                                            <Tab.Pane  
-                                                eventKey={tab.name.replace(/ /g, '_')}
-                                                key={tab.name.replace(/ /g, '_')} 
-                                            >
-                                                <div
-                                                    className='h5'
-                                                >
-                                                    {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
-                                                </div>
-                                                <hr/>
-                                                {tab.component(props)}
-                                            </Tab.Pane>
-                                        )
-                                    })}
-                                </Tab.Content>         
-                            </div>
-                        </Tab.Container>
-                    </Container>
+                                            </PageTitle>
+                                            <hr/>
+                                            {tab.component(props)}
+                                        </Tab.Pane>
+                                    )
+                                })}
+                            </Tab.Content>         
+                        </div>
+                    </Tab.Container>
                 </BrowserView>
                 <TabletView>
                     <Container 

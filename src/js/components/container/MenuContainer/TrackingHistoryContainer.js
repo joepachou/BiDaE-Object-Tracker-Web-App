@@ -20,9 +20,9 @@ import {
     enableBodyScroll,
 } from 'body-scroll-lock';
 import {
-    BOTContainer,
     BOTSideNav,
-    PageTitle
+    PageTitle,
+    BOTSideNavTitle
 } from '../../../config/styleComponent'
 
 const style = {
@@ -68,77 +68,78 @@ class TrackingHistoryContainer extends React.Component{
         return (
             <Fragment>
                 <BrowserView>
-                    <>
-                        <Tab.Container 
-                            transition={false} 
-                            defaultActiveKey={this.defaultActiveKey}
-                        >
-                            <div 
-                                className="border-0 BOTsidenav"
-                                style={style.sidenav}
-                            >            
-                                <ListGroup 
-                                    variant="flush" 
-                                    className="border-0"
-                                >
-                                    {this.tabList.map((tab, index) => {
-                                        return (
-                                            <AccessControl
-                                                permission={tab.permission}
-                                                renderNoAccess={() => null}
-                                                platform={tab.platform}
-                                                key={tab.name}
+                    <Tab.Container 
+                        transition={false} 
+                        defaultActiveKey={this.defaultActiveKey}
+                    >
+                        <div 
+                            className="border-0 BOTsidenav"
+                            style={style.sidenav}
+                        >            
+                            <BOTSideNavTitle>
+                                {locale.texts.TRACKING_HISTORY}
+                            </BOTSideNavTitle>
+                            <ListGroup 
+                                variant="flush" 
+                                className="border-0"
+                            >
+                                {this.tabList.map((tab, index) => {
+                                    return (
+                                        <AccessControl
+                                            permission={tab.permission}
+                                            renderNoAccess={() => null}
+                                            platform={tab.platform}
+                                            key={tab.name}
+                                        >
+                                            <BOTSideNav 
+                                                key={index}
+                                                className="border-0 m-0 my-1 text-capitalize" 
+                                                eventKey={tab.name.replace(/ /g, '_')}
+                                                action
                                             >
-                                                <BOTSideNav 
-                                                    key={index}
-                                                    className="border-0 m-0 my-1 text-capitalize" 
-                                                    eventKey={tab.name.replace(/ /g, '_')}
-                                                    action
-                                                >
+                                                {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
+                                            </BOTSideNav>
+                                        </AccessControl>
+                                    )
+                                })}  
+                            </ListGroup>      
+                        </div>
+                        <div
+                            className="BOTsidemain"
+                            style={style.sidemain}
+                        >           
+                            <Tab.Content>
+                                {this.tabList.map((tab, index) => {
+                                    let props = {
+                                        type: tab.name,
+                                        setMessage: this.setMessage
+                                    }
+                                    return (
+                                        <AccessControl
+                                            permission={tab.permission}
+                                            renderNoAccess={() => null}
+                                            platform={tab.platform}
+                                            key={tab.name}
+                                        >
+                                            <Tab.Pane 
+                                                eventKey={tab.name.replace(/ /g, '_')}
+                                                key={tab.name.replace(/ /g, '_')}
+                                                style={{maginBottom: '1rem'}}
+                                            >
+                                                <PageTitle
+                                                    className="mb-3"
+                                                >           
                                                     {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
-                                                </BOTSideNav>
-                                            </AccessControl>
-                                        )
-                                    })}  
-                                </ListGroup>      
-                            </div>
-                            <div
-                                className="BOTsidemain"
-                                style={style.sidemain}
-                            >           
-                                <Tab.Content>
-                                    {this.tabList.map((tab, index) => {
-                                        let props = {
-                                            type: tab.name,
-                                            setMessage: this.setMessage
-                                        }
-                                        return (
-                                            <AccessControl
-                                                permission={tab.permission}
-                                                renderNoAccess={() => null}
-                                                platform={tab.platform}
-                                                key={tab.name}
-                                            >
-                                                <Tab.Pane 
-                                                    eventKey={tab.name.replace(/ /g, '_')}
-                                                    key={tab.name.replace(/ /g, '_')}
-                                                    style={{maginBottom: '1rem'}}
-                                                >
-                                                    <PageTitle
-                                                        className="mb-3"
-                                                    >           
-                                                        {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
-                                                    </PageTitle>
-                                                    <hr/>
-                                                    {tab.component(props)}
-                                                </Tab.Pane>
-                                            </AccessControl>
-                                        )
-                                    })}
-                                </Tab.Content>         
-                            </div>
-                        </Tab.Container>
-                    </>
+                                                </PageTitle>
+                                                <hr/>
+                                                {tab.component(props)}
+                                            </Tab.Pane>
+                                        </AccessControl>
+                                    )
+                                })}
+                            </Tab.Content>         
+                        </div>
+                    </Tab.Container>
                 </BrowserView>
                 <TabletView>
                     <Container 

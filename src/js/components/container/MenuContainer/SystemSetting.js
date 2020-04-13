@@ -24,20 +24,20 @@ import {
     enableBodyScroll,
 } from 'body-scroll-lock';
 import {
-    PageTitle
+    PageTitle,
+    BOTSideNav,
+    BOTSideNavTitle
 } from '../../../config/styleComponent'
 
 const style = {
 
     sidenav: {
-        width: isBrowser ? 150 : 0,
+        width: isBrowser ? 250 : 0,
     },
     sidemain:{
-        marginLeft: isBrowser ? 150 : 0
+        marginLeft: isBrowser ? 250 : 0
     },
-    container: {
-        overflowX: 'hide'
-    },
+
 }
 
 class SystemSetting extends React.Component{
@@ -88,11 +88,6 @@ class SystemSetting extends React.Component{
         return (
             <Fragment>
                 <BrowserView>
-                    <Container 
-                        fluid 
-                        className="mt-5 text-capitalize"
-                        style={style.container}
-                    >     
                         <Tab.Container 
                             transition={false} 
                             defaultActiveKey={this.defaultActiveKey}
@@ -102,6 +97,9 @@ class SystemSetting extends React.Component{
                                 className="border-0 BOTsidenav"
                                 style={style.sidenav}
                             >            
+                                <BOTSideNavTitle>
+                                    {locale.texts.SYSTEM_SETTING}
+                                </BOTSideNavTitle>
                                 <ListGroup 
                                     variant="flush" 
                                     className="border-0"
@@ -114,14 +112,13 @@ class SystemSetting extends React.Component{
                                                 platform={tab.platform}
                                                 key={tab.name}
                                             >
-                                                <ListGroup.Item 
+                                                <BOTSideNav
                                                     key={index}
-                                                    className="border-0 m-0 my-1 text-capitalize" 
                                                     eventKey={tab.name.replace(/ /g, '_')}
                                                     action
                                                 >
                                                     {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
-                                                </ListGroup.Item>
+                                                </BOTSideNav>
                                             </AccessControl>
                                         )
                                     })}  
@@ -154,7 +151,6 @@ class SystemSetting extends React.Component{
                                 </Tab.Content>         
                             </div>
                         </Tab.Container>
-                    </Container>
                 </BrowserView>
                 <TabletView>
                     <Container 

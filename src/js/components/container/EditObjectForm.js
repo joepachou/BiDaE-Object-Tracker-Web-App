@@ -49,7 +49,7 @@ class EditObjectForm extends React.Component {
             formOption: postOption
         }).then(res => {
             this.props.handleSubmitForm()
-        }).catch( error => {
+        }).catch(error => {
             console.log(error)
         })
     }

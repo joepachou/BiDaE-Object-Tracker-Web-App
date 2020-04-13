@@ -20,14 +20,8 @@ import {
     importTableColumn
  } from '../../../config/tables' 
 import config from '../../../config' 
-// import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { 
-    Button, 
-    Container, 
-    Row,
-    Col,
     Nav,
-    Spinner,
     Tab,
 } from 'react-bootstrap';
 import 'react-tabs/style/react-tabs.css';
@@ -42,6 +36,7 @@ import retrieveDataHelper from '../../../helper/retrieveDataHelper'
 import {
     BOTContainer,
     BOTNavLink,
+    BOTNav,
     PageTitle
 } from '../../../config/styleComponent'
 
@@ -576,29 +571,19 @@ class ObjectManagementContainer extends React.Component{
             sidemain:{
                 marginLeft: 150
             },
-            container: {
-                overflowX: 'hide'
-            },
         }
 
         let typeSelection = filterSelection.typeList ? Object.values(filterSelection.typeList) : null;
         return (     
             <BOTContainer>     
-                <PageTitle
-                    className="mb-3"
-                >                                            
+                <PageTitle>                                            
                     {locale.texts.OBJECT_MANAGEMENT}
                 </PageTitle>
                 <Tab.Container 
                     transition={Fade}
                     defaultActiveKey={this.defaultActiveKey}
                 >
-                    <Nav 
-                        style={{
-                            borderBottom: '1px solid #8080804a',
-                            marginBottom: 0,
-                        }}
-                    >
+                    <BOTNav>
                         <Nav.Item>
                             <BOTNavLink eventKey="devices_table">
                                 {locale.texts.DEVICE_FORM}
@@ -629,7 +614,7 @@ class ObjectManagementContainer extends React.Component{
                                 </BOTNavLink>
                             </Nav.Item>
                         </AccessControl>
-                    </Nav>
+                    </BOTNav>
                     <Tab.Content
                         className="my-3"
                     >

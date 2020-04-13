@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Item from 'react-bootstrap/ListGroupItem';
 import Link from 'react-bootstrap/NavLink'
+import Nav from 'react-bootstrap/Nav'
 import styleSheet from './styleSheet'
 import Button from 'react-bootstrap/Button'
 
@@ -35,6 +36,7 @@ export const PageTitle = styled.div`
     font-size: 1.4rem;
     font-weight: 450;
     text-transform: capitalize;
+    margin-bottom: 1rem;
 `
 
 export const BOTContainer = styled.div`
@@ -47,10 +49,10 @@ export const BOTSideNav = styled(Item)`
     text-transform: capitalize;
     display: flex;
     justify-content: center;
-    height: 2.5rem;
     letter-spacing: 1.2px;
     border-radius: 5px;
-    color: ${styleSheet.lightGrey};
+    margin: 0.5rem 0.5rem;
+    color: ${styleSheet.inActive};
     &:hover {
         color: ${styleSheet.theme};
     }
@@ -62,15 +64,30 @@ export const BOTSideNav = styled(Item)`
     }
 `
 
+export const BOTSideNavTitle = styled.div`
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+    color: black;
+    text-transform: capitalize;
+`
+
 export const BOTNavLink = styled(Link)`
     font-weight: 500;
     text-transform: capitalize;
-    color: ${styleSheet.lightGrey};
+    color: ${styleSheet.inActive};
     &.active {
         color: ${styleSheet.theme};
         border-bottom: 3px solid ${styleSheet.theme};
         border-radius: 0px;
     }
+`
+
+export const BOTNav = styled(Nav)`
+    border-bottom: 1px solid ${styleSheet.lightGrey};
+    margin-bottom: 0;
 `
 
 export const LoaderWrapper = styled.div`

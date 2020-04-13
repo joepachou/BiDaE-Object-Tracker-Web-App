@@ -228,6 +228,7 @@ const trackingTableColumn = [
     {
         Header: "Residence Time",
         accessor: "residence_time",
+        width: 250,
     },
     {
         Header: "Transferred Location",
