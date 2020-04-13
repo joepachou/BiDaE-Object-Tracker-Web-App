@@ -13,6 +13,7 @@ import EditMonitorConfigForm from '../presentational/EditMonitorConfigForm';
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
 import { monitorConfigColumn } from '../../config/tables'
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
+import messageGenerator from '../../helper/messageGenerator'
 const SelectTable = selecTableHOC(ReactTable);
 class MonitorSettingBlock extends React.Component{
 
@@ -106,7 +107,7 @@ class MonitorSettingBlock extends React.Component{
         })
     }
 
-    handleSubmit = (pack) => {
+    handleSubmit = (pack) => { 
         let configPackage = pack ? pack : {}
         let { 
             path,
@@ -115,10 +116,14 @@ class MonitorSettingBlock extends React.Component{
         configPackage["type"] = config.monitorSettingUrlMap[this.props.type]
         // configPackage["id"] = selectedData ? selectedData.id : null;
         configPackage["id"] = this.state.selection   
+        if (configPackage["id"] == "" && this.state.selectedData != null){configPackage["id"] = this.state.selectedData.id }  
         axios.post(dataSrc[path], {
             monitorConfigPackage: configPackage
         })
-        .then(res => {
+        .then(res => { 
+            let callback = () => messageGenerator.setSuccessMessage(
+                'save success'
+            )
             setTimeout(
                 () => {
                     this.getMonitorConfig(),
@@ -129,6 +134,7 @@ class MonitorSettingBlock extends React.Component{
                         selection: '',
                         selectAll:false
                     })
+                    callback()
                 },
                 300
             )
@@ -307,10 +313,10 @@ class MonitorSettingBlock extends React.Component{
                     {...styleConfig.reactTable}
                     getTrProps={(state, rowInfo, column, instance) => {   
                           return {
-                              onClick: (e, handleOriginal) => { 
+                              onClick: (e, handleOriginal) => {  
                                   this.setState({ 
-                                    show: true,
                                     selectedData: rowInfo.row._original,
+                                    show: true, 
                                     isEdited: true,
                                     path: 'setMonitorConfig'
                                 })

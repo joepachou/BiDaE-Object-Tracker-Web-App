@@ -14,7 +14,7 @@ import dataSrc from '../../../dataSrc';
 import FormikFormGroup from '../../presentational/FormikFormGroup'
 import styleConfig from '../../../config/styleConfig';
 import LocaleContext from '../../../context/LocaleContext';
-
+import messageGenerator from '../../../helper/messageGenerator'
 const DeleteUserForm = ({
     show,
     title,
@@ -57,7 +57,12 @@ const DeleteUserForm = ({
                     }
 
                     onSubmit={(values, { setStatus, setSubmitting }) => {
+                        let callback = () => messageGenerator.setSuccessMessage(
+                                            'save success'
+                                        )  
+                        
                         handleSubmit(values)
+                        callback()
                         // axios.post(dataSrc.deleteUser, {
                         //     username: values.name.label
                         // })

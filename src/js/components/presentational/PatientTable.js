@@ -23,6 +23,7 @@ import {
 } from "../../dataSrc"
 import ReactLoading from "react-loading"; 
 import styled from 'styled-components'
+import messageGenerator from '../../helper/messageGenerator'
 const SelectTable = selecTableHOC(ReactTable);
 
 
@@ -63,11 +64,14 @@ class PatientTable extends React.Component{
     }
 
     handleSubmitForm = () => {
+        let callback = () => messageGenerator.setSuccessMessage(
+            'save success'
+        )
         this.setState({
             isPatientShowEdit:false,
             showDeleteConfirmation:false,
             disableASN:false,
-        })
+        }, callback) 
         this.props.refreshData()
     }
 

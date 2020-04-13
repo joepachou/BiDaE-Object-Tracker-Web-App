@@ -1,12 +1,12 @@
 import React from 'react'
 import ToastMessage from '../components/presentational/ToastMessage'
-import { toast } from 'react-toastify';
+import { toast,Slide, Zoom, Flip   } from 'react-toastify';
 
 const setSuccessMessage = (
     msg 
 ) => {
     return (
-        toast.success(<ToastMessage msg={msg} />, {
+        toast.success(<ToastMessage msg={msg}  />, {
             position: toast.POSITION.TOP_CENTER,
             autoClose: 3000,
             className: 'toast-success-notice-container',
@@ -15,6 +15,7 @@ const setSuccessMessage = (
             closeButton: false,
             draggable: false,
             closeOnClick: false,
+            transition: Zoom,
         })
     )
 }
@@ -32,6 +33,7 @@ const setErrorMessage = (
             closeButton: false,
             draggable: false,
             closeOnClick: false,
+            transition: Zoom,
         })
     )
 }

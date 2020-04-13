@@ -12,7 +12,7 @@ import Checkbox from '../presentational/Checkbox'
 import FormikFormGroup from '../presentational/FormikFormGroup'
 import styleConfig from '../../config/styleConfig'
 import { toast } from 'react-toastify';
-
+import messageGenerator from '../../helper/messageGenerator'
 let monitorTypeMap = {};
 Object.keys(config.monitorType)
     .forEach(key => {
@@ -25,12 +25,15 @@ class EditPatientForm extends React.Component {
         const path = this.props.formPath  
         axios.post(path, {
             formOption: postOption
-        }).then(res => {
-            toast.success("Edit Patient Success", {
+        }).then(res => { 
+ 
+            this.setState({
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: 5000,
                 hideProgressBar: true
-            });
+            } )
+
+
         }).catch( error => {
             console.log(error)
         })

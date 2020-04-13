@@ -15,7 +15,7 @@ import {
     deleteObjectWithImport
 } from "../../dataSrc"
 import styleConfig from '../../config/styleConfig';
-
+import messageGenerator from '../../helper/messageGenerator'
 
 class ImportObjectTable extends React.Component{
     static contextType = AppContext   
@@ -38,10 +38,13 @@ class ImportObjectTable extends React.Component{
         })
     }
 
-    handleSubmitForm = () => {
+    handleSubmitForm = () => {  
+        let callback = () => messageGenerator.setSuccessMessage(
+            'save success'
+        )
         this.setState({
             showDeleteConfirmation:false
-        })
+        }, callback)
         this.props.refreshData()
     }
 

@@ -11,7 +11,7 @@ import {
     cleanImportData,
     deleteImportData
 } from "../../dataSrc"
-
+import messageGenerator from '../../helper/messageGenerator'
 class EditImportTable extends React.Component {
     state = {
         show: this.props.show,
@@ -38,15 +38,13 @@ class EditImportTable extends React.Component {
 
 
 
-    handleSubmit = (postOption) => {
-        console.log(this.state.scanValue )
-        console.log(this.props.selectedObjectData.asset_control_number)
+    handleSubmit = (postOption) => { 
         if (this.state.scanValue == this.props.selectedObjectData.asset_control_number){
           
             axios.post(deleteImportData, 
                 {
                     idPackage: this.props.selectedObjectData.id
-                }).then(res => {
+                }).then(res => { 
                         toast.success("Edit Import Table Success", {
                             position: toast.POSITION.TOP_RIGHT,
                             autoClose: 5000,

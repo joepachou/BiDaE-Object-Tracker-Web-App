@@ -16,7 +16,7 @@ import retrieveDataHelper from '../../helper/retrieveDataHelper'
 import styleConfig from '../../config/styleConfig';
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
-
+import messageGenerator from '../../helper/messageGenerator'
 const SelectTable = selecTableHOC(ReactTable);
 let lock = false
 class GeoFenceSettingBlock extends React.Component{

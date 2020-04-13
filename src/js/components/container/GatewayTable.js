@@ -16,6 +16,7 @@ import retrieveDataHelper from '../../helper/retrieveDataHelper'
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm' 
 import BOTCheckbox from '../presentational/BOTCheckbox'
 import styleConfig from '../../config/styleConfig'
+import messageGenerator from '../../helper/messageGenerator'
 const SelectTable = selecTableHOC(ReactTable);
 
 class GatewayTable extends React.Component{
@@ -153,16 +154,17 @@ class GatewayTable extends React.Component{
                 idPackage
             })
             .then(res => {
-                this.props.setMessage(
-                    'success', 
-                    'delete gateway success'
+                   this.getData()
+                    let callback = () => messageGenerator.setSuccessMessage(
+                    'save success'
                 )
-                this.getData()
                 this.setState({
                     selection: [],
                     selectAll: false,
                     showDeleteConfirmation: false
-                })
+                }, callback)
+
+ 
             })
             .catch(err => {
                 console.log(err)

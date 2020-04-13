@@ -28,7 +28,7 @@ import {
 } from '../../config/styleComponent'
 import AccessControl from '../presentational/AccessControl'
 import SearchBox from './SearchBox';
-
+import messageGenerator from '../../helper/messageGenerator'
 class ObjectTable extends React.Component{
 
     static contextType = AppContext
@@ -102,11 +102,15 @@ class ObjectTable extends React.Component{
     }
 
     handleSubmitForm = () => {
+
+        let callback = () => messageGenerator.setSuccessMessage(
+            'save success'
+        )
         this.setState({
             isShowEdit: false,
             showDeleteConfirmation: false,
             disableASN:false,
-        })
+        }, callback) 
         this.props.refreshData()
     }
 
