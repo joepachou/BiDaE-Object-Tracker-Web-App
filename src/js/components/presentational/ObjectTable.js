@@ -240,6 +240,7 @@ class ObjectTable extends React.Component{
                     null
             ) 
         }
+        {console.log("render的次數")}
         return(
             <div> 
                 <ButtonToolbar>

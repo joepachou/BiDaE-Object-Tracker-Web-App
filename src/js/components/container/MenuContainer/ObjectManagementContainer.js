@@ -30,6 +30,7 @@ import ImportObjectTable from '../../presentational/ImportObjectTable'
 import ImportPatientTable from '../../presentational/ImportPatientTable' 
 import DissociationForm from '../DissociationForm'
 import retrieveDataHelper from '../../../helper/retrieveDataHelper'
+import { browserVersion } from 'react-device-detect';
 
 class ObjectManagementContainer extends React.Component{
     static contextType = AppContext
@@ -73,25 +74,72 @@ class ObjectManagementContainer extends React.Component{
         if (this.context.locale.abbr !== prevState.locale) {
             this.getData()
             this.getDataImport()
+            this.getImportPatient()
             this.setState({
                 locale: this.context.locale.abbr
             })
         }
     }
 
-    componentDidMount = () => {
-        this.getTransferredLocation();
-        this.getDataImport()
-        this.getPhysicianList();
-        this.getLbeaconData();
-        this.getAreaTable()
+    async  getDataContontainer(){
+   
+        var a = ( Promise.resolve( this.getTransferredLocation() )  );
+        await   a.then(function(result){a = result})
+ 
+        var b = ( Promise.resolve(  this.getPhysicianList() )  );
+        await   b.then(function(result){b = result})
+
+        var c = ( Promise.resolve( this.getLbeaconData())  );
+        await   c.then(function(result){c = result})
+
+        var d = ( Promise.resolve(  this.getAreaTable())  );
+        await   d.then(function(result){d = result})
+
+        var e = ( Promise.resolve(  this.getData())  );
+        await   e.then(function(result){e = result})
+
+        var f = ( Promise.resolve(  this.getDataImport()  )  );
+        await   f.then(function(result){f = result})
+    
+        var g = ( Promise.resolve(  this.getImportPatient())  );
+        await  g.then(function(result){g = result})
+          
+        this.setState({
+            transferredLocationList: a,
+            physicianList:b,
+            roomOptions :c,
+            areaTable: d.areaTable,
+            filterSelection: {
+                ...d.filterSelection 
+            },
+            data : e.data,
+            filteredData: e.filteredData,
+            column:e.column,
+            dataPatient:e.dataPatient,
+            filteredPatient: e.filteredPatient,
+            columnPatient:e.columnPatient,
+            objectTable: e.objectTable,
+            filterSelection: {
+                ...e.filterSelection
+            },
+            dataImport: f.dataImport,
+            columnImport:f.columnImport,
+            dataImportPatient: f,
+            dataImportPatient: g
+        }) 
+   
     }
 
-    getAreaTable = () => {
+    componentDidMount = () => {
+        this.getDataContontainer();
+  
+    }
+
+    async getAreaTable(){
         let {
             locale
         } = this.context
-        retrieveDataHelper.getAreaTable()
+        return await retrieveDataHelper.getAreaTable()
         .then(res => {
             let areaSelection = res.data.rows.map(area => {
                 return {
@@ -99,22 +147,30 @@ class ObjectManagementContainer extends React.Component{
                     label: locale.texts[area.name]
                 }
             })
-            this.setState({
+
+            return({
                 areaTable: res.data.rows,
                 filterSelection: {
                     ...this.state.filterSelection,
                     areaSelection,
                 }
-            })
+              })
+            // this.setState({
+            //     areaTable: res.data.rows,
+            //     filterSelection: {
+            //         ...this.state.filterSelection,
+            //         areaSelection,
+            //     }
+            // })
         })
         .catch(err => {
             console.log(`get area table failed ${err}`)
         })
     }
 
-    getPhysicianList = () => {
+     async    getPhysicianList(){
         let { locale } = this.context
-        axios.post(getUserList, {
+        return await  axios.post(getUserList, {
             locale: locale.abbr 
         })
         .then(res => {
@@ -124,18 +180,16 @@ class ObjectManagementContainer extends React.Component{
                     return user.role_type.includes("care_provider")
                 })
 
-            this.setState({
-                physicianList,
-            })
+          return physicianList
         })
         .catch(err => {
             console.log(err)
         })
     }
 
-    getDataImport = () => {
+    async   getDataImport(){
         let { locale } = this.context
-        axios.post(getImportTable, {
+        return await  axios.post(getImportTable, {
             locale: locale.abbr
         })
         .then(res => {
@@ -168,7 +222,7 @@ class ObjectManagementContainer extends React.Component{
                 }
             })
             
-            this.setState({
+            return({
                 dataImport: res.data.rows,
                 columnImport
             })
@@ -177,24 +231,31 @@ class ObjectManagementContainer extends React.Component{
             console.log(err);
         })
 
+ 
+    
+    }
 
-        axios.post(getImportPatient, {
+
+    async  getImportPatient(){
+        let { locale } = this.context
+        return await  axios.post(getImportPatient, {
             locale: locale.abbr
         })
         .then(res =>{
-            this.setState({
-                dataImportPatient: res.data.rows,
-            })
+            return res.data.rows
+            // this.setState({
+            //     dataImportPatient: res.data.rows,
+            // })
         })
         .catch(err => {
             console.log(err);
         })
-    
     }
-    
-    getTransferredLocation = () => {
+
+
+    async   getTransferredLocation(){
         let { locale } = this.context
-        axios.get(getTransferredLocation)
+        return await   axios.get(getTransferredLocation)
         .then(res => {
             const transferredLocationOptions = res.data.map(branch => {
                 return {          
@@ -214,20 +275,20 @@ class ObjectManagementContainer extends React.Component{
                 }
 
             })
-            this.setState({
-                transferredLocationList: transferredLocationOptions
-            })
-            this.getData()
+            return transferredLocationOptions
+            // this.setState({
+            //     transferredLocationList: transferredLocationOptions
+            // }) 
         })
     }
 
-    getData = () => {
+   async getData(){
         let { 
             locale,
             auth
         } = this.context
 
-        retrieveDataHelper.getObjectTable(
+       return await retrieveDataHelper.getObjectTable(
             locale.abbr,
             auth.user.areas_id,
             [0, 1, 2]
@@ -312,7 +373,7 @@ class ObjectManagementContainer extends React.Component{
                 }
             })
 
-            this.setState({
+            return ({
                 data,
                 filteredData: data,
                 column,
@@ -325,6 +386,20 @@ class ObjectManagementContainer extends React.Component{
                     typeList,
                 }
             })
+
+            // this.setState({
+            //     data,
+            //     filteredData: data,
+            //     column,
+            //     dataPatient,
+            //     filteredPatient: dataPatient,
+            //     columnPatient,
+            //     objectTable: res.data.rows,
+            //     filterSelection: {
+            //         ...this.state.filterSelection,
+            //         typeList,
+            //     }
+            // })
         })
         .catch(err => {
             console.log(err);
@@ -341,9 +416,9 @@ class ObjectManagementContainer extends React.Component{
             }, [])
     }
 
-    getLbeaconData = () => {
+    async getLbeaconData(){
         let { locale } = this.context
-        axios.post(getLbeaconTable, {
+        return await axios.post(getLbeaconTable, {
             locale: locale.abbr
         })
         .then(res => {
@@ -355,10 +430,11 @@ class ObjectManagementContainer extends React.Component{
                         label: item.room
                     })
                 }
-            })
-            this.setState({
-                roomOptions,
-            })
+            })  
+            return roomOptions
+            // this.setState({
+            //     roomOptions,
+            // })
         })
         .catch(err => {
             console.log("get lbeacon data fail : " + err);
@@ -378,6 +454,7 @@ class ObjectManagementContainer extends React.Component{
         setTimeout(this.getData, 500) 
         setTimeout(this.getDataPatient, 500) 
         setTimeout(this.getDataImport, 500)  
+        setTimeout(this.getImportPatient, 500)   
     }
  
 
