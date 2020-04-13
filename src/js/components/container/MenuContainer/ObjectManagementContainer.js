@@ -112,16 +112,14 @@ class ObjectManagementContainer extends React.Component{
         await   f.then(function(result){f = result})
     
         var g = ( Promise.resolve(  this.getImportPatient())  );
-        await  g.then(function(result){g = result})
-          
+        await  g.then(function(result){g = result}) 
+ 
+           
         this.setState({
             transferredLocationList: a,
             physicianList:b,
             roomOptions :c,
-            areaTable: d.areaTable,
-            filterSelection: {
-                ...d.filterSelection 
-            },
+            areaTable: d.areaTable, 
             data : e.data,
             filteredData: e.filteredData,
             column:e.column,
@@ -130,7 +128,8 @@ class ObjectManagementContainer extends React.Component{
             columnPatient:e.columnPatient,
             objectTable: e.objectTable,
             filterSelection: {
-                ...e.filterSelection
+                ...e.filterSelection,
+                ...d.filterSelection,
             },
             dataImport: f.dataImport,
             columnImport:f.columnImport,
