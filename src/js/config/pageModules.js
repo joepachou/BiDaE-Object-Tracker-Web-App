@@ -94,79 +94,108 @@ export const userContainerPageList = [
     },
 ]
 
-export const systemSettingPageList = [
-    {
-        name: 'user manager',
-        permission: "route:bigScreen",
-        component: (props) => <AdminManagementContainer {...props}/>,
-        platform: ['browser', 'tablet', 'mobile'],
-    },
-    {
-        name: "transferred location management",
-        component: (props) => <TransferredLocationManagement {...props}/>,
-        platform: ['browser'],
-    },
-    {
-        name: "Role Permission Management",
-        permission: "rolePermissionManagement",
-        component: (props) => <RolePermissionManagement {...props}/>,
-        platform: ['browser']
-    },
-    {
-        name: "lbeacon",
-        component: (props) => <LBeaconTable {...props}/>,
-        platform: ['browser', 'tablet', 'mobile']
-    },
-    {
-        name: "gateway",
-        component: (props) => <GatewayTable {...props}/>,
-        platform: ['browser', 'tablet', 'mobile']
-    }
-]
+export const systemSettingModule = {
 
-export const monitorSettingPageList = [
-    {
-        name: config.monitorSettingType.MOVEMENT_MONITOR,
-        component: (props) => <MonitorSettingBlock {...props}/>
-    },
-    {
-        name: config.monitorSettingType.LONG_STAY_IN_DANGER_MONITOR,
-        component: (props) => <MonitorSettingBlock {...props}/>
-    },
-    {
-        name: config.monitorSettingType.NOT_STAY_ROOM_MONITOR,
-        component: (props) => <MonitorSettingBlock {...props}/>
-    },
-    {
-        name: config.monitorSettingType.GEOFENCE_MONITOR,
-        component: (props) => <GeoFenceSettingBlock {...props}/>
-    },
-]
+    title: "system setting",
 
-export const trackingHistoryContainerPageList = [
-    {
-        name: 'real time record',
-        permission: "route:trackingHistory",
-        component: (props) => <TrackingTable {...props}/>,
-        platform: ['browser', 'tablet', 'mobile'],
-    },
-    {
-        name: 'historical record',
-        permission: "route:trackingHistory",
-        component: (props) => <TrackingHistory {...props}/>,
-        platform: ['browser', 'tablet'],
-    },
-]
+    defaultActiveKey: "lbeacon",
 
-export const reportContainerPageList = [
-    {
-        name: 'object edited record',
-        component: (props) => <ObjectEditedRecord {...props} />,
-        platform: ['browser', 'tablet', 'mobile'],
-    },
-    {
-        name: 'Shift Change Record',
-        component: (props) => <ShiftChangeRecord {...props}/>,
-        platform: ['browser', 'tablet', 'mobile'],
-    },
-]
+    tabList: [
+        {
+            name: 'user manager',
+            permission: "route:bigScreen",
+            component: (props) => <AdminManagementContainer {...props}/>,
+            platform: ['browser', 'tablet'],
+        },
+        {
+            name: "transferred location management",
+            component: (props) => <TransferredLocationManagement {...props}/>,
+            platform: ['browser'],
+        },
+        {
+            name: "Role Permission Management",
+            permission: "rolePermissionManagement",
+            component: (props) => <RolePermissionManagement {...props}/>,
+            platform: ['browser']
+        },
+        {
+            name: "lbeacon",
+            component: (props) => <LBeaconTable {...props}/>,
+            platform: ['browser', 'tablet', 'mobile']
+        },
+        {
+            name: "gateway",
+            component: (props) => <GatewayTable {...props}/>,
+            platform: ['browser', 'tablet', 'mobile']
+        }
+    ]
+}
+
+export const monitorSettingModule= {
+    
+    title: "monitor setting",
+
+    defaultActiveKey: "movement_monitor",
+
+    tabList: [
+        {
+            name: config.monitorSettingType.MOVEMENT_MONITOR,
+            component: (props) => <MonitorSettingBlock {...props}/>
+        },
+        {
+            name: config.monitorSettingType.LONG_STAY_IN_DANGER_MONITOR,
+            component: (props) => <MonitorSettingBlock {...props}/>
+        },
+        {
+            name: config.monitorSettingType.NOT_STAY_ROOM_MONITOR,
+            component: (props) => <MonitorSettingBlock {...props}/>
+        },
+        {
+            name: config.monitorSettingType.GEOFENCE_MONITOR,
+            component: (props) => <GeoFenceSettingBlock {...props}/>
+        },
+    ]
+}
+
+export const trackingHistoryContainerModule = {
+
+    title: "tracking history",
+
+    defaultActiveKey: "real_time_record",
+    
+    tabList: [
+        {
+            name: 'real time record',
+            permission: "route:trackingHistory",
+            component: (props) => <TrackingTable {...props}/>,
+            platform: ['browser', 'tablet', 'mobile'],
+        },
+        {
+            name: 'historical record',
+            permission: "route:trackingHistory",
+            component: (props) => <TrackingHistory {...props}/>,
+            platform: ['browser', 'tablet'],
+        },
+    ]
+}
+
+export const reportContainerModule = {
+    
+    title: "report",
+
+    defaultActiveKey: "object_edited_record",
+    
+    tabList: [
+        {
+            name: 'object edited record',
+            component: (props) => <ObjectEditedRecord {...props} />,
+            platform: ['browser', 'tablet', 'mobile'],
+        },
+        {
+            name: 'Shift Change Record',
+            component: (props) => <ShiftChangeRecord {...props}/>,
+            platform: ['browser', 'tablet', 'mobile'],
+        },
+    ],
+
+}

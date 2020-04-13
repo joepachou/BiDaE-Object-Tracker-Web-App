@@ -17,7 +17,7 @@ import ShiftChange from './ShiftChange'
 import { AppContext } from '../../context/AppContext';
 import Select from 'react-select';
 import BatteryLevelNotification from "./BatteryLevelNotification"
-import { navbarNavList } from '../../config/pages'
+import { navbarNavList } from '../../config/pageModules'
 
 class NavbarContainer extends React.Component {
 

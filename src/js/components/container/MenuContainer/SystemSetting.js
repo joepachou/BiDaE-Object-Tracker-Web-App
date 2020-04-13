@@ -1,18 +1,10 @@
 import React, {Fragment} from 'react';
-import { AppContext } from '../../../context/AppContext';
-import AccessControl from '../../presentational/AccessControl'
 import messageGenerator from '../../../helper/messageGenerator'
 import { toast } from 'react-toastify';
 import {
-    systemSettingPageList
-} from '../../../config/pages'
-import { 
-    Tab, 
-    ListGroup,
-    Container
-} from 'react-bootstrap';
+    systemSettingModule
+} from '../../../config/pageModules'
 import {
-    isBrowser,
     isMobileOnly,
     isTablet,
     MobileOnlyView,
@@ -23,26 +15,13 @@ import {
     disableBodyScroll,
     enableBodyScroll,
 } from 'body-scroll-lock';
-import {
-    PageTitle,
-    BOTSideNav,
-    BOTSideNavTitle
-} from '../../../config/styleComponent'
-
-const style = {
-
-    sidenav: {
-        width: isBrowser ? 250 : 0,
-    },
-    sidemain:{
-        marginLeft: isBrowser ? 250 : 0
-    },
-
-}
+import MobilePageComponent from '../../mobile/MobilePageComponent'
+import BrowserPageComponent from '../../browser/BrowserPageComponent';
+import TabletPageComponent from '../../tablet/TabletPageComponent'
 
 class SystemSetting extends React.Component{
 
-    static contextType = AppContext
+    containerModule = systemSettingModule
 
     componentDidMount = () => {
 
@@ -76,223 +55,26 @@ class SystemSetting extends React.Component{
         }
     }
 
-    tabList = systemSettingPageList
-
-    defaultActiveKey = "user_manager"
-
     render() {
-        let {
-            locale
-        } = this.context
-
         return (
             <Fragment>
                 <BrowserView>
-                        <Tab.Container 
-                            transition={false} 
-                            defaultActiveKey={this.defaultActiveKey}
-                            className='mt-5' 
-                        >
-                            <div 
-                                className="border-0 BOTsidenav"
-                                style={style.sidenav}
-                            >            
-                                <BOTSideNavTitle>
-                                    {locale.texts.SYSTEM_SETTING}
-                                </BOTSideNavTitle>
-                                <ListGroup 
-                                    variant="flush" 
-                                    className="border-0"
-                                >
-                                    {this.tabList.map((tab, index) => {
-                                        return (
-                                            <AccessControl
-                                                permission={tab.permission}
-                                                renderNoAccess={() => null}
-                                                platform={tab.platform}
-                                                key={tab.name}
-                                            >
-                                                <BOTSideNav
-                                                    key={index}
-                                                    eventKey={tab.name.replace(/ /g, '_')}
-                                                    action
-                                                >
-                                                    {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
-                                                </BOTSideNav>
-                                            </AccessControl>
-                                        )
-                                    })}  
-                                </ListGroup>      
-                                            
-                            </div>
-                            <div
-                                className="BOTsidemain"
-                                style={style.sidemain}
-                            >           
-                                <Tab.Content>
-                                    {this.tabList.map((tab, index) => {
-                                        let props = {
-                                            type: tab.name,
-                                            setMessage: this.setMessage
-                                        }
-                                        return (
-                                            <Tab.Pane 
-                                                eventKey={tab.name.replace(/ /g, '_')}
-                                                key={tab.name.replace(/ /g, '_')}
-                                            >
-                                                <PageTitle>
-                                                    {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
-                                                </PageTitle>
-                                                <hr/>
-                                                {tab.component(props)}
-                                            </Tab.Pane>
-                                        )
-                                    })}
-                                </Tab.Content>         
-                            </div>
-                        </Tab.Container>
+                    <BrowserPageComponent 
+                        containerModule={this.containerModule}
+                        setMessage={this.setMessage}
+                    /> 
                 </BrowserView>
                 <TabletView>
-                    <Container 
-                        fluid 
-                        className="mt-5 text-capitalize"
-                        style={style.container}
-                    >     
-                        <div 
-                            className="border-0 BOTsidenav"
-                            style={style.sidenav}
-                        >            
-                            <ListGroup 
-                                variant="flush" 
-                                className="border-0"
-                            >
-                                {this.tabList.map((tab, index) => {
-                                    return (
-                                        <AccessControl
-                                            permission={tab.permission}
-                                            renderNoAccess={() => null}
-                                            platform={tab.platform}
-                                            key={tab.name}
-                                        >
-                                            <ListGroup.Item 
-                                                key={index}
-                                                className="border-0 m-0 my-1 text-capitalize" 
-                                                eventKey={tab.name.replace(/ /g, '_')}
-                                                action
-                                            >
-                                                {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
-                                            </ListGroup.Item>
-                                        </AccessControl>
-                                    )
-                                })}  
-                            </ListGroup>      
-                                        
-                        </div>
-                        <div
-                            className="BOTsidemain"
-                            style={style.sidemain}
-                        >           
-                            {this.tabList.map((tab, index) => {
-                                let props = {
-                                    type: tab.name,
-                                    setMessage: this.setMessage
-                                }
-                                return (
-                                    <AccessControl
-                                        permission={tab.permission}
-                                        renderNoAccess={() => null}
-                                        platform={tab.platform}
-                                        key={tab.name}
-                                    >
-                                        <div
-                                            eventKey={tab.name.replace(/ /g, '_')}
-                                            key={tab.name.replace(/ /g, '_')}
-                                            className="mb-5"
-                                        >
-                                            <div
-                                                className='h5'
-                                            >
-                                                {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
-                                            </div>
-                                            <hr/>
-                                            {tab.component(props)}
-                                        </div>
-                                    </AccessControl>
-                                )
-                            })}
-                        </div>
-                    </Container>
+                    <TabletPageComponent
+                        containerModule={this.containerModule}
+                        setMessage={this.setMessage}
+                    />
                 </TabletView>
                 <MobileOnlyView>
-                    <Container 
-                        fluid 
-                        className="mt-5 text-capitalize"
-                        style={style.container}
-                    >     
-                        <div 
-                            className="border-0 BOTsidenav"
-                            style={style.sidenav}
-                        >            
-                            <ListGroup 
-                                variant="flush" 
-                                className="border-0"
-                            >
-                                {this.tabList.map((tab, index) => {
-                                    return (
-                                        <AccessControl
-                                            permission={tab.permission}
-                                            renderNoAccess={() => null}
-                                            platform={tab.platform}
-                                            key={tab.name}
-                                        >
-                                            <ListGroup.Item 
-                                                key={index}
-                                                className="border-0 m-0 my-1 text-capitalize" 
-                                                eventKey={tab.name.replace(/ /g, '_')}
-                                                action
-                                            >
-                                                {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
-                                            </ListGroup.Item>
-                                        </AccessControl>
-                                    )
-                                })}  
-                            </ListGroup>      
-                                        
-                        </div>
-                        <div
-                            className="BOTsidemain"
-                            style={style.sidemain}
-                        >           
-                            {this.tabList.map((tab, index) => {
-                                let props = {
-                                    type: tab.name,
-                                    setMessage: this.setMessage
-                                }
-                                return (
-                                    <AccessControl
-                                        permission={tab.permission}
-                                        renderNoAccess={() => null}
-                                        platform={tab.platform}
-                                        key={tab.name}
-                                    >
-                                        <div
-                                            eventKey={tab.name.replace(/ /g, '_')}
-                                            key={tab.name.replace(/ /g, '_')}
-                                            className="mb-5"
-                                        >
-                                            <div
-                                                className='h5'
-                                            >
-                                                {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
-                                            </div>
-                                            <hr/>
-                                            {tab.component(props)}
-                                        </div>
-                                    </AccessControl>
-                                )
-                            })}
-                        </div>
-                    </Container>
+                    <MobilePageComponent
+                        containerModule={this.containerModule}
+                        setMessage={this.setMessage}
+                    />
                 </MobileOnlyView>
             </Fragment>
         )

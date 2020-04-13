@@ -13,6 +13,7 @@ const SelectTable = selecTableHOC(ReactTable);
 import { AppContext } from '../../../context/AppContext'
 import retrieveDataHelper from '../../../helper/retrieveDataHelper'
 import styleConfig from '../../../config/styleConfig';
+import AccessControl from '../../presentational/AccessControl';
 
 class ObjectEditedRecord extends React.Component{
 
@@ -204,19 +205,25 @@ class ObjectEditedRecord extends React.Component{
                 <ButtonToolbar
                     className="mb-2"
                 >
-                    <Button 
-                        variant="outline-primary" 
-                        className='mb-1 text-capitalize'
-                        size="sm"
-                        onClick={() => {
-                            this.setState({
-                                showDeleteConfirmation: true
-                            })
-                        }}    
+                    <AccessControl
+                        renderNoAccess={() => null}
+                        platform={['browser', 'tablet']}
                     >
-                        {locale.texts.DELETE}
-                    </Button>
+                        <Button 
+                            variant="outline-primary" 
+                            className='mb-1 text-capitalize'
+                            size="sm"
+                            onClick={() => {
+                                this.setState({
+                                    showDeleteConfirmation: true
+                                })
+                            }}    
+                        >
+                            {locale.texts.DELETE}
+                        </Button>
+                    </AccessControl>
                 </ButtonToolbar>
+                
                 {this.state.data && (
                     <SelectTable
                         keyField='_id'

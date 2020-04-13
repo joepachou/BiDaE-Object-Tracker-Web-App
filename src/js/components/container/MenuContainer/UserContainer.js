@@ -15,7 +15,7 @@ import {
 } from 'react-device-detect'
 import {
     userContainerPageList
-} from '../../../config/pages'
+} from '../../../config/pageModules'
 
 class UserSettingContainer extends React.Component{
 

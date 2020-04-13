@@ -13,6 +13,7 @@ import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm'
 import { AppContext } from '../../../context/AppContext';
 import retrieveDataHelper from '../../../helper/retrieveDataHelper';
 import styleConfig from '../../../config/styleConfig';
+import AccessControl from '../../presentational/AccessControl'
 
 class ShiftChangeRecord extends React.Component{
 
@@ -195,18 +196,23 @@ class ShiftChangeRecord extends React.Component{
                 <ButtonToolbar
                     className="mb-2"
                 >                    
-                    <Button 
-                        variant="outline-primary" 
-                        className='mb-1 text-capitalize'
-                        size="sm"
-                        onClick={() => {
-                            this.setState({
-                                showDeleteConfirmation: true
-                            })
-                        }}    
+                    <AccessControl
+                        renderNoAccess={() => null}
+                        platform={['browser', 'tablet']}
                     >
-                        {locale.texts.DELETE}
-                    </Button>
+                        <Button 
+                            variant="outline-primary" 
+                            className='mb-1 text-capitalize'
+                            size="sm"
+                            onClick={() => {
+                                this.setState({
+                                    showDeleteConfirmation: true
+                                })
+                            }}    
+                        >
+                            {locale.texts.DELETE}
+                        </Button>
+                    </AccessControl>
                 </ButtonToolbar>
                 {this.state.data && (
                     <SelectTable

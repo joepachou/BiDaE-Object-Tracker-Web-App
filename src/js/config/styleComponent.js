@@ -83,11 +83,15 @@ export const BOTNavLink = styled(Link)`
         border-bottom: 3px solid ${styleSheet.theme};
         border-radius: 0px;
     }
+    &:hover {
+        color: ${styleSheet.theme};
+    }
 `
 
 export const BOTNav = styled(Nav)`
     border-bottom: 1px solid ${styleSheet.lightGrey};
     margin-bottom: 0;
+    overflow: scroll hidden;
 `
 
 export const LoaderWrapper = styled.div`

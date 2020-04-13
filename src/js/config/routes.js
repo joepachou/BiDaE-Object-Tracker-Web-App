@@ -7,7 +7,6 @@ import About from "../components/container/About"
 import TrackingHistoryContainer from "../components/container/menuContainer/TrackingHistoryContainer"
 import MonitorSettingContainer from "../components/container/menuContainer/MonitorSettingContainer"
 import ReportContainer from "../components/container/menuContainer/ReportContainer"
-import ManagementContainer from "../components/container/menuContainer/ManagementContainer"
 
 const routes = [
     {
@@ -55,11 +54,6 @@ const routes = [
         component: ReportContainer,
         exact: true,
     },
-    {
-        path: '/page/management',
-        component: ManagementContainer,
-        exact: true
-    }
 ];
 
 export default routes;
