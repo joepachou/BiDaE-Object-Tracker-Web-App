@@ -132,8 +132,7 @@ class ObjectManagementContainer extends React.Component{
                 ...d.filterSelection,
             },
             dataImport: f.dataImport,
-            columnImport:f.columnImport,
-            dataImportPatient: f,
+            columnImport:f.columnImport, 
             dataImportPatient: g
         }) 
    
