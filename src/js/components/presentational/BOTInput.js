@@ -2,7 +2,7 @@ import React from 'react';
 import searchIcon from '../../../img/icon/search.png';
 import { Form, Button } from 'react-bootstrap';
 
-class Searchbar extends React.Component {
+class BOTInput extends React.Component {
     
     state = {
         value: '',
@@ -23,10 +23,10 @@ class Searchbar extends React.Component {
         // }
     }
 
-    handleSubmit = (e) => {
-        e.preventDefault();
-        this.props.getSearchKey(this.state.value);
-    }
+    // handleSubmit = (e) => {
+    //     e.preventDefault();
+    //     this.props.getSearchKey(this.state.value);
+    // }
 
     handleChange = (e) => { 
         this.setState({
@@ -59,14 +59,31 @@ class Searchbar extends React.Component {
             <Form>
                 <div className="d-flex">
                     <Form.Group 
-                        className='flex-grow-1 mb-0'
+                        className='d-flex align-items-center'
+                        style={{
+                            border: '1px solid #ced4da',
+                            // border: 'none',
+                            height: '2.5rem',
+                            padding: '.275rem .75rem',
+                            background: 'white'
+                        }}
                     >
+                        <i 
+                            className="fas fa-search"
+                            style={{color: '#80808029'}}
+                        />
                         <Form.Control 
                             type='text' 
                             name={name}
                             value={value} 
                             onChange={this.handleChange}
                             placeholder={placeholder}
+                            style={{
+                                border: 'none',
+                                background: 'unset',
+                                letterSpacing: '1.5px',
+                                color: '#80808029'
+                            }}
                         />
                     </Form.Group>
                     <Button 
@@ -98,4 +115,4 @@ class Searchbar extends React.Component {
     }
 }
 
-export default Searchbar;
+export default BOTInput;

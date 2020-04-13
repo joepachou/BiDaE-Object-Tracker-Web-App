@@ -4,7 +4,11 @@ import siteConfig from '../../site_module/siteConfig'
 
 const config = {
 
-    version: "v1.0 b.1898",
+    theme: {
+        background: '#f0eded17'
+    },
+
+    version: "v1.0 b.1899",
     
     objectStatus: {
         PERIMETER: "perimeter",

@@ -244,7 +244,7 @@ class TrackingHistory extends React.Component{
                         <Nav 
                             defaultActiveKey={this.defaultActiveKey}
                             className="text-capitalize BOTnav my-3"
-                            variant="tabs"
+                            variant="pills"
                         >
                             <Nav.Item>
                                 <Nav.Link
@@ -383,7 +383,7 @@ class TrackingHistory extends React.Component{
                                 data={this.state.data}
                                 columns={this.state.columns}
                                 className="-highlight mt-4 text-capitalize"
-                                style={{height: '70vh', overflowY: 'scroll'}} 
+                                style={{height: '65vh', overflowY: 'scroll'}} 
                                 noDataText={this.state.done ? '' :this.state.errorTitle} 
                                 LoadingComponent={this.state.done ? Loader :aLoader}
                                 {...styleConfig.reactTable}

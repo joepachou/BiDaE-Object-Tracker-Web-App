@@ -162,7 +162,7 @@ const trackingTableColumn = [
         Header: "POUND_SIGN",
         accessor: "_id",
         style: style.column,
-        width: 60,
+        width: 40,
     },
     {
         Header: "Found",
@@ -198,12 +198,12 @@ const trackingTableColumn = [
     {
         Header: "Mac Address",
         accessor: "mac_address",
-        width: 150,
+        width: 180,
     },
     {
         Header: "Name",
         accessor: "name",
-        width: 150
+        width: 180
     },
     {
         Header: "Type",
@@ -213,7 +213,7 @@ const trackingTableColumn = [
     {
         Header: "Asset Control Number",
         accessor: "asset_control_number",
-        width: 140
+        width: 180
     },
     {
         Header: "Status",
@@ -221,19 +221,18 @@ const trackingTableColumn = [
         width: 100,
     },
     {
-        Header: "Transferred Location",
-        accessor: "transferred_location",
-        width: 180
-    },
-    {
         Header: "Last Location",
         accessor: "location_description",
-        width: 180
+        width: 160
     },
     {
         Header: "Residence Time",
         accessor: "residence_time",
-        width: 100,
+    },
+    {
+        Header: "Transferred Location",
+        accessor: "transferred_location",
+        width: 160
     },
 ]
 
@@ -320,8 +319,6 @@ const importTableColumn = [
     },
 ]
 
-
-
 const objectTableColumn = [
     {
         Header: "Name",
@@ -332,25 +329,25 @@ const objectTableColumn = [
         accessor: "type"
     },
     {
-        Header: "auth Area",
-        accessor: "area_name.label"
-    },
-    {
         Header: "Asset Control Number",
         accessor: "asset_control_number"
     },
     {
+        Header: "Mac Address",
+        accessor: "mac_address",
+    },
+    {
+        Header: "area",
+        accessor: "area_name.label"
+    },
+    {
         Header: "Status",
         accessor: "status.label",
-        width: 100,
+        width: 150,
     },
     {
         Header: "Transferred Location",
         accessor: "transferred_location.label"
-    },
-    {
-        Header: "Mac Address",
-        accessor: "mac_address",
     },
     {
         Header: "Monitor Type",
@@ -445,12 +442,12 @@ const editObjectRecordTableColumn = [
     {
         Header: "edit time",
         accessor: "edit_time",
-        width: 200,
+        width: 230,
     },
     {
         Header: "new status",
         accessor: "new_status",
-        width: 150,
+        width: 180,
     },
     {
         Header: "Notes",
@@ -647,5 +644,4 @@ export {
     monitorConfigColumn,
     locationHistoryByMacColumns,
     locationHistoryByUUIDColumns
-
 }

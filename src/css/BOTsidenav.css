@@ -2,15 +2,19 @@
     height: 100%; 
     position: fixed; 
     z-index: 1; 
-    top: 10%; 
-    left: 5%;
+    /* top: 10%; 
+    left: 5%; */
     overflow-x: hidden; 
-    padding-top: 20px;
+    padding: 50px 30px 0px 30px;
+    background: white;
+    box-shadow: 0px 0px 3px 0px rgba(32,33,36,0.28);
 }
 
 /* Style page content */
 .BOTsidemain {
-    padding: 0px 10px;
+    padding: 20px 30px;
+    height: 100%;
+    min-height: 100%
 }
 
 /* The navigation menu links */
@@ -20,6 +24,7 @@
     font-size: 1rem;
     color: #818181;
     display: block;
+    font-weight: 450;
 }
 
 /* The navigation menu links */

@@ -59,7 +59,6 @@ class NavbarContainer extends React.Component {
             navbar: {
                 boxShadow: "0 1px 6px 0 rgba(32,33,36,0.28)",
                 fontWeight: '450',
-                marginBottom: 10,
             },
             navbarBrand: {
                 color: 'black',

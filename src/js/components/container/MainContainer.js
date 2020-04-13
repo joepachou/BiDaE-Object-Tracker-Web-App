@@ -25,6 +25,7 @@ import {
 import { disableBodyScroll } from 'body-scroll-lock';
 import retrieveDataHelper from '../../helper/retrieveDataHelper';
 import messageGenerator from '../../helper/messageGenerator';
+import ObjectListContainer from './ObjectListContainer'
 
 const {
     ALL_DEVICES,

@@ -8,19 +8,28 @@ import {
     getImportPatient,
     getTransferredLocation
 } from "../../../dataSrc"
+import { 
+    Fade,
+    
+} from 'react-transition-group'
 import axios from 'axios'; 
 import 'react-table/react-table.css'; 
-import { 
-    Button, 
-    Container, 
-} from 'react-bootstrap';
 import { 
     objectTableColumn,
     patientTableColumn,
     importTableColumn
  } from '../../../config/tables' 
 import config from '../../../config' 
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+// import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import { 
+    Button, 
+    Container, 
+    Row,
+    Col,
+    Nav,
+    Spinner,
+    Tab,
+} from 'react-bootstrap';
 import 'react-tabs/style/react-tabs.css';
 import { AppContext } from '../../../context/AppContext';
 import AccessControl from '../../presentational/AccessControl'
@@ -30,6 +39,11 @@ import ImportObjectTable from '../../presentational/ImportObjectTable'
 import ImportPatientTable from '../../presentational/ImportPatientTable' 
 import DissociationForm from '../DissociationForm'
 import retrieveDataHelper from '../../../helper/retrieveDataHelper'
+import {
+    BOTContainer,
+    BOTNavLink,
+    PageTitle
+} from '../../../config/styleComponent'
 
 class ObjectManagementContainer extends React.Component{
     static contextType = AppContext
@@ -67,6 +81,7 @@ class ObjectManagementContainer extends React.Component{
         formTitle:'',
         areaTable: [],
         loadingFlag : false,
+        filteredData: []
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -238,32 +253,26 @@ class ObjectManagementContainer extends React.Component{
             let data = [] 
             let dataPatient = []
             let typeList = {} 
-            column.push({
-                Header: "",
-                accessor: "Delete Option",
-                minWidth: 60,
-                Cell: props =>
-                    <Button 
-                        variant="outline-danger" 
-                        className='text-capitalize ml-3 mr-2 py-0'
-                        style={{background: 'none'}}
-                        onClick={()=>this.handleRemove(props)}
-                    >
-                        {locale.texts.REMOVE}
-                    </Button>
-            })
+            // column.push({
+            //     Header: "",
+            //     accessor: "Delete Option",
+            //     minWidth: 60,
+            //     Cell: props =>
+            //         <Button 
+            //             variant="outline-danger" 
+            //             className='text-capitalize ml-3 mr-2 py-0'
+            //             style={{background: 'none'}}
+            //             onClick={()=>this.handleRemove(props)}
+            //         >
+            //             {locale.texts.REMOVE}
+            //         </Button>
+            // })
 
             column.map(field => {
-                field.headerStyle = {
-                    textAlign: 'left',
-                }
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })
 
             columnPatient.map(field => {
-                field.headerStyle = {
-                    textAlign: 'left',
-                }
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })
 
@@ -388,6 +397,7 @@ class ObjectManagementContainer extends React.Component{
             formTitle: "dissociation"
         })
     }
+
     handleClose =() =>{
         this.setState({ 
             selectedObjectData: '',
@@ -548,7 +558,7 @@ class ObjectManagementContainer extends React.Component{
         },
     ]
 
-    defaultActiveKey = "Edit_Object_Management"
+    defaultActiveKey = "devices_table"
 
     render(){
         const {  
@@ -573,86 +583,108 @@ class ObjectManagementContainer extends React.Component{
 
         let typeSelection = filterSelection.typeList ? Object.values(filterSelection.typeList) : null;
         return (     
-            <Container 
-                fluid 
-                className="mt-5 text-capitalize"
-                style={style.container}
-            >     
-                <Tabs 
-                    selectedIndex={this.state.tabIndex} 
-                    onSelect={tabIndex => {
-                        this.setState({ tabIndex })
-                    }}
+            <BOTContainer>     
+                <PageTitle
+                    className="mb-3"
+                >                                            
+                    {locale.texts.OBJECT_MANAGEMENT}
+                </PageTitle>
+                <Tab.Container 
+                    transition={Fade}
+                    defaultActiveKey={this.defaultActiveKey}
                 >
-                    <TabList>
-                       
-                        <Tab>{locale.texts.DEVICE_FORM}</Tab>
-                        <Tab>{locale.texts.PATIENT_FORM}</Tab>
+                    <Nav 
+                        style={{
+                            borderBottom: '1px solid #8080804a',
+                            marginBottom: 0,
+                        }}
+                    >
+                        <Nav.Item>
+                            <BOTNavLink eventKey="devices_table">
+                                {locale.texts.DEVICE_FORM}
+                            </BOTNavLink>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <BOTNavLink eventKey="patients_table">
+                                {locale.texts.PATIENT_FORM}
+                            </BOTNavLink>
+                        </Nav.Item>
                         <AccessControl
                             permission={"user:importTable"}
                             renderNoAccess={() => null}
                         >
-                            <Tab>{locale.texts.IMPORT_DEVICES_DATA}</Tab>
+                            <Nav.Item>
+                                <BOTNavLink eventKey="import_devices">
+                                    {locale.texts.IMPORT_DEVICES_DATA}
+                                </BOTNavLink>
+                            </Nav.Item>
                         </AccessControl>
                         <AccessControl
                             permission={"user:importTable"}
                             renderNoAccess={() => null}
                         >
-                             <Tab>{locale.texts.IMPORT_PATIENTS_DATA}</Tab>
+                            <Nav.Item>
+                                <BOTNavLink eventKey="import_patients">
+                                    {locale.texts.IMPORT_PATIENTS_DATA}
+                                </BOTNavLink>
+                            </Nav.Item>
                         </AccessControl>
-                    </TabList>
+                    </Nav>
+                    <Tab.Content
+                        className="my-3"
+                    >
+                        <Tab.Pane eventKey="devices_table"> 
+                            <ObjectTable
+                                data={this.state.filteredData}
+                                columns={this.state.column}
+                                refreshData={this.refreshData}  
+                                importData={this.state.dataImport}
+                                objectTable={this.state.objectTable} 
+                                addObjectFilter = {this.addObjectFilter}
+                                removeObjectFilter ={ this.removeObjectFilter}
+                                typeSelection = {typeSelection}
+                                filterSelection={this.state.filterSelection}
+                                areaTable={this.state.areaTable}
+                                loadingFlag = {this.state.loadingFlag}
+                            /> 
+                        </Tab.Pane>
 
-                    <TabPanel> 
-                        <ObjectTable
-                            data={this.state.filteredData}
-                            columns={this.state.column}
-                            refreshData={this.refreshData}  
-                            importData={this.state.dataImport}
-                            objectTable={this.state.objectTable} 
-                            addObjectFilter = {this.addObjectFilter}
-                            removeObjectFilter ={ this.removeObjectFilter}
-                            typeSelection = {typeSelection}
-                            filterSelection={this.state.filterSelection}
-                            areaTable={this.state.areaTable}
-                            loadingFlag = {this.state.loadingFlag}
-                        /> 
-                    </TabPanel>
+                        <Tab.Pane eventKey="patients_table">
+                            <PatientTable
+                                data={this.state.filteredPatient}
+                                columns={this.state.columnPatient} 
+                                refreshData={this.refreshData}  
+                                importData={this.state.dataImport}
+                                objectTable={this.state.objectTable} 
+                                addPatientFilter = {this.addPatientFilter}
+                                removePatientFilter = {this.removePatientFilter}
+                                typeSelection = {typeSelection}
+                                filterSelection={this.state.filterSelection}
+                                dataImportPatient = {this.state.dataImportPatient}
+                                physicianList={this.state.physicianList}
+                                roomOptions={this.state.roomOptions} 
+                                areaTable={this.state.areaTable}
+                                loadingFlag = {this.state.loadingFlag}
+                            />
+                        </Tab.Pane>
+                        
+                        <Tab.Pane eventKey="import_devices">
+                            <ImportObjectTable
+                                dataImport = {this.state.dataImport}
+                                columnImport = {this.state.columnImport}
+                                refreshData={this.refreshData}
+                            />
+                        </Tab.Pane>
 
-                    <TabPanel>
-                        <PatientTable
-                            data={this.state.filteredPatient}
-                            columns={this.state.columnPatient} 
-                            refreshData={this.refreshData}  
-                            importData={this.state.dataImport}
-                            objectTable={this.state.objectTable} 
-                            addPatientFilter = {this.addPatientFilter}
-                            removePatientFilter = {this.removePatientFilter}
-                            typeSelection = {typeSelection}
-                            filterSelection={this.state.filterSelection}
-                            dataImportPatient = {this.state.dataImportPatient}
-                            physicianList={this.state.physicianList}
-                            roomOptions={this.state.roomOptions} 
-                            areaTable={this.state.areaTable}
-                            loadingFlag = {this.state.loadingFlag}
-                        />
-                    </TabPanel>
-                    
-                    <TabPanel>  
-                        <ImportObjectTable
-                            dataImport = {this.state.dataImport}
-                            columnImport = {this.state.columnImport}
-                            refreshData={this.refreshData}
-                        />
-                    </TabPanel>
-
-                    <TabPanel>  
-                        <ImportPatientTable
-                            dataImportPatient = {this.state.dataImportPatient}
-                            columnImport = {this.state.columnImport}
-                            refreshData={this.refreshData} 
-                        />
-                    </TabPanel>
-                </Tabs>
+                        <Tab.Pane eventKey="import_patients">
+                            <ImportPatientTable
+                                dataImportPatient = {this.state.dataImportPatient}
+                                columnImport = {this.state.columnImport}
+                                refreshData={this.refreshData} 
+                            />
+                        </Tab.Pane>
+                    </Tab.Content>
+                </Tab.Container>
                 <DissociationForm
                     show={this.state.isShowEditImportTable}
                     title={this.state.formTitle}
@@ -667,7 +699,7 @@ class ObjectManagementContainer extends React.Component{
                         }, {})
                     }
                 />
-            </Container>
+            </BOTContainer>
         )
     }
 }

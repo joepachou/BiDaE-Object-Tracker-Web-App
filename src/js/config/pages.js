@@ -145,13 +145,13 @@ export const monitorSettingPageList = [
 
 export const trackingHistoryContainerPageList = [
     {
-        name: 'real time tracking record',
+        name: 'real time record',
         permission: "route:trackingHistory",
         component: (props) => <TrackingTable {...props}/>,
         platform: ['browser', 'tablet', 'mobile'],
     },
     {
-        name: 'historical tracking record',
+        name: 'historical record',
         permission: "route:trackingHistory",
         component: (props) => <TrackingHistory {...props}/>,
         platform: ['browser', 'tablet'],

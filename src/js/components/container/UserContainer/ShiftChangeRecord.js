@@ -52,7 +52,8 @@ class ShiftChangeRecord extends React.Component{
                 columns.map(field => {
                     field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
                     field.headerStyle = {
-                        textAlign: 'left'
+                        textAlign: 'left',
+                        textTransform: 'capitalize'
                     }
                 })
                 res.data.rows.map(item => {

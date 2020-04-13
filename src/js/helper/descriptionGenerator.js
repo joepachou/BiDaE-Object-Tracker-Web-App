@@ -7,7 +7,7 @@ export const getDescription = (item, locale) => {
     switch(item.object_type) {
         case '0':
             foundDeviceDescription += 
-                item.found === 1
+                item.found 
                     ?   `
                         
                         ${getType(item, locale)}
@@ -19,24 +19,14 @@ export const getDescription = (item, locale) => {
                         ${getStatus(item, locale)}
 
                         ${item.currentPosition  
-                            ? item.status.toUpperCase() === 'NORMAL'
+                            ? item.status == 'normal'
                                 ? `${item.residence_time} `
                                 : ''
                             : ''
                         }  
 
                         ${item.status == "reserve" 
-                            ? `~ ${item.reserved_timestamp_final}`
-                            : ''
-                        } 
-
-                        ${item.status == "reserve" 
-                            ? ` ${locale.texts.IS_RESERVED_FOR}`
-                            : ''
-                        } 
-
-                        ${item.status == "reserve" 
-                            ? `${item.reserved_user_name}`
+                            ? `~ ${item.reserved_timestamp_final} ${locale.texts.IS_RESERVED_FOR} ${item.reserved_user_name}`
                             : ''
                         } 
                     `

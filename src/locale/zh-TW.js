@@ -16,6 +16,8 @@ const tw = {
     TRACKING_HISTORY: "追蹤紀錄",
     HISTORICAL_TRACKING_RECORD: "歷史紀錄",
     REAL_TIME_TRACKING_RECORD: "即時紀錄",
+    HISTORICAL_RECORD: "歷史紀錄",
+    REAL_TIME_RECORD: "即時紀錄",
     SETTINGS: "設定",
     SHIFT_CHANGE: "交班",
     MONITOR_SETTING: "監控設定",
@@ -420,7 +422,7 @@ const tw = {
     BEING_HERE: "已",
     FROM: "",
     MINUTES: "分鐘",
-    IS_RESERVED_FOR:"預約者：",
+    IS_RESERVED_FOR:"預約者:",
     POUND_SIGN: "#",
 
     DEVICE_FOUND: function (length){

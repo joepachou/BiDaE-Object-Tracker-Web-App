@@ -66,6 +66,7 @@ class TrackingTable extends React.Component{
             column.map(field => {
                 field.headerStyle = {
                     textAlign: 'left',
+                    textTransform: 'capitalize'
                 }
                 if (field.accessor == '_id') {
                     field.headerStyle = {

@@ -15,7 +15,7 @@ const styleConfig = {
         }),
         indicatorsContainer: (provided) => ({
             ...provided,
-            // height: 30
+            height: 40
         }),
         menu: (provided) => ({
             ...provided,
@@ -24,15 +24,17 @@ const styleConfig = {
         control: (provided) => ({
             ...provided,
             fontSize: '1rem',
-            // minHeight: 1,
-            height:  'calc(1.75rem + 2px)',
+            minHeight: '2.5rem',
+            height:  'calc(2rem + 2px)',
             position: 'none',
+            // width: '250px',
+            // borderRadius: 0
 
         }),
         singleValue: (provided) => ({
             ...provided,
 
-            maxWidth: 'calc(90% - 8px)'
+            // maxWidth: 'calc(90% - 8px)'
         }),
     },
     reactTable: {
@@ -63,14 +65,15 @@ const styleConfig = {
                     fontWeight: 500,
                     color: 'black',
                     // backgroundColor: '#80808014',
-                    // boxShadow: 'rgba(32, 33, 36, 0.28) 0px 0px 0px 0px',                    
+                    // boxShadow: 'rgba(32, 33, 36, 0.28) 0px 0px 0px 0px',
+                    
                 }
             }
         },
         getProps: () => {
             return {
                 style: {
-                    // border: 'none',
+                    border: 'none',
                     // borderTop: '1px solid #cec7c7',
                 }
             }
@@ -79,19 +82,33 @@ const styleConfig = {
         getTheadProps: () => {
             return {
                 style: {
-                    // boxShadow: 'rgba(32, 33, 36, 0.28) 0px 0px 0px 0px',
+                    boxShadow: 'rgba(32, 33, 36, 0.28) 0px 0px 0px 0px',
+                    borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
                     // height: '1rem'
+                    textTransform: 'capitalize',
                 }
             }
         },
+
+        getTableProps: () => {
+            return {
+                style: {
+                    padding: '10px 20px',
+                    border: '1px solid rgba(0, 0, 0, 0.1)',
+                    // borderRadius: '5px',
+                    background: 'white'
+                }
+            }
+        },
+
 
         SelectAllInputComponent: BOTCheckbox,
 
         SelectInputComponent: BOTCheckbox,
 
         // PaginationComponent: BOTPagination,
-
-        // showPagination: false
+        // showPaginationTop: true,
+        showPagination: false
 
     },
     checkbox: {

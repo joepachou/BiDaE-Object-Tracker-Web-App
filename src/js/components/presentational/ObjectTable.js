@@ -23,6 +23,11 @@ import ReactLoading from "react-loading";
 import styled from 'styled-components'
 const SelectTable = selecTableHOC(ReactTable);
 import BOTCheckbox from './BOTCheckbox';
+import {
+    LoaderWrapper, PrimaryButton
+} from '../../config/styleComponent'
+import AccessControl from '../presentational/AccessControl'
+import SearchBox from './SearchBox';
 
 class ObjectTable extends React.Component{
 
@@ -212,23 +217,11 @@ class ObjectTable extends React.Component{
 
         const { locale } = this.context 
 
-        const LoaderStyle = styled.div`
-        position:absolute;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        top:0;
-        bottom:0;
-        left:0;
-        right:0;
-        background-color:rgb(255,255,255,0.8);
-        `
-        ;
         const Loader = () => {
             return ( 
-                <LoaderStyle>
+                <LoaderWrapper>
                     <ReactLoading type={"bars"} color={"black"}  /> 
-            </LoaderStyle>
+                </LoaderWrapper>
             ) 
         }
         const aLoader = () => {
@@ -238,156 +231,197 @@ class ObjectTable extends React.Component{
         }
         return(
             <div> 
-                <ButtonToolbar>
-                    <Button 
-                        variant="outline-primary" 
-                        className='text-capitalize mr-2 mb-1'
-                        name="associate"
-                        size="sm"
-                        onClick={this.handleClickButton}
-                    >
-                        {locale.texts.ASSOCIATE}
-                    </Button>
-                    <Button 
-                        variant="outline-primary" 
-                        className='text-capitalize mr-2 mb-1'
-                        size="sm"
-                        name="add object"
-                        onClick={this.handleClickButton}
-                    >
-                        {locale.texts.ADD_OBJECT}
-                    </Button>
-                    <Button 
-                        variant="outline-primary" 
-                        className='text-capitalize mr-2 mb-1'
-                        size="sm"
-                        name="dissociation"
-                        onClick={this.handleClickButton}
-                    >
-                        {locale.texts.DISSOCIATE}
-                    </Button>
-                    <Button 
-                        variant="outline-primary" 
-                        className='text-capitalize mr-2 mb-1'
-                        size="sm"
-                        name="deleteObject"
-                        onClick={this.handleClickButton}
-                    >
-                        {locale.texts.MULTIPLEDELETE}
-                    </Button>
-                    <div style={{width: '200px'}}>
-                        
-                    </div>
-                    
-                </ButtonToolbar>
+                <div className="d-flex justify-content-between">
+                    <Row className="" noGutters>
+                        <Col>
+                            <BOTInput
+                                className='float-right'
+                                placeholder={locale.texts.SEARCH}
+                                getSearchKey={(key) => {
+                                    this.props.addObjectFilter(
+                                        key, 
+                                        ['name', 'type', 'area', 'status', 'macAddress', 'acn'], 
+                                        'search bar',
+                                    )
+                                }}
+                                clearSearchResult={null}    
+                            />
+                        </Col>
+                            {/* <SearchBox
+                                className='float-right'
+                                placeholder={locale.texts.SEARCH}
+                                getSearchKey={(key) => {
+                                    this.props.addObjectFilter(
+                                        key, 
+                                        ['name', 'type', 'area', 'status', 'macAddress', 'acn'], 
+                                        'search bar',
+                                    )
+                                }}
+                                clearSearchResult={null}    
 
-                            
-                <Row className="my-1" noGutters>
-                    <Col>
-                        <Select
-                            name="Select Type"
-                            className="float-right w-100"
-                            styles={styleConfig.reactSelect}
-                            onChange={(value) => { 
-                                if(value){
-                                    this.props.addObjectFilter(value.label, ['type'], 'type select' )
-                                }else{
-                                    this.props.removeObjectFilter('type select')
-                                }
-                            }}
-                            options={this.props.typeSelection}
-                            isClearable={true}
-                            isSearchable={false}
-                            placeholder={locale.texts.SELECT_TYPE}
-                            
-                        />
-                    </Col>
-                    <Col>
-                        <Select
-                            name="Select Area"
-                            className='float-right w-100'
-                            styles={styleConfig.reactSelect}
-                            onChange={(value) => {
-                                if(value){
-                                    this.props.addObjectFilter(value.label, ['area'], 'area select')
-                                }else{
-                                    this.props.removeObjectFilter('area select')
-                                }
-                            }}
-                            options={this.props.filterSelection.areaSelection}
-                            isClearable={true}
-                            isSearchable={false}
-                            placeholder={locale.texts.SELECT_AREA}
-                        />
-                    </Col>
-                    <Col>
-                        <Select
-                            name="Select Status"
-                            className='float-right w-100'
-                            styles={styleConfig.reactSelect}
-                            onChange={(value) => {
-                                if(value){
-                                    this.props.addObjectFilter(value.label, ['status'], 'status select')
-                                }else{
-                                    this.props.removeObjectFilter('status select')
-                                }
-                            }}
-                            options={this.props.filterSelection.statusOptions}
-                            isClearable={true}
-                            isSearchable={false}
-                            placeholder={locale.texts.SELECT_STATUS}
-                        />
-                    </Col>
-                    <Col>
-                        <BOTInput
-                            className='float-right'
-                            placeholder={locale.texts.TYPE_SEARCH_KEYWORD}
-                            getSearchKey={(key) => {
-                                this.props.addObjectFilter(
-                                    key, 
-                                    ['name', 'type', 'area', 'status', 'macAddress', 'acn'], 
-                                    'search bar',
-                                )
-                            }}
-                            clearSearchResult={null}    
-                        />
-                    </Col>
-                </Row>
-                
-                <SelectTable
-                    keyField='id'
-                    data={this.props.data}
-                    columns={this.props.columns}
-                    ref={r => (this.selectTable = r)}
-                    SelectAllInputComponent={BOTCheckbox}
-                    SelectInputComponent={BOTCheckbox}
-                    className="-highlight text-none"
-                    name={'obj_table'}
-                    style={{height:'75vh'}} 
-                    {...styleConfig.reactTable}
-                    noDataText={this.props.loadingFlag ? '' :'No rows found'} 
-                    LoadingComponent={this.props.loadingFlag? Loader :aLoader}
-                    onPageChange={(e) => {this.setState({selectAll:false,selection:''})}} 
-                    {...extraProps}
-                    defaultPageSize={100}
-        
-                    getTrProps={(state, rowInfo, column, instance) => {
-                        return {
+                            /> */}
+                        <AccessControl
+                            renderNoAccess={() => null}
+                            platform={['browser']}
+                        >
+                            <Col>
+                                <Select
+                                    name="Select Type"
+                                    className="float-right w-100"
+                                    styles={styleConfig.reactSelect}
+                                    onChange={(value) => { 
+                                        if(value){
+                                            this.props.addObjectFilter(value.label, ['type'], 'type select' )
+                                        }else{
+                                            this.props.removeObjectFilter('type select')
+                                        }
+                                    }}
+                                    options={this.props.typeSelection}
+                                    isClearable={true}
+                                    isSearchable={false}
+                                    placeholder={locale.texts.TYPE}
+                                    styles={{
+                                        control: (provided) => ({
+                                            ...provided,
+                                            fontSize: '1rem',
+                                            minHeight: '2.5rem',
+                                            height:  'calc(2rem + 2px)',
+                                            position: 'none',
+                                            width: '250px',
+                                            borderRadius: 0                                
+                                        }),
+                                    }}
                                     
-                            onClick: (e) => { 
-                                if (!e.target.type) {
-                                    this.setState({
-                                    isShowEdit:true,
-                                    selectedRowData: this.props.data[rowInfo.index],
-                                    formTitle: 'edit object',
-                                    formPath: dataSrc.editObject,
-                                    disableASN:true
-                                })
-                                } 
-                            },
-                        }
-                    }} 
-                />
+                                />
+                            </Col>
+                            <Col >
+                                <Select
+                                    name="Select Area"
+                                    className='float-right w-100'
+                                    styles={styleConfig.reactSelect}
+                                    onChange={(value) => {
+                                        if(value){
+                                            this.props.addObjectFilter(value.label, ['area'], 'area select')
+                                        }else{
+                                            this.props.removeObjectFilter('area select')
+                                        }
+                                    }}
+                                    options={this.props.filterSelection.areaSelection}
+                                    isClearable={true}
+                                    isSearchable={false}
+                                    placeholder={locale.texts.AREA}
+                                    styles={{
+                                        control: (provided) => ({
+                                            ...provided,
+                                            fontSize: '1rem',
+                                            minHeight: '2.5rem',
+                                            height:  'calc(2rem + 2px)',
+                                            position: 'none',
+                                            width: '250px',
+                                            borderRadius: 0                                
+                                        }),
+                                    }}
+                                />
+                            </Col>
+                            <Col>
+                                <Select
+                                    name="Select Status"
+                                    className='float-right w-100'
+                                    styles={styleConfig.reactSelect}
+                                    onChange={(value) => {
+                                        if(value){
+                                            this.props.addObjectFilter(value.label, ['status'], 'status select')
+                                        }else{
+                                            this.props.removeObjectFilter('status select')
+                                        }
+                                    }}
+                                    options={this.props.filterSelection.statusOptions}
+                                    isClearable={true}
+                                    isSearchable={false}
+                                    placeholder={locale.texts.STATUS}
+                                    styles={{
+                                        control: (provided) => ({
+                                            ...provided,
+                                            fontSize: '1rem',
+                                            minHeight: '2.5rem',
+                                            height:  'calc(2rem + 2px)',
+                                            position: 'none',
+                                            width: '250px',
+                                            borderRadius: 0                                
+                                        }),
+                                    }}
+                                />
+                            </Col>
+                        </AccessControl>
+                    </Row>
+                    <AccessControl
+                        renderNoAccess={() => null}
+                        platform={['browser', 'tablet']}
+                    >
+                        <ButtonToolbar>
+                            <PrimaryButton
+                                name="associate"
+                                onClick={this.handleClickButton}
+                            >
+                                {locale.texts.ASSOCIATE}
+                            </PrimaryButton>
+                            <PrimaryButton
+                                name="add object"
+                                onClick={this.handleClickButton}
+                            >
+                                {locale.texts.ADD_OBJECT}
+                            </PrimaryButton>
+                            <PrimaryButton
+                                name="dissociation"
+                                onClick={this.handleClickButton}
+                            >
+                                {locale.texts.DISSOCIATE}
+                            </PrimaryButton>
+                            <PrimaryButton 
+                                name="deleteObject"
+                                onClick={this.handleClickButton}
+                            >
+                                {locale.texts.DELETE}
+                            </PrimaryButton>
+                        </ButtonToolbar>
+                    </AccessControl>
+                </div>
+                <hr/>
+                {this.props.data.length != 0 &&
+                    <SelectTable
+                        keyField='id'
+                        data={this.props.data}
+                        columns={this.props.columns}
+                        ref={r => (this.selectTable = r)}
+                        SelectAllInputComponent={BOTCheckbox}
+                        SelectInputComponent={BOTCheckbox}
+                        className="-highlight text-none"
+                        name={'obj_table'}
+                        style={{height:'75vh'}} 
+                        {...styleConfig.reactTable}
+                        noDataText={this.props.loadingFlag ? '' :'No rows found'} 
+                        LoadingComponent={this.props.loadingFlag? Loader :aLoader}
+                        onPageChange={(e) => {this.setState({selectAll:false,selection:''})}} 
+                        {...extraProps}
+                        
+                        defaultPageSize={this.props.data.length}
+                        getTrProps={(state, rowInfo, column, instance) => {
+                            return {
+                                onClick: (e) => { 
+                                    if (!e.target.type) {
+                                        this.setState({
+                                        isShowEdit:true,
+                                        selectedRowData: this.props.data[rowInfo.index],
+                                        formTitle: 'edit object',
+                                        formPath: dataSrc.editObject,
+                                        disableASN:true
+                                    })
+                                    } 
+                                },
+                            }
+                        }} 
+                    />
+                }
                 <EditObjectForm 
                     show={this.state.isShowEdit} 
                     title={this.state.formTitle} 

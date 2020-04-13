@@ -19,14 +19,19 @@ import {
     disableBodyScroll,
     enableBodyScroll,
 } from 'body-scroll-lock';
+import {
+    BOTContainer,
+    BOTSideNav,
+    PageTitle
+} from '../../../config/styleComponent'
 
 const style = {
 
     sidenav: {
-        width: isBrowser ? 150 : 0,
+        width: isBrowser ? 250 : 0,
     },
     sidemain:{
-        marginLeft: isBrowser ? 150 : 0
+        marginLeft: isBrowser ? 250 : 0
     },
     container: {
         overflowX: 'hide'
@@ -39,7 +44,7 @@ class TrackingHistoryContainer extends React.Component{
 
     tabList = trackingHistoryContainerPageList
 
-    defaultActiveKey = "real_time_tracking_record"
+    defaultActiveKey = "real_time_record"
 
     componentDidMount = () => {
 
@@ -63,15 +68,10 @@ class TrackingHistoryContainer extends React.Component{
         return (
             <Fragment>
                 <BrowserView>
-                    <Container 
-                        fluid 
-                        className="mt-5 text-capitalize"
-                        style={style.container}
-                    >     
+                    <>
                         <Tab.Container 
                             transition={false} 
                             defaultActiveKey={this.defaultActiveKey}
-                            className='mt-5' 
                         >
                             <div 
                                 className="border-0 BOTsidenav"
@@ -89,14 +89,14 @@ class TrackingHistoryContainer extends React.Component{
                                                 platform={tab.platform}
                                                 key={tab.name}
                                             >
-                                                <ListGroup.Item 
+                                                <BOTSideNav 
                                                     key={index}
                                                     className="border-0 m-0 my-1 text-capitalize" 
                                                     eventKey={tab.name.replace(/ /g, '_')}
                                                     action
                                                 >
                                                     {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
-                                                </ListGroup.Item>
+                                                </BOTSideNav>
                                             </AccessControl>
                                         )
                                     })}  
@@ -123,13 +123,12 @@ class TrackingHistoryContainer extends React.Component{
                                                     eventKey={tab.name.replace(/ /g, '_')}
                                                     key={tab.name.replace(/ /g, '_')}
                                                     style={{maginBottom: '1rem'}}
-                                                    className="my-3"
                                                 >
-                                                    <div
-                                                        className='h5'
-                                                    >
+                                                    <PageTitle
+                                                        className="mb-3"
+                                                    >           
                                                         {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
-                                                    </div>
+                                                    </PageTitle>
                                                     <hr/>
                                                     {tab.component(props)}
                                                 </Tab.Pane>
@@ -139,7 +138,7 @@ class TrackingHistoryContainer extends React.Component{
                                 </Tab.Content>         
                             </div>
                         </Tab.Container>
-                    </Container>
+                    </>
                 </BrowserView>
                 <TabletView>
                     <Container 
