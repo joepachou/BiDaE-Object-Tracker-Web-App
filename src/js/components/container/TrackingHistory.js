@@ -6,13 +6,10 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { 
     Button, 
-    Container, 
     Row,
     Col,
     Nav,
-    Spinner
 } from 'react-bootstrap';
-import config from '../../config' 
 import styleConfig from '../../config/styleConfig'
 import 'react-tabs/style/react-tabs.css';
 import { AppContext } from '../../context/AppContext';
@@ -22,14 +19,14 @@ import {
     locationHistoryByUUIDColumns,
 } from '../../config/tables'
 import moment from 'moment'
-import {
-    isBrowser
-} from 'react-device-detect'
 import FormikFormGroup from '../presentational/FormikFormGroup' 
-import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
 import ReactLoading from "react-loading"; 
-import styled from 'styled-components'
+import {
+    LoaderWrapper,
+    BOTNavLink,
+    BOTNav
+} from '../../config/styleComponent'
+
 class TrackingHistory extends React.Component{
     static contextType = AppContext
     
@@ -37,7 +34,7 @@ class TrackingHistory extends React.Component{
         columns:[], 
         data:[],
         additionalData: null,
-        done:false,
+        done: false,
         errorTitle:'Waiting for search...',
     }
 
@@ -53,7 +50,8 @@ class TrackingHistory extends React.Component{
     }
 
     getLocationHistory = (
-        fields
+        fields,
+        setSubmitting
     ) => {
         const {
             locale
@@ -125,7 +123,7 @@ class TrackingHistory extends React.Component{
                     columns,
                     additionalData,
                     done:false
-                })
+                }, setSubmitting(false))
             })
             .catch(err => {
                 this.setState({
@@ -134,6 +132,20 @@ class TrackingHistory extends React.Component{
                 })
                 // console.log(`get location history failed ${err}`)
             })
+    }
+
+    loader = () => {
+        return ( 
+            <LoaderWrapper>
+                <ReactLoading type={"bars"} color={"black"}  /> 
+           </LoaderWrapper>
+        ) 
+    }
+
+    aLoader = () => {
+        return ( 
+                null
+        ) 
     }
  
     render(){
@@ -150,30 +162,6 @@ class TrackingHistory extends React.Component{
             additionalData
         } = this.state
  
-        const LoaderStyle = styled.div`
-            position:absolute;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            top:0;
-            bottom:0;
-            left:0;
-            right:0;
-            background-color:rgb(255,255,255,0.8);
-        `
-        ;
-        const Loader = () => {
-            return ( 
-                <LoaderStyle>
-                    <ReactLoading type={"bars"} color={"black"}  /> 
-               </LoaderStyle>
-            ) 
-        }
-        const aLoader = () => {
-            return ( 
-                    null
-            ) 
-        }
         const timeTypeExample = "ex: YYYY/MM/DD HH:MM:SS"
         const timeValidatedFormat = 'YYYY/MM/DD HH:mm:ss'
 
@@ -235,19 +223,19 @@ class TrackingHistory extends React.Component{
                             ),
                 })}
 
-                onSubmit={(values) => {
-                    this.getLocationHistory(values)
+                onSubmit={(values, setSubmitting) => {
+                    this.getLocationHistory(values, setSubmitting)
                 }}
             
-                render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm, setErrors, setTouched }) => (
+                render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm, setErrors, setTouched, setSubmitting }) => (
                     <div>
-                        <Nav 
+                        <BOTNav
                             defaultActiveKey={this.defaultActiveKey}
-                            className="text-capitalize BOTnav my-3"
-                            variant="pills"
                         >
+                        {console.log(status)}
+                        {console.log(isSubmitting)}
                             <Nav.Item>
-                                <Nav.Link
+                                <BOTNavLink 
                                     className=""
                                     eventKey="mac"
                                     onClick={(e) => {
@@ -263,13 +251,13 @@ class TrackingHistory extends React.Component{
                                             additionalData: null
                                         })
                                     }}
-                                    active={values.mode == "mac"}
-                                >
+                                    active={values.mode == "mac"}                               
+                                 >
                                     {locale.texts.MAC_ADDRESS}
-                                </Nav.Link>
+                                </BOTNavLink>
                             </Nav.Item>
                             <Nav.Item>
-                                <Nav.Link
+                                <BOTNavLink 
                                     eventKey="uuid"
                                     onClick={() => {
                                         setFieldValue('key', "")
@@ -288,12 +276,12 @@ class TrackingHistory extends React.Component{
                                     active={values.mode == "uuid"}
                                 >
                                     {locale.texts.LBEACON}
-                                </Nav.Link>
+                                </BOTNavLink>
                             </Nav.Item>
-                        </Nav>
+
+                        </BOTNav>
                         <div
-                            className=""
-                            style={style.sidemain}
+                            className="my-2"
                         >
                             <Row>
                                 <Col lg={4}>
@@ -378,49 +366,57 @@ class TrackingHistory extends React.Component{
                                     }
                                 </Row>
                             }
-                            <ReactTable
-                                keyField='id'
-                                data={this.state.data}
-                                columns={this.state.columns}
-                                className="-highlight mt-4 text-capitalize"
-                                style={{height: '65vh', overflowY: 'scroll'}} 
-                                noDataText={this.state.done ? '' :this.state.errorTitle} 
-                                LoadingComponent={this.state.done ? Loader :aLoader}
-                                {...styleConfig.reactTable}
-                                getTrProps={(state, rowInfo, column, instance) => {
-                                    return {
-                                        onClick: (e) => { 
-                                            switch(values.mode) {
-                                                case 'mac':
-                                                    setFieldValue('key', rowInfo.original.uuid)
-                                                    setFieldValue('mode', 'uuid')
-                                                    setFieldValue('startTime', rowInfo.original.startTime)
-                                                    setFieldValue('endTime', rowInfo.original.endTime)
-                                                    this.getLocationHistory({
-                                                        ...values,
-                                                        ...rowInfo.original,
-                                                        key: rowInfo.original.uuid,
-                                                        mode: 'uuid'
-                                                    })
-                                                    break;
-                                                case 'uuid':
-                                                    setFieldValue('key', rowInfo.original.mac_address)
-                                                    setFieldValue('mode', 'mac')
-                                                    setFieldValue('startTime', values.startTime)
-                                                    setFieldValue('endTime', values.endTime)
-                                                    this.getLocationHistory({
-                                                        ...values,
-                                                        ...rowInfo.original,
-                                                        key: rowInfo.original.mac_address,
-                                                        mode: 'mac'
-                                                    })
-                                                    break;
-                                            }
+                            {isSubmitting
+                                ?   this.loader()
+                                :   this.state.data.length != 0  
+                                    ?   (
+                                        <ReactTable
+                                            keyField='id'
+                                            data={this.state.data}
+                                            columns={this.state.columns}
+                                            className="-highlight mt-4 text-capitalize"
+                                            style={{maxHeight: '65vh'}} 
+                                            pageSize={this.state.data.length}
+                                            noDataText={this.state.done ? '' :this.state.errorTitle} 
+                                            {...styleConfig.reactTable}
+                                            getTrProps={(state, rowInfo, column, instance) => {
+                                                return {
+                                                    onClick: (e) => { 
+                                                        switch(values.mode) {
+                                                            case 'mac':
+                                                                setFieldValue('key', rowInfo.original.uuid)
+                                                                setFieldValue('mode', 'uuid')
+                                                                setFieldValue('startTime', rowInfo.original.startTime)
+                                                                setFieldValue('endTime', rowInfo.original.endTime)
+                                                                this.getLocationHistory({
+                                                                    ...values,
+                                                                    ...rowInfo.original,
+                                                                    key: rowInfo.original.uuid,
+                                                                    mode: 'uuid'
+                                                                })
+                                                                break;
+                                                            case 'uuid':
+                                                                setFieldValue('key', rowInfo.original.mac_address)
+                                                                setFieldValue('mode', 'mac')
+                                                                setFieldValue('startTime', values.startTime)
+                                                                setFieldValue('endTime', values.endTime)
+                                                                this.getLocationHistory({
+                                                                    ...values,
+                                                                    ...rowInfo.original,
+                                                                    key: rowInfo.original.mac_address,
+                                                                    mode: 'mac'
+                                                                })
+                                                                break;
+                                                        }
 
-                                        },
-                                    }
-                                }}                                     
-                            />
+                                                    },
+                                                }
+                                            }}                                     
+                                        />
+                                    )
+                                    :   ""
+                            }
+                          
                         </div>  
                     </div>
                 )}

@@ -11,9 +11,9 @@ import {
     disableBodyScroll,
     enableBodyScroll,
 } from 'body-scroll-lock';
-import MobilePageComponent from '../../mobile/MobilePageComponent'
-import BrowserPageComponent from '../../browser/BrowserPageComponent';
-import TabletPageComponent from '../../tablet/TabletPageComponent'
+import MobilePageComponent from '../../platform/mobile/mobilePageComponent'
+import BrowserPageComponent from '../../platform/browser/BrowserPageComponent';
+import TabletPageComponent from '../../platform/tablet/TabletPageComponent'
 
 class TrackingHistoryContainer extends React.Component{
 

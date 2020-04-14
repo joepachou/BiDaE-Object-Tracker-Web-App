@@ -316,7 +316,7 @@ const en =  {
     PATIENT_MANAGEMENT: "Patient Management",
     USER_PROFILE: "User Profile",
     TRANSFERRED_LOCATION_MANAGEMENT: "transferred location",
-    ROLE_PERMISSION_MANAGEMENT: "Role Permission Management",
+    ROLE_PERMISSION_MANAGEMENT: "role permission",
     SHIFT_CHANGE_RECORD: "shift change record",
     OBJECT_EDITED_RECORD: "object edited record",
     PATIENT_RECORD: "patient record",

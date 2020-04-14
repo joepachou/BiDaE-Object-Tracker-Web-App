@@ -10,8 +10,8 @@ html,body {
     /* position: fixed; */
     width: 100%;
     overscroll-behavior: auto;
-    /* background: #f0eded17; */
-    background: #f0edf240;
+    background: white;
+    /* background: #f0edf240; */
     color: rgb(92, 92, 92);
     letter-spacing: 1.5px;
     height: '100vh';   

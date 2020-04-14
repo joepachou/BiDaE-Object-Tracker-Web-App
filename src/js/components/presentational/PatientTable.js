@@ -21,10 +21,15 @@ import {
     addPatient,
     deleteDevice,
 } from "../../dataSrc"
+import {
+    LoaderWrapper, 
+    PrimaryButton
+} from '../../config/styleComponent'
 import ReactLoading from "react-loading"; 
 import styled from 'styled-components'
 import messageGenerator from '../../helper/messageGenerator'
 const SelectTable = selecTableHOC(ReactTable);
+import AccessControl from './AccessControl'
 
 
 class PatientTable extends React.Component{
@@ -205,23 +210,12 @@ class PatientTable extends React.Component{
             toggleSelection,
             selectType
         };
-        const LoaderStyle = styled.div`
-            position:absolute;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            top:0;
-            bottom:0;
-            left:0;
-            right:0;
-            background-color:rgb(255,255,255,0.8);
-        `
-        ;
+
         const Loader = () => {
             return ( 
-                <LoaderStyle>
+                <LoaderWrapper>
                     <ReactLoading type={"bars"} color={"black"}  /> 
-               </LoaderStyle>
+                </LoaderWrapper>
             ) 
         }
         const aLoader = () => {
@@ -232,100 +226,110 @@ class PatientTable extends React.Component{
         const { locale } = this.context 
         return(
             <div> 
-                <ButtonToolbar>
-                    <Button 
-                        variant="outline-primary" 
-                        className='text-capitalize mr-2 mb-1'
-                        size="sm"
-                        name="associate_patient"
-                        onClick={this.handleClickButton}
+                <div className="d-flex justify-content-between">
+                    <Row noGutters> 
+                        <Col>
+                            <BOTInput
+                                className={'float-right'}
+                                placeholder={locale.texts.SEARCH}
+                                getSearchKey={(key) => {
+                                    this.props.addPatientFilter(
+                                        key, 
+                                        ['name', 'area', 'macAddress', 'acn', 'monitor', 'physician_name'], 
+                                        'search bar'
+                                    )
+                                }}
+                                clearSearchResult={null}                                        
+                            />
+                        </Col>
+                        <AccessControl
+                            renderNoAccess={() => null}
+                            platform={['browser']}
+                        >
+                            <Col>
+                                <Select
+                                    name="Select Area Patient"
+                                    className='float-right w-100'
+                                    styles={styleConfig.reactSelect}
+                                    onChange={(value) => {
+                                        if(value){
+                                            this.props.addPatientFilter(value.label, ['area'], 'area select')
+                                        }else{
+                                            this.props.removePatientFilter('area select')
+                                        }
+                                    }}
+                                    options={this.props.filterSelection.areaSelection}
+                                    isClearable={true}
+                                    isSearchable={false}
+                                    placeholder={locale.texts.SELECT_AREA}
+                                    styles={styleConfig.reactSelectSearch}
+                                />
+                            </Col> 
+                            <Col>
+                                <Select
+                                    name="Select Status"
+                                    className='float-right w-100'
+                                    styles={styleConfig.reactSelect}
+                                    onChange={(value) => {
+                                        if(value){
+                                            this.props.addPatientFilter(value.label, ['monitor'], 'monitor select')
+                                        }else{
+                                            this.props.removePatientFilter('monitor select')
+                                        }
+                                    }}
+                                    options={this.props.filterSelection.monitorTypeOptions}
+                                    isClearable={true}
+                                    isSearchable={false}
+                                    placeholder={locale.texts.SELECT_MONITOR_TYPE}
+                                    styles={styleConfig.reactSelectSearch}
+                                />
+                            </Col>
+                        </AccessControl>
+                    </Row>
+                    <AccessControl
+                        renderNoAccess={() => null}
+                        platform={['browser', 'tablet']}
                     >
-                        {locale.texts.ASSOCIATE}
-                    </Button>
-                    <Button 
-                        variant="outline-primary" 
-                        className='text-capitalize mr-2 mb-1'
-                        size="sm"
-                        onClick={this.handleClick}
-                    >
-                        {locale.texts.ADD_INPATIENT}
-                    </Button>
-                    <Button 
-                        variant="outline-primary" 
-                        className='text-capitalize mr-2 mb-1'
-                        size="sm"
-                        name="deletePatient"
-                        onClick={this.handleClickButton}
-                    >
-                        {locale.texts.DELETE}
-                    </Button>
-                </ButtonToolbar>
-                <Row className="my-1" noGutters> 
-                    <Col>
-                        <Select
-                            name="Select Area Patient"
-                            className='float-right w-100'
-                            styles={styleConfig.reactSelect}
-                            onChange={(value) => {
-                                if(value){
-                                    this.props.addPatientFilter(value.label, ['area'], 'area select')
-                                }else{
-                                    this.props.removePatientFilter('area select')
-                                }
-                            }}
-                            options={this.props.filterSelection.areaSelection}
-                            isClearable={true}
-                            isSearchable={false}
-                            placeholder={locale.texts.SELECT_AREA}
-                        />
-                    </Col> 
-                    <Col>
-                        <Select
-                            name="Select Status"
-                            className='float-right w-100'
-                            styles={styleConfig.reactSelect}
-                            onChange={(value) => {
-                                if(value){
-                                    this.props.addPatientFilter(value.label, ['monitor'], 'monitor select')
-                                }else{
-                                    this.props.removePatientFilter('monitor select')
-                                }
-                            }}
-                            options={this.props.filterSelection.monitorTypeOptions}
-                            isClearable={true}
-                            isSearchable={false}
-                            placeholder={locale.texts.SELECT_MONITOR_TYPE}
-                        />
-                    </Col>
-                    <Col>
-                        <BOTInput
-                            className={'float-right'}
-                            placeholder={locale.texts.TYPE_SEARCH_KEYWORD}
-                            getSearchKey={(key) => {
-                                this.props.addPatientFilter(
-                                    key, 
-                                    ['name', 'area', 'macAddress', 'acn', 'monitor', 'physician_name'], 
-                                    'search bar'
-                                )
-                            }}
-                            clearSearchResult={null}                                        
-                        />
-                    </Col>
-                </Row>
-                
+                        <ButtonToolbar>
+                            <PrimaryButton
+                                className='text-capitalize mr-2 mb-1'
+                                name="associate_patient"
+                                onClick={this.handleClickButton}
+                            >
+                                {locale.texts.ASSOCIATE}
+                            </PrimaryButton>
+                            <PrimaryButton
+                                className='text-capitalize mr-2 mb-1'
+                                onClick={this.handleClick}
+                            >
+                                {locale.texts.ADD_INPATIENT}
+                            </PrimaryButton>
+                            <PrimaryButton
+                                className='text-capitalize mr-2 mb-1'
+                                name="deletePatient"
+                                onClick={this.handleClickButton}
+                            >
+                                {locale.texts.DELETE}
+                            </PrimaryButton>
+                        </ButtonToolbar>
+                    </AccessControl>
+                </div>
+                <hr/>
+
                 <SelectTable
                     keyField='id'
                     data={this.props.data}
                     columns={this.props.columns}
                     ref={r => (this.selectTable = r)}
                     className="-highlight text-none"
-                    name={'obj_table'}
-                    style={{height:'75vh'}} 
+                    style={{maxHeight:'75vh'}} 
                     noDataText={this.props.loadingFlag ? '' :'No rows found'} 
                     LoadingComponent={this.props.loadingFlag? Loader :aLoader}
                     onPageChange={(e) => {this.setState({selectAll:false,selection:''})}} 
                     {...extraProps}
                     {...styleConfig.reactTable}
+                    pageSize={this.props.data.length}
+
                     getTrProps={(state, rowInfo, column, instance) => {
                         return {
                             onClick: (e) => { 

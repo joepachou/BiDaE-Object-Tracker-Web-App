@@ -37,6 +37,17 @@ const styleConfig = {
             // maxWidth: 'calc(90% - 8px)'
         }),
     },
+    reactSelectSearch : {
+        control: (provided) => ({
+            ...provided,
+            fontSize: '1rem',
+            minHeight: '2.5rem',
+            height:  'calc(2rem + 2px)',
+            position: 'none',
+            width: '250px',
+            borderRadius: 0                                
+        }),
+    },
     reactTable: {
 
         getTdProps: () => {

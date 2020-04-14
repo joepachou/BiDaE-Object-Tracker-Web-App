@@ -21,6 +21,10 @@ import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
 import retrieveDataHelper from '../../helper/retrieveDataHelper'
 import BOTCheckbox from '../presentational/BOTCheckbox'
 import styleConfig from '../../config/styleConfig'
+import {
+    PrimaryButton
+} from '../../config/styleComponent'
+import AccessControl from '../presentational/AccessControl'
 
 const SelectTable = selecTableHOC(ReactTable);
 
@@ -215,49 +219,59 @@ class LbeaconTable extends React.Component{
         };
        
         return(
-            <div> 
-                 <ButtonToolbar>
-                    <Button 
-                        variant="outline-primary" 
-                        className='mb-1 text-capitalize mr-2'
-                        onClick={() => {
+            <div>  
+                <div className="d-flex justify-content-start">
+                    <AccessControl
+                        renderNoAccess={() => null}
+                        platform={['browser', 'tablet']}
+                    >                      
+                        <ButtonToolbar>
+                            <PrimaryButton
+                                className='mb-1 text-capitalize mr-2'
+                                onClick={() => {
+                                    this.setState({
+                                        showDeleteConfirmation: true
+                                    })
+                                }}
+                            >
+                                {locale.texts.DELETE}
+                            </PrimaryButton>
+                        </ButtonToolbar>
+                    </AccessControl>
+                </div>
+                <hr/>
+                {this.state.data.length != 0 &&
+                    <SelectTable
+                        keyField='id'
+                        name="test"
+                        data={this.state.data}
+                        columns={this.state.columns}
+                        SelectAllInputComponent={BOTCheckbox}
+                        SelectInputComponent={BOTCheckbox}
+                        {...styleConfig.reactTable}
+                        ref={r => (this.selectTable = r)}
+                        className="-highlight"
+                        pageSize={this.state.data.length}
+                        style={{maxHeight:'75vh'}}                       
+                        onPageChange={(e) => {
                             this.setState({
-                                showDeleteConfirmation: true
+                                selectAll:false,
+                                selection:''
                             })
-                        }}
-                    >
-                        {locale.texts.DELECT_LBEACON}
-                    </Button>
-                </ButtonToolbar>
-                <SelectTable
-                    keyField='id'
-                    name="test"
-                    data={this.state.data}
-                    columns={this.state.columns}
-                    SelectAllInputComponent={BOTCheckbox}
-                    SelectInputComponent={BOTCheckbox}
-                    {...styleConfig.reactTable}
-                    ref={r => (this.selectTable = r)}
-                    className="-highlight"
-                    style={{height:'75vh'}}
-                    onPageChange={(e) => {
-                        this.setState({
-                            selectAll:false,
-                            selection:''
-                        })
-                    }} 
-                    {...extraProps}
-                    getTrProps={(state, rowInfo, column, instance) => {
-                        return {
-                            onClick: (e, handleOriginal) => {
-                                this.setState({
-                                    selectedRowData: rowInfo.original,
-                                    showEdit: true,
-                                })
+                        }} 
+                        {...extraProps}
+                        getTrProps={(state, rowInfo, column, instance) => {
+                            return {
+                                onClick: (e, handleOriginal) => {
+                                    this.setState({
+                                        selectedRowData: rowInfo.original,
+                                        showEdit: true,
+                                    })
+                                }
                             }
-                        }
-                    }}
-                />
+                        }}
+                    />
+                }
                 <EditLbeaconForm 
                     show= {this.state.showEdit} 
                     title={'edit lbeacon'}
@@ -265,7 +279,6 @@ class LbeaconTable extends React.Component{
                     handleSubmit={this.handleSubmitForm}
                     handleClose={this.handleClose}
                 />
-
                 <DeleteConfirmationForm
                     show={this.state.showDeleteConfirmation} 
                     handleClose={this.handleClose}

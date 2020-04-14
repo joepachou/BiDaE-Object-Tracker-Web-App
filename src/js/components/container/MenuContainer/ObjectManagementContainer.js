@@ -77,7 +77,8 @@ class ObjectManagementContainer extends React.Component{
         formTitle:'',
         areaTable: [],
         loadingFlag : false,
-        filteredData: []
+        filteredData: [],
+        filteredPatient: [],
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -648,31 +649,33 @@ class ObjectManagementContainer extends React.Component{
                     <BOTNav>
                         <Nav.Item>
                             <BOTNavLink eventKey="devices_table">
-                                {locale.texts.DEVICE_FORM}
+                                {locale.texts.DEVICE_FORM} ({this.state.data.length})
                             </BOTNavLink>
                         </Nav.Item>
                         <Nav.Item>
                             <BOTNavLink eventKey="patients_table">
-                                {locale.texts.PATIENT_FORM}
+                                {locale.texts.PATIENT_FORM} ({this.state.dataPatient.length})
                             </BOTNavLink>
                         </Nav.Item>
                         <AccessControl
                             permission={"user:importTable"}
                             renderNoAccess={() => null}
+                            platform={['browser']}
                         >
                             <Nav.Item>
                                 <BOTNavLink eventKey="import_devices">
-                                    {locale.texts.IMPORT_DEVICES_DATA}
+                                    {locale.texts.IMPORT_DEVICES_DATA} ({this.state.dataImport.length})
                                 </BOTNavLink>
                             </Nav.Item>
                         </AccessControl>
                         <AccessControl
                             permission={"user:importTable"}
                             renderNoAccess={() => null}
+                            platform={['browser']}
                         >
                             <Nav.Item>
                                 <BOTNavLink eventKey="import_patients">
-                                    {locale.texts.IMPORT_PATIENTS_DATA}
+                                    {locale.texts.IMPORT_PATIENTS_DATA} ({this.state.dataImportPatient.length})
                                 </BOTNavLink>
                             </Nav.Item>
                         </AccessControl>
@@ -715,21 +718,32 @@ class ObjectManagementContainer extends React.Component{
                             />
                         </Tab.Pane>
                         
-                        <Tab.Pane eventKey="import_devices">
-                            <ImportObjectTable
-                                dataImport = {this.state.dataImport}
-                                columnImport = {this.state.columnImport}
-                                refreshData={this.refreshData}
-                            />
-                        </Tab.Pane>
-
-                        <Tab.Pane eventKey="import_patients">
-                            <ImportPatientTable
-                                dataImportPatient = {this.state.dataImportPatient}
-                                columnImport = {this.state.columnImport}
-                                refreshData={this.refreshData} 
-                            />
-                        </Tab.Pane>
+                        <AccessControl
+                            permission={"user:importTable"}
+                            renderNoAccess={() => null}
+                            platform={['browser']}
+                        >
+                            <Tab.Pane eventKey="import_devices">
+                                <ImportObjectTable
+                                    dataImport = {this.state.dataImport}
+                                    columnImport = {this.state.columnImport}
+                                    refreshData={this.refreshData}
+                                />
+                            </Tab.Pane>
+                        </AccessControl>
+                        <AccessControl
+                            permission={"user:importTable"}
+                            renderNoAccess={() => null}
+                            platform={['browser']}
+                        >
+                            <Tab.Pane eventKey="import_patients">
+                                <ImportPatientTable
+                                    dataImportPatient = {this.state.dataImportPatient}
+                                    columnImport = {this.state.columnImport}
+                                    refreshData={this.refreshData} 
+                                />
+                            </Tab.Pane>
+                        </AccessControl>
                     </Tab.Content>
                 </Tab.Container>
                 <DissociationForm

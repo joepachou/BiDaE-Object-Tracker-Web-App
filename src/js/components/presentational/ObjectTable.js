@@ -238,7 +238,7 @@ class ObjectTable extends React.Component{
     
             <div> 
                 <div className="d-flex justify-content-between">
-                    <Row className="" noGutters>
+                    <Row noGutters>
                         <Col>
                             <BOTInput
                                 className='float-right'
@@ -253,19 +253,6 @@ class ObjectTable extends React.Component{
                                 clearSearchResult={null}    
                             />
                         </Col>
-                            {/* <SearchBox
-                                className='float-right'
-                                placeholder={locale.texts.SEARCH}
-                                getSearchKey={(key) => {
-                                    this.props.addObjectFilter(
-                                        key, 
-                                        ['name', 'type', 'area', 'status', 'macAddress', 'acn'], 
-                                        'search bar',
-                                    )
-                                }}
-                                clearSearchResult={null}    
-
-                            /> */}
                         <AccessControl
                             renderNoAccess={() => null}
                             platform={['browser']}
@@ -286,18 +273,8 @@ class ObjectTable extends React.Component{
                                     isClearable={true}
                                     isSearchable={false}
                                     placeholder={locale.texts.TYPE}
-                                    styles={{
-                                        control: (provided) => ({
-                                            ...provided,
-                                            fontSize: '1rem',
-                                            minHeight: '2.5rem',
-                                            height:  'calc(2rem + 2px)',
-                                            position: 'none',
-                                            width: '250px',
-                                            borderRadius: 0                                
-                                        }),
-                                    }}
-                                    
+                                    styles={styleConfig.reactSelectSearch}
+
                                 />
                             </Col>
                             <Col >
@@ -316,17 +293,7 @@ class ObjectTable extends React.Component{
                                     isClearable={true}
                                     isSearchable={false}
                                     placeholder={locale.texts.AREA}
-                                    styles={{
-                                        control: (provided) => ({
-                                            ...provided,
-                                            fontSize: '1rem',
-                                            minHeight: '2.5rem',
-                                            height:  'calc(2rem + 2px)',
-                                            position: 'none',
-                                            width: '250px',
-                                            borderRadius: 0                                
-                                        }),
-                                    }}
+                                    styles={styleConfig.reactSelectSearch}
                                 />
                             </Col>
                             <Col>
@@ -345,17 +312,7 @@ class ObjectTable extends React.Component{
                                     isClearable={true}
                                     isSearchable={false}
                                     placeholder={locale.texts.STATUS}
-                                    styles={{
-                                        control: (provided) => ({
-                                            ...provided,
-                                            fontSize: '1rem',
-                                            minHeight: '2.5rem',
-                                            height:  'calc(2rem + 2px)',
-                                            position: 'none',
-                                            width: '250px',
-                                            borderRadius: 0                                
-                                        }),
-                                    }}
+                                    styles={styleConfig.reactSelectSearch}
                                 />
                             </Col>
                         </AccessControl>
@@ -393,24 +350,21 @@ class ObjectTable extends React.Component{
                     </AccessControl>
                 </div>
                 <hr/>
+
                 {this.props.data.length != 0 &&
                     <SelectTable
                         keyField='id'
                         data={this.props.data}
                         columns={this.props.columns}
                         ref={r => (this.selectTable = r)}
-                        SelectAllInputComponent={BOTCheckbox}
-                        SelectInputComponent={BOTCheckbox}
                         className="-highlight text-none"
-                        name={'obj_table'}
-                        style={{height:'75vh'}} 
-                        {...styleConfig.reactTable}
                         noDataText={this.props.loadingFlag ? '' :'No rows found'} 
                         LoadingComponent={this.props.loadingFlag? Loader :aLoader}
                         onPageChange={(e) => {this.setState({selectAll:false,selection:''})}} 
                         {...extraProps}
-                        
-                        defaultPageSize={this.props.data.length}
+                        {...styleConfig.reactTable}
+                        pageSize={this.props.data.length}
+                        style={{maxHeight:'75vh'}} 
                         getTrProps={(state, rowInfo, column, instance) => {
                             return {
                                 onClick: (e) => { 

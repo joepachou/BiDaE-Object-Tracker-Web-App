@@ -15,6 +15,11 @@ import { monitorConfigColumn } from '../../config/tables'
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
 import messageGenerator from '../../helper/messageGenerator'
 const SelectTable = selecTableHOC(ReactTable);
+import {
+    PrimaryButton
+} from '../../config/styleComponent'
+import AccessControl from '../presentational/AccessControl'
+
 class MonitorSettingBlock extends React.Component{
 
     static contextType = AppContext
@@ -284,24 +289,30 @@ class MonitorSettingBlock extends React.Component{
 
         return ( 
             <div>  
-                <ButtonToolbar>
-                    <Button 
-                        variant="outline-primary" 
-                        className='mr-2 mb-1'
-                        name="add rule"
-                        onClick={this.handleClickButton}
+                <div className="d-flex justify-content-start">
+                    <AccessControl
+                        renderNoAccess={() => null}
+                        platform={['browser', 'tablet']}
                     >
-                        {locale.texts.ADD_RULE}
-                    </Button>
-                    <Button 
-                        variant="outline-primary" 
-                        className='mr-2 mb-1'
-                        name="delete"
-                        onClick={this.handleClickButton} 
-                    >
-                        {locale.texts.DELETE}
-                    </Button>
-                </ButtonToolbar> 
+                        <ButtonToolbar>
+                            <PrimaryButton
+                                className='mr-2 mb-1'
+                                name="add rule"
+                                onClick={this.handleClickButton}
+                            >
+                                {locale.texts.ADD_RULE}
+                            </PrimaryButton>
+                            <PrimaryButton
+                                className='mr-2 mb-1'
+                                name="delete"
+                                onClick={this.handleClickButton} 
+                            >
+                                {locale.texts.DELETE}
+                            </PrimaryButton>
+                        </ButtonToolbar> 
+                    </AccessControl>
+                </div>
+                <hr/>
                 <SelectTable
                     keyField='id'
                     data={this.state.data}
