@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react';
-import { userContainerModule } from '../../../config/pageModules'
+import { reportContainerModule } from '../../../config/pageModules'
 import {
     isMobileOnly,
     isTablet,
@@ -18,7 +18,7 @@ import TabletPageComponent from '../../platform/tablet/TabletPageComponent'
 
 class ReportContainer extends React.Component{
 
-    containerModule = userContainerModule
+    containerModule = reportContainerModule
 
     componentDidMount = () => {
 
