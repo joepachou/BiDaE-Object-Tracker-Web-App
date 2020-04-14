@@ -20,12 +20,11 @@ import {
 } from '../../config/tables'
 import moment from 'moment'
 import FormikFormGroup from '../presentational/FormikFormGroup' 
-import ReactLoading from "react-loading"; 
 import {
-    LoaderWrapper,
     BOTNavLink,
     BOTNav
 } from '../../config/styleComponent'
+import Loader from '../presentational/Loader'
 
 class TrackingHistory extends React.Component{
     static contextType = AppContext
@@ -34,7 +33,6 @@ class TrackingHistory extends React.Component{
         columns:[], 
         data:[],
         additionalData: null,
-        done: false,
         errorTitle:'Waiting for search...',
     }
 
@@ -49,114 +47,84 @@ class TrackingHistory extends React.Component{
         }
     }
 
-    getLocationHistory = (
-        fields,
-        setSubmitting
-    ) => {
+    getLocationHistory = (fields, setSubmitting) => {
+
         const {
             locale
         } = this.context
-        this.setState({
-            done:true ,
-            data : [],
+
+        let key = null
+        let columns = null;
+        let timeValidatedFormat = 'YYYY/MM/DD HH:mm:ss'
+        switch(fields.mode) {
+            case "mac":
+                key = fields.key.toLowerCase().replace(/[: ]/g, '').match(/.{1,2}/g).join(':')
+                columns = locationHistoryByMacColumns
+                break;
+            case "uuid":
+                key = fields.key
+                columns = locationHistoryByUUIDColumns
+                break;
+        }
+
+        axios.post(dataSrc.getLocationHistory, {
+            key,
+            startTime: moment(fields.startTime).format(), 
+            endTime: moment(fields.endTime).format(),
+            mode: fields.mode
         })
-            let key = null
-            let columns = null;
-            let timeValidatedFormat = 'YYYY/MM/DD HH:mm:ss'
+        .then(res => {
+            let prevUUID = "";
+            let data = []
+            let additionalData = null;
             switch(fields.mode) {
-                case "mac":
-                    key = fields.key.toLowerCase().replace(/[: ]/g, '').match(/.{1,2}/g).join(':')
-                    columns = locationHistoryByMacColumns
+                case 'mac':
+                    res.data.rows
+                    .map(pt => {
+                        if (pt.uuid != prevUUID) {
+                            data.push({
+                                uuid: pt.uuid,
+                                startTime: moment(pt.record_timestamp).locale(locale.abbr).format(timeValidatedFormat),
+                                description: pt.description,
+                                area: locale.texts[pt.area]
+                            })
+                            prevUUID = pt.uuid
+                        }
+    
+                        data[data.length - 1].endTime = moment(pt.record_timestamp).locale(locale.abbr).format(timeValidatedFormat)
+    
+                    })
+                    additionalData = {
+                        name: res.data.rows[0].name,
+                        area: res.data.rows[0].area
+                    }
                     break;
                 case "uuid":
-                    key = fields.key
-                    columns = locationHistoryByUUIDColumns
+                    data = res.data.rows.map((item, index) => {
+                        item.id = index + 1
+                        return item
+                    })
+                    additionalData = {
+                        description: res.data.rows[0].description,
+                        area: res.data.rows[0].area
+                    }                        
                     break;
             }
 
-            axios.post(dataSrc.getLocationHistory, {
-                key,
-                startTime: moment(fields.startTime).format(), 
-                endTime: moment(fields.endTime).format(),
-                mode: fields.mode
-            })
-            .then(res => {
-                let prevUUID = "";
-                let data = []
-                let additionalData = null;
-                switch(fields.mode) {
-                    case 'mac':
-                        res.data.rows
-                        .map(pt => {
-                            if (pt.uuid != prevUUID) {
-                                data.push({
-                                    uuid: pt.uuid,
-                                    startTime: moment(pt.record_timestamp).locale(locale.abbr).format(timeValidatedFormat),
-                                    description: pt.description,
-                                    area: locale.texts[pt.area]
-                                })
-                                prevUUID = pt.uuid
-                            }
-        
-                            data[data.length - 1].endTime = moment(pt.record_timestamp).locale(locale.abbr).format(timeValidatedFormat)
-        
-                        })
-                        additionalData = {
-                            name: res.data.rows[0].name,
-                            area: res.data.rows[0].area
-                        }
-                        break;
-                    case "uuid":
-                        data = res.data.rows.map((item, index) => {
-                            item.id = index + 1
-                            return item
-                        })
-                        additionalData = {
-                            description: res.data.rows[0].description,
-                            area: res.data.rows[0].area
-                        }                        
-                        break;
-                }
-
-                this.setState({
-                    data,
-                    columns,
-                    additionalData,
-                    done:false
-                }, setSubmitting(false))
-            })
-            .catch(err => {
-                this.setState({
-                    errorTitle:'No data Founded',
-                    done:false 
-                })
-                // console.log(`get location history failed ${err}`)
-            })
-    }
-
-    loader = () => {
-        return ( 
-            <LoaderWrapper>
-                <ReactLoading type={"bars"} color={"black"}  /> 
-           </LoaderWrapper>
-        ) 
-    }
-
-    aLoader = () => {
-        return ( 
-                null
-        ) 
+            this.setState({
+                data,
+                columns,
+                additionalData,
+            }, setSubmitting(false))
+        })
+        .catch(err => {
+            console.log(`get location history failed ${err}`)
+        })
     }
  
     render(){
 
         const { locale } = this.context
-
-        const style = {
-            container: {
-                overflowX: 'hide'
-            }
-        }
 
         const {
             additionalData
@@ -223,7 +191,7 @@ class TrackingHistory extends React.Component{
                             ),
                 })}
 
-                onSubmit={(values, setSubmitting) => {
+                onSubmit={(values, { setSubmitting }) => {
                     this.getLocationHistory(values, setSubmitting)
                 }}
             
@@ -232,8 +200,6 @@ class TrackingHistory extends React.Component{
                         <BOTNav
                             defaultActiveKey={this.defaultActiveKey}
                         >
-                        {console.log(status)}
-                        {console.log(isSubmitting)}
                             <Nav.Item>
                                 <BOTNavLink 
                                     className=""
@@ -366,55 +332,54 @@ class TrackingHistory extends React.Component{
                                     }
                                 </Row>
                             }
-                            {isSubmitting
-                                ?   this.loader()
-                                :   this.state.data.length != 0  
-                                    ?   (
-                                        <ReactTable
-                                            keyField='id'
-                                            data={this.state.data}
-                                            columns={this.state.columns}
-                                            className="-highlight mt-4 text-capitalize"
-                                            style={{maxHeight: '65vh'}} 
-                                            pageSize={this.state.data.length}
-                                            noDataText={this.state.done ? '' :this.state.errorTitle} 
-                                            {...styleConfig.reactTable}
-                                            getTrProps={(state, rowInfo, column, instance) => {
-                                                return {
-                                                    onClick: (e) => { 
-                                                        switch(values.mode) {
-                                                            case 'mac':
-                                                                setFieldValue('key', rowInfo.original.uuid)
-                                                                setFieldValue('mode', 'uuid')
-                                                                setFieldValue('startTime', rowInfo.original.startTime)
-                                                                setFieldValue('endTime', rowInfo.original.endTime)
-                                                                this.getLocationHistory({
-                                                                    ...values,
-                                                                    ...rowInfo.original,
-                                                                    key: rowInfo.original.uuid,
-                                                                    mode: 'uuid'
-                                                                })
-                                                                break;
-                                                            case 'uuid':
-                                                                setFieldValue('key', rowInfo.original.mac_address)
-                                                                setFieldValue('mode', 'mac')
-                                                                setFieldValue('startTime', values.startTime)
-                                                                setFieldValue('endTime', values.endTime)
-                                                                this.getLocationHistory({
-                                                                    ...values,
-                                                                    ...rowInfo.original,
-                                                                    key: rowInfo.original.mac_address,
-                                                                    mode: 'mac'
-                                                                })
-                                                                break;
-                                                        }
+                            {isSubmitting && <Loader />}
+                            {this.state.data.length != 0 && 
+                                (
+                                    <ReactTable
+                                        keyField='id'
+                                        data={this.state.data}
+                                        columns={this.state.columns}
+                                        className="-highlight mt-4"
+                                        style={{maxHeight: '65vh'}} 
+                                        pageSize={this.state.data.length}
+                                        {...styleConfig.reactTable}
+                                        getTrProps={(state, rowInfo, column, instance) => {
+                                            return {
+                                                onClick: (e) => { 
+                                                    switch(values.mode) {
+                                                        case 'mac':
+                                                            setFieldValue('key', rowInfo.original.uuid)
+                                                            setFieldValue('mode', 'uuid')
+                                                            setFieldValue('startTime', rowInfo.original.startTime)
+                                                            setFieldValue('endTime', rowInfo.original.endTime)
+                                                            setSubmitting(true)
+                                                            this.getLocationHistory({
+                                                                ...values,
+                                                                ...rowInfo.original,
+                                                                key: rowInfo.original.uuid,
+                                                                mode: 'uuid'
+                                                            }, setSubmitting)
+                                                            break;
+                                                        case 'uuid':
+                                                            setFieldValue('key', rowInfo.original.mac_address)
+                                                            setFieldValue('mode', 'mac')
+                                                            setFieldValue('startTime', values.startTime)
+                                                            setFieldValue('endTime', values.endTime)
+                                                            setSubmitting(true)
+                                                            this.getLocationHistory({
+                                                                ...values,
+                                                                ...rowInfo.original,
+                                                                key: rowInfo.original.mac_address,
+                                                                mode: 'mac'
+                                                            }, setSubmitting)
+                                                            break;
+                                                    }
 
-                                                    },
-                                                }
-                                            }}                                     
-                                        />
-                                    )
-                                    :   ""
+                                                },
+                                            }
+                                        }}                                     
+                                    />
+                                )
                             }
                           
                         </div>  

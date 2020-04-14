@@ -1,6 +1,6 @@
 import React from 'react'
 import ToastMessage from '../components/presentational/ToastMessage'
-import { toast,Slide, Zoom, Flip   } from 'react-toastify';
+import { toast, Slide, Zoom, Flip} from 'react-toastify';
 
 const setSuccessMessage = (
     msg 
@@ -15,7 +15,7 @@ const setSuccessMessage = (
             closeButton: false,
             draggable: false,
             closeOnClick: false,
-            transition: Zoom,
+            transition: Slide,
         })
     )
 }
@@ -33,7 +33,7 @@ const setErrorMessage = (
             closeButton: false,
             draggable: false,
             closeOnClick: false,
-            transition: Zoom,
+            transition: Slide,
         })
     )
 }
