@@ -114,7 +114,7 @@ class ObjectManagementContainer extends React.Component{
     
         var importPatient = ( Promise.resolve(  this.getImportPatient())  );
         await  importPatient.then(function(result){importPatient = result}) 
-  
+        
         this.setState({
             ...transferredLocationList,
             ...physicianList,
@@ -313,8 +313,7 @@ class ObjectManagementContainer extends React.Component{
             //         >
             //             {locale.texts.REMOVE}
             //         </Button>
-            // })
-
+            // }) 
             column.map(field => {
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })
@@ -366,8 +365,7 @@ class ObjectManagementContainer extends React.Component{
                     label: locale.texts[item.area_name],
                     id: item.area_id
                 }
-            })
-
+            }) 
             return ({
                 data,
                 filteredData: data,

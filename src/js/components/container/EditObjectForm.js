@@ -25,7 +25,8 @@ import { toast } from 'react-toastify';
 import messageGenerator from '../../helper/messageGenerator'
 
 let monitorTypeMap = {};
-
+let statusVal = '';
+let statusChange = 0;
 Object.keys(config.monitorType)
     .forEach(key => {
         monitorTypeMap[config.monitorType[key]] = key
@@ -37,6 +38,7 @@ class EditObjectForm extends React.Component {
 
     state = {
         transferredLocationOptions: [],
+        
     };
 
     componentDidMount = () => {
@@ -110,8 +112,7 @@ class EditObjectForm extends React.Component {
             mac_address,
             transferred_location,
             area_name,
-        } = selectedRowData  
-
+        } = selectedRowData    
         return (
             <Modal 
                 show={show} 
@@ -125,6 +126,7 @@ class EditObjectForm extends React.Component {
                     {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
                 </Modal.Header >
                 <Modal.Body>
+                
                     <Formik                    
                         initialValues = {{
                             name: name || '' ,
@@ -212,12 +214,7 @@ class EditObjectForm extends React.Component {
                                     ),
 
                                 status: Yup.string().required(locale.texts.STATUS_IS_REQUIRED),
-
-                                transferred_location: Yup.string()
-                                    .when('status', {
-                                        is: config.objectStatus.TRANSFERRED,
-                                        then: Yup.string().required(locale.texts.LOCATION_IS_REQUIRED)
-                                    }),
+ 
                                 area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
                         })}
                        
@@ -255,7 +252,7 @@ class EditObjectForm extends React.Component {
                             } 
                             while (postOption.name[0] == " "){
                                 postOption.name = postOption.name.substring(1 ,postOption.name.length);       
-                            }  
+                            }   
                             this.handleSubmit(postOption)                            
  
 
@@ -332,6 +329,7 @@ class EditObjectForm extends React.Component {
                                 />
                                 <hr/>
                                 <FormikFormGroup 
+                               
                                     name="status"
                                     label={locale.texts.STATUS}
                                     error={errors.status}
@@ -342,7 +340,7 @@ class EditObjectForm extends React.Component {
                                             value={values.status}
                                             error={errors.status}
                                             touched={touched.status}
-                                        >
+                                        > 
                                             <div className="d-flex justify-content-between form-group my-1">
                                                 <Field  
                                                     component={RadioButton}

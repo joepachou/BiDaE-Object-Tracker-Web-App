@@ -382,6 +382,7 @@ class ObjectTable extends React.Component{
                         }} 
                     />
                 }
+ 
                 <EditObjectForm 
                     show={this.state.isShowEdit} 
                     title={this.state.formTitle} 
