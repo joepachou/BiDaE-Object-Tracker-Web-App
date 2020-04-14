@@ -28,8 +28,7 @@ import {
 } from '../../config/styleComponent'
 import AccessControl from '../presentational/AccessControl'
 import SearchBox from './SearchBox';
-import messageGenerator from '../../helper/messageGenerator'
-import { configConsumerProps } from 'antd/lib/config-provider';
+import messageGenerator from '../../helper/messageGenerator' 
 class ObjectTable extends React.Component{
 
     static contextType = AppContext
@@ -111,7 +110,7 @@ class ObjectTable extends React.Component{
             isShowEdit: false,
             showDeleteConfirmation: false,
             disableASN:false,
-        }, callback) 
+        }, callback)  
         this.props.refreshData()
     }
 
@@ -234,8 +233,9 @@ class ObjectTable extends React.Component{
                     null
             ) 
         }
-        
+ 
         return(
+    
             <div> 
                 <div className="d-flex justify-content-between">
                     <Row noGutters>
