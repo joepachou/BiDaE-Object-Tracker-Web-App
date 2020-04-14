@@ -43,11 +43,7 @@ class AdminManagementContainer extends React.Component{
 
     componentDidUpdate = (prevProps, prevState) => {
         if (this.context.locale.abbr !== prevState.locale) {
-            this.getRoleNameList()
-            this.getUserList()
-            this.setState({
-                locale: this.context.locale.abbr
-            })
+            this.getDataContontainer()
         }
     }
 
@@ -55,8 +51,11 @@ class AdminManagementContainer extends React.Component{
         this.getDataContontainer()
     }
 
-    async  getDataContontainer(){
-   
+    async getDataContontainer() {
+        let {
+            locale
+        } = this.context
+
         var userList = ( Promise.resolve( this.getUserList() )  );
         await   userList.then(function(result){userList = result})
  
@@ -75,11 +74,11 @@ class AdminManagementContainer extends React.Component{
             deleteUserName:'',
             selectedUser: null,
             ...roleName,
-            ...areaTable
+            ...areaTable,
+            locale: locale.abbr
         }) 
    
     }
-
 
     async getUserList(){
         let { 
@@ -91,10 +90,6 @@ class AdminManagementContainer extends React.Component{
             let columns = _.cloneDeep(userInfoTableColumn)
             columns.map((field, index) => {
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
-                field.headerStyle = {
-                    textAlign: 'left',
-                    textTransform: 'capitalize'
-                }
             })
             res.data.rows.map((item, index) => {
                 item._id = index + 1
