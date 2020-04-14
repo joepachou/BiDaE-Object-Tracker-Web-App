@@ -18,6 +18,7 @@ import { AppContext } from '../../context/AppContext';
 import Select from 'react-select';
 import BatteryLevelNotification from "./BatteryLevelNotification"
 import { navbarNavList } from '../../config/pageModules'
+import styleConfig from '../../config/styleConfig';
 
 class NavbarContainer extends React.Component {
 
@@ -69,26 +70,8 @@ class NavbarContainer extends React.Component {
             select: {
                 border: 0,
             },
-            customStyles: {
-                option: (provided, state) => ({
-                    ...provided,
-                    padding: '0.5rem',
-                    fontSize: '0.8rem',
-                    cursor: 'pointer',
-                }),
-                
-                control: () => ({
-                    width: 200,
-                }),
-                
-                singleValue: (provided, state) => ({
-                    opacity: state.isDisabled ? 0.5 : 1,
-                    transition: 'opacity 300ms',
-                    cursor: 'pointer',
-                }),
-
-            }
         }
+
         const { 
             locale, 
             auth, 
@@ -154,7 +137,7 @@ class NavbarContainer extends React.Component {
                                     value: config.mapConfig.areaModules[value.value].id
                                 })
                             }}
-                            styles={style.customStyles}
+                            styles={styleConfig.reactSelectNavbar}
                             isSearchable={false}
                             components={{
                                 IndicatorSeparator: () => null,
@@ -164,7 +147,14 @@ class NavbarContainer extends React.Component {
                     </Nav.Item> 
                 </Navbar.Brand>
                 
-                <Navbar.Toggle aria-controls="responisve-navbar-nav" />
+                <Navbar.Toggle 
+                    aria-controls="responisve-navbar-nav" 
+                    style={{
+                        right: 22,
+                        position: 'fixed',
+                        top: 18,
+                    }}
+                />
                 <Navbar.Collapse id="responsive-navbar-nav">  
                     <Nav className="mr-auto my-auto" >
                         {this.navList.map(nav => {
