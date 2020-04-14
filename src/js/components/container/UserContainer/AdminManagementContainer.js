@@ -61,7 +61,7 @@ class AdminManagementContainer extends React.Component{
 
         var areaTable = ( Promise.resolve( this.getAreaTable())  );
         await   areaTable.then(function(result){areaTable = result}) 
-       
+      
         this.setState({
             data: userList.data,
             columns : userList.columns,
@@ -73,7 +73,7 @@ class AdminManagementContainer extends React.Component{
             selectedUser: null,
             locale: this.context.locale.abbr,
             areaTable:areaTable,
-            ...roleName,
+            roleName:roleName,
         }) 
    
     }
