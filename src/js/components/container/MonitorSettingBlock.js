@@ -117,7 +117,7 @@ class MonitorSettingBlock extends React.Component{
         let { 
             path,
             selectedData
-        } = this.state 
+        } = this.state  
         configPackage["type"] = config.monitorSettingUrlMap[this.props.type]
         // configPackage["id"] = selectedData ? selectedData.id : null;
         configPackage["id"] = this.state.selection   
@@ -125,10 +125,7 @@ class MonitorSettingBlock extends React.Component{
         axios.post(dataSrc[path], {
             monitorConfigPackage: configPackage
         })
-        .then(res => { 
-            let callback = () => messageGenerator.setSuccessMessage(
-                'save success'
-            )
+        .then(res => {  
             setTimeout(
                 () => {
                     this.getMonitorConfig(),
@@ -138,15 +135,14 @@ class MonitorSettingBlock extends React.Component{
                         selectedData: null,
                         selection: '',
                         selectAll:false
-                    })
-                    callback()
+                    }) 
                 },
                 300
             )
         })
         .catch(err => { 
             console.log(err)
-        })
+        }) 
     }
 
     handleClose = () => {
@@ -336,7 +332,7 @@ class MonitorSettingBlock extends React.Component{
                       }}
                 />
                 <EditMonitorConfigForm
-                    handleShowPath={this.props.handleShowPath} 
+                    handleShowPath={this.show} 
                     selectedData={this.state.selectedData}
                     show={this.state.show} 
                     handleClose={this.handleClose}
