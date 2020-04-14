@@ -73,26 +73,33 @@ export const navbarNavList = [
     },
 ]
 
-export const userContainerPageList = [
-    {
-        name: 'User Profile',
-        path: 'userProfile',
-        href: '#UserProfile',
-        component: <UserProfile />
-    },
-    {
-        name: 'Devices Management',
-        path: 'devicesManagement',
-        href: '#DevicesManagement',
-        component: <MyDeviceManager />
-    },
-    {
-        name: 'Patient Management',
-        path: 'patientManagement',
-        href: '#PatientManagement',
-        component: <MyPatientManager />
-    },
-]
+export const userContainerModule = {
+
+    title: "user profile",
+
+    defaultActiveKey: "user_profile",
+
+    tabList: [
+        {
+            name: 'user profile',
+            path: 'userProfile',
+            href: '#UserProfile',
+            component: (props) => <UserProfile />
+        },
+        {
+            name: 'devices management',
+            path: 'devicesManagement',
+            href: '#DevicesManagement',
+            component: (props) => <MyDeviceManager />
+        },
+        {
+            name: 'patient management',
+            path: 'patientManagement',
+            href: '#PatientManagement',
+            component: (props) => <MyPatientManager />
+        },
+    ],
+}
 
 export const systemSettingModule = {
 
