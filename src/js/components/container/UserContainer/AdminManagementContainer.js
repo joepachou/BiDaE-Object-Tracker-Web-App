@@ -43,11 +43,7 @@ class AdminManagementContainer extends React.Component{
 
     componentDidUpdate = (prevProps, prevState) => {
         if (this.context.locale.abbr !== prevState.locale) {
-            this.getRoleNameList()
-            this.getUserList()
-            this.setState({
-                locale: this.context.locale.abbr
-            })
+            this.getDataContontainer() 
         }
     }
 
@@ -56,7 +52,7 @@ class AdminManagementContainer extends React.Component{
     }
 
     async  getDataContontainer(){
-   
+        
         var userList = ( Promise.resolve( this.getUserList() )  );
         await   userList.then(function(result){userList = result})
  
@@ -65,6 +61,7 @@ class AdminManagementContainer extends React.Component{
 
         var areaTable = ( Promise.resolve( this.getAreaTable())  );
         await   areaTable.then(function(result){areaTable = result}) 
+       
         this.setState({
             data: userList.data,
             columns : userList.columns,
@@ -74,8 +71,9 @@ class AdminManagementContainer extends React.Component{
             showDeleteConfirmation:false,
             deleteUserName:'',
             selectedUser: null,
+            locale: this.context.locale.abbr,
+            areaTable:areaTable,
             ...roleName,
-            ...areaTable
         }) 
    
     }
@@ -95,7 +93,7 @@ class AdminManagementContainer extends React.Component{
                     textAlign: 'left',
                     textTransform: 'capitalize'
                 }
-            })
+            }) 
             res.data.rows.map((item, index) => {
                 item._id = index + 1
                 item.roles = item.role_type.map(role => locale.texts[role.toUpperCase()]).join(',')

@@ -115,6 +115,7 @@ class ObjectManagementContainer extends React.Component{
         var importPatient = ( Promise.resolve(  this.getImportPatient())  );
         await  importPatient.then(function(result){importPatient = result}) 
         
+ 
         this.setState({
             ...transferredLocationList,
             ...physicianList,
