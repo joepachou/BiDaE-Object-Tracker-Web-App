@@ -30,6 +30,10 @@ import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
 import ReactLoading from "react-loading"; 
 import styled from 'styled-components'
+import {
+    LoaderWrapper
+} from '../../config/styleComponent'
+
 class TrackingHistory extends React.Component{
     static contextType = AppContext
     
@@ -150,23 +154,12 @@ class TrackingHistory extends React.Component{
             additionalData
         } = this.state
  
-        const LoaderStyle = styled.div`
-            position:absolute;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            top:0;
-            bottom:0;
-            left:0;
-            right:0;
-            background-color:rgb(255,255,255,0.8);
-        `
-        ;
+
         const Loader = () => {
             return ( 
-                <LoaderStyle>
+                <LoaderWrapper>
                     <ReactLoading type={"bars"} color={"black"}  /> 
-               </LoaderStyle>
+               </LoaderWrapper>
             ) 
         }
         const aLoader = () => {
@@ -378,49 +371,53 @@ class TrackingHistory extends React.Component{
                                     }
                                 </Row>
                             }
-                            <ReactTable
-                                keyField='id'
-                                data={this.state.data}
-                                columns={this.state.columns}
-                                className="-highlight mt-4 text-capitalize"
-                                style={{height: '65vh', overflowY: 'scroll'}} 
-                                noDataText={this.state.done ? '' :this.state.errorTitle} 
-                                LoadingComponent={this.state.done ? Loader :aLoader}
-                                {...styleConfig.reactTable}
-                                getTrProps={(state, rowInfo, column, instance) => {
-                                    return {
-                                        onClick: (e) => { 
-                                            switch(values.mode) {
-                                                case 'mac':
-                                                    setFieldValue('key', rowInfo.original.uuid)
-                                                    setFieldValue('mode', 'uuid')
-                                                    setFieldValue('startTime', rowInfo.original.startTime)
-                                                    setFieldValue('endTime', rowInfo.original.endTime)
-                                                    this.getLocationHistory({
-                                                        ...values,
-                                                        ...rowInfo.original,
-                                                        key: rowInfo.original.uuid,
-                                                        mode: 'uuid'
-                                                    })
-                                                    break;
-                                                case 'uuid':
-                                                    setFieldValue('key', rowInfo.original.mac_address)
-                                                    setFieldValue('mode', 'mac')
-                                                    setFieldValue('startTime', values.startTime)
-                                                    setFieldValue('endTime', values.endTime)
-                                                    this.getLocationHistory({
-                                                        ...values,
-                                                        ...rowInfo.original,
-                                                        key: rowInfo.original.mac_address,
-                                                        mode: 'mac'
-                                                    })
-                                                    break;
-                                            }
+                            
+                                <ReactTable
+                                    keyField='id'
+                                    data={this.state.data}
+                                    columns={this.state.columns}
+                                    className="-highlight mt-4 text-capitalize"
+                                    style={{maxheight: '55vh'}} 
+                                    pageSize={this.state.data.length}
+                                    noDataText={this.state.done ? '' :this.state.errorTitle} 
+                                    LoadingComponent={this.state.done ? Loader :aLoader}
+                                    {...styleConfig.reactTable}
+                                    getTrProps={(state, rowInfo, column, instance) => {
+                                        return {
+                                            onClick: (e) => { 
+                                                switch(values.mode) {
+                                                    case 'mac':
+                                                        setFieldValue('key', rowInfo.original.uuid)
+                                                        setFieldValue('mode', 'uuid')
+                                                        setFieldValue('startTime', rowInfo.original.startTime)
+                                                        setFieldValue('endTime', rowInfo.original.endTime)
+                                                        this.getLocationHistory({
+                                                            ...values,
+                                                            ...rowInfo.original,
+                                                            key: rowInfo.original.uuid,
+                                                            mode: 'uuid'
+                                                        })
+                                                        break;
+                                                    case 'uuid':
+                                                        setFieldValue('key', rowInfo.original.mac_address)
+                                                        setFieldValue('mode', 'mac')
+                                                        setFieldValue('startTime', values.startTime)
+                                                        setFieldValue('endTime', values.endTime)
+                                                        this.getLocationHistory({
+                                                            ...values,
+                                                            ...rowInfo.original,
+                                                            key: rowInfo.original.mac_address,
+                                                            mode: 'mac'
+                                                        })
+                                                        break;
+                                                }
 
-                                        },
-                                    }
-                                }}                                     
-                            />
+                                            },
+                                        }
+                                    }}                                     
+                                />
+                            
+                          
                         </div>  
                     </div>
                 )}

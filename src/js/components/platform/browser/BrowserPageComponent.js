@@ -4,8 +4,6 @@ import {
     Nav,
     ListGroup
 } from 'react-bootstrap'
-import LocaleContext from '../../context/LocaleContext'
-import AccessControl from '../presentational/AccessControl'
 import {
     BOTContainer,
     PageTitle,
@@ -13,7 +11,9 @@ import {
     BOTNavLink,
     BOTSideNavTitle,
     BOTSideNav
-} from '../../config/styleComponent'
+} from '../../../config/styleComponent'
+import LocaleContext from '../../../context/LocaleContext'
+import AccessControl from '../../presentational/AccessControl'
 
 const BrowserPageComponent = ({
     containerModule,
@@ -21,11 +21,13 @@ const BrowserPageComponent = ({
 }) => {
 
     let locale = React.useContext(LocaleContext)
+
     let {
         tabList,
         title,
         defaultActiveKey
     } = containerModule
+
     return (
         <Tab.Container 
             transition={false} 
@@ -37,7 +39,7 @@ const BrowserPageComponent = ({
                 <BOTSideNavTitle>
                     {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
                 </BOTSideNavTitle>
-                <ListGroup variant="flush">
+                <ListGroup>
                     {tabList.map((tab, index) => {
                         return (
                             <BOTSideNav

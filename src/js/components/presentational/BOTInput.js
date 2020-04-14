@@ -1,5 +1,4 @@
 import React from 'react';
-import searchIcon from '../../../img/icon/search.png';
 import { Form, Button } from 'react-bootstrap';
 
 class BOTInput extends React.Component {
@@ -15,18 +14,7 @@ class BOTInput extends React.Component {
                 value: '',
             })
         }
-        // if (prepProps.assignValue !== this.props.assignValue && prepProps.assignValue) {
-             
-        //     this.setState({
-        //         value: assignValue
-        //     })
-        // }
     }
-
-    // handleSubmit = (e) => {
-    //     e.preventDefault();
-    //     this.props.getSearchKey(this.state.value);
-    // }
 
     handleChange = (e) => { 
         this.setState({
@@ -82,17 +70,10 @@ class BOTInput extends React.Component {
                                 border: 'none',
                                 background: 'unset',
                                 letterSpacing: '1.5px',
-                                color: '#80808029'
+                                color: 'grey'
                             }}
                         />
                     </Form.Group>
-                    <Button 
-                        type="submit" 
-                        variant='link' 
-                        size="sm" 
-                        onClick={this.handleSubmit}
-                    >
-                    </Button> 
                 </div>
                 {example && 
                     <small 

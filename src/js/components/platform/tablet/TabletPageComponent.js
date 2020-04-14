@@ -3,16 +3,16 @@ import {
     Tab,
     Nav
 } from 'react-bootstrap'
-import LocaleContext from '../../context/LocaleContext'
-import AccessControl from '../presentational/AccessControl'
 import {
     BOTContainer,
     PageTitle,
     BOTNav,
     BOTNavLink
-} from '../../config/styleComponent'
+} from '../../../config/styleComponent'
+import LocaleContext from '../../../context/LocaleContext'
+import AccessControl from '../../presentational/AccessControl'
 
-const MobilePageComponent = ({
+const TabletPageComponent = ({
     containerModule,
     setMessage
 }) => {
@@ -77,4 +77,4 @@ const MobilePageComponent = ({
         </BOTContainer>
     )
 }
-export default MobilePageComponent
+export default TabletPageComponent

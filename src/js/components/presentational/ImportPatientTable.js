@@ -16,6 +16,10 @@ import {
 } from "../../dataSrc"
 import styleConfig from '../../config/styleConfig';
 import messageGenerator from '../../helper/messageGenerator'
+import {
+    PrimaryButton
+} from '../../config/styleComponent'
+import AccessControl from './AccessControl'
 
 class ImportObjectTable extends React.Component{
     static contextType = AppContext   
@@ -287,26 +291,30 @@ class ImportObjectTable extends React.Component{
        
         return(
             <div> 
-                <ButtonToolbar>
-                    <InputFiles accept=".xlsx, .xls" name="import_patient" onChange={this.onImportExcel}>
-                        <Button 
-                            variant="outline-primary" 
-                            className="mr-2 mb-1"
-                            size="sm"
-                        >
-                            {locale.texts.IMPORT_OBJECT}
-                        </Button>
-                    </InputFiles>
-                    <Button 
-                        variant="outline-primary" 
-                        className='text-capitalize mr-2 mb-1'
-                        name="delete import data"
-                        size="sm"
-                        onClick={this.handleClickButton}
-                    >
-                        {locale.texts.DELETE}
-                    </Button>
-                </ButtonToolbar>
+                <div className="d-flex justify-content-between">
+                    <AccessControl
+                        renderNoAccess={() => null}
+                        platform={['browser', 'tablet']}
+                    >                
+                        <ButtonToolbar>
+                            <InputFiles accept=".xlsx, .xls" name="import_patient" onChange={this.onImportExcel}>
+                                <PrimaryButton
+                                    className="mr-2 mb-1"
+                                >
+                                    {locale.texts.IMPORT_OBJECT}
+                                </PrimaryButton>
+                            </InputFiles>
+                            <PrimaryButton
+                                className='text-capitalize mr-2 mb-1'
+                                name="delete import data"
+                                onClick={this.handleClickButton}
+                            >
+                                {locale.texts.DELETE}
+                            </PrimaryButton>
+                        </ButtonToolbar>
+                    </AccessControl>
+                </div>
+                <hr/>
                 <SelectTable
                     keyField='asset_control_number'
                     data={this.props.dataImportPatient}

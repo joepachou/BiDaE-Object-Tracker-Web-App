@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Item from 'react-bootstrap/ListGroupItem';
 import Link from 'react-bootstrap/NavLink'
+import NavLink from 'react-bootstrap/NavLink'
 import Nav from 'react-bootstrap/Nav'
 import styleSheet from './styleSheet'
 import Button from 'react-bootstrap/Button'
@@ -43,15 +44,13 @@ export const BOTContainer = styled.div`
     margin: 20px 20px;
 `
 
-export const BOTSideNav = styled(Item)`
+export const BOTSideNav = styled(NavLink)`
     font-size: 1rem;
     font-weight: 500;
     text-transform: capitalize;
-    display: flex;
-    justify-content: center;
     letter-spacing: 1.2px;
     border-radius: 5px;
-    margin: 0.5rem 0.5rem;
+    margin-top: 0.5rem;
     color: ${styleSheet.inActive};
     &:hover {
         color: ${styleSheet.theme};
@@ -68,8 +67,6 @@ export const BOTSideNavTitle = styled.div`
     font-size: 1.2rem;
     font-weight: 500;
     margin-bottom: 1rem;
-    display: flex;
-    justify-content: center;
     color: black;
     text-transform: capitalize;
 `

@@ -1,16 +1,7 @@
 import React from 'react';
-import { 
-    Container
-} from 'react-bootstrap';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import { AppContext } from '../../context/AppContext';
-import {
-    Tabs, 
-    Tab,
-    TabList, 
-    TabPanel 
-} from 'react-tabs';
 import {
     trackingTableColumn
 } from '../../config/tables'
@@ -119,15 +110,15 @@ class TrackingTable extends React.Component{
     }
 
     render(){
-        return(
+        return  (
             <ReactTable 
-                style={{height:'75vh'}}
+                style={{height:'85vh'}}
                 data={this.state.trackingData} 
                 columns={this.state.trackingColunm} 
-                pageSizeOptions={[5, 10]}
                 resizable={true}
                 freezeWhenExpanded={false}
                 {...styleConfig.reactTable}
+                pageSize={this.state.trackingData.length}
             />
         )
     }

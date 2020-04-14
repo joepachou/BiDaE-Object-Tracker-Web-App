@@ -2,7 +2,7 @@ import MainContainer from "../components/container/MainContainer";
 import SystemSetting from "../components/container/menuContainer/SystemSetting";
 import ObjectManagementContainer from "../components/container/menuContainer/ObjectManagementContainer";
 import UserContainer from "../components/container/menuContainer/UserContainer"
-import BigScreenContainer from "../components/container/BigScreen/BigScreenContainer";
+import BigScreenContainer from "../components/container/bigScreen/BigScreenContainer"
 import About from "../components/container/About"
 import TrackingHistoryContainer from "../components/container/menuContainer/TrackingHistoryContainer"
 import MonitorSettingContainer from "../components/container/menuContainer/MonitorSettingContainer"
