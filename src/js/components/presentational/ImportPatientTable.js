@@ -321,7 +321,8 @@ class ImportObjectTable extends React.Component{
                     columns={this.props.columnImport}
                     ref={r => (this.selectTable = r)}
                     className="-highlight"
-                    style={{height:'75vh'}}
+                    style={{maxHeight:'75vh'}} 
+                    pageSize={this.props.dataImportPatient.length}
                     onPageChange={(e) => {this.setState({selectAll:false,selection:''})}} 
                     {...extraProps}
                     {...styleConfig.reactTable}
