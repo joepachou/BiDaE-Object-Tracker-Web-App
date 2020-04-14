@@ -505,13 +505,13 @@ const geofenceConfigColumn = [
         width: 60,
         style: style.column,
         Cell: props => props.value 
-            ? <i className="fas fa-check" style={style.icon.check}></i>
+            ? <i className="fas fa-circle" style={style.icon.circle}></i>
             : ""
     },
     {
         Header: "area",
         accessor: "area.label",
-        width: 100,
+        width: 150,
     },
     {
         Header: "name",
@@ -548,7 +548,7 @@ const geofenceConfigColumn = [
         Header: "is global fence",
         accessor: "is_global_fence",
         Cell: props => props.value 
-            ? <i className="fas fa-check" style={style.icon.check}></i>
+            ? <i className="fas fa-circle" style={style.icon.circle}></i>
             : ""
     },
 ]
@@ -560,23 +560,23 @@ const monitorConfigColumn = [
         width: 60,
         style: style.column,
         Cell: props => props.value 
-            ? <i className="fas fa-check" style={style.icon.check}></i>
+            ? <i className="fas fa-circle" style={style.icon.circle}></i>
             : ""
     },
     {
         Header: "area",
         accessor: "area.label",
-        width: 100,
+        width: 150,
     },
     {
         Header: "enable start time",
         accessor: "start_time",
-        width: 90,
+        width: 130,
     },
     {
         Header: "enable end time",
         accessor: "end_time",
-        width: 90,
+        width: 130,
     },
 ]
 

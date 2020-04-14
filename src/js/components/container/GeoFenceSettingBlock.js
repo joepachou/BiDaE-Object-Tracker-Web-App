@@ -1,10 +1,7 @@
 import React from 'react';
 import { AppContext } from '../../context/AppContext';
 import { 
-    Row, 
-    Col, 
     ButtonToolbar,
-    Button
 } from "react-bootstrap"
 import axios from "axios"
 import dataSrc from "../../dataSrc"
@@ -85,41 +82,7 @@ class GeoFenceSettingBlock extends React.Component{
         .then(res => {
             let columns = _.cloneDeep(geofenceConfigColumn)
 
-            columns.push({
-                Header: "action",
-                minWidth: 60,
-                Cell: props => (
-                    <div className="d-flex justify-content-start">
-                        {['edit'].map((item, index, original) => {
-                            return   ( 
-                                <div 
-                                    key={item} 
-                                    className="d-flex justify-content-start"
-                                >
-                                    <Button
-                                        variant="link" 
-                                        name={item}
-                                        size="sm"
-                                        style={styleConfig.link}
-                                        onClick={(e) => {
-                                            this.handleClickButton(e, props)
-                                    }} >
-                                        {locale.texts[item.toUpperCase()]}
-                                    </Button>
-                                    {index < original.length - 1
-                                        ? <div className="mx-1">|</div>
-                                        : ""
-                                    }
-                                </div>
-                            )
-                        })}
-                    </div>
-                )
-            })
             columns.map(field => {
-                field.headerStyle = {
-                    textAlign: 'left',
-                }
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })
             
@@ -261,14 +224,6 @@ class GeoFenceSettingBlock extends React.Component{
     };
  
     render() {
-        let style = {
-            container: {
-                minHeight: "100vh"
-            },
-            type: {
-                fontSize: '1rem',
-            },
-        }
         const {  
             selectedRowData,
             selectAll,
