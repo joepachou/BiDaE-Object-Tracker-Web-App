@@ -529,7 +529,7 @@ const geofenceConfigColumn = [
         width: 90,
     },
     {
-        Header: "perimeters group",
+        Header: "perimeter rssi",
         accessor: "parsePerimeters.lbeacons"
     },
     {
@@ -537,7 +537,7 @@ const geofenceConfigColumn = [
         accessor: "parseFences.lbeacons"
     },
     {
-        Header: "perimeter rssi",
+        Header: "perimeters group",
         accessor: "p_rssi"
     },
     {
