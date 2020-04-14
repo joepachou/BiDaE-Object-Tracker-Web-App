@@ -33,19 +33,22 @@ class Auth extends React.Component {
         });
     };
 
-    async signup (values) {
+    signup = (values, callback) => {
         let { 
             name, 
             password, 
             roles, 
             area, 
         } = values
-        return await axios.post(dataSrc.signup, {
+        axios.post(dataSrc.signup, {
             name: name.toLowerCase(),
             password,
             roles,
             area_id: area.id,
             ...values
+        })
+        .then(res => {
+            callback()
         })
     }
 
@@ -58,7 +61,7 @@ class Auth extends React.Component {
             this.setState({
                 ...this.state,
                 user, 
-            }, callback)
+            },callback)
         })
         .catch(err => {
             console.log(`set user info failed ${err}`)
