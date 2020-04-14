@@ -17,8 +17,14 @@ import styleConfig from '../../config/styleConfig';
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
 import messageGenerator from '../../helper/messageGenerator'
+import {
+    PrimaryButton
+} from '../../config/styleComponent'
+import AccessControl from '../presentational/AccessControl'
 const SelectTable = selecTableHOC(ReactTable);
+
 let lock = false
+
 class GeoFenceSettingBlock extends React.Component{
 
     static contextType = AppContext
@@ -295,25 +301,31 @@ class GeoFenceSettingBlock extends React.Component{
         let { locale } = this.context
 
         return (
-            <div>
-                <ButtonToolbar>
-                <Button 
-                        variant="outline-primary" 
-                        className='text-capitalize mr-2 mb-1'
-                        name="add rule"
-                        onClick={this.handleClickButton}
-                    >
-                        {locale.texts.ADD_RULE}
-                    </Button>
-                    <Button 
-                        variant="outline-primary" 
-                        className='mr-2 mb-1'
-                        name="delete"
-                        onClick={this.handleClickButton} 
-                    >
-                        {locale.texts.DELETE}
-                    </Button>
-                </ButtonToolbar>
+            <div>  
+                <div className="d-flex justify-content-start">
+                    <AccessControl
+                        renderNoAccess={() => null}
+                        platform={['browser', 'tablet']}
+                    >                
+                        <ButtonToolbar>
+                            <PrimaryButton
+                                className='text-capitalize mr-2 mb-1'
+                                name="add rule"
+                                onClick={this.handleClickButton}
+                            >
+                                {locale.texts.ADD_RULE}
+                            </PrimaryButton>
+                            <PrimaryButton
+                                className='mr-2 mb-1'
+                                name="delete"
+                                onClick={this.handleClickButton} 
+                            >
+                                {locale.texts.DELETE}
+                            </PrimaryButton>
+                        </ButtonToolbar>
+                    </AccessControl>
+                </div>
+                <hr/>
                 <SelectTable
                     keyField='id'
                     data={this.state.data}

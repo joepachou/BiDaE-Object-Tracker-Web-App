@@ -1,7 +1,6 @@
 import React from 'react';
 import { 
     ButtonToolbar,
-    Button
 } from 'react-bootstrap';
 import ReactTable from 'react-table'
 import axios from 'axios';
@@ -16,10 +15,13 @@ import EditUserForm from './EditUserForm';
 import { AppContext } from '../../../context/AppContext';
 import DeleteUserForm from './DeleteUserForm'
 import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm';
-import config from '../../../config';
 import retrieveDataHelper from '../../../helper/retrieveDataHelper';
 import styleConfig from '../../../config/styleConfig';
 const Fragment = React.Fragment;
+import {
+    PrimaryButton 
+} from '../../../config/styleComponent'
+import AccessControl from '../../presentational/AccessControl'
 
 class AdminManagementContainer extends React.Component{
 
@@ -255,39 +257,42 @@ class AdminManagementContainer extends React.Component{
 
         return (
             <Fragment>
-                <ButtonToolbar>
-                    <Button 
-                        variant="outline-primary" 
-                        className='mb-1 mr-1'
-                        name="add user"
-                        onClick={this.handleClick}    
-                    >
-                        {locale.texts.ADD_USER}
-                    </Button>
-                    <Button 
-                        variant="outline-primary" 
-                        className='mb-1'
-                        name="delete user"
-                        onClick={this.handleClick}    
-                    >
-                        {locale.texts.DELETE_USER}
-                    </Button>
-                </ButtonToolbar>
-                <ReactTable 
-                    data = {this.state.data} 
-                    columns = {this.state.columns} 
-                    noDataText="No Data Available"
-                    className="-highlight text-none"
-                    style={{height:'75vh'}}
-                    {...styleConfig.reactTable}
-                    getTrProps={this.onRowClick}
-                    // getTrGroupProps={(state, rowInfo, column, instance) => { 
-                    //     return { 
-                    //         onMouseEnter: (e, handleOriginal) =>{
-                    //             console.log(123)
-                    //         }}
-                    // }}
-                />
+                <div className="d-flex justify-content-start">
+                    <AccessControl
+                        renderNoAccess={() => null}
+                        platform={['browser', 'tablet']}
+                    >     
+                        <ButtonToolbar>
+                            <PrimaryButton
+                                className='mb-1 mr-1'
+                                name="add user"
+                                onClick={this.handleClick}    
+                            >
+                                {locale.texts.ADD_USER}
+                            </PrimaryButton>
+                            <PrimaryButton
+                                className='mb-1'
+                                name="delete user"
+                                onClick={this.handleClick}    
+                            >
+                                {locale.texts.DELETE}
+                            </PrimaryButton>
+                        </ButtonToolbar>
+                    </AccessControl>
+                </div>
+                <hr/>
+                {this.state.data.length != 0 &&
+                    <ReactTable 
+                        data = {this.state.data} 
+                        columns = {this.state.columns} 
+                        noDataText="No Data Available"
+                        className="-highlight text-none"
+                        pageSize={this.state.data.length}
+                        style={{maxHeight:'85vh'}}                               
+                        {...styleConfig.reactTable}
+                        getTrProps={this.onRowClick}
+                    />
+                }
 
                 <EditUserForm
                     show={this.state.showAddUserForm}

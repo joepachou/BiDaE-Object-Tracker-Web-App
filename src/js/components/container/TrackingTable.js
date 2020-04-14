@@ -112,7 +112,7 @@ class TrackingTable extends React.Component{
     render(){
         return  (
             <ReactTable 
-                style={{height:'85vh'}}
+                style={{maxHeight:'85vh'}}
                 data={this.state.trackingData} 
                 columns={this.state.trackingColunm} 
                 resizable={true}

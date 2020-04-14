@@ -1,6 +1,5 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import { 
-    Button,
     ButtonToolbar
 } from 'react-bootstrap';
 import ReactTable from 'react-table'
@@ -13,7 +12,10 @@ const SelectTable = selecTableHOC(ReactTable);
 import { AppContext } from '../../../context/AppContext'
 import retrieveDataHelper from '../../../helper/retrieveDataHelper'
 import styleConfig from '../../../config/styleConfig';
-import AccessControl from '../../presentational/AccessControl';
+import AccessControl from '../../presentational/AccessControl'
+import {
+    PrimaryButton 
+} from '../../../config/styleComponent'
 
 class ObjectEditedRecord extends React.Component{
 
@@ -201,28 +203,26 @@ class ObjectEditedRecord extends React.Component{
         };
 
         return (
-            <>
-                <ButtonToolbar
-                    className="mb-2"
-                >
+            <Fragment>
+                <div className="d-flex justify-content-start">
                     <AccessControl
                         renderNoAccess={() => null}
                         platform={['browser', 'tablet']}
-                    >
-                        <Button 
-                            variant="outline-primary" 
-                            className='mb-1 text-capitalize'
-                            size="sm"
-                            onClick={() => {
-                                this.setState({
-                                    showDeleteConfirmation: true
-                                })
-                            }}    
-                        >
-                            {locale.texts.DELETE}
-                        </Button>
+                    >     
+                        <ButtonToolbar>                    
+                            <PrimaryButton
+                                onClick={() => {
+                                    this.setState({
+                                        showDeleteConfirmation: true
+                                    })
+                                }}    
+                            >
+                                {locale.texts.DELETE}
+                            </PrimaryButton>
+                        </ButtonToolbar>
                     </AccessControl>
-                </ButtonToolbar>
+                </div>
+                <hr/>
                 
                 {this.state.data && (
                     <SelectTable
@@ -231,7 +231,8 @@ class ObjectEditedRecord extends React.Component{
                         columns={this.state.columns}
                         ref={r => (this.selectTable = r)}
                         className="-highlight"
-                        style={{height:'75vh'}}
+                        pageSize={this.state.data.length}
+                        style={{maxHeight:'80vh'}}                             
                         {...extraProps}
                         {...styleConfig.reactTable}
                         getTrProps={(state, rowInfo, column, instance) => {
@@ -255,7 +256,7 @@ class ObjectEditedRecord extends React.Component{
                     handleClose={this.handleCloseDeleteConfirmForm}
                     handleSubmit={this.handleSubmitDeleteConfirmForm}
                 />
-            </>
+            </Fragment>
         )
     }
 }

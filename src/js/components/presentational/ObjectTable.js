@@ -358,13 +358,13 @@ class ObjectTable extends React.Component{
                         columns={this.props.columns}
                         ref={r => (this.selectTable = r)}
                         className="-highlight text-none"
-                        style={{maxHeight:'75vh'}} 
                         noDataText={this.props.loadingFlag ? '' :'No rows found'} 
                         LoadingComponent={this.props.loadingFlag? Loader :aLoader}
                         onPageChange={(e) => {this.setState({selectAll:false,selection:''})}} 
                         {...extraProps}
                         {...styleConfig.reactTable}
                         pageSize={this.props.data.length}
+                        style={{maxHeight:'75vh'}} 
                         getTrProps={(state, rowInfo, column, instance) => {
                             return {
                                 onClick: (e) => { 
