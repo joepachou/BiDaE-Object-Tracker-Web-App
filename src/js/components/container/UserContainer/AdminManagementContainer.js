@@ -52,16 +52,40 @@ class AdminManagementContainer extends React.Component{
     }
 
     componentDidMount = () => {
-        this.getRoleNameList()
-        this.getUserList()
-        this.getAreaTable()
+        this.getDataContontainer()
     }
 
-    getUserList = () => {
+    async  getDataContontainer(){
+   
+        var userList = ( Promise.resolve( this.getUserList() )  );
+        await   userList.then(function(result){userList = result})
+ 
+        var roleName = ( Promise.resolve(  this.getRoleNameList())  );
+        await   roleName.then(function(result){roleName = result})
+
+        var areaTable = ( Promise.resolve( this.getAreaTable())  );
+        await   areaTable.then(function(result){areaTable = result}) 
+        this.setState({
+            data: userList.data,
+            columns : userList.columns,
+            showModifyUserInfo: false,
+            showAddUserForm: false,
+            showDeleteUserForm:false,
+            showDeleteConfirmation:false,
+            deleteUserName:'',
+            selectedUser: null,
+            ...roleName,
+            ...areaTable
+        }) 
+   
+    }
+
+
+    async getUserList(){
         let { 
             locale
         } = this.context
-        axios.post(getUserList, {
+        return await axios.post(getUserList, {
             locale: locale.abbr 
         }).then(res => { 
             let columns = _.cloneDeep(userInfoTableColumn)
@@ -83,7 +107,7 @@ class AdminManagementContainer extends React.Component{
                     .join('/')
                 item.main_area = locale.texts[item.area_name]
             })
-            this.setState({
+            return ({
                 data: res.data.rows,
                 columns,
                 showModifyUserInfo: false,
@@ -94,26 +118,39 @@ class AdminManagementContainer extends React.Component{
                 selectedUser: null,
 
             })
+            // this.setState({
+            //     data: res.data.rows,
+            //     columns,
+            //     showModifyUserInfo: false,
+            //     showAddUserForm: false,
+            //     showDeleteUserForm:false,
+            //     showDeleteConfirmation:false,
+            //     deleteUserName:'',
+            //     selectedUser: null,
+
+            // })
         })
     }
 
-    getRoleNameList = () => {
-        axios.post(getRoleNameList,{
+    async   getRoleNameList(){
+        return await   axios.post(getRoleNameList,{
             }).then(res => {
                 let rows = _.cloneDeep(res.data.rows)
                 rows.filter(item => item.name !== "guest" )
-                this.setState({
-                    roleName: res.data.rows
-                })
+                return res.data.rows
+                // this.setState({
+                //     roleName: res.data.rows
+                // })
             })
     }
 
-    getAreaTable = () => {
-        retrieveDataHelper.getAreaTable()
+    async  getAreaTable(){
+        return await  retrieveDataHelper.getAreaTable()
             .then(res => {
-                this.setState({
-                    areaTable: res.data.rows
-                })
+                return res.data.rows
+                // this.setState({
+                //     areaTable: res.data.rows
+                // })
             })
             .catch(err => {
                 console.log(`get area table failed ${err}`)
