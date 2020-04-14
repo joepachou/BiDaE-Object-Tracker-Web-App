@@ -93,6 +93,7 @@ export const BOTNav = styled(Nav)`
 
 export const LoaderWrapper = styled.div`
     position: absolute;
+    z-index: 9999;
     display: flex;
     align-items: center;
     justify-content: center;
