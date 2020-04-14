@@ -99,34 +99,33 @@ class ObjectManagementContainer extends React.Component{
         var physicianList = ( Promise.resolve(  this.getPhysicianList() )  );
         await   physicianList.then(function(result){physicianList = result})
 
-        var LbeaconData = ( Promise.resolve( this.getLbeaconData())  );
-        await   LbeaconData.then(function(result){LbeaconData = result})
+        var lbeaconData = ( Promise.resolve( this.getLbeaconData())  );
+        await   lbeaconData.then(function(result){lbeaconData = result})
 
-        var AreaTable = ( Promise.resolve(  this.getAreaTable())  );
-        await   AreaTable.then(function(result){AreaTable = result})
+        var areaTable = ( Promise.resolve(  this.getAreaTable())  );
+        await   areaTable.then(function(result){areaTable = result})
 
-        var Data = ( Promise.resolve(  this.getData())  );
-        await   Data.then(function(result){Data = result})
+        var data = ( Promise.resolve(  this.getData())  );
+        await   data.then(function(result){data = result})
 
-        var DataImport = ( Promise.resolve(  this.getDataImport()  )  );
-        await   DataImport.then(function(result){DataImport = result})
+        var dataImport = ( Promise.resolve(  this.getDataImport()  )  );
+        await   dataImport.then(function(result){dataImport = result})
     
-        var ImportPatient = ( Promise.resolve(  this.getImportPatient())  );
-        await  ImportPatient.then(function(result){ImportPatient = result}) 
- 
-        
+        var importPatient = ( Promise.resolve(  this.getImportPatient())  );
+        await  importPatient.then(function(result){importPatient = result}) 
+  
         this.setState({
             ...transferredLocationList,
             ...physicianList,
-            roomOptions :LbeaconData,
-            areaTable: AreaTable.areaTable, 
-            ...Data,
+            roomOptions :lbeaconData,
+            areaTable: areaTable.areaTable, 
+            ...data,
             filterSelection: {
-                ...Data.filterSelection,
-                ...AreaTable.filterSelection,
+                ...data.filterSelection,
+                ...areaTable.filterSelection,
             },
-            ...DataImport,
-            dataImportPatient: ImportPatient
+            ...dataImport,
+            dataImportPatient: importPatient
         }) 
    
     }
