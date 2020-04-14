@@ -93,47 +93,40 @@ class ObjectManagementContainer extends React.Component{
 
     async  getDataContontainer(){
    
-        var a = ( Promise.resolve( this.getTransferredLocation() )  );
-        await   a.then(function(result){a = result})
+        var transferredLocationList = ( Promise.resolve( this.getTransferredLocation() )  );
+        await   transferredLocationList.then(function(result){transferredLocationList = result})
  
-        var b = ( Promise.resolve(  this.getPhysicianList() )  );
-        await   b.then(function(result){b = result})
+        var physicianList = ( Promise.resolve(  this.getPhysicianList() )  );
+        await   physicianList.then(function(result){physicianList = result})
 
-        var c = ( Promise.resolve( this.getLbeaconData())  );
-        await   c.then(function(result){c = result})
+        var LbeaconData = ( Promise.resolve( this.getLbeaconData())  );
+        await   LbeaconData.then(function(result){LbeaconData = result})
 
-        var d = ( Promise.resolve(  this.getAreaTable())  );
-        await   d.then(function(result){d = result})
+        var AreaTable = ( Promise.resolve(  this.getAreaTable())  );
+        await   AreaTable.then(function(result){AreaTable = result})
 
-        var e = ( Promise.resolve(  this.getData())  );
-        await   e.then(function(result){e = result})
+        var Data = ( Promise.resolve(  this.getData())  );
+        await   Data.then(function(result){Data = result})
 
-        var f = ( Promise.resolve(  this.getDataImport()  )  );
-        await   f.then(function(result){f = result})
+        var DataImport = ( Promise.resolve(  this.getDataImport()  )  );
+        await   DataImport.then(function(result){DataImport = result})
     
-        var g = ( Promise.resolve(  this.getImportPatient())  );
-        await  g.then(function(result){g = result}) 
+        var ImportPatient = ( Promise.resolve(  this.getImportPatient())  );
+        await  ImportPatient.then(function(result){ImportPatient = result}) 
  
-           
+        
         this.setState({
-            transferredLocationList: a,
-            physicianList:b,
-            roomOptions :c,
-            areaTable: d.areaTable, 
-            data : e.data,
-            filteredData: e.filteredData,
-            column:e.column,
-            dataPatient:e.dataPatient,
-            filteredPatient: e.filteredPatient,
-            columnPatient:e.columnPatient,
-            objectTable: e.objectTable,
+            ...transferredLocationList,
+            ...physicianList,
+            roomOptions :LbeaconData,
+            areaTable: AreaTable.areaTable, 
+            ...Data,
             filterSelection: {
-                ...e.filterSelection,
-                ...d.filterSelection,
+                ...Data.filterSelection,
+                ...AreaTable.filterSelection,
             },
-            dataImport: f.dataImport,
-            columnImport:f.columnImport, 
-            dataImportPatient: g
+            ...DataImport,
+            dataImportPatient: ImportPatient
         }) 
    
     }
@@ -452,11 +445,7 @@ class ObjectManagementContainer extends React.Component{
                 tabIndex : (this.state.tabIndex +1)
             })           
         }
-
-        setTimeout(this.getData, 500) 
-        setTimeout(this.getDataPatient, 500) 
-        setTimeout(this.getDataImport, 500)  
-        setTimeout(this.getImportPatient, 500)   
+        this.getDataContontainer()
     }
  
 
@@ -646,8 +635,7 @@ class ObjectManagementContainer extends React.Component{
             sidemain:{
                 marginLeft: 150
             },
-        }
-        console.log('render')
+        } 
         let typeSelection = filterSelection.typeList ? Object.values(filterSelection.typeList) : null;
         return (     
             <BOTContainer>     

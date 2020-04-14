@@ -110,7 +110,7 @@ class ObjectTable extends React.Component{
             isShowEdit: false,
             showDeleteConfirmation: false,
             disableASN:false,
-        }, callback) 
+        }, callback)  
         this.props.refreshData()
     }
 
