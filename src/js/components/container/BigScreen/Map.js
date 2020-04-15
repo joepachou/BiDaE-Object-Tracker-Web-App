@@ -116,7 +116,12 @@ class Map extends React.Component {
 
     createLegendJSX = (imageSize = "25px", fontSize = "15px", legendWidth = "250px") => {
         // pinImage is imported
-        var {legendDescriptor, proccessedTrackingData} = this.props
+        var {
+            legendDescriptor
+        } = this.props
+        let {
+            locale
+        } = this.context
         var pins;
         try{
             pins = legendDescriptor.map( description => { return pinImage[description.pinColor] })
@@ -127,17 +132,18 @@ class Map extends React.Component {
                 <div className="bg-light" style={{width: legendWidth}}>
                     {
                         legendDescriptor.map((description, index) => {
-                            var count = proccessedTrackingData
-                                .filter(item => {
-                                    return item.currentPosition && item.searched == index + 1
-                                })
-                                .filter(item => {
-                                    return parseInt(item.area_id) === parseInt(this.props.areaId) && item.found && item.object_type == 0
-                                }).length
                             return(
-                                <div className="text-left" key = {index} style = {{width: '100%', height: '80px'}}>
+                                <div 
+                                    className="text-left d-flex align-items-center" 
+                                    key = {index} 
+                                    style = {{width: '100%', height: '80px'}}
+                                >
                                     <img src = {pins[index]} className = "m-2 float-left" width={imageSize}></img>
-                                    <strong><h6 className="" style={{lineHeight: '200%', fontWeight:'bold'}}>{description.text} : {count} 個</h6></strong>
+                                    <strong>
+                                        <h6 className="" style={{lineHeight: '200%', fontWeight:'bold'}}>
+                                            {description.text}: {description.itemCount} {locale.texts.ITEM}
+                                        </h6>
+                                    </strong>
                                 </div>
                             )             
                         })
@@ -168,10 +174,7 @@ class Map extends React.Component {
 
         this.props.proccessedTrackingData
         .filter(item => {
-            return ( parseInt(item.area_id) === parseInt(this.props.areaId) && 
-                item.found && 
-                item.object_type == 0 &&
-                item.currentPosition && 
+            return (  
                 item.searched != -1
             )
         })

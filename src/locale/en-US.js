@@ -69,6 +69,7 @@ const en =  {
     MY_DEVICES: "My devices",
     MY_PATIENTS: "My patients",
     OBJECTS: "objects",
+    ITEM: 'items',
     DEVICES_FOUND: "devices found",
     PATIENTS_FOUND: "patient found",
     DEVICES_NOT_FOUND: "devices not found",
