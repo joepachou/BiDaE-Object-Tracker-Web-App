@@ -1,11 +1,9 @@
 const dataSrcIP = process.env.DATASRC_IP;
 const protocol = process.env.PROTOCOL;
-const port = process.env.PORT;
 const domain = `${protocol}://${dataSrcIP}`;
 const getTrackingData = `${protocol}://${dataSrcIP}/data/getTrackingData`;
 const getTrackingTableByMacAddress = `${protocol}://${dataSrcIP}/data/getTrackingTableByMacAddress`;
 const getObjectTable = `${protocol}://${dataSrcIP}/data/getObjectTable`;
-const getPatientTable = `${protocol}://${dataSrcIP}/data/getPatientTable`;
 const getLbeaconTable = `${protocol}://${dataSrcIP}/data/getLbeaconTable`;
 const getGatewayTable = `${protocol}://${dataSrcIP}/data/getGatewayTable`;
 const searchResult = `${protocol}://${dataSrcIP}/data/searchResult`;
@@ -85,7 +83,6 @@ module.exports = {
     editImport,
     cleanBinding,
     getObjectTable,
-    getPatientTable,
     getImportTable,
     getImportPatient,
     getLbeaconTable,
