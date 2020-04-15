@@ -11,6 +11,11 @@ import {
     Row,
     Col,
 } from "react-bootstrap"
+import locale from 'antd/lib/date-picker/locale/en_US';
+import { 
+    TransferredLocationColumn
+} from '../../config/tables'
+
 
 const defaultBranchName = 'new branch'
 const defaultDepartmentName = 'new department'
@@ -18,49 +23,28 @@ const defaultDepartmentName = 'new department'
 
 class TranferredLocationManagement extends React.Component{
 
-    static contextType = AppContext
-
-    state= {
-        
+    static contextType = AppContext 
+    state= { 
         transferredLocationOptions: [],
-        unFoldBranches: []
+        unFoldBranches: [], 
+    } 
 
+
+    getColumn = () => {
+            const { locale } = this.context
+            let column = _.cloneDeep(TransferredLocationColumn) 
+            column.map(item => {
+                item.headerStyle = {
+                    textAlign: 'left',
+                }
+                item.label = locale.texts[item.field.toUpperCase().replace(/ /g, '_')]
+            })  
+            return column
     }
 
-    columns = [
-            {
-              label: '',
-              field: 'fold',
-              sort: "asc",
-              width: 200
-            },
-            {
-              label: 'level',
-              field: 'level',
-              width: 200
-            },
-            {
-              label: 'name',
-              field: 'name',
-              width: 200
-            },
-            {
-                label: 'remove',
-                field: 'remove',
-                width: 200
-            },
-            {
-                label: 'add',
-                field: 'add',
-                width: 200
-            },
-           
-          ]
-
-    componentDidUpdate = (prevProps, prevState) => {
-    }
-
+    
     componentDidMount = () => {
+        this.getColumn()
         this.getTransferredLocation()
     }
    
@@ -80,6 +64,7 @@ class TranferredLocationManagement extends React.Component{
             })           
     }
     generateDataRows = () => {
+        const { locale } = this.context
         let rows = []
         this.state.transferredLocationOptions.map((branch)=> {
             rows.push({
@@ -87,7 +72,7 @@ class TranferredLocationManagement extends React.Component{
                     className= {this.state.unFoldBranches.includes(branch.id) ?"fas fa-caret-down d-flex justify-content-center" : "fas fa-caret-right d-flex justify-content-center" }
                     style={{lineHeight:'100%', fontSize:'30px'}}
                     onClick = {this.changeFold.bind(this, branch.id)}></i>,
-                level: <h6>branch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h6>,
+                level: <h6>{locale.texts.BRANCH}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h6>,
                 name: <input 
                     type="text" 
                     value={branch.branch_name} 
@@ -208,7 +193,7 @@ class TranferredLocationManagement extends React.Component{
         let newName = e.target.value
         axios.post(dataSrc.modifyTransferredLocation, {
             type: 'rename department',
-            data: {
+            data: {                                   
                 branch_id,
                 departmentIndex: index,
                 name: newName
@@ -229,21 +214,19 @@ class TranferredLocationManagement extends React.Component{
         })
     }
 
-    render(){
-        let dataRows = this.generateDataRows()
+    render(){  
+        const { locale } = this.context
+        let dataRows = this.generateDataRows() 
+        let column = this.getColumn()  
         return(
             <Col lg={8}>
                 <MDBTable autoWidth={false}
                 >
-                    <MDBTableHead columns={this.columns} />
+                    <MDBTableHead columns={column} />
                     <MDBTableBody rows={dataRows} color='#000000'/>
                 </MDBTable>
-           <Button variant="light" onClick={this.addBranch}>Add branch</Button>
-
-            </Col>
-
-
-
+           <Button variant="light" onClick={this.addBranch}>{locale.texts.ADD_BRANCH}</Button>
+            </Col> 
         )
     }
 }

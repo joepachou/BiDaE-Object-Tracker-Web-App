@@ -157,6 +157,35 @@ const gatewayTableColumn = [
     }
 ]
 
+const TransferredLocationColumn =[
+    {
+        label: '',
+        field: 'fold',
+        sort: "asc",
+        width: 200
+      },
+      {
+        label: 'level',
+        field: 'level',
+        width: 200
+      },
+      {
+        label: 'name',
+        field: 'name',
+        width: 200
+      },
+      {
+          label: 'remove',
+          field: 'remove',
+          width: 200
+      },
+      {
+          label: 'add',
+          field: 'add',
+          width: 200
+      },
+]
+
 const trackingTableColumn = [
     {
         Header: "POUND_SIGN",
@@ -638,6 +667,7 @@ export {
     searchResultTableColumn,
     lbeaconTableColumn,
     gatewayTableColumn,
+    TransferredLocationColumn,
     objectTableColumn,
     importTableColumn,
     patientTableColumn,

@@ -149,6 +149,7 @@ const en =  {
     HIDE_MAP : "hide map",
     NEW_SEARCH: "new search",
     SEARCH: "search",
+    ADD_BRANCH:"Add branch",
 
     /* field */
     NAME: "name",
@@ -215,7 +216,7 @@ const en =  {
     LOCATION_SELECTION: "location",
     RECORDED_BY: "recorded by",
     ADD_NEW_RECORD: "add new record",
-
+    FOLD:"fold",
 
     /** form title */
     EDIT_LBEACON: "edit lbeacon",
@@ -255,6 +256,7 @@ const en =  {
     EDIT_SECONDARY_AREAS: "edit secondary areas",
     NEW_PASSWORD:"New password",
     CHECK_PASSWORD:"Check password",
+    LEVEL:"level",
 
     /** error message */
     GENDER_IS_REQUIRED: "Gender is required",
@@ -387,6 +389,7 @@ const en =  {
     PRODUCT_VERSION: "product version",
     ABNORMAL_LBEACON_LIST: "abnormal lbeacon list",
     ACTION: "action",
+    BRANCH:"branch",
 
     /** message */
     ARE_YOU_SURE_TO_DELETE: "are you sure to delete ?",

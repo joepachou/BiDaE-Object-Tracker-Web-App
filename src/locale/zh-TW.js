@@ -150,7 +150,8 @@ const tw = {
     HIDE_MAP : "隱藏地圖",
     NEW_SEARCH: "重新搜尋",
     SEARCH: "查詢",
-    
+    ADD_BRANCH:"新增分支",
+
     /* field */
     NAME: "名稱",
     PATIENT_NAME: "病人姓名",
@@ -216,7 +217,8 @@ const tw = {
     LOCATION_SELECTION: "區域",
     RECORDED_BY: "紀錄",
     ADD_NEW_RECORD: "新增紀錄",
-       
+    FOLD:"折疊",
+
     /** form title */
     EDIT_LBEACON: "編輯 lbeacon",
     ADD_OBJECT: "增加儀器",
@@ -256,6 +258,7 @@ const tw = {
     EDIT_SECONDARY_AREAS: "編輯次要區域",
     NEW_PASSWORD:"新密碼",
     CHECK_PASSWORD:"確認新密碼",
+    LEVEL:"等級",
 
     /** Error Message */
     GENDER_IS_REQUIRED: "請選擇性別",
@@ -389,7 +392,7 @@ const tw = {
     PRODUCT_VERSION: "版本號",
     ABNORMAL_LBEACON_LIST: "abnormal lbeacon list",
     ACTION: "action",
-    
+    BRANCH:"分支",
 
     /** message */
     ARE_YOU_SURE_TO_DELETE: "確定要刪除 ?",
