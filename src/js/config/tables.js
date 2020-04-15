@@ -509,6 +509,14 @@ const geofenceConfigColumn = [
             : ""
     },
     {
+        Header: "is global fence",
+        accessor: "is_global_fence",
+        width: 100,
+        Cell: props => props.value 
+            ? <i className="fas fa-circle" style={style.icon.circle}></i>
+            : ""
+    },
+    {
         Header: "area",
         accessor: "area.label",
         width: 150,
@@ -530,26 +538,23 @@ const geofenceConfigColumn = [
     },
     {
         Header: "perimeters group",
-        accessor: "parsePerimeters.lbeacons"
-    },
-    {
-        Header: "fences group",
-        accessor: "parseFences.lbeacons"
+        accessor: "parsePerimeters.lbeacons",
+        width: 350,
     },
     {
         Header: "perimeter rssi",
-        accessor: "p_rssi"
+        accessor: "p_rssi",
+        width: 120,
+    },
+    {
+        Header: "fences group",
+        accessor: "parseFences.lbeacons",
+        width: 350,
     },
     {
         Header: "fence rssi",
-        accessor: "f_rssi"
-    },
-    {
-        Header: "is global fence",
-        accessor: "is_global_fence",
-        Cell: props => props.value 
-            ? <i className="fas fa-circle" style={style.icon.circle}></i>
-            : ""
+        accessor: "f_rssi",
+        width: 120,
     },
 ]
 
