@@ -88,7 +88,6 @@ export const BOTNavLink = styled(Link)`
 export const BOTNav = styled(Nav)`
     border-bottom: 1px solid ${styleSheet.lightGrey};
     margin-bottom: 0;
-    overflow: scroll hidden;
 `
 
 export const LoaderWrapper = styled.div`
@@ -116,5 +115,5 @@ export const NoDataFoundDiv = styled.div`
     padding: 10px 20px;
     border: 1px solid rgba(0, 0, 0, 0.1);
     background: white;
-
+    text-transform: capitalize;
 `
