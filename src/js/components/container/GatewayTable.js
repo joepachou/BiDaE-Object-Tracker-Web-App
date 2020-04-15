@@ -28,6 +28,7 @@ class GatewayTable extends React.Component{
     static contextType = AppContext
     
     state = {  
+        locale: this.context.locale.abbr,
         data: [],
         columns: [],
         showDeleteConfirmation:false,
@@ -36,6 +37,13 @@ class GatewayTable extends React.Component{
         selection:[],
         selectAll :false,
         selectType:''
+    }
+
+    componentDidUpdate = (prevProps, prevState) => {
+        let { locale } = this.context
+        if (locale.abbr !== prevState.locale) {
+            this.getData();
+        }
     }
 
     componentDidMount = () => {
@@ -58,14 +66,12 @@ class GatewayTable extends React.Component{
             this.props.setMessage('clear')
             let column = _.cloneDeep(gatewayTableColumn)
             column.map(field => {
-                field.headerStyle = {
-                    textAlign: 'left',
-                }
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })
             this.setState({
                 data: res.data.rows,
-                columns: column
+                columns: column,
+                locale: locale.abbr
             })
         })
         .catch(err => {

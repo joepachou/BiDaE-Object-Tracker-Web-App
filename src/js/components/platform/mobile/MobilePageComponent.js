@@ -18,15 +18,17 @@ const MobilePageComponent = ({
 }) => {
 
     let locale = React.useContext(LocaleContext)
+
     let {
         tabList,
         title,
         defaultActiveKey
     } = containerModule
+
     return (
         <BOTContainer>     
             <PageTitle>                                            
-                {title}
+                {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
             </PageTitle>
             <Tab.Container 
                 defaultActiveKey={defaultActiveKey}

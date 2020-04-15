@@ -230,6 +230,7 @@ a:hover {
 .btn {
     transition: none;
     text-transform: capitalize;
+    letter-spacing: 1px;
 }
 
 .btn.btn-sm {

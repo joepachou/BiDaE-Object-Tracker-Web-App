@@ -26,16 +26,12 @@ const TabletPageComponent = ({
     return (
         <BOTContainer>     
             <PageTitle>                                            
-                {title}
+                {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
             </PageTitle>
             <Tab.Container 
                 defaultActiveKey={defaultActiveKey}
             >
-                <BOTNav
-                    style={{
-                        width: 500,
-                    }}
-                >
+                <BOTNav>
                     {tabList.map(tab => {
                         return (
                             <AccessControl
