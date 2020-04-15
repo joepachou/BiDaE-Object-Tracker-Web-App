@@ -341,15 +341,36 @@ const config = {
                     "patients found", 
                     locale, 
                     area,
-                    data.patients.length !== 0
+                    data.patients.foundPatients.length !== 0
                 )
 
-                let foundPatientList = config.pdfFormat.getBodyItem.getPatientContent(
-                    data.patients, 
+                let patientFoundList = config.pdfFormat.getBodyItem.getPatientContent(
+                    data.patients.foundPatients, 
                     locale
                 )
 
-                return foundTitle + foundResultList + notFoundTitle + notFoundResultList + patientFoundTitle + foundPatientList
+                let patientNotFoundTitle  = config.pdfFormat.getBodyItem.getBodyTitle(
+                    "patients not found", 
+                    locale, 
+                    area,
+                    data.patients.notFoundPatients.length !== 0
+                )
+
+                let patientNotFoundList = config.pdfFormat.getBodyItem.getPatientContent(
+                    data.patients.notFoundPatients, 
+                    locale
+                )
+
+                return (
+                    foundTitle + 
+                    foundResultList + 
+                    notFoundTitle + 
+                    notFoundResultList + 
+                    patientFoundTitle + 
+                    patientFoundList +
+                    patientNotFoundTitle +
+                    patientNotFoundList
+                )
             },
 
             searchResult: (data, locale, user, location) => {
