@@ -25,26 +25,23 @@ class ObjectEditedRecord extends React.Component{
         data: [],
         columns: [],
         showForm: false,
-        locale: this.context.abbr,
+        locale: this.context.locale.abbr,
         selectAll: false,
         selection: [],
         showDeleteConfirmation: false,
     }
 
     componentDidMount = () => {
-        this.getEditObjectRecord()
+        this.getData()
     }
 
     componentDidUpdate = (prevProps, prevState) => {
-        if (this.context.abbr !== prevState.locale) {
-            this.getEditObjectRecord()
-            this.setState({
-                locale: this.context.abbr
-            })
+        if (this.context.locale.abbr !== prevState.locale) {
+            this.getData()
         }
     }
 
-    getEditObjectRecord = () => {
+    getData = () => {
         let {
             locale
         } = this.context
@@ -66,6 +63,7 @@ class ObjectEditedRecord extends React.Component{
                 this.setState({
                     data: res.data.rows,
                     columns,
+                    locale: locale.abbr
                 })
             })
             .catch(err => {
@@ -100,7 +98,7 @@ class ObjectEditedRecord extends React.Component{
             // the 'sortedData' property contains the currently accessible records based on the filter and sort
             const currentRecords = wrappedInstance.getResolvedState().sortedData;
             // we just push all the IDs onto the selection array
-            console.log(wrappedInstance)
+
             currentRecords.forEach(item => {
                 if (item._original) {
                 selection.push(item._original._id);
@@ -157,7 +155,7 @@ class ObjectEditedRecord extends React.Component{
             idPackage
         })
         .then(res => {
-            this.getEditObjectRecord()
+            this.getData()
             this.setState({
                 selection: [],
                 selectAll: false,

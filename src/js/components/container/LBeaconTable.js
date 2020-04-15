@@ -33,6 +33,7 @@ class LbeaconTable extends React.Component{
     static contextType = AppContext
     
     state = {  
+        locale: this.context.locale.abbr,
         data: [],
         columns: [],
         showDeleteConfirmation:false,
@@ -41,6 +42,13 @@ class LbeaconTable extends React.Component{
         selection:[],
         selectAll :false,
         selectType:''
+    }
+
+    componentDidUpdate = (prevProps, prevState) => {
+        let { locale } = this.context
+        if (locale.abbr !== prevState.locale) {
+            this.getData();
+        }
     }
 
     componentDidMount = () => {
@@ -62,9 +70,6 @@ class LbeaconTable extends React.Component{
             this.props.setMessage('clear')
             let column = _.cloneDeep(lbeaconTableColumn)
             column.map(field => {
-                field.headerStyle = {
-                    textAlign: 'left',
-                }
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })
             this.setState({
@@ -76,6 +81,7 @@ class LbeaconTable extends React.Component{
                 selectAll :false,
                 selectType:'',
                 selection: [],
+                locale: locale.abbr
             }, callback) 
         })
         .catch(err => {
@@ -246,8 +252,6 @@ class LbeaconTable extends React.Component{
                         name="test"
                         data={this.state.data}
                         columns={this.state.columns}
-                        SelectAllInputComponent={BOTCheckbox}
-                        SelectInputComponent={BOTCheckbox}
                         {...styleConfig.reactTable}
                         ref={r => (this.selectTable = r)}
                         className="-highlight"

@@ -25,26 +25,23 @@ class ShiftChangeRecord extends React.Component{
         data: [],
         columns: [],
         showForm: false,
-        locale: this.context.abbr,
+        locale: this.context.locale.abbr,
         selectAll: false,
         selection: [],
         showDeleteConfirmation: false,
     }
 
     componentDidUpdate = (prevProps, prevState) => {
-        if (this.context.abbr !== prevState.locale) {
-            this.getShiftChangeRecord()
-                this.setState({
-                locale: this.context.abbr
-            })
+        if (this.context.locale.abbr !== prevState.locale) {
+            this.getData()
         }
     }
 
     componentDidMount = () => {
-        this.getShiftChangeRecord()
+        this.getData()
     }
 
-    getShiftChangeRecord(){
+    getData(){
         let {
             locale
         } = this.context
@@ -54,10 +51,6 @@ class ShiftChangeRecord extends React.Component{
                 let columns = _.cloneDeep(shiftChangeRecordTableColumn)
                 columns.map(field => {
                     field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
-                    field.headerStyle = {
-                        textAlign: 'left',
-                        textTransform: 'capitalize'
-                    }
                 })
                 res.data.rows.map(item => {
                     item.shift = item.shift && locale.texts[item.shift.toUpperCase().replace(/ /g, '_')]
@@ -65,6 +58,7 @@ class ShiftChangeRecord extends React.Component{
                 this.setState({
                     data: res.data.rows,
                     columns,
+                    locale: locale.abbr
                 })
             })
             .catch(err => {
@@ -148,7 +142,7 @@ class ShiftChangeRecord extends React.Component{
             idPackage
         })
         .then(res => {
-            this.getShiftChangeRecord()
+            this.getData()
             this.setState({
                 selection: [],
                 selectAll: false,
@@ -191,7 +185,6 @@ class ShiftChangeRecord extends React.Component{
             toggleSelection,
             selectType
         };
-
 
         return (
             <Fragment>

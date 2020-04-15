@@ -12,24 +12,22 @@ import styleConfig from '../../config/styleConfig';
  
 
 class TrackingTable extends React.Component{
+
     static contextType = AppContext
 
     state = {
         trackingData: [],
         trackingColunm: [],
         tabIndex: 0,
-        locale: this.context.locale.lang,
+        locale: this.context.locale.abbr,
     }
 
     toastId = null;
 
     componentDidUpdate = (prevProps, prevState) => {
         let { locale } = this.context
-        if (locale.lang !== prevState.locale) {
+        if (locale.abbr !== prevState.locale) {
             this.getTrackingData();
-            this.setState({
-                locale: locale.lang
-            })
         }
     }
 
@@ -76,11 +74,11 @@ class TrackingTable extends React.Component{
             })
             this.setState({
                 trackingData: res.data,
-                trackingColunm: column
+                trackingColunm: column,
+                locale: locale.abbr,
             })
         })
         .catch(err => {
-            this.setMessage(true)
             this.setMessage(
                 'error',
                 'connect to database failed',
