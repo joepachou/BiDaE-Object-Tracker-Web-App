@@ -166,7 +166,7 @@ class TrackingHistory extends React.Component{
                                     locale.texts.LBEACON_FORMAT_IS_NOT_CORRECT,
                                     value => {  
                                         if (value == undefined) return false
-                                        let pattern = new RegExp("^[0-9]{8}-?[0-9]{4}-?[0-9]{4}-?[0-9]{4}-?[0-9]{12}$");
+                                        let pattern = new RegExp("^[0-9A-Za-z]{8}-?[0-9A-Za-z]{4}-?[0-9A-Za-z]{4}-?[0-9A-Za-z]{4}-?[0-9A-Za-z]{12}$");
                                         return value.match(pattern)
                                     }
                                 )
