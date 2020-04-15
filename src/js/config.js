@@ -360,14 +360,14 @@ const config = {
                     area, 
                     data.foundResult.length !== 0
                 )
-                let foundResultList = config.pdfFormat.getBodyItem.getDataContent(data.searchResult.foundResult, locale)
+                let foundResultList = config.pdfFormat.getBodyItem.getDataContent(data.foundResult, locale)
                 let notFoundTitle = config.pdfFormat.getBodyItem.getBodyTitle(
                     "devices not found", 
                     locale, 
                     area,
                     data.notFoundResult.length !== 0
                 )
-                let notFoundResultList = config.pdfFormat.getBodyItem.getDataContent(data.searchResult.notFoundResult, locale)
+                let notFoundResultList = config.pdfFormat.getBodyItem.getDataContent(data.notFoundResult, locale)
                 return foundTitle + foundResultList + notFoundTitle + notFoundResultList
             },
 
