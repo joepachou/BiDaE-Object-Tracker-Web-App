@@ -106,6 +106,10 @@ class ObjectManagementContainer extends React.Component{
         var areaTable = ( Promise.resolve(  this.getAreaTable())  );
         await   areaTable.then(function(result){areaTable = result})
 
+        this.setState({ //不先set的話get data的轉移會沒東西
+            transferredLocationList:transferredLocationList,
+        }) 
+
         var data = ( Promise.resolve(  this.getData())  );
         await   data.then(function(result){data = result})
 
@@ -116,8 +120,8 @@ class ObjectManagementContainer extends React.Component{
         await  importPatient.then(function(result){importPatient = result}) 
         
  
-        this.setState({
-            ...transferredLocationList,
+         this.setState({
+           
             ...physicianList,
             roomOptions :lbeaconData,
             areaTable: areaTable.areaTable, 
@@ -127,9 +131,9 @@ class ObjectManagementContainer extends React.Component{
                 ...areaTable.filterSelection,
             },
             ...dataImport,
-            dataImportPatient: importPatient
+            dataImportPatient: importPatient, 
         }) 
-   
+         
     }
 
     componentDidMount = () => {
@@ -256,7 +260,7 @@ class ObjectManagementContainer extends React.Component{
 
 
     async   getTransferredLocation(){
-        let { locale } = this.context
+        let { locale } = this.context 
         return await   axios.get(getTransferredLocation)
         .then(res => {
             const transferredLocationOptions = res.data.map(branch => {
@@ -324,6 +328,7 @@ class ObjectManagementContainer extends React.Component{
             })
 
             res.data.rows.map(item => {
+ 
                 if (item.object_type != 0) {
 
                     item.monitor_type = this.getMonitorTypeArray(item, 'patient').join('/')
@@ -338,7 +343,7 @@ class ObjectManagementContainer extends React.Component{
                         label: item.status ? locale.texts[item.status.toUpperCase()] : null,
                     }
 
-                    if(item.transferred_location){
+                    if(item.transferred_location){ 
                         let ids = item.transferred_location.split(',')
                         let branchId = ids[0], departmentId = ids[1]
                         if (item.transferred_location){
@@ -349,9 +354,11 @@ class ObjectManagementContainer extends React.Component{
                                 return false
                             })
                             let department = branch[0] ? branch[0].options[departmentId] : null
-                            item.transferred_location = department
-                        }
+                            item.
+                            transferred_location = department
+                        } 
                     }
+
  
                     if (!Object.keys(typeList).includes(item.type)) { 
                        typeList[item.type] = {
@@ -367,6 +374,7 @@ class ObjectManagementContainer extends React.Component{
                     id: item.area_id
                 }
             }) 
+            
             return ({
                 data,
                 filteredData: data,

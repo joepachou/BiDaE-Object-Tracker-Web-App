@@ -23,10 +23,8 @@ import styleConfig from '../../config/styleConfig';
 import FormikFormGroup from '../presentational/FormikFormGroup'
 import { toast } from 'react-toastify';
 import messageGenerator from '../../helper/messageGenerator'
-
-let monitorTypeMap = {};
-let statusVal = '';
-let statusChange = 0;
+ 
+let monitorTypeMap = {}; 
 Object.keys(config.monitorType)
     .forEach(key => {
         monitorTypeMap[config.monitorType[key]] = key
@@ -37,8 +35,7 @@ class EditObjectForm extends React.Component {
     static contextType = AppContext
 
     state = {
-        transferredLocationOptions: [],
-        
+        transferredLocationOptions: [], 
     };
 
     componentDidMount = () => {
@@ -112,8 +109,10 @@ class EditObjectForm extends React.Component {
             mac_address,
             transferred_location,
             area_name,
-        } = selectedRowData     
+        } = selectedRowData    
+  
         return (
+           
             <Modal 
                 show={show} 
                 onHide={handleClose} 
@@ -125,8 +124,9 @@ class EditObjectForm extends React.Component {
                 >
                     {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
                 </Modal.Header >
-                <Modal.Body>
                 
+                <Modal.Body>
+               
                     <Formik                    
                         initialValues = {{
                             name: name || '' ,
@@ -213,9 +213,16 @@ class EditObjectForm extends React.Component {
                                         }
                                     ),
 
-                                status: Yup.string().required(locale.texts.STATUS_IS_REQUIRED),
- 
+                                status: Yup.string()
+                                .required(locale.texts.STATUS_IS_REQUIRED),
+
                                 area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
+                                
+                                transferred_location: Yup.object()  
+                                    .when('status', {
+                                        is: config.objectStatus.TRANSFERRED,
+                                        then: Yup.object().required(locale.texts.LOCATION_IS_REQUIRED)
+                                    })
                         })}
                        
                         onSubmit={(values, { setStatus, setSubmitting }) => {
