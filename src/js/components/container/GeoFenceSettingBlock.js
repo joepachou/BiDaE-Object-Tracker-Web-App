@@ -90,7 +90,7 @@ class GeoFenceSettingBlock extends React.Component{
                 minWidth: 60,
                 Cell: props => (
                     <div className="d-flex justify-content-start">
-                        {['edit'].map((item, index, original) => {
+                        {['edit'].map((item, index, original) => { 
                             return   ( 
                                 <div 
                                     key={item} 
@@ -123,7 +123,8 @@ class GeoFenceSettingBlock extends React.Component{
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })
             
-            res.data.rows.map((item,index) => {  
+            res.data.rows.map((item,index) => { 
+                item.parsePerimeters.lbeacons[index]+=","
                 item.key=index + 1
                 item.area = {
                     value: config.mapConfig.areaOptions[item.area_id],
