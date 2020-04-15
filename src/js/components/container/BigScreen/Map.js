@@ -7,6 +7,9 @@ import _ from 'lodash'
 import { AppContext } from '../../../context/AppContext';
 import  pinImage from "./pinImage"
 import siteConfig from '../../../../../site_module/siteConfig'
+import {
+    macAddressToCoordinate
+} from '../../../helper/dataTransfer'
 
 class Map extends React.Component {
     
@@ -180,8 +183,12 @@ class Map extends React.Component {
         })
         .map(item => {
 
-
-            let position = this.macAddressToCoordinate(item.mac_address,item.currentPosition);
+            /** Calculate the position of the object  */
+            let position = macAddressToCoordinate(
+                item.mac_address, 
+                item.currentPosition, 
+                this.props.mapConfig.iconOptions.markerDispersity
+            );
 
             /** Set the icon option*/
 
@@ -221,22 +228,6 @@ class Map extends React.Component {
         /** Add the new markerslayers to the map */
         this.markersLayer.addTo(this.map);
         this.createLegend(this.createLegendJSX());
-    }
-
-    /** Retrieve the object's offset from object's mac_address.
-     * @param   mac_address The mac_address of the object retrieved from DB. 
-     * @param   lbeacon_coordinate The lbeacon's coordinate processed by createLbeaconCoordinate().*/
-    macAddressToCoordinate = (mac_address, lbeacon_coordinate) => {
-        const xx = mac_address.slice(15,16);
-        const yy = mac_address.slice(16,17);
-        const multiplier = this.props.mapConfig.iconOptions.markerDispersity; 
-		const origin_x = lbeacon_coordinate[1] - parseInt(8, 16) * multiplier ; 
-		const origin_y = lbeacon_coordinate[0] - parseInt(8, 16) * multiplier ;
-		const xxx = origin_x + parseInt(xx, 16) * multiplier;
-        const yyy = origin_y + parseInt(yy, 16) * multiplier;
-        // const xxx = lbeacon_coordinate[1]
-        // const yyy = lbeacon_coordinate[0]
-        return [yyy, xxx];
     }
 
     render(){

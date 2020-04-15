@@ -6,8 +6,6 @@ import _ from 'lodash'
 import { AppContext } from '../../context/AppContext';
 import axios from 'axios';
 import dataSrc from '../../dataSrc'
-import polylineDecorator from 'leaflet-polylinedecorator'
-import moment from 'moment'
 import siteConfig from '../../../../site_module/siteConfig'
 import {
     BrowserView,
@@ -16,8 +14,10 @@ import {
     isMobileOnly,
     isBrowser,
     isTablet,
-    isMobile
 } from 'react-device-detect'
+import {
+    macAddressToCoordinate
+} from '../../helper/dataTransfer'
 
 class Map extends React.Component {
     
@@ -415,7 +415,11 @@ class Map extends React.Component {
         .map((item, index)  => {
 
             /** Calculate the position of the object  */
-            let position = this.macAddressToCoordinate(item.mac_address, item.currentPosition);
+            let position = macAddressToCoordinate(
+                item.mac_address, 
+                item.currentPosition, 
+                this.props.mapConfig.iconOptions.markerDispersity
+            );
 
             /** Set the Marker's popup 
              * popupContent (objectName, objectImg, objectImgWidth)
@@ -498,22 +502,6 @@ class Map extends React.Component {
             })
 
         return objectList 
-    }
-
-    /** Retrieve the object's offset from object's mac_address.
-     * @param   mac_address The Mac address of the object retrieved from DB. 
-     * @param   lbeacon_coordinate The lbeacon's coordinate processed by createLbeaconCoordinate().*/
-    macAddressToCoordinate = (mac_address, lbeacon_coordinate) => {
-        const xx = mac_address.slice(15,16);
-        const yy = mac_address.slice(16,17);
-        const multiplier = this.props.mapConfig.iconOptions.markerDispersity; 
-		const origin_x = lbeacon_coordinate[1] 
-		const origin_y = lbeacon_coordinate[0]
-		const xxx = origin_x + parseInt(xx, 16) * multiplier;
-        const yyy = origin_y + parseInt(yy, 16) * multiplier;
-        // const xxx = lbeacon_coordinate[1]
-        // const yyy = lbeacon_coordinate[0]
-        return [yyy, xxx];
     }
     
     render(){

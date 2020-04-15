@@ -738,7 +738,7 @@ const config = {
             specifiedNumberTop: '8%',
 
             /* Set the Marker dispersity that can be any positive number */
-            markerDispersity: process.env.MARKER_DISPERSITY || 100,
+            markerDispersity: 100,
 
             geoFenceMarkerOptions: {
 
@@ -785,7 +785,7 @@ const config = {
             numberSize: 8, 
 
             /* Set the Marker dispersity that can be any positive number */
-            markerDispersity: 1 || process.env.MARKER_DISPERSITY || 100,
+            markerDispersity: 100,
 
             geoFenceMarkerOptions: {
 
@@ -820,7 +820,7 @@ const config = {
             showNumber: false,
 
             /* Set the Marker dispersity that can be any positive number */
-            markerDispersity: process.env.MARKER_DISPERSITY_IN_BIG_SCREEN || 13,
+            markerDispersity: 100,
         }, 
 
         /** Set the icon option for tablet */
@@ -841,7 +841,7 @@ const config = {
             numberSize: 8, 
 
             /* Set the Marker dispersity that can be any positive number */
-            markerDispersity: 1 || process.env.MARKER_DISPERSITY || 100,
+            markerDispersity: 100,
 
             geoFenceMarkerOptions: {
 
