@@ -151,7 +151,11 @@ const tw = {
     NEW_SEARCH: "重新搜尋",
     SEARCH: "查詢",
     ADD_BRANCH:"新增分支",
-
+    FORM:"表單",
+    ROUTE:"路由",
+    USER:"使用者",
+    ADD_PERMISSION:"新增許可",
+    
     /* field */
     NAME: "名稱",
     PATIENT_NAME: "病人姓名",
@@ -393,6 +397,8 @@ const tw = {
     ABNORMAL_LBEACON_LIST: "abnormal lbeacon list",
     ACTION: "action",
     BRANCH:"分支",
+    ROLE_LIST:"權限列表",
+    PERMISSION_LIST:"白名單",
 
     /** message */
     ARE_YOU_SURE_TO_DELETE: "確定要刪除 ?",
@@ -406,7 +412,7 @@ const tw = {
     DELETE_GATEWAY_SUCCESS: "刪除Gateway成功",
     SAVE_SHIFT_CHANGE_SUCCESS: "儲存交班報表成功",
     SAVE_SUCCESS: "儲存成功",
-
+    SELECT_ROLE:"選擇權限",
 
     /** User Roles */
     CARE_PROVIDER: "護理人員",

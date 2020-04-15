@@ -172,9 +172,10 @@ class RolePermissionManagement extends React.Component{
     }
 
     render(){
+        const { locale } = this.context
         return(
             <Tabs>
-                <Tab eventKey="roleList" title="Role List">
+                <Tab eventKey="roleList" title={locale.texts.ROLE_LIST}>
                     <Formik
                         initialValues = {{
                             ...this.state.permissionList.reduce(function(map, permission) {
@@ -197,7 +198,7 @@ class RolePermissionManagement extends React.Component{
                             <Form className="text-capitalize">
                                 <Select
                                     name="selectedRole"
-                                    placeholder="Select Role..."
+                                    placeholder={locale.texts.SELECT_ROLE + "..."}
                                     options={this.state.roleList}
                                     value={values.selectedRole}
                                     onChange={(value) => {
@@ -221,7 +222,7 @@ class RolePermissionManagement extends React.Component{
                                                 <div key = {type}>
                                                     <Col md={4}></Col>
                                                     <Col md={4} className="m-4 ">
-                                                        <h4 className="d-flex justify-content-center m-4">{type}</h4>
+                                                        <h4 className="d-flex justify-content-center m-4">{locale.texts[type.toUpperCase()]}</h4>
                                                         {
                                                             this.state.permissionList
                                                             .filter(permission => permission.name.split(':')[0] == type)
@@ -270,7 +271,7 @@ class RolePermissionManagement extends React.Component{
                         )}
                     />
                 </Tab>
-                <Tab eventKey="permissionList" title="Permission List">
+                <Tab eventKey="permissionList" title={locale.texts.PERMISSION_LIST}>
                     <Formik
                         initialValues = {
                             this.state.permissionList.reduce(function(map, permission) {
@@ -294,7 +295,7 @@ class RolePermissionManagement extends React.Component{
                                             return   (
 
                                             <Col lg={12} className="m-4" key={type}>
-                                                <h5 className="d-flex justify-content-center">{type}</h5>
+                                                <h5 className="d-flex justify-content-center">{locale.texts[type.toUpperCase()]}</h5>
                                                 {
                                                     this.state.permissionList
                                                     .filter(permission => permission.name.split(':')[0] == type)
@@ -328,7 +329,7 @@ class RolePermissionManagement extends React.Component{
                                                         variant="light"
                                                         onClick = {this.addPermission.bind(this, type)}
                                                     >
-                                                        add permission
+                                                       {locale.texts.ADD_PERMISSION}
                                                     </Button>
                                                 </Row>
                                             </Col>

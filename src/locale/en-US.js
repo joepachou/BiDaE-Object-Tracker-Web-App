@@ -150,6 +150,10 @@ const en =  {
     NEW_SEARCH: "new search",
     SEARCH: "search",
     ADD_BRANCH:"Add branch",
+    FORM:"Forms",
+    ROUTE:"Route",
+    USER:"User",
+    ADD_PERMISSION:"add Permission",
 
     /* field */
     NAME: "name",
@@ -390,6 +394,8 @@ const en =  {
     ABNORMAL_LBEACON_LIST: "abnormal lbeacon list",
     ACTION: "action",
     BRANCH:"branch",
+    ROLE_LIST:"Role List",
+    PERMISSION_LIST:"Permission List",
 
     /** message */
     ARE_YOU_SURE_TO_DELETE: "are you sure to delete ?",
@@ -403,6 +409,7 @@ const en =  {
     DELETE_GATEWAY_SUCCESS: "delete gateway success",
     SAVE_SHIFT_CHANGE_SUCCESS: "save shift change success",
     SAVE_SUCCESS: "save success",
+    SELECT_ROLE:"select role",
 
     /** User Roles */
     CARE_PROVIDER: "care provider",
