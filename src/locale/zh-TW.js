@@ -155,7 +155,7 @@ const tw = {
     ROUTE:"路由",
     USER:"使用者",
     ADD_PERMISSION:"新增許可",
-    
+
     /* field */
     NAME: "名稱",
     PATIENT_NAME: "病人姓名",
@@ -397,8 +397,8 @@ const tw = {
     ABNORMAL_LBEACON_LIST: "abnormal lbeacon list",
     ACTION: "action",
     BRANCH:"分支",
-    ROLE_LIST:"權限列表",
-    PERMISSION_LIST:"白名單",
+    ROLE_LIST:"角色列表",
+    PERMISSION_LIST:"權限列表",
 
     /** message */
     ARE_YOU_SURE_TO_DELETE: "確定要刪除 ?",
