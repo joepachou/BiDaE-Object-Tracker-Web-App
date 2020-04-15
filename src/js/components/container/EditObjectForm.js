@@ -218,7 +218,7 @@ class EditObjectForm extends React.Component {
 
                                 area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
                                 
-                                transferred_location: Yup.object()  
+                                transferred_location: Yup.object()   
                                     .when('status', {
                                         is: config.objectStatus.TRANSFERRED,
                                         then: Yup.object().required(locale.texts.LOCATION_IS_REQUIRED)
@@ -260,6 +260,8 @@ class EditObjectForm extends React.Component {
                             while (postOption.name[0] == " "){
                                 postOption.name = postOption.name.substring(1 ,postOption.name.length);       
                             }  
+                            {console.log('final postOption')}
+                            {console.log(postOption)}
                             this.handleSubmit(postOption)                            
  
 

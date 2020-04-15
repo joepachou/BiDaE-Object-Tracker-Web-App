@@ -367,8 +367,7 @@ class ObjectTable extends React.Component{
                         style={{maxHeight:'75vh'}} 
                         getTrProps={(state, rowInfo, column, instance) => {
                             return {
-                                onClick: (e) => { 
-                                    console.log(this.props.data)
+                                onClick: (e) => {  
                                     if (!e.target.type) {
                                         this.setState({
                                         isShowEdit:true,
