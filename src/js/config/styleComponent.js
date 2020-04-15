@@ -93,7 +93,6 @@ export const BOTNav = styled(Nav)`
 
 export const LoaderWrapper = styled.div`
     position: absolute;
-    z-index: 9999;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -111,4 +110,11 @@ export const PrimaryButton = styled(Button)`
     letter-spacing: 1px;
     text-transform: capitalize;
     margin: 0 .2rem;
+`
+
+export const NoDataFoundDiv = styled.div`
+    padding: 10px 20px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: white;
+
 `
