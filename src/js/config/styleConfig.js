@@ -48,6 +48,26 @@ const styleConfig = {
             borderRadius: 0                                
         }),
     },
+    reactSelectNavbar: {
+        option: (provided, state) => ({
+            ...provided,
+            padding: '0.5rem',
+            fontSize: '0.8rem',
+            cursor: 'pointer',
+        }),
+        
+        control: (provided) => ({
+            ...provided,
+            border: 'none',
+            width: 200,
+        }),
+        
+        singleValue: (provided, state) => ({
+            opacity: state.isDisabled ? 0.5 : 1,
+            transition: 'opacity 300ms',
+            cursor: 'pointer',
+        }),
+    },
     reactTable: {
 
         getTdProps: () => {

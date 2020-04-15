@@ -46,7 +46,10 @@ class ShiftChange extends React.Component {
             foundResult: [],
             notFoundResult: [],
         },
-        patients: [],
+        patients: {
+            foundPatients: [],
+            notFoundPatients: []
+        },
         fileUrl: '',
         showPdfDownloadForm: false,
         showConfirmForm: false,
@@ -78,33 +81,34 @@ class ShiftChange extends React.Component {
 
             let foundResult = []
             let notFoundResult = []
-            let patients= []
+            let foundPatients= []
+            let notFoundPatients= []
+
             res.data
                 .filter(item => myDevice.includes(item.asset_control_number))
                 .map(item => {
                     
                     switch(item.object_type) {
                         case '0':
-                            if (item.found) {
-                                foundResult.push(item)
-                            } else {
-                                notFoundResult.push(item)
-                            }
+                            if (item.found) foundResult.push(item)
+                            else notFoundResult.push(item)
                             break;
                         case '1':
                         case '2':
-                            if (item.found) {
-                                patients.push(item)
-                            }
+                            if (item.found) foundPatients.push(item)
+                            else notFoundPatients.push(item)
                             break
                     }
             })
             this.setState({
                 searchResult: {
-                    foundResult: foundResult,
-                    notFoundResult: notFoundResult,
+                    foundResult,
+                    notFoundResult,
                 },
-                patients,
+                patients: {
+                    foundPatients,
+                    notFoundPatients
+                }
             })
         })
         .catch(err => {
@@ -140,7 +144,7 @@ class ShiftChange extends React.Component {
             this.state.shift
         )  
 
-        this.state.patients.reduce((pkg, object) => {   
+        this.state.patients.foundPatients.reduce((pkg, object) => {   
 
             let temp = config.getPdfPackage(
                 'patientRecord', 
@@ -195,13 +199,8 @@ class ShiftChange extends React.Component {
         const { 
             locale, 
             auth,
-            stateReducer 
         } = this.context
-
-        const {
-            patients
-        } = this.state
-
+        console.log(this.state)
         const { 
             show,
             handleClose
@@ -212,10 +211,16 @@ class ShiftChange extends React.Component {
             notFoundResult 
         } = this.state.searchResult
 
+        const {
+            foundPatients,
+            notFoundPatients
+        } = this.state.patients
+
         const nowTime = moment().locale(locale.abbr)
         const hasFoundResult = foundResult.length !== 0;
         const hasNotFoundResult = notFoundResult.length !== 0;
-        const hasFoundPatients = patients.length !== 0;
+        const hasFoundPatients = foundPatients.length !== 0;
+        const hasNotFoundPatients = notFoundPatients.length !== 0;
         
         const shiftOptions = Object.values(config.shiftOption).map(shift => { 
             return { 
@@ -298,7 +303,12 @@ class ShiftChange extends React.Component {
                                         <TypeBlock
                                             title={locale.texts.PATIENTS_FOUND}
                                             hasType={hasFoundPatients} 
-                                            typeArray={patients}
+                                            typeArray={foundPatients}
+                                        /> 
+                                        <TypeBlock
+                                            title={locale.texts.PATIENTS_NOT_FOUND}
+                                            hasType={hasNotFoundPatients} 
+                                            typeArray={notFoundPatients}
                                         /> 
                                     </Form> 
                                     </Modal.Body>

@@ -234,7 +234,10 @@ const getObjectTable = (objectType, areas_id) => {
 			
 		WHERE object_table.object_type IN (${objectType.map(type => type)})
 		${areas_id ? `AND object_table.area_id IN (${areas_id.map(id => id)})` : ''}
-		ORDER BY object_table.name ASC;
+		ORDER BY 
+			object_table.name ASC
+			
+			;
 	`
 	return text
 } 
@@ -1124,7 +1127,7 @@ const getUserList = () => {
 			user_table.main_area,
 			area_table.name as area_name,
 			ARRAY_AGG(roles.name) AS role_type,
-			areas.area_ids
+			COALESCE(areas.area_ids, ARRAY[]::JSONB[]) as area_ids		
 			
 		FROM user_table  
 

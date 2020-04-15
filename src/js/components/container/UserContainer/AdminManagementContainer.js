@@ -51,8 +51,11 @@ class AdminManagementContainer extends React.Component{
         this.getDataContontainer()
     }
 
-    async  getDataContontainer(){
-        
+    async getDataContontainer() {
+        let {
+            locale
+        } = this.context
+
         var userList = ( Promise.resolve( this.getUserList() )  );
         await   userList.then(function(result){userList = result})
  
@@ -71,13 +74,12 @@ class AdminManagementContainer extends React.Component{
             showDeleteConfirmation:false,
             deleteUserName:'',
             selectedUser: null,
-            locale: this.context.locale.abbr,
+            locale: locale.abbr,
             areaTable:areaTable,
             roleName:roleName,
         }) 
    
     }
-
 
     async getUserList(){
         let { 
@@ -89,11 +91,8 @@ class AdminManagementContainer extends React.Component{
             let columns = _.cloneDeep(userInfoTableColumn)
             columns.map((field, index) => {
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
-                field.headerStyle = {
-                    textAlign: 'left',
-                    textTransform: 'capitalize'
-                }
-            }) 
+            })
+
             res.data.rows.map((item, index) => {
                 item._id = index + 1
                 item.roles = item.role_type.map(role => locale.texts[role.toUpperCase()]).join(',')
@@ -130,7 +129,7 @@ class AdminManagementContainer extends React.Component{
         })
     }
 
-    async   getRoleNameList(){
+    async  getRoleNameList(){
         return await   axios.post(getRoleNameList,{
             }).then(res => {
                 let rows = _.cloneDeep(res.data.rows)
@@ -142,7 +141,7 @@ class AdminManagementContainer extends React.Component{
             })
     }
 
-    async  getAreaTable(){
+    async getAreaTable(){
         return await  retrieveDataHelper.getAreaTable()
             .then(res => {
                 return res.data.rows
@@ -175,18 +174,15 @@ class AdminManagementContainer extends React.Component{
 
         let index = auth.user.areas_id.indexOf(auth.user.main_area)
         user.areas_id.splice(index, 1)
+
         if (!user.areas_id.includes(user.area.id)) {
             user.areas_id.push(user.area.id)
         }
-
-        this.setState({ showAddUserForm: false  })
  
         auth[api](user, () => {
-            this.getUserList()
-        }) 
-        setTimeout(function() { 
-            this.getUserList()
-        }.bind(this),500)
+            this.getDataContontainer()
+        })
+    
         
         // values.id = selectedUser ? selectedUser.id : null
 
