@@ -66,6 +66,7 @@ const tw = {
     MY_DEVICES: "我的儀器",
     MY_PATIENTS: "我的病人",
     OBJECTS: "物件",
+    ITEM: "個",
     DEVICES_FOUND: "找到的儀器",
     PATIENTS_FOUND: "找到的病人",
     DEVICES_NOT_FOUND: "未找到的儀器",

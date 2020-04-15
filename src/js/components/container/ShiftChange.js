@@ -200,7 +200,7 @@ class ShiftChange extends React.Component {
             locale, 
             auth,
         } = this.context
-        console.log(this.state)
+
         const { 
             show,
             handleClose

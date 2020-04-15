@@ -242,61 +242,6 @@ const getObjectTable = (objectType, areas_id) => {
 	return text
 } 
 
-
-// WHERE object_table.object_type = '2'
-const getPatientTable = (area_id) => {
-
-	let text = '';
-	if (!area_id) {
-		text += `
-			SELECT 
-				object_table.name, 
-				object_table.id,
-				object_table.area_id,
-				object_table.physician_id,
-				user_table.name as physician_name,
-				object_table.mac_address,
-				object_table.asset_control_number,
-				object_table.object_type,
-				object_table.monitor_type,
-				object_table.room
-
-			
-			FROM object_table 
-
-			LEFT JOIN user_table
-			ON object_table.physician_id = user_table.id
-
-			WHERE object_table.object_type != '0'
-
-			ORDER BY object_table.name ASC	
-		`;
-	} else {
-		text +=`
-			SELECT 
-				object_table.name, 
-				object_table.id,
-				object_table.area_id,
-				object_table.physician_id,
-				user_table.name as physician_name,
-				object_table.mac_address,
-				object_table.asset_control_number,
-				object_table.object_type,
-				object_table.monitor_type,
-				object_table.room
-
-			FROM object_table 
-			LEFT JOIN user_table
-			ON object_table.physician_id = user_table.id
-
-			WHERE object_table.object_type != '0'
-
-			ORDER BY object_table.name ASC	
-		`;
-	}
-	return text
-} 
-
 const getImportTable = () => {
 
 	let text = `
@@ -1515,7 +1460,6 @@ const getGeofenceConfig = (areaId) => {
 
 
 const setGeofenceConfig = (monitorConfigPackage) => {
-	console.log(monitorConfigPackage)
 	let {
 		type,
 		id,
@@ -2111,7 +2055,6 @@ module.exports = {
 	getTrackingData,
 	getTrackingTableByMacAddress,
 	getObjectTable,
-	getPatientTable,
 	getImportTable,
     getLbeaconTable,
 	getGatewayTable,

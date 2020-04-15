@@ -46,8 +46,6 @@ app.post('/data/getObjectTable', db.getObjectTable);
 
 app.post('/data/getTrackingTableByMacAddress', db.getTrackingTableByMacAddress);
 
-app.post('/data/getPatientTable', db.getPatientTable);
-
 app.post('/data/getImportTable', db.getImportTable);
 
 app.post('/data/getImportData', db.getImportData);

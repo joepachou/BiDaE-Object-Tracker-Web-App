@@ -12,7 +12,7 @@ import dataSrc from '../../../dataSrc'
 import { AppContext } from '../../../context/AppContext'
 import retrieveDataHelper from '../../../helper/retrieveDataHelper';
 
-class MainContainer extends React.Component{
+class BigScreenContainer extends React.Component{
 
     static contextType = AppContext
 
@@ -30,17 +30,28 @@ class MainContainer extends React.Component{
         clearInterval(this.interval);
     }
 
-    addSearchedIndex = (trackingData, queue) => {
-        for(var i in queue){
-            var addresses = queue[i].result_mac_address
-            trackingData = trackingData.map(item =>{
-                if(addresses.includes(item.mac_address)){
-                    item.searched = parseInt(i) + 1
-                    item.pinColor = queue[i].pin_color_index
+    addSearchedIndex = (trackingData, searchQueues) => {
+        // console.log(trackingData)
+        // console
+        searchQueues.map((queue, index) => {
+            // console.log(queue)
+            // console.log(index)
+            trackingData = trackingData.filter(item => {
+                return (
+                    item.found && 
+                    item.currentPosition &&
+                    item.object_type == 0
+                )
+            })
+            .map(item=> {
+                if (item.type == queue.key_word) {
+                    item.searched = index + 1
+                    item.pinColor = queue.pin_color_index
                 }
                 return item
-            } )
-        }
+            })
+        })
+
         trackingData = trackingData.map(item => {
             if(item.searched === undefined){
                 item.searched = -1
@@ -48,6 +59,7 @@ class MainContainer extends React.Component{
             }
             return item
         })
+
 
         return trackingData
     } 
@@ -92,7 +104,7 @@ class MainContainer extends React.Component{
                     })                
 
                     this.setState({
-                        trackingData: res.data,
+                        trackingData,
                         legendDescriptor,
                     })
                 })
@@ -116,7 +128,7 @@ class MainContainer extends React.Component{
                 className='mx-1 my-2' 
                 style={style.pageWrap} 
             >
-                <Row id="mainContainer" className='d-flex w-100 justify-content-around mx-0 overflow-hidden' style={style.container}>
+                <Row id="bigScreenContainer" className='d-flex w-100 justify-content-around mx-0 overflow-hidden' style={style.container}>
                     <Col id='searchMap' className="pl-2 pr-1" >
                         <SurveillanceContainer 
                             proccessedTrackingData={this.state.trackingData}
@@ -129,7 +141,7 @@ class MainContainer extends React.Component{
     }
 }
 
-export default MainContainer
+export default BigScreenContainer
 
 
 

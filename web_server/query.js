@@ -212,18 +212,6 @@ const getLocationHistory = (request, response) => {
     })
 }
 
-const getPatientTable = (request, response) => {
-    let { locale, areaId } = request.body
-    pool.query(queryType.getPatientTable(areaId))       
-        .then(res => {
-            console.log('Get getPatientTable data')
-            response.status(200).json(res)
-        })
-        .catch(err => {
-            console.log("Get getPatientTable fails: " + err)
-        })     
-}
-
 const getImportPatient = (request, response) => {
     let { locale, areaId } = request.body
     pool.query(queryType.getImportPatient())       
@@ -1543,7 +1531,6 @@ const addPatientRecord = (request, response) => {
 module.exports = {
     getTrackingData,
     getObjectTable,
-    getPatientTable,
     getImportTable,
     getImportPatient,
     getImportData,
