@@ -259,9 +259,7 @@ class EditObjectForm extends React.Component {
                             } 
                             while (postOption.name[0] == " "){
                                 postOption.name = postOption.name.substring(1 ,postOption.name.length);       
-                            }  
-                            {console.log('final postOption')}
-                            {console.log(postOption)}
+                            }   
                             this.handleSubmit(postOption)                            
  
 
