@@ -112,8 +112,7 @@ class EditObjectForm extends React.Component {
             mac_address,
             transferred_location,
             area_name,
-        } = selectedRowData    
-        {console.log('shit')}
+        } = selectedRowData     
         return (
             <Modal 
                 show={show} 
