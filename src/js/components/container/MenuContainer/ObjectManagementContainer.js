@@ -101,6 +101,10 @@ class ObjectManagementContainer extends React.Component{
         var areaTable = ( Promise.resolve(  this.getAreaTable())  );
         await   areaTable.then(function(result){areaTable = result})
 
+        this.setState({
+            transferredLocationList: transferredLocationList
+        }) 
+
         var data = ( Promise.resolve(  this.getData())  );
         await   data.then(function(result){data = result})
 
