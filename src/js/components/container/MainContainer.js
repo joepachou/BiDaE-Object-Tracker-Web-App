@@ -453,7 +453,7 @@ class MainContainer extends React.Component{
             trackingData
         } = this.state
         let { auth } = this.context
-        let proccessedTrackingData = _.cloneDeep(trackingData)
+        let proccessedTrackingData = _.cloneDeep(trackingData) 
 
         if (searchKey === MY_DEVICES) {
 
@@ -546,17 +546,27 @@ class MainContainer extends React.Component{
             let searchResultMac = [];
             
             proccessedTrackingData
-                .map(item => {
+                .map(item => {   
                      if (
                         item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0 ||
                         item.asset_control_number.indexOf(searchKey) >= 0 ||
-                        item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0 
+                        item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0
                     ) {
                         item.searched = true
                         item.searchedType = -1;
                         searchResult.push(item)
                         searchResultMac.push(item.mac_address)
                     }
+                   
+                    if(item.location_description != null){ 
+                        if( item.location_description.indexOf(searchKey) >= 0  ){
+                            item.searched = true
+                            item.searchedType = -1;
+                            searchResult.push(item)
+                            searchResultMac.push(item.mac_address)
+                        }
+                    }
+
                 })
 
                 if(this.state.lastsearchKey != searchKey){
