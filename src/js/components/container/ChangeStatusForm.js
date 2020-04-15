@@ -142,7 +142,7 @@ class ChangeStatusForm extends React.Component {
         } = this.props
 
         selectedObjectData = selectedObjectData.length ? selectedObjectData : []
-
+      
         return (
             <Modal  
                 show={this.props.show}
@@ -174,11 +174,11 @@ class ChangeStatusForm extends React.Component {
                                 transferred_location: Yup.string()
                                     .when('status', {
                                         is: config.objectStatus.TRANSFERRED,
-                                        then: Yup.object().required(locale.texts.LOCATION_IS_REQUIRED)
+                                        then: Yup.string().required(locale.texts.LOCATION_IS_REQUIRED)
                                     })
                         })}
 
-                        onSubmit={(values, { setStatus, setSubmitting }) => {
+                        onSubmit={(values, { setStatus, setSubmitting }) => { 
                             this.props.handleChangeObjectStatusFormSubmit(values)
                         }}
 

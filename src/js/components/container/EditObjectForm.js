@@ -113,6 +113,7 @@ class EditObjectForm extends React.Component {
             transferred_location,
             area_name,
         } = selectedRowData    
+        {console.log('shit')}
         return (
             <Modal 
                 show={show} 
@@ -252,7 +253,7 @@ class EditObjectForm extends React.Component {
                             } 
                             while (postOption.name[0] == " "){
                                 postOption.name = postOption.name.substring(1 ,postOption.name.length);       
-                            }   
+                            }  
                             this.handleSubmit(postOption)                            
  
 
