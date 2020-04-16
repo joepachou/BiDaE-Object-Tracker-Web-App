@@ -312,6 +312,8 @@ const tw = {
     TYPE_MAC_OR_NAME: "輸入 mac address 或是 名字",
     ADD_A_COMMENT: "請輸入新紀錄...",
     TYPING: "請輸入新紀錄...",
+    WAIT_FOR_SEARCH: "等待搜尋...",
+    NO_DATA_FOUND: "無搜尋結果",
 
     /* Object Status */
     STATUS: "狀態",

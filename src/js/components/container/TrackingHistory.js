@@ -22,7 +22,8 @@ import moment from 'moment'
 import FormikFormGroup from '../presentational/FormikFormGroup' 
 import {
     BOTNavLink,
-    BOTNav
+    BOTNav,
+    NoDataFoundDiv
 } from '../../config/styleComponent'
 import Loader from '../presentational/Loader'
 
@@ -47,7 +48,7 @@ class TrackingHistory extends React.Component{
         }
     }
 
-    getLocationHistory = (fields, setSubmitting) => {
+    getLocationHistory = (fields, setSubmitting, setStatus) => {
 
         const {
             locale
@@ -74,6 +75,11 @@ class TrackingHistory extends React.Component{
             mode: fields.mode
         })
         .then(res => {
+            if (res.data.rowCount == 0) {
+                setStatus(locale.texts.NO_DATA_FOUND)
+                setSubmitting(false)
+                return
+            }
             let prevUUID = "";
             let data = []
             let additionalData = null;
@@ -94,9 +100,11 @@ class TrackingHistory extends React.Component{
                         data[data.length - 1].endTime = moment(pt.record_timestamp).locale(locale.abbr).format(timeValidatedFormat)
     
                     })
-                    additionalData = {
-                        name: res.data.rows[0].name,
-                        area: res.data.rows[0].area
+                    if (res.data.rowCount != 0) {
+                        additionalData = {
+                            name: res.data.rows[0].name,
+                            area: res.data.rows[0].area
+                        }
                     }
                     break;
                 case "uuid":
@@ -104,10 +112,12 @@ class TrackingHistory extends React.Component{
                         item.id = index + 1
                         return item
                     })
-                    additionalData = {
-                        description: res.data.rows[0].description,
-                        area: res.data.rows[0].area
-                    }                        
+                    if (res.data.rowCount != 0) {
+                        additionalData = {
+                            description: res.data.rows[0].description,
+                            area: res.data.rows[0].area
+                        }  
+                    }
                     break;
             }
 
@@ -142,6 +152,9 @@ class TrackingHistory extends React.Component{
                     startTime: "",
                     endTime: "",
                 }}
+
+                initialStatus={locale.texts.WAIT_FOR_SEARCH}
+
                 validationSchema = {
                     Yup.object().shape({
 
@@ -166,7 +179,7 @@ class TrackingHistory extends React.Component{
                                     locale.texts.LBEACON_FORMAT_IS_NOT_CORRECT,
                                     value => {  
                                         if (value == undefined) return false
-                                        let pattern = new RegExp("^[0-9A-Za-z]{8}-?[0-9A-Za-z]{4}-?[0-9A-Za-z]{4}-?[0-9A-Za-z]{4}-?[0-9A-Za-z]{12}$");
+                                        let pattern = new RegExp("^[0-9A-Fa-f]{8}-?[0-9A-Fa-f]{4}-?[0-9A-Fa-f]{4}-?[0-9A-Fa-f]{4}-?[0-9A-Fa-f]{12}$");
                                         return value.match(pattern)
                                     }
                                 )
@@ -191,8 +204,8 @@ class TrackingHistory extends React.Component{
                             ),
                 })}
 
-                onSubmit={(values, { setSubmitting }) => {
-                    this.getLocationHistory(values, setSubmitting)
+                onSubmit={(values, { setSubmitting, setStatus }) => {
+                    this.getLocationHistory(values, setSubmitting, setStatus)
                 }}
             
                 render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm, setErrors, setTouched, setSubmitting }) => (
@@ -332,15 +345,16 @@ class TrackingHistory extends React.Component{
                                     }
                                 </Row>
                             }
+                            <hr/>
                             {isSubmitting && <Loader />}
-                            {this.state.data.length != 0 && 
+                            {this.state.data.length != 0 ? 
                                 (
                                     <ReactTable
                                         keyField='id'
                                         data={this.state.data}
                                         columns={this.state.columns}
                                         className="-highlight mt-4"
-                                        style={{maxHeight: '65vh'}} 
+                                        style={{maxHeight: '65vh', minHeight: '30vh'}} 
                                         pageSize={this.state.data.length}
                                         {...styleConfig.reactTable}
                                         getTrProps={(state, rowInfo, column, instance) => {
@@ -380,6 +394,7 @@ class TrackingHistory extends React.Component{
                                         }}                                     
                                     />
                                 )
+                                :   <NoDataFoundDiv>{status}</NoDataFoundDiv>
                             }
                           
                         </div>  

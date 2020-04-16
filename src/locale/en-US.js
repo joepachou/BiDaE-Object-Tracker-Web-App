@@ -309,6 +309,8 @@ const en =  {
     TYPE_MAC_OR_NAME: "type mac address or name",
     ADD_A_COMMENT: "Add a comment...",
     TYPING: "typing...",
+    WAIT_FOR_SEARCH: "wait for search...",
+    NO_DATA_FOUND: "no data found",
 
     /* Object Status */
     STATUS: "status",

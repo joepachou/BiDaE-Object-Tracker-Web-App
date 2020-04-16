@@ -53,6 +53,9 @@ const FormikFormGroup = ({
                                 className={'form-control' + (error && touched ? ' is-invalid' : '')} 
                                 placeholder={placeholder}
                                 disabled={disabled}
+                                style={{
+                                    letterSpacing: 1,
+                                }}
                             />
                         :
                         <div>
@@ -62,6 +65,9 @@ const FormikFormGroup = ({
                                 className={'form-control' + (error && touched ? ' is-invalid' : '')} 
                                 placeholder={placeholder}
                                 disabled={disabled}
+                                style={{
+                                    letterSpacing: 1,
+                                }}
                             />
                         </div>
                     )
