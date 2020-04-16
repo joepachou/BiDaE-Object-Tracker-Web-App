@@ -26,18 +26,10 @@ class EditPatientForm extends React.Component {
         axios.post(path, {
             formOption: postOption
         }).then(res => { 
- 
-            this.setState({
-                position: toast.POSITION.TOP_RIGHT,
-                autoClose: 5000,
-                hideProgressBar: true
-            } )
-
-
+            this.props.handleSubmitForm()
         }).catch( error => {
             console.log(error)
         })
-       this.props.handleSubmitForm()
     }
 
     render() {
@@ -131,28 +123,30 @@ class EditPatientForm extends React.Component {
                        
                         validationSchema = {
                             Yup.object().shape({
+
                                 name: Yup.string().required(locale.texts.NAME_IS_REQUIRED),
                                  
                                 area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
+
                                 gender: Yup.string().required(locale.texts.GENDER_IS_REQUIRED),
-             
 
                                 asset_control_number: Yup.string()
                                     .required(locale.texts.NUMBER_IS_REQUIRED)
                                     .test(
                                         'asset_control_number',
                                         locale.texts.THE_Patient_Number_IS_ALREADY_USED,
-                                            value => {
-                                                return value === selectedRowData.asset_control_number ||
-                                                    !this.props.data.map(item => item.asset_control_number).includes(value)
-                                        }
-                                    )
-                                    .test(
-                                        'asset_control_number',
-                                        locale.texts.THE_Patient_Number_IS_ALREADY_USED,
-                                            value => {
-                                                return value === selectedRowData.asset_control_number ||
-                                                    !this.props.objectData.map(item => item.asset_control_number).includes(value)
+                                        value => {  
+                                            if (value == undefined) return false
+
+                                            if(!this.props.disableASN){
+                                                if (value != null){
+                                                    if ((this.props.objectTable.map(item => item.asset_control_number.toUpperCase()).includes(value.toUpperCase()))){
+                                                        return false ;
+                                                    } 
+                                                } 
+                                            } 
+                                            return true; 
+
                                         }
                                     ),
 
@@ -164,15 +158,7 @@ class EditPatientForm extends React.Component {
                                         locale.texts.THE_MAC_ADDRESS_IS_ALREADY_USED,
                                         value => {
                                             return value === selectedRowData.mac_address ||
-                                                !this.props.data.map(item => item.mac_address.toUpperCase().replace(/:/g, '')).includes(value.toUpperCase().replace(/:/g, ''))
-                                        }
-                                        
-                                    ).test(
-                                        'mac_address',
-                                        locale.texts.THE_MAC_ADDRESS_IS_ALREADY_USED,
-                                        value => {
-                                            return value === selectedRowData.mac_address ||
-                                                !this.props.objectData.map(item => item.mac_address.toUpperCase().replace(/:/g, '')).includes(value.toUpperCase().replace(/:/g, ''))
+                                                !this.props.objectTable.map(item => item.mac_address.toUpperCase().replace(/:/g, '')).includes(value.toUpperCase().replace(/:/g, ''))
                                         }
                                         
                                     ).test(

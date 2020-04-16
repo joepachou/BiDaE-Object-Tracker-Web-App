@@ -149,11 +149,11 @@ class NavbarContainer extends React.Component {
                 
                 <Navbar.Toggle 
                     aria-controls="responisve-navbar-nav" 
-                    style={{
-                        right: 22,
-                        position: 'fixed',
-                        top: 18,
-                    }}
+                    // style={{
+                    //     right: 22,
+                    //     position: 'fixed',
+                    //     top: 18,
+                    // }}
                 />
                 <Navbar.Collapse id="responsive-navbar-nav">  
                     <Nav className="mr-auto my-auto" >

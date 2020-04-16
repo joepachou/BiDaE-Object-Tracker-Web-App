@@ -213,6 +213,18 @@ const getObjectTable = (objectType, areas_id) => {
 			object_table.asset_control_number, 
 			object_table.status, 
 			object_table.transferred_location, 
+			SPLIT_PART(object_table.transferred_location, ',', 1) AS branch_id,
+			SPLIT_PART(object_table.transferred_location, ',', 2) AS department_id,
+			branch_and_department.branch_name as branch_name,
+			CASE WHEN CAST(
+				COALESCE(
+					NULLIF(SPLIT_PART(object_table.transferred_location, ',', 1), '')
+				, '0') AS INTEGER
+			) IS NOT NULL THEN branch_and_department.department[CAST(
+				COALESCE(
+					NULLIF(SPLIT_PART(object_table.transferred_location, ',', 1), '')
+				, '0') AS INTEGER
+			)] END AS department_name,
 			object_table.mac_address,
 			object_table.monitor_type,
 			object_table.area_id,
@@ -231,7 +243,14 @@ const getObjectTable = (objectType, areas_id) => {
 
 		LEFT JOIN area_table
 		ON area_table.id = object_table.area_id
-			
+
+		LEFT JOIN branch_and_department
+		ON branch_and_department.id = CAST(
+			COALESCE(
+				NULLIF(SPLIT_PART(object_table.transferred_location, ',', 1), '')
+			, '0') AS INTEGER
+		)
+	
 		WHERE object_table.object_type IN (${objectType.map(type => type)})
 		${areas_id ? `AND object_table.area_id IN (${areas_id.map(id => id)})` : ''}
 		ORDER BY 
@@ -1277,17 +1296,12 @@ const deleteDevice = (formOption) => {
 	return query
 }
 
-const deleteObjectWithImport = (idPackage) => {
-	const query = `
-		DELETE FROM object_table
-		WHERE asset_control_number IN (${idPackage.map(item => `'${item}'`)});
-	`
-	return query
-}
-
 const deleteImportData = (idPackage) => {
 	const query = `
 		DELETE FROM import_table
+		WHERE asset_control_number IN (${idPackage.map(item => `'${item}'`)});
+
+		DELETE FROM object_table
 		WHERE asset_control_number IN (${idPackage.map(item => `'${item}'`)});
 	`
 	return query
@@ -2088,7 +2102,6 @@ module.exports = {
 	deletePatient,
 	deleteDevice, 
 	deleteImportData,
-	deleteObjectWithImport,
 	setShift,
 	deleteLBeacon,
 	deleteGateway,

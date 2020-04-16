@@ -130,8 +130,6 @@ app.post('/test/deleteDevice', db.deleteDevice)
 
 app.post('/test/deleteImportData', db.deleteImportData)
 
-app.post('/test/deleteObjectWithImport', db.deleteObjectWithImport)
-
 app.post('/test/deleteLBeacon', db.deleteLBeacon)
 
 app.post('/test/deleteGateway', db.deleteGateway)

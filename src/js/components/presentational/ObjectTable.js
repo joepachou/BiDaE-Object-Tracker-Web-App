@@ -29,6 +29,11 @@ import {
 import AccessControl from '../presentational/AccessControl'
 import SearchBox from './SearchBox';
 import messageGenerator from '../../helper/messageGenerator' 
+import { objectTableColumn } from '../../config/tables'
+import retrieveDataHelper from '../../service/retrieveDataHelper'
+import config from '../../config'
+
+
 class ObjectTable extends React.Component{
 
     static contextType = AppContext
@@ -49,6 +54,157 @@ class ObjectTable extends React.Component{
         formTitle:'',
         disableASN: false,
         done:false,
+        data: [],
+        columns: [],
+        areaTable: [],
+        objectFilter: [],
+        importData: [],
+        filteredData: [],
+        filterSelection: {
+            statusOptions: config.statusOptions.map(item => {
+                return {
+                    value: item,
+                    label: this.context.locale.texts[item.replace(/ /g, '_').toUpperCase()]
+                }
+            }),
+            monitorTypeOptions: config.monitorOptions.map(item => {
+                return {
+                    value: item,
+                    label: item 
+                }
+            }),
+           
+        },
+    }
+
+    componentDidMount = () => {
+        this.getData()
+        this.getAreaTable()
+        this.getImportData()
+    }
+
+    getAreaTable = () => {
+        let {
+            locale
+        } = this.context
+        retrieveDataHelper.getAreaTable()
+            .then(res => {
+                let areaSelection = res.data.rows.map(area => {
+                    return {
+                        value: area.name,
+                        label: locale.texts[area.name]
+                    }
+                })
+                this.setState({
+                    areaTable: res.data.rows,
+                    filterSelection: {
+                        ...this.state.filterSelection,
+                        areaSelection,
+                    }
+                })
+            })
+            .catch(err => {
+                console.log(`get area table failed ${err}`)
+            })
+    }
+
+    getData = (callback) => {
+        let { 
+            locale,
+            auth
+        } = this.context
+
+        retrieveDataHelper.getObjectTable(
+            locale.abbr,
+            auth.user.areas_id,
+            [0, 1, 2]
+        )
+        .then(res => {
+            let columns = _.cloneDeep(objectTableColumn)
+            // let columnPatient = _.cloneDeep(patientTableColumn)
+            let typeList = {} 
+
+            columns.map(field => {
+                field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
+            })
+
+            let data = res.data.rows
+                .filter(item => item.object_type == 0)
+                .map(item => {
+
+                    item.monitor_type = this.getMonitorTypeArray(item, 'object').join('/')
+
+                    item.status = {
+                        value: item.status,
+                        label: item.status ? locale.texts[item.status.toUpperCase()] : null,
+                    }
+                    item.transferred_location = item.transferred_location 
+                        ?   {
+                            value: `${item.branch_id}, ${item.department_id}`,
+                            label: `${item.department_name}, ${item.branch_name}` 
+                        }
+                        : ""
+
+                    if (!Object.keys(typeList).includes(item.type)) { 
+                        typeList[item.type] = {
+                            value: item.type,
+                            label: item.type
+                        }
+                    }
+                    
+                    item.area_name = {
+                        value: item.area_name,
+                        label: locale.texts[item.area_name],
+                        id: item.area_id
+                    }
+
+                    return item
+                }) 
+
+            this.setState({
+                data,
+                isShowEdit: false,
+                showDeleteConfirmation: false,
+                disableASN: false,
+                filteredData: data,
+                columns,
+                objectTable: res.data.rows,
+                filterSelection: {
+                    ...this.state.filterSelection,
+                    typeList,
+                }
+            }, callback)
+
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    }
+
+    getImportData = (callback) => {
+        let { locale } = this.context
+        axios.post(dataSrc.getImportTable, {
+            locale: locale.abbr
+        })
+        .then(res => {
+            this.setState({
+                importData: res.data.rows,
+            }, callback)
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    
+    }
+
+    getMonitorTypeArray = (item, type) => {
+        return Object.keys(config.monitorType)
+            .reduce((checkboxGroup, index) => {
+                if (item.monitor_type & index) {
+                    checkboxGroup.push(config.monitorType[index])
+                }
+                return checkboxGroup
+            }, [])
     }
 
     handleClose = () => {
@@ -65,7 +221,7 @@ class ObjectTable extends React.Component{
         let formOption = []
         var deleteArray = [];
         var deleteCount = 0;
-        this.props.data.map (item => {
+        this.state.data.map (item => {
          
             this.state.selection.map(itemSelect => {
                 itemSelect === item.id
@@ -79,41 +235,32 @@ class ObjectTable extends React.Component{
         
         deleteArray.map( item => {
          
-            this.props.data[item] === undefined ?
+            this.state.data[item] === undefined ?
                 null
                 :
-                formOption.push(this.props.data[item].mac_address)
+                formOption.push(this.state.data[item].mac_address)
             })
            
         axios.post(dataSrc.deleteDevice, {
             formOption
         })
         .then(res => {
-            this.setState({
-                selection: [],
-                selectAll: false,
-            })
+            this.handleSubmitForm()
         })
         .catch(err => {
             console.log(err)
         })
-
-        this.handleSubmitForm()
     }
 
     handleSubmitForm = () => {
 
-        let callback = () => messageGenerator.setSuccessMessage(
-            'save success'
-        )
-        this.setState({
-            isShowEdit: false,
-            showDeleteConfirmation: false,
-            disableASN:false,
-        }, callback)  
-        this.props.refreshData()
+        let callback = () => {
+            messageGenerator.setSuccessMessage(
+                'save success'
+            )
+        }
+        this.getData(callback)
     }
-
 
     toggleSelection = (key, shift, row) => {
         let selection = [...this.state.selection];
@@ -197,6 +344,138 @@ class ObjectTable extends React.Component{
 
     }
 
+       filterData = (data, key, filteredAttribute) => {
+                    
+        this.setState({
+            loadingFlag:  true
+        })
+        const { locale } = this.context  
+        key = key.toLowerCase()
+        let filteredData = data.filter(obj => { 
+            if(filteredAttribute.includes('name')){
+
+                let keyRex = new RegExp(key)
+                if(obj.name.toLowerCase().match(keyRex)){
+                    return true
+                }
+            }
+            if(filteredAttribute.includes('type')){
+
+                let keyRex = new RegExp(key)
+                
+                if(obj.type.toLowerCase().match(keyRex)){
+                    return true
+                }
+            }
+
+            if(filteredAttribute.includes('acn')){
+                let keyRex = new RegExp(key)
+                if(obj.asset_control_number.toLowerCase().match(keyRex)) return true
+
+            }
+
+            if  (filteredAttribute.includes('status')){
+                
+                let keyRex = new RegExp(key.toLowerCase())
+
+                if(obj.status.label.toLowerCase().match(keyRex)){
+                    return true
+                }
+            }
+
+            if (filteredAttribute.includes('area')){ 
+                let keyRex = new RegExp(key) 
+                if (obj.area_name.label != undefined){
+                    if (obj.area_name.label.match(keyRex)) {
+                       return true 
+                    }
+                } 
+            }
+
+            if (filteredAttribute.includes('monitor')){
+                let keyRex = new RegExp(key)
+                if(obj.monitor_type.toLowerCase().match(keyRex)){
+                    return true
+                }
+            }
+
+            if  (filteredAttribute.includes('macAddress')){
+
+                let keyRex = key.replace(/:/g, '')
+                if (obj.mac_address.replace(/:/g, '').toLowerCase().match(keyRex)) return true
+            }
+
+            if(filteredAttribute.includes('sex')){
+               
+                if (obj.object_type == key){
+                    return true
+                }
+            }
+ 
+            if(filteredAttribute.includes('physician_name')){
+              
+                let keyRex = new RegExp(key)
+
+                if (obj.physician_name && obj.physician_name.toLowerCase().match(keyRex)){
+                    return true
+                } 
+            }
+
+            return false
+        })
+        this.setState({ loadingFlag:  false })
+        return filteredData
+        
+    }
+
+    addObjectFilter = (key, attribute, source) => {
+
+        this.state.objectFilter = this.state.objectFilter.filter(filter => source != filter.source)
+        
+        this.state.objectFilter.push({
+            key, attribute, source
+        })
+        this.filterObjects()
+    }
+
+    removeObjectFilter = (source) => {
+        this.state.objectFilter = this.state.objectFilter.filter(filter => source != filter.source)
+        this.filterObjects()
+    }
+
+    filterObjects = () => {
+        let filteredData = this.state.objectFilter.reduce((acc, curr) => {
+            return this.filterData(acc, curr.key, curr.attribute)
+        }, this.state.data)
+
+        this.setState({
+            filteredData
+        })
+    }
+
+    addPatientFilter = (key, attribute, source) => {
+        this.state.patientFilter = this.state.patientFilter.filter(filter => source != filter.source)
+        this.state.patientFilter.push({
+            key, attribute, source
+        }) 
+       
+        this.filterPatients()
+    }
+
+    removePatientFilter = (source) => {
+        this.state.patientFilter = this.state.patientFilter.filter(filter => source != filter.source)
+        this.filterPatients()
+    }
+
+    filterPatients = () => {
+        let filteredPatient = this.state.patientFilter.reduce((acc, curr) => {
+            return this.filterData(acc, curr.key, curr.attribute)
+        }, this.state.dataPatient)
+        this.setState({
+            filteredPatient
+        }) 
+    }
+
 
     render(){
         const {  
@@ -220,20 +499,8 @@ class ObjectTable extends React.Component{
         };
 
         const { locale } = this.context 
+        let typeSelection = this.state.filterSelection.typeList ? Object.values(this.state.filterSelection.typeList) : null;
 
-        const Loader = () => {
-            return ( 
-                <LoaderWrapper>
-                    <ReactLoading type={"bars"} color={"black"}  /> 
-                </LoaderWrapper>
-            ) 
-        }
-        const aLoader = () => {
-            return ( 
-                    null
-            ) 
-        }
- 
         return(
     
             <div> 
@@ -244,7 +511,7 @@ class ObjectTable extends React.Component{
                                 className='float-right'
                                 placeholder={locale.texts.SEARCH}
                                 getSearchKey={(key) => {
-                                    this.props.addObjectFilter(
+                                    this.addObjectFilter(
                                         key, 
                                         ['name', 'type', 'area', 'status', 'macAddress', 'acn'], 
                                         'search bar',
@@ -264,12 +531,12 @@ class ObjectTable extends React.Component{
                                     styles={styleConfig.reactSelect}
                                     onChange={(value) => { 
                                         if(value){
-                                            this.props.addObjectFilter(value.label, ['type'], 'type select' )
+                                            this.addObjectFilter(value.label, ['type'], 'type select' )
                                         }else{
-                                            this.props.removeObjectFilter('type select')
+                                            this.removeObjectFilter('type select')
                                         }
                                     }}
-                                    options={this.props.typeSelection}
+                                    options={typeSelection}
                                     isClearable={true}
                                     isSearchable={false}
                                     placeholder={locale.texts.TYPE}
@@ -284,12 +551,12 @@ class ObjectTable extends React.Component{
                                     styles={styleConfig.reactSelect}
                                     onChange={(value) => {
                                         if(value){
-                                            this.props.addObjectFilter(value.label, ['area'], 'area select')
+                                            this.addObjectFilter(value.label, ['area'], 'area select')
                                         }else{
-                                            this.props.removeObjectFilter('area select')
+                                            this.removeObjectFilter('area select')
                                         }
                                     }}
-                                    options={this.props.filterSelection.areaSelection}
+                                    options={this.state.filterSelection.areaSelection}
                                     isClearable={true}
                                     isSearchable={false}
                                     placeholder={locale.texts.AREA}
@@ -303,9 +570,9 @@ class ObjectTable extends React.Component{
                                     styles={styleConfig.reactSelect}
                                     onChange={(value) => {
                                         if(value){
-                                            this.props.addObjectFilter(value.label, ['status'], 'status select')
+                                            this.addObjectFilter(value.label, ['status'], 'status select')
                                         }else{
-                                            this.props.removeObjectFilter('status select')
+                                            this.removeObjectFilter('status select')
                                         }
                                     }}
                                     options={this.props.filterSelection.statusOptions}
@@ -350,32 +617,30 @@ class ObjectTable extends React.Component{
                     </AccessControl>
                 </div>
                 <hr/>
-
-                {this.props.data.length != 0 &&
+                {this.state.filteredData.length != 0 &&
                     <SelectTable
                         keyField='id'
-                        data={this.props.data}
-                        columns={this.props.columns}
+                        data={this.state.filteredData}
+                        columns={this.state.columns}
                         ref={r => (this.selectTable = r)}
                         className="-highlight text-none"
-                        noDataText={this.props.loadingFlag ? '' :'No rows found'} 
-                        LoadingComponent={this.props.loadingFlag? Loader :aLoader}
+
                         onPageChange={(e) => {this.setState({selectAll:false,selection:''})}} 
                         {...extraProps}
                         {...styleConfig.reactTable}
-                        pageSize={this.props.data.length}
+                        pageSize={this.state.filteredData.length}
                         style={{maxHeight:'75vh'}} 
                         getTrProps={(state, rowInfo, column, instance) => {
                             return {
                                 onClick: (e) => {  
                                     if (!e.target.type) {
                                         this.setState({
-                                        isShowEdit:true,
-                                        selectedRowData: this.props.data[rowInfo.index],
-                                        formTitle: 'edit object',
-                                        formPath: dataSrc.editObject,
-                                        disableASN:true
-                                    })
+                                            isShowEdit:true,
+                                            selectedRowData: this.state.data[rowInfo.index],
+                                            formTitle: 'edit object',
+                                            formPath: dataSrc.editObject,
+                                            disableASN:true
+                                        })
                                     } 
                                 },
                             }
@@ -390,11 +655,10 @@ class ObjectTable extends React.Component{
                     handleSubmitForm={this.handleSubmitForm}
                     handleClose={this.handleClose}
                     formPath={this.state.formPath}
-                    data={this.props.data}
-                    importData={this.props.importData}
-                    objectTable={this.props.objectTable}
+                    data={this.state.data}
+                    objectTable={this.state.objectTable}
                     disableASN = {this.state.disableASN  }
-                    areaTable={this.props.areaTable}
+                    areaTable={this.state.areaTable}
                 />     
                 <BindForm
                     show = {this.state.isShowBind} 
@@ -404,7 +668,7 @@ class ObjectTable extends React.Component{
                     formPath={this.state.formPath}
                     handleClose={this.handleClose}
                     objectTable={this.props.objectTable}
-                    ImportData= {this.props.importData}
+                    ImportData= {this.state.importData}
                     areaTable={this.props.areaTable}
                     PatientImportData = {this.props.dataImportPatient}
                     data={this.props.importData.reduce((dataMap, item) => {
@@ -419,8 +683,8 @@ class ObjectTable extends React.Component{
                     selectedRowData={this.state.selectedRowData || 'handleAllDelete'} 
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={'xx'}
-                    objectTable={this.props.objectTable}
-                    refreshData = {this.props.refreshData}
+                    objectTable={this.state.objectTable}
+                    refreshData={this.state.refreshData}
                     handleClose={this.handleClose}
                     data={this.props.objectTable.reduce((dataMap, item) => {
                         dataMap[item.mac_address] = item

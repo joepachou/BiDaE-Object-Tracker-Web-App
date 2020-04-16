@@ -20,6 +20,9 @@ import {
     editPatient,
     addPatient,
     deleteDevice,
+    getLbeaconTable,
+    getUserList,
+    getImportPatient
 } from "../../dataSrc"
 import {
     LoaderWrapper, 
@@ -29,7 +32,10 @@ import ReactLoading from "react-loading";
 import styled from 'styled-components'
 import messageGenerator from '../../helper/messageGenerator'
 const SelectTable = selecTableHOC(ReactTable);
-import AccessControl from './AccessControl'
+import AccessControl from './AccessControl';
+import { patientTableColumn } from '../../config/tables'
+import retrieveDataHelper from '../../service/retrieveDataHelper'
+import config from '../../config'
 
 
 class PatientTable extends React.Component{
@@ -47,6 +53,192 @@ class PatientTable extends React.Component{
         formTitle:'',
         disableASN: false,
         done:false,
+        data: [],
+        columns: [],
+        areaTable: [],
+        physicianList: [],
+        roomOptions: [],
+        objectFilter: [],
+        importData: [],
+        filteredData: [],
+        filterSelection: {
+            statusOptions: config.statusOptions.map(item => {
+                return {
+                    value: item,
+                    label: this.context.locale.texts[item.replace(/ /g, '_').toUpperCase()]
+                }
+            }),
+            monitorTypeOptions: config.monitorOptions.map(item => {
+                return {
+                    value: item,
+                    label: item 
+                }
+            }),
+           
+        },
+    }
+
+    componentDidMount = () => {
+        this.getData();
+        this.getAreaTable();
+        this.getLbeaconData();
+        this.getPhysicianList();
+        this.getImportData();
+    }
+
+    getData = (callback) => {
+        let { 
+            locale,
+            auth
+        } = this.context
+
+        retrieveDataHelper.getObjectTable(
+            locale.abbr,
+            auth.user.areas_id,
+            [0, 1, 2]
+        )
+        .then(res => {
+            let columns = _.cloneDeep(patientTableColumn)
+            let data = [] 
+            let typeList = {} 
+
+            columns.map(field => {
+                field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
+            })
+
+            res.data.rows
+            .filter(item => item.object_type != 0)
+            .map(item => {
+
+                item.monitor_type = this.getMonitorTypeArray(item, 'patient').join('/')
+                item.object_type = locale.texts.genderSelect[item.object_type]
+                
+                item.area_name = {
+                    value: item.area_name,
+                    label: locale.texts[item.area_name],
+                    id: item.area_id
+                }
+                data.push(item)
+
+            }) 
+
+            this.setState({
+                data,
+                isShowEdit: false,
+                showDeleteConfirmation: false,
+                isPatientShowEdit: false,
+                disableASN: false,
+                filteredData: data,
+                columns,
+                // dataPatient,
+                // filteredPatient: dataPatient,
+                // columnPatient,
+                objectTable: res.data.rows,
+                // filterSelection: {
+                //     ...this.state.filterSelection,
+                //     typeList,
+                // }
+            }, callback)
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    }
+
+    getImportData = () => {
+        let { locale } = this.context
+        axios.post(getImportPatient, {
+            locale: locale.abbr
+        })
+        .then(res => {
+            this.setState({
+                importData: res.data.rows,
+            })
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    
+    }
+
+    getAreaTable = () => {
+        let {
+            locale
+        } = this.context
+        retrieveDataHelper.getAreaTable()
+            .then(res => {
+                let areaSelection = res.data.rows.map(area => {
+                    return {
+                        value: area.name,
+                        label: locale.texts[area.name]
+                    }
+                })
+                this.setState({
+                    areaTable: res.data.rows,
+                    areaSelection,
+                    filterSelection: {
+                        ...this.state.filterSelection,
+                        areaSelection,
+                    }
+                })
+            })
+            .catch(err => {
+                console.log(`get area table failed ${err}`)
+            })
+    }
+
+    getMonitorTypeArray = (item, type) => {
+        return Object.keys(config.monitorType)
+            .reduce((checkboxGroup, index) => {
+                if (item.monitor_type & index) {
+                    checkboxGroup.push(config.monitorType[index])
+                }
+                return checkboxGroup
+            }, [])
+    }
+
+    getLbeaconData = () => {
+        let { locale } = this.context
+        axios.post(getLbeaconTable, {
+            locale: locale.abbr
+        })
+        .then(res => {
+            let roomOptions = []
+            res.data.rows.map(item => {
+                if (item.room) {
+                    roomOptions.push({
+                        value: item.id,
+                        label: item.room
+                    })
+                }
+            })  
+            this.setState({
+                roomOptions,
+            })
+        })
+        .catch(err => {
+            console.log("get lbeacon data fail : " + err);
+        })
+    }
+
+    getPhysicianList = () => {
+        let { locale } = this.context
+        axios.post(getUserList, {
+            locale: locale.abbr 
+        })
+        .then(res => {
+            let physicianList = res.data.rows
+                .filter(user => {
+                    return user.role_type.includes("care_provider")
+                })
+
+            this.setState({
+                physicianList
+            })
+        })
+        .catch(err => {
+            console.log(err)
+        })
     }
 
     handleClose = () => {
@@ -61,23 +253,21 @@ class PatientTable extends React.Component{
 
     handleClick = (e) => {
         this.setState({
-            disableASN:false,
-            isPatientShowEdit:true,
+            disableASN: false,
+            isPatientShowEdit: true,
             formTitle: 'add inpatient',
             formPath: addPatient,
+            selectedRowData:'',
         })
     }
 
     handleSubmitForm = () => {
-        let callback = () => messageGenerator.setSuccessMessage(
-            'save success'
-        )
-        this.setState({
-            isPatientShowEdit:false,
-            showDeleteConfirmation:false,
-            disableASN:false,
-        }, callback) 
-        this.props.refreshData()
+        let callback = () => {
+            messageGenerator.setSuccessMessage(
+                'save success'
+            )
+        }
+        this.getData(callback)
     }
 
 
@@ -154,7 +344,7 @@ class PatientTable extends React.Component{
         var deleteArray = [];
         var deleteCount = 0;
  
-        this.props.data.map (item => {
+        this.state.data.map (item => {
          
             this.state.selection.map(itemSelect => {
                 itemSelect === item.id
@@ -168,29 +358,160 @@ class PatientTable extends React.Component{
         
         deleteArray.map( item => {
          
-            this.props.data[item] === undefined ?
+            this.state.data[item] === undefined ?
                 null
                 :
-                formOption.push(this.props.data[item].mac_address)
+                formOption.push(this.state.data[item].mac_address)
             })
            
         axios.post(deleteDevice, {
             formOption
         })
         .then(res => {
-            this.setState({
-                selection: [],
-                selectAll: false,
-            })
+            this.handleSubmitForm()
         })
         .catch(err => {
             console.log(err)
         })
+    }
 
-        this.handleSubmitForm()
+
+    filterData = (data, key, filteredAttribute) => {
+                    
+        this.setState({
+            loadingFlag:  true
+        })
+        const { locale } = this.context  
+        key = key.toLowerCase()
+        let filteredData = data.filter(obj => { 
+            if(filteredAttribute.includes('name')){
+
+                let keyRex = new RegExp(key)
+                if(obj.name.toLowerCase().match(keyRex)){
+                    return true
+                }
+            }
+            if(filteredAttribute.includes('type')){
+
+                let keyRex = new RegExp(key)
+                
+                if(obj.type.toLowerCase().match(keyRex)){
+                    return true
+                }
+            }
+
+            if(filteredAttribute.includes('acn')){
+                let keyRex = new RegExp(key)
+                if(obj.asset_control_number.toLowerCase().match(keyRex)) return true
+
+            }
+
+            if  (filteredAttribute.includes('status')){
+                
+                let keyRex = new RegExp(key.toLowerCase())
+
+                if(obj.status.label.toLowerCase().match(keyRex)){
+                    return true
+                }
+            }
+
+            if (filteredAttribute.includes('area')){ 
+                let keyRex = new RegExp(key) 
+                if (obj.area_name.label != undefined){
+                    if (obj.area_name.label.match(keyRex)) {
+                       return true 
+                    }
+                } 
+            }
+
+            if (filteredAttribute.includes('monitor')){
+                let keyRex = new RegExp(key)
+                if(obj.monitor_type.toLowerCase().match(keyRex)){
+                    return true
+                }
+            }
+
+            if  (filteredAttribute.includes('macAddress')){
+
+                let keyRex = key.replace(/:/g, '')
+                if (obj.mac_address.replace(/:/g, '').toLowerCase().match(keyRex)) return true
+            }
+
+            if(filteredAttribute.includes('sex')){
+               
+                if (obj.object_type == key){
+                    return true
+                }
+            }
+ 
+            if(filteredAttribute.includes('physician_name')){
+              
+                let keyRex = new RegExp(key)
+
+                if (obj.physician_name && obj.physician_name.toLowerCase().match(keyRex)){
+                    return true
+                } 
+            }
+
+            return false
+        })
+        this.setState({ loadingFlag:  false })
+        return filteredData
+        
+    }
+
+    addObjectFilter = (key, attribute, source) => {
+
+        this.state.objectFilter = this.state.objectFilter.filter(filter => source != filter.source)
+        
+        this.state.objectFilter.push({
+            key, attribute, source
+        })
+        this.filterObjects()
+    }
+
+    removeObjectFilter = (source) => {
+        this.state.objectFilter = this.state.objectFilter.filter(filter => source != filter.source)
+        this.filterObjects()
+    }
+
+    filterObjects = () => {
+        let filteredData = this.state.objectFilter.reduce((acc, curr) => {
+            return this.filterData(acc, curr.key, curr.attribute)
+        }, this.state.data)
+
+        this.setState({
+            filteredData
+        })
+    }
+
+    addPatientFilter = (key, attribute, source) => {
+        this.state.patientFilter = this.state.patientFilter.filter(filter => source != filter.source)
+        this.state.patientFilter.push({
+            key, attribute, source
+        }) 
+       
+        this.filterPatients()
+    }
+
+    removePatientFilter = (source) => {
+        this.state.patientFilter = this.state.patientFilter.filter(filter => source != filter.source)
+        this.filterPatients()
+    }
+
+    filterPatients = () => {
+        let filteredPatient = this.state.patientFilter.reduce((acc, curr) => {
+            return this.filterData(acc, curr.key, curr.attribute)
+        }, this.state.dataPatient)
+        this.setState({
+            filteredPatient
+        }) 
     }
 
     render(){
+
+        const { locale } = this.context 
+
         const {  
             selectedRowData,
             selectAll,
@@ -211,19 +532,6 @@ class PatientTable extends React.Component{
             selectType
         };
 
-        const Loader = () => {
-            return ( 
-                <LoaderWrapper>
-                    <ReactLoading type={"bars"} color={"black"}  /> 
-                </LoaderWrapper>
-            ) 
-        }
-        const aLoader = () => {
-            return ( 
-                    null
-            ) 
-        }
-        const { locale } = this.context 
         return(
             <div> 
                 <div className="d-flex justify-content-between">
@@ -233,7 +541,7 @@ class PatientTable extends React.Component{
                                 className={'float-right'}
                                 placeholder={locale.texts.SEARCH}
                                 getSearchKey={(key) => {
-                                    this.props.addPatientFilter(
+                                    this.addObjectFilter(
                                         key, 
                                         ['name', 'area', 'macAddress', 'acn', 'monitor', 'physician_name'], 
                                         'search bar'
@@ -253,12 +561,12 @@ class PatientTable extends React.Component{
                                     styles={styleConfig.reactSelect}
                                     onChange={(value) => {
                                         if(value){
-                                            this.props.addPatientFilter(value.label, ['area'], 'area select')
+                                            this.addObjectFilter(value.label, ['area'], 'area select')
                                         }else{
-                                            this.props.removePatientFilter('area select')
+                                            this.removeObjectFilter('area select')
                                         }
                                     }}
-                                    options={this.props.filterSelection.areaSelection}
+                                    options={this.state.filterSelection.areaSelection}
                                     isClearable={true}
                                     isSearchable={false}
                                     placeholder={locale.texts.SELECT_AREA}
@@ -272,12 +580,12 @@ class PatientTable extends React.Component{
                                     styles={styleConfig.reactSelect}
                                     onChange={(value) => {
                                         if(value){
-                                            this.props.addPatientFilter(value.label, ['monitor'], 'monitor select')
+                                            this.addObjectFilter(value.label, ['monitor'], 'monitor select')
                                         }else{
-                                            this.props.removePatientFilter('monitor select')
+                                            this.removeObjectFilter('monitor select')
                                         }
                                     }}
-                                    options={this.props.filterSelection.monitorTypeOptions}
+                                    options={this.state.filterSelection.monitorTypeOptions}
                                     isClearable={true}
                                     isSearchable={false}
                                     placeholder={locale.texts.SELECT_MONITOR_TYPE}
@@ -315,20 +623,17 @@ class PatientTable extends React.Component{
                     </AccessControl>
                 </div>
                 <hr/>
-
                 <SelectTable
                     keyField='id'
-                    data={this.props.data}
-                    columns={this.props.columns}
+                    data={this.state.filteredData}
+                    columns={this.state.columns}
                     ref={r => (this.selectTable = r)}
                     className="-highlight text-none"
                     style={{maxHeight:'75vh'}} 
-                    noDataText={this.props.loadingFlag ? '' :'No rows found'} 
-                    LoadingComponent={this.props.loadingFlag? Loader :aLoader}
                     onPageChange={(e) => {this.setState({selectAll:false,selection:''})}} 
                     {...extraProps}
                     {...styleConfig.reactTable}
-                    pageSize={this.props.data.length}
+                    pageSize={this.state.filteredData.length}
 
                     getTrProps={(state, rowInfo, column, instance) => {
                         return {
@@ -336,7 +641,7 @@ class PatientTable extends React.Component{
                                 if (!e.target.type) { 
                                     this.setState({
                                     isPatientShowEdit:true,
-                                    selectedRowData: this.props.data[rowInfo.index],
+                                    selectedRowData: this.state.data[rowInfo.index],
                                     formTitle: 'edit patient',
                                     disableASN: true,
                                     formPath: editPatient,
@@ -346,7 +651,6 @@ class PatientTable extends React.Component{
                         }
                     }} 
                 />
-
                 <EditPatientForm
                     show = {this.state.isPatientShowEdit} 
                     title= {this.state.formTitle} 
@@ -355,13 +659,12 @@ class PatientTable extends React.Component{
                     formPath={this.state.formPath}
                     handleClose={this.handleClose}
                     data={this.props.data}
-                    objectData = {this.props.objectTable}
-                    physicianList={this.props.physicianList}
-                    roomOptions={this.props.roomOptions}
+                    objectTable= {this.state.objectTable}
+                    physicianList={this.state.physicianList}
+                    roomOptions={this.state.roomOptions}
                     disableASN = {this.state.disableASN}
-                    areaTable={this.props.areaTable}
+                    areaTable={this.state.areaTable}
                 />  
- 
                 <BindForm
                     show = {this.state.isShowBind} 
                     bindCase = {this.state.bindCase}
@@ -369,10 +672,10 @@ class PatientTable extends React.Component{
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={this.state.formPath}
                     handleClose={this.handleClose}
-                    objectTable={this.props.objectTable}
-                    ImportData= {this.props.importData}
-                    areaTable={this.props.areaTable}
-                    PatientImportData = {this.props.dataImportPatient}
+                    objectTable={this.state.objectTable}
+                    ImportData= {this.state.importData}
+                    areaTable={this.state.areaTable}
+                    PatientImportData = {this.state.importData}
                     data={this.props.importData.reduce((dataMap, item) => {
                         dataMap[item.asset_control_number] = item 
                         return dataMap

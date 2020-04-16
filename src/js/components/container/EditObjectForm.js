@@ -54,7 +54,6 @@ class EditObjectForm extends React.Component {
     }
         
     getTransferredLocation = () => {
-        let { locale } = this.context
         axios.get(dataSrc.getTransferredLocation)
         .then(res => {
             const transferredLocationOptions = res.data.map(branch => {
@@ -65,15 +64,11 @@ class EditObjectForm extends React.Component {
                         .map((department, index) => {
                             return {
                                 label: `${department},${branch.branch_name}`,
-                                value: {
-                                    branch,
-                                    departmentId: index,
-                                }
+                                value: `${branch.id}, ${index}`
                             }
                     }),
                     id: branch.id
                 }
-
             })
             this.setState({
                 transferredLocationOptions
@@ -110,14 +105,12 @@ class EditObjectForm extends React.Component {
             transferred_location,
             area_name,
         } = selectedRowData    
-  
+
         return (
-           
             <Modal 
                 show={show} 
                 onHide={handleClose} 
                 size='md'
-                className='text-capitalize'
             >
                 <Modal.Header 
                     closeButton 
@@ -150,27 +143,31 @@ class EditObjectForm extends React.Component {
 
                         validationSchema = {
                             Yup.object().shape({
+
                                 name: Yup.string().required(locale.texts.NAME_IS_REQUIRED),
+
                                 type: Yup.string().required(locale.texts.TYPE_IS_REQUIRED),
+                                
                                 asset_control_number: Yup.string()
                                     .required(locale.texts.ASSET_CONTROL_NUMBER_IS_REQUIRED)
                                     .test(
                                         'asset_control_number', 
                                         locale.texts.THE_ASSET_CONTROL_NUMBER_IS_ALREADY_USED,
                                         value => {  
+                                            if (value == undefined) return false
+                                            console.log(this.props.objectTable)
                                             if(!this.props.disableASN){
                                                 if (value != null){
-                                                   if ((this.props.data.map(item => item.asset_control_number.toUpperCase()).includes(value.toUpperCase()))  ){
-                                                        return false;
-                                                    }  
                                                     if ((this.props.objectTable.map(item => item.asset_control_number.toUpperCase()).includes(value.toUpperCase()))){
                                                         return false ;
                                                     } 
                                                 } 
                                             } 
                                             return true; 
+
                                         }
                                     ),
+
                                 mac_address: Yup.string()
                                     .required(locale.texts.MAC_ADDRESS_IS_REQUIRED)
 
@@ -185,7 +182,7 @@ class EditObjectForm extends React.Component {
                                             } else {
                                                 var pattern = new RegExp("^[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}$");
                                                 if(value.match(pattern)) {
-                                                    return (!objectTable.map(item => item.mac_address).includes(value.match(/.{1,2}/g).join(':')))
+                                                    return (!this.props.objectTable.map(item => item.mac_address).includes(value.match(/.{1,2}/g).join(':')))
                                                 } 
                                                 return false
                                             }
@@ -213,8 +210,7 @@ class EditObjectForm extends React.Component {
                                         }
                                     ),
 
-                                status: Yup.string()
-                                .required(locale.texts.STATUS_IS_REQUIRED),
+                                status: Yup.string().required(locale.texts.STATUS_IS_REQUIRED),
 
                                 area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
                                 
@@ -237,12 +233,13 @@ class EditObjectForm extends React.Component {
                                         return sum
                                     },0)      
                             }
+                            
                             const postOption = {
                                 id,
                                 ...values,
                                 status: values.status,
                                 transferred_location: values.status === config.objectStatus.TRANSFERRED 
-                                    ? `${values.transferred_location.value.branch.id},${values.transferred_location.value.departmentId}`
+                                    ? values.transferred_location.value
                                     : '',
                                 monitor_type: monitor_type || 0,
                                 area_id: values.area.id || 0

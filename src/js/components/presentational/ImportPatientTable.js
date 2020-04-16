@@ -1,6 +1,5 @@
 import React from 'react';
 import { Form, Button,Container,   ButtonToolbar,Row,Col } from 'react-bootstrap';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { AppContext } from '../../context/AppContext';
 import ReactTable from 'react-table'; 
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
@@ -20,6 +19,8 @@ import {
     PrimaryButton
 } from '../../config/styleComponent'
 import AccessControl from './AccessControl'
+import { importTableColumn } from '../../config/tables'
+import { getImportPatient } from '../../dataSrc'
 
 class ImportObjectTable extends React.Component{
     static contextType = AppContext   
@@ -28,12 +29,35 @@ class ImportObjectTable extends React.Component{
         selection: [],
         selectAll: false,
         showDeleteConfirmation:false,
-        filetext:''
+        filetext:'',
+        data: [],
+        columns: [],
     }
 
+    componentDidMount = () =>{
+        this.getData()
+    }
 
-    componentDidUpdate = (prevProps, prevState) => {
-       
+    getData = () => {
+        let { locale } = this.context
+        axios.post(getImportPatient, {
+            locale: locale.abbr
+        })
+        .then(res => {
+            let columns = _.cloneDeep(importTableColumn)
+            columns.map(field => {
+                field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
+            })
+            
+            this.setState({
+                data: res.data.rows,
+                columns
+            })
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    
     }
 
     handleClose = () => {
@@ -207,7 +231,7 @@ class ImportObjectTable extends React.Component{
                     let ReapeName = ''; 
                     data.map(importData =>{
                         reapetFlag = false;
-                        this.props.dataImportPatient.map(dataOrigin=>{
+                        this.props.dataPatient.map(dataOrigin=>{
                            importData.asset_control_number === dataOrigin.asset_control_number ? reapetFlag=true : null
                            importData.asset_control_number == dataOrigin.asset_control_number ? reapetFlag=true : null
                         })
@@ -288,7 +312,6 @@ class ImportObjectTable extends React.Component{
             selectType
         };
 
-       
         return(
             <div> 
                 <div className="d-flex justify-content-between">
@@ -317,12 +340,12 @@ class ImportObjectTable extends React.Component{
                 <hr/>
                 <SelectTable
                     keyField='asset_control_number'
-                    data={this.props.dataImportPatient}
-                    columns={this.props.columnImport}
+                    data={this.state.data}
+                    columns={this.state.columns}
                     ref={r => (this.selectTable = r)}
                     className="-highlight"
                     style={{maxHeight:'75vh'}} 
-                    pageSize={this.props.dataImportPatient.length}
+                    pageSize={this.state.data.length}
                     onPageChange={(e) => {this.setState({selectAll:false,selection:''})}} 
                     {...extraProps}
                     {...styleConfig.reactTable}
