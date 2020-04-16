@@ -42,10 +42,10 @@ class EditObjectForm extends React.Component {
         this.getTransferredLocation();
     }
     
-    handleSubmit = (postOption) => {
+    handleSubmit = (formOption) => {
         const path = this.props.formPath 
         axios.post(path, {
-            formOption: postOption
+            formOption,
         }).then(res => {
             this.props.handleSubmitForm()
         }).catch(error => {
@@ -75,7 +75,6 @@ class EditObjectForm extends React.Component {
             })
         })
     }
-
     render() {
         const { locale } = this.context
 
@@ -129,13 +128,13 @@ class EditObjectForm extends React.Component {
                             status: status.value ,
                             area: area_name || '',
                             select: status.value === config.objectStatus.TRANSFERRED 
-                                ? transferred_location 
-                                : '',
+                                ?   transferred_location 
+                                : ' ',
                             checkboxGroup: selectedRowData.length !== 0 
                                 ?   selectedRowData.monitor_type == 0 
-                                    ? null
-                                    : selectedRowData.monitor_type.split('/') 
-                                : [],
+                                        ? null
+                                        : selectedRowData.monitor_type.split('/') 
+                                :   [],
                             transferred_location:status.value === config.objectStatus.TRANSFERRED 
                                 ? transferred_location 
                                 : '',
@@ -155,7 +154,6 @@ class EditObjectForm extends React.Component {
                                         locale.texts.THE_ASSET_CONTROL_NUMBER_IS_ALREADY_USED,
                                         value => {  
                                             if (value == undefined) return false
-                                            console.log(this.props.objectTable)
                                             if(!this.props.disableASN){
                                                 if (value != null){
                                                     if ((this.props.objectTable.map(item => item.asset_control_number.toUpperCase()).includes(value.toUpperCase()))){
@@ -222,17 +220,14 @@ class EditObjectForm extends React.Component {
                         })}
                        
                         onSubmit={(values, { setStatus, setSubmitting }) => {
-                            let monitor_type  = 0 
-                            if ( isNull(values.checkboxGroup)){
-
-                            }else{
-                                monitor_type = values.checkboxGroup
+                            let monitor_type = values.checkboxGroup
+                                ?   values.checkboxGroup
                                     .filter(item => item)
                                     .reduce((sum, item) => {
                                         sum += parseInt(monitorTypeMap[item])
                                         return sum
-                                    },0)      
-                            }
+                                    }, 0)      
+                                :   0
                             
                             const postOption = {
                                 id,
@@ -241,7 +236,7 @@ class EditObjectForm extends React.Component {
                                 transferred_location: values.status === config.objectStatus.TRANSFERRED 
                                     ? values.transferred_location.value
                                     : '',
-                                monitor_type: monitor_type || 0,
+                                monitor_type,
                                 area_id: values.area.id || 0
                             }
 

@@ -229,6 +229,7 @@ const getObjectTable = (objectType, areas_id) => {
 			object_table.monitor_type,
 			object_table.area_id,
 			area_table.name as area_name,
+			object_table.registered_timestamp,
 			object_table.object_type,
 			object_table.id,
 			object_table.room,
@@ -609,7 +610,7 @@ const editPatient = (formOption) => {
 }
 
  
-function addObject (formOption) {
+const addObject = (formOption) => {
 	const text = `
 		INSERT INTO object_table (
 			type, 
@@ -619,7 +620,8 @@ function addObject (formOption) {
 			status,
 			area_id,
 			object_type,
-			registered_timestamp
+			registered_timestamp,
+			monitor_type
 		)
 		VALUES (
 			$1, 
@@ -629,7 +631,8 @@ function addObject (formOption) {
 			$5,
 			$6,
 			0,
-			now()
+			now(),
+			$7
 		);
 	`;
 		
@@ -639,7 +642,8 @@ function addObject (formOption) {
 		formOption.name, 
 		formOption.mac_address,
 		formOption.status,
-		formOption.area_id
+		formOption.area_id,
+		formOption.monitor_type
 	];
 
 

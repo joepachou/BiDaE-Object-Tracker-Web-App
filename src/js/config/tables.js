@@ -360,7 +360,9 @@ const objectTableColumn = [
     },
     {
         Header: "Asset Control Number",
-        accessor: "asset_control_number"
+        accessor: "asset_control_number",
+        width: 200,
+
     },
     {
         Header: "Mac Address",
@@ -382,6 +384,10 @@ const objectTableColumn = [
     {
         Header: "Monitor Type",
         accessor: "monitor_type"
+    },
+    {
+        Header: "registered timestamp",
+        accessor: "registered_timestamp"
     }
 ]
 

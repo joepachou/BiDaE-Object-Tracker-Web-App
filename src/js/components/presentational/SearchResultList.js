@@ -203,7 +203,6 @@ class SearchResult extends React.Component {
                 editedObject.transferred_location_label = editedObject.transferred_location.label
                 editedObject.transferred_location = `${transferred_location.branch.id},${transferred_location.departmentId}`
             }
-            
 
         })
 
@@ -216,27 +215,24 @@ class SearchResult extends React.Component {
             pdfPackage,
             reservedTimestamp
         }).then(res => {
-            setTimeout(
-                () => {
-                    this.setState ({
-                        showConfirmForm: shouldCreatePdf,
-                        showAddDevice: false,
-                        showDownloadPdfRequest: shouldCreatePdf,
-                        pdfPath: shouldCreatePdf && pdfPackage.path,
-                        selection: []
-                    }, () => {
-                        dispatch({
-                            type: 'setUpdateTrackingData',
-                            value: true
-                        })
-                        messageGenerator.setSuccessMessage(
-                            'edit object success'
-                        )
-                    })
 
-                },
-                1000
-            )
+            this.setState ({
+                showConfirmForm: shouldCreatePdf,
+                showAddDevice: false,
+                showDownloadPdfRequest: shouldCreatePdf,
+                pdfPath: shouldCreatePdf && pdfPackage.path,
+                showConfirmForm: false,
+                selection: []
+            }, () => {
+                dispatch({
+                    type: 'setUpdateTrackingData',
+                    value: true
+                })
+                messageGenerator.setSuccessMessage(
+                    'edit object success'
+                )
+            })
+
         }).catch( error => {
             console.log(error)
         })
