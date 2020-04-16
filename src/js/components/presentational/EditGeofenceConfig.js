@@ -20,8 +20,7 @@ import LocaleContext from '../../context/LocaleContext';
 import FormikFormGroup from './FormikFormGroup'
 import RadioButtonGroup from '../container/RadioButtonGroup';
 import RadioButton from './RadioButton'
-import messageGenerator from '../../helper/messageGenerator'
- 
+import messageGenerator from '../../helper/messageGenerator' 
 let style = {
     icon: {
         minus: {
@@ -61,23 +60,22 @@ const EditGeofenceConfig = ({
         auth,
         locale
     } = appContext
-
-     
+  
     areaOptions = auth.user.areas_id
-        .filter(item => {
+        .filter(item => { 
             return areaOptions[item]
         })
-        .map(item => {
+        .map(item => { 
             return {
                 value: areaOptions[item],
                 label: locale.texts[areaOptions[item]],
                 id: item
             }        
-        })
+        }) 
 
-    
-
+ 
     return (
+       
         <Modal  
             show={show} 
             onHide={handleClose} 
@@ -92,8 +90,11 @@ const EditGeofenceConfig = ({
             >
                 {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
             </Modal.Header > 
+            
             <Modal.Body>
+         
                 <Formik
+                
                     initialValues = {{
                         enable: selectedData ? selectedData.enable : 1,
                         name: selectedData ? selectedData.name : '',
@@ -147,7 +148,7 @@ const EditGeofenceConfig = ({
 
                         let callback = () => messageGenerator.setSuccessMessage(
                                             'save success'
-                                        )  
+                                        )   
                         handleSubmit(monitorConfigPackage)
                         callback()
                     }}
@@ -228,7 +229,7 @@ const EditGeofenceConfig = ({
                                                 value={values.area}
                                                 styles={styleConfig.reactSelect}
                                                 isDisabled={isEdited}
-                                                onChange={value => setFieldValue('area', value)}
+                                                onChange={value => setFieldValue('area', value)} 
                                                 components={{
                                                     IndicatorSeparator: () => null,
                                                 }}
@@ -290,7 +291,7 @@ const EditGeofenceConfig = ({
                                 error={errors}
                                 setFieldValue={setFieldValue}
                                 parseLbeaconsGroup={parseLbeaconsGroup}
-                                lbeaconsTable={lbeaconsTable}
+                                lbeaconsTable={lbeaconsTable} 
                             />
                             <Modal.Footer>
                                 <Button 
@@ -318,7 +319,6 @@ const EditGeofenceConfig = ({
   
 export default EditGeofenceConfig;
  
-
 const parseLbeaconsGroup = (type, index) => {
     return [...type.slice(0, index), ...type.slice(index + 1)]
 }
@@ -346,11 +346,30 @@ const TypeGroup = ({
  
 
 
-    let lbeaconOptions = lbeaconsTable.filter(item => {
+    let lbeaconOptions_p = lbeaconsTable.filter(item => {  
+
         let uuid = item.uuid.replace(/-/g, '')
-        return !values.p_lbeacon.includes(uuid) &&
-            !values.f_lbeacon.includes(uuid)
-    }).reduce((options, item, index) => {
+        return !values.p_lbeacon.includes(uuid) 
+
+    })
+    .reduce((options, item, index) => {
+        let uuid = item.uuid.replace(/-/g, '')
+        options.push({
+            id: item.id,
+            value: uuid,
+            label: `${item.description}[${uuid}]`
+        })
+        return options
+    }, [])
+
+
+    let lbeaconOptions_f = lbeaconsTable.filter(item => {  
+        
+        let uuid = item.uuid.replace(/-/g, '')
+        return !values.f_lbeacon.includes(uuid)
+
+    })
+    .reduce((options, item, index) => {
         let uuid = item.uuid.replace(/-/g, '')
         options.push({
             id: item.id,
@@ -381,39 +400,38 @@ const TypeGroup = ({
             <small className="form-text text-muted">
                 UUID
             </small>
-            {repository.map((item, index) => {
+            {repository.map((item, index) => { 
                 return (
-                    <Row noGutters className="py-1" key={index}>
-                        <Col 
-                            lg={1}
-                            className="d-flex align-items-center justify-content-center"
-                        >
-                            <i 
-                                className="fas fa-minus-circle"
-                                style={style.icon.minus}
-                                type={type}
-                                name='remove'
-                                value={index}
-                                onClick={() => {
-                                    let typeGroup = `${abbr}_lbeacon`
-                                    let value = parseLbeaconsGroup(values[typeGroup], index)
-                                    setFieldValue(typeGroup, value)
-                                }}
-                            ></i>  
-                        </Col>
-                        <Col lg={11} className="pr-1">
-                            <Field  
-                                name={`p-${index + 1}-uuid`} 
-                                type="text" 
-                                className={'form-control' + (error.name ? ' is-invalid' : '')} 
-                                placeholder={item}
-                                value={item}
-                                disabled
-                            />  
-                        </Col>
- 
-                        
-                    </Row>
+                    item == 'undefined,' ? null :
+                        <Row noGutters className="py-1" key={index}>
+                            <Col 
+                                lg={1}
+                                className="d-flex align-items-center justify-content-center"
+                            >
+                                <i 
+                                    className="fas fa-minus-circle"
+                                    style={style.icon.minus}
+                                    type={type}
+                                    name='remove'
+                                    value={index}
+                                    onClick={() => {
+                                        let typeGroup = `${abbr}_lbeacon`
+                                        let value = parseLbeaconsGroup(values[typeGroup], index)
+                                        setFieldValue(typeGroup, value)
+                                    }}
+                                ></i>  
+                            </Col>
+                            <Col lg={11} className="pr-1">
+                                <Field  
+                                    name={`p-${index + 1}-uuid`} 
+                                    type="text" 
+                                    className={'form-control' + (error.name ? ' is-invalid' : '')} 
+                                    placeholder={item}
+                                    value={item}
+                                    disabled
+                                />  
+                            </Col> 
+                        </Row>
                 )
             })}
             <Row noGutters className="py-1">
@@ -433,20 +451,35 @@ const TypeGroup = ({
                             let group = values[typeGroup]
                             group.push(values[`selected_${typeGroup}`].value)
                             setFieldValue(typeGroup, group)
-                            setFieldValue(`selected_${abbr}_lbeacon`, null)
+                            setFieldValue(`selected_${abbr}_lbeacon`, null) 
                         }}
                     >
                     </i>
                 </Col>
                 
-                <Col lg={11} className="pr-1"> 
+                <Col lg={11} className="pr-1">  
                     <Select
                         placeholder={locale.texts.SELECT_LBEACON}
                         name={`${abbr}_lbeacon`}
-                        options={lbeaconOptions} 
+                        options={abbr == 'f' ? lbeaconOptions_f : lbeaconOptions_p} 
                         value={values[`selected_${abbr}_lbeacon`]} 
-                        styles={styleConfig.reactSelect}
-                        onChange={value => setFieldValue(`selected_${abbr}_lbeacon`, value)}
+                        styles={styleConfig.reactSelect} 
+
+                        onChange={value => {  
+                            setFieldValue(`selected_${abbr}_lbeacon`, value)
+
+                            let typeGroup = `${abbr}_lbeacon` 
+                            //  if (!values[`selected_${typeGroup}`]) return
+                            let group = values[typeGroup]
+                            group.push(value.value)
+                            // let group = values[typeGroup]
+                            // group.push(values[`selected_${typeGroup}`].value)
+                            // console.log(group)
+                            setFieldValue(typeGroup, group)
+                            setFieldValue(`selected_${abbr}_lbeacon`, null)  
+                              
+                        }}
+
                         components={{
                             IndicatorSeparator: () => null,
                         }}
