@@ -16,13 +16,10 @@ import CheckboxGroup from './CheckboxGroup'
 import Checkbox from '../presentational/Checkbox'
 import RadioButtonGroup from './RadioButtonGroup'
 import RadioButton from '../presentational/RadioButton'
-import { isNull } from 'util';
 import { AppContext } from '../../context/AppContext';
 import dataSrc from '../../dataSrc'
 import styleConfig from '../../config/styleConfig';
 import FormikFormGroup from '../presentational/FormikFormGroup'
-import { toast } from 'react-toastify';
-import messageGenerator from '../../service/messageGenerator'
  
 let monitorTypeMap = {}; 
 Object.keys(config.monitorType)
@@ -130,7 +127,7 @@ class EditObjectForm extends React.Component {
                             select: status.value === config.objectStatus.TRANSFERRED 
                                 ?   transferred_location 
                                 : ' ',
-                            checkboxGroup: selectedRowData.length !== 0 
+                            monitorType: selectedRowData.length !== 0 
                                 ?   selectedRowData.monitor_type == 0 
                                         ? null
                                         : selectedRowData.monitor_type.split('/') 
@@ -220,8 +217,8 @@ class EditObjectForm extends React.Component {
                         })}
                        
                         onSubmit={(values, { setStatus, setSubmitting }) => {
-                            let monitor_type = values.checkboxGroup
-                                ?   values.checkboxGroup
+                            let monitor_type = values.monitorType
+                                ?   values.monitorType
                                     .filter(item => item)
                                     .reduce((sum, item) => {
                                         sum += parseInt(monitorTypeMap[item])
@@ -239,7 +236,6 @@ class EditObjectForm extends React.Component {
                                 monitor_type,
                                 area_id: values.area.id || 0
                             }
-
                             while (postOption.type[postOption.type.length - 1] == " "){
                                 postOption.type = postOption.type.substring(0, postOption.type.length - 1);       
                             }
@@ -400,16 +396,16 @@ class EditObjectForm extends React.Component {
                                 <FormikFormGroup 
                                     name="asset_control_number"
                                     label={locale.texts.MONITOR_TYPE}
-                                    error={errors.checkboxGroup}
-                                    touched={touched.checkboxGroup}
+                                    error={errors.monitorType}
+                                    touched={touched.monitorType}
                                     placeholder=""
                                     component={() => (
                                         <CheckboxGroup
-                                            id="checkboxGroup"
+                                            id="monitorType"
                                             label={locale.texts.MONITOR_TYPE}
-                                            value={values.checkboxGroup || ''}
-                                            error={errors.checkboxGroup}
-                                            touched={touched.checkboxGroup}
+                                            value={values.monitorType || ''}
+                                            error={errors.monitorType}
+                                            touched={touched.monitorType}
                                             onChange={setFieldValue}
                                         >
                                             {Object.keys(config.monitorType)
@@ -418,7 +414,7 @@ class EditObjectForm extends React.Component {
                                                     return <Field
                                                         key={index}
                                                         component={Checkbox}
-                                                        name="checkboxGroup"
+                                                        name="monitorType"
                                                         id={config.monitorType[key]}
                                                         label={config.monitorType[key]}
                                                     />

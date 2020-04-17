@@ -11,8 +11,7 @@ import CheckboxGroup from './CheckboxGroup'
 import Checkbox from '../presentational/Checkbox'
 import FormikFormGroup from '../presentational/FormikFormGroup'
 import styleConfig from '../../config/styleConfig'
-import { toast } from 'react-toastify';
-import messageGenerator from '../../service/messageGenerator'
+
 let monitorTypeMap = {};
 Object.keys(config.monitorType)
     .forEach(key => {
@@ -106,11 +105,17 @@ class EditPatientForm extends React.Component {
                     <Formik              
                         initialValues = {{
                             area: area_name || '',
+
                             name: name || '' ,
+
                             mac_address: mac_address || '',
+
                             asset_control_number:asset_control_number|| '',
+
                             gender: object_type == locale.texts.FEMALE.toLowerCase() ? genderOptions[1] : genderOptions[0],
+
                             monitorType: selectedRowData.length !== 0 ? monitor_type.split('/') : [],
+
                             room: room 
                                 ? {
                                     value: room,
@@ -177,11 +182,13 @@ class EditPatientForm extends React.Component {
                         onSubmit={(values, { setStatus, setSubmitting }) => {
                          
                             let monitor_type = values.monitorType
-                                .filter(item => item)
-                                .reduce((sum, item) => {
-                                    sum += parseInt(monitorTypeMap[item])
-                                    return sum
-                            },0)
+                                ?   values.monitorType
+                                    .filter(item => item)
+                                    .reduce((sum, item) => {
+                                        sum += parseInt(monitorTypeMap[item])
+                                        return sum
+                                    }, 0)      
+                                :   0
                             
                             physicianList.map(item => { 
                                 if (values.physician)(
@@ -196,7 +203,7 @@ class EditPatientForm extends React.Component {
                                 gender_id : values.gender.value,
                                 monitor_type, 
                                 room: values.room ? values.room.label : '',
-                                object_type:values.gender.value,
+                                object_type: values.gender.value,
                                 physicianIDNumber : values.physician  ? values.physician.value : this.props.physicianIDNumber
                             } 
                             this.handleSubmit(postOption)                            

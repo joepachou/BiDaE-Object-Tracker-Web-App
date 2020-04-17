@@ -327,8 +327,13 @@ const patientTableColumn = [
     },
     {
         Header: "Monitor Type",
-        accessor: "monitor_type"
+        accessor: "monitor_type",
+        width: 250,
     },
+    {
+        Header: "registered timestamp",
+        accessor: "registered_timestamp"
+    }
 ]
 
 const importTableColumn = [

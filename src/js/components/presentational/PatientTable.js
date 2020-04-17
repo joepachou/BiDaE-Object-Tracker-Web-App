@@ -59,6 +59,7 @@ class PatientTable extends React.Component{
         physicianList: [],
         roomOptions: [],
         objectFilter: [],
+        objectTable: [],
         importData: [],
         filteredData: [],
         filterSelection: {
@@ -130,14 +131,7 @@ class PatientTable extends React.Component{
                 disableASN: false,
                 filteredData: data,
                 columns,
-                // dataPatient,
-                // filteredPatient: dataPatient,
-                // columnPatient,
                 objectTable: res.data.rows,
-                // filterSelection: {
-                //     ...this.state.filterSelection,
-                //     typeList,
-                // }
             }, callback)
         })
         .catch(err => {
@@ -658,7 +652,7 @@ class PatientTable extends React.Component{
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={this.state.formPath}
                     handleClose={this.handleClose}
-                    data={this.props.data}
+                    data={this.state.data}
                     objectTable= {this.state.objectTable}
                     physicianList={this.state.physicianList}
                     roomOptions={this.state.roomOptions}
@@ -676,7 +670,7 @@ class PatientTable extends React.Component{
                     ImportData= {this.state.importData}
                     areaTable={this.state.areaTable}
                     PatientImportData = {this.state.importData}
-                    data={this.props.importData.reduce((dataMap, item) => {
+                    data={this.state.importData.reduce((dataMap, item) => {
                         dataMap[item.asset_control_number] = item 
                         return dataMap
                         }, {})
@@ -688,15 +682,16 @@ class PatientTable extends React.Component{
                     selectedRowData={this.state.selectedRowData || 'handleAllDelete'} 
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={this.state.formPath}
-                    objectTable={this.props.objectTable}
+                    objectTable={this.state.objectTable}
                     handleClose={this.handleClose}
-                    data={this.props.objectTable.reduce((dataMap, item) => {
+                    data={this.state.objectTable.reduce((dataMap, item) => {
                         dataMap[item.mac_address] = item
                         return dataMap
                         }, {})
                     }
-                    refreshData={this.props.refreshData}  
+                    refreshData={this.state.refreshData}  
                 />
+
                 <DeleteConfirmationForm
                     show={this.state.showDeleteConfirmation} 
                     handleClose={this.handleClose}

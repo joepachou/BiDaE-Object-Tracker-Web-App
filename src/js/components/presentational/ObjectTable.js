@@ -1,6 +1,5 @@
 import React from 'react';
 import { 
-    Button, 
     ButtonToolbar,
     Row,
     Col 
@@ -17,17 +16,11 @@ import Select from 'react-select';
 import axios from 'axios';
 import BOTInput from '../presentational/BOTInput'
 import dataSrc from "../../dataSrc"
-import FadeIn from "react-fade-in";
-import Lottie from "react-lottie";
-import ReactLoading from "react-loading"; 
-import styled from 'styled-components'
 const SelectTable = selecTableHOC(ReactTable);
-import BOTCheckbox from './BOTCheckbox';
 import {
-    LoaderWrapper, PrimaryButton
+    PrimaryButton
 } from '../../config/styleComponent'
 import AccessControl from '../presentational/AccessControl'
-import SearchBox from './SearchBox';
 import messageGenerator from '../../service/messageGenerator' 
 import { objectTableColumn } from '../../config/tables'
 import retrieveDataHelper from '../../service/retrieveDataHelper'
@@ -57,6 +50,7 @@ class ObjectTable extends React.Component{
         data: [],
         columns: [],
         areaTable: [],
+        objectTable: [],
         objectFilter: [],
         importData: [],
         filteredData: [],
@@ -344,7 +338,7 @@ class ObjectTable extends React.Component{
 
     }
 
-       filterData = (data, key, filteredAttribute) => {
+    filterData = (data, key, filteredAttribute) => {
                     
         this.setState({
             loadingFlag:  true
@@ -453,30 +447,6 @@ class ObjectTable extends React.Component{
         })
     }
 
-    addPatientFilter = (key, attribute, source) => {
-        this.state.patientFilter = this.state.patientFilter.filter(filter => source != filter.source)
-        this.state.patientFilter.push({
-            key, attribute, source
-        }) 
-       
-        this.filterPatients()
-    }
-
-    removePatientFilter = (source) => {
-        this.state.patientFilter = this.state.patientFilter.filter(filter => source != filter.source)
-        this.filterPatients()
-    }
-
-    filterPatients = () => {
-        let filteredPatient = this.state.patientFilter.reduce((acc, curr) => {
-            return this.filterData(acc, curr.key, curr.attribute)
-        }, this.state.dataPatient)
-        this.setState({
-            filteredPatient
-        }) 
-    }
-
-
     render(){
         const {  
             selectedRowData,
@@ -575,7 +545,7 @@ class ObjectTable extends React.Component{
                                             this.removeObjectFilter('status select')
                                         }
                                     }}
-                                    options={this.props.filterSelection.statusOptions}
+                                    options={this.state.filterSelection.statusOptions}
                                     isClearable={true}
                                     isSearchable={false}
                                     placeholder={locale.texts.STATUS}
@@ -667,11 +637,10 @@ class ObjectTable extends React.Component{
                     handleSubmitForm={this.handleSubmitForm}
                     formPath={this.state.formPath}
                     handleClose={this.handleClose}
-                    objectTable={this.props.objectTable}
+                    objectTable={this.state.objectTable}
                     ImportData= {this.state.importData}
-                    areaTable={this.props.areaTable}
-                    PatientImportData = {this.props.dataImportPatient}
-                    data={this.props.importData.reduce((dataMap, item) => {
+                    areaTable={this.state.areaTable}
+                    data={this.state.importData.reduce((dataMap, item) => {
                         dataMap[item.asset_control_number] = item 
                         return dataMap
                         }, {})
@@ -686,7 +655,7 @@ class ObjectTable extends React.Component{
                     objectTable={this.state.objectTable}
                     refreshData={this.state.refreshData}
                     handleClose={this.handleClose}
-                    data={this.props.objectTable.reduce((dataMap, item) => {
+                    data={this.state.objectTable.reduce((dataMap, item) => {
                         dataMap[item.mac_address] = item
                         return dataMap
                         }, {})
