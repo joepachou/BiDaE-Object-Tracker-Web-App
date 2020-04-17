@@ -18,7 +18,7 @@ import Checkbox from '../../presentational/Checkbox'
 import FormikFormGroup from '../../presentational/FormikFormGroup'
 import styleConfig from '../../../config/styleConfig';
 import LocaleContext from '../../../context/LocaleContext';
-import messageGenerator from '../../../helper/messageGenerator'
+import messageGenerator from '../../../service/messageGenerator'
 const EditUserForm = ({
     show,
     title,

@@ -28,7 +28,7 @@ import {
 } from '../../config/styleComponent'
 import AccessControl from '../presentational/AccessControl'
 import SearchBox from './SearchBox';
-import messageGenerator from '../../helper/messageGenerator' 
+import messageGenerator from '../../service/messageGenerator' 
 import { objectTableColumn } from '../../config/tables'
 import retrieveDataHelper from '../../service/retrieveDataHelper'
 import config from '../../config'

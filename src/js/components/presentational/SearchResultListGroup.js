@@ -6,7 +6,7 @@ import {
     getDescription, 
     getMacaddress,
     getRSSI 
-} from '../../helper/descriptionGenerator'
+} from '../../service/descriptionGenerator'
 import AccessControl from './AccessControl'
 
 

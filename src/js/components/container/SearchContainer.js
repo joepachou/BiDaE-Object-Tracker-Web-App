@@ -11,7 +11,7 @@ import {
     TabletView,
     MobileOnlyView
 } from 'react-device-detect'
-import retrieveDataHelper from '../../helper/retrieveDataHelper';
+import retrieveDataHelper from '../../service/retrieveDataHelper';
 
 class SearchContainer extends React.Component {
 

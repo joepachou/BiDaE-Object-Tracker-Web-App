@@ -5,9 +5,9 @@ import { AppContext } from '../../context/AppContext';
 import {
     trackingTableColumn
 } from '../../config/tables'
-import retrieveDataHelper from '../../helper/retrieveDataHelper'
+import retrieveDataHelper from '../../service/retrieveDataHelper'
 import { toast } from 'react-toastify';
-import messageGenerator from '../../helper/messageGenerator';
+import messageGenerator from '../../service/messageGenerator';
 import styleConfig from '../../config/styleConfig';
  
 

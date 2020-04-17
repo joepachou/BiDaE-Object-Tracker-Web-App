@@ -20,7 +20,7 @@ import LocaleContext from '../../context/LocaleContext';
 import FormikFormGroup from './FormikFormGroup'
 import RadioButtonGroup from '../container/RadioButtonGroup';
 import RadioButton from './RadioButton'
-import messageGenerator from '../../helper/messageGenerator' 
+import messageGenerator from '../../service/messageGenerator' 
 let style = {
     icon: {
         minus: {

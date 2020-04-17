@@ -12,7 +12,7 @@ import Checkbox from '../presentational/Checkbox'
 import FormikFormGroup from '../presentational/FormikFormGroup'
 import styleConfig from '../../config/styleConfig'
 import { toast } from 'react-toastify';
-import messageGenerator from '../../helper/messageGenerator'
+import messageGenerator from '../../service/messageGenerator'
 let monitorTypeMap = {};
 Object.keys(config.monitorType)
     .forEach(key => {

@@ -13,7 +13,7 @@ import {
 } from "../../../dataSrc"
 import NumberPicker from '../NumberPicker';
 import EditAreasForm from '../../presentational/EditAreasForm'
-import retrieveDataHelper from '../../../helper/retrieveDataHelper';
+import retrieveDataHelper from '../../../service/retrieveDataHelper';
 import EditPwdForm from '../../presentational/EditPwdForm'
  
 

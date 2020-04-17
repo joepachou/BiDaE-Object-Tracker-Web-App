@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react';
-import messageGenerator from '../../../helper/messageGenerator'
+import messageGenerator from '../../../service/messageGenerator'
 import { toast } from 'react-toastify';
 import {
     systemSettingModule

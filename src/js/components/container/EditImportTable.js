@@ -11,7 +11,7 @@ import {
     cleanImportData,
     deleteImportData
 } from "../../dataSrc"
-import messageGenerator from '../../helper/messageGenerator'
+import messageGenerator from '../../service/messageGenerator'
 class EditImportTable extends React.Component {
     state = {
         show: this.props.show,

@@ -10,7 +10,7 @@ import {
 import { AppContext } from '../../context/AppContext';
 import Select from 'react-select';
 import config from '../../config'
-import messageGenerator from '../../helper/messageGenerator'
+import messageGenerator from '../../service/messageGenerator'
 
 class BindForm extends React.Component {
 

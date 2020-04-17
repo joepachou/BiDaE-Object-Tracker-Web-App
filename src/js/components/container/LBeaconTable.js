@@ -18,7 +18,7 @@ import {
 } from '../../config/tables';
 import { AppContext } from '../../context/AppContext';
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
-import retrieveDataHelper from '../../helper/retrieveDataHelper'
+import retrieveDataHelper from '../../service/retrieveDataHelper'
 import BOTCheckbox from '../presentational/BOTCheckbox'
 import styleConfig from '../../config/styleConfig'
 import {

@@ -23,8 +23,8 @@ import {
     TabletView
 } from 'react-device-detect'
 import { disableBodyScroll } from 'body-scroll-lock';
-import retrieveDataHelper from '../../helper/retrieveDataHelper';
-import messageGenerator from '../../helper/messageGenerator';
+import retrieveDataHelper from '../../service/retrieveDataHelper';
+import messageGenerator from '../../service/messageGenerator';
 import ObjectListContainer from './ObjectListContainer'
 
 const {

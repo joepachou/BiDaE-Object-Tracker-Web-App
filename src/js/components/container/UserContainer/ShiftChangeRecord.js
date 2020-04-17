@@ -10,7 +10,7 @@ const SelectTable = selecTableHOC(ReactTable);
 import { shiftChangeRecordTableColumn } from '../../../config/tables'
 import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm'
 import { AppContext } from '../../../context/AppContext';
-import retrieveDataHelper from '../../../helper/retrieveDataHelper';
+import retrieveDataHelper from '../../../service/retrieveDataHelper';
 import styleConfig from '../../../config/styleConfig';
 import AccessControl from '../../presentational/AccessControl'
 import {

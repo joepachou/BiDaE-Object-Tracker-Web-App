@@ -15,7 +15,7 @@ import EditUserForm from './EditUserForm';
 import { AppContext } from '../../../context/AppContext';
 import DeleteUserForm from './DeleteUserForm'
 import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm';
-import retrieveDataHelper from '../../../helper/retrieveDataHelper';
+import retrieveDataHelper from '../../../service/retrieveDataHelper';
 import styleConfig from '../../../config/styleConfig';
 const Fragment = React.Fragment;
 import {

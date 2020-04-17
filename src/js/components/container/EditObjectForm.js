@@ -22,7 +22,7 @@ import dataSrc from '../../dataSrc'
 import styleConfig from '../../config/styleConfig';
 import FormikFormGroup from '../presentational/FormikFormGroup'
 import { toast } from 'react-toastify';
-import messageGenerator from '../../helper/messageGenerator'
+import messageGenerator from '../../service/messageGenerator'
  
 let monitorTypeMap = {}; 
 Object.keys(config.monitorType)

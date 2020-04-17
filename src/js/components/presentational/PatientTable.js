@@ -30,7 +30,7 @@ import {
 } from '../../config/styleComponent'
 import ReactLoading from "react-loading"; 
 import styled from 'styled-components'
-import messageGenerator from '../../helper/messageGenerator'
+import messageGenerator from '../../service/messageGenerator'
 const SelectTable = selecTableHOC(ReactTable);
 import AccessControl from './AccessControl';
 import { patientTableColumn } from '../../config/tables'

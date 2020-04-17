@@ -23,7 +23,7 @@ import {
 import moment from 'moment'
 import ScrollArea from 'react-scrollbar'
 import ToastNotification from '../presentational/ToastNotification'
-import messageGenerator from '../../helper/messageGenerator'
+import messageGenerator from '../../service/messageGenerator'
 import PatientViewModal from './PatientViewModal';
 
 

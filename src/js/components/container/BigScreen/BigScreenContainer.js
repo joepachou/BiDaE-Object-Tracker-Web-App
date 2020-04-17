@@ -10,7 +10,7 @@ import _ from 'lodash'
 import axios from 'axios';
 import dataSrc from '../../../dataSrc'
 import { AppContext } from '../../../context/AppContext'
-import retrieveDataHelper from '../../../helper/retrieveDataHelper';
+import retrieveDataHelper from '../../../service/retrieveDataHelper';
 
 class BigScreenContainer extends React.Component{
 

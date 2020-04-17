@@ -29,7 +29,7 @@ import PatientTable from '../../presentational/PatientTable'
 import ImportObjectTable from '../../presentational/ImportObjectTable'
 import ImportPatientTable from '../../presentational/ImportPatientTable' 
 import DissociationForm from '../DissociationForm'
-import retrieveDataHelper from '../../../helper/retrieveDataHelper'
+import retrieveDataHelper from '../../../service/retrieveDataHelper'
 
 class ObjectManagementContainer extends React.Component{
     static contextType = AppContext

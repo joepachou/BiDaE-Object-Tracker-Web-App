@@ -4,12 +4,12 @@ import axios from 'axios';
 import dataSrc from "../../../dataSrc";
 import AddableList from './AddableList'
 import { AppContext } from '../../../context/AppContext';
-import retrieveDataHelper from '../../../helper/retrieveDataHelper'
+import retrieveDataHelper from '../../../service/retrieveDataHelper'
 import {
     getName,
     getType,
     getACN
-}from '../../../helper/descriptionGenerator';
+}from '../../../service/descriptionGenerator';
 
 const style = {
     list: {

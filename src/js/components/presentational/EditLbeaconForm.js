@@ -7,7 +7,7 @@ import { Formik, Field, Form } from 'formik';
 import RadioButtonGroup from "../container/RadioButtonGroup"
 import RadioButton from "./RadioButton"
 import FormikFormGroup from './FormikFormGroup'
-import messageGenerator from '../../helper/messageGenerator'
+import messageGenerator from '../../service/messageGenerator'
 /**
  * EditLbeaconForm will update if user selects one of the object table.
  * The selected object data will transfer from ObjectMangentContainer to EditLbeaconForm

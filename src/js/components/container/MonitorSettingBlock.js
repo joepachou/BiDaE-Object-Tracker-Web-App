@@ -13,7 +13,7 @@ import EditMonitorConfigForm from '../presentational/EditMonitorConfigForm';
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
 import { monitorConfigColumn } from '../../config/tables'
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
-import messageGenerator from '../../helper/messageGenerator'
+import messageGenerator from '../../service/messageGenerator'
 const SelectTable = selecTableHOC(ReactTable);
 import {
     PrimaryButton

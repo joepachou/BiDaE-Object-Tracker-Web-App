@@ -2,14 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import L from 'leaflet';
 import 'leaflet.markercluster';
-import '../../../helper/leafletAwesomeNumberMarkers';
+import '../../../service/leafletAwesomeNumberMarkers';
 import _ from 'lodash'
 import { AppContext } from '../../../context/AppContext';
 import  pinImage from "./pinImage"
 import siteConfig from '../../../../../site_module/siteConfig'
 import {
     macAddressToCoordinate
-} from '../../../helper/dataTransfer'
+} from '../../../service/dataTransfer'
 
 class Map extends React.Component {
     

@@ -1,7 +1,7 @@
 import React from 'react';
 import L from 'leaflet';
 import 'leaflet.markercluster';
-import '../../helper/leafletAwesomeNumberMarkers';
+import '../../service/leafletAwesomeNumberMarkers';
 import _ from 'lodash'
 import { AppContext } from '../../context/AppContext';
 import axios from 'axios';
@@ -17,7 +17,7 @@ import {
 } from 'react-device-detect'
 import {
     macAddressToCoordinate
-} from '../../helper/dataTransfer'
+} from '../../service/dataTransfer'
 
 class Map extends React.Component {
     

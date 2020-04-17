@@ -15,7 +15,7 @@ import Switcher from '../container/Switcher'
 import styleConfig from '../../config/styleConfig';
 import FormikFormGroup from './FormikFormGroup'
 import LocaleContext from '../../context/LocaleContext';
-import messageGenerator from '../../helper/messageGenerator'
+import messageGenerator from '../../service/messageGenerator'
 const EditMonitorConfigForm =  ({
     selectedData,
     isEdited,
