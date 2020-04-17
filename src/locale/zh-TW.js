@@ -14,6 +14,7 @@ const tw = {
     BIG_SCREEN: "大螢幕",
     ABOUT: "關於",
     TRACKING_HISTORY: "追蹤紀錄",
+    TRACKING_PATH: "追蹤路徑",
     HISTORICAL_TRACKING_RECORD: "歷史紀錄",
     REAL_TIME_TRACKING_RECORD: "即時紀錄",
     HISTORICAL_RECORD: "歷史紀錄",

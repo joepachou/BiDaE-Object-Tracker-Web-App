@@ -1,31 +1,23 @@
-import React from 'react';
-import SearchContainer from './SearchContainer';
+import React, { Fragment } from 'react';
 import 'react-table/react-table.css';
-import SearchResultList from '../presentational/SearchResultList'
-import { 
-    Row, 
-    Col, 
-    Button,
-    ButtonGroup
-} from 'react-bootstrap'
-import SurveillanceContainer from './SurveillanceContainer';
 import config from '../../config';
-import InfoPrompt from '../presentational/InfoPrompt';
-import _ from 'lodash'
+import _ from 'lodash';
 import axios from 'axios';
 import dataSrc from '../../dataSrc'
-import { AppContext } from '../../context/AppContext'
+import { AppContext } from '../../context/AppContext';
 import { toast } from 'react-toastify';
-import ToastNotification from '../presentational/ToastNotification'
+import ToastNotification from '../presentational/ToastNotification';
 import {
     BrowserView,
     MobileOnlyView,
     TabletView
-} from 'react-device-detect'
+} from 'react-device-detect';
 import { disableBodyScroll } from 'body-scroll-lock';
 import retrieveDataHelper from '../../service/retrieveDataHelper';
 import messageGenerator from '../../service/messageGenerator';
-import ObjectListContainer from './ObjectListContainer'
+import TabletMainContainer from '../platform/tablet/TabletMainContainer'
+import MobileMainContainer from '../platform/mobile/MobileMainContainer';
+import BrowserMainContainer from '../platform/browser/BrowserMainContainer';
 
 const {
     ALL_DEVICES,
@@ -221,7 +213,7 @@ class MainContainer extends React.Component{
     }
 
     /** set the geofence and location monitor enable */
-    setMonitor = (type) => {
+    setMonitor = (type, callback) => {
 
         let { 
             stateReducer 
@@ -247,7 +239,7 @@ class MainContainer extends React.Component{
         .then(res => {
             console.log(`set ${type} enable success`)
             setTimeout(() => {
-                this[triggerFuncName]()
+                this[triggerFuncName](callback)
             }, 1000)
         })
         .catch(err => {
@@ -333,7 +325,7 @@ class MainContainer extends React.Component{
     }
 
     /** Retrieve geofence data from database */
-    getGeofenceConfig = () => {
+    getGeofenceConfig = (callback) => {
         let { stateReducer } = this.context
         let [{areaId}] = stateReducer
         axios.post(dataSrc.getGeofenceConfig, {
@@ -352,7 +344,7 @@ class MainContainer extends React.Component{
             }, {})
             this.setState({
                 geofenceConfig,
-            })
+            }, callback)
         })
         .catch(err => {
             console.log(`get geofence data fail ${err}`)
@@ -602,36 +594,6 @@ class MainContainer extends React.Component{
         })
     }
 
-    /** Transfer the search result, not found list and color panel from SearchContainer, GridButton to MainContainer 
-     *  The three variable will then pass into SurveillanceContainer */
-    processSearchResult = (searchResult, colorPanel, searchKey, searchValue, markerClickPackage) => {
-        if(colorPanel) {
-            this.setState({
-                hasSearchKey: Object.keys(colorPanel).length === 0 ? false : true,
-                searchResult,
-                searchKey,
-                colorPanel: colorPanel,
-                clearColorPanel: false,
-                clearSearchResult: false,
-                hasGridButton: true,
-                markerClickPackage,
-            })
-        } else {
-            this.clearGridButtonBGColor();
-            this.setState({
-                hasSearchKey: true,
-                searchKey,
-                searchResult: searchResult,
-                colorPanel: null,
-                clearColorPanel: true,
-                clearSearchResult: false,
-                hasGridButton: false,
-                searchValue,
-                markerClickPackage
-            })
-        }
-    }
-
     collectObjectsByLatLng = (lbPosition, proccessedTrackingData, markerClickPackage) => {
         let objectList = []
         proccessedTrackingData
@@ -652,10 +614,10 @@ class MainContainer extends React.Component{
         })
     }
 
-    handleShowPath = (mac_address) => {
+    handleShowPath = (mac_address, callback) => {
         this.setState({
             pathMacAddress: mac_address
-        })
+        }, callback)
     }
 
     handleClosePath = () => {
@@ -698,256 +660,84 @@ class MainContainer extends React.Component{
 
         const { 
             hasSearchKey,
-            colorPanel, 
-            clearColorPanel,
             trackingData,
             proccessedTrackingData,
             searchResult,
-            searchKey
+            searchKey,
+            lbeaconPosition,
+            geofenceConfig,
+            authenticated,
+            searchedObjectType,
+            showedObjects,
+            showMobileMap,
+            clearSearchResult,
+            showPath,
+            display,
+            pathMacAddress,
+            isHighlightSearchPanel        
         } = this.state;
 
-        const style = {
-            pageWrap: {
-                overflow: "hidden hidden",
-            },
+        const {
+            handleClearButton,
+            getSearchKey,
+            setMonitor,
+            clearAlerts,
+            handleClosePath,
+            handleShowPath,
+            setShowedObjects,
+            handleShowResultListForMobile,
+            mapButtonHandler,
+            highlightSearchPanel
+        } = this
 
-            searchResultDiv: {
-                display: this.state.hasSearchKey ? null : 'none',
-                // paddingTop: 30,
-            },
-            
-            searchPanel: {
-                zIndex: this.state.isHighlightSearchPanel ? 1060 : 1,
-                background: 'white',
-                borderRadius: 10,
-                // height: '90vh'
-            },
-
-            MapAndResult:{
-                //border: 'solid',
-                width:'70vw'
-            },
-
-            searchPanelForTablet: {
-                
-                zIndex: this.state.isHighlightSearchPanel ? 1060 : 1,
-                background: "white",
-                borderRadius: 10,
-                //border: 'solid',
-                height: '90vh',
-                width:'30vw'
-            },
-
-            containerForMobile:{
-                justifyContent: 'center'
-            },
-            mapForMobile: {
-                display: this.state.showMobileMap ? null : 'none'
-            },
-
-            searchPanelForMobile: {
-                zIndex: this.state.isHighlightSearchPanel ? 1060 : 1,
-                display: this.state.display ? null : 'none',
-                fontSize: '2rem',
-                background: "white",
-                borderRadius: 10,
-                //border: 'solid',
-                height: '90vh',
-                // width:'90vw'
-            },
-            searchResultList: {
-                dispaly: this.state.hasSearchKey ? null : 'none',
-                maxHeight: '28vh'
-            },
-            MapAndQrcode: {
-                maxHeight: '50vh',
-            },
-            searchResultListFormobile: {
-                maxHeight: this.state.showMobileMap ? '20vh' : '65vh'
-            }
+        const propsGroup = {
+            handleClearButton,
+            hasSearchKey,
+            getSearchKey,
+            setMonitor,
+            clearAlerts,
+            handleClosePath,
+            handleShowPath,
+            lbeaconPosition,
+            geofenceConfig,
+            authenticated,
+            searchedObjectType,
+            showedObjects,
+            highlightSearchPanel,
+            showMobileMap,
+            clearSearchResult,
+            searchKey,
+            searchResult,
+            trackingData,
+            proccessedTrackingData,
+            showPath,
+            setShowedObjects,
+            handleShowResultListForMobile,
+            display,
+            pathMacAddress,
+            mapButtonHandler,
+            isHighlightSearchPanel
         }
-        const { 
-            locale, 
-            auth,
-        } = this.context
 
         return (
             /** "page-wrap" the default id named by react-burget-menu */
-            <div>
+            <Fragment>
                 <BrowserView>
-                    <div id="page-wrap" className='mx-1 my-2 overflow-hidden' style={style.pageWrap} >
-                        <Row id="mainContainer" className='d-flex w-100 justify-content-around mx-0' style={style.container}>
-                            <Col sm={7} md={9} lg={8} xl={8} id='searchMap' className="pl-2 pr-1" >
-                                <InfoPrompt 
-                                    searchKey={searchKey}
-                                    searchResult={searchResult}
-                                />
-                                <SurveillanceContainer
-                                    showPath={this.state.showPath}
-                                    pathMacAddress={this.state.pathMacAddress} 
-                                    proccessedTrackingData={proccessedTrackingData.length === 0 ? trackingData : proccessedTrackingData}
-                                    hasSearchKey={hasSearchKey}
-                                    colorPanel={colorPanel}
-                                    searchResult={this.state.searchResult}
-                                    handleClearButton={this.handleClearButton}
-                                    getSearchKey={this.getSearchKey}
-                                    clearColorPanel={clearColorPanel}
-                                    setMonitor={this.setMonitor}
-                                    auth={auth}
-                                    lbeaconPosition={this.state.lbeaconPosition}
-                                    geofenceConfig={this.state.geofenceConfig}
-                                    locationMonitorConfig={this.state.locationMonitorConfig}
-                                    clearAlerts={this.clearAlerts}
-                                    searchKey={this.state.searchKey}
-                                    handleClosePath={this.handleClosePath}
-                                    handleShowPath={this.handleShowPath}
-                                    searchedObjectType={this.state.searchedObjectType}
-                                    showedObjects={this.state.showedObjects}
-                                    setShowedObjects={this.setShowedObjects}
-                                />
-                            </Col>
-
-                            <Col id='searchPanel' xs={12} sm={5} md={3} lg={4} xl={4} className="w-100 px-2" style={style.searchPanel}>
-                                <SearchContainer 
-                                    hasSearchKey={this.state.hasSearchKey}
-                                    clearSearchResult={this.state.clearSearchResult}
-                                    hasGridButton={this.state.hasGridButton}
-                                    auth={auth}
-                                    getSearchKey={this.getSearchKey}
-                                />                        
-                                <div 
-                                    id='searchResult' 
-                                    style={style.searchResultDiv} 
-                                >
-                                    <SearchResultList
-                                        searchResult={this.state.searchResult} 
-                                        searchKey={this.state.searchKey}
-                                        highlightSearchPanel={this.highlightSearchPanel}
-                                        handleShowPath={this.handleShowPath}
-                                        showMobileMap={this.state.showMobileMap}
-                                    />
-                                </div>
-                            </Col>
-                        </Row>
-                    </div>
+                    <BrowserMainContainer 
+                        {...propsGroup}
+                    />
                 </BrowserView>
                 <TabletView>
-                    <div id="page-wrap" className='d-flex flex-column w-100' style={{height: "90vh"}}>
-                        <div id="mainContainer" className='d-flex flex-row h-100 w-100' style={style.container}>
-                            {/** left area of row */}
-                            <div className='d-flex flex-column' style={style.MapAndResult}>
-                                {/** including QR code and map */}
-                                <div className="d-flex" style={style.MapAndQrcode}>
-                                    <SurveillanceContainer
-                                        showPath={this.state.showPath}
-                                        pathMacAddress={this.state.pathMacAddress} 
-                                        proccessedTrackingData={proccessedTrackingData.length === 0 ? trackingData : proccessedTrackingData}
-                                        hasSearchKey={hasSearchKey}
-                                        colorPanel={colorPanel}
-                                        searchResult={this.state.searchResult}
-                                        handleClearButton={this.handleClearButton}
-                                        getSearchKey={this.getSearchKey}
-                                        clearColorPanel={clearColorPanel}
-                                        setMonitor={this.setMonitor}
-                                        auth={auth}
-                                        lbeaconPosition={this.state.lbeaconPosition}
-                                        geofenceConfig={this.state.geofenceConfig}
-                                        clearAlerts={this.clearAlerts}
-                                        searchKey={this.state.searchKey}
-                                        authenticated={this.state.authenticated}
-                                        handleClosePath={this.handleClosePath}
-                                        handleShowPath={this.handleShowPath}
-                                        searchedObjectType={this.state.searchedObjectType}
-                                        showedObjects={this.state.showedObjects}
-                                    />
-                                </div>
-                                <div id="searchResult" className="d-flex" style={{justifyContent: 'center'}}>
-                                    <SearchResultList
-                                        searchResult={this.state.searchResult} 
-                                        searchKey={this.state.searchKey}
-                                        highlightSearchPanel={this.highlightSearchPanel}
-                                        handleShowPath={this.handleShowPath}
-                                        showMobileMap={this.state.showMobileMap}
-                                    />
-                                </div>
-                            </div>
-                            <div id='searchPanel' className="h-100" style={style.searchPanelForTablet}>
-                                <SearchContainer
-                                    hasSearchKey={this.state.hasSearchKey}
-                                    clearSearchResult={this.state.clearSearchResult}
-                                    hasGridButton={this.state.hasGridButton}
-                                    auth={auth}
-                                    getSearchKey={this.getSearchKey}
-                                />
-                            </div>
-                        </div>
-                    </div>
+                    <TabletMainContainer 
+                        {...propsGroup}
+                    />
                 </TabletView>
                 <MobileOnlyView>
-                    <div id="page-wrap" className='d-flex flex-column' style={{height: "90vh"}}>
-                        <div className='h-100' style={{overflow: 'hidden hidden'}}>
-                            <div id='searchPanel' className="h-100" style={style.searchPanelForMobile}>
-                                <SearchContainer 
-                                    hasSearchKey={this.state.hasSearchKey}
-                                    clearSearchResult={this.state.clearSearchResult}
-                                    hasGridButton={this.state.hasGridButton}
-                                    auth={auth}
-                                    getSearchKey={this.getSearchKey}
-                                    handleShowResultListForMobile={this.handleShowResultListForMobile}
-                                />
-                            </div>
-                            <div style={style.mapForMobile} className="m-1">
-                                <SurveillanceContainer
-                                    showPath={this.state.showPath}
-                                    pathMacAddress={this.state.pathMacAddress} 
-                                    proccessedTrackingData={proccessedTrackingData.length === 0 ? trackingData : proccessedTrackingData}
-                                    hasSearchKey={hasSearchKey}
-                                    colorPanel={colorPanel}
-                                    searchResult={this.state.searchResult}
-                                    handleClearButton={this.handleClearButton}
-                                    getSearchKey={this.getSearchKey}
-                                    clearColorPanel={clearColorPanel}
-                                    setMonitor={this.setMonitor}
-                                    auth={auth}
-                                    lbeaconPosition={this.state.lbeaconPosition}
-                                    geofenceConfig={this.state.geofenceConfig}
-                                    clearAlerts={this.clearAlerts}
-                                    searchKey={this.state.searchKey}
-                                    handleClosePath={this.handleClosePath}
-                                    handleShowPath={this.handleShowPath}
-                                    searchedObjectType={this.state.searchedObjectType}
-                                    showedObjects={this.state.showedObjects}
-                                    handleClearButton={this.handleClearButton}
-                                    mapButtonHandler={this.mapButtonHandler}
-                                />
-                            </div>
-                            <ButtonGroup style={{marginTop:'5px',marginBottom:'5px'}}>
-                                <Button 
-                                    variant='outline-primary' 
-                                    onClick={this.mapButtonHandler}
-                                >
-                                    {this.state.showMobileMap ? locale.texts.HIDE_MAP : locale.texts.SHOW_MAP}
-                                </Button>
-                                <Button 
-                                    variant='outline-primary' 
-                                    onClick={this.handleClearButton}
-                                >
-                                    {locale.texts.NEW_SEARCH}
-                                </Button>
-                            </ButtonGroup>
-                            <div className='d-flex justify-content-center'>
-                                <SearchResultList
-                                    searchResult={this.state.searchResult} 
-                                    searchKey={this.state.searchKey}
-                                    highlightSearchPanel={this.highlightSearchPanel}
-                                    handleShowPath={this.handleShowPath}
-                                    showMobileMap={this.state.showMobileMap}
-                                />
-                            </div>
-                        </div>
-                    </div>
+                    <MobileMainContainer 
+                        {...propsGroup}
+                    />
                 </MobileOnlyView>
-            </div>
+            </Fragment>
         )
     }
 }

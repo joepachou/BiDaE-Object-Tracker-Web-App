@@ -1,17 +1,10 @@
-import React from 'react';
-import { 
-    Button,
-    Col, 
-    Row, 
-} from 'react-bootstrap'
+import React, { Fragment } from 'react';
 import ChangeStatusForm from '../container/ChangeStatusForm';
 import ConfirmForm from '../container/ConfirmForm';
 import SignatureForm from '../container/UserContainer/SignatureForm';
 import dataSrc from '../../dataSrc';
 import _ from 'lodash';
 import axios from 'axios';
-import AccessControl from './AccessControl';
-import SearchResultListGroup from '../presentational/SearchResultListGroup'
 import { AppContext } from '../../context/AppContext';
 import DownloadPdfRequestForm from '../container/DownloadPdfRequestForm'
 import config from '../../config'
@@ -19,12 +12,13 @@ import {
     BrowserView,
     TabletView,
     MobileOnlyView
-} from 'react-device-detect'
-import moment from 'moment'
-import ScrollArea from 'react-scrollbar'
-import ToastNotification from '../presentational/ToastNotification'
-import messageGenerator from '../../service/messageGenerator'
+} from 'react-device-detect';
+import moment from 'moment';
+import messageGenerator from '../../service/messageGenerator';
 import PatientViewModal from './PatientViewModal';
+import TabletSearchResultList from '../platform/tablet/TabletSearchResultList';
+import MobileSearchResultList from '../platform/mobile/MobileSearchResultList';
+import BrowserSearchResultList from '../platform/browser/BrowserSearchResultList';
 
 
 class SearchResult extends React.Component {
@@ -210,7 +204,7 @@ class SearchResult extends React.Component {
  
         axios.post(dataSrc.editObjectPackage, {
             locale,
-            formOption: editedObjectPackage[0],
+            formOption: editedObjectPackage,
             username,
             pdfPackage,
             reservedTimestamp
@@ -323,7 +317,21 @@ class SearchResult extends React.Component {
 
     render() {
         const { locale } = this.context;
-        const { searchKey } = this.props;
+        const { 
+            searchKey,
+            highlightSearchPanel
+        } = this.props;
+
+        const {
+            handleToggleNotFound,
+            onSelect
+        } = this
+        
+        const {
+            selection,
+            showNotFoundResult
+        } = this.state
+
         const style = {
             noResultDiv: {
                 color: 'grey',
@@ -359,185 +367,35 @@ class SearchResult extends React.Component {
             ? locale.texts.SEARCH_RESULTS_NOT_FOUND
             : locale.texts.SEARCH_RESULTS_FOUND
 
-        return(
-            <div className='text-capitalize'>
-                <BrowserView>
-                    <div>
-                        <Row className='d-flex justify-content-center' style={style.titleText}>
-                            <div className='title'>
-                                {title}
-                            </div>
-                        </Row>
-                        <Row>
-                            {searchResult.length === 0 
-                                ?   <Col className='d-flex justify-content-center font-weight-lighter' style={style.noResultDiv}>
-                                        <div className='searchResultForDestop'>{locale.texts.NO_RESULT}</div>
-                                    </Col> 
-                                :   
-                                    <Col className="searchResultListGroup d-flex justify-content-center">
-                                        <ScrollArea 
-                                            smoothScrolling={true}
-                                            horizontal={false}
-                                        >                 
-                                            <AccessControl
-                                                permission={'form:edit'}
-                                                renderNoAccess={() => (
-                                                    <SearchResultListGroup 
-                                                        data={searchResult}
-                                                        selection={this.state.selection}
-                                                    />
-                                                )}
-                                            >
-                                                <SearchResultListGroup 
-                                                    data={searchResult}
-                                                    onSelect={this.onSelect}
-                                                    selection={this.state.selection}
-                                                    action
-                                                />
+        let propsGroup = {
+            searchResult,
+            title,
 
-                                            </AccessControl>
-                                        </ScrollArea>
-                                    </Col>
-                            }
-                        </Row>
-                        <Row className='d-flex justify-content-center mt-3'>
-                            <Button
-                                variant="link"
-                                onClick={this.handleToggleNotFound}
-                                size="lg"
-                                disabled={false}
-                            >
-                                {this.state.showNotFoundResult
-                                    ? locale.texts.SHOW_SEARCH_RESULTS_FOUND
-                                    : locale.texts.SHOW_SEARCH_RESULTS_NOT_FOUND
-                                }
-                            </Button>
-                        </Row>
-                    </div>
+            /** function */
+            handleToggleNotFound,
+            onSelect,
+            highlightSearchPanel,
+            /** state */
+            selection,
+            showNotFoundResult
+        }
+
+        return(
+            <Fragment>
+                <BrowserView>
+                    <BrowserSearchResultList
+                        {...propsGroup}
+                    />
                 </BrowserView>
                 <TabletView>
-                    <div>
-                        <Row className='d-flex justify-content-center' style={style.titleText}>
-                            <h4>
-                                {title}
-                            </h4>
-                        </Row>
-                        <Row>
-                            {searchResult.length === 0 
-                                ?   <Col className='d-flex justify-content-center font-weight-lighter' style={style.noResultDiv}>
-                                        <div className='searchResultForDestop'>{locale.texts.NO_RESULT}</div>
-                                    </Col> 
-                                :   
-                                    <Col className="searchResultListGroupForTablet d-flex justify-content-center">
-                                        <ScrollArea 
-                                            style={style.searchResultListForTablet} 
-                                            smoothScrolling={true}
-                                        >                 
-                                            <AccessControl
-                                                permission={'form:edit'}
-                                                renderNoAccess={() => (
-                                                    <SearchResultListGroup 
-                                                        data={searchResult}
-                                                        selection={this.state.selection}
-                                                    />
-                                                )
-                                                }
-                                            >
-                                                <SearchResultListGroup 
-                                                    data={searchResult}
-                                                    onSelect={searchResult[0].object_type == 0 
-                                                        ? this.onSelect
-                                                        : null
-                                                    }
-                                                    selection={this.state.selection}
-                                                    action={
-                                                        searchResult[0].object_type == 0 && !this.state.showNotFoundResult
-                                                            ? true
-                                                            : false
-                                                    }
-                                                />
-
-                                            </AccessControl>
-                                        </ScrollArea>
-                                    </Col>
-                            }
-                        </Row>
-                        <Row className='d-flex justify-content-center mt-3'>
-                            <Button
-                                variant="link"
-                                onClick={this.handleToggleNotFound}
-                                size="lg"
-                                disabled={false}
-                            >
-                                {this.state.showNotFoundResult
-                                    ? locale.texts.SHOW_SEARCH_RESULTS_FOUND
-                                    : locale.texts.SHOW_SEARCH_RESULTS_NOT_FOUND
-                                }
-
-                            </Button>
-                        </Row>
-                    </div>
+                    <TabletSearchResultList 
+                        {...propsGroup}
+                    />
                 </TabletView>
                 <MobileOnlyView>
-                <div>
-                    <Row className='d-flex justify-content-center' style={style.titleText}>
-                        <h4 className='text-capitalize'>
-                            {title}
-                        </h4>
-                    </Row>
-                    <Row>
-                    
-                        {searchResult.length === 0 
-                            ?   <Col className='d-flex justify-content-center font-weight-lighter' style={style.noResultDiv}>
-                                    <div className='searchResultForDestop'>{locale.texts.NO_RESULT}</div>
-                                </Col> 
-                            :   
-                                
-                                <Col className="searchResultListGroupForMobile d-flex justify-content-center">  
-                                    <ScrollArea style={style.searchResultListForMobile} smoothScrolling={true}>                 
-                                        <AccessControl
-                                            permission={'form:edit'}
-                                            renderNoAccess={() => (
-                                                <SearchResultListGroup 
-                                                    data={searchResult}
-                                                    selection={this.state.selection}
-                                                />
-                                            )}
-                                        >
-                                            <SearchResultListGroup 
-                                                data={searchResult}
-                                                onSelect={searchResult[0].object_type == 0 
-                                                    ? this.onSelect
-                                                    : null
-                                                }
-                                                selection={this.state.selection}
-                                                action={
-                                                    searchResult[0].object_type == 0 && !this.state.showNotFoundResult
-                                                        ? true
-                                                        : false
-                                                }
-                                            />
-
-                                        </AccessControl>
-                                    </ScrollArea>
-                                </Col>
-                            }
-                        </Row>
-                        <Row className='d-flex justify-content-center mt-3'>
-                            <Button
-                                variant="link"
-                                onClick={this.handleToggleNotFound}
-                                size="lg"
-                                disabled={false}
-                            >
-                                {this.state.showNotFoundResult
-                                    ? locale.texts.SHOW_SEARCH_RESULTS_FOUND
-                                    : locale.texts.SHOW_SEARCH_RESULTS_NOT_FOUND
-                                }
-
-                            </Button>
-                        </Row>
-                    </div>
+                    <MobileSearchResultList
+                        {...propsGroup}
+                    />
                 </MobileOnlyView>
 
                 <ChangeStatusForm
@@ -552,6 +410,7 @@ class SearchResult extends React.Component {
                     showAddDevice={this.state.showAddDevice}
                     handleRemoveButton={this.handleRemoveButton}
                 />
+                
                 <PatientViewModal
                     show={this.state.showPatientView} 
                     title="patient record"
@@ -569,18 +428,19 @@ class SearchResult extends React.Component {
 
                 <ConfirmForm 
                     show={this.state.showConfirmForm}  
-                    title={'thank you for reporting'}
+                    title='thank you for reporting'
                     selectedObjectData={this.state.editedObjectPackage} 
                     handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose} 
                     handleConfirmFormSubmit={this.handleConfirmFormSubmit}
                     showDownloadPdfRequest={this.state.showDownloadPdfRequest}
                 />
+
                 <DownloadPdfRequestForm
                     show={this.state.showDownloadPdfRequest} 
                     pdfPath={this.state.pdfPath}
                     handleClose={this.handleClose}
                 />
-            </div>
+            </Fragment>
         )
     }
 }

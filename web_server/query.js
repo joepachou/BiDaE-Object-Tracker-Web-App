@@ -464,19 +464,25 @@ const addPatient = (request, response) => {
 
 
 const editObjectPackage = (request, response) => {
-    const { formOption, username, pdfPackage, reservedTimestamp, locale} = request.body
+    const { 
+        formOption, 
+        username, 
+        pdfPackage, 
+        reservedTimestamp, 
+        locale
+    } = request.body
     pool.query(queryType.addEditObjectRecord(formOption, username, pdfPackage.path))
         .then(res => {
             const record_id = res.rows[0].id
-            console.log('Add edited object record success')
+            console.log('add edited object record succeed')
             pool.query(queryType.editObjectPackage(formOption, username, record_id, reservedTimestamp))
                 .then(res => {
-                    console.log('Edit object package success')
+                    console.log('edit object package succeed')
                     if (pdfPackage) {
                         pdf.create(pdfPackage.pdf, pdfPackage.options).toFile(path.join(process.env.LOCAL_FILE_PATH, pdfPackage.path), function(err, result) {
-                            if (err) return console.log("editObjectPackage error: ",err);
+                            if (err) return console.log(`edit object package error ${err}`);
                         
-                            console.log("pdf create success");
+                            console.log("pdf create succeed");
                             response.status(200).json(pdfPackage.path)
                         });
                     } else {
@@ -484,11 +490,11 @@ const editObjectPackage = (request, response) => {
                     }
                 })
                 .catch(err => {
-                    console.log('Edit object package fail ' + err)
+                    console.log(`edit object package failed ${err}`)
                 })
         })
         .catch(err => {
-            console.log('Edit object package fail ' + err)
+            console.log(`edit object package failed ${err}`)
         })
 }
 

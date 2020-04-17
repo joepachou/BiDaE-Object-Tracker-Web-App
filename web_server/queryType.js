@@ -729,9 +729,13 @@ const addImport = (formOption) => {
 	return query;
 }
 
-const editObjectPackage = (formOption, username, record_id, reservedTimestamp) => {
-	
-	let item = formOption
+const editObjectPackage = (
+	formOption, 
+	username, 
+	record_id, 
+	reservedTimestamp
+) => {
+	let item = formOption[0]
 	let text = `
 		UPDATE object_table
 		SET 
@@ -743,7 +747,7 @@ const editObjectPackage = (formOption, username, record_id, reservedTimestamp) =
 				FROM user_table
 				WHERE user_table.name='${username}')
 								
-		WHERE asset_control_number IN (${[formOption].map(item => `'${item.asset_control_number}'`)});
+		WHERE asset_control_number IN (${formOption.map(item => `'${item.asset_control_number}'`)});
 	`
 	return text
 }

@@ -3,7 +3,7 @@ import Map from "./Map";
 import config from "../../../config";
 import { AppContext } from "../../../context/AppContext";
 
-class SurveillanceContainer extends React.Component {
+class MapContainer extends React.Component {
 
     static contextType = AppContext
 
@@ -26,7 +26,7 @@ class SurveillanceContainer extends React.Component {
         let [{areaId}] = stateReducer
 
         return(
-            <div id="surveillanceContainer" style={style.surveillanceContainer} className="overflow-hidden">
+            <div id="MapContainer" style={style.MapContainer} className="overflow-hidden">
                 <div style={style.mapBlock}>
                     <Map 
                         hasSearchKey={hasSearchKey}
@@ -44,4 +44,4 @@ class SurveillanceContainer extends React.Component {
     }
 }
 
-export default SurveillanceContainer
+export default MapContainer

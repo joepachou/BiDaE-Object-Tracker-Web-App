@@ -14,6 +14,7 @@ const en =  {
     BIG_SCREEN: "big screen",
     ABOUT: "about",
     TRACKING_HISTORY: "tracking history",
+    TRACKING_PATH: "tracking path",
     HISTORICAL_TRACKING_RECORD: "historical tracking record",
     REAL_TIME_TRACKING_RECORD: "real-time tracking record",
     HISTORICAL_RECORD: "historical record",

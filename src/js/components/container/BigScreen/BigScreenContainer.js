@@ -4,7 +4,7 @@ import {
     Row, 
     Col 
 } from 'react-bootstrap'
-import SurveillanceContainer from './SurveillanceContainer';
+import MapContainer from './MapContainer';
 import config from '../../../config';
 import _ from 'lodash'
 import axios from 'axios';
@@ -130,7 +130,7 @@ class BigScreenContainer extends React.Component{
             >
                 <Row id="bigScreenContainer" className='d-flex w-100 justify-content-around mx-0 overflow-hidden' style={style.container}>
                     <Col id='searchMap' className="pl-2 pr-1" >
-                        <SurveillanceContainer 
+                        <MapContainer 
                             proccessedTrackingData={this.state.trackingData}
                             legendDescriptor = {this.state.legendDescriptor}
                         />

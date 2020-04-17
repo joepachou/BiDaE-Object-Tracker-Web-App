@@ -7,14 +7,8 @@ import {
 import axios from 'axios';
 import dataSrc from '../../dataSrc';
 import QRCode from 'qrcode.react';
-import moment from 'moment'
 import config from '../../config'
 import { AppContext } from '../../context/AppContext';
-import {
-    BrowserView,
-    MobileOnlyView,
-    TabletView
-} from 'react-device-detect'
 
 class PdfDownloadForm extends React.Component {
 

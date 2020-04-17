@@ -5,8 +5,9 @@ import '../../service/leafletAwesomeNumberMarkers';
 import _ from 'lodash'
 import { AppContext } from '../../context/AppContext';
 import axios from 'axios';
-import dataSrc from '../../dataSrc'
-import siteConfig from '../../../../site_module/siteConfig'
+import dataSrc from '../../dataSrc';
+import siteConfig from '../../../../site_module/siteConfig';
+import polylineDecorator from 'leaflet-polylinedecorator';
 import {
     BrowserView,
     TabletView,
@@ -61,7 +62,6 @@ class Map extends React.Component {
         if (!(_.isEqual(prevProps.locationMonitorConfig, this.props.locationMonitorConfig))) {
             this.createLocationMonitorMarkers()
         }
-
         if(!(_.isEqual(prevProps.pathMacAddress, this.props.pathMacAddress))){
             this.drawPolyline();
         }
@@ -220,9 +220,7 @@ class Map extends React.Component {
     /** init path */
     drawPolyline = () => {
 
-
         this.pathOfDevice.clearLayers();
-        
         if(this.props.pathMacAddress !== ''){
 
             let route = []
@@ -231,27 +229,32 @@ class Map extends React.Component {
                 object_mac_address : this.props.pathMacAddress
             })
             .then(res => {
+
                 var preUUID = ''
                 res.data.rows.map(item => {
                     
                     if(item.uuid != preUUID){
                         preUUID = item.uuid;
-                        let latLng = [item.base_y,item.base_x]
-                        let pos = this.macAddressToCoordinate(item.mac_address,latLng);
-        
-                        
+                        let latLng = [item.base_y, item.base_x]
+
+                        /** Calculate the position of the object  */
+                        let pos = macAddressToCoordinate(
+                            item.mac_address, 
+                            latLng,
+                            this.props.mapConfig.iconOptions.markerDispersity
+                        );
                         var marker = L.circleMarker(pos, {radius:3,color:'lightgrey'});
                         
                         this.pathOfDevice.addLayer(marker)
                         route.push(pos)
                     }
                 })
-
                 var polyline = L.polyline(route,{
                     color: 'black',
                     dashArray: '1,1'
                 })
-                var decorator = L.polylineDecorator( polyline, {
+
+                var decorator = L.polylineDecorator(polyline, {
                     patterns: [
                         {
                             offset: '100%',
@@ -271,10 +274,9 @@ class Map extends React.Component {
                 this.pathOfDevice.addLayer(polyline)
                 this.pathOfDevice.addLayer(decorator)
                 this.pathOfDevice.addTo(this.map)
-                //console.log(route)
             })
             .catch(err => {
-                console.log(`get tracking table by mac address fail: ${err}`)
+                console.log(`get tracking table by mac address failed ${err}`)
             })
         }
     }
@@ -420,6 +422,7 @@ class Map extends React.Component {
                 item.currentPosition, 
                 this.props.mapConfig.iconOptions.markerDispersity
             );
+
 
             /** Set the Marker's popup 
              * popupContent (objectName, objectImg, objectImgWidth)

@@ -21,8 +21,9 @@ import axios from 'axios';
 import dataSrc from '../../dataSrc'
 import styleConfig from '../../config/styleConfig'
 import FormikFormGroup from '../presentational/FormikFormGroup'
+import AccessControl from '../presentational/AccessControl';
 
-class ChangeStatusForm extends React.Component {
+export default class ChangeStatusForm extends React.Component {
 
     static contextType = AppContext
     
@@ -32,17 +33,6 @@ class ChangeStatusForm extends React.Component {
 
     componentDidMount = () => {
        this.getTransferredLocation();
-    }
-
-    pathOnClickHandler = () => {
-        let {
-            selectedObjectData
-        } = this.props
-
-        selectedObjectData ? selectedObjectData.map((item,index)=>{
-            this.props.handleShowPath(item.mac_address);
-        }) : null;
-        this.handleClose()
     }
 
     getTransferredLocation = () => {
@@ -76,13 +66,28 @@ class ChangeStatusForm extends React.Component {
     handleClose = (e) => {
         this.props.handleChangeObjectStatusFormClose();
     }
-  
 
     handleClick = (e) => { 
         const item = e.target.name
         switch(item) {
             case 'add device':
                 this.props.handleAdditionalButton(item);
+                break;
+            case 'tracking path':
+                // let {
+                //     selectedObjectData
+                // } = this.props
+                
+                // selectedObjectData ? selectedObjectData.map((item,index)=>{
+                //     this.props.handleShowPath(item.mac_address);
+                // }) : null;
+                // this.handleClose();
+                let {
+                    selectedObjectData
+                } = this.props
+                let macAddress = selectedObjectData[0].mac_address
+                this.props.handleShowPath(macAddress, this.handleClose);
+
                 break;
         }
     }
@@ -132,9 +137,6 @@ class ChangeStatusForm extends React.Component {
             crossIcom: {
                 cursor: "pointer"
             },
-            buttonPath: {
-                fontSize: '0.5rem'
-            },
         }
         let { 
             title,
@@ -149,18 +151,13 @@ class ChangeStatusForm extends React.Component {
                 onHide={this.handleClose} 
                 size="md" 
                 id='changeStatusForm' 
-                className='text-capitalize'
                 enforceFocus={false}
                 style={style.modal}
             >
                 <Modal.Header 
                     closeButton 
                 >
-
                     {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
-                    {process.env.IS_TRACKING_PATH_ON == 1 && 
-                        <Button variant="link" style={style.buttonPath} onClick={this.pathOnClickHandler}>追蹤路徑</Button>                        
-                    }
                 </Modal.Header >
                 <Modal.Body>
                     <Formik
@@ -333,32 +330,39 @@ class ChangeStatusForm extends React.Component {
                                     touched={touched.notes}
                                     placeholder={locale.texts.WRITE_THE_NOTES}
                                 />
-                                
-                                <Row className='d-flex justify-content-center pb-2'>
-                                    <ButtonToolbar >
-                                        <Button 
-                                            name='add device'
-                                            variant="outline-secondary" 
-                                            className='mr-2 notShowOnMobile text-capitalize' 
-                                            onClick={this.handleClick} 
-                                            active={this.props.showAddDevice}
-                                            name='add device'
-                                        >
-                                            {locale.texts.ADD_DEVICE}
-                                        </Button>
-                                    </ButtonToolbar>
-                                </Row>
+                                <AccessControl 
+                                    platform={['browser', 'tablet']}
+                                >
+                                    <Row className='d-flex justify-content-center pb-2'>
+                                        <ButtonToolbar >
+                                            <Button 
+                                                name='add device'
+                                                variant="outline-secondary" 
+                                                className='mr-2' 
+                                                onClick={this.handleClick} 
+                                                active={this.props.showAddDevice}
+                                            >
+                                                {locale.texts.ADD_DEVICE}
+                                            </Button>
+                                            <Button 
+                                                name='tracking path'
+                                                variant="outline-secondary" 
+                                                onClick={this.handleClick} 
+                                            >
+                                                {locale.texts.TRACKING_PATH}
+                                            </Button>  
+                                        </ButtonToolbar>
+                                    </Row>
+                                </AccessControl>
                                 <Modal.Footer>
                                     <Button 
                                         variant="outline-secondary" 
-                                        className="text-capitalize" 
                                         onClick={this.handleClose}
                                     >
                                         {locale.texts.CANCEL}
                                     </Button>
                                     <Button 
                                         type="submit" 
-                                        className="text-capitalize" 
                                         variant="primary" 
                                         disabled={isSubmitting}
                                     >
@@ -374,4 +378,3 @@ class ChangeStatusForm extends React.Component {
     }
 }
   
-export default ChangeStatusForm;
