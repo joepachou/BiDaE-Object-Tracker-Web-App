@@ -94,7 +94,8 @@ const EditGeofenceConfig = ({
             <Modal.Body>
          
                 <Formik
-                
+                    validateOnChange={false}
+                    validateOnBlur={false}
                     initialValues = {{
                         enable: selectedData ? selectedData.enable : 1,
                         geofenceName: selectedData ? selectedData.name : '',
