@@ -97,7 +97,7 @@ const EditGeofenceConfig = ({
                 
                     initialValues = {{
                         enable: selectedData ? selectedData.enable : 1,
-                        name: selectedData ? selectedData.name : '',
+                        geofenceName: selectedData ? selectedData.name : '',
                         area: selectedData ? selectedData.area : '',
                         start_time: selectedData ? selectedData.start_time : '',
                         end_time: selectedData ? selectedData.end_time : '',
@@ -112,7 +112,7 @@ const EditGeofenceConfig = ({
                     
                     validationSchema = {
                         Yup.object().shape({ 
-                            name: Yup.string().required(locale.texts.NAME_IS_REQUIRED),   
+                            geofenceName: Yup.string().required(locale.texts.NAME_IS_REQUIRED),   
                             p_rssi: Yup.string()
                             .required(locale.texts.ENTER_THE_RSSI)
                             .test(
@@ -208,7 +208,7 @@ const EditGeofenceConfig = ({
                                 <Col>
                                     <FormikFormGroup 
                                         type="text"
-                                        name="name"
+                                        name="geofenceName"
                                         label={locale.texts.NAME}
                                         error={errors.name}
                                         touched={touched.name}
@@ -383,8 +383,7 @@ const TypeGroup = ({
     let typeRssi = `${abbr}_rssi` 
     return (
         
-        <div className="form-group">
-            {/* {console.log(error)} */}
+        <div className="form-group"> 
             <small className="form-text">
                 {title}
             </small>
@@ -439,7 +438,7 @@ const TypeGroup = ({
                     lg={1}
                     className="d-flex align-items-center justify-content-center"
                 >
-                    <i 
+                    {/* <i 
                         className='fa fa-plus'
                         name='add'
                         style={style.icon.add}
@@ -454,7 +453,7 @@ const TypeGroup = ({
                             setFieldValue(`selected_${abbr}_lbeacon`, null) 
                         }}
                     >
-                    </i>
+                    </i> */}
                 </Col>
                 
                 <Col lg={11} className="pr-1">  
