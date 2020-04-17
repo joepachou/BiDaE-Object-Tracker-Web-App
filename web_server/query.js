@@ -453,17 +453,12 @@ const addPatient = (request, response) => {
     const formOption = request.body.formOption
     pool.query(queryType.addPatient(formOption))
         .then(res => {
-            console.log("add patient success");
+            console.log("add patient succeed");
             response.status(200).json(res)
         })
         .catch(err => {
- 
-            console.log(`add patient fails ${err}`)
-            response.status(500).json({
-                message:'not good'
-            })
+            console.log(`add patient failed ${err}`)
         })
-    
 }
 
 
