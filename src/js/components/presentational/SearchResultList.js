@@ -209,7 +209,14 @@ class SearchResult extends React.Component {
             pdfPackage,
             reservedTimestamp
         }).then(res => {
-
+            let callback = () => {
+                dispatch({
+                    type: 'setUpdateTrackingData',
+                    value: true
+                })
+                messageGenerator.setSuccessMessage(
+                'edit object success'
+            )}
             this.setState ({
                 showConfirmForm: shouldCreatePdf,
                 showAddDevice: false,
@@ -217,15 +224,7 @@ class SearchResult extends React.Component {
                 pdfPath: shouldCreatePdf && pdfPackage.path,
                 showConfirmForm: false,
                 selection: []
-            }, () => {
-                dispatch({
-                    type: 'setUpdateTrackingData',
-                    value: true
-                })
-                messageGenerator.setSuccessMessage(
-                    'edit object success'
-                )
-            })
+            }, callback)
 
         }).catch( error => {
             console.log(error)
