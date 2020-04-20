@@ -6,23 +6,22 @@ import {
 import Searchbar from '../../presentational/Searchbar';
 import ObjectTypeListForTablet from '../../container/ObjectTypeListForTablet';
 
-export default class TabletSearchContainer extends React.Component {
+const TabletSearchContainer = ({
+    searchKey,
+    objectTypeList,
+    getSearchKey,
+    handleTouchMove,
+    clearSearchResult,
+    hasGridButton,
+}) => {    
 
-    render() {
-
-        const {
-            searchKey,
-            objectTypeList,
-            getSearchKey
-        } = this.props
-
-        return (
-            <div id='searchContainer' className="py-1" onTouchMove={this.handleTouchMove}>
+    return (
+        <div id='searchContainer' className="py-1" onTouchMove={handleTouchMove}>
             <Row id='searchBar' className='d-flex justify-content-center align-items-center pb-2'>
                 <Searchbar 
                     placeholder={searchKey}
                     getSearchKey={getSearchKey}
-                    clearSearchResult={this.props.clearSearchResult}    
+                    clearSearchResult={clearSearchResult}    
                 />
             </Row>
             <div id='searchOption' className="pt-2">
@@ -30,14 +29,14 @@ export default class TabletSearchContainer extends React.Component {
                     <Col className='px-0'>
                         <ObjectTypeListForTablet
                             getSearchKey={getSearchKey}  
-                            clearSearchResult={this.props.clearSearchResult}   
-                            hasGridButton={this.props.hasGridButton} 
+                            clearSearchResult={clearSearchResult}   
+                            hasGridButton={hasGridButton} 
                             objectTypeList={objectTypeList}
                         />                            
                     </Col>
                 </Row>
             </div>
         </div>
-        )
-    }
+    )
 }
+export default TabletSearchContainer

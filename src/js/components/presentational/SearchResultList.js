@@ -301,7 +301,6 @@ class SearchResult extends React.Component {
                 showPatientView: false,
                 selection: [],
                 selectedObjectData: [],
-
             }, callback)
         })
         .catch(err => {

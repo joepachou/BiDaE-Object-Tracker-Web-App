@@ -1,6 +1,5 @@
 import React from 'react';
 import MapContainer from '../../container/MapContainer';
-import { AppContext } from '../../../context/AppContext';
 import SearchResultList from '../../presentational/SearchResultList';
 import SearchContainer from '../../container/SearchContainer';
 import {
@@ -10,7 +9,7 @@ import {
 import InfoPrompt from '../../presentational/InfoPrompt'
 import AuthenticationContext from '../../../context/AuthenticationContext';
 
-const BrowserMainContainer = ({
+const BrowserMainContainer = ({ 
     handleClearButton,
     getSearchKey,
     setMonitor,
