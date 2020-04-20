@@ -146,12 +146,7 @@ const EditGeofenceConfig = ({
                             action: isEdited ? 'set' : 'add',
                             is_global_fence: values.isGlobal
                         }
-
-                        let callback = () => messageGenerator.setSuccessMessage(
-                                            'save success'
-                                        )   
                         handleSubmit(monitorConfigPackage)
-                        callback()
                     }}
 
                     render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (

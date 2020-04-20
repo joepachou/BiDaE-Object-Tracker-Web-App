@@ -42,7 +42,7 @@ class MonitorSettingBlock extends React.Component{
     }
  
  
-    getMonitorConfig = () => { 
+    getMonitorConfig = (callback) => { 
         let { 
             auth,
             locale
@@ -65,13 +65,15 @@ class MonitorSettingBlock extends React.Component{
                     id: item.area_id
                 }
             }) 
-
             this.setState({
                 data: res.data,
                 columns,
-            })
-            
-
+                show: false,
+                showDeleteConfirmation: false,
+                selectedData: null,
+                selection: '',
+                selectAll:false
+            }, callback)
         })
         .catch(err => {
             console.log(err)
@@ -92,19 +94,10 @@ class MonitorSettingBlock extends React.Component{
             monitorConfigPackage: configPackage
         })
         .then(res => {  
-            setTimeout(
-                () => {
-                    this.getMonitorConfig(),
-                    this.setState({
-                        show: false,
-                        showDeleteConfirmation: false,
-                        selectedData: null,
-                        selection: '',
-                        selectAll:false
-                    }) 
-                },
-                300
-            )
+            let callback = () => messageGenerator.setSuccessMessage(
+                'save success'
+            )   
+            this.getMonitorConfig(callback)
         })
         .catch(err => { 
             console.log(err)
@@ -119,7 +112,7 @@ class MonitorSettingBlock extends React.Component{
         })
     }
 
- 
+
     handleClickButton = (e, value) => {
         let { name } = e.target   
         switch(name) {

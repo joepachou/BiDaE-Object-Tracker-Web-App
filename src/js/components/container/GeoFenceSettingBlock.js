@@ -18,6 +18,7 @@ import {
     PrimaryButton
 } from '../../config/styleComponent'
 import AccessControl from '../presentational/AccessControl'
+import { callbackify } from 'util';
 const SelectTable = selecTableHOC(ReactTable);
 
 let lock = false
@@ -70,7 +71,7 @@ class GeoFenceSettingBlock extends React.Component{
             })
     }
 
-    getMonitorConfig = () => {
+    getMonitorConfig = (callback) => {
         let { 
             auth,
             locale,
@@ -100,7 +101,12 @@ class GeoFenceSettingBlock extends React.Component{
             this.setState({
                 data: res.data.rows,
                 columns,
-            })
+                show: false,
+                showDeleteConfirmation: false,
+                selectedData: null, 
+                selection: '',
+                selectAll:false
+            }, callback)
         })
         .catch(err => {
             console.log(err)
@@ -161,20 +167,12 @@ class GeoFenceSettingBlock extends React.Component{
             monitorConfigPackage: configPackage
         })
         .then(res => {
-            setTimeout(
-                () => {
-                    this.getMonitorConfig(),
-                    this.setState({
-                        show: false,
-                        showDeleteConfirmation: false,
-                        selectedData: null, 
-                        selection: '',
-                        selectAll:false
-                    })
-                   
-                },
-                300
-            )
+
+            let callback = () => messageGenerator.setSuccessMessage(
+                'save success'
+            )   
+            this.getMonitorConfig(callback)
+
         })
         .catch(err => { 
             console.log(err)
