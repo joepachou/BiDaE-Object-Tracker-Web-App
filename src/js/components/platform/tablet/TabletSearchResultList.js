@@ -37,7 +37,8 @@ class SearchResult extends React.Component {
             title,
             selection,
             handleToggleNotFound,
-            showNotFoundResult
+            showNotFoundResult,
+            onSelect
         } = this.props;
         
         const style = {
@@ -92,21 +93,12 @@ class SearchResult extends React.Component {
                                                     data={searchResult}
                                                     selection={selection}
                                                 />
-                                            )
-                                            }
+                                            )}
                                         >
                                             <SearchResultListGroup 
                                                 data={searchResult}
-                                                onSelect={searchResult[0].object_type == 0 
-                                                    ? this.onSelect
-                                                    : null
-                                                }
+                                                onSelect={onSelect}
                                                 selection={selection}
-                                                action={
-                                                    searchResult[0].object_type == 0 && !showNotFoundResult
-                                                        ? true
-                                                        : false
-                                                }
                                             />
 
                                         </AccessControl>

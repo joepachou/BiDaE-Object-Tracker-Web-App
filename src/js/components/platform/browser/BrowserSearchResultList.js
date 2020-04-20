@@ -90,14 +90,14 @@ export default class BrowserSearchResultList extends React.Component {
                                         renderNoAccess={() => (
                                             <SearchResultListGroup 
                                                 data={searchResult}
-                                                selection={this.state.selection}
+                                                selection={selection}
                                             />
                                         )}
                                     >
                                         <SearchResultListGroup 
                                             data={searchResult}
                                             onSelect={onSelect}
-                                            selection={this.state.selection}
+                                            selection={selection}
                                             action
                                         />
 

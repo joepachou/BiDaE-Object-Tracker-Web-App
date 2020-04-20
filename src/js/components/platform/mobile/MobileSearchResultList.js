@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import { AppContext } from '../../../context/AppContext'
 import { 
     Button,
@@ -37,7 +37,8 @@ export default class MobileSearchResultList extends React.Component {
             title,
             selection,
             handleToggleNotFound,
-            showNotFoundResult
+            showNotFoundResult,
+            onSelect
         } = this.props;
         
         const style = {
@@ -67,69 +68,58 @@ export default class MobileSearchResultList extends React.Component {
         
 
         return(
-            <div>
-                <div>
-                    <Row className='d-flex justify-content-center' style={style.titleText}>
-                        <h4>
-                            {title}
-                        </h4>
-                    </Row>
-                    <Row>
-                        {searchResult.length === 0 
-                            ?   <Col className='d-flex justify-content-center font-weight-lighter' style={style.noResultDiv}>
-                                    <div className='searchResultForDestop'>{locale.texts.NO_RESULT}</div>
-                                </Col> 
-                            :   
-                                <Col className="searchResultListGroupForTablet d-flex justify-content-center">
-                                    <ScrollArea 
-                                        style={style.searchResultListForTablet} 
-                                        smoothScrolling={true}
-                                    >                 
-                                        <AccessControl
-                                            permission={'form:edit'}
-                                            renderNoAccess={() => (
-                                                <SearchResultListGroup 
-                                                    data={searchResult}
-                                                    selection={selection}
-                                                />
-                                            )
-                                            }
-                                        >
+            <Fragment>
+                <Row className='d-flex justify-content-center' style={style.titleText}>
+                    <h4>
+                        {title}
+                    </h4>
+                </Row>
+                <Row>
+                    {searchResult.length === 0 
+                        ?   <Col className='d-flex justify-content-center font-weight-lighter' style={style.noResultDiv}>
+                                <div className='searchResultForDestop'>{locale.texts.NO_RESULT}</div>
+                            </Col> 
+                        :   
+                            <Col className="searchResultListGroupForTablet d-flex justify-content-center">
+                                <ScrollArea 
+                                    style={style.searchResultListForTablet} 
+                                    smoothScrolling={true}
+                                >                  
+                                    <AccessControl
+                                        permission={'form:edit'}
+                                        renderNoAccess={() => (
                                             <SearchResultListGroup 
                                                 data={searchResult}
-                                                onSelect={searchResult[0].object_type == 0 
-                                                    ? this.onSelect
-                                                    : null
-                                                }
                                                 selection={selection}
-                                                action={
-                                                    searchResult[0].object_type == 0 && !showNotFoundResult
-                                                        ? true
-                                                        : false
-                                                }
                                             />
-
-                                        </AccessControl>
-                                    </ScrollArea>
-                                </Col>
+                                        )}
+                                    >
+                                        <SearchResultListGroup 
+                                            data={searchResult}
+                                            onSelect={onSelect}
+                                            selection={selection}
+                                            action
+                                        />
+                                    </AccessControl>
+                                </ScrollArea>
+                            </Col>
+                    }
+                </Row>
+                <Row className='d-flex justify-content-center mt-3'>
+                    <Button
+                        variant="link"
+                        onClick={handleToggleNotFound}
+                        size="lg"
+                        disabled={false}
+                    >
+                        {showNotFoundResult
+                            ? locale.texts.SHOW_SEARCH_RESULTS_FOUND
+                            : locale.texts.SHOW_SEARCH_RESULTS_NOT_FOUND
                         }
-                    </Row>
-                    <Row className='d-flex justify-content-center mt-3'>
-                        <Button
-                            variant="link"
-                            onClick={handleToggleNotFound}
-                            size="lg"
-                            disabled={false}
-                        >
-                            {showNotFoundResult
-                                ? locale.texts.SHOW_SEARCH_RESULTS_FOUND
-                                : locale.texts.SHOW_SEARCH_RESULTS_NOT_FOUND
-                            }
 
-                        </Button>
-                    </Row>
-                </div>
-            </div>
+                    </Button>
+                </Row>
+            </Fragment>
         )
     }
 }

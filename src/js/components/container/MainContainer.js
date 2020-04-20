@@ -401,7 +401,6 @@ class MainContainer extends React.Component{
     }
 
     handleClearButton = () => {
-        // this.clearGridButtonBGColor();
         this.setState({
             hasSearchKey: false,
             searchKey: '',

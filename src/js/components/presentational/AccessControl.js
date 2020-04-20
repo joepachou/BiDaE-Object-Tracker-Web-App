@@ -13,8 +13,10 @@ const AccessControl = ({
     platform = [true]
 }) => {
     const auth = React.useContext(AuthContext);
+
     let ownedPermissions = auth.user.permissions
     const permitted = permission ? ownedPermissions.includes(permission) : true
+
     const platformSupported = platform.map(item => {
         switch(item) {
             case 'browser': 
@@ -27,6 +29,7 @@ const AccessControl = ({
                 return true
         }
     }).includes(true)
+
     if (permitted && platformSupported) {
         return children;
     }

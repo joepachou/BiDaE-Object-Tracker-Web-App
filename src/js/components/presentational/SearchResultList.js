@@ -62,7 +62,6 @@ class SearchResult extends React.Component {
         let selectItem = isFound 
                 ? this.props.searchResult.filter(item => item.found)[number]
                 : this.props.searchResult.filter(item => !item.found)[number]
-
         if (selectItem.object_type == 0) {
             /** The reason using array to encapture the selectedObjectData is to have the consisten data form passed into ChangeStatusForm */
             this.toggleSelection(number, isFound)
@@ -77,7 +76,6 @@ class SearchResult extends React.Component {
                 selectedObjectData: selectItem
             })
         }
-
     }
 
     toggleSelection = (number, isFound) => {

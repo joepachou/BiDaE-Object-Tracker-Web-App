@@ -332,6 +332,7 @@ export default class ChangeStatusForm extends React.Component {
                                 />
                                 <AccessControl 
                                     platform={['browser', 'tablet']}
+                                    renderNoAccess={() => null}
                                 >
                                     <Row className='d-flex justify-content-center pb-2'>
                                         <ButtonToolbar >

@@ -151,8 +151,8 @@ export default class MobileMainContainer extends React.Component {
                         <SearchResultList
                             searchResult={searchResult} 
                             searchKey={searchKey}
-                            highlightSearchPanel={this.highlightSearchPanel}
-                            handleShowPath={this.handleShowPath}
+                            highlightSearchPanel={highlightSearchPanel}
+                            handleShowPath={handleShowPath}
                             showMobileMap={showMobileMap}
                         />
                     </div>
