@@ -72,7 +72,7 @@ const lbeaconTableColumn = [
     {
         Header: "UUID",
         accessor: "uuid",
-        width: 350
+        width: 400
     },
     {
         Header: "description",
@@ -602,7 +602,7 @@ const monitorConfigColumn = [
     {
         Header: "enable",
         accessor: "enable",
-        width: 60,
+        width: 70,
         style: style.column,
         Cell: props => props.value 
             ? <i className="fas fa-circle" style={style.icon.circle}></i>
@@ -611,7 +611,7 @@ const monitorConfigColumn = [
     {
         Header: "area",
         accessor: "area.label",
-        width: 150,
+        width: 230,
     },
     {
         Header: "enable start time",
