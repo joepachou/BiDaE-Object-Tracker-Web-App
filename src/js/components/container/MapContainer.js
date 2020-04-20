@@ -20,7 +20,7 @@ class MapContainer extends React.Component {
         showConfirmForm: false,
     }
 
-    handleConfirmFormSubmit = (e) => {
+    handleSubmit = (e) => {
         this.props.setMonitor(this.state.type, this.handleCloseModal)
     }
 
@@ -101,7 +101,8 @@ class MapContainer extends React.Component {
             pathMacAddress,
             handleClearButton,
             geofenceConfig,
-            setMonitor
+            setMonitor,
+            locationMonitorConfig
         }
         return(
             <Fragment>
@@ -127,7 +128,7 @@ class MapContainer extends React.Component {
                 />
                 <GeneralConfirmForm
                     show={this.state.showConfirmForm}
-                    handleSubmit={this.handleConfirmFormSubmit}
+                    handleSubmit={this.handleSubmit}
                     handleClose={this.handleCloseModal}
                 />    
             </Fragment>

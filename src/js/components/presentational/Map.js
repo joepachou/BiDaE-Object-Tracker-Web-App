@@ -174,22 +174,22 @@ class Map extends React.Component {
         this.currentZoom = this.map.getZoom();
         // this.calculateScale();
         this.markersLayer.eachLayer(marker => {
-            // let icon = marker.options.icon;
-            // icon.options.iconSize = [this.scalableIconSize, this.scalableIconSize]
-            // icon.options.numberSize = this.scalableNumberSize
-            // icon.options.iconAnchor = [this.scalableIconSize / 2, this.scalableIconSize / 2]
-            // var pos = marker.getLatLng()
-            // marker.setLatLng([
-            //     pos.lat - this.prevZoom * this.pin_shift_scale[0] + this.currentZoom * this.pin_shift_scale[0], 
-            //     pos.lng - this.prevZoom * this.pin_shift_scale[1] + this.currentZoom * this.pin_shift_scale[1]
-            // ])
-            // marker.setIcon(icon);
+            let icon = marker.options.icon;
+            icon.options.iconSize = [this.scalableIconSize, this.scalableIconSize]
+            icon.options.numberSize = this.scalableNumberSize
+            icon.options.iconAnchor = [this.scalableIconSize / 2, this.scalableIconSize / 2]
+            var pos = marker.getLatLng()
+            marker.setLatLng([
+                pos.lat - this.prevZoom * this.pin_shift_scale[0] + this.currentZoom * this.pin_shift_scale[0], 
+                pos.lng - this.prevZoom * this.pin_shift_scale[1] + this.currentZoom * this.pin_shift_scale[1]
+            ])
+            marker.setIcon(icon);
         })
 
-        // this.geoFenceLayer.eachLayer( circle => {
-        //     circle.setRadius(this.scalableCircleRadius)
-        // })
-        
+        this.geoFenceLayer.eachLayer( circle => {
+            circle.setRadius(this.scalableCircleRadius)
+        })
+
     }
 
     /** Calculate the current scale for creating markers and resizing. */
@@ -321,7 +321,6 @@ class Map extends React.Component {
         let {
             locationMonitorConfig,
         } = this.props
-
         let {
             stateReducer
         } = this.context

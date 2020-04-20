@@ -224,26 +224,23 @@ class MainContainer extends React.Component{
         ] = stateReducer
         
         let configName = `${config.monitor[type].name}Config`
-        let triggerFuncName = `get${configName.replace(/^\w/, (chr) => {
+        let triggerMonitorFunctionName = `get${configName.replace(/^\w/, (chr) => {
             return chr.toUpperCase()
         })}`
         let cloneConfig = _.cloneDeep(this.state[configName])
 
         let enable = + !cloneConfig[areaId].enable
-
         retrieveDataHelper.setMonitorEnable(
             enable,
             areaId,
             config.monitor[type].api
         )
         .then(res => {
-            console.log(`set ${type} enable success`)
-            setTimeout(() => {
-                this[triggerFuncName](callback)
-            }, 1000)
+            console.log(`set ${type} enable succeed`)
+            setTimeout(() => this[triggerMonitorFunctionName](callback), 1000)
         })
         .catch(err => {
-            console.log(`set ${type} enable fails ${err}`)
+            console.log(`set ${type} enable failed ${err}`)
         })
     }
 
@@ -352,7 +349,7 @@ class MainContainer extends React.Component{
     }
 
     /** Retrieve location monitor data from database */
-    getLocationMonitorConfig = () => {
+    getLocationMonitorConfig = (callback) => {
         let { 
             stateReducer,
             auth
@@ -378,7 +375,7 @@ class MainContainer extends React.Component{
             }, {})
             this.setState({
                 locationMonitorConfig
-            })
+            }, callback)
         })
         .catch(err => {
             console.log(`get location monitor config failed ${err}`)
@@ -674,7 +671,8 @@ class MainContainer extends React.Component{
             showPath,
             display,
             pathMacAddress,
-            isHighlightSearchPanel        
+            isHighlightSearchPanel,
+            locationMonitorConfig     
         } = this.state;
 
         const {
@@ -716,7 +714,8 @@ class MainContainer extends React.Component{
             display,
             pathMacAddress,
             mapButtonHandler,
-            isHighlightSearchPanel
+            isHighlightSearchPanel,
+            locationMonitorConfig
         }
 
         return (
