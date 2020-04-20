@@ -299,6 +299,9 @@ class SearchResult extends React.Component {
                 showDownloadPdfRequest: false,
                 showConfirmForm: false,
                 showPatientView: false,
+                selection: [],
+                selectedObjectData: [],
+
             }, callback)
         })
         .catch(err => {
@@ -328,31 +331,6 @@ class SearchResult extends React.Component {
             selection,
             showNotFoundResult
         } = this.state
-
-        const style = {
-            noResultDiv: {
-                color: 'grey',
-                fontSize: '1rem',
-            },
-            titleText: {
-                color: 'rgb(80, 80, 80, 0.9)',
-            }, 
-            downloadPdfRequest: {
-                zIndex: 3000,
-                top: '30%',
-                right: 'auto',
-                bottom: 'auto',
-                padding: 0,
-            },
-            searchResultListForMobile: {
-                maxHeight: this.props.showMobileMap ? '35vh' : '65vh',
-                dispaly: this.props.searchKey ? null : 'none',
-            },
-            searchResultListForTablet: {
-                dispaly: this.props.searchKey ? null : 'none',
-                maxHeight: '28vh'
-            }
-        }
 
         let foundResult = this.props.searchResult.filter(item => item.found)
         let notFoundResult = this.props.searchResult.filter(item => !item.found)
