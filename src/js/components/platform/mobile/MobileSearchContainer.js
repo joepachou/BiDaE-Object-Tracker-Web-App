@@ -4,7 +4,7 @@ import {
     Col
 } from 'react-bootstrap';
 import Searchbar from '../../presentational/Searchbar';
-import ObjectTypeListForTablet from '../../container/ObjectTypeListForTablet';
+import TabletObjectTypeList from '../tablet/TabletObjectTypeList';
 
 const MobileSearchContainer = ({
     searchKey,
@@ -33,7 +33,7 @@ const MobileSearchContainer = ({
             <div id='searchOption' className="pt-2" style={style.textForMobile}>
                 <Row>
                     <Col className='px-0'>
-                        <ObjectTypeListForTablet
+                        <TabletObjectTypeList
                             getSearchKey={getSearchKey}  
                             clearSearchResult={clearSearchResult}   
                             hasGridButton={hasGridButton} 

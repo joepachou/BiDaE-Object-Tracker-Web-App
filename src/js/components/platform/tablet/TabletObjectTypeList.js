@@ -1,8 +1,10 @@
 import React  from 'react';
-import { Col, ListGroup, Row, Button } from 'react-bootstrap';
-import config from '../../config';
-import AccessControl from '../presentational/AccessControl';
-import { AppContext } from '../../context/AppContext';
+import { 
+    Col,
+     Button 
+} from 'react-bootstrap';
+import AccessControl from '../../presentational/AccessControl';
+import { AppContext } from '../../../context/AppContext'
 import {
     MobileOnlyView,
     TabletView,
@@ -10,7 +12,7 @@ import {
 } from 'react-device-detect'
 import ScrollArea from 'react-scrollbar'
 
-class ObjectTypeListForTablet extends React.Component {
+class TabletObjectTypeList extends React.Component {
 
     static contextType = AppContext
 
@@ -239,4 +241,4 @@ class ObjectTypeListForTablet extends React.Component {
     }
 }
 
-export default ObjectTypeListForTablet;
+export default TabletObjectTypeList;

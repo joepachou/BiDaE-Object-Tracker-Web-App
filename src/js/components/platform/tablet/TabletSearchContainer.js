@@ -4,7 +4,7 @@ import {
     Col
 } from 'react-bootstrap';
 import Searchbar from '../../presentational/Searchbar';
-import ObjectTypeListForTablet from '../../container/ObjectTypeListForTablet';
+import TabletObjectTypeList from './TabletObjectTypeList';
 
 const TabletSearchContainer = ({
     searchKey,
@@ -27,7 +27,7 @@ const TabletSearchContainer = ({
             <div id='searchOption' className="pt-2">
                 <Row>
                     <Col className='px-0'>
-                        <ObjectTypeListForTablet
+                        <TabletObjectTypeList
                             getSearchKey={getSearchKey}  
                             clearSearchResult={clearSearchResult}   
                             hasGridButton={hasGridButton} 
