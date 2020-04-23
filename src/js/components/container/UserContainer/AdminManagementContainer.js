@@ -217,6 +217,11 @@ class AdminManagementContainer extends React.Component{
         .then(res => {
             this.getUserList()
             this.handleClose()
+            let callback = () => messageGenerator.setSuccessMessage(
+                'save success'
+            )  
+
+            callback()
         })
         .catch(err => {
             console.log("delete User fail : " + err);

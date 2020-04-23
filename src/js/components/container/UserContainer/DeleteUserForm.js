@@ -57,12 +57,8 @@ const DeleteUserForm = ({
                     }
 
                     onSubmit={(values, { setStatus, setSubmitting }) => {
-                        let callback = () => messageGenerator.setSuccessMessage(
-                                            'save success'
-                                        )  
-                        
-                        handleSubmit(values)
-                        callback()
+  
+                        handleSubmit(values) 
                         // axios.post(dataSrc.deleteUser, {
                         //     username: values.name.label
                         // })
