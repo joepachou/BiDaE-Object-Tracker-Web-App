@@ -93,7 +93,7 @@ class TranferredLocationManagement extends React.Component{
                 department.map( (department, index) => {
                     rows.push({
                         fold: null,
-                        level: <h6>department</h6>,
+                     level: <h6>{locale.texts.DEPARTMENT}</h6>,
                         name: <input 
                             type="text" 
                             value={department} 

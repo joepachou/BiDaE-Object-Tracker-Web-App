@@ -210,7 +210,7 @@ const tw = {
     PERIMETERS_GROUP: "perimeters group",
     FENCE_RSSI:"fences rssi",
     PERIMETER_RSSI:"perimeter rssi",
-    
+    DEPARTMENT:"部門",
     FENCES_GROUP: "fences group",
     RSSI: "rssi",
     YES: '是',
