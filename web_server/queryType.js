@@ -654,6 +654,7 @@ const addObject = (formOption) => {
 }
 
 const addPatient = (formOption) => {
+	 
 	const text = 
 		`
 		INSERT INTO object_table (
@@ -1964,7 +1965,7 @@ function modifyTransferredLocation(type, data){
 	const defaultNewDepartment = 'new department'
 	var query;
 	if(type == 'add branch'){
-        query = `insert into branch_and_department(branch_name, department) values('${data.name}', '{"${defaultNewDepartment}"}')`
+        query = `insert into branch_and_department(branch_name, department) values('${data.name}', '{"${data.departmentName}"}')`
     }else if(type == 'rename branch'){
         query = `update branch_and_department set branch_name = '${data.name}' where id = ${data.branch_id} `
     }else if(type == 'remove branch'){

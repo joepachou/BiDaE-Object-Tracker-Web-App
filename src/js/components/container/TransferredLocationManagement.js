@@ -15,11 +15,7 @@ import locale from 'antd/lib/date-picker/locale/en_US';
 import { 
     TransferredLocationColumn
 } from '../../config/tables'
-
-
-const defaultBranchName = 'new branch'
-const defaultDepartmentName = 'new department'
-
+ 
 
 class TranferredLocationManagement extends React.Component{
 
@@ -129,10 +125,12 @@ class TranferredLocationManagement extends React.Component{
         }      
     }
     addBranch = (e) => {
+        const { locale } = this.context
         axios.post(dataSrc.modifyTransferredLocation, {
             type: 'add branch',
             data: {
-                name: defaultBranchName
+                name: locale.texts.NEW_BRANCH,
+                departmentName: locale.texts.NEW_DEPARTMENT
             }
         }).then(res => {
             this.getTransferredLocation()
@@ -170,11 +168,12 @@ class TranferredLocationManagement extends React.Component{
         })
     }
     addDepartment = (branch_id) => {
+        const { locale } = this.context
         axios.post(dataSrc.modifyTransferredLocation, {
             type: 'add department',
             data: {
                 branch_id,
-                name: defaultDepartmentName
+                name: locale.texts.NEW_DEPARTMENT
             }
         }).then(res => {
             this.getTransferredLocation()
