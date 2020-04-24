@@ -22,7 +22,7 @@ class TranferredLocationManagement extends React.Component{
     static contextType = AppContext 
     state= { 
         transferredLocationOptions: [],
-        unFoldBranches: [], 
+        unFoldBranches: [] 
     } 
 
 
@@ -42,8 +42,8 @@ class TranferredLocationManagement extends React.Component{
     componentDidMount = () => {
         this.getColumn()
         this.getTransferredLocation()
-    }
-   
+    } 
+    
     getTransferredLocation = () => {
         axios.get(dataSrc.getTransferredLocation)
             .then(res => {
@@ -103,8 +103,8 @@ class TranferredLocationManagement extends React.Component{
                                 }else{ 
                                     let callback = () => messageGenerator.setErrorMessage(
                                                         'ALEAST_ONE_DEPARTMENT'
-                                                    )   
-                                    callback() 
+                                                    )    
+                                   callback()
                                 } 
                             }} />,
                         add:null,
