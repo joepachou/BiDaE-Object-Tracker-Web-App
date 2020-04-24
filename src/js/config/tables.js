@@ -160,7 +160,7 @@ const gatewayTableColumn = [
 const TransferredLocationColumn =[
     {
         label: '',
-        field: 'fold',
+        field: '',
         sort: "asc",
         width: 200
       },

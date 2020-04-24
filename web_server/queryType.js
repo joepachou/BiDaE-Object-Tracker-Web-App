@@ -1978,8 +1978,7 @@ function modifyTransferredLocation(type, data){
         query = `update branch_and_department set department = array_remove(department, department[${data.departmentIndex + 1}]) where id = ${data.branch_id}`
     }else{
         console.log('modifyTransferredLocation: unrecognized command type')
-    }
-
+    } 
 	return query
 }
 

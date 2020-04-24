@@ -210,6 +210,7 @@ const en =  {
     FENCE_RSSI:"fences rssi",
     PERIMETER_RSSI:"perimeter rssi",
     DEPARTMENT:"department",
+    NEW_DEPARTMENT:"new department",
     FENCES_GROUP: "fences group",
     RSSI: "rssi",
     YES: 'yes',
@@ -304,6 +305,7 @@ const en =  {
     PASSWORD_NOT_FIT:"password not fit",
     ALEAST_CHOOSE_ONE_UUID:"aleast choose one uuid",
     ENTER_THE_RSSI:"Enter the RSSI",
+    ALEAST_ONE_DEPARTMENT:"Aleast one department",
 
     /** placeholder */
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "please enter or scan mac address",
@@ -398,6 +400,7 @@ const en =  {
     ABNORMAL_LBEACON_LIST: "abnormal lbeacon list",
     ACTION: "action",
     BRANCH:"branch",
+    NEW_BRANCH:"new branch",
     ROLE_LIST:"Role List",
     PERMISSION_LIST:"Permission List",
 

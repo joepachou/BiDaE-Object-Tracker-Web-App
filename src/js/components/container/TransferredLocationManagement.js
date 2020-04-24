@@ -15,7 +15,7 @@ import locale from 'antd/lib/date-picker/locale/en_US';
 import { 
     TransferredLocationColumn
 } from '../../config/tables'
- 
+import messageGenerator from '../../service/messageGenerator'
 
 class TranferredLocationManagement extends React.Component{
 
@@ -97,7 +97,16 @@ class TranferredLocationManagement extends React.Component{
                             onChange={this.renameDepartmentToState.bind(this, branch.id, index)}/>,
                         remove: <i 
                             className="fas fa-minus d-flex justify-content-center" 
-                            onClick={() => {this.removeDepartment(branch.id, index)}} />,
+                            onClick={() => {  
+                                if (branch.department.length > 1){
+                                    this.removeDepartment(branch.id, index)
+                                }else{ 
+                                    let callback = () => messageGenerator.setErrorMessage(
+                                                        'ALEAST_ONE_DEPARTMENT'
+                                                    )   
+                                    callback() 
+                                } 
+                            }} />,
                         add:null,
                     })
                 })
@@ -201,7 +210,7 @@ class TranferredLocationManagement extends React.Component{
             this.getTransferredLocation()
         })
     }
-    removeDepartment = (branch_id, departmentIndex) => {
+    removeDepartment = (branch_id, departmentIndex) => { 
         axios.post(dataSrc.modifyTransferredLocation, {
             type: 'remove department',
             data: {
