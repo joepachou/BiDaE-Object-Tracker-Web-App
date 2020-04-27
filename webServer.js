@@ -62,10 +62,7 @@ const httpServer = process.env.HTTP_PORT
 
 
 
-
-
-//api
-app.post('/api/apiGetKey', db.apiGetKey)
+ 
  
 
 

@@ -544,9 +544,8 @@ const signin = (request, response) => {
                         main_area,
                         locale_id,
                         locale
-                    }
-
-                    request.session.userInfo = userInfo
+                    } 
+                    // request.session.userInfo = userInfo
                     response.json({
                         authentication: true,
                         userInfo
@@ -611,8 +610,22 @@ const signup = (request, response) => {
         .then(res => {
             pool.query(queryType.insertUserData(name, roles, area_id))
                 .then(res => {
-                    console.log('sign up succeed')
-                    response.status(200).json(res)
+                    console.log('sign up succeed') 
+                    
+                    //SETTING API Key while role >= 3 
+                    const saltRounds = 10;
+                    const hash = bcrypt.hashSync(name, saltRounds);
+                    (roles.includes('system_admin') || roles.includes('dev') ) 
+                    ?  pool.query(queryType.setAPIKey(name, hash)) 
+                        .then(res => {
+                            console.log(`set API Key success`)
+                            response.status(200).json(res)
+                        })
+                        .catch(err => {
+                            console.log(`set API Key failed ${err}`)
+                        })
+                    : null
+ 
                 })
                 .catch(err => {
                     console.log(`sinup failed ${err}`)
@@ -1519,6 +1532,7 @@ const addPatientRecord = (request, response) => {
 
 }
 
+ 
 
 module.exports = {
     getTrackingData,
@@ -1588,5 +1602,5 @@ module.exports = {
     clearSearchHistory,
     getLocationHistory,
     setUserSecondaryArea,
-    addPatientRecord
+    addPatientRecord 
 }

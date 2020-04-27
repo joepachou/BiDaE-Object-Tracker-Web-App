@@ -26,19 +26,7 @@ function getTrackingData (areas_id) {
 			edit_object_record.notes,
 			user_table.name as physician_name,
 			object_table.reserved_timestamp,
-			notification.json_agg as notification,
-			JSON_BUILD_OBJECT(
-				'id', area_table.id,
-				'value', area_table.name
-			) AS area,
-			object_table.reserved_user_id,
-			(
-				SELECT name
-				FROM user_table
-				WHERE user_table.id = object_table.reserved_user_id
-			) as reserved_user_name,
-			COALESCE(patient_record.record, ARRAY[]::JSON[]) as records			
-		
+			notification.json_agg as notification 
 		FROM object_summary_table
 
 		LEFT JOIN object_table
@@ -53,26 +41,7 @@ function getTrackingData (areas_id) {
 		LEFT JOIN area_table
 		ON object_table.area_id = area_table.id
 
-		LEFT JOIN (
-			SELECT 
-				object_id,
-				ARRAY_AGG(JSON_BUILD_OBJECT(
-					'created_timestamp', created_timestamp,
-					'record', record,
-					'recorded_user', (
-						SELECT name
-						FROM user_table
-						WHERE id = editing_user_id 
-					)
-				)) as record 
-			FROM (
-				SELECT *
-				FROM patient_record
-				ORDER BY created_timestamp DESC
-			) as patient_record_table
-			GROUP BY object_id					
-		) as patient_record
-		ON object_table.id = patient_record.object_id
+	 
 
 		LEFT JOIN user_table
 		ON user_table.id = object_table.physician_id
@@ -2071,6 +2040,33 @@ const addPatientRecord = objectPackage => {
 	
 }
 
+ 
+function setAPIKey(name,hash) {
+
+	var text = 
+		`
+			INSERT INTO api_key(id,name,key) 
+			VALUES(	
+			(
+				SELECT id 
+				FROM user_table 
+				WHERE name ='${name}'
+			),
+			$1, 
+			$2);
+		`
+	values =  [name,hash]
+	query = {
+		text,
+		values
+	}
+	
+	return query 
+	
+}
+  
+
+
 module.exports = {
 	getTrackingData,
 	getTrackingTableByMacAddress,
@@ -2143,7 +2139,8 @@ module.exports = {
 	setMonitorEnable,
 	clearSearchHistory,
 	setUserSecondaryArea,
-	addPatientRecord
+	addPatientRecord ,
+	setAPIKey
 }
 
 
