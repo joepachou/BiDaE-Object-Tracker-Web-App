@@ -17,7 +17,7 @@ Object.keys(config.monitorType)
     .forEach(key => {
         monitorTypeMap[config.monitorType[key]] = key
 })
-  
+ 
 class EditPatientForm extends React.Component {
   
     handleSubmit = (postOption) => {
@@ -106,6 +106,8 @@ class EditPatientForm extends React.Component {
                         initialValues = {{
                             area: area_name || '',
 
+                            physician : '',
+
                             name: name || '' ,
 
                             mac_address: mac_address || '',
@@ -133,7 +135,9 @@ class EditPatientForm extends React.Component {
                                  
                                 area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
 
-                                gender: Yup.string().required(locale.texts.GENDER_IS_REQUIRED),
+                                physician: Yup.string().required(locale.texts.ATTENDING_IS_REQUIRED),
+
+                                gender: Yup.string().required(locale.texts.GENDER_IS_REQUIRED), 
 
                                 asset_control_number: Yup.string()
                                     .required(locale.texts.NUMBER_IS_REQUIRED)
@@ -175,12 +179,11 @@ class EditPatientForm extends React.Component {
                                             if( value.match(pattern)) return true
                                             return false
                                         }
-                                    ),
+                                    ), 
                         })}
 
 
-                        onSubmit={(values, { setStatus, setSubmitting }) => {
-                         
+                        onSubmit={(values, { setStatus, setSubmitting }) => { 
                             let monitor_type = values.monitorType
                                 ?   values.monitorType
                                     .filter(item => item)
@@ -205,7 +208,7 @@ class EditPatientForm extends React.Component {
                                 room: values.room ? values.room.label : '',
                                 object_type: values.gender.value,
                                 physicianIDNumber : values.physician  ? values.physician.value : this.props.physicianIDNumber
-                            } 
+                            }  
                             this.handleSubmit(postOption)                            
                         }}
 
@@ -293,7 +296,7 @@ class EditPatientForm extends React.Component {
                                             )}
                                         />
                                     </Col>
-                                    <Col>
+                                    <Col> 
                                         <FormikFormGroup 
                                             type="text"
                                             name="physician"
@@ -301,6 +304,7 @@ class EditPatientForm extends React.Component {
                                             error={errors.physician}
                                             touched={touched.physician}
                                             component={() => (
+                                                
                                                 <Select
                                                     placeholder = {locale.texts.SELECT_PHYSICIAN}
                                                     name="physician"
@@ -313,7 +317,7 @@ class EditPatientForm extends React.Component {
                                                     }}
                                                 />
                                             )}
-                                        />
+                                        />   
                                     </Col>
                                 </Row>
                                 <FormikFormGroup 

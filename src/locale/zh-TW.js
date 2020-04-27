@@ -210,7 +210,8 @@ const tw = {
     PERIMETERS_GROUP: "perimeters group",
     FENCE_RSSI:"fences rssi",
     PERIMETER_RSSI:"perimeter rssi",
-    
+    DEPARTMENT:"部門",
+    NEW_DEPARTMENT:"新部門",
     FENCES_GROUP: "fences group",
     RSSI: "rssi",
     YES: '是',
@@ -306,6 +307,7 @@ const tw = {
     PASSWORD_NOT_FIT:"密碼需要相符",
     ALEAST_CHOOSE_ONE_UUID:"至少選擇一個UUID",
     ENTER_THE_RSSI:"請填入RSSI",
+    ALEAST_ONE_DEPARTMENT:"需要保留至少一個部門",
 
     /** placeholder */
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "請輸入或掃描mac address",
@@ -400,6 +402,7 @@ const tw = {
     ABNORMAL_LBEACON_LIST: "abnormal lbeacon list",
     ACTION: "action",
     BRANCH:"分支",
+    NEW_BRANCH:"新分支",
     ROLE_LIST:"角色列表",
     PERMISSION_LIST:"權限列表",
 

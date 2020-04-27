@@ -8,7 +8,7 @@ import {
     Form
 } from 'formik';
 import LocaleContext from '../../context/LocaleContext';
-
+import messageGenerator from '../../service/messageGenerator'
 const DeleteConfirmationForm = ({
     handleClose,
     handleSubmit,
@@ -33,6 +33,11 @@ const DeleteConfirmationForm = ({
             <Modal.Body>
                 <Formik
                     onSubmit={() => {
+                        let callback = () => messageGenerator.setSuccessMessage(
+                'save success'
+            )  
+
+            callback()
                         handleSubmit()
                     }}
                     render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (

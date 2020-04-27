@@ -4,8 +4,8 @@ import { toast, Slide, Zoom, Flip} from 'react-toastify';
 
 const setSuccessMessage = (
     msg 
-) => {
-    return (
+) => { 
+    return ( 
         toast.success(<ToastMessage msg={msg}  />, {
             position: toast.POSITION.TOP_CENTER,
             autoClose: 3000,
@@ -26,7 +26,7 @@ const setErrorMessage = (
     return (
         toast.success(<ToastMessage msg={msg} />, {
             position: toast.POSITION.TOP_CENTER,
-            autoClose: false,
+            autoClose: 3000, //origin is false 
             className: 'toast-error-notice-container',
             bodyClassName: "toast-notice-body",
             hideProgressBar: true,
