@@ -612,11 +612,10 @@ const signup = (request, response) => {
                 .then(res => {
                     console.log('sign up succeed') 
                     
-                    //SETTING API Key while role >= 3 
+                    //SETTING API Key 
                     const saltRounds = 10;
                     const hash = bcrypt.hashSync(name, saltRounds);
-                    (roles.includes('system_admin') || roles.includes('dev') ) 
-                    ?  pool.query(queryType.setAPIKey(name, hash)) 
+                    pool.query(queryType.setAPIKey(name, hash)) 
                         .then(res => {
                             console.log(`set API Key success`)
                             response.status(200).json(res)
@@ -624,8 +623,6 @@ const signup = (request, response) => {
                         .catch(err => {
                             console.log(`set API Key failed ${err}`)
                         })
-                    : null
- 
                 })
                 .catch(err => {
                     console.log(`sinup failed ${err}`)

@@ -8,8 +8,7 @@ const config = {
     password: process.env.DB_PASS,
     port: process.env.DB_PORT,
 }
-const pool = new pg.Pool(config)
-
+const pool = new pg.Pool(config)  
 
 const get_key = (request, response) => {
     let { 
@@ -67,39 +66,89 @@ const get_key = (request, response) => {
         }) 
 }
  
-const match_key = (request, response) => {
-    let { 
-        key 
-    } = request.body  
-    pool.query(queryType.get_all_key())
-        .then(res => {
-            console.log(`match key success`)
-            console.log(res.rows[0].include(key))
-            response.status(200).json(res.rows[0])
+async function match_key(key, response){  
+    let matchFlag = 0
+    return await pool.query(queryType.getAllKey()) 
+        .then(res => {   
+            res.rows.map(item =>{item.key == key ? matchFlag = 1 : null  })    
+            return matchFlag
         })
-        .catch(err => {
+        .catch(err => { 
             console.log(`match key fails ${err}`)
-        }) 
-}
+        })  
+} 
 
-const search_by_mac_address = (request, response) => {
+async function get_area_role(key, response){    
+    return await pool.query(queryType.getAreaIDByKey(key))  //get area id
+        .then(res => {     
+            console.log(`get area role success`)   
+            return res.rows
+        })
+        .catch(err => { 
+            console.log(`get area role fails ${err}`)
+        })  
+} 
+
+async function filterMacAddress(area, response){    
+    return await   pool.query(queryType.filterMacAddress(area)) 
+        .then(res => {    
+            console.log(`filter Mac Address success`) 
+            return res.rows
+        })
+        .catch(err => { 
+            console.log(`filter Mac Address ${err}`)
+        })  
+} 
+
+async function get_mac_address(request, response){
+
     let { 
         key, 
         mac_address 
     } = request.body 
-    pool.query(queryType.search_by_mac_address(mac_address))
-        .then(res => {
-            console.log(`search by mac address success`)
+
+
+    var matchRes = ( Promise.resolve( match_key(key) )  );
+    await   matchRes.then(function(result){matchRes = result}) 
+
+    if (matchRes == 1 ){   // 金鑰驗證通過
+
+        // 檢查這把金鑰的所屬地區 
+        area = ( Promise.resolve( get_area_role(key) )  );
+        await  area.then(function(result){area = result}) 
+       
+        // 輸出此區域擁有的mac_address
+        var filterObject = ( Promise.resolve( filterMacAddress(area)));
+        await  filterObject.then(function(result){filterObject = result})  
+ 
+        //輸出所有mac_address的location history
+        pool.query(queryType.searchByMacAddress(filterObject))
+        .then(res => { 
+            res.error_code= '0'
+            res.error_message='get data success'
             response.status(200).json(res)
+             console.log(`search by mac address success`)    
         })
-        .catch(err => {
+        .catch(err => { 
             console.log(`search by mac address fails ${err}`)
         }) 
-}
 
+    }else{ // 金鑰驗證失敗
+
+
+
+        response.json({
+            error_code: '200',
+            error_message:'get data fail : key is incorrect',
+            data: ''
+        })
+    } 
+}
+ 
 
 module.exports = {
     get_key,
-    search_by_mac_address,
-    match_key
+    get_mac_address,
+    match_key,
+    get_area_role
 }
