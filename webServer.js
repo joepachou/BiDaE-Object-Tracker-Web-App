@@ -229,8 +229,15 @@ const httpServer = process.env.HTTP_PORT
         console.log(`HTTP Server running on port ${httpPort}`)
     })
     :   null;
+    
 
 
 
+
+
+
+//api
+app.post('/api/apiGetKey', db.apiGetKey)
+ 
 
 
