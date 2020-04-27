@@ -1,23 +1,3 @@
-function apiGetKey (name) { 
-	let text = 
-		` 
-			SELECT  key
-			FROM api_key
-			WHERE name = $1
-		`
-	const values = [
-		name
-	];
-
-	const query = {
-		text,
-		values
-	};
-    
-	return query;
-}
-
-
 const  confirmValidation = (username) => {
 	let text = `
 		SELECT 
@@ -70,8 +50,48 @@ const  confirmValidation = (username) => {
 
 }
 
+function apiGetKey (name) { 
+	let text = 
+		` 
+			SELECT  key
+			FROM api_key
+			WHERE name = $1
+		`
+	const values = [
+		name
+	];
+
+	const query = {
+		text,
+		values
+	};
+    
+	return query;
+}
+
+const get_all_key = () => { 
+    const query = 
+		` 
+			SELECT  key
+            FROM api_key 
+		` 
+	return query;
+}
+
+const search_by_mac_address  = (mac_address) => {   
+    const query = 
+    `
+        DELETE FROM location_history_table
+        WHERE mac_address IN (${mac_address.map(item => `'${item}'`)})
+        RETURNING *;
+    `    
+    return query
+}
+
 
 module.exports = {
+    confirmValidation,
     apiGetKey,
-    confirmValidation
+    get_all_key,
+    search_by_mac_address
 }

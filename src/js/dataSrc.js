@@ -69,7 +69,7 @@ const getLocationHistory = `${protocol}://${dataSrcIP}/data/getLocationHistory`
 const setUserSecondaryArea = `${protocol}://${dataSrcIP}/data/setUserSecondaryArea`
 const addPatientRecord = `${protocol}://${dataSrcIP}/data/addPatientRecord`
 
-const apiGetKey = `${protocol}://${dataSrcIP}/api/1.0/apiGetKey`
+const apiGetKey = `${protocol}://${dataSrcIP}/api/1.0/get_key`
 
 const pdfUrl = function (path) {
     return `${protocol}://${dataSrcIP}/${path}`

@@ -11,7 +11,7 @@ const config = {
 const pool = new pg.Pool(config)
 
 
-const apiGetKey = (request, response) => {
+const get_key = (request, response) => {
     let { 
         username, 
         password 
@@ -21,8 +21,9 @@ const apiGetKey = (request, response) => {
             if (res.rowCount < 1) {
                 console.log(`confirm validation failed: incorrect`)
                 response.json({
-                    confirmation: false,
-                    message: 'incorrect'
+                    error_code: '100',
+                    error_message:'get key fail : error username or error password',
+                    key: ''
                 })
             } else {
                 const hash = res.rows[0].password
@@ -31,40 +32,32 @@ const apiGetKey = (request, response) => {
                     let { 
                         roles, 
                     } = res.rows[0] 
-                    /** authenticate if user is care provider */
-                    if (roles.includes('3') || roles.includes('4')) {
+                    /** authenticate if user is care provider */ 
+                     
+                    console.log(`confirm validation succeed`) 
+                    // const saltRounds = 10;
+                    // const hash = bcrypt.hashSync(username, saltRounds);
+                    // console.log(hash)
+                    pool.query(queryType.apiGetKey(username)) 
+                        .then(res => {
 
-                        console.log(`confirm validation succeed`) 
-                        // const saltRounds = 10;
-                        // const hash = bcrypt.hashSync(username, saltRounds);
-                        // console.log(hash)
-                        pool.query(queryType.apiGetKey(username)) 
-                            .then(res => {
-
-                                response.status(200).json({
-                                    confirmation: true,
-                                    key: res.rows[0].key
-                                }) 
-                                console.log('api Get Key success') 
-                                
-                            })
-                            .catch(err => {
-                                console.log(`api Get Key failer ${err}`)
-                        })  
-
-                    } else {
-
-                        console.log(`confirm validation failed: authority is not enough`)
-                        response.json({
-                            confirmation: false,
-                            message: 'authority is not enough'
+                            response.status(200).json({
+                                error_code: '0',
+                                error_message:'get key success',
+                                key: res.rows[0].key
+                            }) 
+                            console.log('api Get Key success') 
+                            
                         })
-                    }
+                        .catch(err => {
+                            console.log(`api Get Key failer ${err}`)
+                    })   
                 } else {
                     console.log(`confirm validation failed: password is incorrect`)
                     response.json({
-                        confirmation: false,
-                        message: 'password incorrect'
+                        error_code: '100',
+                        error_message:'get key fail : error username or error password',
+                        key: ''
                     })
                 }
             }
@@ -73,10 +66,40 @@ const apiGetKey = (request, response) => {
             console.log(`confirm validation fails ${err}`)
         }) 
 }
-
  
+const match_key = (request, response) => {
+    let { 
+        key 
+    } = request.body  
+    pool.query(queryType.get_all_key())
+        .then(res => {
+            console.log(`match key success`)
+            console.log(res.rows[0].include(key))
+            response.status(200).json(res.rows[0])
+        })
+        .catch(err => {
+            console.log(`match key fails ${err}`)
+        }) 
+}
+
+const search_by_mac_address = (request, response) => {
+    let { 
+        key, 
+        mac_address 
+    } = request.body 
+    pool.query(queryType.search_by_mac_address(mac_address))
+        .then(res => {
+            console.log(`search by mac address success`)
+            response.status(200).json(res)
+        })
+        .catch(err => {
+            console.log(`search by mac address fails ${err}`)
+        }) 
+}
 
 
 module.exports = {
-    apiGetKey
+    get_key,
+    search_by_mac_address,
+    match_key
 }

@@ -1,8 +1,7 @@
 require('dotenv').config();
 const express = require('express')
 const app = express()
-const bodyParser = require('body-parser')
-const httpPort = process.env.HTTP_PORT || 80;
+const bodyParser = require('body-parser') 
 const httpsPort = process.env.HTTPS_PORT || 443;
 const path = require('path');
 const fs = require('fs')
@@ -49,8 +48,10 @@ const httpsServer = https.createServer(credentials, app)
 
 /** Enable HTTPS server */
 httpsServer.listen(httpsPort, () => {
+    
     console.log(`HTTPS Server running on PORT ${httpsPort}`)
 })
+ 
 
 const httpServer = process.env.HTTP_PORT 
     ?   http.createServer(app).listen(httpPort, () =>{
