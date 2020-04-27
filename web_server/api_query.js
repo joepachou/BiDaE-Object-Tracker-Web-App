@@ -115,8 +115,7 @@ async function get_mac_address(request, response){
 
         // 檢查這把金鑰的所屬地區 
         area = ( Promise.resolve( get_area_role(key) )  );
-        await  area.then(function(result){area = result}) 
-       
+        await  area.then(function(result){area = result})  
         // 輸出此區域擁有的mac_address
         var filterObject = ( Promise.resolve( filterMacAddress(area)));
         await  filterObject.then(function(result){filterObject = result})  
@@ -126,8 +125,13 @@ async function get_mac_address(request, response){
         .then(res => { 
             res.error_code= '0'
             res.error_message='get data success'
+            
+            res.area_id = ''
+            area.map(item => { item.area_id ?  res.area_id += item.area_id + ',' : null})
+            res.area_id =  res.area_id.substring(0,res.area_id.length-1)
+
             response.status(200).json(res)
-             console.log(`search by mac address success`)    
+            console.log(`search by mac address success`)    
         })
         .catch(err => { 
             console.log(`search by mac address fails ${err}`)
