@@ -78,18 +78,16 @@ const getAllKey = () => {
 	return query;
 }
 
-//  3
-const searchByMacAddress  = (mac_address) => {   
+const searchByMacAddress  = (mac_address) => {     
     const query =  `
         SELECT *  FROM location_history_table 
-        WHERE  mac_address IN (${mac_address.map(item => `'${item.mac_address}'`)}) 
+        WHERE  mac_address IN (${mac_address.map(item => `'${item.mac_address}'`)})
     `    
  
     return query
 }
 
 
-//  1
 const getAreaIDByKey = (key) =>{ 
 	const query = `
             SELECT area_id
@@ -104,8 +102,8 @@ const getAreaIDByKey = (key) =>{
 	return query 
 }
 
-//  2
-const filterMacAddress  = (area_id) => { 
+
+const filterMacAddressByArea  = (area_id) => { 
     const query = 
     `
     SELECT mac_address  FROM object_table
@@ -114,11 +112,19 @@ const filterMacAddress  = (area_id) => {
     return query
 }
 
+const getAllMacAddress  = () => { 
+    const query = 
+    `
+    SELECT mac_address  FROM object_table
+    `    
+    return query
+}
 module.exports = {
     confirmValidation,
     apiGetKey,
     getAllKey,
     searchByMacAddress,
     getAreaIDByKey,
-    filterMacAddress
+    filterMacAddressByArea,
+    getAllMacAddress
 }

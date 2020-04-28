@@ -1,3 +1,6 @@
+require('moment-timezone')
+const moment = require('moment');
+
 const bcrypt = require('bcrypt');
 const queryType = require ('./api_queryType');
 const pg = require('pg');
@@ -89,57 +92,205 @@ async function get_area_role(key, response){
         })  
 } 
 
-async function filterMacAddress(area, response){    
-    return await   pool.query(queryType.filterMacAddress(area)) 
+async function filterMacAddressByArea(area, shouldFilter , response){    
+    
+    if (shouldFilter){ //非全院不分區
+        return await   pool.query(queryType.filterMacAddressByArea(area)) 
+            .then(res => {    
+                console.log(`filter Mac Address success`) 
+                return res.rows
+            })
+            .catch(err => { 
+                console.log(`filter Mac Address ${err}`)
+            })  
+    }else{ //輸出全院
+        return await   pool.query(queryType.getAllMacAddress()) 
         .then(res => {    
-            console.log(`filter Mac Address success`) 
+            console.log(`get Mac Address success`) 
             return res.rows
         })
         .catch(err => { 
-            console.log(`filter Mac Address ${err}`)
+            console.log(`get Mac Address Address ${err}`)
         })  
+    }
+
 } 
 
-async function get_mac_address(request, response){
+async function get_history(filterObject, response){    
+    return await   pool.query(queryType.searchByMacAddress(filterObject))
+    .then(res => { 
+        res.error_code= '0'
+        res.error_message='get data success' 
+
+        // res.area_id = ''
+        // area.map(item => { item.area_id ?  res.area_id += item.area_id + ',' : null})
+        // res.area_id =  res.area_id.substring(0,res.area_id.length-1)
+
+        console.log(`search by mac address success`)    
+        return res.rows
+    })
+    .catch(err => { 
+        response.json({
+            error_code: '300',
+            error_message:'get data fail : no object for this area',
+            data: ''
+        })
+    }) 
+} 
+ 
+
+async function filterData_ByTAG(data,tag){    
+    var filterRes = []
+    try{
+        data.map(dataItem=>{
+            tag.map(filterItem=>{
+                if (dataItem.mac_address == filterItem ){ 
+                    filterRes.push(dataItem)
+                } 
+            })
+        })  
+    }catch(error){
+        console.log('filter by tag fail')
+    }
+
+    return filterRes
+} 
+
+async function filterData_ByLbeacon(data,Lbeacon){    
+    var filterRes = []
+    try{
+        data.map(dataItem=>{
+            Lbeacon.map(filterItem=>{
+                if (dataItem.uuid == filterItem ){ 
+                    filterRes.push(dataItem)
+                } 
+            })
+        })
+    }catch(error){
+        console.log('filter by tag Lbeacon fail')
+    }
+    return filterRes
+} 
+
+async function filterData_ByStartTime(data,start_time){    
+    var filterRes = []
+    try{
+        data.map(dataItem=>{
+                if (moment(dataItem.record_timestamp).isAfter(moment(start_time)) ){ 
+                    filterRes.push(dataItem)
+                } 
+        })
+    }catch(error){
+        console.log('filter data by start_time fail')
+    }
+    return filterRes
+} 
+
+async function filterData_ByEndTime(data,end_time){    
+    var filterRes = []
+    try{
+        data.map(dataItem=>{
+                if (moment(dataItem.record_timestamp).isBefore(moment(end_time)) ){ 
+                    filterRes.push(dataItem)
+                } 
+        })
+    }catch(error){
+        console.log('filter data by end_time fail')
+    }
+    return filterRes
+} 
+
+async function filterData_Bylimit(data,count_limit,sort_type){    
+    var filterRes = []
+    var count = 0 
+    count_limit == 0 ? count_limit = 10 : null
+    sort_type == 0 ? data = data.reverse() :null 
+ 
+    try{
+        data.map(dataItem=>{
+            count < count_limit ?  filterRes.push(dataItem) : null
+            count ++                 
+        })
+    }catch(error){
+        console.log('filter data by limit fail')
+    } 
+     
+    return filterRes
+} 
+
+
+async function get_data(request, response){
 
     let { 
-        key, 
-        mac_address 
+        key,
+        tag, // array
+        Lbeacon, // array
+        start_time, // YYYY/MM/DD HH:mm:ss
+        end_time, // YYYY/MM/DD HH:mm:ss
+        count_limit, // 
+        sort_type,
     } = request.body 
-
-
-    var matchRes = ( Promise.resolve( match_key(key) )  );
+ 
+    var matchRes = ( Promise.resolve(match_key(key)));
     await   matchRes.then(function(result){matchRes = result}) 
 
     if (matchRes == 1 ){   // 金鑰驗證通過
 
         // 檢查這把金鑰的所屬地區 
-        area = ( Promise.resolve( get_area_role(key) )  );
-        await  area.then(function(result){area = result})  
-        // 輸出此區域擁有的mac_address
-        var filterObject = ( Promise.resolve( filterMacAddress(area)));
-        await  filterObject.then(function(result){filterObject = result})  
- 
-        //輸出所有mac_address的location history
-        pool.query(queryType.searchByMacAddress(filterObject))
-        .then(res => { 
-            res.error_code= '0'
-            res.error_message='get data success'
-            
-            res.area_id = ''
-            area.map(item => { item.area_id ?  res.area_id += item.area_id + ',' : null})
-            res.area_id =  res.area_id.substring(0,res.area_id.length-1)
+        area = (Promise.resolve(get_area_role(key)));
+        await  area.then(function(result){area = result}) 
 
-            response.status(200).json(res)
-            console.log(`search by mac address success`)    
-        })
-        .catch(err => { 
-            console.log(`search by mac address fails ${err}`)
+        let shouldFilter = true //判斷是否需要過濾
+        area.map(item=>{
+            if(item.area_id == '9999') { shouldFilter = false}
         }) 
 
-    }else{ // 金鑰驗證失敗
+        //過濾出屬於此區域的mac_address
+        var filterObject = (Promise.resolve(filterMacAddressByArea(area,shouldFilter)));
+        await  filterObject.then(function(result){filterObject = result})  
+         
+        //用mac_address找出location history
+        let data  = (Promise.resolve(get_history(filterObject)));
+        await  data.then(function(result){data = result}) 
+ 
 
+        let temp  
+        if (tag){ //有輸入過濾資料條件：ＴＡＧ
+            temp = (Promise.resolve(filterData_ByTAG(data,tag)));
+            await  temp.then(function(result){temp = result}) 
+            data = temp
+        }  
 
+        if (Lbeacon){ //有輸入過濾資料條件：ＴＡＧ
+            temp = (Promise.resolve(filterData_ByLbeacon(data,Lbeacon)));
+            await  temp.then(function(result){temp = result}) 
+            data = temp
+        }  
+  
+
+        if (start_time){ //有輸入過濾資料條件：START TIME
+            temp = (Promise.resolve(filterData_ByStartTime(data,start_time)));
+            await  temp.then(function(result){temp = result}) 
+            data = temp
+        }  
+         
+        if (end_time){ //有輸入過濾資料條件：END TIME
+            temp = (Promise.resolve(filterData_ByStartTime(data,start_time)));
+            await  temp.then(function(result){temp = result}) 
+            data = temp
+        }  
+
+        //預設是抓 "最新" "10"筆
+        //有過濾資料條件：count limit 
+        temp = (Promise.resolve(filterData_Bylimit(data,count_limit,sort_type)));
+        await  temp.then(function(result){temp = result}) 
+        data = temp
+         
+        response.status(200).json(data)  
+ 
+        
+
+    }else{ // 金鑰驗證失敗 
 
         response.json({
             error_code: '200',
@@ -152,7 +303,13 @@ async function get_mac_address(request, response){
 
 module.exports = {
     get_key,
-    get_mac_address,
+    get_data,
     match_key,
-    get_area_role
+    get_area_role,
+    get_history,
+    filterData_ByTAG,
+    filterData_ByLbeacon,
+    filterData_ByStartTime,
+    filterData_ByEndTime,
+    filterData_Bylimit
 }
