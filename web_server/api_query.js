@@ -303,7 +303,7 @@ async function get_data(request, response){
     }else if (matchRes == 2 ){
         response.json({
             error_code: '201',
-            error_message:'get data fail : key is out of active period',
+            error_message:'get data fail : key is out of active time',
             data: ''
         })
     }else{ // 金鑰驗證失敗 
