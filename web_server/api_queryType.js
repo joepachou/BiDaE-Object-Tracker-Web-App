@@ -50,15 +50,20 @@ const  confirmValidation = (username) => {
 
 }
 
-function apiGetKey (name) { 
+function setKey (user_id,username,hash) { 
 	let text = 
 		` 
-			SELECT  key
-			FROM api_key
-			WHERE name = $1
+			UPDATE  api_key
+			SET 
+                name = $2,
+                key = $3,
+                register_time = now()
+	    	WHERE id = $1
 		`
 	const values = [
-		name
+        user_id,
+        username,
+        hash
 	];
 
 	const query = {
@@ -72,7 +77,7 @@ function apiGetKey (name) {
 const getAllKey = () => { 
     const query = 
 		` 
-			SELECT  key
+			SELECT  *
             FROM api_key 
 		` 
 	return query;
@@ -121,7 +126,7 @@ const getAllMacAddress  = () => {
 }
 module.exports = {
     confirmValidation,
-    apiGetKey,
+    setKey,
     getAllKey,
     searchByMacAddress,
     getAreaIDByKey,

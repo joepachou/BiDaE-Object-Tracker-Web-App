@@ -20,7 +20,7 @@ const get_key = (request, response) => {
     } = request.body 
     pool.query(queryType.confirmValidation(username))
         .then(res => {
-            if (res.rowCount < 1) {
+            if (res.rowCount < 1) { //帳號密碼驗證失敗
                 console.log(`confirm validation failed: incorrect`)
                 response.json({
                     error_code: '100',
@@ -30,31 +30,31 @@ const get_key = (request, response) => {
             } else {
                 const hash = res.rows[0].password
                 
-                if (bcrypt.compareSync(password, hash)) {
-                    let { 
-                        roles, 
-                    } = res.rows[0] 
-                    /** authenticate if user is care provider */ 
+                if (bcrypt.compareSync(password, hash)) { 
                      
                     console.log(`confirm validation succeed`) 
-                    // const saltRounds = 10;
-                    // const hash = bcrypt.hashSync(username, saltRounds);
-                    // console.log(hash)
-                    pool.query(queryType.apiGetKey(username)) 
-                        .then(res => {
 
+                    const saltRounds = 10;
+                    const hash = bcrypt.hashSync(username, saltRounds);
+                    
+                    pool.query(queryType.setKey(res.rows[0].user_id,username,hash)) 
+                        .then(res => {  
                             response.status(200).json({
                                 error_code: '0',
                                 error_message:'get key success',
-                                key: res.rows[0].key
+                                key: hash,
+                                note:'validity period of key until : ' +moment().add(30, 'm').locale('en').format('LT')
                             }) 
-                            console.log('api Get Key success') 
-                            
+                            console.log('set Key success')  
                         })
                         .catch(err => {
-                            console.log(`api Get Key failer ${err}`)
+                            console.log(`set Key failer ${err}`)
                     })   
-                } else {
+
+                    console.log(`get key succeed`) 
+
+
+                } else { //帳號密碼驗證失敗
                     console.log(`confirm validation failed: password is incorrect`)
                     response.json({
                         error_code: '100',
@@ -72,8 +72,18 @@ const get_key = (request, response) => {
 async function match_key(key, response){  
     let matchFlag = 0
     return await pool.query(queryType.getAllKey()) 
-        .then(res => {   
-            res.rows.map(item =>{item.key == key ? matchFlag = 1 : null  })    
+        .then(res => {    
+            res.rows.map(item =>{ 
+                let vaildTime = moment(item.register_time).add(30, 'm')
+                
+                //時間內，且key正確
+                if (moment().isBefore(moment(vaildTime)) && item.key == key ){ 
+                   matchFlag = 1  
+                } else if(moment().isAfter(moment(vaildTime)) && item.key == key ){
+                   matchFlag = 2
+                }
+                //key正確,時間超出 
+            })    
             return matchFlag
         })
         .catch(err => { 
@@ -285,13 +295,19 @@ async function get_data(request, response){
         await  temp.then(function(result){temp = result}) 
         data = temp 
 
-        
+
         response.status(200).json(data)  
  
         
 
+    }else if (matchRes == 2 ){
+        response.json({
+            error_code: '201',
+            error_message:'get data fail : key is out of active period',
+            data: ''
+        })
     }else{ // 金鑰驗證失敗 
-
+        
         response.json({
             error_code: '200',
             error_message:'get data fail : key is incorrect',
