@@ -201,11 +201,10 @@ async function filterData_ByEndTime(data,end_time){
 } 
 
 async function filterData_Bylimit(data,count_limit,sort_type){    
-    var filterRes = []
-    var count = 0 
-    count_limit == 0 ? count_limit = 10 : null
-    sort_type == 0 ? data = data.reverse() :null 
- 
+    var filterRes = [],count = 0  
+    count_limit == undefined ? count_limit = 10 : null
+    sort_type == undefined ? data = data.reverse() :null 
+  
     try{
         data.map(dataItem=>{
             count < count_limit ?  filterRes.push(dataItem) : null
@@ -260,14 +259,14 @@ async function get_data(request, response){
             await  temp.then(function(result){temp = result}) 
             data = temp
         }  
-
+  
         if (Lbeacon){ //有輸入過濾資料條件：ＴＡＧ
             temp = (Promise.resolve(filterData_ByLbeacon(data,Lbeacon)));
             await  temp.then(function(result){temp = result}) 
             data = temp
         }  
+      
   
-
         if (start_time){ //有輸入過濾資料條件：START TIME
             temp = (Promise.resolve(filterData_ByStartTime(data,start_time)));
             await  temp.then(function(result){temp = result}) 
@@ -279,13 +278,14 @@ async function get_data(request, response){
             await  temp.then(function(result){temp = result}) 
             data = temp
         }  
-
+  
         //預設是抓 "最新" "10"筆
         //有過濾資料條件：count limit 
         temp = (Promise.resolve(filterData_Bylimit(data,count_limit,sort_type)));
         await  temp.then(function(result){temp = result}) 
-        data = temp
-         
+        data = temp 
+
+        
         response.status(200).json(data)  
  
         
