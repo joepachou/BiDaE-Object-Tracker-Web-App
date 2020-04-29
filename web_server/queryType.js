@@ -851,19 +851,25 @@ const signup = (signupPackage) => {
 				name, 
 				password,
 				registered_timestamp,
-				main_area
+				main_area,
+				username_sha256,
+				password_sha256
 			)
 		VALUES (
 			$1, 
 			$2, 
 			now(),
-			$3
+			$3,
+			$4,
+			$5
 		);
 		`;
 	const values = [
 		signupPackage.name, 
 		signupPackage.password,
-		signupPackage.area_id
+		signupPackage.area_id,
+		signupPackage.username_sha256,
+		signupPackage.password_sha256
 	];
 
 	const query = {

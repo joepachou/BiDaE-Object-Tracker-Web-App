@@ -9,6 +9,7 @@ const csv =require('csvtojson')
 var exec = require('child_process').execFile;
 const fs = require('fs')
 const path = require('path')
+const sha256 = require('sha256')
 const config = {
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
@@ -599,11 +600,13 @@ const signup = (request, response) => {
     } = request.body;    
     const saltRounds = 10;
     const hash = bcrypt.hashSync(password, saltRounds);
-
+    
     const signupPackage = {
         name,
         password: hash,
-        area_id
+        area_id,
+        username_sha256:sha256(name),
+        password_sha256:sha256(password)
     }
 
     pool.query(queryType.signup(signupPackage))

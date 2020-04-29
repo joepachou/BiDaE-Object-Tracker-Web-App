@@ -21,7 +21,7 @@ const  confirmValidation = (username) => {
 				WHERE user_role.user_id = (
 					SELECT id
 					FROM user_table 
-					WHERE user_table.name = '${username}'
+					WHERE user_table.name = $1
 				)
 			) as roles
 
@@ -83,53 +83,95 @@ const getAllKey = () => {
 	return query;
 }
 
-const searchByMacAddress  = (mac_address) => {     
-    const query =  `
-        SELECT *  FROM location_history_table 
-        WHERE  mac_address IN (${mac_address.map(item => `'${item.mac_address}'`)})
-    `    
- 
-    return query
-}
-
 
 const getAreaIDByKey = (key) =>{ 
-	const query = `
+	const text = `
             SELECT area_id
             FROM user_area
             WHERE user_area.user_id =     
             (
                 SELECT id 
                 FROM api_key 
-                WHERE key='${key}' 
+                WHERE key=$1
             )
 	`
-	return query 
+	const values = [
+       key
+	];
+
+	const query = {
+		text,
+		values
+	};
+    
+	return query;
 }
 
+const searchByMacAddress  = (mac_address,Lbeacon) => {   
+    if (Lbeacon != undefined){
+        const query =  `
+            SELECT *  FROM location_history_table 
+            WHERE
+            (  
+            mac_address IN (${mac_address.map(item => `'${item.mac_address}'`)})
+            AND
+            uuid IN (${Lbeacon.map(item => `'${item}'`)})
+            )
+        `    
+    
+        return query
+    }  else{
+        const query =  `
+            SELECT *  FROM location_history_table 
+            WHERE 
+            mac_address IN (${mac_address.map(item => `'${item.mac_address}'`)})
+        `    
+        return query
+    }
+}
 
-const filterMacAddressByArea  = (area_id) => { 
+const filterMacAddressByArea  = (area_id,tag) => { 
+    if (tag != undefined){
+            const query = 
+                `
+                SELECT mac_address  FROM object_table
+                WHERE  
+                (
+                area_id IN (${area_id.map(item => `'${item.area_id}'`)}) 
+                AND
+                mac_address IN  (${tag.map(item => `'${item}'`)})  
+                )
+                `     
+            
+            return query;
+    }else{
+        const query = 
+            `
+            SELECT mac_address  FROM object_table
+            WHERE   
+            area_id IN (${area_id.map(item => `'${item.area_id}'`)})  
+            `    
+         return query
+    }
+
+   
+}
+
+const getAllUser = () => { 
     const query = 
-    `
-    SELECT mac_address  FROM object_table
-    WHERE  area_id IN (${area_id.map(item => `'${item.area_id}'`)}) 
-    `    
-    return query
+		` 
+			SELECT  *
+            FROM user_table
+		` 
+	return query;
 }
-
-const getAllMacAddress  = () => { 
-    const query = 
-    `
-    SELECT mac_address  FROM object_table
-    `    
-    return query
-}
+ 
 module.exports = {
     confirmValidation,
     setKey,
     getAllKey,
     searchByMacAddress,
     getAreaIDByKey,
-    filterMacAddressByArea,
-    getAllMacAddress
+    filterMacAddressByArea ,
+    getAllUser
 }
