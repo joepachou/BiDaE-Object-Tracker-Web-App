@@ -59,15 +59,9 @@
         error_message:'get data fail : count limit must be a number',
         data: '' 
     } 
-
-    const sort_type_error= {  
-        error_code: '250',
-        error_message:'get data fail : sort type must be a number',
-        data: '' 
-    } 
-
+ 
     const sort_type_define_error= {  
-        error_code: '251',
+        error_code: '250',
         error_message:'get data fail : sort type must be desc or asc',
         data: '' 
     } 
