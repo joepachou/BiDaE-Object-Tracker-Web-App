@@ -164,7 +164,7 @@ async function match_key(key, response){
     return await pool.query(queryType.getAllKey()) 
         .then(res => {    
             res.rows.map(item =>{ 
-                let vaildTime = moment(item.register_time).add(300, 'm')  
+                let vaildTime = moment(item.register_time).add(30, 'm')  
                 if (moment().isBefore(moment(vaildTime)) && item.key == key ){ 
                    matchFlag = 1  //in time & key right
                 } else if(moment().isAfter(moment(vaildTime)) && item.key == key ){
