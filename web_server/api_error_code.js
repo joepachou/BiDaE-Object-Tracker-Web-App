@@ -74,7 +74,6 @@
         end_time_error,
         mac_address_error,
         Lbeacon_error,
-        count_error,
-        sort_type_error,
+        count_error, 
         sort_type_define_error
     }
