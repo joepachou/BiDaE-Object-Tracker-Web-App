@@ -2051,7 +2051,7 @@ function setAPIKey(name,hash) {
 
 	var text = 
 		`
-			INSERT INTO api_key(id,name,key) 
+			INSERT INTO api_key(id,name,key,register_time) 
 			VALUES(	
 			(
 				SELECT id 
@@ -2059,7 +2059,8 @@ function setAPIKey(name,hash) {
 				WHERE name ='${name}'
 			),
 			$1, 
-			$2);
+			$2,
+			now());
 		`
 	values =  [name,hash]
 	query = {
