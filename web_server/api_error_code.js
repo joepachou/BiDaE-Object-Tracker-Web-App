@@ -37,8 +37,8 @@
     } 
 
     const end_time_error= {  
-        error_code: '210',
-        error_message:'get data fail : start time format error',
+        error_code: '211',
+        error_message:'get data fail : end time format error',
         data: '' 
     } 
 
