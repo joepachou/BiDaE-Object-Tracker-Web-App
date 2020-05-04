@@ -7,7 +7,7 @@ import {
     editPassword
 } from "../../dataSrc"
 import { AppContext } from '../../context/AppContext'; 
-
+const sha256 = require('sha256')
 class EditPwdForm extends React.Component {
 
     static contextType = AppContext
@@ -65,10 +65,11 @@ class EditPwdForm extends React.Component {
                         }
 
                         onSubmit={(values, { setStatus, setSubmitting }) => {
-                            
+                       
                                 axios.post(editPassword, {
                                     user_id: auth.user.id,
-                                    password : values.check_password
+                                    password : values.check_password,
+                                    password_sha256:sha256(values.check_password)
                                 })
                                 .then(res => {
                                     this.props.handleClose()

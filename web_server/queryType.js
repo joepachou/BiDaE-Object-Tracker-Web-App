@@ -821,13 +821,15 @@ const editPassword = (user_id,password) => {
 		`
 		UPDATE user_table
 		SET 
-			password = $2
+			password = $2,
+			password_sha256 = $3
 		WHERE id = $1
 	`;
 
 	const values = [
 		user_id,
-		password
+		password,
+		password_sha256
 	];
 
 	const query = {
