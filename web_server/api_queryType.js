@@ -84,12 +84,14 @@ const getAllUser = () => {
 }
  
 const get_data =(key,start_time,end_time,tag,Lbeacon,count_limit,sort_type) =>{ 
-  let text = 
+ 
+    let text = 
     `
     WITH ranges AS (
         SELECT mac_address, area_id, uuid, record_timestamp, battery_voltage, average_rssi, 
             CASE WHEN LAG(uuid) OVER 
-                    (PARTITION BY mac_address ORDER BY mac_address, record_timestamp) = uuid 
+                    (PARTITION BY mac_address 
+                        ORDER BY mac_address, record_timestamp) = uuid 
                     THEN NULL ELSE 1 END r
         FROM 
         (			 
@@ -104,7 +106,7 @@ const get_data =(key,start_time,end_time,tag,Lbeacon,count_limit,sort_type) =>{
 
             INNER JOIN object_table
             ON location_history_table.mac_address = object_table.mac_address
-                AND object_table.type = 'Patient'
+                AND object_table.object_type != 0
 
             INNER JOIN user_area
             ON object_table.area_id = user_area.area_id

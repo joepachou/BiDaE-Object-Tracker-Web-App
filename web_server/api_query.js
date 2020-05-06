@@ -13,6 +13,7 @@ const config = {
 }
 const pool = new pg.Pool(config)  
 const timeDefaultFormat = 'YYYY/MM/DD HH:mm:ss'
+const tw = require('../site_module/locale/zh-TW')
 
 const get_api_key = (request, response) => {
     let { 
@@ -83,10 +84,10 @@ async function get_history_data(request, response){
             if (moment(start_time, timeDefaultFormat, true).isValid() == false){
                 response.json(error_code.start_time_error)  
             }else{ // if format right then convert to utc
-                start_time =  time_format(start_time) 
+                start_time =  time_format(start_time)  
             }
-        }else{ // set default WHEN no input
-            start_time = moment.tz(moment().subtract(365,'day') , process.env.TZ).format(process.env.TIMESTAMP_FORMAT)
+        }else{ // set default WHEN no input 
+            start_time = moment(moment().subtract(1,'day')).format() 
         }
 
         if(end_time != undefined) {
@@ -96,7 +97,7 @@ async function get_history_data(request, response){
                 end_time =  time_format(end_time) 
             }
         }else{
-            end_time = moment.tz(moment().format() , process.env.TZ).format(process.env.TIMESTAMP_FORMAT) 
+            end_time = moment(moment()).format() 
         }
    
 
@@ -183,6 +184,9 @@ async function get_data(key,start_time,end_time,tag,Lbeacon,count_limit,sort_typ
     return await pool.query(queryType.get_data(key,start_time,end_time,tag,Lbeacon,count_limit,sort_type))  //get area id
         .then(res => {      
             console.log(`get_data success`)   
+            res.rows.map(item=>{
+               item.area_name = tw[item.area_name.toUpperCase().replace(/ /g,'_')] 
+            }) 
             return res.rows
         })
         .catch(err => { 
@@ -192,8 +196,9 @@ async function get_data(key,start_time,end_time,tag,Lbeacon,count_limit,sort_typ
 
 
 function time_format(time){    
-    if (time != undefined){ 
-     return  moment.tz(moment(time,timeDefaultFormat).format() , process.env.TZ).format(process.env.TIMESTAMP_FORMAT)
+    if (time != undefined){  
+        return  moment(time,timeDefaultFormat).format()  
+        
     }
 } 
  
