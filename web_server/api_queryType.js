@@ -147,7 +147,7 @@ const get_data =(key,start_time,end_time,tag,Lbeacon,count_limit,sort_type) =>{
         AVG(groups.average_rssi) AS avg_rssi,
         MIN(groups.record_timestamp) AS start_time,
         MAX(groups.record_timestamp) AS end_time,
-        MAX(groups.record_timestamp) - MIN(groups.record_timestamp) AS duration
+        MAX(groups.record_timestamp) - MIN(groups.record_timestamp)  AS duration
     FROM groups
 
     INNER JOIN object_table

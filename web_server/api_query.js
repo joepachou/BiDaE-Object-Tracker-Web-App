@@ -186,6 +186,10 @@ async function get_data(key,start_time,end_time,tag,Lbeacon,count_limit,sort_typ
             console.log(`get_data success`)   
             res.rows.map(item=>{
                item.area_name = tw[item.area_name.toUpperCase().replace(/ /g,'_')] 
+               item.duration.hours == undefined ? item.duration.hours  =0 : null
+               item.duration.minutes == undefined ? item.duration.minutes  =0 : null
+               item.duration.seconds == undefined ? item.duration.seconds  =0 : null
+               item.duration.milliseconds == undefined ? item.duration.milliseconds  =0 : null
             }) 
             return res.rows
         })
