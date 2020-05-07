@@ -97,8 +97,7 @@ export default class ChangeStatusForm extends React.Component {
             selectedObjectData
         } = this.props
 
-        selectedObjectData = selectedObjectData.length ? selectedObjectData : []
-
+        selectedObjectData = selectedObjectData.length ? selectedObjectData : [] 
         let {transferredLocationOptions} = this.state
         let initValues = {
             name: selectedObjectData.length != 0 ? selectedObjectData[0].name : '',
@@ -111,6 +110,7 @@ export default class ChangeStatusForm extends React.Component {
                 
                 : '',
             notes: selectedObjectData.length != 0 ? selectedObjectData[0].notes : "" ,
+            nickname :  selectedObjectData.length != 0 ? selectedObjectData[0].nickname : '',     
         }
         
         if(selectedObjectData.length != 0 && selectedObjectData[0].status == config.objectStatus.TRANSFERRED){
@@ -126,7 +126,7 @@ export default class ChangeStatusForm extends React.Component {
         return initValues
     }
     render() {
-
+        
         const { locale } = this.context
 
         const style = {
@@ -212,8 +212,21 @@ export default class ChangeStatusForm extends React.Component {
                                                                     placeholder=""
                                                                     disabled
                                                                 />
-                                                            </Col>
+                                                            </Col> 
                                                             <Col>
+                                                                <FormikFormGroup 
+                                                                    type="text"
+                                                                    name="nickname"
+                                                                    label={locale.texts.NICKNAME}
+                                                                    error={errors.nickname}
+                                                                    touched={touched.nickname}
+                                                                    placeholder=""
+                                                                    disabled
+                                                                />
+                                                            </Col>
+                                                        </Row>
+                                                        <Row noGutters> 
+                                                              <Col>
                                                                 <FormikFormGroup 
                                                                     type="text"
                                                                     name="type"
@@ -225,10 +238,18 @@ export default class ChangeStatusForm extends React.Component {
                                                                     disabled
                                                                 />
                                                             </Col>
-                                                        </Row>
-                                                        <Row noGutters>
-                                                            <Col>
+                                                            <Col> 
                                                                 <FormikFormGroup 
+                                                                    type="text"
+                                                                    name="area"
+                                                                    label={locale.texts.AREA}
+                                                                    // value={locale.texts[item.area.value]  }
+                                                                    value = { null}
+                                                                    disabled
+                                                                />
+                                                            </Col> 
+                                                        </Row>
+                                                        <FormikFormGroup 
                                                                     type="text"
                                                                     name="asset_control_number"
                                                                     label={locale.texts.ACN}
@@ -237,18 +258,7 @@ export default class ChangeStatusForm extends React.Component {
                                                                     touched={touched.asset_control_number}
                                                                     placeholder=""
                                                                     disabled
-                                                                />
-                                                            </Col>
-                                                            <Col>
-                                                                <FormikFormGroup 
-                                                                    type="text"
-                                                                    name="area"
-                                                                    label={locale.texts.AREA}
-                                                                    value={locale.texts[item.area.value]}
-                                                                    disabled
-                                                                />
-                                                            </Col>
-                                                        </Row>
+                                                        />
                                                     </Col>
                                                 </Row>
                                             </div>

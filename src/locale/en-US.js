@@ -224,6 +224,7 @@ const en =  {
     RECORDED_BY: "recorded by",
     ADD_NEW_RECORD: "add new record",
     FOLD:"fold",
+    NICKNAME:"nickname",
 
     /** form title */
     EDIT_LBEACON: "edit lbeacon",

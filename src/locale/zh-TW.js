@@ -224,6 +224,7 @@ const tw = {
     RECORDED_BY: "紀錄",
     ADD_NEW_RECORD: "新增紀錄",
     FOLD:"折疊",
+    NICKNAME:"綽號",
 
     /** form title */
     EDIT_LBEACON: "編輯 lbeacon",

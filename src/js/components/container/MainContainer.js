@@ -441,8 +441,7 @@ class MainContainer extends React.Component{
             trackingData
         } = this.state
         let { auth } = this.context
-        let proccessedTrackingData = _.cloneDeep(trackingData) 
-
+        let proccessedTrackingData = _.cloneDeep(trackingData)  
         if (searchKey === MY_DEVICES) {
 
             const devicesAccessControlNumber = auth.user.myDevice || []
@@ -531,14 +530,14 @@ class MainContainer extends React.Component{
             searchResult = []
             hasSearchKey = false
         } else {
-            let searchResultMac = [];
-            
+            let searchResultMac = [];  
             proccessedTrackingData
-                .map(item => {   
+                .map(item => {    
                      if (
                         item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0 ||
                         item.asset_control_number.indexOf(searchKey) >= 0 ||
-                        item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0
+                        item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0  ||
+                        (item.nickname != undefined ?  item.nickname.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0 : false)
                     ) {
                         item.searched = true
                         item.searchedType = -1;

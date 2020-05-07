@@ -26,7 +26,8 @@ function getTrackingData (areas_id) {
 			edit_object_record.notes,
 			user_table.name as physician_name,
 			object_table.reserved_timestamp,
-			notification.json_agg as notification 
+			notification.json_agg as notification ,
+			object_table.nickname
 		FROM object_summary_table
 
 		LEFT JOIN object_table
@@ -203,6 +204,7 @@ const getObjectTable = (objectType, areas_id) => {
 			object_table.id,
 			object_table.room,
 			object_table.physician_id,
+			object_table.nickname,
 			(
 				SELECT name
 				FROM user_table
@@ -523,7 +525,8 @@ function editObject (formOption) {
 			name = $4,
 			monitor_type = $5,
 			area_id = $6,
-			mac_address = $7
+			mac_address = $7,
+			nickname = $8
 		WHERE asset_control_number = $3
 		`
 	const values = [
@@ -534,6 +537,7 @@ function editObject (formOption) {
 		formOption.monitor_type,
 		formOption.area_id,
 		formOption.mac_address,
+		formOption.nickname
 	];
 
 	const query = {
@@ -588,7 +592,8 @@ const addObject = (formOption) => {
 			area_id,
 			object_type,
 			registered_timestamp,
-			monitor_type
+			monitor_type,
+			nickname
 		)
 		VALUES (
 			$1, 
@@ -599,7 +604,8 @@ const addObject = (formOption) => {
 			$6,
 			0,
 			now(),
-			$7
+			$7,
+			$8
 		);
 	`;
 		
@@ -610,7 +616,8 @@ const addObject = (formOption) => {
 		formOption.mac_address,
 		formOption.status,
 		formOption.area_id,
-		formOption.monitor_type
+		formOption.monitor_type,
+		formOption.nickname
 	];
 
 
