@@ -27,7 +27,12 @@ function getTrackingData (areas_id) {
 			user_table.name as physician_name,
 			object_table.reserved_timestamp,
 			notification.json_agg as notification ,
-			object_table.nickname
+			object_table.nickname,
+			JSON_BUILD_OBJECT(
+				'id', area_table.id,
+				'value', area_table.name
+			) AS lbeacon_area
+
 		FROM object_summary_table
 
 		LEFT JOIN object_table
@@ -41,8 +46,6 @@ function getTrackingData (areas_id) {
 
 		LEFT JOIN area_table
 		ON object_table.area_id = area_table.id
-
-	 
 
 		LEFT JOIN user_table
 		ON user_table.id = object_table.physician_id

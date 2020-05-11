@@ -14,7 +14,15 @@ export const getDescription = (item, locale) => {
 
                         ${getACN(item, locale)}
                         
-                        ${getPosition(item, locale)}
+                        ${item.currentPosition 
+                            ?   `
+                        
+                            ${getAreaName(item, locale)}-
+        
+                            ${getPosition(item, locale)}
+                        `
+                            :   ""
+                        }
 
                         ${getStatus(item, locale)}
 
@@ -45,12 +53,25 @@ export const getDescription = (item, locale) => {
         case '2':
 
             foundDeviceDescription += `
-                ${getName(item, locale)}
-                ${locale.texts.PHYSICIAN_NAME}: ${item.physician_name},
-                ${getPosition(item, locale)}
-                ${item.residence_time} 
 
-            `    
+                ${getName(item, locale)}
+
+
+                ${locale.texts.PHYSICIAN_NAME}: ${item.physician_name},
+
+                ${item.currentPosition 
+                    ?   `
+                
+                    ${getAreaName(item, locale)}-
+
+                    ${getPosition(item, locale)}
+                `
+                    :   ""
+                }
+
+                ${item.residence_time ? item.residence_time : ''}
+
+            ` 
         break;
     } 
     return foundDeviceDescription
@@ -141,14 +162,10 @@ export const getStatus = (item, locale) => {
     `
 }
 
+
 export const getPosition = (item, locale) => {
     return `
-        ${item.currentPosition 
-            ? locale.abbr == 'en' 
-                ? `${locale.texts.NEAR} ${item.location_description},` 
-                : `${locale.texts.NEAR}${item.location_description},` 
-            : `${locale.texts.NOT_AVAILABLE} `
-        }   
+        ${item.location_description}, 
     `
 }
 
@@ -163,5 +180,11 @@ export const getRSSI = (item, locale) => {
     return `
         ${locale.texts.RSSI}:
         ${item.rssi}
+    `
+}
+
+export const getAreaName = (item, locale) => {
+    return `
+        ${locale.texts.NEAR} ${locale.texts[item.lbeacon_area.value]}
     `
 }
