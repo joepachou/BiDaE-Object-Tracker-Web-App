@@ -51,7 +51,11 @@ class Map extends React.Component {
         this.handleObjectMarkers();
         //this.drawPolyline();
 
-        if (parseInt(process.env.IS_LBEACON_MARK) && !(_.isEqual(prevProps.lbeaconPosition, this.props.lbeaconPosition))) {
+        if (!(_.isEqual(prevProps.lbeaconPosition, this.props.lbeaconPosition))) {
+            this.createLbeaconMarkers(this.props.lbeaconPosition, this.lbeaconsPosition)
+        }
+        
+        if (!(_.isEqual(prevProps.currentAreaId, this.context.stateReducer[0].areaId))){
             this.createLbeaconMarkers(this.props.lbeaconPosition, this.lbeaconsPosition)
         }
 
@@ -348,6 +352,10 @@ class Map extends React.Component {
         } = this.context
         let [{areaId}] = stateReducer
 
+        layer.clearLayers();
+
+        
+        console.log(222)
         // this.calculateScale()
 
         /** Creat the marker of all lbeacons onto the map  */
@@ -356,7 +364,8 @@ class Map extends React.Component {
             .map(pos => {
 
             let latLng = pos.split(',')
-            let lbeacon = L.circleMarker(latLng, this.iconOptions.lbeaconMarkerOptions).addTo(layer);
+            let lbeacon = L.circleMarker(latLng, this.iconOptions.lbeaconMarkerOptions).bindPopup(pos).openPopup()
+            lbeacon.addTo(layer);
             // invisibleCircle.on('mouseover', this.handlemenu)
             // invisibleCircle.on('mouseout', function() {this.closePopup();})
         })

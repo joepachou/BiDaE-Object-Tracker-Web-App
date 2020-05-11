@@ -30,7 +30,9 @@ export default class BrowserMapContainer extends React.Component {
             proccessedTrackingData,
             showedObjects,
             showPdfDownloadForm,
-            handleClickButton
+            handleClickButton,
+            currentAreaId
+
         } = this.props;
 
         let [{areaId}] = stateReducer
@@ -86,6 +88,7 @@ export default class BrowserMapContainer extends React.Component {
                         handleClosePath={this.props.handleClosePath}
                         handleShowPath={this.props.handleShowPath}
                         showPath={this.props.showPath}
+                        currentAreaId={currentAreaId}
                     />
                 </div>
                 <div>
