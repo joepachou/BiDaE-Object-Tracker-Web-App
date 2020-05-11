@@ -62,7 +62,6 @@ class MainContainer extends React.Component{
     errorToast = null
 
     componentDidMount = () => {
-        console.log(this.context.stateReducer[0].areaId)
         /** set the scrollability in body disabled */
         let targetElement = document.querySelector('body')
         disableBodyScroll(targetElement);

@@ -54,7 +54,7 @@ class Map extends React.Component {
         if (!(_.isEqual(prevProps.lbeaconPosition, this.props.lbeaconPosition))) {
             this.createLbeaconMarkers(this.props.lbeaconPosition, this.lbeaconsPosition)
         }
-        
+
         if (!(_.isEqual(prevProps.currentAreaId, this.context.stateReducer[0].areaId))){
             this.createLbeaconMarkers(this.props.lbeaconPosition, this.lbeaconsPosition)
         }
@@ -354,8 +354,6 @@ class Map extends React.Component {
 
         layer.clearLayers();
 
-        
-        console.log(222)
         // this.calculateScale()
 
         /** Creat the marker of all lbeacons onto the map  */
