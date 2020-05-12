@@ -27,7 +27,8 @@ function getTrackingData (areas_id) {
 			user_table.name as physician_name,
 			object_table.reserved_timestamp,
 			notification.json_agg as notification ,
-			object_table.nickname
+			object_table.nickname,
+			area_table.name as location_name
 		FROM object_summary_table
 
 		LEFT JOIN object_table
