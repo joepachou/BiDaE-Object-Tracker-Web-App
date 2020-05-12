@@ -45,7 +45,7 @@ function getTrackingData (areas_id) {
 		ON object_table.note_id = edit_object_record.id
 
 		LEFT JOIN area_table
-		ON object_table.area_id = area_table.id
+		ON area_table.id = object_summary_table.updated_by_area
 
 		LEFT JOIN user_table
 		ON user_table.id = object_table.physician_id

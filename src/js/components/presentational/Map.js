@@ -7,7 +7,7 @@ import { AppContext } from '../../context/AppContext';
 import axios from 'axios';
 import dataSrc from '../../dataSrc';
 import siteConfig from '../../../../site_module/siteConfig';
-import polylineDecorator from 'leaflet-polylinedecorator';
+import polylineDecorator from 'leaflet-polylinedecorator'; 
 import {
     BrowserView,
     TabletView,
@@ -19,6 +19,7 @@ import {
 import {
     macAddressToCoordinate
 } from '../../service/dataTransfer'
+import config from '../../config';
 
 class Map extends React.Component {
     
@@ -47,7 +48,6 @@ class Map extends React.Component {
     }
 
     componentDidUpdate = (prevProps) => {
-        
         this.handleObjectMarkers();
         //this.drawPolyline();
 
@@ -55,7 +55,7 @@ class Map extends React.Component {
             this.createLbeaconMarkers(this.props.lbeaconPosition, this.lbeaconsPosition)
         }
 
-        if (!(_.isEqual(prevProps.currentAreaId, this.context.stateReducer[0].areaId))){
+        if (this.props.mapConfig.IS_SHOW_LBEACON_MARK && !(_.isEqual(prevProps.currentAreaId, this.context.stateReducer[0].areaId))){
             this.createLbeaconMarkers(this.props.lbeaconPosition, this.lbeaconsPosition)
         }
 
@@ -66,11 +66,12 @@ class Map extends React.Component {
         if (!(_.isEqual(prevProps.locationMonitorConfig, this.props.locationMonitorConfig))) {
             this.createLocationMonitorMarkers()
         }
+
         if(!(_.isEqual(prevProps.pathMacAddress, this.props.pathMacAddress))){
             this.drawPolyline();
         }
 
-        if (prevProps.areaId !== this.props.areaId) { 
+        if (prevProps.currentAreaId !== this.props.currentAreaId) { 
             this.setMap()
         }
     }

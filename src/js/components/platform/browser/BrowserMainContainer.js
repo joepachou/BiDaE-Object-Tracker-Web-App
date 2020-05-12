@@ -32,7 +32,7 @@ const BrowserMainContainer = ({
     pathMacAddress,
     isHighlightSearchPanel,
     locationMonitorConfig,
-    currentAreaId
+    currentAreaId,
 }) => {
 
     let auth = React.useContext(AuthenticationContext)

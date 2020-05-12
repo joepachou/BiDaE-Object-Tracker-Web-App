@@ -31,8 +31,8 @@ export default class BrowserMapContainer extends React.Component {
             showedObjects,
             showPdfDownloadForm,
             handleClickButton,
-            currentAreaId
-
+            currentAreaId,
+            authenticated
         } = this.props;
 
         let [{areaId}] = stateReducer
@@ -82,7 +82,6 @@ export default class BrowserMapContainer extends React.Component {
                         geofenceConfig={this.props.geofenceConfig}
                         locationMonitorConfig={this.props.locationMonitorConfig}
                         getSearchKey={this.props.getSearchKey}
-                        areaId={areaId}
                         searchedObjectType={this.props.showedObjects}
                         mapConfig={config.mapConfig}
                         handleClosePath={this.props.handleClosePath}

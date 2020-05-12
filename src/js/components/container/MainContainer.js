@@ -104,6 +104,11 @@ class MainContainer extends React.Component{
 
         /** clear out search result when user sign out */
         if (!(_.isEqual(prevState.authenticated, this.context.auth.authenticated))) {
+            // let currentAreaId = this.context.auth.authenticated ? 
+
+            let { stateReducer } = this.context
+            let [{areaId}, dispatch] = stateReducer
+
             this.setState({
                 authenticated: this.context.auth.authenticated,
                 searchResult: [],
@@ -111,7 +116,10 @@ class MainContainer extends React.Component{
                 hasSearchKey: false,
                 searchedObjectType: [],
                 showedObjects: [],
-            })
+            }, dispatch({
+                type: 'setArea',
+                value: this.context.auth.user.main_area
+            }))
         } 
 
         /** send toast if there are latest violated notification */
@@ -138,6 +146,7 @@ class MainContainer extends React.Component{
         let pathMacAddress = !(_.isEqual(this.state.pathMacAddress, nextState.pathMacAddress)) 
         let isHighlightSearchPanelChange = !(_.isEqual(this.state.isHighlightSearchPanel, nextState.isHighlightSearchPanel))
         let isCurrentAreaChange = !(_.isEqual(this.state.currentAreaId, this.context.stateReducer[0].areaId))
+        let isAuthenticationChange = !(_.isEqual(this.state.authenticated, this.context.auth.authenticated))
         let shouldUpdate = isTrackingDataChange || 
                                 isShowedObjectsChange ||
                                 hasSearchKey || 
@@ -151,7 +160,8 @@ class MainContainer extends React.Component{
                                 pathMacAddress ||
                                 isLocationConfigChange ||
                                 isLbeaconPositionChange ||
-                                isCurrentAreaChange
+                                isCurrentAreaChange ||
+                                isAuthenticationChange
         return shouldUpdate
     }
 
@@ -672,7 +682,6 @@ class MainContainer extends React.Component{
             searchKey,
             lbeaconPosition,
             geofenceConfig,
-            authenticated,
             searchedObjectType,
             showedObjects,
             showMobileMap,
@@ -708,7 +717,6 @@ class MainContainer extends React.Component{
             handleShowPath,
             lbeaconPosition,
             geofenceConfig,
-            authenticated,
             searchedObjectType,
             showedObjects,
             highlightSearchPanel,

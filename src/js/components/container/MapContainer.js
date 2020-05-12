@@ -89,8 +89,7 @@ class MapContainer extends React.Component {
             searchResult,
             setMonitor,
             lbeaconPosition,
-            currentAreaId
-
+            currentAreaId,
         } = this.props;
 
         let propsGroup = {
@@ -107,8 +106,7 @@ class MapContainer extends React.Component {
             setMonitor,
             locationMonitorConfig,
             lbeaconPosition,
-            currentAreaId
-
+            currentAreaId,
 
         }
         return(
