@@ -1,17 +1,18 @@
 const db = require('../query');
+const path = require('path');
+
 
 module.exports = app => {
 
     setInterval(db.clearSearchHistory, 86400*process.env.CLEAR_SEARCH_HISTORY_INTERVAL)
 
     app.get('/image/pinImage/:pinImage', (req, res) => {
-        res.sendFile(path.join(__dirname, 'src','img','colorPin',req.params['pinImage']));
+        res.sendFile(path.join(__dirname, '..', '..', 'src','img','colorPin',req.params['pinImage']));
     })
     
     app.get(/^\/page\/(.*)/, (req, res) => {
-        res.sendFile(path.join(__dirname, 'dist','index.html'));
+        res.sendFile(path.join(__dirname, '..', '..', 'dist','index.html'));
     })
-    
     app.post('/data/getObjectTable', db.getObjectTable);
     
     app.post('/data/getTrackingTableByMacAddress', db.getTrackingTableByMacAddress);
@@ -149,7 +150,7 @@ module.exports = app => {
     })
     
     app.get(`/${process.env.DEFAULT_FOLDER}/search_result/:file`, (req, res) =>{
-        res.sendFile(path.join(__dirname, `${process.env.DEFAULT_FOLDER}/search_result`,req.params['file']));
+        res.sendFile(path.join(`${process.env.LOCAL_FILE_PATH}`, `${process.env.DEFAULT_FOLDER}/search_result`,req.params['file']));
     })
     
     app.get(`/${process.env.DEFAULT_FOLDER}/edit_object_record/:file`, (req, res) =>{
