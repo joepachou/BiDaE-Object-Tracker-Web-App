@@ -31,7 +31,8 @@ const BrowserMainContainer = ({
     setShowedObjects,
     pathMacAddress,
     isHighlightSearchPanel,
-    locationMonitorConfig
+    locationMonitorConfig,
+    currentAreaId,
 }) => {
 
     let auth = React.useContext(AuthenticationContext)
@@ -97,6 +98,7 @@ const BrowserMainContainer = ({
                         searchedObjectType={searchedObjectType}
                         showedObjects={showedObjects}
                         setShowedObjects={setShowedObjects}
+                        currentAreaId={currentAreaId}
                     />
                 </Col>
 

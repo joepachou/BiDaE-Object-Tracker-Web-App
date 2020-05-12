@@ -60,6 +60,9 @@ const styleConfig = {
             ...provided,
             border: 'none',
             width: 200,
+            outline: 0,
+            boxShadow: 'none'
+            
         }),
         
         singleValue: (provided, state) => ({

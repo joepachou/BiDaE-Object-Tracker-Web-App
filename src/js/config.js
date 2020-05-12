@@ -29,7 +29,7 @@ const config = {
             "form:view",
         ],
         locale: 'tw',
-        main_area: 0,
+        main_area: process.env.DEFAULT_AREA_ID,
     },
 
     /** Reserved Object interval time in minutes */
@@ -972,6 +972,8 @@ const config = {
             showNumber: false,
             autoPan: false
         },
+
+        IS_SHOW_LBEACON_MARK: process.env.IS_LBEACON_MARK,
 
         /** Set the html content of popup of markers */
         getPopupContent: (object, objectList, locale) => {

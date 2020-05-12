@@ -27,8 +27,15 @@ function getTrackingData (areas_id) {
 			user_table.name as physician_name,
 			object_table.reserved_timestamp,
 			notification.json_agg as notification ,
-			object_table.nickname,
-			area_table.name as location_name
+			object_table.nickname, 
+			area_table.name as location_name ,
+			JSON_BUILD_OBJECT(
+				'id', area_table.id,
+				'value', area_table.name
+			) AS lbeacon_area,
+			COALESCE(patient_record.record, ARRAY[]::JSON[]) as records			
+
+ 
 		FROM object_summary_table
 
 		LEFT JOIN object_table
@@ -41,12 +48,31 @@ function getTrackingData (areas_id) {
 		ON object_table.note_id = edit_object_record.id
 
 		LEFT JOIN area_table
-		ON object_table.area_id = area_table.id
-
-	 
+		ON area_table.id = object_summary_table.updated_by_area
 
 		LEFT JOIN user_table
 		ON user_table.id = object_table.physician_id
+
+		LEFT JOIN (
+			SELECT 
+				object_id,
+				ARRAY_AGG(JSON_BUILD_OBJECT(
+					'created_timestamp', created_timestamp,
+					'record', record,
+					'recorded_user', (
+						SELECT name
+						FROM user_table
+						WHERE id = editing_user_id 
+					)
+				)) as record 
+			FROM (
+				SELECT *
+				FROM patient_record
+				ORDER BY created_timestamp DESC
+			) as patient_record_table
+			GROUP BY object_id					
+		) as patient_record
+		ON object_table.id = patient_record.object_id
 
 		LEFT JOIN (
 			SELECT 

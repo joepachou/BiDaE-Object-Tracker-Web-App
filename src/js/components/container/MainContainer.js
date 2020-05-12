@@ -56,12 +56,12 @@ class MainContainer extends React.Component{
         showMobileMap: true,
         searchedObjectType: [],
         showedObjects: [],
+        currentAreaId: this.context.stateReducer[0].areaId
     }
 
     errorToast = null
 
     componentDidMount = () => {
-
         /** set the scrollability in body disabled */
         let targetElement = document.querySelector('body')
         disableBodyScroll(targetElement);
@@ -91,6 +91,12 @@ class MainContainer extends React.Component{
             })
         }
 
+        if (!(_.isEqual(prevProps.currentAreaId, this.context.stateReducer[0].areaId))){
+            this.setState({
+                currentAreaId: this.context.stateReducer[0].areaId
+            })
+        }
+
         /** refresh search result if the search results are change */
         if (isTrackingDataChange && this.state.hasSearchKey) {
             this.handleRefreshSearchResult()
@@ -98,6 +104,11 @@ class MainContainer extends React.Component{
 
         /** clear out search result when user sign out */
         if (!(_.isEqual(prevState.authenticated, this.context.auth.authenticated))) {
+            // let currentAreaId = this.context.auth.authenticated ? 
+
+            let { stateReducer } = this.context
+            let [{areaId}, dispatch] = stateReducer
+
             this.setState({
                 authenticated: this.context.auth.authenticated,
                 searchResult: [],
@@ -105,7 +116,10 @@ class MainContainer extends React.Component{
                 hasSearchKey: false,
                 searchedObjectType: [],
                 showedObjects: [],
-            })
+            }, dispatch({
+                type: 'setArea',
+                value: this.context.auth.user.main_area
+            }))
         } 
 
         /** send toast if there are latest violated notification */
@@ -131,6 +145,8 @@ class MainContainer extends React.Component{
         let display = !(_.isEqual(this.state.display, nextState.display)) 
         let pathMacAddress = !(_.isEqual(this.state.pathMacAddress, nextState.pathMacAddress)) 
         let isHighlightSearchPanelChange = !(_.isEqual(this.state.isHighlightSearchPanel, nextState.isHighlightSearchPanel))
+        let isCurrentAreaChange = !(_.isEqual(this.state.currentAreaId, this.context.stateReducer[0].areaId))
+        let isAuthenticationChange = !(_.isEqual(this.state.authenticated, this.context.auth.authenticated))
         let shouldUpdate = isTrackingDataChange || 
                                 isShowedObjectsChange ||
                                 hasSearchKey || 
@@ -143,7 +159,9 @@ class MainContainer extends React.Component{
                                 display ||
                                 pathMacAddress ||
                                 isLocationConfigChange ||
-                                isLbeaconPositionChange 
+                                isLbeaconPositionChange ||
+                                isCurrentAreaChange ||
+                                isAuthenticationChange
         return shouldUpdate
     }
 
@@ -305,13 +323,16 @@ class MainContainer extends React.Component{
             locale: locale.abbr
         })
         .then(res => {
-            let lbeaconPosition = res.data.rows.reduce((activatedLbeacons, item) => {
-                let coordinate = this.createLbeaconCoordinate(item.uuid).toString()
-                if (item.health_status && !activatedLbeacons.includes(coordinate)) {
-                    activatedLbeacons.push(coordinate)
-                }
-                return activatedLbeacons
-            }, [])
+            // let lbeaconPosition = res.data.rows.reduce((activatedLbeacons, item) => {
+            //     let coordinate = this.createLbeaconCoordinate(item.uuid).toString()
+            //     if (item.health_status && !activatedLbeacons.includes(coordinate)) {
+            //         activatedLbeacons.push(coordinate)
+            //     }
+            //     return activatedLbeacons
+            // }, [])
+            let lbeaconPosition = res.data.rows.map(item => {
+                return this.createLbeaconCoordinate(item.uuid).toString()
+            })
             this.setState({
                 lbeaconPosition
             })
@@ -661,7 +682,6 @@ class MainContainer extends React.Component{
             searchKey,
             lbeaconPosition,
             geofenceConfig,
-            authenticated,
             searchedObjectType,
             showedObjects,
             showMobileMap,
@@ -670,7 +690,8 @@ class MainContainer extends React.Component{
             display,
             pathMacAddress,
             isHighlightSearchPanel,
-            locationMonitorConfig     
+            locationMonitorConfig,
+            currentAreaId
         } = this.state;
 
         const {
@@ -696,7 +717,6 @@ class MainContainer extends React.Component{
             handleShowPath,
             lbeaconPosition,
             geofenceConfig,
-            authenticated,
             searchedObjectType,
             showedObjects,
             highlightSearchPanel,
@@ -713,7 +733,8 @@ class MainContainer extends React.Component{
             pathMacAddress,
             mapButtonHandler,
             isHighlightSearchPanel,
-            locationMonitorConfig
+            locationMonitorConfig,
+            currentAreaId
         }
 
         return (
