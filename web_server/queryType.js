@@ -31,7 +31,9 @@ function getTrackingData (areas_id) {
 			JSON_BUILD_OBJECT(
 				'id', area_table.id,
 				'value', area_table.name
-			) AS lbeacon_area
+			) AS lbeacon_area,
+			COALESCE(patient_record.record, ARRAY[]::JSON[]) as records			
+
 
 		FROM object_summary_table
 
@@ -49,6 +51,27 @@ function getTrackingData (areas_id) {
 
 		LEFT JOIN user_table
 		ON user_table.id = object_table.physician_id
+
+		LEFT JOIN (
+			SELECT 
+				object_id,
+				ARRAY_AGG(JSON_BUILD_OBJECT(
+					'created_timestamp', created_timestamp,
+					'record', record,
+					'recorded_user', (
+						SELECT name
+						FROM user_table
+						WHERE id = editing_user_id 
+					)
+				)) as record 
+			FROM (
+				SELECT *
+				FROM patient_record
+				ORDER BY created_timestamp DESC
+			) as patient_record_table
+			GROUP BY object_id					
+		) as patient_record
+		ON object_table.id = patient_record.object_id
 
 		LEFT JOIN (
 			SELECT 

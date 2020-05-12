@@ -145,7 +145,6 @@ class ShiftChange extends React.Component {
         )  
 
         this.state.patients.foundPatients.reduce((pkg, object) => {   
-
             let temp = config.getPdfPackage(
                 'patientRecord', 
                 auth.user, 
@@ -153,7 +152,6 @@ class ShiftChange extends React.Component {
                 locale,
                 authentication,
             )
-            
             if (pkg.pdf) {
                 pkg.pdf += `
                     <div style="page-break-before:always"></div>
