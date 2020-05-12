@@ -39,7 +39,6 @@ class Map extends React.Component {
     locationMonitorLayer = L.layerGroup()
     currentZoom = 0
     prevZoom = 0
-    pin_shift_scale = [500, -400]
     iconOption = {};
     mapOptions = {};
 
@@ -48,14 +47,15 @@ class Map extends React.Component {
     }
 
     componentDidUpdate = (prevProps) => {
-        this.handleObjectMarkers();
-        //this.drawPolyline();
 
-        if (!(_.isEqual(prevProps.lbeaconPosition, this.props.lbeaconPosition))) {
+        this.handleObjectMarkers();
+
+        //this.drawPolyline();
+        if (parseInt(this.props.mapConfig.IS_SHOW_LBEACON_MARK) && !(_.isEqual(prevProps.lbeaconPosition, this.props.lbeaconPosition))) {
             this.createLbeaconMarkers(this.props.lbeaconPosition, this.lbeaconsPosition)
         }
 
-        if (this.props.mapConfig.IS_SHOW_LBEACON_MARK && !(_.isEqual(prevProps.currentAreaId, this.context.stateReducer[0].areaId))){
+        if (parseInt(this.props.mapConfig.IS_SHOW_LBEACON_MARK) && !(_.isEqual(prevProps.currentAreaId, this.context.stateReducer[0].areaId))){
             this.createLbeaconMarkers(this.props.lbeaconPosition, this.lbeaconsPosition)
         }
 
