@@ -27,6 +27,7 @@ class Map extends React.Component {
 
     state = {
         objectInfo: [],
+        shouldUpdateTrackingData: true,
     }
 
     map = null;
@@ -43,12 +44,15 @@ class Map extends React.Component {
     mapOptions = {};
 
     componentDidMount = () => {
+        
         this.initMap();
     }
 
-    componentDidUpdate = (prevProps) => {
+    componentDidUpdate = (prevProps, prevState) => {
 
-        this.handleObjectMarkers();
+        if (this.state.shouldUpdateTrackingData) {
+            this.handleObjectMarkers();
+        }
 
         //this.drawPolyline();
         if (parseInt(this.props.mapConfig.IS_SHOW_LBEACON_MARK) && !(_.isEqual(prevProps.lbeaconPosition, this.props.lbeaconPosition))) {
@@ -74,6 +78,14 @@ class Map extends React.Component {
         if (prevProps.currentAreaId !== this.props.currentAreaId) { 
             this.setMap()
         }
+    }
+
+    shouldComponentUpdate = (nextProps, nextState) => {
+        if (nextState.shouldUpdateTrackingData !== this.state.shouldUpdateTrackingData) {
+            return false
+        }
+        return true
+
     }
 
     /** Set the search map configuration establishing in config.js  */
@@ -131,13 +143,6 @@ class Map extends React.Component {
             map.addLayer(image)
             this.map = map;
         }
-
-        // this.originalZoom = this.map.getZoom()
-        // this.currentZoom = this.map.getZoom();
-        // this.prevZoom = this.map.getZoom();
-        
-        /** Set the map's events */
-        // this.map.on('zoomend', this.resizeMarkers)
     }
 
     /** Set the overlay image when changing area */
@@ -171,30 +176,6 @@ class Map extends React.Component {
         } else {
             this.image.setUrl(null)
         }   
-    }
-
-    /** Resize the markers and errorCircles when the view is zoomend. */
-    resizeMarkers = () => {
-        this.prevZoom = this.currentZoom
-        this.currentZoom = this.map.getZoom();
-        // this.calculateScale();
-        this.markersLayer.eachLayer(marker => {
-            let icon = marker.options.icon;
-            icon.options.iconSize = [this.scalableIconSize, this.scalableIconSize]
-            icon.options.numberSize = this.scalableNumberSize
-            icon.options.iconAnchor = [this.scalableIconSize / 2, this.scalableIconSize / 2]
-            var pos = marker.getLatLng()
-            marker.setLatLng([
-                pos.lat - this.prevZoom * this.pin_shift_scale[0] + this.currentZoom * this.pin_shift_scale[0], 
-                pos.lng - this.prevZoom * this.pin_shift_scale[1] + this.currentZoom * this.pin_shift_scale[1]
-            ])
-            marker.setIcon(icon);
-        })
-
-        this.geoFenceLayer.eachLayer( circle => {
-            circle.setRadius(this.scalableCircleRadius)
-        })
-
     }
 
     /** Calculate the current scale for creating markers and resizing. */
@@ -407,7 +388,9 @@ class Map extends React.Component {
      * Create the error circle of markers, and add into this.markersLayer.
      */
     handleObjectMarkers = () => {
-        let { locale } = this.context
+        let { 
+            locale,
+        } = this.context
 
         /** Clear the old markerslayers. */
         this.prevZoom = this.originalZoom;
@@ -472,9 +455,20 @@ class Map extends React.Component {
             if (item.searched || item.panic) marker.setZIndexOffset(1000);
         
             /** Set the marker's event. */
-            marker.on('mouseover', function () { this.openPopup(); })
-            // marker.on('click', this.handleMarkerClick);
-            // marker.on('mouseout', function () { this.closePopup(); })
+            marker.on('mouseover', () => {
+                this.pop
+                marker.openPopup()
+                this.setState({
+                    shouldUpdateTrackingData: false
+                })
+
+            })
+            marker.getPopup().on('remove', () => {
+                this.setState({
+                    shouldUpdateTrackingData: true
+                })
+            })
+            
         })
         /** Add the new markerslayers to the map */
         this.markersLayer.addTo(this.map);
@@ -514,7 +508,7 @@ class Map extends React.Component {
         return objectList 
     }
     
-    render(){
+    render() {
         return(
             <div>
                 <BrowserView>   
