@@ -143,8 +143,7 @@ export default class ChangeStatusForm extends React.Component {
             selectedObjectData 
         } = this.props
 
-        selectedObjectData = selectedObjectData.length ? selectedObjectData : []
-      
+        selectedObjectData = selectedObjectData.length ? selectedObjectData : [] 
         return (
             <Modal  
                 show={this.props.show}
@@ -238,13 +237,12 @@ export default class ChangeStatusForm extends React.Component {
                                                                     disabled
                                                                 />
                                                             </Col>
-                                                            <Col> 
+                                                            <Col>  
                                                                 <FormikFormGroup 
                                                                     type="text"
                                                                     name="area"
                                                                     label={locale.texts.AREA}
-                                                                    // value={locale.texts[item.area.value]  }
-                                                                    value = { null}
+                                                                    value={locale.texts[item.location_name]  }
                                                                     disabled
                                                                 />
                                                             </Col> 
