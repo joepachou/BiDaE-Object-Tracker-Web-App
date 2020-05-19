@@ -128,7 +128,7 @@ class Map extends React.Component {
             bounds,
             hasMap
         } = areaModules[areaOption]
-        this.mapOptions.maxBounds = bounds.map((latLng, index) => latLng.map(axis => axis + this.mapOptions.maxBoundsOffset[index]))
+        // this.mapOptions.maxBounds = bounds.map((latLng, index) => latLng.map(axis => axis + this.mapOptions.maxBoundsOffset[index]))
         var map = L.map('mapid', this.mapOptions);
 
         if (hasMap) {
@@ -168,7 +168,7 @@ class Map extends React.Component {
             bounds,
             hasMap
         } = areaModules[areaOption]
-        mapOptions.maxBounds = bounds.map((latLng, index) => latLng.map(axis => axis + mapOptions.maxBoundsOffset[index]))
+        // mapOptions.maxBounds = bounds.map((latLng, index) => latLng.map(axis => axis + mapOptions.maxBoundsOffset[index]))
         if (hasMap) {
             this.image.setUrl(url)
             this.image.setBounds(bounds)
