@@ -27,7 +27,7 @@ const TabletMainContainer = ({
     hasSearchKey,
     setShowedObjects,
     pathMacAddress,
-
+    currentAreaId
 }) => {
 
     let auth = React.useContext(AuthenticationContext);
@@ -66,6 +66,7 @@ const TabletMainContainer = ({
                             searchedObjectType={searchedObjectType}
                             showedObjects={showedObjects}
                             setShowedObjects={setShowedObjects}
+                            currentAreaId={currentAreaId}
                         />
                     </div>
 

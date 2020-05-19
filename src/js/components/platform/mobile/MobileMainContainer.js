@@ -24,18 +24,16 @@ const MobileMainContainer = ({
     highlightSearchPanel,
     showMobileMap,
     clearSearchResult,
-    hasGridButton,
     searchKey,
     searchResult,
     trackingData,
     proccessedTrackingData,
     hasSearchKey,
-    setShowedObjects,
     handleShowResultListForMobile,
     display,
     mapButtonHandler,
-    pathMacAddress
-
+    pathMacAddress,
+    currentAreaId
 }) => {
 
     let auth = React.useContext(AuthenticationContext);
@@ -90,6 +88,7 @@ const MobileMainContainer = ({
                         showedObjects={showedObjects}
                         handleClearButton={handleClearButton}
                         mapButtonHandler={mapButtonHandler}
+                        currentAreaId={currentAreaId}
                     />
                 </div>
                 <ButtonGroup style={{marginTop:'5px',marginBottom:'5px'}}>
