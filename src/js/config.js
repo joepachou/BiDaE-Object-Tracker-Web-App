@@ -738,7 +738,7 @@ const config = {
             specifiedNumberTop: '8%',
 
             /* Set the Marker dispersity that can be any positive number */
-            markerDispersity: 100,
+            markerDispersity: 1,
 
             geoFenceMarkerOptions: {
 
@@ -785,7 +785,7 @@ const config = {
             numberSize: 8, 
 
             /* Set the Marker dispersity that can be any positive number */
-            markerDispersity: 100,
+            markerDispersity: 1,
 
             geoFenceMarkerOptions: {
 
@@ -841,7 +841,7 @@ const config = {
             numberSize: 8, 
 
             /* Set the Marker dispersity that can be any positive number */
-            markerDispersity: 100,
+            markerDispersity: 1,
 
             geoFenceMarkerOptions: {
 
