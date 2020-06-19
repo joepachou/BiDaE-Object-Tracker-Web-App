@@ -48,6 +48,7 @@ class Map extends React.Component {
         this.initMap();
     }
 
+
     componentDidUpdate = (prevProps, prevState) => {
 
         let {
@@ -58,11 +59,10 @@ class Map extends React.Component {
             this.handleObjectMarkers();
         }
 
-        if (auth.user.permissions.includes("view:lbeaconMarker") && !(_.isEqual(prevProps.lbeaconPosition, this.props.lbeaconPosition))) {
-            this.createLbeaconMarkers(this.props.lbeaconPosition, this.lbeaconsPosition)
-        }
-
-        if (auth.user.permissions.includes("view:lbeaconMarker") && !(_.isEqual(prevProps.currentAreaId, this.context.stateReducer[0].areaId))){
+        if (!(_.isEqual(prevProps.lbeaconPosition, this.props.lbeaconPosition)) ||
+            !(_.isEqual(prevProps.currentAreaId, this.context.stateReducer[0].areaId)) ||
+            !(_.isEqual(prevProps.authenticated, this.props.authenticated))
+            ) {
             this.createLbeaconMarkers(this.props.lbeaconPosition, this.lbeaconsPosition)
         }
 
@@ -333,25 +333,27 @@ class Map extends React.Component {
     createLbeaconMarkers = (parseUUIDArray, layer) => {
 
         let {
-            stateReducer
+            stateReducer,
+            auth
         } = this.context
         let [{areaId}] = stateReducer
 
         layer.clearLayers();
 
+        if (!auth.user.permissions.includes("view:lbeaconMarker")) {
+            return
+        }
         /** Creat the marker of all lbeacons onto the map  */
         parseUUIDArray
             .filter(lbeacon => parseInt(lbeacon.coordinate.split(',')[2]) == areaId)
             .map(lbeacon => {
-
             let latLng = lbeacon.coordinate.split(',')
-            let lbeaconMarker;
 
-            if (lbeacon.isInHealthInterval) {
-                lbeaconMarker = L.circleMarker(latLng, this.iconOptions.lbeaconMarkerOptions)
-            } else {
-                lbeaconMarker = L.circleMarker(latLng, this.iconOptions.lbeaconMarkerFailedOptions)
-            }
+            let lbeaconMarkerOptions = lbeacon.isInHealthInterval 
+                ? this.iconOptions.lbeaconMarkerOptions
+                : this.iconOptions.lbeaconMarkerFailedOptions
+
+            let lbeaconMarker = L.circleMarker(latLng, lbeaconMarkerOptions)
 
             lbeaconMarker.bindPopup(this.props.mapConfig.getLbeaconPopupContent(lbeacon))
                 .openPopup()
@@ -359,7 +361,6 @@ class Map extends React.Component {
             // invisibleCircle.on('mouseover', this.handlemenu)
             // invisibleCircle.on('mouseout', function() {this.closePopup();})
         })
-
         /** Add the new markerslayers to the map */
         layer.addTo(this.map);
     }

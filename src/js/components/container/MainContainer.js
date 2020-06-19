@@ -105,7 +105,6 @@ class MainContainer extends React.Component{
         /** clear out search result when user sign out */
         if (!(_.isEqual(prevState.authenticated, this.context.auth.authenticated))) {
             // let currentAreaId = this.context.auth.authenticated ? 
-
             let { stateReducer } = this.context
             let [{areaId}, dispatch] = stateReducer
 
@@ -323,13 +322,7 @@ class MainContainer extends React.Component{
             locale: locale.abbr
         })
         .then(res => {
-            // let lbeaconPosition = res.data.rows.reduce((activatedLbeacons, item) => {
-            //     let coordinate = this.createLbeaconCoordinate(item.uuid).toString()
-            //     if (item.health_status && !activatedLbeacons.includes(coordinate)) {
-            //         activatedLbeacons.push(coordinate)
-            //     }
-            //     return activatedLbeacons
-            // }, [])
+
             let lbeaconPosition = res.data.rows.map(item => {
                 item.coordinate = this.createLbeaconCoordinate(item.uuid).toString();
                 return item;
