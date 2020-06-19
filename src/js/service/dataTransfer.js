@@ -6,7 +6,7 @@ export const macAddressToCoordinate = (mac_address, lbeacon_coordinate, dispersi
     const yy = mac_address.slice(16,17);
     const origin_x = lbeacon_coordinate[1] 
     const origin_y = lbeacon_coordinate[0]
-    const xxx = origin_x + parseInt(xx, 16) * dispersity;
-    const yyy = origin_y + parseInt(yy, 16) * dispersity;
+    const xxx = origin_x + (parseInt(xx, 16) - 8) * dispersity;
+    const yyy = origin_y + (parseInt(yy, 16) - 8) * dispersity;
     return [yyy, xxx];
 }

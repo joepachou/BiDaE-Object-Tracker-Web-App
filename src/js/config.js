@@ -738,7 +738,7 @@ const config = {
             specifiedNumberTop: '8%',
 
             /* Set the Marker dispersity that can be any positive number */
-            markerDispersity: 1,
+            markerDispersity: 40,
 
             geoFenceMarkerOptions: {
 
@@ -756,6 +756,17 @@ const config = {
                 color: 'rgba(0, 0, 0, 0)',
 
                 fillColor: 'orange',
+
+                fillOpacity: 0.4,
+
+                radius: 20,
+            },
+
+            lbeaconMarkerFailedOptions: {
+
+                color: 'rgba(0, 0, 0, 0)',
+
+                fillColor: 'red',
 
                 fillOpacity: 0.4,
 
@@ -973,8 +984,6 @@ const config = {
             autoPan: false
         },
 
-        IS_SHOW_LBEACON_MARK: process.env.IS_LBEACON_MARK,
-
         /** Set the html content of popup of markers */
         getPopupContent: (object, objectList, locale) => {
             const content = `
@@ -1032,6 +1041,20 @@ const config = {
                 </div>
             ` 
             return content
+        },
+
+        /** Set the html content of popup of Lbeacon markers */
+        getLbeaconPopupContent: lbeacon => {
+            return `
+                <div>
+                    <div>
+                        description: ${lbeacon.description}
+                    </div>
+                    <div>
+                        coordinate: ${lbeacon.coordinate}
+                    </div>
+                </div>
+            ` 
         },
 
     },

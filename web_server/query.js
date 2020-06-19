@@ -303,7 +303,12 @@ const getLbeaconTable = (request, response) => {
         .then(res => {
             console.log('get lbeacon table data succeed')
             res.rows.map(item => {
+                /** Set the value that distinguish lbeacon is normal */
+                item.isInHealthInterval = moment().diff(item.last_report_timestamp, 'minutes') 
+                    < process.env.LBEACON_HEALTH_TIME_INTERVAL_IN_MIN;
+
                 item.last_report_timestamp = moment.tz(item.last_report_timestamp, process.env.TZ).locale(locale).format(process.env.TIMESTAMP_FORMAT);
+
             })
             response.status(200).json(res)
 

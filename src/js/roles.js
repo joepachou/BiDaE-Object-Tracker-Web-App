@@ -86,6 +86,8 @@ const rules = {
             "user:importTable",
             "user:batteryNotice",
             "user:shiftChange",
+
+            "view:lbeaconMarker"
         ]
     }
   };

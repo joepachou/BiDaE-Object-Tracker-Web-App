@@ -30,7 +30,7 @@ class Map extends React.Component {
         shouldUpdateTrackingData: true,
     }
 
-    map = null;
+    map = null; 
     image = null;
     pathOfDevice = L.layerGroup();
     markersLayer = L.layerGroup();
@@ -50,16 +50,19 @@ class Map extends React.Component {
 
     componentDidUpdate = (prevProps, prevState) => {
 
+        let {
+            auth
+        } = this.context
+
         if (this.state.shouldUpdateTrackingData) {
             this.handleObjectMarkers();
         }
 
-        //this.drawPolyline();
-        if (parseInt(this.props.mapConfig.IS_SHOW_LBEACON_MARK) && !(_.isEqual(prevProps.lbeaconPosition, this.props.lbeaconPosition))) {
+        if (auth.user.permissions.includes("view:lbeaconMarker") && !(_.isEqual(prevProps.lbeaconPosition, this.props.lbeaconPosition))) {
             this.createLbeaconMarkers(this.props.lbeaconPosition, this.lbeaconsPosition)
         }
 
-        if (parseInt(this.props.mapConfig.IS_SHOW_LBEACON_MARK) && !(_.isEqual(prevProps.currentAreaId, this.context.stateReducer[0].areaId))){
+        if (auth.user.permissions.includes("view:lbeaconMarker") && !(_.isEqual(prevProps.currentAreaId, this.context.stateReducer[0].areaId))){
             this.createLbeaconMarkers(this.props.lbeaconPosition, this.lbeaconsPosition)
         }
 
@@ -336,16 +339,23 @@ class Map extends React.Component {
 
         layer.clearLayers();
 
-        // this.calculateScale()
-
         /** Creat the marker of all lbeacons onto the map  */
         parseUUIDArray
-            .filter(pos => parseInt(pos.split(',')[2]) == areaId)
-            .map(pos => {
+            .filter(lbeacon => parseInt(lbeacon.coordinate.split(',')[2]) == areaId)
+            .map(lbeacon => {
 
-            let latLng = pos.split(',')
-            let lbeacon = L.circleMarker(latLng, this.iconOptions.lbeaconMarkerOptions).bindPopup(pos).openPopup()
-            lbeacon.addTo(layer);
+            let latLng = lbeacon.coordinate.split(',')
+            let lbeaconMarker;
+
+            if (lbeacon.isInHealthInterval) {
+                lbeaconMarker = L.circleMarker(latLng, this.iconOptions.lbeaconMarkerOptions)
+            } else {
+                lbeaconMarker = L.circleMarker(latLng, this.iconOptions.lbeaconMarkerFailedOptions)
+            }
+
+            lbeaconMarker.bindPopup(this.props.mapConfig.getLbeaconPopupContent(lbeacon))
+                .openPopup()
+                .addTo(layer);
             // invisibleCircle.on('mouseover', this.handlemenu)
             // invisibleCircle.on('mouseout', function() {this.closePopup();})
         })
@@ -445,7 +455,6 @@ class Map extends React.Component {
                 /** Set the color of the ordered number */
                 numberColor: this.props.mapConfig.iconColor.number,
             }
-
             const option = new L.AwesomeNumberMarkers (item.iconOption)
             let marker = L.marker(position, {icon: option}).bindPopup(popupContent, this.props.mapConfig.popupOptions).openPopup();
             marker.addTo(this.markersLayer)

@@ -11,7 +11,6 @@ import {
     Row,
     Col,
 } from "react-bootstrap"
-import locale from 'antd/lib/date-picker/locale/en_US';
 import { 
     TransferredLocationColumn
 } from '../../config/tables'

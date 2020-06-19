@@ -331,7 +331,8 @@ class MainContainer extends React.Component{
             //     return activatedLbeacons
             // }, [])
             let lbeaconPosition = res.data.rows.map(item => {
-                return this.createLbeaconCoordinate(item.uuid).toString()
+                item.coordinate = this.createLbeaconCoordinate(item.uuid).toString();
+                return item;
             })
             this.setState({
                 lbeaconPosition
