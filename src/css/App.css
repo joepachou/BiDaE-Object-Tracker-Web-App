@@ -14,10 +14,9 @@ html,body {
     /* background: #f0edf240; */
     color: rgb(92, 92, 92);
     letter-spacing: 1.5px;
-    height: 100%;   
+    height: 100vh;   
     overflow-x: hidden;
 }
-
 
 /* html element */
 :focus {
@@ -530,6 +529,12 @@ p {
 .warning {
     font-size: 0.8rem;
     text-transform: initial;
+}
+
+/** .search result list group style sheet*/ 
+.searchResultListGroup {
+    max-height: 42vh;
+    overflow:  hidden scroll; 
 }
 
 /** scroll bar customize */

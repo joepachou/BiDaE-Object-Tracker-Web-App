@@ -63,49 +63,23 @@ export default class TabletMapContainer extends React.Component {
 
         const { 
             hasSearchKey,
-            geofenceConfig,
-            locationMonitorConfig,
-            searchedObjectType,
             proccessedTrackingData,
-            showedObjects,
-            showPdfDownloadForm,
-            handleClickButton,
             pathMacAddress,
+            currentAreaId
         } = this.props;
 
         let [{areaId}] = stateReducer
 
         const style = {
-            title: {
-                color: "grey",
-                fontSize: "1rem",
-                maxWidth: "9rem",
-                height: "5rem",
-                lineHeight: "3rem"
-            },
             mapForMobile: {
                 // width: '90vw',
-                border: "solid 2px rgba(227, 222, 222, 0.619)",
-                padding: "5px",
+                border: 'solid 2px rgba(227, 222, 222, 0.619)',
+                padding: '5px',
             },
             mapBlock: {
-                border: "solid 2px rgba(227, 222, 222, 0.619)",
-                padding: "5px",
+                border: 'solid 2px rgba(227, 222, 222, 0.619)',
+                padding: '5px',
             },
-            MapAndQrcode: {
-                height: '42vh'
-            },
-            qrBlock: {
-                width: '10vw',
-            },
-            mapBlockForTablet: {
-                border: "solid 2px rgba(227, 222, 222, 0.619)",
-                padding: "5px",
-                width: '60vw'
-            },
-            button: {
-                fontSize: "0.8rem"
-            }
         }
 
         return (
@@ -124,6 +98,7 @@ export default class TabletMapContainer extends React.Component {
                     handleShowPath={this.props.handleShowPath}
                     showPath={this.props.showPath}
                     style={{border:'solid'}}
+                    currentAreaId={currentAreaId}
                 />
             </div>
         )

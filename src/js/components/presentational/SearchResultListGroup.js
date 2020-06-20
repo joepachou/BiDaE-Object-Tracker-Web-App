@@ -50,13 +50,17 @@ const SearchResultListGroup = ({
     data,
     onSelect,
     selection,
+    disabled,
     action
 }) => {
 
     const { locale } = React.useContext(AppContext);
    
     const style = {
-
+        icon: {
+            color: '#007bff',
+            top: 10
+        },
         item: {
             minWidth: 35,
         },
@@ -85,8 +89,8 @@ const SearchResultListGroup = ({
         >
             {data.map((item,index) => {
                 let element = 
-                    <Link 
-                        to={dataToLink(item)}
+                    <ListGroup.Item 
+                        href={'#' + index} 
                         eventKey={item.found + ':'+ index} 
                         key={index} 
                         action={action}
@@ -104,7 +108,7 @@ const SearchResultListGroup = ({
                         {getDescription(item, locale, config)}
                         {getMacaddress(item, locale)}
                         {getRSSI(item, locale)}
-                    </Link>
+                    </ListGroup.Item>
                 return element
             })}
         </ListGroup>

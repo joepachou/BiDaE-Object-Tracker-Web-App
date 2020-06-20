@@ -77,20 +77,29 @@ class Map extends React.Component {
     locationMonitorLayer = L.layerGroup()
     currentZoom = 0
     prevZoom = 0
-    pin_shift_scale = [500, -400]
     iconOption = {};
     mapOptions = {};
 
     componentDidMount = () => {
+        
         this.initMap();
     }
 
-    componentDidUpdate = (prevProps) => {
-        
-        this.handleObjectMarkers();
-        //this.drawPolyline();
 
-        if (parseInt(process.env.IS_LBEACON_MARK) && !(_.isEqual(prevProps.lbeaconPosition, this.props.lbeaconPosition))) {
+    componentDidUpdate = (prevProps, prevState) => {
+
+        let {
+            auth
+        } = this.context
+
+        if (this.state.shouldUpdateTrackingData) {
+            this.handleObjectMarkers();
+        }
+
+        if (!(_.isEqual(prevProps.lbeaconPosition, this.props.lbeaconPosition)) ||
+            !(_.isEqual(prevProps.currentAreaId, this.context.stateReducer[0].areaId)) ||
+            !(_.isEqual(prevProps.authenticated, this.props.authenticated))
+            ) {
             this.createLbeaconMarkers(this.props.lbeaconPosition, this.lbeaconsPosition)
         }
 
@@ -108,6 +117,14 @@ class Map extends React.Component {
         if (prevProps.areaId !== this.props.areaId) { 
             this.setMap()
         }
+    }
+
+    shouldComponentUpdate = (nextProps, nextState) => {
+        if (nextState.shouldUpdateTrackingData !== this.state.shouldUpdateTrackingData) {
+            return false
+        }
+        return true
+
     }
 
     /** Set the search map configuration establishing in config.js  */
@@ -165,13 +182,6 @@ class Map extends React.Component {
             map.addLayer(image)
             this.map = map;
         }
-
-        // this.originalZoom = this.map.getZoom()
-        // this.currentZoom = this.map.getZoom();
-        // this.prevZoom = this.map.getZoom();
-        
-        /** Set the map's events */
-        // this.map.on('zoomend', this.resizeMarkers)
     }
 
     /** Set the overlay image when changing area */
@@ -205,30 +215,6 @@ class Map extends React.Component {
         } else {
             this.image.setUrl(null)
         }   
-    }
-
-    /** Resize the markers and errorCircles when the view is zoomend. */
-    resizeMarkers = () => {
-        this.prevZoom = this.currentZoom
-        this.currentZoom = this.map.getZoom();
-        // this.calculateScale();
-        this.markersLayer.eachLayer(marker => {
-            let icon = marker.options.icon;
-            icon.options.iconSize = [this.scalableIconSize, this.scalableIconSize]
-            icon.options.numberSize = this.scalableNumberSize
-            icon.options.iconAnchor = [this.scalableIconSize / 2, this.scalableIconSize / 2]
-            var pos = marker.getLatLng()
-            marker.setLatLng([
-                pos.lat - this.prevZoom * this.pin_shift_scale[0] + this.currentZoom * this.pin_shift_scale[0], 
-                pos.lng - this.prevZoom * this.pin_shift_scale[1] + this.currentZoom * this.pin_shift_scale[1]
-            ])
-            marker.setIcon(icon);
-        })
-
-        this.geoFenceLayer.eachLayer( circle => {
-            circle.setRadius(this.scalableCircleRadius)
-        })
-
     }
 
     /** Calculate the current scale for creating markers and resizing. */
@@ -383,23 +369,34 @@ class Map extends React.Component {
     createLbeaconMarkers = (parseUUIDArray, layer) => {
 
         let {
-            stateReducer
+            stateReducer,
+            auth
         } = this.context
         let [{areaId}] = stateReducer
 
-        // this.calculateScale()
+        layer.clearLayers();
 
+        if (!auth.user.permissions.includes("view:lbeaconMarker")) {
+            return
+        }
         /** Creat the marker of all lbeacons onto the map  */
         parseUUIDArray
-            .filter(pos => parseInt(pos.split(',')[2]) == areaId)
-            .map(pos => {
+            .filter(lbeacon => parseInt(lbeacon.coordinate.split(',')[2]) == areaId)
+            .map(lbeacon => {
+            let latLng = lbeacon.coordinate.split(',')
 
-            let latLng = pos.split(',')
-            let lbeacon = L.circleMarker(latLng, this.iconOptions.lbeaconMarkerOptions).addTo(layer);
+            let lbeaconMarkerOptions = lbeacon.isInHealthInterval 
+                ? this.iconOptions.lbeaconMarkerOptions
+                : this.iconOptions.lbeaconMarkerFailedOptions
+
+            let lbeaconMarker = L.circleMarker(latLng, lbeaconMarkerOptions)
+
+            lbeaconMarker.bindPopup(this.props.mapConfig.getLbeaconPopupContent(lbeacon))
+                .openPopup()
+                .addTo(layer);
             // invisibleCircle.on('mouseover', this.handlemenu)
             // invisibleCircle.on('mouseout', function() {this.closePopup();})
         })
-
         /** Add the new markerslayers to the map */
         layer.addTo(this.map);
     }
@@ -438,7 +435,9 @@ class Map extends React.Component {
      * Create the error circle of markers, and add into this.markersLayer.
      */
     handleObjectMarkers = () => {
-        let { locale } = this.context
+        let { 
+            locale,
+        } = this.context
 
         /** Clear the old markerslayers. */
         this.prevZoom = this.originalZoom;
@@ -493,7 +492,6 @@ class Map extends React.Component {
                 /** Set the color of the ordered number */
                 numberColor: this.props.mapConfig.iconColor.number,
             }
-
             const option = new L.AwesomeNumberMarkers (item.iconOption)
             let marker = L.marker(position, {icon: option}).bindPopup(popupContent, this.props.mapConfig.popupOptions).openPopup();
             marker.addTo(this.markersLayer)
@@ -503,9 +501,20 @@ class Map extends React.Component {
             if (item.searched || item.panic) marker.setZIndexOffset(1000);
         
             /** Set the marker's event. */
-            marker.on('mouseover', function () { this.openPopup(); })
-            // marker.on('click', this.handleMarkerClick);
-            // marker.on('mouseout', function () { this.closePopup(); })
+            marker.on('mouseover', () => {
+                this.pop
+                marker.openPopup()
+                this.setState({
+                    shouldUpdateTrackingData: false
+                })
+
+            })
+            marker.getPopup().on('remove', () => {
+                this.setState({
+                    shouldUpdateTrackingData: true
+                })
+            })
+            
         })
         /** Add the new markerslayers to the map */
         this.markersLayer.addTo(this.map);

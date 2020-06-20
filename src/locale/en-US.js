@@ -257,6 +257,8 @@ const en =  {
     PERIMETERS_GROUP: "perimeters group",
     FENCE_RSSI:"fences rssi",
     PERIMETER_RSSI:"perimeter rssi",
+    DEPARTMENT:"department",
+    NEW_DEPARTMENT:"new department",
     FENCES_GROUP: "fences group",
     RSSI: "rssi",
     YES: "yes",
@@ -272,6 +274,7 @@ const en =  {
     FOLD:"fold",
     COMMENT: "comment",
     SELECT_LEVEL: "select level",
+    NICKNAME:"nickname",
 
     /** form title */
     EDIT_LBEACON: "edit lbeacon",
@@ -367,6 +370,7 @@ const en =  {
     OVERLENGTH: "only allow below 100 chars",
     LIMIT_IN_TWENTY_CHARACTER: "Limit in 20 characters",
     LIMIT_IN_FOURTY_CHARACTER: "Limit in 40 characters",
+    ALEAST_ONE_DEPARTMENT:"Aleast one department",
 
     /** placeholder */
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "please enter or scan mac address",
@@ -469,6 +473,7 @@ const en =  {
     ABNORMAL_LBEACON_LIST: "abnormal lbeacon list",
     ACTION: "action",
     BRANCH:"branch",
+    NEW_BRANCH:"new branch",
     ROLE_LIST:"Role List",
     PERMISSION_LIST:"Permission List",
 
@@ -507,8 +512,21 @@ const en =  {
     MINUTES: "minutes",
     IS_RESERVED_FOR:"is reserved for",
     POUND_SIGN: "#",
+
     // BEING_HERE: "being here",
 
+    DEVICE_FOUND: function (length){
+        return length.toString()+" devices are found"
+    },
+    DEVICE_NOT_FOUND: function (length){
+        return length.toString()+" devices are not found"
+    },
+
+    genderSelect :[
+        "machine",
+        "male",
+        "female"
+    ],
 }
 
 export default en;

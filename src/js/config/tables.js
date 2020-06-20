@@ -102,6 +102,11 @@ const lbeaconTableColumn = [
         width: 130
     },
     {
+        Header: "room",
+        accessor: "room",
+        width: 60,
+    },
+    {
         Header: "IP Address",
         accessor: "ip_address",
         width: 150
@@ -166,25 +171,177 @@ const gatewayTableColumn = [
     }
 ]
 
-const patientTableColumn = [
+const TransferredLocationColumn =[
     {
-        Header: "Name",
-        accessor: "name",
-        width: 250
+        label: '',
+        field: '',
+        sort: "asc",
+        width: 200
+      },
+      {
+        label: 'level',
+        field: 'level',
+        width: 200
+      },
+      {
+        label: 'name',
+        field: 'name',
+        width: 200
+      },
+      {
+          label: 'remove',
+          field: 'remove',
+          width: 200
+      },
+      {
+          label: 'add',
+          field: 'add',
+          width: 200
+      },
+]
+
+const trackingTableColumn = [
+    {
+        Header: "POUND_SIGN",
+        accessor: "_id",
+        style: style.column,
+        width: 40,
     },
     {
-        Header: "ID",
-        accessor: "asset_control_number",
-        width: 250,
+        Header: "Found",
+        accessor: "found",
+        style: style.column,
+        width: 60,
+        Cell: props => props.value 
+            ? <i className="fas fa-circle" style={style.icon.circle}></i>
+            : ""
     },
     {
-        Header: "area",
-        accessor: "area_name.label",
-        width: 200,
+        Header: "Battery",
+        accessor: "battery_indicator",
+        style: style.column,
+        width: 70,
+        Cell: props => 
+            props.value === 3 && <i  className="fas fa-battery-full" style={style.battery.full}></i> ||
+            props.value === 2 && <i className="fas fa-battery-half" style={style.battery.half}></i> ||
+            props.value === 1 && <i className="fas fa-battery-empty" style={style.battery.empty}></i>
+    },
+    {
+        Header: "Panic",
+        accessor: "panic",
+        width: 60,
+        style: style.column,
+        Cell: props => props.value ? <i className="fas fa-exclamation" style={style.icon.exclamation}></i> : null
+    },
+    {
+        Header: "Alert",
+        accessor: "geofence_type",
+        width: 60,
     },
     {
         Header: "Mac Address",
         accessor: "mac_address",
+        width: 180,
+    },
+    {
+        Header: "Name",
+        accessor: "name",
+        width: 180
+    },
+    {
+        Header: "Type",
+        accessor: "type",
+        width: 150
+    },
+    {
+        Header: "Asset Control Number",
+        accessor: "asset_control_number",
+        width: 180
+    },
+    {
+        Header: "Status",
+        accessor: "status",
+        width: 100,
+    },
+    {
+        Header: "Last Location",
+        accessor: "location_description",
+        width: 160
+    },
+    {
+        Header: "Residence Time",
+        accessor: "residence_time",
+        width: 300,
+    },
+    {
+        Header: "Transferred Location",
+        accessor: "transferred_location",
+        width: 160
+    },
+]
+
+const searchResultTableColumn = [
+    {
+        Header: "Type",
+        accessor: "type"
+    },
+    {
+        Header: "Last Four ACN",
+        accessor: "last_four_acn"
+    },
+    {
+        Header: "Status",
+        accessor: "status"
+    },
+    {
+        Header: "Last Location",
+        accessor: "location_description"
+    },
+    {
+        Header: "Residence Time",
+        accessor: "residence_time"
+    },
+]
+
+const patientTableColumn = [
+    {
+        Header: "Name",
+        accessor: "name",
+        width: 150
+    },
+    {
+        Header: "PATIENT_GENDER",
+        accessor: "object_type",
+        width: 70,
+    },
+    {
+        Header: "patient Number",
+        accessor: "asset_control_number",
+        width: 200,
+    },
+    {
+        Header: "auth Area",
+        accessor: "area_name.label",
+        width: 150,
+    },
+    {
+        Header: "room",
+        accessor: "room",
+        width: 100,
+    },
+    {
+        Header: "attending Physician",
+        accessor: "physician_name",
+        width: 100,
+    },
+    {
+        Header: "Mac Address",
+        accessor: "mac_address",
+        width: 200,
+    },
+    {
+        Header: "Monitor Type",
+        accessor: "monitor_type",
         width: 250,
     },
     {
@@ -201,7 +358,12 @@ const importTableColumn = [
         width: 200,
     },
     {
-        Header: "ID",
+        Header: "Type",
+        accessor: "type",
+        width: 200,
+    },
+    {
+        Header: "Asset Control Number",
         accessor: "asset_control_number",
         width: 200,
     },
@@ -249,6 +411,37 @@ const objectTableColumn = [
     }
 ]
 
+const geofenceTableColumn = [
+    {
+        Header: "Mac Address",
+        accessor: "mac_address",
+        width: 180,
+    },
+    {
+        Header: "Type",
+        accessor: "type",
+        width: 100,
+    },
+    {
+        Header: "UUID",
+        accessor: "uuid"
+    },
+    {
+        Header: "Receive Time",
+        accessor: "receive_time",
+        width: 200,
+    },
+    {
+        Header: "Alert Time",
+        accessor: "alert_time",
+        width: 200,
+    },
+    {
+        Header: "Name",
+        accessor: "name",
+        width: 200,
+    },
+]
 
 const userInfoTableColumn = [
     {
@@ -264,13 +457,18 @@ const userInfoTableColumn = [
         width: 150,
     },
     {
+        Header: "user id",
+        accessor: 'id',
+        width: 50,
+    },
+    {
         Header: "Roles",
         accessor: "roles",
-        width: 200,
+        width: 150,
     },
     {
         Header: "Main Area",
-        accessor: "main_area.label",
+        accessor: "main_area",
         width: 150,
     },
     {
@@ -290,6 +488,159 @@ const userInfoTableColumn = [
     },
     
 ]
+
+const editObjectRecordTableColumn = [
+    {
+        Header: "Name",
+        accessor: "name",
+        width: 100,
+    },
+    {
+        Header: "edit time",
+        accessor: "edit_time",
+        width: 230,
+    },
+    {
+        Header: "new status",
+        accessor: "new_status",
+        width: 180,
+    },
+    {
+        Header: "Notes",
+        accessor: "notes",
+    },
+]
+
+const shiftChangeRecordTableColumn = [
+    {
+        Header: "user name",
+        accessor: "user_name",
+        width: 150,
+    },
+    {
+        Header: "shift",
+        accessor: "shift",
+        width: 140,
+    },
+    {
+        Header: "submit timestamp",
+        accessor: "submit_timestamp",
+        // width: 200,
+    }
+]
+
+const deviceManagerTableColumn = [
+    {
+        Header: "Name",
+        accessor: "name"
+    },
+    {
+        Header: "Type",
+        accessor: "type"
+    },
+    {
+        Header: "Access Control Number",
+        accessor: "asset_control_number"
+    },
+    {
+        Header: "Status",
+        accessor: "status",
+        width: 100,
+    },
+    {
+        Header: "Transferred Location",
+        accessor: "transferred_location"
+    }, 
+]
+
+const geofenceConfigColumn = [
+    {
+        Header: "enable",
+        accessor: "enable",
+        width: 60,
+        style: style.column,
+        Cell: props => props.value 
+            ? <i className="fas fa-circle" style={style.icon.circle}></i>
+            : ""
+    },
+    {
+        Header: "is global fence",
+        accessor: "is_global_fence",
+        width: 100,
+        Cell: props => props.value 
+            ? <i className="fas fa-circle" style={style.icon.circle}></i>
+            : ""
+    },
+    {
+        Header: "area",
+        accessor: "area.label",
+        width: 150,
+    },
+    {
+        Header: "name",
+        accessor: "name",
+        width: 100,
+    },
+    {
+        Header: "enable start time",
+        accessor: "start_time",
+        width: 90,
+    },
+    {
+        Header: "enable end time",
+        accessor: "end_time",
+        width: 90,
+    },
+    {
+        Header: "perimeters group",
+        accessor: "parsePerimeters.lbeacons",
+        width: 350,
+    },
+    {
+        Header: "perimeter rssi",
+        accessor: "p_rssi",
+        width: 120,
+    },
+    {
+        Header: "fences group",
+        accessor: "parseFences.lbeacons",
+        width: 350,
+    },
+    {
+        Header: "fence rssi",
+        accessor: "f_rssi",
+        width: 120,
+    },
+]
+
+const monitorConfigColumn = [
+    {
+        Header: "enable",
+        accessor: "enable",
+        width: 70,
+        style: style.column,
+        Cell: props => props.value 
+            ? <i className="fas fa-circle" style={style.icon.circle}></i>
+            : ""
+    },
+    {
+        Header: "area",
+        accessor: "area.label",
+        width: 230,
+    },
+    {
+        Header: "enable start time",
+        accessor: "start_time",
+        width: 130,
+    },
+    {
+        Header: "enable end time",
+        accessor: "end_time",
+        width: 130,
+    },
+]
+
+
 
 const locationHistoryByNameColumns = [
     {
@@ -431,5 +782,15 @@ export {
     locationHistoryByNameColumns,
     locationHistoryByNameGroupBYUUIDColumns,
     locationHistoryByUUIDColumns,
-    locationHistoryByAreaColumns
+    locationHistoryByAreaColumns,
+    trackingTableColumn,
+    searchResultTableColumn,
+    TransferredLocationColumn,
+    geofenceTableColumn,
+    editObjectRecordTableColumn,
+    shiftChangeRecordTableColumn,
+    deviceManagerTableColumn,
+    geofenceConfigColumn,
+    monitorConfigColumn,
+
 }

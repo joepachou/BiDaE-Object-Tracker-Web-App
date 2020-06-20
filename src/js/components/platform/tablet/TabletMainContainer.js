@@ -53,11 +53,13 @@ const TabletMainContainer = ({
     handleShowPath,
     lbeaconPosition,
     geofenceConfig,
+    authenticated,
     searchedObjectType,
     showedObjects,
     highlightSearchPanel,
     showMobileMap,
     clearSearchResult,
+    hasGridButton,
     searchKey,
     searchResult,
     trackingData,
@@ -65,57 +67,50 @@ const TabletMainContainer = ({
     hasSearchKey,
     setShowedObjects,
     pathMacAddress,
-    isHighlightSearchPanel,
-    locationMonitorConfig,
-    suggestData
+    currentAreaId
 }) => {
-   
-    let auth = React.useContext(AuthenticationContext)
 
+    let auth = React.useContext(AuthenticationContext);
+    
     const style = {
         noResultDiv: {
             color: 'grey',
             fontSize: '1rem',
         },
+        titleText: {
+            color: 'rgb(80, 80, 80, 0.9)',
+        }, 
 
-        pageWrap: {
-            overflow: "hidden hidden",
-            height:'100vh'
-        },
+    }
 
-        searchResultDiv: {
-            display: hasSearchKey ? null : 'none',
-        },
+    return (
+        <div id="page-wrap" className='d-flex flex-column w-100' style={{height: "90vh"}}>
+            <div id="mainContainer" className='d-flex flex-row h-100 w-100'>
+                <div className='d-flex flex-column' style={style.MapAndResult}>
+                    <div className="d-flex" style={style.MapAndQrcode}>
+                        <MapContainer
+                            pathMacAddress={pathMacAddress} 
+                            proccessedTrackingData={proccessedTrackingData.length === 0 ? trackingData : proccessedTrackingData}
+                            hasSearchKey={hasSearchKey}
+                            searchResult={searchResult}
+                            handleClearButton={handleClearButton}
+                            getSearchKey={getSearchKey}
+                            setMonitor={setMonitor}
+                            lbeaconPosition={lbeaconPosition}
+                            geofenceConfig={geofenceConfig}
+                            clearAlerts={clearAlerts}
+                            searchKey={searchKey}
+                            authenticated={authenticated}
+                            handleClosePath={handleClosePath}
+                            handleShowPath={handleShowPath}
+                            searchedObjectType={searchedObjectType}
+                            showedObjects={showedObjects}
+                            setShowedObjects={setShowedObjects}
+                            currentAreaId={currentAreaId}
+                        />
+                    </div>
 
-        searchResultList: {
-            dispaly: hasSearchKey ? null : 'none',
-            maxHeight: '28vh'
-        },
-    } 
-
-    return ( 
-        <div 
-            id="page-wrap" 
-            className='mx-1 my-2 overflow-hidden' 
-            style={style.pageWrap} 
-        >
-            <Row 
-                id="mainContainer" 
-                className='d-flex w-100 justify-content-around mx-0' 
-                style={style.container}
-            >
-                <Col>
-                    <SearchContainer 
-                        hasSearchKey={hasSearchKey}
-                        clearSearchResult={clearSearchResult}
-                        auth={auth}
-                        getSearchKey={getSearchKey}
-                        suggestData = {suggestData}
-                    />                        
-                    <div 
-                        id='searchResult' 
-                        style={style.searchResultDiv} 
-                    >
+                    <div id="searchResult" className="d-flex" style={{justifyContent: 'center'}}>
                         <SearchResultList
                             searchResult={searchResult} 
                             searchKey={searchKey}
@@ -124,8 +119,17 @@ const TabletMainContainer = ({
                             showMobileMap={showMobileMap}
                         />
                     </div>
-                </Col>
-            </Row>
+                </div>
+                <div id='searchPanel' className="h-100" style={style.searchPanelForTablet}>
+                    <SearchContainer
+                        hasSearchKey={hasSearchKey}
+                        clearSearchResult={clearSearchResult}
+                        hasGridButton={hasGridButton}
+                        auth={auth}
+                        getSearchKey={getSearchKey}
+                    />
+                </div>
+            </div>
         </div>
     )
 }

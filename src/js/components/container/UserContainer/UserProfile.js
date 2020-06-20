@@ -84,10 +84,31 @@ class UserProfile extends React.Component{
             })
     }
 
+    /** set user's number of search history */
+    resetFreqSearchCount = (value) => {
+        const {
+            auth
+        } = this.context;
+        
+        if (value) {
+            let userInfo = auth.user
+            userInfo.freqSearchCount = value
+            this.setState({
+                userInfo,
+            })
+            axios.post(modifyUserInfo, {
+                info: userInfo,
+                username: userInfo['name']
+            }).then(res => {
+                auth.setUserInfo('freqSearchCount', value)
+            }) 
+        }
+    }
+
     handleClick = (e) => {
         let name = e.target.name
         switch(name) {
-            case 'secondaryArea':
+            case "secondaryArea":
                 this.setState({
                     show: true
                 })

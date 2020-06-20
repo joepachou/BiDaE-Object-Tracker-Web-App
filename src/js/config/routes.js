@@ -42,6 +42,9 @@ import UserContainer from '../components/container/menuContainer/UserContainer';
 import About from '../components/container/About';
 import TraceContainer from '../components/container/menuContainer/TraceContainer';
 import ContactTree from '../components/container/menuContainer/ContactTree';
+import BigScreenContainer from "../components/container/BigScreen/BigScreenContainer";
+import MonitorSettingContainer from "../components/container/menuContainer/MonitorSettingContainer";
+import ReportContainer from "../components/container/menuContainer/ReportContainer";
 
 const routes = [
     {
@@ -65,6 +68,11 @@ const routes = [
         exact: true,
     },
     {
+        path: '/page/bigScreen',
+        component: BigScreenContainer,
+        exact: true,
+    },
+    {
         path: '/page/about',
         component: About,
         exact: true,
@@ -78,7 +86,17 @@ const routes = [
         path: '/page/contactTree',
         component: ContactTree,
         exact: true,
-    }
+    },
+    {
+        path: '/page/monitor',
+        component: MonitorSettingContainer,
+        exact: true,
+    },
+    {
+        path: '/page/report',
+        component: ReportContainer,
+        exact: true,
+    },
 ];
 
 export default routes;

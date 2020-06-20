@@ -3,6 +3,8 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const httpsPort = 443;
+const httpPort = 3000;
+const http = require('http');
 const path = require('path');
 const fs = require('fs')
 const https = require('https');
@@ -11,6 +13,8 @@ const validation = require('./api/middlewares/validation');
 const sessionOptions = require('./api/config/session');
 const dataRoutes = require('./api/routes/dataRoutes');
 const authRoutes = require('./api/routes/dataRoutes/authRoutes');
+const UIRoutes = require('./web_server/routes/UIRoutes');
+const APIRoutes = require('./web_server/routes/APIRoutes');
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true,}));
@@ -34,10 +38,15 @@ app.get(/^\/page\/(.*)/, validation.pageChecker, (req, res) => {
 authRoutes(app);
 
 /** Access control of data retrieving from database by session */
-app.use(validation.authChecker);
+// app.use(validation.authChecker);
 
 /** Data retrieving routes */
 dataRoutes(app)
+
+// UIRoutes(app);
+
+APIRoutes(app);
+
 
 /** privatekey name: private.key
  *  certificate name: certificate.cert or certificate.crt
@@ -48,7 +57,6 @@ dataRoutes(app)
  *  >> openssl req -nodes -new -x509 -keyout private.key -out certificate.cert 
  * If it is window os, please refer to https://tecadmin.net/install-openssl-on-windows/ install openssl 
  * and set the environment variables*/
-
 var privateKey = process.env.PRIVATE_KEY && fs.readFileSync(__dirname + `/ssl/${process.env.PRIVATE_KEY}`)
 var certificate = process.env.CERTIFICATE && fs.readFileSync(__dirname + `/ssl/${process.env.CERTIFICATE}`) 
 var ca_bundle = process.env.CA_BUNDLE && fs.readFileSync(__dirname + `/ssl/${process.env.CA_BUNDLE}`)
@@ -59,14 +67,14 @@ var credentials = {
     ca: ca_bundle
 }
 
-const httpsServer = https.createServer(credentials, app)
+const httpServer = http.createServer(app)
 
-// /** Enable HTTPS server */
-httpsServer.listen(httpsPort, () => {
-    console.log(`HTTPS Server running on PORT ${httpsPort}`)
+/** Enable HTTPS server */
+httpServer.listen(httpPort, () => {
+    console.log(`HTTPS Server running on PORT ${httpPort}`)
 })
 
-httpsServer.timeout = parseInt(process.env.SERVER_TIMEOUT);
+httpServer.timeout = parseInt(process.env.SERVER_TIMEOUT);
 
 
 

@@ -137,6 +137,7 @@ class EditObjectForm extends React.Component {
             mac_address,
             transferred_location,
             area_name,
+            nickname
         } = selectedRowData    
 
         return (
@@ -172,6 +173,7 @@ class EditObjectForm extends React.Component {
                             transferred_location:status.value === config.objectStatus.TRANSFERRED 
                                 ? transferred_location 
                                 : '',
+                            nickname : nickname || '',
                         }}
 
                         validationSchema = {
@@ -306,10 +308,10 @@ class EditObjectForm extends React.Component {
                                     <Col>
                                         <FormikFormGroup 
                                             type="text"
-                                            name="type"
-                                            label={locale.texts.TYPE}
-                                            error={errors.type}
-                                            touched={touched.type}
+                                            name="nickname"
+                                            label={locale.texts.NICKNAME}
+                                            error={errors.nickname}
+                                            touched={touched.nickname}
                                             placeholder=""
                                         />
                                     </Col>
@@ -318,12 +320,11 @@ class EditObjectForm extends React.Component {
                                     <Col>
                                         <FormikFormGroup 
                                             type="text"
-                                            name="mac_address"
-                                            label={locale.texts.MAC_ADDRESS}
-                                            error={errors.mac_address}
-                                            touched={touched.mac_address}
+                                            name="type"
+                                            label={locale.texts.TYPE}
+                                            error={errors.type}
+                                            touched={touched.type}
                                             placeholder=""
-                                            disabled={this.props.disableASN ? 1 : 0}
                                         />
                                     </Col>
                                     <Col>
@@ -350,15 +351,33 @@ class EditObjectForm extends React.Component {
                                         />
                                     </Col>
                                 </Row>
-                                <FormikFormGroup 
-                                    type="text"
-                                    name="asset_control_number"
-                                    label={locale.texts.ACN}
-                                    error={errors.asset_control_number}
-                                    touched={touched.asset_control_number}
-                                    placeholder=""
-                                    disabled= {this.props.disableASN ? 1 : 0}
-                                />
+                                <Row noGutters>
+                                    <Col>
+                                        <FormikFormGroup 
+                                            type="text"
+                                            name="mac_address"
+                                            label={locale.texts.MAC_ADDRESS}
+                                            error={errors.mac_address}
+                                            touched={touched.mac_address}
+                                            placeholder=""
+                                            disabled={this.props.disableASN ? 1 : 0}
+                                        />
+                                    </Col>    
+                                    <Col>
+                                        <FormikFormGroup 
+                                        type="text"
+                                        name="asset_control_number"
+                                        label={locale.texts.ACN}
+                                        error={errors.asset_control_number}
+                                        touched={touched.asset_control_number}
+                                        placeholder=""
+                                        disabled= {this.props.disableASN ? 1 : 0}
+                                        />
+                                    </Col> 
+                                </Row>
+
+
+                         
                                 <hr/>
                                 <FormikFormGroup 
                                

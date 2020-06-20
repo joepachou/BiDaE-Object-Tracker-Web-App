@@ -128,6 +128,8 @@ class MapContainer extends React.Component {
             pathMacAddress,
             searchResult,
             setMonitor,
+            lbeaconPosition,
+            currentAreaId,
         } = this.props;
 
         let propsGroup = {
@@ -142,15 +144,18 @@ class MapContainer extends React.Component {
             handleClearButton,
             geofenceConfig,
             setMonitor,
-            locationMonitorConfig
+            locationMonitorConfig,
+            lbeaconPosition,
+            currentAreaId,
+
         }
         return(
             <Fragment>
-                <CustomView condition={isTablet != true && isMobile != true}>
-                     <BrowserMapContainer 
+                <BrowserView>
+                    <BrowserMapContainer 
                         {...propsGroup}
                     />
-                </CustomView> 
+                </BrowserView>
                 <TabletView>
                     <TabletMapContainer 
                         {...propsGroup}

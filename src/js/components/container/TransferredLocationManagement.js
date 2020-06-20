@@ -48,15 +48,10 @@ import {
     Row,
     Col,
 } from "react-bootstrap"
-import locale from 'antd/lib/date-picker/locale/en_US';
 import { 
     TransferredLocationColumn
 } from '../../config/tables'
-
-
-const defaultBranchName = 'new branch'
-const defaultDepartmentName = 'new department'
-
+import messageGenerator from '../../helper/messageGenerator'
 
 class TranferredLocationManagement extends React.Component{
 
@@ -130,7 +125,7 @@ class TranferredLocationManagement extends React.Component{
                 department.map( (department, index) => {
                     rows.push({
                         fold: null,
-                        level: <h6>department</h6>,
+                     level: <h6>{locale.texts.DEPARTMENT}</h6>,
                         name: <input 
                             type="text" 
                             value={department} 
@@ -138,7 +133,16 @@ class TranferredLocationManagement extends React.Component{
                             onChange={this.renameDepartmentToState.bind(this, branch.id, index)}/>,
                         remove: <i 
                             className="fas fa-minus d-flex justify-content-center" 
-                            onClick={() => {this.removeDepartment(branch.id, index)}} />,
+                            onClick={() => {  
+                                if (branch.department.length > 1){
+                                    this.removeDepartment(branch.id, index)
+                                }else{ 
+                                    let callback = () => messageGenerator.setErrorMessage(
+                                                        'ALEAST_ONE_DEPARTMENT'
+                                                    )    
+                                   callback()
+                                } 
+                            }} />,
                         add:null,
                     })
                 })
@@ -166,10 +170,12 @@ class TranferredLocationManagement extends React.Component{
         }      
     }
     addBranch = (e) => {
+        const { locale } = this.context
         axios.post(dataSrc.modifyTransferredLocation, {
             type: 'add branch',
             data: {
-                name: defaultBranchName
+                name: locale.texts.NEW_BRANCH,
+                departmentName: locale.texts.NEW_DEPARTMENT
             }
         }).then(res => {
             this.getTransferredLocation()
@@ -207,11 +213,12 @@ class TranferredLocationManagement extends React.Component{
         })
     }
     addDepartment = (branch_id) => {
+        const { locale } = this.context
         axios.post(dataSrc.modifyTransferredLocation, {
             type: 'add department',
             data: {
                 branch_id,
-                name: defaultDepartmentName
+                name: locale.texts.NEW_DEPARTMENT
             }
         }).then(res => {
             this.getTransferredLocation()
@@ -239,7 +246,7 @@ class TranferredLocationManagement extends React.Component{
             this.getTransferredLocation()
         })
     }
-    removeDepartment = (branch_id, departmentIndex) => {
+    removeDepartment = (branch_id, departmentIndex) => { 
         axios.post(dataSrc.modifyTransferredLocation, {
             type: 'remove department',
             data: {

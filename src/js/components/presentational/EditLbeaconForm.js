@@ -58,7 +58,9 @@ const EditLbeaconForm = ({
     let {
         uuid,
         description,
-        comment
+        comment,
+        danger_area,
+        room,
     } = selectedObjectData
 
     return (
@@ -77,21 +79,32 @@ const EditLbeaconForm = ({
                 <Formik
                     initialValues = {{
                         description: description || '',
+                        danger_area: danger_area 
+                            ?   danger_area.toString()
+                            :   '0',
+                        room: room || '',
                         uuid: uuid,
                         comment: comment,
                     }}
 
-                    onSubmit={values => {
+                    onSubmit={(values, { setStatus, setSubmitting }) => {
                         let {
                             description,
-                            comment
+                            danger_area,
+                            room
                         } = values
                         let lbeaconSettingPackage = {
                             ...selectedObjectData,
                             description,
-                            comment
+                            comment,
+                            danger_area,
+                            room,
                         }
+                        let callback = () => messageGenerator.setSuccessMessage(
+                                            'save success'
+                                        )  
                         handleSubmit(lbeaconSettingPackage)
+                        callback()
                     }}
 
                     render={({ values, errors, status, touched, isSubmitting }) => (
@@ -118,6 +131,45 @@ const EditLbeaconForm = ({
                                 name="comment"
                                 label={locale.texts.COMMENT}
                                 placeholder=""
+                                name="room"
+                                label={locale.texts.ROOM}
+                                placeholder=""
+                            />
+                            <FormikFormGroup 
+                                type="text"
+                                name="room"
+                                label={locale.texts.ROOM}
+                                placeholder=""
+                            />
+                            <FormikFormGroup 
+                                type="text"
+                                name="danger_area"
+                                label={locale.texts.DANGER_AREA}
+                                error={errors.danger_area}
+                                touched={touched.danger_area}
+                                placeholder=""
+                                component={() => (
+                                    <RadioButtonGroup
+                                        id="danger_area"
+                                        label={locale.texts.DANGER_AREA}
+                                        value={values.danger_area}
+                                        error={errors.danger_area}
+                                        touched={touched.danger_area}
+                                    >
+                                        <Field
+                                            component={RadioButton}
+                                            name="danger_area"
+                                            id="1"
+                                            label={locale.texts.ENABLE}
+                                        />
+                                        <Field
+                                            component={RadioButton}
+                                            name="danger_area"
+                                            id="0"
+                                            label={locale.texts.DISABLE}
+                                        />
+                                    </RadioButtonGroup>
+                                )}
                             />
                             <Modal.Footer>
                                 <Button 

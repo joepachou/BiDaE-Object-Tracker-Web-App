@@ -37,17 +37,22 @@
 import React from 'react';
 import {
     Row,
-    Image
+    Image,
+    Col
 } from 'react-bootstrap';
 import BOTSearchbar from '../../presentational/BOTSearchbar';
 import config from '../../../config';
+import Searchbar from '../../presentational/Searchbar';
+import FrequentSearch from '../../container/FrequentSearch';
+import ObjectTypeList from '../../container/ObjectTypeList';
 
 const BrowserSearchContainer = ({
     searchKey,
+    objectTypeList,
     getSearchKey,
     handleTouchMove,
     clearSearchResult,
-    suggestData
+    hasGridButton,
 }) => {
     return (
         <div 
@@ -55,16 +60,34 @@ const BrowserSearchContainer = ({
             className="py-1" 
             onTouchMove={handleTouchMove}
         >
-            <Image src={config.LOGO} rounded width={150}/>
-            <Row id='searchBar' className='d-flex justify-content-center align-items-center my-4'>
-                <BOTSearchbar
+            <Row id='searchBar' className='d-flex justify-content-center align-items-center pb-2'>
+                <Searchbar 
                     placeholder={searchKey}
                     getSearchKey={getSearchKey}
                     clearSearchResult={clearSearchResult}    
-                    width={500}
-                    suggestData = {suggestData}
                 />
             </Row>
+            <div id='searchOption' className="pt-2"> 
+                <Row>
+                    <Col md={6} sm={6} xs={6} lg={6} xl={6} className='px-0'>
+                        <FrequentSearch 
+                            getSearchKey={getSearchKey}  
+                            clearSearchResult={clearSearchResult}   
+                            hasGridButton={hasGridButton} 
+                            maxHeigh={config.searchResultProportion}
+                        />
+                    </Col>
+                    <Col md={6} sm={6} xs={6} lg={6} xl={6} className='px-0'>
+                        <ObjectTypeList
+                            getSearchKey={getSearchKey}  
+                            clearSearchResult={clearSearchResult}   
+                            hasGridButton={hasGridButton} 
+                            objectTypeList={objectTypeList || []}
+                            maxHeigh={config.searchResultProportion}
+                        />                            
+                    </Col>
+                </Row>
+            </div>
         </div>
     )
 }

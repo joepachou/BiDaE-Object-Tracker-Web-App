@@ -45,7 +45,6 @@ import {
     Form
 } from 'formik';
 import LocaleContext from '../../context/LocaleContext';
-
 const DeleteConfirmationForm = ({
     handleClose,
     handleSubmit,

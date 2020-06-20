@@ -69,12 +69,23 @@ const BrowserSearchResultList = ({
 }) => {
 
     let locale = React.useContext(LocaleContext);
+
+    const style = {
+        noResultDiv: {
+            color: 'grey',
+            fontSize: '1rem',
+        },
+        titleText: {
+            color: 'rgb(80, 80, 80, 0.9)',
+        }, 
+    }
+
     return (
         <Fragment>
-            <Row className='d-flex justify-content-center'>
-                <ListTitle>
+            <Row className='d-flex justify-content-center' style={style.titleText}>
+                <div className='title'>
                     {title}
-                </ListTitle>
+                </div>
             </Row>
             <Row>
                 {searchResult.length == 0 

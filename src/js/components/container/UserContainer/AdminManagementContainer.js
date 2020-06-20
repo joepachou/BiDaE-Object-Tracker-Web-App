@@ -62,6 +62,8 @@ class AdminManagementContainer extends React.Component{
     static contextType = AppContext
 
     state = {
+        showAddUserForm: false,
+        showDeleteUserForm:false,
         data: [],
         columns: [],
         selectedUser: null,
@@ -71,8 +73,6 @@ class AdminManagementContainer extends React.Component{
         showDeleteConfirmation:false,
         deleteUserName:'',
         areaTable: [],
-        showAddUserForm: false,
-        showDeleteUserForm:false, 
     }
 
     componentDidUpdate = (prevProps, prevState) => {

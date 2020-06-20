@@ -66,6 +66,10 @@ const MobileSearchResultList = ({
             color: 'grey',
             fontSize: '1rem',
         },
+        titleText: {
+            color: 'rgb(80, 80, 80, 0.9)',
+        }, 
+
         searchResultListForTablet: {
             maxHeight: '28vh',
             dispaly: searchKey ? null : 'none',
@@ -83,7 +87,7 @@ const MobileSearchResultList = ({
             <Row>
                 {searchResult.length === 0 
                     ?   <Col className='d-flex justify-content-center font-weight-lighter' style={style.noResultDiv}>
-                            {locale.texts.NO_RESULT}
+                            <div className='searchResultForDestop'>{locale.texts.NO_RESULT}</div>
                         </Col> 
                     :   
                         <Col className="searchResultListGroupForTablet d-flex justify-content-center">

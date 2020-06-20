@@ -142,7 +142,6 @@ class BindForm extends React.Component {
             show
         } = this.props
         let lock = 0 
-
         return (
             <Modal 
                 show={show} 

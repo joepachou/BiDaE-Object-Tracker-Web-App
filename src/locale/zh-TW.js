@@ -259,6 +259,8 @@ const tw = {
     PERIMETERS_GROUP: "perimeters group",
     FENCE_RSSI:"fences rssi",
     PERIMETER_RSSI:"perimeter rssi",
+    DEPARTMENT:"部門",
+    NEW_DEPARTMENT:"新部門",
     FENCES_GROUP: "fences group",
     RSSI: "rssi",
     YES: "是",
@@ -275,6 +277,7 @@ const tw = {
     SELECT_LEVEL: "選擇階層",
     NAMEGROUPBYAREA: "名稱(area group)",
     NAMEGROUPBYUUID: "名稱(UUID group)",
+    NICKNAME:"別名",
 
     /** form title */
     EDIT_LBEACON: "編輯 lbeacon",
@@ -420,7 +423,7 @@ const tw = {
     DEVICES: "儀器",
     
     /** table Field */
-    ID: "人員編號",
+    ID: "ID",
     USER_ID: "ID",
     HEALTH_STATUS: "狀態",
     UUID: "UUID",
@@ -510,6 +513,19 @@ const tw = {
     MINUTES: "分鐘",
     IS_RESERVED_FOR:"預約者:",
     POUND_SIGN: "#",
+
+    DEVICE_FOUND: function (length){
+        return "發現"+length.toString()+"個儀器"
+    },
+    DEVICE_NOT_FOUND: function (length){
+        return "沒發現"+length.toString()+"個儀器"
+    },
+
+    genderSelect :[
+        "機器",
+        "男",
+        "女"
+    ],
 }
 
 export default tw;

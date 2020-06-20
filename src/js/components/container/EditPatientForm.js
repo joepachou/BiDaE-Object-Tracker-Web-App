@@ -38,25 +38,45 @@
 import React from 'react';
 import { Modal, Button, Row, Col } from 'react-bootstrap';
 import Select from 'react-select';
-import { Formik, Form } from 'formik';
+import config from '../../config';
+import { AppContext } from '../../context/AppContext';
+import axios from 'axios';
+import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
+import CheckboxGroup from './CheckboxGroup'
+import Checkbox from '../presentational/Checkbox'
 import FormikFormGroup from '../presentational/FormikFormGroup'
 import styleConfig from '../../config/styleConfig'
-import { AppContext } from '../../context/AppContext'
-  
+
+let monitorTypeMap = {};
+Object.keys(config.monitorType)
+    .forEach(key => {
+        monitorTypeMap[config.monitorType[key]] = key
+})
+ 
 class EditPatientForm extends React.Component {
 
-    static contextType = AppContext
+    static contextType = AppContext;
   
+    handleSubmit = (postOption) => {
+        const path = this.props.formPath  
+        axios.post(path, {
+            formOption: postOption
+        }).then(res => { 
+            this.props.handleSubmitForm()
+        }).catch( error => {
+            console.log(error)
+        })
+    }
+
     render() {
 
-        const {
-            locale 
-        } = this.context
+        const locale = this.context
 
         const { 
             title, 
             selectedRowData,
+            physicianList = [],
             show,
             handleClose
         } = this.props;
@@ -66,6 +86,9 @@ class EditPatientForm extends React.Component {
             area_name,
             mac_address,
             asset_control_number,
+            object_type,
+            monitor_type = [],
+            room,
         } = selectedRowData
 
         const areaOptions = this.props.areaTable.map(area => {
@@ -76,7 +99,35 @@ class EditPatientForm extends React.Component {
             };
         })
 
-        return (         
+        const genderOptions = [
+            { 
+                value: '1', 
+                label: locale.texts.MALE
+            },
+            { 
+                value: '2', 
+                label: locale.texts.FEMALE 
+            },
+        ]
+
+        let physicianListOptions = physicianList.map(user => {
+            return {
+                value: user.id,
+                label: user.name
+            }
+        }) 
+
+        physicianList.map(user => {
+            selectedRowData.physician_id == user.id
+                ?   selectedRowData['physician']  = {
+                        value: user.id,
+                        label: user.name
+                    }
+                :   null
+        })
+
+        return (
+            
             <Modal 
                 show={show} 
                 onHide={handleClose} 
@@ -93,11 +144,25 @@ class EditPatientForm extends React.Component {
                         initialValues = {{
                             area: area_name || '',
 
+                            physician : '',
+
                             name: name || '' ,
 
                             mac_address: mac_address || '',
 
                             asset_control_number:asset_control_number|| '',
+
+                            gender: object_type == locale.texts.FEMALE.toLowerCase() ? genderOptions[1] : genderOptions[0],
+
+                            monitorType: selectedRowData.length !== 0 ? monitor_type.split('/') : [],
+
+                            room: room 
+                                ? {
+                                    value: room,
+                                    label: room
+                                }
+                                : null,
+
                             
                         }}
                        
@@ -112,6 +177,10 @@ class EditPatientForm extends React.Component {
                                     ),
                                  
                                 area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
+
+                                physician: Yup.string().required(locale.texts.ATTENDING_IS_REQUIRED),
+
+                                gender: Yup.string().required(locale.texts.GENDER_IS_REQUIRED), 
 
                                 asset_control_number: Yup.string()
                                     .required(locale.texts.NUMBER_IS_REQUIRED)
@@ -156,30 +225,75 @@ class EditPatientForm extends React.Component {
                                             if( value.match(pattern)) return true
                                             return false
                                         }
-                                    ),
+                                    ), 
                         })}
 
 
-                        onSubmit={values => {
-                         
+                        onSubmit={(values, { setStatus, setSubmitting }) => { 
+                            let monitor_type = values.monitorType
+                                ?   values.monitorType
+                                    .filter(item => item)
+                                    .reduce((sum, item) => {
+                                        sum += parseInt(monitorTypeMap[item])
+                                        return sum
+                                    }, 0)      
+                                :   0
+                            
+                            physicianList.map(item => { 
+                                if (values.physician)(
+                                item.name == values.physician.value 
+                                    ?   values.physician.value = item.id
+                                    :   null
+                                )    })
+                             
                             const postOption = {
                                 ...values,
                                 area_id: values.area.id,
-                            } 
-                            this.props.handleSubmit(postOption)                            
+                                gender_id : values.gender.value,
+                                monitor_type, 
+                                room: values.room ? values.room.label : '',
+                                object_type: values.gender.value,
+                                physicianIDNumber : values.physician  ? values.physician.value : this.props.physicianIDNumber
+                            }  
+                            this.handleSubmit(postOption)                            
                         }}
 
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue,submitForm }) => (  
                             <Form>
-                                <FormikFormGroup 
-                                    type="text"
-                                    name="name"
-                                    label={locale.texts.NAME}
-                                    error={errors.name}
-                                    touched={touched.name}
-                                    placeholder=""
-                                />
+                                <Row noGutters>
+                                    <Col>
+                                        <FormikFormGroup 
+                                            type="text"
+                                            name="name"
+                                            label={locale.texts.NAME}
+                                            error={errors.name}
+                                            touched={touched.name}
+                                            placeholder=""
+                                        />
+                                    </Col>
+                                    <Col>
+                                        <FormikFormGroup 
+                                            name="gender"
+                                            label={locale.texts.PATIENT_GENDER}
+                                            error={errors.gender}
+                                            touched={touched.gender}
+                                            component={() => (
+                                                <Select 
+                                                    placeholder={locale.texts.CHOOSE_GENDER}
+                                                    name ="gender"            
+                                                    styles={styleConfig.reactSelect}                          
+                                                    value={values.gender}
+                                                    onChange={value => setFieldValue("gender", value)}
+                                                    options={genderOptions}
+                                                    components={{
+                                                        IndicatorSeparator: () => null
+                                                    }}
+                                                />
+                                            )}
+                                        />
+                                    </Col>
+                                </Row>
                                 <Row noGutters>
                                     <Col>
                                         <FormikFormGroup 
@@ -227,7 +341,77 @@ class EditPatientForm extends React.Component {
                                             )}
                                         />
                                     </Col>
+                                    <Col> 
+                                        <FormikFormGroup 
+                                            type="text"
+                                            name="physician"
+                                            label={locale.texts.ATTENDING_PHYSICIAN}
+                                            error={errors.physician}
+                                            touched={touched.physician}
+                                            component={() => (
+                                                
+                                                <Select
+                                                    placeholder = {locale.texts.SELECT_PHYSICIAN}
+                                                    name="physician"
+                                                    value = {values.physician}
+                                                    onChange= {(value) => setFieldValue("physician", value)}
+                                                    options={physicianListOptions}
+                                                    styles={styleConfig.reactSelect}
+                                                    components={{
+                                                        IndicatorSeparator: () => null
+                                                    }}
+                                                />
+                                            )}
+                                        />   
+                                    </Col>
                                 </Row>
+                                <FormikFormGroup 
+                                    type="text"
+                                    name="room"
+                                    label={locale.texts.ROOM}
+                                    error={errors.room}
+                                    touched={touched.room}
+                                    component={() => (
+                                        <Select 
+                                            placeholder = {locale.texts.SELECT_ROOM}
+                                            name ="room"
+                                            styles={styleConfig.reactSelect}                          
+                                            value={values.room}
+                                            onChange={value => setFieldValue("room", value)}
+                                            options={this.props.roomOptions}
+                                            components={{
+                                                IndicatorSeparator: () => null
+                                            }}
+                                        />
+                                    )}
+                                />
+                                <hr/>
+                                <FormikFormGroup 
+                                    name="room"
+                                    label={locale.texts.MONITOR_TYPE}
+                                    error={errors.monitorType}
+                                    touched={touched.monitorType}
+                                    component={() => (
+                                        <CheckboxGroup
+                                            id="monitorType"
+                                            label={locale.texts.MONITOR_TYPE}
+                                            value={values.monitorType}
+                                            onChange={setFieldValue}                                            
+                                        >
+                                            {Object.keys(config.monitorType)
+                                                .filter(key => config.monitorTypeMap.patient.includes(parseInt(key)))
+                                                .map((key,index) => {
+                                                    return <Field
+                                                        key={index}
+                                                        component={Checkbox}
+                                                        name="checkboxGroup"
+                                                        id={config.monitorType[key]}
+                                                        label={config.monitorType[key]}
+                                                    />
+                                            })}
+                                        </CheckboxGroup>
+                                    )}
+                                />
                                 <Modal.Footer>
                                     <Button 
                                         variant="outline-secondary" 

@@ -46,13 +46,16 @@ import {
     Nav, 
     Image, 
     Dropdown  
-} from 'react-bootstrap';
+} from 'react-bootstrap'
 import SiginForm from '../presentational/SigninForm';
 import config from '../../config';
 import AccessControl from '../presentational/AccessControl';
+import ShiftChange from './ShiftChange'
 import { AppContext } from '../../context/AppContext';
-import BatteryLevelNotification from './BatteryLevelNotification';
-import { navbarNavList } from '../../config/pageModules';
+import Select from 'react-select';
+import BatteryLevelNotification from "./BatteryLevelNotification"
+import { navbarNavList } from '../../config/pageModules'
+import styleConfig from '../../config/styleConfig';
 
 class NavbarContainer extends React.Component {
 
@@ -109,33 +112,74 @@ class NavbarContainer extends React.Component {
         const { 
             locale, 
             auth, 
+            stateReducer 
         } = this.context;
 
+        const [{ areaId }, dispatch] = stateReducer
         const { 
             showSignin, 
             showShiftChange
         } = this.state;
 
+        const {
+            areaOptions,
+            defaultAreaId,
+        } = config.mapConfig
+
+        const options = Object.values(config.mapConfig.areaOptions).map(area => {
+            return {
+                value: area,
+                label: locale.texts[area.toUpperCase().replace(/ /g, '_')],
+            }
+        })
+
+        let selectedArea = {
+            value: areaOptions[areaId] || areaOptions[defaultAreaId] || Object.values(areaOptions)[0],
+            label: this.context.locale.texts[areaOptions[areaId]] || 
+                this.context.locale.texts[areaOptions[defaultAreaId]] || 
+                this.context.locale.texts[Object.values(areaOptions)[0]]
+        }
+
         return (
             <Navbar
-                id='navbar'  
-                bg='white' 
-                className='navbar sticky-top navbar-light text-capitalize' 
-                expand='lg'
-                fixed='top' 
+                id="navbar"  
+                bg="white" 
+                className="navbar sticky-top navbar-light text-capitalize" 
+                expand="lg"
+                fixed="top" 
                 collapseOnSelect
                 style={style.navbar}
             >
                 <Navbar.Brand className='px-0 mx-0'>  
                     <Nav.Item 
-                        className='nav-link nav-brand d-flex align-items-center' 
+                        className="nav-link nav-brand d-flex align-items-center" 
                         style={style.navbarBrand}
                     >
                         <Image
-                            alt=''
+                            alt=""
                             src={config.LOGO}
                             width={50}
-                            className='d-inline-block align-top px-1'
+                            className="d-inline-block align-top px-1"
+                        />
+                        <Select
+                            placeholder = {locale.texts.SELECT_LOCATION}
+                            name="select"
+                            value = {selectedArea}
+                            options={options}
+                            onChange={value => {
+                                let { stateReducer } = this.context
+                                let [{areaId}, dispatch] = stateReducer
+                                dispatch({
+                                    type: 'setArea',
+                                    value: config.mapConfig.areaModules[value.value].id
+                                })
+                            }}
+                            styles={styleConfig.reactSelectNavbar}
+                            isSearchable={false}
+                            components={{
+                                IndicatorSeparator: () => null,
+                                DropdownIndicator:() => null
+                            }}
                         />
                     </Nav.Item> 
                 </Navbar.Brand>
@@ -237,6 +281,10 @@ class NavbarContainer extends React.Component {
 
                 <SiginForm 
                     show={showSignin}
+                    handleClose={this.handleClose}
+                />
+                <ShiftChange 
+                    show={showShiftChange}
                     handleClose={this.handleClose}
                 />
             </Navbar>
