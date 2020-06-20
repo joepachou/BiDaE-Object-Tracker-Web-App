@@ -41,6 +41,8 @@ import LBeaconTable from '../components/container/LBeaconTable';
 import GatewayTable from '../components/container/GatewayTable';
 import AdminManagementContainer from '../components/container/UserContainer/AdminManagementContainer';
 import config from '../config';
+import TransferredLocationManagement from '../components/container/TransferredLocationManagement';
+import RolePermissionManagement from '../components/container/RolePermissionManagement';
 
 export const navbarNavList = [
     {
@@ -122,12 +124,12 @@ export const systemSettingModule = {
             component: (props) => <TransferredLocationManagement {...props}/>,
             platform: ['browser'],
         },
-        {
-            name: "Role Permission Management",
-            permission: "rolePermissionManagement",
-            component: (props) => <RolePermissionManagement {...props}/>,
-            platform: ['browser']
-        },
+        // {
+        //     name: "Role Permission Management",
+        //     permission: "rolePermissionManagement",
+        //     component: (props) => <RolePermissionManagement {...props}/>,
+        //     platform: ['browser']
+        // },
         {
             name: "lbeacon",
             component: (props) => <LBeaconTable {...props}/>,

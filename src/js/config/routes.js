@@ -42,7 +42,7 @@ import UserContainer from '../components/container/menuContainer/UserContainer';
 import About from '../components/container/About';
 import TraceContainer from '../components/container/menuContainer/TraceContainer';
 import ContactTree from '../components/container/menuContainer/ContactTree';
-import BigScreenContainer from "../components/container/BigScreen/BigScreenContainer";
+import BigScreenContainer from "../components/container/bigScreen/BigScreenContainer";
 import MonitorSettingContainer from "../components/container/menuContainer/MonitorSettingContainer";
 import ReportContainer from "../components/container/menuContainer/ReportContainer";
 

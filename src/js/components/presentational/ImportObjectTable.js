@@ -19,8 +19,8 @@ import {
 } from '../../config/styleComponent'
 import AccessControl from './AccessControl'
 import { importTableColumn } from '../../config/tables'
-import { getImportTable } from '../../dataSrc'
 import conifg from '../../config'
+import dataSrc from '../../dataSrc';
 
 class ImportObjectTable extends React.Component{
     static contextType = AppContext   
@@ -40,7 +40,7 @@ class ImportObjectTable extends React.Component{
 
     getData = (callback) => {
         let { locale } = this.context
-        axios.post(getImportTable, {
+        axios.get(dataSrc.importedObject, {
             locale: locale.abbr
         })
         .then(res => {

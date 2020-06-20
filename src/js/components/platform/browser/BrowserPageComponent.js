@@ -89,24 +89,24 @@ const BrowserPageComponent = ({
                 className="BOTsidemain"
             >
                 <Tab.Content>
-                {tabList.map((tab, index) => {
-                    let props = {
-                        type: tab.name,
-                        setMessage,
-                    }
-                    return (
-                        <Tab.Pane 
-                            eventKey={tab.name.replace(/ /g, '_')}
-                            key={tab.name.replace(/ /g, '_')}
-                        >
-                            <PageTitle>
-                                {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
-                            </PageTitle>
-                            <hr/>
-                            {tab.component(props)}
-                        </Tab.Pane>
-                    )
-                })}
+                    {tabList.map((tab, index) => {
+                        let props = {
+                            type: tab.name,
+                            setMessage,
+                        }
+                        return (
+                            <Tab.Pane 
+                                eventKey={tab.name.replace(/ /g, '_')}
+                                key={tab.name.replace(/ /g, '_')}
+                            >
+                                <PageTitle>
+                                    {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
+                                </PageTitle>
+                                <hr/>
+                                {tab.component(props)}
+                            </Tab.Pane>
+                        )
+                    })}
                 </Tab.Content>         
             </div>
         </Tab.Container>

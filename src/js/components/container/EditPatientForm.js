@@ -71,7 +71,9 @@ class EditPatientForm extends React.Component {
 
     render() {
 
-        const locale = this.context
+        const {
+            locale
+        } = this.context
 
         const { 
             title, 

@@ -85,50 +85,9 @@ const SiginForm = ({
                         password: Yup.string().required(locale.texts.PASSWORD_IS_REQUIRED)
                     })}
 
-                    // onSubmit={(values, actions) => {
-                    //     auth.signin(values, actions, handleClose)
-                    onSubmit={({ username, password, radioGroup }, { setStatus, setSubmitting }) => {
-                        axios.post(dataSrc.signin, {
-                            username,
-                            password,
-                        })
-                        .then(res => {
-                            if (!res.data.authentication) { 
-                                setStatus(res.data.message)
-                                setSubmitting(false)
-                            } else {
-                                let {
-                                    userInfo
-                                } = res.data
-
-                                if (userInfo.roles.includes("dev")) {
-                                    userInfo.permissions = 
-                                        Object.keys(permissionsTable).reduce((permissions, role) => {
-                                            permissionsTable[role].permission.map(item => {
-                                                if (!permissions.includes(item)) {
-                                                    permissions.push(item)
-                                                }
-                                            })
-                                            return permissions
-                                        }, [])
-                                } else {
-                                    userInfo.permissions = 
-                                        userInfo.roles.reduce((permissions, role) => {
-                                            permissionsTable[role].permission.map(item => {
-                                                if (!permissions.includes(item)) {
-                                                    permissions.push(item)
-                                                }
-                                            })
-                                            return permissions
-                                        }, [])
-                                }
-                                auth.signin(userInfo)
-                                locale.reSetState(userInfo.locale)
-                                handleClose()
-                            }
-                        }).catch(error => {
-                            console.log(error)
-                        })
+                    onSubmit={(values, actions) => {
+                        auth.signin(values, actions, handleClose)
+                    
                     }}
 
                     render={({ values, errors, status, touched, isSubmitting }) => (

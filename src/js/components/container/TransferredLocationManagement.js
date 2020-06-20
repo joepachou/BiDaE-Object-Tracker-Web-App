@@ -77,24 +77,24 @@ class TranferredLocationManagement extends React.Component{
     
     componentDidMount = () => {
         this.getColumn()
-        this.getTransferredLocation()
+        // this.getTransferredLocation()
     }
    
-    getTransferredLocation = () => {
-        axios.get(dataSrc.getTransferredLocation)
-            .then(res => {
-                res.data.map(branch => {
-                    if(!branch.department){
-                        branch.department = []                       
-                    }
-                })
-                this.setState({
-                    transferredLocationOptions: res.data
-                })
-            }).catch(err => {
-                console.log(err)
-            })           
-    }
+    // getTransferredLocation = () => {
+    //     axios.get(dataSrc.getTransferredLocation)
+    //         .then(res => {
+    //             res.data.map(branch => {
+    //                 if(!branch.department){
+    //                     branch.department = []                       
+    //                 }
+    //             })
+    //             this.setState({
+    //                 transferredLocationOptions: res.data
+    //             })
+    //         }).catch(err => {
+    //             console.log(err)
+    //         })           
+    // }
     generateDataRows = () => {
         const { locale } = this.context
         let rows = []

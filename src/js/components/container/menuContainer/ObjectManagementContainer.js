@@ -13,15 +13,15 @@ import { AppContext } from '../../../context/AppContext';
 import AccessControl from '../../presentational/AccessControl'
 import ObjectTable from '../../presentational/ObjectTable'
 import PatientTable from '../../presentational/PatientTable'
-import ImportObjectTable from '../../presentational/ImportObjectTable'
-import ImportPatientTable from '../../presentational/ImportPatientTable' 
+import ImportObjectTable from '../../presentational/ImportObjectTable';
+import ImportPatientTable from '../../presentational/ImportPatientTable';
+import ObjectTableContainer from '../../container/menuContainer/ObjectTableContainer'; 
 import {
     BOTContainer,
     BOTNavLink,
     BOTNav,
     PageTitle
-} from '../../../config/styleComponent'
-
+} from '../../../config/styleComponent';
 
 class ObjectManagementContainer extends React.Component{
     
@@ -30,8 +30,9 @@ class ObjectManagementContainer extends React.Component{
     defaultActiveKey = "devices_table"
     
     render(){
-
-        const { locale } = this.context
+        const { 
+            locale
+        } = this.context
 
         return (     
             <BOTContainer>     
@@ -80,14 +81,14 @@ class ObjectManagementContainer extends React.Component{
                         className="my-3"
                     >
                         <Tab.Pane eventKey="devices_table"> 
-                            <ObjectTable/> 
+                            <ObjectTableContainer /> 
                         </Tab.Pane>
 
-                        <Tab.Pane eventKey="patients_table">
+                        {/* <Tab.Pane eventKey="patients_table">
                             <PatientTable/>
-                        </Tab.Pane>
+                        </Tab.Pane> */}
                         
-                        <AccessControl
+                        {/* <AccessControl
                             permission={"user:importTable"}
                             renderNoAccess={() => null}
                             platform={['browser']}
@@ -104,7 +105,7 @@ class ObjectManagementContainer extends React.Component{
                             <Tab.Pane eventKey="import_patients">
                                 <ImportPatientTable />
                             </Tab.Pane>
-                        </AccessControl>
+                        </AccessControl> */}
                     </Tab.Content>
                 </Tab.Container>
             </BOTContainer>

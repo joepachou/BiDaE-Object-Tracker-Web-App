@@ -468,7 +468,7 @@ const userInfoTableColumn = [
     },
     {
         Header: "Main Area",
-        accessor: "main_area",
+        accessor: "main_area.label",
         width: 150,
     },
     {

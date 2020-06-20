@@ -91,11 +91,9 @@ class AdminManagementContainer extends React.Component{
         let { 
             locale
         } = this.context
-        axios.get(dataSrc.user, {
-            params: {
-                locale: locale.abbr 
-            }
-        }).then(res => { 
+        retrieveDataHelper.getAllUser(
+            locale.abbr
+        ).then(res => { 
             let columns = _.cloneDeep(userInfoTableColumn)
             columns.map((field, index) => {
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
@@ -128,7 +126,6 @@ class AdminManagementContainer extends React.Component{
     getAllRole = () => {
         retrieveDataHelper.getAllRole()
             .then(res => {
-
                 /** filter system default roles */
                 let roleName = res.data.rows.filter(item => config.ROLES_SELECTION.includes(item.name))
                 this.setState({
@@ -285,7 +282,7 @@ class AdminManagementContainer extends React.Component{
                 <hr/> 
                 <ReactTable 
                     data={this.state.data} 
-                    columns={this.state.data.length != 0 ? this.state.columns : [{Header: ''}]} 
+                    columns={this.state.columns} 
                     className='-highlight text-none'
                     style={{maxHeight:'75vh'}}                               
                     {...styleConfig.reactTable}

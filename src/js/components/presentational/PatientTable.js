@@ -38,6 +38,8 @@
 import React, { Fragment } from 'react';
 import { 
     ButtonToolbar,
+    Row,
+    Col
 } from 'react-bootstrap';
 import { AppContext } from '../../context/AppContext';
 import ReactTable from 'react-table'; 
@@ -92,9 +94,9 @@ class PatientTable extends React.Component{
     componentDidMount = () => {
         this.getData();
         this.getAreaTable();
-        this.getLbeaconData();
+        // this.getLbeaconData();
         this.getPhysicianList();
-        this.getImportData();
+        // this.getImportData();
     }
 
     getData = (callback) => {
@@ -150,21 +152,21 @@ class PatientTable extends React.Component{
         })
     }
 
-    getImportData = () => {
-        let { locale } = this.context
-        axios.post(getImportPatient, {
-            locale: locale.abbr
-        })
-        .then(res => {
-            this.setState({
-                importData: res.data.rows,
-            })
-        })
-        .catch(err => {
-            console.log(err);
-        })
+    // getImportData = () => {
+    //     let { locale } = this.context
+    //     axios.post(getImportPatient, {
+    //         locale: locale.abbr
+    //     })
+    //     .then(res => {
+    //         this.setState({
+    //             importData: res.data.rows,
+    //         })
+    //     })
+    //     .catch(err => {
+    //         console.log(err);
+    //     })
     
-    }
+    // }
 
     getAreaTable = () => {
         let {
@@ -204,9 +206,9 @@ class PatientTable extends React.Component{
 
     getLbeaconData = () => {
         let { locale } = this.context
-        axios.post(getLbeaconTable, {
-            locale: locale.abbr
-        })
+        retrieveDataHelper.getLbeaconTable(
+            locale.abbr
+        )
         .then(res => {
             let roomOptions = []
             res.data.rows.map(item => {
@@ -228,7 +230,7 @@ class PatientTable extends React.Component{
 
     getPhysicianList = () => {
         let { locale } = this.context
-        axios.post(getUserList, {
+        axios.get(dataSrc.user, {
             locale: locale.abbr 
         })
         .then(res => {

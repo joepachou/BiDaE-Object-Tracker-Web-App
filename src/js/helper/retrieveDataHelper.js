@@ -129,7 +129,16 @@ const retrieveDataHelper = {
 
     getAllRole: async function () {
         return await axios.get(dataSrc.role)
-    }
+    },
+
+    getAllUser: async function (locale) {
+        return await axios.get(dataSrc.user, {
+            params: {
+                locale
+            }
+        })
+    },
+
 }
 
 
