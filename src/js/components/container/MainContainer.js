@@ -764,7 +764,6 @@ class MainContainer extends React.Component{
             locationMonitorConfig,
             currentAreaId
         }
-
         return (
             /** "page-wrap" the default id named by react-burget-menu */
             <Fragment>

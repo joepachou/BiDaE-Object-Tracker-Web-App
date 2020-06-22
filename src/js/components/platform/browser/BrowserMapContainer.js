@@ -105,6 +105,7 @@ export default class BrowserMapContainer extends React.Component {
                 fontSize: "0.8rem"
             }
         }
+        
         return (
             <div id="MapContainer" style={style.MapContainer} className="overflow-hidden">
                 <div style={style.mapBlock}>

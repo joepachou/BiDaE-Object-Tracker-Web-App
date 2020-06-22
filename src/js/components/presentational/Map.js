@@ -64,6 +64,7 @@ class Map extends React.Component {
     static contextType = AppContext
 
     state = {
+        shouldUpdateTrackingData: true,
         objectInfo: [],
     }
 
@@ -452,7 +453,6 @@ class Map extends React.Component {
         let counter = 0;
         this.filterTrackingData(_.cloneDeep(this.props.proccessedTrackingData))
         .map((item, index)  => {
-
             /** Calculate the position of the object  */
             let position = macAddressToCoordinate(
                 item.mac_address, 
