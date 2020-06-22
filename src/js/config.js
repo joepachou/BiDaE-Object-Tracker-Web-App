@@ -83,6 +83,8 @@ const config = {
         'location'
     ],
 
+    ACNOmitsymbol: 'XXXXXX',
+
     monitorTypeMap: {
         object: [1],
         patient: [1,2,4,8]
@@ -1007,7 +1009,7 @@ const config = {
                                             ${item.object_type == 0
                                                 ?   `
                                                     ${item.type},
-                                                    ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.last_four_acn.slice(-4)},
+                                                    ${locale.texts.ASSET_CONTROL_NUMBER}: ${config.ACNOmitsymbol}${item.asset_control_number.slice(-4)},
                                                     ${item.status !== "normal" 
                                                         ? `${locale.texts[item.status.toUpperCase()]}`
                                                         : `${item.residence_time}`    

@@ -50,6 +50,7 @@ const getTrackingData = (areas_id, key) => {
 			object_table.id,
 			object_table.name,
 			object_table.type,
+			object_table.status,
 			object_table.asset_control_number,
 			object_table.area_id,
 			object_table.object_type,
@@ -71,7 +72,6 @@ const getTrackingData = (areas_id, key) => {
 		ON area_table.id = object_summary_table.updated_by_area
 
 		WHERE object_table.area_id IN (${areas_id.map(id => id)}) 
-			AND object_table.object_type != 0
 
 		ORDER BY 
 			object_table.type, 
