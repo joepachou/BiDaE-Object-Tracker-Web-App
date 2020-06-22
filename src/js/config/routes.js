@@ -36,15 +36,15 @@
 
 
 import MainContainer from '../components/container/MainContainer';
-import SystemSetting from '../components/container/MenuContainer/SystemSetting';
-import ObjectManagementContainer from '../components/container/MenuContainer/ObjectManagementContainer';
-import UserContainer from '../components/container/MenuContainer/UserContainer';
+import SystemSetting from '../components/container/menuContainer/SystemSetting';
+import ObjectManagementContainer from '../components/container/menuContainer/ObjectManagementContainer';
+import UserContainer from '../components/container/menuContainer/UserContainer';
 import About from '../components/container/About';
-import TraceContainer from '../components/container/MenuContainer/TraceContainer';
-import ContactTree from '../components/container/MenuContainer/ContactTree';
+import TraceContainer from '../components/container/menuContainer/TraceContainer';
+import ContactTree from '../components/container/menuContainer/ContactTree';
 import BigScreenContainer from "../components/container/bigScreen/BigScreenContainer";
-import MonitorSettingContainer from "../components/container/MenuContainer/MonitorSettingContainer";
-import ReportContainer from "../components/container/MenuContainer/ReportContainer";
+import MonitorSettingContainer from "../components/container/menuContainer/MonitorSettingContainer";
+import ReportContainer from "../components/container/menuContainer/ReportContainer";
 
 const routes = [
     {
