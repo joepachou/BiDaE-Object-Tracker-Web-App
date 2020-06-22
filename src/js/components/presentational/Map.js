@@ -267,6 +267,7 @@ class Map extends React.Component {
                         let pos = macAddressToCoordinate(
                             item.mac_address, 
                             latLng,
+                            item.updated_by_n_lbeacons,
                             this.props.mapConfig.iconOptions.markerDispersity
                         );
                         var marker = L.circleMarker(pos, {radius:3,color:'lightgrey'});
@@ -457,6 +458,7 @@ class Map extends React.Component {
             let position = macAddressToCoordinate(
                 item.mac_address, 
                 item.currentPosition, 
+                item.updated_by_n_lbeacons,
                 this.props.mapConfig.iconOptions.markerDispersity
             );
 
