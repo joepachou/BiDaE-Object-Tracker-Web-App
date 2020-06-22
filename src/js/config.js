@@ -41,7 +41,7 @@ import moment from 'moment';
 
 const config = {
 
-    VERSION: 'v1.0 b.1909',
+    VERSION: 'v1.0 b.1910',
 
     TRACING_INTERVAL_UNIT: 'days',
 
