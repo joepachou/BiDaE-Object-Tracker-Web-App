@@ -115,7 +115,6 @@ const rules = {
             "route:systemSetting",
             "route:contactTree",
 
-
             "user:mydevice",
             "user:mypatient",
             "user:saveSearchRecord",
@@ -125,6 +124,8 @@ const rules = {
             "user:importTable",
             "user:batteryNotice",
             "user:shiftChange",
+            "view:lbeaconMarker"
+
         ]
     }
   };

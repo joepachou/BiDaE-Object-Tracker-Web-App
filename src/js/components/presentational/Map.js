@@ -392,7 +392,6 @@ class Map extends React.Component {
                 : this.iconOptions.lbeaconMarkerFailedOptions
 
             let lbeaconMarker = L.circleMarker(latLng, lbeaconMarkerOptions)
-
             lbeaconMarker.bindPopup(this.props.mapConfig.getLbeaconPopupContent(lbeacon))
                 .openPopup()
                 .addTo(layer);

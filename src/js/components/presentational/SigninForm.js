@@ -48,7 +48,6 @@ import LocaleContext from '../../context/LocaleContext'
 import axios from 'axios';
 import dataSrc from '../../dataSrc'
 import AuthenticationContext from '../../context/AuthenticationContext';
-import permissionsTable from '../../roles'
 
 const SiginForm = ({
     show,
