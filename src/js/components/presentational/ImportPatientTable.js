@@ -89,7 +89,6 @@ class ImportPatientTable extends React.Component{
             locale.abbr
         )
         .then(res => { 
-            console.log(res)
             let columns = _.cloneDeep(importTableColumn)
             columns.map(field => {
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
