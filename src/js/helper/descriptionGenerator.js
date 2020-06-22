@@ -229,3 +229,14 @@ export const getID = (item, locale) => {
         ${locale.texts.ID}: ${item.asset_control_number}${item.currentPosition ? ',' : ""}
     `
 }
+
+export const getUpdatedByNLbeacons = (item, locale) => {
+    return (
+        <AccessControl
+            permission={'form:develop'}
+            renderNoAccess={() => null}
+        >
+            | {locale.texts.NUM_OF_UPDATED_LBEACON}: {item.updated_by_n_lbeacons}
+        </AccessControl>
+    )
+}

@@ -47,6 +47,7 @@ const getTrackingData = (areas_id, key) => {
 			object_summary_table.battery_voltage,
 			object_summary_table.base_x,
 			object_summary_table.base_y,
+			object_summary_table.updated_by_n_lbeacons,
 			object_table.id,
 			object_table.name,
 			object_table.type,

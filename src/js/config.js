@@ -144,6 +144,7 @@ const config = {
 
     ROLES_SELECTION: [
         'system_admin',
+        'dev',
     ],
 
     HEALTH_STATUS_MAP: {

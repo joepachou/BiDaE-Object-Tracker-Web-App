@@ -37,13 +37,13 @@
 
 import React from 'react';
 import { ListGroup } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import config from '../../config';
 import { AppContext } from '../../context/AppContext';
 import { 
     getDescription, 
     getMacaddress,
-    getRSSI 
+    getRSSI,
+    getUpdatedByNLbeacons
 } from '../../helper/descriptionGenerator';
 
 const SearchResultListGroup = ({
@@ -108,6 +108,7 @@ const SearchResultListGroup = ({
                         {getDescription(item, locale, config)}
                         {getMacaddress(item, locale)}
                         {getRSSI(item, locale)}
+                        {getUpdatedByNLbeacons(item, locale)}
                     </ListGroup.Item>
                 return element
             })}

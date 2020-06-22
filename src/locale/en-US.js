@@ -275,6 +275,8 @@ const en =  {
     COMMENT: "comment",
     SELECT_LEVEL: "select level",
     NICKNAME:"nickname",
+    NUM_OF_UPDATED_LBEACON: "# updated lbeacons",
+
 
     /** form title */
     EDIT_LBEACON: "edit lbeacon",

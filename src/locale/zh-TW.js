@@ -278,6 +278,7 @@ const tw = {
     NAMEGROUPBYAREA: "名稱(area group)",
     NAMEGROUPBYUUID: "名稱(UUID group)",
     NICKNAME:"別名",
+    NUM_OF_UPDATED_LBEACON: "# updated lbeacons",
 
     /** form title */
     EDIT_LBEACON: "編輯 lbeacon",
