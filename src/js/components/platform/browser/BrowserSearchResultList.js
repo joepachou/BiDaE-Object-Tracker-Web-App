@@ -94,7 +94,7 @@ const BrowserSearchResultList = ({
                         </Col> 
                     :   
                         <Col 
-                            className="d-flex justify-content-center"
+                            className="searchResultListGroup d-flex justify-content-center"
                             style={style.list}
                         > 
                             <ScrollArea 
