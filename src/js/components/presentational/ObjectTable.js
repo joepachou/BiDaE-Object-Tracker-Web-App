@@ -62,7 +62,7 @@ import retrieveDataHelper from '../../helper/retrieveDataHelper';
 import config from '../../config';
  
 
-class ObjectTable extends React.Component{
+class ObjectTable extends React.Component{ 
 
     static contextType = AppContext
 
@@ -611,36 +611,35 @@ class ObjectTable extends React.Component{
                     </AccessControl>
                 </div>
                 <hr/>
-                {this.state.filteredData.length != 0 &&
-                    <SelectTable
-                        keyField='id'
-                        data={this.state.filteredData}
-                        columns={this.state.columns}
-                        ref={r => (this.selectTable = r)}
-                        className='-highlight text-none'
-                         onSortedChange={(e) => {this.setState({selectAll:false,selection:''})}} 
-                        onPageChange={(e) => {this.setState({selectAll:false,selection:''})}} 
-                        {...extraProps}
-                        {...styleConfig.reactTable}
-                        pageSize={this.state.filteredData.length}
-                        style={{maxHeight:'75vh'}} 
-                        getTrProps={(state, rowInfo, column, instance) => {
-                            return {
-                                onClick: (e) => {  
-                                    if (!e.target.type) {
-                                        this.setState({
-                                            isShowEdit:true,
-                                            selectedRowData: this.state.data[rowInfo.index],
-                                            formTitle: 'edit object',
-                                            formPath: dataSrc.editObject,
-                                            disableASN:true
-                                        })
-                                    } 
-                                },
-                            }
-                        }} 
-                    />
-                }
+                <SelectTable
+                    keyField='id'
+                    data={this.state.filteredData}
+                    columns={this.state.columns}
+                    ref={r => (this.selectTable = r)}
+                    className='-highlight text-none'
+                    style={{maxHeight:'70vh'}} 
+                    onSortedChange={(e) => {this.setState({selectAll:false,selection:''})}} 
+                    onPageChange={(e) => {this.setState({selectAll:false,selection:''})}} 
+                    {...extraProps}
+                    {...styleConfig.reactTable}
+                    pageSize={this.state.filteredData.length}
+                    getTrProps={(state, rowInfo, column, instance) => {
+                        return {
+                            onClick: (e) => {  
+                                if (!e.target.type) {
+                                    this.setState({
+                                        isShowEdit:true,
+                                        selectedRowData: this.state.data[rowInfo.index],
+                                        formTitle: 'edit object',
+                                        formPath: dataSrc.editObject,
+                                        disableASN:true,
+                                        apiMethod: 'put',
+                                    })
+                                } 
+                            },
+                        }
+                    }} 
+                />
  
                 <EditObjectForm 
                     show={this.state.isShowEdit} 

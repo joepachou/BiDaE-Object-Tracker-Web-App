@@ -54,6 +54,8 @@ import {
 import AccessControl from './AccessControl';
 import { importTableColumn } from '../../config/tables';
 import dataSrc from '../../dataSrc';
+import retrieveDataHelper from '../../helper/retrieveDataHelper';
+
 const SelectTable = selecTableHOC(ReactTable);
 
 
@@ -83,12 +85,11 @@ class ImportPatientTable extends React.Component{
 
     getData = () => {
         let { locale } = this.context
-        axios.get(dataSrc.importedObject, {
-            params: {
-                locale: locale.abbr
-            }
-        })
+        retrieveDataHelper.getImportedObjectTable(
+            locale.abbr
+        )
         .then(res => { 
+            console.log(res)
             let columns = _.cloneDeep(importTableColumn)
             columns.map(field => {
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]

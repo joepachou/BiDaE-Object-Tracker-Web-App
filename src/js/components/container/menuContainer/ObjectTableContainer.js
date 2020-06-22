@@ -63,7 +63,7 @@ import SiteModuleTW from '../../../../../site_module/locale/zh-TW';
 import SiteModuleEN from '../../../../../site_module/locale/en-US';
 import moment from 'moment';
 
-class ObjectTableContainer extends React.Component{
+class ObjectTableContainer extends React.Component{ 
     
     static contextType = AppContext
     
