@@ -212,9 +212,9 @@ class ObjectTable extends React.Component{
 
     getImportData = (callback) => {
         let { locale } = this.context
-        axios.post(dataSrc.getImportTable, {
-            locale: locale.abbr
-        })
+        retrieveDataHelper.getImportedObjectTable(
+            locale.abbr
+        )
         .then(res => {
             this.setState({
                 importData: res.data.rows,

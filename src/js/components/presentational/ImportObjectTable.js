@@ -1,28 +1,64 @@
-import React from 'react';
-import { Form, Button,Container,   ButtonToolbar,Row,Col } from 'react-bootstrap';
+/*
+    Copyright (c) 2020 Academia Sinica, Institute of Information Science
+
+    License:
+        GPL 3.0 : The content of this file is subject to the terms and conditions
+
+    Project Name:
+        BiDae Object Tracker (BOT)
+
+    File Name:
+        ImportPatientTable.js
+
+    File Description:
+        BOT UI component
+
+    Version:
+        1.0, 20200601
+
+    Abstract:
+        BeDIS uses LBeacons to deliver 3D coordinates and textual descriptions of
+        their locations to users' devices. Basically, a LBeacon is an inexpensive,
+        Bluetooth device. The 3D coordinates and location description of every 
+        LBeacon are retrieved from BeDIS (Building/environment Data and Information 
+        System) and stored locally during deployment and maintenance times. Once 
+        initialized, each LBeacon broadcasts its coordinates and location 
+        description to Bluetooth enabled user devices within its coverage area. It 
+        also scans Bluetooth low-energy devices that advertise to announced their 
+        presence and collect their Mac addresses.
+
+    Authors:
+        Tony Yeh, LT1stSoloMID@gmail.com
+        Wayne Kang, b05505028@ntu.edu.tw
+        Edward Chen, r08921a28@ntu.edu.tw
+        Joe Chou, jjoe100892@gmail.com
+*/
+
+
+import React, {Fragment} from 'react';
+import { 
+    ButtonToolbar
+} from 'react-bootstrap';
 import { AppContext } from '../../context/AppContext';
 import ReactTable from 'react-table'; 
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
-import XLSX from "xlsx";
-import InputFiles from "react-input-files";
+import XLSX from 'xlsx';
+import InputFiles from 'react-input-files';
 import axios from 'axios';
-import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
-const SelectTable = selecTableHOC(ReactTable);
-import { 
-    objectImport,
-    deleteImportData,
-} from "../../dataSrc"
+import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm';
 import styleConfig from '../../config/styleConfig';
-import messageGenerator from '../../helper/messageGenerator'
+import messageGenerator from '../../helper/messageGenerator';
 import {
     PrimaryButton
-} from '../../config/styleComponent'
-import AccessControl from './AccessControl'
-import { importTableColumn } from '../../config/tables'
-import conifg from '../../config'
+} from '../BOTComponent/styleComponent';
+import AccessControl from './AccessControl';
+import { importTableColumn } from '../../config/tables';
 import dataSrc from '../../dataSrc';
+import retrieveDataHelper from '../../helper/retrieveDataHelper';
+const SelectTable = selecTableHOC(ReactTable);
 
-class ImportObjectTable extends React.Component{
+
+class ImportPatientTable extends React.Component{
     static contextType = AppContext   
     
     state = { 
@@ -32,30 +68,36 @@ class ImportObjectTable extends React.Component{
         filetext:'',
         data: [],
         columns: [],
+        locale: this.context.locale.abbr,
+        disable:true,
+    }
+
+    componentDidUpdate = (prevProps, prevState) => {
+        if (this.context.locale.abbr !== prevState.locale) {
+            this.getData()  
+        }
     }
 
     componentDidMount = () =>{
-        this.getData()
+        this.getData() 
     }
 
-    getData = (callback) => {
+    getData = () => {
         let { locale } = this.context
-        axios.get(dataSrc.importedObject, {
-            locale: locale.abbr
-        })
-        .then(res => {
+        retrieveDataHelper.getImportedObjectTable(
+            locale.abbr
+        )
+        .then(res => { 
             let columns = _.cloneDeep(importTableColumn)
             columns.map(field => {
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
-            })
-            
+            }) 
             this.setState({
                 data: res.data.rows,
                 columns,
-                selection: [],
-                selectAll: false,
-                showDeleteConfirmation: false,    
-            }, callback)
+                showDeleteConfirmation:false,
+                locale: locale.abbr
+            })
         })
         .catch(err => {
             console.log(err);
@@ -79,13 +121,13 @@ class ImportObjectTable extends React.Component{
 
     toggleSelection = (key, shift, row) => {
         let selection = [...this.state.selection];
+        selection != '' ? this.setState({disable : true}) :  this.setState({disable : false}) 
 
-
-        let splitKey =""
+        let splitKey =''
         if (key.split('-')[1]){
             for ( var i = 1 ; i < key.split('-').length ; i++){
                 splitKey += key.split('-')[i] 
-                i != key.split('-').length-1 ? splitKey+= "-" : null
+                i != key.split('-').length-1 ? splitKey+= '-' : null
             }            
         }
 
@@ -111,24 +153,21 @@ class ImportObjectTable extends React.Component{
         let rowsCount = 0 ; 
         if (selectAll) {
             const wrappedInstance = this.selectTable.getWrappedInstance();
-            const currentRecords = wrappedInstance.props.data
-            
-            // const currentRecords = wrappedInstance.getResolvedState().sortedData;
+            // const currentRecords = wrappedInstance.props.data 
+            const currentRecords = wrappedInstance.getResolvedState().sortedData;
            
-      
-
             currentRecords.forEach(item =>{
                 rowsCount++; 
                 if ((rowsCount > wrappedInstance.state.pageSize * wrappedInstance.state.page) && ( rowsCount <= wrappedInstance.state.pageSize +wrappedInstance.state.pageSize * wrappedInstance.state.page) ){
-                    selection.push(item.asset_control_number)
+                    selection.push(item._original.asset_control_number)
                 } 
             });
 
         }else{
             selection = [];
         } 
-         this.setState({ selectAll, selection });
-
+        selection == '' ? this.setState({disable : true}) :  this.setState({disable : false}) 
+        this.setState({ selectAll, selection });   
     };
 
     isSelected = (key) => {
@@ -136,50 +175,44 @@ class ImportObjectTable extends React.Component{
     };
 
     deleteRecordImport = () => {
-        // let idPackage = []
-        // var deleteArray = [];
-        // var deleteCount = 0;
-        let callback = () => messageGenerator.setSuccessMessage(
-            'save success'
-        )
+        this.setState({selectAll:false})
         
-        axios.post(deleteImportData, {
-            idPackage: this.state.selection
+        axios.delete(dataSrc.importedObject, {
+            data: {
+                idPackage: this.state.selection
+            }
         })
         .then(res => {
-            this.setState({
-                selection: [],
-                selectAll: false,
-            })
-            this.getData(callback)
+            this.setState({selection:[]})
+            this.handleSubmitForm()
         })
         .catch(err => {
             console.log(err)
         })
+     
     }
  
     handleClickButton = (e) => {
-   
- 
         let { name } = e.target
         switch(name) {
-            case "delete import data":
-                    this.setState({
-                        showDeleteConfirmation: true,
-                        warningSelect : 2
-                   })
+            case 'delete':
+                this.setState({
+                    showDeleteConfirmation: true,
+                    warningSelect : 2
+                })
                 break;  
         }
-
     }
 
 
     onImportExcel = files => {
-    
+
         // 獲取上傳的文件對象
         //const { files } = file.target; // 通過FileReader對象讀取文件
         const fileReader = new FileReader();
         //console.log(fileReader);
+
+        let { locale } = this.context
 
         if (files.length !=0 ) { //避免按下取消後的bug
             for (let index = 0; index < files.length; index++) {
@@ -189,20 +222,20 @@ class ImportObjectTable extends React.Component{
         fileReader.onload = event => {
             try {
                 // 判斷上傳檔案的類型 可接受的附檔名
-                const validExts = new Array(".xlsx", ".xls");
+                const validExts = new Array('.xlsx', '.xls');
                 const fileExt = event.target.name;
-        
+    
                 if (fileExt == null) {
-                    throw "檔案為空值";
+                    throw '檔案為空值';
                 }
     
-                const fileExtlastof = fileExt.substring(fileExt.lastIndexOf("."));
+                const fileExtlastof = fileExt.substring(fileExt.lastIndexOf('.'));
                 if (validExts.indexOf(fileExtlastof) == -1) {
-                    throw "檔案類型錯誤，可接受的副檔名有：" + validExts.toString();
+                    throw '檔案類型錯誤，可接受的副檔名有：' + validExts.toString();
                 }
-    
+
                 const { result } = event.target; // 以二進制流方式讀取得到整份excel表格對象
-                const workbook = XLSX.read(result, { type: "binary" });
+                const workbook = XLSX.read(result, { type: 'binary' });
                 let data = []; // 存儲獲取到的數據 // 遍歷每張工作表進行讀取（這裡默認只讀取第一張表）
                 for (const sheet in workbook.Sheets) {
                     if (workbook.Sheets.hasOwnProperty(sheet)) {
@@ -218,52 +251,74 @@ class ImportObjectTable extends React.Component{
                 let reapetFlag = false;
                 let DataNameIsNull = '';
                 let ReapeName = ''; 
-                data.map(importData =>{
+                let checkArray = []
+                let punctuationFlag = false;
+
+                data.map(importData => {
+
                     reapetFlag = false;
-                    this.props.dataPatient.map(dataOrigin=>{
-                        importData.asset_control_number === dataOrigin.asset_control_number ? reapetFlag=true : null
-                        importData.asset_control_number == dataOrigin.asset_control_number ? reapetFlag=true : null
-                    })
+
+                    this.state.data.map(dataOrigin => {
+
+                        importData.asset_control_number == dataOrigin.asset_control_number ? reapetFlag = true : null
+
+                    }) 
                     if( reapetFlag == false) {
                         if(importData.asset_control_number !=undefined ){
-                                newData.push(importData) 
+                            
+                            if (checkArray!='') {
+                                checkArray.indexOf(importData.asset_control_number) != -1 
+                                ?  ReapeName += importData.name+ ' '
+                                :  newData.push(importData)  
+                            }else {
+                                newData.push(importData)  
+                            }
+                            checkArray.push(importData.asset_control_number)  
                         }else{
                             DataNameIsNull += importData.name + ','
                         }
-                    }else{
-                        ReapeName += importData.name   + ','
+                    } else {
+                        ReapeName += importData.name   + ' ' 
                     }
-                })
+                }) 
+                
+                newData.map(item => {  
+                    item.name.toString().indexOf("'") != -1 || item.name.toString().indexOf('"') != -1 ? punctuationFlag = true : null 
+                    item.asset_control_number.toString().indexOf("'") != -1 ||  item.asset_control_number.toString().indexOf('"') != -1 ? punctuationFlag = true : null 
+                    item.type = 'patient'
+                }) 
 
-
-
-                DataNameIsNull!='' ? alert('ASN必須不等於空:' + DataNameIsNull) : null 
-                ReapeName!='' ?    alert(ReapeName + '的ASN與其他筆資料重複')  : null
-                //沒被擋掉的存到newData後輸出
-        
-                    let { locale } = this.context
-                newData.map(item =>{
-                item.type = 'patient'
-            }) 
-                axios.post(objectImport, {
-                    locale: locale.abbr ,
-                    newData
-                })
-                .then(res => {
-                })
-                .catch(err => {
-                    console.log(err)
-                    
-                })
-            this.handleSubmitForm()
+                if(punctuationFlag){ 
+                    messageGenerator.importErrorMessage( 'NOT_ALLOW_PUNCTUATION'  )  
+                }else if(DataNameIsNull != '' ){
+                    messageGenerator.importErrorMessage('ASSET_CONTROL_NUMBER_IS_REQUIRED',DataNameIsNull)  
+                }else if(ReapeName != '' ){ 
+                    messageGenerator.importErrorMessage('ASN_IS_REPEAT' ,ReapeName)
+                }
+                else{
+                    axios.post(dataSrc.importedObject, {
+                        locale: locale.abbr,
+                        newData
+                    })
+                    .then(res => {
+                        this.handleSubmitForm()  
+                        let callback = () => messageGenerator.setSuccessMessage(
+                            'save success'
+                        )
+                        callback()  
+                    })
+                    .catch(err => {
+                        console.log(err) 
+                    })  
+                }
 
             } catch (e) {
                 // 這裡可以拋出文件類型錯誤不正確的相關提示
                 alert(e);
-                //console.log("文件類型不正確");
+                //console.log('文件類型不正確');
                 return;
             }
-        
+    
         }; // 以二進制方式打開文件
 
 
@@ -273,9 +328,9 @@ class ImportObjectTable extends React.Component{
                 this.setState({filetext : fileReader.result})
             }
         } 
-
-
     };
+    
+
 
     render(){
         const { locale } = this.context 
@@ -300,45 +355,41 @@ class ImportObjectTable extends React.Component{
         };
 
         return(
-            <div> 
-                <div className="d-flex justify-content-between">
+            <Fragment> 
+                <div className='d-flex justify-content-between'>
                     <AccessControl
                         renderNoAccess={() => null}
                         platform={['browser', 'tablet']}
                     >                
                         <ButtonToolbar>
-                            <InputFiles accept=".xlsx, .xls" name="import_patient" onChange={this.onImportExcel}>
+                            <InputFiles accept='.xlsx, .xls' name='import_patient' onChange={this.onImportExcel}>
                                 <PrimaryButton
-                                    className="mr-2 mb-1"
+                                    className='mr-2 mb-1'
                                 >
                                     {locale.texts.IMPORT_OBJECT}
                                 </PrimaryButton>
                             </InputFiles>
                             <PrimaryButton
                                 className='text-capitalize mr-2 mb-1'
-                                name="delete import data"
+                                name='delete'
                                 onClick={this.handleClickButton}
+                                disabled={this.state.selection.length == 0}
                             >
                                 {locale.texts.DELETE}
                             </PrimaryButton>
                         </ButtonToolbar>
                     </AccessControl>
                 </div>
-                <hr/>
+                <hr/> 
                 <SelectTable
                     keyField='asset_control_number'
                     data={this.state.data}
                     columns={this.state.columns}
                     ref={r => (this.selectTable = r)}
-                    className="-highlight"
+                    className='-highlight'
                     style={{maxHeight:'75vh'}} 
-                    pageSize={this.state.data.length}
-                    onPageChange={(e) => {
-                        this.setState({
-                            selectAll: false,
-                            selection: ''
-                        })
-                    }} 
+                     onSortedChange={(e) => {this.setState({selectAll:false,selection:''})}} 
+                    onPageChange={(e) => {this.setState({selectAll:false,selection:''})}} 
                     {...extraProps}
                     {...styleConfig.reactTable}
                 />
@@ -349,11 +400,9 @@ class ImportObjectTable extends React.Component{
                         this.state.warningSelect ==2 ?  this.deleteRecordImport : null 
                     }
                 />
-            </div>
-            
+            </Fragment>
         )
     }
-
 }
 
-export default ImportObjectTable
+export default ImportPatientTable

@@ -43,6 +43,8 @@ import AdminManagementContainer from '../components/container/UserContainer/Admi
 import config from '../config';
 import TransferredLocationManagement from '../components/container/TransferredLocationManagement';
 import RolePermissionManagement from '../components/container/RolePermissionManagement';
+import MyDeviceManager from '../components/container/UserContainer/MyDeviceManager';
+import MyPatientManager from '../components/container/UserContainer/MyPatientManager';
 
 export const navbarNavList = [
     {

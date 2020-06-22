@@ -76,6 +76,16 @@ const retrieveDataHelper = {
         })
     },
 
+    getImportedObjectTable: async function(
+        locale,
+    ){
+        return await axios.get(dataSrc.importedObject, {
+            params: {
+                locale
+            }
+        })
+    },
+
     getAreaTable: async function() {
         return await axios.post(dataSrc.area)
     },
@@ -83,7 +93,7 @@ const retrieveDataHelper = {
     getLbeaconTable: async function(locale) {
         return await axios.get(dataSrc.lbeacon, {
             params: {
-                locale,
+                locale, 
             }
         })
     },

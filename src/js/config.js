@@ -69,6 +69,46 @@ const config = {
 
     LOGO: BOT_LOGO,
 
+    statusOptions: [
+        'normal',
+        'broken',
+        'reserve',
+        'transferred'
+    ],
+
+    monitorOptions: [
+        'geofence',
+        'panic',
+        'movement',
+        'location'
+    ],
+
+    monitorTypeMap: {
+        object: [1],
+        patient: [1,2,4,8]
+    },
+
+    monitorSettingType: {
+        MOVEMENT_MONITOR: "movement monitor",
+        LONG_STAY_IN_DANGER_MONITOR: "long stay in danger monitor",
+        NOT_STAY_ROOM_MONITOR: "not stay room monitor",
+        GEOFENCE_MONITOR: "geofence monitor",
+    },
+
+    monitorSettingUrlMap: {
+        "movement monitor": "movement_config",
+        "long stay in danger monitor": "location_long_stay_in_danger_config",
+        "not stay room monitor": "location_not_stay_room_config",
+        "geofence monitor": "geo_fence_config"
+    },
+
+    monitorSetting: {
+        "movement monitor": "movement_config",
+        "long stay in danger monitor": "location_long_stay_in_danger_config",
+        location: "location_not_stay_room_config",
+        geo: "geo_fence_config"
+    },
+
     getLbeaconDataIntervalTime: process.env.GET_LBEACON_DATA_INTERVAL_TIME_IN_MILLI_SEC || 3600000,
 
     getGatewayDataIntervalTime: process.env.GET_GATEWAY_DATA_INTERVAL_TIME_IN_MILLI_SEC || 3600000,

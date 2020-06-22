@@ -103,8 +103,8 @@ class MainContainer extends React.Component{
 
         this.getTrackingData();
         this.getLbeaconPosition();
-        this.getGeofenceConfig();
-        this.getLocationMonitorConfig()
+        // this.getGeofenceConfig();
+        // this.getLocationMonitorConfig()
         this.interval = setInterval(this.getTrackingData, config.mapConfig.intervalTime)
     }
 
@@ -353,11 +353,10 @@ class MainContainer extends React.Component{
     getLbeaconPosition = () => {
         let { auth, locale } = this.context
 
-        axios.post(dataSrc.getLbeaconTable, {
-            locale: locale.abbr
-        })
+        retrieveDataHelper.getLbeaconTable(
+            locale.abbr
+        )
         .then(res => {
-
             let lbeaconPosition = res.data.rows.map(item => {
                 item.coordinate = this.createLbeaconCoordinate(item.uuid).toString();
                 return item;
