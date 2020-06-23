@@ -52,7 +52,8 @@ const AppContextProvider = (props) => {
 
     const initialState = {
         areaId: parseInt(config.DEFAULT_AREA_ID),
-        shouldUpdateTrackingData: true
+        shouldUpdateTrackingData: true,
+        assignedObject: null,
     }
     
     const stateReducer = React.useReducer(StateReducer, initialState)

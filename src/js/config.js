@@ -776,6 +776,17 @@ const config = {
 
                 radius: 20,
             },
+
+            errorCircleOptions: {
+
+                color: 'rgba(0, 0, 0, 0)',
+
+                fillColor: 'red',
+
+                fillOpacity: 0.4,
+
+                radius: 40,
+            },
         },
 
         /** Set the icon option for mobile */

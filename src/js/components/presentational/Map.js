@@ -438,7 +438,10 @@ class Map extends React.Component {
     handleObjectMarkers = () => {
         let { 
             locale,
+            stateReducer
         } = this.context
+
+        let [{assignedObject}] = stateReducer;
 
         /** Clear the old markerslayers. */
         this.prevZoom = this.originalZoom;
@@ -500,6 +503,17 @@ class Map extends React.Component {
             /** Set the z-index offset of the searhed object so that
              * the searched object icon will be on top of all others */
             if (item.searched || item.panic) marker.setZIndexOffset(1000);
+
+            /** Set error circle if the object in search result list is on hover */
+            if (item.mac_address == assignedObject) {
+
+                let errorCircleOptions = this.iconOptions.errorCircleOptions;
+
+                let errorCircle = L.circleMarker(position, errorCircleOptions);
+                
+                errorCircle.addTo(this.markersLayer);
+
+            }
         
             /** Set the marker's event. */
             marker.on('mouseover', () => {

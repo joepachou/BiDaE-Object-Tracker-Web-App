@@ -38,15 +38,20 @@
 const StateReducer = (state, action) => {
     switch (action.type) {
         case 'setArea':
-          return {
-            ...state,
-            areaId: action.value
-          };
+            return {
+                ...state,
+                areaId: action.value
+            };
         case 'setUpdateTrackingData':
-          return {
-              ...state,
-              shouldUpdateTrackingData: action.value
-          }
+            return {
+                ...state,
+                shouldUpdateTrackingData: action.value
+            }
+        case 'assignObject':
+            return {
+                ...state,
+                assignedObject: action.value
+            }
         default:
           return state;
     }

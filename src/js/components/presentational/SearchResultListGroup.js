@@ -54,7 +54,10 @@ const SearchResultListGroup = ({
     action
 }) => {
 
-    const { locale } = React.useContext(AppContext);
+    const { 
+        locale,
+        stateReducer
+    } = React.useContext(AppContext);
    
     const style = {
         icon: {
@@ -69,17 +72,19 @@ const SearchResultListGroup = ({
         }
     }
 
-    const dataToLink = (data) => {
-        return ({
-            pathname: '/page/trace',
-            state: {
-                key: {
-                    value: data.name,
-                    label: data.name,
-                    description: data.name
-                },
-                mode: 'nameGroupByArea'
-            }
+    const onMouseOver = (e, value) => {
+        let [{}, dispatch] = stateReducer;
+        dispatch({
+            type: 'assignObject',
+            value,
+        })
+    }
+
+    const onMouseOut = () => {
+        let [{}, dispatch] = stateReducer;
+        dispatch({
+            type: 'assignObject',
+            value: null,
         })
     }
 
@@ -92,6 +97,8 @@ const SearchResultListGroup = ({
                     <ListGroup.Item 
                         href={'#' + index} 
                         eventKey={item.found + ':'+ index} 
+                        onMouseOver={(e) => onMouseOver(e, item.mac_address)}
+                        onMouseOut={onMouseOut}
                         key={index} 
                         action={action}
                         active
