@@ -64,7 +64,7 @@ Object.keys(config.monitorType)
         monitorTypeMap[config.monitorType[key]] = key
 })
 
-class EditObjectForm extends React.Component {
+class EditObjectForm extends React.Component { 
 
     static contextType = AppContext
 
@@ -75,17 +75,7 @@ class EditObjectForm extends React.Component {
     componentDidMount = () => {
         this.getTransferredLocation();
     }
-    
-    handleSubmit = (formOption) => {
-        const path = this.props.formPath 
-        axios.post(path, {
-            formOption,
-        }).then(res => {
-            this.props.handleSubmitForm()
-        }).catch(error => {
-            console.log(error)
-        })
-    }
+
         
     getTransferredLocation = () => {
         axios.get(dataSrc.getTransferredLocation)
@@ -287,7 +277,7 @@ class EditObjectForm extends React.Component {
                             while (postOption.name[0] == " "){
                                 postOption.name = postOption.name.substring(1 ,postOption.name.length);       
                             }   
-                            this.handleSubmit(postOption)                            
+                            this.props.handleSubmit(postOption)                            
  
 
                         }}

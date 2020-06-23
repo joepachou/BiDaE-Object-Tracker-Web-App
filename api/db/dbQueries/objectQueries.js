@@ -168,9 +168,58 @@ const deleteObject = (formOption) => {
 	return query
 }
 
+const addObject = (formOption) => {
+	const text = `
+		INSERT INTO object_table (
+			type, 
+			asset_control_number, 
+			name,
+			mac_address,
+			status,
+			area_id,
+			object_type,
+			registered_timestamp,
+			monitor_type,
+			nickname
+		)
+		VALUES (
+			$1, 
+			$2, 
+			$3,
+			$4,
+			$5,
+			$6,
+			0,
+			now(),
+			$7,
+			$8
+		);
+	`;
+		
+	const values = [
+		formOption.type, 
+		formOption.asset_control_number, 
+		formOption.name, 
+		formOption.mac_address,
+		formOption.status,
+		formOption.area_id,
+		formOption.monitor_type,
+		formOption.nickname
+	];
+
+
+	const query = {
+		text,
+		values
+	};
+
+	return query;
+}
+
 module.exports = {
     getObject,
-    addPersona,
+	addPersona,
+	addObject,
     editPersona,
     deleteObject,
 }

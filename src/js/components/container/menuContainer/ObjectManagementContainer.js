@@ -27,7 +27,7 @@ class ObjectManagementContainer extends React.Component{
     
     static contextType = AppContext
 
-    defaultActiveKey = "devices_table"
+    defaultActiveKey = "patients_table"
     
     render(){
         const { 

@@ -58,11 +58,11 @@ import {
 import AccessControl from '../presentational/AccessControl';
 import messageGenerator from '../../helper/messageGenerator';
 import { objectTableColumn } from '../../config/tables';
-import retrieveDataHelper from '../../helper/retrieveDataHelper';
+import retrieveDataHelper from '../../helper/retrieveDataHelper'; 
 import config from '../../config';
  
 
-class ObjectTable extends React.Component{ 
+class ObjectTable extends React.Component{  
 
     static contextType = AppContext
 
@@ -89,27 +89,24 @@ class ObjectTable extends React.Component{
         objectFilter: [],
         importData: [],
         filteredData: [],
-        filterSelection: {
-            statusOptions: config.statusOptions.map(item => {
-                return {
-                    value: item,
-                    label: this.context.locale.texts[item.replace(/ /g, '_').toUpperCase()]
-                }
-            }),
-            monitorTypeOptions: config.monitorOptions.map(item => {
-                return {
-                    value: item,
-                    label: item 
-                }
-            }),
-           
-        },
+        filterSelection: {},
+        apiMethod: '',
     }
 
     componentDidMount = () => {
         this.getData()
         this.getAreaTable()
-        this.getImportData()
+        // this.getImportData()
+    }
+
+
+    componentDidUpdate = (prevProps, prevState) => {    
+
+        if (this.context.locale.abbr !== prevState.locale) {    
+            this.setState({ 
+                locale: this.context.locale.abbr
+            }) 
+        } 
     }
 
     getAreaTable = () => {
@@ -118,6 +115,7 @@ class ObjectTable extends React.Component{
         } = this.context
         retrieveDataHelper.getAreaTable()
             .then(res => {
+                console.log(res)
                 let areaSelection = res.data.rows.map(area => {
                     return {
                         value: area.name,
@@ -126,10 +124,11 @@ class ObjectTable extends React.Component{
                 })
                 this.setState({
                     areaTable: res.data.rows,
-                    filterSelection: {
-                        ...this.state.filterSelection,
-                        areaSelection,
-                    }
+                    areaSelection,
+                    // filterSelection: {
+                    //     ...this.state.filterSelection,
+                    //     areaSelection,
+                    // }
                 })
             })
             .catch(err => {
@@ -281,14 +280,24 @@ class ObjectTable extends React.Component{
         })
     }
 
-    handleSubmitForm = () => {
+    handleSubmitForm = (formOption, cb) => {
+        let {
+            apiMethod
+        } = this.state
 
-        let callback = () => {
-            messageGenerator.setSuccessMessage(
-                'save success'
-            )
-        }
-        this.getData(callback)
+        axios[apiMethod](dataSrc.object, {
+            formOption,
+            mode: 'DEVICE',
+        }).then(res => { 
+            let callback = () => {
+                messageGenerator.setSuccessMessage(
+                    'save success'
+                )
+            }
+            this.getData(callback)
+        }).catch( error => {
+            console.log(error)
+        })
     }
 
     toggleSelection = (key, shift, row) => {
@@ -346,7 +355,8 @@ class ObjectTable extends React.Component{
                     formTitle: name,
                     selectedRowData: [],
                     formPath: dataSrc.addObject,
-                    disableASN:false
+                    disableASN: false,
+                    apiMethod: 'post',
                 })
                 break;
             case 'associate':
@@ -507,7 +517,6 @@ class ObjectTable extends React.Component{
         let typeSelection = this.state.filterSelection.typeList ? Object.values(this.state.filterSelection.typeList) : null;
 
         return(
-    
             <div> 
                 <div className='d-flex justify-content-between my-4'>
                     <div className='d-flex justify-content-start'>
@@ -615,24 +624,23 @@ class ObjectTable extends React.Component{
                     keyField='id'
                     data={this.state.filteredData}
                     columns={this.state.columns}
-                    ref={r => (this.selectTable = r)}
+                    ref={r => (this.selectTable = r)} 
                     className='-highlight text-none'
                     style={{maxHeight:'70vh'}} 
-                    onSortedChange={(e) => {this.setState({selectAll:false,selection:''})}} 
                     onPageChange={(e) => {this.setState({selectAll:false,selection:''})}} 
+                    onSortedChange={(e) => {this.setState({selectAll:false,selection:''})}}
                     {...extraProps}
                     {...styleConfig.reactTable}
-                    pageSize={this.state.filteredData.length}
+                    NoDataComponent={() => null}
                     getTrProps={(state, rowInfo, column, instance) => {
                         return {
                             onClick: (e) => {  
-                                if (!e.target.type) {
+                                if (!e.target.type) { 
                                     this.setState({
-                                        isShowEdit:true,
-                                        selectedRowData: this.state.data[rowInfo.index],
-                                        formTitle: 'edit object',
-                                        formPath: dataSrc.editObject,
-                                        disableASN:true,
+                                        isPatientShowEdit: true,
+                                        selectedRowData: rowInfo.original,
+                                        formTitle: 'edit info',
+                                        disableASN: true,
                                         apiMethod: 'put',
                                     })
                                 } 
@@ -645,7 +653,7 @@ class ObjectTable extends React.Component{
                     show={this.state.isShowEdit} 
                     title={this.state.formTitle} 
                     selectedRowData={selectedRowData || ''} 
-                    handleSubmitForm={this.handleSubmitForm}
+                    handleSubmit={this.handleSubmitForm}
                     handleClose={this.handleClose}
                     formPath={this.state.formPath}
                     data={this.state.data}
