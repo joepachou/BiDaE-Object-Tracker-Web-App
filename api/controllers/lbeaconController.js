@@ -52,8 +52,10 @@ module.exports = {
             console.log('get lbeacon table data succeed')
             res.rows.map(item => {
                 /** Set the value that distinguish lbeacon is normal */
-                item.isInHealthInterval = moment().diff(item.last_report_timestamp, 'minutes') 
-                    < process.env.LBEACON_HEALTH_TIME_INTERVAL_IN_MIN;
+                
+                item.isInHealthInterval = item.health_status == process.env.IS_LBEACON_HEALTH_STATUS_CODE && 
+                    moment().diff(item.last_report_timestamp, 'minutes') 
+                        < process.env.LBEACON_HEALTH_TIME_INTERVAL_IN_MIN;
 
                 item.last_report_timestamp = moment.tz(item.last_report_timestamp, process.env.TZ).locale(locale).format(process.env.TIMESTAMP_FORMAT);
 
