@@ -43,7 +43,12 @@ const pool = require('../db/dev/connection');
 module.exports = {
 
     getImportedObject: (request, response) => {
-        let { locale, areaId } = request.body
+
+        let { 
+            locale, 
+            areaId 
+        } = request.body
+
         pool.query(dbQueries.getImportedObject())       
             .then(res => {
                 console.log(`get imported object`)

@@ -62,7 +62,7 @@ import retrieveDataHelper from '../../helper/retrieveDataHelper';
 import config from '../../config';
  
 
-class ObjectTable extends React.Component{  
+class ObjectTable extends React.Component{   
 
     static contextType = AppContext
 
@@ -124,10 +124,10 @@ class ObjectTable extends React.Component{
                 this.setState({
                     areaTable: res.data.rows,
                     areaSelection,
-                    // filterSelection: {
-                    //     ...this.state.filterSelection,
-                    //     areaSelection,
-                    // }
+                    filterSelection: {
+                        ...this.state.filterSelection,
+                        areaSelection,
+                    }
                 })
             })
             .catch(err => {

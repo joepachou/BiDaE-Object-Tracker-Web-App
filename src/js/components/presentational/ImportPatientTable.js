@@ -66,7 +66,7 @@ class ImportPatientTable extends React.Component{
         selection: [],
         selectAll: false,
         showDeleteConfirmation:false,
-        filetext:'',
+        filetext:'', 
         data: [],
         columns: [],
         locale: this.context.locale.abbr,

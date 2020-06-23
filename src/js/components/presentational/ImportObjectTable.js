@@ -95,7 +95,7 @@ class ImportPatientTable extends React.Component{
             this.setState({
                 data: res.data.rows,
                 columns,
-                showDeleteConfirmation:false,
+                showDeleteConfirmation: false,
                 locale: locale.abbr
             })
         })
@@ -388,7 +388,7 @@ class ImportPatientTable extends React.Component{
                     ref={r => (this.selectTable = r)}
                     className='-highlight'
                     style={{maxHeight:'75vh'}} 
-                     onSortedChange={(e) => {this.setState({selectAll:false,selection:''})}} 
+                    onSortedChange={(e) => {this.setState({selectAll:false,selection:''})}} 
                     onPageChange={(e) => {this.setState({selectAll:false,selection:''})}} 
                     {...extraProps}
                     {...styleConfig.reactTable}

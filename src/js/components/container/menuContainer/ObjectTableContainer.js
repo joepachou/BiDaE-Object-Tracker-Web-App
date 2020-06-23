@@ -63,7 +63,7 @@ import SiteModuleTW from '../../../../../site_module/locale/zh-TW';
 import SiteModuleEN from '../../../../../site_module/locale/en-US';
 import moment from 'moment';
 
-class ObjectTableContainer extends React.Component{ 
+class ObjectTableContainer extends React.Component{  
     
     static contextType = AppContext
     
@@ -115,6 +115,7 @@ class ObjectTableContainer extends React.Component{
             field.Header = this.context.locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
         }) 
         this.state.data.map(item=>{
+            console.log(item.area_name.value)
             this.context.locale.lang == 'en' 
             ? item.area_name.label = SiteModuleEN[item.area_name.value]
             : item.area_name.label = SiteModuleTW[item.area_name.value]

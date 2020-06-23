@@ -78,10 +78,12 @@ const retrieveDataHelper = {
 
     getImportedObjectTable: async function(
         locale,
+        type,
     ){
         return await axios.get(dataSrc.importedObject, {
             params: {
-                locale
+                locale,
+                type
             }
         })
     },
