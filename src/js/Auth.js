@@ -92,7 +92,7 @@ class Auth extends React.Component {
                             return permissions
                         }, [])
                 }
-                console.log(userInfo.roles)
+
                 Cookies.set('authenticated', true)
                 Cookies.set('user', userInfo)
                 // locale.reSetState(userInfo.locale)

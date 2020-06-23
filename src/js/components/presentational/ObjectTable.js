@@ -115,7 +115,6 @@ class ObjectTable extends React.Component{
         } = this.context
         retrieveDataHelper.getAreaTable()
             .then(res => {
-                console.log(res)
                 let areaSelection = res.data.rows.map(area => {
                     return {
                         value: area.name,
@@ -260,7 +259,9 @@ class ObjectTable extends React.Component{
             })
                  deleteCount +=1
         })
+        
         this.setState({selectAll:false})
+
         deleteArray.map( item => {
          
             this.state.data[item] === undefined ?
@@ -268,16 +269,26 @@ class ObjectTable extends React.Component{
                 :
                 formOption.push(this.state.data[item].mac_address)
             })
-           
-        axios.post(dataSrc.deleteDevice, {
-            formOption
+    
+
+        axios.delete(dataSrc.object, {
+            data: {
+                formOption
+            }
         })
         .then(res => {
-            this.handleSubmitForm()
+            let callback = () => {
+                messageGenerator.setSuccessMessage(
+                    'save success'
+                )
+            }
+            this.getData(callback)
         })
         .catch(err => {
             console.log(err)
-        })
+        }) 
+       
+        this.setState({selectAll:false,selection:[]})
     }
 
     handleSubmitForm = (formOption, cb) => {
@@ -368,8 +379,9 @@ class ObjectTable extends React.Component{
 
             case 'deleteObject':
                 this.setState({
-                     showDeleteConfirmation: true,
-                     warningSelect : 1
+                    showDeleteConfirmation: true,
+                    warningSelect : 1
+                     
                 })
                 break;
   
@@ -602,13 +614,7 @@ class ObjectTable extends React.Component{
                                 name='add object'
                                 onClick={this.handleClickButton}
                             >
-                                {locale.texts.ADD_OBJECT}
-                            </PrimaryButton>
-                            <PrimaryButton
-                                name='dissociation'
-                                onClick={this.handleClickButton}
-                            >
-                                {locale.texts.DISSOCIATE}
+                                {locale.texts.ADD}
                             </PrimaryButton>
                             <PrimaryButton 
                                 name='deleteObject'

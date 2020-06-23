@@ -27,12 +27,14 @@ class ObjectManagementContainer extends React.Component{
     
     static contextType = AppContext
 
-    defaultActiveKey = "patients_table"
+    defaultActiveKey = "devices_table"
     
     render(){
+
         const { 
             locale
         } = this.context
+        
         return (     
             <BOTContainer>     
                 <PageTitle>                                            
