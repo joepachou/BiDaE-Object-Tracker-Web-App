@@ -103,7 +103,7 @@ class MainContainer extends React.Component{
 
         this.getTrackingData();
         this.getLbeaconPosition();
-        // this.getGeofenceConfig();
+        this.getGeofenceConfig();
         // this.getLocationMonitorConfig()
         this.interval = setInterval(this.getTrackingData, config.mapConfig.intervalTime)
     }
@@ -374,9 +374,11 @@ class MainContainer extends React.Component{
     getGeofenceConfig = (callback) => {
         let { stateReducer } = this.context
         let [{areaId}] = stateReducer
-        axios.post(dataSrc.getGeofenceConfig, {
+
+        retrieveDataHelper.getMonitorConfig(
+            'geofence',
             areaId
-        })
+        )
         .then(res => {
             let geofenceConfig = res.data.rows.reduce((config, rule) => {
                 if (!config[rule.area_id]) {
@@ -393,7 +395,7 @@ class MainContainer extends React.Component{
             }, callback)
         })
         .catch(err => {
-            console.log(`get geofence data fail ${err}`)
+            console.log(`get geofence data failed ${err}`)
         })
     }
 

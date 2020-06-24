@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        dataRoutes.js
+        monitorConfigRoutes.js
 
     File Description:
         BOT UI component
@@ -36,28 +36,16 @@
 
 
 
-const trackingDataRoutes = require('./dataRoutes/trackingDataRoutes');
-const lbeaconRoutes = require('./dataRoutes/lbeaconRoutes');
-const gatewayRoutes = require('./dataRoutes/gatewayRoutes');
-const userRoutes = require('./dataRoutes/userRoutes');
-const objectRoutes = require('./dataRoutes/objectRoutes');
-const importedObjectRoutes = require('./dataRoutes/importedObjectRoutes');
-const locationHistoryRoutes = require('./dataRoutes/locationHistoryRoutes');
-const areaRoutes = require('./dataRoutes/areaRoutes');
-const fileRoutes =  require('./dataRoutes/fileRoutes');
-const roleRoutes = require('./dataRoutes/roleRoutes');
-const monitorConfigRoutes = require('./dataRoutes/monitorConfigRoutes');
+let monitorConfigController = require('../../controllers/monitorConfigController');
+let cors = require('cors');
 
 module.exports = app => {
-    trackingDataRoutes(app);
-    lbeaconRoutes(app);
-    gatewayRoutes(app);
-    userRoutes(app);
-    objectRoutes(app);
-    importedObjectRoutes(app);
-    locationHistoryRoutes(app);
-    areaRoutes(app);
-    fileRoutes(app);
-    roleRoutes(app);
-    monitorConfigRoutes(app);
+
+    // enable pre-flight request for DELETE request
+    app.options('/data/monitorConfig/geofence', cors()) 
+
+    app.route('/data/monitorConfig/geofence')
+        .post(monitorConfigController.getGeofenceConfig)
+
+
 }

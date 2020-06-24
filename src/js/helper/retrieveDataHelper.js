@@ -108,19 +108,6 @@ const retrieveDataHelper = {
         })
     },
 
-    getMonitorConfig: async function(
-        type, 
-        areasId,
-        isGetLbeaconPosition
-    ) {
-        
-        return await axios.post(dataSrc.getMonitorConfig, {
-            type: config.monitorSettingUrlMap[type],
-            areasId,
-            isGetLbeaconPosition,
-        })
-    },
-
     getEditObjectRecord: async function(locale) {
         return await axios.post(dataSrc.getEditObjectRecord,{
             locale
@@ -150,6 +137,32 @@ const retrieveDataHelper = {
             }
         })
     },
+
+    getMonitorConfig: async function (
+        mode,
+        areaId,
+        isGetLbeaconPosition,
+    ) {
+        return await axios.post(dataSrc.monitorConfig[mode], {
+            areaId,
+            type: config.monitorSettingUrlMap[type],
+            isGetLbeaconPosition,
+
+        })
+    },
+
+    // getMonitorConfig: async function(
+    //     type, 
+    //     areasId,
+    //     isGetLbeaconPosition
+    // ) {
+        
+    //     return await axios.post(dataSrc.getMonitorConfig, {
+    //         type: config.monitorSettingUrlMap[type],
+    //         areasId,
+    //         isGetLbeaconPosition,
+    //     })
+    // },
 
 }
 
