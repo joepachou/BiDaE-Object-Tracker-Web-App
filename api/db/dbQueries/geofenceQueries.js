@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        dataRoutes.js
+        geofenceQueries.js
 
     File Description:
         BOT UI component
@@ -34,32 +34,15 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
+const getGeofenceConfig = (areaId) => {
+	return `
+		SELECT
+			*
+		FROM geo_fence_config
+		ORDER BY id
+	;`
+}
 
-
-const trackingDataRoutes = require('./dataRoutes/trackingDataRoutes');
-const lbeaconRoutes = require('./dataRoutes/lbeaconRoutes');
-const gatewayRoutes = require('./dataRoutes/gatewayRoutes');
-const userRoutes = require('./dataRoutes/userRoutes');
-const objectRoutes = require('./dataRoutes/objectRoutes');
-const importedObjectRoutes = require('./dataRoutes/importedObjectRoutes');
-const locationHistoryRoutes = require('./dataRoutes/locationHistoryRoutes');
-const areaRoutes = require('./dataRoutes/areaRoutes');
-const fileRoutes =  require('./dataRoutes/fileRoutes');
-const roleRoutes = require('./dataRoutes/roleRoutes');
-const geofenceRoutes = require('./dataRoutes/geofenceRoutes');
-const monitorRoutes = require('./dataRoutes/monitorRoutes');
-
-module.exports = app => {
-    trackingDataRoutes(app);
-    lbeaconRoutes(app);
-    gatewayRoutes(app);
-    userRoutes(app);
-    objectRoutes(app);
-    importedObjectRoutes(app);
-    locationHistoryRoutes(app);
-    areaRoutes(app);
-    fileRoutes(app);
-    roleRoutes(app);
-    geofenceRoutes(app);
-    monitorRoutes(app);
+module.exports = {
+    getGeofenceConfig,
 }

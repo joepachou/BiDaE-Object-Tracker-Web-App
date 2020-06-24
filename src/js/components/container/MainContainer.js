@@ -104,7 +104,7 @@ class MainContainer extends React.Component{
         this.getTrackingData();
         this.getLbeaconPosition();
         this.getGeofenceConfig();
-        // this.getLocationMonitorConfig()
+        this.getLocationMonitorConfig()
         this.interval = setInterval(this.getTrackingData, config.mapConfig.intervalTime)
     }
 
@@ -375,8 +375,7 @@ class MainContainer extends React.Component{
         let { stateReducer } = this.context
         let [{areaId}] = stateReducer
 
-        retrieveDataHelper.getMonitorConfig(
-            'geofence',
+        retrieveDataHelper.getGeofenceConfig(
             areaId
         )
         .then(res => {
@@ -405,7 +404,7 @@ class MainContainer extends React.Component{
             stateReducer,
             auth
         } = this.context
-
+        console.log()
         retrieveDataHelper.getMonitorConfig(
             'not stay room monitor',
             auth.user.areas_id,

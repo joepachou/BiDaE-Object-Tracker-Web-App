@@ -53,6 +53,14 @@ export const navbarNavList = [
         path: '/',
     },
     {
+        name: "shift change",
+        alias: "shiftChange",
+        path: "/",
+        permission: "user:shiftChange",
+        platform: ['browser', 'tablet'],
+        hasEvent: true
+    },
+    {
         name: 'object management',
         alias: 'objectManagement',
         path: '/page/objectManagement',
@@ -65,10 +73,25 @@ export const navbarNavList = [
         permission: 'route:trackingHistory',
     },
     {
-        name: 'system setting',
-        alias: 'systemSetting',
-        path: '/page/systemSetting',
-        permission: 'route:systemSetting',
+        name: "monitor setting",
+        alias: "monitor",
+        path: "/page/monitor",
+        permission: "route:monitor",
+        platform: ['browser', 'tablet']
+    },
+    {
+        name: "report",
+        alias: "report",
+        path: "/page/report",
+        permission: "route:report",
+        platform: ['browser', 'tablet', 'mobile'],
+    },
+    {
+        name: "system setting",
+        alias: "systemSetting",
+        path: "/page/systemSetting",
+        permission: "route:systemSetting",
+        platform: ['browser', 'tablet', 'mobile'],
     },
     {
         name: 'contact tree',
@@ -76,7 +99,6 @@ export const navbarNavList = [
         path: '/page/contactTree',
         permission: 'route:contactTree',
         platform: ['browser']
-
     },
 ]
 

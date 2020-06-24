@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        monitorConfigRoutes.js
+        geofenceRoutes.js
 
     File Description:
         BOT UI component
@@ -36,16 +36,16 @@
 
 
 
-let monitorConfigController = require('../../controllers/monitorConfigController');
+let geofenceController = require('../../controllers/geofenceController');
 let cors = require('cors');
 
 module.exports = app => {
 
     // enable pre-flight request for DELETE request
-    app.options('/data/monitorConfig/geofence', cors()) 
+    app.options('/data/geofence', cors()) 
 
-    app.route('/data/monitorConfig/geofence')
-        .post(monitorConfigController.getGeofenceConfig)
+    app.route('/data/geofence')
+        .post(geofenceController.getGeofenceConfig)
 
 
 }

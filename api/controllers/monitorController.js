@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        dataRoutes.js
+        monitorController.js
 
     File Description:
         BOT UI component
@@ -35,31 +35,31 @@
 */
 
 
+require('dotenv').config();
+require('moment-timezone');
+const dbQueries = require('../db/dbQueries/monitorQueries');
+const pool = require('../db/dev/connection');
 
-const trackingDataRoutes = require('./dataRoutes/trackingDataRoutes');
-const lbeaconRoutes = require('./dataRoutes/lbeaconRoutes');
-const gatewayRoutes = require('./dataRoutes/gatewayRoutes');
-const userRoutes = require('./dataRoutes/userRoutes');
-const objectRoutes = require('./dataRoutes/objectRoutes');
-const importedObjectRoutes = require('./dataRoutes/importedObjectRoutes');
-const locationHistoryRoutes = require('./dataRoutes/locationHistoryRoutes');
-const areaRoutes = require('./dataRoutes/areaRoutes');
-const fileRoutes =  require('./dataRoutes/fileRoutes');
-const roleRoutes = require('./dataRoutes/roleRoutes');
-const geofenceRoutes = require('./dataRoutes/geofenceRoutes');
-const monitorRoutes = require('./dataRoutes/monitorRoutes');
+module.exports = {
 
-module.exports = app => {
-    trackingDataRoutes(app);
-    lbeaconRoutes(app);
-    gatewayRoutes(app);
-    userRoutes(app);
-    objectRoutes(app);
-    importedObjectRoutes(app);
-    locationHistoryRoutes(app);
-    areaRoutes(app);
-    fileRoutes(app);
-    roleRoutes(app);
-    geofenceRoutes(app);
-    monitorRoutes(app);
+    getMonitorConfig: (request, response) => {
+        let {
+            type,
+        } = request.body
+        console.log(type)
+        pool.query(dbQueries.getMonitorConfig(type))
+            .then(res => {
+                console.log(`get ${type} success`)
+                let toReturn = res.rows
+                .map(item => {
+                    item.start_time = item.start_time.split(':').filter((item,index) => index < 2).join(':')
+                    item.end_time = item.end_time.split(':').filter((item,index) => index < 2).join(':')
+                    return item
+                })
+                response.status(200).json(toReturn)
+            })
+            .catch(err => {
+                console.log(`get ${type} fail ${err}`)
+            })
+    }
 }

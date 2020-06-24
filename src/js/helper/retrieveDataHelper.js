@@ -138,31 +138,26 @@ const retrieveDataHelper = {
         })
     },
 
-    getMonitorConfig: async function (
-        mode,
+    getGeofenceConfig: async function (
         areaId,
-        isGetLbeaconPosition,
     ) {
-        return await axios.post(dataSrc.monitorConfig[mode], {
+        return await axios.post(dataSrc.geofence, {
             areaId,
-            type: config.monitorSettingUrlMap[type],
-            isGetLbeaconPosition,
-
         })
     },
 
-    // getMonitorConfig: async function(
-    //     type, 
-    //     areasId,
-    //     isGetLbeaconPosition
-    // ) {
+    getMonitorConfig: async function(
+        type, 
+        areasId,
+        isGetLbeaconPosition
+    ) {
         
-    //     return await axios.post(dataSrc.getMonitorConfig, {
-    //         type: config.monitorSettingUrlMap[type],
-    //         areasId,
-    //         isGetLbeaconPosition,
-    //     })
-    // },
+        return await axios.post(dataSrc.monitor, {
+            type: config.monitorSettingUrlMap[type],
+            areasId,
+            isGetLbeaconPosition,
+        })
+    },
 
 }
 

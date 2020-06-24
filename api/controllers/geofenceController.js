@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        monitorConfigController.js
+        geofenceController.js
 
     File Description:
         BOT UI component
@@ -37,14 +37,13 @@
 
 require('dotenv').config();
 require('moment-timezone');
-const dbQueries = require('../db/dbQueries/monitorConfigQueries');
+const dbQueries = require('../db/dbQueries/geofenceQueries');
 const pool = require('../db/dev/connection');
 
 module.exports = {
 
     getGeofenceConfig: (request, response) => {
         let { areaId } = request.body
-        console.log(areaId)
         pool.query(dbQueries.getGeofenceConfig(areaId))
             .then(res => {
                 res.rows.map(item => {
