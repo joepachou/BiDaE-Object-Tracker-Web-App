@@ -84,7 +84,7 @@ module.exports = {
     },
 
     monitorConfig: {
-        geofence: `${domain}/data/monitorConfig/geofence`
+        geofence: `${domain}/data/monitorConfig/geofence`,
     },
 
     pdfUrl: path => {
