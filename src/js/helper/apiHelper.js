@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        monitorRoutes.js
+        apiHelper.js
 
     File Description:
         BOT UI component
@@ -35,21 +35,42 @@
 */
 
 
+import dataSrc from '../dataSrc';
+import axios from 'axios';
+import config from '../config';
 
-let monitorController = require('../../controllers/monitorController');
-let cors = require('cors');
+const apiHelper = {
 
-module.exports = app => {
+    monitor: {
+        delete: async function(
+            configPackage
+        ) {
+            return await axios.delete(dataSrc.monitor, {
+                data: {
+                    configPackage
+                }
+            })
+        },
 
-    // enable pre-flight request for DELETE request
-    app.options('/data/monitor', cors()) 
+        patch: async function(
+            configPackage
+        ) {
+            return await axios.patch(dataSrc.monitor, {
+                configPackage
+            })
+        },
 
-    app.route('/data/monitor')
-        .post(monitorController.getMonitorConfig)
-        .delete(monitorController.deleteMonitorConfig)
-        .patch(monitorController.addMonitorConfig)
-        .put(monitorController.setMonitorConfig)
-
-
+        put: async function(
+            configPackage
+        ) {
+            return await axios.put(dataSrc.monitor, {
+                configPackage
+            })
+        }
+    }
+ 
 
 }
+
+
+export default apiHelper

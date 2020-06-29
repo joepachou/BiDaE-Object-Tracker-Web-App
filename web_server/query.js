@@ -986,40 +986,6 @@ const deleteImportData = (request, response) => {
         })
 }
 
-
-const getMonitorConfig = (request, response) => {
-    let {
-        type,
-    } = request.body
-   
-    pool.query(queryType.getMonitorConfig(type))
-        .then(res => {
-            console.log(`get ${type} success`)
-            let toReturn = res.rows
-            .map(item => {
-                item.start_time = item.start_time.split(':').filter((item,index) => index < 2).join(':')
-                item.end_time = item.end_time.split(':').filter((item,index) => index < 2).join(':')
-                return item
-            })
-            response.status(200).json(toReturn)
-        })
-        .catch(err => {
-            console.log(`get ${type} fail ${err}`)
-        })
-}
-
-const setMonitorConfig = (request, response) =>{
-    let { monitorConfigPackage } = request.body 
-    pool.query(queryType.setMonitorConfig(monitorConfigPackage))
-        .then(res => {
-            console.log(`set monitor config success`)
-            response.status(200).json(res)
-        })
-        .catch(err => {
-            console.log(`set monitor config fail ${err}`)
-        })
-}
-
 const checkoutViolation = (request, response) => {
     let { 
         mac_address,
@@ -1191,38 +1157,6 @@ const setMonitorEnable = (request, response) => {
         })
         .catch(err => {
             console.log(err)
-        })
-}
-
-const addMonitorConfig = (request, response) => {
-    let {
-        monitorConfigPackage,
-    } = request.body
-
-    let {
-        type
-    } = monitorConfigPackage
-    pool.query(queryType.addMonitorConfig(monitorConfigPackage))
-        .then(res => {
-            console.log(`add ${type} config success`)
-            response.status(200).json(res)
-        })
-        .catch(err => {
-            console.log(`add ${type} fail ${err}`)
-        })
-}
-
-const deleteMonitorConfig = (request, response) => {
-    let {
-        monitorConfigPackage,
-    } = request.body
-    pool.query(queryType.deleteMonitorConfig(monitorConfigPackage))
-        .then(res => {
-            console.log(`delete ${monitorConfigPackage.type.replace(/_/g, ' ')}`)
-            response.status(200).json(res)
-        })
-        .catch(err => {
-            console.log(`delete monitor config fail: ${err}`)
         })
 }
 
@@ -1554,7 +1488,6 @@ module.exports = {
     getUserInfo,
     getShiftChangeRecord,
     getEditObjectRecord,
-    getMonitorConfig,
     addShiftChangeRecord,
     addUserSearchHistory,
     addObject,
@@ -1587,7 +1520,6 @@ module.exports = {
     validateUsername,
     setUserInfo,
     getMainSecondArea,
-    setMonitorConfig,
     setGeofenceConfig,
     checkoutViolation,
     confirmValidation,
@@ -1595,8 +1527,6 @@ module.exports = {
     getSearchQueue,
     getTrackingTableByMacAddress,
     addGeofenceConfig,
-    deleteMonitorConfig,
-    addMonitorConfig,
     getTransferredLocation,
     modifyTransferredLocation,
     clearSearchHistory,

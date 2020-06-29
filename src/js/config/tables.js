@@ -34,8 +34,8 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
-
-import config from '../config'
+import React from 'react';
+import config from '../config';
 
 const style = {
     column: {

@@ -54,8 +54,7 @@ import messageGenerator from '../../helper/messageGenerator'
 import {
     PrimaryButton
 } from '../BOTComponent/styleComponent'
-import AccessControl from '../presentational/AccessControl'
-import { callbackify } from 'util';
+import AccessControl from '../presentational/AccessControl';
 const SelectTable = selecTableHOC(ReactTable);
 
 let lock = false
@@ -113,10 +112,10 @@ class GeoFenceSettingBlock extends React.Component{
             auth,
             locale,
         } = this.context
-        axios.post(dataSrc.getGeofenceConfig, {
-            type: config.monitorSettingUrlMap[this.props.type],
-            areasId: auth.user.areas_id
-        })
+
+        retrieveDataHelper.getGeofenceConfig(
+            auth.user.areas_id
+        )
         .then(res => {
             let columns = _.cloneDeep(geofenceConfigColumn)
 

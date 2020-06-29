@@ -45,6 +45,8 @@ import TransferredLocationManagement from '../components/container/TransferredLo
 import RolePermissionManagement from '../components/container/RolePermissionManagement';
 import MyDeviceManager from '../components/container/UserContainer/MyDeviceManager';
 import MyPatientManager from '../components/container/UserContainer/MyPatientManager';
+import MonitorSettingBlock from '../components/container/MonitorSettingBlock';
+import GeoFenceSettingBlock from '../components/container/GeoFenceSettingBlock';
 
 export const navbarNavList = [
     {

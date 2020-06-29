@@ -1602,120 +1602,6 @@ const confirmValidation = (username) => {
 
 }
 
-const addMonitorConfig = (monitorConfigPackage) => {
-	let {
-		type,
-		start_time,
-		end_time,
-		enable,
-		area_id
-	} = monitorConfigPackage
-
-	let text = `
-		INSERT INTO ${type}
-			(
-				start_time,
-				end_time,
-				enable,
-				area_id
-			)
-		VALUES 
-			(
-				$1,
-				$2,
-				$3,
-				$4
-			)
-	`
-
-	let values = [
-		start_time,
-		end_time,
-		enable,
-		area_id,
-	]
-
-	return {
-		text, 
-		values
-	}
-}
-
-const getMonitorConfig = (type) => {
-	let text =  `
-		SELECT 
-			${type}.id, 
-			${type}.area_id,
-			${type}.enable,
-			${type}.start_time,
-			${type}.end_time,
-			${type}.is_active,
-			lbeacon_temp_table.lbeacons
-
-		FROM ${type}
-
-		LEFT JOIN (
-
-			SELECT 
-				lbeacon_area_id,
-				ARRAY_AGG(uuid) AS lbeacons
-			FROM (
-
-				SELECT 
-
-					SUBSTRING(uuid::text, 1, 4)::INTEGER AS lbeacon_area_id,
-					uuid,
-					room
-
-				FROM lbeacon_table
-				WHERE room IS NOT NULL
-				
-			) AS temp
-			GROUP BY lbeacon_area_id
-		) as lbeacon_temp_table
-		ON lbeacon_temp_table.lbeacon_area_id = ${type}.area_id
-		
-		ORDER BY id;
-	`
-	return text
-}
-
-const setMonitorConfig = (monitorConfigPackage) => {
-	let {
-		type,
-		id,
-		start_time,
-		end_time,
-		enable,
-		area_id,
-	} = monitorConfigPackage
-
-	 
-	let text = `
-		UPDATE ${monitorConfigPackage.type}
-		SET 
-			area_id = $5,
-			start_time = $2,
-			end_time = $3,
-			enable = $4
-		
-		WHERE id = $1;
-	`
-	let values = [ 
-		id,
-		start_time,
-		end_time,
-		enable,
-		area_id,
-	]
-
-	let query = {
-		text,
-		values
-	}
-
-	return query
-}
 
 const addGeofenceConfig = (monitorConfigPackage) => { 
 	let {
@@ -1771,17 +1657,6 @@ const addGeofenceConfig = (monitorConfigPackage) => {
 		text, 
 		values
 	}
-}
-
-const deleteMonitorConfig = (monitorConfigPackage) => {
-	let {
-		type,
-		id
-	} = monitorConfigPackage  
-	return `
-		DELETE FROM ${type} 
-		WHERE id IN (${id.map(id => `'${id}'`)})
-	`
 }
 
 function backendSearch(keyType, keyWord){
@@ -2117,7 +1992,6 @@ module.exports = {
 	getImportTable,
     getLbeaconTable,
 	getGatewayTable,
-	getMonitorConfig,
 	setGeofenceConfig,
 	editPatient,
 	editObject,
@@ -2156,7 +2030,6 @@ module.exports = {
 	addShiftChangeRecord,
 	getAreaTable,
 	getGeofenceConfig,
-	setMonitorConfig,
 	checkoutViolation,
 	confirmValidation,
 	backendSearch,
@@ -2171,8 +2044,6 @@ module.exports = {
 	addImport,
 	getImportPatient,
 	addGeofenceConfig,
-	deleteMonitorConfig,
-	addMonitorConfig,
 	getTransferredLocation,
 	modifyTransferredLocation,
 	getLocationHistory,

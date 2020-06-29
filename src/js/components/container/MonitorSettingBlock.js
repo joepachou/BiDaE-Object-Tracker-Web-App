@@ -54,8 +54,10 @@ import messageGenerator from '../../helper/messageGenerator'
 const SelectTable = selecTableHOC(ReactTable);
 import {
     PrimaryButton
-} from '../BOTComponent/styleComponent'
-import AccessControl from '../presentational/AccessControl'
+} from '../BOTComponent/styleComponent';
+import AccessControl from '../presentational/AccessControl';
+import retrieveDataHelper from '../../helper/retrieveDataHelper';
+import apiHelper from '../../helper/apiHelper';
 
 class MonitorSettingBlock extends React.Component{
 
@@ -84,11 +86,10 @@ class MonitorSettingBlock extends React.Component{
             auth,
             locale
         } = this.context 
-        axios.post(dataSrc.getMonitorConfig, {
-            type: config.monitorSettingUrlMap[this.props.type],
-            areasId: auth.user.areas_id,
-            roles:auth.user.roles
-        })
+        retrieveDataHelper.getMonitorConfig(
+            this.props.type,
+            auth.user.areas_id,
+        )
         .then(res => { 
             let columns = _.cloneDeep(monitorConfigColumn)
 
@@ -127,9 +128,10 @@ class MonitorSettingBlock extends React.Component{
         // configPackage["id"] = selectedData ? selectedData.id : null;
         configPackage["id"] = this.state.selection   
         if (configPackage["id"] == "" && this.state.selectedData != null){configPackage["id"] = this.state.selectedData.id }  
-        axios.post(dataSrc[path], {
-            monitorConfigPackage: configPackage
-        })
+
+        apiHelper.monitor[path](
+            configPackage
+        )
         .then(res => {  
             let callback = () => messageGenerator.setSuccessMessage(
                 'save success'
@@ -157,7 +159,7 @@ class MonitorSettingBlock extends React.Component{
                 this.setState({
                     show: true,
                     isEdited: false,
-                    path: 'addMonitorConfig'
+                    path: 'patch'
                 })
                 break;
             case "edit":
@@ -165,13 +167,13 @@ class MonitorSettingBlock extends React.Component{
                     show: true,
                     selectedData: value.original,
                     isEdited: true,
-                    path: 'setMonitorConfig'
+                    path: 'put'
                 })
                 break;
             case "delete":
                 this.setState({
                     showDeleteConfirmation: true,
-                    path: 'deleteMonitorConfig', 
+                    path: 'delete', 
                 })
                 break;
         }
@@ -278,7 +280,6 @@ class MonitorSettingBlock extends React.Component{
 
  
         let title = `edit ${type}`.toUpperCase().replace(/ /g, '_')
-
         return ( 
             <div>  
                 <div className="d-flex justify-content-start">
@@ -322,7 +323,7 @@ class MonitorSettingBlock extends React.Component{
                                     selectedData: rowInfo.row._original,
                                     show: true, 
                                     isEdited: true,
-                                    path: 'setMonitorConfig'
+                                    path: 'put'
                                 })
                               }
                           }

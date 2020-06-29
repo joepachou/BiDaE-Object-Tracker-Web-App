@@ -43,7 +43,7 @@ const getMonitorConfig = (type) => {
 			${type}.start_time,
 			${type}.end_time,
 			${type}.is_active,
-			lbeacon_temp_table.lbeacons
+			lbeacon_temp_table.lbeacons 
 
 		FROM ${type}
 
@@ -73,7 +73,99 @@ const getMonitorConfig = (type) => {
 	return text
 }
 
+const deleteMonitorConfig = (monitorConfigPackage) => {
+	let {
+		type,
+		id
+	} = monitorConfigPackage  
+	return `
+		DELETE FROM ${type} 
+		WHERE id IN (${id.map(id => `'${id}'`)})
+	`
+}
+
+
+const addMonitorConfig = (monitorConfigPackage) => {
+	let {
+		type,
+		start_time,
+		end_time,
+		enable,
+		area_id
+	} = monitorConfigPackage
+
+	let text = `
+		INSERT INTO ${type}
+			(
+				start_time,
+				end_time,
+				enable,
+				area_id
+			)
+		VALUES 
+			(
+				$1,
+				$2,
+				$3,
+				$4
+			)
+	`
+
+	let values = [
+		start_time,
+		end_time,
+		enable,
+		area_id,
+	]
+
+	return {
+		text, 
+		values
+	}
+}
+
+
+const setMonitorConfig = (monitorConfigPackage) => {
+	let {
+		type,
+		id,
+		start_time,
+		end_time,
+		enable,
+		area_id,
+	} = monitorConfigPackage
+
+	 
+	let text = `
+		UPDATE ${monitorConfigPackage.type}
+		SET 
+			area_id = $5,
+			start_time = $2,
+			end_time = $3,
+			enable = $4
+		
+		WHERE id = $1;
+	`
+	let values = [ 
+		id,
+		start_time,
+		end_time,
+		enable,
+		area_id,
+	]
+
+	let query = {
+		text,
+		values
+	}
+
+	return query
+}
+
 
 module.exports = {
-    getMonitorConfig,
+	getMonitorConfig,
+	deleteMonitorConfig,
+	addMonitorConfig,
+	setMonitorConfig
 }

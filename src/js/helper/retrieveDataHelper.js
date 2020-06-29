@@ -149,7 +149,7 @@ const retrieveDataHelper = {
     getMonitorConfig: async function(
         type, 
         areasId,
-        isGetLbeaconPosition
+        isGetLbeaconPosition = false
     ) {
         
         return await axios.post(dataSrc.monitor, {
