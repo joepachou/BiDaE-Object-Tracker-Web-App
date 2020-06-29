@@ -39,134 +39,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage }).single('file')
 
-moment.updateLocale('en', {
-    relativeTime : Object
-});
-
-moment.updateLocale('en', {
-    relativeTime : {
-        future: "being here for the past %s",
-        past:   "%s ago",
-        s  : '1 minute',
-        ss : '1 minute',
-        m:  "1 minute",
-        mm: "%d minutes",
-        h:  "1 hour",
-        hh: "%d hours",
-        d:  "1 day",
-        dd: "%d days",
-        M:  "1 month",
-        MM: "%d months",
-        y:  "1 year",
-        yy: "%d years"
-    }
-});
-
-moment.updateLocale('zh-tw', {
-    relativeTime : {
-        future: "已 %s",
-    }
-});
-const getTrackingData = (request, response) => {
-    const locale = request.body.locale || 'en'
-    let {
-        user,
-        areaId
-    } = request.body
-
-    /** The user's authenticated area id */
-    let userAuthenticatedAreasId= user.areas_id
-
-    /** User interface's current area id */
-    const currentAreaId = areaId.toString()
-
-    pool.query(queryType.getTrackingData(
-        userAuthenticatedAreasId,
-    ))        
-        .then(res => {
-
-            console.log('get tracking data')
-
-            /** Filter the objects that do no belong the area */
-            const toReturn = res.rows
-            .filter(item => item.mac_address)
-            .map((item, index) => {
-
-                /** Parse lbeacon uuid into three field in an array: area id, latitude, longtitude */
-                let lbeacon_coordinate = item.lbeacon_uuid ? parseLbeaconCoordinate(item.lbeacon_uuid) : null;
-
-                item.lbeacon_coordinate = lbeacon_coordinate
-
-                item.currentPosition = item.lbeacon_uuid ? calculatePosition(item) : null;
-
-                let lbeaconAreaId = lbeacon_coordinate ? lbeacon_coordinate[2] : null
-
-                let isLbeaconMatchArea = lbeaconAreaId == currentAreaId
-
-                let isUserSObject = userAuthenticatedAreasId.includes(parseInt(item.area_id))
-
-                /** Flag the object that belongs to the current area or to the user's authenticated area */
-                item.isMatchedObject = isUserSObject && isLbeaconMatchArea
-
-                /** Set the boolean if the object's last_seen_timestamp is in the specific time period */
-                let isInTheTimePeriod = moment().diff(item.last_reported_timestamp, 'seconds') 
-                    < process.env.OBJECT_FOUND_TIME_INTERVAL_IN_SEC;
-
-                    /** Set the boolean if its rssi is below the specific rssi threshold  */
-                let isMatchRssi = item.rssi > process.env.RSSI_THRESHOLD ? 1 : 0;
-                
-                /** Flag the object that satisfied the time period and rssi threshold */
-                item.found = isInTheTimePeriod && isMatchRssi 
-
-                /** Set the residence time of the object */
-                item.residence_time = item.found 
-                    ? moment(item.last_seen_timestamp).locale(locale).from(moment(item.first_seen_timestamp)) 
-                    : item.last_reported_timestamp 
-                        ? moment(item.last_reported_timestamp).locale(locale).fromNow()
-                        : 'N/A'      
-
-                /** Flag the object that is violate geofence */
-                item.isViolated = item.notification ? 1 : 0;
-
-                /** Flag the object that is on sos */
-                item.panic = moment().diff(item.panic_violation_timestamp, 'second') 
-                    < process.env.PANIC_TIME_INTERVAL_IN_SEC ? 1 : 0
-
-                /** Flag the object's battery volumn is limiting */
-                if (item.battery_voltage >= parseInt(process.env.BATTERY_VOLTAGE_INDICATOR)                    
-                    && item.found) {
-                        item.battery_indicator = 3;
-                } else if (item.battery_voltage < parseInt(process.env.BATTERY_VOLTAGE_INDICATOR) && item.battery_voltage > 0 && item.found) {
-                    item.battery_indicator = 2;
-                } else {
-                    item.battery_indicator = 0
-                }
-
-                /** Delete the unused field of the object */
-                delete item.first_seen_timestamp
-                // delete item.last_seen_timestamp
-                delete item.panic_violation_timestamp
-                delete item.lbeacon_uuid
-                delete item.monitor_type
-                delete item.base_x
-                delete item.base_y
-               
-                /** format timestamp*/
-                item.reserved_timestamp_LT = moment.tz(item.reserved_timestamp, process.env.TZ).locale(locale).format('LT');
-                item.reserved_timestamp_MMDD = moment.tz(item.reserved_timestamp, process.env.TZ).locale(locale).format('MM/DD');
-                item.reserved_timestamp_final = moment(item.reserved_timestamp).add(30,"minutes").format("LT");
-                item.reserved_timestamp = moment.tz(item.reserved_timestamp, process.env.TZ).locale(locale).format('lll');
-
-                return item
-            })
-
-        response.status(200).json(toReturn)
-
-    }).catch(err => {
-        console.log(`get tracking data failed ${err}`)
-    })
-}
-
 const getObjectTable = (request, response) => {
     let { 
         locale, 
@@ -1068,68 +940,6 @@ const getGeofenceConfig = (request, response) => {
         })
 }
 
-const setGeofenceConfig = (request, response) => {
-    let {
-        monitorConfigPackage,
-    } = request.body
-    let { 
-        area_id 
-    } = monitorConfigPackage
-
-    pool.query(queryType.setGeofenceConfig(monitorConfigPackage))
-        .then(res => {
-            console.log(`set geofence config success`)
-            if (process.env.RELOAD_GEO_CONFIG_PATH) {
-                exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 9999 -c cmd_reload_geo_fence_setting -r geofence_list -f area_one -a ${area_id}`.split(' '), function(err, data){
-                    if(err){
-                        console.log(`execute reload geofence setting fails ${err}`)
-                        response.status(200).json(res)
-                    }else{
-                        console.log(`execute reload geofence setting success`)
-                        response.status(200).json(res)
-                    }
-                })
-            } else {
-                response.status(200).json(res)
-                console.log('IPC has not set')
-            }
-          
-        })
-        .catch(err => {
-            console.log(`set geofence config fail ${err}`)
-        })
-}
-
-const addGeofenceConfig = (request, response) => {
-
-    let {
-        monitorConfigPackage,
-    } = request.body
-    let area_id = monitorConfigPackage.area.id
-    
-    pool.query(queryType.addGeofenceConfig(monitorConfigPackage))
-        .then(res => {
-            console.log(`add geofence config success`)
-            if (process.env.RELOAD_GEO_CONFIG_PATH) {
-                exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 9999 -c cmd_reload_geo_fence_setting -r geofence_list -f area_one -a ${area_id}`.split(' '), function(err, data){
-                    if(err){
-                        console.log(`execute reload geofence setting fails ${err}`)
-                        response.status(200).json(res)
-                    }else{
-                        console.log(`execute reload geofence setting success`)
-                        response.status(200).json(res)
-                    }
-                })
-            } else {
-                response.status(200).json(res)
-                console.log('IPC has not set')
-            }
-        })
-        .catch(err => {
-            console.log(`add geofence config fail: ${err}`)
-        })
-}
-
 const setMonitorEnable = (request, response) => {
     const {
         enable,
@@ -1474,7 +1284,6 @@ const addPatientRecord = (request, response) => {
  
 
 module.exports = {
-    getTrackingData,
     getObjectTable,
     getImportTable,
     getImportPatient,
@@ -1520,13 +1329,11 @@ module.exports = {
     validateUsername,
     setUserInfo,
     getMainSecondArea,
-    setGeofenceConfig,
     checkoutViolation,
     confirmValidation,
     backendSearch,
     getSearchQueue,
     getTrackingTableByMacAddress,
-    addGeofenceConfig,
     getTransferredLocation,
     modifyTransferredLocation,
     clearSearchHistory,

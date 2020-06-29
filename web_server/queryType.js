@@ -1490,54 +1490,6 @@ const getGeofenceConfig = (areaId) => {
 	;`
 }
 
-
-const setGeofenceConfig = (monitorConfigPackage) => {
-	let {
-		type,
-		id,
-		name,
-		start_time,
-		end_time,
-		enable,
-		perimeters,
-		fences,
-		area_id,
-		is_global_fence
-	} = monitorConfigPackage
-
-	let text = `
-		UPDATE geo_fence_config
-		SET 
-			name = $2,
-			area_id = $3,
-			start_time = $4,
-			end_time = $5,
-			enable = $6,
-			perimeters = $7,
-			fences = $8,
-			is_global_fence = $9
-		WHERE id = $1;
-	`
-	let values = [
-		id,
-		name,
-		area_id,
-		start_time,
-		end_time,
-		enable,
-		perimeters,
-		fences,
-		is_global_fence
-	]
-
-	let query = {
-		text,
-		values
-	}
-
-	return query
-}
-
 const checkoutViolation = (mac_address, monitor_type) => {
 	return `
 		UPDATE notification_table
@@ -1600,63 +1552,6 @@ const confirmValidation = (username) => {
 
 	return query;
 
-}
-
-
-const addGeofenceConfig = (monitorConfigPackage) => { 
-	let {
-		type,
-		id,
-		name,
-		start_time,
-		end_time,
-		enable,
-		perimeters,
-		fences,
-		area_id,
-		is_global_fence
-	} = monitorConfigPackage
-
-	let text = `
-		INSERT INTO ${type}
-			(
-				name,
-				start_time,
-				end_time,
-				enable,
-				perimeters,
-				fences,
-				area_id,
-				is_global_fence
-			)
-		VALUES 
-			(
-				$1,
-				$2,
-				$3,
-				$4,
-				$5,
-				$6,
-				$7,
-				$8
-			)
-	`
-
-	let values = [
-		name,
-		start_time,
-		end_time,
-		enable,
-		perimeters,
-		fences,
-		area_id,
-		is_global_fence
-	]
-
-	return {
-		text, 
-		values
-	}
 }
 
 function backendSearch(keyType, keyWord){
@@ -1992,7 +1887,6 @@ module.exports = {
 	getImportTable,
     getLbeaconTable,
 	getGatewayTable,
-	setGeofenceConfig,
 	editPatient,
 	editObject,
 	editImport,
@@ -2043,7 +1937,6 @@ module.exports = {
 	setLocaleID,
 	addImport,
 	getImportPatient,
-	addGeofenceConfig,
 	getTransferredLocation,
 	modifyTransferredLocation,
 	getLocationHistory,

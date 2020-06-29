@@ -46,6 +46,8 @@ module.exports = app => {
 
     app.route('/data/geofence')
         .post(geofenceController.getGeofenceConfig)
-
+        .delete(geofenceController.deleteMonitorConfig)
+        .patch(geofenceController.addGeofenceConfig)
+        .put(geofenceController.setGeofenceConfig)
 
 }

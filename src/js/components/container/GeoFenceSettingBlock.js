@@ -55,6 +55,8 @@ import {
     PrimaryButton
 } from '../BOTComponent/styleComponent'
 import AccessControl from '../presentational/AccessControl';
+import apiHelper from '../../helper/apiHelper';
+
 const SelectTable = selecTableHOC(ReactTable);
 
 let lock = false
@@ -112,8 +114,7 @@ class GeoFenceSettingBlock extends React.Component{
             auth,
             locale,
         } = this.context
-
-        retrieveDataHelper.getGeofenceConfig(
+        apiHelper.geofenceApis.getGeofenceConfig(
             auth.user.areas_id
         )
         .then(res => {
@@ -158,7 +159,7 @@ class GeoFenceSettingBlock extends React.Component{
                 this.setState({
                     show: true,
                     isEdited: false,
-                    path: 'addGeofenceConfig'
+                    path: 'add'
                 })
                 break;
             case "edit":
@@ -172,7 +173,7 @@ class GeoFenceSettingBlock extends React.Component{
             case "delete":
                 this.setState({ 
                     showDeleteConfirmation: true, 
-                    path: 'deleteMonitorConfig',  
+                    path: 'delete',  
                 }) 
                 lock = true  
                 break;
@@ -199,9 +200,10 @@ class GeoFenceSettingBlock extends React.Component{
         // configPackage["id"] = selectedData ? selectedData.id : null
         // configPackage["id"] = this.state.selection  
         path == "setGeofenceConfig" ? configPackage["id"] = selectedData.id : configPackage["id"] =  this.state.selection 
-        axios.post(dataSrc[path], {
-            monitorConfigPackage: configPackage
-        })
+
+        apiHelper.geofenceApis[path](
+            configPackage
+        )
         .then(res => {
 
             let callback = () => messageGenerator.setSuccessMessage(

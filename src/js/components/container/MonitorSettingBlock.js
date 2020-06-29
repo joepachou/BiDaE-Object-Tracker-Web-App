@@ -86,7 +86,7 @@ class MonitorSettingBlock extends React.Component{
             auth,
             locale
         } = this.context 
-        retrieveDataHelper.getMonitorConfig(
+        apiHelper.monitor.getMonitorConfig(
             this.props.type,
             auth.user.areas_id,
         )
@@ -159,7 +159,7 @@ class MonitorSettingBlock extends React.Component{
                 this.setState({
                     show: true,
                     isEdited: false,
-                    path: 'patch'
+                    path: 'add'
                 })
                 break;
             case "edit":

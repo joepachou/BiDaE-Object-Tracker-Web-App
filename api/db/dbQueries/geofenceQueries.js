@@ -43,6 +43,124 @@ const getGeofenceConfig = (areaId) => {
 	;`
 }
 
+const deleteMonitorConfig = monitorConfigPackage => {
+	let {
+		type,
+		id
+	} = monitorConfigPackage  
+	return `
+		DELETE FROM geo_fence_config
+		WHERE id IN (${id.map(id => `'${id}'`)})
+	`
+}
+
+
+const addGeofenceConfig = (monitorConfigPackage) => { 
+	let {
+		type,
+		id,
+		name,
+		start_time,
+		end_time,
+		enable,
+		perimeters,
+		fences,
+		area_id,
+		is_global_fence
+	} = monitorConfigPackage
+
+	let text = `
+		INSERT INTO ${type}
+			(
+				name,
+				start_time,
+				end_time,
+				enable,
+				perimeters,
+				fences,
+				area_id,
+				is_global_fence
+			)
+		VALUES 
+			(
+				$1,
+				$2,
+				$3,
+				$4,
+				$5,
+				$6,
+				$7,
+				$8
+			)
+	`
+
+	let values = [
+		name,
+		start_time,
+		end_time,
+		enable,
+		perimeters,
+		fences,
+		area_id,
+		is_global_fence
+	]
+
+	return {
+		text, 
+		values
+	}
+}
+
+const setGeofenceConfig = (monitorConfigPackage) => {
+	let {
+		type,
+		id,
+		name,
+		start_time,
+		end_time,
+		enable,
+		perimeters,
+		fences,
+		area_id,
+		is_global_fence
+	} = monitorConfigPackage
+
+	let text = `
+		UPDATE geo_fence_config
+		SET 
+			name = $2,
+			area_id = $3,
+			start_time = $4,
+			end_time = $5,
+			enable = $6,
+			perimeters = $7,
+			fences = $8,
+			is_global_fence = $9
+		WHERE id = $1;
+	`
+	let values = [
+		id,
+		name,
+		area_id,
+		start_time,
+		end_time,
+		enable,
+		perimeters,
+		fences,
+		is_global_fence
+	]
+
+	let query = {
+		text,
+		values
+	}
+
+	return query
+}
+
 module.exports = {
     getGeofenceConfig,
+    deleteMonitorConfig,
+    addGeofenceConfig,
+    setGeofenceConfig
 }

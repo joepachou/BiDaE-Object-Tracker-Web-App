@@ -53,6 +53,7 @@ import messageGenerator from '../../helper/messageGenerator';
 import TabletMainContainer from '../platform/tablet/TabletMainContainer'
 import MobileMainContainer from '../platform/mobile/MobileMainContainer';
 import BrowserMainContainer from '../platform/browser/BrowserMainContainer';
+import apiHelper from '../../helper/apiHelper';
 
 const {
     ALL_DEVICES,
@@ -374,8 +375,8 @@ class MainContainer extends React.Component{
     getGeofenceConfig = (callback) => {
         let { stateReducer } = this.context
         let [{areaId}] = stateReducer
-
-        retrieveDataHelper.getGeofenceConfig(
+        
+        apiHelper.geofenceApis.getGeofenceConfig(
             areaId
         )
         .then(res => {
@@ -404,13 +405,13 @@ class MainContainer extends React.Component{
             stateReducer,
             auth
         } = this.context
-        console.log()
-        retrieveDataHelper.getMonitorConfig(
+        apiHelper.monitor.getMonitorConfig(
             'not stay room monitor',
             auth.user.areas_id,
             true,
         )
         .then(res => {
+
             let locationMonitorConfig = res.data.reduce((config, rule) => {
                 config[rule.area_id] = {
                     enable: rule.enable,

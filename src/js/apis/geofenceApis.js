@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        apiHelper.js
+        geofenceApis.js
 
     File Description:
         BOT UI component
@@ -34,17 +34,55 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
-import monitorApis from '../apis/monitorApis';
-import geofenceApis from '../apis/geofenceApis';
 
-const apiHelper = {
+import dataSrc from '../dataSrc';
+import axios from 'axios';
+import config from '../config';
 
-    monitor: monitorApis,
+const src = dataSrc.geofence;
 
-    geofenceApis,
-    
+const geofenceApis = {
+
+    getGeofenceConfig: async function(
+        type, 
+        areasId,
+        isGetLbeaconPosition = false
+    ) {
+        
+        return await axios.post(src, {
+            type: config.monitorSettingUrlMap[type],
+            areasId,
+            isGetLbeaconPosition,
+        })
+    },
+
+    delete: async function(
+        configPackage
+    ) {
+        return await axios.delete(src, {
+            data: {
+                configPackage
+            }
+        })
+    },
+
+    add: async function(
+        configPackage
+    ) {
+        return await axios.patch(src, {
+            configPackage
+        })
+    },
+
+    setGeofenceConfig: async function(
+        configPackage
+    ) {
+        return await axios.put(src, {
+            configPackage
+        })
+    } 
 
 }
 
 
-export default apiHelper
+export default geofenceApis

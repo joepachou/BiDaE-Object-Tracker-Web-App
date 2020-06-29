@@ -138,27 +138,6 @@ const retrieveDataHelper = {
         })
     },
 
-    getGeofenceConfig: async function (
-        areaId,
-    ) {
-        return await axios.post(dataSrc.geofence, {
-            areaId,
-        })
-    },
-
-    getMonitorConfig: async function(
-        type, 
-        areasId,
-        isGetLbeaconPosition = false
-    ) {
-        
-        return await axios.post(dataSrc.monitor, {
-            type: config.monitorSettingUrlMap[type],
-            areasId,
-            isGetLbeaconPosition,
-        })
-    },
-
 }
 
 

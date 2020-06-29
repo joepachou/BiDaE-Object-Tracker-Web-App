@@ -37,6 +37,7 @@
 
 require('dotenv').config();
 require('moment-timezone');
+var exec = require('child_process').execFile;
 const dbQueries = require('../db/dbQueries/geofenceQueries');
 const pool = require('../db/dev/connection');
 
@@ -57,6 +58,85 @@ module.exports = {
             })
             .catch(err => {
                 console.log(`get geofence config fail ${err}`)
+            })
+    },
+
+    deleteMonitorConfig: (request, response) => {
+        let {
+            configPackage
+        } = request.body
+        pool.query(dbQueries.deleteMonitorConfig(configPackage))
+            .then(res => {
+                console.log(`delete ${configPackage.type.replace(/_/g, ' ')}`)
+                response.status(200).json(res)
+            })
+            .catch(err => {
+                console.log(`delete monitor config failed ${err}`)
+            })
+    },
+
+    addGeofenceConfig: (request, response) => {
+
+        let {
+            configPackage,
+        } = request.body
+
+        let area_id = configPackage.area.id
+        
+        pool.query(dbQueries.addGeofenceConfig(configPackage))
+            .then(res => {
+                console.log(`add geofence config success`)
+                if (process.env.RELOAD_GEO_CONFIG_PATH) {
+                    exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 9999 -c cmd_reload_geo_fence_setting -r geofence_list -f area_one -a ${area_id}`.split(' '), function(err, data){
+                        if(err){
+                            console.log(`execute reload geofence setting failed ${err}`)
+                            response.status(200).json(res)
+                        }else{
+                            console.log(`execute reload geofence setting success`)
+                            response.status(200).json(res)
+                        }
+                    })
+                } else {
+                    response.status(200).json(res)
+                    console.log('IPC has not set')
+                }
+            })
+            .catch(err => {
+                console.log(`add geofence config failed ${err}`)
+            })
+    },
+
+
+    setGeofenceConfig: (request, response) => {
+        let {
+            configPackage,
+        } = request.body
+
+        let { 
+            area_id 
+        } = configPackage
+
+        pool.query(dbQueries.setGeofenceConfig(configPackage))
+            .then(res => {
+                console.log(`set geofence config success`)
+                if (process.env.RELOAD_GEO_CONFIG_PATH) {
+                    exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 9999 -c cmd_reload_geo_fence_setting -r geofence_list -f area_one -a ${area_id}`.split(' '), function(err, data){
+                        if(err){
+                            console.log(`execute reload geofence setting failed ${err}`)
+                            response.status(200).json(res)
+                        }else{
+                            console.log(`execute reload geofence setting success`)
+                            response.status(200).json(res)
+                        }
+                    })
+                } else {
+                    response.status(200).json(res)
+                    console.log('IPC has not set')
+                }
+            
+            })
+            .catch(err => {
+                console.log(`set geofence config failed ${err}`)
             })
     }
 }
