@@ -47,6 +47,8 @@ import MyDeviceManager from '../components/container/UserContainer/MyDeviceManag
 import MyPatientManager from '../components/container/UserContainer/MyPatientManager';
 import MonitorSettingBlock from '../components/container/MonitorSettingBlock';
 import GeoFenceSettingBlock from '../components/container/GeoFenceSettingBlock';
+import ObjectEditedRecord from '../components/container/UserContainer/ObjectEditedRecord';
+import ShiftChangeRecord from '../components/container/UserContainer/ShiftChangeRecord';
 
 export const navbarNavList = [
     {
