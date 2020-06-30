@@ -41,7 +41,7 @@ import moment from 'moment';
 
 const config = {
 
-    VERSION: 'v1.0 b.1913',
+    VERSION: 'v1.0 b.1914',
 
     TRACING_INTERVAL_UNIT: 'days',
 
@@ -54,6 +54,11 @@ const config = {
     DEFAULT_AREA_ID: 1,
 
     MAX_CONTACT_TRACING_LEVEL: 6,
+
+    RECORD_TYPE: {
+        EDITED_OBJECT: 'editedObject',
+        SHIFT_CHANGE: 'shiftChange'
+    },
     
     DEFAULT_USER: {
         roles: 'guest',

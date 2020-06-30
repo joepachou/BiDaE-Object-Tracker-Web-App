@@ -53,6 +53,8 @@ import AccessControl from '../../presentational/AccessControl'
 import {
     PrimaryButton 
 } from '../../BOTComponent/styleComponent'
+import apiHelper from '../../../helper/apiHelper';
+import config from '../../../config';
 
 class ObjectEditedRecord extends React.Component{
 
@@ -82,30 +84,32 @@ class ObjectEditedRecord extends React.Component{
         let {
             locale
         } = this.context
-
-        retrieveDataHelper.getEditObjectRecord(locale.abbr)
-            .then(res => {
-                let columns = _.cloneDeep(editObjectRecordTableColumn)
-                columns.map(field => {
-                    field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
-                    field.headerStyle = {
-                        textAlign: 'left',
-                        textTransform: 'capitalize'
-                    }
-                })
-                res.data.rows.map((item, index) => {
-                    item._id = index + 1
-                    item.new_status = locale.texts[item.new_status.toUpperCase().replace(/ /g, '_')]
-                })
-                this.setState({
-                    data: res.data.rows,
-                    columns,
-                    locale: locale.abbr
-                })
+        apiHelper.record.getRecord(
+            config.RECORD_TYPE.EDITED_OBJECT,
+            locale
+        )
+        .then(res => {
+            let columns = _.cloneDeep(editObjectRecordTableColumn)
+            columns.map(field => {
+                field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
+                field.headerStyle = {
+                    textAlign: 'left',
+                    textTransform: 'capitalize'
+                }
             })
-            .catch(err => {
-                console.log(`get edited object record failed ${err}`)
+            res.data.rows.map((item, index) => {
+                item._id = index + 1
+                item.new_status = locale.texts[item.new_status.toUpperCase().replace(/ /g, '_')]
             })
+            this.setState({
+                data: res.data.rows,
+                columns,
+                locale: locale.abbr
+            })
+        })
+        .catch(err => {
+            console.log(`get edited object record failed ${err}`)
+        })
     }
 
     toggleAll = () => {

@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        dataRoutes.js
+        recordQueries.js
 
     File Description:
         BOT UI component
@@ -34,34 +34,47 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
+const getShiftChangeRecord = () =>{
+	const query = `
+		SELECT 
+			shift_change_record.id,
+			shift_change_record.file_path,
+			shift_change_record.submit_timestamp,
+			shift_change_record.shift,
+			user_table.name as user_name
+		FROM shift_change_record
+		
+		LEFT JOIN user_table
+		ON user_table.id = shift_change_record.user_id
 
+		ORDER BY shift_change_record.submit_timestamp DESC;
 
-const trackingDataRoutes = require('./dataRoutes/trackingDataRoutes');
-const lbeaconRoutes = require('./dataRoutes/lbeaconRoutes');
-const gatewayRoutes = require('./dataRoutes/gatewayRoutes');
-const userRoutes = require('./dataRoutes/userRoutes');
-const objectRoutes = require('./dataRoutes/objectRoutes');
-const importedObjectRoutes = require('./dataRoutes/importedObjectRoutes');
-const locationHistoryRoutes = require('./dataRoutes/locationHistoryRoutes');
-const areaRoutes = require('./dataRoutes/areaRoutes');
-const fileRoutes =  require('./dataRoutes/fileRoutes');
-const roleRoutes = require('./dataRoutes/roleRoutes');
-const geofenceRoutes = require('./dataRoutes/geofenceRoutes');
-const monitorRoutes = require('./dataRoutes/monitorRoutes');
-const recordRoutes = require('./dataRoutes/recordRoutes');
+	`
+	return query
+}
 
-module.exports = app => {
-    trackingDataRoutes(app);
-    lbeaconRoutes(app);
-    gatewayRoutes(app);
-    userRoutes(app);
-    objectRoutes(app);
-    importedObjectRoutes(app);
-    locationHistoryRoutes(app);
-    areaRoutes(app);
-    fileRoutes(app);
-    roleRoutes(app);
-    geofenceRoutes(app);
-    monitorRoutes(app);
-    recordRoutes(app);
+const getEditObjectRecord = () => {
+	const query = `
+		SELECT
+			user_table.name,
+			edit_object_record.id,
+			edit_object_record.edit_time,
+			edit_object_record.notes,
+			edit_object_record.new_status,
+			edit_object_record.path as file_path
+		FROM edit_object_record
+
+		LEFT JOIN user_table
+		ON user_table.id = edit_object_record.edit_user_id
+
+		ORDER BY edit_object_record.edit_time DESC
+
+	`
+	return query
+}
+
+module.exports = {
+    getShiftChangeRecord,
+    getEditObjectRecord
+    
 }

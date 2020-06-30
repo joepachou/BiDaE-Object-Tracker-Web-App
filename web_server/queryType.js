@@ -1257,26 +1257,6 @@ const setUserSecondaryArea = (user) => {
 }
 
 
-const getEditObjectRecord = () => {
-	const query = `
-		SELECT
-			user_table.name,
-			edit_object_record.id,
-			edit_object_record.edit_time,
-			edit_object_record.notes,
-			edit_object_record.new_status,
-			edit_object_record.path as file_path
-		FROM edit_object_record
-
-		LEFT JOIN user_table
-		ON user_table.id = edit_object_record.edit_user_id
-
-		ORDER BY edit_object_record.edit_time DESC
-
-	`
-	return query
-}
-
 const deleteEditObjectRecord = (idPackage) => {
 	const query = `
 		DELETE FROM edit_object_record
@@ -1909,7 +1889,6 @@ module.exports = {
 	deleteUser,
 	setUserInfo,
 	getMainSecondArea,
-	getEditObjectRecord,
 	deleteEditObjectRecord,
 	deleteShiftChangeRecord,
 	deletePatient,

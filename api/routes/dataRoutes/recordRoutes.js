@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        dataRoutes.js
+        recordRoutes.js
 
     File Description:
         BOT UI component
@@ -36,32 +36,21 @@
 
 
 
-const trackingDataRoutes = require('./dataRoutes/trackingDataRoutes');
-const lbeaconRoutes = require('./dataRoutes/lbeaconRoutes');
-const gatewayRoutes = require('./dataRoutes/gatewayRoutes');
-const userRoutes = require('./dataRoutes/userRoutes');
-const objectRoutes = require('./dataRoutes/objectRoutes');
-const importedObjectRoutes = require('./dataRoutes/importedObjectRoutes');
-const locationHistoryRoutes = require('./dataRoutes/locationHistoryRoutes');
-const areaRoutes = require('./dataRoutes/areaRoutes');
-const fileRoutes =  require('./dataRoutes/fileRoutes');
-const roleRoutes = require('./dataRoutes/roleRoutes');
-const geofenceRoutes = require('./dataRoutes/geofenceRoutes');
-const monitorRoutes = require('./dataRoutes/monitorRoutes');
-const recordRoutes = require('./dataRoutes/recordRoutes');
+let recordController = require('../../controllers/recordController');
+let cors = require('cors');
 
 module.exports = app => {
-    trackingDataRoutes(app);
-    lbeaconRoutes(app);
-    gatewayRoutes(app);
-    userRoutes(app);
-    objectRoutes(app);
-    importedObjectRoutes(app);
-    locationHistoryRoutes(app);
-    areaRoutes(app);
-    fileRoutes(app);
-    roleRoutes(app);
-    geofenceRoutes(app);
-    monitorRoutes(app);
-    recordRoutes(app);
+
+    // enable pre-flight request for DELETE request
+    app.options('/data/record', cors()) 
+
+    app.route('/data/record/editedObject')
+        .post(recordController.getEditObjectRecord)
+
+    app.route('/data/record/shiftChange')
+        .post(recordController.getShiftChangeRecord)
+
+    app.get(`/${process.env.DEFAULT_FOLDER}/shift_record/:file`, (req, res) =>{
+        res.sendFile(path.join(`${process.env.LOCAL_FILE_PATH}`, `${process.env.DEFAULT_FOLDER}/shift_record`,req.params['file']));
+    })
 }

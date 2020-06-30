@@ -108,13 +108,7 @@ const retrieveDataHelper = {
         })
     },
 
-    getEditObjectRecord: async function(locale) {
-        return await axios.post(dataSrc.getEditObjectRecord,{
-            locale
-        })
-    },
-
-    setMonitorEnable: async function(
+    setMonitorEnable: async function( 
         enable,
         areaId,
         type

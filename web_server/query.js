@@ -569,22 +569,6 @@ const setUserSecondaryArea = (request, response) => {
         })
 }
 
-const getEditObjectRecord = (request, response) => {
-    const { locale } = request.body
-    pool.query(queryType.getEditObjectRecord())
-        .then(res => {
-            console.log('get object edited record')
-
-            res.rows.map(item => {
-                item.edit_time = moment.tz(item.edit_time, process.env.TZ).locale(locale).format(process.env.TIMESTAMP_FORMAT);
-            })
-            response.status(200).json(res)
-        })
-        .catch(err => {
-            console.log(`get object edited record failed ${err}`)
-        })
-}
-
 const getUserInfo = (request, response) => {
     const username = request.body.username;
     pool.query(queryType.getUserInfo(username))
@@ -685,21 +669,6 @@ const modifyUserInfo = (request, response) => {
             console.log(`modify user info fail ${err}`)
         })
     
-}
-
-const getShiftChangeRecord = (request, response) => {
-    let { locale } = request.body
-    pool.query(queryType.getShiftChangeRecord())
-        .then(res => {
-            console.log('get shift change record succeed')
-            res.rows.map(item => {
-                item.submit_timestamp = moment.tz(item.submit_timestamp, process.env.TZ).locale(locale).format(process.env.TIMESTAMP_FORMAT);
-            })
-            response.status(200).json(res)
-        })
-        .catch(err => {
-            console.log(`get shift change record failed ${err}`)
-        })
 }
 
 const validateUsername = (request, response) => {
@@ -1295,8 +1264,6 @@ module.exports = {
     getAreaTable,
     getGeofenceConfig,
     getUserInfo,
-    getShiftChangeRecord,
-    getEditObjectRecord,
     addShiftChangeRecord,
     addUserSearchHistory,
     addObject,

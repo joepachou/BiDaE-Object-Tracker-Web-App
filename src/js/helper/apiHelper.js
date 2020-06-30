@@ -34,14 +34,17 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
-import monitorApis from '../apis/monitorApis';
-import geofenceApis from '../apis/geofenceApis';
+import monitorApis from '../apiAgent/monitorApis';
+import geofenceApis from '../apiAgent/geofenceApis';
+import record from '../apiAgent/recordApiAgent';
 
 const apiHelper = {
 
     monitor: monitorApis,
 
     geofenceApis,
+
+    record,
     
 
 }

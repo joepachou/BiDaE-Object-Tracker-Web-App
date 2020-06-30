@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        dataRoutes.js
+        recordApiAgent.js
 
     File Description:
         BOT UI component
@@ -35,33 +35,44 @@
 */
 
 
+import dataSrc from '../dataSrc';
+import axios from 'axios';
 
-const trackingDataRoutes = require('./dataRoutes/trackingDataRoutes');
-const lbeaconRoutes = require('./dataRoutes/lbeaconRoutes');
-const gatewayRoutes = require('./dataRoutes/gatewayRoutes');
-const userRoutes = require('./dataRoutes/userRoutes');
-const objectRoutes = require('./dataRoutes/objectRoutes');
-const importedObjectRoutes = require('./dataRoutes/importedObjectRoutes');
-const locationHistoryRoutes = require('./dataRoutes/locationHistoryRoutes');
-const areaRoutes = require('./dataRoutes/areaRoutes');
-const fileRoutes =  require('./dataRoutes/fileRoutes');
-const roleRoutes = require('./dataRoutes/roleRoutes');
-const geofenceRoutes = require('./dataRoutes/geofenceRoutes');
-const monitorRoutes = require('./dataRoutes/monitorRoutes');
-const recordRoutes = require('./dataRoutes/recordRoutes');
+export default {
 
-module.exports = app => {
-    trackingDataRoutes(app);
-    lbeaconRoutes(app);
-    gatewayRoutes(app);
-    userRoutes(app);
-    objectRoutes(app);
-    importedObjectRoutes(app);
-    locationHistoryRoutes(app);
-    areaRoutes(app);
-    fileRoutes(app);
-    roleRoutes(app);
-    geofenceRoutes(app);
-    monitorRoutes(app);
-    recordRoutes(app);
+    getRecord: async function (
+        type, 
+        locale,
+    ) {
+        return await axios.post(dataSrc.record[type], {
+            locale
+        })
+    },
+
+    delete: async function(
+        configPackage
+    ) {
+        return await axios.delete(dataSrc.monitor, {
+            data: {
+                configPackage
+            }
+        })
+    },
+
+    add: async function(
+        configPackage
+    ) {
+        return await axios.patch(dataSrc.monitor, {
+            configPackage
+        })
+    },
+
+    put: async function(
+        configPackage
+    ) {
+        return await axios.put(dataSrc.monitor, {
+            configPackage
+        })
+    } 
+
 }

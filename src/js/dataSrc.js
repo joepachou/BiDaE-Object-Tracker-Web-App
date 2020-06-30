@@ -87,6 +87,14 @@ module.exports = {
 
     monitor: `${domain}/data/monitor`,
 
+    record: {
+        editedObject: `${domain}/data/record/editedObject`,
+        
+        shiftChange: `${domain}/data/record/shiftChange`,
+
+
+    },
+
     pdfUrl: path => {
         return `${domain}/data/file/${path}`
     }

@@ -10,12 +10,13 @@ const SelectTable = selecTableHOC(ReactTable);
 import { shiftChangeRecordTableColumn } from '../../../config/tables'
 import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm'
 import { AppContext } from '../../../context/AppContext';
-import retrieveDataHelper from '../../../helper/retrieveDataHelper';
 import styleConfig from '../../../config/styleConfig';
 import AccessControl from '../../presentational/AccessControl'
 import {
     PrimaryButton 
 } from '../../../config/styleComponent'
+import apiHelper from '../../../helper/apiHelper';
+import config from '../../../config';
 
 class ShiftChangeRecord extends React.Component{
 
@@ -45,25 +46,27 @@ class ShiftChangeRecord extends React.Component{
         let {
             locale
         } = this.context
-
-        retrieveDataHelper.getShiftChangeRecord(locale.abbr)
-            .then(res => {
-                let columns = _.cloneDeep(shiftChangeRecordTableColumn)
-                columns.map(field => {
-                    field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
-                })
-                res.data.rows.map(item => {
-                    item.shift = item.shift && locale.texts[item.shift.toUpperCase().replace(/ /g, '_')]
-                })
-                this.setState({
-                    data: res.data.rows,
-                    columns,
-                    locale: locale.abbr
-                })
+        apiHelper.record.getRecord(
+            config.RECORD_TYPE.SHIFT_CHANGE,
+            locale
+        )
+        .then(res => {
+            let columns = _.cloneDeep(shiftChangeRecordTableColumn)
+            columns.map(field => {
+                field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })
-            .catch(err => {
-                console.log(`get shift change record failed ${err}`)
+            res.data.rows.map(item => {
+                item.shift = item.shift && locale.texts[item.shift.toUpperCase().replace(/ /g, '_')]
             })
+            this.setState({
+                data: res.data.rows,
+                columns,
+                locale: locale.abbr
+            })
+        })
+        .catch(err => {
+            console.log(`get shift change record failed ${err}`)
+        })
     }
 
     toggleAll = () => {
