@@ -280,6 +280,7 @@ const tw = {
     NAMEGROUPBYUUID: "名稱(UUID group)",
     NICKNAME:"別名",
     NUM_OF_UPDATED_LBEACON: "# updated lbeacons",
+    FORGET_PASSWORD: "忘記密碼?",
 
     /** form title */
     EDIT_LBEACON: "編輯 lbeacon",

@@ -59,6 +59,7 @@ const FormikFormGroup = ({
    onChange,
    example = null,
    autoComplete = true,
+   additionalField
 }) => {
     let style = {
         container: {
@@ -77,8 +78,17 @@ const FormikFormGroup = ({
             className={`form-group ${className}`}
             style={style.container}
         >
-            <FormFieldName>
-                {label}
+            <FormFieldName
+                className="d-flex justify-content-between"
+            >
+                <div>
+                    {label}
+                </div>
+                <div
+                    onClick={() => console.log(123)}
+                >
+                    {additionalField}
+                </div>
             </FormFieldName>
             {component 
                 ?   component()

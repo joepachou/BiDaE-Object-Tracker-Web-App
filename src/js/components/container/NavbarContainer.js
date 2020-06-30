@@ -229,53 +229,39 @@ class NavbarContainer extends React.Component {
                         >
                             {locale.toggleLang().nextLangName}
                         </Nav.Item>
-                        {auth.authenticated
-                            ?   (
-                                <Dropdown>
-                                    <Dropdown.Toggle 
-                                        variant='light'
-                                        id='collasible-nav-dropdown' 
-                                    >
-                                        <i className='fas fa-user-alt' />
-                                    </Dropdown.Toggle>
-                                    <Dropdown.Menu
-                                        bsPrefix='bot-dropdown-menu-right  dropdown-menu '
-                                    >
-                                        <div className='dropdownWrapper'>
-                                            <LinkContainer to='/page/userSetting' className='bg-white'>
-                                                <Dropdown.Item 
-                                                    className='lang-select text-none'
-                                                >
-                                                    {auth.user.name}
-                                                </Dropdown.Item>
-                                            </LinkContainer>
-                                            <Dropdown.Divider />
-                                            <LinkContainer to='/page/about' className='bg-white'>
-                                                <Dropdown.Item className='lang-select'>
-                                                    {locale.texts.ABOUT}
-                                                </Dropdown.Item>
-                                            </LinkContainer>
-                                            <Dropdown.Divider />
-                                            <LinkContainer to='/' className='bg-white'>
-                                                <Dropdown.Item className='lang-select' onClick={auth.signout}>
-                                                    {locale.texts.SIGN_OUT}
-                                                </Dropdown.Item>
-                                            </LinkContainer>
-                                        </div>
-                                    </Dropdown.Menu>
-                                </Dropdown> 
-                            )
-
-                            :   (
-                                <Nav.Item 
-                                    className='nav-link nav-route' 
-                                    onClick={this.handleClick}
-                                    name='signin'
-                                >
-                                    {locale.texts.SIGN_IN}
-                                </Nav.Item>
-                            )
-                        }
+                        <Dropdown>
+                            <Dropdown.Toggle 
+                                variant='light'
+                                id='collasible-nav-dropdown' 
+                            >
+                                <i className='fas fa-user-alt' />
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu
+                                bsPrefix='bot-dropdown-menu-right  dropdown-menu '
+                            >
+                                <div className='dropdownWrapper'>
+                                    <LinkContainer to='/page/userSetting' className='bg-white'>
+                                        <Dropdown.Item 
+                                            className='lang-select text-none'
+                                        >
+                                            {auth.user.name}
+                                        </Dropdown.Item>
+                                    </LinkContainer>
+                                    <Dropdown.Divider />
+                                    <LinkContainer to='/page/about' className='bg-white'>
+                                        <Dropdown.Item className='lang-select'>
+                                            {locale.texts.ABOUT}
+                                        </Dropdown.Item>
+                                    </LinkContainer>
+                                    <Dropdown.Divider />
+                                    <LinkContainer to='/' className='bg-white'>
+                                        <Dropdown.Item className='lang-select' onClick={auth.signout}>
+                                            {locale.texts.SIGN_OUT}
+                                        </Dropdown.Item>
+                                    </LinkContainer>
+                                </div>
+                            </Dropdown.Menu>
+                        </Dropdown> 
                     </Nav>
                 </Navbar.Collapse>
 

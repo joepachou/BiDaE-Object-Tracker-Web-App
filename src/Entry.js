@@ -43,7 +43,6 @@ import { ToastContainer } from 'react-toastify';
 import config from './js/config';
 import AccessControl from './js/components/presentational/AccessControl';
 import SigninPage from './js/components/presentational/SigninPage';
-import AuthenticationContext from './js/context/AuthenticationContext';
 
 const Entry = () => {
     

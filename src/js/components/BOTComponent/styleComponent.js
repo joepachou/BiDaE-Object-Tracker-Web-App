@@ -105,6 +105,15 @@ export const BOTContainer = styled.div`
     margin: 20px 20px;
 `
 
+export const CenterContainer = styled.div`
+    width: 500px;
+    height: 500px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -250px 0 0 -250px;
+`
+
 export const BOTSideNav = styled(NavLink)`
     font-size: 1rem;
     font-weight: 500;

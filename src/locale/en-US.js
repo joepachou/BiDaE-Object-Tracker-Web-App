@@ -277,7 +277,7 @@ const en =  {
     SELECT_LEVEL: "select level",
     NICKNAME:"nickname",
     NUM_OF_UPDATED_LBEACON: "# updated lbeacons",
-
+    FORGET_PASSWORD: "forget password?",
 
     /** form title */
     EDIT_LBEACON: "edit lbeacon",

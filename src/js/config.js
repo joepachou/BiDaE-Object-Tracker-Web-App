@@ -981,6 +981,10 @@ const config = {
 
         areaModules: siteConfig.areaModules,
 
+        AREA_MODULES: siteConfig.areaModules,
+
+        AREA_OPTIONS: Object.values(siteConfig.areaModules),
+
         /* For test. To start object tracking*/
         startInteval: true,
 

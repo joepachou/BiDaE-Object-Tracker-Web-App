@@ -42,30 +42,44 @@ import {
 } from 'react-bootstrap';
 import config from '../../config';
 import LocaleContext from '../../context/LocaleContext';
-import AuthenticationContext from '../../context/AuthenticationContext';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
+import AuthContext from '../../context/AuthenticationContext';
+import { 
+    Formik, 
+    Field, 
+    Form, 
+    ErrorMessage 
+} from 'formik';
 import * as Yup from 'yup';
+import {
+    CenterContainer
+} from '../BOTComponent/styleComponent';
+import Select from 'react-select';
+import styleConfig from '../../config/styleConfig';
+import FormikFormGroup from '../presentational/FormikFormGroup';
 
 const imageLength = 80;
 
 const SigninPage = () => {
 
-    let locale = React.useContext(LocaleContext)
-    let auth = React.useContext(AuthenticationContext)
+    let locale = React.useContext(LocaleContext);
+    let auth = React.useContext(AuthContext);
 
+    let areaOptions = Object.values(config.mapConfig.AREA_MODULES)
+        .map(areaModule => {
+            areaModule.value = areaModule.name
+            areaModule.label = locale.texts[areaModule.name]
+            return areaModule
+        })
+    
     return (
-        <div
-            style={{
-                width: '600px',
-                height: '300px',
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                margin: '-150px 0 0 -300px',
-            }}
-        >
+        <CenterContainer>
             <div className='d-flex justify-content-center'>
-                <Image src={config.LOGO} rounded width={imageLength} height={imageLength} />
+                <Image 
+                    src={config.LOGO} 
+                    rounded 
+                    width={imageLength} 
+                    height={imageLength} 
+                />
             </div>
             <div className='d-flex justify-content-center'>
                 <div className="title my-1">
@@ -76,6 +90,7 @@ const SigninPage = () => {
                 initialValues = {{
                     username: '',
                     password: '',
+                    area: null,
                 }}
 
                 validationSchema = {
@@ -89,7 +104,7 @@ const SigninPage = () => {
                 
                 }}
 
-                render={({ values, errors, status, touched, isSubmitting }) => (
+                render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
                     <Form>
                         {status &&
                             <div 
@@ -99,7 +114,7 @@ const SigninPage = () => {
                                 {locale.texts[status.toUpperCase().replace(/ /g, "_")]}
                             </div>
                         }
-                        <div className="form-group">
+                        {/* <div className="form-group">
                             <Field 
                                 name="username" 
                                 type="text" 
@@ -107,16 +122,32 @@ const SigninPage = () => {
                                 placeholder={locale.texts.USERNAME}
                             />
                             <ErrorMessage name="username" component="div" className="invalid-feedback" />
-                        </div>
-                        <div className="form-group">
-                            <Field 
-                                name="password" 
-                                type="password" 
-                                className={'form-control' + (errors.password && touched.password ? ' is-invalid' : '')} 
-                                placeholder={locale.texts.PASSWORD}
-                            />
-                            <ErrorMessage name="password" component="div" className="invalid-feedback" />
-                        </div>
+                        </div> */}
+                        <FormikFormGroup 
+                            type="text"
+                            name="username"
+                            label={locale.texts.NAME}    
+                        />  
+                        <FormikFormGroup 
+                            type="password"
+                            name="password"
+                            additionalField={locale.texts.FORGET_PASSWORD}
+                            label={locale.texts.PASSWORD}    
+                        />  
+                        <Select
+                            placeholder={locale.texts.SELECT_LOCATION}
+                            value={values.area}
+                            options={areaOptions}
+                            onChange={value => {
+                                setFieldValue('area', value)
+                            }}
+                            styles={styleConfig.reactSelectNavbar}
+                            isSearchable={false}
+                            components={{
+                                IndicatorSeparator: () => null,
+                                // DropdownIndicator:() => null
+                            }}
+                        />
 
                         <Button 
                             type="submit" 
@@ -128,7 +159,7 @@ const SigninPage = () => {
                     </Form>
                 )}
             />
-        </div>
+        </CenterContainer>
     )
 }
 
