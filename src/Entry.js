@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        AccessControl.js
+        Entry.js
 
     File Description:
         BOT UI component
@@ -34,46 +34,35 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
-
 import React from 'react';
-import AuthContext from '../../context/AuthenticationContext'
-import {
-    isBrowser,
-    isMobile,
-    isTablet
-} from 'react-device-detect'
+import { BrowserRouter as Router,Switch, Route,  } from 'react-router-dom';
+import NavbarContainer from './js/components/container/NavbarContainer'
+import { renderRoutes } from 'react-router-config';
+import routes from './js/config/routes';
+import { ToastContainer } from 'react-toastify';
+import config from './js/config';
+import AccessControl from './js/components/presentational/AccessControl';
+import SigninPage from './js/components/presentational/SigninPage';
+import AuthenticationContext from './js/context/AuthenticationContext';
 
-const AccessControl = ({
-    permission,
-    children,
-    renderNoAccess,
-    platform = [true]
-}) => {
-    const auth = React.useContext(AuthContext);
-
-    let ownedPermissions = auth.user.permissions
-
-    const authenticated = auth.authenticated;
-
-    const permitted = permission ? ownedPermissions.includes(permission) : true
-
-    const platformSupported = platform.map(item => {
-        switch(item) {
-            case 'browser': 
-                return isBrowser
-            case 'mobile': 
-                return isMobile
-            case 'tablet':
-                return isTablet
-            default: 
-                return true
-        }
-    }).includes(true)
-
-    if (authenticated && permitted && platformSupported) {
-        return children;
-    }
-    return renderNoAccess();
+const Entry = () => {
+    
+    return (
+        <AccessControl
+            renderNoAccess={() => <SigninPage/>}
+        >
+            <Router>          
+                <NavbarContainer/>
+                <Switch>
+                    {renderRoutes(routes)}
+                </Switch>
+            </Router>
+            <ToastContainer {...config.TOAST_PROPS} />
+        </AccessControl>
+    );
 };
 
-export default AccessControl
+export default Entry;
+
+
+

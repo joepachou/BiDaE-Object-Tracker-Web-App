@@ -63,6 +63,7 @@ class Auth extends React.Component {
             password,
         })
         .then(res => {
+
             if (!res.data.authentication) { 
                 actions.setStatus(res.data.message)
                 actions.setSubmitting(false)
@@ -99,7 +100,7 @@ class Auth extends React.Component {
                 this.setState({
                     authenticated: true,
                     user: userInfo
-                }, callback())
+                })
             }
         }).catch(error => {
             console.log(error)

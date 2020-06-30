@@ -39,6 +39,7 @@ const en =  {
     ABBR: "en-US",
 
     BEDI_TECH: "BeDITech",
+    SLOGAN: "BiDaE Object Tracker",
 
     HOME: "home",
     HEALTH_REPORT: "health report",

@@ -34,27 +34,15 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
-
 import React from 'react';
-import { BrowserRouter as Router,Switch, Route,  } from "react-router-dom";
-import NavbarContainer from './js/components/container/NavbarContainer'
-import { renderRoutes } from 'react-router-config';
-import routes from './js/config/routes';
-import CombinedContext from './js/context/AppContext'
-import { ToastContainer } from 'react-toastify';
-import config from './js/config'
+import AppContext from './js/context/AppContext';
+import Entry from './Entry';
 
 const App = () => {
     return (
-        <CombinedContext>
-            <Router>          
-                <NavbarContainer/>
-                <Switch>
-                    {renderRoutes(routes)}
-                </Switch>
-            </Router>
-            <ToastContainer {...config.TOAST_PROPS} />
-        </CombinedContext>
+        <AppContext>
+            <Entry />
+        </AppContext>
     );
 };
 

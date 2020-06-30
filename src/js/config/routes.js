@@ -48,11 +48,6 @@ import ReportContainer from "../components/container/menuContainer/ReportContain
 
 const routes = [
     {
-        path: '/',
-        component: MainContainer,
-        exact: true,
-    },
-    {
         path: '/page/systemSetting',
         component: SystemSetting,
         exact: true,

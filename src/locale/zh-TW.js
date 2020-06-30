@@ -39,6 +39,7 @@ const tw = {
     ABBR: "zh-tw",
 
     BEDI_TECH: "畢迪科技",
+    SLOGAN: "畢迪科技 物件追蹤",
 
     HOME : "首頁",
     HEALTH_REPORT: "Health Report",
