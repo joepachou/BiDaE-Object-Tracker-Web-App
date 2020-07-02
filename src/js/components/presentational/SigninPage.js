@@ -53,7 +53,6 @@ import * as Yup from 'yup';
 import {
     CenterContainer
 } from '../BOTComponent/styleComponent';
-import Select from 'react-select';
 import styleConfig from '../../config/styleConfig';
 import FormikFormGroup from '../presentational/FormikFormGroup';
 
@@ -64,13 +63,6 @@ const SigninPage = () => {
     let locale = React.useContext(LocaleContext);
     let auth = React.useContext(AuthContext);
 
-    let areaOptions = Object.values(config.mapConfig.AREA_MODULES)
-        .map(areaModule => {
-            areaModule.value = areaModule.name
-            areaModule.label = locale.texts[areaModule.name]
-            return areaModule
-        })
-    
     return (
         <CenterContainer>
             <div className='d-flex justify-content-center'>
@@ -82,7 +74,7 @@ const SigninPage = () => {
                 />
             </div>
             <div className='d-flex justify-content-center'>
-                <div className="title my-1">
+                <div className="title mt-1 mb-4">
                     {locale.texts.SLOGAN}
                 </div>
             </div>
@@ -90,7 +82,6 @@ const SigninPage = () => {
                 initialValues = {{
                     username: '',
                     password: '',
-                    area: null,
                 }}
 
                 validationSchema = {
@@ -114,48 +105,28 @@ const SigninPage = () => {
                                 {locale.texts[status.toUpperCase().replace(/ /g, "_")]}
                             </div>
                         }
-                        {/* <div className="form-group">
-                            <Field 
-                                name="username" 
-                                type="text" 
-                                className={'form-control' + (errors.username && touched.username ? ' is-invalid' : '')} 
-                                placeholder={locale.texts.USERNAME}
-                            />
-                            <ErrorMessage name="username" component="div" className="invalid-feedback" />
-                        </div> */}
                         <FormikFormGroup 
                             type="text"
                             name="username"
+                            className="mb-4"
                             label={locale.texts.NAME}    
                         />  
                         <FormikFormGroup 
                             type="password"
                             name="password"
+                            className="mb-4"
                             additionalField={locale.texts.FORGET_PASSWORD}
                             label={locale.texts.PASSWORD}    
                         />  
-                        <Select
-                            placeholder={locale.texts.SELECT_LOCATION}
-                            value={values.area}
-                            options={areaOptions}
-                            onChange={value => {
-                                setFieldValue('area', value)
-                            }}
-                            styles={styleConfig.reactSelectNavbar}
-                            isSearchable={false}
-                            components={{
-                                IndicatorSeparator: () => null,
-                                // DropdownIndicator:() => null
-                            }}
-                        />
-
-                        <Button 
-                            type="submit" 
-                            variant="primary" 
-                            disabled={isSubmitting}
-                        >
-                            {locale.texts.SIGN_IN}
-                        </Button>
+                        <div className='d-flex justify-content-start'>
+                            <Button 
+                                type="submit" 
+                                variant="primary" 
+                                disabled={isSubmitting}
+                            >
+                                {locale.texts.SIGN_IN}
+                            </Button>
+                        </div>
                     </Form>
                 )}
             />
