@@ -149,6 +149,7 @@ const config = {
 
     ROLES_SELECTION: [
         'system_admin',
+        'care_provider',
         'dev',
     ],
 

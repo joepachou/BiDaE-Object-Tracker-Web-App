@@ -60,7 +60,7 @@ module.exports = {
                 
                     const hash = encrypt.createHash(password);
 
-                    if (true) {
+                    if (hash == res.rows[0].password) {
                         let { 
                             name, 
                             roles, 
