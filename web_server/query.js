@@ -2,7 +2,6 @@ require('dotenv').config();
 require('moment-timezone')
 const moment = require('moment');
 const queryType = require ('./queryType');
-const bcrypt = require('bcrypt');
 const pg = require('pg');
 const pdf = require('html-pdf');
 const csv =require('csvtojson')
@@ -10,6 +9,7 @@ var exec = require('child_process').execFile;
 const fs = require('fs')
 const path = require('path')
 const sha256 = require('sha256')
+const encrypt = require('../api/config/encrypt');
 const config = {
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
@@ -17,11 +17,6 @@ const config = {
     password: process.env.DB_PASS,
     port: process.env.DB_PORT,
 }
-
-const {
-    LBEACON_HEALTH_STATUS_TIME_INTERVAL_UNIT,
-    LBEACON_HEALTH_STATUS_TIME_INTERVAL
-} = process.env
 
 
 const pool = new pg.Pool(config)
@@ -376,83 +371,13 @@ const editObjectPackage = (request, response) => {
         })
 }
 
-const signin = (request, response) => {
-    let { 
-        password,
-        username
-    } = request.body
-    username = username.toLowerCase()
-
-
-    pool.query(queryType.signin(username))
-        .then(res => {
-            if (res.rowCount < 1) {
-                console.log(`signin failed: username or password is incorrect`)
-                response.json({
-                    authentication: false,
-                    message: "Username or password is incorrect"
-                })
-            } else {
-                if (bcrypt.compareSync(password, res.rows[0].password)) {
-                    let { 
-                        name, 
-                        roles, 
-                        permissions,
-                        mydevice, 
-                        freq_search_count,
-                        areas_id,
-                        id,
-                        main_area,
-                        locale_id,
-                        locale
-                    } = res.rows[0]
-
-                    if (main_area && !areas_id.includes(main_area)) {
-                        areas_id.push(main_area.toString())
-                    }
-
-                    let userInfo = {
-                        name,
-                        myDevice: mydevice || [],
-                        roles,
-                        permissions,
-                        freqSearchCount: freq_search_count,
-                        id,
-                        areas_id,
-                        main_area,
-                        locale_id,
-                        locale
-                    } 
-                    // request.session.userInfo = userInfo
-                    response.json({
-                        authentication: true,
-                        userInfo
-                    })
-                    pool.query(queryType.setVisitTimestamp(username))
-                        .then(res =>  console.log(`sign in success: ${name}`))
-                        .catch(err => console.log(`set visit timestamp fails ${err}`))
-
-                } else {
-                    response.json({
-                        authentication: false,
-                        message: "password is incorrect"
-                    })
-                }
-            }
-        })
-        .catch(err => {
-            console.log(`sigin fails ${err}`)       
-        })
-}
-
 const editPassword = (request, response) => {
     const { 
         user_id, 
         password
     } = request.body;    
 
-    const saltRounds = 10;
-    const hash = bcrypt.hashSync(password, saltRounds);
+    const hash = encrypt.createHash(password);
 
     pool.query(queryType.editPassword(user_id,hash)) 
         .then(res => {
@@ -466,7 +391,6 @@ const editPassword = (request, response) => {
 }
 
 
-
 const signup = (request, response) => {
 
     const { 
@@ -475,9 +399,9 @@ const signup = (request, response) => {
         roles,
         area_id,
     } = request.body;    
-    const saltRounds = 10;
-    const hash = bcrypt.hashSync(password, saltRounds);
     
+    const hash = encrypt.createHash(password);
+
     const signupPackage = {
         name,
         password: hash,
@@ -493,8 +417,8 @@ const signup = (request, response) => {
                     console.log('sign up succeed') 
                     
                     //SETTING API Key 
-                    const saltRounds = 10;
-                    const hash = bcrypt.hashSync(name, saltRounds);
+                    const hash = encrypt.createHash(password);
+
                     pool.query(queryType.setAPIKey(name, hash)) 
                         .then(res => {
                             console.log(`set API Key success`)
@@ -856,9 +780,10 @@ const confirmValidation = (request, response) => {
                     message: 'incorrect'
                 })
             } else {
-                const hash = res.rows[0].password
+
+                const hash = encrypt.createHash(password);
                 
-                if (bcrypt.compareSync(password, hash)) {
+                if (hash == res.rows[0].password) {
                     let { 
                         roles, 
                     } = res.rows[0] 
@@ -1287,7 +1212,6 @@ module.exports = {
     deleteLBeacon,
     deleteGateway,
     deleteUser,
-    signin,
     signup,
     editPassword,
     generatePDF,

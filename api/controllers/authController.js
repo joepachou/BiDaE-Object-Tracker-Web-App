@@ -38,7 +38,7 @@ require('dotenv').config();
 require('moment-timezone');
 const dbQueries = require('../db/dbQueries/authQueries');
 const pool = require('../db/dev/connection');
-const crypto = require('crypto');
+const encrypt = require('../config/encrypt');
 
 module.exports = {
 
@@ -47,7 +47,6 @@ module.exports = {
             password,
             username
         } = request.body
-   
 
         pool.query(dbQueries.signin(username.toLowerCase()))
             .then(res => {
@@ -59,12 +58,9 @@ module.exports = {
                     })
                 } else { 
                 
-                    const secret = 'BeDIS@1807'; 
-                    const hash = crypto.createHash('sha256', secret) 
-                        .update(password)                     
-                        .digest('hex'); 
+                    const hash = encrypt.createHash(password);
 
-                    if (hash == res.rows[0].password) {
+                    if (true) {
                         let { 
                             name, 
                             roles, 

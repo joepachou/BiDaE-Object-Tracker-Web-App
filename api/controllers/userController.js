@@ -41,7 +41,8 @@ const dbQueries = require('../db/dbQueries/userQueries');
 const pool = require('../db/dev/connection');
 const session = require('express-session');
 const authQueries = require('../db/dbQueries/authQueries');
-const crypto = require('crypto');
+const encrypt = require('../config/encrypt');
+
 
 module.exports = {
 
@@ -75,10 +76,7 @@ module.exports = {
             area_id,
         } = request.body;    
 
-        const secret = 'BeDIS@1807'; 
-        const hash = crypto.createHash('sha256', secret) 
-            .update(password) 
-            .digest('hex'); 
+        const hash = encrypt.createHash(password);
           
         const signupPackage = {
             name: name.toLowerCase(),

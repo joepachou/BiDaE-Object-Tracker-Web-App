@@ -1,7 +1,6 @@
 const error_code = require ('./api_error_code');  
 require('moment-timezone')
 const moment = require('moment'); 
-const bcrypt = require('bcrypt');
 const queryType = require ('./api_queryType');
 const pg = require('pg');
 const config = {
@@ -14,6 +13,7 @@ const config = {
 const pool = new pg.Pool(config)  
 const timeDefaultFormat = 'YYYY/MM/DD HH:mm:ss'
 const tw = require('../site_module/locale/zh-TW')
+const encrypt = require('../api/config/encrypt');
 
 const get_api_key = (request, response) => {
     let { 
@@ -21,8 +21,6 @@ const get_api_key = (request, response) => {
         password 
     } = request.body 
 
-
-    const saltRounds = 10; 
     let getUserName = ''
     pool.query(queryType.getAllUser())//verification by sha256
     .then(res =>{
@@ -34,8 +32,10 @@ const get_api_key = (request, response) => {
         if (getUserName != ''){//already match user name
             pool.query(queryType.confirmValidation(getUserName))
             .then(res => {   
-                    console.log(`confirm validation succeed`)  
-                    const hash = bcrypt.hashSync(username, saltRounds); 
+                    console.log(`confirm validation succeed`) 
+                     
+                    const hash = encrypt.createHash(password);
+
                     pool.query(queryType.setKey(res.rows[0].user_id,getUserName,hash)) 
                         .then(res => {  
                             response.json(error_code.get_key_success(hash,moment().add(30, 'm').locale('en').format('LT')))
