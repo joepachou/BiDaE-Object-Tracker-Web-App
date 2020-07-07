@@ -54,11 +54,10 @@ import * as Yup from 'yup';
 import RadioButton from '../presentational/RadioButton';
 import RadioButtonGroup from './RadioButtonGroup';
 import { AppContext } from '../../context/AppContext';
-import axios from 'axios';
-import dataSrc from '../../dataSrc'
 import styleConfig from '../../config/styleConfig'
 import FormikFormGroup from '../presentational/FormikFormGroup'
 import AccessControl from '../presentational/AccessControl';
+import apiHelper from '../../helper/apiHelper';
 
 export default class ChangeStatusForm extends React.Component {
 
@@ -74,30 +73,31 @@ export default class ChangeStatusForm extends React.Component {
 
     getTransferredLocation = () => {
         let { locale } = this.context
-        axios.get(dataSrc.getTransferredLocation)
-        .then(res => {
-            const transferredLocationOptions = res.data.map(branch => {
-                return {          
-                    label: branch.branch_name,
-                    value: branch,
-                    options: branch.department ? branch.department
-                        .map((department, index) => {
-                            return {
-                                label: `${department},${branch.branch_name}`,
-                                value: {
-                                    branch,
-                                    departmentId: index,
-                                }
-                            }
-                    }) : [],
-                    id: branch.id
-                }
 
+        apiHelper.transferredLocationApiAgent.getAllTransferredLocation()
+            .then(res => {
+                const transferredLocationOptions = res.data.map(branch => {
+                    return {          
+                        label: branch.branch_name,
+                        value: branch,
+                        options: branch.department ? branch.department
+                            .map((department, index) => {
+                                return {
+                                    label: `${department},${branch.branch_name}`,
+                                    value: {
+                                        branch,
+                                        departmentId: index,
+                                    }
+                                }
+                        }) : [],
+                        id: branch.id
+                    }
+
+                })
+                this.setState({
+                    transferredLocationOptions
+                })
             })
-            this.setState({
-                transferredLocationOptions
-            })
-        })
     }
 
     handleClose = (e) => {

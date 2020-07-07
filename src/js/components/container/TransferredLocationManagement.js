@@ -33,8 +33,6 @@
         Edward Chen, r08921a28@ntu.edu.tw
         Joe Chou, jjoe100892@gmail.com
 */
-
-
 import React from 'react';
 import { 
     Button, 
@@ -42,8 +40,6 @@ import {
 import { AppContext } from '../../context/AppContext';
 import config from '../../config';
 import { MDBBtn, MDBTable, MDBTableBody, MDBTableHead  } from 'mdbreact';
-import axios from 'axios';
-import dataSrc from "../../dataSrc"
 import {
     Row,
     Col,
@@ -51,50 +47,51 @@ import {
 import { 
     TransferredLocationColumn
 } from '../../config/tables'
-import messageGenerator from '../../helper/messageGenerator'
+import messageGenerator from '../../helper/messageGenerator';
+import apiHelper from '../../helper/apiHelper';
 
 class TranferredLocationManagement extends React.Component{
 
     static contextType = AppContext 
-    state= { 
+
+    state = { 
         transferredLocationOptions: [],
         unFoldBranches: [], 
     } 
-
-
-    getColumn = () => {
-            const { locale } = this.context
-            let column = _.cloneDeep(TransferredLocationColumn) 
-            column.map(item => {
-                item.headerStyle = {
-                    textAlign: 'left',
-                }
-                item.label = locale.texts[item.field.toUpperCase().replace(/ /g, '_')]
-            })  
-            return column
-    }
-
     
     componentDidMount = () => {
         this.getColumn()
-        // this.getTransferredLocation()
+        this.getTransferredLocation()
     }
    
-    // getTransferredLocation = () => {
-    //     axios.get(dataSrc.getTransferredLocation)
-    //         .then(res => {
-    //             res.data.map(branch => {
-    //                 if(!branch.department){
-    //                     branch.department = []                       
-    //                 }
-    //             })
-    //             this.setState({
-    //                 transferredLocationOptions: res.data
-    //             })
-    //         }).catch(err => {
-    //             console.log(err)
-    //         })           
-    // }
+    getTransferredLocation = () => {
+        apiHelper.transferredLocationApiAgent.getAllTransferredLocation()
+            .then(res => {
+                res.data.map(branch => {
+                    if(!branch.department){
+                        branch.department = []                       
+                    }
+                })
+                this.setState({
+                    transferredLocationOptions: res.data
+                })
+            }).catch(err => {
+                console.log(err)
+            })           
+    }
+
+    getColumn = () => {
+        const { locale } = this.context
+        let column = _.cloneDeep(TransferredLocationColumn) 
+        column.map(item => {
+            item.headerStyle = {
+                textAlign: 'left',
+            }
+            item.label = locale.texts[item.field.toUpperCase().replace(/ /g, '_')]
+        })  
+        return column
+    }
+
     generateDataRows = () => {
         const { locale } = this.context
         let rows = []
@@ -170,14 +167,17 @@ class TranferredLocationManagement extends React.Component{
         }      
     }
     addBranch = (e) => {
-        const { locale } = this.context
-        axios.post(dataSrc.modifyTransferredLocation, {
+        const { 
+            locale 
+        } = this.context
+        apiHelper.transferredLocationApiAgent.editTransferredLocation({
             type: 'add branch',
             data: {
                 name: locale.texts.NEW_BRANCH,
                 departmentName: locale.texts.NEW_DEPARTMENT
             }
-        }).then(res => {
+        })
+        .then(res => {
             this.getTransferredLocation()
         })
     }
@@ -192,35 +192,42 @@ class TranferredLocationManagement extends React.Component{
     }
     renameBranchToBackend = (branch_id, e) => {
         const newName = e.target.value
-        axios.post(dataSrc.modifyTransferredLocation, {
+
+        apiHelper.transferredLocationApiAgent.editTransferredLocation({
             type: 'rename branch',
             data: {
                 branch_id: branch_id,
                 name: newName
             }
-        }).then(res => {
+        })
+        .then(res => {
             this.getTransferredLocation()
         })
     }
     removeBranch = (branch_id) => {
-        axios.post(dataSrc.modifyTransferredLocation, {
+        apiHelper.transferredLocationApiAgent.editTransferredLocation({
             type: 'remove branch',
             data: {
                 branch_id,
             }
-        }).then(res => {
+        })
+        .then(res => {
             this.getTransferredLocation()
         })
     }
     addDepartment = (branch_id) => {
-        const { locale } = this.context
-        axios.post(dataSrc.modifyTransferredLocation, {
+        const { 
+            locale
+        } = this.context
+
+        apiHelper.transferredLocationApiAgent.editTransferredLocation({
             type: 'add department',
             data: {
                 branch_id,
                 name: locale.texts.NEW_DEPARTMENT
             }
-        }).then(res => {
+        })
+        .then(res => {
             this.getTransferredLocation()
         })
     }
@@ -235,25 +242,29 @@ class TranferredLocationManagement extends React.Component{
     }
     renameDepartmentToBackend = (branch_id, index, e) => {
         let newName = e.target.value
-        axios.post(dataSrc.modifyTransferredLocation, {
+
+        apiHelper.transferredLocationApiAgent.editTransferredLocation({
             type: 'rename department',
             data: {                                   
                 branch_id,
                 departmentIndex: index,
                 name: newName
             }
-        }).then(res => {
+        })
+        .then(res => {
             this.getTransferredLocation()
         })
     }
     removeDepartment = (branch_id, departmentIndex) => { 
-        axios.post(dataSrc.modifyTransferredLocation, {
+
+        apiHelper.transferredLocationApiAgent.editTransferredLocation({
             type: 'remove department',
             data: {
                 branch_id,
                 departmentIndex
             }
-        }).then(res => {
+        })
+        .then(res => {
             this.getTransferredLocation()
         })
     }

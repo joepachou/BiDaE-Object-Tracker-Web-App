@@ -58,7 +58,8 @@ import moment from 'moment';
 import axios from 'axios';
 import dataSrc from '../../dataSrc';
 import apiHelper from '../../helper/apiHelper';
-import messageGenerator from '../../helper/messageGenerator'
+import messageGenerator from '../../helper/messageGenerator';
+import pdfPackageGenerator from '../../helper/pdfPackageGenerator';
 
 class SearchResultList extends React.Component {
 
@@ -237,8 +238,13 @@ class SearchResultList extends React.Component {
 
         })
 
-        let pdfPackage = shouldCreatePdf && config.getPdfPackage(status, auth.user, this.state.editedObjectPackage, locale,signatureName)
- 
+        let pdfPackage = shouldCreatePdf && pdfPackageGenerator.getPdfPackage({
+            option: status, 
+            user: auth.user, 
+            data: this.state.editedObjectPackage, 
+            locale,
+            signature: signatureName
+        })
 
         apiHelper.objectApiAgent.editObjectPackage(
             locale,

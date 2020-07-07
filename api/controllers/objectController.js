@@ -42,6 +42,8 @@ const moment = require('moment');
 const dbQueries = require('../db/dbQueries/objectQueries');
 const recordQueries = require('../db/dbQueries/recordQueries');
 const pool = require('../db/dev/connection');
+const pdf = require('html-pdf');
+const path = require('path');
 
 module.exports = {
 

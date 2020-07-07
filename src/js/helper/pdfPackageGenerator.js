@@ -304,7 +304,7 @@ const pdfPackageGenerator = {
                             ${index + 1}. 
                             &nbsp;
                             ${item.name}, 
-                            ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}: ${item.last_four_acn.slice(-4)}, 
+                            ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}: ${item.asset_control_number.slice(-4)}, 
                             ${locale.texts.NEAR} ${item.location_description},
                             ${item.residence_time}
                         </div>
@@ -319,7 +319,7 @@ const pdfPackageGenerator = {
                             ${index + 1}. 
                             &nbsp;
                             ${item.area}, 
-                            ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}: ${item.last_four_acn.slice(-4)}, 
+                            ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}: ${item.asset_control_number.slice(-4)}, 
                             ${locale.texts.NEAR} ${item.location_description},
                             ${item.residence_time}
                         </div>
@@ -456,7 +456,7 @@ const pdfPackageGenerator = {
                             ${index + 1}. 
                             &nbsp;
                             ${item.name}, 
-                            ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}: ${item.last_four_acn.slice(-4)}, 
+                            ${locale.texts.LAST_FOUR_DIGITS_IN_ACN}: ${item.asset_control_number.slice(-4)}, 
                             ${locale.texts.NEAR} ${item.location_description},
                             ${item.residence_time}
                         </div>

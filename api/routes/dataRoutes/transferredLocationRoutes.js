@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        apiHelper.js
+        transferredLocationRoutes.js
 
     File Description:
         BOT UI component
@@ -34,26 +34,18 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
-import monitorApis from '../apiAgent/monitorApis';
-import geofenceApis from '../apiAgent/geofenceApis';
-import record from '../apiAgent/recordApiAgent';
-import objectApiAgent from '../apiAgent/objectAPiAgent';
-import transferredLocationApiAgent from '../apiAgent/transferredLocationApiAgent';
 
-const apiHelper = {
 
-    monitor: monitorApis,
+let transferredLocationController = require('../../controllers/transferredLocationController');
+let cors = require('cors');
 
-    geofenceApis,
+module.exports = app => {
 
-    record,
 
-    objectApiAgent,
+    // enable pre-flight request for DELETE request
+    app.options('/data/transferredLocation', cors()) 
 
-    transferredLocationApiAgent,
-    
-
+    app.route('/data/transferredLocation')
+        .get(transferredLocationController.getAllTransferredLocation)
+        .put(transferredLocationController.editTransferredLocation)
 }
-
-
-export default apiHelper

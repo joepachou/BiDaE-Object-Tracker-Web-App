@@ -94,8 +94,9 @@ module.exports = {
         
         shiftChange: `${domain}/data/record/shiftChange`,
 
-
     },
+
+    transferredLocation: `${domain}/data/transferredLocation`,
 
     pdfUrl: path => {
         return `${domain}/data/file/${path}`

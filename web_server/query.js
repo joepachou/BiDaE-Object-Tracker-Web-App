@@ -1021,40 +1021,7 @@ const clearSearchHistory = () => {
         console.log('clearSearchHistory error: ', err)
     })
 }
-const getTransferredLocation = (request, response) => {
-    pool.query(queryType.getTransferredLocation())
-        .then(res => {
-            response.status(200).json(res.rows)
-        })
-        .catch(err => {
-            console.log('getTransferredLocation error: ', err)
-        })
-}
-const modifyTransferredLocation = (request, response) => {
-    const {type, data} = request.body
-    let query = null
-    if(type == 'add branch'){
-        query = queryType.modifyTransferredLocation('add branch', data)
-    }else if(type == 'rename branch'){
-        query = queryType.modifyTransferredLocation('rename branch', data)
-    }else if(type == 'remove branch'){
-        query = queryType.modifyTransferredLocation('remove branch', data)
-    }else if(type == 'add department'){
-        query = queryType.modifyTransferredLocation('add department', data)
-    }else if(type == 'rename department'){
-        query = queryType.modifyTransferredLocation('rename department', data)
-    }else if(type == 'remove department'){
-        query = queryType.modifyTransferredLocation('remove department', data)
-    }else{
-        console.log('modifyTransferredLocation: unrecognized command type')
-    }
-    pool.query(query)
-        .then(res => {
-            response.status(200).json('ok')
-        }).catch(err => {
-            console.log('modifyTransferredLocation error: ', err)
-        })
-}
+
 
 const getRolesPermission = (request, response) => {
     let query = queryType.getRolesPermission()
@@ -1187,8 +1154,6 @@ module.exports = {
     backendSearch,
     getSearchQueue,
     getTrackingTableByMacAddress,
-    getTransferredLocation,
-    modifyTransferredLocation,
     clearSearchHistory,
     setMonitorEnable,
     getRolesPermission,

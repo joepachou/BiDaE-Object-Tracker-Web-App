@@ -1651,32 +1651,6 @@ function clearSearchHistory(){
 	return query
 }
 
-function getTransferredLocation() {
-	const query = `SELECT id, branch_name, department FROM branch_and_department ORDER BY id`
-	return query
-}
-
-function modifyTransferredLocation(type, data){
-	const defaultNewDepartment = 'new department'
-	var query;
-	if(type == 'add branch'){
-        query = `insert into branch_and_department(branch_name, department) values('${data.name}', '{"${data.departmentName}"}')`
-    }else if(type == 'rename branch'){
-        query = `update branch_and_department set branch_name = '${data.name}' where id = ${data.branch_id} `
-    }else if(type == 'remove branch'){
-        query = `delete from branch_and_department where id = ${data.branch_id} `
-    }else if(type == 'add department'){
-        query = `update branch_and_department set department = array_append(department, '${data.name}') where id = ${data.branch_id}`
-    }else if(type == 'rename department'){
-        query = `update branch_and_department set department[${data.departmentIndex + 1}] = '${data.name}' where id = ${data.branch_id}`
-    }else if(type == 'remove department'){
-        query = `update branch_and_department set department = array_remove(department, department[${data.departmentIndex + 1}]) where id = ${data.branch_id}`
-    }else{
-        console.log('modifyTransferredLocation: unrecognized command type')
-    } 
-	return query
-}
-
 const setMonitorEnable = (enable, areaId, type) => {
 	return `
 		UPDATE ${type}
@@ -1848,8 +1822,6 @@ module.exports = {
 	setLocaleID,
 	addImport,
 	getImportPatient,
-	getTransferredLocation,
-	modifyTransferredLocation,
 	getLocationHistory,
 	getRolesPermission,
 	modifyPermission,
