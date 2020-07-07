@@ -55,8 +55,22 @@ import {
 } from '../BOTComponent/styleComponent';
 import styleConfig from '../../config/styleConfig';
 import FormikFormGroup from '../presentational/FormikFormGroup';
+import { 
+    Link, 
+} from 'react-router-dom';
+
 
 const imageLength = 80;
+
+const handleClick = (e) => {
+    console.log(e.target)
+    let {
+        name
+    } = e.target
+    // switch(name) {
+    //     case 'forget password'
+    // }
+}
 
 const SigninPage = () => {
 
@@ -99,7 +113,7 @@ const SigninPage = () => {
                     <Form>
                         {status &&
                             <div 
-                                className={'alert alert-danger mb-2 warning'}
+                                className='alert alert-danger mb-2 warning'
                             >
                                 <i className="fas fa-times-circle mr-2"/>
                                 {locale.texts[status.toUpperCase().replace(/ /g, "_")]}
@@ -115,7 +129,9 @@ const SigninPage = () => {
                             type="password"
                             name="password"
                             className="mb-4"
-                            additionalField={locale.texts.FORGET_PASSWORD}
+                            additionalField='forget password'
+                            additionalFunc={handleClick}
+                            additionalComponent={Link}
                             label={locale.texts.PASSWORD}    
                         />  
                         <div className='d-flex justify-content-start'>

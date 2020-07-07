@@ -41,7 +41,7 @@ import {
 } from 'formik';
 import {
     FieldLabel
-} from './styleComponent'
+} from '../BOTComponent/styleComponent'
 
 const BOTValueField = ({
    label,

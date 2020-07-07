@@ -38,7 +38,7 @@
 import React from 'react';
 import {
     PrimaryButton
-} from './styleComponent'
+} from '../BOTComponent/styleComponent'
 
 const IconButton = ({
     iconName,

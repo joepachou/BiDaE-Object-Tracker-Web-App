@@ -97,13 +97,13 @@ export const navbarNavList = [
         permission: "route:systemSetting",
         platform: ['browser', 'tablet', 'mobile'],
     },
-    {
-        name: 'contact tree',
-        alias: 'contactTree',
-        path: '/page/contactTree',
-        permission: 'route:contactTree',
-        platform: ['browser']
-    },
+    // {
+    //     name: 'contact tree',
+    //     alias: 'contactTree',
+    //     path: '/page/contactTree',
+    //     permission: 'route:contactTree',
+    //     platform: ['browser']
+    // },
 ]
 
 export const userContainerModule = {

@@ -1,3 +1,40 @@
+/*
+    Copyright (c) 2020 Academia Sinica, Institute of Information Science
+
+    License:
+        GPL 3.0 : The content of this file is subject to the terms and conditions
+
+    Project Name:
+        BiDae Object Tracker (BOT)
+
+    File Name:
+        ShiftChangeRecord.js
+
+    File Description:
+        BOT UI component
+
+    Version:
+        1.0, 20200601
+
+    Abstract:
+        BeDIS uses LBeacons to deliver 3D coordinates and textual descriptions of
+        their locations to users' devices. Basically, a LBeacon is an inexpensive,
+        Bluetooth device. The 3D coordinates and location description of every 
+        LBeacon are retrieved from BeDIS (Building/environment Data and Information 
+        System) and stored locally during deployment and maintenance times. Once 
+        initialized, each LBeacon broadcasts its coordinates and location 
+        description to Bluetooth enabled user devices within its coverage area. It 
+        also scans Bluetooth low-energy devices that advertise to announced their 
+        presence and collect their Mac addresses.
+
+    Authors:
+        Tony Yeh, LT1stSoloMID@gmail.com
+        Wayne Kang, b05505028@ntu.edu.tw
+        Edward Chen, r08921a28@ntu.edu.tw
+        Joe Chou, jjoe100892@gmail.com
+*/
+
+
 import React, {Fragment} from 'react';
 import { 
     ButtonToolbar
@@ -14,7 +51,7 @@ import styleConfig from '../../../config/styleConfig';
 import AccessControl from '../../presentational/AccessControl'
 import {
     PrimaryButton 
-} from '../../../config/styleComponent'
+} from '../../BOTComponent/styleComponent'
 import apiHelper from '../../../helper/apiHelper';
 import config from '../../../config';
 
@@ -210,32 +247,32 @@ class ShiftChangeRecord extends React.Component{
                     </AccessControl>
                 </div>
                 <hr/>
-                {this.state.data && (
-                    <SelectTable
-                        keyField='id'
-                        data={this.state.data}
-                        columns={this.state.columns}
-                        ref={r => (this.selectTable = r)}
-                        className="-highlight"
-                        pageSize={this.state.data.length}
-                        style={{maxHeight:'80vh'}}                             
-                        {...extraProps}
-                        {...styleConfig.reactTable}
-                        getTrProps={(state, rowInfo, column, instance) => {
-                           
-                            return {
-                                onClick: (e, handleOriginal) => {
-                                    let id = rowInfo.index+1
-                                    this.toggleSelection(id)
-                                    if (handleOriginal) {
-                                        handleOriginal()
-                                    }
-                                    window.open(dataSrc.pdfUrl(rowInfo.original.file_path));
+                <SelectTable
+                    keyField='id'
+                    data={this.state.data}
+                    columns={this.state.columns}
+                    ref={r => (this.selectTable = r)}
+                    className='-highlight text-none'
+                    onPageChange={(e) => {this.setState({selectAll:false,selection:''})}} 
+                    onSortedChange={(e) => {this.setState({selectAll:false,selection:''})}}
+                    style={{maxHeight:'75vh'}}                             
+                    {...extraProps}
+                    {...styleConfig.reactTable}
+                    NoDataComponent={() => null}
+                    getTrProps={(state, rowInfo, column, instance) => {
+                        
+                        return {
+                            onClick: (e, handleOriginal) => {
+                                let id = rowInfo.index+1
+                                this.toggleSelection(id)
+                                if (handleOriginal) {
+                                    handleOriginal()
                                 }
+                                window.open(dataSrc.pdfUrl(rowInfo.original.file_path));
                             }
-                        }}
-                    />)
-                }
+                        }
+                    }}
+                />
                 <DeleteConfirmationForm
                     show={this.state.showDeleteConfirmation} 
                     handleClose={this.handleCloseDeleteConfirmForm}

@@ -47,17 +47,18 @@ import SigninPage from './js/components/presentational/SigninPage';
 const Entry = () => {
     
     return (
-        <AccessControl
-            renderNoAccess={() => <SigninPage/>}
-        >
-            <Router>          
+        <Router>          
+            <AccessControl
+                renderNoAccess={() => <SigninPage/>}
+            >
                 <NavbarContainer/>
                 <Switch>
                     {renderRoutes(routes)}
                 </Switch>
-            </Router>
+            </AccessControl>
             <ToastContainer {...config.TOAST_PROPS} />
-        </AccessControl>
+        </Router>
+
     );
 };
 

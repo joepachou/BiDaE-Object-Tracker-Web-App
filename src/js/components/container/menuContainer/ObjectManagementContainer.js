@@ -21,7 +21,7 @@ import {
     BOTNavLink,
     BOTNav,
     PageTitle
-} from '../../../config/styleComponent';
+} from '../../../components/BOTComponent/styleComponent';
 
 class ObjectManagementContainer extends React.Component{
     

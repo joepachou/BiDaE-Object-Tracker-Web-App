@@ -92,10 +92,6 @@ class ObjectEditedRecord extends React.Component{
             let columns = _.cloneDeep(editObjectRecordTableColumn)
             columns.map(field => {
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
-                field.headerStyle = {
-                    textAlign: 'left',
-                    textTransform: 'capitalize'
-                }
             })
             res.data.rows.map((item, index) => {
                 item._id = index + 1
@@ -262,35 +258,33 @@ class ObjectEditedRecord extends React.Component{
                     </AccessControl>
                 </div>
                 <hr/>
-                
-                {this.state.data && (
-                    <SelectTable
-                        keyField='_id'
-                        data={this.state.data}
-                        columns={this.state.columns}
-                        ref={r => (this.selectTable = r)}
-                        className="-highlight"
-                        pageSize={this.state.data.length}
-                         onSortedChange={(e) => {this.setState({selectAll:false,selection:''})}} 
-                        style={{maxHeight:'80vh'}}                             
-                        {...extraProps}
-                        {...styleConfig.reactTable}
-                        getTrProps={(state, rowInfo, column, instance) => {
-                          
-                            return {
-                                onClick: (e, handleOriginal) => {
-                                    let id = rowInfo.original._id
-                                    this.toggleSelection(id)
+                <SelectTable
+                    keyField='_id'
+                    data={this.state.data}
+                    columns={this.state.columns}
+                    ref={r => (this.selectTable = r)}
+                    className='-highlight text-none'
+                    onPageChange={(e) => {this.setState({selectAll:false,selection:''})}} 
+                    onSortedChange={(e) => {this.setState({selectAll:false,selection:''})}}
+                    style={{maxHeight:'75vh'}}                             
+                    {...extraProps}
+                    {...styleConfig.reactTable}
+                    NoDataComponent={() => null}
+                    getTrProps={(state, rowInfo, column, instance) => {
                         
-                                    if (handleOriginal) {
-                                        handleOriginal()
-                                    }
-                                    window.open(dataSrc.pdfUrl(rowInfo.original.file_path));
+                        return {
+                            onClick: (e, handleOriginal) => {
+                                let id = rowInfo.original._id
+                                this.toggleSelection(id)
+                    
+                                if (handleOriginal) {
+                                    handleOriginal()
                                 }
+                                window.open(dataSrc.pdfUrl(rowInfo.original.file_path));
                             }
-                        }}
-                    />)
-                }
+                        }
+                    }}
+                />
                 <DeleteConfirmationForm
                     show={this.state.showDeleteConfirmation} 
                     handleClose={this.handleCloseDeleteConfirmForm}

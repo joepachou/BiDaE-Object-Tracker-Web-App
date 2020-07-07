@@ -85,7 +85,7 @@ const FormikFormGroup = ({
                     {label}
                 </div>
                 <div
-                    onClick={() => console.log(123)}
+                    
                 >
                     {additionalField}
                 </div>
