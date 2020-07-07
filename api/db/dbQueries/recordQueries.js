@@ -73,8 +73,51 @@ const getEditObjectRecord = () => {
 	return query
 }
 
+const addEditObjectRecord = (formOption, username, filePath) => {
+
+	let item = formOption
+	const text = `
+		INSERT INTO edit_object_record (
+			edit_user_id, 
+			edit_time, 
+			notes, 
+			new_status, 
+			new_location, 
+			edit_objects,
+			path
+		)
+		VALUES (
+			(
+				SELECT id 
+				FROM user_table 
+				WHERE name = $1
+			),
+			now(),
+			$2,
+			$3,
+			'${item.transferred_location}',
+			ARRAY ['${formOption.asset_control_number}'],
+			$4
+		)
+		RETURNING id;
+	`
+	const values = [
+		username,
+		item.notes,
+		item.status,
+		filePath
+	]
+
+	const query = {
+		text, 
+		values
+	}
+	return query
+
+}
+
 module.exports = {
     getShiftChangeRecord,
-    getEditObjectRecord
-    
+    getEditObjectRecord,
+    addEditObjectRecord
 }

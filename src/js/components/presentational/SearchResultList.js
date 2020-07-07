@@ -53,7 +53,12 @@ import PatientViewModal from '../presentational/PatientViewModal';
 import SignatureForm from '../container/UserContainer/SignatureForm';
 import ConfirmForm from '../container/ConfirmForm';
 import DownloadPdfRequestForm from '../container/DownloadPdfRequestForm';
-
+import config from '../../config';
+import moment from 'moment';
+import axios from 'axios';
+import dataSrc from '../../dataSrc';
+import apiHelper from '../../helper/apiHelper';
+import messageGenerator from '../../helper/messageGenerator'
 
 class SearchResultList extends React.Component {
 
@@ -234,13 +239,15 @@ class SearchResultList extends React.Component {
 
         let pdfPackage = shouldCreatePdf && config.getPdfPackage(status, auth.user, this.state.editedObjectPackage, locale,signatureName)
  
-        axios.post(dataSrc.editObjectPackage, {
+
+        apiHelper.objectApiAgent.editObjectPackage(
             locale,
-            formOption: editedObjectPackage,
+            editedObjectPackage,
             username,
             pdfPackage,
             reservedTimestamp
-        }).then(res => {
+        )
+        .then(res => {
             let callback = () => {
                 dispatch({
                     type: 'setUpdateTrackingData',

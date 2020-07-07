@@ -59,6 +59,8 @@ module.exports = {
 
     object: `${domain}/data/object`,
 
+    objectPackage: `${domain}/data/objectPackage`,
+
     importedObject: `${domain}/data/importedObject`,
 
     trace: {

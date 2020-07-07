@@ -733,29 +733,6 @@ const addImport = (formOption) => {
 	return query;
 }
 
-const editObjectPackage = (
-	formOption, 
-	username, 
-	record_id, 
-	reservedTimestamp
-) => {
-	let item = formOption[0]
-	let text = `
-		UPDATE object_table
-		SET 
-			status = '${item.status}',
-			transferred_location = '${item.transferred_location}',
-			note_id = ${record_id},
-			reserved_timestamp = ${item.status == 'reserve' ? `'${reservedTimestamp}'` : null},
-			reserved_user_id = (SELECT id
-				FROM user_table
-				WHERE user_table.name='${username}')
-								
-		WHERE asset_control_number IN (${formOption.map(item => `'${item.asset_control_number}'`)});
-	`
-	return text
-}
-
 function signin(username) {
 
 	const text =
@@ -1385,49 +1362,6 @@ const insertUserData = (name, roles, area_id) => {
 	`
 }
 
-const addEditObjectRecord = (formOption, username, filePath) => {
-
-	let item = formOption
-	const text = `
-		INSERT INTO edit_object_record (
-			edit_user_id, 
-			edit_time, 
-			notes, 
-			new_status, 
-			new_location, 
-			edit_objects,
-			path
-		)
-		VALUES (
-			(
-				SELECT id 
-				FROM user_table 
-				WHERE name = $1
-			),
-			now(),
-			$2,
-			$3,
-			'${item.transferred_location}',
-			ARRAY ['${formOption.asset_control_number}'],
-			$4
-		)
-		RETURNING id;
-	`
-	const values = [
-		username,
-		item.notes,
-		item.status,
-		filePath
-	]
-
-	const query = {
-		text, 
-		values
-	}
-	return query
-
-}
-
 const addShiftChangeRecord = (userInfo, file_path,shift) => {
  
 	const query = `
@@ -1873,7 +1807,6 @@ module.exports = {
 	objectImport,
 	addObject,
 	addPatient,
-	editObjectPackage,
 	signin,
 	signup,
 	editPassword,
@@ -1899,7 +1832,6 @@ module.exports = {
 	deleteGateway,
 	setVisitTimestamp,
 	insertUserData,
-	addEditObjectRecord,
 	addShiftChangeRecord,
 	getAreaTable,
 	getGeofenceConfig,

@@ -216,10 +216,34 @@ const addObject = (formOption) => {
 	return query;
 }
 
+const editObjectPackage = (
+	formOption, 
+	username, 
+	record_id, 
+	reservedTimestamp
+) => {
+	let item = formOption[0]
+	let text = `
+		UPDATE object_table
+		SET 
+			status = '${item.status}',
+			transferred_location = '${item.transferred_location}',
+			note_id = ${record_id},
+			reserved_timestamp = ${item.status == 'reserve' ? `'${reservedTimestamp}'` : null},
+			reserved_user_id = (SELECT id
+				FROM user_table
+				WHERE user_table.name='${username}')
+								
+		WHERE asset_control_number IN (${formOption.map(item => `'${item.asset_control_number}'`)});
+	`
+	return text
+}
+
 module.exports = {
     getObject,
 	addPersona,
 	addObject,
     editPersona,
-    deleteObject,
+	deleteObject,
+	editObjectPackage,
 }

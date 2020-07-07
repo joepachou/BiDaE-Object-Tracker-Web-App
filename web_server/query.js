@@ -334,43 +334,6 @@ const addPatient = (request, response) => {
         })
 }
 
-
-
-const editObjectPackage = (request, response) => {
-    const { 
-        formOption, 
-        username, 
-        pdfPackage, 
-        reservedTimestamp, 
-        locale
-    } = request.body
-    pool.query(queryType.addEditObjectRecord(formOption, username, pdfPackage.path))
-        .then(res => {
-            const record_id = res.rows[0].id
-            console.log('add edited object record succeed')
-            pool.query(queryType.editObjectPackage(formOption, username, record_id, reservedTimestamp))
-                .then(res => {
-                    console.log('edit object package succeed')
-                    if (pdfPackage) {
-                        pdf.create(pdfPackage.pdf, pdfPackage.options).toFile(path.join(process.env.LOCAL_FILE_PATH, pdfPackage.path), function(err, result) {
-                            if (err) return console.log(`edit object package error ${err}`);
-                        
-                            console.log("pdf create succeed");
-                            response.status(200).json(pdfPackage.path)
-                        });
-                    } else {
-                        response.status(200).json()
-                    }
-                })
-                .catch(err => {
-                    console.log(`edit object package failed ${err}`)
-                })
-        })
-        .catch(err => {
-            console.log(`edit object package failed ${err}`)
-        })
-}
-
 const editPassword = (request, response) => {
     const { 
         user_id, 
@@ -1203,7 +1166,6 @@ module.exports = {
     editPatient,
     objectImport,
     editLbeacon,
-    editObjectPackage,
     deleteEditObjectRecord,
     deleteShiftChangeRecord,
     deletePatient,

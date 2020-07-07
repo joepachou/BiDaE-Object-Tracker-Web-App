@@ -39,7 +39,8 @@ require('dotenv').config();
 require('moment-timezone');
 const exec = require('child_process').execFile;
 const moment = require('moment');
-const dbQueries = require('../db/dbQueries/objectQueries')
+const dbQueries = require('../db/dbQueries/objectQueries');
+const recordQueries = require('../db/dbQueries/recordQueries');
 const pool = require('../db/dev/connection');
 
 module.exports = {
@@ -143,6 +144,42 @@ module.exports = {
             })
             .catch(err => {
                 console.log(`delete object failed ${err}`)
+            })
+    },
+
+    editObjectPackage: (request, response) => {
+        const { 
+            formOption, 
+            username, 
+            pdfPackage, 
+            reservedTimestamp, 
+            locale
+        } = request.body
+
+        pool.query(recordQueries.addEditObjectRecord(formOption, username, pdfPackage.path))
+            .then(res => {
+                const record_id = res.rows[0].id
+                console.log('add edited object record succeed')
+                pool.query(dbQueries.editObjectPackage(formOption, username, record_id, reservedTimestamp))
+                    .then(res => {
+                        console.log('edit object package succeed')
+                        if (pdfPackage) {
+                            pdf.create(pdfPackage.pdf, pdfPackage.options).toFile(path.join(process.env.LOCAL_FILE_PATH, pdfPackage.path), function(err, result) {
+                                if (err) return console.log(`edit object package error ${err}`);
+                            
+                                console.log("pdf create succeed");
+                                response.status(200).json(pdfPackage.path)
+                            });
+                        } else { 
+                            response.status(200).json()
+                        }
+                    })
+                    .catch(err => {
+                        console.log(`edit object package failed ${err}`)
+                    })
+            })
+            .catch(err => {
+                console.log(`edit object package failed ${err}`)
             })
     }
 }
