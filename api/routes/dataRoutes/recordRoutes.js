@@ -46,12 +46,16 @@ module.exports = app => {
 
     app.options('/data/record/shiftChange', cors()) 
 
+
     app.route('/data/record/editedObject')
         .post(recordController.getEditObjectRecord)
 
     app.route('/data/record/shiftChange')
         .post(recordController.getShiftChangeRecord)
         .put(recordController.addShiftChangeRecord)
+
+    app.route('/data/record/patientRecord')
+        .post(recordController.addPatientRecord)
 
     app.get(`/${process.env.DEFAULT_FOLDER}/shift_record/:file`, (req, res) =>{
         res.sendFile(path.join(`${process.env.LOCAL_FILE_PATH}`, `${process.env.DEFAULT_FOLDER}/shift_record`,req.params['file']));

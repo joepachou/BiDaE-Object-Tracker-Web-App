@@ -103,6 +103,22 @@ module.exports = {
                 console.log(`pdf create failed: ${err}`)
             })
     
+    },
+
+    addPatientRecord: (request, response) => {
+        let {
+            objectPackage
+        } = request.body
+    
+        pool.query(dbQueries.addPatientRecord(objectPackage))
+            .then(res => {
+                console.log(`add patient record succeed`)
+                response.status(200).json(res)
+            })
+            .catch(err => {
+                console.log(`add patient record failed ${err}`)
+            })
+    
     }
 
 }

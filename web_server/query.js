@@ -1017,23 +1017,7 @@ const modifyRolesPermission = (request, response) => {
         })
 }
 
-const addPatientRecord = (request, response) => {
-    let {
-        objectPackage
-    } = request.body
 
-    pool.query(queryType.addPatientRecord(objectPackage))
-        .then(res => {
-            console.log(`add patient record succeed`)
-            response.status(200).json(res)
-        })
-        .catch(err => {
-            console.log(`add patient record failed ${err}`)
-        })
-
-}
-
- 
 
 module.exports = {
     getObjectTable,
@@ -1088,5 +1072,4 @@ module.exports = {
     clearSearchHistory,
     getLocationHistory,
     setUserSecondaryArea,
-    addPatientRecord 
 }

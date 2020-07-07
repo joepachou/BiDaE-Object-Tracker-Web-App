@@ -1686,37 +1686,6 @@ function modifyRolesPermission(type, data){
     }
 }
 
-const addPatientRecord = objectPackage => {
-	let text = `
-		INSERT INTO patient_record (
-			object_id,
-			editing_user_id, 
-			record,
-			created_timestamp
-		) 
-		VALUES (
-			$1,
-			$2,
-			$3,
-			NOW()
-		)
-		
-	`
-	let values = [
-		objectPackage.id,
-		objectPackage.userId,
-		objectPackage.record
-	]	
-
-	let query = {
-		text,
-		values
-	}
-	
-	return query
-	
-}
-
  
 function setAPIKey(name,hash) {
 
@@ -1805,7 +1774,6 @@ module.exports = {
 	setMonitorEnable,
 	clearSearchHistory,
 	setUserSecondaryArea,
-	addPatientRecord ,
 	setAPIKey
 }
 

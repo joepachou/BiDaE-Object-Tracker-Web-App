@@ -61,6 +61,14 @@ export default {
         })
     },
 
+    addPatientRecord: async function({
+        objectPackage
+    }) {
+        return await axios.post(dataSrc.record.patientRecord, {
+            objectPackage
+        })
+    },
+
     delete: async function(
         configPackage
     ) {

@@ -55,8 +55,6 @@ import ConfirmForm from '../container/ConfirmForm';
 import DownloadPdfRequestForm from '../container/DownloadPdfRequestForm';
 import config from '../../config';
 import moment from 'moment';
-import axios from 'axios';
-import dataSrc from '../../dataSrc';
 import apiHelper from '../../helper/apiHelper';
 import messageGenerator from '../../helper/messageGenerator';
 import pdfPackageGenerator from '../../helper/pdfPackageGenerator';
@@ -330,12 +328,14 @@ class SearchResultList extends React.Component {
         let {
             auth
         } = this.context
+
+
         let objectPackage = {
             userId: auth.user.id,
             record: values.record,
             id: this.state.selectedObjectData.id
         }
-        axios.post(dataSrc.addPatientRecord, {
+        apiHelper.record.addPatientRecord({
             objectPackage
         })
         .then(res => {

@@ -139,9 +139,41 @@ const addShiftChangeRecord = (userInfo, file_path,shift) => {
 	return query
 }
 
+const addPatientRecord = objectPackage => {
+	let text = `
+		INSERT INTO patient_record (
+			object_id,
+			editing_user_id, 
+			record,
+			created_timestamp
+		) 
+		VALUES (
+			$1,
+			$2,
+			$3,
+			NOW()
+		)
+		
+	`
+	let values = [
+		objectPackage.id,
+		objectPackage.userId,
+		objectPackage.record
+	]	
+
+	let query = {
+		text,
+		values
+	}
+	
+	return query
+	
+}
+
 module.exports = {
     getShiftChangeRecord,
     getEditObjectRecord,
 	addEditObjectRecord,
-	addShiftChangeRecord
+	addShiftChangeRecord,
+	addPatientRecord
 }

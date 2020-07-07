@@ -95,6 +95,8 @@ module.exports = {
         
         shiftChange: `${domain}/data/record/shiftChange`,
 
+        patientRecord: `${domain}/data/record/patientRecord`,
+
     },
 
     transferredLocation: `${domain}/data/transferredLocation`,
