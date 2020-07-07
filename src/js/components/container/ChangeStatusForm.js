@@ -136,16 +136,17 @@ export default class ChangeStatusForm extends React.Component {
 
         selectedObjectData = selectedObjectData.length ? selectedObjectData : []
 
-        let {transferredLocationOptions} = this.state
+        let {
+            transferredLocationOptions
+        } = this.state
+        console.log(selectedObjectData)
         let initValues = {
             name: selectedObjectData.length != 0 ? selectedObjectData[0].name : '',
             type: selectedObjectData.length != 0 ? selectedObjectData[0].type : '',
             asset_control_number: selectedObjectData.length != 0 ? selectedObjectData[0].asset_control_number : '',
             status: selectedObjectData.length != 0 ? selectedObjectData[0].status : '',
             transferred_location: selectedObjectData.length != 0 && selectedObjectData[0].status == config.objectStatus.TRANSFERRED
-
                 ? null
-                
                 : '',
             notes: selectedObjectData.length != 0 ? selectedObjectData[0].notes : "" ,
             nickname :  selectedObjectData.length != 0 ? selectedObjectData[0].nickname : '',     
@@ -153,7 +154,8 @@ export default class ChangeStatusForm extends React.Component {
         
         if(selectedObjectData.length != 0 && selectedObjectData[0].status == config.objectStatus.TRANSFERRED){
             let ids = selectedObjectData[0].transferred_location.split(',')
-            let branchId = ids[0], departmentId = ids[1]
+            let branchId = ids[0]
+            let departmentId = ids[1]
             let branch = this.state.transferredLocationOptions.filter(branch => branch.id == branchId)[0] 
             let department = null
             if(branch){

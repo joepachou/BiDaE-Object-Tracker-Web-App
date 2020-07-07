@@ -55,6 +55,7 @@ const getTrackingData = (areas_id, key) => {
 			object_table.asset_control_number,
 			object_table.area_id,
 			object_table.object_type,
+			object_table.transferred_location,
 			lbeacon_table.description as location_description,
 			JSON_BUILD_OBJECT(
 				'id', area_table.id,

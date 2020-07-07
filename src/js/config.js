@@ -992,15 +992,6 @@ const config = {
         /* Set the tracking query inteval time(ms) */
         intervalTime: process.env.OBJECT_TRACKING_INTERVAL_TIME_IN_MILLI_SEC,
 
-        objectStatus: {
-            PERIMETER: "perimeter",
-            FENCE: "fence",
-            NORMAL: "normal",
-            BROKEN: "broken",
-            RESERVE: "reserve",
-            TRANSFERRED: "transferred",   
-        },
-
         popupOptions: {
             minWidth: "500",
             maxHeight: "300",
