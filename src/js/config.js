@@ -43,7 +43,7 @@ const config = {
 
     VERSION: 'v1.0 b.1916',
 
-    TIME_FORMAT: 'LLL',
+    TIMESTAMP_FORMAT: 'LLL',
 
     TRACING_INTERVAL_UNIT: 'days',
 

@@ -214,7 +214,7 @@ class ShiftChange extends React.Component {
             notFoundPatients
         } = this.state.patients
 
-        const nowTime = moment().locale(locale.abbr).format(config.TIME_FORMAT)
+        const nowTime = moment().locale(locale.abbr).format(config.TIMESTAMP_FORMAT)
         const hasFoundResult = foundResult.length !== 0;
         const hasNotFoundResult = notFoundResult.length !== 0;
         const hasFoundPatients = foundPatients.length !== 0;

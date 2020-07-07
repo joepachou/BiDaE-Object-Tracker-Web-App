@@ -53,6 +53,7 @@ module.exports = {
     
                 res.rows.map(item => {
                     item.edit_time = moment.tz(item.edit_time, process.env.TZ).locale(locale).format(process.env.TIMESTAMP_FORMAT);
+                    return item
                 })
                 response.status(200).json(res)
             })
@@ -68,6 +69,7 @@ module.exports = {
                 console.log('get shift change record succeed')
                 res.rows.map(item => {
                     item.submit_timestamp = moment.tz(item.submit_timestamp, process.env.TZ).locale(locale).format(process.env.TIMESTAMP_FORMAT);
+                    return item
                 })
                 response.status(200).json(res)
             })

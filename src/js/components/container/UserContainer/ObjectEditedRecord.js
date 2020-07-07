@@ -86,7 +86,7 @@ class ObjectEditedRecord extends React.Component{
         } = this.context
         apiHelper.record.getRecord(
             config.RECORD_TYPE.EDITED_OBJECT,
-            locale
+            locale.abbr
         )
         .then(res => {
             let columns = _.cloneDeep(editObjectRecordTableColumn)
