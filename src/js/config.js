@@ -785,13 +785,13 @@ const config = {
 
             errorCircleOptions: {
 
-                color: 'rgba(0, 0, 0, 0)',
+                color: '#ffc107',
 
-                fillColor: 'red',
+                fillColor: '#ffc10778',
 
-                fillOpacity: 0.4,
+                fillOpacity: 0.2,
 
-                radius: 40,
+                radius: 20,
             },
         },
 
