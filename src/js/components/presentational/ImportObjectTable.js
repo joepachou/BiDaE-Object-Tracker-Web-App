@@ -4,7 +4,7 @@
     License:
         GPL 3.0 : The content of this file is subject to the terms and conditions
 
-    Project Name:
+    Project Name: 
         BiDae Object Tracker (BOT)
 
     File Name:

@@ -43,6 +43,8 @@ const config = {
 
     VERSION: 'v1.0 b.1915',
 
+    TIME_FORMAT: 'LLL',
+
     TRACING_INTERVAL_UNIT: 'days',
 
     TRACING_INTERVAL_VALUE: 1,
@@ -133,8 +135,6 @@ const config = {
 
         trackingRecord: `tracking_record`
     },
-
-    TIME_FORMAT: 'lll',
 
     AJAX_STATUS_MAP: {
         LOADING: 'loading',

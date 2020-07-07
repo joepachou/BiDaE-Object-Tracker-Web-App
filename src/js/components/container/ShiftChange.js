@@ -1,22 +1,22 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { 
     Modal, 
     Button,
 } from 'react-bootstrap';
 import axios from 'axios';
-import dataSrc from '../../dataSrc'
+import dataSrc from '../../dataSrc';
 import moment from 'moment'
 import config from '../../config';
-import { AppContext } from '../../context/AppContext'
-import GeneralConfirmForm from '../presentational/GeneralConfirmForm'
-import retrieveDataHelper from '../../helper/retrieveDataHelper'
-import DownloadPdfRequestForm from './DownloadPdfRequestForm'
+import { AppContext } from '../../context/AppContext';
+import GeneralConfirmForm from '../presentational/GeneralConfirmForm';
+import retrieveDataHelper from '../../helper/retrieveDataHelper';
+import DownloadPdfRequestForm from './DownloadPdfRequestForm';
 import Select from 'react-select';
-import messageGenerator from '../../helper/messageGenerator'
+import messageGenerator from '../../helper/messageGenerator';
 import { Formik, Field, Form } from 'formik';
 import {
     getDescription
-} from '../../helper/descriptionGenerator'
+} from '../../helper/descriptionGenerator';
 
 const style = {
     modalBody: {
@@ -214,7 +214,7 @@ class ShiftChange extends React.Component {
             notFoundPatients
         } = this.state.patients
 
-        const nowTime = moment().locale(locale.abbr)
+        const nowTime = moment().locale(locale.abbr).format(config.TIME_FORMAT)
         const hasFoundResult = foundResult.length !== 0;
         const hasNotFoundResult = notFoundResult.length !== 0;
         const hasFoundPatients = foundPatients.length !== 0;
@@ -233,12 +233,11 @@ class ShiftChange extends React.Component {
         }
 
         return ( 
-            <div>
+            <Fragment>
                 <Modal 
                     show={show} 
                     size="lg" 
                     onHide={handleClose}
-                    className='text-capitalize'
                 >
                     <Formik            
                         initialValues = {{
@@ -252,13 +251,13 @@ class ShiftChange extends React.Component {
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm }) => (
                             <div>
                                 <Modal.Header
-                                    className='d-flex flex-column'
+                                    className='d-flex flex-column text-capitalize'
                                 >
                                     <div className="title">
                                         {locale.texts.SHIFT_CHANGE_RECORD}
                                     </div>                                
                                     <div>
-                                        {locale.texts.DATE_TIME}: {nowTime.format(config.regularTimeFormat)}
+                                        {locale.texts.DATE_TIME}: {nowTime}
                                     </div> 
                                     <div 
                                     >
@@ -340,7 +339,7 @@ class ShiftChange extends React.Component {
                     pdfPath={this.state.fileUrl}
                     handleClose={this.handleClose}
                 /> 
-            </div>
+            </Fragment>
         )
     }
 }
