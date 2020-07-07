@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        recordRoutes.js
+        authApiAgent.js
 
     File Description:
         BOT UI component
@@ -35,25 +35,22 @@
 */
 
 
+import dataSrc from '../dataSrc';
+import axios from 'axios';
 
-let recordController = require('../../controllers/recordController');
-let cors = require('cors');
+export default {
 
-module.exports = app => {
+    confirmValidation: async function ({
+        username,
+        password,
+        locale
+    }) {
+        return await axios.post(dataSrc.auth.validation, {
+            username,
+            password,
+            locale
+        })
+    },
 
-    // enable pre-flight request for DELETE request
-    app.options('/data/record', cors()) 
 
-    app.options('/data/record/shiftChange', cors()) 
-
-    app.route('/data/record/editedObject')
-        .post(recordController.getEditObjectRecord)
-
-    app.route('/data/record/shiftChange')
-        .post(recordController.getShiftChangeRecord)
-        .put(recordController.addShiftChangeRecord)
-
-    app.get(`/${process.env.DEFAULT_FOLDER}/shift_record/:file`, (req, res) =>{
-        res.sendFile(path.join(`${process.env.LOCAL_FILE_PATH}`, `${process.env.DEFAULT_FOLDER}/shift_record`,req.params['file']));
-    })
 }

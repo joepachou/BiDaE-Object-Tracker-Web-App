@@ -39,6 +39,7 @@ import geofenceApis from '../apiAgent/geofenceApis';
 import record from '../apiAgent/recordApiAgent';
 import objectApiAgent from '../apiAgent/objectAPiAgent';
 import transferredLocationApiAgent from '../apiAgent/transferredLocationApiAgent';
+import authApiAgent from '../apiAgent/authApiAgent';
 
 const apiHelper = {
 
@@ -51,6 +52,8 @@ const apiHelper = {
     objectApiAgent,
 
     transferredLocationApiAgent,
+
+    authApiAgent,
     
 
 }

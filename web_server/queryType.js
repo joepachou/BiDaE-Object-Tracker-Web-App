@@ -1362,29 +1362,6 @@ const insertUserData = (name, roles, area_id) => {
 	`
 }
 
-const addShiftChangeRecord = (userInfo, file_path,shift) => {
- 
-	const query = `
-		INSERT INTO shift_change_record (
-			user_id, 
-			shift,
-			submit_timestamp, 
-			file_path
-		)
-		VALUES (
-			(
-				SELECT id
-				FROM user_table
-				WHERE name='${userInfo.name}'
-			), 
-			'${shift.value}',
-			now(), 
-			'${file_path}'
-		);
-	`
-	return query
-}
-
 const getAreaTable = () => {
 	return `
 		SELECT 
@@ -1806,7 +1783,6 @@ module.exports = {
 	deleteGateway,
 	setVisitTimestamp,
 	insertUserData,
-	addShiftChangeRecord,
 	getAreaTable,
 	getGeofenceConfig,
 	checkoutViolation,

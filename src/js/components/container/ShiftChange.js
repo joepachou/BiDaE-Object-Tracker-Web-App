@@ -17,6 +17,8 @@ import { Formik, Field, Form } from 'formik';
 import {
     getDescription
 } from '../../helper/descriptionGenerator';
+import pdfPackageGenerator from '../../helper/pdfPackageGenerator';
+import apiHelper from '../../helper/apiHelper';
 
 const style = {
     modalBody: {
@@ -134,15 +136,19 @@ class ShiftChange extends React.Component {
             searchResult: this.state.searchResult, 
             patients: this.state.patients
         }
-  
-        let pdfPackage = config.getPdfPackage(
-            'shiftChange', 
-            auth.user, 
-            shiftChangeObjectPackage, 
+
+        let pdfPackage = pdfPackageGenerator.getPdfPackage({
+            option: 'shiftChange', 
+            user: auth.user, 
+            data: shiftChangeObjectPackage, 
             locale,
-            authentication,
-            this.state.shift
-        )  
+            signature: authentication,
+            additional: {
+                shift: this.state.shift,
+                area: locale.texts[config.mapConfig.areaOptions[auth.user.areas_id[0]]],
+                name: auth.user.name
+            }
+        })  
 
         this.state.patients.foundPatients.reduce((pkg, object) => {   
             let temp = config.getPdfPackage(
@@ -163,11 +169,12 @@ class ShiftChange extends React.Component {
             return pkg
         }, pdfPackage)
 
-        axios.post(dataSrc.addShiftChangeRecord, {
+        apiHelper.record.addShiftChangeRecord({
             userInfo: auth.user,
             pdfPackage,
             shift: this.state.shift,
-        }).then(res => {
+        })
+        .then(res => {
             let callback = () => {
                 this.props.handleClose(() => {
                     messageGenerator.setSuccessMessage(

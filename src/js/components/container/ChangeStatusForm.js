@@ -139,7 +139,7 @@ export default class ChangeStatusForm extends React.Component {
         let {
             transferredLocationOptions
         } = this.state
-        console.log(selectedObjectData)
+
         let initValues = {
             name: selectedObjectData.length != 0 ? selectedObjectData[0].name : '',
             type: selectedObjectData.length != 0 ? selectedObjectData[0].type : '',

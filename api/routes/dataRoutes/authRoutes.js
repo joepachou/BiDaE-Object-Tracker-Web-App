@@ -44,4 +44,7 @@ module.exports = app => {
 
     app.route('/data/auth/signout')
         .post(authController.signout)
+
+    app.route('/data/auth/validation')
+        .post(authController.validation)
 }

@@ -134,6 +134,8 @@ class MyDeviceManager extends React.Component{
             postMyDeviceChange: (mode, acn) => {
                 let { auth } = this.context;
                 const username = auth.user.name
+
+                
                 axios.post(dataSrc.modifyMyDevice, {
                         username,
                         mode: mode,

@@ -508,29 +508,6 @@ const generatePDF = (request, response) => {
     });
 }
 
-const addShiftChangeRecord = (request, response) => {
-    let { 
-        userInfo, 
-        pdfPackage,
-        shift 
-    } = request.body
-
-    /** If there are some trouble when download pdf, try npm rebuild phantomjs-prebuilt */
-    pool.query(queryType.addShiftChangeRecord(userInfo, pdfPackage.path, shift))
-        .then(res => {
-             /** If there are some trouble when download pdf, try npm rebuild phantomjs-prebuilt */
-            pdf.create(pdfPackage.pdf, pdfPackage.options ).toFile(path.join(process.env.LOCAL_FILE_PATH, pdfPackage.path), function(err, result) {
-                if (err) return console.log(`add shift change record failed ${err}`);
-            
-                console.log("pdf create succeed");
-                response.status(200).json(pdfPackage.path)
-            });
-        })
-        .catch(err => {
-            console.log(`pdf create failed: ${err}`)
-        })
-
-}
 
 const modifyUserDevices = (request, response) => {
     const {username, mode, acn} = request.body
@@ -729,55 +706,6 @@ const checkoutViolation = (request, response) => {
         })
 }
 
-const confirmValidation = (request, response) => {
-    let { 
-        username, 
-        password 
-    } = request.body 
-    pool.query(queryType.confirmValidation(username))
-        .then(res => {
-            if (res.rowCount < 1) {
-                console.log(`confirm validation failed: incorrect`)
-                response.json({
-                    confirmation: false,
-                    message: 'incorrect'
-                })
-            } else {
-
-                const hash = encrypt.createHash(password);
-                
-                if (hash == res.rows[0].password) {
-                    let { 
-                        roles, 
-                    } = res.rows[0] 
-                    /** authenticate if user is care provider */
-                    if (roles.includes('3') || roles.includes('4')) {
-
-                        console.log(`confirm validation succeed`)
-                        response.json({
-                            confirmation: true,
-                        })
-                    } else {
-
-                        console.log(`confirm validation failed: authority is not enough`)
-                        response.json({
-                            confirmation: false,
-                            message: 'authority is not enough'
-                        })
-                    }
-                } else {
-                    console.log(`confirm validation failed: password is incorrect`)
-                    response.json({
-                        confirmation: false,
-                        message: 'password incorrect'
-                    })
-                }
-            }
-        })
-        .catch(err => {
-            console.log(`confirm validation fails ${err}`)
-        })
-}
 
 const getGeofenceConfig = (request, response) => {
     let { areaId } = request.body
@@ -1119,7 +1047,6 @@ module.exports = {
     getAreaTable,
     getGeofenceConfig,
     getUserInfo,
-    addShiftChangeRecord,
     addUserSearchHistory,
     addObject,
     addPatient,
@@ -1150,7 +1077,6 @@ module.exports = {
     setUserInfo,
     getMainSecondArea,
     checkoutViolation,
-    confirmValidation,
     backendSearch,
     getSearchQueue,
     getTrackingTableByMacAddress,

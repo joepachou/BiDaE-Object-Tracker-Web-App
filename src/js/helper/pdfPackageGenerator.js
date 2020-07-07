@@ -81,6 +81,12 @@ const pdfPackageGenerator = {
         contactTree: `contact_tree`,
     },
 
+    shiftOption: [
+        "day shift",
+        "swing shift",
+        "night shift",
+    ],
+
     PDF_FILENAME_TIME_FORMAT: "YYYY-MM-Do_hh_mm_ss",
 
     /** Pdf format pdfPackageGenerator */
@@ -111,7 +117,7 @@ const pdfPackageGenerator = {
         },
     
 
-        getPath: (option, additional) =>{
+        getPath: (option, additional) => {
             let directory = pdfPackageGenerator.FOLDER_PATH[option]
             let name = pdfPackageGenerator.pdfFormat.getFileName[option](option, additional)
             let path = `${directory}/${name}`
@@ -165,8 +171,8 @@ const pdfPackageGenerator = {
                 return signature_title + signatureName + list_title + list + notes
             },
 
-            shiftChange: (data, locale, user) => {
-                let area =  locale.texts[pdfPackageGenerator.mapConfig.areaOptions[parseInt(user.areas_id[0])]]
+            shiftChange: (data, locale, user, location, signature, additional) => {
+                let area =  additional.area
                 let foundTitle = pdfPackageGenerator.pdfFormat.getBodyItem.getBodyTitle(
                     'devices found', 
                     locale, 
@@ -611,14 +617,13 @@ const pdfPackageGenerator = {
                 }).join('')  
             }
         },
-    
+     
         getSubTitle: {
-            shiftChange: (locale, user, signature, shiftOption) => {
+            shiftChange: (locale, user, signature, additional) => {
                 let timestamp = pdfPackageGenerator.pdfFormat.getTimeStamp(locale)
-
-                const lastShiftIndex = (pdfPackageGenerator.shiftOption.indexOf(shiftOption.value) + 2) % pdfPackageGenerator.shiftOption.length
+                const lastShiftIndex = (pdfPackageGenerator.shiftOption.indexOf(additional.shift.value) + 2) % pdfPackageGenerator.shiftOption.length
                 const lastShift = locale.texts[pdfPackageGenerator.shiftOption[lastShiftIndex].toUpperCase().replace(/ /g, '_')]
-                const thisShift = shiftOption.label
+                const thisShift = additional.shift.label
                 let shift = `<div style='text-transform: capitalize;'>
                         ${locale.texts.SHIFT}: ${lastShift} ${locale.texts.SHIFT_TO} ${thisShift}
                     </div>`
@@ -629,7 +634,7 @@ const pdfPackageGenerator = {
                     }
                 </div>`
                 let checkby = `<div style='text-transform: capitalize;'>
-                        ${locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: ${user.name}, ${shiftOption.label}
+                        ${locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: ${user.name}, ${additional.shift.label}
                     </div>`
                 return timestamp + confirmedBy + shift + checkby
             },

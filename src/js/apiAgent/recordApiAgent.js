@@ -49,6 +49,18 @@ export default {
         })
     },
 
+    addShiftChangeRecord: async function ({
+        userInfo,
+        pdfPackage,
+        shift,
+    }) {
+        return await axios.put(dataSrc.record.shiftChange, {
+            userInfo,
+            pdfPackage,
+            shift,
+        })
+    },
+
     delete: async function(
         configPackage
     ) {

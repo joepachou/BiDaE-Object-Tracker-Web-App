@@ -42,9 +42,8 @@ import {
 } from 'react-bootstrap';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import dataSrc from '../../dataSrc'
-import axios from 'axios';
 import LocaleContext from '../../context/LocaleContext';
+import apiHelper from '../../helper/apiHelper';
 
 const style = {
     modal: {
@@ -85,7 +84,8 @@ const GeneralConfirmForm = ({
                     })}
                 
                     onSubmit={({ username, password, radioGroup }, { setStatus, setSubmitting }) => { 
-                        axios.post(dataSrc.confirmValidation, {
+
+                        apiHelper.authApiAgent.confirmValidation({
                             username,
                             password,
                             locale

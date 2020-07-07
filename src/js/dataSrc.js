@@ -76,6 +76,7 @@ module.exports = {
     auth: {
         signin: `${domain}/data/auth/signin`,
         signout: `${domain}/data/auth/signout`,
+        validation: `${domain}/data/auth/validation`,
     },
 
     file: {

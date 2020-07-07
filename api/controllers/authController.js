@@ -123,6 +123,56 @@ module.exports = {
             console.log('session is destroyed')
         })
         res.status(200).json()
+    },
+
+    validation: (request, response) => {
+        let { 
+            username, 
+            password 
+        } = request.body 
+        pool.query(dbQueries.validation(username))
+            .then(res => {
+                if (res.rowCount < 1) {
+                    console.log(`confirm validation failed: incorrect`)
+                    response.json({
+                        confirmation: false,
+                        message: 'incorrect'
+                    })
+                } else {
+    
+                    const hash = encrypt.createHash(password);
+                    
+                    if (hash == res.rows[0].password) {
+                        let { 
+                            roles, 
+                        } = res.rows[0] 
+                        /** authenticate if user is care provider */
+                        if (roles.includes('3') || roles.includes('4')) {
+    
+                            console.log(`confirm validation succeed`)
+                            response.json({
+                                confirmation: true,
+                            })
+                        } else {
+    
+                            console.log(`confirm validation failed: authority is not enough`)
+                            response.json({
+                                confirmation: false,
+                                message: 'authority is not enough'
+                            })
+                        }
+                    } else {
+                        console.log(`confirm validation failed: password is incorrect`)
+                        response.json({
+                            confirmation: false,
+                            message: 'password incorrect'
+                        })
+                    }
+                }
+            })
+            .catch(err => {
+                console.log(`confirm validation fails ${err}`)
+            })
     }
 }
 

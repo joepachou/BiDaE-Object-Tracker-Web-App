@@ -60,4 +60,6 @@ module.exports = app => {
     app.route('/data/user/locale')
         .post(userController.setLocale)
 
+    app.route('/data/user/mydevice')
+
 }

@@ -41,6 +41,8 @@ const exec = require('child_process').execFile;
 const moment = require('moment');
 const dbQueries = require('../db/dbQueries/recordQueries')
 const pool = require('../db/dev/connection');
+const pdf = require('html-pdf');
+const path = require('path');
 
 module.exports = {
 
@@ -76,6 +78,31 @@ module.exports = {
             .catch(err => {
                 console.log(`get shift change record failed ${err}`)
             })
+    },
+
+    addShiftChangeRecord: (request, response) => {
+        let { 
+            userInfo, 
+            pdfPackage,
+            shift 
+        } = request.body
+        console.log(request.body)
+        /** If there are some trouble when download pdf, try npm rebuild phantomjs-prebuilt */
+        pool.query(dbQueries.addShiftChangeRecord(userInfo, pdfPackage.path, shift))
+            .then(res => {
+
+                /** If there are some trouble when download pdf, try npm rebuild phantomjs-prebuilt */
+                pdf.create(pdfPackage.pdf, pdfPackage.options ).toFile(path.join(process.env.LOCAL_FILE_PATH, pdfPackage.path), function(err, result) {
+                    if (err) return console.log(`add shift change record failed ${err}`);
+                
+                    console.log("pdf create succeed");
+                    response.status(200).json(pdfPackage.path)
+                });
+            })
+            .catch(err => {
+                console.log(`pdf create failed: ${err}`)
+            })
+    
     }
 
 }
