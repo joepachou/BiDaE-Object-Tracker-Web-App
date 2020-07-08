@@ -171,6 +171,14 @@ class Map extends React.Component {
         this.mapOptions.maxBounds = bounds.map((latLng, index) => latLng.map(axis => axis + this.mapOptions.maxBoundsOffset[index]))
         var map = L.map('mapid', this.mapOptions);
 
+        /** Close popup while mouse leaving out the map */
+        map.on('mouseout', () => {
+            map.closePopup();
+            this.setState({
+                shouldUpdateTrackingData: true
+            })
+        })
+
         if (hasMap) {
             let image = L.imageOverlay(url, bounds);
             map.addLayer(image)
