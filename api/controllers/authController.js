@@ -67,6 +67,7 @@ module.exports = {
                             permissions,
                             mydevice, 
                             freq_search_count,
+                            search_history,
                             areas_id,
                             id,
                             main_area,
@@ -88,7 +89,8 @@ module.exports = {
                             areas_id,
                             main_area,
                             locale_id,
-                            locale
+                            locale,
+                            searchHistory: search_history
                         }
 
                         /** Set session */

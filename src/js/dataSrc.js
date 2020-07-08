@@ -54,7 +54,11 @@ module.exports = {
             secondary: `${domain}/data/user/area/secondary`,
         },
         password: `${domain}/data/user/password`,
+
         locale: `${domain}/data/user/locale`,
+
+        searchHistory: `${domain}/data/user/searchHistory`,
+
     },
 
     object: `${domain}/data/object`,
@@ -100,6 +104,8 @@ module.exports = {
     },
 
     transferredLocation: `${domain}/data/transferredLocation`,
+
+
 
     pdfUrl: path => {
         return `${domain}/data/file/${path}`

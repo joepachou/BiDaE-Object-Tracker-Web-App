@@ -87,27 +87,28 @@ class FrequentSearch extends React.Component {
                 overflow: "hidden scroll"
             }
         }
-
         return (
             <div id='frequentSearch' >
                 <div className='text-capitalize title'>{locale.texts.FREQUENT_SEARCH}</div>
                 <div style={style.list} className="d-inline-flex flex-column searchOption">
                     {auth.authenticated && auth.user.searchHistory &&
-                        auth.user.searchHistory.filter( (item,index) => {
-                            return index < auth.user.freqSearchCount
-                    }).map( (item, index) => {
-                        return (
-                            <Button
-                                variant="outline-custom"
-                                className="text-none"
-                                onClick={this.handleClick} 
-                                // active={this.state.searchKey === item.name.toLowerCase()} 
-                                key={index}
-                                name={item.name}
-                            >
-                                {item.name}
-                            </Button>
-                        )
+                        auth.user.searchHistory
+                            .filter( (item,index) => {
+                                return index < auth.user.freqSearchCount
+                            })
+                            .map((item, index) => {
+                                return (
+                                    <Button
+                                        variant="outline-custom"
+                                        className="text-none"
+                                        onClick={this.handleClick} 
+                                        // active={this.state.searchKey === item.name.toLowerCase()} 
+                                        key={index}
+                                        name={item.name}
+                                    >
+                                        {item.name}
+                                    </Button>
+                                )
                     })}
                     <hr/>
                     <Button 

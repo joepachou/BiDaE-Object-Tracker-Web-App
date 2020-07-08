@@ -78,8 +78,11 @@ module.exports = {
 			search_histories
 				AS
 					(
-						SELECT keyword as name, COUNT(id) as value
-						FROM search_history where user_id = (SELECT id FROM user_info)
+						SELECT 
+							keyword as name, 
+							COUNT(id) as value
+						FROM search_history 
+						WHERE user_id = (SELECT id FROM user_info)
 						GROUP BY keyword
 					)
 			SELECT 

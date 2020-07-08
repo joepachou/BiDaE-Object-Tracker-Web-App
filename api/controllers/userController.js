@@ -185,6 +185,23 @@ module.exports = {
             .catch(err => {
                 console.log(`set locale failed ${err}`)
             })
+    },
+
+    addSearchHistory: (request, response) => {
+        let { 
+            username, 
+            keyType, 
+            keyWord 
+        } = request.body;
+        
+        pool.query(dbQueries.addSearchHistory(username, keyType, keyWord))
+            .then(res => {
+                console.log('add user searech history success')
+                response.status(200).json(res)
+            })
+            .catch(err => {
+                console.log(`add user search history fails ${err}`)
+            })
     }
 
 

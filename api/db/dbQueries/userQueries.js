@@ -301,5 +301,42 @@ module.exports = {
 		};
 
 		return query;
+	},
+
+	addSearchHistory: (username, keyType, keyWord) => {
+
+		const text = `
+			INSERT INTO search_history (
+				search_time, 
+				keyWord, 
+				key_type, 
+				user_id
+			)
+			
+			VALUES(
+				now(),
+				$1,
+				$2,
+				(
+					SELECT id 
+					FROM user_table 
+					WHERE name = $3
+				)
+			) 
+				
+		`;
+	
+		const values = [
+			keyWord, 
+			keyType, 
+			username
+		];
+	
+		const query = {
+			text, 
+			values
+		};
+	
+		return query
 	}
 }

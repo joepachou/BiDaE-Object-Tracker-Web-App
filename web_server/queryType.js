@@ -914,37 +914,6 @@ function getUserInfo(username) {
 	return query
 }
 
-const addUserSearchHistory = (username, keyType, keyWord) => {
-
-	const text = `
-		INSERT INTO search_history(search_time, keyWord, key_type, user_id)
-		VALUES(
-			now(),
-			$1,
-			$2,
-			(
-				SELECT id 
-				FROM user_table 
-				WHERE name = $3
-			)
-		) 
-			
-	`;
-
-	const values = [
-		keyWord, 
-		keyType, 
-		username
-	];
-
-	const query = {
-		text, 
-		values
-	};
-
-	return query
-}
-
 function editLbeacon (formOption) {
 	const text =
 		`
@@ -1731,7 +1700,6 @@ module.exports = {
 	signup,
 	editPassword,
 	getUserInfo,
-	addUserSearchHistory,
 	editLbeacon,
 	modifyUserDevices,
 	modifyUserInfo,

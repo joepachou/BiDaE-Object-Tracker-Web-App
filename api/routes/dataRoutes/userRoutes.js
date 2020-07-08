@@ -44,6 +44,9 @@ module.exports = app => {
     // enable pre-flight request for DELETE request
     app.options('/data/user', cors()) 
 
+    app.options('/data/user/searchHistory', cors()) 
+
+
     app.route('/data/user')
         .get(userController.getAllUser)
         .delete(userController.deleteUser)
@@ -62,4 +65,6 @@ module.exports = app => {
 
     app.route('/data/user/mydevice')
 
+    app.route('/data/user/searchHistory')
+        .put(userController.addSearchHistory)
 }

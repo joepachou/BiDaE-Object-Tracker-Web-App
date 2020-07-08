@@ -38,8 +38,7 @@
 import React  from 'react';
 import { Button } from 'react-bootstrap';
 import { AppContext } from '../../context/AppContext';
-import axios from 'axios'
-import { addUserSearchHistory } from '../../dataSrc'
+import apiHelper from '../../helper/apiHelper';
 
 class ObjectTypeList extends React.Component {
 
@@ -73,6 +72,7 @@ class ObjectTypeList extends React.Component {
     addSearchHistory(searchKey) {
         let { auth } = this.context
         if (!auth.authenticated) return;
+        console.log(auth.user.searchHistory )
         const searchHistory = auth.user.searchHistory || []
         let flag = false; 
         const toReturnSearchHistory = searchHistory.map( item => {
@@ -97,11 +97,11 @@ class ObjectTypeList extends React.Component {
 
     /** Insert search history to database */
     checkInSearchHistory(itemName) {
+
         let { 
             auth 
         } = this.context
-
-        axios.post(addUserSearchHistory, {
+        apiHelper.userApiAgent.addSearchHistory({
             username: auth.user.name,
             keyType: 'object type search',
             keyWord: itemName
@@ -110,7 +110,7 @@ class ObjectTypeList extends React.Component {
                 searchKey: itemName
             })
         }).catch(err => {
-            console.log(`check in search history fail ${err}`)
+            console.log(`check in search history failed ${err}`)
         })
     }
 

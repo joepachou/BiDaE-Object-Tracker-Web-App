@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        apiHelper.js
+        userApiAgent.js
 
     File Description:
         BOT UI component
@@ -34,32 +34,23 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
-import monitorApis from '../apiAgent/monitorApis';
-import geofenceApis from '../apiAgent/geofenceApis';
-import record from '../apiAgent/recordApiAgent';
-import objectApiAgent from '../apiAgent/objectAPiAgent';
-import transferredLocationApiAgent from '../apiAgent/transferredLocationApiAgent';
-import authApiAgent from '../apiAgent/authApiAgent';
-import userApiAgent from '../apiAgent/userApiAgent';
 
-const apiHelper = {
+import dataSrc from '../dataSrc';
+import axios from 'axios';
 
-    monitor: monitorApis,
+export default {
 
-    geofenceApis,
+    addSearchHistory: async function ({
+        username,
+        keyType,
+        keyWord
+    }) {
+        return await axios.put(dataSrc.userInfo.searchHistory, {
+            username,
+            keyType,
+            keyWord
+        })
+    },
 
-    record,
-
-    objectApiAgent,
-
-    transferredLocationApiAgent,
-
-    authApiAgent,
-
-    userApiAgent,
-    
 
 }
-
-
-export default apiHelper
