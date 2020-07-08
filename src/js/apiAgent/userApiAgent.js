@@ -52,5 +52,16 @@ export default {
         })
     },
 
+    editMyDevice: async function({
+        username,
+        mode,
+        acn,  
+    }) {
+        return await axios.put(dataSrc.userInfo.mydevice, {
+            username,
+            mode,
+            acn  
+        })
+    }
 
 }

@@ -202,7 +202,22 @@ module.exports = {
             .catch(err => {
                 console.log(`add user search history fails ${err}`)
             })
+    },
+
+    editMyDevice: (request, response) => {
+        const {
+            username, 
+            mode, 
+            acn
+        } = request.body
+
+        pool.query(dbQueries.editMyDevice(username, mode, acn))
+            .then(res => {
+                console.log('edit mydevice succeed')
+                response.status(200).json()
+            })
+            .catch(err => {
+                console.log(`edit mydevice failed ${err}`)
+            })            
     }
-
-
 }

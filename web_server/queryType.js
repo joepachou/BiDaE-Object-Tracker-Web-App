@@ -941,27 +941,6 @@ function editLbeacon (formOption) {
 	return query
 }
 
-function modifyUserDevices(username, mode, acn){
-	var text = ""
-	if(mode === 'add'){
-		text = `
-			UPDATE user_table 
-			SET mydevice = array_append(mydevice, '${acn}') 
-			WHERE name = '${username}';
-		`
-	}else if(mode === 'remove'){
-		text = `
-			UPDATE user_table 
-			SET mydevice = array_remove(mydevice, '${acn}') 
-			WHERE name = '${username}';
-		`	
-	}else{
-		text = ""
-	}
-
-	return text
-	
-}
 const modifyUserInfo = (username, info) => {	
 	const {
 		freqSearchCount
@@ -1701,7 +1680,6 @@ module.exports = {
 	editPassword,
 	getUserInfo,
 	editLbeacon,
-	modifyUserDevices,
 	modifyUserInfo,
 	getShiftChangeRecord,
 	validateUsername,

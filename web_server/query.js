@@ -491,20 +491,6 @@ const generatePDF = (request, response) => {
     });
 }
 
-
-const modifyUserDevices = (request, response) => {
-    const {username, mode, acn} = request.body
-    pool.query(queryType.modifyUserDevices(username, mode, acn), (error, results) => {
-        if (error) {
-            console.log("modifyUserDevices error: ", err)
-        } else {
-            console.log('Modify Success')
-        }
-        
-        response.status(200).json(results)
-    })
-}
-
 const modifyUserInfo = (request, response) => {
     const {username, info} = request.body
     pool.query(queryType.modifyUserInfo(username, info))
@@ -1037,7 +1023,6 @@ module.exports = {
     signup,
     editPassword,
     generatePDF,
-    modifyUserDevices,
     modifyUserInfo,
     validateUsername,
     setUserInfo,

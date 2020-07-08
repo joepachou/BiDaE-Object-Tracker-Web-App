@@ -46,6 +46,8 @@ module.exports = app => {
 
     app.options('/data/user/searchHistory', cors()) 
 
+    app.options('/data/user/myDevice', cors()) 
+
 
     app.route('/data/user')
         .get(userController.getAllUser)
@@ -67,4 +69,7 @@ module.exports = app => {
 
     app.route('/data/user/searchHistory')
         .put(userController.addSearchHistory)
+
+    app.route('/data/user/myDevice')
+        .put(userController.editMyDevice)
 }
