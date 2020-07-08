@@ -41,7 +41,7 @@ import moment from 'moment';
 
 const config = {
 
-    VERSION: 'v1.0 b.1917',
+    VERSION: 'v1.0 b.1918',
 
     TIMESTAMP_FORMAT: 'LLL',
 
