@@ -47,6 +47,7 @@ import {
     getType,
     getACN
 }from '../../../helper/descriptionGenerator';
+import apiHelper from '../../../helper/apiHelper';
 
 const style = {
     list: {
@@ -133,14 +134,15 @@ class MyPatientManager extends React.Component{
             postMyDeviceChange: (mode, acn) => {
                 let { auth } = this.context;
                 const username = auth.user.name
-                axios.post(dataSrc.modifyMyDevice, {
-                        username,
-                        mode: mode,
-                        acn: acn
-                    })
-                    .catch(err => {
-                        console.log(err)
-                    })
+
+                apiHelper.userApiAgent.editMyDevice({
+                    username,
+                    mode: mode,
+                    acn: acn            
+                })
+                .catch(err => {
+                    console.log(err)
+                })
             }
         }
 
