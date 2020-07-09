@@ -37,20 +37,18 @@
 
 import React from 'react';
 import { Col, Row, ListGroup, Nav, Button } from 'react-bootstrap';
-
-
-import LocaleContext from '../../context/LocaleContext';
-
-
 // import '../../../css/hideScrollBar.css'
 // import '../../../css/shadow.css'
 import '../../../css/SearchableObjectType.css'
 import axios from 'axios';
-import { getObjectTable } from '../../dataSrc'
+import { getObjectTable, auth } from '../../dataSrc'
 import Cookies from 'js-cookie'
 import {
     addUserSearchHistory
 } from '../../dataSrc'
+import apiHelper from '../../helper/apiHelper';
+import locale from 'antd/lib/date-picker/locale/en_US';
+import { AppContext } from '../../context/AppContext';
 /*
     this class contain three two components
         1. sectionIndexList : this is the alphabet list for user to search their objects by the first letter of their type
@@ -58,6 +56,7 @@ import {
 */
 class SearchableObjectType extends React.Component {
 
+    static contextType = AppContext
     constructor(){
         super()
         this.state = {
@@ -109,11 +108,18 @@ class SearchableObjectType extends React.Component {
         this.sectionIndexHTML= this.sectionIndexHTML.bind(this)
     }
 
-    
-    
-
     componentDidMount(){
-        axios.post(getObjectTable, {
+        let {
+            locale,
+            stateReducer,
+            auth
+        } = this.context;
+
+        console.log(222)
+        apiHelper.objectApiAgent.getObjectTable({
+            locale: locale.abbr,
+            areas_id: auth.user.areas_id,
+            objectType: [0]
         })
         .then(res => {
             let objectTypeList = []
@@ -126,7 +132,7 @@ class SearchableObjectType extends React.Component {
             })
         })
         .catch(err => {
-            console.log(err)
+            console.log(`get object table failed ${err}  `)
         })
 
         // if(this.props.getAPI){
@@ -304,14 +310,14 @@ class SearchableObjectType extends React.Component {
 
     checkInSearchHistory(username, searchHistory) {
         console.log(searchHistory)
-        axios.post(addUserSearchHistory, {
-            username,
-            searchHistory,
-        }).then(res => {
-            console.log(res)
-        }).catch(err => {
-            console.log(err)
-        })
+        // axios.post(addUserSearchHistory, {
+        //     username,
+        //     searchHistory,
+        // }).then(res => {
+        //     console.log(res)
+        // }).catch(err => {
+        //     console.log(err)
+        // })
     }
 
     render() {

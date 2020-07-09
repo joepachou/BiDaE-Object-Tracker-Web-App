@@ -45,6 +45,7 @@ import config from '../../../config';
 import Searchbar from '../../presentational/Searchbar';
 import FrequentSearch from '../../container/FrequentSearch';
 import ObjectTypeList from '../../container/ObjectTypeList';
+import SearchableObjectType from '../../presentational/SearchableObjectType';
 
 const BrowserSearchContainer = ({
     searchKey,
@@ -78,13 +79,20 @@ const BrowserSearchContainer = ({
                         />
                     </Col>
                     <Col md={6} sm={6} xs={6} lg={6} xl={6} className='px-0'>
-                        <ObjectTypeList
+                        {/* <ObjectTypeList
                             getSearchKey={getSearchKey}  
                             clearSearchResult={clearSearchResult}   
                             hasGridButton={hasGridButton} 
                             objectTypeList={objectTypeList || []}
                             maxHeigh={config.searchResultProportion}
-                        />                            
+                        />           */}
+                        <SearchableObjectType
+                            getSearchKey={getSearchKey}  
+                            clearSearchResult={clearSearchResult}   
+                            hasGridButton={hasGridButton} 
+                            objectTypeList={objectTypeList || []}
+                            maxHeigh={config.searchResultProportion}
+                        />                  
                     </Col>
                 </Row>
             </div>

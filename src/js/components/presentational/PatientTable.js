@@ -62,6 +62,7 @@ import { patientTableColumn } from '../../config/tables';
 import retrieveDataHelper from '../../helper/retrieveDataHelper';
 import config from '../../config';
 import dataSrc from '../../dataSrc';
+import apiHelper from '../../helper/apiHelper';
 
 
 class PatientTable extends React.Component{
@@ -105,11 +106,11 @@ class PatientTable extends React.Component{
             auth
         } = this.context
 
-        retrieveDataHelper.getObjectTable(
-            locale.abbr,
-            auth.user.areas_id,
-            [0, 1, 2]
-        )
+        apiHelper.objectApiAgent.getObjectTable({
+            locale: locale.abbr,
+            areas_id: auth.user.areas_id,
+            objectType: [0, 1, 2]
+        })
         .then(res => {
             let columns = _.cloneDeep(patientTableColumn)
             let data = [] 

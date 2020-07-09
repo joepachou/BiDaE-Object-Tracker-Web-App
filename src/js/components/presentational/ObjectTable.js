@@ -60,6 +60,7 @@ import messageGenerator from '../../helper/messageGenerator';
 import { objectTableColumn } from '../../config/tables';
 import retrieveDataHelper from '../../helper/retrieveDataHelper'; 
 import config from '../../config';
+import apiHelper from '../../helper/apiHelper';
  
 
 class ObjectTable extends React.Component{   
@@ -141,11 +142,11 @@ class ObjectTable extends React.Component{
             auth
         } = this.context
 
-        retrieveDataHelper.getObjectTable(
-            locale.abbr,
-            auth.user.areas_id,
-            [0, 1, 2]
-        )
+        apiHelper.objectApiAgent.getObjectTable({
+            locale: locale.abbr,
+            areas_id: auth.user.areas_id,
+            objectType: [0, 1, 2]
+        })
         .then(res => {
             let columns = _.cloneDeep(objectTableColumn)
             // let columnPatient = _.cloneDeep(patientTableColumn)

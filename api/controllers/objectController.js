@@ -60,7 +60,6 @@ module.exports = {
                 res.rows.map(item => {
                     item.registered_timestamp = moment.tz(item.registered_timestamp, process.env.TZ).locale(locale).format(process.env.TIMESTAMP_FORMAT);
                 })
-
                 response.status(200).json(res)
             })
             .catch(err => {

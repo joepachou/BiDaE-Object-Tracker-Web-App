@@ -52,7 +52,6 @@ import {
     NoDataFoundDiv
 } from '../../BOTComponent/styleComponent';
 import Loader from '../../presentational/Loader';
-import retrieveDataHelper from '../../../helper/retrieveDataHelper';
 import Select from 'react-select';
 import {
     PageTitle
@@ -69,6 +68,7 @@ import {
 import NumberPicker from '../../container/NumberPicker';
 import { DateTimePicker } from 'react-widgets';
 import momentLocalizer from 'react-widgets-moment';
+import apiHelper from '../../../helper/apiHelper';
 
 momentLocalizer()
 
@@ -98,11 +98,12 @@ class BrowserContactTree extends React.Component{
             locale,
             auth
         } = this.context
-        retrieveDataHelper.getObjectTable(
-            locale.abbr,
-            auth.user.areas_id, 
-            [1, 2]
-        )
+
+        apiHelper.objectApiAgent.getObjectTable({
+            locale: locale.abbr,
+            areas_id: auth.user.areas_id,
+            objectType: [1, 2]
+        })
         .then(res => {
             let options = res.data.rows.map(item => {
                 return {

@@ -59,22 +59,6 @@ const retrieveDataHelper = {
         })
     },
     
-    /**
-     * get object data from object_table
-     */
-    getObjectTable: async function(
-        locale, 
-        areas_id, 
-        objectType
-    ){
-        return await axios.get(dataSrc.object, {
-            params: {
-                locale,
-                areas_id,
-                objectType,
-            }
-        })
-    },
 
     getImportedObjectTable: async function(
         locale,

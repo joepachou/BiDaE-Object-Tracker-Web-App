@@ -29,7 +29,8 @@ import PatientTable from '../../presentational/PatientTable'
 import ImportObjectTable from '../../presentational/ImportObjectTable'
 import ImportPatientTable from '../../presentational/ImportPatientTable' 
 import DissociationForm from '../DissociationForm'
-import retrieveDataHelper from '../../../helper/retrieveDataHelper'
+import retrieveDataHelper from '../../../helper/retrieveDataHelper';
+import apiHelper from '../../helper/apiHelper';
 
 class ObjectManagementContainer extends React.Component{
     static contextType = AppContext
@@ -226,11 +227,11 @@ class ObjectManagementContainer extends React.Component{
             auth
         } = this.context
 
-        retrieveDataHelper.getObjectTable(
-            locale.abbr,
-            auth.user.areas_id,
-            [0, 1, 2]
-        )
+        apiHelper.objectApiAgent.getObjectTable({
+            locale: locale.abbr,
+            areas_id: auth.user.areas_id,
+            objectType: [0, 1, 2]
+        })
         .then(res => {
             let column = _.cloneDeep(objectTableColumn)
             let columnPatient = _.cloneDeep(patientTableColumn)

@@ -64,6 +64,7 @@ import {
 } from '../../../config/tables';
 import axios from 'axios';
 import dataSrc from '../../../dataSrc';
+import apiHelper from '../../../helper/apiHelper';
 
 
 class TraceContainer extends React.Component{
@@ -165,11 +166,12 @@ class TraceContainer extends React.Component{
             locale,
             auth
         } = this.context
-        retrieveDataHelper.getObjectTable(
-            locale.abbr,
-            auth.user.areas_id, 
-            [1, 2]
-        )
+
+        apiHelper.objectApiAgent.getObjectTable({
+            locale: locale.abbr,
+            areas_id: auth.user.areas_id,
+            objectType: [1, 2]
+        })
         .then(res => {
             let name = res.data.rows.map(item => {
                 return {

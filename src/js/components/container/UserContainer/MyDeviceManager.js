@@ -219,12 +219,13 @@ class MyDeviceManager extends React.Component{
             locale, 
             auth 
         } = this.context
-        
-        retrieveDataHelper.getObjectTable(
-            locale.lang, 
-            auth.user.areas_id, 
-            [0]
-        ).then(res => {
+
+        apiHelper.objectApiAgent.getObjectTable({
+            locale: locale.abbr,
+            areas_id: auth.user.areas_id,
+            objectType: [0]
+        })
+        .then(res => {
 
             let myDevices = {}
             let notMyDevices = {}

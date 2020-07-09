@@ -37,11 +37,8 @@
 
 import React from 'react';
 import { Col, Row } from 'react-bootstrap';
-import axios from 'axios';
-import dataSrc from "../../../dataSrc";
-import AddableList from './AddableList'
+import AddableList from './AddableList';
 import { AppContext } from '../../../context/AppContext';
-import retrieveDataHelper from '../../../helper/retrieveDataHelper'
 import {
     getName,
     getType,
@@ -218,12 +215,13 @@ class MyPatientManager extends React.Component{
             locale, 
             auth 
         } = this.context
-        
-        retrieveDataHelper.getObjectTable(
-            locale.lang, 
-            auth.user.areas_id, 
-            [1, 2]
-        ).then(res => {
+
+        apiHelper.objectApiAgent.getObjectTable({
+            locale: locale.abbr,
+            areas_id: auth.user.areas_id,
+            objectType: [1, 2]
+        })
+        .then(res => {
 
             let myDevices = {}
             let notMyDevices = {}

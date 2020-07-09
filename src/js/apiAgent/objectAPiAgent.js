@@ -40,6 +40,23 @@ import axios from 'axios';
 
 export default {
 
+    /**
+     * get object data from object_table
+     */
+    getObjectTable: async function({
+        locale, 
+        areas_id, 
+        objectType
+    }){
+        return await axios.get(dataSrc.object, {
+            params: {
+                locale,
+                areas_id,
+                objectType,
+            }
+        })
+    },
+
     getRecord: async function (
         type, 
         locale,

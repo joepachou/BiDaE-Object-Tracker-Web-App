@@ -47,7 +47,7 @@ import { AppContext } from '../../context/AppContext';
 import TabletSearchContainer from '../platform/tablet/TabletSearchContainer';
 import MobileSearchContainer from '../platform/mobile/MobileSearchContainer';
 import BrowserSearchContainer from '../platform/browser/BrowserSearchContainer';
-import retrieveDataHelper from '../../helper/retrieveDataHelper';
+import apiHelper from '../../helper/apiHelper';
 
 class SearchContainer extends React.Component {
 
@@ -97,11 +97,11 @@ class SearchContainer extends React.Component {
             auth
         } = this.context
 
-        retrieveDataHelper.getObjectTable(
-            locale.abbr,
-            null,
-            [0]
-        )
+        apiHelper.objectApiAgent.getObjectTable({
+            locale: locale.abbr,
+            areas_id: null,
+            objectType: [0]
+        })
         .then(res => {
             let objectTypeList = res.data.rows.reduce((objectTypeList, item) => {
                 if (!objectTypeList.includes(item.type)) {

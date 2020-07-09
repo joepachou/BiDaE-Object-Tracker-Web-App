@@ -62,6 +62,7 @@ import TabletObjectTableView from '../../platform/tablet/TableObjectTableView';
 import SiteModuleTW from '../../../../../site_module/locale/zh-TW';
 import SiteModuleEN from '../../../../../site_module/locale/en-US';
 import moment from 'moment';
+import apiHelper from '../../../helper/apiHelper';
 
 class ObjectTableContainer extends React.Component{  
     
@@ -143,11 +144,11 @@ class ObjectTableContainer extends React.Component{
             auth
         } = this.context
 
-        retrieveDataHelper.getObjectTable(
-            locale.abbr,
-            auth.user.areas_id,
-            [0, 1, 2]
-        )
+        apiHelper.objectApiAgent.getObjectTable({
+            locale: locale.abbr,
+            areas_id: auth.user.areas_id,
+            objectType: [0, 1, 2]
+        })
         .then(res => {
             let columns = _.cloneDeep(patientTableColumn)
             let data = [] 
@@ -235,6 +236,7 @@ class ObjectTableContainer extends React.Component{
             apiMethod
         } = this.state
         this.setState({isShowBind:false})
+        
         axios[apiMethod](dataSrc.object, {
             formOption,
             mode: 'PERSONA',
