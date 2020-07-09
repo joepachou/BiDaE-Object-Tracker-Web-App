@@ -41,7 +41,7 @@ import moment from 'moment';
 
 const config = {
 
-    VERSION: 'v1.0 b.1918',
+    VERSION: 'v1.0 b.1919',
 
     TIMESTAMP_FORMAT: 'LLL',
 
@@ -340,7 +340,7 @@ const config = {
             specifiedNumberTop: '8%',
 
             /* Set the Marker dispersity that can be any positive number */
-            markerDispersity: 400,
+            markerDispersity: 40,
 
             geoFenceMarkerOptions: {
 
