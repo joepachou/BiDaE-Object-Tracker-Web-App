@@ -38,7 +38,7 @@ import 'react-table/react-table.css';
 import config from '../../config';
 import _ from 'lodash';
 import axios from 'axios';
-import dataSrc from '../../dataSrc'
+import dataSrc, { objectPackage } from '../../dataSrc'
 import { AppContext } from '../../context/AppContext';
 import { toast } from 'react-toastify';
 import ToastNotification from '../presentational/ToastNotification';
@@ -54,6 +54,9 @@ import TabletMainContainer from '../platform/tablet/TabletMainContainer'
 import MobileMainContainer from '../platform/mobile/MobileMainContainer';
 import BrowserMainContainer from '../platform/browser/BrowserMainContainer';
 import apiHelper from '../../helper/apiHelper';
+import {
+    createLbeaconCoordinate
+} from '../../helper/dataTransfer';
 
 const {
     ALL_DEVICES,
@@ -61,7 +64,12 @@ const {
     ALL_PATIENTS,
     MY_PATIENTS,
     OBJECTS,
+    OBJECT_TYPE
 } = config.frequentSearchOption
+
+const {
+    MAX_SEARCH_OBJECT_NUM
+} = config
 
 class MainContainer extends React.Component{
 
@@ -74,8 +82,9 @@ class MainContainer extends React.Component{
         geofenceConfig: null,
         locationMonitorConfig: null,
         violatedObjects: {},
-        hasSearchKey: false,
+        hasSearchKey: true,
         searchKey: '',
+        searchType: ALL_DEVICES,
         lastsearchKey: '',
         searchResult: [],
         colorPanel: null,
@@ -92,10 +101,13 @@ class MainContainer extends React.Component{
         showMobileMap: true,
         searchedObjectType: [],
         showedObjects: [],
-        currentAreaId: this.context.stateReducer[0].areaId
+        currentAreaId: this.context.stateReducer[0].areaId,
+        searchObjectArray: [],
+        pinColorArray: config.mapConfig.iconColor.pinColorArray.filter((item, index) => index < MAX_SEARCH_OBJECT_NUM)
     }
 
     errorToast = null
+
 
     componentDidMount = () => {
         /** set the scrollability in body disabled */
@@ -127,9 +139,9 @@ class MainContainer extends React.Component{
             })
         }
 
-        if (!(_.isEqual(prevProps.currentAreaId, this.context.stateReducer[0].areaId))){
+        if (!(_.isEqual(prevState.currentAreaId, stateReducer[0].areaId))){
             this.setState({
-                currentAreaId: this.context.stateReducer[0].areaId
+                currentAreaId: stateReducer[0].areaId
             })
         }
 
@@ -164,40 +176,6 @@ class MainContainer extends React.Component{
                 this.getToastNotification(this.state.violatedObjects[item])
             })
         }
-    }
-
-    shouldComponentUpdate = (nextProps,nextState) => {
-        let isTrackingDataChange = !(_.isEqual(this.state.trackingData, nextState.trackingData))
-        let hasSearchKey = nextState.hasSearchKey !== this.state.hasSearchKey
-        let isSearchKeyChange = this.state.searchKey !== nextState.searchKey
-        let isSearchResultChange = !(_.isEqual(this.state.searchResult, nextState.searchResult))
-        let isGeoFenceDataChange = !(_.isEqual(this.state.geofenceConfig, nextState.geofenceConfig))
-        let isLocationConfigChange = !(_.isEqual(this.state.locationMonitorConfig, nextState.locationMonitorConfig))
-        let isLbeaconPositionChange = !(_.isEqual(this.state.lbeaconPosition, nextState.lbeaconPosition))
-        let isShowedObjectsChange = !(_.isEqual(this.state.showedObjects, nextState.showedObjects))
-        let isViolatedObjectChange = !(_.isEqual(this.state.violatedObjects, nextState.violatedObjects))
-        let showMobileMap = !(_.isEqual(this.state.showMobileMap, nextState.showMobileMap))
-        let display = !(_.isEqual(this.state.display, nextState.display)) 
-        let pathMacAddress = !(_.isEqual(this.state.pathMacAddress, nextState.pathMacAddress)) 
-        let isHighlightSearchPanelChange = !(_.isEqual(this.state.isHighlightSearchPanel, nextState.isHighlightSearchPanel))
-        let isCurrentAreaChange = !(_.isEqual(this.state.currentAreaId, this.context.stateReducer[0].areaId))
-        let isAuthenticationChange = !(_.isEqual(this.state.authenticated, this.context.auth.authenticated))
-        let shouldUpdate = isTrackingDataChange || 
-                                isShowedObjectsChange ||
-                                hasSearchKey || 
-                                isSearchKeyChange || 
-                                isSearchResultChange || 
-                                isHighlightSearchPanelChange || 
-                                isGeoFenceDataChange ||
-                                isViolatedObjectChange ||
-                                showMobileMap ||
-                                display ||
-                                pathMacAddress ||
-                                isLocationConfigChange ||
-                                isLbeaconPositionChange ||
-                                isCurrentAreaChange ||
-                                isAuthenticationChange
-        return shouldUpdate
     }
 
     getToastNotification = (item) => {
@@ -261,8 +239,13 @@ class MainContainer extends React.Component{
 
     /** get the latest search results */
     handleRefreshSearchResult = () => {
-        let { searchKey, colorPanel, searchValue, markerClickPackage } = this.state
-        this.getSearchKey(searchKey, colorPanel, searchValue, markerClickPackage)
+        let { 
+            searchKey, 
+            searchType, 
+            markerClickPackage 
+        } = this.state
+        
+        this.getSearchKey(searchKey, searchType, markerClickPackage)
     }
 
     /** set the geofence and location monitor enable */
@@ -359,7 +342,7 @@ class MainContainer extends React.Component{
         )
         .then(res => {
             let lbeaconPosition = res.data.rows.map(item => {
-                item.coordinate = this.createLbeaconCoordinate(item.uuid).toString();
+                item.coordinate = createLbeaconCoordinate(item.uuid).toString();
                 return item;
             })
             this.setState({
@@ -418,7 +401,7 @@ class MainContainer extends React.Component{
                     rule: {
                         ...rule,
                         lbeacons: rule.lbeacons.map(uuid => {
-                            return this.createLbeaconCoordinate(uuid).toString()
+                            return createLbeaconCoordinate(uuid).toString()
                         })
                     }
                 }
@@ -433,16 +416,6 @@ class MainContainer extends React.Component{
         })
     }
 
-    /** Parsing the lbeacon's location coordinate from lbeacon_uuid*/
-    createLbeaconCoordinate = (lbeacon_uuid) => {
-
-        /** Example of lbeacon_uuid: 00000018-0000-0000-7310-000000004610 */
-        const zz = lbeacon_uuid.slice(0,4);
-        const xx = parseInt(lbeacon_uuid.slice(14,18) + lbeacon_uuid.slice(19,23));
-        const yy = parseInt(lbeacon_uuid.slice(-8));
-        return [yy, xx, zz];
-    }
-
     /** remove the background color of grid button */
     clearGridButtonBGColor = () => {
         var gridbuttons = document.getElementsByClassName('gridbutton')
@@ -452,25 +425,38 @@ class MainContainer extends React.Component{
     }
 
     handleClearButton = () => {
+        let {
+            proccessedTrackingData
+        } = this.state
+
+        let searchResult = proccessedTrackingData
+            .filter(item => {
+                return item.object_type == 0 
+            })
+            .map(item => {
+                item.searchedType = 0
+                return item
+            })
+
         this.setState({
-            hasSearchKey: false,
-            searchKey: '',
+            hasSearchKey: true,
+            searchKey: ALL_DEVICES,
             lastsearchKey: '',
-            searchResult: [],
+            searchResult,
             colorPanel: null,
             clearColorPanel: true,
             clearSearchResult: this.state.hasSearchKey ? true : false,
             proccessedTrackingData: [],
             display: true,
-            searchedObjectType: [],
-            showedObjects: [],
+            searchedObjectType: [0],
+            showedObjects: [0],
             showMobileMap: true,
         })
     }
 
     /** Fired once the user click the item in object type list or in frequent seaerch */
-    getSearchKey = (searchKey, colorPanel = null, searchValue = null, markerClickPackage = {}) => {
-        this.getResultBySearchKey(searchKey, colorPanel, searchValue, markerClickPackage)
+    getSearchKey = (searchKey, searchType, colorPanel = null, markerClickPackage = {}) => {
+        this.getResultBySearchKey(searchKey, searchType, colorPanel, markerClickPackage)
     }
 
     /** Process the search result by the search key.
@@ -483,152 +469,346 @@ class MainContainer extends React.Component{
      *  6. coordinate(disable now)
      *  7. multiple selected object(gridbutton)(disable now)
      */
-    getResultBySearchKey = (searchKey, colorPanel, searchValue, markerClickPackage) => {
+    getResultBySearchKey = (searchKey, searchType, colorPanel, markerClickPackage) => {
         let searchResult = [];
+
         let hasSearchKey = true
+
         let {
             searchedObjectType,
             showedObjects,
-            trackingData
+            trackingData,
+            searchObjectArray,
+            pinColorArray
         } = this.state
-        let { auth } = this.context
+
+        let { 
+            auth
+        } = this.context
+
         let proccessedTrackingData = _.cloneDeep(trackingData)  
-        if (searchKey === MY_DEVICES) {
 
-            const devicesAccessControlNumber = auth.user.myDevice || []
-            proccessedTrackingData
-                .filter(item => {
-                    return item.object_type == 0
-                })
-                .map(item => {
-                    if (devicesAccessControlNumber.includes(item.asset_control_number)) {
-                        item.searched = true;
-                        item.searchedType = -1;
-                        searchResult.push(item)
-                    }
-                })
-            if (!searchedObjectType.includes(-1)) { 
-                searchedObjectType.push(-1)
-                showedObjects.push(-1)
-            }
-
-        } else if (searchKey === ALL_DEVICES) {
-            searchResult = proccessedTrackingData
-                .filter(item => {
-                    return item.object_type == 0 
-                })
-                .map(item => {
-                    item.searchedType = 0
-                    return item
-                })
-            if (!searchedObjectType.includes(0)) {
-                searchedObjectType.push(0)
-                showedObjects.push(0)
-            }
+        const devicesAccessControlNumber = auth.user.myDevice || []
 
 
-        } else if (searchKey === MY_PATIENTS){
-            const devicesAccessControlNumber = auth.user.myDevice || []
+        switch(searchType) {
+            case ALL_DEVICES:
+
+                searchObjectArray = [];
+
+                searchResult = proccessedTrackingData
+                    .filter(item => {
+                        return item.object_type == 0 
+                    })
+                    .map(item => {
+                        item.searchedType = 0
+                        return item
+                    })
+
+                if (!searchedObjectType.includes(0)) {
+                    searchedObjectType.push(0)
+                    showedObjects.push(0)
+                }
+                break;
             
-            proccessedTrackingData
-                .filter(item => {
-                    return item.object_type != 0 
+            case MY_DEVICES:
+
+                searchObjectArray = [];
+    
+                proccessedTrackingData
+                    .filter(item => {
+                        return item.object_type == 0
+                    })
+                    .map(item => {
+                        if (devicesAccessControlNumber.includes(item.asset_control_number)) {
+                            item.searched = true;
+                            item.searchedType = -1;
+                            searchResult.push(item)
+                        }
+                    })
+                if (!searchedObjectType.includes(-1)) { 
+                    searchedObjectType.push(-1)
+                    showedObjects.push(-1)
+                }
+
+                break;
+
+            case ALL_PATIENTS:
+
+                searchObjectArray = [];
+
+                searchResult = proccessedTrackingData
+                    .filter(item => {
+                        return item.object_type != 0 
+                    })
+                    .map(item => {
+                        item.searchedType = 1;
+                        return item
+                    })
+                if (!searchedObjectType.includes(1) || !searchedObjectType.includes(2)) { 
+                    searchedObjectType.push(1)
+                    searchedObjectType.push(2)
+                    showedObjects.push(1)
+                    showedObjects.push(2)
+                }
+
+                break;
+
+            case MY_PATIENTS: 
+
+                searchObjectArray = [];
+                
+                proccessedTrackingData
+                    .filter(item => {
+                        return item.object_type != 0 
+                    })
+                    .map(item => {
+                        if (devicesAccessControlNumber.includes(item.asset_control_number)) {
+                            item.searched = true;
+                            item.searchedType = -2;
+                            searchResult.push(item)
+                        }
+                    })
+                if (!searchedObjectType.includes(-2)) { 
+                    searchedObjectType.push(-2)
+                    showedObjects.push(-2)
+                }
+                break;
+
+            case OBJECT_TYPE:
+                
+                if (searchObjectArray.includes(searchKey)) {
+
+                } else if (searchObjectArray.length < MAX_SEARCH_OBJECT_NUM) {
+                    searchObjectArray.push(searchKey)
+                } else {
+                    searchObjectArray.shift();
+                    pinColorArray.push(pinColorArray.shift());
+                    searchObjectArray.push(searchKey)
+                }
+                searchResult = proccessedTrackingData.filter(item => {
+                    return searchObjectArray.includes(item.type)
                 })
-                .map(item => {
-                    if (devicesAccessControlNumber.includes(item.asset_control_number)) {
-                        item.searched = true;
-                        item.searchedType = -2;
-                        searchResult.push(item)
-                    }
-                })
-            if (!searchedObjectType.includes(-2)) { 
-                searchedObjectType.push(-2)
-                showedObjects.push(-2)
-            }
 
+                break;
 
-        } else if (searchKey === ALL_PATIENTS) {
-            searchResult = proccessedTrackingData
-                .filter(item => {
-                    return item.object_type != 0 
-                })
-                .map(item => {
-                    item.searchedType = 1;
-                    return item
-                })
-            if (!searchedObjectType.includes(1) || !searchedObjectType.includes(2)) { 
-                searchedObjectType.push(1)
-                searchedObjectType.push(2)
-                showedObjects.push(1)
-                showedObjects.push(2)
-            }
+            default:
+                let searchResultMac = []; 
 
+                searchObjectArray = [];
 
-        } else if (searchKey == OBJECTS) {
-            searchResult = this.collectObjectsByLatLng(searchValue, proccessedTrackingData, markerClickPackage)
-
-        } else if (typeof searchKey === 'object') {
-            proccessedTrackingData.map(item => {
-                if (searchKey.includes(item.type)) {
-                    item.searched = true;
-                    item.searchedType = -1;
-                    item.pinColor = colorPanel[item.type];
-                    searchResult.push(item)
-                } 
-            })
-
-        } else if (searchKey == "") {
-            searchResult = []
-            hasSearchKey = false
-        } else {
-            let searchResultMac = [];  
-            proccessedTrackingData
-                .map(item => {    
-                     if (
-                        item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0 ||
-                        item.asset_control_number.indexOf(searchKey) >= 0 ||
-                        item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0  ||
-                        (item.nickname != undefined ?  item.nickname.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0 : false)
-                    ) {
-                        item.searched = true
-                        item.searchedType = -1;
-                        searchResult.push(item)
-                        searchResultMac.push(item.mac_address)
-                    }
-                   
-                    if(item.location_description != null){ 
-                        if( item.location_description.indexOf(searchKey) >= 0  ){
-                            item.searched = true
+                proccessedTrackingData
+                    .map(item => {    
+                         if (
+                            item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0 ||
+                            item.asset_control_number.indexOf(searchKey) >= 0 ||
+                            item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0  ||
+                            (item.nickname != undefined ?  item.nickname.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0 : false)
+                        ) {
+                            item.searched = true;
                             item.searchedType = -1;
                             searchResult.push(item)
                             searchResultMac.push(item.mac_address)
+                            
                         }
-                    }
-
-                })
-
-            // if(this.state.lastsearchKey != searchKey) {
-            //     axios.post(dataSrc.backendSearch,{
-            //         keyType : 'all attributes',
-            //         keyWord : searchKey,
-            //         mac_address : searchResultMac
-            //     })
-            //     .then(res => {
-            //         this.setState({
-            //             lastsearchKey: searchKey
-            //         })
-            //     })
-            //     .catch(err =>{
-            //         console.log(err)
-            //     })
-
-            // }
-
-            if (!searchedObjectType.includes(-1)) { 
-                searchedObjectType.push(-1)
-                showedObjects.push(-1)
-            }
+                       
+                        if(item.location_description != null){ 
+                            if( item.location_description.indexOf(searchKey) >= 0  ){
+                                item.searched = true
+                                item.searchedType = -1;
+                                searchResult.push(item)
+                                searchResultMac.push(item.mac_address)
+                            }
+                        }
+    
+                    })
+    
+                // if(this.state.lastsearchKey != searchKey) {
+                //     axios.post(dataSrc.backendSearch,{
+                //         keyType : 'all attributes',
+                //         keyWord : searchKey,
+                //         mac_address : searchResultMac
+                //     })
+                //     .then(res => {
+                //         this.setState({
+                //             lastsearchKey: searchKey
+                //         })
+                //     })
+                //     .catch(err =>{
+                //         console.log(err)
+                //     })
+    
+                // }
+    
+                if (!searchedObjectType.includes(-1)) { 
+                    searchedObjectType.push(-1)
+                    showedObjects.push(-1)
+                }
         }
+
+
+        // if (searchKey === MY_DEVICES) {
+        //     searchObjectArray = [];
+
+        //     const devicesAccessControlNumber = auth.user.myDevice || []
+
+        //     proccessedTrackingData
+        //         .filter(item => {
+        //             return item.object_type == 0
+        //         })
+        //         .map(item => {
+        //             if (devicesAccessControlNumber.includes(item.asset_control_number)) {
+        //                 item.searched = true;
+        //                 item.searchedType = -1;
+        //                 searchResult.push(item)
+        //             }
+        //         })
+        //     if (!searchedObjectType.includes(-1)) { 
+        //         searchedObjectType.push(-1)
+        //         showedObjects.push(-1)
+        //     }
+
+        // } else if (searchKey === ALL_DEVICES) {
+
+        //     searchObjectArray = [];
+
+        //     searchResult = proccessedTrackingData
+        //         .filter(item => {
+        //             return item.object_type == 0 
+        //         })
+        //         .map(item => {
+        //             item.searchedType = 0
+        //             return item
+        //         })
+        //     if (!searchedObjectType.includes(0)) {
+        //         searchedObjectType.push(0)
+        //         showedObjects.push(0)
+        //     }
+
+
+        // } else if (searchKey === MY_PATIENTS){
+
+        //     searchObjectArray = [];
+
+        //     const devicesAccessControlNumber = auth.user.myDevice || []
+            
+        //     proccessedTrackingData
+        //         .filter(item => {
+        //             return item.object_type != 0 
+        //         })
+        //         .map(item => {
+        //             if (devicesAccessControlNumber.includes(item.asset_control_number)) {
+        //                 item.searched = true;
+        //                 item.searchedType = -2;
+        //                 searchResult.push(item)
+        //             }
+        //         })
+        //     if (!searchedObjectType.includes(-2)) { 
+        //         searchedObjectType.push(-2)
+        //         showedObjects.push(-2)
+        //     }
+
+
+        // } else if (searchKey === ALL_PATIENTS) {
+        //     searchObjectArray = [];
+
+        //     searchResult = proccessedTrackingData
+        //         .filter(item => {
+        //             return item.object_type != 0 
+        //         })
+        //         .map(item => {
+        //             item.searchedType = 1;
+        //             return item
+        //         })
+        //     if (!searchedObjectType.includes(1) || !searchedObjectType.includes(2)) { 
+        //         searchedObjectType.push(1)
+        //         searchedObjectType.push(2)
+        //         showedObjects.push(1)
+        //         showedObjects.push(2)
+        //     }
+
+
+        // } else if (searchKey == OBJECTS) {
+        //     searchResult = this.collectObjectsByLatLng(searchValue, proccessedTrackingData, markerClickPackage)
+
+        // } else if (typeof searchKey === 'object') {
+        //     proccessedTrackingData.map(item => {
+        //         if (searchKey.includes(item.type)) {
+        //             item.searched = true;
+        //             item.searchedType = -1;
+        //             item.pinColor = colorPanel[item.type];
+        //             searchResult.push(item)
+        //         } 
+        //     })
+
+        // } else if (searchKey == "") {
+        //     searchResult = []
+        //     hasSearchKey = false 
+
+        // } else if (searchType == OBJECT_TYPE) {
+
+        //     if (searchObjectArray.includes(searchKey)) {
+        //     } else if (searchObjectArray.length < MAX_SEARCH_OBJECT_NUM) {
+        //         searchObjectArray.push(searchKey)
+        //     } else {
+        //         searchObjectArray.shift();
+        //         pinColorArray.push(pinColorArray.shift());
+        //         searchObjectArray.push(searchKey)
+        //     }
+        //     searchResult = proccessedTrackingData.filter(item => {
+        //         return searchObjectArray.includes(item.type)
+        //     })
+        // } else {
+        //     let searchResultMac = []; 
+        //     searchObjectArray = [];
+        //     proccessedTrackingData
+        //         .map(item => {    
+        //              if (
+        //                 item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0 ||
+        //                 item.asset_control_number.indexOf(searchKey) >= 0 ||
+        //                 item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0  ||
+        //                 (item.nickname != undefined ?  item.nickname.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0 : false)
+        //             ) {
+        //                 item.searched = true;
+        //                 item.searchedType = -1;
+        //                 searchResult.push(item)
+        //                 searchResultMac.push(item.mac_address)
+                        
+        //             }
+                   
+        //             if(item.location_description != null){ 
+        //                 if( item.location_description.indexOf(searchKey) >= 0  ){
+        //                     item.searched = true
+        //                     item.searchedType = -1;
+        //                     searchResult.push(item)
+        //                     searchResultMac.push(item.mac_address)
+        //                 }
+        //             }
+
+        //         })
+
+        //     // if(this.state.lastsearchKey != searchKey) {
+        //     //     axios.post(dataSrc.backendSearch,{
+        //     //         keyType : 'all attributes',
+        //     //         keyWord : searchKey,
+        //     //         mac_address : searchResultMac
+        //     //     })
+        //     //     .then(res => {
+        //     //         this.setState({
+        //     //             lastsearchKey: searchKey
+        //     //         })
+        //     //     })
+        //     //     .catch(err =>{
+        //     //         console.log(err)
+        //     //     })
+
+        //     // }
+
+        //     if (!searchedObjectType.includes(-1)) { 
+        //         searchedObjectType.push(-1)
+        //         showedObjects.push(-1)
+        //     }
+        // }
 
         this.setState({
             proccessedTrackingData,
@@ -637,7 +817,9 @@ class MainContainer extends React.Component{
             searchResult,
             hasSearchKey,
             searchKey,
-
+            searchType,
+            searchObjectArray,
+            pinColorArray
         })
     }
 
@@ -711,6 +893,7 @@ class MainContainer extends React.Component{
             proccessedTrackingData,
             searchResult,
             searchKey,
+            searchType,
             lbeaconPosition,
             geofenceConfig,
             searchedObjectType,
@@ -722,7 +905,9 @@ class MainContainer extends React.Component{
             pathMacAddress,
             isHighlightSearchPanel,
             locationMonitorConfig,
-            currentAreaId
+            currentAreaId,
+            searchObjectArray,
+            pinColorArray
         } = this.state;
 
         const {
@@ -754,6 +939,7 @@ class MainContainer extends React.Component{
             showMobileMap,
             clearSearchResult,
             searchKey,
+            searchType,
             searchResult,
             trackingData,
             proccessedTrackingData,
@@ -765,8 +951,11 @@ class MainContainer extends React.Component{
             mapButtonHandler,
             isHighlightSearchPanel,
             locationMonitorConfig,
-            currentAreaId
+            currentAreaId,
+            searchObjectArray,
+            pinColorArray
         }
+
         return (
             /** "page-wrap" the default id named by react-burget-menu */
             <Fragment>

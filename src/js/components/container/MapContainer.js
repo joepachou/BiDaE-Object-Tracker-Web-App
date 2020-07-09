@@ -130,6 +130,8 @@ class MapContainer extends React.Component {
             setMonitor,
             lbeaconPosition,
             currentAreaId,
+            searchObjectArray,
+            pinColorArray
         } = this.props;
 
         let propsGroup = {
@@ -147,6 +149,8 @@ class MapContainer extends React.Component {
             locationMonitorConfig,
             lbeaconPosition,
             currentAreaId,
+            searchObjectArray,
+            pinColorArray
 
         }
         return(

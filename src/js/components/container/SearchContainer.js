@@ -165,6 +165,8 @@ class SearchContainer extends React.Component {
             getSearchKey,
             clearSearchResult,
             handleShowResultListForMobile,
+            searchObjectArray,
+            pinColorArray
         } = this.props
 
         const {
@@ -176,7 +178,9 @@ class SearchContainer extends React.Component {
             objectTypeList,
             getSearchKey,
             clearSearchResult,
-            handleShowResultListForMobile
+            handleShowResultListForMobile,
+            searchObjectArray,
+            pinColorArray
         }
         
         return (

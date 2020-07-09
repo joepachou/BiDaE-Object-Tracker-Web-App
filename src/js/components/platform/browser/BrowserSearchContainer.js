@@ -54,6 +54,8 @@ const BrowserSearchContainer = ({
     handleTouchMove,
     clearSearchResult,
     hasGridButton,
+    searchObjectArray,
+    pinColorArray
 }) => {
     return (
         <div 
@@ -92,6 +94,8 @@ const BrowserSearchContainer = ({
                             hasGridButton={hasGridButton} 
                             objectTypeList={objectTypeList || []}
                             maxHeigh={config.searchResultProportion}
+                            searchObjectArray={searchObjectArray}
+                            pinColorArray={pinColorArray}
                         />                  
                     </Col>
                 </Row>

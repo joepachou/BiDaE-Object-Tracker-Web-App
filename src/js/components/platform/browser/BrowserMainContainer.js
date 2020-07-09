@@ -60,6 +60,7 @@ const BrowserMainContainer = ({
     showMobileMap,
     clearSearchResult,
     searchKey,
+    searchType,
     searchResult,
     trackingData,
     proccessedTrackingData,
@@ -69,6 +70,8 @@ const BrowserMainContainer = ({
     isHighlightSearchPanel,
     locationMonitorConfig,
     currentAreaId,
+    searchObjectArray,
+    pinColorArray
 }) => {
 
     let auth = React.useContext(AuthenticationContext)
@@ -131,12 +134,14 @@ const BrowserMainContainer = ({
                         showedObjects={showedObjects}
                         setShowedObjects={setShowedObjects}
                         currentAreaId={currentAreaId}
+                        searchObjectArray={searchObjectArray}
+                        pinColorArray={pinColorArray}
                     />
                 </Col>
 
                 <Col id='searchPanel' xs={12} sm={5} md={3} lg={4} xl={4} className="w-100 px-2" style={style.searchPanel}>
                     <InfoPrompt 
-                        searchKey={searchKey}
+                        searchType={searchType}
                         searchResult={searchResult}
                     />
                     <SearchContainer 
@@ -144,6 +149,8 @@ const BrowserMainContainer = ({
                         clearSearchResult={clearSearchResult}
                         auth={auth}
                         getSearchKey={getSearchKey}
+                        searchObjectArray={searchObjectArray}
+                        pinColorArray={pinColorArray}
                     />                        
                     <div 
                         id='searchResult' 
@@ -152,9 +159,12 @@ const BrowserMainContainer = ({
                         <SearchResultList
                             searchResult={searchResult} 
                             searchKey={searchKey}
+                            searchType={searchType}
                             highlightSearchPanel={highlightSearchPanel}
                             handleShowPath={handleShowPath}
                             showMobileMap={showMobileMap}
+                            searchObjectArray={searchObjectArray}
+                            pinColorArray={pinColorArray}
                         />
                     </div>
                 </Col>

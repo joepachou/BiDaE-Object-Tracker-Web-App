@@ -116,6 +116,7 @@ class NavbarContainer extends React.Component {
         } = this.context;
 
         const [{ areaId }, dispatch] = stateReducer
+
         const { 
             showSignin, 
             showShiftChange
@@ -133,8 +134,8 @@ class NavbarContainer extends React.Component {
         })
 
         let selectedArea = {
-            value: areaOptions[auth.user.areas_id[0]],
-            label: locale.texts[areaOptions[auth.user.areas_id[0]]]
+            value: areaOptions[areaId],
+            label: locale.texts[areaOptions[areaId]]
         }
 
         return (
@@ -166,6 +167,7 @@ class NavbarContainer extends React.Component {
                             onChange={value => {
                                 let { stateReducer } = this.context
                                 let [{areaId}, dispatch] = stateReducer
+
                                 dispatch({
                                     type: 'setArea',
                                     value: config.mapConfig.areaModules[value.value].id

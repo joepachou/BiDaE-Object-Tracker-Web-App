@@ -69,7 +69,7 @@ class FrequentSearch extends React.Component {
     }
 
     getSearchKey = (itemName) => {
-        this.props.getSearchKey(itemName)
+        this.props.getSearchKey(null, itemName)
         this.setState({
             searchKey: itemName
         })
@@ -114,7 +114,7 @@ class FrequentSearch extends React.Component {
                     <Button 
                         variant="outline-custom"
                         onClick={this.handleClick} 
-                        // active={this.state.searchKey === 'all devices'}
+                        active={this.state.searchKey === 'all devices'}
                         name='all devices'
                     >
                         {locale.texts.ALL_DEVICES}

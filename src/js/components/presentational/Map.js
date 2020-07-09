@@ -449,6 +449,11 @@ class Map extends React.Component {
             stateReducer
         } = this.context
 
+        let {
+            searchObjectArray,
+            pinColorArray,
+        } = this.props
+
         let [{assignedObject}] = stateReducer;
 
         /** Clear the old markerslayers. */
@@ -462,6 +467,7 @@ class Map extends React.Component {
         // const iconSize = [this.scalableIconSize, this.scalableIconSize];
         // const numberSize = this.scalableNumberSize;
         let counter = 0;
+
         this.filterTrackingData(_.cloneDeep(this.props.proccessedTrackingData))
         .map((item, index)  => {
             /** Calculate the position of the object  */
@@ -472,19 +478,25 @@ class Map extends React.Component {
                 this.props.mapConfig.iconOptions.markerDispersity
             );
 
-
             /** Set the Marker's popup 
              * popupContent (objectName, objectImg, objectImgWidth)
              * More Style sheet include in Map.css */
             let popupContent = this.props.mapConfig.getPopupContent([item], this.collectObjectsByLatLng(item.lbeacon_coordinate), locale)
             
+            let pinColorIndex = searchObjectArray.indexOf(item.type)
+
+            if (pinColorIndex > -1) {
+                item.searched = true;
+                item.pinColor = pinColorArray[pinColorIndex];
+            }
+
             /** Set the icon option*/
             item.iconOption = {
 
                 ...this.iconOptions,
 
                 /** Set the pin color */
-                markerColor: this.props.mapConfig.getIconColor(item, this.props.colorPanel),
+                markerColor: this.props.mapConfig.getIconColor(item, pinColorIndex > -1),
 
                 /** Set the pin size */
                 // iconSize,

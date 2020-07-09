@@ -65,7 +65,11 @@ const BrowserSearchResultList = ({
     selection,
     handleToggleNotFound,
     showNotFoundResult,
-    onSelect
+    onSelect,
+    searchObjectArray,
+    pinColorArray,
+    searchKey,
+    searchType,
 }) => {
 
     let locale = React.useContext(LocaleContext);
@@ -115,6 +119,9 @@ const BrowserSearchResultList = ({
                                         onSelect={onSelect}
                                         selection={selection}
                                         action
+                                        searchObjectArray={searchObjectArray}
+                                        pinColorArray={pinColorArray}
+                                        searchType={searchType}
                                     />
 
                                 </AccessControl>

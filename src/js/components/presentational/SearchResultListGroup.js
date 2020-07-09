@@ -46,12 +46,21 @@ import {
     getUpdatedByNLbeacons
 } from '../../helper/descriptionGenerator';
 
+const {
+    ALL_DEVICES,
+    OBJECT_TYPE
+} = config.frequentSearchOption
+
+
 const SearchResultListGroup = ({
     data,
     onSelect,
     selection,
     disabled,
-    action
+    action,
+    searchObjectArray,
+    pinColorArray,
+    searchType,
 }) => {
 
     const { 
@@ -88,6 +97,33 @@ const SearchResultListGroup = ({
         })
     }
 
+    const createItem = (searchType, item, index) => {
+        switch(searchType) {
+            case ALL_DEVICES: 
+                return <p className='d-inline-block'>&bull;</p>;
+            case OBJECT_TYPE:
+                return (
+                    <div className='d-inline-block'>
+                        <div
+                            style={{
+                                height: '25px',
+                                width: '25px',
+                                borderRadius: '50%',
+                                background: searchObjectArray.includes(item.type) ? pinColorArray[searchObjectArray.indexOf(item.type)] : null,
+                                display: 'flex',
+                                justifyContent: 'center',
+                                color: 'white'
+                            }}
+                        >
+                            {index + 1}
+                        </div>
+                    </div>
+                )
+            default: 
+                return <p className='d-inline-block'>{index + 1}.</p>;
+        }
+    }
+
     return (
         <ListGroup 
             onSelect={onSelect} 
@@ -104,13 +140,12 @@ const SearchResultListGroup = ({
                         active
                         style={style.listGroup}
                         className='d-flex py-1 text-left justify-content-start' 
-
                     >   
                         <div 
                             style={style.item}
                             className='d-flex justify-content-center'
                         >
-                            <p className='d-inline-block'>{index + 1}.</p>
+                            {createItem(searchType, item, index)}
                         </div>
                         {getDescription(item, locale, config)}
                         {getMacaddress(item, locale)}

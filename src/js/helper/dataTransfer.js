@@ -53,3 +53,13 @@ export const macAddressToCoordinate = (
     const yyy = origin_y + (parseInt(yy, 16)  -8 ) * factor;
     return [yyy, xxx];
 }
+
+/** Parsing the lbeacon's location coordinate from lbeacon_uuid*/
+export const createLbeaconCoordinate = (lbeacon_uuid) => {
+
+    /** Example of lbeacon_uuid: 00000018-0000-0000-7310-000000004610 */
+    const zz = lbeacon_uuid.slice(0,4);
+    const xx = parseInt(lbeacon_uuid.slice(14,18) + lbeacon_uuid.slice(19,23));
+    const yy = parseInt(lbeacon_uuid.slice(-8));
+    return [yy, xx, zz];
+}

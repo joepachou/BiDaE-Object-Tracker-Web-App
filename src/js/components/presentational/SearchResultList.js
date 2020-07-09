@@ -365,7 +365,10 @@ class SearchResultList extends React.Component {
         const { locale } = this.context;
         const { 
             searchKey,
-            highlightSearchPanel
+            highlightSearchPanel,
+            searchObjectArray,
+            pinColorArray,
+            searchType,
         } = this.props;
 
         const {
@@ -396,9 +399,17 @@ class SearchResultList extends React.Component {
             handleToggleNotFound,
             onSelect,
             highlightSearchPanel,
+
             /** state */
             selection,
-            showNotFoundResult
+            showNotFoundResult,
+            
+            /** props */
+            searchObjectArray,
+            pinColorArray,
+            searchKey,
+            searchType,
+
         }
         return(
             <Fragment> 

@@ -231,8 +231,12 @@ class SearchableObjectType extends React.Component {
 
         var Data = [];
         let first = []; 
+        let {
+            searchObjectArray,
+            pinColorArray,
+        } = this.props
 
-        for(var titleData in this.state.firstLetterMap){
+        for (var titleData in this.state.firstLetterMap) {
             first = titleData
             Data.push (
                 <div 
@@ -246,12 +250,18 @@ class SearchableObjectType extends React.Component {
 
             for (let i in this.state.firstLetterMap[first]){
                 let name = this.state.firstLetterMap[first][i]
+
+                let pinColorIndex = searchObjectArray.indexOf(name)
+
                 Data.push(
                     <div 
                         key={name} 
                         name={name} 
                         className="my-0 py-0 w-100 text-right" 
-                        style={{cursor: 'pointer'}} 
+                        style={{
+                            cursor: 'pointer',
+                            color: pinColorIndex > -1 ? pinColorArray[pinColorIndex] : null
+                        }} 
                         onClick={this.handleClick} 
                     >
                         {name}
@@ -265,7 +275,7 @@ class SearchableObjectType extends React.Component {
 
     handleClick = (e) => {
         let searchKey = e.target.innerText
-        this.props.getSearchKey(searchKey)
+        this.props.getSearchKey(searchKey, 'object type')
 
         this.addSearchHistory(searchKey)
 
@@ -324,7 +334,7 @@ class SearchableObjectType extends React.Component {
     }
 
     render() {
-        var  Setting = {
+        let Setting = {
 
             SectionIndex: {
             } ,

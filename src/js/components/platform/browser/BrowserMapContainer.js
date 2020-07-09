@@ -68,7 +68,9 @@ export default class BrowserMapContainer extends React.Component {
             showPdfDownloadForm,
             handleClickButton,
             currentAreaId,
-            authenticated
+            authenticated,
+            searchObjectArray,
+            pinColorArray,
         } = this.props;
 
         let [{areaId}] = stateReducer
@@ -125,6 +127,8 @@ export default class BrowserMapContainer extends React.Component {
                         handleShowPath={this.props.handleShowPath}
                         showPath={this.props.showPath}
                         currentAreaId={currentAreaId}
+                        searchObjectArray={searchObjectArray}
+                        pinColorArray={pinColorArray}
                     />
                 </div>
                 <div>
