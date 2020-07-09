@@ -115,7 +115,6 @@ class SearchableObjectType extends React.Component {
             auth
         } = this.context;
 
-        console.log(222)
         apiHelper.objectApiAgent.getObjectTable({
             locale: locale.abbr,
             areas_id: auth.user.areas_id,
@@ -143,10 +142,6 @@ class SearchableObjectType extends React.Component {
         //     console.error('onSubmit is empty')
         // }
     }
-
-    // componentWillUnmount = () => {
-    //     console.log(123)
-    // }
 
     getObjectIndexList = (objectList) => {
         var firstLetterMap = []
@@ -283,7 +278,10 @@ class SearchableObjectType extends React.Component {
     }
 
     addSearchHistory(searchKey) {
-        let { auth } = this.props
+        let { 
+            auth 
+        } = this.context
+
         if (!auth.authenticated) return;
         const searchHistory = auth.user.searchHistory || []
         let flag = false; 
@@ -308,16 +306,23 @@ class SearchableObjectType extends React.Component {
         return toReturn
     }
 
-    checkInSearchHistory(username, searchHistory) {
-        console.log(searchHistory)
-        // axios.post(addUserSearchHistory, {
-        //     username,
-        //     searchHistory,
-        // }).then(res => {
-        //     console.log(res)
-        // }).catch(err => {
-        //     console.log(err)
-        // })
+    /** Insert search history to database */
+    checkInSearchHistory(itemName) {
+
+        let { 
+            auth 
+        } = this.context
+        apiHelper.userApiAgent.addSearchHistory({
+            username: auth.user.name,
+            keyType: 'object type search',
+            keyWord: itemName
+        }).then(res => {
+            this.setState({
+                searchKey: itemName
+            })
+        }).catch(err => {
+            console.log(`check in search history failed ${err}`)
+        })
     }
 
     render() {

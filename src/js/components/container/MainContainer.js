@@ -607,22 +607,23 @@ class MainContainer extends React.Component{
 
                 })
 
-                if(this.state.lastsearchKey != searchKey){
-                axios.post(dataSrc.backendSearch,{
-                    keyType : 'all attributes',
-                    keyWord : searchKey,
-                    mac_address : searchResultMac
-                })
-                .then(res => {
-                    this.setState({
-                        lastsearchKey: searchKey
-                    })
-                })
-                .catch(err =>{
-                    console.log(err)
-                })
+            // if(this.state.lastsearchKey != searchKey) {
+            //     axios.post(dataSrc.backendSearch,{
+            //         keyType : 'all attributes',
+            //         keyWord : searchKey,
+            //         mac_address : searchResultMac
+            //     })
+            //     .then(res => {
+            //         this.setState({
+            //             lastsearchKey: searchKey
+            //         })
+            //     })
+            //     .catch(err =>{
+            //         console.log(err)
+            //     })
 
-            }
+            // }
+
             if (!searchedObjectType.includes(-1)) { 
                 searchedObjectType.push(-1)
                 showedObjects.push(-1)
