@@ -130,7 +130,9 @@ class Map extends React.Component {
 
     /** Set the search map configuration establishing in config.js  */
     initMap = () => {
-        let [{areaId}] = this.context.stateReducer
+        let [{
+            areaId
+        }] = this.context.stateReducer
 
         let {
             mapConfig
@@ -138,7 +140,6 @@ class Map extends React.Component {
 
         let { 
             areaOptions,
-            defaultAreaId,
         } = mapConfig
 
         let {
@@ -160,7 +161,7 @@ class Map extends React.Component {
         }
 
         /** Error handler of the user's auth area does not include the group of sites */
-        let areaOption = areaOptions[areaId] || areaOptions[defaultAreaId] || Object.values(areaOptions)[0]
+        let areaOption = areaOptions[areaId]
 
         /** set the map's config */
         let { 
@@ -203,12 +204,11 @@ class Map extends React.Component {
 
         let { 
             areaOptions,
-            defaultAreaId,
             mapOptions
         } = this.props.mapConfig
 
         /** Error handler of the user's auth area does not include the group of sites */
-        let areaOption = areaOptions[areaId] || areaOptions[defaultAreaId] || Object.values(areaOptions)[0]
+        let areaOption = areaOptions[areaId];
 
         /** set the map's config */
         let { 
@@ -581,7 +581,7 @@ class Map extends React.Component {
         return(
             <div>
                <CustomView condition={isTablet != true && isMobile != true}>
-                    <div id='mapid' style={{height:'80vh'}}></div>
+                    <div id='mapid' style={{height:'85vh'}}></div>
                 </CustomView>  
                 <TabletView>
                     <div id='mapid' style={{height:'40vh'}}></div>

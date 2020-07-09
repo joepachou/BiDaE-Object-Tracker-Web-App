@@ -40,7 +40,6 @@ import AuthenticationContext from '../context/AuthenticationContext'
 import LocaleContext from '../context/LocaleContext'
 import Locale from '../Locale'
 import Auth from '../Auth'
-import config from '../config';
 import StateReducer from '../reducer/StateReducer'
 
 export const AppContext = React.createContext();
@@ -51,7 +50,7 @@ const AppContextProvider = (props) => {
     const locale = React.useContext(LocaleContext)
 
     const initialState = {
-        areaId: parseInt(config.DEFAULT_AREA_ID),
+        areaId: parseInt(auth.user.main_area),
         shouldUpdateTrackingData: true,
         assignedObject: null,
     }

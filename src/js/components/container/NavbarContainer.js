@@ -123,7 +123,6 @@ class NavbarContainer extends React.Component {
 
         const {
             areaOptions,
-            defaultAreaId,
         } = config.mapConfig
 
         const options = Object.values(config.mapConfig.areaOptions).map(area => {
@@ -134,10 +133,8 @@ class NavbarContainer extends React.Component {
         })
 
         let selectedArea = {
-            value: areaOptions[areaId] || areaOptions[defaultAreaId] || Object.values(areaOptions)[0],
-            label: this.context.locale.texts[areaOptions[areaId]] || 
-                this.context.locale.texts[areaOptions[defaultAreaId]] || 
-                this.context.locale.texts[Object.values(areaOptions)[0]]
+            value: areaOptions[auth.user.areas_id[0]],
+            label: locale.texts[areaOptions[auth.user.areas_id[0]]]
         }
 
         return (

@@ -112,10 +112,6 @@ const BrowserMainContainer = ({
                 style={style.container}
             >
                 <Col sm={7} md={9} lg={8} xl={8} id='searchMap' className="pl-2 pr-1" >
-                    <InfoPrompt 
-                        searchKey={searchKey}
-                        searchResult={searchResult}
-                    />
                     <MapContainer
                         pathMacAddress={pathMacAddress} 
                         proccessedTrackingData={proccessedTrackingData.length === 0 ? trackingData : proccessedTrackingData}
@@ -139,6 +135,10 @@ const BrowserMainContainer = ({
                 </Col>
 
                 <Col id='searchPanel' xs={12} sm={5} md={3} lg={4} xl={4} className="w-100 px-2" style={style.searchPanel}>
+                    <InfoPrompt 
+                        searchKey={searchKey}
+                        searchResult={searchResult}
+                    />
                     <SearchContainer 
                         hasSearchKey={hasSearchKey}
                         clearSearchResult={clearSearchResult}

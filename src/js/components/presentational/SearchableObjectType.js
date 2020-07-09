@@ -57,22 +57,24 @@ import { AppContext } from '../../context/AppContext';
 class SearchableObjectType extends React.Component {
 
     static contextType = AppContext
-    constructor(){
-        super()
-        this.state = {
-            sectionIndexList: ['A','B','C', 'D','E','F','G','H', 'I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'],
+
+        state = {
+            sectionIndexList: ['A','B','C','D','E','F','G','H', 'I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'],
             IsShowSection : false,
             changeState: 0,
             firstLetterMap: [],
         }
-        this.data = {
+        
+        data = {
             sectionTitleData : [],
             floatUp: false
         }
-        this.shouldUpdate = false
-        this.onSubmit = null
 
-        this.API = {
+        shouldUpdate = false
+        
+        onSubmit = null
+
+        API = {
             // setObjectList : (objectList) => {
             //     var firstLetterMap = new Array()
             //     if(objectList.length !== 0){
@@ -91,24 +93,28 @@ class SearchableObjectType extends React.Component {
             setOnSubmit : (func) => {
                 this.onSubmit = func
             },
+
             floatUp : () => {
                 this.shouldUpdate = true
                 this.data.floatUp = true
                 this.setState({})
             },
+
             floatDown: () => {
                 this.shouldUpdate = true
                 this.data.floatUp = false
                 this.setState({})
             }
         }
-        this.handleHoverEvent = this.handleHoverEvent.bind(this)
-        this.mouseClick = this.mouseClick.bind(this)
-        this.mouseLeave = this.mouseLeave.bind(this)
-        this.sectionIndexHTML= this.sectionIndexHTML.bind(this)
+ 
+    
+
+    componentDidMount = () => {
+        this.getData()
     }
 
-    componentDidMount(){
+    getData = () => {
+
         let {
             locale,
             stateReducer,
@@ -133,14 +139,6 @@ class SearchableObjectType extends React.Component {
         .catch(err => {
             console.log(`get object table failed ${err}  `)
         })
-
-        // if(this.props.getAPI){
-        //     this.props.getAPI(this.API)
-        // }else if(this.props.onSubmit){
-        //     this.onSubmit = this.props.onSubmit
-        // }else{
-        //     console.error('onSubmit is empty')
-        // }
     }
 
     getObjectIndexList = (objectList) => {
@@ -159,7 +157,7 @@ class SearchableObjectType extends React.Component {
         // this.setState({})
     }
     
-    shouldComponentUpdate(nextProps, nexState){
+    shouldComponentUpdate = (nextProps, nexState) => {
         if(this.shouldUpdate){
             this.shouldUpdate = false
             return true
@@ -178,7 +176,7 @@ class SearchableObjectType extends React.Component {
         return false
     }
 
-    handleHoverEvent(e){
+    handleHoverEvent = (e) => {
         location.href = '#' + e.target.parentNode.getAttribute('name')
         this.shouldUpdate = true
         this.setState({
@@ -186,7 +184,7 @@ class SearchableObjectType extends React.Component {
         })
     }
 
-    mouseClick(e){
+    mouseClick = (e) => {
         this.onSubmit(e.target.innerHTML)
         this.shouldUpdate = true
         this.setState({
@@ -194,7 +192,7 @@ class SearchableObjectType extends React.Component {
         })
     }
 
-    mouseLeave(){
+    mouseLeave = () =>{
 
         this.shouldUpdate = true
         this.setState({
@@ -277,7 +275,7 @@ class SearchableObjectType extends React.Component {
         })
     }
 
-    addSearchHistory(searchKey) {
+    addSearchHistory = searchKey => {
         let { 
             auth 
         } = this.context
@@ -299,7 +297,7 @@ class SearchableObjectType extends React.Component {
     }
 
     /** Sort the user search history and limit the history number */
-    sortSearchHistory(history) {
+    sortSearchHistory = history => {
         let toReturn = history.sort( (a,b) => {
             return b.value - a.value
         })
@@ -307,7 +305,7 @@ class SearchableObjectType extends React.Component {
     }
 
     /** Insert search history to database */
-    checkInSearchHistory(itemName) {
+    checkInSearchHistory = itemName => {
 
         let { 
             auth 
@@ -356,7 +354,8 @@ class SearchableObjectType extends React.Component {
                 fontSize: '1.3rem'
             }
         }
-        return(
+
+        return (
             <div
                 id='searchableObjectType' 
                 onMouseLeave={this.mouseLeave} 
