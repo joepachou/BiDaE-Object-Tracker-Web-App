@@ -163,7 +163,6 @@ const EditUserForm = ({
                                 label={locale.texts.NAME} 
                                 error={errors.name}
                                 touched={touched.name}
-                                placeholder={locale.texts.USERNAME} 
                                 autoComplete="off"
                             />                             
                             <FormikFormGroup 
@@ -172,7 +171,6 @@ const EditUserForm = ({
                                 label={locale.texts.PASSWORD}
                                 error={errors.password}
                                 touched={touched.password}
-                                placeholder={locale.texts.PASSWORD}
                                 display={!selectedUser}
                                 autoComplete="off"
                             />

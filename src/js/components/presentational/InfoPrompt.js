@@ -64,7 +64,7 @@ const style = {
 }
 
 const InfoPrompt = ({
-    searchType,
+    searchKey,
     searchResult,
 }) => {
     const appContext = React.useContext(AppContext);
@@ -77,32 +77,32 @@ const InfoPrompt = ({
                         className='text-capitalize mr-2' 
                         style={style.alertTextTitle}
                     >
-                        {searchType ? locale.texts.FOUND : locale.texts.PLEASE_SELECT_SEARCH_OBJECT}
+                        {searchKey ? locale.texts.FOUND : locale.texts.PLEASE_SELECT_SEARCH_OBJECT}
                     </div>
                     <div 
                         className="mr-1"
                         style={style.alertText}
                     >
-                        {searchType ? searchResult.filter(item => item.found).length : ""}
+                        {searchKey ? searchResult.filter(item => item.found).length : ""}
                     </div>
                     <div >
-                        {searchType && locale.texts.OBJECTS}
+                        {searchKey && locale.texts.OBJECTS}
                     </div>
-                        {searchType && <div>&nbsp;</div> }
+                        {searchKey && <div>&nbsp;</div> }
                     <div 
                         className='text-capitalize mr-2' 
                         style={style.alertTextTitle}
                     >
-                        {searchType && `${locale.texts.NOT_FOUND}`}
+                        {searchKey && `${locale.texts.NOT_FOUND}`}
                     </div>
                     <div 
                         className="mr-1"
                         style={style.alertText}
                     >
-                        {searchType ? searchResult.filter(item => !item.found).length : ""}
+                        {searchKey ? searchResult.filter(item => !item.found).length : ""}
                     </div>
                     <div >
-                        {searchType && locale.texts.OBJECTS}
+                        {searchKey && locale.texts.OBJECTS}
                     </div>
                 </Alert>
             </CustomView> 
@@ -110,9 +110,9 @@ const InfoPrompt = ({
 
             <TabletView>
                 <div>
-                    <div className='text-capitalize' style={style.alerTextTitleForTablet}>{searchType ? locale.texts.FOUND : locale.texts.PLEASE_SELECT_SEARCH_OBJECT}</div>
-                    <div className='text-capitalize' style={style.alerTextTitleForTablet}>{searchType ? searchResult.filter(item => item.found).length : ""}</div>
-                    <div className='text-capitalize' style={style.alerTextTitleForTablet}>{searchType 
+                    <div className='text-capitalize' style={style.alerTextTitleForTablet}>{searchKey ? locale.texts.FOUND : locale.texts.PLEASE_SELECT_SEARCH_OBJECT}</div>
+                    <div className='text-capitalize' style={style.alerTextTitleForTablet}>{searchKey ? searchResult.filter(item => item.found).length : ""}</div>
+                    <div className='text-capitalize' style={style.alerTextTitleForTablet}>{searchKey 
                             ?   
                                 locale.texts.OBJECTS
                             :   ""

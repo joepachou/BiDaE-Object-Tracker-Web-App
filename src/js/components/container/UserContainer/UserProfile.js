@@ -208,7 +208,9 @@ class UserProfile extends React.Component{
                         {locale.texts.EDIT_PASSWORD}
                     </Button> 
                 </ButtonToolbar>
-                <div>
+                <div
+                    className='mb-2'
+                >
                     <ListTitle>
                         {locale.texts.ABOUT_YOU}
                     </ListTitle>
@@ -217,7 +219,9 @@ class UserProfile extends React.Component{
                     </p>
                 </div>
                 <hr/>
-                <div>
+                <div
+                    className='mb-2'
+                >
                     <ListTitle>
                         {locale.texts.YOUR_SERVICE_AREAS}
                     </ListTitle>
@@ -240,7 +244,9 @@ class UserProfile extends React.Component{
                         }
                     </p>
                 </div>
-                <div>
+                <div
+                    className='mb-2'
+                >
                     <ListTitle>
                         {locale.texts.PREFERENCE}
                     </ListTitle>
