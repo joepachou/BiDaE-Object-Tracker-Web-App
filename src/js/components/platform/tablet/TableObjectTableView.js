@@ -46,7 +46,7 @@ import Select from 'react-select';
 import {
     PrimaryButton
 } from '../../BOTComponent/styleComponent';
-import AccessControl from '../../presentational/AccessControl';
+import AccessControl from '../../authentication/AccessControl';
 
 
 const MobileObjectTableView = ({

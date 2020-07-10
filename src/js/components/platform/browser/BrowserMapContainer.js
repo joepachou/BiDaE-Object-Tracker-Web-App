@@ -43,7 +43,7 @@ import {
     Nav,
     Button 
 } from 'react-bootstrap'
-import AccessControl from '../../presentational/AccessControl'
+import AccessControl from '../../authentication/AccessControl'
 import Map from '../../presentational/Map'
 
 export default class BrowserMapContainer extends React.Component {

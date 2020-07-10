@@ -51,7 +51,7 @@ import messageGenerator from '../../helper/messageGenerator';
 import {
     PrimaryButton
 } from '../BOTComponent/styleComponent';
-import AccessControl from './AccessControl';
+import AccessControl from '../authentication/AccessControl';
 import { importTableColumn } from '../../config/tables';
 import dataSrc from '../../dataSrc';
 import retrieveDataHelper from '../../helper/retrieveDataHelper';

@@ -23,7 +23,7 @@ import config from '../../../config'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import { AppContext } from '../../../context/AppContext';
-import AccessControl from '../../presentational/AccessControl'
+import AccessControl from '../../authentication/AccessControl'
 import ObjectTable from '../../presentational/ObjectTable'
 import PatientTable from '../../presentational/PatientTable'
 import ImportObjectTable from '../../presentational/ImportObjectTable'

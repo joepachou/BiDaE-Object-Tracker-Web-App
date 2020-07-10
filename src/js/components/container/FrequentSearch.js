@@ -39,7 +39,7 @@ import React  from 'react';
 import { 
     Button 
 } from 'react-bootstrap';
-import AccessControl from '../presentational/AccessControl';
+import AccessControl from '../authentication/AccessControl';
 import { AppContext } from '../../context/AppContext';
 
 class FrequentSearch extends React.Component {

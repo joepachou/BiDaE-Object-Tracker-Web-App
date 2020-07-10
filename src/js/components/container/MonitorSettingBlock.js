@@ -55,7 +55,7 @@ const SelectTable = selecTableHOC(ReactTable);
 import {
     PrimaryButton
 } from '../BOTComponent/styleComponent';
-import AccessControl from '../presentational/AccessControl';
+import AccessControl from '../authentication/AccessControl';
 import retrieveDataHelper from '../../helper/retrieveDataHelper';
 import apiHelper from '../../helper/apiHelper';
 

@@ -40,7 +40,7 @@ import {
     Col,
      Button 
 } from 'react-bootstrap';
-import AccessControl from '../../presentational/AccessControl';
+import AccessControl from '../../authentication/AccessControl';
 import { AppContext } from '../../../context/AppContext'
 import {
     MobileOnlyView,

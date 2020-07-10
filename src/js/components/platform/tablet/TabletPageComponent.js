@@ -47,7 +47,7 @@ import {
     BOTNavLink
 } from '../../BOTComponent/styleComponent'
 import LocaleContext from '../../../context/LocaleContext'
-import AccessControl from '../../presentational/AccessControl'
+import AccessControl from '../../authentication/AccessControl'
 
 const TabletPageComponent = ({
     containerModule,

@@ -37,7 +37,7 @@
 
 import config from '../config';
 import React from 'react';
-import AccessControl from '../components/presentational/AccessControl';
+import AccessControl from '../components/authentication/AccessControl';
 
 export const getDescription = (item, locale) => {
     var foundDeviceDescription = ``; 

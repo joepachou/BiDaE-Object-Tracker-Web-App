@@ -10,7 +10,7 @@ import {
 } from 'react-bootstrap';
 import 'react-tabs/style/react-tabs.css';
 import { AppContext } from '../../../context/AppContext';
-import AccessControl from '../../presentational/AccessControl'
+import AccessControl from '../../authentication/AccessControl'
 import ObjectTable from '../../presentational/ObjectTable';
 import PatientTable from '../../presentational/PatientTable';
 import ImportObjectTable from '../../presentational/ImportObjectTable';

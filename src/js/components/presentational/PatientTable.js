@@ -57,7 +57,7 @@ import {
 } from '../BOTComponent/styleComponent';
 import messageGenerator from '../../helper/messageGenerator';
 const SelectTable = selecTableHOC(ReactTable);
-import AccessControl from './AccessControl';
+import AccessControl from '../authentication/AccessControl';
 import { patientTableColumn } from '../../config/tables';
 import retrieveDataHelper from '../../helper/retrieveDataHelper';
 import config from '../../config';

@@ -43,7 +43,7 @@ import {
     BrowserRouter as Router,
     Route,  
 } from 'react-router-dom';
-import SigninPage from './js/components/authComponent/SigninPage';
+import SigninPage from './js/components/authentication/SigninPage';
 
 const App = () => {
     return (

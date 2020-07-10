@@ -54,7 +54,7 @@ import messageGenerator from '../../helper/messageGenerator'
 import {
     PrimaryButton
 } from '../BOTComponent/styleComponent'
-import AccessControl from '../presentational/AccessControl';
+import AccessControl from '../authentication/AccessControl';
 import apiHelper from '../../helper/apiHelper';
 
 const SelectTable = selecTableHOC(ReactTable);

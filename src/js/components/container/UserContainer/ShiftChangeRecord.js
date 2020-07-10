@@ -48,7 +48,7 @@ import { shiftChangeRecordTableColumn } from '../../../config/tables'
 import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm'
 import { AppContext } from '../../../context/AppContext';
 import styleConfig from '../../../config/styleConfig';
-import AccessControl from '../../presentational/AccessControl'
+import AccessControl from '../../authentication/AccessControl'
 import {
     PrimaryButton 
 } from '../../BOTComponent/styleComponent'

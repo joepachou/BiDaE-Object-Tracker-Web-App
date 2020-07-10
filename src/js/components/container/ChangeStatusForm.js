@@ -56,7 +56,7 @@ import RadioButtonGroup from './RadioButtonGroup';
 import { AppContext } from '../../context/AppContext';
 import styleConfig from '../../config/styleConfig'
 import FormikFormGroup from '../presentational/FormikFormGroup'
-import AccessControl from '../presentational/AccessControl';
+import AccessControl from '../authentication/AccessControl';
 import apiHelper from '../../helper/apiHelper';
 
 export default class ChangeStatusForm extends React.Component {

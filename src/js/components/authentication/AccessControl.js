@@ -36,7 +36,7 @@
 
 
 import React from 'react';
-import AuthContext from '../../context/AuthenticationContext'
+import AuthContext from '../../context/AuthenticationContext';
 import {
     isBrowser,
     isMobile,

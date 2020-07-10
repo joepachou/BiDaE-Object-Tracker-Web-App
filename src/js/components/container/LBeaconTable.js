@@ -56,7 +56,7 @@ import styleConfig from '../../config/styleConfig';
 import {
     PrimaryButton
 } from '../BOTComponent/styleComponent';
-import AccessControl from '../presentational/AccessControl';
+import AccessControl from '../authentication/AccessControl';
 import messageGenerator from '../../helper/messageGenerator';
 
 const SelectTable = selecTableHOC(ReactTable);

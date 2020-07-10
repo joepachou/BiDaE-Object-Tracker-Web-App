@@ -54,7 +54,7 @@ const Fragment = React.Fragment;
 import {
     PrimaryButton 
 } from '../../BOTComponent/styleComponent';
-import AccessControl from '../../presentational/AccessControl';
+import AccessControl from '../../authentication/AccessControl';
 import config from '../../../config';
 
 class AdminManagementContainer extends React.Component{

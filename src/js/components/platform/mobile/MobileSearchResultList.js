@@ -42,7 +42,7 @@ import {
     Row, 
 } from 'react-bootstrap';
 import ScrollArea from 'react-scrollbar';
-import AccessControl from '../../presentational/AccessControl';
+import AccessControl from '../../authentication/AccessControl';
 import SearchResultListGroup from '../../presentational/SearchResultListGroup'
 import LocaleContext from '../../../context/LocaleContext';
 import {

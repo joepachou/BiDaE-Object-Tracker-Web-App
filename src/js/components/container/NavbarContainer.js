@@ -49,7 +49,7 @@ import {
 } from 'react-bootstrap'
 import SiginForm from '../presentational/SigninForm';
 import config from '../../config';
-import AccessControl from '../presentational/AccessControl';
+import AccessControl from '../authentication/AccessControl';
 import ShiftChange from './ShiftChange'
 import { AppContext } from '../../context/AppContext';
 import Select from 'react-select';

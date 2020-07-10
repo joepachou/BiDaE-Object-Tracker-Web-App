@@ -56,7 +56,7 @@ const SelectTable = selecTableHOC(ReactTable);
 import {
     PrimaryButton
 } from '../BOTComponent/styleComponent'
-import AccessControl from '../presentational/AccessControl';
+import AccessControl from '../authentication/AccessControl';
 import EditGatewayForm from '../presentational/EditGatewayForm';
 
 class GatewayTable extends React.Component{
