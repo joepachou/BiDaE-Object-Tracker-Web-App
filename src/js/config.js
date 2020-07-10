@@ -528,7 +528,7 @@ const config = {
             male_1: "male_1",
 
             // ["slateblue", "tan", "lightyellow", "lavender", "orange","lightblue", "mistyrose", "yellowgreen", "darkseagreen", "orchid"]
-            pinColorArray: ["slateblue", "orange", "darkseagreen", "orchid", "tan"]
+            pinColorArray: ["slateblue", "orange", "yellowgreen", "lightblue", "tan"]
 
         },
 

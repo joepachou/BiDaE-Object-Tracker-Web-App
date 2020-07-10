@@ -119,7 +119,7 @@
 }
 
 .awesome-number-marker-icon-slateblue {
-  background: url('../img/colorPin/SlateBlue.svg') no-repeat center/contain;
+  background: url('../img/colorPin/slateblue_without_dot.png') no-repeat center/contain;
 
 }
 
@@ -128,11 +128,11 @@
 }
 
 .awesome-number-marker-icon-lightblue {
-  background: url('../img/colorPin/lightblue.svg') no-repeat center/contain;
+  background: url('../img/colorPin/lightblue_without_dot.png') no-repeat center/contain;
 }
 
 .awesome-number-marker-icon-tan {
-  background: url('../img/colorPin/Tan.svg') no-repeat center/contain;
+  background: url('../img/colorPin/tan_without_dot.png') no-repeat center/contain;
 }
 
 .awesome-number-marker-icon-mistyrose {
@@ -140,11 +140,11 @@
 }
 
 .awesome-number-marker-icon-yellowgreen {
-  background: url('../img/colorPin/YellowGreen.svg') no-repeat center/contain;
+  background: url('../img/colorPin/yellowgreen_without_dot.png') no-repeat center/contain;
 }
 
 .awesome-number-marker-icon-orange {
-  background: url('../img/colorPin/Orange.svg') no-repeat center/contain;
+  background: url('../img/colorPin/orange_without_dot.png') no-repeat center/contain;
 }
 
 .awesome-number-marker-icon-orchid {
