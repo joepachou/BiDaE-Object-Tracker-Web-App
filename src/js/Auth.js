@@ -43,7 +43,6 @@ import dataSrc from './dataSrc';
 import config from './config';
 import permissionsTable from './config/roles';
 
-
 class Auth extends React.Component {
 
     state = {
@@ -100,7 +99,7 @@ class Auth extends React.Component {
                 this.setState({
                     authenticated: true,
                     user: userInfo
-                })
+                }, callback)
             }
         }).catch(error => {
             console.log(error)

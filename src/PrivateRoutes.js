@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        Entry.js
+        PrivateRoutes.js
 
     File Description:
         BOT UI component
@@ -34,35 +34,34 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
-import React from 'react';
-import { BrowserRouter as Router,Switch, Route,  } from 'react-router-dom';
+import React, { Fragment } from 'react';
+import { 
+    Switch, 
+    Redirect    
+} from 'react-router-dom';
 import NavbarContainer from './js/components/container/NavbarContainer'
 import { renderRoutes } from 'react-router-config';
 import routes from './js/config/routes';
-import { ToastContainer } from 'react-toastify';
-import config from './js/config';
-import AccessControl from './js/components/presentational/AccessControl';
-import SigninPage from './js/components/presentational/SigninPage';
+import AuthContext from './js/context/AuthenticationContext';
 
-const Entry = () => {
-    
-    return (
-        <Router>          
-            <AccessControl
-                renderNoAccess={() => <SigninPage/>}
-            >
+const PrivateRoutes = () => {
+
+    let auth = React.useContext(AuthContext)
+
+    if (auth.authenticated) {
+        return (
+            <Fragment>          
                 <NavbarContainer/>
                 <Switch>
                     {renderRoutes(routes)}
                 </Switch>
-            </AccessControl>
-            <ToastContainer {...config.TOAST_PROPS} />
-        </Router>
-
-    );
+            </Fragment>
+        );
+    }
+    return <Redirect to={{pathname: '/login', state: {}}} />
 };
 
-export default Entry;
+export default PrivateRoutes;
 
 
 

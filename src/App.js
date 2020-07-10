@@ -36,12 +36,23 @@
 
 import React from 'react';
 import AppContext from './js/context/AppContext';
-import Entry from './Entry';
+import PrivateRoutes from './PrivateRoutes';
+import { ToastContainer } from 'react-toastify';
+import config from './js/config';
+import { 
+    BrowserRouter as Router,
+    Route,  
+} from 'react-router-dom';
+import SigninPage from './js/components/authComponent/SigninPage';
 
 const App = () => {
     return (
         <AppContext>
-            <Entry />
+            <Router>          
+                <Route path='/login' exact component={SigninPage} />
+                <PrivateRoutes />
+            </Router>
+            <ToastContainer {...config.TOAST_PROPS} />
         </AppContext>
     );
 };

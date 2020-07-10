@@ -57,7 +57,9 @@ import styleConfig from '../../config/styleConfig';
 import FormikFormGroup from '../presentational/FormikFormGroup';
 import { 
     Link, 
+    useHistory
 } from 'react-router-dom';
+
 
 
 const imageLength = 80;
@@ -76,7 +78,7 @@ const SigninPage = () => {
 
     let locale = React.useContext(LocaleContext);
     let auth = React.useContext(AuthContext);
-
+    let history = useHistory();
     return (
         <CenterContainer>
             <div className='d-flex justify-content-center'>
@@ -105,8 +107,8 @@ const SigninPage = () => {
                 })}
 
                 onSubmit={(values, actions) => {
-                    auth.signin(values, actions)
-                
+                    let callback = () => history.push("/")
+                    auth.signin(values, actions, callback)
                 }}
 
                 render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
