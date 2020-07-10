@@ -69,7 +69,6 @@ const BrowserSearchResultList = ({
     searchObjectArray,
     pinColorArray,
     searchKey,
-    searchType,
 }) => {
 
     let locale = React.useContext(LocaleContext);
@@ -121,7 +120,7 @@ const BrowserSearchResultList = ({
                                         action
                                         searchObjectArray={searchObjectArray}
                                         pinColorArray={pinColorArray}
-                                        searchType={searchType}
+                                        searchKey={searchKey}
                                     />
 
                                 </AccessControl>

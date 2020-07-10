@@ -60,7 +60,7 @@ const SearchResultListGroup = ({
     action,
     searchObjectArray,
     pinColorArray,
-    searchType,
+    searchKey,
 }) => {
 
     const { 
@@ -97,8 +97,8 @@ const SearchResultListGroup = ({
         })
     }
 
-    const createItem = (searchType, item, index) => {
-        switch(searchType) {
+    const createItem = (searchKey, item, index) => {
+        switch(searchKey.type) {
             case ALL_DEVICES: 
                 return <p className='d-inline-block'>&bull;</p>;
             case OBJECT_TYPE:
@@ -145,7 +145,7 @@ const SearchResultListGroup = ({
                             style={style.item}
                             className='d-flex justify-content-center'
                         >
-                            {createItem(searchType, item, index)}
+                            {createItem(searchKey, item, index)}
                         </div>
                         {getDescription(item, locale, config)}
                         {getMacaddress(item, locale)}

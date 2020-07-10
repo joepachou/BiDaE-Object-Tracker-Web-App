@@ -36,19 +36,23 @@
 
 
 import React from 'react';
-import { Col, Row, ListGroup, Nav, Button } from 'react-bootstrap';
+import { 
+    Col, 
+    Row, 
+    ListGroup, 
+    Nav, 
+    Button 
+} from 'react-bootstrap';
 // import '../../../css/hideScrollBar.css'
 // import '../../../css/shadow.css'
 import '../../../css/SearchableObjectType.css'
-import axios from 'axios';
-import { getObjectTable, auth } from '../../dataSrc'
-import Cookies from 'js-cookie'
-import {
-    addUserSearchHistory
-} from '../../dataSrc'
 import apiHelper from '../../helper/apiHelper';
-import locale from 'antd/lib/date-picker/locale/en_US';
 import { AppContext } from '../../context/AppContext';
+import config from '../../config';
+
+const {
+    OBJECT_TYPE
+} = config.frequentSearchOption;
 /*
     this class contain three two components
         1. sectionIndexList : this is the alphabet list for user to search their objects by the first letter of their type
@@ -274,10 +278,14 @@ class SearchableObjectType extends React.Component {
     }
 
     handleClick = (e) => {
-        let searchKey = e.target.innerText
-        this.props.getSearchKey(searchKey, 'object type')
+        let itemName = e.target.innerText
+        const searchKey = {
+            type: OBJECT_TYPE,
+            value: itemName
+        }
+        this.props.getSearchKey(searchKey)
 
-        this.addSearchHistory(searchKey)
+        this.addSearchHistory(itemName)
 
         this.shouldUpdate = true
         this.setState({

@@ -368,7 +368,6 @@ class SearchResultList extends React.Component {
             highlightSearchPanel,
             searchObjectArray,
             pinColorArray,
-            searchType,
         } = this.props;
 
         const {
@@ -408,7 +407,6 @@ class SearchResultList extends React.Component {
             searchObjectArray,
             pinColorArray,
             searchKey,
-            searchType,
 
         }
         return(

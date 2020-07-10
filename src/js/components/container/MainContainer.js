@@ -83,8 +83,10 @@ class MainContainer extends React.Component{
         locationMonitorConfig: null,
         violatedObjects: {},
         hasSearchKey: true,
-        searchKey: '',
-        searchType: ALL_DEVICES,
+        searchKey: {
+            type: ALL_DEVICES,
+            value: null,
+        },
         lastsearchKey: '',
         searchResult: [],
         colorPanel: null,
@@ -241,11 +243,10 @@ class MainContainer extends React.Component{
     handleRefreshSearchResult = () => {
         let { 
             searchKey, 
-            searchType, 
             markerClickPackage 
         } = this.state
         
-        this.getSearchKey(searchKey, searchType, markerClickPackage)
+        this.getSearchKey(searchKey, markerClickPackage)
     }
 
     /** set the geofence and location monitor enable */
@@ -455,8 +456,8 @@ class MainContainer extends React.Component{
     }
 
     /** Fired once the user click the item in object type list or in frequent seaerch */
-    getSearchKey = (searchKey, searchType, colorPanel = null, markerClickPackage = {}) => {
-        this.getResultBySearchKey(searchKey, searchType, colorPanel, markerClickPackage)
+    getSearchKey = (searchKey, colorPanel = null, markerClickPackage = {}) => {
+        this.getResultBySearchKey(searchKey, colorPanel, markerClickPackage)
     }
 
     /** Process the search result by the search key.
@@ -469,7 +470,7 @@ class MainContainer extends React.Component{
      *  6. coordinate(disable now)
      *  7. multiple selected object(gridbutton)(disable now)
      */
-    getResultBySearchKey = (searchKey, searchType, colorPanel, markerClickPackage) => {
+    getResultBySearchKey = (searchKey, colorPanel, markerClickPackage) => {
         let searchResult = [];
 
         let hasSearchKey = true
@@ -490,8 +491,7 @@ class MainContainer extends React.Component{
 
         const devicesAccessControlNumber = auth.user.myDevice || []
 
-
-        switch(searchType) {
+        switch(searchKey.type) {
             case ALL_DEVICES:
 
                 searchObjectArray = [];
@@ -576,15 +576,14 @@ class MainContainer extends React.Component{
                 break;
 
             case OBJECT_TYPE:
-                
-                if (searchObjectArray.includes(searchKey)) {
+                if (searchObjectArray.includes(searchKey.value)) {
 
                 } else if (searchObjectArray.length < MAX_SEARCH_OBJECT_NUM) {
-                    searchObjectArray.push(searchKey)
+                    searchObjectArray.push(searchKey.value)
                 } else {
                     searchObjectArray.shift();
                     pinColorArray.push(pinColorArray.shift());
-                    searchObjectArray.push(searchKey)
+                    searchObjectArray.push(searchKey.value)
                 }
                 searchResult = proccessedTrackingData.filter(item => {
                     return searchObjectArray.includes(item.type)
@@ -646,170 +645,6 @@ class MainContainer extends React.Component{
                 }
         }
 
-
-        // if (searchKey === MY_DEVICES) {
-        //     searchObjectArray = [];
-
-        //     const devicesAccessControlNumber = auth.user.myDevice || []
-
-        //     proccessedTrackingData
-        //         .filter(item => {
-        //             return item.object_type == 0
-        //         })
-        //         .map(item => {
-        //             if (devicesAccessControlNumber.includes(item.asset_control_number)) {
-        //                 item.searched = true;
-        //                 item.searchedType = -1;
-        //                 searchResult.push(item)
-        //             }
-        //         })
-        //     if (!searchedObjectType.includes(-1)) { 
-        //         searchedObjectType.push(-1)
-        //         showedObjects.push(-1)
-        //     }
-
-        // } else if (searchKey === ALL_DEVICES) {
-
-        //     searchObjectArray = [];
-
-        //     searchResult = proccessedTrackingData
-        //         .filter(item => {
-        //             return item.object_type == 0 
-        //         })
-        //         .map(item => {
-        //             item.searchedType = 0
-        //             return item
-        //         })
-        //     if (!searchedObjectType.includes(0)) {
-        //         searchedObjectType.push(0)
-        //         showedObjects.push(0)
-        //     }
-
-
-        // } else if (searchKey === MY_PATIENTS){
-
-        //     searchObjectArray = [];
-
-        //     const devicesAccessControlNumber = auth.user.myDevice || []
-            
-        //     proccessedTrackingData
-        //         .filter(item => {
-        //             return item.object_type != 0 
-        //         })
-        //         .map(item => {
-        //             if (devicesAccessControlNumber.includes(item.asset_control_number)) {
-        //                 item.searched = true;
-        //                 item.searchedType = -2;
-        //                 searchResult.push(item)
-        //             }
-        //         })
-        //     if (!searchedObjectType.includes(-2)) { 
-        //         searchedObjectType.push(-2)
-        //         showedObjects.push(-2)
-        //     }
-
-
-        // } else if (searchKey === ALL_PATIENTS) {
-        //     searchObjectArray = [];
-
-        //     searchResult = proccessedTrackingData
-        //         .filter(item => {
-        //             return item.object_type != 0 
-        //         })
-        //         .map(item => {
-        //             item.searchedType = 1;
-        //             return item
-        //         })
-        //     if (!searchedObjectType.includes(1) || !searchedObjectType.includes(2)) { 
-        //         searchedObjectType.push(1)
-        //         searchedObjectType.push(2)
-        //         showedObjects.push(1)
-        //         showedObjects.push(2)
-        //     }
-
-
-        // } else if (searchKey == OBJECTS) {
-        //     searchResult = this.collectObjectsByLatLng(searchValue, proccessedTrackingData, markerClickPackage)
-
-        // } else if (typeof searchKey === 'object') {
-        //     proccessedTrackingData.map(item => {
-        //         if (searchKey.includes(item.type)) {
-        //             item.searched = true;
-        //             item.searchedType = -1;
-        //             item.pinColor = colorPanel[item.type];
-        //             searchResult.push(item)
-        //         } 
-        //     })
-
-        // } else if (searchKey == "") {
-        //     searchResult = []
-        //     hasSearchKey = false 
-
-        // } else if (searchType == OBJECT_TYPE) {
-
-        //     if (searchObjectArray.includes(searchKey)) {
-        //     } else if (searchObjectArray.length < MAX_SEARCH_OBJECT_NUM) {
-        //         searchObjectArray.push(searchKey)
-        //     } else {
-        //         searchObjectArray.shift();
-        //         pinColorArray.push(pinColorArray.shift());
-        //         searchObjectArray.push(searchKey)
-        //     }
-        //     searchResult = proccessedTrackingData.filter(item => {
-        //         return searchObjectArray.includes(item.type)
-        //     })
-        // } else {
-        //     let searchResultMac = []; 
-        //     searchObjectArray = [];
-        //     proccessedTrackingData
-        //         .map(item => {    
-        //              if (
-        //                 item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0 ||
-        //                 item.asset_control_number.indexOf(searchKey) >= 0 ||
-        //                 item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0  ||
-        //                 (item.nickname != undefined ?  item.nickname.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0 : false)
-        //             ) {
-        //                 item.searched = true;
-        //                 item.searchedType = -1;
-        //                 searchResult.push(item)
-        //                 searchResultMac.push(item.mac_address)
-                        
-        //             }
-                   
-        //             if(item.location_description != null){ 
-        //                 if( item.location_description.indexOf(searchKey) >= 0  ){
-        //                     item.searched = true
-        //                     item.searchedType = -1;
-        //                     searchResult.push(item)
-        //                     searchResultMac.push(item.mac_address)
-        //                 }
-        //             }
-
-        //         })
-
-        //     // if(this.state.lastsearchKey != searchKey) {
-        //     //     axios.post(dataSrc.backendSearch,{
-        //     //         keyType : 'all attributes',
-        //     //         keyWord : searchKey,
-        //     //         mac_address : searchResultMac
-        //     //     })
-        //     //     .then(res => {
-        //     //         this.setState({
-        //     //             lastsearchKey: searchKey
-        //     //         })
-        //     //     })
-        //     //     .catch(err =>{
-        //     //         console.log(err)
-        //     //     })
-
-        //     // }
-
-        //     if (!searchedObjectType.includes(-1)) { 
-        //         searchedObjectType.push(-1)
-        //         showedObjects.push(-1)
-        //     }
-        // }
-
         this.setState({
             proccessedTrackingData,
             searchedObjectType,
@@ -817,7 +652,6 @@ class MainContainer extends React.Component{
             searchResult,
             hasSearchKey,
             searchKey,
-            searchType,
             searchObjectArray,
             pinColorArray
         })
@@ -893,7 +727,6 @@ class MainContainer extends React.Component{
             proccessedTrackingData,
             searchResult,
             searchKey,
-            searchType,
             lbeaconPosition,
             geofenceConfig,
             searchedObjectType,
@@ -939,7 +772,6 @@ class MainContainer extends React.Component{
             showMobileMap,
             clearSearchResult,
             searchKey,
-            searchType,
             searchResult,
             trackingData,
             proccessedTrackingData,

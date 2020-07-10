@@ -60,7 +60,6 @@ const BrowserMainContainer = ({
     showMobileMap,
     clearSearchResult,
     searchKey,
-    searchType,
     searchResult,
     trackingData,
     proccessedTrackingData,
@@ -141,7 +140,7 @@ const BrowserMainContainer = ({
 
                 <Col id='searchPanel' xs={12} sm={5} md={3} lg={4} xl={4} className="w-100 px-2" style={style.searchPanel}>
                     <InfoPrompt 
-                        searchType={searchType}
+                        searchKey={searchKey}
                         searchResult={searchResult}
                     />
                     <SearchContainer 
@@ -159,7 +158,6 @@ const BrowserMainContainer = ({
                         <SearchResultList
                             searchResult={searchResult} 
                             searchKey={searchKey}
-                            searchType={searchType}
                             highlightSearchPanel={highlightSearchPanel}
                             handleShowPath={handleShowPath}
                             showMobileMap={showMobileMap}
