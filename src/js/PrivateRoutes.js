@@ -39,10 +39,10 @@ import {
     Switch, 
     Redirect    
 } from 'react-router-dom';
-import NavbarContainer from './js/components/container/NavbarContainer'
+import NavbarContainer from './components/container/NavbarContainer'
 import { renderRoutes } from 'react-router-config';
-import routes from './js/config/routes';
-import AuthContext from './js/context/AuthenticationContext';
+import routes from './config/routes';
+import AuthContext from './context/AuthenticationContext';
 
 const PrivateRoutes = () => {
 
