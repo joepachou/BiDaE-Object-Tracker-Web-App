@@ -44,12 +44,14 @@ import {
     Route,  
 } from 'react-router-dom';
 import SigninPage from './js/components/authentication/SigninPage';
+import ForgetPassword from './js/components/authentication/ForgetPassword';
 
 const App = () => {
     return (
         <AppContext>
             <Router>          
                 <Route path='/login' exact component={SigninPage} />
+                <Route path='/resetPassword' exact component={ForgetPassword} />
                 <PrivateRoutes />
             </Router>
             <ToastContainer {...config.TOAST_PROPS} />

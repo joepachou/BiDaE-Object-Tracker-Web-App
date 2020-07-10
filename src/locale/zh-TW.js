@@ -205,9 +205,11 @@ const tw = {
     EXPORT: "匯出",
     EXPORT_CSV: "匯出CSV",
     EXPORT_PDF: "匯出PDF",
+    SEND_RESET_INSTRUCTION: "send reset instruction",
 
     /* field */
     NAME: "名稱",
+    EMAIL: "電子郵件",
     PATIENT_NAME: "病人姓名",
     KEY: "關鍵字",
     TYPE: "類別",
@@ -375,6 +377,7 @@ const tw = {
     OVERLENGTH:"帳號僅允許一百字內",
     LIMIT_IN_TWENTY_CHARACTER: "僅允許20個字元",
     LIMIT_IN_FOURTY_CHARACTER: "僅允許40個字元",
+    CANNOT_WORK_NOW: "cannot work now",
 
     /** placeholder */
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "請輸入或掃描mac address",

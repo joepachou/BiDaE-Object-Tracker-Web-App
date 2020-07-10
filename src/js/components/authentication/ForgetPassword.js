@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        SigninPage.js
+        ForgetPassword.js
 
     File Description:
         BOT UI component
@@ -59,6 +59,7 @@ import {
     Link, 
     useHistory
 } from 'react-router-dom';
+import { set } from 'js-cookie';
 
 
 
@@ -74,7 +75,7 @@ const handleClick = (e) => {
     // }
 }
 
-const SigninPage = () => {
+const ForgetPassword = () => {
 
     let locale = React.useContext(LocaleContext);
     let auth = React.useContext(AuthContext);
@@ -102,13 +103,11 @@ const SigninPage = () => {
 
                 validationSchema = {
                     Yup.object().shape({
-                    username: Yup.string().required(locale.texts.USERNAME_IS_REQUIRED),
-                    password: Yup.string().required(locale.texts.PASSWORD_IS_REQUIRED)
+ 
                 })}
 
-                onSubmit={(values, actions) => {
-                    let callback = () => history.push("/")
-                    auth.signin(values, actions, callback)
+                onSubmit={(values, {setStatus} ) => {
+                    setStatus('cannot work now')
                 }}
 
                 render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
@@ -123,23 +122,9 @@ const SigninPage = () => {
                         }
                         <FormikFormGroup 
                             type="text"
-                            name="username"
+                            name="email"
                             className="mb-4"
-                            label={locale.texts.NAME}    
-                        />  
-                        <FormikFormGroup 
-                            type="password"
-                            name="password"
-                            className="mb-4"
-                            additionalField='forget password'
-                            additionalComponent={() => (
-                                <Link
-                                    to={'/resetPassword'}
-                                >
-                                    {locale.texts.FORGET_PASSWORD}
-                                </Link>
-                            )}
-                            label={locale.texts.PASSWORD}    
+                            label={locale.texts.EMAIL}    
                         />  
                         <div className='d-flex justify-content-start'>
                             <Button 
@@ -147,7 +132,7 @@ const SigninPage = () => {
                                 variant="primary" 
                                 disabled={isSubmitting}
                             >
-                                {locale.texts.SIGN_IN}
+                                {locale.texts.SEND_RESET_INSTRUCTION}
                             </Button>
                         </div>
                     </Form>
@@ -157,4 +142,4 @@ const SigninPage = () => {
     )
 }
 
-export default SigninPage;
+export default ForgetPassword;

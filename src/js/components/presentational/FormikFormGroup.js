@@ -59,7 +59,7 @@ const FormikFormGroup = ({
    onChange,
    example = null,
    autoComplete = true,
-   additionalField
+   additionalComponent = () => null
 }) => {
     let style = {
         container: {
@@ -84,10 +84,8 @@ const FormikFormGroup = ({
                 <div>
                     {label}
                 </div>
-                <div
-                    
-                >
-                    {additionalField}
+                <div>
+                    {additionalComponent()}
                 </div>
             </FormFieldName>
             {component 

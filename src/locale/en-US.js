@@ -203,9 +203,11 @@ const en =  {
     EXPORT: "export",
     EXPORT_CSV: "export CSV",
     EXPORT_PDF: "export PDF",
+    SEND_RESET_INSTRUCTION: "send reset instruction",
 
     /* field */
     NAME: "name",
+    EMAIL: "email",
     PATIENT_NAME: "patient name",
     KEY: "key",
     TYPE: "type",
@@ -374,6 +376,7 @@ const en =  {
     LIMIT_IN_TWENTY_CHARACTER: "Limit in 20 characters",
     LIMIT_IN_FOURTY_CHARACTER: "Limit in 40 characters",
     ALEAST_ONE_DEPARTMENT:"Aleast one department",
+    CANNOT_WORK_NOW: "cannot work now",
 
     /** placeholder */
     PLEASE_ENTER_OR_SCAN_MAC_ADDRESS: "please enter or scan mac address",
