@@ -33,7 +33,11 @@
         Edward Chen, r08921a28@ntu.edu.tw
         Joe Chou, jjoe100892@gmail.com
 */
+import config from '../config';
 
+const {
+    OBJECT_TYPE
+} = config.frequentSearchOption;
 
 /** Retrieve the object's offset from object's mac_address.
  * @param   mac_address The mac_address of the object retrieved from DB. 
@@ -62,4 +66,26 @@ export const createLbeaconCoordinate = (lbeacon_uuid) => {
     const xx = parseInt(lbeacon_uuid.slice(14,18) + lbeacon_uuid.slice(19,23));
     const yy = parseInt(lbeacon_uuid.slice(-8));
     return [yy, xx, zz];
+}
+
+/** Count the number of searched object  */
+export const countNumber = (searchKey, item, numberSheet) => {
+    let newNum = 1;
+
+    switch(searchKey.type) {
+        case OBJECT_TYPE: 
+            if (Object.keys(numberSheet).includes(item.type)) {
+                newNum = numberSheet[item.type] += 1
+            } else {
+                numberSheet[item.type] = newNum;
+            }
+            return newNum;
+        default: 
+            if (Object.keys(numberSheet).includes(searchKey.type)) {
+                newNum = numberSheet[searchKey.type] += 1
+            } else {
+                numberSheet[searchKey.type] = newNum;
+            }
+            return newNum;
+    }
 }

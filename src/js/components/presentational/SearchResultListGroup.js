@@ -45,9 +45,13 @@ import {
     getRSSI,
     getUpdatedByNLbeacons
 } from '../../helper/descriptionGenerator';
+import {
+    countNumber
+} from '../../helper/dataTransfer';
 
 const {
     ALL_DEVICES,
+    ALL_PATIENTS,
     OBJECT_TYPE
 } = config.frequentSearchOption
 
@@ -67,6 +71,8 @@ const SearchResultListGroup = ({
         locale,
         stateReducer
     } = React.useContext(AppContext);
+
+    let numberSheet = {};
    
     const style = {
         icon: {
@@ -100,6 +106,7 @@ const SearchResultListGroup = ({
     const createItem = (searchKey, item, index) => {
         switch(searchKey.type) {
             case ALL_DEVICES: 
+            case ALL_PATIENTS:
                 return <p className='d-inline-block'>&bull;</p>;
             case OBJECT_TYPE:
                 return (
@@ -115,7 +122,7 @@ const SearchResultListGroup = ({
                                 color: 'white'
                             }}
                         >
-                            {index + 1}
+                            {countNumber(searchKey, item, numberSheet)}
                         </div>
                     </div>
                 )

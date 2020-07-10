@@ -57,7 +57,15 @@ import {
 } from 'react-device-detect'
 import {
     macAddressToCoordinate
-} from '../../helper/dataTransfer'
+} from '../../helper/dataTransfer';
+import config from '../../config';
+import {
+    countNumber
+} from '../../helper/dataTransfer';
+
+const {
+    OBJECT_TYPE
+} = config.frequentSearchOption
 
 class Map extends React.Component {
     
@@ -452,6 +460,7 @@ class Map extends React.Component {
         let {
             searchObjectArray,
             pinColorArray,
+            searchKey,
         } = this.props
 
         let [{assignedObject}] = stateReducer;
@@ -466,7 +475,8 @@ class Map extends React.Component {
 
         // const iconSize = [this.scalableIconSize, this.scalableIconSize];
         // const numberSize = this.scalableNumberSize;
-        let counter = 0;
+
+        let numberSheet = {}
 
         this.filterTrackingData(_.cloneDeep(this.props.proccessedTrackingData))
         .map((item, index)  => {
@@ -509,9 +519,7 @@ class Map extends React.Component {
                 currentPosition: item.currentPosition,
 
                 /** Set the ordered number on location pin */
-                number: this.props.mapConfig.iconOptions.showNumber && item.searched 
-                            ? ++counter
-                            : '',
+                number: item.searched ? countNumber(searchKey, item, numberSheet) : '',
 
                 /** Set the color of the ordered number */
                 numberColor: this.props.mapConfig.iconColor.number,
