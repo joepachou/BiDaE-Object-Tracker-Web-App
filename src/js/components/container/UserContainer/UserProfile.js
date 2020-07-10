@@ -50,6 +50,8 @@ import dataSrc from '../../../dataSrc';
 import {
     ListTitle
 } from '../../BOTComponent/styleComponent';
+import NumberPicker from '../NumberPicker';
+import apiHelper from '../../../helper/apiHelper';
  
 
 class UserProfile extends React.Component{
@@ -92,13 +94,16 @@ class UserProfile extends React.Component{
         
         if (value) {
             let userInfo = auth.user
+            
             userInfo.freqSearchCount = value
+
             this.setState({
                 userInfo,
             })
-            axios.post(modifyUserInfo, {
+
+            apiHelper.userApiAgent.editMaxSearchHistoryCount({
                 info: userInfo,
-                username: userInfo['name']
+                username: userInfo['name']           
             }).then(res => {
                 auth.setUserInfo('freqSearchCount', value)
             }) 
@@ -234,6 +239,22 @@ class UserProfile extends React.Component{
                                 .join('/')
                         }
                     </p>
+                </div>
+                <div>
+                    <ListTitle>
+                        {locale.texts.PREFERENCE}
+                    </ListTitle>
+                    <div 
+                        className="d-flex justify-content-start align-items-center"
+                    >
+                        {locale.texts.NUMBER_OF_SEARCH_HISTORY}: 
+                        <NumberPicker
+                            name="numberPicker"
+                            value={auth.user.freqSearchCount}
+                            onChange={this.resetFreqSearchCount}
+                            length={10}
+                        />
+                    </div> 
                 </div>
                 <hr/>
                 <EditAreasForm 

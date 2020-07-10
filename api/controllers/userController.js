@@ -219,5 +219,18 @@ module.exports = {
             .catch(err => {
                 console.log(`edit mydevice failed ${err}`)
             })            
+    },
+
+    editMaxSearchHistoryCount: (request, response) => {
+        const {username, info} = request.body
+        pool.query(dbQueries.editMaxSearchHistoryCount(username, info))
+            .then(res => {
+                console.log('modify user info success')
+                response.status(200).send('ok')
+            })
+            .catch(err => {
+                console.log(`modify user info fail ${err}`)
+            })
+        
     }
 }

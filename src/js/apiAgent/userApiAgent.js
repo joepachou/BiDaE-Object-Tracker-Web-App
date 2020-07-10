@@ -62,6 +62,18 @@ export default {
             mode,
             acn  
         })
+    },
+
+    editMaxSearchHistoryCount: async function({
+        info,
+        username,
+    }) {
+        return await axios.post(dataSrc.userInfo.maxSearchHistoryCount, {
+            info,
+            username,
+        })
     }
+
+
 
 }

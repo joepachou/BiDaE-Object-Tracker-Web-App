@@ -941,19 +941,6 @@ function editLbeacon (formOption) {
 	return query
 }
 
-const modifyUserInfo = (username, info) => {	
-	const {
-		freqSearchCount
-	} = info
-
-	return `
-		UPDATE user_table 
-		SET max_search_history_count = ${freqSearchCount} 
-		WHERE name='${username}'
-	`
-	
-}
-
 function getShiftChangeRecord(){
 	const query = `
 		SELECT 
@@ -1680,7 +1667,6 @@ module.exports = {
 	editPassword,
 	getUserInfo,
 	editLbeacon,
-	modifyUserInfo,
 	getShiftChangeRecord,
 	validateUsername,
 	getUserList,

@@ -59,7 +59,9 @@ module.exports = {
 
         searchHistory: `${domain}/data/user/searchHistory`,
 
-        mydevice: `${domain}/data/user/mydevice`
+        mydevice: `${domain}/data/user/mydevice`,
+
+        maxSearchHistoryCount: `${domain}/data/user/maxSearchHistoryCount`
 
     },
 

@@ -72,4 +72,7 @@ module.exports = app => {
 
     app.route('/data/user/myDevice')
         .put(userController.editMyDevice)
+
+    app.route('/data/user/maxSearchHistoryCount')
+        .post(userController.editMaxSearchHistoryCount)
 }

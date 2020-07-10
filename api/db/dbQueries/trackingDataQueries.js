@@ -76,6 +76,7 @@ const getTrackingData = (areas_id, key) => {
 		WHERE object_table.area_id IN (${areas_id.map(id => id)}) 
 
 		ORDER BY 
+			object_table.area_id,
 			object_table.type, 
 			object_table.asset_control_number
 			DESC;

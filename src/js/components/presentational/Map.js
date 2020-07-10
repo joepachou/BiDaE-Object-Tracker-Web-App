@@ -509,7 +509,7 @@ class Map extends React.Component {
                 markerColor: this.props.mapConfig.getIconColor(item, pinColorIndex > -1),
 
                 /** Set the pin size */
-                // iconSize,
+                iconSize: [50, 50],
 
                 /** Insert the object's mac_address to be the data when clicking the object's marker */
                 macAddress: item.mac_address,

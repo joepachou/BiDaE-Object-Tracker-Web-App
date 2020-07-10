@@ -491,19 +491,6 @@ const generatePDF = (request, response) => {
     });
 }
 
-const modifyUserInfo = (request, response) => {
-    const {username, info} = request.body
-    pool.query(queryType.modifyUserInfo(username, info))
-        .then(res => {
-            console.log('modify user info success')
-            response.status(200).send('ok')
-        })
-        .catch(err => {
-            console.log(`modify user info fail ${err}`)
-        })
-    
-}
-
 const validateUsername = (request, response) => {
     let { username } = request.body
     pool.query(queryType.validateUsername(username))
@@ -1023,7 +1010,6 @@ module.exports = {
     signup,
     editPassword,
     generatePDF,
-    modifyUserInfo,
     validateUsername,
     setUserInfo,
     getMainSecondArea,

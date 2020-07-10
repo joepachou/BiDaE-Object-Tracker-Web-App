@@ -360,5 +360,18 @@ module.exports = {
 	
 		return text
 		
+	},
+
+	editMaxSearchHistoryCount: (username, info) => {	
+		const {
+			freqSearchCount
+		} = info
+	
+		return `
+			UPDATE user_table 
+			SET max_search_history_count = ${freqSearchCount} 
+			WHERE name='${username}'
+		`
+		
 	}
 }
