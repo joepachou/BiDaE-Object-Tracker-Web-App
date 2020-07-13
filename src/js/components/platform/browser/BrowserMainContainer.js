@@ -58,7 +58,7 @@ const BrowserMainContainer = ({
     showedObjects,
     highlightSearchPanel,
     showMobileMap,
-    clearSearchResult,
+    clearSearchResult, 
     searchKey,
     searchResult,
     trackingData,
@@ -70,7 +70,9 @@ const BrowserMainContainer = ({
     locationMonitorConfig,
     currentAreaId,
     searchObjectArray,
-    pinColorArray
+    pinColorArray,
+    handleClick,
+    showFoundResult
 }) => {
 
     let auth = React.useContext(AuthenticationContext)
@@ -142,6 +144,7 @@ const BrowserMainContainer = ({
                     <InfoPrompt 
                         searchKey={searchKey}
                         searchResult={searchResult}
+                        handleClick={handleClick}
                     />
                     <SearchContainer 
                         hasSearchKey={hasSearchKey}
@@ -163,6 +166,7 @@ const BrowserMainContainer = ({
                             showMobileMap={showMobileMap}
                             searchObjectArray={searchObjectArray}
                             pinColorArray={pinColorArray}
+                            showFoundResult={showFoundResult}
                         />
                     </div>
                 </Col>

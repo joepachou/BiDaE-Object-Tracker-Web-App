@@ -35,7 +35,7 @@
 */
 
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Alert } from 'react-bootstrap'
 import { AppContext } from '../../context/AppContext';
 import {
@@ -46,6 +46,7 @@ import {
     CustomView,
     isMobile 
 } from 'react-device-detect'
+import { SWITCH_SEARCH_LIST } from '../../config/words';
 
 const style = {
     alertText: {
@@ -66,43 +67,68 @@ const style = {
 const InfoPrompt = ({
     searchKey,
     searchResult,
+    handleClick
 }) => {
     const appContext = React.useContext(AppContext);
     const { locale } = appContext
     return (
-        <div>
+        <Fragment>
             <CustomView condition={isTablet != true && isMobile != true}>
                <Alert variant='secondary' className='d-flex justify-content-start'>
-                    <div 
-                        className='text-capitalize mr-2' 
-                        style={style.alertTextTitle}
+                    <div
+                        className='d-flex justify-content-start'
+                        onClick={handleClick}
                     >
-                        {searchKey ? locale.texts.FOUND : locale.texts.PLEASE_SELECT_SEARCH_OBJECT}
+                        <div 
+                            className='text-capitalize mr-2' 
+                            style={style.alertTextTitle}
+                            name={SWITCH_SEARCH_LIST}
+                            value={true}
+                        >
+                            {searchKey ? locale.texts.FOUND : locale.texts.PLEASE_SELECT_SEARCH_OBJECT}
+                        </div>
+                        <div 
+                            className="mr-1"
+                            style={style.alertText}
+                            name={SWITCH_SEARCH_LIST}
+                            value={true}
+                        >
+                            {searchKey ? searchResult.filter(item => item.found).length : ""}
+                        </div>
+                        <div 
+                            name={SWITCH_SEARCH_LIST}
+                            value={true}
+                        >
+                            {searchKey && locale.texts.OBJECTS}
+                        </div>
                     </div>
-                    <div 
-                        className="mr-1"
-                        style={style.alertText}
+                    {searchKey && <div>&nbsp;</div> }
+                    <div
+                        className='d-flex justify-content-start'
+                        onClick={handleClick}
                     >
-                        {searchKey ? searchResult.filter(item => item.found).length : ""}
-                    </div>
-                    <div >
-                        {searchKey && locale.texts.OBJECTS}
-                    </div>
-                        {searchKey && <div>&nbsp;</div> }
-                    <div 
-                        className='text-capitalize mr-2' 
-                        style={style.alertTextTitle}
-                    >
-                        {searchKey && `${locale.texts.NOT_FOUND}`}
-                    </div>
-                    <div 
-                        className="mr-1"
-                        style={style.alertText}
-                    >
-                        {searchKey ? searchResult.filter(item => !item.found).length : ""}
-                    </div>
-                    <div >
-                        {searchKey && locale.texts.OBJECTS}
+                        <div 
+                            className='text-capitalize mr-2' 
+                            style={style.alertTextTitle}
+                            name={SWITCH_SEARCH_LIST}
+                            value={false}
+                        >
+                            {searchKey && `${locale.texts.NOT_FOUND}`}
+                        </div>
+                        <div 
+                            className="mr-1"
+                            style={style.alertText}
+                            name={SWITCH_SEARCH_LIST}
+                            value={false}
+                        >
+                            {searchKey ? searchResult.filter(item => !item.found).length : ""}
+                        </div>
+                        <div 
+                            name={SWITCH_SEARCH_LIST}
+                            value={false}
+                        >
+                            {searchKey && locale.texts.OBJECTS}
+                        </div>
                     </div>
                 </Alert>
             </CustomView> 
@@ -119,7 +145,7 @@ const InfoPrompt = ({
                         }</div>
                 </div>
             </TabletView>
-        </div>
+        </Fragment>
     )
 
 }

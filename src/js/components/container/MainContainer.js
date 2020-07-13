@@ -57,6 +57,7 @@ import apiHelper from '../../helper/apiHelper';
 import {
     createLbeaconCoordinate
 } from '../../helper/dataTransfer';
+import { SWITCH_SEARCH_LIST } from '../../config/words';
 
 const {
     ALL_DEVICES,
@@ -88,6 +89,7 @@ class MainContainer extends React.Component{
             value: null,
         },
         lastsearchKey: '',
+        showFoundResult: true,
         searchResult: [],
         colorPanel: null,
         clearColorPanel: false,
@@ -417,14 +419,6 @@ class MainContainer extends React.Component{
         })
     }
 
-    /** remove the background color of grid button */
-    clearGridButtonBGColor = () => {
-        var gridbuttons = document.getElementsByClassName('gridbutton')
-        for(let button of gridbuttons) {
-            button.style.background = ''
-        }
-    }
-
     handleClearButton = () => {
         let {
             proccessedTrackingData
@@ -719,6 +713,20 @@ class MainContainer extends React.Component{
         })
     }
 
+    handleClick = (e) => {
+
+        const name = e.target.name || e.target.getAttribute('name')
+
+        switch(name) {
+            case SWITCH_SEARCH_LIST:
+                const value = e.target.getAttribute('value')
+                this.setState({ 
+                    showFoundResult: JSON.parse(value)
+                })
+                break;
+        }
+    }
+
     render(){
 
         const { 
@@ -740,7 +748,8 @@ class MainContainer extends React.Component{
             locationMonitorConfig,
             currentAreaId,
             searchObjectArray,
-            pinColorArray
+            pinColorArray,
+            showFoundResult
         } = this.state;
 
         const {
@@ -753,7 +762,8 @@ class MainContainer extends React.Component{
             setShowedObjects,
             handleShowResultListForMobile,
             mapButtonHandler,
-            highlightSearchPanel
+            highlightSearchPanel,
+            handleClick
         } = this
 
         const propsGroup = {
@@ -785,7 +795,9 @@ class MainContainer extends React.Component{
             locationMonitorConfig,
             currentAreaId,
             searchObjectArray,
-            pinColorArray
+            pinColorArray,
+            handleClick,
+            showFoundResult
         }
 
         return (

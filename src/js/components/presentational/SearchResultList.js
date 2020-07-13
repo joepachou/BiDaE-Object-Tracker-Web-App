@@ -68,7 +68,6 @@ class SearchResultList extends React.Component {
         showSignatureForm:false,
         showConfirmForm: false,
         selectedObjectData: [],
-        showNotFoundResult: false,
         showPatientResult: false,
         selection: [],
         editedObjectPackage: [],
@@ -77,14 +76,6 @@ class SearchResultList extends React.Component {
         showPath: false,
         signatureName:'',
         showPatientView: false,
-    }
-
-    componentDidUpdate = (prevProps, prevState) => {
-        if (!(_.isEqual(prevProps.searchKey, this.props.searchKey))) {
-            this.setState({
-                showNotFoundResult: false
-            })
-        } 
     }
 
     onSelect = (eventKey) => {
@@ -274,13 +265,6 @@ class SearchResultList extends React.Component {
         })
     } 
 
-    handleToggleNotFound = (e) => {
-        e.preventDefault()
-        this.setState({ 
-            showNotFoundResult: !this.state.showNotFoundResult 
-        })
-    }
-
     handleAdditionalButton = (text) => {
         let selection = []
         let selectedObjectData = []
@@ -368,40 +352,36 @@ class SearchResultList extends React.Component {
             highlightSearchPanel,
             searchObjectArray,
             pinColorArray,
+            showFoundResult,
+            searchResult
         } = this.props;
 
         const {
-            handleToggleNotFound,
             onSelect
         } = this
         
         const {
             selection,
-            showNotFoundResult
         } = this.state
 
-        let foundResult = this.props.searchResult.filter(item => item.found)
-        let notFoundResult = this.props.searchResult.filter(item => !item.found)
-        let searchResult = this.state.showNotFoundResult 
-            ? notFoundResult
-            : foundResult
+        let result = searchResult.filter(item => {
+            return item.found == showFoundResult 
+        })
 
-        let title = this.state.showNotFoundResult 
-            ? locale.texts.SEARCH_RESULTS_NOT_FOUND
-            : locale.texts.SEARCH_RESULTS_FOUND
+        let title = showFoundResult 
+            ? locale.texts.SEARCH_RESULTS_FOUND
+            : locale.texts.SEARCH_RESULTS_NOT_FOUND
 
         let propsGroup = {
-            searchResult,
+            searchResult: result,
             title,
 
             /** function */
-            handleToggleNotFound,
             onSelect,
             highlightSearchPanel,
 
             /** state */
             selection,
-            showNotFoundResult,
             
             /** props */
             searchObjectArray,

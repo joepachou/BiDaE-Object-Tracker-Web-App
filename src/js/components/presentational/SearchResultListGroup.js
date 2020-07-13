@@ -65,6 +65,7 @@ const SearchResultListGroup = ({
     searchObjectArray,
     pinColorArray,
     searchKey,
+    onClick
 }) => {
 
     const { 

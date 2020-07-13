@@ -63,15 +63,13 @@ const BrowserSearchResultList = ({
     searchResult,
     title,
     selection,
-    handleToggleNotFound,
-    showNotFoundResult,
     onSelect,
     searchObjectArray,
     pinColorArray,
     searchKey,
 }) => {
 
-    let locale = React.useContext(LocaleContext);
+    let locale = React.useContext(LocaleContext); 
 
     const style = {
         noResultDiv: {
@@ -127,19 +125,6 @@ const BrowserSearchResultList = ({
                             </ScrollArea>
                         </Col>
                 }
-            </Row>
-            <Row className='d-flex justify-content-center mt-3'>
-                <Button
-                    variant="link"
-                    onClick={handleToggleNotFound}
-                    size="lg"
-                    disabled={false}
-                >
-                    {showNotFoundResult
-                        ? locale.texts.SHOW_SEARCH_RESULTS_FOUND
-                        : locale.texts.SHOW_SEARCH_RESULTS_NOT_FOUND
-                    }
-                </Button>
             </Row>
         </Fragment>
     )

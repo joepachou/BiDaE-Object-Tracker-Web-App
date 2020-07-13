@@ -47,7 +47,7 @@ import AuthContext from './context/AuthenticationContext';
 const PrivateRoutes = () => {
 
     let auth = React.useContext(AuthContext)
-
+    console.log(auth.authenticated)
     if (auth.authenticated) {
         return (
             <Fragment>          
