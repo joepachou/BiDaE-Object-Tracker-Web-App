@@ -57,7 +57,7 @@ import apiHelper from '../../helper/apiHelper';
 import {
     createLbeaconCoordinate
 } from '../../helper/dataTransfer';
-import { SWITCH_SEARCH_LIST } from '../../config/words';
+import { SWITCH_SEARCH_LIST, CLEAR_SEARCH_RESULT } from '../../config/words';
 
 const {
     ALL_DEVICES,
@@ -419,36 +419,6 @@ class MainContainer extends React.Component{
         })
     }
 
-    handleClearButton = () => {
-        let {
-            proccessedTrackingData
-        } = this.state
-
-        let searchResult = proccessedTrackingData
-            .filter(item => {
-                return item.object_type == 0 
-            })
-            .map(item => {
-                item.searchedType = 0
-                return item
-            })
-
-        this.setState({
-            hasSearchKey: true,
-            searchKey: ALL_DEVICES,
-            lastsearchKey: '',
-            searchResult,
-            colorPanel: null,
-            clearColorPanel: true,
-            clearSearchResult: this.state.hasSearchKey ? true : false,
-            proccessedTrackingData: [],
-            display: true,
-            searchedObjectType: [0],
-            showedObjects: [0],
-            showMobileMap: true,
-        })
-    }
-
     /** Fired once the user click the item in object type list or in frequent seaerch */
     getSearchKey = (searchKey, colorPanel = null, markerClickPackage = {}) => {
         this.getResultBySearchKey(searchKey, colorPanel, markerClickPackage)
@@ -724,6 +694,36 @@ class MainContainer extends React.Component{
                     showFoundResult: JSON.parse(value)
                 })
                 break;
+
+            case CLEAR_SEARCH_RESULT: 
+                let {
+                    proccessedTrackingData
+                } = this.state
+        
+                let searchResult = proccessedTrackingData
+                    .filter(item => {
+                        return item.object_type == 0 
+                    })
+                    .map(item => {
+                        item.searchedType = 0
+                        return item
+                    })
+        
+                this.setState({
+                    hasSearchKey: true,
+                    searchKey: ALL_DEVICES,
+                    lastsearchKey: '',
+                    searchResult,
+                    colorPanel: null,
+                    clearColorPanel: true,
+                    clearSearchResult: this.state.hasSearchKey ? true : false,
+                    proccessedTrackingData: [],
+                    display: true,
+                    searchedObjectType: [0],
+                    showedObjects: [0],
+                    showMobileMap: true,
+                })
+
         }
     }
 
@@ -753,7 +753,6 @@ class MainContainer extends React.Component{
         } = this.state;
 
         const {
-            handleClearButton,
             getSearchKey,
             setMonitor,
             clearAlerts,
@@ -767,7 +766,6 @@ class MainContainer extends React.Component{
         } = this
 
         const propsGroup = {
-            handleClearButton,
             hasSearchKey,
             getSearchKey,
             setMonitor,

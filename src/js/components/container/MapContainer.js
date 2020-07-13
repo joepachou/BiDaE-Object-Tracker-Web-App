@@ -50,6 +50,7 @@ import GeneralConfirmForm from '../presentational/GeneralConfirmForm';
 import TabletMapContainer from '../platform/tablet/TabletMapContainer';
 import MobileMapContainer from '../platform/mobile/MobileMapContainer';
 import BrowserMapContainer from '../platform/browser/BrowserMapContainer';
+import { CLEAR_SEARCH_RESULT } from '../../config/words';
 
 class MapContainer extends React.Component {
 
@@ -66,9 +67,10 @@ class MapContainer extends React.Component {
 
     handleClickButton = (e) => {
         const { name, value } = e.target
+        console.log(name)
         switch(name) {
-            case 'clear':
-                this.props.handleClearButton();
+            case CLEAR_SEARCH_RESULT:
+                this.props.handleClick(e);
                 break;
             case 'save':
                 this.setState({

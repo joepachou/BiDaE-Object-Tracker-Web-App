@@ -44,7 +44,10 @@ import {
     Button 
 } from 'react-bootstrap'
 import AccessControl from '../../authentication/AccessControl'
-import Map from '../../presentational/Map'
+import Map from '../../presentational/Map';
+import {
+    CLEAR_SEARCH_RESULT
+} from '../../../config/words';
 
 export default class BrowserMapContainer extends React.Component {
 
@@ -71,7 +74,8 @@ export default class BrowserMapContainer extends React.Component {
             authenticated,
             searchObjectArray,
             pinColorArray,
-            searchKey
+            searchKey,
+            handleClick
         } = this.props;
 
         let [{areaId}] = stateReducer
@@ -140,7 +144,7 @@ export default class BrowserMapContainer extends React.Component {
                                 variant="outline-primary" 
                                 className="mr-1 ml-2 text-capitalize" 
                                 onClick={handleClickButton} 
-                                name="clear"
+                                name={CLEAR_SEARCH_RESULT}
                                 disabled={!this.props.hasSearchKey}
                             >
                                 {locale.texts.CLEAR}
