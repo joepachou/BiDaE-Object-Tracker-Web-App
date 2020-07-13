@@ -75,16 +75,15 @@ const getEditObjectRecord = () => {
 
 const addEditObjectRecord = (formOption, username, filePath) => {
 
-	let item = formOption
 	const text = `
 		INSERT INTO edit_object_record (
 			edit_user_id, 
-			edit_time, 
 			notes, 
 			new_status, 
 			new_location, 
 			edit_objects,
-			path
+			path,
+			edit_time
 		)
 		VALUES (
 			(
@@ -92,19 +91,20 @@ const addEditObjectRecord = (formOption, username, filePath) => {
 				FROM user_table 
 				WHERE name = $1
 			),
-			now(),
 			$2,
 			$3,
-			'${item.transferred_location}',
-			ARRAY ['${formOption.asset_control_number}'],
-			$4
+			$4,
+			ARRAY ['${formOption.map(item => item.asset_control_number)}'],
+			$5,
+			now()
 		)
 		RETURNING id;
 	`
 	const values = [
 		username,
-		item.notes,
-		item.status,
+		formOption[0].notes,
+		formOption[0].status,
+		formOption[0].transferred_location,
 		filePath
 	]
 
