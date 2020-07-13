@@ -42,6 +42,8 @@ const pool = require('../db/dev/connection');
 const session = require('express-session');
 const authQueries = require('../db/dbQueries/authQueries');
 const encrypt = require('../config/encrypt');
+const mailTransport = require('../service/nodemailer');
+const { resetPasswordInstruction } = require('../config/template');
 
 
 module.exports = {
@@ -232,5 +234,28 @@ module.exports = {
                 console.log(`modify user info fail ${err}`)
             })
         
+    },
+
+    sentResetPwdInstruction: (request, response) => {
+        const {
+            email
+        } = request.body;
+        
+        const token = '';
+        const message = {
+            from: 'ossf402@gmail', // Sender address
+            to: 'joechou@iis.sinica.edu.tw',
+            subject: 'BOT Password Assistance', 
+            html: resetPasswordInstruction(token)
+        };
+        
+        mailTransport.sendMail(message)
+            .then(res => {
+                console.log('send password reset instruction succeed')
+                response.status(200)
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 }

@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        userApiAgent.js
+        template.js
 
     File Description:
         BOT UI component
@@ -34,54 +34,23 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
+const resetPasswordInstruction = token => {
+    return `
+        <div>
+            <p>Greetings from BiDaE Object Tracker Service,</p>
 
-import dataSrc from '../dataSrc';
-import axios from 'axios';
+            <p>We received a request to reset the password for the BOT account associated with this e-mail address. Click the link below to reset your password using our secure server:</p>
+                        
+            ${token}
 
-export default {
-
-    addSearchHistory: async function ({
-        username,
-        keyType,
-        keyWord
-    }) {
-        return await axios.put(dataSrc.userInfo.searchHistory, {
-            username,
-            keyType,
-            keyWord
-        })
-    },
-
-    editMyDevice: async function({
-        username,
-        mode,
-        acn,  
-    }) {
-        return await axios.put(dataSrc.userInfo.mydevice, {
-            username,
-            mode,
-            acn  
-        })
-    },
-
-    editMaxSearchHistoryCount: async function({
-        info,
-        username,
-    }) {
-        return await axios.post(dataSrc.userInfo.maxSearchHistoryCount, {
-            info,
-            username,
-        })
-    },
-
-    sentResetPwdInstruction: async function({
-        email,
-    }) {
-        return await axios.post(dataSrc.userInfo.sentResetPwdInstruction, {
-            email,
-        })
-    }
-
-
-
+            <p>Sincerely,</p>
+            <p>The BOT Service Team
+            </p>
+        </div>
+    `
 }
+
+module.exports = {
+    resetPasswordInstruction
+}
+

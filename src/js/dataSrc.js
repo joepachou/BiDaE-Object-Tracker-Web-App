@@ -39,7 +39,7 @@ dataSrcIP = process.env.DATASRC_IP;
 dataSrcProtocol = process.env.DATASRC_PROTOCOL || 'https'
 domain = `${dataSrcProtocol}://${dataSrcIP}`;
 
-module.exports = {
+const dataSrc = {
 
     trackingData: `${domain}/data/trackingData`,
 
@@ -61,7 +61,9 @@ module.exports = {
 
         mydevice: `${domain}/data/user/mydevice`,
 
-        maxSearchHistoryCount: `${domain}/data/user/maxSearchHistoryCount`
+        maxSearchHistoryCount: `${domain}/data/user/maxSearchHistoryCount`,
+
+        sentResetPwdInstruction: `${domain}/data/user/sentResetPwdInstruction`
 
     },
 
@@ -115,4 +117,7 @@ module.exports = {
         return `${domain}/data/file/${path}`
     }
 }
+
+module.exports = dataSrc
+
 

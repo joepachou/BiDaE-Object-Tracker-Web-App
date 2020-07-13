@@ -60,6 +60,7 @@ import {
     useHistory
 } from 'react-router-dom';
 import { set } from 'js-cookie';
+import apiHelper from '../../helper/apiHelper';
 
 
 
@@ -97,8 +98,7 @@ const ForgetPassword = () => {
             </div>
             <Formik
                 initialValues = {{
-                    username: '',
-                    password: '',
+                    email: '',
                 }}
 
                 validationSchema = {
@@ -107,7 +107,20 @@ const ForgetPassword = () => {
                 })}
 
                 onSubmit={(values, {setStatus} ) => {
-                    setStatus('cannot work now')
+                    console.log(values)
+                    const {
+                        email
+                    } = values
+
+                    apiHelper.userApiAgent.sentResetPwdInstruction({
+                        email
+                    })
+                    .then(res => {
+                        console.log(res)
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
                 }}
 
                 render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
