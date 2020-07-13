@@ -369,8 +369,8 @@ class SearchResultList extends React.Component {
         })
 
         let title = showFoundResult 
-            ? locale.texts.SEARCH_RESULTS_FOUND
-            : locale.texts.SEARCH_RESULTS_NOT_FOUND
+            ? locale.texts.OBJECTS_FOUND
+            : locale.texts.OBJECTS_NOT_FOUND
 
         let propsGroup = {
             searchResult: result,

@@ -47,6 +47,9 @@ import {
     isMobile 
 } from 'react-device-detect'
 import { SWITCH_SEARCH_LIST } from '../../config/words';
+import {
+    HoverDiv
+} from '../BOTComponent/styleComponent';
 
 const style = {
     alertText: {
@@ -75,7 +78,7 @@ const InfoPrompt = ({
         <Fragment>
             <CustomView condition={isTablet != true && isMobile != true}>
                <Alert variant='secondary' className='d-flex justify-content-start'>
-                    <div
+                    <HoverDiv
                         className='d-flex justify-content-start'
                         onClick={handleClick}
                     >
@@ -101,9 +104,9 @@ const InfoPrompt = ({
                         >
                             {searchKey && locale.texts.OBJECTS}
                         </div>
-                    </div>
+                    </HoverDiv>
                     {searchKey && <div>&nbsp;</div> }
-                    <div
+                    <HoverDiv
                         className='d-flex justify-content-start'
                         onClick={handleClick}
                     >
@@ -129,7 +132,7 @@ const InfoPrompt = ({
                         >
                             {searchKey && locale.texts.OBJECTS}
                         </div>
-                    </div>
+                    </HoverDiv>
                 </Alert>
             </CustomView> 
 

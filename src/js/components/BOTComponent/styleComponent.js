@@ -191,3 +191,10 @@ export const NoDataFoundDiv = styled.div`
 export const BOTDataTimePicker = styled(DataTimePicker)`
     height: 3rem;
 `
+
+export const HoverDiv = styled.div`
+    &:hover {
+        cursor: pointer;
+        text-decoration
+    }
+`

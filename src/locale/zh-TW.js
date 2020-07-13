@@ -119,6 +119,8 @@ const tw = {
     PATIENTS_NOT_FOUND: "未找到的病人",
     SEARCH_RESULTS_FOUND: "找到的搜尋結果",
     SEARCH_RESULTS_NOT_FOUND: "未找到的搜尋結果",
+    OBJECTS_FOUND: "找到的物件",
+    OBJECTS_NOT_FOUND: "未找到的物件",
     PLEASE_SELECT_SEARCH_OBJECT: "請選擇搜尋物件",
     BIND_MAC_ADDRESS:"綁定哪個Mac_Address?",
     IMPORT_DEVICES_DATA:"匯入設備",

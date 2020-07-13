@@ -65,7 +65,7 @@ const BrowserSearchResultList = ({
     selection,
     onSelect,
     searchObjectArray,
-    pinColorArray,
+    pinColorArray, 
     searchKey,
 }) => {
 
@@ -84,9 +84,9 @@ const BrowserSearchResultList = ({
     return (
         <Fragment>
             <Row className='d-flex justify-content-center' style={style.titleText}>
-                <div className='title'>
+                <ListTitle>
                     {title}
-                </div>
+                </ListTitle>
             </Row>
             <Row>
                 {searchResult.length == 0 
