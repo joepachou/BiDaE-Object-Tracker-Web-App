@@ -16,5 +16,9 @@ module.exports = {
 
     OBJECTS: "objects",
 
-    OBJECT_TYPE: "object type"
+    OBJECT_TYPE: "object type",
+
+    SEARCH_HISTORY: "search history",
+
+    SEARCH_BAR: "search bar"
 }

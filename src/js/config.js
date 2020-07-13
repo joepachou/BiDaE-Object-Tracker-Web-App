@@ -178,16 +178,6 @@ const config = {
         "night shift",
     ],
 
-
-    frequentSearchOption: {
-        MY_DEVICES: "my devices",
-        ALL_DEVICES: "all devices",
-        MY_PATIENTS: "my patients",
-        ALL_PATIENTS: "all patients",
-        OBJECTS: "objects",
-        OBJECT_TYPE: "object type"
-    },
-
     monitorType: {
         1: "geofence",
         2: "panic",

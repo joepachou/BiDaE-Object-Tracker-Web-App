@@ -66,7 +66,7 @@ class SearchContainer extends React.Component {
     }
 
     componentDidMount = () => {
-        this.getObjectTable()
+        this.getData()
     }
 
     componentDidUpdate = (prepProps) => {
@@ -91,7 +91,7 @@ class SearchContainer extends React.Component {
 
     }
     /** Get the searchable object type. */
-    getObjectTable = () => {
+    getData = () => {
         const {
             locale,
             auth
@@ -99,7 +99,7 @@ class SearchContainer extends React.Component {
 
         apiHelper.objectApiAgent.getObjectTable({
             locale: locale.abbr,
-            areas_id: null,
+            areas_id: auth.user.areas_id,
             objectType: [0]
         })
         .then(res => {
@@ -204,45 +204,5 @@ class SearchContainer extends React.Component {
         );
     }
 }
-
-// const SearchContainer = ({
-//     searchKey,
-//     getSearchKey,
-//     clearSearchResult,
-//     handleShowResultListForMobile,
-//     suggestData
-// }) => {
-
-//     const propsGroup = {
-//         searchKey,
-//         getSearchKey,
-//         clearSearchResult,
-//         handleShowResultListForMobile,
-//         suggestData
-//     }
-
-    
-    
-//     return (
-//         <Fragment> 
-//             <CustomView condition={isTablet != true && isMobile != true}>
-//                 <BrowserSearchContainer 
-//                 {...propsGroup}
-//                  />
-//             </CustomView> 
-//             <TabletView>
-//                 <TabletSearchContainer 
-//                     {...propsGroup}
-//                 />
-//             </TabletView>
-//             <MobileOnlyView>
-//                 <MobileSearchContainer
-//                     {...propsGroup}
-//                 />
-//             </MobileOnlyView>
-//         </Fragment>
-//     );
-// }
-
 
 export default SearchContainer;

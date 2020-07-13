@@ -495,6 +495,23 @@ class Map extends React.Component {
                 item.pinColor = pinColorArray[pinColorIndex];
             }
 
+            let iconSize = this.iconOptions.iconSize;
+
+            /** Set the attribute if the object in search result list is on hover */
+            if (item.mac_address == assignedObject) {
+
+                // iconSize = iconSize.map(item => item * 5)
+                
+                let errorCircleOptions = this.iconOptions.errorCircleOptions;
+
+                let errorCircle = L.circleMarker(position, errorCircleOptions);
+                
+                errorCircle.addTo(this.markersLayer);
+
+            }
+
+
+
             /** Set the icon option*/
             item.iconOption = {
 
@@ -504,7 +521,7 @@ class Map extends React.Component {
                 markerColor: this.props.mapConfig.getIconColor(item, pinColorIndex > -1),
 
                 /** Set the pin size */
-                iconSize: [50, 50],
+                // iconSize,
 
                 /** Insert the object's mac_address to be the data when clicking the object's marker */
                 macAddress: item.mac_address,
@@ -519,24 +536,16 @@ class Map extends React.Component {
                 /** Set the color of the ordered number */
                 numberColor: this.props.mapConfig.iconColor.number,
             }
+
             const option = new L.AwesomeNumberMarkers (item.iconOption)
+            
             let marker = L.marker(position, {icon: option}).bindPopup(popupContent, this.props.mapConfig.popupOptions).openPopup();
+            
             marker.addTo(this.markersLayer)
 
             /** Set the z-index offset of the searhed object so that
              * the searched object icon will be on top of all others */
             if (item.searched || item.panic) marker.setZIndexOffset(1000);
-
-            /** Set error circle if the object in search result list is on hover */
-            if (item.mac_address == assignedObject) {
-
-                let errorCircleOptions = this.iconOptions.errorCircleOptions;
-
-                let errorCircle = L.circleMarker(position, errorCircleOptions);
-                
-                errorCircle.addTo(this.markersLayer);
-
-            }
         
             /** Set the marker's event. */
             marker.on('mouseover', () => {

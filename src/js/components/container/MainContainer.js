@@ -563,10 +563,10 @@ class MainContainer extends React.Component{
                 proccessedTrackingData
                     .map(item => {    
                          if (
-                            item.type.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0 ||
-                            item.asset_control_number.indexOf(searchKey) >= 0 ||
-                            item.name.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0  ||
-                            (item.nickname != undefined ?  item.nickname.toLowerCase().indexOf(searchKey.toLowerCase()) >= 0 : false)
+                            item.type.toLowerCase().indexOf(searchKey.value.toLowerCase()) >= 0 ||
+                            item.asset_control_number.indexOf(searchKey.value) >= 0 ||
+                            item.name.toLowerCase().indexOf(searchKey.value.toLowerCase()) >= 0  ||
+                            (item.nickname != undefined ?  item.nickname.toLowerCase().indexOf(searchKey.value.toLowerCase()) >= 0 : false)
                         ) {
                             item.searched = true;
                             item.searchedType = -1;

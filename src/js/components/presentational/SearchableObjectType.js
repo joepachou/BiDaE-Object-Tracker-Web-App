@@ -48,6 +48,7 @@ import {
 import '../../../css/SearchableObjectType.css'
 import apiHelper from '../../helper/apiHelper';
 import { AppContext } from '../../context/AppContext';
+import config from '../../config';
 import {
     OBJECT_TYPE
 } from '../../config/words';
@@ -134,6 +135,7 @@ class SearchableObjectType extends React.Component {
                 objectTypeList.includes(item.type) ? null : objectTypeList.push(item.type)
             })
             let firstLetterMap = this.getObjectIndexList(objectTypeList)
+
             this.setState({
                 firstLetterMap
             })

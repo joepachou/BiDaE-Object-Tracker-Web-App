@@ -47,7 +47,7 @@ import FrequentSearch from '../../container/FrequentSearch';
 import ObjectTypeList from '../../container/ObjectTypeList';
 import SearchableObjectType from '../../presentational/SearchableObjectType';
 
-const BrowserSearchContainer = ({
+const BrowserSearchContainer = ({ 
     searchKey,
     objectTypeList,
     getSearchKey,
@@ -71,34 +71,34 @@ const BrowserSearchContainer = ({
                 />
             </Row>
             <div id='searchOption' className="pt-2"> 
-                <Row>
-                    <Col md={6} sm={6} xs={6} lg={6} xl={6} className='px-0'>
-                        <FrequentSearch 
-                            getSearchKey={getSearchKey}  
-                            clearSearchResult={clearSearchResult}   
-                            hasGridButton={hasGridButton} 
-                            maxHeigh={config.searchResultProportion}
-                        />
-                    </Col>
-                    <Col md={6} sm={6} xs={6} lg={6} xl={6} className='px-0'>
-                        {/* <ObjectTypeList
-                            getSearchKey={getSearchKey}  
-                            clearSearchResult={clearSearchResult}   
-                            hasGridButton={hasGridButton} 
-                            objectTypeList={objectTypeList || []}
-                            maxHeigh={config.searchResultProportion}
-                        />           */}
-                        <SearchableObjectType
-                            getSearchKey={getSearchKey}  
-                            clearSearchResult={clearSearchResult}   
-                            hasGridButton={hasGridButton} 
-                            objectTypeList={objectTypeList || []}
-                            maxHeigh={config.searchResultProportion}
-                            searchObjectArray={searchObjectArray}
-                            pinColorArray={pinColorArray}
-                        />                  
-                    </Col>
-                </Row>
+                <div
+                    className="mb-3"
+                >
+                    <FrequentSearch 
+                        getSearchKey={getSearchKey}  
+                        clearSearchResult={clearSearchResult}   
+                        hasGridButton={hasGridButton} 
+                        maxHeigh={config.searchResultProportion}
+                    />
+                </div>
+                {/* <ObjectTypeList
+                    getSearchKey={getSearchKey}  
+                    clearSearchResult={clearSearchResult}   
+                    hasGridButton={hasGridButton} 
+                    objectTypeList={objectTypeList || []}
+                    maxHeigh={config.searchResultProportion}
+                />           */}
+                <div>
+                    <SearchableObjectType
+                        getSearchKey={getSearchKey}  
+                        clearSearchResult={clearSearchResult}   
+                        hasGridButton={hasGridButton} 
+                        objectTypeList={objectTypeList || []}
+                        maxHeigh={config.searchResultProportion}
+                        searchObjectArray={searchObjectArray}
+                        pinColorArray={pinColorArray}
+                    />                
+                </div>  
             </div>
         </div>
     )
