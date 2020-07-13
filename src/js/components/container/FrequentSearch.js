@@ -41,6 +41,13 @@ import {
 } from 'react-bootstrap';
 import AccessControl from '../authentication/AccessControl';
 import { AppContext } from '../../context/AppContext';
+import {
+    SEARCH_HISTORY,
+    ALL_DEVICES,
+    ALL_PATIENTS,
+    MY_DEVICES,
+    MY_PATIENTS
+} from '../../config/words';
 
 class FrequentSearch extends React.Component {
 
@@ -56,22 +63,17 @@ class FrequentSearch extends React.Component {
                 searchKey: '',
             })
         }
-        if (prepProps.hasGridButton !== this.props.hasGridButton && this.props.hasGridButton) {
-            this.setState({
-                searchKey: ''
-            })
-        }
     }
 
     handleClick = (e) => {
-        const itemName = e.target.name
-        this.getSearchKey(itemName)
-    }
+        const {
+            name,
+            value
+        } = e.target
 
-    getSearchKey = (itemName) => {
         let searchKey = {
-            type: itemName,
-            value: null
+            type: name,
+            value,
         }
         this.props.getSearchKey(searchKey)
         this.setState({
@@ -108,7 +110,8 @@ class FrequentSearch extends React.Component {
                                         onClick={this.handleClick} 
                                         // active={this.state.searchKey === item.name.toLowerCase()} 
                                         key={index}
-                                        name={item.name}
+                                        name={SEARCH_HISTORY}
+                                        value={item.name}
                                     >
                                         {item.name}
                                     </Button>
@@ -118,17 +121,16 @@ class FrequentSearch extends React.Component {
                     <Button 
                         variant="outline-custom"
                         onClick={this.handleClick} 
-                        active={this.state.searchKey === 'all devices'}
-                        name='all devices'
+                        // active={this.state.searchKey === 'all devices'}
+                        name={ALL_DEVICES}
                     >
                         {locale.texts.ALL_DEVICES}
                     </Button>
                     <Button 
                         variant="outline-custom"
                         onClick={this.handleClick}
-                        className="text-capitalize" 
                         // active={this.state.searchKey === 'all devices'}
-                        name='all patients'
+                        name={ALL_PATIENTS}
                     >
                         {locale.texts.ALL_PATIENTS}
                     </Button>
@@ -139,9 +141,8 @@ class FrequentSearch extends React.Component {
                         <Button
                             variant="outline-custom"
                             onClick={this.handleClick} 
-                            className="text-capitalize"
                             // active={this.state.searchKey === 'my devices'}
-                            name='my devices'
+                            name={MY_DEVICES}
                         >
                             {locale.texts.MY_DEVICES}
                         </Button>
@@ -153,8 +154,7 @@ class FrequentSearch extends React.Component {
                         <Button
                             variant="outline-custom"
                             onClick={this.handleClick}
-                            className="text-capitalize"
-                            name = 'my patients'
+                            name={MY_PATIENTS}
                         >
                             {locale.texts.MY_PATIENTS}
                         </Button>

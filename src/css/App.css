@@ -263,7 +263,7 @@ button:focus {
     border-color: inherit
 }
 
-.btn-outline-primary:not(:disabled):not(.disabled):active, {
+.btn-outline-primary:not(:disabled):not(.disabled):active {
     color: rgb(0, 123, 255, 1);
     background-color: white;
     border-color: #007bff;
@@ -533,7 +533,7 @@ p {
 
 /** .search result list group style sheet*/ 
 .searchResultListGroup {
-    max-height: 42vh;
+    max-height: 45vh;
     overflow:  hidden scroll; 
 }
 
