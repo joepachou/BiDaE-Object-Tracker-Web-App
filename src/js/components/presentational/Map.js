@@ -58,14 +58,9 @@ import {
 import {
     macAddressToCoordinate
 } from '../../helper/dataTransfer';
-import config from '../../config';
 import {
     countNumber
 } from '../../helper/dataTransfer';
-
-const {
-    OBJECT_TYPE
-} = config.frequentSearchOption
 
 class Map extends React.Component {
     

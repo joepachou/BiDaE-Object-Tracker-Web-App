@@ -57,16 +57,16 @@ import apiHelper from '../../helper/apiHelper';
 import {
     createLbeaconCoordinate
 } from '../../helper/dataTransfer';
-import { SWITCH_SEARCH_LIST, CLEAR_SEARCH_RESULT } from '../../config/words';
-
-const {
+import { 
+    SWITCH_SEARCH_LIST, 
+    CLEAR_SEARCH_RESULT,
     ALL_DEVICES,
     MY_DEVICES,
     ALL_PATIENTS,
     MY_PATIENTS,
     OBJECTS,
     OBJECT_TYPE
-} = config.frequentSearchOption
+} from '../../config/words';
 
 const {
     MAX_SEARCH_OBJECT_NUM
@@ -711,7 +711,10 @@ class MainContainer extends React.Component{
         
                 this.setState({
                     hasSearchKey: true,
-                    searchKey: ALL_DEVICES,
+                    searchKey: {
+                        type: ALL_DEVICES,
+                        value: null,
+                    },
                     lastsearchKey: '',
                     searchResult,
                     colorPanel: null,

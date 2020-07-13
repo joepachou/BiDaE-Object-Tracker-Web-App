@@ -48,12 +48,11 @@ import {
 import {
     countNumber
 } from '../../helper/dataTransfer';
-
-const {
+import {
     ALL_DEVICES,
     ALL_PATIENTS,
     OBJECT_TYPE
-} = config.frequentSearchOption
+} from '../../config/words';
 
 
 const SearchResultListGroup = ({

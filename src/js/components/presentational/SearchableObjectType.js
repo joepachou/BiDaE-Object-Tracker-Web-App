@@ -48,11 +48,9 @@ import {
 import '../../../css/SearchableObjectType.css'
 import apiHelper from '../../helper/apiHelper';
 import { AppContext } from '../../context/AppContext';
-import config from '../../config';
-
-const {
+import {
     OBJECT_TYPE
-} = config.frequentSearchOption;
+} from '../../config/words';
 /*
     this class contain three two components
         1. sectionIndexList : this is the alphabet list for user to search their objects by the first letter of their type

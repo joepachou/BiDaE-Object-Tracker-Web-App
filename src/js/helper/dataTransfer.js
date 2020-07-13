@@ -33,11 +33,9 @@
         Edward Chen, r08921a28@ntu.edu.tw
         Joe Chou, jjoe100892@gmail.com
 */
-import config from '../config';
-
-const {
+import {
     OBJECT_TYPE
-} = config.frequentSearchOption;
+} from '../config/words';
 
 /** Retrieve the object's offset from object's mac_address.
  * @param   mac_address The mac_address of the object retrieved from DB. 
