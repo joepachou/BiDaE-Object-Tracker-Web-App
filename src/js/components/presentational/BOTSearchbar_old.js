@@ -37,6 +37,12 @@
 
 import React from 'react';
 import { Form, Button } from 'react-bootstrap'; 
+import {
+    SEARCH_BAR
+} from '../../config/words';
+import {
+    isMobileOnly
+} from 'react-device-detect';
 
 class BOTSearchbar extends React.Component {
     
@@ -54,7 +60,12 @@ class BOTSearchbar extends React.Component {
 
     handleSubmit = (e) => { 
         e.preventDefault();
-        this.props.getSearchKey(this.state.value);
+        let searchKey = {
+            type: SEARCH_BAR,
+            value: this.state.value
+        }
+        this.props.getSearchKey(searchKey);
+        if (isMobileOnly) this.props.handleShowResultListForMobile();
     }
 
     handleChange = (e) => {
@@ -85,7 +96,6 @@ class BOTSearchbar extends React.Component {
 
         return (           
             
-
             <Form 
                 style={style.form}
                 className='d-flex justify-content-around'
@@ -96,14 +106,6 @@ class BOTSearchbar extends React.Component {
                         minWidth: parseInt(this.props.width) * 0.9
                     }}
                 >
-                    <i 
-                        className='fas fa-search'
-                        style={{
-                            color: 'black',
-                            fontSize: '1.2rem',
-                            marginLeft: 10,
-                        }}
-                    />
                        
                     <Form.Control 
                         id='BOTSearchbarText' 
@@ -114,6 +116,14 @@ class BOTSearchbar extends React.Component {
                         onChange={this.handleChange}
                         autoComplete="off"
                         autoFocus={false}
+                    />
+                    <i 
+                        className='fas fa-search'
+                        style={{
+                            color: 'black',
+                            fontSize: '1.2rem',
+                            marginRight: -10,
+                        }}
                     />
          
            

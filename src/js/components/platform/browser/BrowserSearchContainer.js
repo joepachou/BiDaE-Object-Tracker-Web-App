@@ -40,7 +40,7 @@ import {
     Image,
     Col
 } from 'react-bootstrap';
-import BOTSearchbar from '../../presentational/BOTSearchbar';
+import BOTSearchbar from '../../presentational/BOTSearchbar_old';
 import config from '../../../config';
 import Searchbar from '../../presentational/Searchbar';
 import FrequentSearch from '../../container/FrequentSearch';
@@ -57,17 +57,27 @@ const BrowserSearchContainer = ({
     searchObjectArray,
     pinColorArray
 }) => {
-    return (
+    return ( 
         <div 
             id='searchContainer' 
             className="py-1" 
+            style={{
+                minHeight: 520
+            }}
             onTouchMove={handleTouchMove}
         >
             <Row id='searchBar' className='d-flex justify-content-center align-items-center pb-2'>
-                <Searchbar 
+                {/* <Searchbar 
                     placeholder={searchKey}
                     getSearchKey={getSearchKey}
                     clearSearchResult={clearSearchResult}    
+                /> */}
+                <BOTSearchbar
+                    placeholder={searchKey}
+                    getSearchKey={getSearchKey}
+                    clearSearchResult={clearSearchResult}    
+                    width={400}
+                    // suggestData = {suggestData}
                 />
             </Row>
             <div id='searchOption' className="pt-2"> 

@@ -74,6 +74,8 @@ const en =  {
     FOUND: "found",
     NOT_FOUND: "not found",
     OBJECT_TYPE: "object types",
+    OBJECT: "object",
+    TYPES: "types",
     disable:"disable",
     count : "records",
     LAST_KNOWN_LOCATION:"Last known location",

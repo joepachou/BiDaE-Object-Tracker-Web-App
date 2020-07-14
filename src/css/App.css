@@ -533,7 +533,8 @@ p {
 
 /** .search result list group style sheet*/ 
 .searchResultListGroup {
-    max-height: 45vh;
+    padding-right: 25px;
+    max-height: 33vh;
     overflow:  hidden scroll; 
 }
 

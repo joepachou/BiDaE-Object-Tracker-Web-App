@@ -82,7 +82,7 @@ class Searchbar extends React.Component {
                 border: "2px solid rgba(227, 222, 222, 0.447)",
                 borderRadius : '25px',
                 fontSize: '0.8rem',
-                width:300,
+                width: 450,
                 minHeight: '1.2rem',
                 position: 'relative'
             },
@@ -113,7 +113,9 @@ class Searchbar extends React.Component {
                     variant='link' 
                     className="btn btn-link btn-sm bd-highlight" 
                     onClick={this.handleSubmit}
-                    style={{left: '100px'}}
+                    style={{
+                        left: '100px'
+                    }}
                 >
                     <img src={searchIcon} width="23px" />
                 </Button>

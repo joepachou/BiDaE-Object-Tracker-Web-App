@@ -88,7 +88,11 @@ const BrowserSearchResultList = ({
                     {title}
                 </ListTitle>
             </Row>
-            <Row>
+            <Row
+                style={{
+                    marginRight: 0
+                }}
+            >
                 {searchResult.length == 0 
                     ?   <Col className='d-flex justify-content-center font-weight-lighter' style={style.noResultDiv}>
                             {locale.texts.NO_RESULT}

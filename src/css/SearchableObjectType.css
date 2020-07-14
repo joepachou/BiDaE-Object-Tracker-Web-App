@@ -72,13 +72,13 @@
     #SectionList{
         /*height: 60vh;*/
         position: absolute;
-        right: 40%;
+        right: 55%;
         width: 30vw;
     }
     #searchableObjectType {
         position: absolute;
         z-index: 1600;
-        top: 12vh;
-        right: -1.5%;
+        top: 11vh;
+        right: -0.5%;
     }
 }

@@ -49,9 +49,12 @@ import '../../../css/SearchableObjectType.css'
 import apiHelper from '../../helper/apiHelper';
 import { AppContext } from '../../context/AppContext';
 import config from '../../config';
-import {
+import { 
     OBJECT_TYPE
 } from '../../config/words';
+import {
+    ListTitle
+} from '../BOTComponent/styleComponent';
 /*
     this class contain three two components
         1. sectionIndexList : this is the alphabet list for user to search their objects by the first letter of their type
@@ -59,56 +62,58 @@ import {
 */
 class SearchableObjectType extends React.Component {
 
+
+
     static contextType = AppContext
 
-        state = {
-            sectionIndexList: ['A','B','C','D','E','F','G','H', 'I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'],
-            IsShowSection : false,
-            changeState: 0,
-            firstLetterMap: [],
+    state = {
+        sectionIndexList: ['A','B','C','D','E','F','G','H', 'I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'],
+        IsShowSection : false,
+        changeState: 0,
+        firstLetterMap: [],
+    }
+    
+    data = {
+        sectionTitleData : [],
+        floatUp: false
+    }
+
+    shouldUpdate = false
+    
+    onSubmit = null
+
+    API = {
+        // setObjectList : (objectList) => {
+        //     var firstLetterMap = new Array()
+        //     if(objectList.length !== 0){
+        //         objectList.map((name) => {
+        //             firstLetterMap[name[0]] 
+        //                 ? firstLetterMap[name[0]].push(name)
+        //                 : firstLetterMap[name[0]] = [name]
+        //         })
+        //     }
+        //     this.shouldUpdate = true
+            
+        //     this.data.sectionTitleData = firstLetterMap
+        //     this.setState({})
+            
+        // },
+        setOnSubmit : (func) => {
+            this.onSubmit = func
+        },
+
+        floatUp : () => {
+            this.shouldUpdate = true
+            this.data.floatUp = true
+            this.setState({})
+        },
+
+        floatDown: () => {
+            this.shouldUpdate = true
+            this.data.floatUp = false
+            this.setState({})
         }
-        
-        data = {
-            sectionTitleData : [],
-            floatUp: false
-        }
-
-        shouldUpdate = false
-        
-        onSubmit = null
-
-        API = {
-            // setObjectList : (objectList) => {
-            //     var firstLetterMap = new Array()
-            //     if(objectList.length !== 0){
-            //         objectList.map((name) => {
-            //             firstLetterMap[name[0]] 
-            //                 ? firstLetterMap[name[0]].push(name)
-            //                 : firstLetterMap[name[0]] = [name]
-            //         })
-            //     }
-            //     this.shouldUpdate = true
-                
-            //     this.data.sectionTitleData = firstLetterMap
-            //     this.setState({})
-                
-            // },
-            setOnSubmit : (func) => {
-                this.onSubmit = func
-            },
-
-            floatUp : () => {
-                this.shouldUpdate = true
-                this.data.floatUp = true
-                this.setState({})
-            },
-
-            floatDown: () => {
-                this.shouldUpdate = true
-                this.data.floatUp = false
-                this.setState({})
-            }
-        }
+    }
  
     
 
@@ -222,7 +227,26 @@ class SearchableObjectType extends React.Component {
                     onMouseOver={this.handleHoverEvent} 
                     style = {{fontSize: '1rem'}}
                 >
-                    {(index % 2) ? <div>{sectionIndexList[i]}</div> : <div >&bull;</div>}
+                    {index % 2
+                        ? (
+                            <div
+                                style={{
+                                    height: 15
+                                }}
+                            >
+                                {sectionIndexList[i]}
+                            </div>
+                        ) 
+                        : (
+                            <div
+                                style={{
+                                    height: 15
+                                }}
+                            >
+                                &bull;
+                            </div>
+                        )
+                    }
                 </Nav.Link>
             ;
 
@@ -342,6 +366,10 @@ class SearchableObjectType extends React.Component {
     }
 
     render() {
+        let {
+            locale
+        } = this.context;
+
         let Setting = {
 
             SectionIndex: {
@@ -379,8 +407,21 @@ class SearchableObjectType extends React.Component {
                 onMouseLeave={this.mouseLeave} 
                 className="hideScrollBar mx-2 float-right" 
             >
+                <ListTitle>
+                    {locale.texts.OBJECT}
+                </ListTitle>
+                <ListTitle>
+                    {locale.texts.TYPES}
+                </ListTitle>
                 {/** this section shows the layout of sectionIndexList (Alphabet List)*/}
-                <Col id="SectionIndex"  className = "float-right d-flex flex-column align-items-center" style = {{zIndex: (this.data.floatUp) ? 1080 : 1}}>
+                <Col 
+                    id="SectionIndex"  
+                    className = "float-right d-flex flex-column align-items-center" 
+                    style = {{
+                        zIndex: (this.data.floatUp) ? 1080 : 1,
+                        right: '20%',
+                    }}
+                >
                     {this.sectionIndexHTML()}  
                 </Col>
 

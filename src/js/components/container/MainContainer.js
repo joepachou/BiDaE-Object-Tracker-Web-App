@@ -556,6 +556,8 @@ class MainContainer extends React.Component{
                 break;
 
             default:
+
+                if (searchKey.value == "") return
                 let searchResultMac = []; 
 
                 searchObjectArray = [];
