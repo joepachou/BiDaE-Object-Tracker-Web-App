@@ -36,7 +36,7 @@
 
 
 import React, { Fragment } from 'react';
-import { Alert } from 'react-bootstrap'
+import { Alert, Button } from 'react-bootstrap'
 import { AppContext } from '../../context/AppContext';
 import {
     BrowserView,
@@ -50,6 +50,7 @@ import { SWITCH_SEARCH_LIST } from '../../config/words';
 import {
     HoverDiv
 } from '../BOTComponent/styleComponent';
+import styled from 'styled-components';
 
 const style = {
     alertText: {
@@ -79,57 +80,41 @@ const InfoPrompt = ({
             <CustomView condition={isTablet != true && isMobile != true}>
                <Alert variant='secondary' className='d-flex justify-content-start'>
                     <HoverDiv
-                        className='d-flex justify-content-start'
                         onClick={handleClick}
                     >
                         <div 
-                            className='text-capitalize mr-2' 
-                            style={style.alertTextTitle}
+                            className='d-flex justify-content-start mr-1'
                             name={SWITCH_SEARCH_LIST}
                             value={true}
                         >
                             {searchKey ? locale.texts.FOUND : locale.texts.PLEASE_SELECT_SEARCH_OBJECT}
-                        </div>
-                        <div 
-                            className="mr-1"
-                            style={style.alertText}
-                            name={SWITCH_SEARCH_LIST}
-                            value={true}
-                        >
-                            {searchKey ? searchResult.filter(item => item.found).length : ""}
-                        </div>
-                        <div 
-                            name={SWITCH_SEARCH_LIST}
-                            value={true}
-                        >
+                            &nbsp;
+                            <div
+                                style={style.alertText}
+                            >
+                                {searchKey ? searchResult.filter(item => item.found).length : ""}
+                            </div>
+                            &nbsp;
                             {searchKey && locale.texts.OBJECTS}
                         </div>
                     </HoverDiv>
                     {searchKey && <div>&nbsp;</div> }
                     <HoverDiv
-                        className='d-flex justify-content-start'
                         onClick={handleClick}
                     >
                         <div 
-                            className='text-capitalize mr-2' 
-                            style={style.alertTextTitle}
+                            className='d-flex justify-content-start mr-1'
                             name={SWITCH_SEARCH_LIST}
                             value={false}
                         >
                             {searchKey && `${locale.texts.NOT_FOUND}`}
-                        </div>
-                        <div 
-                            className="mr-1"
-                            style={style.alertText}
-                            name={SWITCH_SEARCH_LIST}
-                            value={false}
-                        >
-                            {searchKey ? searchResult.filter(item => !item.found).length : ""}
-                        </div>
-                        <div 
-                            name={SWITCH_SEARCH_LIST}
-                            value={false}
-                        >
+                            &nbsp;
+                            <div
+                                style={style.alertText}
+                            >
+                                {searchKey ? searchResult.filter(item => !item.found).length : ""}
+                            </div>
+                            &nbsp;
                             {searchKey && locale.texts.OBJECTS}
                         </div>
                     </HoverDiv>

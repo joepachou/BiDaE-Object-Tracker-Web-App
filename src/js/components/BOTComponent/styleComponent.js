@@ -193,8 +193,10 @@ export const BOTDataTimePicker = styled(DataTimePicker)`
 `
 
 export const HoverDiv = styled.div`
+    text-transform: capitalize;
+
     &:hover {
         cursor: pointer;
-        text-decoration
+        text-decoration: underline;
     }
 `
