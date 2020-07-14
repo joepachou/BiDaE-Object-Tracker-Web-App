@@ -41,7 +41,7 @@ import moment from 'moment';
 
 const config = {
 
-    VERSION: 'v1.0 b.1922',
+    VERSION: 'v1.0 b.1923',
 
     TIMESTAMP_FORMAT: 'LLL',
 
@@ -253,7 +253,7 @@ const config = {
             crs: L.CRS.Simple,
             zoom: -5.5,
             minZoom: -5.46,
-            maxZoom: -5,
+            maxZoom: -4,
             zoomDelta: 0.25,
             zoomSnap: 0,
             zoomControl: true,
@@ -330,7 +330,7 @@ const config = {
             specifiedNumberTop: '8%',
 
             /* Set the Marker dispersity that can be any positive number */
-            markerDispersity: 400,
+            markerDispersity: 40,
 
             geoFenceMarkerOptions: {
 
