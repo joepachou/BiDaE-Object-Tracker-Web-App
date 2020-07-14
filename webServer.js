@@ -3,11 +3,11 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const httpsPort = 443;
-const httpPort = 3000;
-const http = require('http');
+const httpPort = 80;
 const path = require('path');
 const fs = require('fs')
 const https = require('https');
+const http = require('http');
 const session = require('express-session');
 const validation = require('./api/middlewares/validation');
 const sessionOptions = require('./api/config/session');
@@ -26,12 +26,9 @@ app.use(function(req, res, next) {
 
 app.use(session(sessionOptions))
 
-
-// setInterval(db.clearSearchHistory, 86400*process.env.CLEAR_SEARCH_HISTORY_INTERVAL)
-
 app.use(express.static(path.join(__dirname,'dist')));
 
-app.get(/^\/page\/(.*)/, validation.pageChecker, (req, res) => {
+app.get(/^\/page\/(.*)/, (req, res) => {
     res.sendFile(path.join(__dirname, 'dist','index.html'));
 })
 
@@ -69,9 +66,9 @@ var credentials = {
 
 const httpsServer = https.createServer(credentials, app)
 
-/** Enable HTTPS server */
+/** Enable HTTP server */
 httpsServer.listen(httpsPort, () => {
-    console.log(`HTTPS Server running on PORT ${httpsPort}`)
+    console.log(`HTTP Server running on PORT ${httpsPort}`)
 })
 
 httpsServer.timeout = parseInt(process.env.SERVER_TIMEOUT);

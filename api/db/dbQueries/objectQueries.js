@@ -48,11 +48,7 @@ const getObject = (objectType, areas_id) => {
 			SPLIT_PART(object_table.transferred_location, ',', 1) AS branch_id,
 			SPLIT_PART(object_table.transferred_location, ',', 2) AS department_id,
 			branch_and_department.branch_name as branch_name,
-			CASE WHEN CAST(
-				COALESCE(
-					NULLIF(SPLIT_PART(object_table.transferred_location, ',', 1), '')
-				, '0') AS INTEGER
-			) IS NOT NULL THEN branch_and_department.department[CAST(
+			CASE WHEN object_table.transferred_location IS NOT NULL THEN branch_and_department.department[CAST(
 				COALESCE(
 					NULLIF(SPLIT_PART(object_table.transferred_location, ',', 1), '')
 				, '0') AS INTEGER
@@ -216,7 +212,7 @@ const addObject = (formOption) => {
 	return query;
 }
 
-const editObjectPackage = (
+const editObjectPackage = ( 
 	formOption, 
 	username, 
 	record_id, 
