@@ -303,15 +303,17 @@ class SearchableObjectType extends React.Component {
 
     handleClick = (e) => {
         let itemName = e.target.innerText
+
         const searchKey = {
             type: OBJECT_TYPE,
             value: itemName
         }
         this.props.getSearchKey(searchKey)
 
-        this.addSearchHistory(itemName)
+        this.addSearchHistory(searchKey)
 
         this.shouldUpdate = true
+
         this.setState({
             IsShowSection: false
         })
@@ -323,19 +325,31 @@ class SearchableObjectType extends React.Component {
         } = this.context
 
         if (!auth.authenticated) return;
+
         const searchHistory = auth.user.searchHistory || []
+
+        console.log(searchHistory)
+
         let flag = false; 
-        const toReturnSearchHistory = searchHistory.map( item => {
-            if (item.name === searchKey) {
+
+        const toReturnSearchHistory = searchHistory.map(item => {
+            if (item.name === searchKey.value) {
                 item.value = item.value + 1;
                 flag = true;
             }
             return item
         })
-        flag === false ? toReturnSearchHistory.push({name: searchKey, value: 1}) : null;
+        flag === false 
+            ? toReturnSearchHistory.push({
+                name: searchKey.value, 
+                value: 1
+            }) 
+            : null;
         const sortedSearchHistory = this.sortSearchHistory(toReturnSearchHistory)
+
         auth.setSearchHistory(sortedSearchHistory)
-        this.checkInSearchHistory(auth.user.name, sortedSearchHistory)
+
+        this.checkInSearchHistory(searchKey.value)
     }
 
     /** Sort the user search history and limit the history number */
@@ -350,8 +364,9 @@ class SearchableObjectType extends React.Component {
     checkInSearchHistory = itemName => {
 
         let { 
-            auth 
+            auth, 
         } = this.context
+
         apiHelper.userApiAgent.addSearchHistory({
             username: auth.user.name,
             keyType: 'object type search',
