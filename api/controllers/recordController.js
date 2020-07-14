@@ -86,7 +86,6 @@ module.exports = {
             pdfPackage,
             shift 
         } = request.body
-        console.log(request.body)
         /** If there are some trouble when download pdf, try npm rebuild phantomjs-prebuilt */
         pool.query(dbQueries.addShiftChangeRecord(userInfo, pdfPackage.path, shift))
             .then(res => {
