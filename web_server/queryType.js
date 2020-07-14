@@ -540,40 +540,6 @@ function setLocaleID (userID,lang) {
 	return query;
 }
 
-function editObject (formOption) {
-	 
-	let text = 
-		`
-		Update object_table 
-		SET type = $1,
-			status = $2,
-			transferred_location = '${formOption.transferred_location}',
-			asset_control_number = $3,
-			name = $4,
-			monitor_type = $5,
-			area_id = $6,
-			mac_address = $7,
-			nickname = $8
-		WHERE asset_control_number = $3
-		`
-	const values = [
-		formOption.type, 
-		formOption.status, 
-		formOption.asset_control_number, 
-		formOption.name,
-		formOption.monitor_type,
-		formOption.area_id,
-		formOption.mac_address,
-		formOption.nickname
-	];
-
-	const query = {
-		text,
-		values
-	};
-
-	return query;
-}
 
 const editPatient = (formOption) => {
 	const text = `
@@ -1657,7 +1623,6 @@ module.exports = {
     getLbeaconTable,
 	getGatewayTable,
 	editPatient,
-	editObject,
 	editImport,
 	objectImport,
 	addObject,

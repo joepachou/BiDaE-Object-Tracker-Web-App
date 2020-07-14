@@ -217,36 +217,6 @@ const setLocaleID = (request, response) => {
         })
 }
 
-
-const editObject = (request, response) => {
-    const formOption = request.body.formOption
-    let {
-        area_id
-    } = formOption
-
-    pool.query(queryType.editObject(formOption))
-        .then(res => {
-            console.log("edit object succeed");
-            if (process.env.RELOAD_GEO_CONFIG_PATH) {
-                exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 9999 -c cmd_reload_geo_fence_setting -r geofence_object -f area_one -a ${area_id}`.split(' '), function(err, data){
-                    if(err){
-                        console.log(`execute reload geofence setting failed ${err}`)
-                        response.status(200).json(res)
-                    }else{
-                        console.log(`execute reload geofence setting succeed`)
-                        response.status(200).json(res)
-                    }
-                })
-            } else {
-                response.status(200).json(res)
-                console.log('IPC has not set')
-            }
-        })
-        .catch(err => {
-            console.log(`edit object failed ${err}`)
-        })
-}
-
 const editImport = (request, response) => {
     const formOption = request.body.formOption
     pool.query(queryType.editImport(formOption))
@@ -993,7 +963,6 @@ module.exports = {
     addAssociation,
     addAssociation_Patient,
     cleanBinding,
-    editObject,
     setLocaleID,
     editImport,
     editPatient,

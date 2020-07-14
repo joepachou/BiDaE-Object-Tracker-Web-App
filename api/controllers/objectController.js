@@ -95,7 +95,7 @@ module.exports = {
     },
 
     editObject: (request, response) => {
-        const {
+        const { 
             formOption,
             mode
         } = request.body

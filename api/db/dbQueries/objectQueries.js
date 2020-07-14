@@ -48,7 +48,11 @@ const getObject = (objectType, areas_id) => {
 			SPLIT_PART(object_table.transferred_location, ',', 1) AS branch_id,
 			SPLIT_PART(object_table.transferred_location, ',', 2) AS department_id,
 			branch_and_department.branch_name as branch_name,
-			CASE WHEN object_table.transferred_location IS NOT NULL THEN branch_and_department.department[CAST(
+			CASE WHEN CAST(
+				COALESCE(
+					NULLIF(SPLIT_PART(object_table.transferred_location, ',', 1), '')
+				, '0') AS INTEGER
+			) IS NOT NULL THEN branch_and_department.department[CAST(
 				COALESCE(
 					NULLIF(SPLIT_PART(object_table.transferred_location, ',', 1), '')
 				, '0') AS INTEGER
@@ -155,6 +159,42 @@ const editPersona = (formOption) => {
 	return query;
 }
 
+
+const editObject = (formOption) => {
+	 
+	let text = 
+		`
+		Update object_table 
+		SET type = $1,
+			status = $2,
+			transferred_location = '${formOption.transferred_location}',
+			asset_control_number = $3,
+			name = $4,
+			monitor_type = $5,
+			area_id = $6,
+			mac_address = $7,
+			nickname = $8
+		WHERE asset_control_number = $3
+		`
+	const values = [
+		formOption.type, 
+		formOption.status, 
+		formOption.asset_control_number, 
+		formOption.name,
+		formOption.monitor_type,
+		formOption.area_id,
+		formOption.mac_address,
+		formOption.nickname
+	];
+
+	const query = {
+		text,
+		values
+	};
+
+	return query;
+}
+
 const deleteObject = (formOption) => {
     
 	const query = `
@@ -212,7 +252,7 @@ const addObject = (formOption) => {
 	return query;
 }
 
-const editObjectPackage = ( 
+const editObjectPackage = (
 	formOption, 
 	username, 
 	record_id, 
@@ -239,6 +279,7 @@ module.exports = {
     getObject,
 	addPersona,
 	addObject,
+	editObject,
     editPersona,
 	deleteObject,
 	editObjectPackage,
