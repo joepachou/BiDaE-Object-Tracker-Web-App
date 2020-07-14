@@ -37,7 +37,8 @@
 import React, { Fragment } from 'react';
 import { 
     Switch, 
-    Redirect    
+    Redirect,
+    Route    
 } from 'react-router-dom';
 import NavbarContainer from './components/container/NavbarContainer'
 import { renderRoutes } from 'react-router-config';
@@ -47,14 +48,18 @@ import AuthContext from './context/AuthenticationContext';
 const PrivateRoutes = () => {
 
     let auth = React.useContext(AuthContext)
-    console.log(auth.authenticated)
+
     if (auth.authenticated) {
         return (
             <Fragment>          
                 <NavbarContainer/>
-                <Switch>
+                {routes.map(route => {
+                    return <Route path={route.path} exact component={route.component} />
+
+                })}
+                {/* <Switch>
                     {renderRoutes(routes)}
-                </Switch>
+                </Switch> */}
             </Fragment>
         );
     }

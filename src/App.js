@@ -40,20 +40,21 @@ import PrivateRoutes from '../src/js/PrivateRoutes';
 import { ToastContainer } from 'react-toastify';
 import config from './js/config';
 import { 
-    BrowserRouter as Router,
+    BrowserRouter,
     Route,  
 } from 'react-router-dom';
 import SigninPage from './js/components/authentication/SigninPage';
 import ForgetPassword from './js/components/authentication/ForgetPassword';
+import MainContainer from './js/components/container/MainContainer';
 
 const App = () => {
     return (
         <AppContext>
-            <Router>          
+            <BrowserRouter>          
                 <Route path='/login' exact component={SigninPage} />
                 <Route path='/resetPassword' exact component={ForgetPassword} />
                 <PrivateRoutes />
-            </Router>
+            </BrowserRouter>
             <ToastContainer {...config.TOAST_PROPS} />
         </AppContext>
     );
