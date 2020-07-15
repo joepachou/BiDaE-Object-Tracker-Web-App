@@ -35,6 +35,12 @@ class TrackingHistoryContainer extends React.Component{
 
     render() {
 
+        let {
+            location
+        } = this.props
+
+        this.containerModule.defaultActiveKey = location.state ? location.state.key : this.containerModule.defaultActiveKey
+
         return (
             <Fragment>
                 <BrowserView>

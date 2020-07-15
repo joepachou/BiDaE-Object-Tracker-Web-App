@@ -167,7 +167,6 @@ class ObjectTableContainer extends React.Component{
                         label: locale.texts[item.area_name] || '*site module error*',
                         id: item.area_id
                     }
-                    console.log(item.monitor_type)
                     item.monitor_type = transferMonitorTypeToString(item);
 
                     data.push(item)

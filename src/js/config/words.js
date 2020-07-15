@@ -20,5 +20,6 @@ module.exports = {
 
     SEARCH_HISTORY: "search history",
 
-    SEARCH_BAR: "search bar"
+    SEARCH_BAR: "search bar",
+    
 }

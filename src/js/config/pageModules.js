@@ -50,61 +50,6 @@ import GeoFenceSettingBlock from '../components/container/GeoFenceSettingBlock';
 import ObjectEditedRecord from '../components/container/UserContainer/ObjectEditedRecord';
 import ShiftChangeRecord from '../components/container/UserContainer/ShiftChangeRecord';
 
-export const navbarNavList = [
-    {
-        name: 'home',
-        alias: 'home',
-        path: '/',
-    },
-    {
-        name: "shift change",
-        alias: "shiftChange",
-        path: "/",
-        permission: "user:shiftChange",
-        platform: ['browser', 'tablet'],
-        hasEvent: true
-    },
-    {
-        name: 'object management',
-        alias: 'objectManagement',
-        path: '/page/objectManagement',
-        permission: 'route:objectManagement',
-    },
-    {
-        name: 'tracking history',
-        alias: 'trackinghistory',
-        path: '/page/trace',
-        permission: 'route:trackingHistory',
-    },
-    {
-        name: "monitor setting",
-        alias: "monitor",
-        path: "/page/monitor",
-        permission: "route:monitor",
-        platform: ['browser', 'tablet']
-    },
-    {
-        name: "report",
-        alias: "report",
-        path: "/page/report",
-        permission: "route:report",
-        platform: ['browser', 'tablet', 'mobile'],
-    },
-    {
-        name: "system setting",
-        alias: "systemSetting",
-        path: "/page/systemSetting",
-        permission: "route:systemSetting",
-        platform: ['browser', 'tablet', 'mobile'],
-    },
-    // {
-    //     name: 'contact tree',
-    //     alias: 'contactTree',
-    //     path: '/page/contactTree',
-    //     permission: 'route:contactTree',
-    //     platform: ['browser']
-    // },
-]
 
 export const userContainerModule = {
 
@@ -139,6 +84,8 @@ export const systemSettingModule = {
     title: 'system setting',
 
     defaultActiveKey: 'user_manager',
+
+    path: "/page/systemSetting",
 
     tabList: [
         {
@@ -175,6 +122,8 @@ export const monitorSettingModule= {
     
     title: "monitor setting",
 
+    path: "/page/monitor",
+
     defaultActiveKey: "movement_monitor",
 
     tabList: [
@@ -202,6 +151,8 @@ export const trackingHistoryContainerModule = {
     title: "tracking history",
 
     defaultActiveKey: "real_time_record",
+
+    path: '/page/trace',
     
     tabList: [
         {
@@ -224,6 +175,8 @@ export const reportContainerModule = {
     title: "report",
 
     defaultActiveKey: "object_edited_record",
+
+    path: "/page/report",
     
     tabList: [
         {
@@ -239,3 +192,65 @@ export const reportContainerModule = {
     ],
 
 }
+
+export const navbarNavList = [
+    {
+        name: 'home',
+        alias: 'home',
+        path: '/',
+        hasEvent: true
+    },
+    {
+        name: "shift change",
+        alias: "shiftChange",
+        // path: "/",
+        permission: "user:shiftChange",
+        platform: ['browser', 'tablet'],
+        hasEvent: true
+    },
+    {
+        name: 'object management',
+        alias: 'objectManagement',
+        path: '/page/objectManagement',
+        permission: 'route:objectManagement',
+        hasEvent: true
+    },
+    {
+        name: 'tracking history',
+        alias: 'trackinghistory',
+        path: '/page/trace',
+        module: trackingHistoryContainerModule,
+        permission: 'route:trackingHistory',
+    },
+    {
+        name: "monitor setting",
+        alias: "monitor",
+        path: "/page/monitor",
+        module: monitorSettingModule,
+        permission: "route:monitor",
+        platform: ['browser', 'tablet']
+    },
+    {
+        name: "report",
+        alias: "report",
+        path: "/page/report",
+        module: reportContainerModule,
+        permission: "route:report",
+        platform: ['browser', 'tablet', 'mobile'],
+    },
+    {
+        name: "system setting",
+        alias: "systemSetting",
+        path: "/page/systemSetting",
+        module: systemSettingModule,
+        permission: "route:systemSetting",
+        platform: ['browser', 'tablet', 'mobile'],
+    },
+    // {
+    //     name: 'contact tree',
+    //     alias: 'contactTree',
+    //     path: '/page/contactTree',
+    //     permission: 'route:contactTree',
+    //     platform: ['browser']
+    // },
+]

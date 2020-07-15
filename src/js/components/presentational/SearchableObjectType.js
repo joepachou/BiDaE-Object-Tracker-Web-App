@@ -328,8 +328,6 @@ class SearchableObjectType extends React.Component {
 
         const searchHistory = auth.user.searchHistory || []
 
-        console.log(searchHistory)
-
         let flag = false; 
 
         const toReturnSearchHistory = searchHistory.map(item => {

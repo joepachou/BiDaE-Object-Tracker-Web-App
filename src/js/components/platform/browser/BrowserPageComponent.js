@@ -34,7 +34,7 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
     Tab,
     ListGroup
@@ -48,10 +48,8 @@ import LocaleContext from '../../../context/LocaleContext';
 
 const BrowserPageComponent = ({
     containerModule,
-    setMessage
+    setMessage,
 }) => {
-
-    let locale = React.useContext(LocaleContext)
 
     let {
         tabList,
@@ -59,10 +57,20 @@ const BrowserPageComponent = ({
         defaultActiveKey
     } = containerModule
 
+    let locale = React.useContext(LocaleContext)
+    let [key, setKey] = React.useState(defaultActiveKey)
+
+    useEffect(() => {
+        setKey(defaultActiveKey)
+    }, [defaultActiveKey])
+
     return (
         <Tab.Container 
             transition={false} 
-            defaultActiveKey={defaultActiveKey}
+            activeKey={key}
+            onSelect={(k) => {
+                setKey(k);
+            }}
         >
             <div 
                 className="BOTsidenav"
