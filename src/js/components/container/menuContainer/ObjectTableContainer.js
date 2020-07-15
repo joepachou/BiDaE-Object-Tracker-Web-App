@@ -241,7 +241,7 @@ class ObjectTableContainer extends React.Component{
             apiMethod
         } = this.state
         this.setState({isShowBind:false})
-        console.log(formOption)
+
         axios[apiMethod](dataSrc.object, {
             formOption,
             mode: 'PERSONA',

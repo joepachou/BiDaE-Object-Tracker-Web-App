@@ -58,18 +58,6 @@ class EditPatientForm extends React.Component {
 
     static contextType = AppContext;
   
-    handleSubmit = (postOption) => {
-        console.log(path)
-        const path = this.props.formPath  
-        axios.post(path, {
-            formOption: postOption
-        }).then(res => { 
-            this.props.handleSubmitForm()
-        }).catch( error => {
-            console.log(error)
-        })
-    }
-
     render() {
 
         const {
@@ -180,8 +168,6 @@ class EditPatientForm extends React.Component {
                                     ),
                                  
                                 area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
-
-                                // physician: Yup.string().required(locale.texts.ATTENDING_IS_REQUIRED),
 
                                 gender: Yup.string().required(locale.texts.GENDER_IS_REQUIRED), 
 
