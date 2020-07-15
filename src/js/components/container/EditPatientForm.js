@@ -219,7 +219,6 @@ class EditPatientForm extends React.Component {
 
 
                         onSubmit={(values, { setStatus, setSubmitting }) => { 
-                            console.log(values)
                             let monitor_type = values.monitorType
                                 ?   values.monitorType
                                     .filter(item => item)
