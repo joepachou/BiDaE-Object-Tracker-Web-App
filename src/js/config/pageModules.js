@@ -152,12 +152,12 @@ export const systemSettingModule = {
             component: (props) => <TransferredLocationManagement {...props}/>,
             platform: ['browser'],
         },
-        // {
-        //     name: "Role Permission Management",
-        //     permission: "rolePermissionManagement",
-        //     component: (props) => <RolePermissionManagement {...props}/>,
-        //     platform: ['browser']
-        // },
+        {
+            name: "Role Permission Management",
+            permission: "rolePermissionManagement",
+            component: (props) => <RolePermissionManagement {...props}/>,
+            platform: ['browser']
+        },
         {
             name: "lbeacon",
             component: (props) => <LBeaconTable {...props}/>,
