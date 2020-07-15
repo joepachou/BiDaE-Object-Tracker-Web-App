@@ -74,6 +74,7 @@ const tw = {
     NOT_FOUND: "未找到",
     OBJECT_TYPE: "物件類別",
     OBJECT: "物件",
+    TYPES: "類別",
     disable:"收起",
     count : "筆",
     LAST_KNOWN_LOCATION:"最後位置",

@@ -61,7 +61,7 @@ import FormikFormGroup from '../presentational/FormikFormGroup'
 let monitorTypeMap = {}; 
 Object.keys(config.monitorType)
     .forEach(key => {
-        monitorTypeMap[config.monitorType[key]] = key
+        monitorTypeMap[config.monitorType[key]] = key 
 })
 
 class EditObjectForm extends React.Component { 

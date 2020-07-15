@@ -36,6 +36,7 @@
 import {
     OBJECT_TYPE
 } from '../config/words';
+import config from '../config';
 
 /** Retrieve the object's offset from object's mac_address.
  * @param   mac_address The mac_address of the object retrieved from DB. 
@@ -86,4 +87,15 @@ export const countNumber = (searchKey, item, numberSheet) => {
             }
             return newNum;
     }
+}
+
+/** Transfer monitor type binary code to type string */
+export const transferMonitorTypeToString = (item, type) => {
+    return Object.keys(config.monitorType)
+        .reduce((checkboxGroup, index) => {
+            if (item.monitor_type & index) {
+                checkboxGroup.push(config.monitorType[index])
+            }
+            return checkboxGroup
+        }, []).join('/')
 }

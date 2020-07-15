@@ -63,6 +63,9 @@ import SiteModuleTW from '../../../../../site_module/locale/zh-TW';
 import SiteModuleEN from '../../../../../site_module/locale/en-US';
 import moment from 'moment';
 import apiHelper from '../../../helper/apiHelper';
+import {
+    transferMonitorTypeToString
+} from '../../../helper/dataTransfer';
 
 class ObjectTableContainer extends React.Component{  
     
@@ -116,7 +119,6 @@ class ObjectTableContainer extends React.Component{
             field.Header = this.context.locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
         }) 
         this.state.data.map(item=>{
-            console.log(item.area_name.value)
             this.context.locale.lang == 'en' 
             ? item.area_name.label = SiteModuleEN[item.area_name.value]
             : item.area_name.label = SiteModuleTW[item.area_name.value]
@@ -133,7 +135,7 @@ class ObjectTableContainer extends React.Component{
         })
        
         this.setState({
-            columns,
+            columns, 
             locale: this.context.locale.abbr
         }) 
     }
@@ -158,15 +160,18 @@ class ObjectTableContainer extends React.Component{
             })
 
             res.data.rows
-            .filter(item => item.object_type != 0)
-            .map(item => { 
-                item.area_name = {
-                    value:item.area_name,
-                    label: locale.texts[item.area_name] || '*site module error*',
-                    id: item.area_id
-                }
-                data.push(item)
-            })  
+                .filter(item => item.object_type != 0)
+                .map(item => { 
+                    item.area_name = {
+                        value:item.area_name,
+                        label: locale.texts[item.area_name] || '*site module error*',
+                        id: item.area_id
+                    }
+                    console.log(item.monitor_type)
+                    item.monitor_type = transferMonitorTypeToString(item);
+
+                    data.push(item)
+                })  
             this.setState({
                 data,
                 isShowEdit: false,
@@ -236,7 +241,7 @@ class ObjectTableContainer extends React.Component{
             apiMethod
         } = this.state
         this.setState({isShowBind:false})
-        
+        console.log(formOption)
         axios[apiMethod](dataSrc.object, {
             formOption,
             mode: 'PERSONA',

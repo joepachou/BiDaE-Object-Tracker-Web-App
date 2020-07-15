@@ -61,6 +61,9 @@ import { objectTableColumn } from '../../config/tables';
 import retrieveDataHelper from '../../helper/retrieveDataHelper'; 
 import config from '../../config';
 import apiHelper from '../../helper/apiHelper';
+import {
+    transferMonitorTypeToString
+} from '../../helper/dataTransfer';
  
 
 class ObjectTable extends React.Component{   
@@ -160,7 +163,7 @@ class ObjectTable extends React.Component{
                 .filter(item => item.object_type == 0)
                 .map(item => {
 
-                    item.monitor_type = this.getMonitorTypeArray(item, 'object').join('/')
+                    item.monitor_type = transferMonitorTypeToString(item, 'object')
 
                     item.status = {
                         value: item.status,
@@ -225,16 +228,6 @@ class ObjectTable extends React.Component{
     
     }
 
-    getMonitorTypeArray = (item, type) => {
-        return Object.keys(config.monitorType)
-            .reduce((checkboxGroup, index) => {
-                if (item.monitor_type & index) {
-                    checkboxGroup.push(config.monitorType[index])
-                }
-                return checkboxGroup
-            }, [])
-    }
-
     handleClose = () => {
         this.setState({
             isShowBind:false,
@@ -297,10 +290,11 @@ class ObjectTable extends React.Component{
             apiMethod
         } = this.state
 
-        axios[apiMethod](dataSrc.object, {
+        apiHelper.objectApiAgent[apiMethod]({
             formOption,
             mode: 'DEVICE',
-        }).then(res => { 
+        })
+        .then(res => { 
             let callback = () => {
                 messageGenerator.setSuccessMessage(
                     'save success'
@@ -644,7 +638,8 @@ class ObjectTable extends React.Component{
                             onClick: (e) => {  
                                 if (!e.target.type) { 
                                     this.setState({
-                                        isPatientShowEdit: true,
+                                        isPatientShowEdit: true, 
+                                        isShowEdit: true,
                                         selectedRowData: rowInfo.original,
                                         formTitle: 'edit info',
                                         disableASN: true,

@@ -233,6 +233,7 @@ class EditPatientForm extends React.Component {
 
 
                         onSubmit={(values, { setStatus, setSubmitting }) => { 
+                            console.log(values)
                             let monitor_type = values.monitorType
                                 ?   values.monitorType
                                     .filter(item => item)
@@ -258,7 +259,7 @@ class EditPatientForm extends React.Component {
                                 object_type: values.gender.value,
                                 physicianIDNumber : values.physician  ? values.physician.value : this.props.physicianIDNumber
                             }  
-                            this.handleSubmit(postOption)                            
+                            this.props.handleSubmit(postOption)
                         }}
 
 

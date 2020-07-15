@@ -57,18 +57,9 @@ export default {
         })
     },
 
-    getRecord: async function (
-        type, 
-        locale,
-    ) {
-        return await axios.post(dataSrc.record[type], {
-            locale
-        })
-    },
-
-    delete: async function(
+    delete: async function({
         configPackage
-    ) {
+    }) {
         return await axios.delete(dataSrc.monitor, {
             data: {
                 configPackage
@@ -76,19 +67,21 @@ export default {
         })
     },
 
-    add: async function(
+    add: async function({
         configPackage
-    ) {
+    }) {
         return await axios.patch(dataSrc.monitor, {
             configPackage
         })
     },
 
-    put: async function(
-        configPackage
-    ) {
-        return await axios.put(dataSrc.monitor, {
-            configPackage
+    put: async function({
+        formOption,
+        mode
+    }) {
+        return await axios.put(dataSrc.object, {
+            formOption,
+            mode
         })
     },
 

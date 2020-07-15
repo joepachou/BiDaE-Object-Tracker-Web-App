@@ -104,6 +104,7 @@ const addPersona = (formOption) => {
 			asset_control_number,
 			area_id,
 			object_type,
+			monitor_type,
 			type,
 			status,
 			registered_timestamp
@@ -113,6 +114,7 @@ const addPersona = (formOption) => {
 			$2,
 			$3,
 			$4,
+			$5
 			1,
 			'register',
 			'normal',
@@ -124,6 +126,7 @@ const addPersona = (formOption) => {
 		formOption.mac_address,
 		formOption.asset_control_number,
 		formOption.area_id,
+		formOption.monitor_type,
 	];
 
 	const query = {
@@ -140,6 +143,7 @@ const editPersona = (formOption) => {
 		SET name = $2,
 			mac_address = $3,
 			area_id = $4,
+			monitor_type = $5,
 			object_type = 1
 		WHERE asset_control_number = $1
 	`;
@@ -149,6 +153,7 @@ const editPersona = (formOption) => {
 		formOption.name,
 		formOption.mac_address,
 		formOption.area_id,
+		formOption.monitor_type
 	];
 
 	const query = {
