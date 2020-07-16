@@ -176,7 +176,7 @@ const mapConfig = {
 
         errorCircleOptions: {
 
-            color: '#ffc107',
+            color: 'rgba(0, 0, 0, 0)',
 
             fillColor: '#ffc10778',
 
