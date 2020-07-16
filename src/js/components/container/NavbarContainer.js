@@ -56,6 +56,10 @@ import Select from 'react-select';
 import BatteryLevelNotification from "./BatteryLevelNotification"
 import { navbarNavList } from '../../config/pageModules'
 import styleConfig from '../../config/styleConfig';
+import {
+    SubMenu,
+    BOTNavLink
+} from '../BOTComponent/styleComponent';
 
 class NavbarContainer extends React.Component {
 
@@ -64,6 +68,8 @@ class NavbarContainer extends React.Component {
     state = {
         showSignin: false,
         showShiftChange: false,
+        showDropdownName: null,
+        dropDownModule: null,
     }
 
     navList = navbarNavList
@@ -223,18 +229,6 @@ class NavbarContainer extends React.Component {
                                         platform={nav.platform}
                                         key={nav.alias}
                                     >
-                                        {/* <Nav.Item>
-                                            <Link 
-                                                to={nav.path} 
-                                                className='nav-link nav-route'
-                                                name={nav.alias}
-                                                onClick={nav.hasEvent && this.handleClick}
-                                                key={nav.alias}
-                                                style={style.nav}
-                                            >
-                                                {locale.texts[nav.name.toUpperCase().replace(/ /g, '_')]}
-                                            </Link>
-                                        </Nav.Item> */}
                                         <Nav.Item
                                             className="d-flex align-items-center menu mx-1"
                                         >
@@ -314,47 +308,36 @@ class NavbarContainer extends React.Component {
 
                 </Navbar>
                 {this.state.showDropdownName &&
-                    <div
-                        style={{
-                            minHeight: 80,
-                            position: 'absolute',
-                            background: 'white',
-                            width: '100%',
-                            zIndex: 10000,
-                            padding: 20,
-                            boxShadow: 'rgba(32, 33, 36, 0.28) 0px 1px 6px 0px',
-                        }}
-                        className="d-flex justify-content-center sub-nav-menu"
+                    <SubMenu
+                        className="sub-nav-menu"
                     >
-                        <Nav
-                            className="sub-nav-menu"
-                        >
-                            {this.state.dropDownModule && this.state.dropDownModule.tabList.map(tab => {
-                                return (
-                                    <Link 
-                                        to={{
-                                            pathname: this.state.dropDownModule.path,
-                                            state: {
-                                                key: tab.name.replace(/ /g, '_'),
-                                            }
-                                        }}
-                                        onClick={() => {
-                                            this.setState({
-                                                showDropdownName: null,
-                                            })
-                                        }}
-                                        className='nav-link nav-route sub-nav-menu'
-                                        style={{
-                                            color: 'black'
-                                        }}
-                                        key={tab.name}
+                        {this.state.dropDownModule && this.state.dropDownModule.tabList.map(tab => {
+                            return (
+                                <LinkContainer 
+                                    to={{
+                                        pathname: this.state.dropDownModule.path,
+                                        state: {
+                                            key: tab.name.replace(/ /g, '_'),
+                                        }
+                                    }}
+                                    onClick={() => {
+                                        this.setState({
+                                            showDropdownName: null,
+                                        })
+                                    }}
+                                    className='nav-link nav-route sub-nav-menu'
+                                    key={tab.name}
+                                >
+                                    <BOTNavLink
+                                        primary
+                                        className="sub-nav-menu"
                                     >
                                         {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
-                                    </Link>
-                                )
-                            })}
-                        </Nav>
-                    </div>
+                                    </BOTNavLink>
+                                </LinkContainer>
+                            )
+                        })}
+                    </SubMenu>
                 }
                 <SiginForm 
                     show={showSignin}

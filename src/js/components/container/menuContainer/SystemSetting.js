@@ -18,6 +18,7 @@ import {
 import MobilePageComponent from '../../platform/mobile/mobilePageComponent'
 import BrowserPageComponent from '../../platform/browser/BrowserPageComponent';
 import TabletPageComponent from '../../platform/tablet/TabletPageComponent'
+import locale from 'antd/lib/date-picker/locale/en_US';
 
 class SystemSetting extends React.Component{
 

@@ -46,12 +46,18 @@ class ObjectManagementContainer extends React.Component{
                 >
                     <BOTNav>
                         <Nav.Item>
-                            <BOTNavLink eventKey="devices_table">
+                            <BOTNavLink 
+                                secondary
+                                eventKey="devices_table"
+                            >
                                 {locale.texts.DEVICE_FORM}
                             </BOTNavLink>
                         </Nav.Item>
                         <Nav.Item>
-                            <BOTNavLink eventKey="patients_table">
+                            <BOTNavLink 
+                                secondary
+                                eventKey="patients_table"
+                            >
                                 {locale.texts.PATIENT_FORM}
                             </BOTNavLink>
                         </Nav.Item>

@@ -35,7 +35,7 @@
 */
 
 
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 import Item from 'react-bootstrap/ListGroupItem';
 import Link from 'react-bootstrap/NavLink'
 import NavLink from 'react-bootstrap/NavLink'
@@ -144,15 +144,26 @@ export const BOTSideNavTitle = styled.div`
 export const BOTNavLink = styled(Link)`
     font-weight: 500;
     text-transform: capitalize;
-    color: ${styleSheet.inActive};
-    &.active {
-        color: ${styleSheet.theme};
-        border-bottom: 3px solid ${styleSheet.theme};
-        border-radius: 0px;
-    }
-    &:hover {
-        color: ${styleSheet.theme};
-    }
+
+    ${props => props.primary && css`
+        background: white;
+        color: black;
+        &:hover {
+            color: ${styleSheet.grey};
+        }
+    `}
+    ${props => props.secondary && css`
+        background: white;
+        color: ${styleSheet.inActive};
+        &.active {
+            color: ${styleSheet.theme};
+            border-bottom: 3px solid ${styleSheet.theme};
+            border-radius: 0px;
+        }
+        &:hover {
+            color: ${styleSheet.theme};
+        }
+    `}
 `
 
 export const BOTNav = styled(Nav)`
@@ -200,3 +211,20 @@ export const HoverDiv = styled.div`
         text-decoration: underline;
     }
 `
+export const SubMenu = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80px;
+    position: absolute;
+    background: white;
+    width: 100%;
+    z-index: 10000;
+    padding: 20;
+    box-shadow: rgba(32, 33, 36, 0.28) 0px 1px 6px 0px;
+    font-size: 0.9rem;
+    &:hover {
+        color: grey;
+    }
+`
+
