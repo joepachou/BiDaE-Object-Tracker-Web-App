@@ -49,8 +49,8 @@ import MonitorSettingBlock from '../components/container/MonitorSettingBlock';
 import GeoFenceSettingBlock from '../components/container/GeoFenceSettingBlock';
 import ObjectEditedRecord from '../components/container/UserContainer/ObjectEditedRecord';
 import ShiftChangeRecord from '../components/container/UserContainer/ShiftChangeRecord';
-// import TrackingHistory from '../components/container/TrackingHistory';
 import TrackingTable from '../components/container/TrackingTable';
+import TraceContainer from '../components/container/menuContainer/TraceContainer';
 
 
 export const userContainerModule = {
@@ -163,12 +163,12 @@ export const trackingHistoryContainerModule = {
             component: (props) => <TrackingTable {...props}/>,
             platform: ['browser', 'tablet', 'mobile'],
         },
-        // {
-        //     name: 'historical record',
-        //     permission: "route:trackingHistory",
-        //     component: (props) => <TrackingHistory {...props}/>,
-        //     platform: ['browser', 'tablet'],
-        // },
+        {
+            name: 'historical record',
+            permission: "route:trackingHistory",
+            component: (props) => <TraceContainer {...props}/>,
+            platform: ['browser', 'tablet'],
+        },
     ]
 }
 

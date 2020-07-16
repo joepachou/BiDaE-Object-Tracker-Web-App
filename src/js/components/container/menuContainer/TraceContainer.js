@@ -120,19 +120,19 @@ class TraceContainer extends React.Component{
         this.getObjectTable();
         this.getLbeaconTable();
         this.getAreaTable();
-        if (this.props.location.state) {
-            let { state } = this.props.location
-            let endTime = moment();
-            let startTime = moment().startOf('day');
-            let field = {
-                mode: state.mode,
-                key: state.key,
-                startTime,
-                endTime,
-                description: state.key.label
-            }
-            this.getLocationHistory(field, 0)
-        }
+        // if (this.props.location.state) {
+        //     let { state } = this.props.location
+        //     let endTime = moment();
+        //     let startTime = moment().startOf('day');
+        //     let field = {
+        //         mode: state.mode,
+        //         key: state.key,
+        //         startTime,
+        //         endTime,
+        //         description: state.key.label
+        //     }
+        //     this.getLocationHistory(field, 0)
+        // }
     }
 
     componentWillUnmount = () => {
@@ -341,17 +341,17 @@ class TraceContainer extends React.Component{
     }
 
     getInitialValues = () => {
-        if (this.props.location.state) {
-            let { state } = this.props.location;
-            let endTime = moment().toDate();
-            let startTime = moment().startOf('day').toDate();
-            return {
-                mode: state.mode,
-                key: state.key,
-                startTime,
-                endTime,
-            }
-        }
+        // if (this.props.location.state) {
+        //     let { state } = this.props.location;
+        //     let endTime = moment().toDate();
+        //     let startTime = moment().startOf('day').toDate();
+        //     return {
+        //         mode: state.mode,
+        //         key: state.key,
+        //         startTime,
+        //         endTime,
+        //     }
+        // }
         return {  
             mode: this.defaultActiveKey,
             key: null,

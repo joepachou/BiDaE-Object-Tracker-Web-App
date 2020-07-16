@@ -1,7 +1,7 @@
 import React from 'react';
 import dataSrc from "../../dataSrc"
 import axios from 'axios'; 
-import 'react-table/react-table.css'; 
+import 'react-table/react-table.css';  
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { 
@@ -24,7 +24,7 @@ import {
     BOTNavLink,
     BOTNav,
     NoDataFoundDiv
-} from '../../config/styleComponent'
+} from '../BOTComponent/styleComponent'
 import Loader from '../presentational/Loader'
 
 class TrackingHistory extends React.Component{
