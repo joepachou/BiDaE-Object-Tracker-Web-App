@@ -38,7 +38,8 @@ import React, { Fragment } from 'react';
 import { 
     Switch, 
     Redirect,
-    Route    
+    Route,
+    useHistory    
 } from 'react-router-dom';
 import NavbarContainer from './components/container/NavbarContainer'
 import { renderRoutes } from 'react-router-config';
@@ -48,6 +49,7 @@ import AuthContext from './context/AuthenticationContext';
 const PrivateRoutes = () => {
 
     let auth = React.useContext(AuthContext)
+    let history = useHistory();
 
     if (auth.authenticated) {
         return (
@@ -62,6 +64,8 @@ const PrivateRoutes = () => {
                 </Switch> */}
             </Fragment>
         );
+    } else if (window.location.pathname.split('/')[1] != 'page') {
+        return <Redirect to={{pathname: window.location.pathname, state: {}}} />
     }
     return <Redirect to={{pathname: '/login', state: {}}} />
 };

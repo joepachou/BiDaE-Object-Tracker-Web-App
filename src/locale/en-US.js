@@ -284,6 +284,7 @@ const en =  {
     NICKNAME:"nickname",
     NUM_OF_UPDATED_LBEACON: "# updated lbeacons",
     FORGET_PASSWORD: "forget password?",
+    RESET_PASSWORD: "reset password",
 
     /** form title */
     EDIT_LBEACON: "edit lbeacon",
@@ -324,7 +325,7 @@ const en =  {
     PANIC: "emergency",
     EDIT_SECONDARY_AREAS: "edit secondary areas",
     NEW_PASSWORD:"New password",
-    CHECK_PASSWORD:"Check password",
+    CHECK_PASSWORD:"confirm new password",
     LEVEL:"level",
     ADD_COMMENT: "add comment",
     NAMEGROUPBYAREA: "name(area group)",

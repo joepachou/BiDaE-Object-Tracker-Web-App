@@ -79,6 +79,26 @@ export const FieldLabel = styled.div`
     font-weight: 600;
 `
 
+export const Title = styled.div`
+    color: black;
+    text-transform: capitalize;
+    font-size: 1rem;
+    font-weight: 400;
+    ${props => props.page && css`
+        color: black;
+        font-size: 1.4rem;
+        font-weight: 450;
+        margin-bottom: 1rem;
+    `}
+    ${props => props.list && css`
+        font-size: 1.2rem;
+        color: black;
+    `}
+    ${props => props.sub && css`
+        margin-bottom: 5px;
+    `}
+`
+
 export const PageTitle = styled.div`
     color: black;
     font-size: 1.4rem;

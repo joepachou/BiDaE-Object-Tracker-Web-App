@@ -133,6 +133,7 @@ const tw = {
     PREFERENCE: "偏好設定",
 
 
+
     /* buttons */
     CLEAR : "清除",
     SAVE : "儲存",
@@ -287,6 +288,7 @@ const tw = {
     NICKNAME:"別名",
     NUM_OF_UPDATED_LBEACON: "# updated lbeacons",
     FORGET_PASSWORD: "忘記密碼?",
+    RESET_PASSWORD: "重設密碼",
 
     /** form title */
     EDIT_LBEACON: "編輯 lbeacon",

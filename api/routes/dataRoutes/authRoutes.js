@@ -47,8 +47,4 @@ module.exports = app => {
 
     app.route('/data/auth/validation')
         .post(authController.validation)
-
-    app.get('/login', (req, res) => {
-        res.sendFile(path.join(__dirname, 'dist','index.html'));
-    })
 }

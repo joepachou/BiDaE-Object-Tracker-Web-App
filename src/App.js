@@ -45,14 +45,15 @@ import {
 } from 'react-router-dom';
 import SigninPage from './js/components/authentication/SigninPage';
 import ForgetPassword from './js/components/authentication/ForgetPassword';
-import MainContainer from './js/components/container/MainContainer';
+import ResetPassword from './js/components/authentication/ResetPassword'
 
 const App = () => {
     return (
         <AppContext>
             <BrowserRouter>          
                 <Route path='/login' exact component={SigninPage} />
-                <Route path='/resetPassword' exact component={ForgetPassword} />
+                <Route path='/resetpassword' exact component={ForgetPassword} />
+                <Route path='/resetpassword/new' exact component={ResetPassword} />
                 <PrivateRoutes />
             </BrowserRouter>
             <ToastContainer {...config.TOAST_PROPS} />

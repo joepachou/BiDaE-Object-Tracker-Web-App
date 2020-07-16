@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        SigninPage.js
+        ResetPassword.js
 
     File Description:
         BOT UI component
@@ -59,6 +59,12 @@ import {
     Link, 
     useHistory
 } from 'react-router-dom';
+import { set } from 'js-cookie';
+import apiHelper from '../../helper/apiHelper';
+import {
+    PageTitle,
+    Title
+} from '../BOTComponent/styleComponent';
 
 
 
@@ -74,11 +80,13 @@ const handleClick = (e) => {
     // }
 }
 
-const SigninPage = () => {
+const ResetPassword = () => {
 
     let locale = React.useContext(LocaleContext);
     let auth = React.useContext(AuthContext);
     let history = useHistory();
+    console.log(window.location)
+    console.log(history)
     return (
         <CenterContainer>
             <div className='d-flex justify-content-center'>
@@ -96,23 +104,36 @@ const SigninPage = () => {
             </div>
             <Formik
                 initialValues = {{
-                    username: '',
-                    password: '',
+                    email: '',
                 }}
 
                 validationSchema = {
                     Yup.object().shape({
-                    username: Yup.string().required(locale.texts.USERNAME_IS_REQUIRED),
-                    password: Yup.string().required(locale.texts.PASSWORD_IS_REQUIRED)
+ 
                 })}
 
-                onSubmit={(values, actions) => {
-                    let callback = () => history.push("/")
-                    auth.signin(values, actions, callback)
+                onSubmit={(values, {setStatus} ) => {
+                    console.log(values)
+                    const {
+                        email
+                    } = values
+
+                    apiHelper.userApiAgent.sentResetPwdInstruction({
+                        email
+                    })
+                    .then(res => {
+                        console.log(res)
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
                 }}
 
                 render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
                     <Form>
+                        <Title page>
+                            {locale.texts.RESET_PASSWORD}
+                        </Title>
                         {status &&
                             <div 
                                 className='alert alert-danger mb-2 warning'
@@ -122,24 +143,16 @@ const SigninPage = () => {
                             </div>
                         }
                         <FormikFormGroup 
-                            type="text"
-                            name="username"
+                            type="password"
+                            name="new"
                             className="mb-4"
-                            label={locale.texts.NAME}    
+                            label={locale.texts.NEW_PASSWORD}    
                         />  
                         <FormikFormGroup 
                             type="password"
-                            name="password"
+                            name="confirm"
                             className="mb-4"
-                            additionalField='forget password'
-                            additionalComponent={() => (
-                                <Link
-                                    to={'/resetpassword'}
-                                >
-                                    {locale.texts.FORGET_PASSWORD}
-                                </Link>
-                            )}
-                            label={locale.texts.PASSWORD}    
+                            label={locale.texts.CHECK_PASSWORD}    
                         />  
                         <div className='d-flex justify-content-start'>
                             <Button 
@@ -147,7 +160,7 @@ const SigninPage = () => {
                                 variant="primary" 
                                 disabled={isSubmitting}
                             >
-                                {locale.texts.SIGN_IN}
+                                {locale.texts.CONFIRM}
                             </Button>
                         </div>
                     </Form>
@@ -157,4 +170,4 @@ const SigninPage = () => {
     )
 }
 
-export default SigninPage;
+export default ResetPassword;

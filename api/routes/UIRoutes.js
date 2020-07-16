@@ -34,14 +34,19 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
+let userController = require('../controllers/userController');
+let path = require('path');
+
 
 module.exports = app => {
 
     app.get('/login', (req, res) => {
-        res.sendFile(path.join(__dirname, 'dist','index.html'));
+        res.sendFile(path.join(__dirname, '..', '..', 'dist', 'index.html'));
     })
 
     app.get(/^\/page\/(.*)/, (req, res) => {
-        res.sendFile(path.join(__dirname, 'dist','index.html'));
+        res.sendFile(path.join(__dirname, '..', '..', 'dist', 'index.html'));
     })
+
+    app.get('/resetpassword/new', userController.resetPassword)
 }

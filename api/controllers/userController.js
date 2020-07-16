@@ -265,5 +265,10 @@ module.exports = {
             .catch(err => {
                 console.log(err)
             })
+    },
+
+    resetPassword: (request, response) => {
+        let token = request.query.token
+        var decoded = jwt.decode(token, 'shhhhh');
     }
 }
