@@ -139,7 +139,7 @@ const mapConfig = {
         specifiedNumberTop: '8%',
 
         /* Set the Marker dispersity that can be any positive number */
-        markerDispersity: 40,
+        markerDispersity: 400,
 
         geoFenceMarkerOptions: {
 

@@ -49,7 +49,7 @@
         options: {
             iconSize: [50, 50], // [35, 45]
             iconAnchor:   [25, 25], // [17, 42]
-            popupAnchor: [0, -10], // [1, -32]
+            popupAnchor: [0, -40], // [1, -32]
             className: 'awesome-number-marker',
             icon: 'home',
             markerColor: 'blue',
