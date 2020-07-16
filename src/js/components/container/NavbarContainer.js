@@ -338,6 +338,11 @@ class NavbarContainer extends React.Component {
                                                 key: tab.name.replace(/ /g, '_'),
                                             }
                                         }}
+                                        onClick={() => {
+                                            this.setState({
+                                                showDropdownName: null,
+                                            })
+                                        }}
                                         className='nav-link nav-route sub-nav-menu'
                                         style={{
                                             color: 'black'
