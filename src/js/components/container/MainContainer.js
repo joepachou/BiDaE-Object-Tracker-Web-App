@@ -294,11 +294,11 @@ class MainContainer extends React.Component{
         } = this.context
         let [{areaId}] = stateReducer
 
-        retrieveDataHelper.getTrackingData(
-            locale.abbr,
-            auth.user,
+        apiHelper.trackingDataApiAgent.getTrackingData({
+            locale: locale.abbr,
+            user: auth.user,
             areaId
-        )
+        })
         .then(res => {
             /** dismiss error message when the database is connected */
             if (this.errorToast) {

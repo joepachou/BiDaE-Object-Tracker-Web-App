@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        actionType.js
+        trackingDataApiAgent.js
 
     File Description:
         BOT UI component
@@ -35,11 +35,22 @@
 */
 
 
-/** Actions related to the Sidebar Menu */
-export const IS_OBJECT_LIST_SHOWN = 'IS_OBJECT_LIST_SHOWN';
+import dataSrc from '../dataSrc';
+import axios from 'axios';
 
-export const SELECT_OBJECT_LIST = 'SELECT_OBJECT_LIST';
+export default {
 
-/** Actions related to Retreiving Data */
+    getTrackingData: async function ({
+        locale, 
+        user, 
+        areaId
+    }) {
+        return await axios.post(dataSrc.trackingData,{
+            locale,
+            user,
+            areaId,
+        })
+    },
+    
 
-export const SHOULD_UPDATE_TRACKING_DATA = 'SHOULD_UPDATE_TRACKING_DATA';
+}

@@ -41,6 +41,7 @@ import objectApiAgent from '../apiAgent/objectAPiAgent';
 import transferredLocationApiAgent from '../apiAgent/transferredLocationApiAgent';
 import authApiAgent from '../apiAgent/authApiAgent';
 import userApiAgent from '../apiAgent/userApiAgent';
+import trackingDataApiAgent from '../apiAgent/trackingDataApiAgent';
 
 const apiHelper = {
 
@@ -57,6 +58,8 @@ const apiHelper = {
     authApiAgent,
 
     userApiAgent,
+
+    trackingDataApiAgent, 
     
 
 }

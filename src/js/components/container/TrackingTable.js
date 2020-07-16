@@ -42,10 +42,10 @@ import { AppContext } from '../../context/AppContext';
 import {
     trackingTableColumn
 } from '../../config/tables'
-import retrieveDataHelper from '../../helper/retrieveDataHelper'
 import { toast } from 'react-toastify';
 import messageGenerator from '../../helper/messageGenerator';
 import styleConfig from '../../config/styleConfig';
+import apiHelper from '../../helper/apiHelper';
  
 
 class TrackingTable extends React.Component{
@@ -81,11 +81,11 @@ class TrackingTable extends React.Component{
         let { locale, auth, stateReducer } = this.context
         let [{areaId}] = stateReducer
 
-        retrieveDataHelper.getTrackingData(
-            locale.abbr,
-            auth.user,
+        apiHelper.trackingDataApiAgent.getTrackingData({
+            locale: locale.abbr,
+            user: auth.user,
             areaId
-        )
+        })
         .then(res => {
             this.setMessage('clear')
             let column = _.cloneDeep(trackingTableColumn)
@@ -153,7 +153,7 @@ class TrackingTable extends React.Component{
                 resizable={true}
                 freezeWhenExpanded={false}
                 {...styleConfig.reactTable}
-                pageSize={this.state.trackingData.length}
+                // pageSize={this.state.trackingData.length}
             />
         )
     }

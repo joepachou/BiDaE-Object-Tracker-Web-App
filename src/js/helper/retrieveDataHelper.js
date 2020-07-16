@@ -41,24 +41,6 @@ import config from '../config';
 
 const retrieveDataHelper = {
     
-    /**
-     * get tracking data from object_summary_table
-     * @param {*} locale: the abbr in locale context
-     * @param {*} userInfo: the user object in auth
-     * @param {*} areaId: the area_id of current area or the area_id in stateReducer
-     */
-    getTrackingData: async function (
-        locale, 
-        user, 
-        areaId
-    ) {
-        return await axios.post(dataSrc.trackingData,{
-            locale,
-            user,
-            areaId,
-        })
-    },
-    
 
     getImportedObjectTable: async function(
         locale,

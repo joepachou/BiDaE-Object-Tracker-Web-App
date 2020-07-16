@@ -71,11 +71,12 @@ class ShiftChange extends React.Component {
             stateReducer 
         } = this.context
         let [{areaId}] = stateReducer
-        retrieveDataHelper.getTrackingData(
-            locale.abbr, 
-            auth.user, 
+
+        apiHelper.trackingDataApiAgent.getTrackingData({
+            locale: locale.abbr,
+            user: auth.user,
             areaId
-        )
+        })
         .then(res => {
             let {
                 myDevice

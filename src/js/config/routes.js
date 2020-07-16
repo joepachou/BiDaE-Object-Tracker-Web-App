@@ -45,6 +45,7 @@ import ContactTree from '../components/container/menuContainer/ContactTree';
 import BigScreenContainer from "../components/container/bigScreen/BigScreenContainer";
 import MonitorSettingContainer from "../components/container/menuContainer/MonitorSettingContainer";
 import ReportContainer from "../components/container/menuContainer/ReportContainer";
+import TrackingHistoryContainer from '../components/container/menuContainer/TrackingHistoryContainer';
 
 const routes = [
     {
@@ -80,7 +81,7 @@ const routes = [
     },
     {
         path: '/page/trace',
-        component: TraceContainer,
+        component: TrackingHistoryContainer,
         exact: true,
     },
     {
