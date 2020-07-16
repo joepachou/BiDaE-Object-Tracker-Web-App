@@ -38,7 +38,7 @@ require('dotenv').config();
 require('moment-timezone');
 const dbQueries = require('../db/dbQueries/authQueries');
 const pool = require('../db/dev/connection');
-const encrypt = require('../config/encrypt');
+const encrypt = require('../service/encrypt');
 
 module.exports = {
 

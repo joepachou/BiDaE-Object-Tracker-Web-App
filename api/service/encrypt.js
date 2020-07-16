@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        template.js
+        encrypt.js
 
     File Description:
         BOT UI component
@@ -34,23 +34,16 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
-const resetPasswordInstruction = token => {
-    return `
-        <div>
-            <p>Greetings from BiDaE Object Tracker Service,</p>
+const crypto = require('crypto');
 
-            <p>We received a request to reset the password for the BOT account associated with this e-mail address. Click the link below to reset your password using our secure server:</p>
-                        
-            http://localhost:8080/resetpassword/new?token=${token}
-
-            <p>Sincerely,</p>
-            <p>The BOT Service Team
-            </p>
-        </div>
-    `
+const createHash = password => {
+    const secret = 'BeDIS@1807'; 
+    return crypto.createHash('sha256', secret) 
+        .update(password)                     
+        .digest('hex'); 
+    
 }
 
 module.exports = {
-    resetPasswordInstruction
+    createHash
 }
-

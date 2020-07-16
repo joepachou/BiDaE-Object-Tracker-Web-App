@@ -41,9 +41,10 @@ const dbQueries = require('../db/dbQueries/userQueries');
 const pool = require('../db/dev/connection');
 const session = require('express-session');
 const authQueries = require('../db/dbQueries/authQueries');
-const encrypt = require('../config/encrypt');
-const mailTransport = require('../service/nodemailer');
+const encrypt = require('../service/encrypt');
+const mailTransporter = require('../service/mailTransporter');
 const { resetPasswordInstruction } = require('../config/template');
+var jwt = require('jsonwebtoken');
 
 
 module.exports = {
@@ -240,8 +241,15 @@ module.exports = {
         const {
             email
         } = request.body;
+
+        var token = jwt.sign({
+            exp: Math.floor(Date.now() / 1000) + (60 * 60),
+            email,
+        }, 'secret');
+
+        // var decoded = jwt.verify(token, 'shhhhh');
+        // console.log(decoded) // bar
         
-        const token = '';
         const message = {
             from: 'ossf402@gmail', // Sender address
             to: 'joechou@iis.sinica.edu.tw',
@@ -249,7 +257,7 @@ module.exports = {
             html: resetPasswordInstruction(token)
         };
         
-        mailTransport.sendMail(message)
+        mailTransporter.sendMail(message)
             .then(res => {
                 console.log('send password reset instruction succeed')
                 response.status(200)

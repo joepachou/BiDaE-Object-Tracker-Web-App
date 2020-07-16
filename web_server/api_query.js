@@ -13,7 +13,7 @@ const config = {
 const pool = new pg.Pool(config)  
 const timeDefaultFormat = 'YYYY/MM/DD HH:mm:ss'
 const tw = require('../site_module/locale/zh-TW')
-const encrypt = require('../api/config/encrypt');
+const encrypt = require('../api/service/encrypt');
 
 const get_api_key = (request, response) => {
     let { 

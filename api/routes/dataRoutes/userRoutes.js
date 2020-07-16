@@ -50,8 +50,6 @@ module.exports = app => {
 
     app.options('/data/user/sentResetPwdInstruction', cors()) 
 
-
-
     app.route('/data/user')
         .get(userController.getAllUser)
         .delete(userController.deleteUser)
