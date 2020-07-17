@@ -35,7 +35,11 @@
 */
 
 let userController = require('../controllers/userController');
+let authController = require('../controllers/authController');
 let path = require('path');
+let {
+    pageChecker
+} = require('../middlewares/validation');
 
 
 module.exports = app => {
@@ -44,9 +48,10 @@ module.exports = app => {
         res.sendFile(path.join(__dirname, '..', '..', 'dist', 'index.html'));
     })
 
-    app.get(/^\/page\/(.*)/, (req, res) => {
+    app.get(/^\/page\/(.*)/, pageChecker, (req, res) => {
         res.sendFile(path.join(__dirname, '..', '..', 'dist', 'index.html'));
     })
 
-    app.get('/resetpassword/new', userController.resetPassword)
+    app.get('/resetpassword/new/:token', authController.verifyResetPwdToken)
+
 }

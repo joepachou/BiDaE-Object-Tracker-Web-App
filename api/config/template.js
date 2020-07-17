@@ -41,7 +41,7 @@ const resetPasswordInstruction = token => {
 
             <p>We received a request to reset the password for the BOT account associated with this e-mail address. Click the link below to reset your password using our secure server:</p>
                         
-            http://localhost/resetpassword/new?token=${token}
+            http://localhost/resetpassword/new/${token}
 
             <p>Sincerely,</p>
             <p>The BOT Service Team

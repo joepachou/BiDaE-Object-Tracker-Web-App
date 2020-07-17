@@ -52,5 +52,24 @@ export default {
         })
     },
 
+    sentResetPwdInstruction: async function({
+        email,
+    }) {
+        return await axios.post(dataSrc.auth.sentResetPwdInstruction, {
+            email,
+        })
+    },
+
+    resetPassword: async function({
+        token,
+        password
+    }) {
+        console.log(22222)
+        return await axios.post(dataSrc.auth.resetPassword, {
+            token,
+            password
+        })
+    }
+
 
 }

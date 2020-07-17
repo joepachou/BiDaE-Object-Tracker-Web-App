@@ -53,34 +53,19 @@ import * as Yup from 'yup';
 import {
     CenterContainer
 } from '../BOTComponent/styleComponent';
-import styleConfig from '../../config/styleConfig';
 import FormikFormGroup from '../presentational/FormikFormGroup';
 import { 
     Link, 
     useHistory
 } from 'react-router-dom';
-import { set } from 'js-cookie';
 import apiHelper from '../../helper/apiHelper';
 
-
-
 const imageLength = 80;
-
-const handleClick = (e) => {
-    console.log(e.target)
-    let {
-        name
-    } = e.target
-    // switch(name) {
-    //     case 'forget password'
-    // }
-}
 
 const ForgetPassword = () => {
 
     let locale = React.useContext(LocaleContext);
     let auth = React.useContext(AuthContext);
-    let history = useHistory();
     return (
         <CenterContainer>
             <div className='d-flex justify-content-center'>
@@ -107,12 +92,11 @@ const ForgetPassword = () => {
                 })}
 
                 onSubmit={(values, {setStatus} ) => {
-                    console.log(values)
                     const {
                         email
                     } = values
 
-                    apiHelper.userApiAgent.sentResetPwdInstruction({
+                    apiHelper.authApiAgent.sentResetPwdInstruction({
                         email
                     })
                     .then(res => {

@@ -49,8 +49,9 @@ import AuthContext from './context/AuthenticationContext';
 const PrivateRoutes = () => {
 
     let auth = React.useContext(AuthContext)
-    let history = useHistory();
-
+    let {
+        pathname
+    } = window.location
     if (auth.authenticated) {
         return (
             <Fragment>          
@@ -64,7 +65,7 @@ const PrivateRoutes = () => {
                 </Switch> */}
             </Fragment>
         );
-    } else if (window.location.pathname.split('/')[1] != 'page') {
+    } else if (pathname != '/' && pathname.split('/')[1] != 'page') {
         return <Redirect to={{pathname: window.location.pathname, state: {}}} />
     }
     return <Redirect to={{pathname: '/login', state: {}}} />

@@ -39,6 +39,10 @@ require('moment-timezone');
 const dbQueries = require('../db/dbQueries/authQueries');
 const pool = require('../db/dev/connection');
 const encrypt = require('../service/encrypt');
+const mailTransporter = require('../service/mailTransporter');
+const { resetPasswordInstruction } = require('../config/template');
+const jwt = require('jsonwebtoken');
+const path = require('path');
 
 module.exports = {
 
@@ -175,6 +179,71 @@ module.exports = {
             .catch(err => {
                 console.log(`confirm validation fails ${err}`)
             })
+    },
+
+    sentResetPwdInstruction: (request, response) => {
+        const {
+            email
+        } = request.body;
+
+        var token = jwt.sign({
+            // exp: Math.floor(Date.now() / 1000) + (60 * 60),
+            email,
+        }, 'shhhhh');
+
+        const message = {
+            from: 'ossf402@gmail', // Sender address
+            to: 'joechou@iis.sinica.edu.tw',
+            subject: 'BOT Password Assistance', 
+            html: resetPasswordInstruction(token)
+        };
+        
+        mailTransporter.sendMail(message)
+            .then(res => {
+                console.log('send password reset instruction succeed')
+                response.status(200)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    },
+
+    verifyResetPwdToken: (request, response) => {
+        let token = request.params.token
+
+        let decoded = jwt.verify(token, 'shhhhh');
+
+        if (decoded) {
+            response.sendFile(path.join(__dirname, '..', '..', 'dist', 'index.html'));
+        } else {
+            response.redirect('/')
+        }
+    },
+    
+    resetPassword: (request, response) => {
+        let {
+            token,
+            password
+        } = request.body
+        
+        let decoded = jwt.verify(token, 'shhhhh');
+
+        let user_id = 35;
+        console.log(decoded)
+
+        const hash = encrypt.createHash(password);
+
+
+        pool.query(dbQueries.resetPassword(user_id, hash))
+        .then(res => {
+            console.log(`reset password succeed`)
+            response.status(200).json();
+        })
+        .catch(err => {
+            console.log(`reset password failed ${err}`)
+        })
+
+
     }
 }
 

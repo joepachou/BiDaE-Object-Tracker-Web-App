@@ -502,6 +502,7 @@ const en =  {
     SAVE_SUCCESS: "save success",
     SELECT_ROLE:"select role",
     SIGNUP_FAIL:"this username already exist",
+    PASSWORD_RESET_SUCCESSFUL: "password reset successful",
     
     /** user roles */
     CARE_PROVIDER: "care provider",

@@ -66,27 +66,20 @@ import {
     Title
 } from '../BOTComponent/styleComponent';
 
-
-
 const imageLength = 80;
 
-const handleClick = (e) => {
-    console.log(e.target)
-    let {
-        name
-    } = e.target
-    // switch(name) {
-    //     case 'forget password'
-    // }
-}
-
-const ResetPassword = () => {
+const ResetPassword = ({
+    match
+}) => {
 
     let locale = React.useContext(LocaleContext);
     let auth = React.useContext(AuthContext);
     let history = useHistory();
-    console.log(window.location)
-    console.log(history)
+
+    let {
+        token
+    } = match.params
+
     return (
         <CenterContainer>
             <div className='d-flex justify-content-center'>
@@ -104,25 +97,22 @@ const ResetPassword = () => {
             </div>
             <Formik
                 initialValues = {{
-                    email: '',
+                    new: '',
+                    confirm: '',
                 }}
 
-                validationSchema = {
-                    Yup.object().shape({
+                // validationSchema = {
+                //     Yup.object().shape({
  
-                })}
+                // })}
 
                 onSubmit={(values, {setStatus} ) => {
-                    console.log(values)
-                    const {
-                        email
-                    } = values
-
-                    apiHelper.userApiAgent.sentResetPwdInstruction({
-                        email
+                    apiHelper.authApiAgent.resetPassword({
+                        token, 
+                        password: values.new
                     })
                     .then(res => {
-                        console.log(res)
+                        history.push("/resetpassword/success")
                     })
                     .catch(err => {
                         console.log(err)

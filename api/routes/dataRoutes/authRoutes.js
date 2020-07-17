@@ -47,4 +47,10 @@ module.exports = app => {
 
     app.route('/data/auth/validation')
         .post(authController.validation)
+
+    app.route('/data/auth/sentResetPwdInstruction')
+        .post(authController.sentResetPwdInstruction)
+
+    app.route('/data/auth/resetpassword')
+        .post(authController.resetPassword)
 }

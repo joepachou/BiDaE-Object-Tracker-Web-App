@@ -76,7 +76,4 @@ module.exports = app => {
 
     app.route('/data/user/maxSearchHistoryCount')
         .post(userController.editMaxSearchHistoryCount)
-
-    app.route('/data/user/sentResetPwdInstruction')
-        .post(userController.sentResetPwdInstruction)
 }

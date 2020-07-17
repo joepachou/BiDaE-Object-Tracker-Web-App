@@ -74,14 +74,4 @@ export default {
         })
     },
 
-    sentResetPwdInstruction: async function({
-        email,
-    }) {
-        return await axios.post(dataSrc.userInfo.sentResetPwdInstruction, {
-            email,
-        })
-    }
-
-
-
 }

@@ -42,19 +42,24 @@ import config from './js/config';
 import { 
     BrowserRouter,
     Route,  
+    Switch
 } from 'react-router-dom';
 import SigninPage from './js/components/authentication/SigninPage';
 import ForgetPassword from './js/components/authentication/ForgetPassword';
-import ResetPassword from './js/components/authentication/ResetPassword'
+import ResetPassword from './js/components/authentication/ResetPassword';
+import ResetPasswordResult from './js/components/authentication/ResetPasswordResult';
 
 const App = () => {
     return (
         <AppContext>
-            <BrowserRouter>          
-                <Route path='/login' exact component={SigninPage} />
-                <Route path='/resetpassword' exact component={ForgetPassword} />
-                <Route path='/resetpassword/new' exact component={ResetPassword} />
-                <PrivateRoutes />
+            <BrowserRouter>     
+                <Switch>
+                    <Route path='/login' exact component={SigninPage} />
+                    <Route path='/resetpassword' exact component={ForgetPassword} />
+                    <Route path='/resetpassword/new/:token' exact component={ResetPassword} />
+                    <Route path='/resetpassword/success' exact component={ResetPasswordResult} />
+                    <PrivateRoutes />
+                </Switch>
             </BrowserRouter>
             <ToastContainer {...config.TOAST_PROPS} />
         </AppContext>

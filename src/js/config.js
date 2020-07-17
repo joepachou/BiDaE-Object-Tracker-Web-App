@@ -70,7 +70,7 @@ const config = {
             'form:view',
         ],
         locale: 'tw',
-        main_area: 0,
+        main_area: 1,
     },
 
     DEFAULT_LOCALE: 'tw' ,
