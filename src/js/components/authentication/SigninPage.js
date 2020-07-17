@@ -59,6 +59,7 @@ import {
     Link, 
     useHistory
 } from 'react-router-dom';
+import Licence from '../BOTComponent/Licence';
 
 
 
@@ -153,6 +154,7 @@ const SigninPage = () => {
                     </Form>
                 )}
             />
+            {/* <Licence /> */}
         </CenterContainer>
     )
 }

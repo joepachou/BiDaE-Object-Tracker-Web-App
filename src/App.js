@@ -48,6 +48,7 @@ import SigninPage from './js/components/authentication/SigninPage';
 import ForgetPassword from './js/components/authentication/ForgetPassword';
 import ResetPassword from './js/components/authentication/ResetPassword';
 import ResetPasswordResult from './js/components/authentication/ResetPasswordResult';
+import SentPwdInstructionResult from './js/components/authentication/SentPwdInstructionResult';
 
 const App = () => {
     return (
@@ -58,6 +59,7 @@ const App = () => {
                     <Route path='/resetpassword' exact component={ForgetPassword} />
                     <Route path='/resetpassword/new/:token' exact component={ResetPassword} />
                     <Route path='/resetpassword/success' exact component={ResetPasswordResult} />
+                    <Route path='/resetpassword/instruction' exact component={SentPwdInstructionResult} />
                     <PrivateRoutes />
                 </Switch>
             </BrowserRouter>

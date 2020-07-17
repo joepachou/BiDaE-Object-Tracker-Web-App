@@ -201,13 +201,13 @@ module.exports = {
         mailTransporter.sendMail(message)
             .then(res => {
                 console.log('send password reset instruction succeed')
-                response.status(200)
+                response.status(200).json()
             })
             .catch(err => {
-                console.log(err)
+                console.log(`send password reset instruction failed ${err}`)
             })
     },
-
+ 
     verifyResetPwdToken: (request, response) => {
         let token = request.params.token
 
@@ -229,10 +229,8 @@ module.exports = {
         let decoded = jwt.verify(token, 'shhhhh');
 
         let user_id = 35;
-        console.log(decoded)
 
         const hash = encrypt.createHash(password);
-
 
         pool.query(dbQueries.resetPassword(user_id, hash))
         .then(res => {

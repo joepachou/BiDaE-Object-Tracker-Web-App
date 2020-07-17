@@ -504,6 +504,8 @@ const tw = {
     SELECT_ROLE:"選擇權限",
     SIGNUP_FAIL:"帳號重複",
     PASSWORD_RESET_SUCCESSFUL: "更改密碼成功",
+    PASSWORD_RESET_INSTRUCTION_SUCCESSFUL: "更改密碼確認信已寄到您的信箱，請依照郵件指示更改您的密碼",
+
 
     /** user roles */
     CARE_PROVIDER: "護理人員",

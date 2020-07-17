@@ -66,6 +66,8 @@ const ForgetPassword = () => {
 
     let locale = React.useContext(LocaleContext);
     let auth = React.useContext(AuthContext);
+    let history = useHistory();
+
     return (
         <CenterContainer>
             <div className='d-flex justify-content-center'>
@@ -100,7 +102,7 @@ const ForgetPassword = () => {
                         email
                     })
                     .then(res => {
-                        console.log(res)
+                        history.push("/resetpassword/instruction")
                     })
                     .catch(err => {
                         console.log(err)

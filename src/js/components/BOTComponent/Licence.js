@@ -37,7 +37,7 @@
 
 import React, { Fragment } from 'react';
 import doc from '../../../../inc/doc';
-console.log(doc)
+
 const Licence = () => {
     return ( 
         <div>

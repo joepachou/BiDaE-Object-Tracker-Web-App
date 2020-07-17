@@ -503,6 +503,7 @@ const en =  {
     SELECT_ROLE:"select role",
     SIGNUP_FAIL:"this username already exist",
     PASSWORD_RESET_SUCCESSFUL: "password reset successful",
+    PASSWORD_RESET_INSTRUCTION_SUCCESSFUL: "password reset instruction has been send to your email. Follow the instuction to reset the password.",
     
     /** user roles */
     CARE_PROVIDER: "care provider",
