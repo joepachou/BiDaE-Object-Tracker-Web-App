@@ -124,9 +124,9 @@ const mapConfig = {
     /** Set the icon option for browser */
     iconOptions: {
 
-        iconSize: [process.env.MARKER_SIZE_IN_DESKTOP, process.env.MARKER_SIZE_IN_DESKTOP] || 1,
+        iconSize: [siteConfig.MARKER_SIZE_IN_DESKTOP, siteConfig.MARKER_SIZE_IN_DESKTOP] || 1,
 
-        iconAnchor: [process.env.MARKER_SIZE_IN_DESKTOP / 2, process.env.MARKER_SIZE_IN_DESKTOP],
+        iconAnchor: [siteConfig.MARKER_SIZE_IN_DESKTOP / 2, siteConfig.MARKER_SIZE_IN_DESKTOP],
 
         showNumber: true,
 
@@ -189,9 +189,9 @@ const mapConfig = {
     /** Set the icon option for mobile */
     iconOptionsInMobile: {
 
-        iconSize: [process.env.MARKER_SIZE_IN_MOBILE, process.env.MARKER_SIZE_IN_MOBILE] || 1,
+        iconSize: [viewConfig.MARKER_SIZE_IN_MOBILE, viewConfig.MARKER_SIZE_IN_MOBILE] || 1,
 
-        iconAnchor: [process.env.MARKER_SIZE_IN_MOBILE / 2, process.env.MARKER_SIZE_IN_MOBILE],
+        iconAnchor: [viewConfig.MARKER_SIZE_IN_MOBILE / 2, viewConfig.MARKER_SIZE_IN_MOBILE],
 
         circleRadius: 8,
 
@@ -249,9 +249,9 @@ const mapConfig = {
     /** Set the icon option for tablet */
     iconOptionsInTablet: {
 
-        iconSize: [process.env.MARKER_SIZE_IN_TABLET, process.env.MARKER_SIZE_IN_TABLET],
+        iconSize: [viewConfig.MARKER_SIZE_IN_TABLET, viewConfig.MARKER_SIZE_IN_TABLET],
 
-        iconAnchor: [process.env.MARKER_SIZE_IN_TABLET / 2, process.env.MARKER_SIZE_IN_TABLET],
+        iconAnchor: [viewConfig.MARKER_SIZE_IN_TABLET / 2, viewConfig.MARKER_SIZE_IN_TABLET],
 
         showNumber: true,
 
@@ -379,7 +379,7 @@ const mapConfig = {
     startInteval: true,
 
     /* Set the tracking query inteval time(ms) */
-    intervalTime: process.env.OBJECT_TRACKING_INTERVAL_TIME_IN_MILLI_SEC,
+    OBJECT_TRACKING_INTERVAL_TIME_IN_MILLI_SEC: 30,
 
     objectStatus: {
         PERIMETER: "perimeter",

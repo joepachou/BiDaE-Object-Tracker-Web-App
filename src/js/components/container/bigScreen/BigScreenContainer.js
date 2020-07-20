@@ -60,7 +60,7 @@ class BigScreenContainer extends React.Component{
 
     componentDidMount = () => {
         this.getTrackingData();
-        this.interval = setInterval(this.getTrackingData, config.mapConfig.intervalTime)
+        this.interval = setInterval(this.getTrackingData, config.mapConfig.OBJECT_TRACKING_INTERVAL_TIME_IN_MILLI_SEC)
     }
 
     componentWillUnmount = () => {

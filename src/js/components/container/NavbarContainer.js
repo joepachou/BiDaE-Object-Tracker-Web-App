@@ -60,6 +60,7 @@ import {
     SubMenu,
     BOTNavLink
 } from '../BOTComponent/styleComponent';
+import routes from '../../config/routes/routes';
 
 class NavbarContainer extends React.Component {
 
@@ -257,7 +258,7 @@ class NavbarContainer extends React.Component {
 
                         <Nav>
                             <AccessControl
-                                permission={'user:batteryNotice'}
+                                permission='user:batteryNotice'
                                 renderNoAccess={() => null}
                                 platform={['browser', 'tablet']}
                             >
@@ -281,7 +282,7 @@ class NavbarContainer extends React.Component {
                                     bsPrefix='bot-dropdown-menu-right  dropdown-menu '
                                 >
                                     <div className='dropdownWrapper'>
-                                        <LinkContainer to='/page/userSetting' className='bg-white'>
+                                        <LinkContainer to={routes.USER_SETTINGS} className='bg-white'>
                                             <Dropdown.Item 
                                                 className='lang-select text-none'
                                             >
@@ -289,13 +290,13 @@ class NavbarContainer extends React.Component {
                                             </Dropdown.Item>
                                         </LinkContainer>
                                         <Dropdown.Divider />
-                                        <LinkContainer to='/page/about' className='bg-white'>
+                                        <LinkContainer to={routes.ABOUT} className='bg-white'>
                                             <Dropdown.Item className='lang-select'>
                                                 {locale.texts.ABOUT}
                                             </Dropdown.Item>
                                         </LinkContainer>
                                         <Dropdown.Divider />
-                                        <LinkContainer to='/' className='bg-white'>
+                                        <LinkContainer to={routes.HOME} className='bg-white'>
                                             <Dropdown.Item className='lang-select' onClick={auth.signout}>
                                                 {locale.texts.SIGN_OUT}
                                             </Dropdown.Item>
