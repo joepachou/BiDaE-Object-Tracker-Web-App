@@ -38,8 +38,7 @@
 import React from 'react';
 import Select from 'react-select';
 import { AppContext } from '../../../context/AppContext';
-import axios from 'axios'
-import dataSrc from "../../../dataSrc"
+import apiHelper from '../../../helper/apiHelper';
   
 class LBeaconPicker extends React.Component {
 
@@ -62,9 +61,11 @@ class LBeaconPicker extends React.Component {
     getBeacon = () => {
         if(this.props.area){
             let { locale } = this.context
-            axios.post(dataSrc.getLbeaconTable, {
+
+            apiHelper.lbeaconApiAgent.getLbeaconTable({
                 locale: locale.abbr
-            }).then(res => {
+            })
+            .then(res => {
                 let beacons = res.data.rows.filter(beacon => {
                     return parseInt(beacon.uuid.slice(0, 4)) == parseInt(this.props.area)
                 })

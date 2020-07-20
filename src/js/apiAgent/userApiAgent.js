@@ -40,6 +40,16 @@ import axios from 'axios';
 
 export default {
 
+    getAllUser: async function ({
+        locale
+    }) {
+        return await axios.get(dataSrc.user, {
+            params: {
+                locale
+            }
+        })
+    },
+
     addSearchHistory: async function ({
         username,
         keyType,

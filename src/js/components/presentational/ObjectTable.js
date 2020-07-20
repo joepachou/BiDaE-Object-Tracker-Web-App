@@ -117,7 +117,8 @@ class ObjectTable extends React.Component{
         let {
             locale
         } = this.context
-        retrieveDataHelper.getAreaTable()
+
+        apiHelper.areaApiAgent.getAreaTable()
             .then(res => {
                 let areaSelection = res.data.rows.map(area => {
                     return {

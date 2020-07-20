@@ -52,7 +52,6 @@ import BrowserTraceContainerView from '../../platform/browser/BrowserTraceContai
 import MobileTraceContainerView from '../../platform/mobile/MobileTraceContainerView';
 import TabletTraceContainerView from '../../platform/tablet/TabletTraceContainerView';
 import { AppContext } from '../../../context/AppContext';
-import retrieveDataHelper from '../../../helper/retrieveDataHelper';
 import pdfPackageGenerator from '../../../helper/pdfPackageGenerator';
 import config from '../../../config';
 import moment from 'moment';
@@ -194,9 +193,11 @@ class TraceContainer extends React.Component{
         let {
             locale
         } = this.context
-        retrieveDataHelper.getLbeaconTable(
-            locale.abbr
-        )
+
+
+        apiHelper.lbeaconApiAgent.getLbeaconTable({
+            locale: locale.abbr
+        })
         .then(res => {
             let uuid = res.data.rows.map(lbeacon => {
                 return {
@@ -219,7 +220,8 @@ class TraceContainer extends React.Component{
         let {
             locale
         } = this.context
-        retrieveDataHelper.getAreaTable()
+
+        apiHelper.areaApiAgent.getAreaTable()
             .then(res => {
                 let area = res.data.rows.map(area => {
                     return {

@@ -59,7 +59,6 @@ import messageGenerator from '../../helper/messageGenerator';
 const SelectTable = selecTableHOC(ReactTable);
 import AccessControl from '../authentication/AccessControl';
 import { patientTableColumn } from '../../config/tables';
-import retrieveDataHelper from '../../helper/retrieveDataHelper';
 import config from '../../config';
 import dataSrc from '../../dataSrc';
 import apiHelper from '../../helper/apiHelper';
@@ -173,7 +172,8 @@ class PatientTable extends React.Component{
         let {
             locale
         } = this.context
-        retrieveDataHelper.getAreaTable()
+
+        apiHelper.areaApiAgent.getAreaTable()
             .then(res => {
                 let areaSelection = res.data.rows.map(area => {
                     return {
@@ -207,9 +207,9 @@ class PatientTable extends React.Component{
 
     getLbeaconData = () => {
         let { locale } = this.context
-        retrieveDataHelper.getLbeaconTable(
-            locale.abbr
-        )
+        apiHelper.lbeaconApiAgent.getLbeaconTable({
+            locale: locale.abbr
+        })
         .then(res => {
             let roomOptions = []
             res.data.rows.map(item => {

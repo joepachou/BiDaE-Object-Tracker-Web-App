@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        retrieveDataHelper.js
+        areaApiAgent.js
 
     File Description:
         BOT UI component
@@ -37,36 +37,12 @@
 
 import dataSrc from '../dataSrc';
 import axios from 'axios';
-import config from '../config';
 
-const retrieveDataHelper = {
+export default {
+
     
-
-    getImportedObjectTable: async function(
-        locale,
-        type,
-    ){
-        return await axios.get(dataSrc.importedObject, {
-            params: {
-                locale,
-                type
-            }
-        })
+    getAreaTable: async function() {
+        return await axios.post(dataSrc.area)
     },
-
-    setMonitorEnable: async function( 
-        enable,
-        areaId,
-        type
-    ){
-        return await axios.post(dataSrc.setMonitorEnable, {
-            enable,
-            areaId,
-            type
-        })
-    },
-
+    
 }
-
-
-export default retrieveDataHelper

@@ -47,7 +47,6 @@ import {
     gatewayTableColumn
 } from '../../config/tables';
 import { AppContext } from '../../context/AppContext';
-import retrieveDataHelper from '../../helper/retrieveDataHelper'
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm' 
 import BOTCheckbox from '../presentational/BOTCheckbox'
 import styleConfig from '../../config/styleConfig'
@@ -58,6 +57,7 @@ import {
 } from '../BOTComponent/styleComponent'
 import AccessControl from '../authentication/AccessControl';
 import EditGatewayForm from '../presentational/EditGatewayForm';
+import apiHelper from '../../helper/apiHelper';
 
 class GatewayTable extends React.Component{
     
@@ -96,9 +96,9 @@ class GatewayTable extends React.Component{
         let { 
             locale
         } = this.context
-        retrieveDataHelper.getGatewayTable(
-            locale.abbr
-        )
+        apiHelper.gatewayApiAgent.gatewayApiAgent({
+            locale: locale.abbr,
+        })
         .then(res => {
             this.props.setMessage('clear')
             let column = _.cloneDeep(gatewayTableColumn)

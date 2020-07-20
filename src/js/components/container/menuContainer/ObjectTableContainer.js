@@ -46,7 +46,6 @@ import EditPatientForm from '../../container/EditPatientForm';
 import messageGenerator from '../../../helper/messageGenerator';
 const SelectTable = selecTableHOC(ReactTable);
 import { patientTableColumn } from '../../../config/tables';
-import retrieveDataHelper from '../../../helper/retrieveDataHelper';
 import dataSrc from '../../../dataSrc';
 import {
     BrowserView,
@@ -193,7 +192,8 @@ class ObjectTableContainer extends React.Component{
         let {
             locale
         } = this.context
-        retrieveDataHelper.getAreaTable()
+
+        apiHelper.areaApiAgent.getAreaTable()
             .then(res => {
                 let areaSelection = res.data.rows.map(area => {
                     return {

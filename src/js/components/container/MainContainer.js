@@ -340,9 +340,9 @@ class MainContainer extends React.Component{
     getLbeaconPosition = () => {
         let { auth, locale } = this.context
 
-        retrieveDataHelper.getLbeaconTable(
-            locale.abbr
-        )
+        apiHelper.lbeaconApiAgent.getLbeaconTable({
+            locale: locale.abbr
+        })
         .then(res => {
             let lbeaconPosition = res.data.rows.map(item => {
                 item.coordinate = createLbeaconCoordinate(item.uuid).toString();
