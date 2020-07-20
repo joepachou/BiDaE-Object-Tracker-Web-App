@@ -92,6 +92,7 @@ const EditUserForm = ({
                     initialValues = {{
                         name: selectedUser ? selectedUser.name : '',
                         password: '',
+                        email: selectedUser ? selectedUser.email : '',
                         roles: selectedUser ? selectedUser.role_type : config.DEFAULT_ROLE,
                         area: selectedUser ? selectedUser.main_area : '',
                     }}
@@ -164,7 +165,15 @@ const EditUserForm = ({
                                 error={errors.name}
                                 touched={touched.name}
                                 autoComplete="off"
-                            />                             
+                            />   
+                            <FormikFormGroup 
+                                type="text"
+                                name="email"
+                                label={locale.texts.EMAIL}
+                                error={errors.email}
+                                touched={touched.email}
+                                autoComplete="off"
+                            />                          
                             <FormikFormGroup 
                                 type="password"
                                 name="password"

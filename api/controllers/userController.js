@@ -71,6 +71,7 @@ module.exports = {
         const { 
             name, 
             password, 
+            email,
             roles,
             area_id,
         } = request.body;    
@@ -80,6 +81,7 @@ module.exports = {
         const signupPackage = {
             name: name.toLowerCase(),
             password: hash,
+            email,
             area_id
         } 
         request.session.regenerate(() => {

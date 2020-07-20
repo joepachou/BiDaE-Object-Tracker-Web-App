@@ -177,8 +177,7 @@ class AdminManagementContainer extends React.Component{
         }  
         auth[api](user, () => {
             this.getUserList(callback)
-        } 
-        )
+        }) 
     }
 
     handleDeleteUserSubmit = (e) => {

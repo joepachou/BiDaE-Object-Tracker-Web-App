@@ -45,6 +45,7 @@ import trackingDataApiAgent from '../apiAgent/trackingDataApiAgent';
 import roleApiAgent from '../apiAgent/roleApiAgent';
 import areaApiAgent from '../apiAgent/areaApiAgent';
 import lbeaconApiAgent from '../apiAgent/lbeaconApiAgent';
+import gatewayApiAgent from '../apiAgent/gatewayApiAgent';
 
 const apiHelper = {
 
@@ -69,6 +70,8 @@ const apiHelper = {
     areaApiAgent,
 
     lbeaconApiAgent,
+
+    gatewayApiAgent,
     
 
 }

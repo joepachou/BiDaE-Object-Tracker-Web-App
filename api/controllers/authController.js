@@ -76,7 +76,8 @@ module.exports = {
                             id,
                             main_area,
                             locale_id,
-                            locale
+                            locale,
+                            email
                         } = res.rows[0]
 
                         if (main_area && !areas_id.includes(main_area)) {
@@ -94,7 +95,8 @@ module.exports = {
                             main_area,
                             locale_id,
                             locale,
-                            searchHistory: search_history
+                            searchHistory: search_history,
+                            email
                         }
 
                         /** Set session */

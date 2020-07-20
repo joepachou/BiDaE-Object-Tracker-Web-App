@@ -127,12 +127,14 @@ class Auth extends React.Component {
     signup = (values, callback) => {
         let { 
             name, 
+            email,
             password, 
             roles, 
             area, 
         } = values
         axios.post(dataSrc.user, {
             name: name.toLowerCase(),
+            email: email.toLowerCase(),
             password,
             roles,
             area_id: area.id,

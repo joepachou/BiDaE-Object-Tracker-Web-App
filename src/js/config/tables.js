@@ -459,7 +459,7 @@ const userInfoTableColumn = [
     {
         Header: "email",
         accessor: "email",
-        width: 250,
+        width: 150,
     },
     {
         Header: "user id",
