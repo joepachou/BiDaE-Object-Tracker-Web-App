@@ -122,7 +122,7 @@ class MainContainer extends React.Component{
         this.getLbeaconPosition();
         this.getGeofenceConfig();
         this.getLocationMonitorConfig()
-        this.interval = setInterval(this.getTrackingData, config.mapConfig.OBJECT_TRACKING_INTERVAL_TIME_IN_MILLI_SEC)
+        this.interval = setInterval(this.getTrackingData, config.mapConfig.intervalTime)
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -136,7 +136,7 @@ class MainContainer extends React.Component{
         if (stateReducer[0].shouldUpdateTrackingData !== this.state.shouldUpdateTrackingData) {
             let [{shouldUpdateTrackingData}] = stateReducer
             this.interval = shouldUpdateTrackingData 
-                ?   setInterval(this.getTrackingData, config.mapConfig.OBJECT_TRACKING_INTERVAL_TIME_IN_MILLI_SEC)
+                ?   setInterval(this.getTrackingData, config.mapConfig.intervalTime)
                 :   clearInterval(this.interval);
             this.setState({
                 shouldUpdateTrackingData

@@ -379,7 +379,7 @@ const mapConfig = {
     startInteval: true,
 
     /* Set the tracking query inteval time(ms) */
-    OBJECT_TRACKING_INTERVAL_TIME_IN_MILLI_SEC: 30,
+    intervalTime: 1000,
 
     objectStatus: {
         PERIMETER: "perimeter",
