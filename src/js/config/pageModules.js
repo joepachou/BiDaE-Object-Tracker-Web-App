@@ -202,43 +202,20 @@ export const navbarNavList = [
         path: '/',
         hasEvent: true
     },
-    {
-        name: "shift change",
-        alias: "shiftChange",
-        // path: "/",
-        permission: "user:shiftChange",
-        platform: ['browser', 'tablet'],
-        hasEvent: true
-    },
+    // {
+    //     name: "shift change",
+    //     alias: "shiftChange",
+    //     // path: "/",
+    //     permission: "user:shiftChange",
+    //     platform: ['browser', 'tablet'],
+    //     hasEvent: true
+    // },
     {
         name: 'object management',
         alias: 'objectManagement',
         path: '/page/objectManagement',
         permission: 'route:objectManagement',
         hasEvent: true
-    },
-    {
-        name: 'tracking history',
-        alias: 'trackinghistory',
-        path: '/page/trace',
-        module: trackingHistoryContainerModule,
-        permission: 'route:trackingHistory',
-    },
-    {
-        name: "monitor setting",
-        alias: "monitor",
-        path: "/page/monitor",
-        module: monitorSettingModule,
-        permission: "route:monitor",
-        platform: ['browser', 'tablet']
-    },
-    {
-        name: "report",
-        alias: "report",
-        path: "/page/report",
-        module: reportContainerModule,
-        permission: "route:report",
-        platform: ['browser', 'tablet', 'mobile'],
     },
     {
         name: "system setting",
@@ -248,6 +225,30 @@ export const navbarNavList = [
         permission: "route:systemSetting",
         platform: ['browser', 'tablet', 'mobile'],
     },
+    // {
+    //     name: 'tracking history',
+    //     alias: 'trackinghistory',
+    //     path: '/page/trace',
+    //     module: trackingHistoryContainerModule,
+    //     permission: 'route:trackingHistory',
+    // },
+    // {
+    //     name: "monitor setting",
+    //     alias: "monitor",
+    //     path: "/page/monitor",
+    //     module: monitorSettingModule,
+    //     permission: "route:monitor",
+    //     platform: ['browser', 'tablet']
+    // },
+    {
+        name: "report",
+        alias: "report",
+        path: "/page/report",
+        module: reportContainerModule,
+        permission: "route:report",
+        platform: ['browser', 'tablet', 'mobile'],
+    },
+
     // {
     //     name: 'contact tree',
     //     alias: 'contactTree',

@@ -43,7 +43,7 @@ import {
 } from 'react-router-dom';
 import NavbarContainer from './components/container/NavbarContainer'
 import { renderRoutes } from 'react-router-config';
-import routes from './config/routes';
+import routes from './config/routes/privateRoutesConfig';
 import AuthContext from './context/AuthenticationContext';
 
 const PrivateRoutes = () => {

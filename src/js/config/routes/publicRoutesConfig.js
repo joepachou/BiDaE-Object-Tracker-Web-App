@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        App.js
+        publicRoutesConfig.js
 
     File Description:
         BOT UI component
@@ -34,36 +34,40 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
-import React from 'react';
-import AppContext from './js/context/AppContext';
-import PrivateRoutes from '../src/js/PrivateRoutes';
-import { ToastContainer } from 'react-toastify';
-import config from './js/config';
-import { 
-    BrowserRouter,
-    Route,  
-    Switch
-} from 'react-router-dom';
-import publicRoutes from './js/config/routes/publicRoutesConfig';
+import routes from './routes';
+import SigninPage from '../../components/authentication/SigninPage';
+import ForgetPassword from '../../components/authentication/ForgetPassword';
+import ResetPassword from '../../components/authentication/ResetPassword';
+import ResetPasswordResult from '../../components/authentication/ResetPasswordResult';
+import SentPwdInstructionResult from '../../components/authentication/SentPwdInstructionResult';
 
-const App = () => {
-    return (
-        <AppContext>
-            <BrowserRouter>     
-                <Switch>
-                    {publicRoutes.map(route => {
-                        return <Route path={route.path} exact component={route.component} />
+const publicRoutesConfig = [
+    {
+        path: routes.LOGIN,
+        component: SigninPage,
+        exact: true,
+    },
+    {
+        path: routes.FORGET_PASSWORD,
+        component: ForgetPassword,
+        exact: true,
+    },
+    {
+        path: routes.RESET_PASSWORD,
+        component: ResetPassword,
+        exact: true,
+    },
+    {
+        path: routes.RESET_PASSWORD_RESULT,
+        component: ResetPasswordResult,
+        exact: true,
+    },
+    {
+        path: routes.RESET_PASSWORD_INSTRUCTION,
+        component: SentPwdInstructionResult,
+        exact: true
+    }
 
-                    })}
-                    <PrivateRoutes />
-                </Switch>
-            </BrowserRouter>
-            <ToastContainer {...config.TOAST_PROPS} />
-        </AppContext>
-    );
-};
+];
 
-export default App;
-
-
-
+export default publicRoutesConfig;

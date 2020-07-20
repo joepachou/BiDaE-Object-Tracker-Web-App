@@ -211,7 +211,7 @@ const en =  {
 
     /* field */
     NAME: "name",
-    EMAIL: "email",
+    EMAIL: "email address",
     PATIENT_NAME: "patient name",
     KEY: "key",
     TYPE: "type",

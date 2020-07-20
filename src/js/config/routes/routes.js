@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        App.js
+        routes.js
 
     File Description:
         BOT UI component
@@ -34,36 +34,38 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
-import React from 'react';
-import AppContext from './js/context/AppContext';
-import PrivateRoutes from '../src/js/PrivateRoutes';
-import { ToastContainer } from 'react-toastify';
-import config from './js/config';
-import { 
-    BrowserRouter,
-    Route,  
-    Switch
-} from 'react-router-dom';
-import publicRoutes from './js/config/routes/publicRoutesConfig';
+const routes = {
 
-const App = () => {
-    return (
-        <AppContext>
-            <BrowserRouter>     
-                <Switch>
-                    {publicRoutes.map(route => {
-                        return <Route path={route.path} exact component={route.component} />
+    HOME: '/',
 
-                    })}
-                    <PrivateRoutes />
-                </Switch>
-            </BrowserRouter>
-            <ToastContainer {...config.TOAST_PROPS} />
-        </AppContext>
-    );
-};
+    SYSTEM_SETTINGS: '/page/systemSetting',
 
-export default App;
+    OBJECT_MANAGEMENT: '/page/objectManagement',
 
+    USER_SETTINGS: '/page/userSetting',
 
+    BIG_SCREEN: '/page/bigScreen',
 
+    ABOUT: '/page/about',
+
+    TRACE: '/page/trace',
+
+    CONTACT_TREE: '/page/contactTree',
+
+    MONITOR_SETTINGS: '/page/monitor',
+
+    RECORDS: '/page/report',
+
+    LOGIN: '/login',
+
+    FORGET_PASSWORD: '/resetpassword',
+
+    RESET_PASSWORD: '/resetpassword/new/:token',
+
+    RESET_PASSWORD_RESULT: '/resetpassword/success',
+
+    RESET_PASSWORD_INSTRUCTION: '/resetpassword/instruction'
+
+}
+
+export default routes;
