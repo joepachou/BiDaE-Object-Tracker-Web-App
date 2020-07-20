@@ -38,7 +38,7 @@ const routes = {
 
     HOME: '/',
 
-    SYSTEM_SETTINGS: '/page/systemSetting',
+    SETTINGS: '/page/setting',
 
     OBJECT_MANAGEMENT: '/page/objectManagement',
 
@@ -64,7 +64,9 @@ const routes = {
 
     RESET_PASSWORD_RESULT: '/resetpassword/success',
 
-    RESET_PASSWORD_INSTRUCTION: '/resetpassword/instruction'
+    RESET_PASSWORD_INSTRUCTION: '/resetpassword/instruction',
+
+    BOT_ADMIN: '/page/BOTAdmin',
 
 }
 

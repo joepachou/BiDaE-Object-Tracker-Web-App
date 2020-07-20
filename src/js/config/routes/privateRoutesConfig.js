@@ -47,6 +47,7 @@ import MonitorSettingContainer from "../../components/container/menuContainer/Mo
 import ReportContainer from "../../components/container/menuContainer/ReportContainer";
 import TrackingHistoryContainer from '../../components/container/menuContainer/TrackingHistoryContainer';
 import routes from './routes';
+import BOTAdminContainer from '../../components/container/menuContainer/BOTAdminContainer';
 
 const privateRoutesConfig = [
     {
@@ -54,9 +55,8 @@ const privateRoutesConfig = [
         component: MainContainer,
         exact: true,
     },
-    
     {
-        path: routes.SYSTEM_SETTINGS,
+        path: routes.SETTINGS,
         component: SystemSetting,
         exact: true,
     },
@@ -98,6 +98,11 @@ const privateRoutesConfig = [
     {
         path: routes.RECORDS,
         component: ReportContainer,
+        exact: true,
+    },
+    {
+        path: routes.BOT_ADMIN,
+        component: BOTAdminContainer,
         exact: true,
     },
 ];

@@ -51,6 +51,8 @@ import ObjectEditedRecord from '../components/container/UserContainer/ObjectEdit
 import ShiftChangeRecord from '../components/container/UserContainer/ShiftChangeRecord';
 import TrackingTable from '../components/container/TrackingTable';
 import TraceContainer from '../components/container/menuContainer/TraceContainer';
+import BOTAdmin from '../components/container/menuContainer/BOTAdminContainer';
+import routes from '../config/routes/routes';
 
 
 export const userContainerModule = {
@@ -81,42 +83,87 @@ export const userContainerModule = {
     ],
 }
 
-export const systemSettingModule = {
+// export const systemSettingModule = {
 
-    title: 'system setting',
+//     title: 'system setting',
 
-    defaultActiveKey: 'user_manager',
+//     defaultActiveKey: 'user_manager',
 
-    path: "/page/systemSetting",
+//     path: "/page/systemSetting",
+
+//     tabList: [
+//         {
+//             name: 'user manager',
+//             permission: "route:bigScreen",
+//             component: (props) => <AdminManagementContainer {...props}/>,
+//             platform: ['browser', 'tablet'],
+//         },
+//         {
+//             name: "transferred location management",
+//             component: (props) => <TransferredLocationManagement {...props}/>,
+//             platform: ['browser'],
+//         },
+//         {
+//             name: "Role Permission Management",
+//             permission: "rolePermissionManagement",
+//             component: (props) => <RolePermissionManagement {...props}/>,
+//             platform: ['browser']
+//         },
+//         {
+//             name: "lbeacon",
+//             component: (props) => <LBeaconTable {...props}/>,
+//             platform: ['browser', 'tablet', 'mobile']
+//         },
+//         {
+//             name: "gateway",
+//             component: (props) => <GatewayTable {...props}/>,
+//             platform: ['browser', 'tablet', 'mobile']
+//         }
+//     ]
+// }
+
+export const settingModule = {
+
+    title: 'settings',
+
+    defaultActiveKey: 'user_profile',
+
+    path: routes.SETTINGS,
 
     tabList: [
         {
-            name: 'user manager',
-            permission: "route:bigScreen",
-            component: (props) => <AdminManagementContainer {...props}/>,
-            platform: ['browser', 'tablet'],
+            name: 'user profile',
+            component: (props) => <UserProfile />
         },
-        {
-            name: "transferred location management",
-            component: (props) => <TransferredLocationManagement {...props}/>,
-            platform: ['browser'],
-        },
-        {
-            name: "Role Permission Management",
-            permission: "rolePermissionManagement",
-            component: (props) => <RolePermissionManagement {...props}/>,
-            platform: ['browser']
-        },
-        {
-            name: "lbeacon",
-            component: (props) => <LBeaconTable {...props}/>,
-            platform: ['browser', 'tablet', 'mobile']
-        },
-        {
-            name: "gateway",
-            component: (props) => <GatewayTable {...props}/>,
-            platform: ['browser', 'tablet', 'mobile']
-        }
+        // {
+        //     name: "transferred location management",
+        //     component: (props) => <TransferredLocationManagement {...props}/>,
+        //     platform: ['browser'],
+        // },
+        // {
+        //     name: "Role Permission Management",
+        //     permission: "rolePermissionManagement",
+        //     component: (props) => <RolePermissionManagement {...props}/>,
+        //     platform: ['browser']
+        // },
+        // {
+        //     name: "monitor setting",
+        //     alias: "monitor",
+        //     path: "/page/monitor",
+        //     module: monitorSettingModule,
+        //     permission: "route:monitor",
+        //     platform: ['browser', 'tablet']
+        // },
+        // {
+        //     name: "lbeacon",
+        //     component: (props) => <LBeaconTable {...props}/>,
+        //     platform: ['browser', 'tablet', 'mobile']
+        // },
+        // {
+        //     name: "gateway",
+        //     component: (props) => <GatewayTable {...props}/>,
+        //     platform: ['browser', 'tablet', 'mobile']
+        // }
     ]
 }
 
@@ -124,9 +171,9 @@ export const monitorSettingModule= {
     
     title: "monitor setting",
 
-    path: "/page/monitor",
-
     defaultActiveKey: "movement_monitor",
+
+    path: routes.MONITOR_SETTINGS,
 
     tabList: [
         {
@@ -154,7 +201,7 @@ export const trackingHistoryContainerModule = {
 
     defaultActiveKey: "real_time_record",
 
-    path: '/page/trace',
+    path: routes.TRACE,
     
     tabList: [
         {
@@ -178,7 +225,7 @@ export const reportContainerModule = {
 
     defaultActiveKey: "object_edited_record",
 
-    path: "/page/report",
+    path: routes.RECORDS,
     
     tabList: [
         {
@@ -195,11 +242,50 @@ export const reportContainerModule = {
 
 }
 
+export const BOTAdminModule = {
+
+    title: 'BOT admin',
+
+    defaultActiveKey: 'user_manager',
+
+    path: routes.BOT_ADMIN,
+
+    tabList: [
+        {
+            name: 'user manager',
+            permission: "route:bigScreen",
+            component: (props) => <AdminManagementContainer {...props}/>,
+            platform: ['browser', 'tablet'],
+        },
+        // {
+        //     name: "transferred location management",
+        //     component: (props) => <TransferredLocationManagement {...props}/>,
+        //     platform: ['browser'],
+        // },
+        {
+            name: "Role Permission Management",
+            permission: "rolePermissionManagement",
+            component: (props) => <RolePermissionManagement {...props}/>,
+            platform: ['browser']
+        },
+        // {
+        //     name: "lbeacon",
+        //     component: (props) => <LBeaconTable {...props}/>,
+        //     platform: ['browser', 'tablet', 'mobile']
+        // },
+        // {
+        //     name: "gateway",
+        //     component: (props) => <GatewayTable {...props}/>,
+        //     platform: ['browser', 'tablet', 'mobile']
+        // }
+    ]
+}
+
 export const navbarNavList = [
     {
         name: 'home',
         alias: 'home',
-        path: '/',
+        path: routes.HOME,
         hasEvent: true
     },
     // {
@@ -213,18 +299,35 @@ export const navbarNavList = [
     {
         name: 'object management',
         alias: 'objectManagement',
-        path: '/page/objectManagement',
+        path: routes.OBJECT_MANAGEMENT,
         permission: 'route:objectManagement',
         hasEvent: true
     },
     {
-        name: "system setting",
-        alias: "systemSetting",
-        path: "/page/systemSetting",
-        module: systemSettingModule,
-        permission: "route:systemSetting",
+        name: "BOT Admin",
+        alias: "BOTAdmin",
+        path: routes.BOT_ADMIN,
+        module: BOTAdminModule,
+        permission: "route:setting",
         platform: ['browser', 'tablet', 'mobile'],
     },
+    {
+        name: "record",
+        alias: "record",
+        path: routes.RECORDS,
+        module: reportContainerModule,
+        permission: "route:report",
+        platform: ['browser', 'tablet', 'mobile'],
+    },
+    {
+        name: "settings",
+        alias: "settings",
+        path: routes.SETTINGS,
+        module: settingModule,
+        permission: "route:setting",
+        platform: ['browser', 'tablet', 'mobile'],
+    },
+    
     // {
     //     name: 'tracking history',
     //     alias: 'trackinghistory',
@@ -240,15 +343,6 @@ export const navbarNavList = [
     //     permission: "route:monitor",
     //     platform: ['browser', 'tablet']
     // },
-    {
-        name: "report",
-        alias: "report",
-        path: "/page/report",
-        module: reportContainerModule,
-        permission: "route:report",
-        platform: ['browser', 'tablet', 'mobile'],
-    },
-
     // {
     //     name: 'contact tree',
     //     alias: 'contactTree',

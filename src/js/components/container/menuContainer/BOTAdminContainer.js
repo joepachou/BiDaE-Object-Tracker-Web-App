@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        SystemSetting.js
+        BOTAdmin.js
 
     File Description:
         BOT UI component
@@ -35,11 +35,7 @@
 */
 
 import React, {Fragment} from 'react';
-import messageGenerator from '../../../helper/messageGenerator'
-import { toast } from 'react-toastify';
-import {
-    settingModule
-} from '../../../config/pageModules'
+import { BOTAdminModule } from '../../../config/pageModules'
 import {
     isMobileOnly,
     isTablet,
@@ -54,11 +50,11 @@ import {
 import MobilePageComponent from '../../platform/mobile/mobilePageComponent'
 import BrowserPageComponent from '../../platform/browser/BrowserPageComponent';
 import TabletPageComponent from '../../platform/tablet/TabletPageComponent'
-import locale from 'antd/lib/date-picker/locale/en_US';
 
-class SystemSetting extends React.Component{
 
-    containerModule = settingModule
+class BOTAdmin extends React.Component{
+
+    containerModule = BOTAdminModule
 
     componentDidMount = () => {
 
@@ -74,24 +70,6 @@ class SystemSetting extends React.Component{
         disableBodyScroll(targetElement);
     }
 
-    setMessage = (type, msg, isSetting) => {
-
-        switch(type) {
-            case 'success':
-                this.toastId = messageGenerator.setSuccessMessage(msg)
-                break;
-            case 'error':
-                if (isSetting && !this.toastId) {
-                    this.toastId = messageGenerator.setErrorMessage(msg)
-                } 
-                break;
-            case 'clear':
-                this.toastId = null;
-                toast.dismiss(this.toastId)
-                break;
-        }
-    }
-
     render() {
 
         let {
@@ -99,25 +77,22 @@ class SystemSetting extends React.Component{
         } = this.props
 
         this.containerModule.defaultActiveKey = location.state ? location.state.key : this.containerModule.defaultActiveKey
-        
+
         return (
             <Fragment>
                 <BrowserView>
                     <BrowserPageComponent 
                         containerModule={this.containerModule}
-                        setMessage={this.setMessage}
                     /> 
                 </BrowserView>
                 <TabletView>
                     <TabletPageComponent
                         containerModule={this.containerModule}
-                        setMessage={this.setMessage}
                     />
                 </TabletView>
                 <MobileOnlyView>
                     <MobilePageComponent
                         containerModule={this.containerModule}
-                        setMessage={this.setMessage}
                     />
                 </MobileOnlyView>
             </Fragment>
@@ -125,4 +100,4 @@ class SystemSetting extends React.Component{
     }
 }
 
-export default SystemSetting
+export default BOTAdmin
