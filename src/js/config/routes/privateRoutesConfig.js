@@ -107,4 +107,9 @@ const privateRoutesConfig = [
     },
 ];
 
+export const privateRouteParam = [
+    'page',
+    'resetpassword'
+]
+
 export default privateRoutesConfig;

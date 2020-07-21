@@ -50,6 +50,8 @@ const routes = {
 
     TRACE: '/page/trace',
 
+    BOT_ADMIN: '/page/BOTAdmin',
+
     CONTACT_TREE: '/page/contactTree',
 
     MONITOR_SETTINGS: '/page/monitor',
@@ -60,13 +62,11 @@ const routes = {
 
     FORGET_PASSWORD: '/resetpassword',
 
-    RESET_PASSWORD: '/resetpassword/new/:token',
+    RESET_PASSWORD: '/reset/new/:token',
 
     RESET_PASSWORD_RESULT: '/resetpassword/success',
 
     RESET_PASSWORD_INSTRUCTION: '/resetpassword/instruction',
-
-    BOT_ADMIN: '/page/BOTAdmin',
 
 }
 

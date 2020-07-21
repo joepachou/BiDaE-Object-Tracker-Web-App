@@ -59,6 +59,9 @@ import {
     useHistory
 } from 'react-router-dom';
 import apiHelper from '../../helper/apiHelper';
+import {
+    emailValidation
+} from '../../helper/validation';
 
 const imageLength = 80;
 
@@ -90,14 +93,19 @@ const ForgetPassword = () => {
 
                 validationSchema = {
                     Yup.object().shape({
- 
+                        email: Yup.string().required(locale.texts.REQUIRED)
+                            .test(
+                                'email',
+                                locale.texts.EMAIL_ADDRESS_FORMAT_IS_INCORRECT,
+                                emailValidation
+                            )
                 })}
 
                 onSubmit={(values, {setStatus} ) => {
                     const {
                         email
                     } = values
-
+                    setStatus("verifying")
                     apiHelper.authApiAgent.sentResetPwdInstruction({
                         email
                     })
@@ -111,12 +119,12 @@ const ForgetPassword = () => {
 
                 render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
                     <Form>
-                        {status &&
+                        {errors.email && touched.email &&
                             <div 
                                 className='alert alert-danger mb-2 warning'
                             >
                                 <i className="fas fa-times-circle mr-2"/>
-                                {locale.texts[status.toUpperCase().replace(/ /g, "_")]}
+                                {errors.email}
                             </div>
                         }
                         <FormikFormGroup 
