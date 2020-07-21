@@ -48,7 +48,6 @@ import {
     TabletView
 } from 'react-device-detect';
 import { disableBodyScroll } from 'body-scroll-lock';
-import retrieveDataHelper from '../../helper/retrieveDataHelper';
 import messageGenerator from '../../helper/messageGenerator';
 import TabletMainContainer from '../platform/tablet/TabletMainContainer'
 import MobileMainContainer from '../platform/mobile/MobileMainContainer';
@@ -269,18 +268,18 @@ class MainContainer extends React.Component{
         let cloneConfig = _.cloneDeep(this.state[configName])
 
         let enable = + !cloneConfig[areaId].enable
-        retrieveDataHelper.setMonitorEnable(
-            enable,
-            areaId,
-            config.monitor[type].api
-        )
-        .then(res => {
-            console.log(`set ${type} enable succeed`)
-            setTimeout(() => this[triggerMonitorFunctionName](callback), 1000)
-        })
-        .catch(err => {
-            console.log(`set ${type} enable failed ${err}`)
-        })
+        // retrieveDataHelper.setMonitorEnable(
+        //     enable,
+        //     areaId,
+        //     config.monitor[type].api
+        // )
+        // .then(res => {
+        //     console.log(`set ${type} enable succeed`)
+        //     setTimeout(() => this[triggerMonitorFunctionName](callback), 1000)
+        // })
+        // .catch(err => {
+        //     console.log(`set ${type} enable failed ${err}`)
+        // })
     }
 
     /** Get tracking data from database.

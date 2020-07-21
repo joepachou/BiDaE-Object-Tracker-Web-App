@@ -41,8 +41,6 @@ import {
     ButtonToolbar,
     Button
 } from "react-bootstrap"
-import axios from "axios"
-import dataSrc from "../../dataSrc"
 import config from "../../config"
 import ReactTable from 'react-table';
 import styleConfig from '../../config/styleConfig';
@@ -56,7 +54,6 @@ import {
     PrimaryButton
 } from '../BOTComponent/styleComponent';
 import AccessControl from '../authentication/AccessControl';
-import retrieveDataHelper from '../../helper/retrieveDataHelper';
 import apiHelper from '../../helper/apiHelper';
 
 class MonitorSettingBlock extends React.Component{

@@ -46,6 +46,7 @@ import roleApiAgent from '../apiAgent/roleApiAgent';
 import areaApiAgent from '../apiAgent/areaApiAgent';
 import lbeaconApiAgent from '../apiAgent/lbeaconApiAgent';
 import gatewayApiAgent from '../apiAgent/gatewayApiAgent';
+import importedObjectApiAgent from '../apiAgent/importedObjectApiAgent';
 
 const apiHelper = {
 
@@ -56,6 +57,8 @@ const apiHelper = {
     record,
 
     objectApiAgent,
+
+    importedObjectApiAgent,
 
     transferredLocationApiAgent,
 

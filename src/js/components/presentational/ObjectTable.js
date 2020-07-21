@@ -58,7 +58,6 @@ import {
 import AccessControl from '../authentication/AccessControl';
 import messageGenerator from '../../helper/messageGenerator';
 import { objectTableColumn } from '../../config/tables';
-import retrieveDataHelper from '../../helper/retrieveDataHelper'; 
 import config from '../../config';
 import apiHelper from '../../helper/apiHelper';
 import {
@@ -215,9 +214,10 @@ class ObjectTable extends React.Component{
 
     getImportData = (callback) => {
         let { locale } = this.context
-        retrieveDataHelper.getImportedObjectTable(
-            locale.abbr
-        )
+
+        apiHelper.importedObjectApiAgent.getImportedObjectTable({
+            locale: locale.abbr,
+        })
         .then(res => {
             this.setState({
                 importData: res.data.rows,

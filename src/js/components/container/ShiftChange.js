@@ -9,7 +9,6 @@ import moment from 'moment'
 import config from '../../config';
 import { AppContext } from '../../context/AppContext';
 import GeneralConfirmForm from '../presentational/GeneralConfirmForm';
-import retrieveDataHelper from '../../helper/retrieveDataHelper';
 import DownloadPdfRequestForm from './DownloadPdfRequestForm';
 import Select from 'react-select';
 import messageGenerator from '../../helper/messageGenerator';

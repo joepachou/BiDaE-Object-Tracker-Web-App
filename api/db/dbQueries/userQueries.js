@@ -183,7 +183,8 @@ module.exports = {
 			UPDATE user_table
 			SET 
 				name = '${user.name}',
-				main_area = ${user.main_area}
+				main_area = ${user.main_area},
+				email = '${user.email}'
 			WHERE id = ${user.id};
 
 			INSERT INTO user_role (
