@@ -192,15 +192,15 @@ module.exports = {
 
 	},
 
-	resetPassword: (user_id, hash) => {
+	resetPassword: (email, hash) => {
 		let text = `
 			UPDATE user_table
 			SET password = $2
-			WHERE id = $1;
+			WHERE email = $1;
 		`
 
 		let values = [
-			user_id, 
+			email, 
 			hash
 		]
 
@@ -216,7 +216,7 @@ module.exports = {
 		let text = `
 			SELECT 
 				id,
-				 
+				registered_timestamp
 			FROM user_table
 			WHERE email = LOWER($1)
 		`

@@ -43,6 +43,7 @@ const mailTransporter = require('../service/mailTransporter');
 const { resetPasswordInstruction } = require('../config/template');
 const jwt = require('jsonwebtoken');
 const path = require('path');
+const { decode } = require('punycode');
 
 module.exports = {
 
@@ -193,9 +194,14 @@ module.exports = {
             .then(res => {
                 if (res.rowCount != 0) {
 
-                    console.log(res)
+                    let {
+                        id,
+                        password,
+                        registered_timestamp
+                    } = res.rows[0]
                     var token = jwt.sign({
-                        // exp: Math.floor(Date.now() / 1000) + (60 * 60),
+                        exp: Math.floor(Date.now() / 1000) + (60 * 60),
+                        registered_timestamp,
                         email,
                     }, encrypt.secret);
             
@@ -231,36 +237,44 @@ module.exports = {
     verifyResetPwdToken: (request, response) => {
         let token = request.params.token
 
-        let decoded = jwt.verify(token, encrypt.secret);
-
-        if (decoded) {
-            response.sendFile(path.join(__dirname, '..', '..', 'dist', 'index.html'));
-        } else {
-            response.redirect('/')
-        }
+        jwt.verify(token, encrypt.secret, (err, decoded) => {
+            if (err) {
+                response.redirect('/')
+            } else {
+                response.sendFile(path.join(__dirname, '..', '..', 'dist', 'index.html'));
+            }
+        })
     },
     
     resetPassword: (request, response) => {
+
         let {
             token,
             password
         } = request.body
-        
-        let decoded = jwt.verify(token, encrypt.secret);
 
-        let user_id = 35;
+        jwt.verify(token, encrypt.secret, (err, decoded) => {
+            if (err) {
+                console.log(`reset password failed ${err}`)
+            } else {
 
-        const hash = encrypt.createHash(password);
+                let {
+                    email
+                } = decoded
 
-        pool.query(dbQueries.resetPassword(user_id, hash))
-        .then(res => {
-            console.log(`reset password succeed`)
-            response.status(200).json();
+                const hash = encrypt.createHash(password);
+
+                pool.query(dbQueries.resetPassword(email, hash))
+                .then(res => {
+                    console.log(`reset password succeed`)
+                    response.status(200).json();
+                })
+                .catch(err => {
+                    console.log(`reset password failed ${err}`)
+                })
+            }
         })
-        .catch(err => {
-            console.log(`reset password failed ${err}`)
-        })
-
+    
 
     }
 }

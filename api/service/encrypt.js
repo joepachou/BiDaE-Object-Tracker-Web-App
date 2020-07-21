@@ -38,11 +38,13 @@ const crypto = require('crypto');
 
 require('dotenv').config()
 
+const secret = process.env.KEY
+
 const createHash = password => {
 
-    const secret = process.env.KEY
+    const algorithm = 'sha256';
 
-    return crypto.createHash('sha256', secret) 
+    return crypto.createHash(algorithm, secret) 
         .update(password)                     
         .digest('hex');     
 }
@@ -69,4 +71,5 @@ const decrypt = encrypted => {
 module.exports = {
     createHash,
     decrypt,
+    secret,
 }
