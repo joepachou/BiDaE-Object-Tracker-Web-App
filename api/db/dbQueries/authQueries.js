@@ -138,7 +138,7 @@ module.exports = {
 	},
 
 
-	validation: username => {
+	validateUsername: username => {
 		let text = `
 			SELECT 
 				user_table.name, 
@@ -161,7 +161,7 @@ module.exports = {
 					WHERE user_role.user_id = (
 						SELECT id
 						FROM user_table 
-						WHERE user_table.name = '${username}'
+						WHERE user_table.name = $1
 					)
 				) as roles
 
@@ -179,7 +179,9 @@ module.exports = {
 			WHERE user_table.name = $1;
 		`
 
-		const values = [username];
+		const values = [
+			username
+		];
 
 		const query = {
 			text,
@@ -208,5 +210,24 @@ module.exports = {
 		}
 
 		return query;
+	},
+
+	validateEmail: email => {
+		let text = `
+			SELECT 
+				id,
+				 
+			FROM user_table
+			WHERE email = LOWER($1)
+		`
+
+		let values = [
+			email
+		]
+
+		return {
+			text,
+			values
+		}
 	}
 }

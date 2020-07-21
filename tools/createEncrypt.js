@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        session.js
+        createEncrypt.js
 
     File Description:
         BOT UI component
@@ -34,22 +34,22 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
-require('dotenv').config();
-const session = require('express-session');
-const pgSession = require('connect-pg-simple')(session);
-const pool = require('../db/dev/connection');
+const crypto = require('crypto');
 
-const sessionOptions = {
-    store: new pgSession({
-        pool,             
-        tableName: process.env.SESSION_TABLE_NAME   
-    }),
-    secret: process.env.KEY,
-    resave: true,
-    saveUninitialized: true,
-    cookie: {
-        // maxAge: 1000 
-    }
-}
+const algorithm = 'aes-192-cbc';
 
-module.exports = sessionOptions
+const password = process.argv[3] || '';
+
+const toEncrypt = process.argv[2]
+
+const key = crypto.scryptSync(password, 'salt', 24);
+
+const iv = Buffer.alloc(16, 0);
+
+const cipher = crypto.createCipheriv(algorithm, key, iv);
+
+let encrypted = cipher.update(toEncrypt, 'utf8', 'hex');
+
+encrypted += cipher.final('hex');
+
+console.log(encrypted);

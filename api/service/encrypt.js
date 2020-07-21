@@ -36,14 +36,37 @@
 
 const crypto = require('crypto');
 
+require('dotenv').config()
+
 const createHash = password => {
-    const secret = 'BeDIS@1807'; 
+
+    const secret = process.env.KEY
+
     return crypto.createHash('sha256', secret) 
         .update(password)                     
-        .digest('hex'); 
+        .digest('hex');     
+}
+
+const decrypt = encrypted => {
+
+    const algorithm = 'aes-192-cbc';
+
+    const password = process.env.KEY
+
+    const key = crypto.scryptSync(password, 'salt', 24);
+
+    const iv = Buffer.alloc(16, 0); // Initialization vector.
     
+    const decipher = crypto.createDecipheriv(algorithm, key, iv);
+    
+    let decrypted = decipher.update(encrypted, 'hex', 'utf8');
+
+    decrypted += decipher.final('utf8');
+
+    return decrypted
 }
 
 module.exports = {
-    createHash
+    createHash,
+    decrypt,
 }

@@ -122,7 +122,7 @@ module.exports = {
             })
 
             .catch(err => {
-                console.log(`sigin fails ${err}`)       
+                console.log(`sigin failed ${err}`)       
             })
     },
 
@@ -138,7 +138,8 @@ module.exports = {
             username, 
             password 
         } = request.body 
-        pool.query(dbQueries.validation(username))
+
+        pool.query(dbQueries.validateUsername(username))
             .then(res => {
                 if (res.rowCount < 1) {
                     console.log(`confirm validation failed: incorrect`)
@@ -188,32 +189,49 @@ module.exports = {
             email
         } = request.body;
 
-        var token = jwt.sign({
-            // exp: Math.floor(Date.now() / 1000) + (60 * 60),
-            email,
-        }, 'shhhhh');
-
-        const message = {
-            from: 'ossf402@gmail', // Sender address
-            to: 'joechou@iis.sinica.edu.tw',
-            subject: 'BOT Password Assistance', 
-            html: resetPasswordInstruction(token)
-        };
-        
-        mailTransporter.sendMail(message)
+        pool.query(dbQueries.validateEmail(email))
             .then(res => {
-                console.log('send password reset instruction succeed')
-                response.status(200).json()
+                if (res.rowCount != 0) {
+
+                    console.log(res)
+                    var token = jwt.sign({
+                        // exp: Math.floor(Date.now() / 1000) + (60 * 60),
+                        email,
+                    }, encrypt.secret);
+            
+                    const message = {
+                        from: 'BiDaEAssistCenter@gmail', // Sender address
+                        to: email,
+                        subject: resetPasswordInstruction.subject, 
+                        html: resetPasswordInstruction.content(token)
+                    };
+                    
+                    mailTransporter.sendMail(message)
+                        .then(res => {
+                            console.log('send password reset instruction succeed')
+                            response.status(200).json()
+                        })
+                        .catch(err => {
+                            console.log(`send password reset instruction failed ${err}`)
+                        })
+
+                } else {
+                    console.log(`email address does not match`)
+                    response.status(200).json({
+                        confirmation: false,
+                        message: 'email failed'
+                    })
+                }
             })
             .catch(err => {
-                console.log(`send password reset instruction failed ${err}`)
+                console.log(`email validation failed ${err}`);
             })
     },
  
     verifyResetPwdToken: (request, response) => {
         let token = request.params.token
 
-        let decoded = jwt.verify(token, 'shhhhh');
+        let decoded = jwt.verify(token, encrypt.secret);
 
         if (decoded) {
             response.sendFile(path.join(__dirname, '..', '..', 'dist', 'index.html'));
@@ -228,7 +246,7 @@ module.exports = {
             password
         } = request.body
         
-        let decoded = jwt.verify(token, 'shhhhh');
+        let decoded = jwt.verify(token, encrypt.secret);
 
         let user_id = 35;
 

@@ -34,20 +34,25 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
-const resetPasswordInstruction = token => {
-    return `
-        <div>
-            <p>Greetings from BiDaE Object Tracker Service,</p>
+const resetPasswordInstruction = {
 
-            <p>We received a request to reset the password for the BOT account associated with this e-mail address. Click the link below to reset your password using our secure server:</p>
-                        
-            http://localhost/resetpassword/new/${token}
+    subject: 'BOT Password Assistance',
 
-            <p>Sincerely,</p>
-            <p>The BOT Service Team
-            </p>
-        </div>
-    `
+    content: token => {
+        return `
+            <div>
+                <p>Greetings from BiDaE Object Tracker Service,</p>
+
+                <p>We received a request to reset the password for the BOT account associated with this e-mail address. Click the link below to reset your password using our secure server:</p>
+                            
+                http://localhost/resetpassword/new/${token}
+
+                <p>Sincerely,</p>
+                <p>The BOT Service Team
+                </p>
+            </div>
+        `
+    }
 }
 
 module.exports = {
