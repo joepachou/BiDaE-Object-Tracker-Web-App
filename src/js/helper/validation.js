@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        mailTransporter.js
+        validation.js
 
     File Description:
         BOT UI component
@@ -34,25 +34,7 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
-const nodemailer = require('nodemailer');
-require('dotenv');
-
-// let transport = nodemailer.createTransport({
-//     host: 'smtp.mailtrap.io',
-//     port: 2525,
-//     auth: {
-//        user: 'daf0bca0f4f7b1',
-//        pass: '50a28be26e3db7'
-//     }
-// });
-
-var transport = nodemailer.createTransport({
-    service: process.env.EMAIL_HOST,
-
-    auth: {
-      user: process.env.EMAIL_SENDER_ADDRESS,
-      pass: 'jane1807',
-    },
-});
-
-module.exports = transport;
+export const emailValidation = (email) => {
+    let req = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
+    return req.test(email)
+}

@@ -53,6 +53,7 @@ import Checkbox from '../../presentational/Checkbox';
 import FormikFormGroup from '../../presentational/FormikFormGroup';
 import styleConfig from '../../../config/styleConfig';
 import LocaleContext from '../../../context/LocaleContext';
+import { emailValidation } from '../../../helper/validation';
 
 const EditUserForm = ({
     show,
@@ -100,7 +101,7 @@ const EditUserForm = ({
                     validationSchema = {
                         Yup.object().shape({
                             name: Yup.string()
-                                .required(locale.texts.USERNAME_IS_REQUIRED)
+                                .required(locale.texts.REQUIRED)
                                 .test({
                                     name: 'name', 
                                     message: locale.texts.THE_USERNAME_IS_ALREADY_TAKEN,
@@ -130,9 +131,9 @@ const EditUserForm = ({
                                     20,
                                     locale.texts.LIMIT_IN_TWENTY_CHARACTER
                                 ),
-                            area: selectedUser ? null : Yup.object().required(locale.texts.AREA_IS_REQUIRED),
+                            area: selectedUser ? null : Yup.object().required(locale.texts.REQUIRED),
                             password: selectedUser ? '' : 
-                                Yup.string().required(locale.texts.PASSWORD_IS_REQUIRED)
+                                Yup.string().required(locale.texts.REQUIRED)
                                 .test(
                                     'password',
                                     locale.texts.NOT_ALLOW_PUNCTUATION,
@@ -148,7 +149,13 @@ const EditUserForm = ({
                                     20,
                                     locale.texts.LIMIT_IN_TWENTY_CHARACTER
                                 ),
-                            roles: Yup.string().required(locale.texts.ROLE_IS_REQUIRED)
+                            roles: Yup.string().required(locale.texts.ROLE_IS_REQUIRED),
+                            email: Yup.string().required(locale.texts.REQUIRED)
+                                    .test(
+                                        'email',
+                                        locale.texts.EMAIL_ADDRESS_FORMAT_IS_INCORRECT,
+                                        emailValidation
+                                    )
                         })
                     }
 
