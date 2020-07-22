@@ -99,3 +99,8 @@ export const transferMonitorTypeToString = (item, type) => {
             return checkboxGroup
         }, []).join('/')
 }
+
+/** Check if the collection contains the type code */
+export const monitorTypeChecker = (collect, typeCode) => {
+    return collect & typeCode;
+}

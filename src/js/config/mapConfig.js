@@ -36,6 +36,7 @@
 
 import siteConfig from '../../../site_module/siteConfig';
 import viewConfig from '../config/viewConfig';
+import { monitorTypeChecker } from '../helper/dataTransfer';
 
 /** Map configuration.
  *  Refer leaflet.js for more optional setting https://leafletjs.com/reference-1.5.0.html
@@ -310,7 +311,9 @@ const mapConfig = {
         "yellowgreen",
         "sos",
         "female",
-        "male"
+        "male",
+        "blackRound",
+        "whiteRound"
     ],
 
     iconColor: {
@@ -325,6 +328,8 @@ const mapConfig = {
         male: "male",
         female_1: "female_2",
         male_1: "male_1",
+        blackBed: "blackRound",
+        whiteBed: "whiteRound",
 
         // ["slateblue", "tan", "lightyellow", "lavender", "orange","lightblue", "mistyrose", "yellowgreen", "darkseagreen", "orchid"]
         pinColorArray: ["slateblue", "orange", "yellowgreen", "lightblue", "tan"]
@@ -336,7 +341,8 @@ const mapConfig = {
         if (item.panic) return this.iconColor.sos
 
         if (item.object_type == 0) {
-            if (hasColorPanel) return item.pinColor
+            if (monitorTypeChecker(item.monitor_type, 16)) return mapConfig.iconColor.blackBed
+            else if (hasColorPanel) return item.pinColor
             else if (item.searched) return mapConfig.iconColor.searched
             else if (item.status !== mapConfig.objectStatus.NORMAL) return mapConfig.iconColor.unNormal
             else return mapConfig.iconColor.normal

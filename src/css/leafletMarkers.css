@@ -166,3 +166,11 @@
 .awesome-number-marker-icon-male_1 {
   background: url('../img/peoplePin/Male_5.png') no-repeat center/contain;
 }
+
+.awesome-number-marker-icon-blackRound {
+  background: url('../img/colorPin/black_round.png') no-repeat center/contain;
+}
+
+.awesome-number-marker-icon-whiteRound {
+  background: url('../img/colorPin/white_round.png') no-repeat center/contain;
+}

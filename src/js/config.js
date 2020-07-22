@@ -92,7 +92,7 @@ const config = {
     ],
 
     monitorTypeMap: {
-        object: [1],
+        object: [1, 16],
         patient: [1,2,4,8]
     },
 
@@ -182,6 +182,7 @@ const config = {
         2: "panic",
         4: "movement",
         8: "location",
+        16: "bed",
     },
 
     monitorSettingType: {

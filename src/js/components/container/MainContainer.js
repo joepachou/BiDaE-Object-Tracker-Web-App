@@ -299,15 +299,17 @@ class MainContainer extends React.Component{
             areaId
         })
         .then(res => {
+
             /** dismiss error message when the database is connected */
             if (this.errorToast) {
                 this.errorToast = null;
                 toast.dismiss(this.errorToast)
             }
 
+            let violatedObjects = _.cloneDeep(this.state.violatedObjects)
             /** collect violated objects as violatedObjects */
-            let violatedObjects = res.data.reduce((violatedObjects, item) => {
-                
+            res.data.map((item, index) => {
+
                 if (item.isViolated) {
                     item.notification.map(notice => {
                         let toastId = `${item.mac_address}-${notice.type}`
@@ -316,9 +318,8 @@ class MainContainer extends React.Component{
                         }
                     })
                 }
-                return violatedObjects
 
-            }, _.cloneDeep(this.state.violatedObjects))
+            })
 
             this.setState({
                 trackingData: res.data,

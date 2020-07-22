@@ -100,69 +100,68 @@ const getTrackingData = (request, response) => {
         userAuthenticatedAreasId,
         key
     ))        
-        .then(res => {
+    .then(res => {
+        
+        console.log('get tracking data')
 
-            console.log('get tracking data')
+        /** Filter the objects that do no belong the area */
+        const toReturn = res.rows
+        .filter(item => item.mac_address)
+        .map((item, index) => {
 
-            /** Filter the objects that do no belong the area */
-            const toReturn = res.rows
-            .filter(item => item.mac_address)
-            .map((item, index) => {
+            /** Parse lbeacon uuid into three field in an array: area id, latitude, longtitude */
+            let lbeacon_coordinate = item.lbeacon_uuid ? parseLbeaconCoordinate(item.lbeacon_uuid) : null;
 
-                /** Parse lbeacon uuid into three field in an array: area id, latitude, longtitude */
-                let lbeacon_coordinate = item.lbeacon_uuid ? parseLbeaconCoordinate(item.lbeacon_uuid) : null;
+            item.lbeacon_coordinate = lbeacon_coordinate
 
-                item.lbeacon_coordinate = lbeacon_coordinate
+            item.currentPosition = item.lbeacon_uuid ? calculatePosition(item) : null;
 
-                item.currentPosition = item.lbeacon_uuid ? calculatePosition(item) : null;
+            let lbeaconAreaId = lbeacon_coordinate ? lbeacon_coordinate[2] : null
 
-                let lbeaconAreaId = lbeacon_coordinate ? lbeacon_coordinate[2] : null
+            let isLbeaconMatchArea = lbeaconAreaId == currentAreaId
 
-                let isLbeaconMatchArea = lbeaconAreaId == currentAreaId
+            let isUserSObject = userAuthenticatedAreasId.includes(parseInt(item.area_id))
 
-                let isUserSObject = userAuthenticatedAreasId.includes(parseInt(item.area_id))
+            /** Flag the object that belongs to the current area or to the user's authenticated area */
+            item.isMatchedObject = isUserSObject && isLbeaconMatchArea
 
-                /** Flag the object that belongs to the current area or to the user's authenticated area */
-                item.isMatchedObject = isUserSObject && isLbeaconMatchArea
+            /** Set the boolean if the object's last_seen_timestamp is in the specific time period */
+            let isInTheTimePeriod = moment().diff(item.last_reported_timestamp, 'seconds') 
+                < process.env.OBJECT_FOUND_TIME_INTERVAL_IN_SEC;
 
-                /** Set the boolean if the object's last_seen_timestamp is in the specific time period */
-                let isInTheTimePeriod = moment().diff(item.last_reported_timestamp, 'seconds') 
-                    < process.env.OBJECT_FOUND_TIME_INTERVAL_IN_SEC;
+                /** Set the boolean if its rssi is below the specific rssi threshold  */
+            let isMatchRssi = item.rssi > process.env.RSSI_THRESHOLD ? 1 : 0;
+            
+            /** Flag the object that satisfied the time period and rssi threshold */
+            item.found = isInTheTimePeriod && isMatchRssi 
 
-                    /** Set the boolean if its rssi is below the specific rssi threshold  */
-                let isMatchRssi = item.rssi > process.env.RSSI_THRESHOLD ? 1 : 0;
-                
-                /** Flag the object that satisfied the time period and rssi threshold */
-                item.found = isInTheTimePeriod && isMatchRssi 
+            /** Set the residence time of the object */
+            item.residence_time = item.found 
+                ? moment(item.last_seen_timestamp).locale(locale).from(moment(item.first_seen_timestamp)) 
+                : item.last_reported_timestamp 
+                    ? moment(item.last_reported_timestamp).locale(locale).fromNow()
+                    : ""      
 
-                /** Set the residence time of the object */
-                item.residence_time = item.found 
-                    ? moment(item.last_seen_timestamp).locale(locale).from(moment(item.first_seen_timestamp)) 
-                    : item.last_reported_timestamp 
-                        ? moment(item.last_reported_timestamp).locale(locale).fromNow()
-                        : ""      
+            /** Flag the object's battery volumn is limiting */
+            if (item.battery_voltage >= parseInt(process.env.BATTERY_VOLTAGE_INDICATOR)                    
+                && item.found) {
+                    item.battery_indicator = 3;
+            } else if (item.battery_voltage < parseInt(process.env.BATTERY_VOLTAGE_INDICATOR) && item.battery_voltage > 0 && item.found) {
+                item.battery_indicator = 2;
+            } else {
+                item.battery_indicator = 0
+            }
 
-                /** Flag the object's battery volumn is limiting */
-                if (item.battery_voltage >= parseInt(process.env.BATTERY_VOLTAGE_INDICATOR)                    
-                    && item.found) {
-                        item.battery_indicator = 3;
-                } else if (item.battery_voltage < parseInt(process.env.BATTERY_VOLTAGE_INDICATOR) && item.battery_voltage > 0 && item.found) {
-                    item.battery_indicator = 2;
-                } else {
-                    item.battery_indicator = 0
-                }
+            /** Delete the unused field of the object */
+            delete item.first_seen_timestamp
+            // delete item.last_seen_timestamp
+            delete item.panic_violation_timestamp
+            delete item.lbeacon_uuid
+            delete item.base_x
+            delete item.base_y
 
-                /** Delete the unused field of the object */
-                delete item.first_seen_timestamp
-                // delete item.last_seen_timestamp
-                delete item.panic_violation_timestamp
-                delete item.lbeacon_uuid
-                delete item.monitor_type
-                delete item.base_x
-                delete item.base_y
-
-                return item
-            })
+            return item
+        })
         response.status(200).json(toReturn)
 
     }).catch(err => {

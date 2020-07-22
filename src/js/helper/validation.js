@@ -36,5 +36,5 @@
 
 export const emailValidation = (email) => {
     let req = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
-    return req.test(email)
+    return req.test(email);
 }
