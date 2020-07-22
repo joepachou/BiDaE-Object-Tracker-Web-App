@@ -45,7 +45,6 @@ import LocaleContext from '../../context/LocaleContext';
 import AuthContext from '../../context/AuthenticationContext';
 import { 
     Formik, 
-    Field, 
     Form, 
     ErrorMessage 
 } from 'formik';
@@ -53,13 +52,13 @@ import * as Yup from 'yup';
 import {
     CenterContainer
 } from '../BOTComponent/styleComponent';
-import styleConfig from '../../config/styleConfig';
 import FormikFormGroup from '../presentational/FormikFormGroup';
 import { 
     Link, 
     useHistory
 } from 'react-router-dom';
 import Licence from '../BOTComponent/Licence';
+import routes from '../../config/routes/routes';
 
 
 
@@ -126,27 +125,33 @@ const SigninPage = () => {
                             type="text"
                             name="username"
                             className="mb-4"
+                            error={errors.username}
+                            touched={touched.username}
                             label={locale.texts.NAME}    
+                            tabindex={1}
                         />  
                         <FormikFormGroup 
                             type="password"
                             name="password"
                             className="mb-4"
-                            additionalField='forget password'
+                            error={errors.password}
+                            touched={touched.password}
                             additionalComponent={() => (
                                 <Link
-                                    to={'/resetpassword'}
+                                    to={routes.FORGET_PASSWORD}
                                 >
                                     {locale.texts.FORGET_PASSWORD}
                                 </Link>
                             )}
                             label={locale.texts.PASSWORD}    
+                            tabindex={2}
                         />  
                         <div className='d-flex justify-content-start'>
                             <Button 
                                 type="submit" 
                                 variant="primary" 
                                 disabled={isSubmitting}
+                                tabindex={3}
                             >
                                 {locale.texts.SIGN_IN}
                             </Button>
