@@ -211,6 +211,7 @@ const en =  {
     EXPORT_CSV: "export CSV",
     EXPORT_PDF: "export PDF",
     SEND_RESET_INSTRUCTION: "send reset instruction",
+    DETAIL: "detail",
 
     /* field */
     NAME: "name",

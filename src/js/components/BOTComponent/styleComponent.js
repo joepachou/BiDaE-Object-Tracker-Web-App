@@ -223,12 +223,20 @@ export const BOTDataTimePicker = styled(DataTimePicker)`
     height: 3rem;
 `
 
-export const HoverDiv = styled.div`
+export const HoverWithUnderlineDiv = styled.div`
     text-transform: capitalize;
 
     &:hover {
         cursor: pointer;
         text-decoration: underline;
+    }
+`
+
+export const HoverDiv = styled.div`
+    text-transform: capitalize;
+
+    &:hover {
+        cursor: pointer;
     }
 `
 export const SubMenu = styled.div`

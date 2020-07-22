@@ -213,6 +213,7 @@ const tw = {
     EXPORT_CSV: "匯出CSV",
     EXPORT_PDF: "匯出PDF",
     SEND_RESET_INSTRUCTION: "send reset instruction",
+    DETAIL: "詳細資料",
 
     /* field */
     NAME: "名稱",

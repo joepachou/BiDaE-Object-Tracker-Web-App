@@ -35,8 +35,12 @@
 */
 
 
-import React, { Fragment } from 'react';
-import { Alert, Button } from 'react-bootstrap'
+import React, { Fragment, useEffect } from 'react';
+import { 
+    Alert, 
+    Button,
+    Row
+} from 'react-bootstrap'
 import { AppContext } from '../../context/AppContext';
 import {
     BrowserView,
@@ -48,7 +52,8 @@ import {
 } from 'react-device-detect'
 import { SWITCH_SEARCH_LIST } from '../../config/words';
 import {
-    HoverDiv
+    HoverDiv,
+    HoverWithUnderlineDiv
 } from '../BOTComponent/styleComponent';
 import styled from 'styled-components';
 
@@ -74,50 +79,136 @@ const InfoPrompt = ({
     handleClick
 }) => {
     const appContext = React.useContext(AppContext);
+    const [showDetail, setShowDetail] = React.useState(false)
+
     const { locale } = appContext
+
+    let searchResultMap = searchResult.reduce((map, item) => {
+        if (Object.keys(map).includes(item.type)) {
+           map[item.type][0] += 1;
+           if (item.found) {
+               map[item.type][1] += 1;
+           }
+        } else {
+            map[item.type] = []
+            map[item.type][0] = 1;
+            map[item.type][1] = 0;
+            if (item.found) {
+                map[item.type][1] += 1
+            } 
+        }
+        return map
+    }, {})
+
+    const handleShowDetail = () => {
+       setShowDetail(!showDetail)
+    }
+
     return (
         <Fragment>
             <CustomView condition={isTablet != true && isMobile != true}>
-               <Alert variant='secondary' className='d-flex justify-content-start'>
-                    <HoverDiv
-                        onClick={handleClick}
-                    >
-                        <div 
-                            className='d-flex justify-content-start mr-1'
-                            name={SWITCH_SEARCH_LIST}
-                            value={true}
+                <Alert
+                    variant='secondary' 
+                    style={{
+                        zIndex: 10000000,
+                        background: '#f2f0f0'
+                    }}
+                >
+                    <Row>
+                        <HoverDiv
+                            onClick={handleClick}
                         >
-                            {searchKey ? locale.texts.FOUND : locale.texts.PLEASE_SELECT_SEARCH_OBJECT}
-                            &nbsp;
-                            <div
-                                style={style.alertText}
+                            <div 
+                                className='d-flex justify-content-start mr-1'
+                                name={SWITCH_SEARCH_LIST}
+                                value={true}
                             >
-                                {searchKey ? searchResult.filter(item => item.found).length : ""}
+                                {searchKey ? locale.texts.FOUND : locale.texts.PLEASE_SELECT_SEARCH_OBJECT}
+                                &nbsp;
+                                <div
+                                    style={style.alertText}
+                                >
+                                    {searchKey ? searchResult.filter(item => item.found).length : ""}
+                                </div>
+                                &nbsp;
+                                {searchKey && locale.texts.OBJECTS}
                             </div>
-                            &nbsp;
-                            {searchKey && locale.texts.OBJECTS}
-                        </div>
-                    </HoverDiv>
-                    {searchKey && <div>&nbsp;</div> }
-                    <HoverDiv
-                        onClick={handleClick}
-                    >
-                        <div 
-                            className='d-flex justify-content-start mr-1'
-                            name={SWITCH_SEARCH_LIST}
-                            value={false}
+                        </HoverDiv>
+                        {searchKey && <div>&nbsp;</div> }
+                        <HoverWithUnderlineDiv
+                            onClick={handleClick}
                         >
-                            {searchKey && `${locale.texts.NOT_FOUND}`}
-                            &nbsp;
-                            <div
-                                style={style.alertText}
+                            <div 
+                                className='d-flex justify-content-start mr-1'
+                                name={SWITCH_SEARCH_LIST}
+                                value={false}
                             >
-                                {searchKey ? searchResult.filter(item => !item.found).length : ""}
+                                {searchKey && `${locale.texts.NOT_FOUND}`}
+                                &nbsp;
+                                <div
+                                    style={style.alertText}
+                                >
+                                    {searchKey ? searchResult.filter(item => !item.found).length : ""}
+                                </div>
+                                &nbsp;
+                                {searchKey && locale.texts.OBJECTS}
                             </div>
+                        </HoverWithUnderlineDiv>
+                        <HoverDiv
+                            onClick={handleShowDetail}
+                            className="text-muted ml-auto d-flex align-items-center"
+                            style={{
+                                position: 'relative',
+                                right: 0,
+                                fontSize: '0.9rem'
+                            }}
+                        >
+                            {locale.texts.DETAIL}
                             &nbsp;
-                            {searchKey && locale.texts.OBJECTS}
-                        </div>
-                    </HoverDiv>
+                            <i 
+                                className={`fas ${showDetail ? 'fa-angle-up' : 'fa-angle-down'}`}
+                            />
+                        </HoverDiv>
+
+                    </Row>
+                    <div
+                        style={{
+                            display: showDetail ? "" : 'none',
+                            // fontSize: '0.9rem'
+                        }}
+                    >
+                        {Object.keys(searchResultMap).map((item, index) => {
+                            return (
+                                <Row>
+                                    <div 
+                                        className='d-flex justify-content-start mr-1 text-capitalize'
+                                    >
+                                        {locale.texts.FOUND}
+                                        &nbsp;
+                                        <div
+                                        >
+                                            {searchResultMap[item][1]}
+                                        </div>
+                                        &nbsp;
+                                        {item}
+                                    </div>
+                                    &nbsp;
+                                    <div 
+                                        className='d-flex justify-content-start mr-1 text-capitalize'
+                                    >
+                                        {locale.texts.NOT_FOUND}
+                                        &nbsp;
+                                        <div
+                                        >
+                                            {searchResultMap[item][0] - searchResultMap[item][1]}
+                                        </div>
+                                        &nbsp;
+                                        {item}
+                                    </div>
+                                </Row>
+                            )
+                        })} 
+                    </div>
                 </Alert>
             </CustomView> 
 

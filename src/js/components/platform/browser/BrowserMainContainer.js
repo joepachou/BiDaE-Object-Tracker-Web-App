@@ -147,28 +147,35 @@ const BrowserMainContainer = ({
                         searchResult={searchResult}
                         handleClick={handleClick}
                     />
-                    <SearchContainer 
-                        hasSearchKey={hasSearchKey}
-                        clearSearchResult={clearSearchResult}
-                        auth={auth}
-                        getSearchKey={getSearchKey}
-                        searchObjectArray={searchObjectArray}
-                        pinColorArray={pinColorArray}
-                    />                        
-                    <div 
-                        id='searchResult' 
-                        style={style.searchResultDiv} 
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: 60,
+                        }}
                     >
-                        <SearchResultList
-                            searchResult={searchResult} 
-                            searchKey={searchKey}
-                            highlightSearchPanel={highlightSearchPanel}
-                            handleShowPath={handleShowPath}
-                            showMobileMap={showMobileMap}
+                        <SearchContainer 
+                            hasSearchKey={hasSearchKey}
+                            clearSearchResult={clearSearchResult}
+                            auth={auth}
+                            getSearchKey={getSearchKey}
                             searchObjectArray={searchObjectArray}
                             pinColorArray={pinColorArray}
-                            showFoundResult={showFoundResult}
-                        />
+                        />                        
+                        <div 
+                            id='searchResult' 
+                            style={style.searchResultDiv} 
+                        >
+                            <SearchResultList
+                                searchResult={searchResult} 
+                                searchKey={searchKey}
+                                highlightSearchPanel={highlightSearchPanel}
+                                handleShowPath={handleShowPath}
+                                showMobileMap={showMobileMap}
+                                searchObjectArray={searchObjectArray}
+                                pinColorArray={pinColorArray}
+                                showFoundResult={showFoundResult}
+                            />
+                        </div>
                     </div>
                 </Col>
             </Row>
