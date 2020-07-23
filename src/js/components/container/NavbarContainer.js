@@ -213,13 +213,13 @@ class NavbarContainer extends React.Component {
                     <Navbar.Collapse 
                         id='responsive-navbar-nav'
                         style={{
-                            minHeight: '100%',
+                            height: 'inherit'
                         }}
                     >  
                         <Nav 
                             className='mr-auto' 
                             style={{
-                                minHeight: '-webkit-fill-available',
+                                height: 'inherit'
                             }}
                         >
                             {this.navList.map(nav => {

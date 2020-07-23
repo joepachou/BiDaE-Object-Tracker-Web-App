@@ -372,12 +372,12 @@ export default class ChangeStatusForm extends React.Component {
                                         />
                                     )}
                                 />
-                                <hr/>                                 
+                                <hr/>  
                                 <div 
                                     className="mb-2 text-capitalize"
                                 >
                                     <FormFieldName>
-                                        {locale.texts.ADD_NEW_RECORD}
+                                        {locale.texts.NOTES}
                                     </FormFieldName>
                                     <Field 
                                         component="textarea"
@@ -385,8 +385,7 @@ export default class ChangeStatusForm extends React.Component {
                                         className={'form-control' + (errors.notes && touched.notes ? ' is-invalid' : '')} 
                                         rows={3}
                                     />
-                                </div>
-
+                                </div>                              
                                 <AccessControl 
                                     platform={['browser', 'tablet']}
                                     renderNoAccess={() => null}

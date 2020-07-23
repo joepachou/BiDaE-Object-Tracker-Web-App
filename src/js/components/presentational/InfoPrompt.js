@@ -59,15 +59,14 @@ import styled from 'styled-components';
 
 const style = {
     alertText: {
-        fontSize: '1.2rem',
         fontWeight: 700
     },
     alertTextTitle: {
-        fontSize: '1.2rem',
+        fontSize: '1rem',
         color: 'rgba(101, 111, 121, 0.78)',
     },
     alerTextTitleForTablet: {
-        fontSize: '1.2rem',
+        fontSize: '1rem',
         fontWeight: 500,
         color: 'black'
     }
@@ -109,17 +108,18 @@ const InfoPrompt = ({
             <CustomView condition={isTablet != true && isMobile != true}>
                 <Alert
                     variant='secondary' 
+                    className='px-5'
                     style={{
                         zIndex: 10000000,
                         background: '#f2f0f0'
                     }}
                 >
                     <Row>
-                        <HoverDiv
+                        <HoverWithUnderlineDiv
                             onClick={handleClick}
                         >
                             <div 
-                                className='d-flex justify-content-start mr-1'
+                                className='d-flex justify-content-start mr-2'
                                 name={SWITCH_SEARCH_LIST}
                                 value={true}
                             >
@@ -133,7 +133,7 @@ const InfoPrompt = ({
                                 &nbsp;
                                 {searchKey && locale.texts.OBJECTS}
                             </div>
-                        </HoverDiv>
+                        </HoverWithUnderlineDiv>
                         {searchKey && <div>&nbsp;</div> }
                         <HoverWithUnderlineDiv
                             onClick={handleClick}
@@ -179,13 +179,16 @@ const InfoPrompt = ({
                     >
                         {Object.keys(searchResultMap).map((item, index) => {
                             return (
-                                <Row>
+                                <Row
+                                    className='text-capitalize'
+                                >
                                     <div 
-                                        className='d-flex justify-content-start mr-1 text-capitalize'
+                                        className='d-flex justify-content-start mr-1'
                                     >
                                         {locale.texts.FOUND}
                                         &nbsp;
                                         <div
+                                            style={style.alertText}
                                         >
                                             {searchResultMap[item][1]}
                                         </div>
@@ -199,6 +202,7 @@ const InfoPrompt = ({
                                         {locale.texts.NOT_FOUND}
                                         &nbsp;
                                         <div
+                                            style={style.alertText}
                                         >
                                             {searchResultMap[item][0] - searchResultMap[item][1]}
                                         </div>
