@@ -75,7 +75,7 @@ class ObjectTable extends React.Component{
         selectedRowData:'',
         selection: [],
         selectAll: false,
-        isShowBind:false,
+        isShowBind: false,
         showDeleteConfirmation:false,
         isShowEditImportTable:false,
         bindCase: 0,
@@ -195,6 +195,7 @@ class ObjectTable extends React.Component{
             this.setState({
                 data,
                 isShowEdit: false,
+                isShowBind: false,
                 showDeleteConfirmation: false,
                 disableASN: false,
                 filteredData: data,
@@ -370,6 +371,7 @@ class ObjectTable extends React.Component{
                 this.setState({
                     isShowBind: true,
                     bindCase: 1,
+                    apiMethod: 'post',
                 })
             break; 
 
@@ -642,7 +644,7 @@ class ObjectTable extends React.Component{
                                         isPatientShowEdit: true, 
                                         isShowEdit: true,
                                         selectedRowData: rowInfo.original,
-                                        formTitle: 'edit info',
+                                        formTitle: 'edit object',
                                         disableASN: true,
                                         apiMethod: 'put',
                                     })
@@ -652,7 +654,7 @@ class ObjectTable extends React.Component{
                     }} 
                 />
  
-                <EditObjectForm 
+                <EditObjectForm  
                     show={this.state.isShowEdit} 
                     title={this.state.formTitle} 
                     selectedRowData={selectedRowData || ''} 
@@ -668,9 +670,9 @@ class ObjectTable extends React.Component{
                     show = {this.state.isShowBind} 
                     bindCase = {this.state.bindCase}
                     title={this.state.formTitle} 
-                    handleSubmitForm={this.handleSubmitForm}
+                    handleSubmit={this.handleSubmitForm}
                     formPath={this.state.formPath}
-                    handleClose={this.handleClose}
+                    handleClose={this.handleClose} 
                     objectTable={this.state.objectTable}
                     ImportData= {this.state.importData}
                     areaTable={this.state.areaTable}

@@ -74,7 +74,6 @@ module.exports = {
         } = request.body
 
         let query;
-
         switch(mode) {
             case 'PERSONA':
                 query = dbQueries.addPersona(formOption);

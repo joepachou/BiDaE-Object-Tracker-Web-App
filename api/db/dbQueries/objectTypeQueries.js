@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        objectApiAgent.js
+        objectTypeQueries.js
 
     File Description:
         BOT UI component
@@ -34,63 +34,25 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
+const addObjectType = (name, ) => {
+    let text = `
+        INSERT INTO object_type (
+            type_id,
+            name
+        )
+        VALUES (
+            (
+                SELECT type_id
+                FROM object_type
+                WHERE SUBSTRING(type_id::text 
+            )
+        )
 
-import dataSrc from '../dataSrc';
-import axios from 'axios';
 
-export default {
+    `
+}
 
-    /**
-     * get object data from object_table
-     */
-    getObjectTable: async function({
-        locale, 
-        areas_id, 
-        objectType
-    }){
-        return await axios.get(dataSrc.object, {
-            params: {
-                locale,
-                areas_id,
-                objectType,
-            }
-        })
-    },
 
-    post: async function({
-        formOption,
-        mode,
-    }) {
-        return await axios.post(dataSrc.object, {
-            formOption,
-            mode
-        })
-    },
-
-    put: async function({
-        formOption,
-        mode
-    }) {
-        return await axios.put(dataSrc.object, {
-            formOption,
-            mode
-        })
-    },
-
-    editObjectPackage: async function(
-        locale,
-        formOption,
-        username,
-        pdfPackage,
-        reservedTimestamp
-    ) {
-        return await axios.put(dataSrc.objectPackage, {
-            locale,
-            formOption,
-            username,
-            pdfPackage,
-            reservedTimestamp
-        })
-    }
+module.exports = {
 
 }

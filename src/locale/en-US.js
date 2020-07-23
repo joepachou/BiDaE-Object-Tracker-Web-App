@@ -220,6 +220,7 @@ const en =  {
     KEY: "key",
     TYPE: "type",
     ASSET_CONTROL_NUMBER: "Asset ID",
+    OBJECT_IDENTITY_NUMBER: "object ID",
     MAC_ADDRESS: "mac address",
     LBEACON: "lbeacon",
     STATUS: "status",
@@ -402,6 +403,7 @@ const en =  {
     SEARCH_FOR_NAMEGROUPBYAREA: "search for name",
     SEARCH_FOR_NAMEGROUPBYUUID: "search for UUID",
     PLEASE_TYPE_PERSONA_ID: "please type ID",
+    PLEASE_TYPE_OBJECT_IDENTITY_NUMBER: "please type ACN or ID",
 
     /* Object Status */
     STATUS: "status",

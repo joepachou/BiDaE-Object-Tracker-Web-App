@@ -222,6 +222,7 @@ const tw = {
     KEY: "關鍵字",
     TYPE: "類別",
     ASSET_CONTROL_NUMBER: "財產編號",
+    OBJECT_IDENTITY_NUMBER: "物件 ID",
     MAC_ADDRESS: "mac address",
     LBEACON: "lbeacon",
     STATUS: "儀器狀態",
@@ -296,7 +297,7 @@ const tw = {
     /** form title */
     EDIT_LBEACON: "編輯 lbeacon",
     ADD_OBJECT: "增加儀器",
-    EDIT_OBJECT: "編輯儀器",
+    EDIT_OBJECT: "編輯物件",
     ADD_PERSONA: "增加人員",
     REPORT_DEVICE_STATUS: "回報儀器狀態",
     REPORT_PATIENT_STATUS: "回報病人狀態",
@@ -317,7 +318,7 @@ const tw = {
     NOT_STAY_ROOM_MONITOR: "房間監控",
     GEOFENCE_MONITOR: "電子圍籬監控",
     DISSOCIATION: "解除綁定",
-    ASSOCIATION: "綁定人員",
+    ASSOCIATION: "綁定",
     EDIT_GEOFENCE_CONFIG: "編輯電子圍籬設定",
     ADD_GEOFENCE_CONFIG: "新增電子圍籬設定",
     WARNING: "警告",
@@ -403,6 +404,7 @@ const tw = {
     SEARCH_FOR_NAMEGROUPBYAREA: "搜尋地區",
     SEARCH_FOR_NAMEGROUPBYUUID: "搜尋UUID",
     PLEASE_TYPE_PERSONA_ID: "請輸入人員編號",
+    PLEASE_TYPE_OBJECT_IDENTITY_NUMBER: "請輸入財產編號或是人員編號",
 
     /* Object Status */
     STATUS: "狀態",

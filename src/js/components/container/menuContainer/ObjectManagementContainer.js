@@ -61,13 +61,16 @@ class ObjectManagementContainer extends React.Component{
                                 {locale.texts.PATIENT_FORM}
                             </BOTNavLink>
                         </Nav.Item>
-                        {/* <AccessControl
+                        <AccessControl
                             permission={"user:importTable"}
                             renderNoAccess={() => null}
                             platform={['browser']}
                         >
                             <Nav.Item>
-                                <BOTNavLink eventKey="import_devices">
+                                <BOTNavLink 
+                                    secondary
+                                    eventKey="import_devices"
+                                >
                                     {locale.texts.IMPORT_DEVICES_DATA}
                                 </BOTNavLink>
                             </Nav.Item>
@@ -78,11 +81,14 @@ class ObjectManagementContainer extends React.Component{
                             platform={['browser']}
                         >
                             <Nav.Item>
-                                <BOTNavLink eventKey="import_patients">
+                                <BOTNavLink 
+                                    secondary
+                                    eventKey="import_patients"
+                                >
                                     {locale.texts.IMPORT_PATIENTS_DATA}
                                 </BOTNavLink>
                             </Nav.Item>
-                        </AccessControl> */}
+                        </AccessControl>
                     </BOTNav>
                     <Tab.Content
                         className="my-3"
@@ -95,7 +101,7 @@ class ObjectManagementContainer extends React.Component{
                             <ObjectTableContainer /> 
                         </Tab.Pane>
                         
-                        {/* <AccessControl
+                        <AccessControl
                             permission={"user:importTable"}
                             renderNoAccess={() => null}
                             platform={['browser']}
@@ -112,7 +118,7 @@ class ObjectManagementContainer extends React.Component{
                             <Tab.Pane eventKey="import_patients">
                                 <ImportPatientTable />
                             </Tab.Pane>
-                        </AccessControl> */}
+                        </AccessControl>
                     </Tab.Content>
                 </Tab.Container>
             </BOTContainer>

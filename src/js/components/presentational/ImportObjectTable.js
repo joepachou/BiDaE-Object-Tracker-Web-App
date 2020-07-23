@@ -4,11 +4,11 @@
     License:
         GPL 3.0 : The content of this file is subject to the terms and conditions
 
-    Project Name: 
+    Project Name:
         BiDae Object Tracker (BOT)
 
     File Name:
-        ImportPatientTable.js
+        ImportObjectTable.js
 
     File Description:
         BOT UI component
@@ -55,17 +55,18 @@ import AccessControl from '../authentication/AccessControl';
 import { importTableColumn } from '../../config/tables';
 import dataSrc from '../../dataSrc';
 import apiHelper from '../../helper/apiHelper';
+
 const SelectTable = selecTableHOC(ReactTable);
 
 
-class ImportPatientTable extends React.Component{
+class ImportObjectTable extends React.Component{
     static contextType = AppContext   
     
     state = { 
         selection: [],
         selectAll: false,
         showDeleteConfirmation:false,
-        filetext:'',
+        filetext:'', 
         data: [],
         columns: [],
         locale: this.context.locale.abbr,
@@ -84,7 +85,7 @@ class ImportPatientTable extends React.Component{
 
     getData = () => {
         let { locale } = this.context
-        
+
         apiHelper.importedObjectApiAgent.getImportedObjectTable({
             locale: locale.abbr,
         })
@@ -93,10 +94,12 @@ class ImportPatientTable extends React.Component{
             columns.map(field => {
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             }) 
+            let data = res.data.rows.filter(item => item.type != 'patient')
+            
             this.setState({
-                data: res.data.rows,
+                data,
                 columns,
-                showDeleteConfirmation: false,
+                showDeleteConfirmation:false,
                 locale: locale.abbr
             })
         })
@@ -286,7 +289,6 @@ class ImportPatientTable extends React.Component{
                 newData.map(item => {  
                     item.name.toString().indexOf("'") != -1 || item.name.toString().indexOf('"') != -1 ? punctuationFlag = true : null 
                     item.asset_control_number.toString().indexOf("'") != -1 ||  item.asset_control_number.toString().indexOf('"') != -1 ? punctuationFlag = true : null 
-                    item.type = 'patient'
                 }) 
 
                 if(punctuationFlag){ 
@@ -389,7 +391,7 @@ class ImportPatientTable extends React.Component{
                     ref={r => (this.selectTable = r)}
                     className='-highlight'
                     style={{maxHeight:'75vh'}} 
-                    onSortedChange={(e) => {this.setState({selectAll:false,selection:''})}} 
+                     onSortedChange={(e) => {this.setState({selectAll:false,selection:''})}} 
                     onPageChange={(e) => {this.setState({selectAll:false,selection:''})}} 
                     {...extraProps}
                     {...styleConfig.reactTable}
@@ -406,4 +408,4 @@ class ImportPatientTable extends React.Component{
     }
 }
 
-export default ImportPatientTable
+export default ImportObjectTable

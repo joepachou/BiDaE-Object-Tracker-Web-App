@@ -94,8 +94,9 @@ class ImportPatientTable extends React.Component{
             columns.map(field => {
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             }) 
+            let data = res.data.rows.filter(item => item.type == 'patient')
             this.setState({
-                data: res.data.rows,
+                data,
                 columns,
                 showDeleteConfirmation:false,
                 locale: locale.abbr

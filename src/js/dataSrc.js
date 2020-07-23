@@ -109,6 +109,7 @@ const dataSrc = {
     monitor: `${domain}/data/monitor`,
 
     record: {
+
         editedObject: `${domain}/data/record/editedObject`,
         
         shiftChange: `${domain}/data/record/shiftChange`,

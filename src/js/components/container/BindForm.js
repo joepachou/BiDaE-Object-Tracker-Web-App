@@ -47,6 +47,7 @@ import {
     FormFieldName
 } from '../BOTComponent/styleComponent';
 import dataSrc from '../../dataSrc';
+import apiHelper from '../../helper/apiHelper';
 
 class BindForm extends React.Component {
 
@@ -81,9 +82,10 @@ class BindForm extends React.Component {
     }
 
     handleSubmit = (formOption) => {
+        console.log(222)
         this.setState({
             mac:'',
-            showDetail : false,
+            showDetail: false,
             objectName:'',
             bindData:'',
             objectType:'',
@@ -93,7 +95,8 @@ class BindForm extends React.Component {
  
     getImportedData = () => {
         let { locale } = this.context
-        axios.get(dataSrc.importedObject, {
+
+        apiHelper.importedObjectApiAgent.getImportedObjectTable({
             params: {
                 locale: locale.abbr
             }
@@ -157,12 +160,14 @@ class BindForm extends React.Component {
                 <Modal.Body
                     className='mb-2'
                 >
-                    <Formik                    
+                    <Formik            
+
                         initialValues = {{
                            acn:'',
                            mac:'',
                            area:"",
                         }}
+
                         validationSchema = {
                             Yup.object().shape({
                                 acn: Yup.string() 
@@ -241,8 +246,8 @@ class BindForm extends React.Component {
                                     name="acn"
                                     error={errors.acn}
                                     touched={touched.acn}                                        
-                                    label={locale.texts.ID}   
-                                    placeholder={locale.texts.PLEASE_TYPE_PERSONA_ID}
+                                    label={locale.texts.OBJECT_IDENTITY_NUMBER}   
+                                    placeholder={locale.texts.PLEASE_TYPE_OBJECT_IDENTITY_NUMBER}
                                 /> 
 
                                 {this.state.showDetail &&

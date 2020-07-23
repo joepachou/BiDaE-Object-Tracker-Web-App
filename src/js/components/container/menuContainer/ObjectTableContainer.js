@@ -33,7 +33,7 @@
         Edward Chen, r08921a28@ntu.edu.tw
         Joe Chou, jjoe100892@gmail.com
 */
-
+ 
 import React, { Fragment } from 'react';
 import { AppContext } from '../../../context/AppContext';
 import ReactTable from 'react-table'; 
@@ -505,7 +505,7 @@ class ObjectTableContainer extends React.Component{
                                     this.setState({
                                         isPatientShowEdit: true,
                                         selectedRowData: rowInfo.original,
-                                        formTitle: 'edit info',
+                                        formTitle: 'edit i',
                                         disableASN: true,
                                         apiMethod: 'put',
                                     })
