@@ -53,8 +53,10 @@ import ScrollArea from 'react-scrollbar'
 import {
     EditedTime,
     Primary,
-    Paragraph 
+    Paragraph,
+    FormFieldName 
 } from '../BOTComponent/styleComponent'
+import FormikFormGroup from '../presentational/FormikFormGroup';
 
 const style = {
     index: {
@@ -111,8 +113,7 @@ class PatientViewModal extends React.Component {
             <Modal  
                 show={show}
                 onHide={this.handleClose} 
-                size="lg" 
-                className='text-capitalize'
+                size="md" 
                 enforceFocus={false}
                 style={style.modal}
             >
@@ -136,35 +137,42 @@ class PatientViewModal extends React.Component {
     
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
                             <Form>
-                                <div
-                                    className='d-flex flex-column'
-                                >                       
-                                    <div>
-                                        {locale.texts.NAME}: {data.name} 
-                                    </div>
-                                    <div>
-                                        {locale.texts.PATIENT_NUMBER}: {data.asset_control_number} 
-                                    </div>
-                                </div>
+                                <FormikFormGroup 
+                                    type="text"
+                                    name="name"
+                                    label={locale.texts.NAME}
+                                    value={data.name}
+                                    error={errors.name}
+                                    touched={touched.name}
+                                    placeholder=""
+                                    disabled
+                                />
+                                <FormikFormGroup 
+                                    type="text"
+                                    name="name"
+                                    label={locale.texts.PATIENT_NUMBER}
+                                    value={data.asset_control_number}
+                                    error={errors.name}
+                                    touched={touched.name}
+                                    placeholder=""
+                                    disabled
+                                />
                                 <hr/>
                                 <div 
                                     className="mb-2 text-capitalize"
                                 >
-                                    <small 
-                                        className="form-text text-muted"
-                                    >
+                                    <FormFieldName>
                                         {locale.texts.ADD_NEW_RECORD}
-                                    </small>
+                                    </FormFieldName>
                                     <Field 
                                         component="textarea"
                                         value={values.record}
                                         name="record"
                                         className={'form-control' + (errors.record && touched.record ? ' is-invalid' : '')} 
-                                        placeholder={locale.texts.TYPING}
-                                        rows={4}
+                                        rows={3}
                                     />
                                 </div>
-                                <div
+                                <FormFieldName
                                     className="mb-2 cursor-pointer"
                                     onClick={() => {
                                         this.setState({
@@ -177,7 +185,7 @@ class PatientViewModal extends React.Component {
                                     <i 
                                         className={`fas ${this.state.display ? 'fa-angle-up' : 'fa-angle-down'}`}
                                     />
-                                </div>
+                                </FormFieldName>
                                 
                                 
                                 <div

@@ -50,6 +50,9 @@ import {
     Field, 
     Form, 
 } from 'formik';
+import {
+    FormFieldName
+} from '../BOTComponent/styleComponent';
 import * as Yup from 'yup';
 import RadioButton from '../presentational/RadioButton';
 import RadioButtonGroup from './RadioButtonGroup';
@@ -369,15 +372,21 @@ export default class ChangeStatusForm extends React.Component {
                                         />
                                     )}
                                 />
-                                <hr/>
-                                <FormikFormGroup 
-                                    type="text"
-                                    name="notes"
-                                    label={locale.texts.NOTES}
-                                    error={errors.notes}
-                                    touched={touched.notes}
-                                    placeholder={locale.texts.WRITE_THE_NOTES}
-                                />
+                                <hr/>                                 
+                                <div 
+                                    className="mb-2 text-capitalize"
+                                >
+                                    <FormFieldName>
+                                        {locale.texts.ADD_NEW_RECORD}
+                                    </FormFieldName>
+                                    <Field 
+                                        component="textarea"
+                                        name="notes"
+                                        className={'form-control' + (errors.notes && touched.notes ? ' is-invalid' : '')} 
+                                        rows={3}
+                                    />
+                                </div>
+
                                 <AccessControl 
                                     platform={['browser', 'tablet']}
                                     renderNoAccess={() => null}

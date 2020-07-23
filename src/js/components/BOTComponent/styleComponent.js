@@ -45,7 +45,7 @@ import Button from 'react-bootstrap/Button';
 import DataTimePicker from 'react-widgets/lib/DateTimePicker';
 
 export const EditedTime = styled.div`
-    font-size: 0.8em;
+    font-size: 0.8rem;
     display: flex;
     align-items: flex-end;
     padding-left: 5px;
@@ -53,14 +53,17 @@ export const EditedTime = styled.div`
 `;
 
 export const Primary = styled.div`
-    font-size: 1em;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: flex-end;
     font-weight: 600;
     color: black;
+    te
 `
 
 export const Paragraph = styled.p`
     text-align: justify;
-    text-justify:inter-ideograph;
+    text-justify: inter-ideograph;
     color: black;
 `
 
