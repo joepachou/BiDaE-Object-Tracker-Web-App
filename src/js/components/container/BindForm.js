@@ -37,7 +37,6 @@
 
 import React from 'react';
 import { Modal, Button, Row, Col } from 'react-bootstrap';
-import axios from 'axios';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { AppContext } from '../../context/AppContext';
@@ -46,7 +45,6 @@ import FormikFormGroup from '../presentational/FormikFormGroup';
 import {
     FormFieldName
 } from '../BOTComponent/styleComponent';
-import dataSrc from '../../dataSrc';
 import apiHelper from '../../helper/apiHelper';
 
 class BindForm extends React.Component {
@@ -82,7 +80,6 @@ class BindForm extends React.Component {
     }
 
     handleSubmit = (formOption) => {
-        console.log(222)
         this.setState({
             mac:'',
             showDetail: false,

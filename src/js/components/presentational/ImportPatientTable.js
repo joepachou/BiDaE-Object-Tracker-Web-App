@@ -44,7 +44,6 @@ import ReactTable from 'react-table';
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
 import XLSX from 'xlsx';
 import InputFiles from 'react-input-files';
-import axios from 'axios';
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm';
 import styleConfig from '../../config/styleConfig';
 import messageGenerator from '../../helper/messageGenerator';
@@ -53,7 +52,6 @@ import {
 } from '../BOTComponent/styleComponent';
 import AccessControl from '../authentication/AccessControl';
 import { importTableColumn } from '../../config/tables';
-import dataSrc from '../../dataSrc';
 import apiHelper from '../../helper/apiHelper';
 
 const SelectTable = selecTableHOC(ReactTable);
@@ -179,11 +177,9 @@ class ImportPatientTable extends React.Component{
 
     deleteRecordImport = () => {
         this.setState({selectAll:false})
-        
-        axios.delete(dataSrc.importedObject, {
-            data: {
-                idPackage: this.state.selection
-            }
+
+        apiHelper.importedObjectApiAgent.deleteImportedObject({
+            idPackage: this.state.selection
         })
         .then(res => {
             this.setState({selection:[]})
@@ -299,7 +295,8 @@ class ImportPatientTable extends React.Component{
                     messageGenerator.importErrorMessage('ASN_IS_REPEAT' ,ReapeName)
                 }
                 else{
-                    axios.post(dataSrc.importedObject, {
+
+                    apiHelper.importedObjectApiAgent.addImportedObject({
                         locale: locale.abbr,
                         newData
                     })

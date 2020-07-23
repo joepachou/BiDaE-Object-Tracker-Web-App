@@ -52,5 +52,25 @@ export default {
             }
         })
     },
+
+    addImportedObject: async function({
+        locale,
+        newData
+    }) {
+        return await axios.post(dataSrc.importedObject, {
+            locale,
+            newData
+        })
+    },
+
+    deleteImportedObject: async function({
+        idPackage
+    }) {
+        return await axios.delete(dataSrc.importedObject, {
+            data: {
+                idPackage,
+            }
+        })
+    }
     
 }
