@@ -214,22 +214,6 @@ export default class BrowserMapContainer extends React.Component {
                                 </Button>
                             </Nav.Item>
                         </AccessControl>
-                        <AccessControl
-                            permission={"user:cleanPath"}
-                            renderNoAccess={()=>null}
-                        >
-                            <Nav.Item className="mt-2">
-                                <Button
-                                    variant="primary"
-                                    className="mr-1 ml-2"
-                                    onClick={handleClickButton}
-                                    name="cleanPath"
-                                    disabled={(this.props.pathMacAddress == '')}
-                                >
-                                    {locale.texts.HIDE_PATH}
-                                </Button>
-                            </Nav.Item>
-                        </AccessControl>
                         <div
                             className="d-flex bd-highligh ml-auto"
                         >

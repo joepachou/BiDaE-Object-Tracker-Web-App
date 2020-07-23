@@ -288,14 +288,14 @@ export default class ChangeStatusForm extends React.Component {
                                                             </Col> 
                                                         </Row>
                                                         <FormikFormGroup 
-                                                                    type="text"
-                                                                    name="asset_control_number"
-                                                                    label={locale.texts.ACN}
-                                                                    error={errors.asset_control_number}
-                                                                    value={item.asset_control_number}
-                                                                    touched={touched.asset_control_number}
-                                                                    placeholder=""
-                                                                    disabled
+                                                            type="text"
+                                                            name="asset_control_number"
+                                                            label={locale.texts.ACN}
+                                                            error={errors.asset_control_number}
+                                                            value={item.asset_control_number}
+                                                            touched={touched.asset_control_number}
+                                                            placeholder=""
+                                                            disabled
                                                         />
                                                     </Col>
                                                 </Row>

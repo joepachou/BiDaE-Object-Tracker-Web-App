@@ -50,8 +50,6 @@ const BrowserMainContainer = ({
     getSearchKey,
     setMonitor,
     clearAlerts,
-    handleClosePath,
-    handleShowPath,
     lbeaconPosition,
     geofenceConfig,
     searchedObjectType,
@@ -130,8 +128,6 @@ const BrowserMainContainer = ({
                         geofenceConfig={geofenceConfig}
                         locationMonitorConfig={locationMonitorConfig}
                         clearAlerts={clearAlerts}
-                        handleClosePath={handleClosePath}
-                        handleShowPath={handleShowPath}
                         searchedObjectType={searchedObjectType}
                         showedObjects={showedObjects}
                         setShowedObjects={setShowedObjects}
@@ -169,7 +165,6 @@ const BrowserMainContainer = ({
                                 searchResult={searchResult} 
                                 searchKey={searchKey}
                                 highlightSearchPanel={highlightSearchPanel}
-                                handleShowPath={handleShowPath}
                                 showMobileMap={showMobileMap}
                                 searchObjectArray={searchObjectArray}
                                 pinColorArray={pinColorArray}

@@ -67,7 +67,7 @@ class MapContainer extends React.Component {
 
     handleClickButton = (e) => {
         const { name, value } = e.target
-        console.log(name)
+
         switch(name) {
             case CLEAR_SEARCH_RESULT:
                 this.props.handleClick(e);
@@ -94,9 +94,6 @@ class MapContainer extends React.Component {
                 break;
             case 'searchedObjectType':
                 this.props.setShowedObjects(value)
-                break;
-            case 'cleanPath':
-                this.props.handleClosePath();
                 break;
         }
     }

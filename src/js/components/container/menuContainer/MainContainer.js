@@ -35,27 +35,27 @@
 */
 import React, { Fragment } from 'react';
 import 'react-table/react-table.css';
-import config from '../../config';
+import config from '../../../config';
 import _ from 'lodash';
 import axios from 'axios';
-import dataSrc, { objectPackage } from '../../dataSrc'
-import { AppContext } from '../../context/AppContext';
+import dataSrc, { objectPackage } from '../../../dataSrc'
+import { AppContext } from '../../../context/AppContext';
 import { toast } from 'react-toastify';
-import ToastNotification from '../presentational/ToastNotification';
+import ToastNotification from '../../presentational/ToastNotification';
 import {
     BrowserView,
     MobileOnlyView,
     TabletView
 } from 'react-device-detect';
 import { disableBodyScroll } from 'body-scroll-lock';
-import messageGenerator from '../../helper/messageGenerator';
-import TabletMainContainer from '../platform/tablet/TabletMainContainer'
-import MobileMainContainer from '../platform/mobile/MobileMainContainer';
-import BrowserMainContainer from '../platform/browser/BrowserMainContainer';
-import apiHelper from '../../helper/apiHelper';
+import messageGenerator from '../../../helper/messageGenerator';
+import TabletMainContainer from '../../platform/tablet/TabletMainContainer'
+import MobileMainContainer from '../../platform/mobile/MobileMainContainer';
+import BrowserMainContainer from '../../platform/browser/BrowserMainContainer';
+import apiHelper from '../../../helper/apiHelper';
 import {
     createLbeaconCoordinate
-} from '../../helper/dataTransfer';
+} from '../../../helper/dataTransfer';
 import { 
     SWITCH_SEARCH_LIST, 
     CLEAR_SEARCH_RESULT,
@@ -65,7 +65,7 @@ import {
     MY_PATIENTS,
     OBJECTS,
     OBJECT_TYPE
-} from '../../config/words';
+} from '../../../config/words';
 
 const {
     MAX_SEARCH_OBJECT_NUM
@@ -643,18 +643,6 @@ class MainContainer extends React.Component{
         })
     }
 
-    handleShowPath = (mac_address, callback) => {
-        this.setState({
-            pathMacAddress: mac_address
-        }, callback)
-    }
-
-    handleClosePath = () => {
-        this.setState({
-            pathMacAddress: ''
-        })
-    }
-
     handleShowResultListForMobile = () => {
         this.setState({
             display: false
@@ -761,8 +749,6 @@ class MainContainer extends React.Component{
             getSearchKey,
             setMonitor,
             clearAlerts,
-            handleClosePath,
-            handleShowPath,
             setShowedObjects,
             handleShowResultListForMobile,
             mapButtonHandler,
@@ -775,8 +761,6 @@ class MainContainer extends React.Component{
             getSearchKey,
             setMonitor,
             clearAlerts,
-            handleClosePath,
-            handleShowPath,
             lbeaconPosition,
             geofenceConfig,
             searchedObjectType,

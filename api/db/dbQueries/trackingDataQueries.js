@@ -57,11 +57,17 @@ const getTrackingData = (areas_id, key) => {
 			object_table.object_type,
 			object_table.transferred_location,
 			object_table.monitor_type,
+			edit_object_record.notes,
 			lbeacon_table.description as location_description,
 			JSON_BUILD_OBJECT(
 				'id', area_table.id,
 				'value', area_table.name
-			) AS lbeacon_area
+			) AS lbeacon_area,
+			JSON_BUILD_OBJECT(
+				'id', area_table.id,
+				'value', area_table.name
+			) AS lbeacon_area,
+			COALESCE(patient_record.record, ARRAY[]::JSON[]) as records	
 		
 		FROM object_summary_table
 
@@ -73,6 +79,57 @@ const getTrackingData = (areas_id, key) => {
 
 		LEFT JOIN area_table
 		ON area_table.id = object_summary_table.updated_by_area
+
+		LEFT JOIN edit_object_record
+		ON object_table.note_id = edit_object_record.id
+
+		LEFT JOIN (
+			SELECT 
+				object_id,
+				ARRAY_AGG(JSON_BUILD_OBJECT(
+					'created_timestamp', created_timestamp,
+					'record', record,
+					'recorded_user', (
+						SELECT name
+						FROM user_table
+						WHERE id = editing_user_id 
+					)
+				)) as record 
+			FROM (
+				SELECT *
+				FROM patient_record
+				ORDER BY created_timestamp DESC
+			) as patient_record_table
+			GROUP BY object_id					
+		) as patient_record
+		ON object_table.id = patient_record.object_id
+
+		LEFT JOIN (
+			SELECT 
+				mac_address,
+				json_agg(json_build_object(
+					'type', monitor_type, 
+					'time', violation_timestamp
+				))
+			FROM (
+				SELECT 
+					mac_address,
+					monitor_type,
+					MIN(violation_timestamp) AS violation_timestamp
+				FROM (
+					SELECT 
+						mac_address,
+						monitor_type,
+						violation_timestamp
+					FROM notification_table
+					WHERE 
+						web_processed IS NULL
+				)	as tmp_1
+				GROUP BY mac_address, monitor_type
+			) as tmp_2
+			GROUP BY mac_address
+		) as notification
+		ON notification.mac_address = object_summary_table.mac_address
 
 		WHERE object_table.area_id IN (${areas_id.map(id => id)}) 
 

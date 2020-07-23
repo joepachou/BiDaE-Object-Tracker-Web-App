@@ -40,30 +40,17 @@ require('moment-timezone')
 const moment = require('moment');
 const dbQueries = require('../db/dbQueries/trackingDataQueries')
 const pool = require('../db/dev/connection');
+const {
+    MOMENT_LOCALE_RELATIVE_TIME_FORMAT_EN,
+    MOMENT_LOCALE_RELATIVE_TIME_FORMAT_TW
+} = require('../config/config');
 
 moment.updateLocale('en', {
-    relativeTime : {
-        future: "being here for the past %s",
-        past:   "%s ago",
-        s  : '1 minute',
-        ss : '1 minute',
-        m:  "1 minute",
-        mm: "%d minutes",
-        h:  "1 hour",
-        hh: "%d hours",
-        d:  "1 day",
-        dd: "%d days",
-        M:  "1 month",
-        MM: "%d months",
-        y:  "1 year",
-        yy: "%d years"
-    }
+    relativeTime : MOMENT_LOCALE_RELATIVE_TIME_FORMAT_EN
 });
 
 moment.updateLocale('zh-tw', {
-    relativeTime : {
-        future: "已 %s",
-    }
+    relativeTime : MOMENT_LOCALE_RELATIVE_TIME_FORMAT_TW
 });
 
 /** Parse the lbeacon's location coordinate from lbeacon_uuid*/

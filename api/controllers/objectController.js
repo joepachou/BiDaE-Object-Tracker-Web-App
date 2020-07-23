@@ -160,6 +160,7 @@ module.exports = {
             .then(res => {
                 const record_id = res.rows[0].id
                 console.log('add edited object record succeed')
+                
                 pool.query(dbQueries.editObjectPackage(formOption, username, record_id, reservedTimestamp))
                     .then(res => {
                         console.log('edit object package succeed')

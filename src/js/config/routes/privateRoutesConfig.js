@@ -35,7 +35,7 @@
 */
 
 
-import MainContainer from '../../components/container/MainContainer';
+import MainContainer from '../../components/container/menuContainer/MainContainer';
 import SystemSetting from '../../components/container/menuContainer/SystemSetting';
 import ObjectManagementContainer from '../../components/container/menuContainer/ObjectManagementContainer';
 import UserContainer from '../../components/container/menuContainer/UserContainer';
