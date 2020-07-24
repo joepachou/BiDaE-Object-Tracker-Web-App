@@ -42,8 +42,8 @@ import {
 } from 'react-bootstrap';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import LocaleContext from '../../context/LocaleContext';
-import apiHelper from '../../helper/apiHelper';
+import LocaleContext from '../../../context/LocaleContext';
+import apiHelper from '../../../helper/apiHelper';
 
 const style = {
     modal: {

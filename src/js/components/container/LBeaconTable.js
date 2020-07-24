@@ -41,7 +41,7 @@ import {
 } from 'react-bootstrap';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
-import EditLbeaconForm from './../presentational/EditLbeaconForm'
+import EditLbeaconForm from '../presentational/form/EditLbeaconForm'
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
 import axios from 'axios';
 import dataSrc from '../../dataSrc';

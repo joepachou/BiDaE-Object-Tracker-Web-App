@@ -37,9 +37,9 @@
 
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import LocaleContext from '../../context/LocaleContext';
+import LocaleContext from '../../../context/LocaleContext';
 import { Formik, Field, Form } from 'formik';
-import FormikFormGroup from './FormikFormGroup';
+import FormikFormGroup from '../FormikFormGroup';
 /**
  * EditLbeaconForm will update if user selects one of the object table.
  * The selected object data will transfer from ObjectMangentContainer to EditLbeaconForm

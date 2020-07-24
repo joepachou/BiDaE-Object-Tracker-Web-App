@@ -44,8 +44,8 @@ import {
     Formik, 
     Form 
 } from 'formik';
-import dataSrc from '../../dataSrc'
-import LocaleContext from '../../context/LocaleContext';
+import dataSrc from '../../../dataSrc'
+import LocaleContext from '../../../context/LocaleContext';
 
 const style = {
     modal: {

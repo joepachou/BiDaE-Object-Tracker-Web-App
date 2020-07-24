@@ -44,7 +44,7 @@ import {
     ButtonToolbar 
 } from 'react-bootstrap'
 import Select from 'react-select';
-import config from '../../config';
+import config from '../../../config';
 import { 
     Formik, 
     Field, 
@@ -52,15 +52,15 @@ import {
 } from 'formik';
 import {
     FormFieldName
-} from '../BOTComponent/styleComponent';
+} from '../../BOTComponent/styleComponent';
 import * as Yup from 'yup';
-import RadioButton from '../presentational/RadioButton';
-import RadioButtonGroup from './RadioButtonGroup';
-import { AppContext } from '../../context/AppContext';
-import styleConfig from '../../config/styleConfig'
-import FormikFormGroup from '../presentational/FormikFormGroup'
-import AccessControl from '../authentication/AccessControl';
-import apiHelper from '../../helper/apiHelper';
+import RadioButton from '../RadioButton';
+import RadioButtonGroup from '../../container/RadioButtonGroup';
+import { AppContext } from '../../../context/AppContext';
+import styleConfig from '../../../config/styleConfig'
+import FormikFormGroup from '../FormikFormGroup'
+import AccessControl from '../../authentication/AccessControl';
+import apiHelper from '../../../helper/apiHelper';
 
 export default class ChangeStatusForm extends React.Component {
 

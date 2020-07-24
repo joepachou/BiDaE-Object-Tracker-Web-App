@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        EditPatientForm.js
+        EditPatientForm.js 
 
     File Description:
         BOT UI component
@@ -38,15 +38,15 @@
 import React from 'react';
 import { Modal, Button, Row, Col } from 'react-bootstrap';
 import Select from 'react-select';
-import config from '../../config';
-import { AppContext } from '../../context/AppContext';
+import config from '../../../config';
+import { AppContext } from '../../../context/AppContext';
 import axios from 'axios';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
-import CheckboxGroup from './CheckboxGroup'
-import Checkbox from '../presentational/Checkbox'
-import FormikFormGroup from '../presentational/FormikFormGroup'
-import styleConfig from '../../config/styleConfig'
+import CheckboxGroup from '../../container/CheckboxGroup'
+import Checkbox from '../Checkbox'
+import FormikFormGroup from '../FormikFormGroup'
+import styleConfig from '../../../config/styleConfig'
 
 let monitorTypeMap = {};
 Object.keys(config.monitorType)

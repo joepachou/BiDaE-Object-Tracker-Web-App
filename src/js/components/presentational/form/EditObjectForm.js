@@ -45,18 +45,18 @@
 import React from 'react';
 import { Modal, Button, Row, Col } from 'react-bootstrap';
 import Select from 'react-select';
-import config from '../../config';
+import config from '../../../config';
 import axios from 'axios';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
-import CheckboxGroup from './CheckboxGroup'
-import Checkbox from '../presentational/Checkbox'
-import RadioButtonGroup from './RadioButtonGroup'
-import RadioButton from '../presentational/RadioButton'
-import { AppContext } from '../../context/AppContext';
-import dataSrc from '../../dataSrc'
-import styleConfig from '../../config/styleConfig';
-import FormikFormGroup from '../presentational/FormikFormGroup'
+import CheckboxGroup from '../../container/CheckboxGroup'
+import Checkbox from '../Checkbox'
+import RadioButtonGroup from '../../container/RadioButtonGroup'
+import RadioButton from '../RadioButton'
+import { AppContext } from '../../../context/AppContext';
+import dataSrc from '../../../dataSrc'
+import styleConfig from '../../../config/styleConfig';
+import FormikFormGroup from '../FormikFormGroup'
  
 let monitorTypeMap = {}; 
 Object.keys(config.monitorType)

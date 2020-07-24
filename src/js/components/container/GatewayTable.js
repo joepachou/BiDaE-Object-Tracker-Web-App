@@ -56,7 +56,7 @@ import {
     PrimaryButton
 } from '../BOTComponent/styleComponent'
 import AccessControl from '../authentication/AccessControl';
-import EditGatewayForm from '../presentational/EditGatewayForm';
+import EditGatewayForm from '../presentational/form/EditGatewayForm';
 import apiHelper from '../../helper/apiHelper';
 
 class GatewayTable extends React.Component{

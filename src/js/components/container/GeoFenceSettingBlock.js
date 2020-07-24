@@ -43,7 +43,7 @@ import {
 import config from "../../config"
 import ReactTable from 'react-table'
 import { geofenceConfigColumn } from '../../config/tables'
-import EditGeofenceConfig from '../presentational/EditGeofenceConfig'
+import EditGeofenceConfig from '../presentational/form/EditGeofenceConfig'
 import styleConfig from '../../config/styleConfig';
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
 import selecTableHOC from 'react-table/lib/hoc/selectTable';

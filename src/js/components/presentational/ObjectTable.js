@@ -43,8 +43,8 @@ import { AppContext } from '../../context/AppContext';
 import ReactTable from 'react-table'; 
 import styleConfig from '../../config/styleConfig';
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
-import EditObjectForm from '../container/EditObjectForm';
-import BindForm from '../container/BindForm';
+import EditObjectForm from './form/EditObjectForm';
+import BindForm from '../presentational/form/BindForm';
 import DissociationForm from '../container/DissociationForm'
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
 import Select from 'react-select';

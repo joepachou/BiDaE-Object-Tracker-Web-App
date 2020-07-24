@@ -48,11 +48,11 @@ import {
 import TabletSearchResultList from '../platform/tablet/TabletSearchResultList';
 import MobileSearchResultList from '../platform/mobile/MobileSearchResultList';
 import BrowserSearchResultList from '../platform/browser/BrowserSearchResultList';
-import ChangeStatusForm from '../container/ChangeStatusForm';
+import ChangeStatusForm from './form/ChangeStatusForm';
 import PatientViewModal from '../presentational/PatientViewModal';
 import SignatureForm from '../container/UserContainer/SignatureForm';
 import ConfirmForm from '../container/ConfirmForm';
-import DownloadPdfRequestForm from '../container/DownloadPdfRequestForm';
+import DownloadPdfRequestForm from '../presentational/form/DownloadPdfRequestForm';
 import config from '../../config';
 import moment from 'moment';
 import apiHelper from '../../helper/apiHelper';

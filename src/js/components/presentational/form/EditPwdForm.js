@@ -47,7 +47,7 @@ import {
     ErrorMessage 
 } from 'formik';
 import * as Yup from 'yup';
-import LocaleContext from '../../context/LocaleContext';
+import LocaleContext from '../../../context/LocaleContext';
 
 const EditPwdForm = ({
     show,

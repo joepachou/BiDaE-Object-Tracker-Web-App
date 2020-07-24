@@ -46,7 +46,7 @@ import {
     isMobile,
     isTablet
 } from 'react-device-detect';
-import GeneralConfirmForm from '../presentational/GeneralConfirmForm';
+import GeneralConfirmForm from '../presentational/form/GeneralConfirmForm';
 import TabletMapContainer from '../platform/tablet/TabletMapContainer';
 import MobileMapContainer from '../platform/mobile/MobileMapContainer';
 import BrowserMapContainer from '../platform/browser/BrowserMapContainer';

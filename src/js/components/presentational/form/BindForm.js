@@ -39,13 +39,13 @@ import React from 'react';
 import { Modal, Button, Row, Col } from 'react-bootstrap';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { AppContext } from '../../context/AppContext';
+import { AppContext } from '../../../context/AppContext';
 import Select from 'react-select';
-import FormikFormGroup from '../presentational/FormikFormGroup';
+import FormikFormGroup from '../FormikFormGroup';
 import {
     FormFieldName
-} from '../BOTComponent/styleComponent';
-import apiHelper from '../../helper/apiHelper';
+} from '../../BOTComponent/styleComponent';
+import apiHelper from '../../../helper/apiHelper';
 
 class BindForm extends React.Component {
 

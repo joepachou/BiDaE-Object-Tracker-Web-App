@@ -47,13 +47,13 @@ import {
 import {
     ListGroup 
 } from 'react-bootstrap'
-import LocaleContext from '../../context/LocaleContext';
-import config from '../../config'
-import AuthenticationContext from '../../context/AuthenticationContext';
+import LocaleContext from '../../../context/LocaleContext';
+import config from '../../../config'
+import AuthenticationContext from '../../../context/AuthenticationContext';
 import {
     ListTitle,
     SubTitle
-} from '../BOTComponent/styleComponent';
+} from '../../BOTComponent/styleComponent';
 
 const EditAreasForm = ({
     show,

@@ -44,7 +44,7 @@ import {
 import config from "../../config"
 import ReactTable from 'react-table';
 import styleConfig from '../../config/styleConfig';
-import EditMonitorConfigForm from '../presentational/EditMonitorConfigForm';
+import EditMonitorConfigForm from '../presentational/form/EditMonitorConfigForm';
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
 import { monitorConfigColumn } from '../../config/tables'
 import selecTableHOC from 'react-table/lib/hoc/selectTable';

@@ -42,8 +42,8 @@ import {
 } from 'react-bootstrap';
 import { AppContext } from '../../../context/AppContext';
 import axios from 'axios';
-import EditAreasForm from '../../presentational/EditAreasForm';
-import EditPwdForm from '../../presentational/EditPwdForm';
+import EditAreasForm from '../../presentational/form/EditAreasForm';
+import EditPwdForm from '../../presentational/form/EditPwdForm';
 import messageGenerator from '../../../helper/messageGenerator';
 import dataSrc from '../../../dataSrc';
 import {

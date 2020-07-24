@@ -3,13 +3,11 @@ import {
     Modal, 
     Button,
 } from 'react-bootstrap';
-import axios from 'axios';
-import dataSrc from '../../dataSrc';
 import moment from 'moment'
 import config from '../../config';
 import { AppContext } from '../../context/AppContext';
-import GeneralConfirmForm from '../presentational/GeneralConfirmForm';
-import DownloadPdfRequestForm from './DownloadPdfRequestForm';
+import GeneralConfirmForm from '../presentational/form/GeneralConfirmForm';
+import DownloadPdfRequestForm from '../presentational/form/DownloadPdfRequestForm';
 import Select from 'react-select';
 import messageGenerator from '../../helper/messageGenerator';
 import { Formik, Field, Form } from 'formik';
