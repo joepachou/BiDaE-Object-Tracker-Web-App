@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        doc.js
+        en-US.js
 
     File Description:
         BOT UI component
@@ -34,10 +34,10 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
-let doc = {
+const en = {
 
-    LICENCE: '© 2020 畢迪科技 BiDae Tech. All rights reserved.'
+    LICENCE: '© 2020 BiDae Tech. All rights reserved.'
 
 }
 
-export default doc
+module.exports = en;
