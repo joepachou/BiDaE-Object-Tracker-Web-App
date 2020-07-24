@@ -375,6 +375,10 @@ const objectTableColumn = [
         accessor: "name"
     },
     {
+        Header: "Nickname",
+        accessor: "nickname"
+    },
+    {
         Header: "Type",
         accessor: "type"
     },

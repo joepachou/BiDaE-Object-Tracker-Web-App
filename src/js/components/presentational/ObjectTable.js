@@ -63,7 +63,8 @@ import apiHelper from '../../helper/apiHelper';
 import {
     transferMonitorTypeToString
 } from '../../helper/dataTransfer';
- 
+import moment from 'moment';
+
 
 class ObjectTable extends React.Component{   
 
@@ -94,6 +95,7 @@ class ObjectTable extends React.Component{
         filteredData: [],
         filterSelection: {},
         apiMethod: '',
+        locale: this.context.locale.abbr,
     }
 
     componentDidMount = () => {
@@ -102,14 +104,46 @@ class ObjectTable extends React.Component{
         // this.getImportData()
     }
 
-
     componentDidUpdate = (prevProps, prevState) => {    
 
-        if (this.context.locale.abbr !== prevState.locale) {    
+        if (this.context.locale.abbr !== prevState.locale) {  
+            this.getRefresh()
             this.setState({ 
                 locale: this.context.locale.abbr
             }) 
         } 
+    }
+
+    getRefresh = () =>{
+        this.getAreaTable()
+
+        let columns = _.cloneDeep(objectTableColumn) 
+
+        let {
+            locale
+        } = this.context;
+
+        columns.map(field => {
+            field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
+        }) 
+
+        this.state.data.map(item=>{
+            item.area_name.label = locale.texts[item.area_name.value]
+            item.registered_timestamp = moment(item.registered_timestamp._i).locale(this.context.locale.abbr).format("lll")
+            item.area_name.label == undefined ?   item.area_name.label = '*site module error*' : null 
+        })
+
+        this.state.filteredData.map(item=>{ 
+            item.area_name.label = locale.texts[item.area_name.value]
+
+            item.registered_timestamp = moment(item.registered_timestamp._i).locale(this.context.locale.abbr).format("lll")
+            item.area_name.label == undefined ?   item.area_name.label = '*site module error*' : null
+        })
+       
+        this.setState({
+            columns, 
+            locale: this.context.locale.abbr
+        }) 
     }
 
     getAreaTable = () => {

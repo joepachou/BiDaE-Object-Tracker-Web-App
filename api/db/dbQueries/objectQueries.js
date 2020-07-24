@@ -42,6 +42,7 @@ const getObject = (objectType, areas_id) => {
 			object_table.id,
 			object_table.name, 
 			object_table.type, 
+			object_table.nickname,
 			object_table.asset_control_number, 
 			object_table.status, 
 			object_table.transferred_location, 

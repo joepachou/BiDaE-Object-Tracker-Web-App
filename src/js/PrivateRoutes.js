@@ -51,8 +51,6 @@ const PrivateRoutes = () => {
         pathname
     } = window.location
     if (auth.authenticated) {
-        console.log(123)
-
         return (
             <Fragment>          
                 <NavbarContainer/>
@@ -63,11 +61,9 @@ const PrivateRoutes = () => {
             </Fragment>
         );
     } else if (pathname != '/' && pathname.split('/')[1] != 'page') {
-        console.log(222)
 
         return <Redirect to={{pathname: window.location.pathname, state: {}}} />
     }
-    console.log(333)
 
     return <Redirect to={{pathname: '/login', state: {}}} />
 };

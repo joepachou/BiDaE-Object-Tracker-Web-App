@@ -44,7 +44,7 @@ import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm'
 import axios from 'axios';
 import EditPatientForm from '../../presentational/form/EditPatientForm';
 import messageGenerator from '../../../helper/messageGenerator';
-const SelectTable = selecTableHOC(ReactTable);
+const SelectTable = selecTableHOC(ReactTable); 
 import { patientTableColumn } from '../../../config/tables';
 import dataSrc from '../../../dataSrc';
 import {
@@ -58,8 +58,6 @@ import {
 import BrowserObjectTableView from '../../platform/browser/BrowserObjectTableView';
 import MobileObjectTableView from '../../platform/mobile/MobileObjectTableView';
 import TabletObjectTableView from '../../platform/tablet/TableObjectTableView';
-import SiteModuleTW from '../../../../../site_module/locale/zh-TW';
-import SiteModuleEN from '../../../../../site_module/locale/en-US';
 import moment from 'moment';
 import apiHelper from '../../../helper/apiHelper';
 import {
@@ -114,21 +112,23 @@ class ObjectTableContainer extends React.Component{
 
         let columns = _.cloneDeep(patientTableColumn) 
 
+        let {
+            locale
+        } = this.context;
+
         columns.map(field => {
             field.Header = this.context.locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
         }) 
+
         this.state.data.map(item=>{
-            this.context.locale.lang == 'en' 
-            ? item.area_name.label = SiteModuleEN[item.area_name.value]
-            : item.area_name.label = SiteModuleTW[item.area_name.value]
+            item.area_name.label = locale.texts[item.area_name.value]
             item.registered_timestamp = moment(item.registered_timestamp._i).locale(this.context.locale.abbr).format("lll")
             item.area_name.label == undefined ?   item.area_name.label = '*site module error*' : null 
         })
 
         this.state.filteredData.map(item=>{ 
-            this.context.locale.lang == 'en' 
-            ? item.area_name.label = SiteModuleEN[item.area_name.value]
-            : item.area_name.label = SiteModuleTW[item.area_name.value]
+            item.area_name.label = locale.texts[item.area_name.value]
+
             item.registered_timestamp = moment(item.registered_timestamp._i).locale(this.context.locale.abbr).format("lll")
             item.area_name.label == undefined ?   item.area_name.label = '*site module error*' : null
         })
