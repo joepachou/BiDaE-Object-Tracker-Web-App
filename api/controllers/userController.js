@@ -159,10 +159,7 @@ module.exports = {
             password
         } = request.body;    
     
-        const secret = 'BeDIS@1807'; 
-        const hash = crypto.createHash('sha256', secret) 
-            .update(password) 
-            .digest('hex'); 
+        const hash = encrypt.createHash(password);
     
         pool.query(dbQueries.editPassword(user_id,hash)) 
             .then(res => {
