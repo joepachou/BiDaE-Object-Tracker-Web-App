@@ -39,6 +39,8 @@ import tw from '../locale/zh-TW';
 import en from '../locale/en-US';
 import siteModuleLocaleEn from '../../site_module/locale/en-US';
 import siteModuleLocaleTw from '../../site_module/locale/zh-TW';
+import incDocLocaleEn from '../../inc/doc/locale/en-US';
+import incDocLocaleTw from '../../inc/doc/locale/zh-TW';
 import React from 'react';
 import LocaleContext from './context/LocaleContext';
 import config from './config';
@@ -54,6 +56,7 @@ const supportedLocale = {
         texts: {
             ...tw,
             ...siteModuleLocaleTw,
+            ...incDocLocaleTw,
         },
     },
     en: {
@@ -63,6 +66,7 @@ const supportedLocale = {
         texts: {
             ...en,
             ...siteModuleLocaleEn,
+            ...incDocLocaleEn
         }    
     }
 }

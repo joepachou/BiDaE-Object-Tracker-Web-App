@@ -50,29 +50,16 @@ import {
 } from 'formik';
 import * as Yup from 'yup';
 import {
-    CenterContainer
+    CenterContainer, JustifyCenterDiv
 } from '../BOTComponent/styleComponent';
 import FormikFormGroup from '../presentational/FormikFormGroup';
 import { 
     Link, 
     useHistory
 } from 'react-router-dom';
-import Licence from '../BOTComponent/Licence';
 import routes from '../../config/routes/routes';
 
-
-
 const imageLength = 80;
-
-const handleClick = (e) => {
-    console.log(e.target)
-    let {
-        name
-    } = e.target
-    // switch(name) {
-    //     case 'forget password'
-    // }
-}
 
 const SigninPage = () => {
 
@@ -159,7 +146,6 @@ const SigninPage = () => {
                     </Form>
                 )}
             />
-            {/* <Licence /> */}
         </CenterContainer>
     )
 }

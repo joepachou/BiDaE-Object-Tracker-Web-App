@@ -36,12 +36,18 @@
 
 
 import React, { Fragment } from 'react';
-import doc from '../../../../inc/doc';
+import LocaleContext from '../../context/LocaleContext';
+import {
+    Title
+} from '../BOTComponent/styleComponent';
 
 const Licence = () => {
+
+    let locale = React.useContext(LocaleContext);
+
     return ( 
         <div>
-            {doc.LICENCE}
+            {locale.texts.LICENCE}
         </div>
     )
 }
