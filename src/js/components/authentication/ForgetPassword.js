@@ -51,7 +51,9 @@ import {
 } from 'formik';
 import * as Yup from 'yup';
 import {
-    CenterContainer
+    CenterContainer,
+    Title,
+    Paragraph
 } from '../BOTComponent/styleComponent';
 import FormikFormGroup from '../presentational/FormikFormGroup';
 import { 
@@ -127,10 +129,17 @@ const ForgetPassword = () => {
                                 {errors.email}
                             </div>
                         }
+                        <Title page>
+                            {locale.texts.FORGET_PASSWORD}
+                        </Title>
+                        <Paragraph>
+                            Enter the email address you used when you joined and we’ll send you instructions to reset your password.
+                        </Paragraph>
+                        
                         <FormikFormGroup 
                             type="text"
                             name="email"
-                            className="mb-4"
+                            className="my-4"
                             label={locale.texts.EMAIL}    
                         />  
                         <div className='d-flex justify-content-start'>
