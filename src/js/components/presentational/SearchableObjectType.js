@@ -53,7 +53,7 @@ import {
     OBJECT_TYPE
 } from '../../config/wordMap';
 import {
-    ListTitle
+    Title
 } from '../BOTComponent/styleComponent';
 /*
     this class contain three two components
@@ -420,12 +420,12 @@ class SearchableObjectType extends React.Component {
                 onMouseLeave={this.mouseLeave} 
                 className="hideScrollBar mx-2 float-right" 
             >
-                <ListTitle>
+                <Title list>
                     {locale.texts.OBJECT}
-                </ListTitle>
-                <ListTitle>
+                </Title>
+                <Title list>
                     {locale.texts.TYPES}
-                </ListTitle>
+                </Title>
                 {/** this section shows the layout of sectionIndexList (Alphabet List)*/}
                 <Col 
                     id="SectionIndex"  

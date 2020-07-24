@@ -38,7 +38,7 @@ import 'react-table/react-table.css';
 import config from '../../../config';
 import _ from 'lodash';
 import axios from 'axios';
-import dataSrc, { objectPackage } from '../../../dataSrc'
+import dataSrc from '../../../dataSrc'
 import { AppContext } from '../../../context/AppContext';
 import { toast } from 'react-toastify';
 import ToastNotification from '../../presentational/ToastNotification';
@@ -64,7 +64,9 @@ import {
     ALL_PATIENTS,
     MY_PATIENTS,
     OBJECTS,
-    OBJECT_TYPE
+    OBJECT_TYPE,
+    NOT_STAY_ROOM_MONITOR,
+    SEARCH_HISTORY
 } from '../../../config/wordMap';
 
 const {
@@ -392,7 +394,7 @@ class MainContainer extends React.Component{
             auth
         } = this.context
         apiHelper.monitor.getMonitorConfig(
-            'not stay room monitor',
+            NOT_STAY_ROOM_MONITOR,
             auth.user.areas_id,
             true,
         )
@@ -540,6 +542,7 @@ class MainContainer extends React.Component{
                 break;
 
             case OBJECT_TYPE:
+            case SEARCH_HISTORY:
                 if (searchObjectArray.includes(searchKey.value)) {
 
                 } else if (searchObjectArray.length < MAX_SEARCH_OBJECT_NUM) {
@@ -558,34 +561,25 @@ class MainContainer extends React.Component{
             default:
 
                 if (searchKey.value == "") return
+
                 let searchResultMac = []; 
 
                 searchObjectArray = [];
+                
+                let keyword = searchKey.value.toLowerCase();
+
+                let searchableField = config.SEARCHABLE_FIELD
 
                 proccessedTrackingData
                     .map(item => {    
-                         if (
-                            item.type.toLowerCase().indexOf(searchKey.value.toLowerCase()) >= 0 ||
-                            item.asset_control_number.indexOf(searchKey.value) >= 0 ||
-                            item.name.toLowerCase().indexOf(searchKey.value.toLowerCase()) >= 0  ||
-                            (item.nickname != undefined ?  item.nickname.toLowerCase().indexOf(searchKey.value.toLowerCase()) >= 0 : false)
-                        ) {
-                            item.searched = true;
-                            item.searchedType = -1;
-                            searchResult.push(item)
-                            searchResultMac.push(item.mac_address)
-                            
-                        }
-                       
-                        if(item.location_description != null){ 
-                            if( item.location_description.indexOf(searchKey) >= 0  ){
-                                item.searched = true
+                        searchableField.map(field => {
+                            if (item[field] && item[field].toLowerCase().indexOf(keyword) >= 0) {
+                                item.searched = true;
                                 item.searchedType = -1;
                                 searchResult.push(item)
                                 searchResultMac.push(item.mac_address)
                             }
-                        }
-    
+                        })    
                     })
     
                 // if(this.state.lastsearchKey != searchKey) {

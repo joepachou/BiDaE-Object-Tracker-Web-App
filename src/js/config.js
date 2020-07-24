@@ -177,6 +177,14 @@ const config = {
         "night shift",
     ],
 
+    SEARCHABLE_FIELD: [
+        'type', 
+        'asset_contol_number', 
+        'name', 
+        'nickname', 
+        'location_description'
+    ],
+
     monitorType: {
         1: "geofence",
         2: "panic",

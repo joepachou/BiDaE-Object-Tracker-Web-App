@@ -47,7 +47,7 @@ export const getDescription = (item, locale) => {
                 item.found 
                     ?   `
                         
-                        ${getType(item, locale)}
+                        ${item.nickname ? getNickname(item, locale) : getType(item, locale)}
 
                         ${getACN(item, locale)}
                         
@@ -158,6 +158,12 @@ export const getName = (item, locale) => {
 export const getType = (item, locale) => {
     return `
         ${item.type},
+    `
+}
+
+export const getNickname = (item, locale) => {
+    return `
+        ${item.nickname},
     `
 }
 

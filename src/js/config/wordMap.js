@@ -25,5 +25,7 @@ module.exports = {
     SHIFT_CHANGE: "shift change",
 
     SIGN_IN: "signin",
+
+    NOT_STAY_ROOM_MONITOR: 'not stay room monitor'
     
 }

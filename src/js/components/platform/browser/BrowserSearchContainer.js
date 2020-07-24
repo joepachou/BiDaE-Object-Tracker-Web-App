@@ -89,6 +89,8 @@ const BrowserSearchContainer = ({
                         clearSearchResult={clearSearchResult}   
                         hasGridButton={hasGridButton} 
                         maxHeigh={config.searchResultProportion}
+                        searchObjectArray={searchObjectArray}
+                        pinColorArray={pinColorArray}
                     />
                 </div>
                 {/* <ObjectTypeList

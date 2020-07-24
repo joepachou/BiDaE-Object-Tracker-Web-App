@@ -57,6 +57,7 @@ const getTrackingData = (areas_id, key) => {
 			object_table.object_type,
 			object_table.transferred_location,
 			object_table.monitor_type,
+			object_table.nickname,
 			edit_object_record.notes,
 			lbeacon_table.description as location_description,
 			JSON_BUILD_OBJECT(
