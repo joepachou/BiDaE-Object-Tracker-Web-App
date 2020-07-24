@@ -34,6 +34,11 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
+require('dotenv').config();
+let dataSrcIP = process.env.DATASRC_IP;
+let dataSrcProtocol = process.env.DATASRC_PROTOCOL || 'https'
+let domain = `${dataSrcProtocol}://${dataSrcIP}`;
+
 const resetPasswordInstruction = {
 
     subject: 'BOT Password Assistance',
@@ -45,7 +50,7 @@ const resetPasswordInstruction = {
 
                 <p>We received a request to reset the password for the BOT account associated with this e-mail address. Click the link below to reset your password using our secure server:</p>
                             
-                http://localhost/resetpassword/new/${token}
+                ${domain}/resetpassword/new/${token}
 
                 <p>Sincerely,</p>
                 <p>The BOT Service Team

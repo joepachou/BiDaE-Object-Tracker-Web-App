@@ -62,7 +62,7 @@ const routes = {
 
     FORGET_PASSWORD: '/resetpassword',
 
-    RESET_PASSWORD: '/reset/new/:token',
+    RESET_PASSWORD: '/resetpassword/new/:token',
 
     RESET_PASSWORD_RESULT: '/resetpassword/success',
 
