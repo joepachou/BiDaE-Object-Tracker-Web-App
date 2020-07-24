@@ -171,7 +171,7 @@ const config = {
         draggable: true
     },
 
-    shiftOption: [
+    SHIFT_OPTIONS: [
         "day shift",
         "swing shift",
         "night shift",
@@ -221,11 +221,11 @@ const config = {
     getShift: () => {
         const hour = moment().hours()
         if (hour < 17 && hour > 8){
-            return config.shiftOption[0]
+            return config.SHIFT_OPTIONS[0]
         }else if(hour < 24 && hour > 17){
-            return config.shiftOption[1]
+            return config.SHIFT_OPTIONS[1]
         }else{
-            return config.shiftOption[2]
+            return config.SHIFT_OPTIONS[2]
         }
     },
 

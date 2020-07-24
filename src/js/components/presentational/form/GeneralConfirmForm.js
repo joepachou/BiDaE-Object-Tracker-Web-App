@@ -40,10 +40,19 @@ import {
     Modal, 
     Button,
 } from 'react-bootstrap';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
+import { 
+    Formik, 
+    Field, 
+    Form, 
+    ErrorMessage 
+} from 'formik';
 import * as Yup from 'yup';
 import LocaleContext from '../../../context/LocaleContext';
 import apiHelper from '../../../helper/apiHelper';
+import FormikFormGroup from '../FormikFormGroup';
+import {
+    Title
+} from '../../BOTComponent/styleComponent';
 
 const style = {
     modal: {
@@ -64,11 +73,13 @@ const GeneralConfirmForm = ({
             size="sm" 
             onHide={handleClose}
             style={style.modal}
-            className='text-capitalize'
         >
             <Modal.Body>
                 <div className='d-flex justify-content-center'>
-                    <div className="subtitle my-1">{locale.texts.PLEASE_ENTER_ID_AND_PASSWORD}</div>
+                    <Title sub 
+                        className="my-1">
+                        {locale.texts.PLEASE_ENTER_ID_AND_PASSWORD}
+                    </Title>
                 </div>
 
                 <Formik
@@ -112,25 +123,22 @@ const GeneralConfirmForm = ({
                                     {locale.texts[status.toUpperCase().replace(/ /g, "_")]}
                                 </div>
                             }
-                            <div className="form-group">
-                                <Field 
-                                    name="username" 
-                                    type="text" 
-                                    className={'form-control' + (errors.username && touched.username ? ' is-invalid' : '')} 
-                                    placeholder={locale.texts.USERNAME}
-                                />
-                                <ErrorMessage name="username" component="div" className="invalid-feedback" />
-                            </div>
-                            <div className="form-group">
-                                <Field 
-                                    name="password" 
-                                    type="password" 
-                                    className={'form-control' + (errors.password && touched.password ? ' is-invalid' : '')} 
-                                    placeholder={locale.texts.PASSWORD}
-                                />
-                                <ErrorMessage name="password" component="div" className="invalid-feedback" />
-                            </div>
-                            
+                            <FormikFormGroup 
+                                type="text"
+                                name="username"
+                                label={locale.texts.NAME} 
+                                error={errors.username}
+                                touched={touched.username}
+                                autoComplete="off"
+                            />  
+                            <FormikFormGroup 
+                                type="password"
+                                name="password"
+                                label={locale.texts.PASSWORD}
+                                error={errors.password}
+                                touched={touched.password}
+                                autoComplete="off"
+                            />
                             <Modal.Footer>
                                 <Button 
                                     type="submit" 

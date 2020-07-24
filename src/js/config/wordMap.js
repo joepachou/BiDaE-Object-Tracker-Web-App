@@ -21,5 +21,9 @@ module.exports = {
     SEARCH_HISTORY: "search history",
 
     SEARCH_BAR: "search bar",
+
+    SHIFT_CHANGE: "shift change",
+
+    SIGN_IN: "signin",
     
 }

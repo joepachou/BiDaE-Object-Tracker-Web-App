@@ -50,7 +50,7 @@ import GeneralConfirmForm from '../presentational/form/GeneralConfirmForm';
 import TabletMapContainer from '../platform/tablet/TabletMapContainer';
 import MobileMapContainer from '../platform/mobile/MobileMapContainer';
 import BrowserMapContainer from '../platform/browser/BrowserMapContainer';
-import { CLEAR_SEARCH_RESULT } from '../../config/words';
+import { CLEAR_SEARCH_RESULT } from '../../config/wordMap';
 
 class MapContainer extends React.Component {
 

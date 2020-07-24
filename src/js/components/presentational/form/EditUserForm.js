@@ -48,9 +48,9 @@ import {
 import Select from 'react-select';
 import * as Yup from 'yup';
 import config from '../../../config';
-import CheckboxGroup from '../CheckboxGroup';
-import Checkbox from '../../presentational/Checkbox';
-import FormikFormGroup from '../../presentational/FormikFormGroup';
+import CheckboxGroup from '../../container/CheckboxGroup';
+import Checkbox from '../Checkbox';
+import FormikFormGroup from '../FormikFormGroup';
 import styleConfig from '../../../config/styleConfig';
 import LocaleContext from '../../../context/LocaleContext';
 import { emailValidation } from '../../../helper/validation';

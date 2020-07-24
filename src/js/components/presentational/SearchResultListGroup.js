@@ -52,7 +52,7 @@ import {
     ALL_DEVICES,
     ALL_PATIENTS,
     OBJECT_TYPE
-} from '../../config/words';
+} from '../../config/wordMap';
 
 
 const SearchResultListGroup = ({

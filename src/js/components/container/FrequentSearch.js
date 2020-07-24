@@ -47,7 +47,7 @@ import {
     ALL_PATIENTS,
     MY_DEVICES,
     MY_PATIENTS
-} from '../../config/words';
+} from '../../config/wordMap';
 
 class FrequentSearch extends React.Component {
 

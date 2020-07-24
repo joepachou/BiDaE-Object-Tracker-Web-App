@@ -35,7 +35,7 @@
 */
 import {
     OBJECT_TYPE
-} from '../config/words';
+} from '../config/wordMap';
 import config from '../config';
 
 /** Retrieve the object's offset from object's mac_address.

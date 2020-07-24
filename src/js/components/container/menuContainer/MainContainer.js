@@ -65,7 +65,7 @@ import {
     MY_PATIENTS,
     OBJECTS,
     OBJECT_TYPE
-} from '../../../config/words';
+} from '../../../config/wordMap';
 
 const {
     MAX_SEARCH_OBJECT_NUM

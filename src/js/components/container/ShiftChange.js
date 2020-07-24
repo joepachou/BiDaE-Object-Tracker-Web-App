@@ -1,3 +1,39 @@
+/*
+    Copyright (c) 2020 Academia Sinica, Institute of Information Science
+
+    License:
+        GPL 3.0 : The content of this file is subject to the terms and conditions
+
+    Project Name:
+        BiDae Object Tracker (BOT)
+
+    File Name:
+        ShiftChange.js
+
+    File Description:
+        BOT UI component
+
+    Version:
+        1.0, 20200601
+
+    Abstract:
+        BeDIS uses LBeacons to deliver 3D coordinates and textual descriptions of
+        their locations to users' devices. Basically, a LBeacon is an inexpensive,
+        Bluetooth device. The 3D coordinates and location description of every 
+        LBeacon are retrieved from BeDIS (Building/environment Data and Information 
+        System) and stored locally during deployment and maintenance times. Once 
+        initialized, each LBeacon broadcasts its coordinates and location 
+        description to Bluetooth enabled user devices within its coverage area. It 
+        also scans Bluetooth low-energy devices that advertise to announced their 
+        presence and collect their Mac addresses.
+
+    Authors:
+        Tony Yeh, LT1stSoloMID@gmail.com
+        Wayne Kang, b05505028@ntu.edu.tw
+        Edward Chen, r08921a28@ntu.edu.tw
+        Joe Chou, jjoe100892@gmail.com
+*/
+
 import React, { Fragment } from 'react';
 import { 
     Modal, 
@@ -16,6 +52,9 @@ import {
 } from '../../helper/descriptionGenerator';
 import pdfPackageGenerator from '../../helper/pdfPackageGenerator';
 import apiHelper from '../../helper/apiHelper';
+import {
+    Title
+} from '../BOTComponent/styleComponent';
 
 const style = {
     modalBody: {
@@ -123,7 +162,7 @@ class ShiftChange extends React.Component {
         })
     }
 
-    handleConfirmFormSubmit = (authentication) => { 
+    handleConfirmFormSubmit = (authentication = '', values) => { 
 
         let { 
             locale, 
@@ -135,6 +174,8 @@ class ShiftChange extends React.Component {
             patients: this.state.patients
         }
 
+        console.log(values)
+
         let pdfPackage = pdfPackageGenerator.getPdfPackage({
             option: 'shiftChange', 
             user: auth.user, 
@@ -142,7 +183,7 @@ class ShiftChange extends React.Component {
             locale,
             signature: authentication,
             additional: {
-                shift: this.state.shift,
+                shift: values.shift,
                 area: locale.texts[config.mapConfig.areaOptions[auth.user.areas_id[0]]],
                 name: auth.user.name
             }
@@ -172,7 +213,7 @@ class ShiftChange extends React.Component {
         apiHelper.record.addShiftChangeRecord({
             userInfo: auth.user,
             pdfPackage,
-            shift: this.state.shift,
+            shift: values.shift,
         })
         .then(res => {
             let callback = () => {
@@ -227,7 +268,7 @@ class ShiftChange extends React.Component {
         const hasFoundPatients = foundPatients.length !== 0;
         const hasNotFoundPatients = notFoundPatients.length !== 0;
         
-        const shiftOptions = Object.values(config.shiftOption).map(shift => { 
+        const shiftOptions = Object.values(config.SHIFT_OPTIONS).map(shift => { 
             return { 
                 value: shift,
                 label: locale.texts[shift.toUpperCase().replace(/ /g, '_')]
@@ -252,17 +293,17 @@ class ShiftChange extends React.Component {
                         }}
 
                         onSubmit={(values, { setStatus, setSubmitting }) => {
-                            this.confirmShift(values)
+                            this.handleConfirmFormSubmit("", values)
                         }}
 
-                        render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm }) => (
-                            <div>
+                        render={({ values, setFieldValue, submitForm }) => (
+                            <Fragment>
                                 <Modal.Header
                                     className='d-flex flex-column text-capitalize'
                                 >
-                                    <div className="title">
+                                    <Title>
                                         {locale.texts.SHIFT_CHANGE_RECORD}
-                                    </div>                                
+                                    </Title>                                
                                     <div>
                                         {locale.texts.DATE_TIME}: {nowTime}
                                     </div> 
@@ -315,7 +356,7 @@ class ShiftChange extends React.Component {
                                             typeArray={notFoundPatients}
                                         /> 
                                     </Form> 
-                                    </Modal.Body>
+                                </Modal.Body>
                                     <Modal.Footer>
                                         <Button 
                                             variant="outline-secondary" 
@@ -331,8 +372,8 @@ class ShiftChange extends React.Component {
                                         >
                                             {locale.texts.CONFIRM}
                                         </Button>
-                                    </Modal.Footer>   
-                                </div>
+                                    </Modal.Footer>  
+                                </Fragment>
                         )}
                     />
                 </Modal>     
@@ -367,13 +408,11 @@ const TypeBlock = ({
     } = appContext
 
     return (
-        <div>
+        <Fragment>
             {hasType && 
-                <div
-                    className="subtitle"
-                >
+                <Title sub >
                     {title} 
-                </div>
+                </Title>
             }     
             {hasType && typeArray.map((item, index) => { 
                 return (
@@ -397,6 +436,6 @@ const TypeBlock = ({
                     </div>
                 )
             })}
-        </div>
+        </Fragment>
     )
 }

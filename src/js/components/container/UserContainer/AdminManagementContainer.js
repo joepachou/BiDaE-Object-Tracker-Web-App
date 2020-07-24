@@ -43,7 +43,7 @@ import ReactTable from 'react-table';
 import axios from 'axios';
 import dataSrc from '../../../dataSrc';
 import { userInfoTableColumn } from '../../../config/tables';
-import EditUserForm from './EditUserForm';
+import EditUserForm from '../../presentational/form/EditUserForm';
 import { AppContext } from '../../../context/AppContext';
 import DeleteUserForm from './DeleteUserForm';
 import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm';

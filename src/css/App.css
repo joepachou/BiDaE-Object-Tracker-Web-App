@@ -206,18 +206,6 @@ a:hover {
     display: none;
 }
 
-/* React-bootstrap Alert */
-.alert-secondary {
-    border: 0;
-    background: rgba(143, 143, 143, 0.1);
-    box-shadow: 2px 2px 4px 0 #cbcbcb;
-    margin-bottom: 0.8rem;
-}
-
-.alert {
-    font-size: 1.2rem;
-}
-
 .alert-danger {
     padding: 5px 10px;
     margin-bottom: 0px;

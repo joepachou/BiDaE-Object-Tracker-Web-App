@@ -47,7 +47,7 @@ import AccessControl from '../../authentication/AccessControl'
 import Map from '../../presentational/Map';
 import {
     CLEAR_SEARCH_RESULT
-} from '../../../config/words';
+} from '../../../config/wordMap';
 
 export default class BrowserMapContainer extends React.Component {
 

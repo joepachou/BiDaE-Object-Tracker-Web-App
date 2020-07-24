@@ -118,13 +118,6 @@ export const ListTitle = styled.div`
     color: black;
 `
 
-export const SubTitle = styled.div`
-    font-size: 1rem;
-    font-weight: 400;
-    color: black;
-    margin-bottom: 5px;
-`
-
 export const BOTContainer = styled.div`
     margin: 20px 20px;
 `

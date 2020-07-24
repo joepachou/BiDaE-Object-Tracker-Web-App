@@ -43,7 +43,7 @@ import {
 } from 'react-device-detect';
 import {
     SEARCH_BAR
-} from '../../config/words';
+} from '../../config/wordMap';
 
 class Searchbar extends React.Component {
     

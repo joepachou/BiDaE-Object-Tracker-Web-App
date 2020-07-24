@@ -51,7 +51,7 @@ import { AppContext } from '../../context/AppContext';
 import config from '../../config';
 import { 
     OBJECT_TYPE
-} from '../../config/words';
+} from '../../config/wordMap';
 import {
     ListTitle
 } from '../BOTComponent/styleComponent';

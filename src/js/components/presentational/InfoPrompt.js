@@ -48,7 +48,7 @@ import {
     CustomView,
     isMobile 
 } from 'react-device-detect'
-import { SWITCH_SEARCH_LIST } from '../../config/words';
+import { SWITCH_SEARCH_LIST } from '../../config/wordMap';
 import {
     HoverDiv,
     HoverWithUnderlineDiv,

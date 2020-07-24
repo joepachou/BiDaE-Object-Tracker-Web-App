@@ -51,8 +51,7 @@ import LocaleContext from '../../../context/LocaleContext';
 import config from '../../../config'
 import AuthenticationContext from '../../../context/AuthenticationContext';
 import {
-    ListTitle,
-    SubTitle
+    Title
 } from '../../BOTComponent/styleComponent';
 
 const EditAreasForm = ({
@@ -89,9 +88,9 @@ const EditAreasForm = ({
 
                     render={({ values, errors, status, touched, isSubmitting, setFieldValue}) => (
                         <Form>
-                            <SubTitle>
+                            <Title sub>
                                 {locale.texts.SELECTED_AREAS}
-                            </SubTitle>
+                            </Title>
                             <ListGroup>
                                 {
                                     Object.values(areaTable)
@@ -122,9 +121,9 @@ const EditAreasForm = ({
                                         })
                                 }
                             </ListGroup>
-                            <SubTitle>
+                            <Title sub>
                                 {locale.texts.NOT_SELECTED_AREAS}
-                            </SubTitle>
+                            </Title>
                             <ListGroup>
                                 {
                                     Object.values(areaTable)

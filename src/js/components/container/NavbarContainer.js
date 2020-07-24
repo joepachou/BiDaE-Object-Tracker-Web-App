@@ -61,6 +61,10 @@ import {
     BOTNavLink
 } from '../BOTComponent/styleComponent';
 import routes from '../../config/routes/routes';
+import {
+    SHIFT_CHANGE,
+    SIGN_IN
+} from '../../config/wordMap';
 
 class NavbarContainer extends React.Component {
 
@@ -83,15 +87,17 @@ class NavbarContainer extends React.Component {
     }
 
     handleClick = (e) => {
+
         let name = e.target.getAttribute('name')
+        
         switch(name) {
-            case 'shiftChange':
+            case SHIFT_CHANGE:
                 e.preventDefault()
                 this.setState({
                     showShiftChange: true
                 })
                 break;
-            case 'signin':
+            case SIGN_IN:
                 this.setState({
                     showSignin: true,
                 })
