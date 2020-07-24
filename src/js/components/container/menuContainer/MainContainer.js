@@ -560,6 +560,7 @@ class MainContainer extends React.Component{
 
             default:
 
+                if (/^\s/.test(searchKey.value)) return
                 if (searchKey.value == "") return
 
                 let searchResultMac = []; 
