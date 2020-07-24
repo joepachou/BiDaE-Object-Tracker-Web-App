@@ -43,6 +43,7 @@ import Nav from 'react-bootstrap/Nav'
 import styleSheet from '../../config/styleSheet'
 import Button from 'react-bootstrap/Button';
 import DataTimePicker from 'react-widgets/lib/DateTimePicker';
+import Alert from 'react-bootstrap/Alert';
 
 export const EditedTime = styled.div`
     font-size: 0.8rem;
@@ -228,7 +229,7 @@ export const BOTDataTimePicker = styled(DataTimePicker)`
 
 export const HoverWithUnderlineDiv = styled.div`
     text-transform: capitalize;
-
+    letter-spacing: 1px;
     &:hover {
         cursor: pointer;
         text-decoration: underline;
@@ -257,5 +258,31 @@ export const SubMenu = styled.div`
     &:hover {
         color: grey;
     }
+`
+
+export const JustifyCenterDiv = styled.div`
+    display: flex;
+    justify-content: center;
+`
+
+export const FontBoldDiv = styled.div`
+    font-weight: ${styleSheet.fontWeight};
+    text-transform: capitalize;
+`
+
+export const ToggleDisplayDiv = styled.div`
+    ${props => !props.display && css`
+        display: none;
+    `}
+`
+
+export const ReactBootstrapAlert = styled(Alert)`
+    ${props => props.variant == 'secondary' && css`
+        border: 0;
+        background: ${styleSheet.lightGrey};
+        box-shadow: 2px 2px 4px 0 #cbcbcb;
+        margin-bottom: 0.8rem;
+        z-Index: 1700;
+    `}
 `
 

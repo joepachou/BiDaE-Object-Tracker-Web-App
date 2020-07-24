@@ -288,14 +288,14 @@ export const navbarNavList = [
         path: routes.HOME,
         hasEvent: true
     },
-    // {
-    //     name: "shift change",
-    //     alias: "shiftChange",
-    //     // path: "/",
-    //     permission: "user:shiftChange",
-    //     platform: ['browser', 'tablet'],
-    //     hasEvent: true
-    // },
+    {
+        name: "shift change",
+        alias: "shiftChange",
+        // path: "/",
+        permission: "user:shiftChange",
+        platform: ['browser', 'tablet'],
+        hasEvent: true
+    },
     {
         name: 'object management',
         alias: 'objectManagement',

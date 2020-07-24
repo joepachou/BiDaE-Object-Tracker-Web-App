@@ -37,8 +37,6 @@
 
 import React, { Fragment, useEffect } from 'react';
 import { 
-    Alert, 
-    Button,
     Row
 } from 'react-bootstrap'
 import { AppContext } from '../../context/AppContext';
@@ -53,24 +51,12 @@ import {
 import { SWITCH_SEARCH_LIST } from '../../config/words';
 import {
     HoverDiv,
-    HoverWithUnderlineDiv
+    HoverWithUnderlineDiv,
+    JustifyCenterDiv,
+    FontBoldDiv,
+    ToggleDisplayDiv,
+    ReactBootstrapAlert
 } from '../BOTComponent/styleComponent';
-import styled from 'styled-components';
-
-const style = {
-    alertText: {
-        fontWeight: 700
-    },
-    alertTextTitle: {
-        fontSize: '1rem',
-        color: 'rgba(101, 111, 121, 0.78)',
-    },
-    alerTextTitleForTablet: {
-        fontSize: '1rem',
-        fontWeight: 500,
-        color: 'black'
-    }
-}
 
 const InfoPrompt = ({
     searchKey,
@@ -106,13 +92,9 @@ const InfoPrompt = ({
     return (
         <Fragment>
             <CustomView condition={isTablet != true && isMobile != true}>
-                <Alert
+                <ReactBootstrapAlert
                     variant='secondary' 
-                    className='px-5'
-                    style={{
-                        zIndex: 10000000,
-                        background: '#f2f0f0'
-                    }}
+                    className='px-4'
                 >
                     <Row>
                         <HoverWithUnderlineDiv
@@ -125,16 +107,13 @@ const InfoPrompt = ({
                             >
                                 {searchKey ? locale.texts.FOUND : locale.texts.PLEASE_SELECT_SEARCH_OBJECT}
                                 &nbsp;
-                                <div
-                                    style={style.alertText}
-                                >
+                                <FontBoldDiv>
                                     {searchKey ? searchResult.filter(item => item.found).length : ""}
-                                </div>
+                                </FontBoldDiv>
                                 &nbsp;
                                 {searchKey && locale.texts.OBJECTS}
                             </div>
                         </HoverWithUnderlineDiv>
-                        {searchKey && <div>&nbsp;</div> }
                         <HoverWithUnderlineDiv
                             onClick={handleClick}
                         >
@@ -145,11 +124,9 @@ const InfoPrompt = ({
                             >
                                 {searchKey && `${locale.texts.NOT_FOUND}`}
                                 &nbsp;
-                                <div
-                                    style={style.alertText}
-                                >
+                                <FontBoldDiv>
                                     {searchKey ? searchResult.filter(item => !item.found).length : ""}
-                                </div>
+                                </FontBoldDiv>
                                 &nbsp;
                                 {searchKey && locale.texts.OBJECTS}
                             </div>
@@ -171,66 +148,57 @@ const InfoPrompt = ({
                         </HoverDiv>
 
                     </Row>
-                    <div
-                        style={{
-                            display: showDetail ? "" : 'none',
-                            // fontSize: '0.9rem'
-                        }}
+                    <ToggleDisplayDiv
+                        display={showDetail}
+                        className="pt-1"
                     >
                         {Object.keys(searchResultMap).map((item, index) => {
                             return (
                                 <Row
                                     className='text-capitalize'
                                 >
-                                    <div 
-                                        className='d-flex justify-content-start mr-1'
+                                    <JustifyCenterDiv
+                                        className='mr-1'
                                     >
                                         {locale.texts.FOUND}
                                         &nbsp;
-                                        <div
-                                            style={style.alertText}
-                                        >
+                                        <FontBoldDiv>
                                             {searchResultMap[item][1]}
-                                        </div>
+                                        </FontBoldDiv>
                                         &nbsp;
                                         {item}
-                                    </div>
+                                    </JustifyCenterDiv>
                                     &nbsp;
-                                    <div 
-                                        className='d-flex justify-content-start mr-1 text-capitalize'
+                                    <JustifyCenterDiv
+                                        className='mr-1'
                                     >
                                         {locale.texts.NOT_FOUND}
                                         &nbsp;
-                                        <div
-                                            style={style.alertText}
-                                        >
+                                        <FontBoldDiv>
                                             {searchResultMap[item][0] - searchResultMap[item][1]}
-                                        </div>
+                                        </FontBoldDiv>
                                         &nbsp;
                                         {item}
-                                    </div>
+                                    </JustifyCenterDiv>
                                 </Row>
                             )
                         })} 
-                    </div>
-                </Alert>
+                    </ToggleDisplayDiv>
+                </ReactBootstrapAlert>
             </CustomView> 
-
-
             <TabletView>
-                <div>
-                    <div className='text-capitalize' style={style.alerTextTitleForTablet}>{searchKey ? locale.texts.FOUND : locale.texts.PLEASE_SELECT_SEARCH_OBJECT}</div>
-                    <div className='text-capitalize' style={style.alerTextTitleForTablet}>{searchKey ? searchResult.filter(item => item.found).length : ""}</div>
-                    <div className='text-capitalize' style={style.alerTextTitleForTablet}>{searchKey 
-                            ?   
-                                locale.texts.OBJECTS
-                            :   ""
-                        }</div>
-                </div>
+                <FontBoldDiv>
+                    {searchKey ? locale.texts.FOUND : locale.texts.PLEASE_SELECT_SEARCH_OBJECT}
+                    {searchKey ? searchResult.filter(item => item.found).length : ""}
+                    {searchKey 
+                        ?   
+                            locale.texts.OBJECTS
+                        :   ""
+                    }
+                </FontBoldDiv>
             </TabletView>
         </Fragment>
     )
-
-}
+};
 
 export default InfoPrompt

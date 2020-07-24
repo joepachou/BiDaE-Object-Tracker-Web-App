@@ -39,7 +39,7 @@ const styleSheet = {
 
     theme: 'rgb(0, 123, 255)',
 
-    lightGrey: 'rgba(32,33,36,0.28)',
+    lightGrey: 'rgba(242, 240, 240, 1)',
 
     bodyBackGround: '#f0edf240',
 
@@ -52,6 +52,8 @@ const styleSheet = {
     warning: 'red',
 
     black: 'black',
+
+    fontWeight: 700,
 
 
 
