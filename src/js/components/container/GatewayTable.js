@@ -96,7 +96,8 @@ class GatewayTable extends React.Component{
         let { 
             locale
         } = this.context
-        apiHelper.gatewayApiAgent.gatewayApiAgent({
+
+        apiHelper.gatewayApiAgent.getGatewayTable({
             locale: locale.abbr,
         })
         .then(res => {

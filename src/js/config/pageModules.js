@@ -135,6 +135,28 @@ export const settingModule = {
             name: 'user profile',
             component: (props) => <UserProfile />
         },
+        {
+            name: 'devices management',
+            path: 'devicesManagement',
+            href: '#DevicesManagement',
+            component: (props) => <MyDeviceManager />
+        },
+        {
+            name: 'patient management',
+            path: 'patientManagement',
+            href: '#PatientManagement',
+            component: (props) => <MyPatientManager />
+        },
+        {
+            name: "lbeacon",
+            component: (props) => <LBeaconTable {...props}/>,
+            platform: ['browser', 'tablet', 'mobile']
+        },
+        {
+            name: "gateway",
+            component: (props) => <GatewayTable {...props}/>,
+            platform: ['browser', 'tablet', 'mobile']
+        }
         // {
         //     name: "transferred location management",
         //     component: (props) => <TransferredLocationManagement {...props}/>,
