@@ -312,7 +312,7 @@ export const navbarNavList = [
     },
     {
         name: "shift change",
-        alias: "shiftChange",
+        alias: "shift change",
         // path: "/",
         permission: "user:shiftChange",
         platform: ['browser', 'tablet'],

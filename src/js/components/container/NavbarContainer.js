@@ -97,11 +97,6 @@ class NavbarContainer extends React.Component {
                     showShiftChange: true
                 })
                 break;
-            case SIGN_IN:
-                this.setState({
-                    showSignin: true,
-                })
-                break;
         }
     }
 
