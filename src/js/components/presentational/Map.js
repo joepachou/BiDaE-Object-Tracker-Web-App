@@ -218,8 +218,6 @@ class Map extends React.Component {
         /** Error handler of the user's auth area does not include the group of sites */
         let areaOption = areaOptions[areaId];
 
-        console.log(this.context)
-
         /** set the map's config */
         let { 
             url, 
