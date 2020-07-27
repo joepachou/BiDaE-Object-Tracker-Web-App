@@ -60,7 +60,6 @@ class CheckboxGroup extends React.Component {
 
     render() {
         const { value, error, touched, label, className, children } = this.props;
-        console.log(children)
         return (
             <div
                 className="d-flex flex-column"

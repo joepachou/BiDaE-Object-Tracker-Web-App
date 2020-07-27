@@ -132,21 +132,20 @@ class NavbarContainer extends React.Component {
             showShiftChange
         } = this.state;
 
-        const {
-            areaOptions,
-        } = config.mapConfig
 
-        const options = Object.values(config.mapConfig.areaOptions).map(area => {
-            return {
-                value: area,
-                label: locale.texts[area.toUpperCase().replace(/ /g, '_')],
-            }
-        })
+        const AREA_MODULE = config.mapConfig.AREA_MODULES
 
-        let selectedArea = {
-            value: areaOptions[areaId],
-            label: locale.texts[areaOptions[areaId]]
-        }
+        let options = Object.values(AREA_MODULE)
+            .filter(module => auth.user.areas_id.includes(module.id))
+            .map(module => {
+                return {
+                    value: module.name,
+                    label: locale.texts[module.name],
+                    id: module.id
+                }
+            })
+
+        let selectedArea = options.filter(module => module.id == areaId)
 
         return (
             <div
@@ -192,10 +191,9 @@ class NavbarContainer extends React.Component {
                                 onChange={value => {
                                     let { stateReducer } = this.context
                                     let [{areaId}, dispatch] = stateReducer
-
                                     dispatch({
                                         type: 'setArea',
-                                        value: config.mapConfig.areaModules[value.value].id
+                                        value: value.id
                                     })
                                 }}
                                 styles={styleConfig.reactSelectNavbar}

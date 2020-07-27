@@ -251,13 +251,38 @@ export const reportContainerModule = {
     
     tabList: [
         {
-            name: 'object edited record',
+            name: 'Shift Change Record',
+            component: (props) => <ShiftChangeRecord {...props}/>,
+            platform: ['browser', 'tablet', 'mobile'],
+        },
+        {
+            name: 'notes on patients',
+            component: (props) => null,
+            platform: ['browser', 'tablet', 'mobile'],
+        },
+        {
+            name: 'device transfer record',
             component: (props) => <ObjectEditedRecord {...props} />,
             platform: ['browser', 'tablet', 'mobile'],
         },
         {
-            name: 'Shift Change Record',
-            component: (props) => <ShiftChangeRecord {...props}/>,
+            name: 'device service request',
+            component: (props) => null,
+            platform: ['browser', 'tablet', 'mobile'],
+        },
+        {
+            name: 'object tracking',
+            component: (props) => <TrackingTable {...props}/>,
+            platform: ['browser', 'tablet', 'mobile'],
+        },
+        // {
+        //     name: 'object edited record',
+        //     component: (props) => <ObjectEditedRecord {...props} />,
+        //     platform: ['browser', 'tablet', 'mobile'],
+        // },
+        {
+            name: 'asset usage',
+            component: (props) => null,
             platform: ['browser', 'tablet', 'mobile'],
         },
     ],

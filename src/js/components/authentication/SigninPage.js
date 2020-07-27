@@ -58,6 +58,7 @@ import {
     useHistory
 } from 'react-router-dom';
 import routes from '../../config/routes/routes';
+import { AppContext } from '../../context/AppContext';
 
 const imageLength = 80;
 
@@ -65,7 +66,10 @@ const SigninPage = () => {
 
     let locale = React.useContext(LocaleContext);
     let auth = React.useContext(AuthContext);
+    let appContext = React.useContext(AppContext)
+
     let history = useHistory();
+
     return (
         <CenterContainer>
             <div className='d-flex justify-content-center'>
@@ -95,7 +99,14 @@ const SigninPage = () => {
 
                 onSubmit={(values, actions) => {
                     let callback = () => history.push("/")
-                    auth.signin(values, actions, callback)
+
+                    let {
+                        stateReducer
+                    } = appContext
+
+                    let [{}, dispatch] = stateReducer
+                    
+                    auth.signin(values, actions, dispatch, callback)
                 }}
 
                 render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (

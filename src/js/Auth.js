@@ -42,8 +42,13 @@ import axios from 'axios';
 import dataSrc from './dataSrc';
 import config from './config';
 import permissionsTable from './config/roles';
+import {
+    AppContext
+} from './context/AppContext';
 
 class Auth extends React.Component {
+
+    static contextType = AppContext
 
     state = {
         authenticated: Cookies.get('authenticated') ? true : false,
@@ -51,7 +56,7 @@ class Auth extends React.Component {
         accessToken: ""
     }
 
-    signin = (userInfo, actions, callback) => {
+    signin = (userInfo, actions, dispatch, callback) => {
         let {
             username,
             password
@@ -95,6 +100,12 @@ class Auth extends React.Component {
 
                 Cookies.set('authenticated', true)
                 Cookies.set('user', userInfo)
+                
+                dispatch({
+                    type: 'setArea',
+                    value: userInfo.main_area
+                })
+
                 // locale.reSetState(userInfo.locale)
                 this.setState({
                     authenticated: true,
@@ -132,6 +143,7 @@ class Auth extends React.Component {
             roles, 
             area, 
         } = values
+
         axios.post(dataSrc.user, {
             name: name.toLowerCase(),
             email: email.toLowerCase(),

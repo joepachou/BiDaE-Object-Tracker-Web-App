@@ -155,25 +155,6 @@ class MainContainer extends React.Component{
             this.handleRefreshSearchResult()
         }
 
-        /** clear out search result when user sign out */
-        if (!(_.isEqual(prevState.authenticated, this.context.auth.authenticated))) {
-            // let currentAreaId = this.context.auth.authenticated ? 
-            let { stateReducer } = this.context
-            let [{areaId}, dispatch] = stateReducer
-
-            this.setState({
-                authenticated: this.context.auth.authenticated,
-                searchResult: [],
-                searchKey: '',
-                hasSearchKey: false,
-                searchedObjectType: [],
-                showedObjects: [],
-            }, dispatch({
-                type: 'setArea',
-                value: this.context.auth.user.main_area
-            }))
-        } 
-
         /** send toast if there are latest violated notification */
         let newViolatedObject = Object.keys(this.state.violatedObjects).filter(item => !Object.keys(prevState.violatedObjects).includes(item))
         if (newViolatedObject.length !== 0 ) {
@@ -293,6 +274,7 @@ class MainContainer extends React.Component{
             locale, 
             stateReducer 
         } = this.context
+
         let [{areaId}] = stateReducer
 
         apiHelper.trackingDataApiAgent.getTrackingData({

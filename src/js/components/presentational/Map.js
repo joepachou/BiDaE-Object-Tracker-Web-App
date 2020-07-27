@@ -133,6 +133,11 @@ class Map extends React.Component {
 
     /** Set the search map configuration establishing in config.js  */
     initMap = () => {
+
+        let {
+            auth
+        } = this.context;
+
         let [{
             areaId
         }] = this.context.stateReducer
@@ -162,9 +167,9 @@ class Map extends React.Component {
             this.mapOptions = mapConfig.mobileMapOptions
             this.iconOptions = mapConfig.iconOptionsInMobile
         }
-
+     
         /** Error handler of the user's auth area does not include the group of sites */
-        let areaOption = areaOptions[areaId]
+        let areaOption = areaOptions[auth.user.main_area]
 
         /** set the map's config */
         let { 
