@@ -65,6 +65,9 @@ import {
     SHIFT_CHANGE,
     SIGN_IN
 } from '../../config/wordMap';
+import {
+    SET_AREA
+} from '../../reducer/action';
 
 class NavbarContainer extends React.Component {
 
@@ -192,7 +195,7 @@ class NavbarContainer extends React.Component {
                                     let { stateReducer } = this.context
                                     let [{areaId}, dispatch] = stateReducer
                                     dispatch({
-                                        type: 'setArea',
+                                        type: SET_AREA,
                                         value: value.id
                                     })
                                 }}

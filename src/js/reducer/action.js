@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        StateReducer.js
+        action.js
 
     File Description:
         BOT UI component
@@ -34,33 +34,14 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
-import {
-    SET_AREA,
-    SET_ENABLE_REQUEST_TRACKING_DATA,
-    ASSIGN_OBJECT
-} from './action';
+let action = {
 
-const StateReducer = (state, action) => {
+    SET_AREA: "set area",
 
-    switch (action.type) {
-        case SET_AREA:
-            return {
-                ...state,
-                areaId: action.value
-            };
-        case SET_ENABLE_REQUEST_TRACKING_DATA:
-            return {
-                ...state,
-                shouldUpdateTrackingData: action.value
-            }
-        case ASSIGN_OBJECT:
-            return {
-                ...state,
-                assignedObject: action.value
-            }
-        default:
-            return state;
-    }
+    SET_ENABLE_REQUEST_TRACKING_DATA: "set enable request tracking data",
+
+    ASSIGN_OBJECT: "assign object",
+
 }
 
-export default StateReducer
+module.exports = action

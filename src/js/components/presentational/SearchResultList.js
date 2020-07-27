@@ -58,6 +58,9 @@ import moment from 'moment';
 import apiHelper from '../../helper/apiHelper';
 import messageGenerator from '../../helper/messageGenerator';
 import pdfPackageGenerator from '../../helper/pdfPackageGenerator';
+import {
+    SET_ENABLE_REQUEST_TRACKING_DATA
+} from '../../reducer/action';
 
 class SearchResultList extends React.Component {
 
@@ -96,7 +99,7 @@ class SearchResultList extends React.Component {
             this.toggleSelection(number, isFound)
             this.props.highlightSearchPanel(true)
             dispatch({
-                type: 'setUpdateTrackingData',
+                type: SET_ENABLE_REQUEST_TRACKING_DATA,
                 value: false
             })
         } else {
@@ -147,7 +150,7 @@ class SearchResultList extends React.Component {
             showAddDevice: false
         })
         dispatch({
-            type: 'setUpdateTrackingData',
+            type: SET_ENABLE_REQUEST_TRACKING_DATA,
             value: true
         })
         this.props.highlightSearchPanel(false)
@@ -245,7 +248,7 @@ class SearchResultList extends React.Component {
         .then(res => {
             let callback = () => {
                 dispatch({
-                    type: 'setUpdateTrackingData',
+                    type: SET_ENABLE_REQUEST_TRACKING_DATA,
                     value: true
                 })
                 messageGenerator.setSuccessMessage(

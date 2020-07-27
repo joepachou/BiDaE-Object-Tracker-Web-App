@@ -45,6 +45,9 @@ import permissionsTable from './config/roles';
 import {
     AppContext
 } from './context/AppContext';
+import {
+    SET_AREA
+} from './reducer/action';
 
 class Auth extends React.Component {
 
@@ -102,7 +105,7 @@ class Auth extends React.Component {
                 Cookies.set('user', userInfo)
                 
                 dispatch({
-                    type: 'setArea',
+                    type: SET_AREA,
                     value: userInfo.main_area
                 })
 
