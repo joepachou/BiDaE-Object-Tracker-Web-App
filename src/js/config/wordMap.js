@@ -26,6 +26,10 @@ module.exports = {
 
     SIGN_IN: "signin",
 
-    NOT_STAY_ROOM_MONITOR: 'not stay room monitor'
+    NOT_STAY_ROOM_MONITOR: "not stay room monitor",
+
+    FOUND: "found",
+
+    NOT_FOUND: "not found"
     
 }

@@ -60,18 +60,19 @@ class CheckboxGroup extends React.Component {
 
     render() {
         const { value, error, touched, label, className, children } = this.props;
+        console.log(children)
         return (
-            <div className=''>
-                <fieldset>
+            <div
+                className="d-flex flex-column"
+            >
                 {React.Children.map(children, child => {
                     return React.cloneElement(child, {
-                                field: {
-                                    value: value.includes(child.props.id),
-                                    onChange: this.handleChange,
-                                }
-                            });
+                            field: {
+                                value: value.includes(child.props.id),
+                                onChange: this.handleChange,
+                            }
+                        });
                 })}
-                </fieldset>
             </div>
         );
     }

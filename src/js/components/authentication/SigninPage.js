@@ -140,7 +140,7 @@ const SigninPage = () => {
                                 disabled={isSubmitting}
                                 tabindex={3}
                             >
-                                {locale.texts.SIGN_IN}
+                                {locale.texts.LOG_IN}
                             </Button>
                         </div>
                     </Form>

@@ -251,7 +251,8 @@ const styleConfig = {
 
     },
     checkbox: {
-        fontSize: '0.9rem'
+        fontSize: '0.9rem',
+        margin: '.5rem .2rem'
     },
     radioButton: {
         fontSize: '0.9rem'

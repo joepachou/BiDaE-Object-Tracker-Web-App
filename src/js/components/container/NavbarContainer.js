@@ -257,7 +257,9 @@ class NavbarContainer extends React.Component {
                             })}
                         </Nav>
 
-                        <Nav>
+                        <Nav
+                            className="d-flex align-items-center"
+                        >
                             <AccessControl
                                 permission='user:batteryNotice'
                                 renderNoAccess={() => null}
@@ -267,7 +269,6 @@ class NavbarContainer extends React.Component {
                             </AccessControl>
                             <Nav.Item 
                                 className='nav-link nav-route' 
-                                name={'en'}
                                 onClick={(e) => locale.changeLocale(e, auth)}                         
                             >
                                 {locale.toggleLang().nextLangName}
@@ -277,20 +278,16 @@ class NavbarContainer extends React.Component {
                                     variant='light'
                                     id='collasible-nav-dropdown' 
                                 >
-                                    <i className='fas fa-user-alt' />
+                                    <Nav.Item
+                                        className='nav-link nav-route' 
+                                    >
+                                        {auth.user.name}
+                                    </Nav.Item>
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu
                                     bsPrefix='bot-dropdown-menu-right  dropdown-menu '
                                 >
                                     <div className='dropdownWrapper'>
-                                        <LinkContainer to={routes.USER_SETTINGS} className='bg-white'>
-                                            <Dropdown.Item 
-                                                className='lang-select text-none'
-                                            >
-                                                {auth.user.name}
-                                            </Dropdown.Item>
-                                        </LinkContainer>
-                                        <Dropdown.Divider />
                                         <LinkContainer to={routes.ABOUT} className='bg-white'>
                                             <Dropdown.Item className='lang-select'>
                                                 {locale.texts.ABOUT}

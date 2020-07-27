@@ -57,8 +57,10 @@ import {
     ToggleDisplayDiv,
     ReactBootstrapAlert
 } from '../BOTComponent/styleComponent';
+import wordMap from '../../config/wordMap';
+import { searchResultToMap } from '../../helper/dataTransfer';
 
-const InfoPrompt = ({
+export default ({
     searchKey,
     searchResult,
     handleClick
@@ -68,22 +70,7 @@ const InfoPrompt = ({
 
     const { locale } = appContext
 
-    let searchResultMap = searchResult.reduce((map, item) => {
-        if (Object.keys(map).includes(item.type)) {
-           map[item.type][0] += 1;
-           if (item.found) {
-               map[item.type][1] += 1;
-           }
-        } else {
-            map[item.type] = []
-            map[item.type][0] = 1;
-            map[item.type][1] = 0;
-            if (item.found) {
-                map[item.type][1] += 1
-            } 
-        }
-        return map
-    }, {})
+    let searchResultMap = searchResultToMap(searchResult)
 
     const handleShowDetail = () => {
        setShowDetail(!showDetail)
@@ -100,36 +87,24 @@ const InfoPrompt = ({
                         <HoverWithUnderlineDiv
                             onClick={handleClick}
                         >
-                            <div 
-                                className='d-flex justify-content-start mr-2'
-                                name={SWITCH_SEARCH_LIST}
-                                value={true}
-                            >
-                                {searchKey ? locale.texts.FOUND : locale.texts.PLEASE_SELECT_SEARCH_OBJECT}
-                                &nbsp;
-                                <FontBoldDiv>
-                                    {searchKey ? searchResult.filter(item => item.found).length : ""}
-                                </FontBoldDiv>
-                                &nbsp;
-                                {searchKey && locale.texts.OBJECTS}
-                            </div>
+                            {stringBlock({
+                                name: SWITCH_SEARCH_LIST,
+                                value: true,
+                                data: searchResult.filter(item => item.found).length,
+                                label: wordMap.FOUND,
+                                locale,
+                            })}
                         </HoverWithUnderlineDiv>
                         <HoverWithUnderlineDiv
                             onClick={handleClick}
                         >
-                            <div 
-                                className='d-flex justify-content-start mr-1'
-                                name={SWITCH_SEARCH_LIST}
-                                value={false}
-                            >
-                                {searchKey && `${locale.texts.NOT_FOUND}`}
-                                &nbsp;
-                                <FontBoldDiv>
-                                    {searchKey ? searchResult.filter(item => !item.found).length : ""}
-                                </FontBoldDiv>
-                                &nbsp;
-                                {searchKey && locale.texts.OBJECTS}
-                            </div>
+                            {stringBlock({
+                                name: SWITCH_SEARCH_LIST,
+                                value: false,
+                                data: searchResult.filter(item => !item.found).length,
+                                label: wordMap.NOT_FOUND,
+                                locale,
+                            })}
                         </HoverWithUnderlineDiv>
                         <HoverDiv
                             onClick={handleShowDetail}
@@ -201,4 +176,45 @@ const InfoPrompt = ({
     )
 };
 
-export default InfoPrompt
+const stringBlock = ({
+    name,
+    value,
+    data,
+    label,
+    locale
+}) => {
+    switch(locale.lang) {
+        case "en":
+            return (
+                <div 
+                    className='d-flex justify-content-start mr-2'
+                    name={name}
+                    value={value}
+                >
+                    <FontBoldDiv>
+                        {data}
+                    </FontBoldDiv>
+                    &nbsp;
+                    {locale.texts.OBJECTS}
+                    &nbsp;
+                    {locale.texts[label.toUpperCase().replace(/ /g, '_')]}
+                </div>
+            )
+        case "tw":
+            return (
+                <div 
+                    className='d-flex justify-content-start mr-2'
+                    name={name}
+                    value={value}
+                >
+                    {locale.texts[label.toUpperCase().replace(/ /g, '_')]}
+                    &nbsp;
+                    <FontBoldDiv>
+                        {data}
+                    </FontBoldDiv>
+                    &nbsp;
+                    {locale.texts.OBJECTS}
+                </div>
+            )
+    }
+}

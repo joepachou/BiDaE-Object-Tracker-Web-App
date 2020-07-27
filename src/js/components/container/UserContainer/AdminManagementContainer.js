@@ -268,14 +268,14 @@ class AdminManagementContainer extends React.Component{
                                 name='add user'
                                 onClick={this.handleClick}    
                             >
-                                {locale.texts.ADD}
+                                {locale.texts.ADD_USER}
                             </PrimaryButton>
                             <PrimaryButton
                                 className='mb-1'
                                 name='delete user'
                                 onClick={this.handleClick}    
                             >
-                                {locale.texts.DELETE}
+                                {locale.texts.DELETE_USER}
                             </PrimaryButton>
                         </ButtonToolbar>
                     </AccessControl>

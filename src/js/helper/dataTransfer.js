@@ -104,3 +104,23 @@ export const transferMonitorTypeToString = (item, type) => {
 export const monitorTypeChecker = (collect, typeCode) => {
     return collect & typeCode;
 }
+
+/** Count numbers of each object in the result and return a map */
+export const searchResultToMap = result => {
+    return result.reduce((map, item) => {
+        if (Object.keys(map).includes(item.type)) {
+           map[item.type][0] += 1;
+           if (item.found) {
+               map[item.type][1] += 1;
+           }
+        } else {
+            map[item.type] = []
+            map[item.type][0] = 1;
+            map[item.type][1] = 0;
+            if (item.found) {
+                map[item.type][1] += 1
+            } 
+        }
+        return map
+    }, {})
+}

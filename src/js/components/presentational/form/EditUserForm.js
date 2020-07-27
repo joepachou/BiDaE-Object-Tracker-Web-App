@@ -193,6 +193,7 @@ const EditUserForm = ({
                             <hr/>
                             <FormikFormGroup 
                                 name="roles"
+                                className="text-capitalize"
                                 label={locale.texts.ROLES}
                                 error={errors.roles}
                                 touched={touched.roles}
@@ -222,12 +223,13 @@ const EditUserForm = ({
                             <FormikFormGroup 
                                 type="text"
                                 name="areaName"
-                                label={locale.texts.MAIN_AREA}
+                                className="text-capitalize"
+                                label={locale.texts.PRIMARY_AREA}
                                 error={errors.area}
                                 touched={touched.area}
                                 component={() => (
                                     <Select
-                                        placeholder = {locale.texts.SELECT_AREA}
+                                        placeholder={locale.texts.SELECT_AREA}
                                         name="area"
                                         value={values.area}
                                         onChange={value => setFieldValue("area", value)}
