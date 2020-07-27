@@ -39,6 +39,12 @@ import React  from 'react';
 import { Button } from 'react-bootstrap';
 import { AppContext } from '../../context/AppContext';
 import apiHelper from '../../helper/apiHelper';
+import { 
+    OBJECT_TYPE
+} from '../../config/wordMap';
+import {
+    Title
+} from '../BOTComponent/styleComponent';
 
 class ObjectTypeList extends React.Component {
 
@@ -63,28 +69,49 @@ class ObjectTypeList extends React.Component {
 
     handleClick = (e) => {
         const itemName = e.target.name;
-        this.props.getSearchKey(itemName)        
-        this.addSearchHistory(itemName)
+
+        const searchKey = {
+            type: OBJECT_TYPE,
+            value: itemName
+        }
+
+        this.props.getSearchKey(searchKey)
+
+        this.addSearchHistory(searchKey)
+
         this.checkInSearchHistory(itemName)
     }
 
     /** Set search history to auth */
-    addSearchHistory(searchKey) {
-        let { auth } = this.context
+    addSearchHistory = searchKey => {
+        let { 
+            auth 
+        } = this.context
+
         if (!auth.authenticated) return;
-        console.log(auth.user.searchHistory )
+
         const searchHistory = auth.user.searchHistory || []
+
         let flag = false; 
-        const toReturnSearchHistory = searchHistory.map( item => {
-            if (item.name === searchKey) {
+
+        const toReturnSearchHistory = searchHistory.map(item => {
+            if (item.name === searchKey.value) {
                 item.value = item.value + 1;
                 flag = true;
             }
             return item
         })
-        flag === false ? toReturnSearchHistory.push({name: searchKey, value: 1}) : null;
+        flag === false 
+            ? toReturnSearchHistory.push({
+                name: searchKey.value, 
+                value: 1
+            }) 
+            : null;
         const sortedSearchHistory = this.sortSearchHistory(toReturnSearchHistory)
+
         auth.setSearchHistory(sortedSearchHistory)
+
+        this.checkInSearchHistory(searchKey.value)
     }
 
     /** Sort the user search history and limit the history number */
@@ -96,11 +123,12 @@ class ObjectTypeList extends React.Component {
     }
 
     /** Insert search history to database */
-    checkInSearchHistory(itemName) {
+    checkInSearchHistory = itemName => {
 
         let { 
-            auth 
+            auth, 
         } = this.context
+
         apiHelper.userApiAgent.addSearchHistory({
             username: auth.user.name,
             keyType: 'object type search',
@@ -114,6 +142,7 @@ class ObjectTypeList extends React.Component {
         })
     }
 
+
     render() {
         const style = {
             titleText: {
@@ -125,24 +154,35 @@ class ObjectTypeList extends React.Component {
             },
         }
 
+        const {
+            searchObjectArray,
+            pinColorArray
+        } = this.props
+
         const { 
             locale, 
         } = this.context
 
         return (
             <div>
-                <div className='text-capitalize title'>
+                <Title list>
                     {locale.texts.OBJECT_TYPE}
-                </div>
+                </Title>
                 <div style={style.list} className="d-inline-flex flex-column searchOption">
                     {this.props.objectTypeList
                         .map((item, index) => {
+
+                            let pinColorIndex = searchObjectArray.indexOf(item)
+
                             return ( 
                                 <Button
                                     variant="outline-custom"
                                     className="text-none"
                                     onClick={this.handleClick} 
                                     // active={this.state.searchKey === item.toLowerCase()} 
+                                    style={{
+                                        color: pinColorIndex > -1 ? pinColorArray[pinColorIndex] : null
+                                    }}
                                     key={index}
                                     name={item}
                                 >

@@ -67,11 +67,6 @@ const BrowserSearchContainer = ({
             onTouchMove={handleTouchMove}
         >
             <Row id='searchBar' className='d-flex justify-content-center align-items-center pb-2'>
-                {/* <Searchbar 
-                    placeholder={searchKey}
-                    getSearchKey={getSearchKey}
-                    clearSearchResult={clearSearchResult}    
-                /> */}
                 <BOTSearchbar
                     placeholder={searchKey}
                     getSearchKey={getSearchKey}
@@ -80,27 +75,29 @@ const BrowserSearchContainer = ({
                     // suggestData = {suggestData}
                 />
             </Row>
-            <div id='searchOption' className="pt-2"> 
-                <div
-                    className="mb-3"
-                >
-                    <FrequentSearch 
-                        getSearchKey={getSearchKey}  
-                        clearSearchResult={clearSearchResult}   
-                        hasGridButton={hasGridButton} 
-                        maxHeigh={config.searchResultProportion}
-                        searchObjectArray={searchObjectArray}
-                        pinColorArray={pinColorArray}
-                    />
-                </div>
-                {/* <ObjectTypeList
+            <div
+                id='searchOption' 
+                className="pt-2 d-flex justify-content-center"
+
+            > 
+                <FrequentSearch 
+                    getSearchKey={getSearchKey}  
+                    clearSearchResult={clearSearchResult}   
+                    hasGridButton={hasGridButton} 
+                    maxHeigh={config.searchResultProportion}
+                    searchObjectArray={searchObjectArray}
+                    pinColorArray={pinColorArray}
+                />
+                <ObjectTypeList
                     getSearchKey={getSearchKey}  
                     clearSearchResult={clearSearchResult}   
                     hasGridButton={hasGridButton} 
                     objectTypeList={objectTypeList || []}
                     maxHeigh={config.searchResultProportion}
-                />           */}
-                <div>
+                    searchObjectArray={searchObjectArray}
+                    pinColorArray={pinColorArray}
+                />          
+                {/* <div>
                     <SearchableObjectType
                         getSearchKey={getSearchKey}  
                         clearSearchResult={clearSearchResult}   
@@ -110,7 +107,7 @@ const BrowserSearchContainer = ({
                         searchObjectArray={searchObjectArray}
                         pinColorArray={pinColorArray}
                     />                
-                </div>  
+                </div>   */}
             </div>
         </div>
     )

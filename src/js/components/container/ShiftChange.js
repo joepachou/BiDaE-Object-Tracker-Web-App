@@ -174,8 +174,6 @@ class ShiftChange extends React.Component {
             patients: this.state.patients
         }
 
-        console.log(values)
-
         let pdfPackage = pdfPackageGenerator.getPdfPackage({
             option: 'shiftChange', 
             user: auth.user, 

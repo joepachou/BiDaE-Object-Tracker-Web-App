@@ -302,7 +302,7 @@ class SearchableObjectType extends React.Component {
     }
 
     handleClick = (e) => {
-        let itemName = e.target.innerText
+        let itemName = e.target.innerText 
 
         const searchKey = {
             type: OBJECT_TYPE,
