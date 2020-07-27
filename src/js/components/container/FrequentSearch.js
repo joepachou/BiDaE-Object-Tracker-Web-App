@@ -104,7 +104,7 @@ class FrequentSearch extends React.Component {
         
         return (
             <div id='frequentSearch' >
-                <Title list>
+                <Title list> 
                     {locale.texts.FREQUENT_SEARCH}
                 </Title>
                 <div style={style.list} className="d-inline-flex flex-column searchOption">
