@@ -52,7 +52,6 @@ import BrowserTraceContainerView from '../../platform/browser/BrowserTraceContai
 import MobileTraceContainerView from '../../platform/mobile/MobileTraceContainerView';
 import TabletTraceContainerView from '../../platform/tablet/TabletTraceContainerView';
 import { AppContext } from '../../../context/AppContext';
-import retrieveDataHelper from '../../../helper/retrieveDataHelper';
 import pdfPackageGenerator from '../../../helper/pdfPackageGenerator';
 import config from '../../../config';
 import moment from 'moment';
@@ -120,19 +119,19 @@ class TraceContainer extends React.Component{
         this.getObjectTable();
         this.getLbeaconTable();
         this.getAreaTable();
-        if (this.props.location.state) {
-            let { state } = this.props.location
-            let endTime = moment();
-            let startTime = moment().startOf('day');
-            let field = {
-                mode: state.mode,
-                key: state.key,
-                startTime,
-                endTime,
-                description: state.key.label
-            }
-            this.getLocationHistory(field, 0)
-        }
+        // if (this.props.location.state) {
+        //     let { state } = this.props.location
+        //     let endTime = moment();
+        //     let startTime = moment().startOf('day');
+        //     let field = {
+        //         mode: state.mode,
+        //         key: state.key,
+        //         startTime,
+        //         endTime,
+        //         description: state.key.label
+        //     }
+        //     this.getLocationHistory(field, 0)
+        // }
     }
 
     componentWillUnmount = () => {
@@ -194,9 +193,11 @@ class TraceContainer extends React.Component{
         let {
             locale
         } = this.context
-        retrieveDataHelper.getLbeaconTable(
-            locale.abbr
-        )
+
+
+        apiHelper.lbeaconApiAgent.getLbeaconTable({
+            locale: locale.abbr
+        })
         .then(res => {
             let uuid = res.data.rows.map(lbeacon => {
                 return {
@@ -219,7 +220,8 @@ class TraceContainer extends React.Component{
         let {
             locale
         } = this.context
-        retrieveDataHelper.getAreaTable()
+
+        apiHelper.areaApiAgent.getAreaTable()
             .then(res => {
                 let area = res.data.rows.map(area => {
                     return {
@@ -341,17 +343,17 @@ class TraceContainer extends React.Component{
     }
 
     getInitialValues = () => {
-        if (this.props.location.state) {
-            let { state } = this.props.location;
-            let endTime = moment().toDate();
-            let startTime = moment().startOf('day').toDate();
-            return {
-                mode: state.mode,
-                key: state.key,
-                startTime,
-                endTime,
-            }
-        }
+        // if (this.props.location.state) {
+        //     let { state } = this.props.location;
+        //     let endTime = moment().toDate();
+        //     let startTime = moment().startOf('day').toDate();
+        //     return {
+        //         mode: state.mode,
+        //         key: state.key,
+        //         startTime,
+        //         endTime,
+        //     }
+        // }
         return {  
             mode: this.defaultActiveKey,
             key: null,

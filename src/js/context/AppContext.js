@@ -48,7 +48,7 @@ const AppContextProvider = (props) => {
 
     const auth = React.useContext(AuthenticationContext)
     const locale = React.useContext(LocaleContext)
-
+        
     const initialState = {
         areaId: parseInt(auth.user.main_area),
         shouldUpdateTrackingData: true,

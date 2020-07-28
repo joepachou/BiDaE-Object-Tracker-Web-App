@@ -50,8 +50,6 @@ module.exports = app => {
 
     app.options('/data/user/sentResetPwdInstruction', cors()) 
 
-
-
     app.route('/data/user')
         .get(userController.getAllUser)
         .delete(userController.deleteUser)
@@ -78,7 +76,4 @@ module.exports = app => {
 
     app.route('/data/user/maxSearchHistoryCount')
         .post(userController.editMaxSearchHistoryCount)
-
-    app.route('/data/user/sentResetPwdInstruction')
-        .post(userController.sentResetPwdInstruction)
 }

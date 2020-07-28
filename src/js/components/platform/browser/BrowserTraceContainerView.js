@@ -88,12 +88,8 @@ const BrowseTraceContainerView = React.forwardRef(({
     let initialValues = getInitialValues()
 
     return (
-        <BOTContainer
-        >
+        <div>
             <div className='d-flex justify-content-between'>
-                <PageTitle>                                            
-                    {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
-                </PageTitle>
                 {data.length !== 0 &&
                     <div>
                         <IconButton
@@ -357,7 +353,7 @@ const BrowseTraceContainerView = React.forwardRef(({
                     </Fragment>
                 )}
             />
-        </BOTContainer>
+        </div>
     )
 })
 

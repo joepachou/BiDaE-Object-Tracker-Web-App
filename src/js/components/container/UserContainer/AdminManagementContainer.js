@@ -43,11 +43,10 @@ import ReactTable from 'react-table';
 import axios from 'axios';
 import dataSrc from '../../../dataSrc';
 import { userInfoTableColumn } from '../../../config/tables';
-import EditUserForm from './EditUserForm';
+import EditUserForm from '../../presentational/form/EditUserForm';
 import { AppContext } from '../../../context/AppContext';
 import DeleteUserForm from './DeleteUserForm';
 import DeleteConfirmationForm from '../../presentational/DeleteConfirmationForm';
-import retrieveDataHelper from '../../../helper/retrieveDataHelper';
 import messageGenerator from '../../../helper/messageGenerator';
 import styleConfig from '../../../config/styleConfig';
 const Fragment = React.Fragment;
@@ -56,6 +55,7 @@ import {
 } from '../../BOTComponent/styleComponent';
 import AccessControl from '../../authentication/AccessControl';
 import config from '../../../config';
+import apiHelper from '../../../helper/apiHelper';
 
 class AdminManagementContainer extends React.Component{
 
@@ -91,9 +91,11 @@ class AdminManagementContainer extends React.Component{
         let { 
             locale
         } = this.context
-        retrieveDataHelper.getAllUser(
-            locale.abbr
-        ).then(res => { 
+
+        apiHelper.userApiAgent.getAllUser({
+            locale: locale.abbr
+        })
+        .then(res => { 
             let columns = _.cloneDeep(userInfoTableColumn)
             columns.map((field, index) => {
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
@@ -124,7 +126,7 @@ class AdminManagementContainer extends React.Component{
     }
 
     getAllRole = () => {
-        retrieveDataHelper.getAllRole()
+        apiHelper.roleApiAgent.getAllRole()
             .then(res => {
                 /** filter system default roles */
                 let roleName = res.data.rows.filter(item => config.ROLES_SELECTION.includes(item.name))
@@ -135,7 +137,7 @@ class AdminManagementContainer extends React.Component{
     }
 
     getAreaTable = () => {
-        retrieveDataHelper.getAreaTable()
+        apiHelper.areaApiAgent.getAreaTable()
             .then(res => {
                 this.setState({
                     areaTable: res.data.rows
@@ -175,8 +177,7 @@ class AdminManagementContainer extends React.Component{
         }  
         auth[api](user, () => {
             this.getUserList(callback)
-        } 
-        )
+        }) 
     }
 
     handleDeleteUserSubmit = (e) => {
@@ -267,14 +268,14 @@ class AdminManagementContainer extends React.Component{
                                 name='add user'
                                 onClick={this.handleClick}    
                             >
-                                {locale.texts.ADD}
+                                {locale.texts.ADD_USER}
                             </PrimaryButton>
                             <PrimaryButton
                                 className='mb-1'
                                 name='delete user'
                                 onClick={this.handleClick}    
                             >
-                                {locale.texts.DELETE}
+                                {locale.texts.DELETE_USER}
                             </PrimaryButton>
                         </ButtonToolbar>
                     </AccessControl>

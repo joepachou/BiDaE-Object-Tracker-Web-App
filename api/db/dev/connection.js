@@ -36,11 +36,17 @@
 
 
 const pg = require('pg');
+const {
+    decrypt
+} = require('../../service/encrypt'); 
+
+let password = decrypt(process.env.DB_PASS)
+
 const config = {
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
     database: process.env.DB_DATABASE,
-    password: process.env.DB_PASS,
+    password,
     port: process.env.DB_PORT,
 }
 

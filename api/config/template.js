@@ -34,20 +34,30 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
-const resetPasswordInstruction = token => {
-    return `
-        <div>
-            <p>Greetings from BiDaE Object Tracker Service,</p>
+require('dotenv').config();
+let dataSrcIP = process.env.DATASRC_IP;
+let dataSrcProtocol = process.env.DATASRC_PROTOCOL || 'https'
+let domain = `${dataSrcProtocol}://${dataSrcIP}`;
 
-            <p>We received a request to reset the password for the BOT account associated with this e-mail address. Click the link below to reset your password using our secure server:</p>
-                        
-            ${token}
+const resetPasswordInstruction = {
 
-            <p>Sincerely,</p>
-            <p>The BOT Service Team
-            </p>
-        </div>
-    `
+    subject: 'BOT Password Assistance',
+
+    content: token => {
+        return `
+            <div>
+                <p>Greetings from BiDaE Object Tracker Service,</p>
+
+                <p>We received a request to reset the password for the BOT account associated with this e-mail address. Click the link below to reset your password using our secure server:</p>
+                            
+                ${domain}/resetpassword/new/${token}
+
+                <p>Sincerely,</p>
+                <p>The BOT Service Team
+                </p>
+            </div>
+        `
+    }
 }
 
 module.exports = {

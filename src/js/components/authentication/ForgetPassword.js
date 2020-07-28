@@ -51,36 +51,28 @@ import {
 } from 'formik';
 import * as Yup from 'yup';
 import {
-    CenterContainer
+    CenterContainer,
+    Title,
+    Paragraph
 } from '../BOTComponent/styleComponent';
-import styleConfig from '../../config/styleConfig';
 import FormikFormGroup from '../presentational/FormikFormGroup';
 import { 
     Link, 
     useHistory
 } from 'react-router-dom';
-import { set } from 'js-cookie';
 import apiHelper from '../../helper/apiHelper';
-
-
+import {
+    emailValidation
+} from '../../helper/validation';
 
 const imageLength = 80;
-
-const handleClick = (e) => {
-    console.log(e.target)
-    let {
-        name
-    } = e.target
-    // switch(name) {
-    //     case 'forget password'
-    // }
-}
 
 const ForgetPassword = () => {
 
     let locale = React.useContext(LocaleContext);
     let auth = React.useContext(AuthContext);
     let history = useHistory();
+
     return (
         <CenterContainer>
             <div className='d-flex justify-content-center'>
@@ -103,20 +95,24 @@ const ForgetPassword = () => {
 
                 validationSchema = {
                     Yup.object().shape({
- 
+                        email: Yup.string().required(locale.texts.REQUIRED)
+                            .test(
+                                'email',
+                                locale.texts.EMAIL_ADDRESS_FORMAT_IS_INCORRECT,
+                                emailValidation
+                            )
                 })}
 
                 onSubmit={(values, {setStatus} ) => {
-                    console.log(values)
                     const {
                         email
                     } = values
-
-                    apiHelper.userApiAgent.sentResetPwdInstruction({
+                    setStatus("verifying")
+                    apiHelper.authApiAgent.sentResetPwdInstruction({
                         email
                     })
                     .then(res => {
-                        console.log(res)
+                        history.push("/resetpassword/instruction")
                     })
                     .catch(err => {
                         console.log(err)
@@ -125,18 +121,25 @@ const ForgetPassword = () => {
 
                 render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
                     <Form>
-                        {status &&
+                        {errors.email && touched.email &&
                             <div 
                                 className='alert alert-danger mb-2 warning'
                             >
                                 <i className="fas fa-times-circle mr-2"/>
-                                {locale.texts[status.toUpperCase().replace(/ /g, "_")]}
+                                {errors.email}
                             </div>
                         }
+                        <Title page>
+                            {locale.texts.FORGET_PASSWORD}
+                        </Title>
+                        <Paragraph>
+                            Enter the email address you used when you joined and we’ll send you instructions to reset your password.
+                        </Paragraph>
+                        
                         <FormikFormGroup 
                             type="text"
                             name="email"
-                            className="mb-4"
+                            className="my-4"
                             label={locale.texts.EMAIL}    
                         />  
                         <div className='d-flex justify-content-start'>

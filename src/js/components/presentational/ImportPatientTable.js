@@ -44,7 +44,6 @@ import ReactTable from 'react-table';
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
 import XLSX from 'xlsx';
 import InputFiles from 'react-input-files';
-import axios from 'axios';
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm';
 import styleConfig from '../../config/styleConfig';
 import messageGenerator from '../../helper/messageGenerator';
@@ -53,8 +52,7 @@ import {
 } from '../BOTComponent/styleComponent';
 import AccessControl from '../authentication/AccessControl';
 import { importTableColumn } from '../../config/tables';
-import dataSrc from '../../dataSrc';
-import retrieveDataHelper from '../../helper/retrieveDataHelper';
+import apiHelper from '../../helper/apiHelper';
 
 const SelectTable = selecTableHOC(ReactTable);
 
@@ -85,16 +83,18 @@ class ImportPatientTable extends React.Component{
 
     getData = () => {
         let { locale } = this.context
-        retrieveDataHelper.getImportedObjectTable(
-            locale.abbr
-        )
+
+        apiHelper.importedObjectApiAgent.getImportedObjectTable({
+            locale: locale.abbr,
+        })
         .then(res => { 
             let columns = _.cloneDeep(importTableColumn)
             columns.map(field => {
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             }) 
+            let data = res.data.rows.filter(item => item.type == 'patient')
             this.setState({
-                data: res.data.rows,
+                data,
                 columns,
                 showDeleteConfirmation:false,
                 locale: locale.abbr
@@ -177,11 +177,9 @@ class ImportPatientTable extends React.Component{
 
     deleteRecordImport = () => {
         this.setState({selectAll:false})
-        
-        axios.delete(dataSrc.importedObject, {
-            data: {
-                idPackage: this.state.selection
-            }
+
+        apiHelper.importedObjectApiAgent.deleteImportedObject({
+            idPackage: this.state.selection
         })
         .then(res => {
             this.setState({selection:[]})
@@ -297,7 +295,8 @@ class ImportPatientTable extends React.Component{
                     messageGenerator.importErrorMessage('ASN_IS_REPEAT' ,ReapeName)
                 }
                 else{
-                    axios.post(dataSrc.importedObject, {
+
+                    apiHelper.importedObjectApiAgent.addImportedObject({
                         locale: locale.abbr,
                         newData
                     })

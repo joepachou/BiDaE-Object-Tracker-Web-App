@@ -1,16 +1,49 @@
+/*
+    Copyright (c) 2020 Academia Sinica, Institute of Information Science
+
+    License:
+        GPL 3.0 : The content of this file is subject to the terms and conditions
+
+    Project Name:
+        BiDae Object Tracker (BOT)
+
+    File Name:
+        ShiftChange.js
+
+    File Description:
+        BOT UI component
+
+    Version:
+        1.0, 20200601
+
+    Abstract:
+        BeDIS uses LBeacons to deliver 3D coordinates and textual descriptions of
+        their locations to users' devices. Basically, a LBeacon is an inexpensive,
+        Bluetooth device. The 3D coordinates and location description of every 
+        LBeacon are retrieved from BeDIS (Building/environment Data and Information 
+        System) and stored locally during deployment and maintenance times. Once 
+        initialized, each LBeacon broadcasts its coordinates and location 
+        description to Bluetooth enabled user devices within its coverage area. It 
+        also scans Bluetooth low-energy devices that advertise to announced their 
+        presence and collect their Mac addresses.
+
+    Authors:
+        Tony Yeh, LT1stSoloMID@gmail.com
+        Wayne Kang, b05505028@ntu.edu.tw
+        Edward Chen, r08921a28@ntu.edu.tw
+        Joe Chou, jjoe100892@gmail.com
+*/
+
 import React, { Fragment } from 'react';
 import { 
     Modal, 
     Button,
 } from 'react-bootstrap';
-import axios from 'axios';
-import dataSrc from '../../dataSrc';
 import moment from 'moment'
 import config from '../../config';
 import { AppContext } from '../../context/AppContext';
-import GeneralConfirmForm from '../presentational/GeneralConfirmForm';
-import retrieveDataHelper from '../../helper/retrieveDataHelper';
-import DownloadPdfRequestForm from './DownloadPdfRequestForm';
+import GeneralConfirmForm from '../presentational/form/GeneralConfirmForm';
+import DownloadPdfRequestForm from '../presentational/form/DownloadPdfRequestForm';
 import Select from 'react-select';
 import messageGenerator from '../../helper/messageGenerator';
 import { Formik, Field, Form } from 'formik';
@@ -19,6 +52,9 @@ import {
 } from '../../helper/descriptionGenerator';
 import pdfPackageGenerator from '../../helper/pdfPackageGenerator';
 import apiHelper from '../../helper/apiHelper';
+import {
+    Title
+} from '../BOTComponent/styleComponent';
 
 const style = {
     modalBody: {
@@ -42,6 +78,8 @@ const style = {
 class ShiftChange extends React.Component {
 
     static contextType = AppContext
+
+    formikRef = React.createRef()
     
     state = {
         searchResult: {
@@ -71,11 +109,12 @@ class ShiftChange extends React.Component {
             stateReducer 
         } = this.context
         let [{areaId}] = stateReducer
-        retrieveDataHelper.getTrackingData(
-            locale.abbr, 
-            auth.user, 
+
+        apiHelper.trackingDataApiAgent.getTrackingData({
+            locale: locale.abbr,
+            user: auth.user,
             areaId
-        )
+        })
         .then(res => {
             let {
                 myDevice
@@ -121,16 +160,21 @@ class ShiftChange extends React.Component {
     confirmShift = (values) => {
         this.setState({
             showConfirmForm: true,
-            shift: values.shift
         })
     }
 
-    handleConfirmFormSubmit = (authentication) => { 
+    handleConfirmFormSubmit = (authentication = "") => { 
+
+        let {
+            values   
+        } = this.formikRef.current.state
 
         let { 
             locale, 
             auth 
-        } = this.context   
+        } = this.context  
+        
+        authentication = auth.user.name
 
         let shiftChangeObjectPackage = {
             searchResult: this.state.searchResult, 
@@ -144,7 +188,7 @@ class ShiftChange extends React.Component {
             locale,
             signature: authentication,
             additional: {
-                shift: this.state.shift,
+                shift: values.shift,
                 area: locale.texts[config.mapConfig.areaOptions[auth.user.areas_id[0]]],
                 name: auth.user.name
             }
@@ -174,7 +218,7 @@ class ShiftChange extends React.Component {
         apiHelper.record.addShiftChangeRecord({
             userInfo: auth.user,
             pdfPackage,
-            shift: this.state.shift,
+            shift: values.shift,
         })
         .then(res => {
             let callback = () => {
@@ -229,7 +273,7 @@ class ShiftChange extends React.Component {
         const hasFoundPatients = foundPatients.length !== 0;
         const hasNotFoundPatients = notFoundPatients.length !== 0;
         
-        const shiftOptions = Object.values(config.shiftOption).map(shift => { 
+        const shiftOptions = Object.values(config.SHIFT_OPTIONS).map(shift => { 
             return { 
                 value: shift,
                 label: locale.texts[shift.toUpperCase().replace(/ /g, '_')]
@@ -253,18 +297,21 @@ class ShiftChange extends React.Component {
                             shift: defaultShiftOption
                         }}
 
+                        ref={this.formikRef}
+
                         onSubmit={(values, { setStatus, setSubmitting }) => {
-                            this.confirmShift(values)
+                            this.confirmShift(values);
+                            // this.handleConfirmFormSubmit("", values)
                         }}
 
-                        render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm }) => (
-                            <div>
+                        render={({ values, setFieldValue, submitForm }) => (
+                            <Fragment>
                                 <Modal.Header
                                     className='d-flex flex-column text-capitalize'
                                 >
-                                    <div className="title">
+                                    <Title>
                                         {locale.texts.SHIFT_CHANGE_RECORD}
-                                    </div>                                
+                                    </Title>                                
                                     <div>
                                         {locale.texts.DATE_TIME}: {nowTime}
                                     </div> 
@@ -317,7 +364,7 @@ class ShiftChange extends React.Component {
                                             typeArray={notFoundPatients}
                                         /> 
                                     </Form> 
-                                    </Modal.Body>
+                                </Modal.Body>
                                     <Modal.Footer>
                                         <Button 
                                             variant="outline-secondary" 
@@ -333,15 +380,17 @@ class ShiftChange extends React.Component {
                                         >
                                             {locale.texts.CONFIRM}
                                         </Button>
-                                    </Modal.Footer>   
-                                </div>
+                                    </Modal.Footer>  
+                                </Fragment>
                         )}
                     />
                 </Modal>     
                 <GeneralConfirmForm
                     show={this.state.showConfirmForm}
+                    title={locale.texts.PLEASE_ENTER_PASSWORD}
                     handleSubmit={this.handleConfirmFormSubmit}
                     handleClose={this.handleClose}
+                    authenticatedRoles={null}
                 />
                 <DownloadPdfRequestForm
                     show={this.state.showDownloadPdfRequest} 
@@ -369,13 +418,11 @@ const TypeBlock = ({
     } = appContext
 
     return (
-        <div>
+        <Fragment>
             {hasType && 
-                <div
-                    className="subtitle"
-                >
+                <Title sub >
                     {title} 
-                </div>
+                </Title>
             }     
             {hasType && typeArray.map((item, index) => { 
                 return (
@@ -399,6 +446,6 @@ const TypeBlock = ({
                     </div>
                 )
             })}
-        </div>
+        </Fragment>
     )
 }

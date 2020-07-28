@@ -35,7 +35,7 @@
 */
 
 
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 import Item from 'react-bootstrap/ListGroupItem';
 import Link from 'react-bootstrap/NavLink'
 import NavLink from 'react-bootstrap/NavLink'
@@ -43,9 +43,11 @@ import Nav from 'react-bootstrap/Nav'
 import styleSheet from '../../config/styleSheet'
 import Button from 'react-bootstrap/Button';
 import DataTimePicker from 'react-widgets/lib/DateTimePicker';
+import Alert from 'react-bootstrap/Alert';
+import DropdownButton from 'react-bootstrap/DropdownButton';
 
 export const EditedTime = styled.div`
-    font-size: 0.8em;
+    font-size: 0.8rem;
     display: flex;
     align-items: flex-end;
     padding-left: 5px;
@@ -53,14 +55,17 @@ export const EditedTime = styled.div`
 `;
 
 export const Primary = styled.div`
-    font-size: 1em;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: flex-end;
     font-weight: 600;
     color: black;
+    te
 `
 
 export const Paragraph = styled.p`
     text-align: justify;
-    text-justify:inter-ideograph;
+    text-justify: inter-ideograph;
     color: black;
 `
 
@@ -79,6 +84,26 @@ export const FieldLabel = styled.div`
     font-weight: 600;
 `
 
+export const Title = styled.div`
+    color: black;
+    text-transform: capitalize;
+    font-size: 1rem;
+    font-weight: 400;
+    ${props => props.page && css`
+        color: black;
+        font-size: 1.4rem;
+        font-weight: 450;
+        margin-bottom: 1rem;
+    `}
+    ${props => props.list && css`
+        font-size: 1.2rem;
+        color: black;
+    `}
+    ${props => props.sub && css`
+        margin-bottom: 5px;
+    `}
+`
+
 export const PageTitle = styled.div`
     color: black;
     font-size: 1.4rem;
@@ -92,13 +117,6 @@ export const ListTitle = styled.div`
     font-size: 1.2rem;
     font-weight: 400;
     color: black;
-`
-
-export const SubTitle = styled.div`
-    font-size: 1rem;
-    font-weight: 400;
-    color: black;
-    margin-bottom: 5px;
 `
 
 export const BOTContainer = styled.div`
@@ -144,15 +162,26 @@ export const BOTSideNavTitle = styled.div`
 export const BOTNavLink = styled(Link)`
     font-weight: 500;
     text-transform: capitalize;
-    color: ${styleSheet.inActive};
-    &.active {
-        color: ${styleSheet.theme};
-        border-bottom: 3px solid ${styleSheet.theme};
-        border-radius: 0px;
-    }
-    &:hover {
-        color: ${styleSheet.theme};
-    }
+
+    ${props => props.primary && css`
+        background: white;
+        color: black;
+        &:hover {
+            color: ${styleSheet.grey};
+        }
+    `}
+    ${props => props.secondary && css`
+        background: white;
+        color: ${styleSheet.inActive};
+        &.active {
+            color: ${styleSheet.theme};
+            border-bottom: 3px solid ${styleSheet.theme};
+            border-radius: 0px;
+        }
+        &:hover {
+            color: ${styleSheet.theme};
+        }
+    `}
 `
 
 export const BOTNav = styled(Nav)`
@@ -192,11 +221,68 @@ export const BOTDataTimePicker = styled(DataTimePicker)`
     height: 3rem;
 `
 
+export const HoverWithUnderlineDiv = styled.div`
+    text-transform: capitalize;
+    letter-spacing: 1px;
+    &:hover {
+        cursor: pointer;
+        text-decoration: underline;
+    }
+`
+
 export const HoverDiv = styled.div`
     text-transform: capitalize;
 
     &:hover {
         cursor: pointer;
-        text-decoration: underline;
     }
+`
+export const SubMenu = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80px;
+    position: absolute;
+    background: white;
+    width: 100%;
+    z-index: 10000;
+    padding: 20;
+    box-shadow: rgba(32, 33, 36, 0.28) 0px 1px 6px 0px;
+    font-size: 0.9rem;
+    &:hover {
+        color: grey;
+    }
+`
+
+export const JustifyCenterDiv = styled.div`
+    display: flex;
+    justify-content: center;
+`
+
+export const FontBoldDiv = styled.div`
+    font-weight: ${styleSheet.fontWeight};
+    text-transform: capitalize;
+`
+
+export const ToggleDisplayDiv = styled.div`
+    ${props => !props.display && css`
+        display: none;
+    `}
+`
+
+export const ReactBootstrapAlert = styled(Alert)`
+    ${props => props.variant == 'secondary' && css`
+        border: 0;
+        background: ${styleSheet.lightGrey};
+        box-shadow: 2px 2px 4px 0 #cbcbcb;
+        margin-bottom: 0.8rem;
+        z-Index: 1700;
+    `}
+`
+
+export const ReactDropdownButton = styled(DropdownButton)`
+    color: black;
+    background: red;
+    font-size: 1px;
+
 `

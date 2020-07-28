@@ -43,6 +43,7 @@ module.exports = {
 
 				user_table.id,
 				user_table.name, 
+				user_table.email,
 				user_table.registered_timestamp,
 				user_table.last_visit_timestamp,
 				JSON_BUILD_OBJECT(
@@ -87,6 +88,7 @@ module.exports = {
 			GROUP BY 
 				user_table.id, 
 				user_table.name,
+				user_table.email,
 				user_table.registered_timestamp, 
 				user_table.last_visit_timestamp,
 				area_table.name,
@@ -104,19 +106,22 @@ module.exports = {
 					name, 
 					password,
 					registered_timestamp,
-					main_area
+					main_area,
+					email
 				)
 			VALUES (
 				$1, 
 				$2, 
 				now(),
-				$3
+				$3,
+				$4
 			);
 			`;
 		const values = [
 			signupPackage.name, 
 			signupPackage.password,
-			signupPackage.area_id
+			signupPackage.area_id,
+			signupPackage.email
 		];
 
 		const query = {
@@ -178,7 +183,8 @@ module.exports = {
 			UPDATE user_table
 			SET 
 				name = '${user.name}',
-				main_area = ${user.main_area}
+				main_area = ${user.main_area},
+				email = '${user.email}'
 			WHERE id = ${user.id};
 
 			INSERT INTO user_role (

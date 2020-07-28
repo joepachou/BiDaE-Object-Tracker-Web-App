@@ -51,7 +51,7 @@ import {
 import {
     trackingTableColumn
 } from '../../config/tables'
-import retrieveDataHelper from '../../helper/retrieveDataHelper'
+import apiHelper from '../../helper/apiHelper';
 import { toast } from 'react-toastify';
 import LBeaconTable from './LBeaconTable'
 import GatewayTable from './GatewayTable' 
@@ -93,11 +93,11 @@ class SystemStatus extends React.Component{
         let { locale, auth, stateReducer } = this.context
         let [{areaId}] = stateReducer
 
-        retrieveDataHelper.getTrackingData(
-            locale.abbr,
-            auth.user,
+        apiHelper.trackingDataApiAgent.getTrackingData({
+            locale: locale.abbr,
+            user: auth.user,
             areaId
-        )
+        })
         .then(res => {
             this.setMessage('clear')
             let column = _.cloneDeep(trackingTableColumn)

@@ -42,9 +42,8 @@ import {
 } from 'react-bootstrap';
 import { AppContext } from '../../../context/AppContext';
 import axios from 'axios';
-import EditAreasForm from '../../presentational/EditAreasForm';
-import retrieveDataHelper from '../../../helper/retrieveDataHelper';
-import EditPwdForm from '../../presentational/EditPwdForm';
+import EditAreasForm from '../../presentational/form/EditAreasForm';
+import EditPwdForm from '../../presentational/form/EditPwdForm';
 import messageGenerator from '../../../helper/messageGenerator';
 import dataSrc from '../../../dataSrc';
 import {
@@ -71,7 +70,7 @@ class UserProfile extends React.Component{
     /** get area table from database */
     getAreaTable = () => {
 
-        retrieveDataHelper.getAreaTable()
+        apiHelper.areaApiAgent.getAreaTable()
             .then(res => {
                 let areaTable = res.data.rows.reduce((table, area) => {
                     table[area.id] = area

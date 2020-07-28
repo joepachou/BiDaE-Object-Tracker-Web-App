@@ -45,10 +45,11 @@ const tw = {
     HEALTH_REPORT: "Health Report",
     DEVICE_MONITOR: "偵測裝置",
     SYSTEM_SETTING: "系統設定",
+    BOT_ADMIN: "BOT 管理",
     CONTACT_TREE: "匡列對象",
     MONITOR_MANAGEMENT: "偵測裝置管理",
     GEOFENCE: "Geofence",
-    OBJECT_MANAGEMENT: "追蹤項目管理",
+    OBJECT_MANAGEMENT: "追蹤物件管理",
     MANAGEMENT: "管理",
     BIG_SCREEN: "大螢幕",
     ABOUT: "關於",
@@ -61,9 +62,15 @@ const tw = {
     HISTORICAL_RECORD: "歷史紀錄",
     REAL_TIME_RECORD: "即時紀錄",
     SETTINGS: "設定",
+    ASSET_USAGE: "資產使用",
+    DEVICE_TRANSFER_RECORD: "儀器轉移",
+    NOTES_ON_PATIENTS: "病人報告",
+    DEVICE_SERVICE_REQUEST: "device service request",
+    OBJECT_TRACKING: "物件追蹤",
     SHIFT_CHANGE: "交班",
     MONITOR_SETTING: "監控設定",
     REPORT: "報表",
+    RECORD: " 報表",
     LBEACON: "lbeacon",
     GATEWAY: "gateway",
     SEARCH_RESULT: "搜尋結果",
@@ -98,6 +105,7 @@ const tw = {
     SCAN_TAG:"請掃描TAG",
     ALREADY_CHOOSE:"已選擇",
     MAIN_AREA:"主要區域",
+    PRIMARY_AREA: "主要區域",
     SECONDARY_AREAS: "次要區域",
     PERSONA_LIST: "人員列表",
     IMPORT_PERSONA: "匯入人員",
@@ -133,6 +141,7 @@ const tw = {
     PREFERENCE: "偏好設定",
 
 
+
     /* buttons */
     CLEAR : "清除",
     SAVE : "儲存",
@@ -143,6 +152,8 @@ const tw = {
     SIGN_IN: "登入",
     SIGN_UP: "註冊",
     SIGN_OUT: "登出",
+    LOG_IN: "登入",
+    LOG_OUT: "登出",
     ON: "開啟",
     OFF: "關閉",
     SHIFT_CHANGE_RECORD: "交接記錄",
@@ -210,6 +221,7 @@ const tw = {
     EXPORT_CSV: "匯出CSV",
     EXPORT_PDF: "匯出PDF",
     SEND_RESET_INSTRUCTION: "send reset instruction",
+    DETAIL: "詳細資料",
 
     /* field */
     NAME: "名稱",
@@ -218,6 +230,7 @@ const tw = {
     KEY: "關鍵字",
     TYPE: "類別",
     ASSET_CONTROL_NUMBER: "財產編號",
+    OBJECT_IDENTITY_NUMBER: "物件 ID",
     MAC_ADDRESS: "mac address",
     LBEACON: "lbeacon",
     STATUS: "儀器狀態",
@@ -287,11 +300,12 @@ const tw = {
     NICKNAME:"別名",
     NUM_OF_UPDATED_LBEACON: "# updated lbeacons",
     FORGET_PASSWORD: "忘記密碼?",
+    RESET_PASSWORD: "重設密碼",
 
     /** form title */
     EDIT_LBEACON: "編輯 lbeacon",
     ADD_OBJECT: "增加儀器",
-    EDIT_OBJECT: "編輯儀器",
+    EDIT_OBJECT: "編輯物件",
     ADD_PERSONA: "增加人員",
     REPORT_DEVICE_STATUS: "回報儀器狀態",
     REPORT_PATIENT_STATUS: "回報病人狀態",
@@ -312,7 +326,7 @@ const tw = {
     NOT_STAY_ROOM_MONITOR: "房間監控",
     GEOFENCE_MONITOR: "電子圍籬監控",
     DISSOCIATION: "解除綁定",
-    ASSOCIATION: "綁定人員",
+    ASSOCIATION: "綁定",
     EDIT_GEOFENCE_CONFIG: "編輯電子圍籬設定",
     ADD_GEOFENCE_CONFIG: "新增電子圍籬設定",
     WARNING: "警告",
@@ -358,6 +372,7 @@ const tw = {
     THE_MAC_ADDRESS_IS_ALREADY_USED_OR_FORMAT_IS_NOT_CORRECT: "Mac Address已被使用或格式錯誤",
     MAC_ADDRESS_FORMAT_IS_NOT_CORRECT: "mac address格式錯誤",
     TIME_FORMAT_IS_INCORRECT: "時間格式錯誤",
+    EMAIL_ADDRESS_FORMAT_IS_INCORRECT: "電子郵件格式錯誤",
     LBEACON_FORMAT_IS_NOT_CORRECT: "Lbeacon格式錯誤",
     ASSET_CONTROL_NUMBER_IS_NOT_FOUND: "未有符合的財產編號",
     INCORRECT:"帳號錯誤",
@@ -397,6 +412,7 @@ const tw = {
     SEARCH_FOR_NAMEGROUPBYAREA: "搜尋地區",
     SEARCH_FOR_NAMEGROUPBYUUID: "搜尋UUID",
     PLEASE_TYPE_PERSONA_ID: "請輸入人員編號",
+    PLEASE_TYPE_OBJECT_IDENTITY_NUMBER: "請輸入財產編號或是人員編號",
 
     /* Object Status */
     STATUS: "狀態",
@@ -493,6 +509,7 @@ const tw = {
     USERNAME_OR_PASSWORD_IS_INCORRECT: "使用者名稱或是密碼錯誤",
     PASSWORD_IS_INCORRECT: "密碼錯誤",
     PLEASE_ENTER_ID_AND_PASSWORD: "請輸入管理者的ID及密碼",
+    PLEASE_ENTER_PASSWORD: "請輸入密碼",
     EDIT_LBEACON_SUCCESS: "編輯Lbeacon成功",
     EDIT_OBJECT_SUCCESS: "編輯物件成功",
     DELETE_LBEACON_SUCCESS: "刪除Lbeacon成功",
@@ -501,6 +518,9 @@ const tw = {
     SAVE_SUCCESS: "儲存成功",
     SELECT_ROLE:"選擇權限",
     SIGNUP_FAIL:"帳號重複",
+    PASSWORD_RESET_SUCCESSFUL: "更改密碼成功",
+    PASSWORD_RESET_INSTRUCTION_SUCCESSFUL: "更改密碼確認信已寄到您的信箱，請依照郵件指示更改您的密碼",
+
 
     /** user roles */
     CARE_PROVIDER: "護理人員",
@@ -523,6 +543,10 @@ const tw = {
     MINUTES: "分鐘",
     IS_RESERVED_FOR:"預約者:",
     POUND_SIGN: "#",
+
+    /** locale */
+    TW: "中文",
+    EN: "英文",
 
     DEVICE_FOUND: function (length){
         return "發現"+length.toString()+"個儀器"

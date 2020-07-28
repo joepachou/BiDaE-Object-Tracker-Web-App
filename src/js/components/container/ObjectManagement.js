@@ -29,7 +29,6 @@ import PatientTable from '../../presentational/PatientTable'
 import ImportObjectTable from '../../presentational/ImportObjectTable'
 import ImportPatientTable from '../../presentational/ImportPatientTable' 
 import DissociationForm from '../DissociationForm'
-import retrieveDataHelper from '../../../helper/retrieveDataHelper';
 import apiHelper from '../../helper/apiHelper';
 
 class ObjectManagementContainer extends React.Component{
@@ -91,7 +90,8 @@ class ObjectManagementContainer extends React.Component{
         let {
             locale
         } = this.context
-        retrieveDataHelper.getAreaTable()
+
+        apiHelper.areaApiAgent.getAreaTable()
         .then(res => {
             let areaSelection = res.data.rows.map(area => {
                 return {
@@ -343,7 +343,8 @@ class ObjectManagementContainer extends React.Component{
 
     getLbeaconData = () => {
         let { locale } = this.context
-        axios.post(getLbeaconTable, {
+
+        apiHelper.lbeaconApiAgent.getLbeaconTable({
             locale: locale.abbr
         })
         .then(res => {

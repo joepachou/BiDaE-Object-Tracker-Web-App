@@ -39,6 +39,8 @@ import tw from '../locale/zh-TW';
 import en from '../locale/en-US';
 import siteModuleLocaleEn from '../../site_module/locale/en-US';
 import siteModuleLocaleTw from '../../site_module/locale/zh-TW';
+import incDocLocaleEn from '../../inc/doc/locale/en-US';
+import incDocLocaleTw from '../../inc/doc/locale/zh-TW';
 import React from 'react';
 import LocaleContext from './context/LocaleContext';
 import config from './config';
@@ -46,14 +48,34 @@ import dataSrc from '../js/dataSrc';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
+const localeCollection = {
+    tw: {
+        name:'中文(繁體)',
+        abbr: 'tw',
+    },
+    en: {
+        name:'English',
+        abbr: 'en',
+    },
+    ms: {
+        name:'Melayu',
+        abbr: 'ms',
+    },
+    cn: {
+        name:'中文(简体)',
+        abbr: 'cn',
+    },   
+}
+
 const supportedLocale = {
     tw: {
-        name:'中文',
+        name:'中文(繁體)',
         lang: 'tw',
         abbr: 'zh-tw',
         texts: {
             ...tw,
             ...siteModuleLocaleTw,
+            ...incDocLocaleTw,
         },
     },
     en: {
@@ -63,17 +85,36 @@ const supportedLocale = {
         texts: {
             ...en,
             ...siteModuleLocaleEn,
+            ...incDocLocaleEn
         }    
-    }
+    },
+    ms: {
+        name:'Melayu',
+        lang: 'en',
+        abbr: 'en',
+        texts: {
+            ...en,
+            ...siteModuleLocaleEn,
+            ...incDocLocaleEn
+        }    
+    },
+    cn: {
+        name:'中文(简体)',
+        lang: 'tw',
+        abbr: 'tw',
+        texts: {
+            ...tw,
+            ...siteModuleLocaleTw,
+            ...incDocLocaleTw,
+        },
+    },
 }
 
 
 class Locale extends React.Component {
 
     state = {
-        lang:  Cookies.get('authenticated') ? JSON.parse(Cookies.get('user')).locale : config.DEFAULT_LOCALE,
-        texts: Cookies.get('authenticated') ? supportedLocale[JSON.parse(Cookies.get('user')).locale].texts : supportedLocale[config.DEFAULT_LOCALE].texts,
-        abbr:  Cookies.get('authenticated') ? supportedLocale[JSON.parse(Cookies.get('user')).locale].abbr : supportedLocale[config.DEFAULT_LOCALE].abbr,
+        ...supportedLocale[config.DEFAULT_LOCALE]
     }
 
     changeTexts = (lang) => {
@@ -93,8 +134,20 @@ class Locale extends React.Component {
         }
     }
 
+    setLocale = (lang) => {
+        if (lang == this.state.lang) return 
 
-    changeLocale = (e,auth) => {
+        Cookies.set('user', {
+            ...JSON.parse(Cookies.get('user')),
+            locale: lang
+        })
+
+        this.setState({
+            ...supportedLocale[lang]
+        })
+    }
+
+    changeLocale = (e, auth) => {
         const nextLang = this.toggleLang().nextLang
 
         axios.post(dataSrc.userInfo.locale, {
@@ -131,9 +184,11 @@ class Locale extends React.Component {
     render() {
         const localeProviderValue = {
             ...this.state,
-            changeLocale: this.changeLocale,
-            toggleLang: this.toggleLang,
-            reSetState : this.reSetState,
+            // changeLocale: this.changeLocale,
+            // toggleLang: this.toggleLang,
+            // reSetState : this.reSetState,
+            localeCollection: Object.values(localeCollection),
+            setLocale: this.setLocale
         };
 
        

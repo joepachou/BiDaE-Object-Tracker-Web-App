@@ -47,7 +47,7 @@ import _ from 'lodash'
 import axios from 'axios';
 import dataSrc from '../../../dataSrc'
 import { AppContext } from '../../../context/AppContext'
-import retrieveDataHelper from '../../../helper/retrieveDataHelper';
+import apiHelper from '../../../helper/apiHelper';
 
 class BigScreenContainer extends React.Component{
 
@@ -117,11 +117,11 @@ class BigScreenContainer extends React.Component{
         } = this.context
         let [{areaId}] = stateReducer
 
-        retrieveDataHelper.getTrackingData(
-            locale.abbr,
-            auth.user,
+        apiHelper.trackingDataApiAgent.getTrackingData({
+            locale: locale.abbr,
+            user: auth.user,
             areaId
-        )
+        })
         .then(res => {
             axios.post(dataSrc.getSearchQueue)
                 .then(searchQueue => {

@@ -46,7 +46,7 @@ import _ from 'lodash';
 import { AppContext } from '../../context/AppContext';
 import config from '../../config';
 import { getDescription } from '../../helper/descriptionGenerator';
-import retrieveDataHelper from '../../helper/retrieveDataHelper';
+import apiHelper from '../../helper/apiHelper';
 
 class BatteryLevelNotification extends React.Component {
     
@@ -78,11 +78,11 @@ class BatteryLevelNotification extends React.Component {
             {areaId}, 
         ] = stateReducer
 
-        retrieveDataHelper.getTrackingData(
-            locale.abbr,
-            auth.user,
-            areaId,
-        )
+        apiHelper.trackingDataApiAgent.getTrackingData({
+            locale: locale.abbr,
+            user: auth.user,
+            areaId
+        })
         .then(res => {
             this.setState({
                 data: res.data.filter(item => item.battery_indicator == 2),
@@ -126,6 +126,7 @@ class BatteryLevelNotification extends React.Component {
                 <Dropdown.Toggle 
                     variant='light'
                     id="battery-notice-btn"
+                    bsPrefix="bot-dropdown-toggle"
                 >
                     <i className="fas fa-bell" style={style.icon}>
                         <NotificationBadge 

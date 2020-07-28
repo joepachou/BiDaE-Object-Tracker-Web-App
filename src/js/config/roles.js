@@ -82,6 +82,9 @@ const rules = {
             "route:management",
             "route:systemSetting",
             "route:contactTree",
+            "route:setting",
+            "route:lbeacon",
+            "route:gateway",
 
             "user:mydevice",
             "user:mypatient",
@@ -114,6 +117,7 @@ const rules = {
             "route:management",
             "route:systemSetting",
             "route:contactTree",
+            "route:setting",
 
             "user:mydevice",
             "user:mypatient",

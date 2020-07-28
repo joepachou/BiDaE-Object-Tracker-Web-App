@@ -43,14 +43,32 @@ export default {
     confirmValidation: async function ({
         username,
         password,
-        locale
+        authenticatedRoles
     }) {
         return await axios.post(dataSrc.auth.validation, {
             username,
             password,
-            locale
+            authenticatedRoles
         })
     },
+
+    sentResetPwdInstruction: async function({
+        email,
+    }) {
+        return await axios.post(dataSrc.auth.sentResetPwdInstruction, {
+            email,
+        })
+    },
+
+    resetPassword: async function({
+        token,
+        password
+    }) {
+        return await axios.post(dataSrc.auth.resetPassword, {
+            token,
+            password
+        })
+    }
 
 
 }

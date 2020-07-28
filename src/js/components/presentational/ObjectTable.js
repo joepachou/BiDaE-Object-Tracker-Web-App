@@ -43,8 +43,8 @@ import { AppContext } from '../../context/AppContext';
 import ReactTable from 'react-table'; 
 import styleConfig from '../../config/styleConfig';
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
-import EditObjectForm from '../container/EditObjectForm';
-import BindForm from '../container/BindForm';
+import EditObjectForm from './form/EditObjectForm';
+import BindForm from '../presentational/form/BindForm';
 import DissociationForm from '../container/DissociationForm'
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
 import Select from 'react-select';
@@ -58,13 +58,13 @@ import {
 import AccessControl from '../authentication/AccessControl';
 import messageGenerator from '../../helper/messageGenerator';
 import { objectTableColumn } from '../../config/tables';
-import retrieveDataHelper from '../../helper/retrieveDataHelper'; 
 import config from '../../config';
 import apiHelper from '../../helper/apiHelper';
 import {
     transferMonitorTypeToString
 } from '../../helper/dataTransfer';
- 
+import moment from 'moment';
+
 
 class ObjectTable extends React.Component{   
 
@@ -76,7 +76,7 @@ class ObjectTable extends React.Component{
         selectedRowData:'',
         selection: [],
         selectAll: false,
-        isShowBind:false,
+        isShowBind: false,
         showDeleteConfirmation:false,
         isShowEditImportTable:false,
         bindCase: 0,
@@ -95,6 +95,7 @@ class ObjectTable extends React.Component{
         filteredData: [],
         filterSelection: {},
         apiMethod: '',
+        locale: this.context.locale.abbr,
     }
 
     componentDidMount = () => {
@@ -103,21 +104,54 @@ class ObjectTable extends React.Component{
         // this.getImportData()
     }
 
-
     componentDidUpdate = (prevProps, prevState) => {    
 
-        if (this.context.locale.abbr !== prevState.locale) {    
+        if (this.context.locale.abbr !== prevState.locale) {  
+            this.getRefresh()
             this.setState({ 
                 locale: this.context.locale.abbr
             }) 
         } 
     }
 
+    getRefresh = () =>{
+        this.getAreaTable()
+
+        let columns = _.cloneDeep(objectTableColumn) 
+
+        let {
+            locale
+        } = this.context;
+
+        columns.map(field => {
+            field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
+        }) 
+
+        this.state.data.map(item=>{
+            item.area_name.label = locale.texts[item.area_name.value]
+            item.registered_timestamp = moment(item.registered_timestamp._i).locale(this.context.locale.abbr).format("lll")
+            item.area_name.label == undefined ?   item.area_name.label = '*site module error*' : null 
+        })
+
+        this.state.filteredData.map(item=>{ 
+            item.area_name.label = locale.texts[item.area_name.value]
+
+            item.registered_timestamp = moment(item.registered_timestamp._i).locale(this.context.locale.abbr).format("lll")
+            item.area_name.label == undefined ?   item.area_name.label = '*site module error*' : null
+        })
+       
+        this.setState({
+            columns, 
+            locale: this.context.locale.abbr
+        }) 
+    }
+
     getAreaTable = () => {
         let {
             locale
         } = this.context
-        retrieveDataHelper.getAreaTable()
+
+        apiHelper.areaApiAgent.getAreaTable()
             .then(res => {
                 let areaSelection = res.data.rows.map(area => {
                     return {
@@ -195,6 +229,7 @@ class ObjectTable extends React.Component{
             this.setState({
                 data,
                 isShowEdit: false,
+                isShowBind: false,
                 showDeleteConfirmation: false,
                 disableASN: false,
                 filteredData: data,
@@ -214,9 +249,10 @@ class ObjectTable extends React.Component{
 
     getImportData = (callback) => {
         let { locale } = this.context
-        retrieveDataHelper.getImportedObjectTable(
-            locale.abbr
-        )
+
+        apiHelper.importedObjectApiAgent.getImportedObjectTable({
+            locale: locale.abbr,
+        })
         .then(res => {
             this.setState({
                 importData: res.data.rows,
@@ -369,6 +405,7 @@ class ObjectTable extends React.Component{
                 this.setState({
                     isShowBind: true,
                     bindCase: 1,
+                    apiMethod: 'post',
                 })
             break; 
 
@@ -641,7 +678,7 @@ class ObjectTable extends React.Component{
                                         isPatientShowEdit: true, 
                                         isShowEdit: true,
                                         selectedRowData: rowInfo.original,
-                                        formTitle: 'edit info',
+                                        formTitle: 'edit object',
                                         disableASN: true,
                                         apiMethod: 'put',
                                     })
@@ -651,7 +688,7 @@ class ObjectTable extends React.Component{
                     }} 
                 />
  
-                <EditObjectForm 
+                <EditObjectForm  
                     show={this.state.isShowEdit} 
                     title={this.state.formTitle} 
                     selectedRowData={selectedRowData || ''} 
@@ -667,9 +704,9 @@ class ObjectTable extends React.Component{
                     show = {this.state.isShowBind} 
                     bindCase = {this.state.bindCase}
                     title={this.state.formTitle} 
-                    handleSubmitForm={this.handleSubmitForm}
+                    handleSubmit={this.handleSubmitForm}
                     formPath={this.state.formPath}
-                    handleClose={this.handleClose}
+                    handleClose={this.handleClose} 
                     objectTable={this.state.objectTable}
                     ImportData= {this.state.importData}
                     areaTable={this.state.areaTable}

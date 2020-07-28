@@ -42,6 +42,12 @@ import transferredLocationApiAgent from '../apiAgent/transferredLocationApiAgent
 import authApiAgent from '../apiAgent/authApiAgent';
 import userApiAgent from '../apiAgent/userApiAgent';
 import deviceListApis from '../apiAgent/deviceListApiAgent';
+import trackingDataApiAgent from '../apiAgent/trackingDataApiAgent';
+import roleApiAgent from '../apiAgent/roleApiAgent';
+import areaApiAgent from '../apiAgent/areaApiAgent';
+import lbeaconApiAgent from '../apiAgent/lbeaconApiAgent';
+import gatewayApiAgent from '../apiAgent/gatewayApiAgent';
+import importedObjectApiAgent from '../apiAgent/importedObjectApiAgent';
 
 const apiHelper = {
 
@@ -53,11 +59,23 @@ const apiHelper = {
 
     objectApiAgent,
 
+    importedObjectApiAgent,
+
     transferredLocationApiAgent,
 
     authApiAgent,
 
     userApiAgent,
+
+    trackingDataApiAgent, 
+
+    roleApiAgent,
+
+    areaApiAgent,
+
+    lbeaconApiAgent,
+
+    gatewayApiAgent,
     
     deviceListApis,
 

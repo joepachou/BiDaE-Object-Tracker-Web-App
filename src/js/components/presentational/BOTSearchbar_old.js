@@ -39,7 +39,7 @@ import React from 'react';
 import { Form, Button } from 'react-bootstrap'; 
 import {
     SEARCH_BAR
-} from '../../config/words';
+} from '../../config/wordMap';
 import {
     isMobileOnly
 } from 'react-device-detect';

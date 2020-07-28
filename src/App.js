@@ -42,18 +42,21 @@ import config from './js/config';
 import { 
     BrowserRouter,
     Route,  
+    Switch
 } from 'react-router-dom';
-import SigninPage from './js/components/authentication/SigninPage';
-import ForgetPassword from './js/components/authentication/ForgetPassword';
-import MainContainer from './js/components/container/MainContainer';
+import publicRoutes from './js/config/routes/publicRoutesConfig';
 
 const App = () => {
     return (
         <AppContext>
-            <BrowserRouter>          
-                <Route path='/login' exact component={SigninPage} />
-                <Route path='/resetPassword' exact component={ForgetPassword} />
-                <PrivateRoutes />
+            <BrowserRouter>     
+                <Switch>
+                    {publicRoutes.map(route => {
+                        return <Route path={route.path} exact component={route.component} />
+
+                    })}
+                    <PrivateRoutes />
+                </Switch>
             </BrowserRouter>
             <ToastContainer {...config.TOAST_PROPS} />
         </AppContext>

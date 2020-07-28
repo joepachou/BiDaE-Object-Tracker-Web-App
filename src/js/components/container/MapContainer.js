@@ -46,11 +46,11 @@ import {
     isMobile,
     isTablet
 } from 'react-device-detect';
-import GeneralConfirmForm from '../presentational/GeneralConfirmForm';
+import GeneralConfirmForm from '../presentational/form/GeneralConfirmForm';
 import TabletMapContainer from '../platform/tablet/TabletMapContainer';
 import MobileMapContainer from '../platform/mobile/MobileMapContainer';
 import BrowserMapContainer from '../platform/browser/BrowserMapContainer';
-import { CLEAR_SEARCH_RESULT } from '../../config/words';
+import { CLEAR_SEARCH_RESULT } from '../../config/wordMap';
 
 class MapContainer extends React.Component {
 
@@ -67,7 +67,7 @@ class MapContainer extends React.Component {
 
     handleClickButton = (e) => {
         const { name, value } = e.target
-        console.log(name)
+
         switch(name) {
             case CLEAR_SEARCH_RESULT:
                 this.props.handleClick(e);
@@ -94,9 +94,6 @@ class MapContainer extends React.Component {
                 break;
             case 'searchedObjectType':
                 this.props.setShowedObjects(value)
-                break;
-            case 'cleanPath':
-                this.props.handleClosePath();
                 break;
         }
     }

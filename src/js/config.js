@@ -42,7 +42,7 @@ import moment from 'moment';
 
 const config = {
 
-    VERSION: 'v1.0 b.1925',
+    VERSION: 'v1.0 b.1936',
 
     TIMESTAMP_FORMAT: 'LLL',
 
@@ -70,7 +70,7 @@ const config = {
             'form:view',
         ],
         locale: 'tw',
-        main_area: 0,
+        main_area: 1,
     },
 
     DEFAULT_LOCALE: 'tw' ,
@@ -92,7 +92,7 @@ const config = {
     ],
 
     monitorTypeMap: {
-        object: [1],
+        object: [1, 16],
         patient: [1,2,4,8]
     },
 
@@ -171,10 +171,18 @@ const config = {
         draggable: true
     },
 
-    shiftOption: [
+    SHIFT_OPTIONS: [
         "day shift",
         "swing shift",
         "night shift",
+    ],
+
+    SEARCHABLE_FIELD: [
+        'type', 
+        'asset_contol_number', 
+        'name', 
+        'nickname', 
+        'location_description'
     ],
 
     monitorType: {
@@ -182,6 +190,7 @@ const config = {
         2: "panic",
         4: "movement",
         8: "location",
+        16: "bed",
     },
 
     monitorSettingType: {
@@ -220,11 +229,11 @@ const config = {
     getShift: () => {
         const hour = moment().hours()
         if (hour < 17 && hour > 8){
-            return config.shiftOption[0]
+            return config.SHIFT_OPTIONS[0]
         }else if(hour < 24 && hour > 17){
-            return config.shiftOption[1]
+            return config.SHIFT_OPTIONS[1]
         }else{
-            return config.shiftOption[2]
+            return config.SHIFT_OPTIONS[2]
         }
     },
 

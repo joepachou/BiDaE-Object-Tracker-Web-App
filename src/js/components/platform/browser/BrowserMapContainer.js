@@ -47,7 +47,7 @@ import AccessControl from '../../authentication/AccessControl'
 import Map from '../../presentational/Map';
 import {
     CLEAR_SEARCH_RESULT
-} from '../../../config/words';
+} from '../../../config/wordMap';
 
 export default class BrowserMapContainer extends React.Component {
 
@@ -211,22 +211,6 @@ export default class BrowserMapContainer extends React.Component {
                                         ?   locale.texts.SHOW_RESIDENTS
                                         :   locale.texts.HIDE_RESIDENTS 
                                     }
-                                </Button>
-                            </Nav.Item>
-                        </AccessControl>
-                        <AccessControl
-                            permission={"user:cleanPath"}
-                            renderNoAccess={()=>null}
-                        >
-                            <Nav.Item className="mt-2">
-                                <Button
-                                    variant="primary"
-                                    className="mr-1 ml-2"
-                                    onClick={handleClickButton}
-                                    name="cleanPath"
-                                    disabled={(this.props.pathMacAddress == '')}
-                                >
-                                    {locale.texts.HIDE_PATH}
                                 </Button>
                             </Nav.Item>
                         </AccessControl>

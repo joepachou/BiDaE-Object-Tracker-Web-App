@@ -51,9 +51,9 @@ import { AppContext } from '../../context/AppContext';
 import config from '../../config';
 import { 
     OBJECT_TYPE
-} from '../../config/words';
+} from '../../config/wordMap';
 import {
-    ListTitle
+    Title
 } from '../BOTComponent/styleComponent';
 /*
     this class contain three two components
@@ -302,7 +302,7 @@ class SearchableObjectType extends React.Component {
     }
 
     handleClick = (e) => {
-        let itemName = e.target.innerText
+        let itemName = e.target.innerText 
 
         const searchKey = {
             type: OBJECT_TYPE,
@@ -420,12 +420,12 @@ class SearchableObjectType extends React.Component {
                 onMouseLeave={this.mouseLeave} 
                 className="hideScrollBar mx-2 float-right" 
             >
-                <ListTitle>
+                <Title list>
                     {locale.texts.OBJECT}
-                </ListTitle>
-                <ListTitle>
+                </Title>
+                <Title list>
                     {locale.texts.TYPES}
-                </ListTitle>
+                </Title>
                 {/** this section shows the layout of sectionIndexList (Alphabet List)*/}
                 <Col 
                     id="SectionIndex"  

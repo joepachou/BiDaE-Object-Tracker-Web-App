@@ -52,7 +52,10 @@ import {
     ALL_DEVICES,
     ALL_PATIENTS,
     OBJECT_TYPE
-} from '../../config/words';
+} from '../../config/wordMap';
+import {
+    ASSIGN_OBJECT
+} from '../../reducer/action';
 
 
 const SearchResultListGroup = ({
@@ -80,7 +83,7 @@ const SearchResultListGroup = ({
             top: 10
         },
         item: {
-            minWidth: 35,
+            minWidth: 25,
         },
         listGroup: {
             color: 'rgb(33, 37, 41)',
@@ -90,7 +93,7 @@ const SearchResultListGroup = ({
     const onMouseOver = (e, value) => {
         let [{}, dispatch] = stateReducer;
         dispatch({
-            type: 'assignObject',
+            type: ASSIGN_OBJECT,
             value,
         })
     }
@@ -98,7 +101,7 @@ const SearchResultListGroup = ({
     const onMouseOut = () => {
         let [{}, dispatch] = stateReducer;
         dispatch({
-            type: 'assignObject',
+            type: ASSIGN_OBJECT,
             value: null,
         })
     }

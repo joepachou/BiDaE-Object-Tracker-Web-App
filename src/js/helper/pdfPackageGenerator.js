@@ -81,13 +81,13 @@ const pdfPackageGenerator = {
         contactTree: `contact_tree`,
     },
 
+    PDF_FILENAME_TIME_FORMAT: "YYYY-MM-Do_hh_mm_ss",
+
     shiftOption: [
         "day shift",
         "swing shift",
         "night shift",
     ],
-
-    PDF_FILENAME_TIME_FORMAT: "YYYY-MM-Do_hh_mm_ss",
 
     /** Pdf format pdfPackageGenerator */
     pdfFormat: {
@@ -745,6 +745,7 @@ const pdfPackageGenerator = {
                 </div>
             `
         },
+
     },
     
 }

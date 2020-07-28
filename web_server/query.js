@@ -9,7 +9,7 @@ var exec = require('child_process').execFile;
 const fs = require('fs')
 const path = require('path')
 const sha256 = require('sha256')
-const encrypt = require('../api/config/encrypt');
+const encrypt = require('../api/service/encrypt');
 const config = {
     user: process.env.DB_USER,
     host: process.env.DB_HOST,

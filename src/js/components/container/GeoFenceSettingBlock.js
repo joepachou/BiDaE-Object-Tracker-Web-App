@@ -40,13 +40,10 @@ import { AppContext } from '../../context/AppContext';
 import { 
     ButtonToolbar,
 } from "react-bootstrap"
-import axios from "axios"
-import dataSrc from "../../dataSrc"
 import config from "../../config"
 import ReactTable from 'react-table'
 import { geofenceConfigColumn } from '../../config/tables'
-import EditGeofenceConfig from '../presentational/EditGeofenceConfig'
-import retrieveDataHelper from '../../helper/retrieveDataHelper'
+import EditGeofenceConfig from '../presentational/form/EditGeofenceConfig'
 import styleConfig from '../../config/styleConfig';
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm'
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
@@ -101,12 +98,15 @@ class GeoFenceSettingBlock extends React.Component{
 
     getLbeaconTable = () => {
         let { locale } = this.context
-        retrieveDataHelper.getLbeaconTable(locale.abbr)
-            .then(res => {
-                this.setState({
-                    lbeaconsTable: res.data.rows
-                })
+
+        apiHelper.lbeaconApiAgent.getLbeaconTable({
+            locale: locale.abbr
+        })
+        .then(res => {
+            this.setState({
+                lbeaconsTable: res.data.rows
             })
+        })
     }
 
     getMonitorConfig = (callback) => {

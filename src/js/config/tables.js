@@ -375,6 +375,10 @@ const objectTableColumn = [
         accessor: "name"
     },
     {
+        Header: "Nickname",
+        accessor: "nickname"
+    },
+    {
         Header: "Type",
         accessor: "type"
     },
@@ -454,6 +458,11 @@ const userInfoTableColumn = [
         Header: "Name",
         accessor: "name",
         resizable: false,
+        width: 150,
+    },
+    {
+        Header: "email",
+        accessor: "email",
         width: 150,
     },
     {

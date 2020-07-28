@@ -47,7 +47,10 @@ import {
     ALL_PATIENTS,
     MY_DEVICES,
     MY_PATIENTS
-} from '../../config/words';
+} from '../../config/wordMap';
+import {
+    Title
+} from '../BOTComponent/styleComponent';
 
 class FrequentSearch extends React.Component {
 
@@ -87,15 +90,23 @@ class FrequentSearch extends React.Component {
             auth 
         } = this.context
 
+        const {
+            searchObjectArray,
+            pinColorArray
+        } = this.props
+
         const style = {
             list: {
                 maxHeight: this.props.maxHeigh,
                 overflow: "hidden scroll"
             }
         }
+        
         return (
             <div id='frequentSearch' >
-                <div className='text-capitalize title'>{locale.texts.FREQUENT_SEARCH}</div>
+                <Title list> 
+                    {locale.texts.FREQUENT_SEARCH}
+                </Title>
                 <div style={style.list} className="d-inline-flex flex-column searchOption">
                     {auth.authenticated && auth.user.searchHistory &&
                         auth.user.searchHistory
@@ -103,11 +114,17 @@ class FrequentSearch extends React.Component {
                                 return index < auth.user.freqSearchCount
                             })
                             .map((item, index) => {
+
+                                let pinColorIndex = searchObjectArray.indexOf(item.name)
+
                                 return (
                                     <Button
                                         variant="outline-custom"
                                         className="text-none"
                                         onClick={this.handleClick} 
+                                        style={{
+                                            color: pinColorIndex > -1 ? pinColorArray[pinColorIndex] : null
+                                        }}
                                         // active={this.state.searchKey === item.name.toLowerCase()} 
                                         key={index}
                                         name={SEARCH_HISTORY}

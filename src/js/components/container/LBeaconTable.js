@@ -41,7 +41,7 @@ import {
 } from 'react-bootstrap';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
-import EditLbeaconForm from './../presentational/EditLbeaconForm'
+import EditLbeaconForm from '../presentational/form/EditLbeaconForm'
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
 import axios from 'axios';
 import dataSrc from '../../dataSrc';
@@ -51,13 +51,13 @@ import {
 } from '../../config/tables';
 import { AppContext } from '../../context/AppContext';
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm';
-import retrieveDataHelper from '../../helper/retrieveDataHelper';
 import styleConfig from '../../config/styleConfig';
 import {
     PrimaryButton
 } from '../BOTComponent/styleComponent';
 import AccessControl from '../authentication/AccessControl';
 import messageGenerator from '../../helper/messageGenerator';
+import apiHelper from '../../helper/apiHelper';
 
 const SelectTable = selecTableHOC(ReactTable);
 
@@ -97,9 +97,10 @@ class LbeaconTable extends React.Component{
     getData = (callback) => {
 
         let { locale } = this.context
-        retrieveDataHelper.getLbeaconTable(
-            locale.abbr
-        )
+
+        apiHelper.lbeaconApiAgent.getLbeaconTable({
+            locale: locale.abbr
+        })
         .then(res => {
             this.props.setMessage('clear')
             let column = _.cloneDeep(lbeaconTableColumn)

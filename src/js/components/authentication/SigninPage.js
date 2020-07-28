@@ -45,40 +45,31 @@ import LocaleContext from '../../context/LocaleContext';
 import AuthContext from '../../context/AuthenticationContext';
 import { 
     Formik, 
-    Field, 
     Form, 
     ErrorMessage 
 } from 'formik';
 import * as Yup from 'yup';
 import {
-    CenterContainer
+    CenterContainer, JustifyCenterDiv
 } from '../BOTComponent/styleComponent';
-import styleConfig from '../../config/styleConfig';
 import FormikFormGroup from '../presentational/FormikFormGroup';
 import { 
     Link, 
     useHistory
 } from 'react-router-dom';
-
-
+import routes from '../../config/routes/routes';
+import { AppContext } from '../../context/AppContext';
 
 const imageLength = 80;
-
-const handleClick = (e) => {
-    console.log(e.target)
-    let {
-        name
-    } = e.target
-    // switch(name) {
-    //     case 'forget password'
-    // }
-}
 
 const SigninPage = () => {
 
     let locale = React.useContext(LocaleContext);
     let auth = React.useContext(AuthContext);
+    let appContext = React.useContext(AppContext)
+
     let history = useHistory();
+
     return (
         <CenterContainer>
             <div className='d-flex justify-content-center'>
@@ -108,7 +99,14 @@ const SigninPage = () => {
 
                 onSubmit={(values, actions) => {
                     let callback = () => history.push("/")
-                    auth.signin(values, actions, callback)
+
+                    let {
+                        stateReducer
+                    } = appContext
+
+                    let [{}, dispatch] = stateReducer
+                    
+                    auth.signin(values, actions, dispatch, callback)
                 }}
 
                 render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
@@ -125,29 +123,35 @@ const SigninPage = () => {
                             type="text"
                             name="username"
                             className="mb-4"
+                            error={errors.username}
+                            touched={touched.username}
                             label={locale.texts.NAME}    
+                            tabIndex={1}
                         />  
                         <FormikFormGroup 
                             type="password"
                             name="password"
                             className="mb-4"
-                            additionalField='forget password'
+                            error={errors.password}
+                            touched={touched.password}
                             additionalComponent={() => (
                                 <Link
-                                    to={'/resetPassword'}
+                                    to={routes.FORGET_PASSWORD}
                                 >
                                     {locale.texts.FORGET_PASSWORD}
                                 </Link>
                             )}
                             label={locale.texts.PASSWORD}    
+                            tabIndex={2}
                         />  
                         <div className='d-flex justify-content-start'>
                             <Button 
                                 type="submit" 
                                 variant="primary" 
                                 disabled={isSubmitting}
+                                tabIndex={3}
                             >
-                                {locale.texts.SIGN_IN}
+                                {locale.texts.LOG_IN}
                             </Button>
                         </div>
                     </Form>

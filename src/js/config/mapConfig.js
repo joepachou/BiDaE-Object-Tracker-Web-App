@@ -36,6 +36,7 @@
 
 import siteConfig from '../../../site_module/siteConfig';
 import viewConfig from '../config/viewConfig';
+import { monitorTypeChecker } from '../helper/dataTransfer';
 
 /** Map configuration.
  *  Refer leaflet.js for more optional setting https://leafletjs.com/reference-1.5.0.html
@@ -124,9 +125,9 @@ const mapConfig = {
     /** Set the icon option for browser */
     iconOptions: {
 
-        iconSize: [process.env.MARKER_SIZE_IN_DESKTOP, process.env.MARKER_SIZE_IN_DESKTOP] || 1,
+        iconSize: [siteConfig.MARKER_SIZE_IN_DESKTOP, siteConfig.MARKER_SIZE_IN_DESKTOP] || 1,
 
-        iconAnchor: [process.env.MARKER_SIZE_IN_DESKTOP / 2, process.env.MARKER_SIZE_IN_DESKTOP],
+        iconAnchor: [siteConfig.MARKER_SIZE_IN_DESKTOP / 2, siteConfig.MARKER_SIZE_IN_DESKTOP],
 
         showNumber: true,
 
@@ -139,7 +140,7 @@ const mapConfig = {
         specifiedNumberTop: '8%',
 
         /* Set the Marker dispersity that can be any positive number */
-        markerDispersity: 40,
+        markerDispersity: 400,
 
         geoFenceMarkerOptions: {
 
@@ -176,7 +177,7 @@ const mapConfig = {
 
         errorCircleOptions: {
 
-            color: '#ffc107',
+            color: 'rgba(0, 0, 0, 0)',
 
             fillColor: '#ffc10778',
 
@@ -189,9 +190,9 @@ const mapConfig = {
     /** Set the icon option for mobile */
     iconOptionsInMobile: {
 
-        iconSize: [process.env.MARKER_SIZE_IN_MOBILE, process.env.MARKER_SIZE_IN_MOBILE] || 1,
+        iconSize: [viewConfig.MARKER_SIZE_IN_MOBILE, viewConfig.MARKER_SIZE_IN_MOBILE] || 1,
 
-        iconAnchor: [process.env.MARKER_SIZE_IN_MOBILE / 2, process.env.MARKER_SIZE_IN_MOBILE],
+        iconAnchor: [viewConfig.MARKER_SIZE_IN_MOBILE / 2, viewConfig.MARKER_SIZE_IN_MOBILE],
 
         circleRadius: 8,
 
@@ -249,9 +250,9 @@ const mapConfig = {
     /** Set the icon option for tablet */
     iconOptionsInTablet: {
 
-        iconSize: [process.env.MARKER_SIZE_IN_TABLET, process.env.MARKER_SIZE_IN_TABLET],
+        iconSize: [viewConfig.MARKER_SIZE_IN_TABLET, viewConfig.MARKER_SIZE_IN_TABLET],
 
-        iconAnchor: [process.env.MARKER_SIZE_IN_TABLET / 2, process.env.MARKER_SIZE_IN_TABLET],
+        iconAnchor: [viewConfig.MARKER_SIZE_IN_TABLET / 2, viewConfig.MARKER_SIZE_IN_TABLET],
 
         showNumber: true,
 
@@ -310,7 +311,9 @@ const mapConfig = {
         "yellowgreen",
         "sos",
         "female",
-        "male"
+        "male",
+        "blackRound",
+        "whiteRound"
     ],
 
     iconColor: {
@@ -325,6 +328,8 @@ const mapConfig = {
         male: "male",
         female_1: "female_2",
         male_1: "male_1",
+        blackBed: "blackRound",
+        whiteBed: "whiteRound",
 
         // ["slateblue", "tan", "lightyellow", "lavender", "orange","lightblue", "mistyrose", "yellowgreen", "darkseagreen", "orchid"]
         pinColorArray: ["slateblue", "orange", "yellowgreen", "lightblue", "tan"]
@@ -336,7 +341,8 @@ const mapConfig = {
         if (item.panic) return this.iconColor.sos
 
         if (item.object_type == 0) {
-            if (hasColorPanel) return item.pinColor
+            if (monitorTypeChecker(item.monitor_type, 16)) return mapConfig.iconColor.blackBed
+            else if (hasColorPanel) return item.pinColor
             else if (item.searched) return mapConfig.iconColor.searched
             else if (item.status !== mapConfig.objectStatus.NORMAL) return mapConfig.iconColor.unNormal
             else return mapConfig.iconColor.normal
@@ -379,7 +385,7 @@ const mapConfig = {
     startInteval: true,
 
     /* Set the tracking query inteval time(ms) */
-    intervalTime: process.env.OBJECT_TRACKING_INTERVAL_TIME_IN_MILLI_SEC,
+    intervalTime: 1000,
 
     objectStatus: {
         PERIMETER: "perimeter",

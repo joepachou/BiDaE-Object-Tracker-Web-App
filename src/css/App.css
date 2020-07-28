@@ -203,19 +203,8 @@ a:hover {
 
 /* React-bootstrap dropdown css */
 .dropdown-toggle::after {
-    display: none;
-}
-
-/* React-bootstrap Alert */
-.alert-secondary {
-    border: 0;
-    background: rgba(143, 143, 143, 0.1);
-    box-shadow: 2px 2px 4px 0 #cbcbcb;
-    margin-bottom: 0.8rem;
-}
-
-.alert {
-    font-size: 1.2rem;
+    /* display: none; */
+    margin-left: 1rem;
 }
 
 .alert-danger {
@@ -670,6 +659,10 @@ p {
     left: auto !important;
 }
 
+.bot-dropdown-toggle::after {
+    display: none;
+}
+
 .toast-success-notice-container { 
     background: #dbf8d1;
     color: black;
@@ -733,4 +726,24 @@ p {
 .breadcrumb-item.active {
     font-weight: 500;
     color: #007bff;
+}
+
+
+.Toastify__toast-container--top-center {
+
+    padding: 0px;
+    width: 100%;
+    left: 0;
+    margin-left: 0;
+    top: 0%;
+
+}
+
+/** Classes for the displayed toast **/
+.Toastify__toast {
+    min-height: 55px;
+}
+
+.modal-header {
+    text-transform: capitalize;
 }

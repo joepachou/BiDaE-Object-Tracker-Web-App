@@ -4,11 +4,11 @@
     License:
         GPL 3.0 : The content of this file is subject to the terms and conditions
 
-    Project Name: 
+    Project Name:
         BiDae Object Tracker (BOT)
 
     File Name:
-        ImportPatientTable.js
+        ImportObjectTable.js
 
     File Description:
         BOT UI component
@@ -44,7 +44,6 @@ import ReactTable from 'react-table';
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
 import XLSX from 'xlsx';
 import InputFiles from 'react-input-files';
-import axios from 'axios';
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm';
 import styleConfig from '../../config/styleConfig';
 import messageGenerator from '../../helper/messageGenerator';
@@ -53,19 +52,19 @@ import {
 } from '../BOTComponent/styleComponent';
 import AccessControl from '../authentication/AccessControl';
 import { importTableColumn } from '../../config/tables';
-import dataSrc from '../../dataSrc';
-import retrieveDataHelper from '../../helper/retrieveDataHelper';
+import apiHelper from '../../helper/apiHelper';
+
 const SelectTable = selecTableHOC(ReactTable);
 
 
-class ImportPatientTable extends React.Component{
+class ImportObjectTable extends React.Component{
     static contextType = AppContext   
     
     state = { 
         selection: [],
         selectAll: false,
         showDeleteConfirmation:false,
-        filetext:'',
+        filetext:'', 
         data: [],
         columns: [],
         locale: this.context.locale.abbr,
@@ -84,18 +83,21 @@ class ImportPatientTable extends React.Component{
 
     getData = () => {
         let { locale } = this.context
-        retrieveDataHelper.getImportedObjectTable(
-            locale.abbr
-        )
+
+        apiHelper.importedObjectApiAgent.getImportedObjectTable({
+            locale: locale.abbr,
+        })
         .then(res => { 
             let columns = _.cloneDeep(importTableColumn)
             columns.map(field => {
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             }) 
+            let data = res.data.rows.filter(item => item.type != 'patient')
+            
             this.setState({
-                data: res.data.rows,
+                data,
                 columns,
-                showDeleteConfirmation: false,
+                showDeleteConfirmation:false,
                 locale: locale.abbr
             })
         })
@@ -176,11 +178,9 @@ class ImportPatientTable extends React.Component{
 
     deleteRecordImport = () => {
         this.setState({selectAll:false})
-        
-        axios.delete(dataSrc.importedObject, {
-            data: {
-                idPackage: this.state.selection
-            }
+
+        apiHelper.importedObjectApiAgent.deleteImportedObject({
+            idPackage: this.state.selection
         })
         .then(res => {
             this.setState({selection:[]})
@@ -285,7 +285,6 @@ class ImportPatientTable extends React.Component{
                 newData.map(item => {  
                     item.name.toString().indexOf("'") != -1 || item.name.toString().indexOf('"') != -1 ? punctuationFlag = true : null 
                     item.asset_control_number.toString().indexOf("'") != -1 ||  item.asset_control_number.toString().indexOf('"') != -1 ? punctuationFlag = true : null 
-                    item.type = 'patient'
                 }) 
 
                 if(punctuationFlag){ 
@@ -296,7 +295,8 @@ class ImportPatientTable extends React.Component{
                     messageGenerator.importErrorMessage('ASN_IS_REPEAT' ,ReapeName)
                 }
                 else{
-                    axios.post(dataSrc.importedObject, {
+
+                    apiHelper.importedObjectApiAgent.addImportedObject({
                         locale: locale.abbr,
                         newData
                     })
@@ -388,7 +388,7 @@ class ImportPatientTable extends React.Component{
                     ref={r => (this.selectTable = r)}
                     className='-highlight'
                     style={{maxHeight:'75vh'}} 
-                    onSortedChange={(e) => {this.setState({selectAll:false,selection:''})}} 
+                     onSortedChange={(e) => {this.setState({selectAll:false,selection:''})}} 
                     onPageChange={(e) => {this.setState({selectAll:false,selection:''})}} 
                     {...extraProps}
                     {...styleConfig.reactTable}
@@ -405,4 +405,4 @@ class ImportPatientTable extends React.Component{
     }
 }
 
-export default ImportPatientTable
+export default ImportObjectTable

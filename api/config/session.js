@@ -42,9 +42,9 @@ const pool = require('../db/dev/connection');
 const sessionOptions = {
     store: new pgSession({
         pool,             
-        tableName: 'session'   
+        tableName: process.env.SESSION_TABLE_NAME   
     }),
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.KEY,
     resave: true,
     saveUninitialized: true,
     cookie: {

@@ -36,7 +36,7 @@
 
 
 dataSrcIP = process.env.DATASRC_IP;
-dataSrcProtocol = process.env.DATASRC_PROTOCOL || 'https'
+dataSrcProtocol = parseInt(process.env.ENABLE_HTTP) ? 'http' : 'https';
 domain = `${dataSrcProtocol}://${dataSrcIP}`;
 
 const dataSrc = {
@@ -50,9 +50,11 @@ const dataSrc = {
     user: `${domain}/data/user`,
 
     userInfo: {
+
         area: {
             secondary: `${domain}/data/user/area/secondary`,
         },
+
         password: `${domain}/data/user/password`,
 
         locale: `${domain}/data/user/locale`,
@@ -62,8 +64,6 @@ const dataSrc = {
         mydevice: `${domain}/data/user/mydevice`,
 
         maxSearchHistoryCount: `${domain}/data/user/maxSearchHistoryCount`,
-
-        sentResetPwdInstruction: `${domain}/data/user/sentResetPwdInstruction`
 
     },
 
@@ -84,9 +84,17 @@ const dataSrc = {
     role: `${domain}/data/role`,
 
     auth: {
+
         signin: `${domain}/data/auth/signin`,
+
         signout: `${domain}/data/auth/signout`,
+
         validation: `${domain}/data/auth/validation`,
+
+        resetPassword: `${domain}/data/auth/resetpassword`,
+
+        sentResetPwdInstruction: `${domain}/data/auth/sentResetPwdInstruction`,
+
     },
 
     file: {
@@ -101,6 +109,7 @@ const dataSrc = {
     monitor: `${domain}/data/monitor`,
 
     record: {
+
         editedObject: `${domain}/data/record/editedObject`,
         
         shiftChange: `${domain}/data/record/shiftChange`,

@@ -41,10 +41,7 @@ const dbQueries = require('../db/dbQueries/userQueries');
 const pool = require('../db/dev/connection');
 const session = require('express-session');
 const authQueries = require('../db/dbQueries/authQueries');
-const encrypt = require('../config/encrypt');
-const mailTransport = require('../service/nodemailer');
-const { resetPasswordInstruction } = require('../config/template');
-
+const encrypt = require('../service/encrypt');
 
 module.exports = {
 
@@ -74,6 +71,7 @@ module.exports = {
         const { 
             name, 
             password, 
+            email,
             roles,
             area_id,
         } = request.body;    
@@ -83,6 +81,7 @@ module.exports = {
         const signupPackage = {
             name: name.toLowerCase(),
             password: hash,
+            email,
             area_id
         } 
         request.session.regenerate(() => {
@@ -160,10 +159,7 @@ module.exports = {
             password
         } = request.body;    
     
-        const secret = 'BeDIS@1807'; 
-        const hash = crypto.createHash('sha256', secret) 
-            .update(password) 
-            .digest('hex'); 
+        const hash = encrypt.createHash(password);
     
         pool.query(dbQueries.editPassword(user_id,hash)) 
             .then(res => {
@@ -236,26 +232,4 @@ module.exports = {
         
     },
 
-    sentResetPwdInstruction: (request, response) => {
-        const {
-            email
-        } = request.body;
-        
-        const token = '';
-        const message = {
-            from: 'ossf402@gmail', // Sender address
-            to: 'joechou@iis.sinica.edu.tw',
-            subject: 'BOT Password Assistance', 
-            html: resetPasswordInstruction(token)
-        };
-        
-        mailTransport.sendMail(message)
-            .then(res => {
-                console.log('send password reset instruction succeed')
-                response.status(200)
-            })
-            .catch(err => {
-                console.log(err)
-            })
-    }
 }

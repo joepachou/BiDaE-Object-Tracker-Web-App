@@ -38,7 +38,7 @@
 import React from 'react';
 import L from 'leaflet';
 import 'leaflet.markercluster';
-import '../../helper/leafletAwesomeNumberMarkers';
+import '../../config/leafletAwesomeNumberMarkers';
 import _ from 'lodash'
 import { AppContext } from '../../context/AppContext';
 import axios from 'axios';
@@ -133,6 +133,11 @@ class Map extends React.Component {
 
     /** Set the search map configuration establishing in config.js  */
     initMap = () => {
+
+        let {
+            auth
+        } = this.context;
+
         let [{
             areaId
         }] = this.context.stateReducer
@@ -162,9 +167,9 @@ class Map extends React.Component {
             this.mapOptions = mapConfig.mobileMapOptions
             this.iconOptions = mapConfig.iconOptionsInMobile
         }
-
+     
         /** Error handler of the user's auth area does not include the group of sites */
-        let areaOption = areaOptions[areaId]
+        let areaOption = areaOptions[auth.user.main_area]
 
         /** set the map's config */
         let { 
@@ -220,6 +225,7 @@ class Map extends React.Component {
             hasMap
         } = areaModules[areaOption]
         mapOptions.maxBounds = bounds.map((latLng, index) => latLng.map(axis => axis + mapOptions.maxBoundsOffset[index]))
+
         if (hasMap) {
             this.image.setUrl(url)
             this.image.setBounds(bounds)
@@ -494,7 +500,6 @@ class Map extends React.Component {
                 item.searched = true;
                 item.pinColor = pinColorArray[pinColorIndex];
             }
-
             let iconSize = this.iconOptions.iconSize;
 
             /** Set the attribute if the object in search result list is on hover */

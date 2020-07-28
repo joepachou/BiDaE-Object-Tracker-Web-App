@@ -38,7 +38,6 @@ import React from 'react';
 import { Form, Button } from 'react-bootstrap'; 
 import Autosuggest from 'react-autosuggest'; 
 import themeCSS from '../../../../src/css/SearchBar.css'
-import retrieveDataHelper from '../../../js/helper/retrieveDataHelper'
 
 let suggestData = []; 
 let load_suggest = false;

@@ -34,26 +34,32 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
+import {
+    SET_AREA,
+    SET_ENABLE_REQUEST_TRACKING_DATA,
+    ASSIGN_OBJECT
+} from './action';
 
 const StateReducer = (state, action) => {
+
     switch (action.type) {
-        case 'setArea':
+        case SET_AREA:
             return {
                 ...state,
                 areaId: action.value
             };
-        case 'setUpdateTrackingData':
+        case SET_ENABLE_REQUEST_TRACKING_DATA:
             return {
                 ...state,
                 shouldUpdateTrackingData: action.value
             }
-        case 'assignObject':
+        case ASSIGN_OBJECT:
             return {
                 ...state,
                 assignedObject: action.value
             }
         default:
-          return state;
+            return state;
     }
 }
 

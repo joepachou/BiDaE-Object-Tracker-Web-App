@@ -36,7 +36,6 @@
 
 import React, { Fragment } from 'react';
 import {
-    BrowserView,
     TabletView,
     MobileOnlyView,
     isTablet,
@@ -118,48 +117,7 @@ class SearchContainer extends React.Component {
         })
     }
 
-    /* Handle the cursor hover events in device that can use mouse.*/
-    handleMouseOver = (e) => {
-        location.href = '#' + e.target.innerText;
-        this.setState({
-            isShowSectionTitle: true,
-            sectionIndex: e.target.innerText,
-        })
-    }
-
-    /* Handle the touch start events in mobile device */
-    handleTouchStart = (e) => { 
-        if (e.target.classList.contains("sectionIndexItem")) {
-            location.href = '#' + sectionIndex;
-        }
-        this.setState({
-            isShowSectionTitle: true,
-            sectionIndex: e.target.innerText,
-        })
-    }
-
-    /* Handle the touch move events in mobile device */
-    handleTouchMove = (e) => { 
-        
-        const pageX = e.changedTouches[0].pageX;
-        const pageY = e.changedTouches[0].pageY;
-        const element = document.elementFromPoint(pageX, pageY);
-
-        if (element.classList.contains("sectionIndexItem")) {
-            location.href = '#' + element.innerText;
-            this.setState({
-                isShowSectionTitle: true,
-                sectionIndex: element.innerText,
-            })
-        }
-    }
-
     render() {      
-        const style = {    
-            textForMobile: {
-                fontSize: '2rem'
-            }
-        }
         const {
             searchKey,
             getSearchKey,

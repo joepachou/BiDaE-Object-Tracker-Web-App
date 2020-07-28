@@ -57,21 +57,13 @@ export default {
         })
     },
 
-    delete: async function({
-        configPackage
+    post: async function({
+        formOption,
+        mode,
     }) {
-        return await axios.delete(dataSrc.monitor, {
-            data: {
-                configPackage
-            }
-        })
-    },
-
-    add: async function({
-        configPackage
-    }) {
-        return await axios.patch(dataSrc.monitor, {
-            configPackage
+        return await axios.post(dataSrc.object, {
+            formOption,
+            mode
         })
     },
 

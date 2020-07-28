@@ -35,7 +35,7 @@
 */
 import {
     OBJECT_TYPE
-} from '../config/words';
+} from '../config/wordMap';
 import config from '../config';
 
 /** Retrieve the object's offset from object's mac_address.
@@ -98,4 +98,29 @@ export const transferMonitorTypeToString = (item, type) => {
             }
             return checkboxGroup
         }, []).join('/')
+}
+
+/** Check if the collection contains the type code */
+export const monitorTypeChecker = (collect, typeCode) => {
+    return collect & typeCode;
+}
+
+/** Count numbers of each object in the result and return a map */
+export const searchResultToMap = result => {
+    return result.reduce((map, item) => {
+        if (Object.keys(map).includes(item.type)) {
+           map[item.type][0] += 1;
+           if (item.found) {
+               map[item.type][1] += 1;
+           }
+        } else {
+            map[item.type] = []
+            map[item.type][0] = 1;
+            map[item.type][1] = 0;
+            if (item.found) {
+                map[item.type][1] += 1
+            } 
+        }
+        return map
+    }, {})
 }

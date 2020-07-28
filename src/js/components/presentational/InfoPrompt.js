@@ -35,8 +35,10 @@
 */
 
 
-import React, { Fragment } from 'react';
-import { Alert, Button } from 'react-bootstrap'
+import React, { Fragment, useEffect } from 'react';
+import { 
+    Row
+} from 'react-bootstrap'
 import { AppContext } from '../../context/AppContext';
 import {
     BrowserView,
@@ -46,96 +48,181 @@ import {
     CustomView,
     isMobile 
 } from 'react-device-detect'
-import { SWITCH_SEARCH_LIST } from '../../config/words';
+import { SWITCH_SEARCH_LIST } from '../../config/wordMap';
 import {
-    HoverDiv
+    HoverDiv,
+    HoverWithUnderlineDiv,
+    JustifyCenterDiv,
+    FontBoldDiv,
+    ToggleDisplayDiv,
+    ReactBootstrapAlert
 } from '../BOTComponent/styleComponent';
-import styled from 'styled-components';
+import wordMap from '../../config/wordMap';
+import { searchResultToMap } from '../../helper/dataTransfer';
 
-const style = {
-    alertText: {
-        fontSize: '1.2rem',
-        fontWeight: 700
-    },
-    alertTextTitle: {
-        fontSize: '1.2rem',
-        color: 'rgba(101, 111, 121, 0.78)',
-    },
-    alerTextTitleForTablet: {
-        fontSize: '1.2rem',
-        fontWeight: 500,
-        color: 'black'
-    }
-}
-
-const InfoPrompt = ({
+export default ({
     searchKey,
     searchResult,
     handleClick
 }) => {
     const appContext = React.useContext(AppContext);
+    const [showDetail, setShowDetail] = React.useState(false)
+
     const { locale } = appContext
+
+    let searchResultMap = searchResultToMap(searchResult)
+
+    const handleShowDetail = () => {
+       setShowDetail(!showDetail)
+    }
+
     return (
         <Fragment>
             <CustomView condition={isTablet != true && isMobile != true}>
-               <Alert variant='secondary' className='d-flex justify-content-start'>
-                    <HoverDiv
-                        onClick={handleClick}
+                <div
+                    className="d-flex justify-content-center"
+                >
+                    <ReactBootstrapAlert
+                        variant='secondary' 
+                        className='px-4'
+                        style={{
+                            position: 'fixed',
+                            width: '32%'
+                        }}
                     >
-                        <div 
-                            className='d-flex justify-content-start mr-1'
-                            name={SWITCH_SEARCH_LIST}
-                            value={true}
-                        >
-                            {searchKey ? locale.texts.FOUND : locale.texts.PLEASE_SELECT_SEARCH_OBJECT}
-                            &nbsp;
-                            <div
-                                style={style.alertText}
+                        <Row>
+                            <HoverWithUnderlineDiv
+                                onClick={handleClick}
                             >
-                                {searchKey ? searchResult.filter(item => item.found).length : ""}
-                            </div>
-                            &nbsp;
-                            {searchKey && locale.texts.OBJECTS}
-                        </div>
-                    </HoverDiv>
-                    {searchKey && <div>&nbsp;</div> }
-                    <HoverDiv
-                        onClick={handleClick}
-                    >
-                        <div 
-                            className='d-flex justify-content-start mr-1'
-                            name={SWITCH_SEARCH_LIST}
-                            value={false}
-                        >
-                            {searchKey && `${locale.texts.NOT_FOUND}`}
-                            &nbsp;
-                            <div
-                                style={style.alertText}
+                                {stringBlock({
+                                    name: SWITCH_SEARCH_LIST,
+                                    value: true,
+                                    data: searchResult.filter(item => item.found).length,
+                                    label: wordMap.FOUND,
+                                    locale,
+                                })}
+                            </HoverWithUnderlineDiv>
+                            <HoverWithUnderlineDiv
+                                onClick={handleClick}
                             >
-                                {searchKey ? searchResult.filter(item => !item.found).length : ""}
-                            </div>
-                            &nbsp;
-                            {searchKey && locale.texts.OBJECTS}
-                        </div>
-                    </HoverDiv>
-                </Alert>
-            </CustomView> 
+                                {stringBlock({
+                                    name: SWITCH_SEARCH_LIST,
+                                    value: false,
+                                    data: searchResult.filter(item => !item.found).length,
+                                    label: wordMap.NOT_FOUND,
+                                    locale,
+                                })}
+                            </HoverWithUnderlineDiv>
+                            <HoverDiv
+                                onClick={handleShowDetail}
+                                className="text-muted ml-auto d-flex align-items-center"
+                                style={{
+                                    position: 'relative',
+                                    right: 0,
+                                    fontSize: '0.9rem'
+                                }}
+                            >
+                                {locale.texts.DETAIL}
+                                &nbsp;
+                                <i 
+                                    className={`fas ${showDetail ? 'fa-angle-up' : 'fa-angle-down'}`}
+                                />
+                            </HoverDiv>
 
-
-            <TabletView>
-                <div>
-                    <div className='text-capitalize' style={style.alerTextTitleForTablet}>{searchKey ? locale.texts.FOUND : locale.texts.PLEASE_SELECT_SEARCH_OBJECT}</div>
-                    <div className='text-capitalize' style={style.alerTextTitleForTablet}>{searchKey ? searchResult.filter(item => item.found).length : ""}</div>
-                    <div className='text-capitalize' style={style.alerTextTitleForTablet}>{searchKey 
-                            ?   
-                                locale.texts.OBJECTS
-                            :   ""
-                        }</div>
+                        </Row>
+                        <ToggleDisplayDiv
+                            display={showDetail}
+                            className="pt-1"
+                        >
+                            {Object.keys(searchResultMap).map((item, index) => {
+                                return (
+                                    <Row
+                                        className='text-capitalize'
+                                    >
+                                        <JustifyCenterDiv
+                                            className='mr-1'
+                                        >
+                                            {locale.texts.FOUND}
+                                            &nbsp;
+                                            <FontBoldDiv>
+                                                {searchResultMap[item][1]}
+                                            </FontBoldDiv>
+                                            &nbsp;
+                                            {item}
+                                        </JustifyCenterDiv>
+                                        &nbsp;
+                                        <JustifyCenterDiv
+                                            className='mr-1'
+                                        >
+                                            {locale.texts.NOT_FOUND}
+                                            &nbsp;
+                                            <FontBoldDiv>
+                                                {searchResultMap[item][0] - searchResultMap[item][1]}
+                                            </FontBoldDiv>
+                                            &nbsp;
+                                            {item}
+                                        </JustifyCenterDiv>
+                                    </Row>
+                                )
+                            })} 
+                        </ToggleDisplayDiv>
+                    </ReactBootstrapAlert>
                 </div>
+            </CustomView> 
+            <TabletView>
+                <FontBoldDiv>
+                    {searchKey ? locale.texts.FOUND : locale.texts.PLEASE_SELECT_SEARCH_OBJECT}
+                    {searchKey ? searchResult.filter(item => item.found).length : ""}
+                    {searchKey 
+                        ?   
+                            locale.texts.OBJECTS
+                        :   ""
+                    }
+                </FontBoldDiv>
             </TabletView>
         </Fragment>
     )
+};
 
+const stringBlock = ({
+    name,
+    value,
+    data,
+    label,
+    locale
+}) => {
+    switch(locale.lang) {
+        case "en":
+            return (
+                <div 
+                    className='d-flex justify-content-start mr-2'
+                    name={name}
+                    value={value}
+                >
+                    <FontBoldDiv>
+                        {data}
+                    </FontBoldDiv>
+                    &nbsp;
+                    {locale.texts.OBJECTS}
+                    &nbsp;
+                    {locale.texts[label.toUpperCase().replace(/ /g, '_')]}
+                </div>
+            )
+        case "tw":
+            return (
+                <div 
+                    className='d-flex justify-content-start mr-2'
+                    name={name}
+                    value={value}
+                >
+                    {locale.texts[label.toUpperCase().replace(/ /g, '_')]}
+                    &nbsp;
+                    <FontBoldDiv>
+                        {data}
+                    </FontBoldDiv>
+                    &nbsp;
+                    {locale.texts.OBJECTS}
+                </div>
+            )
+    }
 }
-
-export default InfoPrompt

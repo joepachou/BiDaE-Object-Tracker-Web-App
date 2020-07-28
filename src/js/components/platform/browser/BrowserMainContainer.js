@@ -50,8 +50,6 @@ const BrowserMainContainer = ({
     getSearchKey,
     setMonitor,
     clearAlerts,
-    handleClosePath,
-    handleShowPath,
     lbeaconPosition,
     geofenceConfig,
     searchedObjectType,
@@ -130,8 +128,6 @@ const BrowserMainContainer = ({
                         geofenceConfig={geofenceConfig}
                         locationMonitorConfig={locationMonitorConfig}
                         clearAlerts={clearAlerts}
-                        handleClosePath={handleClosePath}
-                        handleShowPath={handleShowPath}
                         searchedObjectType={searchedObjectType}
                         showedObjects={showedObjects}
                         setShowedObjects={setShowedObjects}
@@ -147,28 +143,29 @@ const BrowserMainContainer = ({
                         searchResult={searchResult}
                         handleClick={handleClick}
                     />
-                    <SearchContainer 
-                        hasSearchKey={hasSearchKey}
-                        clearSearchResult={clearSearchResult}
-                        auth={auth}
-                        getSearchKey={getSearchKey}
-                        searchObjectArray={searchObjectArray}
-                        pinColorArray={pinColorArray}
-                    />                        
-                    <div 
-                        id='searchResult' 
-                        style={style.searchResultDiv} 
-                    >
-                        <SearchResultList
-                            searchResult={searchResult} 
-                            searchKey={searchKey}
-                            highlightSearchPanel={highlightSearchPanel}
-                            handleShowPath={handleShowPath}
-                            showMobileMap={showMobileMap}
+                    <div>
+                        <SearchContainer 
+                            hasSearchKey={hasSearchKey}
+                            clearSearchResult={clearSearchResult}
+                            auth={auth}
+                            getSearchKey={getSearchKey}
                             searchObjectArray={searchObjectArray}
                             pinColorArray={pinColorArray}
-                            showFoundResult={showFoundResult}
-                        />
+                        />                        
+                        <div 
+                            id='searchResult' 
+                            style={style.searchResultDiv} 
+                        >
+                            <SearchResultList
+                                searchResult={searchResult} 
+                                searchKey={searchKey}
+                                highlightSearchPanel={highlightSearchPanel}
+                                showMobileMap={showMobileMap}
+                                searchObjectArray={searchObjectArray}
+                                pinColorArray={pinColorArray}
+                                showFoundResult={showFoundResult}
+                            />
+                        </div>
                     </div>
                 </Col>
             </Row>

@@ -78,7 +78,7 @@
     #searchableObjectType {
         position: absolute;
         z-index: 1600;
-        top: 11vh;
+        top: 60px;
         right: -0.5%;
     }
 }

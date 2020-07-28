@@ -45,6 +45,8 @@ const en =  {
     HEALTH_REPORT: "health report",
     DEVICE_MONITOR: "device monitor",
     SYSTEM_SETTING: "system setting",
+    SETTINGS: "settings",
+    BOT_ADMIN: "BOT admin",
     CONTACT_TREE: "contact tree",
     MONITOR_MANAGEMENT: "monitor management",
     GEOFENCE: "geofence",
@@ -62,9 +64,15 @@ const en =  {
     REAL_TIME_RECORD: "real-time record",
     TRACKING_TABLE: "tracking table",
     SETTINGS: "settings",
+    ASSET_USAGE: "asset usage",
+    DEVICE_TRANSFER_RECORD: "device transfer record",
+    NOTES_ON_PATIENTS: "notes on patients",
+    DEVICE_SERVICE_REQUEST: "device service request",
+    OBJECT_TRACKING: "object tracking",
     SHIFT_CHANGE: "shift change",
     MONITOR_SETTING: "monitor setting",
     REPORT: "report",
+    RECORD: "records & reports",
     LBEACON: "lbeacon",
     GATEWAY: "gateway",
     SEARCH_RESULT: "search results",
@@ -101,6 +109,7 @@ const en =  {
     SCAN_TAG:"Please Scan TAG",
     ALREADY_CHOOSE:"Already choose",
     MAIN_AREA:"Main area",
+    PRIMARY_AREA: "primary area",
     SECONDARY_AREAS: "secondary areas",
     PERSONA_LIST: "persona list",
     IMPORT_PERSONA: "import persona",
@@ -145,6 +154,8 @@ const en =  {
     SIGN_IN: "sign in",
     SIGN_UP: "sign up",
     SIGN_OUT: "sign out",
+    LOG_IN: "log in",
+    LOG_OUT: "log out",
     ON: "on",
     OFF: "off",
     SHIFT_CHANGE_RECORD: "shift change record",
@@ -208,14 +219,16 @@ const en =  {
     EXPORT_CSV: "export CSV",
     EXPORT_PDF: "export PDF",
     SEND_RESET_INSTRUCTION: "send reset instruction",
+    DETAIL: "detail",
 
     /* field */
     NAME: "name",
-    EMAIL: "email",
+    EMAIL: "email address",
     PATIENT_NAME: "patient name",
     KEY: "key",
     TYPE: "type",
     ASSET_CONTROL_NUMBER: "Asset ID",
+    OBJECT_IDENTITY_NUMBER: "object ID",
     MAC_ADDRESS: "mac address",
     LBEACON: "lbeacon",
     STATUS: "status",
@@ -284,6 +297,7 @@ const en =  {
     NICKNAME:"nickname",
     NUM_OF_UPDATED_LBEACON: "# updated lbeacons",
     FORGET_PASSWORD: "forget password?",
+    RESET_PASSWORD: "reset password",
 
     /** form title */
     EDIT_LBEACON: "edit lbeacon",
@@ -324,7 +338,7 @@ const en =  {
     PANIC: "emergency",
     EDIT_SECONDARY_AREAS: "edit secondary areas",
     NEW_PASSWORD:"New password",
-    CHECK_PASSWORD:"Check password",
+    CHECK_PASSWORD:"confirm new password",
     LEVEL:"level",
     ADD_COMMENT: "add comment",
     NAMEGROUPBYAREA: "name(area group)",
@@ -356,6 +370,7 @@ const en =  {
     THE_MAC_ADDRESS_IS_ALREADY_USED_OR_FORMAT_IS_NOT_CORRECT: "Mac Address is already used or the format is wrong",
     MAC_ADDRESS_FORMAT_IS_NOT_CORRECT: "mac address format is not correct",
     TIME_FORMAT_IS_INCORRECT: "time format is incorrect",
+    EMAIL_ADDRESS_FORMAT_IS_INCORRECT: "email address format is incorrect",
     LBEACON_FORMAT_IS_NOT_CORRECT: "mac address format is not correct",
     ASSET_CONTROL_NUMBER_IS_NOT_FOUND: "asset control number is not found",
     INCORRECT:"username incorrect",
@@ -396,6 +411,7 @@ const en =  {
     SEARCH_FOR_NAMEGROUPBYAREA: "search for name",
     SEARCH_FOR_NAMEGROUPBYUUID: "search for UUID",
     PLEASE_TYPE_PERSONA_ID: "please type ID",
+    PLEASE_TYPE_OBJECT_IDENTITY_NUMBER: "please type ACN or ID",
 
     /* Object Status */
     STATUS: "status",
@@ -493,6 +509,7 @@ const en =  {
     USERNAME_OR_PASSWORD_IS_INCORRECT: "Username or password is incorrect",
     PASSWORD_IS_INCORRECT: "password is incorrect",
     PLEASE_ENTER_ID_AND_PASSWORD: "please enter Admin's info",
+    PLEASE_ENTER_PASSWORD: "please enter password",
     EDIT_LBEACON_SUCCESS: "edit lbeacon success",
     EDIT_OBJECT_SUCCESS: "edit object success",
     DELETE_LBEACON_SUCCESS: "delete lbeacon success",
@@ -501,6 +518,8 @@ const en =  {
     SAVE_SUCCESS: "save success",
     SELECT_ROLE:"select role",
     SIGNUP_FAIL:"this username already exist",
+    PASSWORD_RESET_SUCCESSFUL: "password reset successful",
+    PASSWORD_RESET_INSTRUCTION_SUCCESSFUL: "password reset instruction has been send to your email. Follow the instuction to reset the password.",
     
     /** user roles */
     CARE_PROVIDER: "care provider",
@@ -524,6 +543,10 @@ const en =  {
     POUND_SIGN: "#",
 
     // BEING_HERE: "being here",
+
+    /** locale */
+    TW: "chinese",
+    EN: "english",
 
     DEVICE_FOUND: function (length){
         return length.toString()+" devices are found"

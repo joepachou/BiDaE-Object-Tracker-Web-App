@@ -45,7 +45,8 @@ import {
     Navbar, 
     Nav, 
     Image, 
-    Dropdown  
+    Dropdown,
+    DropdownButton  
 } from 'react-bootstrap'
 import SiginForm from '../presentational/SigninForm';
 import config from '../../config';
@@ -56,6 +57,19 @@ import Select from 'react-select';
 import BatteryLevelNotification from "./BatteryLevelNotification"
 import { navbarNavList } from '../../config/pageModules'
 import styleConfig from '../../config/styleConfig';
+import {
+    SubMenu,
+    BOTNavLink,
+    ReactDropdownButton
+} from '../BOTComponent/styleComponent';
+import routes from '../../config/routes/routes';
+import {
+    SHIFT_CHANGE,
+    SIGN_IN
+} from '../../config/wordMap';
+import {
+    SET_AREA
+} from '../../reducer/action';
 
 class NavbarContainer extends React.Component {
 
@@ -64,6 +78,8 @@ class NavbarContainer extends React.Component {
     state = {
         showSignin: false,
         showShiftChange: false,
+        showDropdownName: null,
+        dropDownModule: null,
     }
 
     navList = navbarNavList
@@ -76,17 +92,14 @@ class NavbarContainer extends React.Component {
     }
 
     handleClick = (e) => {
+
         let name = e.target.getAttribute('name')
+        
         switch(name) {
-            case 'shiftChange':
+            case SHIFT_CHANGE:
                 e.preventDefault()
                 this.setState({
                     showShiftChange: true
-                })
-                break;
-            case 'signin':
-                this.setState({
-                    showSignin: true,
                 })
                 break;
         }
@@ -124,21 +137,20 @@ class NavbarContainer extends React.Component {
             showShiftChange
         } = this.state;
 
-        const {
-            areaOptions,
-        } = config.mapConfig
 
-        const options = Object.values(config.mapConfig.areaOptions).map(area => {
-            return {
-                value: area,
-                label: locale.texts[area.toUpperCase().replace(/ /g, '_')],
-            }
-        })
+        const AREA_MODULE = config.mapConfig.AREA_MODULES
 
-        let selectedArea = {
-            value: areaOptions[areaId],
-            label: locale.texts[areaOptions[areaId]]
-        }
+        let options = Object.values(AREA_MODULE)
+            .filter(module => auth.user.areas_id.includes(module.id))
+            .map(module => {
+                return {
+                    value: module.name,
+                    label: locale.texts[module.name],
+                    id: module.id
+                }
+            })
+
+        let selectedArea = options.filter(module => module.id == areaId)
 
         return (
             <div
@@ -184,10 +196,9 @@ class NavbarContainer extends React.Component {
                                 onChange={value => {
                                     let { stateReducer } = this.context
                                     let [{areaId}, dispatch] = stateReducer
-
                                     dispatch({
-                                        type: 'setArea',
-                                        value: config.mapConfig.areaModules[value.value].id
+                                        type: SET_AREA,
+                                        value: value.id
                                     })
                                 }}
                                 styles={styleConfig.reactSelectNavbar}
@@ -206,13 +217,13 @@ class NavbarContainer extends React.Component {
                     <Navbar.Collapse 
                         id='responsive-navbar-nav'
                         style={{
-                            minHeight: '100%',
+                            height: 'inherit'
                         }}
                     >  
                         <Nav 
                             className='mr-auto' 
                             style={{
-                                minHeight: '-webkit-fill-available',
+                                height: 'inherit'
                             }}
                         >
                             {this.navList.map(nav => {
@@ -223,18 +234,6 @@ class NavbarContainer extends React.Component {
                                         platform={nav.platform}
                                         key={nav.alias}
                                     >
-                                        {/* <Nav.Item>
-                                            <Link 
-                                                to={nav.path} 
-                                                className='nav-link nav-route'
-                                                name={nav.alias}
-                                                onClick={nav.hasEvent && this.handleClick}
-                                                key={nav.alias}
-                                                style={style.nav}
-                                            >
-                                                {locale.texts[nav.name.toUpperCase().replace(/ /g, '_')]}
-                                            </Link>
-                                        </Nav.Item> */}
                                         <Nav.Item
                                             className="d-flex align-items-center menu mx-1"
                                         >
@@ -261,47 +260,60 @@ class NavbarContainer extends React.Component {
                             })}
                         </Nav>
 
-                        <Nav>
+                        <Nav
+                            className="d-flex align-items-center"
+                        >
                             <AccessControl
-                                permission={'user:batteryNotice'}
+                                permission='user:batteryNotice'
                                 renderNoAccess={() => null}
                                 platform={['browser', 'tablet']}
                             >
                                 <BatteryLevelNotification />
                             </AccessControl>
-                            <Nav.Item 
-                                className='nav-link nav-route' 
-                                name={'en'}
-                                onClick={(e) => locale.changeLocale(e, auth)}                         
+                            <Dropdown
+                                className="mr-2 ml-3"
+                                onSelect={(e) => {
+                                    locale.setLocale(e);
+                                }}
                             >
-                                {locale.toggleLang().nextLangName}
-                            </Nav.Item>
+                                <Dropdown.Toggle 
+                                    variant='light'
+                                >
+                                    {locale.name}
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu
+                                    bsPrefix='bot-dropdown-menu-right dropdown-menu '
+                                >
+                                    {locale.localeCollection.map(lang => {
+                                        return (
+                                            <Dropdown.Item 
+                                                className='lang-select'
+                                                eventKey={lang.abbr}
+                                            >
+                                                {lang.name}
+                                            </Dropdown.Item>
+                                        )
+                                    })}
+                                </Dropdown.Menu>
+                            </Dropdown> 
                             <Dropdown>
                                 <Dropdown.Toggle 
                                     variant='light'
-                                    id='collasible-nav-dropdown' 
+                                    bsPrefix='bot-dropdown-toggle'
                                 >
-                                    <i className='fas fa-user-alt' />
+                                    {auth.user.name}
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu
-                                    bsPrefix='bot-dropdown-menu-right  dropdown-menu '
+                                    bsPrefix='bot-dropdown-menu-right dropdown-menu '
                                 >
                                     <div className='dropdownWrapper'>
-                                        <LinkContainer to='/page/userSetting' className='bg-white'>
-                                            <Dropdown.Item 
-                                                className='lang-select text-none'
-                                            >
-                                                {auth.user.name}
-                                            </Dropdown.Item>
-                                        </LinkContainer>
-                                        <Dropdown.Divider />
-                                        <LinkContainer to='/page/about' className='bg-white'>
+                                        <LinkContainer to={routes.ABOUT} className='bg-white'>
                                             <Dropdown.Item className='lang-select'>
                                                 {locale.texts.ABOUT}
                                             </Dropdown.Item>
                                         </LinkContainer>
                                         <Dropdown.Divider />
-                                        <LinkContainer to='/' className='bg-white'>
+                                        <LinkContainer to={routes.HOME} className='bg-white'>
                                             <Dropdown.Item className='lang-select' onClick={auth.signout}>
                                                 {locale.texts.SIGN_OUT}
                                             </Dropdown.Item>
@@ -314,42 +326,43 @@ class NavbarContainer extends React.Component {
 
                 </Navbar>
                 {this.state.showDropdownName &&
-                    <div
-                        style={{
-                            minHeight: 80,
-                            position: 'absolute',
-                            background: 'white',
-                            width: '100%',
-                            zIndex: 10000,
-                            padding: 20,
-                            boxShadow: 'rgba(32, 33, 36, 0.28) 0px 1px 6px 0px',
-                        }}
-                        className="d-flex justify-content-center sub-nav-menu"
+                    <SubMenu
+                        className="sub-nav-menu"
                     >
-                        <Nav
-                            className="sub-nav-menu"
-                        >
-                            {this.state.dropDownModule && this.state.dropDownModule.tabList.map(tab => {
-                                return (
-                                    <Link 
+                        {this.state.dropDownModule && this.state.dropDownModule.tabList.map(tab => {
+                            return (
+                                <AccessControl
+                                    permission={tab.permission}
+                                    renderNoAccess={() => null}
+                                    platform={tab.platform}
+                                    // key={tab.alias}
+                                >
+                                    <LinkContainer 
                                         to={{
                                             pathname: this.state.dropDownModule.path,
                                             state: {
                                                 key: tab.name.replace(/ /g, '_'),
                                             }
                                         }}
-                                        className='nav-link nav-route sub-nav-menu'
-                                        style={{
-                                            color: 'black'
+                                        onClick={() => {
+                                            this.setState({
+                                                showDropdownName: null,
+                                            })
                                         }}
+                                        className='nav-link nav-route sub-nav-menu'
                                         key={tab.name}
                                     >
-                                        {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
-                                    </Link>
-                                )
-                            })}
-                        </Nav>
-                    </div>
+                                        <BOTNavLink
+                                            primary
+                                            className="sub-nav-menu"
+                                        >
+                                            {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
+                                        </BOTNavLink>
+                                    </LinkContainer>
+                                </AccessControl>
+                            )
+                        })}
+                    </SubMenu>
                 }
                 <SiginForm 
                     show={showSignin}

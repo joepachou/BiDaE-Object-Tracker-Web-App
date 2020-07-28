@@ -37,11 +37,8 @@
 
 import React from 'react';
 import { Col, Row } from 'react-bootstrap';
-import axios from 'axios';
-import dataSrc from "../../../dataSrc";
 import AddableList from './AddableList'
 import { AppContext } from '../../../context/AppContext';
-import retrieveDataHelper from '../../../helper/retrieveDataHelper'
 import {
     getName,
     getType,

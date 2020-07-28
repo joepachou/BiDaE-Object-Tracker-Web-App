@@ -38,7 +38,12 @@ require('dotenv').config();
 require('moment-timezone');
 const dbQueries = require('../db/dbQueries/authQueries');
 const pool = require('../db/dev/connection');
-const encrypt = require('../config/encrypt');
+const encrypt = require('../service/encrypt');
+const mailTransporter = require('../service/mailTransporter');
+const { resetPasswordInstruction } = require('../config/template');
+const jwt = require('jsonwebtoken');
+const path = require('path');
+const { decode } = require('punycode');
 
 module.exports = {
 
@@ -72,7 +77,8 @@ module.exports = {
                             id,
                             main_area,
                             locale_id,
-                            locale
+                            locale,
+                            email
                         } = res.rows[0]
 
                         if (main_area && !areas_id.includes(main_area)) {
@@ -90,7 +96,8 @@ module.exports = {
                             main_area,
                             locale_id,
                             locale,
-                            searchHistory: search_history
+                            searchHistory: search_history,
+                            email
                         }
 
                         /** Set session */
@@ -116,7 +123,7 @@ module.exports = {
             })
 
             .catch(err => {
-                console.log(`sigin fails ${err}`)       
+                console.log(`sigin failed ${err}`)       
             })
     },
 
@@ -130,10 +137,13 @@ module.exports = {
     validation: (request, response) => {
         let { 
             username, 
-            password 
+            password,
+            authenticatedRoles
         } = request.body 
-        pool.query(dbQueries.validation(username))
+
+        pool.query(dbQueries.signin(username.toLowerCase()))
             .then(res => {
+                console.log(res.rows[0])
                 if (res.rowCount < 1) {
                     console.log(`confirm validation failed: incorrect`)
                     response.json({
@@ -148,8 +158,12 @@ module.exports = {
                         let { 
                             roles, 
                         } = res.rows[0] 
+
+
+
+                        console.log(res.rows[0])
                         /** authenticate if user is care provider */
-                        if (roles.includes('3') || roles.includes('4')) {
+                        if (!authenticatedRoles || roles.filter(role => authenticatedRoles.includes(role)).length !== 0) {
     
                             console.log(`confirm validation succeed`)
                             response.json({
@@ -175,6 +189,99 @@ module.exports = {
             .catch(err => {
                 console.log(`confirm validation fails ${err}`)
             })
+    },
+
+    sentResetPwdInstruction: (request, response) => {
+        const {
+            email
+        } = request.body;
+
+        pool.query(dbQueries.validateEmail(email))
+            .then(res => {
+                if (res.rowCount != 0) {
+
+                    let {
+                        id,
+                        password,
+                        registered_timestamp
+                    } = res.rows[0]
+                    var token = jwt.sign({
+                        exp: Math.floor(Date.now() / 1000) + (60 * 60),
+                        registered_timestamp,
+                        email,
+                    }, encrypt.secret);
+            
+                    const message = {
+                        from: 'BiDaEAssistCenter@gmail', // Sender address
+                        to: email,
+                        subject: resetPasswordInstruction.subject, 
+                        html: resetPasswordInstruction.content(token)
+                    };
+                    
+                    mailTransporter.sendMail(message)
+                        .then(res => {
+                            console.log('send password reset instruction succeed')
+                            response.status(200).json()
+                        })
+                        .catch(err => {
+                            console.log(`send password reset instruction failed ${err}`)
+                        })
+
+                } else {
+                    console.log(`email address does not match`)
+                    response.status(200).json({
+                        confirmation: false,
+                        message: 'email failed'
+                    })
+                }
+            })
+            .catch(err => {
+                console.log(`email validation failed ${err}`);
+            })
+    },
+ 
+    verifyResetPwdToken: (request, response) => {
+        let token = request.params.token
+
+        jwt.verify(token, encrypt.secret, (err, decoded) => {
+            if (err) {
+                response.redirect('/')
+            } else {
+                response.sendFile(path.join(__dirname, '..', '..', 'dist', 'index.html'));
+            }
+        })
+    },
+    
+    resetPassword: (request, response) => {
+
+        let {
+            token,
+            password
+        } = request.body
+
+        jwt.verify(token, encrypt.secret, (err, decoded) => {
+            if (err) {
+                console.log(`reset password failed ${err}`)
+            } else {
+
+                let {
+                    email
+                } = decoded
+
+                const hash = encrypt.createHash(password);
+
+                pool.query(dbQueries.resetPassword(email, hash))
+                .then(res => {
+                    console.log(`reset password succeed`)
+                    response.status(200).json();
+                })
+                .catch(err => {
+                    console.log(`reset password failed ${err}`)
+                })
+            }
+        })
+    
+
     }
 }
 

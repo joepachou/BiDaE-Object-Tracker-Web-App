@@ -11,7 +11,8 @@
     "fetch": "git fetch --all",
     "reset": "git reset --hard origin/master",
     "git": "npm run fetch && npm run reset",
-    "production": "npm install && npm run build && npm run server"
+    "production": "npm install && npm run build && npm run server",
+    "encrypt": "node ./tools/createEncrypt.js"
   },
   "keywords": [],
   "author": "",
@@ -59,6 +60,7 @@
     "html-pdf": "^2.2.0",
     "js-cookie": "^2.2.0",
     "json2csv": "^5.0.0",
+    "jsonwebtoken": "^8.5.1",
     "leaflet-polylinedecorator": "^1.6.0",
     "leaflet.markercluster": "^1.4.1",
     "lodash": "^4.17.14",

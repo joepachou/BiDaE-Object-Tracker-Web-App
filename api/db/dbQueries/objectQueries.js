@@ -42,6 +42,7 @@ const getObject = (objectType, areas_id) => {
 			object_table.id,
 			object_table.name, 
 			object_table.type, 
+			object_table.nickname,
 			object_table.asset_control_number, 
 			object_table.status, 
 			object_table.transferred_location, 
@@ -103,8 +104,8 @@ const addPersona = (formOption) => {
 			mac_address, 
 			asset_control_number,
 			area_id,
-			object_type,
 			monitor_type,
+			object_type,
 			type,
 			status,
 			registered_timestamp
@@ -114,13 +115,13 @@ const addPersona = (formOption) => {
 			$2,
 			$3,
 			$4,
-			$5
+			$5,
 			1,
 			'register',
 			'normal',
 			now()
-		)
-		`;
+		)`;
+
 	const values = [
 		formOption.name,
 		formOption.mac_address,
@@ -216,12 +217,12 @@ const addObject = (formOption) => {
 			asset_control_number, 
 			name,
 			mac_address,
-			status,
 			area_id,
-			object_type,
-			registered_timestamp,
 			monitor_type,
-			nickname
+			nickname,
+			object_type,
+			status,
+			registered_timestamp
 		)
 		VALUES (
 			$1, 
@@ -230,10 +231,10 @@ const addObject = (formOption) => {
 			$4,
 			$5,
 			$6,
-			0,
-			now(),
 			$7,
-			$8
+			0,
+			'normal',
+			now()
 		);
 	`;
 		
@@ -242,7 +243,6 @@ const addObject = (formOption) => {
 		formOption.asset_control_number, 
 		formOption.name, 
 		formOption.mac_address,
-		formOption.status,
 		formOption.area_id,
 		formOption.monitor_type,
 		formOption.nickname
