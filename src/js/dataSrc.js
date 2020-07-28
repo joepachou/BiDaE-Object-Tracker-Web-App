@@ -36,7 +36,7 @@
 
 
 dataSrcIP = process.env.DATASRC_IP;
-dataSrcProtocol = process.env.DATASRC_PROTOCOL || 'https'
+dataSrcProtocol = parseInt(process.env.ENABLE_HTTP) ? 'http' : 'https';
 domain = `${dataSrcProtocol}://${dataSrcIP}`;
 
 const dataSrc = {

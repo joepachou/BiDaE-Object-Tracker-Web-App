@@ -41,14 +41,31 @@ dataRoutes(app);
 
 APIRoutes(app);
 
-const httpsServer = https.createServer(credentials, app);
+switch(process.env.ENABLE_HTTP) {
+    case "1":
+    case 1:
+    case true:
+        const httpServer = http.createServer(app);
 
-/** Initiate HTTPS server */
-httpsServer.listen(httpsPort, () => {
-    console.log(`HTTPS Server running on PORT ${httpsPort}`)
-})
+        /** Initiate HTTPS server */
+        httpServer.listen(httpPort, () => {
+            console.log(`HTTP Server running on PORT ${httpPort}`)
+        })
 
-httpsServer.timeout = parseInt(process.env.SERVER_TIMEOUT);
+        httpServer.timeout = parseInt(process.env.SERVER_TIMEOUT);
+        break;
+    default: 
+        const httpsServer = https.createServer(credentials, app);
+
+        /** Initiate HTTPS server */
+        httpsServer.listen(httpsPort, () => {
+            console.log(`HTTPS Server running on PORT ${httpsPort}`)
+        })
+
+        httpsServer.timeout = parseInt(process.env.SERVER_TIMEOUT);
+        break;
+}
+
 
 
 
