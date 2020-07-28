@@ -126,7 +126,7 @@ const SigninPage = () => {
                             error={errors.username}
                             touched={touched.username}
                             label={locale.texts.NAME}    
-                            tabindex={1}
+                            tabIndex={1}
                         />  
                         <FormikFormGroup 
                             type="password"
@@ -142,14 +142,14 @@ const SigninPage = () => {
                                 </Link>
                             )}
                             label={locale.texts.PASSWORD}    
-                            tabindex={2}
+                            tabIndex={2}
                         />  
                         <div className='d-flex justify-content-start'>
                             <Button 
                                 type="submit" 
                                 variant="primary" 
                                 disabled={isSubmitting}
-                                tabindex={3}
+                                tabIndex={3}
                             >
                                 {locale.texts.LOG_IN}
                             </Button>

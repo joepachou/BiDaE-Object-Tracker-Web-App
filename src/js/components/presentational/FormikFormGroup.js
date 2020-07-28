@@ -60,7 +60,7 @@ const FormikFormGroup = ({
    example = null,
    autoComplete = true,
    additionalComponent = () => null,
-   tabindex = 1,
+   tabIndex = 1,
 }) => {
     let style = {
         container: {
@@ -104,7 +104,7 @@ const FormikFormGroup = ({
                                     letterSpacing: 1,
                                 }}
                                 autoComplete={autoComplete}
-                                tabindex={tabindex}
+                                tabIndex={tabIndex}
                             />
                         :
                         <div>
@@ -118,7 +118,7 @@ const FormikFormGroup = ({
                                     letterSpacing: 1,
                                 }}
                                 autoComplete={autoComplete}
-                                tabindex={tabindex}
+                                tabIndex={tabIndex}
                             />
                         </div>
                     )
