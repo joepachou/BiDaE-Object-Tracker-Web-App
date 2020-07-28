@@ -78,6 +78,8 @@ const style = {
 class ShiftChange extends React.Component {
 
     static contextType = AppContext
+
+    formikRef = React.createRef()
     
     state = {
         searchResult: {
@@ -158,16 +160,21 @@ class ShiftChange extends React.Component {
     confirmShift = (values) => {
         this.setState({
             showConfirmForm: true,
-            shift: values.shift
         })
     }
 
-    handleConfirmFormSubmit = (authentication = '', values) => { 
+    handleConfirmFormSubmit = (authentication = "") => { 
+
+        let {
+            values   
+        } = this.formikRef.current.state
 
         let { 
             locale, 
             auth 
-        } = this.context   
+        } = this.context  
+        
+        authentication = auth.user.name
 
         let shiftChangeObjectPackage = {
             searchResult: this.state.searchResult, 
@@ -290,8 +297,11 @@ class ShiftChange extends React.Component {
                             shift: defaultShiftOption
                         }}
 
+                        ref={this.formikRef}
+
                         onSubmit={(values, { setStatus, setSubmitting }) => {
-                            this.handleConfirmFormSubmit("", values)
+                            this.confirmShift(values);
+                            // this.handleConfirmFormSubmit("", values)
                         }}
 
                         render={({ values, setFieldValue, submitForm }) => (
@@ -377,8 +387,10 @@ class ShiftChange extends React.Component {
                 </Modal>     
                 <GeneralConfirmForm
                     show={this.state.showConfirmForm}
+                    title={locale.texts.PLEASE_ENTER_PASSWORD}
                     handleSubmit={this.handleConfirmFormSubmit}
                     handleClose={this.handleClose}
+                    authenticatedRoles={null}
                 />
                 <DownloadPdfRequestForm
                     show={this.state.showDownloadPdfRequest} 

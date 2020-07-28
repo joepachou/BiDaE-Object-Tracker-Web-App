@@ -42,17 +42,17 @@ import {
 } from 'react-bootstrap';
 import { 
     Formik, 
-    Field, 
     Form, 
-    ErrorMessage 
 } from 'formik';
 import * as Yup from 'yup';
 import LocaleContext from '../../../context/LocaleContext';
 import apiHelper from '../../../helper/apiHelper';
 import FormikFormGroup from '../FormikFormGroup';
 import {
-    Title
+    Title,
+    JustifyCenterDiv
 } from '../../BOTComponent/styleComponent';
+import AuthenticationContext from '../../../context/AuthenticationContext';
 
 const style = {
     modal: {
@@ -63,10 +63,14 @@ const style = {
 const GeneralConfirmForm = ({
     show,
     handleClose,
-    handleSubmit
+    handleSubmit,
+    title,
+    authenticatedRoles
 }) => {
         
-    let locale = React.useContext(LocaleContext)
+    let locale = React.useContext(LocaleContext);
+    let auth = React.useContext(AuthenticationContext);
+
     return (
         <Modal 
             show={show} 
@@ -75,38 +79,38 @@ const GeneralConfirmForm = ({
             style={style.modal}
         >
             <Modal.Body>
-                <div className='d-flex justify-content-center'>
-                    <Title sub 
-                        className="my-1">
-                        {locale.texts.PLEASE_ENTER_ID_AND_PASSWORD}
+                <JustifyCenterDiv>
+                    <Title 
+                        sub 
+                    >
+                        {title}
                     </Title>
-                </div>
+                </JustifyCenterDiv>
 
                 <Formik
                     initialValues = {{
-                        username: '',
+                        username: auth.user.name,
                         password: '',
                     }}
 
                     validationSchema = {
                         Yup.object().shape({
-                        username: Yup.string().required(locale.texts.USERNAME_IS_REQUIRED),
+                        // username: Yup.string().required(locale.texts.USERNAME_IS_REQUIRED),
                         password: Yup.string().required(locale.texts.PASSWORD_IS_REQUIRED)
                     })}
                 
                     onSubmit={({ username, password, radioGroup }, { setStatus, setSubmitting }) => { 
-
                         apiHelper.authApiAgent.confirmValidation({
                             username,
                             password,
-                            locale
+                            authenticatedRoles,
                         })
                         .then(res => { 
                             if (!res.data.confirmation) {  
                                 setStatus(res.data.message)
                                 setSubmitting(false)
                             } else {    
-                                handleSubmit(username)
+                                handleSubmit()
                             }
                         }).catch(error => {
                             console.log(error)
@@ -123,14 +127,14 @@ const GeneralConfirmForm = ({
                                     {locale.texts[status.toUpperCase().replace(/ /g, "_")]}
                                 </div>
                             }
-                            <FormikFormGroup 
+                            {/* <FormikFormGroup 
                                 type="text"
                                 name="username"
                                 label={locale.texts.NAME} 
                                 error={errors.username}
                                 touched={touched.username}
                                 autoComplete="off"
-                            />  
+                            />   */}
                             <FormikFormGroup 
                                 type="password"
                                 name="password"

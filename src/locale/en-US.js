@@ -509,6 +509,7 @@ const en =  {
     USERNAME_OR_PASSWORD_IS_INCORRECT: "Username or password is incorrect",
     PASSWORD_IS_INCORRECT: "password is incorrect",
     PLEASE_ENTER_ID_AND_PASSWORD: "please enter Admin's info",
+    PLEASE_ENTER_PASSWORD: "please enter password",
     EDIT_LBEACON_SUCCESS: "edit lbeacon success",
     EDIT_OBJECT_SUCCESS: "edit object success",
     DELETE_LBEACON_SUCCESS: "delete lbeacon success",

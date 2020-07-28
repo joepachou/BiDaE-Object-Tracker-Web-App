@@ -137,11 +137,13 @@ module.exports = {
     validation: (request, response) => {
         let { 
             username, 
-            password 
+            password,
+            authenticatedRoles
         } = request.body 
 
-        pool.query(dbQueries.validateUsername(username))
+        pool.query(dbQueries.signin(username.toLowerCase()))
             .then(res => {
+                console.log(res.rows[0])
                 if (res.rowCount < 1) {
                     console.log(`confirm validation failed: incorrect`)
                     response.json({
@@ -156,8 +158,12 @@ module.exports = {
                         let { 
                             roles, 
                         } = res.rows[0] 
+
+
+
+                        console.log(res.rows[0])
                         /** authenticate if user is care provider */
-                        if (roles.includes('3') || roles.includes('4')) {
+                        if (!authenticatedRoles || roles.filter(role => authenticatedRoles.includes(role)).length !== 0) {
     
                             console.log(`confirm validation succeed`)
                             response.json({
