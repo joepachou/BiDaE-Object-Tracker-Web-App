@@ -270,22 +270,6 @@ class NavbarContainer extends React.Component {
                             >
                                 <BatteryLevelNotification />
                             </AccessControl>
-                            {/* <DropdownButton
-                                title={locale.texts[locale.lang.toUpperCase()]}
-                                onSelect={(e) => {
-                                    locale.setLocale(e);
-                                }}
-                            >
-                                {locale.supportedLocale.map(lang => {
-                                    return (
-                                        <Dropdown.Item 
-                                            eventKey={lang}
-                                        >
-                                            {locale.texts[lang.toUpperCase()]}
-                                        </Dropdown.Item>
-                                    )
-                                })}
-                            </DropdownButton> */}
                             <Dropdown
                                 className="mr-2 ml-3"
                                 onSelect={(e) => {
@@ -312,12 +296,6 @@ class NavbarContainer extends React.Component {
                                     })}
                                 </Dropdown.Menu>
                             </Dropdown> 
-                            {/* <Nav.Item 
-                                className='nav-link nav-route' 
-                                onClick={(e) => locale.changeLocale(e, auth)}                         
-                            >
-                                {locale.toggleLang().nextLangName}
-                            </Nav.Item> */}
                             <Dropdown>
                                 <Dropdown.Toggle 
                                     variant='light'
@@ -353,28 +331,35 @@ class NavbarContainer extends React.Component {
                     >
                         {this.state.dropDownModule && this.state.dropDownModule.tabList.map(tab => {
                             return (
-                                <LinkContainer 
-                                    to={{
-                                        pathname: this.state.dropDownModule.path,
-                                        state: {
-                                            key: tab.name.replace(/ /g, '_'),
-                                        }
-                                    }}
-                                    onClick={() => {
-                                        this.setState({
-                                            showDropdownName: null,
-                                        })
-                                    }}
-                                    className='nav-link nav-route sub-nav-menu'
-                                    key={tab.name}
+                                <AccessControl
+                                    permission={tab.permission}
+                                    renderNoAccess={() => null}
+                                    platform={tab.platform}
+                                    // key={tab.alias}
                                 >
-                                    <BOTNavLink
-                                        primary
-                                        className="sub-nav-menu"
+                                    <LinkContainer 
+                                        to={{
+                                            pathname: this.state.dropDownModule.path,
+                                            state: {
+                                                key: tab.name.replace(/ /g, '_'),
+                                            }
+                                        }}
+                                        onClick={() => {
+                                            this.setState({
+                                                showDropdownName: null,
+                                            })
+                                        }}
+                                        className='nav-link nav-route sub-nav-menu'
+                                        key={tab.name}
                                     >
-                                        {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
-                                    </BOTNavLink>
-                                </LinkContainer>
+                                        <BOTNavLink
+                                            primary
+                                            className="sub-nav-menu"
+                                        >
+                                            {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
+                                        </BOTNavLink>
+                                    </LinkContainer>
+                                </AccessControl>
                             )
                         })}
                     </SubMenu>

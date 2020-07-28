@@ -150,12 +150,15 @@ export const settingModule = {
         {
             name: "lbeacon",
             component: (props) => <LBeaconTable {...props}/>,
-            platform: ['browser', 'tablet', 'mobile']
+            platform: ['browser', 'tablet', 'mobile'],
+            permission: "route:lbeacon",
         },
         {
             name: "gateway",
             component: (props) => <GatewayTable {...props}/>,
-            platform: ['browser', 'tablet', 'mobile']
+            platform: ['browser', 'tablet', 'mobile'],
+            permission: "route:gateway",
+
         }
         // {
         //     name: "transferred location management",
@@ -265,11 +268,11 @@ export const reportContainerModule = {
             component: (props) => <ObjectEditedRecord {...props} />,
             platform: ['browser', 'tablet', 'mobile'],
         },
-        {
-            name: 'device service request',
-            component: (props) => null,
-            platform: ['browser', 'tablet', 'mobile'],
-        },
+        // {
+        //     name: 'device service request',
+        //     component: (props) => null,
+        //     platform: ['browser', 'tablet', 'mobile'],
+        // },
         {
             name: 'object tracking',
             component: (props) => <TrackingTable {...props}/>,
@@ -371,7 +374,6 @@ export const navbarNavList = [
         alias: "settings",
         path: routes.SETTINGS,
         module: settingModule,
-        permission: "route:setting",
         platform: ['browser', 'tablet', 'mobile'],
     },
     
