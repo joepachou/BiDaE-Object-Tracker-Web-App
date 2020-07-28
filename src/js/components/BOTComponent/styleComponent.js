@@ -44,6 +44,7 @@ import styleSheet from '../../config/styleSheet'
 import Button from 'react-bootstrap/Button';
 import DataTimePicker from 'react-widgets/lib/DateTimePicker';
 import Alert from 'react-bootstrap/Alert';
+import DropdownButton from 'react-bootstrap/DropdownButton';
 
 export const EditedTime = styled.div`
     font-size: 0.8rem;
@@ -279,3 +280,9 @@ export const ReactBootstrapAlert = styled(Alert)`
     `}
 `
 
+export const ReactDropdownButton = styled(DropdownButton)`
+    color: black;
+    background: red;
+    font-size: 1px;
+
+`

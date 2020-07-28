@@ -45,7 +45,8 @@ import {
     Navbar, 
     Nav, 
     Image, 
-    Dropdown  
+    Dropdown,
+    DropdownButton  
 } from 'react-bootstrap'
 import SiginForm from '../presentational/SigninForm';
 import config from '../../config';
@@ -58,7 +59,8 @@ import { navbarNavList } from '../../config/pageModules'
 import styleConfig from '../../config/styleConfig';
 import {
     SubMenu,
-    BOTNavLink
+    BOTNavLink,
+    ReactDropdownButton
 } from '../BOTComponent/styleComponent';
 import routes from '../../config/routes/routes';
 import {
@@ -268,25 +270,63 @@ class NavbarContainer extends React.Component {
                             >
                                 <BatteryLevelNotification />
                             </AccessControl>
-                            <Nav.Item 
+                            {/* <DropdownButton
+                                title={locale.texts[locale.lang.toUpperCase()]}
+                                onSelect={(e) => {
+                                    locale.setLocale(e);
+                                }}
+                            >
+                                {locale.supportedLocale.map(lang => {
+                                    return (
+                                        <Dropdown.Item 
+                                            eventKey={lang}
+                                        >
+                                            {locale.texts[lang.toUpperCase()]}
+                                        </Dropdown.Item>
+                                    )
+                                })}
+                            </DropdownButton> */}
+                            <Dropdown
+                                className="mr-2 ml-3"
+                                onSelect={(e) => {
+                                    locale.setLocale(e);
+                                }}
+                            >
+                                <Dropdown.Toggle 
+                                    variant='light'
+                                >
+                                    {locale.name}
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu
+                                    bsPrefix='bot-dropdown-menu-right dropdown-menu '
+                                >
+                                    {locale.localeCollection.map(lang => {
+                                        return (
+                                            <Dropdown.Item 
+                                                className='lang-select'
+                                                eventKey={lang.abbr}
+                                            >
+                                                {lang.name}
+                                            </Dropdown.Item>
+                                        )
+                                    })}
+                                </Dropdown.Menu>
+                            </Dropdown> 
+                            {/* <Nav.Item 
                                 className='nav-link nav-route' 
                                 onClick={(e) => locale.changeLocale(e, auth)}                         
                             >
                                 {locale.toggleLang().nextLangName}
-                            </Nav.Item>
+                            </Nav.Item> */}
                             <Dropdown>
                                 <Dropdown.Toggle 
                                     variant='light'
-                                    id='collasible-nav-dropdown' 
+                                    bsPrefix='bot-dropdown-toggle'
                                 >
-                                    <Nav.Item
-                                        className='nav-link nav-route' 
-                                    >
-                                        {auth.user.name}
-                                    </Nav.Item>
+                                    {auth.user.name}
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu
-                                    bsPrefix='bot-dropdown-menu-right  dropdown-menu '
+                                    bsPrefix='bot-dropdown-menu-right dropdown-menu '
                                 >
                                     <div className='dropdownWrapper'>
                                         <LinkContainer to={routes.ABOUT} className='bg-white'>

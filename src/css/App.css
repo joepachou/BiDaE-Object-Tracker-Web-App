@@ -203,7 +203,8 @@ a:hover {
 
 /* React-bootstrap dropdown css */
 .dropdown-toggle::after {
-    display: none;
+    /* display: none; */
+    margin-left: 1rem;
 }
 
 .alert-danger {
@@ -656,6 +657,10 @@ p {
 .bot-dropdown-menu-right{
     right: 0 !important;
     left: auto !important;
+}
+
+.bot-dropdown-toggle::after {
+    display: none;
 }
 
 .toast-success-notice-container { 

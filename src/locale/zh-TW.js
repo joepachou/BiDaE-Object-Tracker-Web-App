@@ -543,6 +543,10 @@ const tw = {
     IS_RESERVED_FOR:"預約者:",
     POUND_SIGN: "#",
 
+    /** locale */
+    TW: "中文",
+    EN: "英文",
+
     DEVICE_FOUND: function (length){
         return "發現"+length.toString()+"個儀器"
     },

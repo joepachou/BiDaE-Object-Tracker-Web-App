@@ -126,6 +126,7 @@ class BatteryLevelNotification extends React.Component {
                 <Dropdown.Toggle 
                     variant='light'
                     id="battery-notice-btn"
+                    bsPrefix="bot-dropdown-toggle"
                 >
                     <i className="fas fa-bell" style={style.icon}>
                         <NotificationBadge 

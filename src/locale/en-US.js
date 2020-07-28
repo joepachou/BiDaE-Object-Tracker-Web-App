@@ -543,6 +543,10 @@ const en =  {
 
     // BEING_HERE: "being here",
 
+    /** locale */
+    TW: "chinese",
+    EN: "english",
+
     DEVICE_FOUND: function (length){
         return length.toString()+" devices are found"
     },
