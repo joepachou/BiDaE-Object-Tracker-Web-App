@@ -64,11 +64,11 @@ var credentials = {
     ca: ca_bundle
 }
 
-const httpsServer = https.createServer(credentials, app)
+const httpsServer = http.createServer(app)
 
 /** Enable HTTP server */
-httpsServer.listen(httpsPort, () => {
-    console.log(`HTTP Server running on PORT ${httpsPort}`)
+httpsServer.listen(httpPort, () => {
+    console.log(`HTTP Server running on PORT ${httpPort}`)
 })
 
 httpsServer.timeout = parseInt(process.env.SERVER_TIMEOUT);

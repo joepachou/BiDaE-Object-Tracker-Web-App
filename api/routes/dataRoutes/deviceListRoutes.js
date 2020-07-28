@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        apiHelper.js
+        objectRoutes.js
 
     File Description:
         BOT UI component
@@ -34,34 +34,22 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
-import monitorApis from '../apiAgent/monitorApis';
-import geofenceApis from '../apiAgent/geofenceApis';
-import record from '../apiAgent/recordApiAgent';
-import objectApiAgent from '../apiAgent/objectAPiAgent';
-import transferredLocationApiAgent from '../apiAgent/transferredLocationApiAgent';
-import authApiAgent from '../apiAgent/authApiAgent';
-import userApiAgent from '../apiAgent/userApiAgent';
-import deviceListApis from '../apiAgent/deviceListApiAgent';
 
-const apiHelper = {
 
-    monitor: monitorApis,
+const deviceListController = require('../../controllers/deviceListController');
+let cors = require('cors');
 
-    geofenceApis,
+module.exports = app => {
 
-    record,
+    // enable pre-flight request for DELETE request
+    app.options('/data/deviceList', cors()) 
+    // app.options('/data/objectPackage', cors())
 
-    objectApiAgent,
+    app.route('/data/deviceList')
+        .get(deviceListController.getPatientList)
+        .post(deviceListController.addPatientList)
+        // .put(deviceListController.editPatientList)
+        // .delete(objectController.deletePatientList)
 
-    transferredLocationApiAgent,
-
-    authApiAgent,
-
-    userApiAgent,
-    
-    deviceListApis,
 
 }
-
-
-export default apiHelper

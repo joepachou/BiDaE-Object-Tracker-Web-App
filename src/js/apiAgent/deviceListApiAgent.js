@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        apiHelper.js
+        deviceListApiAgent.js
 
     File Description:
         BOT UI component
@@ -34,34 +34,58 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
-import monitorApis from '../apiAgent/monitorApis';
-import geofenceApis from '../apiAgent/geofenceApis';
-import record from '../apiAgent/recordApiAgent';
-import objectApiAgent from '../apiAgent/objectAPiAgent';
-import transferredLocationApiAgent from '../apiAgent/transferredLocationApiAgent';
-import authApiAgent from '../apiAgent/authApiAgent';
-import userApiAgent from '../apiAgent/userApiAgent';
-import deviceListApis from '../apiAgent/deviceListApiAgent';
 
-const apiHelper = {
+import dataSrc from '../dataSrc';
+import axios from 'axios';
+import config from '../config';
 
-    monitor: monitorApis,
+const src = dataSrc.deviceList;
 
-    geofenceApis,
+const deviceListApis = {
+    addDeviceList: async function(
+        name
+    ) {
+        console.log('add', src)
+        return await axios.post(src, {
+            name
+        })
+    },
+    // getGeofenceConfig: async function(
+    //     type, 
+    //     areasId,
+    //     isGetLbeaconPosition = false
+    // ) {
+        
+        
+    // },
 
-    record,
+    // delete: async function(
+    //     configPackage
+    // ) {
+    //     return await axios.delete(src, {
+    //         data: {
+    //             configPackage
+    //         }
+    //     })
+    // },
 
-    objectApiAgent,
+    // add: async function(
+    //     configPackage
+    // ) {
+    //     return await axios.patch(src, {
+    //         configPackage
+    //     })
+    // },
 
-    transferredLocationApiAgent,
-
-    authApiAgent,
-
-    userApiAgent,
-    
-    deviceListApis,
+    // setGeofenceConfig: async function(
+    //     configPackage
+    // ) {
+    //     return await axios.put(src, {
+    //         configPackage
+    //     })
+    // } 
 
 }
 
 
-export default apiHelper
+export default deviceListApis
