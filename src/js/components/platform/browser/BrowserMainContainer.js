@@ -143,12 +143,7 @@ const BrowserMainContainer = ({
                         searchResult={searchResult}
                         handleClick={handleClick}
                     />
-                    <div
-                        style={{
-                            position: 'absolute',
-                            top: 60,
-                        }}
-                    >
+                    <div>
                         <SearchContainer 
                             hasSearchKey={hasSearchKey}
                             clearSearchResult={clearSearchResult}

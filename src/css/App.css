@@ -738,3 +738,7 @@ p {
 .Toastify__toast {
     min-height: 55px;
 }
+
+.modal-header {
+    text-transform: capitalize;
+}

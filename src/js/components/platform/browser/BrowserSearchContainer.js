@@ -62,7 +62,8 @@ const BrowserSearchContainer = ({
             id='searchContainer' 
             className="py-1" 
             style={{
-                minHeight: 520
+                minHeight: 520,
+                marginTop: 60,
             }}
             onTouchMove={handleTouchMove}
         >
@@ -80,23 +81,27 @@ const BrowserSearchContainer = ({
                 className="pt-2 d-flex justify-content-center"
 
             > 
-                <FrequentSearch 
-                    getSearchKey={getSearchKey}  
-                    clearSearchResult={clearSearchResult}   
-                    hasGridButton={hasGridButton} 
-                    maxHeigh={config.searchResultProportion}
-                    searchObjectArray={searchObjectArray}
-                    pinColorArray={pinColorArray}
-                />
-                <ObjectTypeList
-                    getSearchKey={getSearchKey}  
-                    clearSearchResult={clearSearchResult}   
-                    hasGridButton={hasGridButton} 
-                    objectTypeList={objectTypeList || []}
-                    maxHeigh={config.searchResultProportion}
-                    searchObjectArray={searchObjectArray}
-                    pinColorArray={pinColorArray}
-                />          
+                <Col md={6} sm={6} xs={6} lg={6} xl={6}>
+                    <FrequentSearch 
+                        getSearchKey={getSearchKey}  
+                        clearSearchResult={clearSearchResult}   
+                        hasGridButton={hasGridButton} 
+                        maxHeigh={config.searchResultProportion}
+                        searchObjectArray={searchObjectArray}
+                        pinColorArray={pinColorArray}
+                    />
+                </Col>
+                <Col md={6} sm={6} xs={6} lg={6} xl={6}>
+                    <ObjectTypeList
+                        getSearchKey={getSearchKey}  
+                        clearSearchResult={clearSearchResult}   
+                        hasGridButton={hasGridButton} 
+                        objectTypeList={objectTypeList || []}
+                        maxHeigh={config.searchResultProportion}
+                        searchObjectArray={searchObjectArray}
+                        pinColorArray={pinColorArray}
+                    />   
+                </Col>       
                 {/* <div>
                     <SearchableObjectType
                         getSearchKey={getSearchKey}  

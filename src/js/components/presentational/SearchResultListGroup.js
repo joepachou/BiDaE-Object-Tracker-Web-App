@@ -83,7 +83,7 @@ const SearchResultListGroup = ({
             top: 10
         },
         item: {
-            minWidth: 35,
+            minWidth: 25,
         },
         listGroup: {
             color: 'rgb(33, 37, 41)',

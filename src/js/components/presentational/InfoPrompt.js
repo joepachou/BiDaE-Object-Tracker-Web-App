@@ -79,87 +79,95 @@ export default ({
     return (
         <Fragment>
             <CustomView condition={isTablet != true && isMobile != true}>
-                <ReactBootstrapAlert
-                    variant='secondary' 
-                    className='px-4'
+                <div
+                    className="d-flex justify-content-center"
                 >
-                    <Row>
-                        <HoverWithUnderlineDiv
-                            onClick={handleClick}
-                        >
-                            {stringBlock({
-                                name: SWITCH_SEARCH_LIST,
-                                value: true,
-                                data: searchResult.filter(item => item.found).length,
-                                label: wordMap.FOUND,
-                                locale,
-                            })}
-                        </HoverWithUnderlineDiv>
-                        <HoverWithUnderlineDiv
-                            onClick={handleClick}
-                        >
-                            {stringBlock({
-                                name: SWITCH_SEARCH_LIST,
-                                value: false,
-                                data: searchResult.filter(item => !item.found).length,
-                                label: wordMap.NOT_FOUND,
-                                locale,
-                            })}
-                        </HoverWithUnderlineDiv>
-                        <HoverDiv
-                            onClick={handleShowDetail}
-                            className="text-muted ml-auto d-flex align-items-center"
-                            style={{
-                                position: 'relative',
-                                right: 0,
-                                fontSize: '0.9rem'
-                            }}
-                        >
-                            {locale.texts.DETAIL}
-                            &nbsp;
-                            <i 
-                                className={`fas ${showDetail ? 'fa-angle-up' : 'fa-angle-down'}`}
-                            />
-                        </HoverDiv>
-
-                    </Row>
-                    <ToggleDisplayDiv
-                        display={showDetail}
-                        className="pt-1"
+                    <ReactBootstrapAlert
+                        variant='secondary' 
+                        className='px-4'
+                        style={{
+                            position: 'fixed',
+                            width: '32%'
+                        }}
                     >
-                        {Object.keys(searchResultMap).map((item, index) => {
-                            return (
-                                <Row
-                                    className='text-capitalize'
-                                >
-                                    <JustifyCenterDiv
-                                        className='mr-1'
+                        <Row>
+                            <HoverWithUnderlineDiv
+                                onClick={handleClick}
+                            >
+                                {stringBlock({
+                                    name: SWITCH_SEARCH_LIST,
+                                    value: true,
+                                    data: searchResult.filter(item => item.found).length,
+                                    label: wordMap.FOUND,
+                                    locale,
+                                })}
+                            </HoverWithUnderlineDiv>
+                            <HoverWithUnderlineDiv
+                                onClick={handleClick}
+                            >
+                                {stringBlock({
+                                    name: SWITCH_SEARCH_LIST,
+                                    value: false,
+                                    data: searchResult.filter(item => !item.found).length,
+                                    label: wordMap.NOT_FOUND,
+                                    locale,
+                                })}
+                            </HoverWithUnderlineDiv>
+                            <HoverDiv
+                                onClick={handleShowDetail}
+                                className="text-muted ml-auto d-flex align-items-center"
+                                style={{
+                                    position: 'relative',
+                                    right: 0,
+                                    fontSize: '0.9rem'
+                                }}
+                            >
+                                {locale.texts.DETAIL}
+                                &nbsp;
+                                <i 
+                                    className={`fas ${showDetail ? 'fa-angle-up' : 'fa-angle-down'}`}
+                                />
+                            </HoverDiv>
+
+                        </Row>
+                        <ToggleDisplayDiv
+                            display={showDetail}
+                            className="pt-1"
+                        >
+                            {Object.keys(searchResultMap).map((item, index) => {
+                                return (
+                                    <Row
+                                        className='text-capitalize'
                                     >
-                                        {locale.texts.FOUND}
+                                        <JustifyCenterDiv
+                                            className='mr-1'
+                                        >
+                                            {locale.texts.FOUND}
+                                            &nbsp;
+                                            <FontBoldDiv>
+                                                {searchResultMap[item][1]}
+                                            </FontBoldDiv>
+                                            &nbsp;
+                                            {item}
+                                        </JustifyCenterDiv>
                                         &nbsp;
-                                        <FontBoldDiv>
-                                            {searchResultMap[item][1]}
-                                        </FontBoldDiv>
-                                        &nbsp;
-                                        {item}
-                                    </JustifyCenterDiv>
-                                    &nbsp;
-                                    <JustifyCenterDiv
-                                        className='mr-1'
-                                    >
-                                        {locale.texts.NOT_FOUND}
-                                        &nbsp;
-                                        <FontBoldDiv>
-                                            {searchResultMap[item][0] - searchResultMap[item][1]}
-                                        </FontBoldDiv>
-                                        &nbsp;
-                                        {item}
-                                    </JustifyCenterDiv>
-                                </Row>
-                            )
-                        })} 
-                    </ToggleDisplayDiv>
-                </ReactBootstrapAlert>
+                                        <JustifyCenterDiv
+                                            className='mr-1'
+                                        >
+                                            {locale.texts.NOT_FOUND}
+                                            &nbsp;
+                                            <FontBoldDiv>
+                                                {searchResultMap[item][0] - searchResultMap[item][1]}
+                                            </FontBoldDiv>
+                                            &nbsp;
+                                            {item}
+                                        </JustifyCenterDiv>
+                                    </Row>
+                                )
+                            })} 
+                        </ToggleDisplayDiv>
+                    </ReactBootstrapAlert>
+                </div>
             </CustomView> 
             <TabletView>
                 <FontBoldDiv>
