@@ -722,3 +722,19 @@ p {
     font-weight: 500;
     color: #007bff;
 }
+
+
+.Toastify__toast-container--top-center {
+
+    padding: 0px;
+    width: 100%;
+    left: 0;
+    margin-left: 0;
+    top: 0%;
+
+}
+
+/** Classes for the displayed toast **/
+.Toastify__toast {
+    min-height: 55px;
+}
