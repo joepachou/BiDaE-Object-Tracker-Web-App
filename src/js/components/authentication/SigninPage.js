@@ -60,6 +60,7 @@ import {
 } from 'react-router-dom';
 import routes from '../../config/routes/routes';
 import { AppContext } from '../../context/AppContext';
+import Licence from '../BOTComponent/Licence';
 
 const imageLength = 80;
 
@@ -161,8 +162,7 @@ const SigninPage = () => {
                             </div>
                             <Dropdown
                                 onSelect={(e) => {
-                                    let callback = () => auth.setLocale(e)
-                                    locale.setLocale(e, callback);
+                                    locale.setLocale(e);
                                 }}
                                 drop="up"
                             >
@@ -191,6 +191,17 @@ const SigninPage = () => {
                     </Form>
                 )}
             />
+            <JustifyCenterDiv>
+                <div
+                    style={{
+                        position: 'absolute',
+                        bottom: 0,
+                    }}
+                >
+                    {locale.texts.LICENCE}
+                </div>
+            </JustifyCenterDiv>
+
         </CenterContainer>
     )
 }

@@ -36,7 +36,7 @@
 
 const en = {
 
-    LICENCE: '© 2020 BiDae Tech. All rights reserved.'
+    LICENCE: '© 2020 BiDaE Technology'
 
 }
 

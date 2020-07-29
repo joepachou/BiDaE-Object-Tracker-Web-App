@@ -76,7 +76,7 @@ class Locale extends React.Component {
             supportedLocale, 
             setLocale: this.setLocale
         };
-        console.log(config.DEFAULT_LOCALE)
+
         return (
             <LocaleContext.Provider value={localeProviderValue}>
                 {this.props.children}

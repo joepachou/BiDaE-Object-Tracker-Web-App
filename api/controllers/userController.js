@@ -172,10 +172,12 @@ module.exports = {
     },
 
     setLocale: (request, response) => {
-        const userID = request.body.userID
-        const lang = request.body.lang
-    
-        pool.query(dbQueries.setLocale(userID,lang))
+        const {
+            userId,
+            localeName
+        } = request.body
+
+        pool.query(dbQueries.setLocale(userId, localeName))
             .then(res => {
                 console.log("set locale succeed");
                 response.status(200).json(res)

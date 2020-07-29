@@ -125,18 +125,18 @@ class Auth extends React.Component {
     logout = () => {
 
         apiHelper.authApiAgent.logout()
-        .then(res => {
-            Cookies.remove('authenticated')
-            Cookies.remove('user')
-            this.setState({
-                authenticated: false,
-                user: config.DEFAULT_USER,
-                accessToken: ""
-            });
-        })
-        .catch(err => {
-            console.log(`logout failed ${err}`)
-        })
+            .then(res => {
+                Cookies.remove('authenticated')
+                Cookies.remove('user')
+                this.setState({
+                    authenticated: false,
+                    user: config.DEFAULT_USER,
+                    accessToken: ""
+                });
+            })
+            .catch(err => {
+                console.log(`logout failed ${err}`)
+            })
     }; 
 
     signup = (values, callback) => {
