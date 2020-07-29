@@ -84,4 +84,14 @@ export default {
         })
     },
 
+    setLocale: async function({
+        userId,
+        localeName
+    }) {
+        return await axios.post(dataSrc.userInfo.locale, {
+            userId,
+            localeName
+        })
+    }
+
 }

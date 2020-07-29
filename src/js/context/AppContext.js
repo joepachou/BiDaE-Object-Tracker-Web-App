@@ -37,8 +37,8 @@
 
 import React from 'react';
 import AuthenticationContext from '../context/AuthenticationContext'
-import LocaleContext from '../context/LocaleContext'
-import Locale from '../Locale'
+import LocaleContext from '../context/LocaleContext';
+import Locale from '../locale/Locale';
 import Auth from '../Auth'
 import StateReducer from '../reducer/StateReducer'
 

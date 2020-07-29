@@ -48,6 +48,7 @@ import {
 import {
     SET_AREA
 } from './reducer/action';
+import apiHelper from './helper/apiHelper';
 
 class Auth extends React.Component {
 
@@ -55,17 +56,17 @@ class Auth extends React.Component {
 
     state = {
         authenticated: Cookies.get('authenticated') ? true : false,
-        user: Cookies.get('user') ? {...JSON.parse(Cookies.get('user'))} : config.DEFAULT_USER,
+        user: Cookies.get('authenticated') ? {...JSON.parse(Cookies.get('user'))} : config.DEFAULT_USER,
         accessToken: ""
     }
 
-    signin = (userInfo, actions, dispatch, callback) => {
+    login = (userInfo, { actions, dispatch, callback, locale } ) => {
         let {
             username,
             password
         } = userInfo;
 
-        axios.post(dataSrc.auth.signin, {
+        apiHelper.authApiAgent.login({
             username,
             password,
         })
@@ -103,13 +104,14 @@ class Auth extends React.Component {
 
                 Cookies.set('authenticated', true)
                 Cookies.set('user', userInfo)
+
+                locale.setLocale(userInfo.locale)
                 
                 dispatch({
                     type: SET_AREA,
                     value: userInfo.main_area
                 })
 
-                // locale.reSetState(userInfo.locale)
                 this.setState({
                     authenticated: true,
                     user: userInfo
@@ -120,10 +122,9 @@ class Auth extends React.Component {
         })
     };
   
-    signout = () => {
-        axios.post(dataSrc.auth.signout, {
-            
-        })
+    logout = () => {
+
+        apiHelper.authApiAgent.logout()
         .then(res => {
             Cookies.remove('authenticated')
             Cookies.remove('user')
@@ -134,7 +135,7 @@ class Auth extends React.Component {
             });
         })
         .catch(err => {
-            console.log(`signout failed ${err}`)
+            console.log(`logout failed ${err}`)
         })
     }; 
 
@@ -241,17 +242,29 @@ class Auth extends React.Component {
             })
     }
 
+    setLocale = (abbr) => {
+
+        apiHelper.userApiAgent.setLocale({
+            userId: this.state.user.id,
+            localeName: abbr
+        })
+        .catch(err => {
+            console.log(`set locale failed ${err}`)
+        })
+    }
+
     render() {
         const authProviderValue = {
             ...this.state,
-            signin: this.signin,
+            login: this.login,
             signup: this.signup,
-            signout: this.signout,
+            logout: this.logout,
             handleAuthentication: this.handleAuthentication,
             setSearchHistory: this.setSearchHistory,
             setMyDevice: this.setMyDevice,
             setUserInfo: this.setUserInfo,
             setCookies: this.setCookies,
+            setLocale: this.setLocale,
             setUser: this.setUser,
             setArea: this.setArea
         };

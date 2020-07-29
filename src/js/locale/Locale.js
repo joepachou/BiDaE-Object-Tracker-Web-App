@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        locale.js
+        Locale.js
 
     File Description:
         BOT UI component
@@ -35,16 +35,14 @@
 */
 
 
-import generalTexts from '../locale/text';
-import siteModuleTexts from '../../site_module/locale/text';
-import incTexts from '../../inc/doc/locale/text';
+import generalTexts from './text';
+import siteModuleTexts from '../../../site_module/locale/text';
+import incTexts from '../../../inc/doc/locale/text';
 import React from 'react';
-import LocaleContext from './context/LocaleContext';
-import config from './config';
-import dataSrc from '../js/dataSrc';
-import axios from 'axios';
+import LocaleContext from '../context/LocaleContext';
+import config from '../config';
 import Cookies from 'js-cookie';
-import supportedLocale from '../locale/supportedLocale';
+import supportedLocale from './supportedLocale';
 
 
 const localePackage = Object.values(supportedLocale).reduce((localeMap, locale) => {
@@ -60,82 +58,27 @@ const localePackage = Object.values(supportedLocale).reduce((localeMap, locale) 
 
 class Locale extends React.Component {
 
-    state = {
-        ...localePackage['tw']
-    }
+    state = Cookies.get('authenticated') ? localePackage[JSON.parse(Cookies.get('user')).locale] : localePackage[config.DEFAULT_LOCALE];
 
-    changeTexts = (lang) => {
-        return localePackage[lang].texts;
-    }
+    setLocale = (abbr, callback) => {
 
-    changeAbbr = (lang) => {
-        return localePackage[lang].abbr;
-    }
-
-    toggleLang = () => {
-        const langArray = Object.keys(localePackage)
-        const nextLang = langArray.filter(item => item !== this.state.lang).pop()
-        return {
-            nextLang,
-            nextLangName: supportedLocale[nextLang].name
-        }
-    }
-
-    setLocale = (lang) => {
-        if (lang == this.state.lang) return 
+        if (abbr == this.state.abbr) return 
 
         Cookies.set('user', {
             ...JSON.parse(Cookies.get('user')),
-            locale: lang
+            locale: abbr
         })
 
         this.setState({
-            ...localePackage[lang]
-        })
-    }
-
-    changeLocale = (e, auth) => {
-        const nextLang = this.toggleLang().nextLang
-
-        axios.post(dataSrc.userInfo.locale, {
-            userID: auth.user.id,
-            lang: nextLang
-        })
-        .then(resSet => {
-            Cookies.set('user', {
-                ...JSON.parse(Cookies.get('user')),
-                locale: nextLang
-            })
-        })
-        .catch(err => {
-            console.log(`set locale fail ${err}`)
-        })
-
-        this.setState({
-            lang: nextLang,
-            texts: this.changeTexts(nextLang),
-            abbr: this.changeAbbr(nextLang),            
-        })
-    }
-    
-
-    reSetState = (lang) => {
-        this.setState({
-            lang,
-            texts: this.changeTexts(lang),
-            abbr: this.changeAbbr(lang),            
-        })
+            ...localePackage[abbr]
+        }, callback)
     }
 
     render() {
 
         const localeProviderValue = {
             ...this.state,
-            // changeLocale: this.changeLocale,
-            // toggleLang: this.toggleLang,
-            // reSetState : this.reSetState,
-            // localeCollection: Object.values(localeCollection),
-            supportedLocale: Object.values(supportedLocale),
+            supportedLocale, 
             setLocale: this.setLocale
         };
 

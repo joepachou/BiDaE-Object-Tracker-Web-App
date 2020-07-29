@@ -272,7 +272,8 @@ class NavbarContainer extends React.Component {
                             <Dropdown
                                 className="mr-2 ml-3"
                                 onSelect={(e) => {
-                                    locale.setLocale(e);
+                                    let callback = () => auth.setLocale(e)
+                                    locale.setLocale(e, callback);
                                 }}
                             >
                                 <Dropdown.Toggle 
@@ -283,7 +284,7 @@ class NavbarContainer extends React.Component {
                                 <Dropdown.Menu
                                     bsPrefix='bot-dropdown-menu-right dropdown-menu '
                                 >
-                                    {locale.supportedLocale.map(lang => {
+                                    {Object.values(locale.supportedLocale).map(lang => {
                                         return (
                                             <Dropdown.Item 
                                                 className='lang-select'
@@ -314,7 +315,7 @@ class NavbarContainer extends React.Component {
                                         </LinkContainer>
                                         <Dropdown.Divider />
                                         <LinkContainer to={routes.HOME} className='bg-white'>
-                                            <Dropdown.Item className='lang-select' onClick={auth.signout}>
+                                            <Dropdown.Item className='lang-select' onClick={auth.logout}>
                                                 {locale.texts.SIGN_OUT}
                                             </Dropdown.Item>
                                         </LinkContainer>
@@ -330,7 +331,6 @@ class NavbarContainer extends React.Component {
                         className="sub-nav-menu"
                     >
                         {this.state.dropDownModule && this.state.dropDownModule.tabList.map(tab => {
-                            console.log(tab)
                             return (
                                 <AccessControl
                                     permission={tab.permission}

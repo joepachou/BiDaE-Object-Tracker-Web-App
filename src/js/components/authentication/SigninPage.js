@@ -101,12 +101,13 @@ const SigninPage = () => {
                     let callback = () => history.push("/")
 
                     let {
-                        stateReducer
+                        stateReducer,
+                        locale
                     } = appContext
 
                     let [{}, dispatch] = stateReducer
                     
-                    auth.signin(values, actions, dispatch, callback)
+                    auth.login(values, { actions, dispatch, callback, locale })
                 }}
 
                 render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (

@@ -68,7 +68,20 @@ export default {
             token,
             password
         })
-    }
+    },
+    
+    logout: async function () {
+        return await axios.post(dataSrc.auth.signout)
+    },
 
+    login: async function({
+        username,
+        password,
+    }){
+        return await axios.post(dataSrc.auth.signin, {
+            username,
+            password,
+        })
+    }
 
 }

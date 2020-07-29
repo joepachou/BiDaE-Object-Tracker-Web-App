@@ -191,8 +191,9 @@ const stringBlock = ({
     label,
     locale
 }) => {
-    switch(locale.lang) {
-        case "en":
+    switch(locale.abbr) {
+        case locale.supportedLocale.en.abbr:
+        case locale.supportedLocale.ms.abbr:
             return (
                 <div 
                     className='d-flex justify-content-start mr-2'
@@ -208,7 +209,8 @@ const stringBlock = ({
                     {locale.texts[label.toUpperCase().replace(/ /g, '_')]}
                 </div>
             )
-        case "tw":
+        case locale.supportedLocale.tw.abbr:
+        case locale.supportedLocale.cn.abbr:
             return (
                 <div 
                     className='d-flex justify-content-start mr-2'
