@@ -49,7 +49,7 @@ const supportedLocale = {
     },
 
     ms: {
-        name:'Melayu',
+        name:'Malayu',
         code: 'ms-my',
         abbr: 'ms',
     },

@@ -248,6 +248,12 @@ class Auth extends React.Component {
             userId: this.state.user.id,
             localeName: abbr
         })
+        .then(res => {
+            Cookies.set('user', {
+                ...JSON.parse(Cookies.get('user')),
+                locale: abbr
+            })
+        })
         .catch(err => {
             console.log(`set locale failed ${err}`)
         })

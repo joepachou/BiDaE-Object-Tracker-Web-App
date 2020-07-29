@@ -39,6 +39,7 @@ import BOT_LOGO from '../img//logo/BOT_LOGO_RED.png';
 import mapConfig from './config/mapConfig';
 import viewConfig from './config/viewConfig';
 import moment from 'moment';
+import supportedLocale from './locale/supportedLocale';
 
 const config = {
 
@@ -73,7 +74,16 @@ const config = {
         main_area: 1,
     },
 
-    DEFAULT_LOCALE: 'tw' ,
+    /** Set the default locale based on the language of platform. 
+     *  Default locale for can be tw or en 
+    */
+    DEFAULT_LOCALE: Object.values(supportedLocale).reduce((abbr, locale) => {
+        let navigatorLang = navigator.language.toLocaleUpperCase()
+        if (navigatorLang == locale.code.toLocaleUpperCase() || navigatorLang == locale.abbr.toUpperCase()) {
+            return locale.abbr
+        }
+        return abbr
+    }, 'tw'),
 
     LOGO: BOT_LOGO,
 

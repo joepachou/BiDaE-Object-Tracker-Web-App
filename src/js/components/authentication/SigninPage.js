@@ -39,6 +39,7 @@ import {
     Modal, 
     Image, 
     Button,
+    Dropdown
 } from 'react-bootstrap';
 import config from '../../config';
 import LocaleContext from '../../context/LocaleContext';
@@ -145,15 +146,47 @@ const SigninPage = () => {
                             label={locale.texts.PASSWORD}    
                             tabIndex={2}
                         />  
-                        <div className='d-flex justify-content-start'>
-                            <Button 
-                                type="submit" 
-                                variant="primary" 
-                                disabled={isSubmitting}
-                                tabIndex={3}
+                        <div
+                            className="d-flex justify-content-between"
+                        >
+                            <div className='d-flex justify-content-start'>
+                                <Button 
+                                    type="submit" 
+                                    variant="primary" 
+                                    disabled={isSubmitting}
+                                    tabIndex={3}
+                                >
+                                    {locale.texts.LOG_IN}
+                                </Button>
+                            </div>
+                            <Dropdown
+                                onSelect={(e) => {
+                                    let callback = () => auth.setLocale(e)
+                                    locale.setLocale(e, callback);
+                                }}
+                                drop="up"
                             >
-                                {locale.texts.LOG_IN}
-                            </Button>
+                                <Dropdown.Toggle 
+                                    variant='light'
+                                >
+                                    {locale.name}
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu
+                                    bsPrefix='dropdown-menu '
+                                >
+                                    {Object.values(locale.supportedLocale).map(lang => {
+                                        return (
+                                            <Dropdown.Item 
+                                                className='lang-select'
+                                                eventKey={lang.abbr}
+                                                key={lang.abbr}
+                                            >
+                                                {lang.name}
+                                            </Dropdown.Item>
+                                        )
+                                    })}
+                                </Dropdown.Menu>
+                            </Dropdown> 
                         </div>
                     </Form>
                 )}

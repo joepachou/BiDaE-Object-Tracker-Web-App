@@ -59,15 +59,10 @@ const localePackage = Object.values(supportedLocale).reduce((localeMap, locale) 
 class Locale extends React.Component {
 
     state = Cookies.get('authenticated') ? localePackage[JSON.parse(Cookies.get('user')).locale] : localePackage[config.DEFAULT_LOCALE];
-
+    
     setLocale = (abbr, callback) => {
 
         if (abbr == this.state.abbr) return 
-
-        Cookies.set('user', {
-            ...JSON.parse(Cookies.get('user')),
-            locale: abbr
-        })
 
         this.setState({
             ...localePackage[abbr]
@@ -81,8 +76,7 @@ class Locale extends React.Component {
             supportedLocale, 
             setLocale: this.setLocale
         };
-
-       
+        console.log(config.DEFAULT_LOCALE)
         return (
             <LocaleContext.Provider value={localeProviderValue}>
                 {this.props.children}
