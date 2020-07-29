@@ -120,7 +120,9 @@ const dataSrc = {
 
     transferredLocation: `${domain}/data/transferredLocation`,
 
+    deviceGroupList: `${domain}/data/deviceGroupList`,
 
+    patientGroupList: `${domain}/data/patientGroupList`,
 
     pdfUrl: path => {
         return `${domain}/data/file/${path}`

@@ -41,6 +41,8 @@ import objectApiAgent from '../apiAgent/objectAPiAgent';
 import transferredLocationApiAgent from '../apiAgent/transferredLocationApiAgent';
 import authApiAgent from '../apiAgent/authApiAgent';
 import userApiAgent from '../apiAgent/userApiAgent';
+import deviceGroupListApis from '../apiAgent/deviceGroupListApiAgent';
+import patientGroupListApis from '../apiAgent/patientGroupListApiAgent';
 import trackingDataApiAgent from '../apiAgent/trackingDataApiAgent';
 import roleApiAgent from '../apiAgent/roleApiAgent';
 import areaApiAgent from '../apiAgent/areaApiAgent';
@@ -76,6 +78,9 @@ const apiHelper = {
 
     gatewayApiAgent,
     
+    deviceGroupListApis,
+
+    patientGroupListApis
 
 }
 

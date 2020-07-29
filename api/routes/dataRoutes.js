@@ -50,6 +50,7 @@ const geofenceRoutes = require('./dataRoutes/geofenceRoutes');
 const monitorRoutes = require('./dataRoutes/monitorRoutes');
 const recordRoutes = require('./dataRoutes/recordRoutes');
 const transferredLocationRoutes = require('./dataRoutes/transferredLocationRoutes');
+const groupListRoutes = require('./dataRoutes/groupListRoutes');
 
 module.exports = app => {
     trackingDataRoutes(app);
@@ -66,4 +67,5 @@ module.exports = app => {
     monitorRoutes(app);
     recordRoutes(app);
     transferredLocationRoutes(app);
+    groupListRoutes(app);
 }

@@ -39,6 +39,7 @@ import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 import AddableList from './AddableList';
 import { AppContext } from '../../../context/AppContext';
+// import EditPatientGroup from './EditPatientGroup'
 import {
     getName,
     getType,
@@ -264,6 +265,7 @@ class MyPatientManager extends React.Component{
             <div
                 className="text-capitalize"
             >
+
                 <Row className="w-100 d-flex bg-white">
                     <Col>
                         <div className="title">
