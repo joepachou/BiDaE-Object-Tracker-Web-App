@@ -56,8 +56,4 @@ module.exports = app => {
 
     app.route('/data/record/patientRecord')
         .post(recordController.addPatientRecord)
-
-    app.get(`/${process.env.DEFAULT_FOLDER}/shift_record/:file`, (req, res) =>{
-        res.sendFile(path.join(`${process.env.LOCAL_FILE_PATH}`, `${process.env.DEFAULT_FOLDER}/shift_record`,req.params['file']));
-    })
 }
