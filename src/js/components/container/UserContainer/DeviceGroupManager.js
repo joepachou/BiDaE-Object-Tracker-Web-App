@@ -25,7 +25,7 @@ const style = {
     },
 }
 
-class EditDeviceGroup extends React.Component{
+class DeviceGroupManager extends React.Component{
 
     static contextType = AppContext
 
@@ -43,8 +43,7 @@ class EditDeviceGroup extends React.Component{
     }
     
     newDeviceGroup = (name) => {
-        console.log(apiHelper, 'newwwww')
-        apiHelper.deviceListApis.addDeviceList({
+        apiHelper.deviceGroupListApis.addDeviceGroupList({
             name
         })
         .then(res => {
@@ -56,11 +55,47 @@ class EditDeviceGroup extends React.Component{
     }
     addDeviceToGroup = (item) => {
         const groupId = this.state.selectedDeviceGroup.id
-
-        axios.post(dataSrc.modifyDeviceGroup, {
+        console.log(item)
+        apiHelper.deviceGroupListApis.modifyDeviceGroupList({
             groupId: this.state.selectedDeviceGroup.id,
-            mode: 'add device',
-            item: item.asset_control_number
+            mode: 0,
+            itemACN: item.asset_control_number
+        }).then(res => {
+            console.log('successs', res)
+            this.reload()
+        }).catch(err => 
+            console.log(err)
+        )
+    }
+    removeDeviceFromGroup = (item) => {
+        const groupId = this.state.selectedDeviceGroup.id
+
+        apiHelper.deviceGroupListApis.modifyDeviceGroupList({
+            groupId: this.state.selectedDeviceGroup.id,
+            mode: 1,
+            itemACN: item.asset_control_number
+        }).then(res => {
+            this.reload()
+        }).catch(err => 
+            console.log(err)
+        )
+    }
+    renameGroup = (newName) => {
+        const groupId = this.state.selectedDeviceGroup.id
+
+        apiHelper.deviceGroupListApis.modifyDeviceGroupList({
+            groupId: this.state.selectedDeviceGroup.id,
+            mode: 2,
+            newName: newName
+        }).then(res => {
+            this.reload()
+        }).catch(err => 
+            console.log(err)
+        )
+    }
+    deleteGroup = () => {
+        apiHelper.deviceGroupListApis.deleteGroup({
+            groupId: this.state.selectedDeviceGroup.id,
         }).then(res => {
             this.reload()
         }).catch(err => 
@@ -77,19 +112,7 @@ class EditDeviceGroup extends React.Component{
 
         return options
     }
-    removeDeviceFromGroup = (item) => {
-        const groupId = this.state.selectedDeviceGroup.id
-
-        axios.post(dataSrc.modifyDeviceGroup, {
-            groupId: this.state.selectedDeviceGroup.id,
-            mode: 'remove device',
-            item: item.asset_control_number
-        }).then(res => {
-            this.reload()
-        }).catch(err => 
-            console.log(err)
-        )
-    }
+    
     selectDeviceGroup = (deviceGroup) => {
         this.setState({
             selectedDeviceGroup: deviceGroup ? deviceGroup.value : null
@@ -98,11 +121,15 @@ class EditDeviceGroup extends React.Component{
     getObjectData = () => {
         let { locale, auth } = this.context
         
-        retrieveDataHelper.getObjectTable(locale.lang, auth.user.areas_id, [0])
+        apiHelper.objectApiAgent.getObjectTable({
+            locale: locale.abbr,
+            areas_id: auth.user.areas_id,
+            objectType: [0]
+        })
         .then(res => {
-            
+            console.log(res.data.rows)
             this.setState({
-                allDevices: res.data.rows.filter(object => object.object_type == 0)
+                allDevices: res.data.rows
             })
         }).catch(function (error) {
 
@@ -111,7 +138,7 @@ class EditDeviceGroup extends React.Component{
         })
     }
     getDeviceGroup = () => {
-        axios.post(dataSrc.getDeviceGroup, {})
+        apiHelper.deviceGroupListApis.getDeviceGroupList()
         .then(res => {
             const data = res.data.map(group => {
                 return {
@@ -170,7 +197,7 @@ class EditDeviceGroup extends React.Component{
                     ?
                         <DualListBox
                             allItems={this.state.allDevices || []}
-                            selectedItemList={this.state.selectedDeviceGroup ? this.state.selectedDeviceGroup.devices : []}
+                            selectedItemList={this.state.selectedDeviceGroup ? this.state.selectedDeviceGroup.items : []}
                             selectedTitle = 'Devices In List'
                             unselectedTitle = 'Other Devices'
                             onSelect = {this.addDeviceToGroup}
@@ -185,4 +212,4 @@ class EditDeviceGroup extends React.Component{
     }
 }
 
-export default EditDeviceGroup
+export default DeviceGroupManager 

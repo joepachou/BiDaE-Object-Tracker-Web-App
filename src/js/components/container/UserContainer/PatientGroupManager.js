@@ -4,7 +4,7 @@ import axios from 'axios';
 import dataSrc from "../../../dataSrc";
 // import AddableList from './AddableList'
 import { AppContext } from '../../../context/AppContext';
-import retrieveDataHelper from '../../../helper/retrieveDataHelper'
+
 import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import {
@@ -26,7 +26,7 @@ const style = {
     },
 }
 
-class EditPatientGroup extends React.Component{
+class PatientGroupManager extends React.Component{
 
     static contextType = AppContext
 
@@ -44,8 +44,7 @@ class EditPatientGroup extends React.Component{
     }
     
     newPatientGroup = (name) => {
-        console.log(apiHelper, 'newwwww')
-        apiHelper.deviceListApis.addDeviceList({
+        apiHelper.patientGroupListApis.addPatientGroupList({
             name
         })
         .then(res => {
@@ -57,11 +56,11 @@ class EditPatientGroup extends React.Component{
     }
     addPatientToGroup = (item) => {
         const groupId = this.state.selectedPatientGroup.id
-
-        axios.post(dataSrc.modifyPatientGroup, {
+        console.log(item)
+        apiHelper.patientGroupListApis.modifyPatientGroupList({
             groupId: this.state.selectedPatientGroup.id,
-            mode: 'add patient',
-            item: item.asset_control_number
+            mode: 0,
+            itemACN: item.asset_control_number
         }).then(res => {
             this.reload()
         }).catch(err => 
@@ -71,10 +70,23 @@ class EditPatientGroup extends React.Component{
     removePatientFromGroup = (item) => {
         const groupId = this.state.selectedPatientGroup.id
 
-        axios.post(dataSrc.modifyPatientGroup, {
+        apiHelper.patientGroupListApis.modifyPatientGroupList({
             groupId: this.state.selectedPatientGroup.id,
-            mode: 'remove patient',
-            item: item.asset_control_number
+            mode: 1,
+            itemACN: item.asset_control_number
+        }).then(res => {
+            this.reload()
+        }).catch(err => 
+            console.log(err)
+        )
+    }
+    renameGroup = (newName) => {
+        const groupId = this.state.selectedPatientGroup.id
+
+        apiHelper.patientGroupListApis.modifyPatientGroupList({
+            groupId: this.state.selectedPatientGroup.id,
+            mode: 2,
+            newName: newName
         }).then(res => {
             this.reload()
         }).catch(err => 
@@ -92,12 +104,11 @@ class EditPatientGroup extends React.Component{
         apiHelper.objectApiAgent.getObjectTable({
             locale: locale.abbr,
             areas_id: auth.user.areas_id,
-            objectType: [0]
+            objectType: [1, 2]
         })
         .then(res => {
-
             this.setState({
-                allPatients: res.data.rows.filter(object => object.object_type != 0)
+                allPatients: res.data.rows
             })
         }).catch(function (error) {
 
@@ -116,7 +127,7 @@ class EditPatientGroup extends React.Component{
         return options
     }
     getPatientGroup = () => {
-        axios.post(dataSrc.getPatientGroup, {})
+        apiHelper.patientGroupListApis.getPatientGroupList()
         .then(res => {
             const data = res.data.map(group => {
                 return {
@@ -149,7 +160,7 @@ class EditPatientGroup extends React.Component{
     
     render() {
         const { locale } = this.context
-
+        console.log(this.state.allPatients)
         return (
             <div
                 className="text-capitalize"
@@ -192,4 +203,4 @@ class EditPatientGroup extends React.Component{
     }
 }
 
-export default EditPatientGroup
+export default PatientGroupManager

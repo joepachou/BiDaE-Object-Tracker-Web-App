@@ -8,7 +8,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        deviceListApiAgent.js
+        deviceGroupListApiAgent.js
 
     File Description:
         BOT UI component
@@ -39,16 +39,29 @@ import dataSrc from '../dataSrc';
 import axios from 'axios';
 import config from '../config';
 
-const src = dataSrc.deviceList;
+const src = dataSrc.patientGroupList;
 
-const deviceListApis = {
-    addDeviceList: async function(
+const patientGroupListApis = {
+    addPatientGroupList: async function(
         name
     ) {
         console.log('add', src)
         return await axios.post(src, {
             name
         })
+    },
+    getPatientGroupList: async function(
+        name
+    ) {
+        return await axios.get(src, {
+            name
+        })
+    },
+    modifyPatientGroupList: async function( pack ) {
+        return await axios.put(src, pack)
+    },
+    deleteGroup: async function( groupId ) {
+        return await axios.put(src, groupId)
     },
     // getGeofenceConfig: async function(
     //     type, 
@@ -88,4 +101,4 @@ const deviceListApis = {
 }
 
 
-export default deviceListApis
+export default patientGroupListApis

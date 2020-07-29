@@ -54,7 +54,7 @@ switch(process.env.ENABLE_HTTP) {
 
         httpServer.timeout = parseInt(process.env.SERVER_TIMEOUT);
         break;
-    default: 
+    default:
         const httpsServer = https.createServer(credentials, app);
 
         /** Initiate HTTPS server */
@@ -66,17 +66,16 @@ switch(process.env.ENABLE_HTTP) {
         break;
 }
 
-<<<<<<< HEAD
-const httpsServer = http.createServer(app)
 
-/** Enable HTTP server */
-httpsServer.listen(httpPort, () => {
-    console.log(`HTTP Server running on PORT ${httpPort}`)
-})
+// const httpsServer = http.createServer(app)
 
-httpsServer.timeout = parseInt(process.env.SERVER_TIMEOUT);
-=======
->>>>>>> 5198d31ac1ff2684b1d3f07b933d8314a42750a0
+// /** Enable HTTP server */
+// httpsServer.listen(httpPort, () => {
+//     console.log(`HTTP Server running on PORT ${httpPort}`)
+// })
+
+// httpsServer.timeout = parseInt(process.env.SERVER_TIMEOUT);
+
 
 
 

@@ -39,7 +39,7 @@ require('dotenv').config();
 require('moment-timezone');
 const exec = require('child_process').execFile;
 const moment = require('moment');
-const dbQueries = require('../db/dbQueries/deviceListQueries');
+const dbQueries = require('../db/dbQueries/patientGroupListQueries');
 const recordQueries = require('../db/dbQueries/recordQueries');
 const pool = require('../db/dev/connection');
 const pdf = require('html-pdf');
@@ -47,7 +47,7 @@ const path = require('path');
 
 module.exports = {
 
-    getPatientList : (request, response) => {
+    getPatientGroupList : (request, response) => {
         let query = dbQueries.getPatientGroup(request.body)
         pool.query(query)
         .then(res => {
@@ -57,7 +57,7 @@ module.exports = {
             console.log('addPatientGroup error: ', err)
         })
     },
-    addPatientList : (request, response) => {
+    addPatientGroupList : (request, response) => {
         const {name} = request.body
         let query = dbQueries.addPatientGroup(name ? name : 'New Group')
         pool.query(query)
@@ -68,17 +68,16 @@ module.exports = {
             console.log('addPatientGroup error: ', err)
         })
     },
-    modifyPatientList : (request, response) => {
-        let {groupId, mode} = request.body
+    modifyPatientGroupList : (request, response) => {
+        let {groupId, mode, itemACN, newName} = request.body
+        console.log(groupId, mode, itemACN)
         let query = null
-        if(mode == 'add patient'){
-            let {item} = request.body
-            query = queryType.modifyPatientGroup(groupId, 'add patient', item = item)
-        }else if(mode == 'remove patient'){
-            let {item} = request.body
-            query = queryType.modifyPatientGroup(groupId, 'remove patient', item = item)
-        }else if(mode == 'rename group'){
-
+        if(mode == 0){
+            query = dbQueries.modifyPatientGroup(groupId, 0, itemACN)
+        }else if(mode == 1){
+            query = dbQueries.modifyPatientGroup(groupId, 1, itemACN)
+        }else if(mode == 2){
+            query = dbQueries.modifyPatientGroup(groupId, 2, newName)
         }
         pool.query(query)
             .then(res => {
@@ -88,6 +87,16 @@ module.exports = {
             })
     },
     changePatientList : (request, response) => {
+        const {patient_group_id, user_id} = request.body
+        const query = queryType.changePatientGroup(patient_group_id, user_id)
+        pool.query(query).then(res => {
+            console.log('success')
+            response.status(200).json('ok')
+        }).catch(err => {
+            console.log('error when change patient group,', err)
+        })
+    },
+    deletePatientGroup : (request, response) => {
         const {patient_group_id, user_id} = request.body
         const query = queryType.changePatientGroup(patient_group_id, user_id)
         pool.query(query).then(res => {

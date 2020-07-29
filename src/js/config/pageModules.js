@@ -44,7 +44,9 @@ import config from '../config';
 import TransferredLocationManagement from '../components/container/TransferredLocationManagement';
 import RolePermissionManagement from '../components/container/RolePermissionManagement';
 import MyDeviceManager from '../components/container/UserContainer/MyDeviceManager';
+import DeviceGroupManager from '../components/container/UserContainer/DeviceGroupManager';
 import MyPatientManager from '../components/container/UserContainer/MyPatientManager';
+import PatientGroupManager from '../components/container/UserContainer/PatientGroupManager';
 import MonitorSettingBlock from '../components/container/MonitorSettingBlock';
 import GeoFenceSettingBlock from '../components/container/GeoFenceSettingBlock';
 import ObjectEditedRecord from '../components/container/UserContainer/ObjectEditedRecord';
@@ -139,13 +141,15 @@ export const settingModule = {
             name: 'devices management',
             path: 'devicesManagement',
             href: '#DevicesManagement',
-            component: (props) => <MyDeviceManager />
+            // component: (props) => <MyDeviceManager />
+            component: (props) => <DeviceGroupManager />
         },
         {
             name: 'patient management',
             path: 'patientManagement',
             href: '#PatientManagement',
-            component: (props) => <MyPatientManager />
+            // component: (props) => <MyPatientManager />
+            component: (props) => <PatientGroupManager />
         },
         {
             name: "lbeacon",

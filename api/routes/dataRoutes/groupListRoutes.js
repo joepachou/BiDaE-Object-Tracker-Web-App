@@ -36,20 +36,27 @@
 
 
 
-const deviceListController = require('../../controllers/deviceListController');
+const deviceGroupListController = require('../../controllers/deviceGroupListController');
+const patientGroupListController = require('../../controllers/patientGroupListController');
 let cors = require('cors');
 
 module.exports = app => {
 
     // enable pre-flight request for DELETE request
-    app.options('/data/deviceList', cors()) 
+    app.options('/data/deviceGroupList', cors())
+    app.options('/data/patientGroupList', cors())
     // app.options('/data/objectPackage', cors())
 
-    app.route('/data/deviceList')
-        .get(deviceListController.getPatientList)
-        .post(deviceListController.addPatientList)
-        // .put(deviceListController.editPatientList)
-        // .delete(objectController.deletePatientList)
+    app.route('/data/deviceGroupList')
+        .get(deviceGroupListController.getDeviceGroupList)
+        .post(deviceGroupListController.addDeviceGroupList)
+        .put(deviceGroupListController.modifyDeviceGroupList)
+        .delete(deviceGroupListController.deleteDeviceGroup)
 
+    app.route('/data/patientGroupList')
+        .get(patientGroupListController.getPatientGroupList)
+        .post(patientGroupListController.addPatientGroupList)
+        .put(patientGroupListController.modifyPatientGroupList)
+        .delete(patientGroupListController.deletePatientGroup)
 
 }

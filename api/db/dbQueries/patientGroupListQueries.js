@@ -34,7 +34,7 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
-function getDeviceGroup(pack){
+const getDeviceGroup = (pack) => {
     const groupIdSelector = pack.groupId ? `WHERE id = ${pack.groupId}` : ``
     const query = `
         SELECT  * FROM device_group ${groupIdSelector} ORDER BY id
@@ -42,54 +42,51 @@ function getDeviceGroup(pack){
     return query
 }
 
-function addDeviceGroup(name){
+const addDeviceGroup = (name) => {
     const query = `
-        INSERT INTO device_group (name) VALUES ('${name}')
+        INSERT INTO device_group_list (name) VALUES ('${name}')
     `
     return query
 }
 
-function modifyDeviceGroup(groupId, mode, item = null, newName = null){
+const modifyPatientGroup = (groupId, mode, option) => {
     var query = null
-    if(mode == 'add device'){
-        query = `UPDATE device_group SET devices=array_append(devices, '${item}') WHERE id=${groupId}`
-    }else if(mode == 'remove device'){
-        query = `UPDATE device_group SET devices=array_remove(devices, '${item}') WHERE id=${groupId}`
-    }else if(mode == 'rename group'){
-
+    if(mode === 0){
+        var patientACN = option
+        query = `UPDATE patient_group_list SET patients=array_append(patients, '${patientACN}') WHERE id=${groupId}`
+    }else if(mode == 1){
+        var patientACN = option
+        query = `UPDATE patient_group_list SET patients=array_remove(patients, '${patientACN}') WHERE id=${groupId}`
+    }else if(mode == 2){
+        var newName = option
+        query = `UPDATE patient_group_list SET name = ${newName} WHERE id=${groupId}`
     }
+
     return query
 }
 const changeDeviceGroup = (device_group_id, user_id) => {
     const query = `UPDATE user_table SET my_device_index = ${device_group_id} WHERE id = ${user_id}`
     return query
 }
+// INPUT pack = {groupId: [int]}
 const getPatientGroup = (pack) => {
+    // print('pack', pack)
     const groupIdSelector = pack.groupId ? `WHERE id = ${pack.groupId}` : ``
     const query = `
-        SELECT  * FROM patient_group ${groupIdSelector} ORDER BY id
+        SELECT  * FROM patient_group_list ${groupIdSelector} ORDER BY id
     `
     return query
 }
-
+// INPUT name = {'name': [text]}
 const addPatientGroup = (name) => {
     const query = `
-        INSERT INTO patient_group (name) VALUES ('${name}')
+        INSERT INTO patient_group_list (name) VALUES ('${name.name}')
     `
     return query
 }
 
-const modifyPatientGroup = (groupId, mode, item = null, newName = null) => {
-    var query = null
-    if(mode == 'add patient'){
-        query = `UPDATE patient_group SET patients=array_append(patients, '${item}') WHERE id=${groupId}`
-    }else if(mode == 'remove device'){
-        query = `UPDATE patient_group SET patients=array_remove(patients, '${item}') WHERE id=${groupId}`
-    }else if(mode == 'rename group'){
 
-    }
-    return query
-}
+
 const changePatientGroup = (patient_group_id, user_id) => {
     const query = `UPDATE user_table SET my_patient_index = ${patient_group_id} WHERE id = ${user_id}`
     return query
