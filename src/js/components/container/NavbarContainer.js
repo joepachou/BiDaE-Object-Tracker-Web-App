@@ -151,7 +151,6 @@ class NavbarContainer extends React.Component {
             })
 
         let selectedArea = options.filter(module => module.id == areaId)
-
         return (
             <div
                 onMouseOver={(e) => {
@@ -284,11 +283,12 @@ class NavbarContainer extends React.Component {
                                 <Dropdown.Menu
                                     bsPrefix='bot-dropdown-menu-right dropdown-menu '
                                 >
-                                    {locale.localeCollection.map(lang => {
+                                    {locale.supportedLocale.map(lang => {
                                         return (
                                             <Dropdown.Item 
                                                 className='lang-select'
                                                 eventKey={lang.abbr}
+                                                key={lang.abbr}
                                             >
                                                 {lang.name}
                                             </Dropdown.Item>
@@ -330,12 +330,13 @@ class NavbarContainer extends React.Component {
                         className="sub-nav-menu"
                     >
                         {this.state.dropDownModule && this.state.dropDownModule.tabList.map(tab => {
+                            console.log(tab)
                             return (
                                 <AccessControl
                                     permission={tab.permission}
                                     renderNoAccess={() => null}
                                     platform={tab.platform}
-                                    // key={tab.alias}
+                                    key={tab.name}
                                 >
                                     <LinkContainer 
                                         to={{

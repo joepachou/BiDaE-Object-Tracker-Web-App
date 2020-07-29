@@ -35,98 +35,45 @@
 */
 
 
-import tw from '../locale/zh-TW';
-import en from '../locale/en-US';
-import siteModuleLocaleEn from '../../site_module/locale/en-US';
-import siteModuleLocaleTw from '../../site_module/locale/zh-TW';
-import incDocLocaleEn from '../../inc/doc/locale/en-US';
-import incDocLocaleTw from '../../inc/doc/locale/zh-TW';
+import generalTexts from '../locale/text';
+import siteModuleTexts from '../../site_module/locale/text';
+import incTexts from '../../inc/doc/locale/text';
 import React from 'react';
 import LocaleContext from './context/LocaleContext';
 import config from './config';
 import dataSrc from '../js/dataSrc';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import supportedLocale from '../locale/supportedLocale';
 
-const localeCollection = {
-    tw: {
-        name:'中文(繁體)',
-        abbr: 'tw',
-    },
-    en: {
-        name:'English',
-        abbr: 'en',
-    },
-    ms: {
-        name:'Melayu',
-        abbr: 'ms',
-    },
-    cn: {
-        name:'中文(简体)',
-        abbr: 'cn',
-    },   
-}
 
-const supportedLocale = {
-    tw: {
-        name:'中文(繁體)',
-        lang: 'tw',
-        abbr: 'zh-tw',
-        texts: {
-            ...tw,
-            ...siteModuleLocaleTw,
-            ...incDocLocaleTw,
-        },
-    },
-    en: {
-        name:'English',
-        lang: 'en',
-        abbr: 'en',
-        texts: {
-            ...en,
-            ...siteModuleLocaleEn,
-            ...incDocLocaleEn
-        }    
-    },
-    ms: {
-        name:'Melayu',
-        lang: 'en',
-        abbr: 'en',
-        texts: {
-            ...en,
-            ...siteModuleLocaleEn,
-            ...incDocLocaleEn
-        }    
-    },
-    cn: {
-        name:'中文(简体)',
-        lang: 'tw',
-        abbr: 'tw',
-        texts: {
-            ...tw,
-            ...siteModuleLocaleTw,
-            ...incDocLocaleTw,
-        },
-    },
-}
+const localePackage = Object.values(supportedLocale).reduce((localeMap, locale) => {
+    localeMap[locale.abbr] = locale
+    localeMap[locale.abbr].texts = {
+       ...generalTexts[locale.abbr],
+       ...siteModuleTexts[locale.abbr],
+       ...incTexts[locale.abbr]
+    }
+    return localeMap
+}, {})
 
 
 class Locale extends React.Component {
 
     state = {
-        ...supportedLocale[config.DEFAULT_LOCALE]
+        ...localePackage['tw']
     }
 
     changeTexts = (lang) => {
-        return supportedLocale[lang].texts;
+        return localePackage[lang].texts;
     }
 
     changeAbbr = (lang) => {
-        return supportedLocale[lang].abbr;
+        return localePackage[lang].abbr;
     }
 
     toggleLang = () => {
-        const langArray = Object.keys(supportedLocale)
+        const langArray = Object.keys(localePackage)
         const nextLang = langArray.filter(item => item !== this.state.lang).pop()
         return {
             nextLang,
@@ -143,7 +90,7 @@ class Locale extends React.Component {
         })
 
         this.setState({
-            ...supportedLocale[lang]
+            ...localePackage[lang]
         })
     }
 
@@ -180,14 +127,15 @@ class Locale extends React.Component {
         })
     }
 
-
     render() {
+
         const localeProviderValue = {
             ...this.state,
             // changeLocale: this.changeLocale,
             // toggleLang: this.toggleLang,
             // reSetState : this.reSetState,
-            localeCollection: Object.values(localeCollection),
+            // localeCollection: Object.values(localeCollection),
+            supportedLocale: Object.values(supportedLocale),
             setLocale: this.setLocale
         };
 
