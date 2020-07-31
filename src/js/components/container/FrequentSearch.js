@@ -97,7 +97,7 @@ class FrequentSearch extends React.Component {
 
         const style = {
             list: {
-                maxHeight: this.props.maxHeigh,
+                maxHeight: 450,
                 overflow: "hidden scroll"
             }
         }
@@ -108,32 +108,40 @@ class FrequentSearch extends React.Component {
                     {locale.texts.FREQUENT_SEARCH}
                 </Title>
                 <div style={style.list} className="d-inline-flex flex-column searchOption">
-                    {auth.authenticated && auth.user.searchHistory &&
-                        auth.user.searchHistory
-                            .filter( (item,index) => {
-                                return index < auth.user.freqSearchCount
-                            })
-                            .map((item, index) => {
+                    <div
+                        style={{
+                            maxHeight: 350,
+                            overflow: "hidden scroll"
+                        }}
+                    >
+                        {auth.authenticated && auth.user.searchHistory &&
+                            auth.user.searchHistory
+                                .filter( (item,index) => {
+                                    return index < auth.user.freqSearchCount
+                                })
+                                .map((item, index) => {
 
-                                let pinColorIndex = searchObjectArray.indexOf(item.name)
+                                    let pinColorIndex = searchObjectArray.indexOf(item.name)
 
-                                return (
-                                    <Button
-                                        variant="outline-custom"
-                                        className="text-none"
-                                        onClick={this.handleClick} 
-                                        style={{
-                                            color: pinColorIndex > -1 ? pinColorArray[pinColorIndex] : null
-                                        }}
-                                        // active={this.state.searchKey === item.name.toLowerCase()} 
-                                        key={index}
-                                        name={SEARCH_HISTORY}
-                                        value={item.name}
-                                    >
-                                        {item.name}
-                                    </Button>
-                                )
-                    })}
+                                    return (
+                                        <Button
+                                            variant="outline-custom"
+                                            className="text-none"
+                                            onClick={this.handleClick} 
+                                            style={{
+                                                color: pinColorIndex > -1 ? pinColorArray[pinColorIndex] : null
+                                            }}
+                                            // active={this.state.searchKey === item.name.toLowerCase()} 
+                                            key={index}
+                                            name={SEARCH_HISTORY}
+                                            value={item.name}
+                                        >
+                                            {item.name}
+                                        </Button>
+                                    )
+                        })}
+                    </div>
+                  
                     <hr/>
                     <Button 
                         variant="outline-custom"
