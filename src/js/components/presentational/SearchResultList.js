@@ -61,6 +61,7 @@ import pdfPackageGenerator from '../../helper/pdfPackageGenerator';
 import {
     SET_ENABLE_REQUEST_TRACKING_DATA
 } from '../../reducer/action';
+import { editTransferredLocation } from '../../../../api/db/dbQueries/transferredLocationQueries';
 
 class SearchResultList extends React.Component {
 
@@ -219,17 +220,8 @@ class SearchResultList extends React.Component {
         let shouldCreatePdf = config.statusToCreatePdf.includes(editedObjectPackage[0].status)
         let status = editedObjectPackage[0].status
         let reservedTimestamp = isDelayTime ? moment().add(10, 'minutes').format() : moment().format()
+
         /** Create the pdf package, including pdf, pdf setting and path */
-
-        editedObjectPackage.map(editedObject => {
-            if(editedObject.transferred_location){
-                let transferred_location = editedObject.transferred_location.value
-                editedObject.transferred_location_label = editedObject.transferred_location.label
-                editedObject.transferred_location = `${transferred_location.branch.id},${transferred_location.departmentId}`
-            }
-
-        })
-
         let pdfPackage = shouldCreatePdf && pdfPackageGenerator.getPdfPackage({
             option: status, 
             user: auth.user, 

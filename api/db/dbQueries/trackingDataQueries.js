@@ -55,15 +55,15 @@ const getTrackingData = (areas_id, key) => {
 			object_table.asset_control_number,
 			object_table.area_id,
 			object_table.object_type,
-			object_table.transferred_location,
+			JSON_BUILD_OBJECT(
+				'id', branches.id,
+				'name', branches.name,
+				'department', branches.department
+			) AS transferred_location,
 			object_table.monitor_type,
 			object_table.nickname,
 			edit_object_record.notes,
 			lbeacon_table.description as location_description,
-			JSON_BUILD_OBJECT(
-				'id', area_table.id,
-				'value', area_table.name
-			) AS lbeacon_area,
 			JSON_BUILD_OBJECT(
 				'id', area_table.id,
 				'value', area_table.name
@@ -131,6 +131,9 @@ const getTrackingData = (areas_id, key) => {
 			GROUP BY mac_address
 		) as notification
 		ON notification.mac_address = object_summary_table.mac_address
+
+		LEFT JOIN branches
+		ON object_table.transferred_location = branches.id
 
 		WHERE object_table.area_id IN (${areas_id.map(id => id)}) 
 

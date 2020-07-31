@@ -203,10 +203,10 @@ class ObjectTable extends React.Component{
                         value: item.status,
                         label: item.status ? locale.texts[item.status.toUpperCase()] : null,
                     }
-                    item.transferred_location = item.transferred_location 
-                        ?   {
-                            value: `${item.branch_id}, ${item.department_id}`,
-                            label: `${item.department_name}, ${item.branch_name}` 
+                    item.transferred_location = item.transferred_location.id 
+                        ? {
+                            value: `${item.transferred_location.name}-${item.transferred_location.department}`, 
+                            label: `${item.transferred_location.name}-${item.transferred_location.department}` 
                         }
                         : ''
 

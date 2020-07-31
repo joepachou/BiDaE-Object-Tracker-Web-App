@@ -289,7 +289,6 @@ class MainContainer extends React.Component{
                 this.errorToast = null;
                 toast.dismiss(this.errorToast)
             }
-
             let violatedObjects = _.cloneDeep(this.state.violatedObjects)
             /** collect violated objects as violatedObjects */
             res.data.map((item, index) => {

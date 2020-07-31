@@ -311,11 +311,11 @@ export const BOTAdminModule = {
             component: (props) => <AdminManagementContainer {...props}/>,
             platform: ['browser', 'tablet'],
         },
-        // {
-        //     name: "transferred location management",
-        //     component: (props) => <TransferredLocationManagement {...props}/>,
-        //     platform: ['browser'],
-        // },
+        {
+            name: "transferred location management",
+            component: (props) => <TransferredLocationManagement {...props}/>,
+            platform: ['browser'],
+        },
         {
             name: "Role Permission Management",
             permission: "rolePermissionManagement",

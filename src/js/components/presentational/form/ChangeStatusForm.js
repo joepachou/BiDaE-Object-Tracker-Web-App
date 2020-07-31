@@ -75,25 +75,20 @@ export default class ChangeStatusForm extends React.Component {
     }
 
     getTransferredLocation = () => {
-        let { locale } = this.context
-
         apiHelper.transferredLocationApiAgent.getAllTransferredLocation()
             .then(res => {
                 const transferredLocationOptions = res.data.map(branch => {
                     return {          
-                        label: branch.branch_name,
-                        value: branch,
-                        options: branch.department ? branch.department
+                        label: branch.name,
+                        value: branch.name,
+                        options: branch.departments ? branch.departments
                             .map((department, index) => {
                                 return {
-                                    label: `${department},${branch.branch_name}`,
-                                    value: {
-                                        branch,
-                                        departmentId: index,
-                                    }
+                                    id: department.id,
+                                    label: `${branch.name}-${department.value}`,
+                                    value: department.value
                                 }
                         }) : [],
-                        id: branch.id
                     }
 
                 })
@@ -139,33 +134,22 @@ export default class ChangeStatusForm extends React.Component {
 
         selectedObjectData = selectedObjectData.length ? selectedObjectData : []
 
-        let {
-            transferredLocationOptions
-        } = this.state
-
         let initValues = {
             name: selectedObjectData.length != 0 ? selectedObjectData[0].name : '',
             type: selectedObjectData.length != 0 ? selectedObjectData[0].type : '',
             asset_control_number: selectedObjectData.length != 0 ? selectedObjectData[0].asset_control_number : '',
             status: selectedObjectData.length != 0 ? selectedObjectData[0].status : '',
             transferred_location: selectedObjectData.length != 0 && selectedObjectData[0].status == config.objectStatus.TRANSFERRED
-                ? null
-                : '',
+                ? {
+                    id: selectedObjectData[0].transferred_location.id,
+                    value: selectedObjectData[0].transferred_location.value,
+                    label: `${selectedObjectData[0].transferred_location.name}-${selectedObjectData[0].transferred_location.department}`
+                }
+                : null,
             notes: selectedObjectData.length != 0 ? selectedObjectData[0].notes : "" ,
             nickname :  selectedObjectData.length != 0 ? selectedObjectData[0].nickname : '',     
         }
         
-        if(selectedObjectData.length != 0 && selectedObjectData[0].status == config.objectStatus.TRANSFERRED){
-            let ids = selectedObjectData[0].transferred_location.split(',')
-            let branchId = ids[0]
-            let departmentId = ids[1]
-            let branch = this.state.transferredLocationOptions.filter(branch => branch.id == branchId)[0] 
-            let department = null
-            if(branch){
-                department = departmentId ? branch.options[departmentId]: ''
-                initValues.transferred_location = department
-            }
-        }
         return initValues
     }
     render() {

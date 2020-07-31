@@ -46,18 +46,11 @@ const getObject = (objectType, areas_id) => {
 			object_table.asset_control_number, 
 			object_table.status, 
 			object_table.transferred_location, 
-			SPLIT_PART(object_table.transferred_location, ',', 1) AS branch_id,
-			SPLIT_PART(object_table.transferred_location, ',', 2) AS department_id,
-			branch_and_department.branch_name as branch_name,
-			CASE WHEN CAST(
-				COALESCE(
-					NULLIF(SPLIT_PART(object_table.transferred_location, ',', 1), '')
-				, '0') AS INTEGER
-			) IS NOT NULL THEN branch_and_department.department[CAST(
-				COALESCE(
-					NULLIF(SPLIT_PART(object_table.transferred_location, ',', 1), '')
-				, '0') AS INTEGER
-			)] END AS department_name,
+			JSON_BUILD_OBJECT(
+				'id', branches.id,
+				'name', branches.name,
+				'department', branches.department
+			) AS transferred_location,
 			object_table.mac_address,
 			object_table.monitor_type,
 			object_table.area_id,
@@ -71,19 +64,15 @@ const getObject = (objectType, areas_id) => {
 				SELECT name
 				FROM user_table
 				WHERE user_table.id = object_table.physician_id
-			) as physician_name
+			) as physician_name 
 
 		FROM object_table 
 
 		LEFT JOIN area_table
 		ON area_table.id = object_table.area_id
 
-		LEFT JOIN branch_and_department
-		ON branch_and_department.id = CAST(
-			COALESCE(
-				NULLIF(SPLIT_PART(object_table.transferred_location, ',', 1), '')
-			, '0') AS INTEGER
-		)
+		LEFT JOIN branches
+		ON branches.id = object_table.transferred_location
 	
 		WHERE object_table.object_type IN (${objectType.map(type => type)})
 		${areas_id ? `AND object_table.area_id IN (${areas_id.map(id => id)})` : ''}
@@ -268,7 +257,7 @@ const editObjectPackage = (
 		UPDATE object_table
 		SET 
 			status = '${item.status}',
-			transferred_location = '${item.transferred_location}',
+			transferred_location = ${item.transferred_location.id},
 			note_id = ${record_id},
 			reserved_timestamp = ${item.status == 'reserve' ? `'${reservedTimestamp}'` : null},
 			reserved_user_id = (SELECT id

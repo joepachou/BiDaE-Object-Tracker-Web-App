@@ -39,9 +39,16 @@ module.exports = {
 
 	getAllTransferredLocation: () => {
 		return `
-			SELECT id, branch_name, department 
-			FROM branch_and_department 
-			ORDER BY id
+			SELECT 
+				name, 
+				ARRAY_AGG(JSON_BUILD_OBJECT(
+					'id', branches.id,
+					'value', branches.department
+				)) AS departments
+			FROM branches 
+			GROUP BY 
+				branches.name
+			ORDER BY name
 		`
 	},
 
