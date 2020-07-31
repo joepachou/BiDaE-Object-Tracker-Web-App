@@ -51,7 +51,8 @@ import {
 import {
     ALL_DEVICES,
     ALL_PATIENTS,
-    OBJECT_TYPE
+    OBJECT_TYPE,
+    SEARCH_HISTORY,
 } from '../../config/wordMap';
 import {
     ASSIGN_OBJECT
@@ -112,6 +113,7 @@ const SearchResultListGroup = ({
             case ALL_PATIENTS:
                 return <p className='d-inline-block'>&bull;</p>;
             case OBJECT_TYPE:
+            case SEARCH_HISTORY:
                 return (
                     <div className='d-inline-block'>
                         <div
