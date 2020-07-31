@@ -494,14 +494,18 @@ class TraceContainer extends React.Component{
                     }
                 })
 
-                axios.post(dataSrc.file.export.pdf, {
+                apiHelper.fileApiAgent.getPDF({
                     userInfo: auth.user,
                     pdfPackage,
-                }).then(res => {
-                    window.open(dataSrc.pdfUrl(pdfPackage.path))
-                }).catch(err => {
-                    console.log(`export PDF failed ${err}`)
                 })
+                .then(res => {
+                    apiHelper.fileApiAgent.getFile(pdfPackage.path)
+                    callBack(res.data)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+
                 break;
 
             case 'nav':

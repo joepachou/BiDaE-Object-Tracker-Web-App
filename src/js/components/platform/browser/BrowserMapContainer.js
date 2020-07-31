@@ -160,6 +160,7 @@ export default class BrowserMapContainer extends React.Component {
                                     className="mr-1 ml-2 text-capitalize" 
                                     onClick={handleClickButton} 
                                     name="save"
+                                    value={1}
                                     disabled={!this.props.hasSearchKey || this.props.showPdfDownloadForm}
                                 >
                                     {locale.texts.SAVE}

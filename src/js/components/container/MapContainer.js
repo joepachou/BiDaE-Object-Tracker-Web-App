@@ -73,7 +73,7 @@ class MapContainer extends React.Component {
                 this.props.handleClick(e);
                 break;
             case 'save':
-                this.setState({
+                this.setState({ 
                     showPdfDownloadForm: true,
                 })
                 break;

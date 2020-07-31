@@ -269,7 +269,7 @@ class ShiftChangeRecord extends React.Component{
                                 if (handleOriginal) {
                                     handleOriginal()
                                 }
-                                window.open(dataSrc.pdfUrl(rowInfo.original.file_path));
+                                apiHelper.fileApiAgent.getFile(rowInfo.original.file_path)
                             }
                         }
                     }}

@@ -46,6 +46,8 @@ import dataSrc from '../../dataSrc';
 import QRCode from 'qrcode.react';
 import config from '../../config'
 import { AppContext } from '../../context/AppContext';
+import pdfPackageGenerator from '../../helper/pdfPackageGenerator';
+import apiHelper from '../../helper/apiHelper';
 
 class PdfDownloadForm extends React.Component {
 
@@ -62,13 +64,16 @@ class PdfDownloadForm extends React.Component {
 
 
     sendSearchResultToBackend = (searchResultInfo, callBack) => {
-        axios.post(dataSrc.generatePDF ,searchResultInfo)
-            .then(res => {
-                callBack(res.data)
-            })
-            .catch(err => {
-                console.log(err)
-            })
+
+        apiHelper.fileApiAgent.getPDF({
+            ...searchResultInfo
+        })
+        .then(res => {
+            callBack(res.data)
+        })
+        .catch(err => {
+            console.log(err)
+        })
     }
 
     componentDidUpdate = (preProps) => {
@@ -85,12 +90,26 @@ class PdfDownloadForm extends React.Component {
 
             let { locale, auth, stateReducer } = this.context
             let [{areaId}] = stateReducer
-            let pdfPackage = config.getPdfPackage('searchResult', auth.user, data, locale, areaId)
+            // let pdfPackage = config.getPdfPackage('searchResult', auth.user, data, locale, areaId)
+
+            let pdfPackage = pdfPackageGenerator.getPdfPackage({
+                option: 'searchResult', 
+                user: auth.user, 
+                data, 
+                locale,
+                // signature: authentication,
+                // additional: {
+                //     shift: values.shift,
+                //     area: locale.texts[config.mapConfig.areaOptions[auth.user.areas_id[0]]],
+                //     name: auth.user.name
+                // }
+            })  
 
             var searResultInfo = {
                 userInfo: auth.user,
                 pdfPackage,
             }
+            
             this.sendSearchResultToBackend(searResultInfo,(path) => {
                 this.setState({
                     savePath : path,
@@ -113,7 +132,9 @@ class PdfDownloadForm extends React.Component {
         })
     }
     PdfDownloader = () => {
-        window.open(this.state.savePath);
+        apiHelper.fileApiAgent.getFile({
+            path: this.state.savePath
+        })
     }
 
     render() {

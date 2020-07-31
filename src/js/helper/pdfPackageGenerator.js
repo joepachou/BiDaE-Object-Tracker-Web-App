@@ -230,18 +230,17 @@ const pdfPackageGenerator = {
             },
 
             searchResult: (data, locale, user, location) => {
-                let area =  locale.texts[pdfPackageGenerator.mapConfig.areaOptions[parseInt(user.areas_id[0])]]
                 let foundTitle = pdfPackageGenerator.pdfFormat.getBodyItem.getBodyTitle(
                     'devices found', 
                     locale, 
-                    area, 
+                    null, 
                     data.foundResult.length !== 0
                 )
                 let foundResultList = pdfPackageGenerator.pdfFormat.getBodyItem.getDataContent(data.foundResult, locale)
                 let notFoundTitle = pdfPackageGenerator.pdfFormat.getBodyItem.getBodyTitle(
                     'devices not found', 
                     locale, 
-                    area,
+                    null,
                     data.notFoundResult.length !== 0
                 )
                 let notFoundResultList = pdfPackageGenerator.pdfFormat.getBodyItem.getDataContent(data.notFoundResult, locale)
@@ -297,7 +296,6 @@ const pdfPackageGenerator = {
                             border-bottom: 1px solid black;'
                         >
                             ${locale.texts[title.toUpperCase().replace(/ /g, '_')].toUpperCase()}
-                            ${area ? area : ''}
                         </h4>
                     `
                     : ``;
