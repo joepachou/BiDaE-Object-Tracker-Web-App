@@ -163,7 +163,17 @@ export const settingModule = {
             platform: ['browser', 'tablet', 'mobile'],
             permission: "route:gateway",
 
-        }
+        },
+        {
+            name: "monitor settings",
+            alias: "monitor",
+            path: "/page/monitor",
+            module: monitorSettingModule,
+            permission: "route:monitor",
+            platform: ['browser', 'tablet'],
+            component: (props) => <GeoFenceSettingBlock {...props}/>
+            
+        },
         // {
         //     name: "transferred location management",
         //     component: (props) => <TransferredLocationManagement {...props}/>,
@@ -183,16 +193,6 @@ export const settingModule = {
         //     permission: "route:monitor",
         //     platform: ['browser', 'tablet']
         // },
-        // {
-        //     name: "lbeacon",
-        //     component: (props) => <LBeaconTable {...props}/>,
-        //     platform: ['browser', 'tablet', 'mobile']
-        // },
-        // {
-        //     name: "gateway",
-        //     component: (props) => <GatewayTable {...props}/>,
-        //     platform: ['browser', 'tablet', 'mobile']
-        // }
     ]
 }
 
@@ -205,18 +205,18 @@ export const monitorSettingModule= {
     path: routes.MONITOR_SETTINGS,
 
     tabList: [
-        {
-            name: config.monitorSettingType.MOVEMENT_MONITOR,
-            component: (props) => <MonitorSettingBlock {...props}/>
-        },
-        {
-            name: config.monitorSettingType.LONG_STAY_IN_DANGER_MONITOR,
-            component: (props) => <MonitorSettingBlock {...props}/>
-        },
-        {
-            name: config.monitorSettingType.NOT_STAY_ROOM_MONITOR,
-            component: (props) => <MonitorSettingBlock {...props}/>
-        },
+        // {
+        //     name: config.monitorSettingType.MOVEMENT_MONITOR,
+        //     component: (props) => <MonitorSettingBlock {...props}/>
+        // },
+        // {
+        //     name: config.monitorSettingType.LONG_STAY_IN_DANGER_MONITOR,
+        //     component: (props) => <MonitorSettingBlock {...props}/>
+        // },
+        // {
+        //     name: config.monitorSettingType.NOT_STAY_ROOM_MONITOR,
+        //     component: (props) => <MonitorSettingBlock {...props}/>
+        // },
         {
             name: config.monitorSettingType.GEOFENCE_MONITOR,
             component: (props) => <GeoFenceSettingBlock {...props}/>
@@ -342,14 +342,14 @@ export const navbarNavList = [
         path: routes.HOME,
         hasEvent: true
     },
-    {
-        name: "shift change",
-        alias: "shift change",
-        // path: "/",
-        permission: "user:shiftChange",
-        platform: ['browser', 'tablet'],
-        hasEvent: true
-    },
+    // {
+    //     name: "shift change",
+    //     alias: "shift change",
+    //     // path: "/",
+    //     permission: "user:shiftChange",
+    //     platform: ['browser', 'tablet'],
+    //     hasEvent: true
+    // },
     {
         name: 'object management',
         alias: 'objectManagement',

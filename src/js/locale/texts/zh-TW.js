@@ -68,7 +68,7 @@ const tw = {
     DEVICE_SERVICE_REQUEST: "device service request",
     OBJECT_TRACKING: "物件追蹤",
     SHIFT_CHANGE: "交班",
-    MONITOR_SETTING: "監控設定",
+    MONITOR_SETTINGS: "監控設定",
     REPORT: "報表",
     RECORD: " 報表",
     LBEACON: "lbeacon",

@@ -70,7 +70,7 @@ const en =  {
     DEVICE_SERVICE_REQUEST: "device service request",
     OBJECT_TRACKING: "object tracking",
     SHIFT_CHANGE: "shift change",
-    MONITOR_SETTING: "monitor setting",
+    MONITOR_SETTINGS: "monitor settings",
     REPORT: "report",
     RECORD: "records & reports",
     LBEACON: "lbeacon",
