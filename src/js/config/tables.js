@@ -371,6 +371,15 @@ const importTableColumn = [
 
 const objectTableColumn = [
     {
+        Header: 'bind',
+        accessor: 'mac_address',
+        style: style.column,
+        width: 80,
+        Cell: props => props.value 
+            ? <i className="fas fa-circle" style={style.icon.circle}></i>
+            : ""
+    },
+    {
         Header: "Name",
         accessor: "name"
     },

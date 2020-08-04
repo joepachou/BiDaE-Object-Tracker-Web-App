@@ -52,7 +52,7 @@ module.exports = app => {
 
     app.route('/data/object/device')
         .post(objectController.addDevice)
-        .put(objectController.editObject)
+        .put(objectController.editDevice)
 
     app.route('/data/objectPackage')
         .put(objectController.editObjectPackage)

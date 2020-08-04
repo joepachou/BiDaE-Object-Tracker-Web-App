@@ -66,7 +66,7 @@ export default {
             mode
         })
     },
-
+ 
     put: async function({
         formOption,
         mode
@@ -91,6 +91,17 @@ export default {
             pdfPackage,
             reservedTimestamp
         })
+    },
+
+    deleteObject: async function({
+        formOption
+    }) {
+        return await axios.delete(dataSrc.object.object, {
+            data: {
+                formOption
+            }
+        })
     }
+    
 
 }

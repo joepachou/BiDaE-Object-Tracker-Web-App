@@ -160,7 +160,7 @@ class EditObjectForm extends React.Component {
                                         ? null
                                         : selectedRowData.monitor_type.split('/') 
                                 :   [],
-                            transferred_location:status.value === config.objectStatus.TRANSFERRED 
+                            transferred_location: status.value === config.objectStatus.TRANSFERRED 
                                 ? transferred_location 
                                 : '',
                             nickname : nickname || '',
@@ -259,12 +259,13 @@ class EditObjectForm extends React.Component {
                                 id,
                                 ...values,
                                 status: values.status,
-                                transferred_location: values.status === config.objectStatus.TRANSFERRED 
-                                    ? values.transferred_location.value
-                                    : '',
+                                transferred_location: values.status == config.objectStatus.TRANSFERRED 
+                                    ? values.transferred_location.id
+                                    : null,
                                 monitor_type,
                                 area_id: values.area.id || 0
                             }
+
                             while (postOption.type[postOption.type.length - 1] == " "){
                                 postOption.type = postOption.type.substring(0, postOption.type.length - 1);       
                             }
@@ -279,11 +280,10 @@ class EditObjectForm extends React.Component {
                             }   
                             this.props.handleSubmit(postOption)                            
  
-
                         }}
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue, submitForm }) => (
-                            <Form className="text-capitalize">
+                            <Form>
                                 <Row noGutters>
                                     <Col>
                                         <FormikFormGroup 

@@ -69,7 +69,8 @@ import {
     BIND,
     UNBIND,
     DELETE,
-    DEVICE
+    DEVICE,
+    SAVE_SUCCESS
 } from '../../config/wordMap';
 import { JSONClone } from '../../helper/utilities';
 
@@ -77,6 +78,8 @@ import { JSONClone } from '../../helper/utilities';
 class ObjectTable extends React.Component{   
 
     static contextType = AppContext
+    
+    selectTableRef = React.createRef();
 
     state = {
         tabIndex:'', 
@@ -304,14 +307,11 @@ class ObjectTable extends React.Component{
             this.state.data[item] === undefined ?
                 null
                 :
-                formOption.push(this.state.data[item].mac_address)
+                formOption.push(this.state.data[item].id)
             })
-    
 
-        axios.delete(dataSrc.object, {
-            data: {
-                formOption
-            }
+        apiHelper.objectApiAgent.deleteObject({
+            formOption
         })
         .then(res => {
             let callback = () => {
@@ -339,7 +339,9 @@ class ObjectTable extends React.Component{
         })
         .then(res => { 
             let callback = () => {
-                messageGenerator.setSuccessMessage()
+                messageGenerator.setSuccessMessage(
+                    SAVE_SUCCESS
+                )
             }
             this.getData(callback)
         }).catch( error => {
@@ -692,7 +694,6 @@ class ObjectTable extends React.Component{
                             onClick: (e) => {  
                                 if (!e.target.type) { 
                                     this.setState({
-                                        isPatientShowEdit: true, 
                                         isShowEdit: true,
                                         selectedRowData: rowInfo.original,
                                         formTitle: 'edit object',
@@ -752,7 +753,7 @@ class ObjectTable extends React.Component{
                     show={this.state.showDeleteConfirmation} 
                     handleClose={this.handleClose}
                     handleSubmit={
-                        this.state.warningSelect == 1 ?  this.objectMultipleDelete :null
+                        this.state.warningSelect == 1 ? this.objectMultipleDelete : null
                     }
                 />
             </div>

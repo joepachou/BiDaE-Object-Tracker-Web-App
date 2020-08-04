@@ -155,23 +155,24 @@ const editPersona = (formOption) => {
 }
 
 
-const editObject = (formOption) => {
+const editDevice = (formOption) => {
 	 
 	let text = 
 		`
 		Update object_table 
-		SET type = $1,
-			status = $2,
-			transferred_location = '${formOption.transferred_location}',
-			asset_control_number = $3,
-			name = $4,
-			monitor_type = $5,
-			area_id = $6,
-			mac_address = $7,
-			nickname = $8
-		WHERE asset_control_number = $3
+		SET type = $2,
+			status = $3,
+			asset_control_number = $4,
+			name = $5,
+			monitor_type = $6,
+			area_id = $7,
+			mac_address = $8,
+			nickname = $9,
+			transferred_location = $10
+		WHERE id = $1
 		`
 	const values = [
+		formOption.id,
 		formOption.type, 
 		formOption.status, 
 		formOption.asset_control_number, 
@@ -179,7 +180,8 @@ const editObject = (formOption) => {
 		formOption.monitor_type,
 		formOption.area_id,
 		formOption.mac_address,
-		formOption.nickname
+		formOption.nickname,
+		formOption.transferred_location
 	];
 
 	const query = {
@@ -190,11 +192,11 @@ const editObject = (formOption) => {
 	return query;
 }
 
-const deleteObject = (formOption) => {
+const deleteObject = formOption => {
     
 	const query = `
 		DELETE FROM object_table
-		WHERE mac_address IN (${formOption.map(item => `'${item}'`)});
+		WHERE id IN (${formOption.map(item => `'${item}'`)});
 	`
 	return query
 }
@@ -289,13 +291,22 @@ const addObjectSummaryRecord = (mac_address) => {
 	}
 }
 
+const deleteObjectSummaryRecord = mac_address => {
+	return `
+		DELETE FROM object_summary_table
+		WHERE mac_address = ${mac_address}
+
+	`
+}
+
 module.exports = {
     getObject,
 	addPersona,
 	addObject,
-	editObject,
+	editDevice,
     editPersona,
 	deleteObject,
 	editObjectPackage,
-	addObjectSummaryRecord
+	addObjectSummaryRecord,
+	deleteObjectSummaryRecord
 }
