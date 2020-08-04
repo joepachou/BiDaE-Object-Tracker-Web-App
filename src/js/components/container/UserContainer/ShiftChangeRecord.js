@@ -89,7 +89,7 @@ class ShiftChangeRecord extends React.Component{
             locale.abbr
         )
         .then(res => {
-            let columns = _.cloneDeep(shiftChangeRecordTableColumn)
+            let columns = shiftChangeRecordTableColumn;
             columns.map(field => {
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })

@@ -90,7 +90,7 @@ class AddableList extends React.Component{
             },
             removeItem: (item) => {
                 this.setState({
-                    itemList: _.without(this.state.itemList, item)
+                    // itemList: _.without(this.state.itemList, item)
                 })
                 this.Update('remove', item)
             },

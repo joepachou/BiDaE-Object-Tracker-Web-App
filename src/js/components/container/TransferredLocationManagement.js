@@ -82,7 +82,7 @@ class TranferredLocationManagement extends React.Component{
 
     getColumn = () => {
         const { locale } = this.context
-        let column = _.cloneDeep(TransferredLocationColumn) 
+        let column = TransferredLocationColumn
         column.map(item => {
             item.headerStyle = {
                 textAlign: 'left',

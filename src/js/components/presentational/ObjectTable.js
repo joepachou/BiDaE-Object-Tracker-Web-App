@@ -124,7 +124,7 @@ class ObjectTable extends React.Component{
     getRefresh = () =>{
         this.getAreaTable()
 
-        let columns = _.cloneDeep(objectTableColumn) 
+        let columns = objectTableColumn;
 
         let {
             locale
@@ -192,8 +192,7 @@ class ObjectTable extends React.Component{
             objectType: [0, 1, 2]
         })
         .then(res => {
-            let columns = _.cloneDeep(objectTableColumn)
-            // let columnPatient = _.cloneDeep(patientTableColumn)
+            let columns = objectTableColumn
             let typeList = {} 
 
             columns.map(field => {
@@ -223,7 +222,7 @@ class ObjectTable extends React.Component{
                             label: item.type
                         }
                     }
-                    
+
                     item.area_name = {
                         value: item.area_name,
                         label: locale.texts[item.area_name],

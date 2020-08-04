@@ -42,7 +42,6 @@ import {
     Row, 
     Dropdown
 } from 'react-bootstrap';
-import _ from 'lodash';
 import { AppContext } from '../../context/AppContext';
 import config from '../../config';
 import { getDescription } from '../../helper/descriptionGenerator';

@@ -88,7 +88,7 @@ class ObjectEditedRecord extends React.Component{
             locale.abbr
         )
         .then(res => {
-            let columns = _.cloneDeep(editObjectRecordTableColumn)
+            let columns = editObjectRecordTableColumn;
             columns.map(field => {
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })

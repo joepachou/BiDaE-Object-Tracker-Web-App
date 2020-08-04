@@ -100,7 +100,7 @@ class SystemStatus extends React.Component{
         })
         .then(res => {
             this.setMessage('clear')
-            let column = _.cloneDeep(trackingTableColumn)
+            let column = trackingTableColumn
             column.map(field => {
                 field.headerStyle = {
                     textAlign: 'left',

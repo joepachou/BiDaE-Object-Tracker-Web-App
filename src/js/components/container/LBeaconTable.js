@@ -103,7 +103,7 @@ class LbeaconTable extends React.Component{
         })
         .then(res => {
             this.props.setMessage('clear')
-            let column = _.cloneDeep(lbeaconTableColumn)
+            let column = lbeaconTableColumn;
             column.map(field => {
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })

@@ -40,7 +40,6 @@ import ReactDOM from 'react-dom';
 import L from 'leaflet';
 import 'leaflet.markercluster';
 import '../../../config/leafletAwesomeNumberMarkers';
-import _ from 'lodash'
 import { AppContext } from '../../../context/AppContext';
 import  pinImage from "./pinImage"
 import siteConfig from '../../../../../site_module/siteConfig'

@@ -110,7 +110,7 @@ class ObjectTableContainer extends React.Component{
     getRefresh = () =>{
         this.getAreaTable()
 
-        let columns = _.cloneDeep(patientTableColumn) 
+        let columns = patientTableColumn;
 
         let {
             locale
@@ -151,7 +151,7 @@ class ObjectTableContainer extends React.Component{
             objectType: [0, 1, 2]
         })
         .then(res => {
-            let columns = _.cloneDeep(patientTableColumn)
+            let columns = patientTableColumn;
             let data = [] 
 
             columns.map(field => {

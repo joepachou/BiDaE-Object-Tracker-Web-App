@@ -39,7 +39,6 @@ import React from 'react';
 import L from 'leaflet';
 import 'leaflet.markercluster';
 import '../../config/leafletAwesomeNumberMarkers';
-import _ from 'lodash'
 import { AppContext } from '../../context/AppContext';
 import axios from 'axios';
 import dataSrc from '../../dataSrc';
@@ -61,6 +60,10 @@ import {
 import {
     countNumber
 } from '../../helper/dataTransfer';
+import {
+    JSONClone,
+    isEqual
+} from '../../helper/utilities';
 
 class Map extends React.Component {
     
@@ -100,21 +103,21 @@ class Map extends React.Component {
             this.handleObjectMarkers();
         }
 
-        if (!(_.isEqual(prevProps.lbeaconPosition, this.props.lbeaconPosition)) ||
-            !(_.isEqual(prevProps.currentAreaId, this.context.stateReducer[0].areaId)) ||
-            !(_.isEqual(prevProps.authenticated, this.props.authenticated))
+        if (!(isEqual(prevProps.lbeaconPosition, this.props.lbeaconPosition)) ||
+            !(isEqual(prevProps.currentAreaId, this.context.stateReducer[0].areaId)) ||
+            !(isEqual(prevProps.authenticated, this.props.authenticated))
             ) {
             this.createLbeaconMarkers(this.props.lbeaconPosition, this.lbeaconsPosition)
         }
 
-        if (!(_.isEqual(prevProps.geofenceConfig, this.props.geofenceConfig))) {
+        if (!(isEqual(prevProps.geofenceConfig, this.props.geofenceConfig))) {
             this.createGeofenceMarkers()
         }
 
-        if (!(_.isEqual(prevProps.locationMonitorConfig, this.props.locationMonitorConfig))) {
+        if (!(isEqual(prevProps.locationMonitorConfig, this.props.locationMonitorConfig))) {
             this.createLocationMonitorMarkers()
         }
-        if(!(_.isEqual(prevProps.pathMacAddress, this.props.pathMacAddress))){
+        if(!(isEqual(prevProps.pathMacAddress, this.props.pathMacAddress))){
             this.drawPolyline();
         }
 
@@ -479,7 +482,7 @@ class Map extends React.Component {
 
         let numberSheet = {}
 
-        this.filterTrackingData(_.cloneDeep(this.props.proccessedTrackingData))
+        this.filterTrackingData(JSONClone(this.props.proccessedTrackingData))
         .map((item, index)  => {
             /** Calculate the position of the object  */
             let position = macAddressToCoordinate(

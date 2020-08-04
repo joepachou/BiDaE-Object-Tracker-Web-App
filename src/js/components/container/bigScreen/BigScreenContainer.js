@@ -43,7 +43,6 @@ import {
 } from 'react-bootstrap'
 import MapContainer from './MapContainer';
 import config from '../../../config';
-import _ from 'lodash'
 import axios from 'axios';
 import dataSrc from '../../../dataSrc'
 import { AppContext } from '../../../context/AppContext'

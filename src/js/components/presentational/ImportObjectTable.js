@@ -88,7 +88,7 @@ class ImportObjectTable extends React.Component{
             locale: locale.abbr,
         })
         .then(res => { 
-            let columns = _.cloneDeep(importTableColumn)
+            let columns = importTableColumn;
             columns.map(field => {
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             }) 

@@ -53,6 +53,7 @@ import {
 } from '../BOTComponent/styleComponent'
 import AccessControl from '../authentication/AccessControl';
 import apiHelper from '../../helper/apiHelper';
+import { JSONClone } from '../../helper/utilities';
 
 const SelectTable = selecTableHOC(ReactTable);
 
@@ -118,7 +119,7 @@ class GeoFenceSettingBlock extends React.Component{
             auth.user.areas_id
         )
         .then(res => {
-            let columns = _.cloneDeep(geofenceConfigColumn)
+            let columns = JSONClone(geofenceConfigColumn)
 
             columns.map(field => {
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]

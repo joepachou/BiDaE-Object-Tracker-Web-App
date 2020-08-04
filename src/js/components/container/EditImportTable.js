@@ -49,6 +49,10 @@ import {
     deleteImportData
 } from "../../dataSrc"
 import messageGenerator from '../../helper/messageGenerator'
+import {
+    isEqual
+} from '../../helper/utilities';
+
 class EditImportTable extends React.Component {
     state = {
         show: this.props.show,
@@ -58,7 +62,7 @@ class EditImportTable extends React.Component {
     
 
     componentDidUpdate = (prevProps) => {
-        if (!(_.isEqual(prevProps, this.props))) {
+        if (!(isEqual(prevProps, this.props))) {
             this.setState({
                 show: this.props.show
             })

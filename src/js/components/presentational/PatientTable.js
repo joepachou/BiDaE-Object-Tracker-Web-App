@@ -111,7 +111,7 @@ class PatientTable extends React.Component{
             objectType: [0, 1, 2]
         })
         .then(res => {
-            let columns = _.cloneDeep(patientTableColumn)
+            let columns = patientTableColumn;
             let data = [] 
             let typeList = {} 
 

@@ -139,7 +139,7 @@ class ObjectManagementContainer extends React.Component{
             locale: locale.abbr
         })
         .then(res => {
-            let columnImport = _.cloneDeep(importTableColumn)
+            let columnImport = importTableColumn
             columnImport.map(field => {
                 field.headerStyle = {
                     textAlign: 'left',
@@ -233,8 +233,8 @@ class ObjectManagementContainer extends React.Component{
             objectType: [0, 1, 2]
         })
         .then(res => {
-            let column = _.cloneDeep(objectTableColumn)
-            let columnPatient = _.cloneDeep(patientTableColumn)
+            let column = objectTableColumn
+            let columnPatient = patientTableColumn
             let data = [] 
             let dataPatient = []
             let typeList = {} 

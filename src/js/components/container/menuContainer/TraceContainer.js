@@ -64,6 +64,9 @@ import {
 import axios from 'axios';
 import dataSrc from '../../../dataSrc';
 import apiHelper from '../../../helper/apiHelper';
+import {
+    JSONClone
+} from '../../../helper/utilities';
 
 
 class TraceContainer extends React.Component{
@@ -144,7 +147,7 @@ class TraceContainer extends React.Component{
             locale
         } = this.context
         if (this.context.locale.abbr !== prevState.locale) {   
-            let columns = _.cloneDeep(this.columns).map(field => {
+            let columns = JSONClone(this.columns).map(field => {
                 field.name = field.Header
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
                 return field
@@ -253,7 +256,7 @@ class TraceContainer extends React.Component{
 
         this.columns = this.navList[fields.mode].columns;
 
-        let columns = _.cloneDeep(this.columns).map(field => {
+        let columns = JSONClone(this.columns).map(field => {
             field.name = field.Header
             field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             return field

@@ -102,7 +102,7 @@ class GatewayTable extends React.Component{
         })
         .then(res => {
             this.props.setMessage('clear')
-            let column = _.cloneDeep(gatewayTableColumn)
+            let column = gatewayTableColumn;
             column.map(field => {
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })

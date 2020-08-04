@@ -35,7 +35,6 @@
 */
 
 import React, { Fragment } from 'react';
-import _ from 'lodash';
 import { AppContext } from '../../context/AppContext';
 import {
     BrowserView,
@@ -62,6 +61,9 @@ import {
     SET_ENABLE_REQUEST_TRACKING_DATA
 } from '../../reducer/action';
 import { editTransferredLocation } from '../../../../api/db/dbQueries/transferredLocationQueries';
+import {
+    JSONClone
+} from '../../helper/utilities';
 
 class SearchResultList extends React.Component {
 
@@ -159,7 +161,7 @@ class SearchResultList extends React.Component {
 
     handleChangeObjectStatusFormSubmit = values => {
 
-        let editedObjectPackage = _.cloneDeep(this.state.selectedObjectData).map(item => {
+        let editedObjectPackage = JSONClone(this.state.selectedObjectData).map(item => {
             item.status = values.status.toLowerCase(),
             item.transferred_location = values.transferred_location ? values.transferred_location : '';
             item.notes = values.notes

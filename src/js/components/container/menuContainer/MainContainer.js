@@ -36,7 +36,6 @@
 import React, { Fragment } from 'react';
 import 'react-table/react-table.css';
 import config from '../../../config';
-import _ from 'lodash';
 import axios from 'axios';
 import dataSrc from '../../../dataSrc'
 import { AppContext } from '../../../context/AppContext';
@@ -56,6 +55,10 @@ import apiHelper from '../../../helper/apiHelper';
 import {
     createLbeaconCoordinate
 } from '../../../helper/dataTransfer';
+import {
+    isEqual,
+    JSONClone
+} from '../../../helper/utilities';
 import { 
     SWITCH_SEARCH_LIST, 
     CLEAR_SEARCH_RESULT,
@@ -127,7 +130,9 @@ class MainContainer extends React.Component{
     }
 
     componentDidUpdate = (prevProps, prevState) => {
-        let isTrackingDataChange = !(_.isEqual(this.state.trackingData, prevState.trackingData))
+
+        
+        let isTrackingDataChange = !(isEqual(this.state.trackingData, prevState.trackingData))
 
         let { 
             stateReducer
@@ -144,7 +149,7 @@ class MainContainer extends React.Component{
             })
         }
 
-        if (!(_.isEqual(prevState.currentAreaId, stateReducer[0].areaId))){
+        if (!(isEqual(prevState.currentAreaId, stateReducer[0].areaId))){
             this.setState({
                 currentAreaId: stateReducer[0].areaId
             })
@@ -248,7 +253,7 @@ class MainContainer extends React.Component{
         let triggerMonitorFunctionName = `get${configName.replace(/^\w/, (chr) => {
             return chr.toUpperCase()
         })}`
-        let cloneConfig = _.cloneDeep(this.state[configName])
+        let cloneConfig = JSONClone(this.state[configName])
 
         let enable = + !cloneConfig[areaId].enable
         // retrieveDataHelper.setMonitorEnable(
@@ -289,7 +294,7 @@ class MainContainer extends React.Component{
                 this.errorToast = null;
                 toast.dismiss(this.errorToast)
             }
-            let violatedObjects = _.cloneDeep(this.state.violatedObjects)
+            let violatedObjects = JSONClone(this.state.violatedObjects)
             /** collect violated objects as violatedObjects */
             res.data.map((item, index) => {
 
@@ -434,7 +439,7 @@ class MainContainer extends React.Component{
             auth
         } = this.context
 
-        let proccessedTrackingData = _.cloneDeep(trackingData)  
+        let proccessedTrackingData = JSONClone(trackingData)  
 
         const devicesAccessControlNumber = auth.user.myDevice || []
 
@@ -643,7 +648,7 @@ class MainContainer extends React.Component{
             }
             return showedObjects
 
-        }, _.cloneDeep(this.state.showedObjects))
+        }, JSONClone(this.state.showedObjects))
         this.setState({
             showedObjects
         })

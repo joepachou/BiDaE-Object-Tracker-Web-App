@@ -96,7 +96,7 @@ class AdminManagementContainer extends React.Component{
             locale: locale.abbr
         })
         .then(res => { 
-            let columns = _.cloneDeep(userInfoTableColumn)
+            let columns = userInfoTableColumn;
             columns.map((field, index) => {
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             }) 

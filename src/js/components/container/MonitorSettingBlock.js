@@ -55,6 +55,9 @@ import {
 } from '../BOTComponent/styleComponent';
 import AccessControl from '../authentication/AccessControl';
 import apiHelper from '../../helper/apiHelper';
+import {
+    JSONClone
+} from '../../helper/utilities';
 
 class MonitorSettingBlock extends React.Component{
 
@@ -88,7 +91,7 @@ class MonitorSettingBlock extends React.Component{
             auth.user.areas_id,
         )
         .then(res => { 
-            let columns = _.cloneDeep(monitorConfigColumn)
+            let columns = JSONClone(monitorConfigColumn)
 
             columns.map(field => {
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
