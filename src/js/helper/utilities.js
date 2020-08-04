@@ -40,7 +40,9 @@ export const isEqual = (obj1, obj2) => {
     return JSON.stringify(obj1) == JSON.stringify(obj2);
 }
 
-/** Deep clone */
-export const JSONClone = (obj) => {
-    return JSON.parse(JSON.stringify(obj))
+/** Deep clone for json format */
+export const JSONClone = (arr) => {
+    return arr.map(object => {
+        return Object.assign({}, object)
+    }, )
 }
