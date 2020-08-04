@@ -67,7 +67,16 @@ const dataSrc = {
 
     },
 
-    object: `${domain}/data/object`,
+    // object: `${domain}/data/object`,
+
+    object: {
+
+        object: `${domain}/data/object`,
+
+        device: `${domain}/data/object/device`,
+
+        person: `${domain}/data/object/person`
+    },
 
     objectPackage: `${domain}/data/objectPackage`,
 

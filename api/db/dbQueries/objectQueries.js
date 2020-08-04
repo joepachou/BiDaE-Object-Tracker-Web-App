@@ -269,6 +269,26 @@ const editObjectPackage = (
 	return text
 }
 
+const addObjectSummaryRecord = (mac_address) => {
+	let text = `
+		INSERT INTO object_summary_table (
+			mac_address
+		) 
+		values (
+			$1
+		)
+	`
+
+	let values =[
+		mac_address
+	]
+
+	return {
+		text, 
+		values
+	}
+}
+
 module.exports = {
     getObject,
 	addPersona,
@@ -277,4 +297,5 @@ module.exports = {
     editPersona,
 	deleteObject,
 	editObjectPackage,
+	addObjectSummaryRecord
 }

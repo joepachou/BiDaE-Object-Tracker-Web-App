@@ -68,6 +68,7 @@ module.exports = {
     },
 
     addObject: (request, response) => {
+
         const {
             formOption,
             mode
@@ -90,6 +91,46 @@ module.exports = {
             })
             .catch(err => {
                 console.log(`add ${mode} failed ${err}`);
+            })
+    },
+
+    addDevice: (request, response) => {
+        const {
+            formOption,
+            mode
+        } = request.body
+
+
+        pool.query(dbQueries.addObject(formOption))
+            .then(res => {
+                console.log(`add device succeed`);
+                pool.query(dbQueries.addObjectSummaryRecord(formOption.mac_address))
+                    .then(res => {
+                        console.log(`add record in object summary table succeed`)
+                        response.status(200).json(res)
+                    }) 
+                    .catch(err => {
+                        console.log(`add record in object summary table failed ${err}`)
+                    })
+            })
+            .catch(err => {
+                console.log(`add device failed ${err}`);
+            })
+    },
+
+    addPerson: (request, response) => {
+        const {
+            formOption,
+            mode
+        } = request.body
+
+        pool.query(dbQueries.addPersona(formOption))
+            .then(res => {
+                console.log(`add person succeed`);
+                response.status(200).json(res)
+            })
+            .catch(err => {
+                console.log(`add person failed ${err}`);
             })
     },
 

@@ -16,6 +16,8 @@ module.exports = {
 
     OBJECTS: "objects",
 
+    DEVICE: "device",
+
     OBJECT_TYPE: "object type",
 
     SEARCH_HISTORY: "search history",
@@ -30,6 +32,15 @@ module.exports = {
 
     FOUND: "found",
 
-    NOT_FOUND: "not found"
-    
+    NOT_FOUND: "not found",
+
+    BIND: "bind",
+
+    UNBIND: "unbind",
+
+    ADD: "add",
+
+    DELETE: "delete",
+
+    SAVE_SUCCESS: "save success"
 }

@@ -64,6 +64,13 @@ import {
     transferMonitorTypeToString
 } from '../../helper/dataTransfer';
 import moment from 'moment';
+import {
+    ADD,
+    BIND,
+    UNBIND,
+    DELETE,
+    DEVICE
+} from '../../config/wordMap';
 
 
 class ObjectTable extends React.Component{   
@@ -204,11 +211,11 @@ class ObjectTable extends React.Component{
                         label: item.status ? locale.texts[item.status.toUpperCase()] : null,
                     }
                     item.transferred_location = item.transferred_location.id 
-                        ? {
+                        && {
                             value: `${item.transferred_location.name}-${item.transferred_location.department}`, 
                             label: `${item.transferred_location.name}-${item.transferred_location.department}` 
                         }
-                        : ''
+                        
 
                     if (!Object.keys(typeList).includes(item.type)) { 
                         typeList[item.type] = {
@@ -328,13 +335,11 @@ class ObjectTable extends React.Component{
 
         apiHelper.objectApiAgent[apiMethod]({
             formOption,
-            mode: 'DEVICE',
+            mode: DEVICE,
         })
         .then(res => { 
             let callback = () => {
-                messageGenerator.setSuccessMessage(
-                    'save success'
-                )
+                messageGenerator.setSuccessMessage()
             }
             this.getData(callback)
         }).catch( error => {
@@ -391,7 +396,7 @@ class ObjectTable extends React.Component{
         let { name } = e.target
         
         switch(name) {
-            case 'add object': 
+            case ADD: 
                 this.setState({
                     isShowEdit: true,
                     formTitle: name,
@@ -401,15 +406,21 @@ class ObjectTable extends React.Component{
                     apiMethod: 'post',
                 })
                 break;
-            case 'associate':
+            case BIND:
                 this.setState({
                     isShowBind: true,
                     bindCase: 1,
                     apiMethod: 'post',
                 })
             break; 
-
-            case 'deleteObject':
+            case UNBIND:
+                this.setState({
+                    isShowBind: true,
+                    bindCase: 1,
+                    apiMethod: 'post',
+                })
+            break; 
+            case DELETE:
                 this.setState({
                     showDeleteConfirmation: true,
                     warningSelect : 1
@@ -637,19 +648,25 @@ class ObjectTable extends React.Component{
                     >
                         <ButtonToolbar>
                             <PrimaryButton
-                                name='associate'
+                                name={BIND}
                                 onClick={this.handleClickButton}
                             >
-                                {locale.texts.ASSOCIATE}
+                                {locale.texts.BIND}
                             </PrimaryButton>
                             <PrimaryButton
-                                name='add object'
+                                name={ADD}
                                 onClick={this.handleClickButton}
                             >
                                 {locale.texts.ADD}
                             </PrimaryButton>
+                            <PrimaryButton
+                                name={UNBIND}
+                                onClick={this.handleClickButton}
+                            >
+                                {locale.texts.UNBIND}
+                            </PrimaryButton>
                             <PrimaryButton 
-                                name='deleteObject'
+                                name={DELETE}
                                 onClick={this.handleClickButton}
                             >
                                 {locale.texts.DELETE}

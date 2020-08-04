@@ -38,9 +38,12 @@
 import React from 'react'
 import ToastMessage from '../components/presentational/ToastMessage'
 import { toast, Slide, Zoom, Flip} from 'react-toastify';
+import {
+    SAVE_SUCCESS
+} from '../config/wordMap';
 
 const setSuccessMessage = (
-    msg 
+    msg = SAVE_SUCCESS
 ) => {
     return (
         toast.success(<ToastMessage msg={msg}  />, {

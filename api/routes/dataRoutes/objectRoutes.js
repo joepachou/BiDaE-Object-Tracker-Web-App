@@ -43,13 +43,16 @@ module.exports = app => {
 
     // enable pre-flight request for DELETE request
     app.options('/data/object', cors()) 
+    app.options('/data/object/:type', cors()) 
     app.options('/data/objectPackage', cors())
 
     app.route('/data/object')
         .get(objectController.getObject)
-        .post(objectController.addObject)
-        .put(objectController.editObject)
         .delete(objectController.deleteObject)
+
+    app.route('/data/object/device')
+        .post(objectController.addDevice)
+        .put(objectController.editObject)
 
     app.route('/data/objectPackage')
         .put(objectController.editObjectPackage)

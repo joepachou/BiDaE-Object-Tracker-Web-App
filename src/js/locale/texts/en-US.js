@@ -194,6 +194,8 @@ const en =  {
     SHOW_SEARCH_RESULTS_NOT_FOUND: "show search results not found",
     ASSOCIATE: "associate",
     DISSOCIATE: "dissociate",
+    BIND: "bind",
+    UNBIND: "unbind",
     IMPORT_OBJECT:"Import Excel",
     ACN_VERIFICATION:"ACN Verification",
     BINDING_SETTING:"Binding Setting",

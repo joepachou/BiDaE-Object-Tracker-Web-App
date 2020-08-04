@@ -35,7 +35,7 @@
 */
 
 
-import dataSrc from '../dataSrc';
+import dataSrc from '../dataSrc'; 
 import axios from 'axios';
 
 export default {
@@ -48,7 +48,7 @@ export default {
         areas_id, 
         objectType
     }){
-        return await axios.get(dataSrc.object, {
+        return await axios.get(dataSrc.object.object, {
             params: {
                 locale,
                 areas_id,
@@ -61,7 +61,7 @@ export default {
         formOption,
         mode,
     }) {
-        return await axios.post(dataSrc.object, {
+        return await axios.post(dataSrc.object[mode], {
             formOption,
             mode
         })
@@ -71,7 +71,7 @@ export default {
         formOption,
         mode
     }) {
-        return await axios.put(dataSrc.object, {
+        return await axios.put(dataSrc.object[mode], {
             formOption,
             mode
         })
