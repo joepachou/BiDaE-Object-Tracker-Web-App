@@ -56,6 +56,9 @@ import {
 import AccessControl from '../../authentication/AccessControl';
 import config from '../../../config';
 import apiHelper from '../../../helper/apiHelper';
+import {
+    JSONClone
+} from '../../../helper/utilities';
 
 class AdminManagementContainer extends React.Component{
 
@@ -96,7 +99,7 @@ class AdminManagementContainer extends React.Component{
             locale: locale.abbr
         })
         .then(res => { 
-            let columns = userInfoTableColumn;
+            let columns = JSONClone(userInfoTableColumn);
             columns.map((field, index) => {
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             }) 

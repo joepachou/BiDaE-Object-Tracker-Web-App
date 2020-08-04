@@ -26,6 +26,7 @@ import {
     NoDataFoundDiv
 } from '../BOTComponent/styleComponent'
 import Loader from '../presentational/Loader'
+import { JSONClone } from '../../helper/utilities';
 
 class TrackingHistory extends React.Component{
     static contextType = AppContext
@@ -60,11 +61,11 @@ class TrackingHistory extends React.Component{
         switch(fields.mode) {
             case "mac":
                 key = fields.key.toLowerCase().replace(/[: ]/g, '').match(/.{1,2}/g).join(':')
-                columns = locationHistoryByMacColumns
+                columns = JSONClone(locationHistoryByMacColumns);
                 break;
             case "uuid":
                 key = fields.key
-                columns = locationHistoryByUUIDColumns
+                columns = JSONClone(locationHistoryByUUIDColumns);
                 break;
         }
 

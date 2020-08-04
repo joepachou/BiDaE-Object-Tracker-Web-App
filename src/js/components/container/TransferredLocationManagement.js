@@ -49,6 +49,7 @@ import {
 } from '../../config/tables'
 import messageGenerator from '../../helper/messageGenerator';
 import apiHelper from '../../helper/apiHelper';
+import { JSONClone } from '../../helper/utilities';
 
 class TranferredLocationManagement extends React.Component{
 
@@ -82,7 +83,7 @@ class TranferredLocationManagement extends React.Component{
 
     getColumn = () => {
         const { locale } = this.context
-        let column = TransferredLocationColumn
+        let column = JSONClone(TransferredLocationColumn);
         column.map(item => {
             item.headerStyle = {
                 textAlign: 'left',

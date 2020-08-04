@@ -56,6 +56,7 @@ import { toast } from 'react-toastify';
 import LBeaconTable from './LBeaconTable'
 import GatewayTable from './GatewayTable' 
 import messageGenerator from '../../helper/messageGenerator';
+import { JSONClone } from '../../helper/utilities';
  
 
 class SystemStatus extends React.Component{
@@ -100,7 +101,7 @@ class SystemStatus extends React.Component{
         })
         .then(res => {
             this.setMessage('clear')
-            let column = trackingTableColumn
+            let column = JSONClone(trackingTableColumn);
             column.map(field => {
                 field.headerStyle = {
                     textAlign: 'left',

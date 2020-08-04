@@ -62,6 +62,7 @@ import { patientTableColumn } from '../../config/tables';
 import config from '../../config';
 import dataSrc from '../../dataSrc';
 import apiHelper from '../../helper/apiHelper';
+import { JSONClone } from '../../helper/utilities';
 
 
 class PatientTable extends React.Component{
@@ -111,7 +112,7 @@ class PatientTable extends React.Component{
             objectType: [0, 1, 2]
         })
         .then(res => {
-            let columns = patientTableColumn;
+            let columns = JSONClone(patientTableColumn);
             let data = [] 
             let typeList = {} 
 

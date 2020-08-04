@@ -63,6 +63,7 @@ import apiHelper from '../../../helper/apiHelper';
 import {
     transferMonitorTypeToString
 } from '../../../helper/dataTransfer';
+import { JSONClone } from '../../../helper/utilities';
 
 class ObjectTableContainer extends React.Component{  
     
@@ -110,7 +111,7 @@ class ObjectTableContainer extends React.Component{
     getRefresh = () =>{
         this.getAreaTable()
 
-        let columns = patientTableColumn;
+        let columns = JSONClone(patientTableColumn);
 
         let {
             locale
@@ -151,7 +152,7 @@ class ObjectTableContainer extends React.Component{
             objectType: [0, 1, 2]
         })
         .then(res => {
-            let columns = patientTableColumn;
+            let columns = JSONClone(patientTableColumn);
             let data = [] 
 
             columns.map(field => {

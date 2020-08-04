@@ -106,6 +106,7 @@ export const getDescription = (item, locale) => {
 }
 
 export const getSubDescription = (item, locale) => {
+    console.log(123)
     let toReturn = 
         locale.abbr == 'en'
             ?   `
@@ -124,6 +125,8 @@ export const getSubDescription = (item, locale) => {
                     : `${locale.texts.NOT_AVAILABLE}`
                 } 
             `
+            console.log(toReturn)
+
     return toReturn
 }
 

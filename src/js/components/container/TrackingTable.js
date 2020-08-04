@@ -46,6 +46,7 @@ import { toast } from 'react-toastify';
 import messageGenerator from '../../helper/messageGenerator';
 import styleConfig from '../../config/styleConfig';
 import apiHelper from '../../helper/apiHelper';
+import { JSONClone } from '../../helper/utilities';
  
 
 class TrackingTable extends React.Component{
@@ -88,7 +89,7 @@ class TrackingTable extends React.Component{
         })
         .then(res => {
             this.setMessage('clear')
-            let column = trackingTableColumn
+            let column = JSONClone(trackingTableColumn);
             column.map(field => {
                 field.headerStyle = {
                     textAlign: 'left',

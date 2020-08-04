@@ -58,6 +58,9 @@ import {
 import AccessControl from '../authentication/AccessControl';
 import messageGenerator from '../../helper/messageGenerator';
 import apiHelper from '../../helper/apiHelper';
+import {
+    JSONClone
+} from '../../helper/utilities';
 
 const SelectTable = selecTableHOC(ReactTable);
 
@@ -99,11 +102,11 @@ class LbeaconTable extends React.Component{
         let { locale } = this.context
 
         apiHelper.lbeaconApiAgent.getLbeaconTable({
-            locale: locale.abbr
+            locale: locale.code
         })
         .then(res => {
             this.props.setMessage('clear')
-            let column = lbeaconTableColumn;
+            let column = JSONClone(lbeaconTableColumn);
             column.map(field => {
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })

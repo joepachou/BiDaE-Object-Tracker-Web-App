@@ -58,6 +58,7 @@ import {
 import AccessControl from '../authentication/AccessControl';
 import EditGatewayForm from '../presentational/form/EditGatewayForm';
 import apiHelper from '../../helper/apiHelper';
+import { JSONClone } from '../../helper/utilities';
 
 class GatewayTable extends React.Component{
     
@@ -98,11 +99,11 @@ class GatewayTable extends React.Component{
         } = this.context
 
         apiHelper.gatewayApiAgent.getGatewayTable({
-            locale: locale.abbr,
+            locale: locale.code
         })
         .then(res => {
             this.props.setMessage('clear')
-            let column = gatewayTableColumn;
+            let column = JSONClone(gatewayTableColumn);
             column.map(field => {
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })

@@ -139,7 +139,7 @@ class ObjectManagementContainer extends React.Component{
             locale: locale.abbr
         })
         .then(res => {
-            let columnImport = importTableColumn
+            let columnImport = JSONClone(importTableColumn);
             columnImport.map(field => {
                 field.headerStyle = {
                     textAlign: 'left',

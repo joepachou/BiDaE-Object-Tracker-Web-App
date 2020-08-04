@@ -54,6 +54,7 @@ import {
 } from '../../BOTComponent/styleComponent'
 import apiHelper from '../../../helper/apiHelper';
 import config from '../../../config';
+import { JSONClone } from '../../../helper/utilities';
 
 class ObjectEditedRecord extends React.Component{
 
@@ -88,7 +89,7 @@ class ObjectEditedRecord extends React.Component{
             locale.abbr
         )
         .then(res => {
-            let columns = editObjectRecordTableColumn;
+            let columns = JSONClone(editObjectRecordTableColumn);
             columns.map(field => {
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })

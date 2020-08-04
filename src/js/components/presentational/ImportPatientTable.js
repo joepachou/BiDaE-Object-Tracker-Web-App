@@ -53,6 +53,7 @@ import {
 import AccessControl from '../authentication/AccessControl';
 import { importTableColumn } from '../../config/tables';
 import apiHelper from '../../helper/apiHelper';
+import { JSONClone } from '../../helper/utilities';
 
 const SelectTable = selecTableHOC(ReactTable);
 
@@ -88,7 +89,7 @@ class ImportPatientTable extends React.Component{
             locale: locale.abbr,
         })
         .then(res => { 
-            let columns = importTableColumn;
+            let columns = JSONClone(importTableColumn);
             columns.map(field => {
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             }) 

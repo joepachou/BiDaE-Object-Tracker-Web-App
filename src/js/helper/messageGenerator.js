@@ -43,7 +43,7 @@ import {
 } from '../config/wordMap';
 
 const setSuccessMessage = (
-    msg = SAVE_SUCCESS
+    msg
 ) => {
     return (
         toast.success(<ToastMessage msg={msg}  />, {

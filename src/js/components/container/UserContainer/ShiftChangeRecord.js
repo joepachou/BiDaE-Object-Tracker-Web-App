@@ -54,6 +54,7 @@ import {
 } from '../../BOTComponent/styleComponent'
 import apiHelper from '../../../helper/apiHelper';
 import config from '../../../config';
+import { JSONClone } from '../../../helper/utilities';
 
 class ShiftChangeRecord extends React.Component{
 
@@ -89,7 +90,8 @@ class ShiftChangeRecord extends React.Component{
             locale.abbr
         )
         .then(res => {
-            let columns = shiftChangeRecordTableColumn;
+            let columns = JSONClone(shiftChangeRecordTableColumn);
+            
             columns.map(field => {
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })

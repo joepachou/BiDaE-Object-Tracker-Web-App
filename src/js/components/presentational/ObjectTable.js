@@ -71,6 +71,7 @@ import {
     DELETE,
     DEVICE
 } from '../../config/wordMap';
+import { JSONClone } from '../../helper/utilities';
 
 
 class ObjectTable extends React.Component{   
@@ -124,7 +125,7 @@ class ObjectTable extends React.Component{
     getRefresh = () =>{
         this.getAreaTable()
 
-        let columns = objectTableColumn;
+        let columns = JSONClone(objectTableColumn);
 
         let {
             locale
@@ -192,7 +193,7 @@ class ObjectTable extends React.Component{
             objectType: [0, 1, 2]
         })
         .then(res => {
-            let columns = objectTableColumn
+            let columns = JSONClone(objectTableColumn);
             let typeList = {} 
 
             columns.map(field => {
