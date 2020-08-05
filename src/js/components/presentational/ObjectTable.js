@@ -313,6 +313,7 @@ class ObjectTable extends React.Component{
                 let formOption = []
                 var deleteArray = [];
                 var deleteCount = 0;
+
                 this.state.data.map (item => {
                 
                     this.state.selection.map(itemSelect => {

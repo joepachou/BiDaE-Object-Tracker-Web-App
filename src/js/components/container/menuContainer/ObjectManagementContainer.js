@@ -15,7 +15,6 @@ import ObjectTable from '../../presentational/ObjectTable';
 import PatientTable from '../../presentational/PatientTable';
 import ImportObjectTable from '../../presentational/ImportObjectTable';
 import ImportPatientTable from '../../presentational/ImportPatientTable';
-import ObjectTableContainer from '../../container/menuContainer/ObjectTableContainer'; 
 import {
     BOTContainer,
     BOTNavLink,
@@ -98,7 +97,7 @@ class ObjectManagementContainer extends React.Component{
                         </Tab.Pane>
 
                         <Tab.Pane eventKey="patients_table">
-                            <ObjectTableContainer /> 
+                            <PatientTable /> 
                         </Tab.Pane>
                         
                         <AccessControl
