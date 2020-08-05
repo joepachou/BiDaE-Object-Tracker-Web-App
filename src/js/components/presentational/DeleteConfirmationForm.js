@@ -32,7 +32,6 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
-
 import React from 'react';
 import { 
     Modal, 
@@ -43,10 +42,12 @@ import {
     Form
 } from 'formik';
 import LocaleContext from '../../context/LocaleContext';
+
 const DeleteConfirmationForm = ({
     handleClose,
     handleSubmit,
-    show
+    show,
+    message,
 }) => {
 
     const locale = React.useContext(LocaleContext);
@@ -57,12 +58,11 @@ const DeleteConfirmationForm = ({
             onHide={handleClose} 
             size="md" 
             id='DeleteConfirmationForm' 
-            className='text-capitalize'
         >
             <Modal.Header 
                 closeButton 
             >
-                {locale.texts.WARNING}
+                {locale.texts.REMINDER}
             </Modal.Header >
             <Modal.Body>
                 <Formik
@@ -72,19 +72,17 @@ const DeleteConfirmationForm = ({
                     render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
                         <Form className="text-capitalize">
                             <div className="mb-5">
-                                {locale.texts.ARE_YOU_SURE_TO_DELETE}
+                                {message}
                             </div>
                             <Modal.Footer>
                                 <Button 
                                     variant="outline-secondary" 
-                                    className="text-capitalize" 
                                     onClick={handleClose}
                                 >
                                     {locale.texts.CANCEL}
                                 </Button>
                                 <Button 
                                     type="submit" 
-                                    className="text-capitalize" 
                                     variant="primary" 
                                     disabled={isSubmitting}
                                 >

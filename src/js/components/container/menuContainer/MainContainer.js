@@ -292,24 +292,25 @@ class MainContainer extends React.Component{
                 this.errorToast = null;
                 toast.dismiss(this.errorToast)
             }
-            let violatedObjects = JSONClone(this.state.violatedObjects)
+
+            // let violatedObjects = JSONClone(this.state.violatedObjects)
             /** collect violated objects as violatedObjects */
-            res.data.map((item, index) => {
+            // res.data.map((item, index) => {
 
-                if (item.isViolated) {
-                    item.notification.map(notice => {
-                        let toastId = `${item.mac_address}-${notice.type}`
-                        if (!(toastId in violatedObjects)) {
-                            violatedObjects[toastId] = item
-                        }
-                    })
-                }
+            //     if (item.isViolated) {
+            //         item.notification.map(notice => {
+            //             let toastId = `${item.mac_address}-${notice.type}`
+            //             if (!(toastId in violatedObjects)) {
+            //                 violatedObjects[toastId] = item
+            //             }
+            //         })
+            //     }
 
-            })
+            // })
 
             this.setState({
                 trackingData: res.data,
-                violatedObjects,
+                // violatedObjects,
             })
         })
         .catch(err => {

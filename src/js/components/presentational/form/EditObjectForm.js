@@ -54,7 +54,10 @@ import RadioButton from '../RadioButton'
 import { AppContext } from '../../../context/AppContext';
 import dataSrc from '../../../dataSrc'
 import styleConfig from '../../../config/styleConfig';
-import FormikFormGroup from '../FormikFormGroup'
+import FormikFormGroup from '../FormikFormGroup';
+import {
+    DISASSOCIATE
+} from '../../../config/wordMap';
  
 let monitorTypeMap = {}; 
 Object.keys(config.monitorType)
@@ -147,7 +150,7 @@ class EditObjectForm extends React.Component {
                             name: name || '' ,
                             type: type || '',
                             asset_control_number: asset_control_number || '',
-                            mac_address: mac_address || '',
+                            mac_address: selectedRowData.isBind ? mac_address : '',
                             status: status.value ,
                             area: area_name || '',
                             select: status.value === config.objectStatus.TRANSFERRED 
@@ -348,18 +351,16 @@ class EditObjectForm extends React.Component {
                                             error={errors.mac_address}
                                             touched={touched.mac_address}
                                             placeholder=""
-                                            disabled={this.props.disableASN ? 1 : 0}
+                                            disabled={selectedRowData.isBind}
                                         />
                                     </Col>    
                                     <Col>
                                         <FormikFormGroup 
-                                        type="text"
-                                        name="asset_control_number"
-                                        label={locale.texts.ACN}
-                                        error={errors.asset_control_number}
-                                        touched={touched.asset_control_number}
-                                        placeholder=""
-                                        disabled= {this.props.disableASN ? 1 : 0}
+                                            type="text"
+                                            name="asset_control_number"
+                                            label={locale.texts.ACN}
+                                            error={errors.asset_control_number}
+                                            touched={touched.asset_control_number}
                                         />
                                     </Col> 
                                 </Row>
@@ -467,20 +468,36 @@ class EditObjectForm extends React.Component {
                                     )}
                                 />                                           
                                 <Modal.Footer>
-                                    <Button 
-                                        variant="outline-secondary" 
-                                        onClick={handleClose}
+                                    <div
+                                        className="mr-auto"
                                     >
-                                        {locale.texts.CANCEL}
-                                    </Button>
-                                    <Button 
-                                        type="button" 
-                                        variant="primary" 
-                                        disabled={isSubmitting}
-                                        onClick={submitForm}
+                                        <Button
+                                            onClick={this.props.handleClick}
+                                            variant="link"
+                                            name={DISASSOCIATE}
+                                            disabled={!selectedRowData.isBind}
+                                        >
+                                            {locale.texts.UNBIND}
+                                        </Button>
+                                    </div>
+                                    <div
                                     >
-                                        {locale.texts.SAVE}
-                                    </Button>
+                                        <Button 
+                                            variant="outline-secondary" 
+                                            onClick={handleClose}
+                                        >
+                                            {locale.texts.CANCEL}
+                                        </Button>
+                                        <Button 
+                                            type="button" 
+                                            variant="primary" 
+                                            disabled={isSubmitting}
+                                            onClick={submitForm}
+                                        >
+                                            {locale.texts.SAVE}
+                                        </Button>
+                                    </div>
+
                                 </Modal.Footer>
                             </Form>
                         )}

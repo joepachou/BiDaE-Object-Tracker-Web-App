@@ -99,6 +99,14 @@ export default {
                 formOption
             }
         })
+    },
+
+    disassociate: async function({
+        formOption
+    }) {
+        return await axios.patch(dataSrc.object.device, {
+            formOption
+        })
     }
     
 

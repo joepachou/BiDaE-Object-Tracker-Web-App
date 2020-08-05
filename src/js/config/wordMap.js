@@ -42,5 +42,7 @@ module.exports = {
 
     DELETE: "delete",
 
-    SAVE_SUCCESS: "save success"
+    SAVE_SUCCESS: "save success",
+
+    DISASSOCIATE: "disassociate"
 }

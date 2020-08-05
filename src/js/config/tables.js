@@ -34,8 +34,12 @@
 
 import React from 'react';
 import config from '../config';
+import styleSheet from './styleSheet';
 
 const style = {
+    firstColumn: {
+        marginLeft: 20,
+    },
     column: {
         textAlign: "center",
     },
@@ -44,7 +48,7 @@ const style = {
     },
     icon: {
         check: {
-            color: "green",
+            color: styleSheet.theme,
         },
         times: {
             color: "red",
@@ -53,7 +57,7 @@ const style = {
             color: "orange",
         },
         circle: {
-            color: "green",
+            color: styleSheet.theme,
         }
     },
     battery:{
@@ -369,15 +373,6 @@ const importTableColumn = [
 
 const objectTableColumn = [
     {
-        Header: 'bind',
-        accessor: 'mac_address',
-        style: style.column,
-        width: 80,
-        Cell: props => props.value 
-            ? <i className="fas fa-circle" style={style.icon.circle}></i>
-            : ""
-    },
-    {
         Header: "Name",
         accessor: "name"
     },
@@ -390,14 +385,18 @@ const objectTableColumn = [
         accessor: "type"
     },
     {
+        Header: "Mac Address",
+        accessor: "mac_address",
+        width: 200,
+        Cell: props => !props.original.isBind 
+            ? <div style={{color: styleSheet.theme, textDecoration: 'underline'}}>{props.value}</div> 
+            : props.value
+    },
+    {
         Header: "Asset Control Number",
         accessor: "asset_control_number",
         width: 200,
 
-    },
-    {
-        Header: "Mac Address",
-        accessor: "mac_address",
     },
     {
         Header: "area",

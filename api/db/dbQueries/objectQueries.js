@@ -194,9 +194,34 @@ const deleteObject = formOption => {
     
 	const query = `
 		DELETE FROM object_table
-		WHERE id IN (${formOption.map(item => `'${item}'`)});
+		WHERE id IN (${formOption.map(item => `'${item.id}'`)})
 	`
 	return query
+}
+
+const disassociate = formOption => {
+	const text = `
+		UPDATE object_table
+		SET mac_address = null
+		WHERE id = $1
+
+		RETURNING (
+			SELECT mac_address
+			FROM object_table
+			WHERE id = $1
+		)
+	`;
+
+	const values = [
+		formOption.id
+	];
+	
+	return {
+		text,
+		values
+	}
+
+
 }
 
 const addObject = (formOption) => {
@@ -289,12 +314,29 @@ const addObjectSummaryRecord = (mac_address) => {
 	}
 }
 
-const deleteObjectSummaryRecord = mac_address => {
+const deleteObjectSummaryRecord = mac_address_array => {
 	return `
 		DELETE FROM object_summary_table
-		WHERE mac_address = ${mac_address}
-
+		WHERE mac_address IN (${mac_address_array.map(item => `'${item}'`)});
 	`
+}
+
+const checkIsObjectSummaryRecordExist = mac_address => {
+	let text = `
+		SELECT 
+			mac_address
+		FROM object_summary_table
+		WHERE mac_address = $1
+	`
+
+	let values = [
+		mac_address
+	]
+
+	return {
+		text,
+		values
+	}
 }
 
 module.exports = {
@@ -304,7 +346,9 @@ module.exports = {
 	editDevice,
     editPersona,
 	deleteObject,
+	disassociate,
 	editObjectPackage,
 	addObjectSummaryRecord,
-	deleteObjectSummaryRecord
+	deleteObjectSummaryRecord,
+	checkIsObjectSummaryRecordExist
 }

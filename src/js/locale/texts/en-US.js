@@ -165,12 +165,12 @@ const en =  {
     DOWNLOAD: "download",
     DELETE: "delete",
     REMOVE: "remove",
-    DELECT_LBEACON:"Delete LBeacon",
-    DELECT_GATEWAY:"Delete Gateway",
+    DELETE_LBEACON:"Delete LBeacon",
+    DELETE_GATEWAY:"Delete Gateway",
     ADD_USER: "add user",
     ADD_INPATIENT:"add inpatient",
-    DELECT_INPATIENT:"delect inpatient",
-    DELECT_DEVICE:"delect device",
+    DELETE_INPATIENT:"DELETE inpatient",
+    DELETE_DEVICE:"DELETE device",
     EDIT_DEVICES: "edit devices",
     SWITCH_AREA: "switch area",
     FENCE_ON: "fence on",
@@ -220,6 +220,7 @@ const en =  {
     EXPORT_PDF: "export PDF",
     SEND_RESET_INSTRUCTION: "send reset instruction",
     DETAIL: "detail",
+    NON_BINDIN: "non binding",
 
     /* field */
     NAME: "name",
@@ -302,6 +303,7 @@ const en =  {
     /** form title */
     EDIT_LBEACON: "edit lbeacon",
     ADD_OBJECT: "add object",
+    DELETE_OBJECT: "delete object",
     EDIT_OBJECT: "edit object",
     EDIT_PATIENT: "edit patient",
     EDIT_INFO: "edit info",
@@ -343,6 +345,7 @@ const en =  {
     ADD_COMMENT: "add comment",
     NAMEGROUPBYAREA: "name(area group)",
     NAMEGROUPBYUUID: "name(UUID group)",
+    REMINDER: "reminder",
 
     /** error message */
     GENDER_IS_REQUIRED: "Gender is required",
@@ -505,6 +508,7 @@ const en =  {
 
     /** message */
     ARE_YOU_SURE_TO_DELETE: "are you sure to delete ?",
+    ARE_YOU_SURE_TO_DISASSOCIATE: "are you sure to disassociate",
     NOW_YOU_CAN_DO_THE_FOllOWING_ACTION: "Now you can do the following action",
     USERNAME_OR_PASSWORD_IS_INCORRECT: "Username or password is incorrect",
     PASSWORD_IS_INCORRECT: "password is incorrect",

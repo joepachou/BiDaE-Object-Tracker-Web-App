@@ -68,7 +68,8 @@ import {
     UNBIND,
     DELETE,
     DEVICE,
-    SAVE_SUCCESS
+    SAVE_SUCCESS,
+    DISASSOCIATE
 } from '../../config/wordMap';
 import { JSONClone } from '../../helper/utilities';
 
@@ -216,6 +217,9 @@ class ObjectTable extends React.Component{
                             value: `${item.transferred_location.name}-${item.transferred_location.department}`, 
                             label: `${item.transferred_location.name}-${item.transferred_location.department}` 
                         }
+
+                    item.isBind = item.mac_address ? 1 : 0;
+                    item.mac_address = item.mac_address ? item.mac_address : locale.texts.NON_BINDIN
                         
 
                     if (!Object.keys(typeList).includes(item.type)) { 
@@ -283,47 +287,74 @@ class ObjectTable extends React.Component{
     }
 
     objectMultipleDelete = () => {
-        let formOption = []
-        var deleteArray = [];
-        var deleteCount = 0;
-        this.state.data.map (item => {
-         
-            this.state.selection.map(itemSelect => {
-                itemSelect === item.id
-                ? 
-                 deleteArray.push(deleteCount.toString()) 
-                : 
-                null          
-            })
-                 deleteCount +=1
-        })
+
+
+        switch(this.state.action) {
+
+            case DISASSOCIATE:
         
-        this.setState({selectAll:false})
+                apiHelper.objectApiAgent.disassociate({
+                    formOption: {
+                        id: this.state.selectedRowData.id
+                    }
+                })
+                .then(res => {
+                    let callback = () => {
+                        messageGenerator.setSuccessMessage(SAVE_SUCCESS)
+                    }
+                    this.getData(callback)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            break;
+          
+            case DELETE:
+                let formOption = []
+                var deleteArray = [];
+                var deleteCount = 0;
+                this.state.data.map (item => {
+                
+                    this.state.selection.map(itemSelect => {
+                        itemSelect === item.id
+                        ? 
+                        deleteArray.push(deleteCount.toString()) 
+                        : 
+                        null          
+                    })
+                        deleteCount +=1
+                })
+                
+                this.setState({selectAll:false})
 
-        deleteArray.map( item => {
-         
-            this.state.data[item] === undefined ?
-                null
-                :
-                formOption.push(this.state.data[item].id)
-            })
+                deleteArray.map( item => {
+                
+                    this.state.data[item] === undefined ?
+                        null
+                        :
+                        formOption.push({
+                            id: this.state.data[item].id,
+                            mac_address: this.state.data[item].isBind ? this.state.data[item].mac_address : null
+                        })
+                    })
 
-        apiHelper.objectApiAgent.deleteObject({
-            formOption
-        })
-        .then(res => {
-            let callback = () => {
-                messageGenerator.setSuccessMessage(
-                    'save success'
-                )
-            }
-            this.getData(callback)
-        })
-        .catch(err => {
-            console.log(err)
-        }) 
-       
-        this.setState({selectAll:false,selection:[]})
+                apiHelper.objectApiAgent.deleteObject({
+                    formOption
+                })
+                .then(res => {
+                    let callback = () => {
+                        messageGenerator.setSuccessMessage(SAVE_SUCCESS)
+                    }
+                    this.getData(callback)
+                })
+                .catch(err => {
+                    console.log(err)
+                }) 
+        
+                this.setState({selectAll:false,selection:[]})
+
+                break;
+        }
     }
 
     handleSubmitForm = (formOption, cb) => {
@@ -394,6 +425,9 @@ class ObjectTable extends React.Component{
     handleClickButton = (e) => {
 
         let { name } = e.target
+        let {
+            locale
+        } = this.context
         
         switch(name) {
             case ADD: 
@@ -423,15 +457,24 @@ class ObjectTable extends React.Component{
             case DELETE:
                 this.setState({
                     showDeleteConfirmation: true,
-                    warningSelect : 1
-                     
+                    warningSelect : 1,
+                    action: DELETE,
+                    message: locale.texts.ARE_YOU_SURE_TO_DELETE
                 })
                 break;
   
-            case 'dissociation':
+            // case DISASSOCIATE:
+            //     this.setState({
+            //         formTitle: name,
+            //         isShowEditImportTable: true
+            //     })
+            //     break; 
+
+            case DISASSOCIATE:
                 this.setState({
-                    formTitle: name,
-                    isShowEditImportTable: true
+                    showDeleteConfirmation: true,
+                    action: DISASSOCIATE,
+                    message: locale.texts.ARE_YOU_SURE_TO_DISASSOCIATE
                 })
                 break; 
         }
@@ -657,19 +700,19 @@ class ObjectTable extends React.Component{
                                 name={ADD}
                                 onClick={this.handleClickButton}
                             >
-                                {locale.texts.ADD}
+                                {locale.texts.ADD_DEVICE}
                             </PrimaryButton>
-                            <PrimaryButton
+                            {/* <PrimaryButton
                                 name={UNBIND}
                                 onClick={this.handleClickButton}
                             >
                                 {locale.texts.UNBIND}
-                            </PrimaryButton>
+                            </PrimaryButton> */}
                             <PrimaryButton 
                                 name={DELETE}
                                 onClick={this.handleClickButton}
                             >
-                                {locale.texts.DELETE}
+                                {locale.texts.DELETE_DEVICE}
                             </PrimaryButton>
                         </ButtonToolbar>
                     </AccessControl>
@@ -708,6 +751,7 @@ class ObjectTable extends React.Component{
                     show={this.state.isShowEdit} 
                     title={this.state.formTitle} 
                     selectedRowData={selectedRowData || ''} 
+                    handleClick={this.handleClickButton}
                     handleSubmit={this.handleSubmitForm}
                     handleClose={this.handleClose}
                     formPath={this.state.formPath}
@@ -750,9 +794,11 @@ class ObjectTable extends React.Component{
                 <DeleteConfirmationForm
                     show={this.state.showDeleteConfirmation} 
                     handleClose={this.handleClose}
-                    handleSubmit={
-                        this.state.warningSelect == 1 ? this.objectMultipleDelete : null
-                    }
+                    message={this.state.message}
+                    // handleSubmit={
+                    //     this.state.warningSelect == 1 ? this.objectMultipleDelete : null
+                    // }
+                    handleSubmit={this.objectMultipleDelete}
                 />
             </div>
         )

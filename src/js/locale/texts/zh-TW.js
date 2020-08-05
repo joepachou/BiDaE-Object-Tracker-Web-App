@@ -165,10 +165,10 @@ const tw = {
     REMOVE: "移除",
     ADD_USER: "新增使用者",
     ADD_INPATIENT:"新增病人",
-    DELECT_INPATIENT:"刪除病人",
-    DELECT_DEVICE:"刪除儀器",
-    DELECT_LBEACON:"刪除LBeacon",
-    DELECT_GATEWAY:"刪除Gateway",
+    DELETE_INPATIENT:"刪除病人",
+    DELETE_DEVICE:"刪除儀器",
+    DELETE_LBEACON:"刪除LBeacon",
+    DELETE_GATEWAY:"刪除Gateway",
     EDIT_DEVICES: "編輯儀器",
     EDIT_PATIENT: "編輯病人資料",
     EDIT_INFO: "編輯資料",
@@ -222,6 +222,7 @@ const tw = {
     EXPORT_PDF: "匯出PDF",
     SEND_RESET_INSTRUCTION: "send reset instruction",
     DETAIL: "詳細資料",
+    NON_BINDIN: "尚未綁定",
 
     /* field */
     NAME: "名稱",
@@ -305,6 +306,7 @@ const tw = {
     /** form title */
     EDIT_LBEACON: "編輯 lbeacon",
     ADD_OBJECT: "增加儀器",
+    DELETE_OBJECT: "刪除儀器",
     EDIT_OBJECT: "編輯物件",
     ADD_PERSONA: "增加人員",
     REPORT_DEVICE_STATUS: "回報儀器狀態",
@@ -344,6 +346,8 @@ const tw = {
     CHECK_PASSWORD:"確認新密碼",
     LEVEL:"階層",
     ADD_COMMENT: "新增註記",
+    REMINDER: "提醒",
+
 
     /** error message */
     GENDER_IS_REQUIRED: "請選擇性別",
@@ -505,6 +509,7 @@ const tw = {
 
     /** message */
     ARE_YOU_SURE_TO_DELETE: "確定要刪除 ?",
+    ARE_YOU_SURE_TO_DISASSOCIATE: "確定要解除綁定 ?",
     NOW_YOU_CAN_DO_THE_FOllOWING_ACTION: "你可以執行以下操作",
     USERNAME_OR_PASSWORD_IS_INCORRECT: "使用者名稱或是密碼錯誤",
     PASSWORD_IS_INCORRECT: "密碼錯誤",
