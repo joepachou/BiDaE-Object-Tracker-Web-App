@@ -368,7 +368,7 @@ const tw = {
     THE_MAC_ADDRESS_IS_ALREADY_USED :"Mac Address已被使用",
     THE_Patient_Number_IS_ALREADY_USED :"病人編號已被使用",
     THE_ID_IS_ALREADY_USED: "人員編號已被使用",
-    THE_MAC_ADDRESS_FORM_IS_WRONG: "Mac Address 形式錯誤",
+    INCORRECT_MAC_ADDRESS_FORMAT: "Mac Address 格式錯誤",
     THE_ATTENDINGPHYSICIAN_IS_WRONG: "醫生編號 必須是數字",  
     AREA_IS_REQUIRED: "請選擇地區",
     NOT_ASSIGNED_TO_ANY_DEVICES: "尚未指定任何儀器",

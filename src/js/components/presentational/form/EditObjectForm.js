@@ -58,6 +58,10 @@ import FormikFormGroup from '../FormikFormGroup';
 import {
     DISASSOCIATE
 } from '../../../config/wordMap';
+import {
+    isEmpty,
+    macaddrValidation
+} from '../../../helper/validation';
  
 let monitorTypeMap = {}; 
 Object.keys(config.monitorType)
@@ -74,32 +78,35 @@ class EditObjectForm extends React.Component {
     };
 
     componentDidMount = () => {
-        this.getTransferredLocation();
+        // this.getTransferredLocation();
     }
 
         
-    getTransferredLocation = () => {
-        axios.get(dataSrc.getTransferredLocation)
-        .then(res => {
-            const transferredLocationOptions = res.data.map(branch => {
-                return {          
-                    label: branch.branch_name,
-                    value: branch,
-                    options: branch.department
-                        .map((department, index) => {
-                            return {
-                                label: `${department},${branch.branch_name}`,
-                                value: `${branch.id}, ${index}`
-                            }
-                    }),
-                    id: branch.id
-                }
-            })
-            this.setState({
-                transferredLocationOptions
-            })
-        })
-    }
+    // getTransferredLocation = () => {
+
+    //     axios.get(dataSrc.getTransferredLocation)
+    //     .then(res => {
+    //         console.log(res)
+    //         const transferredLocationOptions = res.data.map(branch => {
+    //             return {          
+    //                 label: branch.branch_name,
+    //                 value: branch,
+    //                 options: branch.department
+    //                     .map((department, index) => {
+    //                         return {
+    //                             label: `${department},${branch.branch_name}`,
+    //                             value: `${branch.id}, ${index}`
+    //                         }
+    //                 }),
+    //                 id: branch.id
+    //             }
+    //         })
+    //         this.setState({
+    //             transferredLocationOptions
+    //         })
+    //     })
+    // }
+
     render() {
         const { locale } = this.context
 
@@ -150,7 +157,12 @@ class EditObjectForm extends React.Component {
                             name: name || '' ,
                             type: type || '',
                             asset_control_number: asset_control_number || '',
-                            mac_address: selectedRowData.isBind ? mac_address : '',
+                            mac_address: selectedRowData.isBind 
+                                ? {
+                                    label: mac_address,
+                                    value: mac_address
+                                }
+                                : null,
                             status: status.value ,
                             area: area_name || '',
                             select: status.value === config.objectStatus.TRANSFERRED 
@@ -194,46 +206,30 @@ class EditObjectForm extends React.Component {
                                     ),
 
                                 mac_address: Yup.string()
-                                    .required(locale.texts.MAC_ADDRESS_IS_REQUIRED)
-
+                                    // .required(locale.texts.MAC_ADDRESS_IS_REQUIRED)
+                                    .nullable(),
                                     /** check if there are duplicated mac address in object table */
-                                    .test(
-                                        'mac_address',
-                                        locale.texts.THE_MAC_ADDRESS_FORM_IS_WRONG,
-                                        value => {
-                                            if (value == undefined) return false
-                                            if (this.props.selectedRowData.length != 0) {
-                                                return true
-                                            } else {
-                                                var pattern = new RegExp("^[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}$");
-                                                if(value.match(pattern)) {
-                                                    return (!this.props.objectTable.map(item => item.mac_address).includes(value.match(/.{1,2}/g).join(':')))
-                                                } 
-                                                return false
-                                            }
-                                            
-                                        }
-                                        
-                                    )
-                                    .test(
-                                        'mac_address',
-                                        locale.texts.THE_MAC_ADDRESS_IS_ALREADY_USED ,
-                                        value =>{
-                                            if (value == undefined) return false
-                                            let repeatFlag = false  
-                                            this.props.data.map(item => { 
-                                                if(this.props.selectedRowData.length != 0){ 
-                                                    if (item.asset_control_number != this.props.selectedRowData.asset_control_number){
-                                                     item.mac_address == value ?  repeatFlag = true : null
-                                                    }
-                                                }else{ 
-                                                 item.mac_address.replace(/:/g,'') == value.replace(/:/g,'')  ? repeatFlag = true : null
-                                                } 
-                                            })
-                                            return !repeatFlag
-                                           
-                                        }
-                                    ),
+                                    // .test(
+                                    //     'mac_address',
+                                    //     locale.texts.INCORRECT_MAC_ADDRESS_FORMAT,
+                                    //     value => {
+                                    //         if (value == undefined) return true;
+                                    //         if (value == null || isEmpty(value)) return true;
+                                    //         if (this.props.selectedRowData.length == 0) return true;
+                                    //         else return macaddrValidation(value)
+                                    //     }
+                                    // )
+                                    // .test(
+                                    //     'mac_address',
+                                    //     locale.texts.THE_MAC_ADDRESS_IS_ALREADY_USED ,
+                                    //     value => {
+                                    //         console.log(value.match(/.{1,2}/g).join(':'))
+                                    //         console.log(this.props.idleMacaddrSet.includes(value.match(/.{1,2}/g).join(':')))
+                                    //         if (value == undefined) return true;
+                                    //         if (value == null || isEmpty(value)) return true;
+                                    //         if (this.props.idleMacaddrSet.includes(value.match(/.{1,2}/g).join(':'))) return true;
+                                    //     }
+                                    // ),
 
                                 status: Yup.string().required(locale.texts.STATUS_IS_REQUIRED),
 
@@ -255,7 +251,7 @@ class EditObjectForm extends React.Component {
                                         return sum
                                     }, 0)      
                                 :   0
-                            
+
                             const postOption = {
                                 id,
                                 ...values,
@@ -264,9 +260,10 @@ class EditObjectForm extends React.Component {
                                     ? values.transferred_location.id
                                     : null,
                                 monitor_type,
-                                area_id: values.area.id || 0
+                                area_id: values.area.id || 0,
+                                mac_address: isEmpty(values.mac_address) ? null : values.mac_address.value,
                             }
-
+                            
                             while (postOption.type[postOption.type.length - 1] == " "){
                                 postOption.type = postOption.type.substring(0, postOption.type.length - 1);       
                             }
@@ -344,7 +341,7 @@ class EditObjectForm extends React.Component {
                                 </Row>
                                 <Row noGutters>
                                     <Col>
-                                        <FormikFormGroup 
+                                        {/* <FormikFormGroup 
                                             type="text"
                                             name="mac_address"
                                             label={locale.texts.MAC_ADDRESS}
@@ -352,6 +349,28 @@ class EditObjectForm extends React.Component {
                                             touched={touched.mac_address}
                                             placeholder=""
                                             disabled={selectedRowData.isBind}
+                                        /> */}
+                                        <FormikFormGroup 
+                                            name="mac_address"
+                                            label={locale.texts.MAC_ADDRESS}
+                                            error={errors.transferred_location}
+                                            touched={touched.transferred_location}
+                                            component={() => (
+                                                <Select
+                                                name="mac_address"
+                                                    value = {values.mac_address}
+                                                    className="my-1"
+                                                    onChange={value => setFieldValue("mac_address", value)}
+                                                    options={this.props.macOptions}
+                                                    isSearchable={false}
+                                                    isDisabled={selectedRowData.isBind}
+                                                    styles={styleConfig.reactSelect}
+                                                    placeholder=""
+                                                    components={{
+                                                        IndicatorSeparator: () => null
+                                                    }}
+                                                />
+                                            )}
                                         />
                                     </Col>    
                                     <Col>

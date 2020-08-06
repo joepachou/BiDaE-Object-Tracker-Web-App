@@ -312,5 +312,17 @@ module.exports = {
             .catch(err => {
                 console.log(`edit object package failed ${err}`)
             })
+    },
+
+    getIdleMacaddr: (request, response) => {
+
+        pool.query(dbQueries.getIdleMacaddr())
+            .then(res => {
+                console.log(`get idle mac address succeed`)
+                response.status(200).json(res)
+            })
+            .catch(err => {
+                console.log(`get idle mac address failed ${err}`)
+            })
     }
 }

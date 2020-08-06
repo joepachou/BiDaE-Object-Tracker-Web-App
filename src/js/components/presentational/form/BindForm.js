@@ -35,7 +35,7 @@
 
 import React from 'react';
 import { Modal, Button, Row, Col } from 'react-bootstrap';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
+import { Formik, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { AppContext } from '../../../context/AppContext';
 import Select from 'react-select';
@@ -43,7 +43,8 @@ import FormikFormGroup from '../FormikFormGroup';
 import {
     FormFieldName
 } from '../../BOTComponent/styleComponent';
-import apiHelper from '../../../helper/apiHelper';
+import apiHelper from '../../../helper/apiHelper'; 
+import styleConfig from '../../../config/styleConfig';
 
 class BindForm extends React.Component {
 
@@ -201,22 +202,7 @@ class BindForm extends React.Component {
                                 ) ,
 
 
-                                mac: Yup.string()
-                                .required(locale.texts.MAC_ADDRESS_IS_REQUIRED)
-
-                                /** check if there are duplicated mac address in object table */
-                                .test(
-                                    'mac_address',
-                                    locale.texts.THE_MAC_ADDRESS_IS_ALREADY_USED_OR_FORMAT_IS_NOT_CORRECT,
-                                    value => { 
-                                        if (value == undefined) return false 
-                                        var pattern = new RegExp("^[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}$");
-                                        if(value.match(pattern)) {
-                                            return (!objectTable.map(item => item.mac_address).includes(value.match(/.{1,2}/g).join(':')))
-                                        } 
-                                        return false
-                                    }
-                                ),
+                                mac: Yup.string().required(locale.texts.MAC_ADDRESS_IS_REQUIRED),                      
 
                                 area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
 
@@ -227,7 +213,7 @@ class BindForm extends React.Component {
                             let formOption = this.state.bindData
                             formOption = {
                                 ...formOption,
-                                mac_address: values.mac,
+                                mac_address: values.mac.value,
                                 area_id: values.area.id || 0
                             }
                             this.handleSubmit(formOption)
@@ -279,13 +265,25 @@ class BindForm extends React.Component {
                                         </div>
 
                                         <FormikFormGroup 
-                                            type="text"
                                             name="mac"
-                                            error={errors.mac}
-                                            touched={touched.mac}
-                                            label={locale.texts.MAC_ADDRESS}   
-                                            placeholder={locale.texts.PLEASE_ENTER_OR_SCAN_MAC_ADDRESS} 
-                                        />    
+                                            label={locale.texts.MAC_ADDRESS}
+                                            error={errors.transferred_location}
+                                            touched={touched.transferred_location}
+                                            component={() => (
+                                                <Select
+                                                    name="mac"
+                                                    value = {values.mac}
+                                                    className="my-1"
+                                                    onChange={value => setFieldValue("mac", value)}
+                                                    options={this.props.macOptions}
+                                                    isSearchable={false}
+                                                    styles={styleConfig.reactSelect}
+                                                    components={{
+                                                        IndicatorSeparator: () => null
+                                                    }}
+                                                />
+                                            )}
+                                        />
                                     </div>
                                 }
                                 <Modal.Footer>

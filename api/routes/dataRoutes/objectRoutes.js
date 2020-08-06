@@ -56,4 +56,7 @@ module.exports = app => {
     app.route('/data/objectPackage')
         .put(objectController.editObjectPackage)
 
+    app.route('/data/object/mac/idle')
+        .post(objectController.getIdleMacaddr)
+
 }

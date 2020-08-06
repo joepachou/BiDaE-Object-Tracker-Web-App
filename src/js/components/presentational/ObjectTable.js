@@ -105,12 +105,14 @@ class ObjectTable extends React.Component{
         filteredData: [],
         filterSelection: {},
         apiMethod: '',
+        idleMacaddrSet: [],
         locale: this.context.locale.abbr,
     }
 
     componentDidMount = () => {
         this.getData()
         this.getAreaTable()
+        this.getIdleMacaddrSet()
         // this.getImportData()
     }
 
@@ -118,14 +120,12 @@ class ObjectTable extends React.Component{
 
         if (this.context.locale.abbr !== prevState.locale) {  
             this.getRefresh()
-            this.setState({ 
-                locale: this.context.locale.abbr
-            }) 
         } 
     }
 
     getRefresh = () =>{
         this.getAreaTable()
+        this.getIdleMacaddrSet()
 
         let columns = JSONClone(objectTableColumn);
 
@@ -220,7 +220,6 @@ class ObjectTable extends React.Component{
 
                     item.isBind = item.mac_address ? 1 : 0;
                     item.mac_address = item.mac_address ? item.mac_address : locale.texts.NON_BINDIN
-                        
 
                     if (!Object.keys(typeList).includes(item.type)) { 
                         typeList[item.type] = {
@@ -237,6 +236,8 @@ class ObjectTable extends React.Component{
 
                     return item
                 }) 
+
+            this.getIdleMacaddrSet()
 
             this.setState({
                 data,
@@ -257,6 +258,26 @@ class ObjectTable extends React.Component{
         .catch(err => {
             console.log(err);
         })
+    }
+
+    getIdleMacaddrSet = async () => {
+        await apiHelper.objectApiAgent.getIdleMacaddr()
+            .then(res => {
+                let idleMacaddrSet = res.data.rows[0].mac_set
+                let macOptions = idleMacaddrSet.map(mac => {
+                    return {
+                        label: mac,
+                        value: mac
+                    }
+                })
+                this.setState({
+                    idleMacaddrSet,
+                    macOptions
+                })
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 
     getImportData = (callback) => {
@@ -747,7 +768,6 @@ class ObjectTable extends React.Component{
                         }
                     }} 
                 />
- 
                 <EditObjectForm  
                     show={this.state.isShowEdit} 
                     title={this.state.formTitle} 
@@ -760,6 +780,8 @@ class ObjectTable extends React.Component{
                     objectTable={this.state.objectTable}
                     disableASN = {this.state.disableASN  }
                     areaTable={this.state.areaTable}
+                    idleMacaddrSet={this.state.idleMacaddrSet}
+                    macOptions={this.state.macOptions}
                 />     
                 <BindForm
                     show = {this.state.isShowBind} 
@@ -771,6 +793,7 @@ class ObjectTable extends React.Component{
                     objectTable={this.state.objectTable}
                     ImportData= {this.state.importData}
                     areaTable={this.state.areaTable}
+                    macOptions={this.state.macOptions}
                     data={this.state.importData.reduce((dataMap, item) => {
                         dataMap[item.asset_control_number] = item 
                         return dataMap

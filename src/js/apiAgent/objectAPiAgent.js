@@ -107,6 +107,10 @@ export default {
         return await axios.patch(dataSrc.object.device, {
             formOption
         })
+    },
+
+    getIdleMacaddr: async function() {
+        return await axios.post(dataSrc.object.idleMacaddr)
     }
     
 

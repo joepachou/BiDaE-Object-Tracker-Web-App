@@ -339,6 +339,19 @@ const checkIsObjectSummaryRecordExist = mac_address => {
 	}
 }
 
+const getIdleMacaddr = () => {
+	return `
+		SELECT 
+			ARRAY_AGG(object_summary_table.mac_address) AS mac_set
+		FROM object_summary_table
+
+		LEFT JOIN object_table
+		ON object_summary_table.mac_address = object_table.mac_address
+		
+		WHERE object_table.name IS NULL
+	`
+}
+
 module.exports = {
     getObject,
 	addPersona,
@@ -350,5 +363,6 @@ module.exports = {
 	editObjectPackage,
 	addObjectSummaryRecord,
 	deleteObjectSummaryRecord,
-	checkIsObjectSummaryRecordExist
+	checkIsObjectSummaryRecordExist,
+	getIdleMacaddr
 }

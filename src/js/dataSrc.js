@@ -73,7 +73,9 @@ const dataSrc = {
 
         device: `${domain}/data/object/device`,
 
-        person: `${domain}/data/object/person`
+        person: `${domain}/data/object/person`,
+
+        idleMacaddr: `${domain}/data/object/mac/idle`,
     },
 
     objectPackage: `${domain}/data/objectPackage`,
