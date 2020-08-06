@@ -1,9 +1,7 @@
 /*
-    Copyright (c) 2020 Academia Sinica, Institute of Information Science
-
-    License:
-        GPL 3.0 : The content of this file is subject to the terms and conditions
-
+    2020 © Copyright (c) BiDaE Technology Inc. 
+    Provided under BiDaE SHAREWARE LICENSE-1.0 in the LICENSE.
+  
     Project Name:
         BiDae Object Tracker (BOT)
 
@@ -34,8 +32,8 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
-
 const HtmlWebPackPlugin = require("html-webpack-plugin");
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const webpack = require('webpack');
 const dotenv = require('dotenv');
 var path = require('path')
@@ -48,7 +46,7 @@ const envKeys = Object.keys(env).reduce((prev, next) => {
 module.exports = {
 
     entry: './src/index.js',
-    mode: 'development',
+    mode: env.NODE_ENV,
     output: {
         path: path.join(__dirname, 'dist'),
         filename: "bundle.js",
@@ -83,10 +81,10 @@ module.exports = {
                 // test: /\.(png|jpe|jpg|woff|woff2|eot|ttf|svg|jpeg)(\?.*$|$)/,
                 test: /\.(eot|woff|woff2|ttf|svg|png|jpe?g|gif)(\?\S*)?$/,
                 use: [
-                {
-                    loader: 'file-loader?limit=100000&name=[name].[ext]',
-                    options: {},
-                },
+                    {
+                        loader: 'file-loader?limit=100000&name=[name].[ext]',
+                        options: {},
+                    },
                 ],
             },
             {
@@ -98,13 +96,27 @@ module.exports = {
     devServer: {
         historyApiFallback: true,
     },
+    
     plugins: [
         new HtmlWebPackPlugin({
             template: "./src/index.html",
             filename: "./index.html"
         }),
+
+        /** Include the env parameters as web page parameters */
         new webpack.DefinePlugin({
             'process.env': envKeys
         }),
+
+        /** Webpack tool for analyzing the package size */
+        // new BundleAnalyzerPlugin({
+        //     analyzerMode: 'static',
+        //     reportFilename: 'BundleReport.html',
+        //     logLevel: 'info'
+        // }),
+
+        /** Only introduce used moment locale package */
+        new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /zh|en/),
+        
     ]
 };
