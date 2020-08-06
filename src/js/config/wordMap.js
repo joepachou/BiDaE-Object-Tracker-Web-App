@@ -46,5 +46,9 @@ module.exports = {
 
     SAVE_SUCCESS: "save success",
 
-    DISASSOCIATE: "disassociate"
+    DISASSOCIATE: "disassociate",
+
+    NORMAL: "normal",
+
+    RESERVE: "reserve"
 }

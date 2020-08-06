@@ -40,6 +40,7 @@ export const isEqual = (obj1, obj2) => {
 
 /** Deep clone for json format */
 export const JSONClone = (arr) => {
+    if (arr == null) return arr;
     return arr.map(object => {
         return Object.assign({}, object)
     }, )

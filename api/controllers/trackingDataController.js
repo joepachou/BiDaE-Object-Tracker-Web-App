@@ -91,7 +91,6 @@ const getTrackingData = (request, response) => {
 
         /** Filter the objects that do no belong the area */
         const toReturn = res.rows
-        .filter(item => item.mac_address)
         .map((item, index) => {
 
             /** Parse lbeacon uuid into three field in an array: area id, latitude, longtitude */

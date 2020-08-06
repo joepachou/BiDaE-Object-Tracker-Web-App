@@ -222,7 +222,7 @@ const tw = {
     EXPORT_PDF: "匯出PDF",
     SEND_RESET_INSTRUCTION: "send reset instruction",
     DETAIL: "詳細資料",
-    NON_BINDIN: "尚未綁定",
+      NON_BINDING: "尚未綁定",
 
     /* field */
     NAME: "名稱",

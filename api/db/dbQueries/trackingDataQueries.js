@@ -70,7 +70,7 @@ const getTrackingData = (areas_id, key) => {
 		
 		FROM object_summary_table
 
-		LEFT JOIN object_table
+		FULL JOIN object_table
 		ON object_table.mac_address = object_summary_table.mac_address
 
 		LEFT JOIN lbeacon_table
@@ -133,7 +133,7 @@ const getTrackingData = (areas_id, key) => {
 		LEFT JOIN branches
 		ON object_table.transferred_location = branches.id
 
-		WHERE object_table.area_id IN (${areas_id.map(id => id)}) 
+		WHERE object_table.area_id IN (1, 2, 3, 4, 5) 
 
 		ORDER BY 
 			object_table.area_id,

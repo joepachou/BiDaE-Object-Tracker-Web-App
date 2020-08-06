@@ -36,6 +36,10 @@
 import config from '../config';
 import React from 'react';
 import AccessControl from '../components/authentication/AccessControl';
+import {
+    NORMAL,
+    RESERVE
+} from '../config/wordMap';
 
 export const getDescription = (item, locale) => {
     var foundDeviceDescription = ``; 
@@ -54,26 +58,24 @@ export const getDescription = (item, locale) => {
                         ${getStatus(item, locale)}
 
                         ${item.currentPosition  
-                            ? item.status == 'normal'
+                            ? item.status == NORMAL
                                 ? `${item.residence_time} `
                                 : ''
                             : ''
                         }  
 
-                        ${item.status == "reserve" 
+                        ${item.status == RESERVE
                             ? `~ ${item.reserved_timestamp_final} ${locale.texts.IS_RESERVED_FOR} ${item.reserved_user_name}`
                             : ''
                         } 
                     `
                     :   `
-                        ${getType(item, locale)}
+                        ${item.nickname ? getNickname(item, locale) : getType(item, locale)}
 
                         ${getACN(item, locale)}
                         
                         ${getSubDescription(item, locale)}
                         
-                        ${getStatus(item, locale)}
-
                     `
             break;
         case '1':
@@ -104,50 +106,51 @@ export const getDescription = (item, locale) => {
 }
 
 export const getSubDescription = (item, locale) => {
-    console.log(123)
-    let toReturn = 
-        locale.abbr == 'en'
-            ?   `
-                ${item.currentPosition  
-                    ? item.status.toUpperCase() === 'NORMAL'
+    switch(locale.abbr) {
+        case locale.supportedLocale.en.abbr:
+        case locale.supportedLocale.ms.abbr:
+            return (
+                item.currentPosition  
+                    ? item.status == NORMAL
                         ? `${locale.texts.WAS} ${locale.texts.NEAR} ${item.location_description} ${item.residence_time}`
                         : ''
-                    : `${locale.texts.NOT_AVAILABLE}`
-                } 
-            `
-            :   `                 
-                ${item.currentPosition  
-                    ? item.status.toUpperCase() === 'NORMAL'
+                    : `${locale.texts.  NON_BINDING}`
+            )
+        case locale.supportedLocale.tw.abbr:
+        case locale.supportedLocale.cn.abbr:
+            return (
+                item.currentPosition  
+                    ? item.status == NORMAL
                         ? `${item.residence_time}${locale.texts.WAS}${locale.texts.NEAR}${item.location_description}`
                         : ''
-                    : `${locale.texts.NOT_AVAILABLE}`
-                } 
-            `
-            console.log(toReturn)
-
-    return toReturn
+                    : `${locale.texts.  NON_BINDING}`
+                
+            )
+    }
 }
 
 export const getBatteryVolumn = (item, locale, config) => {
-    let toReturn = 
-        locale.abbr == 'en'
-            ?   `
-                ${item.currentPosition  
-                    ? item.status.toUpperCase() === 'NORMAL'
+
+    switch(locale.abbr) {
+        case locale.supportedLocale.en.abbr:
+        case locale.supportedLocale.ms.abbr:
+            return (
+                item.currentPosition  
+                    ? item.status == NORMAL
                         ? `, ${locale.texts.WAS} ${locale.texts.NEAR} ${item.location_description} ${item.residence_time}`
                         : ''
                     : `, ${locale.texts.NOT_AVAILABLE}`
-                } 
-            `
-            :   `                 
-                ${item.currentPosition  
-                    ? item.status.toUpperCase() === 'NORMAL'
+            )
+        case locale.supportedLocale.tw.abbr:
+        case locale.supportedLocale.cn.abbr:
+            return (
+                item.currentPosition  
+                    ? item.status == NORMAL
                         ? `, ${item.residence_time}${locale.texts.WAS}${locale.texts.NEAR}${item.location_description}`
                         : ''
                     : `, ${locale.texts.NOT_AVAILABLE}`
-                } 
-            `
-    return toReturn
+            )
+    }
 }
 
 export const getName = (item, locale) => {
@@ -190,7 +193,7 @@ export const getPhysicianName = (item, locale) => {
 
 export const getStatus = (item, locale) => {
     return `
-        ${item.status.toUpperCase() === 'NORMAL' 
+        ${item.status.toUpperCase() == NORMAL 
             ? ''  
             : `${locale.texts[item.status.toUpperCase()]}`
         }

@@ -219,7 +219,7 @@ class ObjectTable extends React.Component{
                         }
 
                     item.isBind = item.mac_address ? 1 : 0;
-                    item.mac_address = item.mac_address ? item.mac_address : locale.texts.NON_BINDIN
+                    item.mac_address = item.mac_address ? item.mac_address : locale.texts.  NON_BINDING
 
                     if (!Object.keys(typeList).includes(item.type)) { 
                         typeList[item.type] = {

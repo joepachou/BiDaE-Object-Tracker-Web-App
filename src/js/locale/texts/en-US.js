@@ -220,7 +220,7 @@ const en =  {
     EXPORT_PDF: "export PDF",
     SEND_RESET_INSTRUCTION: "send reset instruction",
     DETAIL: "detail",
-    NON_BINDIN: "non binding",
+    NON_BINDING: "non binding",
 
     /* field */
     NAME: "name",
