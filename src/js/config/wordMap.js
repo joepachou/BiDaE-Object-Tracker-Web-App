@@ -18,6 +18,8 @@ module.exports = {
 
     DEVICE: "device",
 
+    PERSON: "person",
+
     OBJECT_TYPE: "object type",
 
     SEARCH_HISTORY: "search history",

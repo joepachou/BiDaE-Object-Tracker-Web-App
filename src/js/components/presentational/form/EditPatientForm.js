@@ -42,9 +42,15 @@ import axios from 'axios';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
 import CheckboxGroup from '../../container/CheckboxGroup'
-import Checkbox from '../Checkbox'
-import FormikFormGroup from '../FormikFormGroup'
-import styleConfig from '../../../config/styleConfig'
+import Checkbox from '../Checkbox';
+import FormikFormGroup from '../FormikFormGroup';
+import styleConfig from '../../../config/styleConfig';
+import {
+    DISASSOCIATE
+} from '../../../config/wordMap';
+import {
+    isEmpty,
+} from '../../../helper/validation';
 
 let monitorTypeMap = {};
 Object.keys(config.monitorType)
@@ -53,7 +59,7 @@ Object.keys(config.monitorType)
 })
  
 class EditPatientForm extends React.Component {
-
+ 
     static contextType = AppContext;
   
     render() {
@@ -137,7 +143,12 @@ class EditPatientForm extends React.Component {
 
                             name: name || '' ,
 
-                            mac_address: mac_address || '',
+                            mac_address: selectedRowData.isBind 
+                                ? {
+                                    label: mac_address,
+                                    value: mac_address
+                                }
+                                : null,
 
                             asset_control_number:asset_control_number|| '',
 
@@ -193,26 +204,9 @@ class EditPatientForm extends React.Component {
                                         locale.texts.LIMIT_IN_FOURTY_CHARACTER
                                     ),
 
-                                mac_address: Yup.string()
-                                    .required(locale.texts.MAC_ADDRESS_IS_REQUIRED)
-                                    .test(
-                                        'mac_address',
-                                        locale.texts.THE_MAC_ADDRESS_IS_ALREADY_USED,
-                                        value => {
-                                            return value === selectedRowData.mac_address ||
-                                                !this.props.objectTable.map(item => item.mac_address.toUpperCase().replace(/:/g, '')).includes(value.toUpperCase().replace(/:/g, ''))
-                                        }
-                                        
-                                    ).test(
-                                        'mac_address',
-                                        locale.texts.THE_MAC_ADDRESS_FORM_IS_WRONG,
-                                        value => {
-                                            if (value == undefined) return false
-                                            var pattern = new RegExp("^[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}$");
-                                            if( value.match(pattern)) return true
-                                            return false
-                                        }
-                                    ), 
+
+                                mac_address: Yup.string().nullable(),
+                               
                         })}
 
 
@@ -240,8 +234,9 @@ class EditPatientForm extends React.Component {
                                 monitor_type, 
                                 room: values.room ? values.room.label : '',
                                 object_type: values.gender.value,
-                                physicianIDNumber : values.physician  ? values.physician.value : this.props.physicianIDNumber
-                            }  
+                                physicianIDNumber : values.physician  ? values.physician.value : this.props.physicianIDNumber,
+                                mac_address: isEmpty(values.mac_address) || values.mac_address == null ? null : values.mac_address.value,
+                            }                              
                             this.props.handleSubmit(postOption)
                         }}
 
@@ -295,13 +290,26 @@ class EditPatientForm extends React.Component {
                                     </Col>
                                     <Col>
                                         <FormikFormGroup 
-                                            type="text"
                                             name="mac_address"
                                             label={locale.texts.MAC_ADDRESS}
-                                            error={errors.mac_address}
-                                            touched={touched.mac_address}
-                                            placeholder=""
-                                            disabled={this.props.disableASN}
+                                            error={errors.transferred_location}
+                                            touched={touched.transferred_location}
+                                            component={() => (
+                                                <Select
+                                                name="mac_address"
+                                                    value = {values.mac_address}
+                                                    className="my-1"
+                                                    onChange={value => setFieldValue("mac_address", value)}
+                                                    options={this.props.macOptions}
+                                                    isSearchable={false}
+                                                    isDisabled={selectedRowData.isBind}
+                                                    styles={styleConfig.reactSelect}
+                                                    placeholder=""
+                                                    components={{
+                                                        IndicatorSeparator: () => null
+                                                    }}
+                                                />
+                                            )}
                                         />
                                     </Col>
                                 </Row>
@@ -400,20 +408,36 @@ class EditPatientForm extends React.Component {
                                     )}
                                 />
                                 <Modal.Footer>
-                                    <Button 
-                                        variant="outline-secondary" 
-                                        onClick={handleClose}
+                                    <div
+                                        className="mr-auto"
                                     >
-                                        {locale.texts.CANCEL}
-                                    </Button>
-                                    <Button 
-                                        type="button" 
-                                        onClick={submitForm} 
-                                        variant="primary" 
-                                        disabled={isSubmitting}
+                                        <Button
+                                            onClick={this.props.handleClick}
+                                            variant="link"
+                                            name={DISASSOCIATE}
+                                            disabled={!selectedRowData.isBind}
+                                        >
+                                            {locale.texts.UNBIND}
+                                        </Button>
+                                    </div>
+                                    <div
                                     >
-                                        {locale.texts.SAVE}
-                                    </Button>
+                                        <Button 
+                                            variant="outline-secondary" 
+                                            onClick={handleClose}
+                                        >
+                                            {locale.texts.CANCEL}
+                                        </Button>
+                                        <Button 
+                                            type="button" 
+                                            variant="primary" 
+                                            disabled={isSubmitting}
+                                            onClick={submitForm}
+                                        >
+                                            {locale.texts.SAVE}
+                                        </Button>
+                                    </div>
+
                                 </Modal.Footer>
                             </Form>
                         )}

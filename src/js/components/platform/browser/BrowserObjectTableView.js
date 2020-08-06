@@ -44,6 +44,15 @@ import {
     PrimaryButton
 } from '../../BOTComponent/styleComponent';
 import AccessControl from '../../authentication/AccessControl'; 
+import {
+    ADD,
+    BIND,
+    UNBIND,
+    DELETE,
+    DEVICE,
+    SAVE_SUCCESS,
+    DISASSOCIATE
+} from '../../../config/wordMap';
  
 const BrowserObjectTableView = ({
     addObjectFilter,
@@ -98,24 +107,25 @@ const BrowserObjectTableView = ({
                 <ButtonToolbar>
                     <PrimaryButton
                         className='text-capitalize mr-2 mb-1'
-                        name='associate'
+                        name={BIND}
                         onClick={handleClickButton}
                     >
-                        {locale.texts.ASSOCIATE}
+                        {locale.texts.BIND}
                     </PrimaryButton>
                     <PrimaryButton
                         className='text-capitalize mr-2 mb-1'
-                        onClick={handleClick}
+                        name={ADD}
+                        onClick={handleClickButton}
                     >
-                        {locale.texts.ADD}
+                        {locale.texts.ADD_PATIENT}
                     </PrimaryButton>
                     <PrimaryButton
                         className='text-capitalize mr-2 mb-1'
-                        name='delete'
+                        name={DELETE}
                         onClick={handleClickButton}
                         disabled={selection.length == 0}
                     >
-                        {locale.texts.DELETE}
+                        {locale.texts.DELETE_PATIENT}
                     </PrimaryButton>
                 </ButtonToolbar>
             </AccessControl>

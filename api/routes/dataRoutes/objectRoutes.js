@@ -47,11 +47,15 @@ module.exports = app => {
     app.route('/data/object')
         .get(objectController.getObject)
         .delete(objectController.deleteObject)
+        .patch(objectController.disassociate)
 
     app.route('/data/object/device')
         .post(objectController.addDevice)
         .put(objectController.editDevice)
-        .patch(objectController.disassociate)
+
+    app.route('/data/object/person')
+        .post(objectController.addPerson)
+        .put(objectController.editPerson)
 
     app.route('/data/objectPackage')
         .put(objectController.editObjectPackage)

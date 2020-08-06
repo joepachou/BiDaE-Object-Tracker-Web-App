@@ -68,33 +68,6 @@ module.exports = {
             })     
     },
 
-    // addObject: (request, response) => {
-
-    //     const {
-    //         formOption,
-    //         mode
-    //     } = request.body
-
-    //     let query;
-    //     switch(mode) {
-    //         case 'PERSONA':
-    //             query = dbQueries.addPersona(formOption);
-    //             break;
-    //         case 'DEVICE':
-    //             query = dbQueries.addObject(formOption);
-    //             break;
-    //     }
-
-    //     pool.query(query)
-    //         .then(res => {
-    //             console.log(`add ${mode} succeed`);
-    //             response.status(200).json(res)
-    //         })
-    //         .catch(err => {
-    //             console.log(`add ${mode} failed ${err}`);
-    //         })
-    // },
-
     addDevice: (request, response) => {
         const {
             formOption,
@@ -124,7 +97,6 @@ module.exports = {
             formOption,
             mode
         } = request.body
-
         pool.query(dbQueries.addPersona(formOption))
             .then(res => {
                 console.log(`add person succeed`);
@@ -134,49 +106,6 @@ module.exports = {
                 console.log(`add person failed ${err}`);
             })
     },
-
-    // editObject: (request, response) => {
-    //     const { 
-    //         formOption,
-    //         mode
-    //     } = request.body
-
-    //     let {
-    //         area_id
-    //     } = formOption
-
-    //     switch(mode) {
-    //         case 'PERSONA':
-    //             query = dbQueries.editPersona(formOption);
-    //             break;
-    //         case 'DEVICE':
-    //             query = dbQueries.editObject(formOption);
-    //             break;
-    //     }
-
-    //     pool.query(query)
-    //         .then(res => {
-    //             console.log(`edit ${mode} succeed`);
-    //             if (process.env.RELOAD_GEO_CONFIG_PATH) {
-    //                 exec(process.env.RELOAD_GEO_CONFIG_PATH, `-p 9999 -c cmd_reload_geo_fence_setting -r geofence_object -f area_one -a ${area_id}`.split(' '), function(err, data){
-    //                     if(err){
-    //                         console.log(`execute reload geofence setting fails ${err}`)
-    //                         response.status(200).json(res)
-    //                     }else{
-    //                         console.log(`execute reload geofence setting success`)
-    //                         response.status(200).json(res)
-    //                     }
-    //                 })
-    //             } else {
-    //                 response.status(200).json(res)
-    //                 console.log('IPC has not set')
-    //             }
-    //         })
-    //         .catch(err => {
-    //             console.log(`edit ${mode} failed ${err}`)
-    //         })
-    // },
-
 
     /** Controller for editing device 
      *  If the 
@@ -193,6 +122,49 @@ module.exports = {
         } = formOption
 
         pool.query(dbQueries.editDevice(formOption))
+            .then(res => {
+                console.log(`edit ${mode} succeed`);
+
+                pool.query(dbQueries.checkIsObjectSummaryRecordExist(formOption.mac_address))
+                    .then(res => {
+                        if (res.rowCount != 0) {
+
+                            pool.query(dbQueries.addObjectSummaryRecord(formOption.mac_address))
+                                .then(res => {
+                                    console.log(`add record in object summary table succeed`)
+
+                                    reloadGeofenceConfig(area_id);
+
+                                    response.status(200).json(res)
+                                }) 
+                                .catch(err => {
+                                    console.log(`add record in object summary table failed ${err}`)
+                                })
+                        } else {
+                            reloadGeofenceConfig(area_id);
+
+                            response.status(200).json(res)
+                        }
+                    })
+
+            })
+            .catch(err => {
+                console.log(`edit ${mode} failed ${err}`)
+            })
+    },
+
+    editPerson: (request, response) => {
+        
+        const { 
+            formOption,
+            mode
+        } = request.body
+
+        let {
+            area_id
+        } = formOption
+
+        pool.query(dbQueries.editPersona(formOption))
             .then(res => {
                 console.log(`edit ${mode} succeed`);
 

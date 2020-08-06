@@ -240,6 +240,8 @@ const en =  {
     RSSI_THRESHOLD: "RSSI threshold",
     LAST_FOUR_DIGITS_IN_ACN: "last 4 digits in ACN",
     ADD_DEVICE: "add device",
+    ADD_PATIENT: "add patient",
+    DELETE_PATIENT: "delete patient",
     ADD_NOTE: "add note",
     HIDE_NOTE: "hide note",
     DELAY_BY: "delay by",

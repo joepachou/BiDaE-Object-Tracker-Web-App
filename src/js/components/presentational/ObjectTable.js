@@ -390,9 +390,7 @@ class ObjectTable extends React.Component{
         })
         .then(res => { 
             let callback = () => {
-                messageGenerator.setSuccessMessage(
-                    SAVE_SUCCESS
-                )
+                messageGenerator.setSuccessMessage(SAVE_SUCCESS)
             }
             this.getData(callback)
         }).catch( error => {
@@ -500,7 +498,6 @@ class ObjectTable extends React.Component{
                 })
                 break; 
         }
-
     }
 
     filterData = (data, key, filteredAttribute) => {
@@ -733,6 +730,7 @@ class ObjectTable extends React.Component{
                             <PrimaryButton 
                                 name={DELETE}
                                 onClick={this.handleClickButton}
+                                disabled={this.state.selection.length == 0}
                             >
                                 {locale.texts.DELETE_DEVICE}
                             </PrimaryButton>
@@ -780,7 +778,7 @@ class ObjectTable extends React.Component{
                     objectTable={this.state.objectTable}
                     disableASN = {this.state.disableASN  }
                     areaTable={this.state.areaTable}
-                    idleMacaddrSet={this.state.idleMacaddrSet}
+                    // idleMacaddrSet={this.state.idleMacaddrSet}
                     macOptions={this.state.macOptions}
                 />     
                 <BindForm
@@ -819,9 +817,6 @@ class ObjectTable extends React.Component{
                     show={this.state.showDeleteConfirmation} 
                     handleClose={this.handleClose}
                     message={this.state.message}
-                    // handleSubmit={
-                    //     this.state.warningSelect == 1 ? this.objectMultipleDelete : null
-                    // }
                     handleSubmit={this.objectMultipleDelete}
                 />
             </div>

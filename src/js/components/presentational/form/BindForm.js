@@ -278,6 +278,7 @@ class BindForm extends React.Component {
                                                     options={this.props.macOptions}
                                                     isSearchable={false}
                                                     styles={styleConfig.reactSelect}
+                                                    placeholder=""
                                                     components={{
                                                         IndicatorSeparator: () => null
                                                     }}

@@ -340,6 +340,9 @@ const patientTableColumn = [
         Header: "Mac Address",
         accessor: "mac_address",
         width: 200,
+        Cell: props => !props.original.isBind 
+            ? <div style={{color: styleSheet.theme, textDecoration: 'underline'}}>{props.value}</div> 
+            : props.value
     },
     {
         Header: "Monitor Type",

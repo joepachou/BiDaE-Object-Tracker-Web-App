@@ -242,6 +242,8 @@ const tw = {
     RSSI_THRESHOLD: "RSSI設定",
     LAST_FOUR_DIGITS_IN_ACN: "產編後四碼",
     ADD_DEVICE: "增加儀器",
+    ADD_PATIENT: "增加病人",
+    DELETE_PATIENT: "刪除病人",
     ADD_NOTE: "增加註記",
     HIDE_NOTE: "隱藏註記",
     DELAY_BY: "延後",

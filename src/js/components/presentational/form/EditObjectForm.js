@@ -69,7 +69,7 @@ Object.keys(config.monitorType)
         monitorTypeMap[config.monitorType[key]] = key 
 })
 
-class EditObjectForm extends React.Component { 
+class EditObjectForm extends React.Component {  
 
     static contextType = AppContext
 
@@ -251,7 +251,6 @@ class EditObjectForm extends React.Component {
                                         return sum
                                     }, 0)      
                                 :   0
-
                             const postOption = {
                                 id,
                                 ...values,
@@ -261,7 +260,7 @@ class EditObjectForm extends React.Component {
                                     : null,
                                 monitor_type,
                                 area_id: values.area.id || 0,
-                                mac_address: isEmpty(values.mac_address) ? null : values.mac_address.value,
+                                mac_address: isEmpty(values.mac_address) || values.mac_address == null ? null : values.mac_address.value,
                             }
                             
                             while (postOption.type[postOption.type.length - 1] == " "){

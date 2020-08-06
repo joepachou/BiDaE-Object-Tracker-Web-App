@@ -75,6 +75,16 @@ import MobileObjectTableView from '../platform/mobile/MobileObjectTableView';
 import {
     transferMonitorTypeToString
 } from '../../helper/dataTransfer';
+import {
+    ADD,
+    BIND,
+    UNBIND,
+    DELETE,
+    DEVICE,
+    PERSON,
+    SAVE_SUCCESS,
+    DISASSOCIATE
+} from '../../config/wordMap';
 
 
 class PatientTable extends React.Component{  
@@ -165,13 +175,12 @@ class PatientTable extends React.Component{
         })
         .then(res => {
             let columns = JSONClone(patientTableColumn);
-            let data = [] 
 
             columns.map(field => {
                 field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
             })
 
-            res.data.rows
+            let data = res.data.rows
                 .filter(item => item.object_type != 0)
                 .map(item => { 
                     item.area_name = {
@@ -181,8 +190,14 @@ class PatientTable extends React.Component{
                     }
                     item.monitor_type = transferMonitorTypeToString(item);
 
-                    data.push(item)
+                    item.isBind = item.mac_address ? 1 : 0;
+                    item.mac_address = item.mac_address ? item.mac_address : locale.texts.NON_BINDIN
+
+                    return item
                 })  
+
+            this.getIdleMacaddrSet()
+
             this.setState({
                 data,
                 isShowEdit: false,
@@ -199,6 +214,26 @@ class PatientTable extends React.Component{
         .catch(err => {
             console.log(err);
         })
+    }
+
+    getIdleMacaddrSet = async () => {
+        await apiHelper.objectApiAgent.getIdleMacaddr()
+            .then(res => {
+                let idleMacaddrSet = res.data.rows[0].mac_set
+                let macOptions = idleMacaddrSet.map(mac => {
+                    return {
+                        label: mac,
+                        value: mac
+                    }
+                })
+                this.setState({
+                    idleMacaddrSet,
+                    macOptions
+                })
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 
     getAreaTable = () => {
@@ -238,30 +273,18 @@ class PatientTable extends React.Component{
         })
     }
 
-    handleClick = (e) => {
-        this.setState({
-            disableASN: false,
-            isPatientShowEdit: true,
-            formTitle: 'add persona',
-            apiMethod: 'post',
-            selectedRowData:'',
-        })
-    }
-
     handleSubmitForm = (formOption, cb) => {
         let {
             apiMethod
         } = this.state
-        this.setState({isShowBind:false})
 
-        axios[apiMethod](dataSrc.object, {
+        apiHelper.objectApiAgent[apiMethod]({
             formOption,
-            mode: 'PERSONA',
-        }).then(res => { 
+            mode: PERSON,
+        })
+        .then(res => { 
             let callback = () => {
-                messageGenerator.setSuccessMessage(
-                    'save success'
-                )
+                messageGenerator.setSuccessMessage(SAVE_SUCCESS)
             }
             this.getData(callback)
         }).catch( error => {
@@ -319,66 +342,130 @@ class PatientTable extends React.Component{
     handleClickButton = (e) => {
 
         let { name } = e.target
+        let {
+            locale
+        } = this.context
+        
         switch(name) {
-            case 'associate':
+            case ADD: 
                 this.setState({
-                    isShowBind: true,
-                    bindCase: 2,
+                    isPatientShowEdit: true,
+                    formTitle: name,
+                    selectedRowData: [],
+                    disableASN: false,
                     apiMethod: 'post',
                 })
-            break;
-            case 'delete':
+                break;
+            case BIND:
+                this.setState({
+                    isShowBind: true,
+                    bindCase: 1,
+                    apiMethod: 'post',
+                })
+            break; 
+            case UNBIND:
+                this.setState({
+                    isShowBind: true,
+                    bindCase: 1,
+                    apiMethod: 'post',
+                })
+            break; 
+            case DELETE:
                 this.setState({
                     showDeleteConfirmation: true,
-                    warningSelect : 0,
+                    warningSelect : 1,
+                    action: DELETE,
+                    message: locale.texts.ARE_YOU_SURE_TO_DELETE
                 })
-            break;
-        }
+                break;
+  
+            // case DISASSOCIATE:
+            //     this.setState({
+            //         formTitle: name,
+            //         isShowEditImportTable: true
+            //     })
+            //     break; 
 
+            case DISASSOCIATE:
+                this.setState({
+                    showDeleteConfirmation: true,
+                    action: DISASSOCIATE,
+                    message: locale.texts.ARE_YOU_SURE_TO_DISASSOCIATE
+                })
+                break; 
+        }
     }
 
     objectMultipleDelete = () => {
-        let formOption = []
-        var deleteArray = [];
-        var deleteCount = 0; 
-        this.state.data.map (item => {
-         
-            this.state.selection.map(itemSelect => {
-                itemSelect === item.id
-                ? 
-                 deleteArray.push(deleteCount.toString()) 
-                : 
-                null          
-            })
-                 deleteCount +=1
-        })
-        
-        deleteArray.map( item => {
-         
-            this.state.data[item] === undefined ?
-                null
-                :
-                formOption.push(this.state.data[item].mac_address)
-            })
 
-        axios.delete(dataSrc.object, {
-            data: {
-                formOption
-            }
-        })
-        .then(res => {
-            let callback = () => {
-                messageGenerator.setSuccessMessage(
-                    'save success'
-                )
-            }
-            this.getData(callback)
-        })
-        .catch(err => {
-            console.log(err)
-        }) 
-       
-        this.setState({selectAll:false,selection:[]})
+
+        switch(this.state.action) {
+
+            case DISASSOCIATE:
+        
+                apiHelper.objectApiAgent.disassociate({
+                    formOption: {
+                        id: this.state.selectedRowData.id
+                    }
+                })
+                .then(res => {
+                    let callback = () => {
+                        messageGenerator.setSuccessMessage(SAVE_SUCCESS)
+                    }
+                    this.getData(callback)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            break;
+          
+            case DELETE:
+                let formOption = []
+                var deleteArray = [];
+                var deleteCount = 0;
+
+                this.state.data.map (item => {
+                
+                    this.state.selection.map(itemSelect => {
+                        itemSelect === item.id
+                        ? 
+                        deleteArray.push(deleteCount.toString()) 
+                        : 
+                        null          
+                    })
+                        deleteCount +=1
+                })
+                
+                this.setState({selectAll:false})
+
+                deleteArray.map( item => {
+                
+                    this.state.data[item] === undefined ?
+                        null
+                        :
+                        formOption.push({
+                            id: this.state.data[item].id,
+                            mac_address: this.state.data[item].isBind ? this.state.data[item].mac_address : null
+                        })
+                    })
+
+                apiHelper.objectApiAgent.deleteObject({
+                    formOption
+                })
+                .then(res => {
+                    let callback = () => {
+                        messageGenerator.setSuccessMessage(SAVE_SUCCESS)
+                    }
+                    this.getData(callback)
+                })
+                .catch(err => {
+                    console.log(err)
+                }) 
+        
+                this.setState({selectAll:false,selection:[]})
+
+                break;
+        }
     }
 
 
@@ -518,7 +605,7 @@ class PatientTable extends React.Component{
                                     this.setState({
                                         isPatientShowEdit: true,
                                         selectedRowData: rowInfo.original,
-                                        formTitle: 'edit i',
+                                        formTitle: 'edit info',
                                         disableASN: true,
                                         apiMethod: 'put',
                                     })
@@ -532,6 +619,7 @@ class PatientTable extends React.Component{
                     title= {this.state.formTitle} 
                     selectedRowData={selectedRowData  || ''} 
                     handleSubmit={this.handleSubmitForm}
+                    handleClick={this.handleClickButton}
                     formPath={this.state.formPath}
                     handleClose={this.handleClose}
                     data={this.state.data}
@@ -540,6 +628,7 @@ class PatientTable extends React.Component{
                     roomOptions={this.state.roomOptions}
                     disableASN = {this.state.disableASN}
                     areaTable={this.state.areaTable}
+                    macOptions={this.state.macOptions}
                 />  
                 <BindForm 
                     show = {this.state.isShowBind} 
@@ -550,6 +639,7 @@ class PatientTable extends React.Component{
                     handleClose={this.handleClose}
                     objectTable={this.state.objectTable}
                     areaTable={this.state.areaTable}
+                    macOptions={this.state.macOptions}
                     data={this.state.importData.reduce((dataMap, item) => {
                         dataMap[item.asset_control_number] = item 
                         return dataMap
@@ -559,11 +649,8 @@ class PatientTable extends React.Component{
                 <DeleteConfirmationForm
                     show={this.state.showDeleteConfirmation} 
                     handleClose={this.handleClose}
-                    handleSubmit={
-                        
-                    this.state.warningSelect == 0 ?  this.objectMultipleDelete :null
-              
-                    } 
+                    message={this.state.message}
+                    handleSubmit={this.objectMultipleDelete}
                 />
             </Fragment>
         )
