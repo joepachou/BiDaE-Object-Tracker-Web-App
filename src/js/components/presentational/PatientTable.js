@@ -34,28 +34,16 @@
 
 
 import React, { Fragment } from 'react';
-import { 
-    ButtonToolbar,
-    Row,
-    Col
-} from 'react-bootstrap';
 import { AppContext } from '../../context/AppContext';
 import ReactTable from 'react-table'; 
 import styleConfig from '../../config/styleConfig';
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
 import BindForm from '../presentational/form/BindForm';
-import DissociationForm from '../container/DissociationForm';
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm';
-import Select from 'react-select';
-import BOTInput from '../presentational/BOTInput';
-import axios from 'axios';
+import moment from 'moment';
 import EditPatientForm from '../presentational/form/EditPatientForm';
-import {
-    PrimaryButton
-} from '../BOTComponent/styleComponent';
 import messageGenerator from '../../helper/messageGenerator';
 const SelectTable = selecTableHOC(ReactTable);
-import AccessControl from '../authentication/AccessControl';
 import { patientTableColumn } from '../../config/tables';
 import config from '../../config';
 import dataSrc from '../../dataSrc';
