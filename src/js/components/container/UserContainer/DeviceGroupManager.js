@@ -1,5 +1,6 @@
 import React from 'react';
-import { Col, 
+import { 
+    Col, 
     Row,
     Button, 
     ButtonToolbar,
@@ -66,13 +67,11 @@ class DeviceGroupManager extends React.Component{
     }
     addDeviceToGroup = (item) => {
         const groupId = this.state.selectedDeviceGroup.id
-        console.log(item)
         apiHelper.deviceGroupListApis.modifyDeviceGroupList({
             groupId: this.state.selectedDeviceGroup.id,
             mode: 0,
             itemACN: item.asset_control_number
         }).then(res => {
-
             this.reload()
         }).catch(err => 
             console.log(err)
@@ -111,7 +110,6 @@ class DeviceGroupManager extends React.Component{
         apiHelper.deviceGroupListApis.deleteGroup({
             groupId: this.state.selectedDeviceGroup.id,
         }).then(res => {
-            
             this.reload()
         }).catch(err => 
             console.log(err)
@@ -127,7 +125,7 @@ class DeviceGroupManager extends React.Component{
 
         return options
     }
-    
+
     selectDeviceGroup = (deviceGroup) => {
         this.setState({
             selectedDeviceGroup: deviceGroup ? deviceGroup.value : null
@@ -135,7 +133,6 @@ class DeviceGroupManager extends React.Component{
     }
     getObjectData = (isMount) => {
         let { locale, auth } = this.context
-        
         apiHelper.objectApiAgent.getObjectTable({
             locale: locale.abbr,
             areas_id: auth.user.areas_id,
@@ -177,7 +174,7 @@ class DeviceGroupManager extends React.Component{
             this.setState({
                 deviceGroupList: data,
                 deviceGroupListOptions: this.deviceGroupListToSelectOptions(data),
-                selectedDeviceGroup: isMount== "Mount"?data[0]:updatedSelectedDeviceGroup
+                selectedDeviceGroup: isMount == "Mount" ?data[0]:updatedSelectedDeviceGroup
             })
         })
         .catch(err => {

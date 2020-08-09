@@ -60,7 +60,6 @@ module.exports = {
         let query = dbQueries.addDeviceGroup(name ? name : 'New Group')
         pool.query(query)
         .then(res => {
-            console.log(res.rows)
             response.status(200).json(res.rows[0].id)
         })
         .catch(err => {
@@ -96,14 +95,13 @@ module.exports = {
         // })
     },
     deleteDeviceGroup : (request, response) => {
-        console.log(request.body)
         const {groupId} = request.body
         const query = dbQueries.removeDeviceGroup(groupId)
         pool.query(query).then(res => {
             console.log('success')
             response.status(200).json('ok')
         }).catch(err => {
-            console.log('error when change patient group,', err)
+            console.log('error when change device group,', err)
         })
     }
 }

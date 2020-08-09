@@ -40,61 +40,18 @@ import config from '../config';
 const src = dataSrc.patientGroupList;
 
 const patientGroupListApis = {
-    addPatientGroupList: async function(
-        name
-    ) {
-        console.log('add', src)
-        return await axios.post(src, {
-            name
-        })
+    addPatientGroupList: async function( name ) {
+        return await axios.post(src, { name })
     },
-    getPatientGroupList: async function(
-        name
-    ) {
-        return await axios.get(src, {
-            name
-        })
+    getPatientGroupList: async function( name ) {
+        return await axios.get(src, { name })
     },
     modifyPatientGroupList: async function( pack ) {
         return await axios.put(src, pack)
     },
     deleteGroup: async function( groupId ) {
-        return await axios.put(src, groupId)
+        return await axios.delete(src, {data: groupId})
     },
-    // getGeofenceConfig: async function(
-    //     type, 
-    //     areasId,
-    //     isGetLbeaconPosition = false
-    // ) {
-        
-        
-    // },
-
-    // delete: async function(
-    //     configPackage
-    // ) {
-    //     return await axios.delete(src, {
-    //         data: {
-    //             configPackage
-    //         }
-    //     })
-    // },
-
-    // add: async function(
-    //     configPackage
-    // ) {
-    //     return await axios.patch(src, {
-    //         configPackage
-    //     })
-    // },
-
-    // setGeofenceConfig: async function(
-    //     configPackage
-    // ) {
-    //     return await axios.put(src, {
-    //         configPackage
-    //     })
-    // } 
 
 }
 

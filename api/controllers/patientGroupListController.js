@@ -60,7 +60,7 @@ module.exports = {
         let query = dbQueries.addPatientGroup(name ? name : 'New Group')
         pool.query(query)
         .then(res => {
-            response.status(200).json("ok")
+            response.status(200).json(res.rows[0].id)
         })
         .catch(err => {
             console.log('addPatientGroup error: ', err)
@@ -95,8 +95,8 @@ module.exports = {
         })
     },
     deletePatientGroup : (request, response) => {
-        const {patient_group_id, user_id} = request.body
-        const query = queryType.changePatientGroup(patient_group_id, user_id)
+        const {groupId} = request.body
+        const query = dbQueries.removePatientGroup(groupId)
         pool.query(query).then(res => {
             console.log('success')
             response.status(200).json('ok')
