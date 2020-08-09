@@ -1,5 +1,11 @@
 import React from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { Col, 
+    Row,
+    Button, 
+    ButtonToolbar,
+    Modal,
+    Form
+} from 'react-bootstrap';
 import axios from 'axios';
 import dataSrc from "../../../dataSrc";
 // import AddableList from './AddableList'
@@ -28,13 +34,14 @@ const style = {
 class DeviceGroupManager extends React.Component{
 
     static contextType = AppContext
-
+    reNameRef = React.createRef()
     state = {
-        selectedDeviceGroup: null
+        selectedDeviceGroup: null,
+        renameGroup: false
     }
     componentDidMount = () => {
         this.getObjectData()
-        this.getDeviceGroup()
+        this.getDeviceGroup("Mount")
     }
 
     reload = () => {
@@ -47,6 +54,10 @@ class DeviceGroupManager extends React.Component{
             name
         })
         .then(res => {
+            console.log('successs', res.data)
+            this.setState({
+                selectedDeviceGroup: {id:res.data}
+            })
             this.reload()
         })
         .catch(err => {
@@ -61,7 +72,7 @@ class DeviceGroupManager extends React.Component{
             mode: 0,
             itemACN: item.asset_control_number
         }).then(res => {
-            console.log('successs', res)
+
             this.reload()
         }).catch(err => 
             console.log(err)
@@ -89,6 +100,9 @@ class DeviceGroupManager extends React.Component{
             newName: newName
         }).then(res => {
             this.reload()
+            this.setState({
+                renameGroup: false
+            })
         }).catch(err => 
             console.log(err)
         )
@@ -97,6 +111,7 @@ class DeviceGroupManager extends React.Component{
         apiHelper.deviceGroupListApis.deleteGroup({
             groupId: this.state.selectedDeviceGroup.id,
         }).then(res => {
+            
             this.reload()
         }).catch(err => 
             console.log(err)
@@ -118,7 +133,7 @@ class DeviceGroupManager extends React.Component{
             selectedDeviceGroup: deviceGroup ? deviceGroup.value : null
         })
     }
-    getObjectData = () => {
+    getObjectData = (isMount) => {
         let { locale, auth } = this.context
         
         apiHelper.objectApiAgent.getObjectTable({
@@ -131,13 +146,14 @@ class DeviceGroupManager extends React.Component{
             this.setState({
                 allDevices: res.data.rows
             })
+
         }).catch(function (error) {
 
             console.log(error);
 
         })
     }
-    getDeviceGroup = () => {
+    getDeviceGroup = (isMount) => {
         apiHelper.deviceGroupListApis.getDeviceGroupList()
         .then(res => {
             const data = res.data.map(group => {
@@ -161,7 +177,7 @@ class DeviceGroupManager extends React.Component{
             this.setState({
                 deviceGroupList: data,
                 deviceGroupListOptions: this.deviceGroupListToSelectOptions(data),
-                selectedDeviceGroup: updatedSelectedDeviceGroup
+                selectedDeviceGroup: isMount== "Mount"?data[0]:updatedSelectedDeviceGroup
             })
         })
         .catch(err => {
@@ -177,6 +193,23 @@ class DeviceGroupManager extends React.Component{
                 className="text-capitalize"
                 style={{height: this.state.selectedDeviceGroup ? '80vh':'10vh'}}
             >
+                <Modal
+                  show={this.state.renameGroup}
+                  onHide={() => {this.setState({renameGroup: false})}}>
+                  <Modal.Header closeButton>
+                      <Modal.Title>{locale.texts.RENAME}</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form.Group as={Col} >
+                          <Form.Control type="text" ref={this.reNameRef}/>
+                        </Form.Group>
+                    </Modal.Body>
+                    <Modal.Footer>
+                      <Button variant="primary" onClick={()=>{console.log(this.reNameRef.current.value);this.renameGroup(this.reNameRef.current.value)}}>
+                        Save Changes
+                      </Button>
+                    </Modal.Footer>
+                </Modal>
                 <CreatableSelect
                     isClearable
                     onChange={this.selectDeviceGroup}
@@ -195,14 +228,38 @@ class DeviceGroupManager extends React.Component{
                 {
                     this.state.selectedDeviceGroup 
                     ?
-                        <DualListBox
-                            allItems={this.state.allDevices || []}
-                            selectedItemList={this.state.selectedDeviceGroup ? this.state.selectedDeviceGroup.items : []}
-                            selectedTitle = 'Devices In List'
-                            unselectedTitle = 'Other Devices'
-                            onSelect = {this.addDeviceToGroup}
-                            onUnselect = {this.removeDeviceFromGroup}
-                        />
+                        <>
+                            <ButtonToolbar
+                                className='my-2'
+                            >
+                                <Button 
+                                    variant='outline-primary' 
+                                    className='text-capitalize mr-2'
+                                    name='secondaryArea'
+                                    size='sm'
+                                    onClick={() => {this.setState({renameGroup: true})}}
+                                >
+                                    {locale.texts.EDIT_DEVICE_GROUP_NAME}
+                                </Button>
+                                <Button 
+                                    variant='outline-primary' 
+                                    className='text-capitalize mr-2'
+                                    name='password'
+                                    size='sm'
+                                    onClick={this.deleteGroup}
+                                >
+                                    {locale.texts.REMOVE_DEVICE_GROUP}
+                                </Button> 
+                            </ButtonToolbar>
+                            <DualListBox
+                                allItems={this.state.allDevices || []}
+                                selectedItemList={this.state.selectedDeviceGroup ? this.state.selectedDeviceGroup.items : []}
+                                selectedTitle = 'Devices In List'
+                                unselectedTitle = 'Other Devices'
+                                onSelect = {this.addDeviceToGroup}
+                                onUnselect = {this.removeDeviceFromGroup}
+                            />
+                        </>
                     :
                         null
                 }
