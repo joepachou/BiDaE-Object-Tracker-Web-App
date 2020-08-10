@@ -1,7 +1,10 @@
 /*
     2020 © Copyright (c) BiDaE Technology Inc. 
     Provided under BiDaE SHAREWARE LICENSE-1.0 in the LICENSE.
-  
+
+    License:
+        GPL 3.0 : The content of this file is subject to the terms and conditions
+
     Project Name:
         BiDae Object Tracker (BOT)
 

@@ -298,6 +298,7 @@ class NavbarContainer extends React.Component {
                             >
                                 <Dropdown.Toggle 
                                     variant='light'
+                                    bsPrefix='bot-dropdown-toggle'
                                 >
                                     {locale.name}
                                 </Dropdown.Toggle>
@@ -306,14 +307,12 @@ class NavbarContainer extends React.Component {
                                 >
                                     {Object.values(locale.supportedLocale).map(lang => {
                                         return (
-                                            <Dropdown.Item 
-                                                className='lang-select'
+                                            <BOTNavLink
                                                 eventKey={lang.abbr}
                                                 key={lang.abbr}
                                             >
                                                 {lang.name}
-                                            </Dropdown.Item>
-                                            
+                                            </BOTNavLink>
                                         )
                                     })}
                                 </Dropdown.Menu>
