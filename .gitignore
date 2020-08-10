@@ -1,5 +1,6 @@
 *.env
 **/.DS_Store
+package-lock.json
 node_modules/
 site_module/
 default_folder/
