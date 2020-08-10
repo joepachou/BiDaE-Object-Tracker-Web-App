@@ -216,7 +216,7 @@ class ImportPatientTable extends React.Component{
                 fileReader.name = files[index].name;
             }
         } 
-        fileReader.onload = event => {
+        fileReader.onload = async event => {
             try {
                 // 判斷上傳檔案的類型 可接受的附檔名
                 const validExts = new Array('.xlsx', '.xls');
@@ -234,7 +234,7 @@ class ImportPatientTable extends React.Component{
                 const { result } = event.target; // 以二進制流方式讀取得到整份excel表格對象
                 let data = []; // 存儲獲取到的數據 // 遍歷每張工作表進行讀取（這裡默認只讀取第一張表）
 
-                import(
+                await import(
                     /* webpackChunkName: "xlsx" */
                     'xlsx'
                 )

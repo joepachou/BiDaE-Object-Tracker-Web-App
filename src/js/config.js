@@ -33,7 +33,7 @@
 */
 
 
-import BOT_LOGO from '../img//logo/BOT_LOGO_RED.png';
+import BOT_LOGO from '../img/logo/BOT_LOGO_GREEN.png';
 import mapConfig from './config/mapConfig';
 import viewConfig from './config/viewConfig';
 import moment from 'moment';

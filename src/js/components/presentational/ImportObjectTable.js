@@ -203,7 +203,7 @@ class ImportObjectTable extends React.Component{
     }
 
 
-    onImportExcel = files => {
+    onImportExcel = (files) => {
 
         // 獲取上傳的文件對象
         //const { files } = file.target; // 通過FileReader對象讀取文件
@@ -217,7 +217,7 @@ class ImportObjectTable extends React.Component{
                 fileReader.name = files[index].name;
             }
         } 
-        fileReader.onload = event => {
+        fileReader.onload = async event => {
             try {
                 // 判斷上傳檔案的類型 可接受的附檔名
                 const validExts = new Array('.xlsx', '.xls');
@@ -235,13 +235,12 @@ class ImportObjectTable extends React.Component{
                 const { result } = event.target; // 以二進制流方式讀取得到整份excel表格對象
                 let data = []; // 存儲獲取到的數據 // 遍歷每張工作表進行讀取（這裡默認只讀取第一張表）
 
-                import(
+                await import(
                     /* webpackChunkName: "xlsx" */
                     'xlsx'
                 )
                 .then(XLSX => {
                     const workbook = XLSX.read(result, { type: 'binary' });
-
                     for (const sheet in workbook.Sheets) {
                         if (workbook.Sheets.hasOwnProperty(sheet)) {
                             // 利用 sheet_to_json 方法將 excel 轉成 json 數據
@@ -251,7 +250,6 @@ class ImportObjectTable extends React.Component{
                         }
                     } 
                 })
-
 
                 // ＩＭＰＯＲＴ時把ＡＣＮ重複的擋掉
                 let newData = []
