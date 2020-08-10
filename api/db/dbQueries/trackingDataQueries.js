@@ -68,9 +68,9 @@ const getTrackingData = (areas_id, key) => {
 			) AS lbeacon_area,
 			COALESCE(patient_record.record, ARRAY[]::JSON[]) as records	
 		
-		FROM object_summary_table
+		FROM object_table
 
-		FULL JOIN object_table
+		LEFT JOIN object_summary_table
 		ON object_table.mac_address = object_summary_table.mac_address
 
 		LEFT JOIN lbeacon_table
