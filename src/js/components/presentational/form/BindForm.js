@@ -213,7 +213,7 @@ class BindForm extends React.Component {
                             let formOption = this.state.bindData
                             formOption = {
                                 ...formOption,
-                                mac_address: values.mac.value,
+                                mac_address: values.mac.label,
                                 area_id: values.area.id || 0
                             }
                             this.handleSubmit(formOption)
@@ -276,7 +276,7 @@ class BindForm extends React.Component {
                                                     className="my-1"
                                                     onChange={value => setFieldValue("mac", value)}
                                                     options={this.props.macOptions}
-                                                    isSearchable={false}
+                                                    isSearchable={true}
                                                     styles={styleConfig.reactSelect}
                                                     placeholder=""
                                                     components={{

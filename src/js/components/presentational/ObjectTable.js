@@ -267,7 +267,7 @@ class ObjectTable extends React.Component{
                 let macOptions = idleMacaddrSet.map(mac => {
                     return {
                         label: mac,
-                        value: mac
+                        value: mac.replace(/:/, '')
                     }
                 })
                 this.setState({

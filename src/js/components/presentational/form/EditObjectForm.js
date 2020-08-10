@@ -260,7 +260,7 @@ class EditObjectForm extends React.Component {
                                     : null,
                                 monitor_type,
                                 area_id: values.area.id || 0,
-                                mac_address: isEmpty(values.mac_address) || values.mac_address == null ? null : values.mac_address.value,
+                                mac_address: isEmpty(values.mac_address) || values.mac_address == null ? null : values.mac_address.label,
                             }
                             
                             while (postOption.type[postOption.type.length - 1] == " "){
@@ -361,7 +361,7 @@ class EditObjectForm extends React.Component {
                                                     className="my-1"
                                                     onChange={value => setFieldValue("mac_address", value)}
                                                     options={this.props.macOptions}
-                                                    isSearchable={false}
+                                                    isSearchable={true}
                                                     isDisabled={selectedRowData.isBind}
                                                     styles={styleConfig.reactSelect}
                                                     placeholder=""
