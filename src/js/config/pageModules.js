@@ -304,7 +304,7 @@ export const reportContainerModule = {
 
 }
 
-export const BOTAdminModule = {
+export const BOTAdminModule = { 
 
     title: 'BOT admin',
 
