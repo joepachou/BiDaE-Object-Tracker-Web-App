@@ -38,7 +38,6 @@
     "react-leaflet": "^2.2.0",
     "style-loader": "^0.23.1",
     "webpack": "^4.41.2",
-    "webpack-bundle-analyzer": "^3.8.0",
     "webpack-cli": "^3.2.1",
     "webpack-dev-server": "^3.1.14"
   },
@@ -64,6 +63,7 @@
     "jsonwebtoken": "^8.5.1",
     "leaflet-polylinedecorator": "^1.6.0",
     "leaflet.markercluster": "^1.4.1",
+    "lodash": "^4.17.14",
     "lodash-es": "^4.17.14",
     "mdbreact": "^4.25.0",
     "moment": "^2.24.0",
