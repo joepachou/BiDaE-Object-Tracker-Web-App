@@ -64,7 +64,7 @@ import {
     Card
 } from 'react-bootstrap';
 import NumberPicker from '../../container/NumberPicker';
-import { DateTimePicker } from 'react-widgets';
+import DateTimePicker from 'react-widgets/lib/DateTimePicker';
 import momentLocalizer from 'react-widgets-moment';
 import apiHelper from '../../../helper/apiHelper';
 

@@ -40,7 +40,6 @@ import {
 import { AppContext } from '../../context/AppContext';
 import ReactTable from 'react-table'; 
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
-import XLSX from 'xlsx';
 import InputFiles from 'react-input-files';
 import DeleteConfirmationForm from '../presentational/DeleteConfirmationForm';
 import styleConfig from '../../config/styleConfig';
@@ -234,16 +233,25 @@ class ImportObjectTable extends React.Component{
                 }
 
                 const { result } = event.target; // 以二進制流方式讀取得到整份excel表格對象
-                const workbook = XLSX.read(result, { type: 'binary' });
                 let data = []; // 存儲獲取到的數據 // 遍歷每張工作表進行讀取（這裡默認只讀取第一張表）
-                for (const sheet in workbook.Sheets) {
-                    if (workbook.Sheets.hasOwnProperty(sheet)) {
-                        // 利用 sheet_to_json 方法將 excel 轉成 json 數據
-                        data = data.concat(
-                            XLSX.utils.sheet_to_json(workbook.Sheets[sheet])
-                        ); // break; // 如果只取第一張表，就取消註釋這行
-                    }
-                } 
+
+                import(
+                    /* webpackChunkName: "xlsx" */
+                    'xlsx'
+                )
+                .then(XLSX => {
+                    const workbook = XLSX.read(result, { type: 'binary' });
+
+                    for (const sheet in workbook.Sheets) {
+                        if (workbook.Sheets.hasOwnProperty(sheet)) {
+                            // 利用 sheet_to_json 方法將 excel 轉成 json 數據
+                            data = data.concat(
+                                XLSX.utils.sheet_to_json(workbook.Sheets[sheet])
+                            ); // break; // 如果只取第一張表，就取消註釋這行
+                        }
+                    } 
+                })
+
 
                 // ＩＭＰＯＲＴ時把ＡＣＮ重複的擋掉
                 let newData = []

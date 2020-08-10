@@ -39,11 +39,9 @@ import ReactDOM from 'react-dom';
 
 /** IE 11 */
 import 'react-app-polyfill/ie11';
-import 'react-app-polyfill/stable';
 
 // /** IE 10 */
 // import 'react-app-polyfill/ie10';
-// import 'react-app-polyfill/stable';
 
 /** IE 9 */
 import 'react-app-polyfill/ie9';

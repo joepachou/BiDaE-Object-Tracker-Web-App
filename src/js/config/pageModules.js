@@ -39,7 +39,7 @@ import LBeaconTable from '../components/container/LBeaconTable';
 import GatewayTable from '../components/container/GatewayTable';
 import AdminManagementContainer from '../components/container/UserContainer/AdminManagementContainer';
 import config from '../config';
-import TransferredLocationManagement from '../components/container/TransferredLocationManagement';
+// import TransferredLocationManagement from '../components/container/TransferredLocationManagement';
 import RolePermissionManagement from '../components/container/RolePermissionManagement';
 import MyDeviceManager from '../components/container/UserContainer/MyDeviceManager';
 import DeviceGroupManager from '../components/container/UserContainer/DeviceGroupManager';
@@ -53,6 +53,16 @@ import TrackingTable from '../components/container/TrackingTable';
 import TraceContainer from '../components/container/menuContainer/TraceContainer';
 import BOTAdmin from '../components/container/menuContainer/BOTAdminContainer';
 import routes from '../config/routes/routes';
+import Loadable from 'react-loadable';
+import Loader from '../components/presentational/Loader';
+
+const TransferredLocationManagement = Loadable({
+    loader: () => import(
+        /* webpackChunkName: "TransferredLocationManagement" */
+        '../components/container/TransferredLocationManagement'
+    ),
+    loading: Loader
+});
 
 
 export const userContainerModule = {
