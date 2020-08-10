@@ -33,7 +33,7 @@
 */
 
 const HtmlWebPackPlugin = require("html-webpack-plugin");
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer');
 const CompressionPlugin = require('compression-webpack-plugin');
 const zlib = require('zlib');
 const webpack = require('webpack');
@@ -49,7 +49,7 @@ module.exports = {
 
     entry: './src/index.js',
     mode: env.NODE_ENV,
-    devtool: 'none',
+    devtool: env.NODE_ENV == 'production' ? 'none' : 'inline-source-map',
     output: {
         path: path.join(__dirname, 'dist'),
 
