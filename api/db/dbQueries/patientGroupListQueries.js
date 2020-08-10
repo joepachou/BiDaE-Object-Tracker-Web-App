@@ -32,21 +32,6 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
-const getDeviceGroup = (pack) => {
-    const groupIdSelector = pack.groupId ? `WHERE id = ${pack.groupId}` : ``
-    const query = `
-        SELECT  * FROM device_group ${groupIdSelector} ORDER BY id
-    `
-    return query
-}
-
-const addDeviceGroup = (name) => {
-    const query = `
-        INSERT INTO device_group_list (name) VALUES ('${name}')
-    `
-    return query
-}
-
 const modifyPatientGroup = (groupId, mode, option) => {
     var query = null
     if(mode === 0){
@@ -62,10 +47,7 @@ const modifyPatientGroup = (groupId, mode, option) => {
 
     return query
 }
-const changeDeviceGroup = (device_group_id, user_id) => {
-    const query = `UPDATE user_table SET my_device_index = ${device_group_id} WHERE id = ${user_id}`
-    return query
-}
+
 // INPUT pack = {groupId: [int]}
 const getPatientGroup = (pack) => {
     // print('pack', pack)
@@ -78,7 +60,7 @@ const getPatientGroup = (pack) => {
 // INPUT name = {'name': [text]}
 const addPatientGroup = (name) => {
     const query = `
-        INSERT INTO patient_group_list (name) VALUES ('${name.name}')
+        INSERT INTO patient_group_list (name) VALUES ('${name.name}') RETURNING id
     `
     return query
 }
@@ -90,12 +72,16 @@ const changePatientGroup = (patient_group_id, user_id) => {
     return query
 }
 
-
+const removePatientGroup = (groupId) => {
+    const query = `DELETE FROM patient_group_list WHERE Id=${groupId}`
+    return query
+}
 
 
 module.exports = {
     addPatientGroup,
     changePatientGroup,
     modifyPatientGroup,
-    getPatientGroup
+    getPatientGroup,
+    removePatientGroup
 }

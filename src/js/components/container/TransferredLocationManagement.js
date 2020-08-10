@@ -274,8 +274,7 @@ class TranferredLocationManagement extends React.Component{
         let column = this.getColumn()  
         return(
             <Col lg={8}>
-                <MDBTable autoWidth={false}
-                >
+                <MDBTable autoWidth={false}>
                     <MDBTableHead columns={column} />
                     <MDBTableBody rows={dataRows} color='#000000'/>
                 </MDBTable>

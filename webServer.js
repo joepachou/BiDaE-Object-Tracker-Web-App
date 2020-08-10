@@ -37,7 +37,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const httpsPort = 443;
-const httpPort = 80;
+const httpPort = process.env.HTTP_PORT;
 const path = require('path');
 const https = require('https');
 const http = require('http');
@@ -45,6 +45,7 @@ const session = require('express-session');
 const validation = require('./api/middlewares/validation');
 const sessionOptions = require('./api/config/session');
 const credentials = require('./api/config/credentials');
+const compression = require('compression');
 const dataRoutes = require('./api/routes/dataRoutes');
 const authRoutes = require('./api/routes/dataRoutes/authRoutes');
 const UIRoutes = require('./api/routes/UIRoutes');
@@ -58,6 +59,7 @@ app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     next();
 });
+app.use(compression())
 
 app.use(session(sessionOptions));
 

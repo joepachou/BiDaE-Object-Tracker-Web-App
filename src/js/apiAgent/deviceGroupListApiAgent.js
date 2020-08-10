@@ -50,7 +50,7 @@ const deviceGroupListApis = {
         return await axios.put(src, pack)
     },
     deleteGroup: async function( groupId ) {
-        return await axios.put(src, groupId)
+        return await axios.delete(src, {data: groupId})
     },
 }
 
