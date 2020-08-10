@@ -78,8 +78,6 @@ import '../../node_modules/leaflet/dist/leaflet.css';
 
 /** leaflet related source */
 
-import "../css/CustomMarkerCluster.css"
-
 import "../../node_modules/leaflet.markercluster/dist/MarkerCluster.css"
 
 import "../../node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css"
@@ -96,10 +94,6 @@ import 'react-widgets/dist/css/react-widgets.css';
 
 /** pretty check box */
 import "../../node_modules/pretty-checkbox/dist/pretty-checkbox.min.css"
-
-/** ant design */
-// import "../../node_modules/antd/dist/antd.css"
-
 
 
 
