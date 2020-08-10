@@ -37,11 +37,15 @@ module.exports = {
     getImportedObject: () => {
         let text = `
             SELECT 
+                import_table.id,
                 import_table.name, 
                 import_table.asset_control_number,
-                import_table.type,
-                import_table.id
+                import_table.type
+
             FROM import_table 
+
+            LEFT JOIN object_table
+            ON object_table.asset_control_number = import_table.asset_control_number
         `;
         
         return text

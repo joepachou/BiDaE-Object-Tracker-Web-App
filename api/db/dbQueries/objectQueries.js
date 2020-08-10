@@ -294,49 +294,11 @@ const editObjectPackage = (
 	return text
 }
 
-const addObjectSummaryRecord = (mac_address) => {
-	let text = `
-		INSERT INTO object_summary_table (
-			mac_address
-		) 
-		values (
-			$1
-		)
-	`
-
-	let values =[
-		mac_address
-	]
-
-	return {
-		text, 
-		values
-	}
-}
-
 const deleteObjectSummaryRecord = mac_address_array => {
 	return `
 		DELETE FROM object_summary_table
 		WHERE mac_address IN (${mac_address_array.map(item => `'${item}'`)});
 	`
-}
-
-const checkIsObjectSummaryRecordExist = mac_address => {
-	let text = `
-		SELECT 
-			mac_address
-		FROM object_summary_table
-		WHERE mac_address = $1
-	`
-
-	let values = [
-		mac_address
-	]
-
-	return {
-		text,
-		values
-	}
 }
 
 const getIdleMacaddr = () => {
@@ -361,8 +323,6 @@ module.exports = {
 	deleteObject,
 	disassociate,
 	editObjectPackage,
-	addObjectSummaryRecord,
 	deleteObjectSummaryRecord,
-	checkIsObjectSummaryRecordExist,
 	getIdleMacaddr
 }
