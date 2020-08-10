@@ -60,7 +60,7 @@ module.exports = {
         let query = dbQueries.addDeviceGroup(name ? name : 'New Group')
         pool.query(query)
         .then(res => {
-            response.status(200).json("ok")
+            response.status(200).json(res.rows[0].id)
         })
         .catch(err => {
             console.log('addPatientGroup error: ', err)
@@ -84,24 +84,24 @@ module.exports = {
                 console.log('err when modifyPatientGroup', err)
             })
     },
-    changePatientList : (request, response) => {
+    changeDeviceList : (request, response) => {
         const {patient_group_id, user_id} = request.body
-        const query = queryType.changePatientGroup(patient_group_id, user_id)
-        pool.query(query).then(res => {
-            console.log('success')
-            response.status(200).json('ok')
-        }).catch(err => {
-            console.log('error when change patient group,', err)
-        })
+        // const query = queryType.changePatientGroup(patient_group_id, user_id)
+        // pool.query(query).then(res => {
+        //     console.log('success')
+        //     response.status(200).json('ok')
+        // }).catch(err => {
+        //     console.log('error when change patient group,', err)
+        // })
     },
     deleteDeviceGroup : (request, response) => {
-        const {patient_group_id, user_id} = request.body
-        const query = queryType.changePatientGroup(patient_group_id, user_id)
+        const {groupId} = request.body
+        const query = dbQueries.removeDeviceGroup(groupId)
         pool.query(query).then(res => {
             console.log('success')
             response.status(200).json('ok')
         }).catch(err => {
-            console.log('error when change patient group,', err)
+            console.log('error when change device group,', err)
         })
     }
 }

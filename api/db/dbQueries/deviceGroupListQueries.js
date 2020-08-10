@@ -42,7 +42,7 @@ const getDeviceGroup = (pack) => {
 
 const addDeviceGroup = (name) => {
     const query = `
-        INSERT INTO device_group_list (name) VALUES ('${name.name}')
+        INSERT INTO device_group_list (name) VALUES ('${name.name}') RETURNING id
     `
     return query
 }
@@ -65,15 +65,15 @@ const modifyDeviceGroup = (groupId, mode, option) => {
 const renameDeviceGroup = (groupId,) => {
 
 }
-const changeDeviceGroup = (device_group_id, user_id) => {
-    const query = `UPDATE user_table SET my_device_index = ${device_group_id} WHERE id = ${user_id}`
+const removeDeviceGroup = (groupId) => {
+    const query = `DELETE FROM device_group_list WHERE Id=${groupId}`
     return query
 }
 
 
 module.exports = {
     addDeviceGroup,
-    changeDeviceGroup,
+    removeDeviceGroup,
     modifyDeviceGroup,
     getDeviceGroup
 }

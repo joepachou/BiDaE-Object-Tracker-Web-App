@@ -31,13 +31,54 @@
         Edward Chen, r08921a28@ntu.edu.tw
         Joe Chou, jjoe100892@gmail.com
 */
-
+import Loadable from 'react-loadable';
 import routes from './routes';
-import SigninPage from '../../components/authentication/SigninPage';
-import ForgetPassword from '../../components/authentication/ForgetPassword';
-import ResetPassword from '../../components/authentication/ResetPassword';
-import ResetPasswordResult from '../../components/authentication/ResetPasswordResult';
-import SentPwdInstructionResult from '../../components/authentication/SentPwdInstructionResult';
+// import SigninPage from '../../components/authentication/SigninPage';
+// import ForgetPassword from '../../components/authentication/ForgetPassword';
+// import ResetPassword from '../../components/authentication/ResetPassword';
+// import ResetPasswordResult from '../../components/authentication/ResetPasswordResult';
+// import SentPwdInstructionResult from '../../components/authentication/SentPwdInstructionResult';
+import Loader from '../../components/presentational/Loader';
+
+const ForgetPassword = Loadable({
+    loader: () => import(
+        /* webpackChunkName: "forgetPassword" */
+        '../../components/authentication/ForgetPassword'
+    ),
+    loading: Loader
+});
+
+const SigninPage = Loadable({
+    loader: () => import(
+        /* webpackChunkName: "signinPage" */
+        '../../components/authentication/SigninPage'
+    ),
+    loading: Loader
+});
+
+const ResetPassword = Loadable({
+    loader: () => import(
+        /* webpackChunkName: "resetPassword" */
+        '../../components/authentication/ResetPassword'
+    ),
+    loading: Loader
+});
+
+const ResetPasswordResult = Loadable({
+    loader: () => import(
+        /* webpackChunkName: "resetPasswordResult" */
+        '../../components/authentication/ResetPasswordResult'
+    ),
+    loading: Loader
+});
+
+const SentPwdInstructionResult = Loadable({
+    loader: () => import(
+        /* webpackChunkName: "sentPwdInstructionResult" */
+        '../../components/authentication/SentPwdInstructionResult'
+    ),
+    loading: Loader
+});
 
 const publicRoutesConfig = [
     {

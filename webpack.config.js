@@ -34,6 +34,8 @@
 
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const CompressionPlugin = require('compression-webpack-plugin');
+const zlib = require('zlib');
 const webpack = require('webpack');
 const dotenv = require('dotenv');
 var path = require('path')
@@ -47,9 +49,14 @@ module.exports = {
 
     entry: './src/index.js',
     mode: env.NODE_ENV,
+    devtool: 'none',
     output: {
         path: path.join(__dirname, 'dist'),
-        filename: "bundle.js",
+
+        filename: "[name].bundle.js",
+
+        chunkFilename: '[name].bundle.js',
+
         publicPath: '/',
     },
 
@@ -83,7 +90,12 @@ module.exports = {
                 use: [
                     {
                         loader: 'file-loader?limit=100000&name=[name].[ext]',
-                        options: {},
+                        options: {
+                            name: '[name].[ext]',
+                            outputPath: 'img',
+                            // emitFile: false
+                        },
+                        
                     },
                 ],
             },
@@ -117,6 +129,57 @@ module.exports = {
 
         /** Only introduce used moment locale package */
         new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /zh|en/),
+
+        new CompressionPlugin({
+            filename: '[path].br[query]',
+            algorithm: 'brotliCompress',
+            test: /\.(js|css|html|svg|png)$/,
+            compressionOptions: {
+              // zlib’s `level` option matches Brotli’s `BROTLI_PARAM_QUALITY` option.
+              level: 11,
+            },
+            threshold: 10240,
+            minRatio: 0.8,
+            deleteOriginalAssets: false,
+        }),
         
-    ]
+    ],
+
+    optimization: {
+
+		splitChunks: {
+            chunks: 'all',
+			cacheGroups: {
+                commons: {
+                    test: /[\\/]node_modules[\\/](!react-bootstrap)(!leaflet)(!mdbreact)(!xlsx)(!react-app-polyfill)[\\/]/,
+                    name: "vendor",
+                },
+				xlsxVendor: {
+					test: /[\\/]node_modules[\\/](xlsx)[\\/]/,
+                    name: 'xlsxVendor',
+                },
+                // reactVendor: {
+                //     test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+                //     name: "reactVendor"
+                // },
+                mdbreactVendor: {
+                    test: /[\\/]node_modules[\\/](mdbreact)[\\/]/,
+                    name: "mdbreacVendor"
+                },
+                leaflet: {
+                    test: /[\\/]node_modules[\\/](leaflet)[\\/]/,
+                    name: "leafletVendor"
+                },
+                reactAppPolyfill: {
+                    test: /[\\/]node_modules[\\/](react-app-polyfill)[\\/]/,
+                    name: "reactAppPolyfillVendor"
+                },
+                bootstrapVendor: {
+                    test: /[\\/]node_modules[\\/](react-bootstrap)[\\/]/,
+                    name: "bootstrapVendor"
+                },
+                
+			}
+		}
+	}
 };

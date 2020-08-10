@@ -1,5 +1,12 @@
 import React from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { 
+    Col, 
+    Row,
+    Button, 
+    ButtonToolbar,
+    Modal,
+    Form
+} from 'react-bootstrap';
 import axios from 'axios';
 import dataSrc from "../../../dataSrc";
 // import AddableList from './AddableList'
@@ -29,25 +36,26 @@ const style = {
 class PatientGroupManager extends React.Component{
 
     static contextType = AppContext
-
+    reNameRef = React.createRef()
     state = {
         selectedPatientGroup: null
     }
     componentDidMount = () => {
         this.getObjectData()
-        this.getPatientGroup()
+        this.getPatientGroup("Mount")
     }
-
     reload = () => {
         this.getObjectData()
         this.getPatientGroup()
     }
-    
     newPatientGroup = (name) => {
         apiHelper.patientGroupListApis.addPatientGroupList({
             name
         })
         .then(res => {
+            this.setState({
+                selectedPatientGroup: {id:res.data}
+            })
             this.reload()
         })
         .catch(err => {
@@ -56,7 +64,6 @@ class PatientGroupManager extends React.Component{
     }
     addPatientToGroup = (item) => {
         const groupId = this.state.selectedPatientGroup.id
-        console.log(item)
         apiHelper.patientGroupListApis.modifyPatientGroupList({
             groupId: this.state.selectedPatientGroup.id,
             mode: 0,
@@ -88,6 +95,9 @@ class PatientGroupManager extends React.Component{
             mode: 2,
             newName: newName
         }).then(res => {
+            this.setState({
+                renameGroup: false
+            })
             this.reload()
         }).catch(err => 
             console.log(err)
@@ -98,9 +108,17 @@ class PatientGroupManager extends React.Component{
             selectedPatientGroup: patientGroup ? patientGroup.value : null
         })
     }
+    deleteGroup = () => {
+        apiHelper.patientGroupListApis.deleteGroup({
+            groupId: this.state.selectedPatientGroup.id,
+        }).then(res => {
+            this.reload()
+        }).catch(err => 
+            console.log(err)
+        )
+    }
     getObjectData = () => {
         let { locale, auth } = this.context
-        
         apiHelper.objectApiAgent.getObjectTable({
             locale: locale.abbr,
             areas_id: auth.user.areas_id,
@@ -111,9 +129,7 @@ class PatientGroupManager extends React.Component{
                 allPatients: res.data.rows
             })
         }).catch(function (error) {
-
             console.log(error);
-
         })
     }
     patientGroupListToSelectOptions = (data) => {
@@ -126,7 +142,7 @@ class PatientGroupManager extends React.Component{
 
         return options
     }
-    getPatientGroup = () => {
+    getPatientGroup = (isMount) => {
         apiHelper.patientGroupListApis.getPatientGroupList()
         .then(res => {
             const data = res.data.map(group => {
@@ -150,7 +166,7 @@ class PatientGroupManager extends React.Component{
             this.setState({
                 patientGroupList: data,
                 patientGroupListOptions: this.patientGroupListToSelectOptions(data),
-                selectedPatientGroup: updatedSelectedPatientGroup
+                selectedPatientGroup: isMount == "Mount" ?data[0] : updatedSelectedPatientGroup
             })
         })
         .catch(err => {
@@ -168,6 +184,23 @@ class PatientGroupManager extends React.Component{
                     height: this.state.selectedPatientGroup ? '80vh' : '10vh',
                 }}
             >
+                <Modal
+                  show={this.state.renameGroup}
+                  onHide={() => {this.setState({renameGroup: false})}}>
+                  <Modal.Header closeButton>
+                      <Modal.Title>{locale.texts.RENAME}</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form.Group as={Col} >
+                          <Form.Control type="text" ref={this.reNameRef}/>
+                        </Form.Group>
+                    </Modal.Body>
+                    <Modal.Footer>
+                      <Button variant="primary" onClick={()=>{console.log(this.reNameRef.current.value);this.renameGroup(this.reNameRef.current.value)}}>
+                        Save Changes
+                      </Button>
+                    </Modal.Footer>
+                </Modal>
                 <CreatableSelect
                     isClearable
                     onChange={this.selectPatientGroup}
@@ -186,14 +219,38 @@ class PatientGroupManager extends React.Component{
                 {
                     this.state.selectedPatientGroup 
                     ?
-                        <DualListBox
-                            allItems={this.state.allPatients || []}
-                            selectedItemList={this.state.selectedPatientGroup ? this.state.selectedPatientGroup.patients : []}
-                            selectedTitle = 'Patients In List'
-                            unselectedTitle = 'Other Patients'
-                            onSelect = {this.addPatientToGroup}
-                            onUnselect = {this.removePatientFromGroup}
-                        />
+                        <>
+                            <ButtonToolbar
+                                className='my-2'
+                            >
+                                <Button 
+                                    variant='outline-primary' 
+                                    className='text-capitalize mr-2'
+                                    name='secondaryArea'
+                                    size='sm'
+                                    onClick={() => {this.setState({renameGroup: true})}}
+                                >
+                                    {locale.texts.EDIT_DEVICE_GROUP_NAME}
+                                </Button>
+                                <Button 
+                                    variant='outline-primary' 
+                                    className='text-capitalize mr-2'
+                                    name='password'
+                                    size='sm'
+                                    onClick={this.deleteGroup}
+                                >
+                                    {locale.texts.REMOVE_DEVICE_GROUP}
+                                </Button> 
+                            </ButtonToolbar>
+                            <DualListBox
+                                allItems={this.state.allPatients || []}
+                                selectedItemList={this.state.selectedPatientGroup ? this.state.selectedPatientGroup.patients : []}
+                                selectedTitle = 'Patients In List'
+                                unselectedTitle = 'Other Patients'
+                                onSelect = {this.addPatientToGroup}
+                                onUnselect = {this.removePatientFromGroup}
+                            />
+                        </>
                     :
                         null
                 }

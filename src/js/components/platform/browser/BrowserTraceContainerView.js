@@ -33,7 +33,7 @@
 */
 
 import React, { Fragment } from 'react';
-import { DateTimePicker } from 'react-widgets';
+import DateTimePicker from 'react-widgets/lib/DateTimePicker';
 import momentLocalizer from 'react-widgets-moment';
 import 'react-table/react-table.css'; 
 import { 

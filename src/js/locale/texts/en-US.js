@@ -567,6 +567,10 @@ const en =  {
         "male",
         "female"
     ],
+
+    EDIT_DEVICE_GROUP_NAME: "edit group name",
+    REMOVE_DEVICE_GROUP: "remove group",
+    RENAME: "Rename"
 }
 
 export default en;

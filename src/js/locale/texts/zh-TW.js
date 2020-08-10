@@ -567,6 +567,10 @@ const tw = {
         "男",
         "女"
     ],
+
+    EDIT_DEVICE_GROUP_NAME: "更改儀器群組名稱",
+    REMOVE_DEVICE_GROUP: "移除儀器群組",
+    RENAME: "重新命名"
 }
 
 export default tw;
