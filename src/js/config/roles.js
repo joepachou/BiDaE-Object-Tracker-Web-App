@@ -46,10 +46,11 @@ const rules = {
             "route:devicesManagement",
             "route:patientManagement",
             "route:objectManagement",
-
+            "route:BOTAdmin",
             "route:userProfile",
             "route:bigScreen",
             "route:trackingHistory",
+            "route:report",
             "user:mydevice",
             "user:mypatient",
             "user:shiftChange",
@@ -59,6 +60,7 @@ const rules = {
             "user:toggleShowResidents",
             "route:monitorSetting",
             "user:batteryNotice"
+            
         ]
     },
     system_admin: {

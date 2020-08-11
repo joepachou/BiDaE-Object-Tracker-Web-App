@@ -370,7 +370,7 @@ export const navbarNavList = [
         alias: "BOTAdmin",
         path: routes.BOT_ADMIN,
         module: BOTAdminModule,
-        permission: "route:setting",
+        permission: "route:BOTAdmin",
         platform: ['browser', 'tablet', 'mobile'],
     },
     {
