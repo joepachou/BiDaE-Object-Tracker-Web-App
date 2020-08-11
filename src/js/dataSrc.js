@@ -65,8 +65,6 @@ const dataSrc = {
 
     },
 
-    // object: `${domain}/data/object`,
-
     object: {
 
         object: `${domain}/data/object`,
@@ -135,6 +133,11 @@ const dataSrc = {
 
     pdfUrl: path => {
         return `${domain}/data/file/${path}`
+    },
+
+    utils: {
+
+        searchableKeyword: `${domain}/data/utils/searchableKeyword`,
     }
 }
 

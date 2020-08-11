@@ -1,4 +1,4 @@
-<!-- 
+/*
     2020 © Copyright (c) BiDaE Technology Inc. 
     Provided under BiDaE SHAREWARE LICENSE-1.0 in the LICENSE.
   
@@ -6,7 +6,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        index.js
+        utilsRoutes.js
 
     File Description:
         BOT UI component
@@ -29,28 +29,19 @@
         Tony Yeh, LT1stSoloMID@gmail.com
         Wayne Kang, b05505028@ntu.edu.tw
         Edward Chen, r08921a28@ntu.edu.tw
-        Joe Chou, jjoe100892@gmail.com 
--->
+        Joe Chou, jjoe100892@gmail.com
+*/
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Real-Time BOT</title>
 
-    <meta charset="utf-8">
 
-    <!-- Head of removing the 300-350ms tap delay -->
-    <meta name="viewport" content="width=device-width">
+let utilsController = require('../../controllers/utilsController');
+let cors = require('cors');
 
-    <!-- This upgrades all http request to use https  -->
-    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">  -->
-    
-    <!-- Browser's icon source-->
-    <link rel="shortcut icon" href="/logo/BOT_LOGO_GREEN.png" type="image/x-icon" />
+module.exports = app => {
 
-</head>
+    // enable pre-flight request for DELETE request
+    // app.options('/data/utils/searchableKeyword', cors()) 
 
-<body>
-    <div id='root'></div>
-</body>
-</html>
+    app.route('/data/utils/searchableKeyword')
+        .post(utilsController.getSearchableKeywords)
+}

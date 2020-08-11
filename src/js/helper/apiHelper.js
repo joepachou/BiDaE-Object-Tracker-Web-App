@@ -48,6 +48,7 @@ import lbeaconApiAgent from '../apiAgent/lbeaconApiAgent';
 import gatewayApiAgent from '../apiAgent/gatewayApiAgent';
 import importedObjectApiAgent from '../apiAgent/importedObjectApiAgent';
 import fileApiAgent from '../apiAgent/fileApiAgent';
+import utilsApiAgent from '../apiAgent/utilsApiAgent';
 
 const apiHelper = {
 
@@ -82,6 +83,8 @@ const apiHelper = {
     patientGroupListApis,
 
     fileApiAgent,
+
+    utilsApiAgent
 
 }
 

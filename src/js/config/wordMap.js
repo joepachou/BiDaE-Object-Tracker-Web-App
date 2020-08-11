@@ -50,5 +50,7 @@ module.exports = {
 
     NORMAL: "normal",
 
-    RESERVE: "reserve"
+    RESERVE: "reserve",
+
+    ASSET_CONTROL_NUMBER: "asset control number"
 }

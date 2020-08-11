@@ -1,4 +1,4 @@
-<!-- 
+/*
     2020 © Copyright (c) BiDaE Technology Inc. 
     Provided under BiDaE SHAREWARE LICENSE-1.0 in the LICENSE.
   
@@ -6,7 +6,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        index.js
+        utilsApiAgent.js
 
     File Description:
         BOT UI component
@@ -29,28 +29,17 @@
         Tony Yeh, LT1stSoloMID@gmail.com
         Wayne Kang, b05505028@ntu.edu.tw
         Edward Chen, r08921a28@ntu.edu.tw
-        Joe Chou, jjoe100892@gmail.com 
--->
+        Joe Chou, jjoe100892@gmail.com
+*/
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Real-Time BOT</title>
 
-    <meta charset="utf-8">
+import dataSrc from '../dataSrc';
+import axios from 'axios';
 
-    <!-- Head of removing the 300-350ms tap delay -->
-    <meta name="viewport" content="width=device-width">
+export default {
 
-    <!-- This upgrades all http request to use https  -->
-    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">  -->
-    
-    <!-- Browser's icon source-->
-    <link rel="shortcut icon" href="/logo/BOT_LOGO_GREEN.png" type="image/x-icon" />
+    getSearchableKeywords: async function () {
+        return await axios.post(dataSrc.utils.searchableKeyword)
+    },
 
-</head>
-
-<body>
-    <div id='root'></div>
-</body>
-</html>
+}

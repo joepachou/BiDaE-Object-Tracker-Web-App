@@ -49,6 +49,7 @@ const monitorRoutes = require('./dataRoutes/monitorRoutes');
 const recordRoutes = require('./dataRoutes/recordRoutes');
 const transferredLocationRoutes = require('./dataRoutes/transferredLocationRoutes');
 const groupListRoutes = require('./dataRoutes/groupListRoutes');
+const utilsRoutes = require('./dataRoutes/utilsRoutes');
 
 module.exports = app => {
     trackingDataRoutes(app);
@@ -66,4 +67,5 @@ module.exports = app => {
     recordRoutes(app);
     transferredLocationRoutes(app);
     groupListRoutes(app);
+    utilsRoutes(app)
 }

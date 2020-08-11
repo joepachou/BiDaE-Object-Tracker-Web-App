@@ -121,6 +121,7 @@ class MainContainer extends React.Component{
         // disableBodyScroll(targetElement);
 
         this.getTrackingData();
+        this.getKeywords();
         this.getLbeaconPosition();
         this.getGeofenceConfig();
         this.getLocationMonitorConfig()
@@ -321,6 +322,18 @@ class MainContainer extends React.Component{
                 this.errorToast = messageGenerator.setErrorMessage()
             }
         })
+    }
+
+    getKeywords = () => {
+        apiHelper.utilsApiAgent.getSearchableKeywords()
+            .then(res => {
+                this.setState({
+                    keywords: res.data.rows[0].keys
+                })
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 
     /** Retrieve lbeacon data from database */
@@ -722,7 +735,8 @@ class MainContainer extends React.Component{
             currentAreaId,
             searchObjectArray,
             pinColorArray,
-            showFoundResult
+            showFoundResult,
+            keywords
         } = this.state;
 
         const {
@@ -764,7 +778,8 @@ class MainContainer extends React.Component{
             searchObjectArray,
             pinColorArray,
             handleClick,
-            showFoundResult
+            showFoundResult,
+            keywords
         }
 
         return (

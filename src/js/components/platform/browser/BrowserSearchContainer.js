@@ -38,7 +38,7 @@ import {
     Image,
     Col
 } from 'react-bootstrap';
-import BOTSearchbar from '../../presentational/BOTSearchbar_old';
+import BOTSearchbar from '../../presentational/BOTSearchbar';
 import config from '../../../config';
 import Searchbar from '../../presentational/Searchbar';
 import FrequentSearch from '../../container/FrequentSearch';
@@ -53,7 +53,8 @@ const BrowserSearchContainer = ({
     clearSearchResult,
     hasGridButton,
     searchObjectArray,
-    pinColorArray
+    pinColorArray,
+    keywords
 }) => {
     return ( 
         <div 
@@ -71,7 +72,7 @@ const BrowserSearchContainer = ({
                     getSearchKey={getSearchKey}
                     clearSearchResult={clearSearchResult}    
                     width={400}
-                    // suggestData = {suggestData}
+                    suggestData={keywords}
                 />
             </Row>
             <div

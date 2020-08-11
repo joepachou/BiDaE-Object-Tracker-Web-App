@@ -1,4 +1,4 @@
-<!-- 
+/*
     2020 © Copyright (c) BiDaE Technology Inc. 
     Provided under BiDaE SHAREWARE LICENSE-1.0 in the LICENSE.
   
@@ -6,7 +6,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        index.js
+        utilsQueries.js
 
     File Description:
         BOT UI component
@@ -29,28 +29,46 @@
         Tony Yeh, LT1stSoloMID@gmail.com
         Wayne Kang, b05505028@ntu.edu.tw
         Edward Chen, r08921a28@ntu.edu.tw
-        Joe Chou, jjoe100892@gmail.com 
--->
+        Joe Chou, jjoe100892@gmail.com
+*/
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Real-Time BOT</title>
 
-    <meta charset="utf-8">
+module.exports = {
 
-    <!-- Head of removing the 300-350ms tap delay -->
-    <meta name="viewport" content="width=device-width">
+	getSearchableKeyword: () => {
+        return `
+            SELECT 
+                ARRAY_AGG(key) as keys
+            FROM (
+                SELECT 
+                    DISTINCT name AS key
+                FROM object_table
+                
+                UNION 
+                
+                SELECT 
+                    DISTINCT type
+                FROM object_table
 
-    <!-- This upgrades all http request to use https  -->
-    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">  -->
-    
-    <!-- Browser's icon source-->
-    <link rel="shortcut icon" href="/logo/BOT_LOGO_GREEN.png" type="image/x-icon" />
+                UNION
 
-</head>
+                SELECT 
+                    DISTINCT name
+                FROM object_table
 
-<body>
-    <div id='root'></div>
-</body>
-</html>
+                UNION
+
+                SELECT 
+                    DISTINCT asset_control_number
+                FROM object_table
+
+                UNION
+
+                SELECT 
+                    DISTINCT description
+                FROM lbeacon_table
+            ) AS keywords
+            WHERE key IS NOT NULL
+        `
+    }
+}

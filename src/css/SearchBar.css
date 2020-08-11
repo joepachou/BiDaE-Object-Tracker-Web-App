@@ -1,75 +1,71 @@
 
-  
-  .react-autosuggest__container {
+.react-autosuggest__container {
     position: relative;
-  }
+}
   
-  .react-autosuggest__input {
-    width: 260px;
-    height: 45px;
-    padding: 10px 20px 10px 40px;
-    font-family: Helvetica, sans-serif;
-    font-weight: 300;
+.react-autosuggest__input {
+    width: 300px;
+    height: 40px;
+    padding: 10px 40px 10px 20px;
     font-size: 16px;
-    border: 1px solid #aaa;
+    border: 1px solid rgba(227, 222, 222, 1);
     border-radius: 30px 30px 30px 30px;
-  }
+}
   
-  .react-autosuggest__input--focused {
+.react-autosuggest__input--focused {
     outline: none;
-  }
-  
-  .react-autosuggest__input--open {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-  }
-  
-  .react-autosuggest__suggestions-container {
+}
+
+.react-autosuggest__input--open {
+    border-radius: 20px 20px 0 0;
+    border-bottom: none;
+}
+
+.react-autosuggest__suggestions-container {
     display: none;   
     position:absolute;
     z-index: 20;    
-  }
+}
   
-  .react-autosuggest__suggestions-container--open {
-    display: block; 
-    top: 45px;
-    width: 260px;
-    border: 1px solid #aaa;
-    background-color: #ffffff;
-    font-family: Helvetica, sans-serif;
-    font-weight: 300;
-    font-size: 16px;
-    text-align: justify;
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;  
-    z-index: 20;    
-  }
+.react-autosuggest__suggestions-container--open {
+      display: block; 
+      top: 40px;
+      width: 300px;
+      border: 1px solid rgba(227, 222, 222, 1);
+      background-color: #ffffff;
+      font-size: 16px;
+      text-align: justify;
+      border-radius: 0 0 5px 5px;
+
+      z-index: 20;    
+}
   
-  .react-autosuggest__suggestions-list {
+.react-autosuggest__suggestions-list {
     margin: 0;
     padding: 0;
     list-style-type: none;  
-  }
+}
   
-  .react-autosuggest__suggestion {
+.react-autosuggest__suggestion {
     cursor: pointer;
-    padding: 5px 41px;
-    width: 258px; 
+    padding: 5px 20px;
+    width: 300px; 
     height: 30px;   
-  }
+}
   
-  .react-autosuggest__suggestion--highlighted {
+.react-autosuggest__suggestion--highlighted {
     background-color: #ddd; 
-  }
+}
 
-  .icon {
+.icon {
     position: absolute;
     top: 12px;
-    left: 12px;
+    right: 12px;
     width: 24px;
     height: 24px;
     background-color: #ffffff; 
     font-size: 20px;
-  } 
+    color: black;
+} 
 
  

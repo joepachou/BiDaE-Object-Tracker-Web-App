@@ -68,7 +68,8 @@ const BrowserMainContainer = ({
     searchObjectArray,
     pinColorArray,
     handleClick,
-    showFoundResult
+    showFoundResult,
+    keywords
 }) => {
 
     let auth = React.useContext(AuthenticationContext)
@@ -149,6 +150,7 @@ const BrowserMainContainer = ({
                             getSearchKey={getSearchKey}
                             searchObjectArray={searchObjectArray}
                             pinColorArray={pinColorArray}
+                            keywords={keywords}
                         />                        
                         <div 
                             id='searchResult' 

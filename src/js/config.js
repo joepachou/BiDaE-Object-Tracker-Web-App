@@ -38,6 +38,7 @@ import mapConfig from './config/mapConfig';
 import viewConfig from './config/viewConfig';
 import moment from 'moment';
 import supportedLocale from './locale/supportedLocale';
+import wordMap from './config/wordMap';
 
 const config = {
 
@@ -185,13 +186,15 @@ const config = {
         "night shift",
     ],
 
-    SEARCHABLE_FIELD: [
+    SEARCHABLE_FIELD: [ 
         'type', 
-        'asset_contol_number', 
+        'asset_control_number', 
         'name', 
         'nickname', 
         'location_description'
     ],
+
+    AUTOSUGGEST_NUMBER_LIMIT: 10,
 
     monitorType: {
         1: "geofence",
