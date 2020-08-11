@@ -78,7 +78,7 @@ module.exports = {
                             locale,
                             email
                         } = res.rows[0]
-
+                        console.log(res.rows)
                         if (main_area && !areas_id.includes(main_area)) {
                             areas_id.push(main_area.toString())
                         }

@@ -88,26 +88,36 @@ class ObjectTypeList extends React.Component {
 
         if (!auth.authenticated) return;
 
-        const searchHistory = auth.user.searchHistory || []
+        let searchHistory = [...auth.user.searchHistory] || []
 
-        let flag = false; 
+        const itemIndex = searchHistory.indexOf(searchKey.value);
 
-        const toReturnSearchHistory = searchHistory.map(item => {
-            if (item.name === searchKey.value) {
-                item.value = item.value + 1;
-                flag = true;
-            }
-            return item
-        })
-        flag === false 
-            ? toReturnSearchHistory.push({
-                name: searchKey.value, 
-                value: 1
-            }) 
-            : null;
-        const sortedSearchHistory = this.sortSearchHistory(toReturnSearchHistory)
+        if (itemIndex > -1) {
 
-        auth.setSearchHistory(sortedSearchHistory)
+            searchHistory = [...searchHistory.slice(0, itemIndex), ...searchHistory.slice(itemIndex + 1)]
+
+        }
+
+        searchHistory.unshift(searchKey.value)
+
+        // let flag = false; 
+
+        // const toReturnSearchHistory = searchHistory.map(item => {
+        //     if (item.name === searchKey.value) {
+        //         item.value = item.value + 1;
+        //         flag = true;
+        //     }
+        //     return item
+        // })
+        // flag === false 
+        //     ? toReturnSearchHistory.push({
+        //         name: searchKey.value, 
+        //         value: 1
+        //     }) 
+        //     : null;
+        // const sortedSearchHistory = this.sortSearchHistory(toReturnSearchHistory)
+
+        auth.setSearchHistory(searchHistory)
 
         this.checkInSearchHistory(searchKey.value)
     }

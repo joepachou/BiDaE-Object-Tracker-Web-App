@@ -502,9 +502,6 @@ class ObjectTable extends React.Component{
 
     filterData = (data, key, filteredAttribute) => {
                     
-        this.setState({
-            loadingFlag:  true
-        })
         const { locale } = this.context  
         key = key.toLowerCase()
         let filteredData = data.filter(obj => { 
@@ -579,7 +576,7 @@ class ObjectTable extends React.Component{
 
             return false
         })
-        this.setState({ loadingFlag:  false })
+
         return filteredData
         
     }

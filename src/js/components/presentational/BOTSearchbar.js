@@ -40,6 +40,8 @@ import config from '../../config';
 import {
     SEARCH_BAR
 } from '../../config/wordMap'
+import apiHelper from '../../helper/apiHelper';
+import { AppContext } from '../../context/AppContext';
 
 let suggestData = []; 
 let load_suggest = false;
@@ -63,6 +65,8 @@ const renderInputComponent = inputProps => (
 
 
 class BOTSearchbar extends React.Component {
+
+    static contextType = AppContext;
     
     state = {
         value: '',
@@ -89,7 +93,57 @@ class BOTSearchbar extends React.Component {
             value: this.state.value
         }
         this.props.getSearchKey(searchKey);
+
+        this.addSearchHistory(searchKey)
+
+        this.checkInSearchHistory(this.state.value)
     }
+
+    /** Set search history to auth */
+    addSearchHistory = searchKey => {
+        let { 
+            auth 
+        } = this.context
+
+        if (!auth.authenticated) return;
+
+        let searchHistory = [...auth.user.searchHistory] || []
+
+        const itemIndex = searchHistory.indexOf(searchKey.value);
+
+        if (itemIndex > -1) {
+
+            searchHistory = [...searchHistory.slice(0, itemIndex), ...searchHistory.slice(itemIndex + 1)]
+
+        }
+
+        searchHistory.unshift(searchKey.value)
+
+        auth.setSearchHistory(searchHistory)
+
+        this.checkInSearchHistory(searchKey.value)
+    }
+
+    /** Insert search history to database */
+    checkInSearchHistory = itemName => {
+
+        let { 
+            auth, 
+        } = this.context
+
+        apiHelper.userApiAgent.addSearchHistory({
+            username: auth.user.name,
+            keyType: 'object type search',
+            keyWord: itemName
+        }).then(res => {
+            this.setState({
+                searchKey: itemName
+            })
+        }).catch(err => {
+            console.log(`check in search history failed ${err}`)
+        })
+    }
+    
 
     handleChange = (e) => {
         this.setState({
@@ -187,7 +241,6 @@ class BOTSearchbar extends React.Component {
         );
     }
 }
-
 
 
 export default BOTSearchbar;

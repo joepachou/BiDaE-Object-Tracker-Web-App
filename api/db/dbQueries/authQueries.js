@@ -38,7 +38,7 @@ module.exports = {
 			`
 			WITH 
 			user_info
-				AS
+				AS 
 					(
 						SELECT name, password, mydevice, id, main_area, max_search_history_count, locale_id
 						FROM user_table
@@ -76,12 +76,23 @@ module.exports = {
 			search_histories
 				AS
 					(
-						SELECT 
-							keyword as name, 
-							COUNT(id) as value
-						FROM search_history 
-						WHERE user_id = (SELECT id FROM user_info)
-						GROUP BY keyword
+						WITH temp AS (
+							SELECT 
+								keyword,
+								search_time, 
+								CASE WHEN LAG(keyword) OVER (PARTITION BY keyword ORDER BY search_history DESC ) = keyword 
+								THEN null ELSE 1 END 
+							FROM search_history 
+							WHERE user_id = (
+								SELECT id
+								FROM user_table
+								WHERE name = $1
+							)
+							ORDER BY search_time DESC
+						) 
+						SELECT * 
+						FROM temp 
+						WHERE temp.case IS NOT NULL
 					)
 			SELECT 
 				user_info.name, 
@@ -89,7 +100,7 @@ module.exports = {
 				user_info.mydevice, 
 				user_info.locale_id,
 				array (
-					SELECT row_to_json(search_histories) 
+					SELECT keyword
 					FROM search_histories
 				) AS search_history,
 				user_info.id,
@@ -117,7 +128,9 @@ module.exports = {
 			FROM user_info
 			`;
 
-		const values = [username];
+		const values = [
+			username
+		];
 
 		const query = {
 			text,

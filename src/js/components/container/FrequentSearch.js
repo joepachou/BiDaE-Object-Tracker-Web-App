@@ -134,7 +134,7 @@ class FrequentSearch extends React.Component {
                                             name={SEARCH_HISTORY}
                                             value={item.name}
                                         >
-                                            {item.name}
+                                            {item}
                                         </Button>
                                     )
                         })}
