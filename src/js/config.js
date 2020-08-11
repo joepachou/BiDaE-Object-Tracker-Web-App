@@ -42,7 +42,7 @@ import wordMap from './config/wordMap';
 
 const config = {
 
-    VERSION: 'v1.0 b.1941',
+    VERSION: 'v1.0 b.1942',
 
     TIMESTAMP_FORMAT: 'LLL',
 
