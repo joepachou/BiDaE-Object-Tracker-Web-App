@@ -12,7 +12,8 @@
     "reset": "git reset --hard origin/master",
     "git": "npm run fetch && npm run reset",
     "production": "npm install && npm run build && npm run server",
-    "encrypt": "node ./tools/createEncrypt.js"
+    "encrypt": "node ./tools/createEncrypt.js",
+    "webp": "node ./tools/webpCovertor.js"
   },
   "keywords": [],
   "author": "",

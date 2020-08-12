@@ -48,7 +48,7 @@ const convertImages = async () => {
 
     console.log('coverting image to webp...');
     await imagemin(files, config);
-    console.log('WebP complete!');
+    console.log('webp coverting complete!');
 };
 
 convertImages();
