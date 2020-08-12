@@ -98,6 +98,7 @@ export default ({
                                     data: searchResult.filter(item => item.found).length,
                                     label: wordMap.FOUND,
                                     locale,
+                                    onClick: handleClick
                                 })}
                             </HoverWithUnderlineDiv>
                             <HoverWithUnderlineDiv
@@ -109,6 +110,7 @@ export default ({
                                     data: searchResult.filter(item => !item.found).length,
                                     label: wordMap.NOT_FOUND,
                                     locale,
+                                    onClick: handleClick
                                 })}
                             </HoverWithUnderlineDiv>
                             <HoverDiv
@@ -198,8 +200,12 @@ const stringBlock = ({
                     className='d-flex justify-content-start mr-2'
                     name={name}
                     value={value}
+                    onClick={onClick}
                 >
-                    <FontBoldDiv>
+                    <FontBoldDiv
+                        name={name}
+                        value={value}
+                    >
                         {data}
                     </FontBoldDiv>
                     &nbsp;
@@ -215,10 +221,14 @@ const stringBlock = ({
                     className='d-flex justify-content-start mr-2'
                     name={name}
                     value={value}
+                    onClick={onClick}
                 >
                     {locale.texts[label.toUpperCase().replace(/ /g, '_')]}
                     &nbsp;
-                    <FontBoldDiv>
+                    <FontBoldDiv
+                        name={name}
+                        value={value}
+                    >
                         {data}
                     </FontBoldDiv>
                     &nbsp;
