@@ -26,7 +26,7 @@
 
 /* Colors */
 .awesome-number-marker-icon-red {
-  background: url('../img/colorPin/Red.svg') no-repeat center/contain;
+  background: url('../img/colorPin/Red.png') no-repeat center/contain;
   /* background-position: 0 0; */
 }
 
@@ -39,7 +39,7 @@
 }
 
 .awesome-number-marker-icon-orange {
-  background: url('../img/colorPin/Orange.svg') no-repeat center/contain;
+  background: url('../img/colorPin/Orange.png') no-repeat center/contain;
   /* background-position: -36px 0; */
 }
 
@@ -93,7 +93,7 @@
 }
 
 .awesome-number-marker-icon-grey {
-  background: url('../img/colorPin//DarkGrey.svg') no-repeat center/contain;
+  background: url('../img/colorPin//DarkGrey.png') no-repeat center/contain;
   /* background-position: -648px 0; */
 }
 
@@ -102,20 +102,20 @@
 }
 
 .awesome-number-marker-icon-black {
-  background: url('../img/colorPin/Black.svg') no-repeat center/contain;
+  background: url('../img/colorPin/Black.png') no-repeat center/contain;
   /* background-position: -682px 0; */
 }
 
 .awesome-number-marker-icon-sos {
-  background: url('../img/colorPin/sos.svg') no-repeat center/contain;
+  background: url('../img/colorPin/sos.png') no-repeat center/contain;
 
 }
 .awesome-number-marker-icon-lavender  {
-  background: url('../img/colorPin/Lavender.svg') no-repeat center/contain;
+  background: url('../img/colorPin/Lavender.png') no-repeat center/contain;
 }
 
 .awesome-number-marker-icon-lightyellow  {
-  background: url('../img/colorPin/LightYellow.svg') no-repeat center/contain;
+  background: url('../img/colorPin/LightYellow.png') no-repeat center/contain;
 }
 
 .awesome-number-marker-icon-slateblue {
@@ -124,7 +124,7 @@
 }
 
 .awesome-number-marker-icon-darkseagreen {
-  background: url('../img/colorPin/DarkSeaGreen.svg') no-repeat center/contain;
+  background: url('../img/colorPin/DarkSeaGreen.png') no-repeat center/contain;
 }
 
 .awesome-number-marker-icon-lightblue {
@@ -136,7 +136,7 @@
 }
 
 .awesome-number-marker-icon-mistyrose {
-  background: url('../img/colorPin/MistyRose.svg') no-repeat center/contain;
+  background: url('../img/colorPin/MistyRose.png') no-repeat center/contain;
 }
 
 .awesome-number-marker-icon-yellowgreen {
@@ -148,7 +148,7 @@
 }
 
 .awesome-number-marker-icon-orchid {
-  background: url('../img/colorPin/Orchid.svg') no-repeat center/contain;
+  background: url('../img/colorPin/Orchid.png') no-repeat center/contain;
 }
 
 .awesome-number-marker-icon-female {
