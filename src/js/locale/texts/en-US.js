@@ -141,6 +141,7 @@ const en =  {
     ABOUT_YOU: "about you",
     YOUR_SERVICE_AREAS: "your service areas",
     PREFERENCE: "preference",
+    SEARCH_PREFERENCES: "search preferences",
 
     /* buttons */
     CLEAR : "clear",
@@ -289,6 +290,7 @@ const en =  {
     IS_GLOBAL_FENCE: "global fence",
     SIGNATURE:"signature",
     NUMBER_OF_SEARCH_HISTORY: "number of search history",
+    NUMBER_OF_FREQUENT_SEARCH: "number of frequent searchs",
     SELECTED_AREAS: "selected areas",
     NOT_SELECTED_AREAS: "not selected areas",
     LOCATION_SELECTION: "location",

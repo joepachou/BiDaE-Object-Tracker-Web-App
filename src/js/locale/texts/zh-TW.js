@@ -137,8 +137,7 @@ const tw = {
     ABOUT_YOU: "關於",
     YOUR_SERVICE_AREAS: "服務區域",
     PREFERENCE: "偏好設定",
-
-
+    SEARCH_PREFERENCES: "搜尋設定",
 
     /* buttons */
     CLEAR : "清除",
@@ -290,6 +289,7 @@ const tw = {
     NO: "否",
     IS_GLOBAL_FENCE: "全境電子圍籬",
     NUMBER_OF_SEARCH_HISTORY: "常用搜尋筆數",
+    NUMBER_OF_FREQUENT_SEARCH: "常用搜尋筆數",
     SELECTED_AREAS: "已選取區域",
     NOT_SELECTED_AREAS: "未選取區域",
     LOCATION_SELECTION: "區域",

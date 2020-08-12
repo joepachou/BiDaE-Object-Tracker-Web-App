@@ -609,26 +609,26 @@ const geofenceConfigColumn = [
         accessor: "end_time",
         width: 90,
     },
-    {
-        Header: "perimeters group",
-        accessor: "parsePerimeters.lbeacons",
-        width: 350,
-    },
-    {
-        Header: "perimeter rssi",
-        accessor: "p_rssi",
-        width: 120,
-    },
-    {
-        Header: "fences group",
-        accessor: "parseFences.lbeacons",
-        width: 350,
-    },
-    {
-        Header: "fence rssi",
-        accessor: "f_rssi",
-        width: 120,
-    },
+    // {
+    //     Header: "perimeters group",
+    //     accessor: "parsePerimeters.lbeacons",
+    //     width: 350,
+    // },
+    // {
+    //     Header: "perimeter rssi",
+    //     accessor: "p_rssi",
+    //     width: 120,
+    // },
+    // {
+    //     Header: "fences group",
+    //     accessor: "parseFences.lbeacons",
+    //     width: 350,
+    // },
+    // {
+    //     Header: "fence rssi",
+    //     accessor: "f_rssi",
+    //     width: 120,
+    // },
 ]
 
 const monitorConfigColumn = [

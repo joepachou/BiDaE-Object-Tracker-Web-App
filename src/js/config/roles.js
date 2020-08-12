@@ -85,6 +85,7 @@ const rules = {
             "route:setting",
             "route:lbeacon",
             "route:gateway",
+            "route:BOTAdmin",
 
             "user:mydevice",
             "user:mypatient",

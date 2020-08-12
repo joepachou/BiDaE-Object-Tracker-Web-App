@@ -217,13 +217,13 @@ class UserProfile extends React.Component{
                 </div>
                 <hr/>
                 <div
-                    className='mb-2'
+                    className='mb-2 text-capitalize'
                 >
                     <ListTitle>
                         {locale.texts.YOUR_SERVICE_AREAS}
                     </ListTitle>
                     <p>
-                        {locale.texts.MAIN_AREA}: {areaTable.length != 0 
+                        {locale.texts.PRIMARY_AREA}: {areaTable.length != 0 
                             && auth.user.main_area
                             && locale.texts[areaTable[auth.user.main_area].name]
                         }
@@ -241,16 +241,17 @@ class UserProfile extends React.Component{
                         }
                     </p>
                 </div>
+                <hr/>
                 <div
                     className='mb-2'
                 >
                     <ListTitle>
-                        {locale.texts.PREFERENCE}
+                        {locale.texts.SEARCH_PREFERENCES}
                     </ListTitle>
                     <div 
-                        className="d-flex justify-content-start align-items-center"
+                        className="d-flex justify-content-start align-items-center text-capitalize"
                     >
-                        {locale.texts.NUMBER_OF_SEARCH_HISTORY}: 
+                        {locale.texts.NUMBER_OF_FREQUENT_SEARCH}: 
                         <NumberPicker
                             name="numberPicker"
                             value={auth.user.freqSearchCount}
