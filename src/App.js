@@ -34,7 +34,7 @@
 
 import React from 'react';
 import AppContext from './js/context/AppContext';
-import PrivateRoutes from '../src/js/PrivateRoutes';
+import PrivateRoutes from '../src/js/components/utils/PrivateRoutes';
 import { ToastContainer } from 'react-toastify';
 import config from './js/config';
 import { 
