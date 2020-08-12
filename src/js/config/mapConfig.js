@@ -35,6 +35,7 @@
 import siteConfig from '../../../site_module/siteConfig';
 import viewConfig from '../config/viewConfig';
 import { monitorTypeChecker } from '../helper/dataTransfer';
+import { map } from 'lodash';
 
 /** Map configuration.
  *  Refer leaflet.js for more optional setting https://leafletjs.com/reference-1.5.0.html
@@ -339,6 +340,7 @@ const mapConfig = {
         if (item.panic) return this.iconColor.sos
 
         if (item.object_type == 0) {
+            if (item.clear_bed) return mapConfig.iconColor.whiteBed
             if (monitorTypeChecker(item.monitor_type, 16)) return mapConfig.iconColor.blackBed
             else if (hasColorPanel) return item.pinColor
             else if (item.searched) return mapConfig.iconColor.searched
@@ -373,11 +375,7 @@ const mapConfig = {
             return res
         }, {}),
 
-    areaModules: siteConfig.areaModules,
-
     AREA_MODULES: siteConfig.areaModules,
-
-    AREA_OPTIONS: Object.values(siteConfig.areaModules),
 
     /* For test. To start object tracking*/
     startInteval: true,
