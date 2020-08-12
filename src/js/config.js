@@ -39,11 +39,10 @@ import mapConfig from './config/mapConfig';
 import viewConfig from './config/viewConfig';
 import moment from 'moment';
 import supportedLocale from './locale/supportedLocale';
-import wordMap from './config/wordMap';
 
 const config = {
 
-    VERSION: 'v1.0 b.1942',
+    VERSION: 'v1.0 b.1943',
 
     TIMESTAMP_FORMAT: 'LLL',
 
