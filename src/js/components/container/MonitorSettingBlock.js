@@ -267,7 +267,7 @@ class MonitorSettingBlock extends React.Component{
             isEdited
         } = this.state
 
-        let areaOptions = Object.values(config.mapConfig.areaModules)
+        let areaOptions = Object.values(config.mapConfig.AREA_MODULES)
             .map((area, index) => {
                 return {
                     value: area.name,
