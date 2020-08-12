@@ -65,6 +65,7 @@ import {
 } from '../BOTComponent/styleComponent';
 import styleSheet from '../../config/styleSheet';
 
+
 const imageLength = 160;
 
 const ResetPasswordResult = ({

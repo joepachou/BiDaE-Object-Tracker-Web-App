@@ -35,16 +35,13 @@
 
 import React, {Fragment} from 'react';
 import { 
-    BrowserRouter as Router, 
     Link, 
 } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 import { 
     Navbar, 
     Nav, 
-    Image, 
     Dropdown,
-    DropdownButton  
 } from 'react-bootstrap'
 import config from '../../config';
 import AccessControl from '../authentication/AccessControl';
@@ -55,9 +52,7 @@ import BatteryLevelNotification from "./BatteryLevelNotification"
 import { navbarNavList } from '../../config/pageModules'
 import styleConfig from '../../config/styleConfig';
 import {
-    SubMenu,
     BOTNavLink,
-    ReactDropdownButton
 } from '../BOTComponent/styleComponent';
 import routes from '../../config/routes/routes';
 import {
@@ -67,6 +62,7 @@ import {
 import {
     SET_AREA
 } from '../../reducer/action';
+import ImageWebp from '../utils/ImageWebp';
 
 class NavbarContainer extends React.Component {
 
@@ -157,11 +153,13 @@ class NavbarContainer extends React.Component {
                             className="nav-link nav-brand d-flex align-items-center" 
                             style={style.navbarBrand}
                         >
-                            <Image
-                                alt=""
+                            <ImageWebp
+                                alt="LOGO"
                                 src={config.LOGO}
-                                width={50}
+                                srcWebp={config.LOGO_WEBP}
+                                width={30} 
                                 className="d-inline-block align-top px-1"
+
                             />
                             <Select
                                 placeholder = {locale.texts.SELECT_LOCATION}

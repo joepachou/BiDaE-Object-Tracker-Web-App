@@ -34,8 +34,6 @@
 
 import React, { Component } from 'react';
 import { 
-    Modal, 
-    Image, 
     Button,
     Dropdown
 } from 'react-bootstrap';
@@ -58,7 +56,7 @@ import {
 } from 'react-router-dom';
 import routes from '../../config/routes/routes';
 import { AppContext } from '../../context/AppContext';
-import Licence from '../BOTComponent/Licence';
+import ImageWebp from '../utils/ImageWebp';
 
 const imageLength = 80;
 
@@ -73,11 +71,11 @@ const SigninPage = () => {
     return (
         <CenterContainer>
             <div className='d-flex justify-content-center'>
-                <Image 
-                    src={config.LOGO} 
-                    rounded 
+                <ImageWebp
+                    alt="logo"
+                    src={config.LOGO}
+                    srcWebp={config.LOGO_WEBP}
                     width={imageLength} 
-                    height={imageLength} 
                 />
             </div>
             <div className='d-flex justify-content-center'>

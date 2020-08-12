@@ -60,7 +60,8 @@ import {
 } from '../../helper/dataTransfer';
 import {
     JSONClone,
-    isEqual
+    isEqual,
+    isWebpSupported
 } from '../../helper/utilities';
 
 class Map extends React.Component {
@@ -174,10 +175,12 @@ class Map extends React.Component {
 
         /** set the map's config */
         let { 
-            url, 
             bounds,
             hasMap
         } = areaModules[areaOption]
+
+        let url = isWebpSupported() && areaModules[areaOption].urlWebp ? areaModules[areaOption].urlWebp : areaModules[areaOption].url
+        
         this.mapOptions.maxBounds = bounds.map((latLng, index) => latLng.map(axis => axis + this.mapOptions.maxBoundsOffset[index]))
         var map = L.map('mapid', this.mapOptions);
 
@@ -221,10 +224,12 @@ class Map extends React.Component {
 
         /** set the map's config */
         let { 
-            url, 
             bounds,
             hasMap
         } = areaModules[areaOption]
+
+        let url = isWebpSupported() && areaModules[areaOption].urlWebp ? areaModules[areaOption].urlWebp : areaModules[areaOption].url
+
         mapOptions.maxBounds = bounds.map((latLng, index) => latLng.map(axis => axis + mapOptions.maxBoundsOffset[index]))
 
         if (hasMap) {

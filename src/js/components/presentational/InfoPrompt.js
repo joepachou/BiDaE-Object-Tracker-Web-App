@@ -187,7 +187,8 @@ const stringBlock = ({
     value,
     data,
     label,
-    locale
+    locale,
+    onClick
 }) => {
     switch(locale.abbr) {
         case locale.supportedLocale.en.abbr:

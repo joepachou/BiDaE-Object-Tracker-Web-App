@@ -6,7 +6,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        MainContainer.js
+        ImageWebp.js
 
     File Description:
         BOT UI component
@@ -31,30 +31,20 @@
         Edward Chen, r08921a28@ntu.edu.tw
         Joe Chou, jjoe100892@gmail.com
 */
+import React from 'react';
 
-
-/** Compare two objects, including strings, deep objects  */
-export const isEqual = (obj1, obj2) => {
-    return JSON.stringify(obj1) == JSON.stringify(obj2);
+const ImageWebp = ({
+    src,
+    srcWebp,
+    width,
+    alt
+}) => {
+    return (
+        <picture>
+            <source srcset={srcWebp} type="image/jpeg" media="(min-width:650px)" /> 
+            <img src={src} alt={alt} width={width}/>
+        </picture>
+    ) 
 }
 
-/** Deep clone for json format */
-export const JSONClone = (arr) => {
-    if (arr == null) return arr;
-    return arr.map(object => {
-        return Object.assign({}, object)
-    }, )
-}
-
-/** Check whether the platform supports Webp */
-export const isWebpSupported = () => {
-    var elem = document.createElement('canvas');
-
-    if (!!(elem.getContext && elem.getContext('2d'))) {
-        // was able or not to get WebP representation
-        return elem.toDataURL('image/webp').indexOf('data:image/webp') == 0;
-    }
-
-    // very old browser like IE 8, canvas not supported
-    return false;
-}
+export default ImageWebp
