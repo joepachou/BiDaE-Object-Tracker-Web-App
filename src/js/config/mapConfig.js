@@ -123,9 +123,9 @@ const mapConfig = {
     /** Set the icon option for browser */
     iconOptions: {
 
-        iconSize: [siteConfig.MARKER_SIZE_IN_DESKTOP, siteConfig.MARKER_SIZE_IN_DESKTOP] || 1,
+        iconSize: [viewConfig.MARKER_SIZE_IN_DESKTOP, viewConfig.MARKER_SIZE_IN_DESKTOP] || 1,
 
-        iconAnchor: [siteConfig.MARKER_SIZE_IN_DESKTOP / 2, siteConfig.MARKER_SIZE_IN_DESKTOP],
+        iconAnchor: [viewConfig.MARKER_SIZE_IN_DESKTOP / 2, viewConfig.MARKER_SIZE_IN_DESKTOP],
 
         showNumber: true,
 
