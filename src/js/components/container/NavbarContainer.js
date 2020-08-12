@@ -98,7 +98,6 @@ class NavbarContainer extends React.Component {
         const style = {
             navbar: {
                 boxShadow: '0 1px 6px 0 rgba(32,33,36,0.28)',
-                fontWeight: '450',
                 padding: '0 1rem', 
             },
             navbarBrand: {
@@ -142,7 +141,7 @@ class NavbarContainer extends React.Component {
                 <Navbar
                     id="navbar"  
                     bg="white" 
-                    className="navbar sticky-top navbar-light text-capitalize" 
+                    className="navbar sticky-top navbar-light text-capitalize font-weight-500" 
                     expand="lg"
                     fixed="top" 
                     collapseOnSelect
@@ -214,10 +213,8 @@ class NavbarContainer extends React.Component {
                                                 >
                                                     <Dropdown.Toggle 
                                                         variant='light'
+                                                        className="font-weight-500"
                                                         bsPrefix='bot-dropdown-toggle'
-                                                        style={{
-                                                            fontWeight: '450',
-                                                        }}
                                                     >
                                                         {locale.texts[nav.name.toUpperCase().replace(/ /g, '_')]}
                                                     </Dropdown.Toggle>
@@ -239,7 +236,7 @@ class NavbarContainer extends React.Component {
                                                                                 key: tab.name.replace(/ /g, '_'),
                                                                             }
                                                                         }}
-                                                                        className='nav-link nav-route sub-nav-menu'
+                                                                        className='nav-link nav-route sub-nav-menu white-space-nowrap'
                                                                         key={tab.name}
                                                                     >
                                                                         <BOTNavLink
