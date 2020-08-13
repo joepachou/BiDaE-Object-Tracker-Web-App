@@ -35,6 +35,8 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer');
 const CompressionPlugin = require('compression-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const zlib = require('zlib');
 const webpack = require('webpack');
 const dotenv = require('dotenv');
@@ -53,9 +55,9 @@ module.exports = {
     output: {
         path: path.join(__dirname, 'dist'),
 
-        filename: "[name].bundle.js",
+        filename: "./js/[name].bundle.js",
 
-        chunkFilename: '[name].bundle.js',
+        chunkFilename: './js/[name].bundle.js',
 
         publicPath: '/',
     },
@@ -72,9 +74,9 @@ module.exports = {
             {
                 test: /\.html$/,
                 use: [
-                {
-                    loader: "html-loader"
-                }
+                    {
+                        loader: "html-loader"
+                    }
                 ]
             },
             {
@@ -97,7 +99,13 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                use: ['style-loader', 'css-loader'],
+                use: [
+                    {
+                        loader: MiniCssExtractPlugin.loader,
+                    },
+                    'css-loader',
+                    // 'style-loader', 
+                ],
             },
         ]
     },
@@ -106,6 +114,16 @@ module.exports = {
     },
     
     plugins: [
+
+        new CleanWebpackPlugin(),
+
+        /** Webpack tool for analyzing the package size */
+        // new BundleAnalyzerPlugin({
+        //     analyzerMode: 'static',
+        //     reportFilename: 'BundleReport.html',
+        //     logLevel: 'info'
+        // }),
+
         new HtmlWebPackPlugin({
             template: "./src/index.html",
             filename: "./index.html"
@@ -116,13 +134,6 @@ module.exports = {
             'process.env': envKeys
         }),
 
-        /** Webpack tool for analyzing the package size */
-        // new BundleAnalyzerPlugin({
-        //     analyzerMode: 'static',
-        //     reportFilename: 'BundleReport.html',
-        //     logLevel: 'info'
-        // }),
-
         /** Only introduce used moment locale package */
         new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /zh|en/),
 
@@ -130,7 +141,7 @@ module.exports = {
         new CompressionPlugin({
             filename: '[path].br[query]',
             algorithm: 'brotliCompress',
-            test: /\.(js|css|html|svg|png)$/,
+            test: /\.(js|css|html)$/,
             compressionOptions: {
               // zlib’s `level` option matches Brotli’s `BROTLI_PARAM_QUALITY` option.
               level: 11,
@@ -138,6 +149,10 @@ module.exports = {
             threshold: 10240,
             minRatio: 0.8,
             deleteOriginalAssets: false,
+        }),
+
+        new MiniCssExtractPlugin({
+            filename: './css/[name].css',
         }),
         
     ],
@@ -155,10 +170,10 @@ module.exports = {
 					test: /[\\/]node_modules[\\/](xlsx)[\\/]/,
                     name: 'xlsxVendor',
                 },
-                // reactVendor: {
-                //     test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
-                //     name: "reactVendor"
-                // },
+                reactVendor: {
+                    test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+                    name: "reactVendor"
+                },
                 mdbreactVendor: {
                     test: /[\\/]node_modules[\\/](mdbreact)[\\/]/,
                     name: "mdbreacVendor"
