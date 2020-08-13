@@ -35,8 +35,7 @@
 const imagemin = require('imagemin');
 const webp = require('imagemin-webp');
 const path = require('path')
-const imagePath = path.join(__dirname, '..', 'dist', 'img')
-
+const imagePath = path.join(__dirname, '..', 'site_module', 'img', 'map')
 
 const convertImages = async () => {
 
