@@ -67,7 +67,8 @@ import {
     OBJECTS,
     OBJECT_TYPE,
     NOT_STAY_ROOM_MONITOR,
-    SEARCH_HISTORY
+    SEARCH_HISTORY,
+    PIN_SELETION
 } from '../../../config/wordMap';
 
 const {
@@ -555,6 +556,25 @@ class MainContainer extends React.Component{
                 })
 
                 break;
+            case PIN_SELETION:
+
+                searchObjectArray = [];
+    
+                proccessedTrackingData
+                    
+                    .map(item => {
+                        if (searchKey.value.includes(item.mac_address)) {
+                            item.searched = true;
+                            item.searchedType = -1;
+                            searchResult.push(item)
+                        }
+                    })
+                if (!searchedObjectType.includes(-1)) { 
+                    searchedObjectType.push(-1)
+                    showedObjects.push(-1)
+                }
+
+                break;
 
             default:
 
@@ -614,20 +634,6 @@ class MainContainer extends React.Component{
             searchObjectArray,
             pinColorArray
         })
-    }
-
-    collectObjectsByLatLng = (lbPosition, proccessedTrackingData, markerClickPackage) => {
-        let objectList = []
-        proccessedTrackingData
-        .filter(item => {
-            return item.lbeacon_coordinate && 
-                item.lbeacon_coordinate.toString() === lbPosition.toString()
-        })
-        .map(item => {
-            item.searched = true;
-            objectList.push(item);            
-        })
-        return objectList 
     }
 
     highlightSearchPanel = (boolean) => {

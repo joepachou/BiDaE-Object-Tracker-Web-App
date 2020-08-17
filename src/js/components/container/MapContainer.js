@@ -129,7 +129,8 @@ class MapContainer extends React.Component {
             currentAreaId,
             searchObjectArray,
             pinColorArray,
-            searchKey
+            searchKey,
+            getSearchKey,
         } = this.props;
 
         let propsGroup = {
@@ -149,8 +150,8 @@ class MapContainer extends React.Component {
             currentAreaId,
             searchObjectArray,
             pinColorArray,
-            searchKey
-
+            searchKey,
+            getSearchKey
 
         }
         return(

@@ -26,6 +26,8 @@ module.exports = {
 
     SEARCH_BAR: "search bar",
 
+    PIN_SELETION: "pin selection",
+
     SHIFT_CHANGE: "shift change",
 
     SIGN_IN: "signin",

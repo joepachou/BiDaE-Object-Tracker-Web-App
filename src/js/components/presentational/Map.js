@@ -63,6 +63,9 @@ import {
     isEqual,
     isWebpSupported
 } from '../../helper/utilities';
+import {
+    PIN_SELETION
+} from '../../config/wordMap';
 
 class Map extends React.Component {
     
@@ -468,6 +471,7 @@ class Map extends React.Component {
             searchObjectArray,
             pinColorArray,
             searchKey,
+            proccessedTrackingData
         } = this.props
 
         let [{assignedObject}] = stateReducer;
@@ -478,7 +482,6 @@ class Map extends React.Component {
         this.errorCircle .clearLayers();
 
         /** Mark the objects onto the map  */
-        // this.calculateScale();
 
         // const iconSize = [this.scalableIconSize, this.scalableIconSize];
         // const numberSize = this.scalableNumberSize;
@@ -498,7 +501,7 @@ class Map extends React.Component {
             /** Set the Marker's popup 
              * popupContent (objectName, objectImg, objectImgWidth)
              * More Style sheet include in Map.css */
-            let popupContent = this.props.mapConfig.getPopupContent([item], this.collectObjectsByLatLng(item.lbeacon_coordinate), locale)
+            let popupContent = this.props.mapConfig.getPopupContent([item], this.collectObjectsByPosition(proccessedTrackingData, item.currentPosition), locale)
             
             let pinColorIndex = searchObjectArray.indexOf(item.type)
 
@@ -567,9 +570,18 @@ class Map extends React.Component {
                 })
 
             })
+
             marker.getPopup().on('remove', () => {
                 this.setState({
                     shouldUpdateTrackingData: true
+                })
+            })
+
+            marker.on('click', () => {
+                let objectList = this.collectObjectsByPosition(proccessedTrackingData, item.currentPosition);
+                this.props.getSearchKey({
+                    type: PIN_SELETION,
+                    value: objectList.map(item => item.mac_address)
                 })
             })
             
@@ -610,6 +622,23 @@ class Map extends React.Component {
             })
 
         return objectList 
+    }
+
+    collectObjectsByPosition = (collection, position) => {
+        let objectList = collection
+            .filter(item => {
+                if (!item.found) return false; 
+                if (item.currentPosition == null) return false;
+                if (item.object_type != 0) return false;
+
+                let yDiff = Math.abs(item.currentPosition[0] - position[0]);
+                let xDiff = Math.abs(item.currentPosition[1] - position[1]);
+                let distance = Math.sqrt(Math.pow(yDiff, 2) + Math.pow(xDiff, 2));
+
+                return distance < this.props.mapConfig.PIN_SELECTION_RADIUS;
+            })
+ 
+        return objectList
     }
     
     render(){

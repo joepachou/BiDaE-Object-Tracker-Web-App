@@ -383,6 +383,9 @@ const mapConfig = {
     /* Set the tracking query inteval time(ms) */
     intervalTime: 1000,
 
+    /** Radius of circle for collecting object based on the selection pin */
+    PIN_SELECTION_RADIUS: 1000,
+
     objectStatus: {
         PERIMETER: "perimeter",
         FENCE: "fence",

@@ -73,7 +73,8 @@ export default class BrowserMapContainer extends React.Component {
             searchObjectArray,
             pinColorArray,
             searchKey,
-            handleClick
+            handleClick,
+            getSearchKey
         } = this.props;
 
         let [{areaId}] = stateReducer
@@ -115,7 +116,7 @@ export default class BrowserMapContainer extends React.Component {
             <div id="MapContainer" style={style.MapContainer} className="overflow-hidden">
                 <div style={style.mapBlock}>
                     <Map
-                        pathMacAddress={this.props.pathMacAddress}
+                        pathMacAddress={this.props.pathMacAddress} 
                         hasSearchKey={hasSearchKey}
                         colorPanel={this.props.colorPanel}
                         proccessedTrackingData={proccessedTrackingData}
@@ -133,6 +134,7 @@ export default class BrowserMapContainer extends React.Component {
                         searchObjectArray={searchObjectArray}
                         pinColorArray={pinColorArray}
                         searchKey={searchKey}
+                        getSearchKey={getSearchKey}
                     />
                 </div>
                 <div>
