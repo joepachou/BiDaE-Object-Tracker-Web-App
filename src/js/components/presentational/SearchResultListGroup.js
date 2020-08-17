@@ -81,9 +81,6 @@ const SearchResultListGroup = ({
             color: '#007bff',
             top: 10
         },
-        item: {
-            minWidth: 25,
-        },
         listGroup: {
             color: 'rgb(33, 37, 41)',
         }
@@ -97,6 +94,7 @@ const SearchResultListGroup = ({
         })
     }
 
+
     const onMouseOut = () => {
         let [{}, dispatch] = stateReducer;
         dispatch({
@@ -106,6 +104,15 @@ const SearchResultListGroup = ({
     }
 
     const createItem = (searchKey, item, index) => {
+
+        if (selection.includes(item.mac_address)) {
+            return (
+                <div className='d-inline-block'>
+                    <i className="fas fa-check color-blue"></i>
+                </div>
+            )
+        }
+
         switch(searchKey.type) {
             case ALL_DEVICES: 
             case ALL_PATIENTS:
@@ -115,14 +122,12 @@ const SearchResultListGroup = ({
                 return (
                     <div className='d-inline-block'>
                         <div
+                            className="d-flex justify-content-center color-white"
                             style={{
                                 height: '25px',
                                 width: '25px',
                                 borderRadius: '50%',
                                 background: searchObjectArray.includes(item.type) ? pinColorArray[searchObjectArray.indexOf(item.type)] : null,
-                                display: 'flex',
-                                justifyContent: 'center',
-                                color: 'white'
                             }}
                         >
                             {countNumber(searchKey, item, numberSheet)}
@@ -152,8 +157,7 @@ const SearchResultListGroup = ({
                         className='d-flex py-1 text-left justify-content-start' 
                     >   
                         <div 
-                            style={style.item}
-                            className='d-flex justify-content-center'
+                            className='d-flex justify-content-center min-width-25'
                         >
                             {createItem(searchKey, item, index)}
                         </div>

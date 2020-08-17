@@ -143,7 +143,7 @@ export default class ChangeStatusForm extends React.Component {
                     value: selectedObjectData[0].transferred_location.value,
                     label: `${selectedObjectData[0].transferred_location.name}-${selectedObjectData[0].transferred_location.department}`
                 }
-                : null,
+                : "",
             notes: selectedObjectData.length != 0 ? selectedObjectData[0].notes : "" ,
             nickname :  selectedObjectData.length != 0 ? selectedObjectData[0].nickname : '',     
         }
@@ -181,7 +181,7 @@ export default class ChangeStatusForm extends React.Component {
                 <Modal.Header 
                     closeButton 
                 >
-                    {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
+                    {title}
                 </Modal.Header >
                 <Modal.Body>
                     <Formik
@@ -267,7 +267,7 @@ export default class ChangeStatusForm extends React.Component {
                                                                     type="text"
                                                                     name="area"
                                                                     label={locale.texts.AREA}
-                                                                    value={locale.texts[item.location_name]  }
+                                                                    value={locale.texts[item.lbeacon_area.value]  }
                                                                     disabled
                                                                 />
                                                             </Col> 

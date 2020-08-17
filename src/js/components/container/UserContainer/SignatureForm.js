@@ -42,7 +42,7 @@ import {
     Formik, 
     Form, 
 } from 'formik';
-import Select from 'react-select';
+import Select from 'react-select'; 
 import * as Yup from 'yup';
 import axios from 'axios';
 import dataSrc from '../../../dataSrc';
@@ -77,10 +77,6 @@ const SignatureForm = ({
                     initialValues = {{
                         name: ''
                     }}
-
-                    validationSchema = {
-                        null
-                    }
 
                     onSubmit={(values, { setStatus, setSubmitting }) => {
                         handleSubmit(values)

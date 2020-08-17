@@ -35,7 +35,6 @@
 import React, { Fragment } from 'react';
 import { AppContext } from '../../context/AppContext';
 import {
-    BrowserView,
     TabletView,
     MobileOnlyView,
     isTablet,
@@ -58,12 +57,12 @@ import pdfPackageGenerator from '../../helper/pdfPackageGenerator';
 import {
     SET_ENABLE_REQUEST_TRACKING_DATA
 } from '../../reducer/action';
-import { editTransferredLocation } from '../../../../api/db/dbQueries/transferredLocationQueries';
 import {
     JSONClone
 } from '../../helper/utilities';
 import {
-    PIN_SELETION
+    PIN_SELETION,
+    TRANSFERRED
 } from '../../config/wordMap';
 
 class SearchResultList extends React.Component {
@@ -83,16 +82,6 @@ class SearchResultList extends React.Component {
         signatureName:'',
         selection: [],
         editedObjectPackage: [],
-    }
-
-    componentDidUpdate = (prevProps, prevState) => {
-        // console.log(prevProps)
-        if (this.props.searchKey.type == PIN_SELETION && !this.state.showEditObjectForm) {
-            this.setState({
-                showEditObjectForm: true,
-                showAddDevice: true,
-            })
-        }
     }
 
     onSelect = (eventKey) => {
@@ -182,45 +171,24 @@ class SearchResultList extends React.Component {
             showEditObjectForm: false,
             editedObjectPackage :editedObjectPackage ,
         })
-        if (values.status == 'transferred') { 
+        if (values.status == TRANSFERRED) { 
             this.setState({
                 showSignatureForm:true
             })
-        }else{ 
-            setTimeout(
-                function() {
-                    this.setState({
-                        showConfirmForm: true,
-                    })
-                    this.props.highlightSearchPanel(false)
-                }.bind(this),
-                500
-            )
+        } else { 
+            this.setState({
+                showConfirmForm: true,
+            },  this.props.highlightSearchPanel(false))
         }
     }
 
     handleSignatureSubmit = values => {
-        
-        // let editedObjectPackage = _.cloneDeep(this.state.selectedObjectData).map(item => {
-        //     item.signature = values.name
-        //     return item
-        // })
-        
+
         this.setState({
-            showSignatureForm:false,
-            signatureName : values.name
-            // editedObjectPackage : editedObjectPackage
-        })
-    
-        setTimeout(
-            function() {
-                this.setState({
-                    showConfirmForm: true,
-                })
-                this.props.highlightSearchPanel(false)
-            }.bind(this),
-            500
-        )
+            showSignatureForm: false,
+            signatureName : values.name,
+            showConfirmForm: true,
+        }, this.props.highlightSearchPanel(false))    
     }
 
 
@@ -242,7 +210,6 @@ class SearchResultList extends React.Component {
             locale,
             signature: signatureName
         })
-
         apiHelper.objectApiAgent.editObjectPackage(
             locale,
             editedObjectPackage,
@@ -314,7 +281,6 @@ class SearchResultList extends React.Component {
             selectedObjectData: [],
             selection: [],
             editedObjectPackage: [],
-
         }, callback)
     }
 
@@ -416,11 +382,10 @@ class SearchResultList extends React.Component {
                         {...propsGroup}
                     />
                 </MobileOnlyView>
-
                 <ChangeStatusForm
                     handleShowPath={this.props.handleShowPath} 
                     show={this.state.showEditObjectForm} 
-                    title='report device status' 
+                    title={locale.texts.DEVICE_STATUS} 
                     selectedObjectData={this.state.selectedObjectData} 
                     searchKey={searchKey}
                     handleChangeObjectStatusFormClose={this.handleChangeObjectStatusFormClose}

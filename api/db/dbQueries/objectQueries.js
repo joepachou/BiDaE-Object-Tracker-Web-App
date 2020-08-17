@@ -282,7 +282,7 @@ const editObjectPackage = (
 		UPDATE object_table
 		SET 
 			status = '${item.status}',
-			transferred_location = ${item.transferred_location.id},
+			transferred_location = ${item.status == 'transferred' ? item.transferred_location.id : null},
 			note_id = ${record_id},
 			reserved_timestamp = ${item.status == 'reserve' ? `'${reservedTimestamp}'` : null},
 			reserved_user_id = (SELECT id

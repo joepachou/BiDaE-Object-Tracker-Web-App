@@ -312,6 +312,7 @@ const tw = {
     EDIT_OBJECT: "編輯物件",
     ADD_PERSONA: "增加人員",
     REPORT_DEVICE_STATUS: "回報儀器狀態",
+    DEVICE_STATUS: "儀器狀態",
     REPORT_PATIENT_STATUS: "回報病人狀態",
     THANK_YOU_FOR_REPORTING: "謝謝您的回報",
     PRINT_SEARCH_RESULT: "下載搜尋結果",

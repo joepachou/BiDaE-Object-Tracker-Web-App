@@ -222,7 +222,7 @@ module.exports = {
             reservedTimestamp, 
             locale
         } = request.body
-
+        console.log(formOption)
         pool.query(recordQueries.addEditObjectRecord(formOption, username, pdfPackage.path))
             .then(res => {
                 const record_id = res.rows[0].id

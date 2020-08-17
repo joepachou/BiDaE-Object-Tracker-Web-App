@@ -46,7 +46,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 /** General customized css */
 import "../scss/App.scss"
 
-// import "../scss/stylesheet.scss"
+import "../scss/stylesheet.scss"
 
 /** BOTCheckbox */
 import "../scss/BOTCheckbox.scss"

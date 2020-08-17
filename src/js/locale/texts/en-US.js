@@ -313,6 +313,7 @@ const en =  {
     EDIT_INFO: "edit info",
     ADD_PERSONA: "add persona",
     REPORT_DEVICE_STATUS: "report device status",
+    DEVICE_STATUS: "device status",
     REPORT_PATIENT_STATUS: "report patient status",
     THANK_YOU_FOR_REPORTING: "Thank you for reporting",
     PRINT_SEARCH_RESULT: "print search result",

@@ -54,5 +54,7 @@ module.exports = {
 
     RESERVE: "reserve",
 
+    TRANSFERRED: "transferred",
+
     ASSET_CONTROL_NUMBER: "asset control number"
 }
