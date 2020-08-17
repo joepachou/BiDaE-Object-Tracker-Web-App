@@ -119,7 +119,7 @@ class FrequentSearch extends React.Component {
                                 })
                                 .map((item, index) => {
 
-                                    let pinColorIndex = searchObjectArray.indexOf(item.name)
+                                    let pinColorIndex = searchObjectArray.indexOf(item)
 
                                     return (
                                         <Button
@@ -132,7 +132,7 @@ class FrequentSearch extends React.Component {
                                             // active={this.state.searchKey === item.name.toLowerCase()} 
                                             key={index}
                                             name={SEARCH_HISTORY}
-                                            value={item.name}
+                                            value={item}
                                         >
                                             {item}
                                         </Button>
