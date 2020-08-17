@@ -35,7 +35,7 @@
 const supportedLocale = {
 
     tw: {
-        name:'中文(繁體)',
+        name:'繁體中文',
         code: 'zh-tw',
         abbr: 'tw',
     },
@@ -53,7 +53,7 @@ const supportedLocale = {
     },
     
     cn: {
-        name:'中文(简体)',
+        name:'简体中文',
         code: 'zh-cn',
         abbr: 'cn',
     },   
