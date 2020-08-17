@@ -51,7 +51,7 @@ module.exports = {
 
     entry: './src/index.js',
     mode: env.NODE_ENV,
-    devtool: 'none',
+    // devtool: 'none',
     output: {
         path: path.join(__dirname, 'dist'),
 
@@ -80,13 +80,23 @@ module.exports = {
                 ]
             },
             {
-                test: /\.(eot|webp|woff|woff2|ttf|svg|png|jpe?g|gif)(\?\S*)?$/,
+                test: /\.(eot|woff|woff2|[ot]tf)$/,
+                use: {
+                    loader: 'file-loader?limit=100000&name=[name].[ext]',
+                    options: {
+                        name: '[name].[ext]',
+                        outputPath: 'fonts',
+                    }
+                }
+            },
+            {
+                test: /\.(webp|svg|png|jpe?g|gif)(\?\S*)?$/,
                 use: [
                     {
-                        loader: 'file-loader?limit=100000&name=[name].[ext]',
+                        loader: 'file-loader',
                         options: {
                             name: '[name].[ext]',
-                            outputPath: 'img',
+                            outputPath: 'imgs',
                         },
                     },
                     {
@@ -98,15 +108,19 @@ module.exports = {
                 ],
             },
             {
-                test: /\.css$/,
+                test: /\.(sa|sc|c)ss$/,
                 use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                    },
-                    'css-loader',
-                    // 'style-loader', 
-                ],
+                    'sass-loader'
+                ]
             },
+            {
+                test: /\.(sa|sc|c)ss$/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    'sass-loader'
+                ]
+            }
         ]
     },
     devServer: {
