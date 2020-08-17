@@ -44,7 +44,6 @@ import React from 'react';
 import { Modal, Button, Row, Col } from 'react-bootstrap';
 import Select from 'react-select';
 import config from '../../../config';
-import axios from 'axios';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
 import CheckboxGroup from '../../container/CheckboxGroup'
@@ -52,17 +51,18 @@ import Checkbox from '../Checkbox'
 import RadioButtonGroup from '../../container/RadioButtonGroup'
 import RadioButton from '../RadioButton'
 import { AppContext } from '../../../context/AppContext';
-import dataSrc from '../../../dataSrc'
 import styleConfig from '../../../config/styleConfig';
 import FormikFormGroup from '../FormikFormGroup';
 import {
-    DISASSOCIATE
+    DISASSOCIATE,
+    NORMAL
 } from '../../../config/wordMap';
 import {
     isEmpty,
     macaddrValidation
 } from '../../../helper/validation';
- 
+import apiHelper from '../../../helper/apiHelper';
+
 let monitorTypeMap = {}; 
 Object.keys(config.monitorType)
     .forEach(key => {
@@ -78,34 +78,33 @@ class EditObjectForm extends React.Component {
     };
 
     componentDidMount = () => {
-        // this.getTransferredLocation();
+        this.getTransferredLocation();
     }
 
         
-    // getTransferredLocation = () => {
+    getTransferredLocation = () => {
+        apiHelper.transferredLocationApiAgent.getAllTransferredLocation()
+            .then(res => {
+                const transferredLocationOptions = res.data.map(branch => {
+                    return {          
+                        label: branch.name,
+                        value: branch.name,
+                        options: branch.departments ? branch.departments
+                            .map((department, index) => {
+                                return {
+                                    id: department.id,
+                                    label: `${branch.name}-${department.value}`,
+                                    value: department.value
+                                }
+                        }) : [],
+                    }
 
-    //     axios.get(dataSrc.getTransferredLocation)
-    //     .then(res => {
-    //         console.log(res)
-    //         const transferredLocationOptions = res.data.map(branch => {
-    //             return {          
-    //                 label: branch.branch_name,
-    //                 value: branch,
-    //                 options: branch.department
-    //                     .map((department, index) => {
-    //                         return {
-    //                             label: `${department},${branch.branch_name}`,
-    //                             value: `${branch.id}, ${index}`
-    //                         }
-    //                 }),
-    //                 id: branch.id
-    //             }
-    //         })
-    //         this.setState({
-    //             transferredLocationOptions
-    //         })
-    //     })
-    // }
+                })
+                this.setState({
+                    transferredLocationOptions
+                })
+            })
+    }
 
     render() {
         const { locale } = this.context
@@ -163,7 +162,7 @@ class EditObjectForm extends React.Component {
                                     value: mac_address
                                 }
                                 : null,
-                            status: status.value ,
+                            status: selectedRowData.length != 0 ? status.value : NORMAL,
                             area: area_name || '',
                             select: status.value === config.objectStatus.TRANSFERRED 
                                 ?   transferred_location 
@@ -324,7 +323,7 @@ class EditObjectForm extends React.Component {
                                             placeholder=""
                                             component={() => ( 
                                                 <Select
-                                                    placeholder={locale.texts.SELECT_AREA}
+                                                    placeholder=""
                                                     name="area"
                                                     value = {values.area}
                                                     onChange={value => setFieldValue("area", value)}
@@ -340,15 +339,6 @@ class EditObjectForm extends React.Component {
                                 </Row>
                                 <Row noGutters>
                                     <Col>
-                                        {/* <FormikFormGroup 
-                                            type="text"
-                                            name="mac_address"
-                                            label={locale.texts.MAC_ADDRESS}
-                                            error={errors.mac_address}
-                                            touched={touched.mac_address}
-                                            placeholder=""
-                                            disabled={selectedRowData.isBind}
-                                        /> */}
                                         <FormikFormGroup 
                                             name="mac_address"
                                             label={locale.texts.MAC_ADDRESS}
