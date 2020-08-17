@@ -41,9 +41,6 @@ import {
     Nav, 
     Button 
 } from 'react-bootstrap';
-// import '../../../css/hideScrollBar.css'
-// import '../../../css/shadow.css'
-import '../../../css/SearchableObjectType.css'
 import apiHelper from '../../helper/apiHelper';
 import { AppContext } from '../../context/AppContext';
 import config from '../../config';

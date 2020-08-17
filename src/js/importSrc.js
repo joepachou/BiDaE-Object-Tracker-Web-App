@@ -44,33 +44,38 @@ import "../../node_modules/react-toastify/dist/ReactToastify.min.css"
 import 'react-toastify/dist/ReactToastify.min.css';
 
 /** General customized css */
-import "../css/App.css"
+import "../scss/App.scss"
 
-import "../css/stylesheet.css"
+// import "../scss/stylesheet.scss"
 
 /** BOTCheckbox */
-import "../css/BOTCheckbox.css"
+import "../scss/BOTCheckbox.scss"
 
-import "../css/BOTsidenav.css"
+import "../scss/BOTsidenav.scss"
 
 /** ObjectListMenu Component customized css */
-import "../css/ObjectListMenu.css"
+import "../scss/ObjectListMenu.scss"
 
 /** pagination */
-import "../css/Pagination.css"
+import "../scss/Pagination.scss"
 
 /** Surveillance Component customized css */
-import "../css/Leaflet.css"
+import "../scss/Leaflet.scss"
+
+import '../scss/SearchableObjectType.scss'
+
+import "../scss/SearchBar.scss"
+
 
 /** RWD customized css */
-import "../css/RWD.css"
+import "../scss/RWD.scss"
 
 /** ToggleSwitch customized css */
-import "../css/ToggleSwitch.css"
+import "../scss/ToggleSwitch.scss"
 
-import "../css/leafletMarkers.css"
+import "../scss/leafletMarkers.scss"
 
-import "../css/GridButton.css"
+import "../scss/GridButton.scss"
 
 /** leaflet source */
 
@@ -89,10 +94,6 @@ import "../../node_modules/@fortawesome/fontawesome-free/css/all.css"
 
 /** react-widget */
 import 'react-widgets/dist/css/react-widgets.css';
-
-
-/** search bar */
-// import "../../src/css/SearchBar.css"
 
 /** pretty check box */
 import "../../node_modules/pretty-checkbox/dist/pretty-checkbox.min.css"

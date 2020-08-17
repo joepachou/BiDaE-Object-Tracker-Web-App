@@ -62,6 +62,9 @@ import { editTransferredLocation } from '../../../../api/db/dbQueries/transferre
 import {
     JSONClone
 } from '../../helper/utilities';
+import {
+    PIN_SELETION
+} from '../../config/wordMap';
 
 class SearchResultList extends React.Component {
 
@@ -71,15 +74,25 @@ class SearchResultList extends React.Component {
         showEditObjectForm: false,
         showSignatureForm:false,
         showConfirmForm: false,
-        selectedObjectData: [],
-        showPatientResult: false,
-        selection: [],
-        editedObjectPackage: [],
         showAddDevice: false,
         showDownloadPdfRequest: false,
         showPath: false,
-        signatureName:'',
         showPatientView: false,
+        showPatientResult: false,
+        selectedObjectData: [],
+        signatureName:'',
+        selection: [],
+        editedObjectPackage: [],
+    }
+
+    componentDidUpdate = (prevProps, prevState) => {
+        // console.log(prevProps)
+        if (this.props.searchKey.type == PIN_SELETION && !this.state.showEditObjectForm) {
+            this.setState({
+                showEditObjectForm: true,
+                showAddDevice: true,
+            })
+        }
     }
 
     onSelect = (eventKey) => {
@@ -296,10 +309,12 @@ class SearchResultList extends React.Component {
             showDownloadPdfRequest: false,
             showConfirmForm: false,
             showPatientView: false,
+            showSignatureForm: false,
+            showAddDevice: false,
             selectedObjectData: [],
             selection: [],
             editedObjectPackage: [],
-            showSignatureForm: false
+
         }, callback)
     }
 

@@ -35,7 +35,6 @@
 import React from 'react';
 import { Form, Button } from 'react-bootstrap'; 
 import Autosuggest from 'react-autosuggest'; 
-import themeCSS from '../../../../src/css/SearchBar.css'
 import config from '../../config';
 import {
     SEARCH_BAR

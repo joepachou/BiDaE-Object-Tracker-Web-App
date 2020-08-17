@@ -1,3 +1,5 @@
+@import './core.scss';
+
 html,body {
     -webkit-overflow-scrolling: touch;
     margin: 0;
@@ -9,7 +11,7 @@ html,body {
     overscroll-behavior: auto;
     background: white;
     /* background: #f0edf240; */
-    color: rgb(92, 92, 92);
+    color: $color-grey;
     letter-spacing: 1.5px;
     height: 100vh;   
     overflow-x: hidden;
@@ -37,7 +39,7 @@ html,body {
 
 
 input {
-    border-color: rgba(227, 222, 222, );
+    border-color: rgba(227, 222, 222, 1);
 }
 
 a:hover {
@@ -235,8 +237,8 @@ button:focus {
 
 .btn.btn-outline-primary {
     background-color: white;
-    color: rgb(0, 123, 255, 1);
-    border-color: rgb(0, 123, 255, 0.6);
+    color: $color-blue;
+    border-color: rgba(0, 123, 255, 0.6);
 }
 
 .btn-outline-primary:hover {
@@ -250,7 +252,7 @@ button:focus {
 }
 
 .btn-outline-primary:not(:disabled):not(.disabled):active {
-    color: rgb(0, 123, 255, 1);
+    color: rgba(0, 123, 255, 1);
     background-color: white;
     border-color: #007bff;
     outline: 0;
@@ -269,7 +271,7 @@ button:focus {
 .btn-outline-primary:not(:disabled):not(.disabled):active, 
 .show>.btn-outline-primary.dropdown-toggle {
     background-color: white;
-    color: rgb(0, 123, 255, 1);
+    color: rgba(0, 123, 255, 1);
 }
 
 /** React Bootstrap button variant outline-secondary */
@@ -290,21 +292,21 @@ button:focus {
 
 .btn-outline-secondary:hover {
     background-color: white;
-    border-color: rgb(92, 92, 92, 1);
-    color: rgb(0, 0, 0, 0.75);
+    border-color: rgba(92, 92, 92, 1);
+    color: rgba(0, 0, 0, 0.75);
 }
 
 .btn-outline-secondary:not(:disabled):not(.disabled):active {
-    color: rgb(0, 0, 0, 0.6);
+    color: rgba(0, 0, 0, 0.6);
     background-color: white;
-    border-color: rgb(0, 0, 0, 0.5);
+    border-color: rgba(0, 0, 0, 0.5);
 }
 
 /** React Bootstrap button variant outline-danger */
 .btn-outline-danger {
     border: none;
-    border-color: rgb(220, 53, 69, 0.8);
-    color: rgb(220, 53, 69, 0.8);
+    border-color: rgba(220, 53, 69, 0.8);
+    color: rgba(220, 53, 69, 0.8);
 }
 
 .btn-outline-danger:hover {
@@ -334,7 +336,7 @@ button:focus {
 .btn-outline-custom.active {
     border: 0;
     outline: 0;
-    background-color: rgb(0, 123, 255, 0.1);
+    background-color: rgba(0, 123, 255, 0.1);
     color: rgba(4, 53, 106, 1);    
 }
 
@@ -372,8 +374,8 @@ button:focus {
     color: white;
     /* background-color: rgba(0, 90, 255, 1);
     border-color: rgba(0, 90, 255, 1); */
-    background-color: rgb(0, 123, 255, 1);
-    border-color: rgb(0, 123, 255, 1)
+    background-color: rgba(0, 123, 255, 1);
+    border-color: rgba(0, 123, 255, 1)
 }
 
 .btn-warning:not(:disabled):not(.disabled).active:focus {
