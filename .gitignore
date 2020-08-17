@@ -4,14 +4,6 @@ package-lock.json
 node_modules/
 site_module/
 default_folder/
-/dist/*.png
-/dist/*.svg
-/dist/*.woff2
-/dist/*.woff
-/dist/*.ttf
-/dist/*.eot
-/dist/bundle.js
-/dist/*.html
-/dist/*.js
+dist/*
 .npm_cache
 
