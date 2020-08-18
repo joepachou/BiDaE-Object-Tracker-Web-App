@@ -43,14 +43,9 @@ import dataSrc from '../../dataSrc';
 import siteConfig from '../../../../site_module/siteConfig';
 import polylineDecorator from 'leaflet-polylinedecorator';
 import {
-    BrowserView,
-    TabletView,
-    MobileOnlyView,
     isMobileOnly,
     isBrowser,
     isTablet, 
-    CustomView,
-    isMobile 
 } from 'react-device-detect'
 import {
     macAddressToCoordinate
@@ -643,17 +638,7 @@ class Map extends React.Component {
     
     render(){
         return(
-            <div>
-               <CustomView condition={isTablet != true && isMobile != true}>
-                    <div id='mapid' style={{height:'85vh'}}></div>
-                </CustomView>  
-                <TabletView>
-                    <div id='mapid' style={{height:'40vh'}}></div>
-                </TabletView>
-                <MobileOnlyView>
-                    <div id='mapid' style={{height: '28vh'}}></div>
-                </MobileOnlyView>
-            </div>
+            <div id='mapid' className="sm:height-25 md:height-40 lg:height-60 xl:height-85" />
         )
     }
 }

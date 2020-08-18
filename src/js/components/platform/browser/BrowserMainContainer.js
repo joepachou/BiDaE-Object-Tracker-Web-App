@@ -75,14 +75,6 @@ const BrowserMainContainer = ({
     let auth = React.useContext(AuthenticationContext)
 
     const style = {
-        noResultDiv: {
-            color: 'grey',
-            fontSize: '1rem',
-        },
-
-        pageWrap: {
-            overflow: "hidden hidden",
-        },
 
         searchResultDiv: {
             display: hasSearchKey ? null : 'none',
@@ -90,9 +82,8 @@ const BrowserMainContainer = ({
         
         searchPanel: {
             zIndex: isHighlightSearchPanel ? 1060 : 1,
-            background: 'white',
             borderRadius: 10,
-            // height: '90vh'
+            height: '90vh'
         },
 
         searchResultList: {
@@ -105,14 +96,15 @@ const BrowserMainContainer = ({
         <div 
             id="page-wrap" 
             className='mx-1 my-2 overflow-hidden' 
-            style={style.pageWrap} 
         >
             <Row 
                 id="mainContainer" 
                 className='d-flex w-100 justify-content-around mx-0' 
-                style={style.container}
             >
-                <Col sm={7} md={9} lg={8} xl={8} id='searchMap' className="pl-2 pr-1" >
+                <Col 
+                    md={8} lg={8} xl={8} 
+                    className="pl-2 pr-1 xs:display-none sm:display-none"
+                >
                     <MapContainer
                         pathMacAddress={pathMacAddress} 
                         proccessedTrackingData={proccessedTrackingData.length === 0 ? trackingData : proccessedTrackingData}
@@ -136,36 +128,39 @@ const BrowserMainContainer = ({
                     />
                 </Col>
 
-                <Col id='searchPanel' xs={12} sm={5} md={3} lg={4} xl={4} className="w-100 px-2" style={style.searchPanel}>
+                <Col 
+                    id='searchPanel' 
+                    xs={12} sm={5} md={4} lg={4} xl={4} 
+                    className="w-100 px-2 bg-white d-flex flex-column" 
+                    style={style.searchPanel}
+                >
                     <InfoPrompt 
                         searchKey={searchKey}
                         searchResult={searchResult}
                         handleClick={handleClick}
                     />
-                    <div>
-                        <SearchContainer 
-                            hasSearchKey={hasSearchKey}
-                            clearSearchResult={clearSearchResult}
-                            auth={auth}
-                            getSearchKey={getSearchKey}
+                    <SearchContainer 
+                        hasSearchKey={hasSearchKey}
+                        clearSearchResult={clearSearchResult}
+                        auth={auth}
+                        getSearchKey={getSearchKey}
+                        searchObjectArray={searchObjectArray}
+                        pinColorArray={pinColorArray}
+                        keywords={keywords}
+                    />                        
+                    <div 
+                        id='searchResult' 
+                        style={style.searchResultDiv} 
+                    >
+                        <SearchResultList
+                            searchResult={searchResult} 
+                            searchKey={searchKey}
+                            highlightSearchPanel={highlightSearchPanel}
+                            showMobileMap={showMobileMap}
                             searchObjectArray={searchObjectArray}
                             pinColorArray={pinColorArray}
-                            keywords={keywords}
-                        />                        
-                        <div 
-                            id='searchResult' 
-                            style={style.searchResultDiv} 
-                        >
-                            <SearchResultList
-                                searchResult={searchResult} 
-                                searchKey={searchKey}
-                                highlightSearchPanel={highlightSearchPanel}
-                                showMobileMap={showMobileMap}
-                                searchObjectArray={searchObjectArray}
-                                pinColorArray={pinColorArray}
-                                showFoundResult={showFoundResult}
-                            />
-                        </div>
+                            showFoundResult={showFoundResult}
+                        />
                     </div>
                 </Col>
             </Row>

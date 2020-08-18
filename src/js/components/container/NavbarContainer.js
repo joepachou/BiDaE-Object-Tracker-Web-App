@@ -57,7 +57,6 @@ import {
 import routes from '../../config/routes/routes';
 import {
     SHIFT_CHANGE,
-    SIGN_IN
 } from '../../config/wordMap';
 import {
     SET_AREA
@@ -98,16 +97,6 @@ class NavbarContainer extends React.Component {
         const style = {
             navbar: {
                 boxShadow: '0 1px 6px 0 rgba(32,33,36,0.28)',
-                padding: '0 1rem', 
-            },
-            navbarBrand: {
-                color: 'black',
-            },
-            nav: {
-                padding: '.5rem 1.4rem'
-            },
-            select: {
-                border: 0,
             },
         }
 
@@ -139,18 +128,16 @@ class NavbarContainer extends React.Component {
         return (
             <div>
                 <Navbar
-                    id="navbar"  
                     bg="white" 
-                    className="navbar sticky-top navbar-light text-capitalize font-weight-500" 
+                    className="navbar sticky-top navbar-light text-capitalize font-weight-500 px-3" 
                     expand="lg"
                     fixed="top" 
                     collapseOnSelect
                     style={style.navbar}
                 >
-                    <Navbar.Brand className='px-0 mx-0'>  
+                    <Navbar.Brand className='p-0 mx-0'>  
                         <Nav.Item 
-                            className="nav-link nav-brand d-flex align-items-center" 
-                            style={style.navbarBrand}
+                            className="nav-link nav-brand d-flex align-items-center color-black" 
                         >
                             <ImageWebp
                                 alt="LOGO"
@@ -209,11 +196,11 @@ class NavbarContainer extends React.Component {
                                         {nav.module
                                             ? (                                  
                                                 <Dropdown
-                                                    className="d-flex align-items-center menu mx-1"
+                                                    className="d-flex align-items-center menu mx-1 "
                                                 >
                                                     <Dropdown.Toggle 
                                                         variant='light'
-                                                        className="font-weight-500"
+                                                        className="font-weight-500 px-1"
                                                         bsPrefix='bot-dropdown-toggle'
                                                     >
                                                         {locale.texts[nav.name.toUpperCase().replace(/ /g, '_')]}
@@ -254,15 +241,13 @@ class NavbarContainer extends React.Component {
                                             )
                                             : (
                                                 <Nav.Item
-                                                    className="d-flex align-items-center menu mx-1"
+                                                    className="d-flex align-items-center menu mx-1 text-center"
                                                 >
                                                     <Link
                                                         onClick={nav.hasEvent && this.handleClick}
                                                         to={nav.path}
-                                                        className='nav-link nav-route menu'
+                                                        className='nav-link nav-route menu px-1'
                                                         name={nav.alias}
-                                                        style={style.nav}
-
                                                     >
                                                         {locale.texts[nav.name.toUpperCase().replace(/ /g, '_')]}
                                                     </Link>
@@ -274,9 +259,7 @@ class NavbarContainer extends React.Component {
                             })}
                         </Nav>
 
-                        <Nav
-                            // className="d-flex align-items-center"
-                        >
+                        <Nav>
                             <AccessControl
                                 permission='user:batteryNotice'
                                 renderNoAccess={() => null}
@@ -285,7 +268,7 @@ class NavbarContainer extends React.Component {
                                 <BatteryLevelNotification />
                             </AccessControl>
                             <Dropdown
-                                className="mr-2 ml-3"
+                                className="mx-1 font-weight-500"
                                 onSelect={(e) => {
                                     let callback = () => auth.setLocale(e)
                                     locale.setLocale(e, callback);
@@ -294,6 +277,7 @@ class NavbarContainer extends React.Component {
                                 <Dropdown.Toggle 
                                     variant='light'
                                     bsPrefix='bot-dropdown-toggle'
+                                    className="px-1 font-weight-500"
                                 >
                                     {locale.name}
                                 </Dropdown.Toggle>
@@ -312,10 +296,13 @@ class NavbarContainer extends React.Component {
                                     })}
                                 </Dropdown.Menu>
                             </Dropdown> 
-                            <Dropdown>
+                            <Dropdown
+                                className="mx-1"
+                            >
                                 <Dropdown.Toggle 
                                     variant='light'
-                                    bsPrefix='bot-dropdown-toggle'
+                                    bsPrefix='bot-dropdown-toggle font-weight-500'
+                                    className="px-1"
                                 >
                                     {auth.user.name}
                                 </Dropdown.Toggle>

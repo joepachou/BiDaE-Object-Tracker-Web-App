@@ -104,7 +104,6 @@ class BatteryLevelNotification extends React.Component {
                 overFlow: 'hidden scroll'
             },
             dropdown: {
-                overflow: 'hidden scroll',
                 maxHeight: '300px',
                 marginBottom: 5
             },
@@ -153,7 +152,7 @@ class BatteryLevelNotification extends React.Component {
                         </Row>
                     </div>
                     <div 
-                        id="batteryNoticeDiv"
+                        className="overflow-hidden-scroll custom-scrollbar"
                         style={style.dropdown}
                     >
                         {data.length != 0 

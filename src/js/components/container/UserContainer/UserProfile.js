@@ -45,7 +45,7 @@ import EditPwdForm from '../../presentational/form/EditPwdForm';
 import messageGenerator from '../../../helper/messageGenerator';
 import dataSrc from '../../../dataSrc';
 import {
-    ListTitle
+    Title
 } from '../../BOTComponent/styleComponent';
 import NumberPicker from '../NumberPicker';
 import apiHelper from '../../../helper/apiHelper';
@@ -208,9 +208,9 @@ class UserProfile extends React.Component{
                 <div
                     className='mb-2'
                 >
-                    <ListTitle>
+                    <Title>
                         {locale.texts.ABOUT_YOU}
-                    </ListTitle>
+                    </Title>
                     <p>
                         {locale.texts.NAME}: {auth.user.name}
                     </p>
@@ -219,9 +219,9 @@ class UserProfile extends React.Component{
                 <div
                     className='mb-2 text-capitalize'
                 >
-                    <ListTitle>
+                    <Title>
                         {locale.texts.YOUR_SERVICE_AREAS}
-                    </ListTitle>
+                    </Title>
                     <p>
                         {locale.texts.PRIMARY_AREA}: {areaTable.length != 0 
                             && auth.user.main_area
@@ -245,9 +245,9 @@ class UserProfile extends React.Component{
                 <div
                     className='mb-2'
                 >
-                    <ListTitle>
+                    <Title>
                         {locale.texts.SEARCH_PREFERENCES}
-                    </ListTitle>
+                    </Title>
                     <div 
                         className="d-flex justify-content-start align-items-center text-capitalize"
                     >

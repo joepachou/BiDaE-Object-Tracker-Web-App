@@ -158,16 +158,16 @@ class AddableList extends React.Component{
     render(){
 
         const style = {
-            listGroup: {
-                overflow: 'hidden scroll'
-            },
             item: {
                 cursor: "pointer",
             }
         }
         return (
             <Fragment>
-                <ListGroup className="addableList" variant = "flush" style={style.listGroup}>
+                <ListGroup 
+                    className="overflow-hidden-scroll custom-scrollbar"
+                    variant = "flush" 
+                >
                     {this.state.itemList !== null 
                         ? 
                             (() => {
@@ -192,6 +192,7 @@ class AddableList extends React.Component{
                                                 onClick={this.onClick} 
                                                 name={index} 
                                                 action 
+                                                className="cursor-pointer"
                                                 style={style.item} 
                                             >
                                                 {this.itemLayout(item, index)}

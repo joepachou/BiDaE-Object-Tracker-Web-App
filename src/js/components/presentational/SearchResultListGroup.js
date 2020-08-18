@@ -75,16 +75,6 @@ const SearchResultListGroup = ({
     } = React.useContext(AppContext);
 
     let numberSheet = {};
-   
-    const style = {
-        icon: {
-            color: '#007bff',
-            top: 10
-        },
-        listGroup: {
-            color: 'rgb(33, 37, 41)',
-        }
-    }
 
     const onMouseOver = (e, value) => {
         let [{}, dispatch] = stateReducer;
@@ -153,7 +143,6 @@ const SearchResultListGroup = ({
                         key={index} 
                         action={action}
                         active
-                        style={style.listGroup}
                         className='d-flex py-1 text-left justify-content-start' 
                     >   
                         <div 

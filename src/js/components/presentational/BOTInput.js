@@ -81,30 +81,20 @@ class BOTInput extends React.Component {
             error: {
                 color: "#dc3545"
             },
-            example: {
-                color: "grey"
-
-            }
         }
         return (            
             <Form>
                 <div className="d-flex">
                     <Form.Group 
-                        className='d-flex align-items-center'
+                        className='d-flex align-items-center bg-white border-grey'
                         style={{
-                            border: '1px solid #ced4da',
-                            // border: 'none',
                             height: '3rem',
                             padding: '.275rem .75rem',
-                            background: 'white',
                             width: 300,
                         }}
                     >
                         <i 
-                            className="fas fa-search"
-                            style={{
-                                color: 'black'
-                            }}
+                            className="fas fa-search color-black"
                         />
                         <Form.Control 
                             type='text' 
@@ -124,8 +114,7 @@ class BOTInput extends React.Component {
                 </div>
                 {example && 
                     <small 
-                        className="form-text"
-                        style={style.example}
+                        className="form-text color-grey"
                     >
                         {example}
                     </small>

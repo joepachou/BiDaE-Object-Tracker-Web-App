@@ -100,23 +100,6 @@ class ObjectTypeList extends React.Component {
 
         searchHistory.unshift(searchKey.value)
 
-        // let flag = false; 
-
-        // const toReturnSearchHistory = searchHistory.map(item => {
-        //     if (item.name === searchKey.value) {
-        //         item.value = item.value + 1;
-        //         flag = true;
-        //     }
-        //     return item
-        // })
-        // flag === false 
-        //     ? toReturnSearchHistory.push({
-        //         name: searchKey.value, 
-        //         value: 1
-        //     }) 
-        //     : null;
-        // const sortedSearchHistory = this.sortSearchHistory(toReturnSearchHistory)
-
         auth.setSearchHistory(searchHistory)
 
         this.checkInSearchHistory(searchKey.value)
@@ -153,12 +136,8 @@ class ObjectTypeList extends React.Component {
 
     render() {
         const style = {
-            titleText: {
-                color: 'rgb(80, 80, 80, 1)'
-            }, 
             list: {
-                maxHeight: 450,
-                overflow: "hidden scroll",
+                maxHeight: 250,
             },
         }
 
@@ -176,7 +155,10 @@ class ObjectTypeList extends React.Component {
                 <Title list>
                     {locale.texts.OBJECT_TYPE}
                 </Title>
-                <div style={style.list} className="d-inline-flex flex-column searchOption">
+                <div 
+                    style={style.list} 
+                    className="d-inline-flex flex-column overflow-hidden-scroll custom-scrollbar"
+                >
                     {this.props.objectTypeList
                         .map((item, index) => {
 

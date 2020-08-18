@@ -44,7 +44,7 @@ import AccessControl from '../../authentication/AccessControl';
 import SearchResultListGroup from '../../presentational/SearchResultListGroup'
 import LocaleContext from '../../../context/LocaleContext';
 import {
-    ListTitle
+    Title
 } from '../../BOTComponent/styleComponent';
 
 const MobileSearchResultList = ({
@@ -78,9 +78,9 @@ const MobileSearchResultList = ({
     return(
         <Fragment>
             <Row className='d-flex justify-content-center'>
-                <ListTitle>
+                <Title>
                     {title}
-                </ListTitle>
+                </Title>
             </Row>
             <Row>
                 {searchResult.length === 0 
@@ -88,7 +88,7 @@ const MobileSearchResultList = ({
                             <div className='searchResultForDestop'>{locale.texts.NO_RESULT}</div>
                         </Col> 
                     :   
-                        <Col className="searchResultListGroupForTablet d-flex justify-content-center">
+                        <Col className="d-flex justify-content-center overflow-hidden-scroll custom-scrollbar">
                             <ScrollArea 
                                 style={style.searchResultListForTablet} 
                                 smoothScrolling={true}

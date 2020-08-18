@@ -36,6 +36,7 @@
 import React from 'react';
 import { 
     ButtonToolbar,
+    Row
 } from 'react-bootstrap';
 import { AppContext } from '../../context/AppContext';
 import ReactTable from 'react-table'; 
@@ -632,7 +633,7 @@ class ObjectTable extends React.Component{
 
         return(
             <div> 
-                <div className='d-flex justify-content-between my-4'>
+                <Row className='d-flex justify-content-between my-4'>
                     <div className='d-flex justify-content-start'>
                         <BOTInput
                             className='mx-2'
@@ -733,7 +734,7 @@ class ObjectTable extends React.Component{
                             </PrimaryButton>
                         </ButtonToolbar>
                     </AccessControl>
-                </div>
+                </Row>
                 <hr/>
                 <SelectTable
                     keyField='id'

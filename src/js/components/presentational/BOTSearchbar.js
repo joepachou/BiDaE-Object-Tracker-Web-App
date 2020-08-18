@@ -210,7 +210,7 @@ class BOTSearchbar extends React.Component {
                 className='d-flex justify-content-around'
             > 
                 <Form.Group 
-                    className='d-flex justify-content-center   mb-0 mx-1'
+                    className='d-flex justify-content-center mb-0 mx-1'
                     style={{
                         minWidth: parseInt(this.props.width) * 0.9
                     }}

@@ -1,12 +1,12 @@
 @import './core.scss';
 
 html,body {
-    -webkit-overflow-scrolling: touch;
     margin: 0;
+    padding: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans TC', sans-serif, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
     /* font-size: 1.8vh; */
     font-size: 16px;
-    /* position: fixed; */
+    position: fixed;
     width: 100%;
     overscroll-behavior: auto;
     background: white;
@@ -15,6 +15,7 @@ html,body {
     letter-spacing: 1.5px;
     height: 100vh;   
     overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
 }
 
 /* html element */
@@ -524,82 +525,6 @@ p {
     padding-right: 25px;
     max-height: 33vh;
     overflow:  hidden scroll; 
-}
-
-/** scroll bar customize */
-/** .search option custom scroll bar style */
-.searchOption::-webkit-scrollbar {
-    -webkit-appearance: none;
-    width: 7px;
-}
-.searchOption::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: rgba(0, 0, 0, .5);
-    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
-}
-
-/** .addable list custom scroll bar style */
-.addableList::-webkit-scrollbar {
-    -webkit-appearance: none;
-    width: 7px;
-}
-.addableList::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: rgba(0, 0, 0, .5);
-    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
-}
-
-.searchResultListGroup::-webkit-scrollbar {
-    -webkit-appearance: none;
-    width: 7px;
-}
-
-.searchResultListGroupForTablet::-webkit-scrollbar {
-    -webkit-appearance: none;
-    width: 7px;
-}
-
-.searchResultListGroupForMobile::-webkit-scrollbar {
-    -webkit-appearance: none;
-    width: 7px;
-}
-
-.searchResultListGroup::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: rgba(0, 0, 0, .5);
-    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
-}
-
-.searchResultListGroupForTablet::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: rgba(0, 0, 0, .5);
-    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
-}
-
-.searchResultListGroupForMobile::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: rgba(0, 0, 0, .5);
-    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
-}
-#batteryNoticeDiv::-webkit-scrollbar {
-    -webkit-appearance: none;
-    width: 7px;
-}
-#batteryNoticeDiv::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: rgba(0, 0, 0, .5);
-    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
-}
-
-#shiftChange::-webkit-scrollbar {
-    -webkit-appearance: none;
-    width: 7px;
-}
-
-#shiftChange::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: rgba(0, 0, 0, .5);
-    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
 }
 
 .dropdown-menu {

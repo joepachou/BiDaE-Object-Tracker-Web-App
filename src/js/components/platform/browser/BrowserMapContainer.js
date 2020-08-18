@@ -80,15 +80,7 @@ export default class BrowserMapContainer extends React.Component {
         let [{areaId}] = stateReducer
 
         const style = {
-            title: {
-                color: "grey",
-                fontSize: "1rem",
-                maxWidth: "9rem",
-                height: "5rem",
-                lineHeight: "3rem"
-            },
             mapForMobile: {
-                // width: '90vw',
                 border: "solid 2px rgba(227, 222, 222, 0.619)",
                 padding: "5px",
             },
@@ -114,7 +106,10 @@ export default class BrowserMapContainer extends React.Component {
         
         return (
             <div id="MapContainer" style={style.MapContainer} className="overflow-hidden">
-                <div style={style.mapBlock}>
+                <div 
+                    className='p-1'
+                    style={style.mapBlock}
+                >
                     <Map
                         pathMacAddress={this.props.pathMacAddress} 
                         hasSearchKey={hasSearchKey}

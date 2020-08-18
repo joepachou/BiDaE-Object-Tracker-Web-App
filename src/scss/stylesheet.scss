@@ -1,5 +1,17 @@
 @import './core.scss';
 
+.font-size-16 {
+    font-size: 16px;
+}
+
+.font-size-90-percent {
+    font-size: .9rem;
+}
+
+.font-size-80-percent {
+    font-size: .8rem;
+}
+
 .font-weight-500 {
     font-weight: 500;
 }
@@ -16,6 +28,151 @@
     color: $color-white;
 }
 
+.color-black {
+    color: $color-black;
+}
+
+.color-grey {
+    color: $color-grey;
+}
+
+.bg-white {
+    color: $color-white;
+}
+
+.border-grey { 
+    border: $border-grey;
+}
+
 .min-width-25 { 
     min-width: 25px;
+}
+
+.position-absolute {
+    position: absolute;
+}
+
+.position-fixed {
+    position: fixed;
+}
+
+.position-relative {
+    position: relative;
+}
+
+.bottom-0 {
+    bottom: 0;
+}
+
+.right-0 {
+    right: 0;
+}
+
+.overflow-hidden-scroll {
+    overflow: hidden scroll;
+}
+
+.custom-scrollbar {
+    &::-webkit-scrollbar {
+        -webkit-appearance: none;
+        width: $webkit-scrollbar-width;
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: $webkit-scrollbar-border-radius;
+        background-color: $webkit-scrollbar-background;
+        -webkit-box-shadow: $webkit-scrollbar-box-shadow;
+    }
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+
+@media (max-width: $screen-xs) {
+    .xs\:font-size-16 {
+        font-size: 100px;
+    }
+
+    .xs\:height-85 {
+        height: 85vh;
+    }
+
+    .xs\:display-none {
+        display: none;
+    }
+}
+
+
+@media (min-width: $screen-xs) and (max-width: $screen-sm) {
+
+    .sm\:font-size-16 {
+        font-size: 100px;
+    }
+    
+    .sm\:font-size-16 {
+        font-size: 100px;
+    }
+
+    .sm\:height-25 {
+        height: 25vh;
+    }
+
+    .sm\:display-none {
+        display: none;
+    }
+
+}
+@media (min-width: $screen-sm) and (max-width: $screen-md) {
+    .md\:font-size-16 {
+        font-size: 100px;
+    }
+
+    .md\:height-40 {
+        height: 65vh;
+    }
+
+    .md\:display-none {
+        display: none;
+    }
+
+    .md\:margin-top-4 {
+        margin-top: 4rem;
+    }
+}
+@media (min-width: $screen-md) and (max-width: $screen-lg) {
+
+    .lg\:font-size-16 {
+        font-size: 100px;
+    }
+
+    .lg\:height-60 {
+        height: 85vh;
+    }
+
+    .lg\:display-none {
+        display: none;
+    }
+
+    .lg\:margin-top-4 {
+        margin-top: 4rem;
+    }
+}
+
+@media (min-width: $screen-lg){
+    .xl\:font-size-16 {
+        font-size: 100px;
+    }
+
+    .xl\:height-85 {
+        height: 85vh;
+    }
+
+    .xl\:display-none {
+        display: none;
+    }
+
+    .xl\:margin-top-4 {
+        margin-top: 4rem;
+    }
 }

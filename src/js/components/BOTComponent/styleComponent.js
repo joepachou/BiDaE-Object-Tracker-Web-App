@@ -92,12 +92,11 @@ export const Title = styled.div`
     font-weight: 400;
     ${props => props.page && css`
         color: black;
-        font-size: 1.4rem;
+        font-size: 1.2rem;
         font-weight: 450;
         margin-bottom: 1rem;
     `}
     ${props => props.list && css`
-        font-size: 1.2rem;
         color: black;
     `}
     ${props => props.sub && css`
@@ -107,17 +106,9 @@ export const Title = styled.div`
 
 export const PageTitle = styled.div`
     color: black;
-    font-size: 1.4rem;
     font-weight: 450;
     text-transform: capitalize;
     margin-bottom: 1rem;
-`
-
-export const ListTitle = styled.div`
-    text-transform: capitalize;
-    font-size: 1.2rem;
-    font-weight: 400;
-    color: black;
 `
 
 export const BOTContainer = styled.div`
@@ -205,7 +196,7 @@ export const LoaderWrapper = styled.div`
 
 export const PrimaryButton = styled(Button)`
     font-size: 1rem;
-    padding: 0.375rem 0.5rem;
+    padding: 0.1rem 0.5rem;
     height: 3rem;
     letter-spacing: 1px;
     text-transform: capitalize;

@@ -43,7 +43,7 @@ import AccessControl from '../../authentication/AccessControl';
 import SearchResultListGroup from '../../presentational/SearchResultListGroup'
 import LocaleContext from '../../../context/LocaleContext';
 import {
-    ListTitle
+    Title
 } from '../../BOTComponent/styleComponent';
 
 const style = {
@@ -69,22 +69,12 @@ const BrowserSearchResultList = ({
 
     let locale = React.useContext(LocaleContext); 
 
-    const style = {
-        noResultDiv: {
-            color: 'grey',
-            fontSize: '1rem',
-        },
-        titleText: {
-            color: 'rgb(80, 80, 80, 0.9)',
-        }, 
-    }
-
     return (
         <Fragment>
-            <Row className='d-flex justify-content-center' style={style.titleText}>
-                <ListTitle>
+            <Row className='d-flex justify-content-center'>
+                <Title>
                     {title}
-                </ListTitle>
+                </Title>
             </Row>
             <Row
                 style={{
@@ -92,39 +82,36 @@ const BrowserSearchResultList = ({
                 }}
             >
                 {searchResult.length == 0 
-                    ?   <Col className='d-flex justify-content-center font-weight-lighter' style={style.noResultDiv}>
+                    ?   <Col className='d-flex justify-content-center color-grey'>
                             {locale.texts.NO_RESULT}
                         </Col> 
                     :   
                         <Col 
-                            className="searchResultListGroup d-flex justify-content-center"
-                            style={style.list}
+                            className="d-flex justify-content-center overflow-hidden-scroll custom-scrollbar"
+                            style={{
+                                maxHeight: "50vh"
+                            }}
                         > 
-                            <ScrollArea 
-                                smoothScrolling={true}
-                                horizontal={false}
-                            >                 
-                                <AccessControl
-                                    permission={'form:edit'}
-                                    renderNoAccess={() => (
-                                        <SearchResultListGroup 
-                                            data={searchResult}
-                                            selection={selection}
-                                        />
-                                    )}
-                                >
+                            <AccessControl
+                                permission={'form:edit'}
+                                renderNoAccess={() => (
                                     <SearchResultListGroup 
                                         data={searchResult}
-                                        onSelect={onSelect}
                                         selection={selection}
-                                        action
-                                        searchObjectArray={searchObjectArray}
-                                        pinColorArray={pinColorArray}
-                                        searchKey={searchKey}
                                     />
+                                )}
+                            >
+                                <SearchResultListGroup 
+                                    data={searchResult}
+                                    onSelect={onSelect}
+                                    selection={selection}
+                                    action
+                                    searchObjectArray={searchObjectArray}
+                                    pinColorArray={pinColorArray}
+                                    searchKey={searchKey}
+                                />
 
-                                </AccessControl>
-                            </ScrollArea>
+                            </AccessControl>
                         </Col>
                 }
             </Row>

@@ -1,8 +1,4 @@
-import React, { Fragment } from 'react';
-import { 
-    Fade,
-    
-} from 'react-transition-group'
+import React from 'react';
 import 'react-table/react-table.css'; 
 import { 
     Nav,
@@ -40,7 +36,6 @@ class ObjectManagementContainer extends React.Component{
                     {locale.texts.OBJECT_MANAGEMENT}
                 </PageTitle>
                 <Tab.Container 
-                    transition={Fade}
                     defaultActiveKey={this.defaultActiveKey}
                 >
                     <BOTNav>

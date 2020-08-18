@@ -82,9 +82,8 @@ export default ({
                 >
                     <ReactBootstrapAlert
                         variant='secondary' 
-                        className='px-4'
+                        className='px-4 position-fixed sm:display-none xs:display-none'
                         style={{
-                            position: 'fixed',
                             width: '32%'
                         }}
                     >
@@ -115,12 +114,7 @@ export default ({
                             </HoverWithUnderlineDiv>
                             <HoverDiv
                                 onClick={handleShowDetail}
-                                className="text-muted ml-auto d-flex align-items-center"
-                                style={{
-                                    position: 'relative',
-                                    right: 0,
-                                    fontSize: '0.9rem'
-                                }}
+                                className="text-muted ml-auto d-flex align-items-center position-relative right-0 font-size-80-percent"
                             >
                                 {locale.texts.DETAIL}
                                 &nbsp;

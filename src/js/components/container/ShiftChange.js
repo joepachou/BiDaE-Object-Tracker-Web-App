@@ -57,7 +57,6 @@ import {
 const style = {
     modalBody: {
         height: '60vh',
-        overflow: 'hidden scroll'
     },
     row: {
         wordBreak: 'break-all'
@@ -332,8 +331,8 @@ class ShiftChange extends React.Component {
                                     </div>
                                 </Modal.Header>
                                 <Modal.Body       
+                                    className="overflow-hidden-scroll custom-scrollbar"
                                     style ={style.modalBody}
-                                    id="shiftChange"
                                 >
                                     <Form className="text-capitalize">
                                         {!hasFoundResult && !hasNotFoundResult && 

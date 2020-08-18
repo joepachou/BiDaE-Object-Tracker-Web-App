@@ -100,7 +100,7 @@ const styleConfig = {
         control: (provided) => ({
             ...provided,
             fontSize: '1rem',
-            minHeight: '3rem',
+            minHeight: '2rem',
             position: 'none',
             width: '550px',
             borderRadius: 0                                

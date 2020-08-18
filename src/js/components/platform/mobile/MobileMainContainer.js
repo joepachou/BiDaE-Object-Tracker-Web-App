@@ -41,23 +41,38 @@ import {
     Col
 } from 'react-bootstrap';
 import AuthenticationContext from '../../../context/AuthenticationContext';
+import LocaleContext from '../../../context/LocaleContext';
+import MapContainer from '../../container/MapContainer';
 
 const MobileMainContainer = ({ 
+    handleClearButton,
     getSearchKey,
-    handleShowPath,
+    setMonitor,
+    clearAlerts,
+    lbeaconPosition,
+    geofenceConfig,
+    searchedObjectType,
+    showedObjects,
     highlightSearchPanel,
     showMobileMap,
-    clearSearchResult,
+    clearSearchResult, 
     searchKey,
     searchResult,
     trackingData,
     proccessedTrackingData,
     hasSearchKey,
-    handleShowResultListForMobile,
-    display,
-    mapButtonHandler,
+    setShowedObjects,
     pathMacAddress,
-    currentAreaId
+    isHighlightSearchPanel,
+    locationMonitorConfig,
+    currentAreaId,
+    searchObjectArray = [],
+    pinColorArray,
+    handleClick,
+    showFoundResult,
+    keywords,
+    display,
+    handleShowResultListForMobile,
 }) => {
 
     let auth = React.useContext(AuthenticationContext);
@@ -98,24 +113,23 @@ const MobileMainContainer = ({
                         pathMacAddress={pathMacAddress} 
                         proccessedTrackingData={proccessedTrackingData.length === 0 ? trackingData : proccessedTrackingData}
                         hasSearchKey={hasSearchKey}
+                        searchKey={searchKey}
                         searchResult={searchResult}
-                        handleClearButton={handleClearButton}
+                        handleClearButton={handleClick}
+                        handleClick={handleClick}
                         getSearchKey={getSearchKey}
-                        setMonitor={setMonitor}
                         lbeaconPosition={lbeaconPosition}
                         geofenceConfig={geofenceConfig}
-                        clearAlerts={clearAlerts}
-                        searchKey={searchKey}
-                        handleClosePath={handleClosePath}
-                        handleShowPath={handleShowPath}
+                        locationMonitorConfig={locationMonitorConfig}
                         searchedObjectType={searchedObjectType}
                         showedObjects={showedObjects}
-                        handleClearButton={handleClearButton}
-                        mapButtonHandler={mapButtonHandler}
+                        setShowedObjects={setShowedObjects}
                         currentAreaId={currentAreaId}
+                        searchObjectArray={searchObjectArray}
+                        pinColorArray={pinColorArray}
                     />
                 </div>
-                <ButtonGroup style={{marginTop:'5px',marginBottom:'5px'}}>
+                {/* <ButtonGroup style={{marginTop:'5px',marginBottom:'5px'}}>
                     <Button 
                         variant='outline-primary' 
                         onClick={mapButtonHandler}
@@ -137,7 +151,7 @@ const MobileMainContainer = ({
                         handleShowPath={handleShowPath}
                         showMobileMap={showMobileMap}
                     />
-                </div>
+                </div> */}
             </div>
         </div>
     )

@@ -35,15 +35,12 @@
 import React from 'react';
 import {
     Row,
-    Image,
     Col
 } from 'react-bootstrap';
 import BOTSearchbar from '../../presentational/BOTSearchbar';
 import config from '../../../config';
-import Searchbar from '../../presentational/Searchbar';
 import FrequentSearch from '../../container/FrequentSearch';
 import ObjectTypeList from '../../container/ObjectTypeList';
-import SearchableObjectType from '../../presentational/SearchableObjectType';
 
 const BrowserSearchContainer = ({ 
     searchKey,
@@ -59,11 +56,7 @@ const BrowserSearchContainer = ({
     return ( 
         <div 
             id='searchContainer' 
-            className="py-1" 
-            style={{
-                minHeight: 520,
-                marginTop: 60,
-            }}
+            className="py-1 md:margin-top-4 lg:margin-top-4 xl:margin-top-4" 
             onTouchMove={handleTouchMove}
         >
             <Row id='searchBar' className='d-flex justify-content-center align-items-center pb-2'>
@@ -78,9 +71,8 @@ const BrowserSearchContainer = ({
             <div
                 id='searchOption' 
                 className="pt-2 d-flex justify-content-center"
-
             > 
-                <Col md={6} sm={6} xs={6} lg={6} xl={6}>
+                <Col md={6} sm={6} xs={6} lg={6} xl={6} className="custom-scrollbar">
                     <FrequentSearch 
                         getSearchKey={getSearchKey}  
                         clearSearchResult={clearSearchResult}   
@@ -101,17 +93,6 @@ const BrowserSearchContainer = ({
                         pinColorArray={pinColorArray}
                     />   
                 </Col>       
-                {/* <div>
-                    <SearchableObjectType
-                        getSearchKey={getSearchKey}  
-                        clearSearchResult={clearSearchResult}   
-                        hasGridButton={hasGridButton} 
-                        objectTypeList={objectTypeList || []}
-                        maxHeigh={config.searchResultProportion}
-                        searchObjectArray={searchObjectArray}
-                        pinColorArray={pinColorArray}
-                    />                
-                </div>   */}
             </div>
         </div>
     )

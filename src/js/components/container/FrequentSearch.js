@@ -95,23 +95,20 @@ class FrequentSearch extends React.Component {
 
         const style = {
             list: {
-                maxHeight: 450,
-                overflow: "hidden scroll"
+                maxHeight: 250,
             }
         }
         
         return (
-            <div id='frequentSearch' >
+            <div>
                 <Title list> 
                     {locale.texts.FREQUENT_SEARCH}
                 </Title>
-                <div style={style.list} className="d-inline-flex flex-column searchOption">
-                    <div
-                        style={{
-                            maxHeight: 350,
-                            overflow: "hidden scroll"
-                        }}
-                    >
+                <div 
+                    style={style.list} 
+                    className="d-inline-flex flex-column overflow-hidden-scroll custom-scrollbar"
+                >
+                    <div>
                         {auth.authenticated && auth.user.searchHistory &&
                             auth.user.searchHistory
                                 .filter( (item,index) => {

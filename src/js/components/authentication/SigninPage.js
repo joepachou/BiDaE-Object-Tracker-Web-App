@@ -189,10 +189,7 @@ const SigninPage = () => {
             />
             <JustifyCenterDiv>
                 <div
-                    style={{
-                        position: 'absolute',
-                        bottom: 0,
-                    }}
+                    className="position-absolute bottom-0"
                 >
                     {locale.texts.LICENCE}
                 </div>
