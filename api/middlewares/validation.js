@@ -38,7 +38,7 @@ module.exports = {
         if (req.session.user) {
             next()
         } else {
-            res.redirect('/'); 
+            res.redirect('/login'); 
         }
     },
 
@@ -47,7 +47,7 @@ module.exports = {
         else {
             res.clearCookie('authenticated');
             res.clearCookie('user');
-            res.redirect('/');    
+            res.redirect('/login');    
         }
     }
 }
