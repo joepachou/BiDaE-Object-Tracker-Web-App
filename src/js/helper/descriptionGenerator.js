@@ -40,6 +40,7 @@ import {
     NORMAL,
     RESERVE
 } from '../config/wordMap';
+import { isEqual } from 'lodash';
 
 export const getDescription = (item, locale) => {
     var foundDeviceDescription = ``; 
@@ -58,7 +59,7 @@ export const getDescription = (item, locale) => {
                         ${getStatus(item, locale)}
 
                         ${item.currentPosition  
-                            ? item.status == NORMAL
+                            ? isEqual(item.status, NORMAL) 
                                 ? `${item.residence_time} `
                                 : ''
                             : ''
@@ -111,7 +112,7 @@ export const getSubDescription = (item, locale) => {
         case locale.supportedLocale.ms.abbr:
             return (
                 item.currentPosition  
-                    ? item.status == NORMAL
+                    ? isEqual(item.statue, NORMAL)
                         ? `${locale.texts.WAS} ${locale.texts.NEAR} ${item.location_description} ${item.residence_time}`
                         : ''
                     : `${locale.texts.  NON_BINDING}`
@@ -136,7 +137,7 @@ export const getBatteryVolumn = (item, locale, config) => {
         case locale.supportedLocale.ms.abbr:
             return (
                 item.currentPosition  
-                    ? item.status == NORMAL
+                    ? isEqual(item.status, NORMAL) 
                         ? `, ${locale.texts.WAS} ${locale.texts.NEAR} ${item.location_description} ${item.residence_time}`
                         : ''
                     : `, ${locale.texts.NOT_AVAILABLE}`
@@ -145,7 +146,7 @@ export const getBatteryVolumn = (item, locale, config) => {
         case locale.supportedLocale.cn.abbr:
             return (
                 item.currentPosition  
-                    ? item.status == NORMAL
+                    ? isEqual(item.status, NORMAL) 
                         ? `, ${item.residence_time}${locale.texts.WAS}${locale.texts.NEAR}${item.location_description}`
                         : ''
                     : `, ${locale.texts.NOT_AVAILABLE}`
@@ -193,7 +194,7 @@ export const getPhysicianName = (item, locale) => {
 
 export const getStatus = (item, locale) => {
     return `
-        ${item.status.toUpperCase() == NORMAL 
+        ${isEqual(item.status, NORMAL) 
             ? ''  
             : `${locale.texts[item.status.toUpperCase()]}`
         }

@@ -35,6 +35,10 @@
 
 /** Compare two objects, including strings, deep objects  */
 export const isEqual = (obj1, obj2) => {
+    if (typeof obj1 != typeof obj2) return false;
+    if (typeof obj1 == 'string') {
+        return obj1.toUpperCase() == obj2.toUpperCase();
+    }
     return JSON.stringify(obj1) == JSON.stringify(obj2);
 }
 
