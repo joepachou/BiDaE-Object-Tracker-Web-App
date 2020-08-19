@@ -68,11 +68,11 @@ const BrowserSearchContainer = ({
                     suggestData={keywords}
                 />
             </Row>
-            <div
+            <Row
                 id='searchOption' 
                 className="pt-2 d-flex justify-content-center"
             > 
-                <Col md={6} sm={6} xs={6} lg={6} xl={6} className="custom-scrollbar">
+                <Col xs={6} sm={6} md={6} lg={6} xl={6}>
                     <FrequentSearch 
                         getSearchKey={getSearchKey}  
                         clearSearchResult={clearSearchResult}   
@@ -82,7 +82,7 @@ const BrowserSearchContainer = ({
                         pinColorArray={pinColorArray}
                     />
                 </Col>
-                <Col md={6} sm={6} xs={6} lg={6} xl={6}>
+                <Col xs={6} sm={6} md={6} lg={6} xl={6}>
                     <ObjectTypeList
                         getSearchKey={getSearchKey}  
                         clearSearchResult={clearSearchResult}   
@@ -93,7 +93,7 @@ const BrowserSearchContainer = ({
                         pinColorArray={pinColorArray}
                     />   
                 </Col>       
-            </div>
+            </Row>
         </div>
     )
 }

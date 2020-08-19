@@ -135,11 +135,6 @@ class ObjectTypeList extends React.Component {
 
 
     render() {
-        const style = {
-            list: {
-                maxHeight: 250,
-            },
-        }
 
         const {
             searchObjectArray,
@@ -152,34 +147,40 @@ class ObjectTypeList extends React.Component {
 
         return (
             <div>
-                <Title list>
+                <Title 
+                    list
+                    className='text-center'
+                >
                     {locale.texts.OBJECT_TYPE}
                 </Title>
                 <div 
-                    style={style.list} 
-                    className="d-inline-flex flex-column overflow-hidden-scroll custom-scrollbar"
+                    className="d-inline-flex flex-column overflow-hidden-scroll custom-scrollbar text-center max-height-30"
                 >
-                    {this.props.objectTypeList
-                        .map((item, index) => {
+                    <div
+                        className='text-center'
+                    >
+                        {this.props.objectTypeList
+                            .map((item, index) => {
 
-                            let pinColorIndex = searchObjectArray.indexOf(item)
+                                let pinColorIndex = searchObjectArray.indexOf(item)
 
-                            return ( 
-                                <Button
-                                    variant="outline-custom"
-                                    className="text-none"
-                                    onClick={this.handleClick} 
-                                    // active={this.state.searchKey === item.toLowerCase()} 
-                                    style={{
-                                        color: pinColorIndex > -1 ? pinColorArray[pinColorIndex] : null
-                                    }}
-                                    key={index}
-                                    name={item}
-                                >
-                                    {item}
-                                </Button>
-                            )
-                    })}
+                                return ( 
+                                    <Button
+                                        variant="outline-custom"
+                                        className="text-none"
+                                        onClick={this.handleClick} 
+                                        // active={this.state.searchKey === item.toLowerCase()} 
+                                        style={{
+                                            color: pinColorIndex > -1 ? pinColorArray[pinColorIndex] : null
+                                        }}
+                                        key={index}
+                                        name={item}
+                                    >
+                                        {item}
+                                    </Button>
+                                )
+                        })}
+                    </div>
                 </div>
             </div>
                 

@@ -42,7 +42,10 @@ import {
     Form, 
 } from 'formik';
 import { AppContext } from '../../context/AppContext';
-import FormikFormGroup from '../presentational/FormikFormGroup'
+import FormikFormGroup from '../presentational/FormikFormGroup';
+import {
+    RESERVE
+} from '../../config/wordMap';
   
 class ConfirmForm extends React.Component {
 
@@ -67,7 +70,7 @@ class ConfirmForm extends React.Component {
     handleButtonClick = (e) => {
         const { name }  = e.target
         switch(name) {
-            case "reserve":
+            case RESERVE:
                 this.setState({
                     isDelayTime: !this.state.isDelayTime
                 })
@@ -79,7 +82,6 @@ class ConfirmForm extends React.Component {
         const style = {
             deviceList: {
                 maxHeight: '20rem',
-                overflow: 'hidden scroll' 
             }
         }
 
@@ -125,7 +127,10 @@ class ConfirmForm extends React.Component {
 
                             render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
                                 <Form>
-                                    <div className='modalDeviceListGroup' style={style.deviceList}>
+                                    <div 
+                                        className='custom-scrollbar' 
+                                        style={style.deviceList}
+                                    >
                                         {selectedObjectData.map((item,index) => {
                                             return (
                                                 <div key={index} >

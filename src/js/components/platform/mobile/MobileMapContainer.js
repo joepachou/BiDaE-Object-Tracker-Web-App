@@ -61,9 +61,20 @@ export default class TabletMapContainer extends React.Component {
 
         const { 
             hasSearchKey,
+            geofenceConfig,
+            locationMonitorConfig,
+            searchedObjectType,
             proccessedTrackingData,
-            pathMacAddress,
-            currentAreaId
+            showedObjects,
+            showPdfDownloadForm,
+            handleClickButton,
+            currentAreaId,
+            authenticated,
+            searchObjectArray,
+            pinColorArray,
+            searchKey,
+            handleClick,
+            getSearchKey
         } = this.props;
 
         let [{areaId}] = stateReducer
@@ -83,11 +94,13 @@ export default class TabletMapContainer extends React.Component {
         return (
             <div style={style.mapForMobile}>
                 <Map
-                    pathMacAddress={pathMacAddress}
+                    pathMacAddress={this.props.pathMacAddress} 
                     hasSearchKey={hasSearchKey}
+                    colorPanel={this.props.colorPanel}
                     proccessedTrackingData={proccessedTrackingData}
                     lbeaconPosition={this.props.lbeaconPosition}
                     geofenceConfig={this.props.geofenceConfig}
+                    locationMonitorConfig={this.props.locationMonitorConfig}
                     getSearchKey={this.props.getSearchKey}
                     areaId={areaId}
                     searchedObjectType={this.props.showedObjects}
@@ -95,8 +108,11 @@ export default class TabletMapContainer extends React.Component {
                     handleClosePath={this.props.handleClosePath}
                     handleShowPath={this.props.handleShowPath}
                     showPath={this.props.showPath}
-                    style={{border:'solid'}}
                     currentAreaId={currentAreaId}
+                    searchObjectArray={searchObjectArray}
+                    pinColorArray={pinColorArray}
+                    searchKey={searchKey}
+                    getSearchKey={getSearchKey}
                 />
             </div>
         )

@@ -63,9 +63,7 @@ const style = {
     item: {
         minWidth: 30,
     },
-    scrollArea: {
-        maxHeight: 500
-    },
+
     blockOne: {
         minWidth: 'initial'
     },
@@ -191,27 +189,21 @@ class PatientViewModal extends React.Component {
                                 >
                                     {data.record && data.record.length != 0 && <hr style={{margin: 0}}></hr>}
 
-                                    <ScrollArea
-                                        // smoothScrolling={true}
-                                        horizontal={false}
-                                        style={style.scrollArea}
+                                    <ListGroup
+                                        className='text-none px-0 max-height-30 custom-scrollbar'
                                     >
-                                        <ListGroup
-                                            className='text-none px-0'
-                                        >
-                                            {data.records && data.records.length != 0 
-                                                &&   (
-                                                    <div>
-                                                        {data.records.map((item, index) => {
-                                                            return (
-                                                                recordBlockTypeTwo(item, index, locale)
-                                                            )
-                                                        })}
-                                                    </div>
-                                                )
-                                            }
-                                        </ListGroup>
-                                    </ScrollArea>
+                                        {data.records && data.records.length != 0 
+                                            &&   (
+                                                <div>
+                                                    {data.records.map((item, index) => {
+                                                        return (
+                                                            recordBlockTypeTwo(item, index, locale)
+                                                        )
+                                                    })}
+                                                </div>
+                                            )
+                                        }
+                                    </ListGroup>
                                 </div>
                                 <Modal.Footer>
                                     <Button 
@@ -279,7 +271,7 @@ const recordBlockTypeTwo = (item, index, locale) => {
                 className="d-flex justify-content-start"
             >
                 <div
-                    className="font-color-black d-flex justify-content-start"
+                    className="color-black d-flex justify-content-start"
                 >
                     <Primary>
                         {item.recorded_user}

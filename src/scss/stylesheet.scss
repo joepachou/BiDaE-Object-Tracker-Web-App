@@ -12,8 +12,16 @@
     font-size: .8rem;
 }
 
-.font-weight-500 {
-    font-weight: 500;
+.font-size-120-percent {
+    font-size: 1.2rem;
+}
+
+.font-weight-bold {
+    font-weight: $font-weight-bold;
+}
+
+.letter-spacing-1 {
+    letter-spacing: 1px;
 }
 
 .white-space-nowrap {
@@ -37,15 +45,43 @@
 }
 
 .bg-white {
-    color: $color-white;
+    background-color: $color-white;
+}
+
+.bg-transparent {
+    background-color: transparent;
 }
 
 .border-grey { 
     border: $border-grey;
 }
 
+.border-radius-30 {
+    border-radius: 30px;
+}
+
+.width-0 {
+    width: 0;
+}
+
 .min-width-25 { 
     min-width: 25px;
+}
+
+.min-width-1-percent {
+    min-width: 1rem;
+}
+
+.min-width-30-view {
+    min-width: 30vh;
+}
+
+.height-40 {
+    height: 40px;
+}
+
+.max-height-30 {
+    max-height: 30vh;
 }
 
 .position-absolute {
@@ -73,6 +109,8 @@
 }
 
 .custom-scrollbar {
+    overflow: hidden scroll;
+
     &::-webkit-scrollbar {
         -webkit-appearance: none;
         width: $webkit-scrollbar-width;
@@ -88,8 +126,28 @@
     cursor: pointer;
 }
 
+.cursor-not-allowed {
+    cursor: not-allowed;
+}
+
+.outline-none {
+    outline: none;
+}
+
+.border-none {
+    border: none;
+}
+
+.text-none {
+    text-transform: none;
+}
 
 @media (max-width: $screen-xs) {
+
+    html, body {
+        font-size: 10px;
+    }
+
     .xs\:font-size-16 {
         font-size: 100px;
     }
@@ -105,6 +163,10 @@
 
 
 @media (min-width: $screen-xs) and (max-width: $screen-sm) {
+
+    html, body {
+        font-size: 10px;
+    }
 
     .sm\:font-size-16 {
         font-size: 100px;
@@ -124,6 +186,11 @@
 
 }
 @media (min-width: $screen-sm) and (max-width: $screen-md) {
+
+    html, body {
+        font-size: 10px;
+    }
+
     .md\:font-size-16 {
         font-size: 100px;
     }
@@ -142,6 +209,10 @@
 }
 @media (min-width: $screen-md) and (max-width: $screen-lg) {
 
+    html, body {
+        font-size: 12px;
+    }
+
     .lg\:font-size-16 {
         font-size: 100px;
     }
@@ -159,7 +230,12 @@
     }
 }
 
-@media (min-width: $screen-lg){
+@media (min-width: $screen-lg) and (max-width: $screen-xl) {
+
+    html, body {
+        font-size: 12px;
+    }
+
     .xl\:font-size-16 {
         font-size: 100px;
     }
@@ -175,4 +251,30 @@
     .xl\:margin-top-4 {
         margin-top: 4rem;
     }
+}
+
+@media (min-width: $screen-xl) and (max-width: $screen-xxl) {
+
+    html, body {
+        font-size: 14px;
+    }
+
+    .xxl\:height-85 {
+        height: 85vh;
+    }
+}
+
+@media (min-width: $screen-xxl) {
+
+    html, body {
+        font-size: 16px;
+    }
+
+    .xxxl\:height-90 {
+        height: 90vh;
+    }
+}
+
+.customPopup .leaflet-popup-scrolled {
+    overflow: hidden hidden;
 }

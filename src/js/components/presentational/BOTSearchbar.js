@@ -56,8 +56,10 @@ const renderSuggestion = suggestion => (
 
 const renderInputComponent = inputProps => (
     <div className="inputContainer">
-        <i  className='fas fa-search icon'  /> 
-        <input {...inputProps} />
+        <i  className='fas fa-search icon font-size-120-percent'  /> 
+        <input 
+            {...inputProps} 
+        />
     </div>
 );
 
@@ -211,9 +213,9 @@ class BOTSearchbar extends React.Component {
             > 
                 <Form.Group 
                     className='d-flex justify-content-center mb-0 mx-1'
-                    style={{
-                        minWidth: parseInt(this.props.width) * 0.9
-                    }}
+                    // style={{
+                    //     minWidth: parseInt(this.props.width) * 0.9
+                    // }}
                 >
                     
                 <Autosuggest
@@ -230,10 +232,7 @@ class BOTSearchbar extends React.Component {
                 <Button 
                     type='submit' 
                     variant='link' 
-                    className='btn btn-link btn-sm bd-highlight'
-                    style={{
-                        width: 0,
-                    }} 
+                    className='btn btn-link btn-sm bd-highlight width-0'
                     onClick={this.handleSubmit}
                 ></Button> 
             </Form> 

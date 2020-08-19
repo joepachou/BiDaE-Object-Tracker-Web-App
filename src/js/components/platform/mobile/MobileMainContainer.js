@@ -99,13 +99,16 @@ const MobileMainContainer = ({
     return (
         <div id="page-wrap" className='d-flex flex-column' style={{height: "90vh"}}>
             <div className='h-100' style={{overflow: 'hidden hidden'}}>
-                <div id='searchPanel' className="h-100" style={style.searchPanelForMobile}>
+                <div id='searchPanel' className="h-100" style={style.searchPanelForMobile}> 
                     <SearchContainer 
                         hasSearchKey={hasSearchKey}
                         clearSearchResult={clearSearchResult}
                         auth={auth}
                         getSearchKey={getSearchKey}
                         handleShowResultListForMobile={handleShowResultListForMobile}
+                        searchObjectArray={searchObjectArray}
+                        pinColorArray={pinColorArray}
+                        keywords={keywords}
                     />
                 </div>
                 <div style={style.mapForMobile} className="m-1">

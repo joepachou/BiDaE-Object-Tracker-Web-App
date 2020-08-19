@@ -92,23 +92,21 @@ class FrequentSearch extends React.Component {
             searchObjectArray,
             pinColorArray
         } = this.props
-
-        const style = {
-            list: {
-                maxHeight: 250,
-            }
-        }
         
         return (
             <div>
-                <Title list> 
+                <Title 
+                    list
+                    className='text-center'
+                > 
                     {locale.texts.FREQUENT_SEARCH}
                 </Title>
                 <div 
-                    style={style.list} 
-                    className="d-inline-flex flex-column overflow-hidden-scroll custom-scrollbar"
+                    className="d-inline-flex flex-column overflow-hidden-scroll custom-scrollbar max-height-30"
                 >
-                    <div>
+                    <div
+                        className='text-center'
+                    >
                         {auth.authenticated && auth.user.searchHistory &&
                             auth.user.searchHistory
                                 .filter( (item,index) => {

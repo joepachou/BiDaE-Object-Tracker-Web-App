@@ -126,6 +126,7 @@ const SigninPage = () => {
                             touched={touched.username}
                             label={locale.texts.NAME}    
                             tabIndex={1}
+                            
                         />  
                         <FormikFormGroup 
                             type="password"

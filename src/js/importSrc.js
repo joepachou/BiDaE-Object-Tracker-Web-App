@@ -53,15 +53,6 @@ import "../scss/BOTCheckbox.scss"
 
 import "../scss/BOTsidenav.scss"
 
-/** ObjectListMenu Component customized css */
-import "../scss/ObjectListMenu.scss"
-
-/** pagination */
-import "../scss/Pagination.scss"
-
-/** Surveillance Component customized css */
-import "../scss/Leaflet.scss"
-
 import '../scss/SearchableObjectType.scss'
 
 import "../scss/SearchBar.scss"

@@ -408,15 +408,16 @@ const mapConfig = {
 
         const content = `
             <div class="text-capitalize">
-                <div class="popupTitle">
+                <div class="font-size-120-percent">
                     ${object[0].location_description}
                 </div>
-                <div class="popupContent"> 
+                <hr/>
+                <div class="popupContent custom-scrollbar max-height-30"> 
                     ${objectList.map((item, index) => {
                         return  `
-                            <div id='${item.mac_address}' class="popupItem">
+                            <div id='${item.mac_address}' class="popupItem mb-2">
                                 <div class="d-flex justify-content-start">
-                                    <div class="popupIndex">
+                                    <div class="min-width-1-percent">
                                         ${mapConfig.popupOptions.showNumber
                                             ?   `${index + 1}.`
                                             :   `&bull;`

@@ -1,80 +1,101 @@
-@media (min-width: 576px) {
-    html, body {
-        font-size: 14px;
-    }
+// @import './core.scss';
 
-    // .searchResultForMobile {
-    //     display: inline-block
-    // }
+// @media (min-width: $screen-xs) {
+//     html, body {
+//         font-size: 10px;
+//     }
 
-    // .searchResultForDestop {
-    //     display: none;
-    // }
+//     // .searchResultForMobile {
+//     //     display: inline-block
+//     // }
 
-    // .searchResultListGroup {
-    //     max-Height: none;
-    //     overflow: hidden auto;
-    //     margin: 0 5px 0 5px;
-    // }
+//     // .searchResultForDestop {
+//     //     display: none;
+//     // }
 
-    // .modal {
-    //     z-Index: 1080;
-    // }
-    // .modal-backdrop {
-    //     z-index: 1070;
-    // }
-    // .notShowOnMobile {
-    //     display: none;
-    // }
-    // .container-fluid {
-    //     width: 100%
-    // }
+//     // .searchResultListGroup {
+//     //     max-Height: none;
+//     //     overflow: hidden auto;
+//     //     margin: 0 5px 0 5px;
+//     // }
 
-    // #downloadPdfRequest {
-    //     top: 50%;
-    //     /* left: -10%; */
-    //     /* right: auto; */
-    //     bottom: auto;
-    // }
+//     // .modal {
+//     //     z-Index: 1080;
+//     // }
+//     // .modal-backdrop {
+//     //     z-index: 1070;
+//     // }
+//     // .notShowOnMobile {
+//     //     display: none;
+//     // }
+//     // .container-fluid {
+//     //     width: 100%
+//     // }
 
-}
+//     // #downloadPdfRequest {
+//     //     top: 50%;
+//     //     /* left: -10%; */
+//     //     /* right: auto; */
+//     //     bottom: auto;
+//     // }
 
-@media (min-width: 768px) { 
+// }
 
- }
+// @media (min-width: $screen-xs) and (max-width: $screen-sm) {
+//     html, body {
+//         font-size: 12px;
+//     }
 
-@media (min-width: 992px) {
+// }
+
+// @media (min-width: $screen-sm) and (max-width: $screen-md) {
+//     html, body {
+//         font-size: 12px;
+//     }
+// }
+
+// /* Large devices (desktops, 992px and up) */
+// @media (min-width: $screen-md) and (max-width: $screen-lg) {
+//     html, body {
+//         font-size: 12px;
+//     }
+// }
+
+// @media (min-width: $screen-lg) and (max-width: $screen-xl) {
+//     html, body {
+//         font-size: 14px;
+//     }
+
+//     // #searchPanel {
+//     //     height: 90vh;
+//     // }
+
+//     // #downloadPdfRequest {
+//     //     z-Index: 1050;
+//     //     top: 10%;
+//     //     /* left: -10%; */
+//     //     right: auto;
+//     //     bottom: auto;
+//     //     padding: 0;
+//     // }
+// }
 
 
-    // #searchbar {
-    //     min-width: 200;
-    // }
+// @media (min-width: $screen-xl) {
+//     html, body {
+//         font-size: 14px;
+//     }
 
-  }
+//     // #searchPanel {
+//     //     height: 90vh;
+//     // }
 
-/* Large devices (desktops, 992px and up) */
-@media (min-width: 1200px) {
-    html, body {
-        font-size: 16px;
-    }
-}
-
-@media (min-width: 1600px) {
-    
-    #navbar {
-        height: 65px;
-    }
-
-    // #searchPanel {
-    //     height: 90vh;
-    // }
-
-    // #downloadPdfRequest {
-    //     z-Index: 1050;
-    //     top: 10%;
-    //     /* left: -10%; */
-    //     right: auto;
-    //     bottom: auto;
-    //     padding: 0;
-    // }
-}
+//     // #downloadPdfRequest {
+//     //     z-Index: 1050;
+//     //     top: 10%;
+//     //     /* left: -10%; */
+//     //     right: auto;
+//     //     bottom: auto;
+//     //     padding: 0;
+//     // }
+// }

@@ -196,11 +196,11 @@ class NavbarContainer extends React.Component {
                                         {nav.module
                                             ? (                                  
                                                 <Dropdown
-                                                    className="d-flex align-items-center menu mx-1 "
+                                                    className="d-flex align-items-center menu mx-1"
                                                 >
                                                     <Dropdown.Toggle 
                                                         variant='light'
-                                                        className="font-weight-500 px-1"
+                                                        className="font-weight-500 px-2"
                                                         bsPrefix='bot-dropdown-toggle'
                                                     >
                                                         {locale.texts[nav.name.toUpperCase().replace(/ /g, '_')]}
@@ -246,7 +246,7 @@ class NavbarContainer extends React.Component {
                                                     <Link
                                                         onClick={nav.hasEvent && this.handleClick}
                                                         to={nav.path}
-                                                        className='nav-link nav-route menu px-1'
+                                                        className='nav-link nav-route menu px-2'
                                                         name={nav.alias}
                                                     >
                                                         {locale.texts[nav.name.toUpperCase().replace(/ /g, '_')]}

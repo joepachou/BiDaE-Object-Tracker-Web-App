@@ -124,7 +124,7 @@ const BrowserMainContainer = ({
                         setShowedObjects={setShowedObjects}
                         currentAreaId={currentAreaId}
                         searchObjectArray={searchObjectArray}
-                        pinColorArray={pinColorArray}
+                        pinColorArray={pinColorArray} 
                     />
                 </Col>
 

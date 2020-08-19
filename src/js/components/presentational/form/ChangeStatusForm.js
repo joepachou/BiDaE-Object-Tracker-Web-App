@@ -156,10 +156,6 @@ export default class ChangeStatusForm extends React.Component {
         const style = {
             deviceList: {
                 maxHeight: '20rem',
-                overflow: 'hidden scroll' 
-            },
-            crossIcom: {
-                cursor: "pointer"
             },
         }
         let { 
@@ -205,7 +201,10 @@ export default class ChangeStatusForm extends React.Component {
 
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
                             <Form className="text-capitalize">
-                                <div className='modalDeviceListGroup' style={style.deviceList}>
+                                <div 
+                                    className='custom-scrollbar' 
+                                    style={style.deviceList}
+                                >
                                     {selectedObjectData.map((item,index) => {
                                         return (
                                             <div key={index} >
@@ -215,10 +214,9 @@ export default class ChangeStatusForm extends React.Component {
                                                         ? 
                                                             <Col xs={1} sm={1} className='d-flex align-items-center'>
                                                                 <i 
-                                                                    className="fas fa-times" 
+                                                                    className="fas fa-times cursor-pointer" 
                                                                     onClick={this.props.handleRemoveButton} 
                                                                     name={item.mac_address}
-                                                                    style={style.crossIcom}
                                                                 /> 
                                                             </Col>
                                                         : null

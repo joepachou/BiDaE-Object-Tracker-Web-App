@@ -32,7 +32,6 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { AppContext } from '../../context/AppContext';
@@ -89,7 +88,7 @@ export default class Pagination extends React.Component {
         }
     };
 
-    changePage(page) {
+    changePage = page =>{
         const activePage = this.props.page + 1;
 
         if (page === activePage) {
@@ -120,7 +119,7 @@ export default class Pagination extends React.Component {
 
         return (
             <div 
-                className='Table__pagination d-flex justify-content-between'    
+                className='d-flex justify-content-between py-1'    
             >
                 <div
                     className='d-flex text-capitalize'
@@ -139,7 +138,13 @@ export default class Pagination extends React.Component {
                     >
                         <div className='Table__prevPageWrapper'>
                             <PageButtonComponent
-                                className='Table__pageButton'
+                                className={'cursor-pointer outline-none border-none bg-transparent ' +
+                                    (
+                                        activePage == 1 
+                                            ? 'cursor-not-allowed'
+                                            : ''
+                                    )
+                                }   
                                 onClick={() => {
                                 if (activePage === 1) return;
                                     this.changePage(activePage - 1);
@@ -155,10 +160,12 @@ export default class Pagination extends React.Component {
                                 return (
                                     <PageButtonComponent
                                         key={page}
-                                        className={
-                                        activePage === page
-                                            ? 'Table__pageButton Table__pageButton--active'
-                                            : 'Table__pageButton'
+                                        className={'cursor-pointer outline-none border-none bg-transparent ' +
+                                            (
+                                                activePage == page
+                                                    ? 'color-blue font-weight-bold'
+                                                    : ''
+                                            )
                                         }
                                         onClick={this.changePage.bind(null, page)}
                                     >
@@ -170,12 +177,18 @@ export default class Pagination extends React.Component {
     
                         <div className='Table__nextPageWrapper'>
                             <PageButtonComponent
-                                className='Table__pageButton'
+                                className={'cursor-pointer outline-none border-none bg-transparent ' +
+                                    (
+                                        activePage == this.props.pages
+                                            ? 'cursor-not-allowed'
+                                            : ''
+                                    )
+                                }
                                 onClick={() => {
                                     if (activePage === this.props.pages) return;
                                         this.changePage(activePage + 1);
                                     }}
-                                disabled={activePage === this.props.pages}
+                                disabled={activePage == this.props.pages}
                             >
                                 {this.props.nextText}
                             </PageButtonComponent>

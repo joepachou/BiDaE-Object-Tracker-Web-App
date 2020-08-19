@@ -46,7 +46,8 @@ const MobileSearchContainer = ({
     getSearchKey,
     handleTouchMove,
     clearSearchResult,
-    suggestData 
+    suggestData,
+    keywords 
 }) => {
     return (
         <div 
@@ -54,14 +55,13 @@ const MobileSearchContainer = ({
             className="py-1" 
             onTouchMove={handleTouchMove}
         >
-            <Image src={config.LOGO} rounded width={100}/>
             <Row id='searchBar' className='d-flex justify-content-center align-items-center my-4'>
                 <BOTSearchbar
                     placeholder={searchKey}
                     getSearchKey={getSearchKey}
                     clearSearchResult={clearSearchResult}    
-                    width={250}
-                    suggestData  ={suggestData }
+                    width={400}
+                    suggestData={keywords}
                 />
             </Row>
         </div>
