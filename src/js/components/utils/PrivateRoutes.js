@@ -50,7 +50,7 @@ const PrivateRoutes = () => {
         pathname
     } = window.location
 
-    if (auth.authenticated) {
+    if (auth.authenticated && auth.user) {
         return (
             <Fragment>          
                 <NavbarContainer/>

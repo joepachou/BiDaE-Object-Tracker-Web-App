@@ -54,8 +54,7 @@ class Auth extends React.Component {
 
     state = {
         authenticated: Cookies.get('authenticated') ? true : false,
-        user: Cookies.get('authenticated') ? {...JSON.parse(Cookies.get('user'))} : config.DEFAULT_USER,
-        accessToken: ""
+        user: Cookies.get('authenticated') && Cookies.get('user')? {...JSON.parse(Cookies.get('user'))} : config.DEFAULT_USER,
     }
 
     login = (userInfo, { actions, dispatch, callback, locale } ) => {
