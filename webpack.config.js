@@ -155,7 +155,7 @@ module.exports = {
         new CompressionPlugin({
             filename: '[path].br[query]',
             algorithm: 'brotliCompress',
-            test: /\.(js|css|html)$/,
+            test: /\.(js)$/,
             compressionOptions: {
               // zlib’s `level` option matches Brotli’s `BROTLI_PARAM_QUALITY` option.
               level: 11,

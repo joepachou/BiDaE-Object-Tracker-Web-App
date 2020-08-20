@@ -50,19 +50,37 @@ const dataRoutes = require('./api/routes/dataRoutes');
 const authRoutes = require('./api/routes/dataRoutes/authRoutes');
 const UIRoutes = require('./api/routes/UIRoutes');
 const APIRoutes = require('./web_server/routes/APIRoutes');
+const {
+    shouldCompress
+} = require('./api/config/compression');
 
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true,}));
-app.use(function(req, res, next) {
+app.use(session(sessionOptions));
+
+app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     next();
 });
 
-app.use(session(sessionOptions));
+app.use(compression({
+    filter: shouldCompress
+}))
+
+
+/** Replace with br file if the browser support br encoding */
+app.get(/\.(js)$/, (req, res, next) => {
+    if (req.header('Accept-Encoding').includes('br')) {
+        req.url = req.url + '.br';
+        res.set('Content-Encoding', 'br');
+    } 
+    next();
+});   
 
 app.use(express.static(path.join(__dirname,'dist')));
+
 
 UIRoutes(app);
 
