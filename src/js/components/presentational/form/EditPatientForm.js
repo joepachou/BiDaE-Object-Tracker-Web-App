@@ -229,6 +229,7 @@ class EditPatientForm extends React.Component {
                              
                             const postOption = {
                                 ...values,
+                                name: values.name.trim(),
                                 area_id: values.area.id,
                                 gender_id : values.gender.value,
                                 monitor_type, 

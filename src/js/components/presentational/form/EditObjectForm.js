@@ -242,6 +242,7 @@ class EditObjectForm extends React.Component {
                         })}
                        
                         onSubmit={(values, { setStatus, setSubmitting }) => {
+
                             let monitor_type = values.monitorType
                                 ?   values.monitorType
                                     .filter(item => item)
@@ -253,6 +254,9 @@ class EditObjectForm extends React.Component {
                             const postOption = {
                                 id,
                                 ...values,
+                                name: values.name.trim(),
+                                type: values.type.trim(),
+                                nickname: values.nickname.trim(),
                                 status: values.status,
                                 transferred_location: values.status == config.objectStatus.TRANSFERRED 
                                     ? values.transferred_location.id
@@ -262,18 +266,6 @@ class EditObjectForm extends React.Component {
                                 mac_address: isEmpty(values.mac_address) || values.mac_address == null ? null : values.mac_address.label,
                             }
                             
-                            while (postOption.type[postOption.type.length - 1] == " "){
-                                postOption.type = postOption.type.substring(0, postOption.type.length - 1);       
-                            }
-                            while (postOption.type[0] == " "){
-                                postOption.type = postOption.type.substring(1, postOption.type.length );       
-                            }
-                            while (postOption.name[postOption.name.length - 1] == " "){
-                                postOption.name = postOption.name.substring(0,postOption.name.length - 1);       
-                            } 
-                            while (postOption.name[0] == " "){
-                                postOption.name = postOption.name.substring(1 ,postOption.name.length);       
-                            }   
                             this.props.handleSubmit(postOption)                            
  
                         }}
