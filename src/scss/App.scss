@@ -542,29 +542,6 @@ button.close {
     display: none;
 }
 
-.toast-success-notice-container { 
-    background: #dbf8d1;
-    color: black;
-    display: flex;
-    justify-content: center;
-    top: 80%;
-}
-.toast-error-notice-container { 
-    background: #f8d7da;
-    color: #721c24;
-    display: flex;
-    justify-content: center;
-    top: 80%;
-}
-
-.toast-notice-body {
-    display: flex;
-    justify-content: center;
-}
-
-.toast-success-notice {
-    top: 60%;
-}
 
 .rw-widget>.rw-widget-container {
     height: 3rem;
@@ -595,21 +572,3 @@ button.close {
 }
 
 
-.Toastify__toast-container--top-center {
-
-    padding: 0px;
-    width: 100%;
-    left: 0;
-    margin-left: 0;
-    top: 0%;
-
-}
-
-/** Classes for the displayed toast **/
-.Toastify__toast {
-    min-height: 55px;
-}
-
-.modal-header {
-    text-transform: capitalize;
-}

@@ -44,8 +44,20 @@
     color: $color-grey;
 }
 
+.color-red {
+    color: $color-red;
+}
+
+.bg-green {
+    background-color: $color-green;
+}
+
 .bg-white {
     background-color: $color-white;
+}
+
+.bg-pink {
+    background-color: $color-pink;
 }
 
 .bg-transparent {
@@ -268,4 +280,16 @@
 
 .customPopup .leaflet-popup-scrolled {
     overflow: hidden hidden;
+}
+
+.Toastify__toast {
+    min-height: 6vh;
+}
+
+.Toastify__toast-container--top-center {
+    padding: 0px;
+    width: 100%;
+    left: 0;
+    margin-left: 0;
+    top: 0%;
 }

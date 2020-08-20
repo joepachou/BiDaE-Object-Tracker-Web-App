@@ -46,13 +46,13 @@ const setSuccessMessage = (
     return (
         toast.success(<ToastMessage msg={msg}  />, {
             position: toast.POSITION.TOP_CENTER,
-            autoClose: 3000,
-            className: 'toast-success-notice-container',
-            bodyClassName: "toast-notice-body",
+            autoClose: 1500,
+            className: 'color-black bg-green',
+            bodyClassName: "d-flex justify-content-center",
             hideProgressBar: true,
             closeButton: false,
             draggable: false,
-            closeOnClick: false,
+            closeOnClick: true,
             transition: Slide,
         })
     )
@@ -65,8 +65,8 @@ const setErrorMessage = (
         toast.success(<ToastMessage msg={'connect to database failed'} />, {
             position: toast.POSITION.TOP_CENTER,
             autoClose: false,
-            className: 'toast-error-notice-container',
-            bodyClassName: "toast-notice-body",
+            className: 'color-red bg-pink',
+            bodyClassName: "d-flex justify-content-center",
             hideProgressBar: true,
             closeButton: false,
             draggable: false,
