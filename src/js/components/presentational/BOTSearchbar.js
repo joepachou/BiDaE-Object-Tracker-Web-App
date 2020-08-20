@@ -63,6 +63,25 @@ const renderInputComponent = inputProps => (
     </div>
 );
 
+const suggestionFilter = {
+
+    autoComplete: (suggestData, inputValue, inputLength) => {
+
+        return suggestData.filter(term => {
+            return term.toLowerCase().slice(0, inputLength) === inputValue
+        }) 
+
+    },
+
+    partialMatch: (suggestData, inputValue, inputLength) => {
+
+        return suggestData.filter(term => {
+            return term.match(inputValue)
+        }) 
+
+    },
+}
+
 
 
 class BOTSearchbar extends React.Component {
@@ -180,9 +199,7 @@ class BOTSearchbar extends React.Component {
         /** limit count by specific number */
         let suggestTemp = [] 
 
-        suggestTemp = this.props.suggestData.filter(lang => {
-            return lang.toLowerCase().slice(0, inputLength) === inputValue
-        }) 
+        suggestTemp = suggestionFilter.partialMatch(this.props.suggestData, inputValue, inputLength)
 
         let suggestLimit =[]
 
@@ -191,6 +208,7 @@ class BOTSearchbar extends React.Component {
         })
 
         return inputLength === 0 ? [] :  suggestLimit
+
     };
 
     
@@ -225,7 +243,7 @@ class BOTSearchbar extends React.Component {
                     getSuggestionValue={getSuggestionValue}
                     renderSuggestion={renderSuggestion}
                     inputProps={inputProps}
-                    renderInputComponent={renderInputComponent} 
+                    renderInputComponent={renderInputComponent}  
                 /> 
         
                 </Form.Group>
