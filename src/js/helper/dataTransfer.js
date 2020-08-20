@@ -32,7 +32,8 @@
         Joe Chou, jjoe100892@gmail.com
 */
 import {
-    OBJECT_TYPE
+    OBJECT_TYPE, 
+    SEARCH_HISTORY
 } from '../config/wordMap';
 import config from '../config';
 
@@ -71,6 +72,7 @@ export const countNumber = (searchKey, item, numberSheet) => {
 
     switch(searchKey.type) {
         case OBJECT_TYPE: 
+        case SEARCH_HISTORY:
             if (Object.keys(numberSheet).includes(item.type)) {
                 newNum = numberSheet[item.type] += 1
             } else {

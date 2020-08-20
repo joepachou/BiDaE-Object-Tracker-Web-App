@@ -103,6 +103,8 @@ const SearchResultListGroup = ({
             )
         }
 
+        console.log(numberSheet)
+
         switch(searchKey.type) {
             case ALL_DEVICES: 
             case ALL_PATIENTS:

@@ -456,6 +456,8 @@ class MainContainer extends React.Component{
 
         const devicesAccessControlNumber = auth.user.myDevice || []
 
+        let searchableField = config.SEARCHABLE_FIELD
+
         switch(searchKey.type) {
             case ALL_DEVICES:
 
@@ -540,8 +542,26 @@ class MainContainer extends React.Component{
                 }
                 break;
 
+            // case OBJECT_TYPE:
+
+            //     if (searchObjectArray.includes(searchKey.value)) {
+
+            //     } else if (searchObjectArray.length < MAX_SEARCH_OBJECT_NUM) {
+            //         searchObjectArray.push(searchKey.value)
+            //     } else {
+            //         searchObjectArray.shift();
+            //         pinColorArray.push(pinColorArray.shift());
+            //         searchObjectArray.push(searchKey.value)
+            //     }
+
+            //     searchResult = proccessedTrackingData.filter(item => {
+            //         return searchObjectArray.includes(item.type)
+            //     })
+
+            //     break;
             case OBJECT_TYPE:
             case SEARCH_HISTORY:
+
                 if (searchObjectArray.includes(searchKey.value)) {
 
                 } else if (searchObjectArray.length < MAX_SEARCH_OBJECT_NUM) {
@@ -551,17 +571,23 @@ class MainContainer extends React.Component{
                     pinColorArray.push(pinColorArray.shift());
                     searchObjectArray.push(searchKey.value)
                 }
-                searchResult = proccessedTrackingData.filter(item => {
-                    return searchObjectArray.includes(item.type)
-                })
+
+                searchResult = proccessedTrackingData
+                   .filter(item => {
+                        return searchObjectArray.some(key => {
+                            return searchableField.some(field => {
+                                return item[field] && item[field].match(key)
+                            })
+                       })
+                   })
 
                 break;
+
             case PIN_SELETION:
 
                 searchObjectArray = [];
     
                 proccessedTrackingData
-                    
                     .map(item => {
                         if (searchKey.value.includes(item.mac_address)) {
                             item.searched = true;
@@ -569,6 +595,7 @@ class MainContainer extends React.Component{
                             searchResult.push(item)
                         }
                     })
+                    
                 if (!searchedObjectType.includes(-1)) { 
                     searchedObjectType.push(-1)
                     showedObjects.push(-1)
@@ -585,14 +612,10 @@ class MainContainer extends React.Component{
 
                 searchObjectArray = [];
                 
-                let keyword = searchKey.value.toLowerCase();
-
-                let searchableField = config.SEARCHABLE_FIELD
-
                 proccessedTrackingData
                     .map(item => {    
                         searchableField.map(field => {
-                            if (item[field] && item[field].toLowerCase().indexOf(keyword) >= 0) {
+                            if (item[field] && item[field].toLowerCase().indexOf(searchKey.value.toLowerCase()) >= 0) {
                                 item.searched = true;
                                 item.searchedType = -1;
                                 searchResult.push(item)
@@ -720,7 +743,6 @@ class MainContainer extends React.Component{
     }
 
     render(){
-
         const { 
             hasSearchKey,
             trackingData,
@@ -744,6 +766,7 @@ class MainContainer extends React.Component{
             showFoundResult,
             keywords
         } = this.state;
+
 
         const {
             getSearchKey,

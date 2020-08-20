@@ -127,6 +127,8 @@ class BOTSearchbar extends React.Component {
 
         if (!auth.authenticated) return;
 
+        if (!this.props.suggestData.includes(searchKey.value)) return
+
         let searchHistory = [...auth.user.searchHistory] || []
 
         const itemIndex = searchHistory.indexOf(searchKey.value);
