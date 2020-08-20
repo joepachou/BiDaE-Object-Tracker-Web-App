@@ -55,7 +55,8 @@ import styleConfig from '../../../config/styleConfig';
 import FormikFormGroup from '../FormikFormGroup';
 import {
     DISASSOCIATE,
-    NORMAL
+    NORMAL,
+    TRANSFERRED
 } from '../../../config/wordMap';
 import {
     isEmpty,
@@ -164,17 +165,15 @@ class EditObjectForm extends React.Component {
                                 : null,
                             status: selectedRowData.length != 0 ? status.value : NORMAL,
                             area: area_name || '',
-                            select: status.value === config.objectStatus.TRANSFERRED 
-                                ?   transferred_location 
-                                : ' ',
+
                             monitorType: selectedRowData.length !== 0 
                                 ?   selectedRowData.monitor_type == 0 
                                         ? null
                                         : selectedRowData.monitor_type.split('/') 
                                 :   [],
-                            transferred_location: status.value === config.objectStatus.TRANSFERRED 
+                            transferred_location: status.value === TRANSFERRED
                                 ? transferred_location 
-                                : '',
+                                : " ",
                             nickname : nickname || '',
                         }}
 
@@ -234,9 +233,10 @@ class EditObjectForm extends React.Component {
 
                                 area: Yup.string().required(locale.texts.AREA_IS_REQUIRED),
                                 
-                                transferred_location: Yup.object()   
+                                transferred_location: Yup.object()  
+                                    .nullable()
                                     .when('status', {
-                                        is: config.objectStatus.TRANSFERRED,
+                                        is: TRANSFERRED,
                                         then: Yup.object().required(locale.texts.LOCATION_IS_REQUIRED)
                                     })
                         })}
@@ -258,7 +258,7 @@ class EditObjectForm extends React.Component {
                                 type: values.type.trim(),
                                 nickname: values.nickname.trim(),
                                 status: values.status,
-                                transferred_location: values.status == config.objectStatus.TRANSFERRED 
+                                transferred_location: values.status == TRANSFERRED 
                                     ? values.transferred_location.id
                                     : null,
                                 monitor_type,
@@ -334,8 +334,8 @@ class EditObjectForm extends React.Component {
                                         <FormikFormGroup 
                                             name="mac_address"
                                             label={locale.texts.MAC_ADDRESS}
-                                            error={errors.transferred_location}
-                                            touched={touched.transferred_location}
+                                            error={errors.mac_address}
+                                            touched={touched.mac_address}
                                             component={() => (
                                                 <Select
                                                 name="mac_address"
@@ -414,15 +414,15 @@ class EditObjectForm extends React.Component {
 
                                 />  
                                 <FormikFormGroup 
-                                    name="select"
+                                    name="transferred_location"
                                     label={locale.texts.AREA}
                                     error={errors.transferred_location}
                                     touched={touched.transferred_location}
                                     placeholder=""
-                                    display={values.status == 'transferred'}
+                                    display={values.status == TRANSFERRED}
                                     component={() => (
                                         <Select
-                                            name="select"
+                                            name="transferred_location"
                                             value = {values.transferred_location}
                                             className="my-1"
                                             onChange={value => setFieldValue("transferred_location", value)}
