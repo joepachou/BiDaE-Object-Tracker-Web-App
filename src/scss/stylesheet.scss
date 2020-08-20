@@ -203,9 +203,6 @@
         display: none;
     }
 
-    .md\:margin-top-4 {
-        margin-top: 4rem;
-    }
 }
 @media (min-width: $screen-md) and (max-width: $screen-lg) {
 
@@ -225,9 +222,6 @@
         display: none;
     }
 
-    .lg\:margin-top-4 {
-        margin-top: 4rem;
-    }
 }
 
 @media (min-width: $screen-lg) and (max-width: $screen-xl) {
@@ -248,9 +242,6 @@
         display: none;
     }
 
-    .xl\:margin-top-4 {
-        margin-top: 4rem;
-    }
 }
 
 @media (min-width: $screen-xl) and (max-width: $screen-xxl) {

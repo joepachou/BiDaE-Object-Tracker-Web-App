@@ -56,7 +56,7 @@ const BrowserSearchContainer = ({
     return ( 
         <div 
             id='searchContainer' 
-            className="py-1 md:margin-top-4 lg:margin-top-4 xl:margin-top-4" 
+            className="py-2 mt-5" 
             onTouchMove={handleTouchMove}
         >
             <Row id='searchBar' className='d-flex justify-content-center align-items-center pb-2'>
