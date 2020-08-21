@@ -236,7 +236,7 @@ class EditPatientForm extends React.Component {
                                 room: values.room ? values.room.label : '',
                                 object_type: values.gender.value,
                                 physicianIDNumber : values.physician  ? values.physician.value : this.props.physicianIDNumber,
-                                mac_address: isEmpty(values.mac_address) || values.mac_address == null ? null : values.mac_address.value,
+                                mac_address: isEmpty(values.mac_address) || values.mac_address == null ? null : values.mac_address.label,
                             }                              
                             this.props.handleSubmit(postOption)
                         }}
@@ -302,7 +302,7 @@ class EditPatientForm extends React.Component {
                                                     className="my-1"
                                                     onChange={value => setFieldValue("mac_address", value)}
                                                     options={this.props.macOptions}
-                                                    isSearchable={false}
+                                                    isSearchable={true}
                                                     isDisabled={selectedRowData.isBind}
                                                     styles={styleConfig.reactSelect}
                                                     placeholder=""
@@ -383,7 +383,7 @@ class EditPatientForm extends React.Component {
                                 />
                                 <hr/>
                                 <FormikFormGroup 
-                                    name="room"
+                                    name="monitorType"
                                     label={locale.texts.MONITOR_TYPE}
                                     error={errors.monitorType}
                                     touched={touched.monitorType}

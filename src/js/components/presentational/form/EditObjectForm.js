@@ -338,7 +338,7 @@ class EditObjectForm extends React.Component {
                                             touched={touched.mac_address}
                                             component={() => (
                                                 <Select
-                                                name="mac_address"
+                                                    name="mac_address"
                                                     value = {values.mac_address}
                                                     className="my-1"
                                                     onChange={value => setFieldValue("mac_address", value)}
