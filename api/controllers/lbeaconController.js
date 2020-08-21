@@ -38,6 +38,7 @@ require('moment-timezone')
 const moment = require('moment');
 const dbQueries = require('../db/dbQueries/lbeaconQueries');
 const pool = require('../db/dev/connection');
+const statusCode = require('../config/statusCode');
 
 module.exports = {
 
@@ -51,9 +52,10 @@ module.exports = {
             res.rows.map(item => {
                 /** Set the value that distinguish lbeacon is normal */
                 
-                item.isInHealthInterval = item.health_status == process.env.IS_LBEACON_HEALTH_STATUS_CODE && 
-                    moment().diff(item.last_report_timestamp, 'minutes') 
-                        < process.env.LBEACON_HEALTH_TIME_INTERVAL_IN_MIN;
+                item.isInHealthInterval = 
+                    (item.health_status == process.env.IS_LBEACON_HEALTH_STATUS_CODE || 
+                    item.health_status != statusCode.LBEACON_STATUS_NOT_AVAILABLE)  &&
+                    moment().diff(item.last_report_timestamp, 'minutes') < process.env.LBEACON_HEALTH_TIME_INTERVAL_IN_MIN;
 
                 item.last_report_timestamp = moment.tz(item.last_report_timestamp, process.env.TZ).locale(locale).format(process.env.TIMESTAMP_FORMAT);
 
