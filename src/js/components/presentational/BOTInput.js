@@ -81,7 +81,7 @@ class BOTInput extends React.Component {
             <Form>
                 <div className="d-flex">
                     <Form.Group 
-                        className='d-flex align-items-center bg-white border-grey height-regular'
+                        className='d-flex align-items-center bg-white border-grey height-regular min-height-regular'
                         style={{
                             padding: '.275rem .75rem',
                         }}

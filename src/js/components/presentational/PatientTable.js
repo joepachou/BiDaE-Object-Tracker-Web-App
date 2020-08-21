@@ -179,7 +179,7 @@ class PatientTable extends React.Component{
                     item.monitor_type = transferMonitorTypeToString(item);
 
                     item.isBind = item.mac_address ? 1 : 0;
-                    item.mac_address = item.mac_address ? item.mac_address : locale.texts.  NON_BINDINGG
+                    item.mac_address = item.mac_address ? item.mac_address : locale.texts.NON_BINDING
 
                     return item
                 })  

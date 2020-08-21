@@ -52,7 +52,7 @@ import {
     DEVICE,
     SAVE_SUCCESS,
     DISASSOCIATE
-} from '../../../config/wordMap';
+} from '../../../config/wordMap'; 
  
 const BrowserObjectTableView = ({
     addObjectFilter,
@@ -67,7 +67,7 @@ const BrowserObjectTableView = ({
         <div className='d-flex justify-content-between my-4'>
             <div className='d-flex justify-content-start'>                    
                 <BOTInput
-                    className='mx-2'
+                    className='mx-2 w-30-view'
                     placeholder={locale.texts.SEARCH}
                     getSearchKey={(key) => {
                         addObjectFilter(
@@ -83,7 +83,7 @@ const BrowserObjectTableView = ({
                     platform={['browser']}
                 > 
                     <Select
-                        className='mx-2 text-capitalize'
+                        className='mx-2 text-capitalize w-30-view min-height-regular'
                         styles={styleConfig.reactSelectFilter}  
                        
                         onChange={(value) => {   

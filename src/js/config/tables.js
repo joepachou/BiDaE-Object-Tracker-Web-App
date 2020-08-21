@@ -312,9 +312,12 @@ const patientTableColumn = [
         width: 150
     },
     {
-        Header: "PATIENT_GENDER",
-        accessor: "object_type",
-        width: 70,
+        Header: "Mac Address",
+        accessor: "mac_address",
+        width: 200,
+        Cell: props => !props.original.isBind 
+            ? <div className='color-blue text-underline'>{props.value}</div> 
+            : props.value
     },
     {
         Header: "patient Number",
@@ -327,6 +330,11 @@ const patientTableColumn = [
         width: 150,
     },
     {
+        Header: "PATIENT_GENDER",
+        accessor: "object_type",
+        width: 70,
+    },
+    {
         Header: "room",
         accessor: "room",
         width: 100,
@@ -335,14 +343,6 @@ const patientTableColumn = [
         Header: "attending Physician",
         accessor: "physician_name",
         width: 100,
-    },
-    {
-        Header: "Mac Address",
-        accessor: "mac_address",
-        width: 200,
-        Cell: props => !props.original.isBind 
-            ? <div style={{color: styleSheet.theme, textDecoration: 'underline'}}>{props.value}</div> 
-            : props.value
     },
     {
         Header: "Monitor Type",
@@ -392,7 +392,7 @@ const objectTableColumn = [
         accessor: "mac_address",
         width: 200,
         Cell: props => !props.original.isBind 
-            ? <div style={{color: styleSheet.theme, textDecoration: 'underline'}}>{props.value}</div> 
+            ? <div className='color-blue text-underline'>{props.value}</div> 
             : props.value
     },
     {
