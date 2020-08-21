@@ -153,11 +153,6 @@ export default class ChangeStatusForm extends React.Component {
     render() {
         const { locale } = this.context
 
-        const style = {
-            deviceList: {
-                maxHeight: '20rem',
-            },
-        }
         let { 
             title,
             selectedObjectData 
@@ -168,11 +163,10 @@ export default class ChangeStatusForm extends React.Component {
         return (
             <Modal  
                 show={this.props.show}
+                dialogClassName="right-20-percent"
                 onHide={this.handleClose} 
                 size="md" 
-                id='changeStatusForm' 
                 enforceFocus={false}
-                style={style.modal}
             >
                 <Modal.Header 
                     closeButton 
@@ -202,8 +196,7 @@ export default class ChangeStatusForm extends React.Component {
                         render={({ values, errors, status, touched, isSubmitting, setFieldValue }) => (
                             <Form className="text-capitalize">
                                 <div 
-                                    className='custom-scrollbar' 
-                                    style={style.deviceList}
+                                    className='custom-scrollbar max-height-30' 
                                 >
                                     {selectedObjectData.map((item,index) => {
                                         return (

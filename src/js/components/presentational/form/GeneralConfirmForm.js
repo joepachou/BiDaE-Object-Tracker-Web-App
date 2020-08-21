@@ -72,6 +72,7 @@ const GeneralConfirmForm = ({
     return (
         <Modal 
             show={show} 
+            centered={true}
             size="sm" 
             onHide={handleClose}
             style={style.modal}

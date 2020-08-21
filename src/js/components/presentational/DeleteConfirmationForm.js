@@ -55,9 +55,9 @@ const DeleteConfirmationForm = ({
     return (
         <Modal  
             show={show} 
+            centered={true}
             onHide={handleClose} 
             size="md" 
-            id='DeleteConfirmationForm' 
         >
             <Modal.Header 
                 closeButton 

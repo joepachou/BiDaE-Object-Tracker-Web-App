@@ -59,14 +59,12 @@ import "../scss/SearchBar.scss"
 
 
 /** RWD customized css */
-import "../scss/RWD.scss"
+// import "../scss/RWD.scss"
 
 /** ToggleSwitch customized css */
 import "../scss/ToggleSwitch.scss"
 
 import "../scss/leafletMarkers.scss"
-
-import "../scss/GridButton.scss"
 
 /** leaflet source */
 

@@ -76,7 +76,7 @@ const DownloadPdfRequestForm = ({
                 var link = document.createElement('a');
                 link.href = dataSrc.pdfUrl(pdfPath);
                 link.download = "";
-                link.click();
+                link.click(); 
                 break;
             case "close":
                 handleClose()
@@ -87,7 +87,7 @@ const DownloadPdfRequestForm = ({
 
     return (
         <Modal 
-            id='downloadPdfRequest' 
+            centered={true}
             show={show} 
             onHide={handleClose} 
             size="md"

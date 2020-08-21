@@ -76,28 +76,21 @@ class BOTInput extends React.Component {
             name
         } = this.props
 
-        let style = {
-            
-            error: {
-                color: "#dc3545"
-            },
-        }
+
         return (            
             <Form>
                 <div className="d-flex">
                     <Form.Group 
-                        className='d-flex align-items-center bg-white border-grey'
+                        className='d-flex align-items-center bg-white border-grey height-regular'
                         style={{
-                            height: '3rem',
                             padding: '.275rem .75rem',
-                            width: 300,
                         }}
                     >
                         <i 
                             className="fas fa-search color-black"
                         />
                         <Form.Control 
-                            type='text' 
+                            type='text color-grey bg-unset letter-spacing-1' 
                             name={name}
                             value={value} 
                             onChange={this.handleChange}
@@ -105,9 +98,7 @@ class BOTInput extends React.Component {
                             onKeyPress={this.handleKeyPress}
                             style={{
                                 border: 'none',
-                                background: 'unset',
-                                letterSpacing: '1.5px',
-                                color: 'grey'
+                                // letterSpacing: '1.5px',
                             }}
                         />
                     </Form.Group>
@@ -121,8 +112,7 @@ class BOTInput extends React.Component {
                 }
                 {error &&  
                     <small 
-                        className="form-text text-capitaliz"
-                        style={style.error}
+                        className="form-text text-capitalize color-red"
                     >
                         {error}
                     </small>

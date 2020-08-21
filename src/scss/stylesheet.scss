@@ -64,6 +64,10 @@
     background-color: transparent;
 }
 
+.bg-unset {
+    background-color: unset;
+}
+
 .border-grey { 
     border: $border-grey;
 }
@@ -74,6 +78,10 @@
 
 .width-0 {
     width: 0;
+}
+
+.w-30-view {
+    width: 30vh;
 }
 
 .min-width-25 { 
@@ -90,6 +98,14 @@
 
 .height-40 {
     height: 40px;
+}
+
+.height-regular {
+    height: $box-regular-height;
+}
+
+.min-height-regular {
+    min-height: $box-regular-height;
 }
 
 .max-height-30 {
@@ -114,6 +130,10 @@
 
 .right-0 {
     right: 0;
+}
+
+.right-20-percent {
+    right: 20%
 }
 
 .overflow-hidden-scroll {

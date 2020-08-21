@@ -636,7 +636,7 @@ class ObjectTable extends React.Component{
                 <Row className='d-flex justify-content-between my-4'>
                     <div className='d-flex justify-content-start'>
                         <BOTInput
-                            className='mx-2'
+                            className='mx-2 w-30-view min-height-regular'
                             placeholder={locale.texts.SEARCH}
                             getSearchKey={(key) => {
                                 this.addObjectFilter(
@@ -653,7 +653,7 @@ class ObjectTable extends React.Component{
                         >
                             <Select
                                 name='Select Type'
-                                className='mx-2'
+                                className='mx-2 w-30-view min-height-regular'
                                 styles={styleConfig.reactSelectFilter}
                                 onChange={(value) => { 
                                     if(value){
@@ -664,13 +664,13 @@ class ObjectTable extends React.Component{
                                 }}
                                 options={typeSelection}
                                 isClearable={true}
-                                isSearchable={false}
+                                isSearchable={true}
                                 placeholder={locale.texts.TYPE}
 
                             />
                             <Select
                                 name='Select Area'
-                                className='mx-2'
+                                className='mx-2 w-30-view min-height-regular'
                                 styles={styleConfig.reactSelectFilter}
                                 onChange={(value) => {
                                     if(value){
@@ -681,12 +681,12 @@ class ObjectTable extends React.Component{
                                 }}
                                 options={this.state.filterSelection.areaSelection}
                                 isClearable={true}
-                                isSearchable={false}
+                                isSearchable={true}
                                 placeholder={locale.texts.AREA}
                             />
                             <Select
                                 name='Select Status'
-                                className='mx-2'
+                                className='mx-2 w-30-view min-height-regular'
                                 styles={styleConfig.reactSelectFilter}
                                 onChange={(value) => {
                                     if(value){
@@ -697,7 +697,7 @@ class ObjectTable extends React.Component{
                                 }}
                                 options={this.state.filterSelection.statusOptions}
                                 isClearable={true}
-                                isSearchable={false}
+                                isSearchable={true}
                                 placeholder={locale.texts.STATUS}
                             />
                         </AccessControl>

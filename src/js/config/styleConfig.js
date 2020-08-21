@@ -123,7 +123,7 @@ const styleConfig = {
             fontSize: '1rem',
             minHeight: '3rem',
             position: 'none',
-            width: '300px',
+            // width: '300px',
             borderRadius: 0,
         }),
 
