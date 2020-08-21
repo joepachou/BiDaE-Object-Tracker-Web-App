@@ -77,7 +77,7 @@ const suggestionFilter = {
     partialMatch: (suggestData, inputValue, inputLength) => {
 
         return suggestData.filter(term => {
-            return term.match(inputValue)
+            return term.toLowerCase().indexOf(inputValue) > -1;
         }) 
 
     },
