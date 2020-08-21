@@ -42,7 +42,7 @@ import supportedLocale from './locale/supportedLocale';
 
 const config = {
 
-    VERSION: 'v1.0 b.1949',
+    VERSION: 'v1.0 b.1950',
 
     TIMESTAMP_FORMAT: 'LLL',
 
