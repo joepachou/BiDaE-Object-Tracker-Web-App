@@ -44,7 +44,7 @@ import AuthenticationContext from '../../../context/AuthenticationContext';
 import MapContainer from '../../container/MapContainer';
 
 const BrowserMainContainer = ({ 
-    handleClearButton,
+    handleClearButton, 
     getSearchKey,
     setMonitor,
     clearAlerts,

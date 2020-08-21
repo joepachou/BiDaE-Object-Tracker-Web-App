@@ -73,7 +73,7 @@ class SearchResultList extends React.Component {
         showEditObjectForm: false,
         showSignatureForm:false,
         showConfirmForm: false,
-        showAddDevice: false,
+        showAddDevice: false, 
         showDownloadPdfRequest: false,
         showPath: false,
         showPatientView: false,

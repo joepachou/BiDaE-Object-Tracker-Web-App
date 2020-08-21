@@ -498,7 +498,7 @@ class Map extends React.Component {
              * More Style sheet include in Map.css */
             let popupContent = this.props.mapConfig.getPopupContent([item], this.collectObjectsByPosition(proccessedTrackingData, item.currentPosition), locale)
             
-            let pinColorIndex = searchObjectArray.indexOf(item.type)
+            let pinColorIndex = searchObjectArray.indexOf(item.keyword)
 
             if (pinColorIndex > -1) {
                 item.searched = true;

@@ -57,7 +57,7 @@ const style = {
     }
 }
 
-const BrowserSearchResultList = ({
+const BrowserSearchResultList = ({ 
     searchResult,
     title,
     selection,

@@ -576,7 +576,11 @@ class MainContainer extends React.Component{
                    .filter(item => {
                         return searchObjectArray.some(key => {
                             return searchableField.some(field => {
-                                return item[field] && item[field].match(key)
+                                if (item[field] && item[field] == key) {
+                                    item.keyword = key;
+                                    return true;
+                                }
+                                return false;
                             })
                        })
                    })

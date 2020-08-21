@@ -73,10 +73,10 @@ export const countNumber = (searchKey, item, numberSheet) => {
     switch(searchKey.type) {
         case OBJECT_TYPE: 
         case SEARCH_HISTORY:
-            if (Object.keys(numberSheet).includes(item.type)) {
-                newNum = numberSheet[item.type] += 1
-            } else {
-                numberSheet[item.type] = newNum;
+            if (Object.keys(numberSheet).includes(item.keyword)) {
+                newNum = numberSheet[item.keyword] += 1
+            } else { 
+                numberSheet[item.keyword] = newNum;
             }
             return newNum;
         default: 

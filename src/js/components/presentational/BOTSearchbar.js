@@ -37,7 +37,8 @@ import { Form, Button } from 'react-bootstrap';
 import Autosuggest from 'react-autosuggest'; 
 import config from '../../config';
 import {
-    SEARCH_BAR
+    SEARCH_BAR,
+    SEARCH_HISTORY
 } from '../../config/wordMap'
 import apiHelper from '../../helper/apiHelper';
 import { AppContext } from '../../context/AppContext';
@@ -108,15 +109,29 @@ class BOTSearchbar extends React.Component {
 
     handleSubmit = (e) => {  
         e.preventDefault();
-        let searchKey = {
-            type: SEARCH_BAR,
-            value: this.state.value
+
+        let type;
+        let searchKey = {};
+        let value = this.state.value;
+
+        if (this.props.suggestData.includes(value)) {
+            type = SEARCH_HISTORY;
+            searchKey = {
+                type,
+                value
+            }
+            this.addSearchHistory(searchKey)
+        } else {
+            type = SEARCH_BAR;
+            searchKey = {
+                type,
+                value,
+            }
         }
+
         this.props.getSearchKey(searchKey);
 
-        this.addSearchHistory(searchKey)
-
-        this.checkInSearchHistory(this.state.value)
+        this.checkInSearchHistory(value)
     }
 
     /** Set search history to auth */

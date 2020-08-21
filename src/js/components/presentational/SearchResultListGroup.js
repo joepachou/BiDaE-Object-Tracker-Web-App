@@ -63,7 +63,7 @@ const SearchResultListGroup = ({
     selection,
     disabled,
     action,
-    searchObjectArray,
+    searchObjectArray, 
     pinColorArray,
     searchKey,
     onClick
@@ -117,7 +117,7 @@ const SearchResultListGroup = ({
                                 height: '25px',
                                 width: '25px',
                                 borderRadius: '50%',
-                                background: searchObjectArray.includes(item.type) ? pinColorArray[searchObjectArray.indexOf(item.type)] : null,
+                                background: searchObjectArray.includes(item.keyword) ? pinColorArray[searchObjectArray.indexOf(item.keyword)] : null,
                             }}
                         >
                             {countNumber(searchKey, item, numberSheet)}
