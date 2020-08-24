@@ -37,6 +37,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer');
 const CompressionPlugin = require('compression-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+workboxPlugin = require('workbox-webpack-plugin');
 const zlib = require('zlib');
 const webpack = require('webpack');
 const dotenv = require('dotenv');
@@ -167,6 +168,12 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: './css/[name].css',
         }),
+
+        new workboxPlugin.GenerateSW({
+            swDest: 'sw.js',
+            clientsClaim: true,
+            skipWaiting: true,
+        })
         
     ],
 

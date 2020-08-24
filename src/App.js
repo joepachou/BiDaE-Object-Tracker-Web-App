@@ -44,21 +44,39 @@ import {
 } from 'react-router-dom';
 import publicRoutes from './js/config/routes/publicRoutesConfig';
 
-const App = () => {
-    return (
-        <AppContext>
-            <BrowserRouter>     
-                <Switch>
-                    {publicRoutes.map(route => {
-                        return <Route path={route.path} exact component={route.component} />
+class App extends React.Component {
 
-                    })}
-                    <PrivateRoutes />
-                </Switch>
-            </BrowserRouter>
-            <ToastContainer {...config.TOAST_PROPS} />
-        </AppContext>
-    );
+    componentDidMount = () => {
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+              navigator.serviceWorker.register('/sw.js')
+                .then(registration => {
+                    console.log('SW registered: ', registration);
+                })
+                .catch(registrationError => {
+                    console.log('SW registration failed: ', registrationError);
+                });
+            });
+        }
+    }
+
+    render() {
+
+        return (
+            <AppContext>
+                <BrowserRouter>     
+                    <Switch>
+                        {publicRoutes.map(route => {
+                            return <Route path={route.path} exact component={route.component} />
+
+                        })}
+                        <PrivateRoutes />
+                    </Switch>
+                </BrowserRouter>
+                <ToastContainer {...config.TOAST_PROPS} />
+            </AppContext>
+        );
+    }
 };
 
 export default App;
