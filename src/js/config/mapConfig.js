@@ -178,7 +178,7 @@ const mapConfig = {
 
             color: 'rgba(0, 0, 0, 0)',
 
-            fillColor: '#ffc10778',
+            fillColor: 'orange',
 
             fillOpacity: 0.5,
 
