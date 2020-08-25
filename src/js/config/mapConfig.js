@@ -360,15 +360,6 @@ const mapConfig = {
         }
     },
 
-    gender: {
-        MAN: {
-            id: 1,
-        },
-        GIRL:{
-            id: 2,
-        },
-    },
-
     areaOptions: Object.keys(siteConfig.areaModules)
         .reduce((res, item) => {
             res[siteConfig.areaModules[item].id] = item
