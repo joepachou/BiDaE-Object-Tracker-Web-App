@@ -142,6 +142,8 @@ const en =  {
     YOUR_SERVICE_AREAS: "your service areas",
     PREFERENCE: "preference",
     SEARCH_PREFERENCES: "search preferences",
+    MALE: "male",
+    FEMALE: "female",
 
     /* buttons */
     CLEAR : "clear",

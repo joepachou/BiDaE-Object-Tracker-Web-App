@@ -331,7 +331,7 @@ const patientTableColumn = [
     },
     {
         Header: "PATIENT_GENDER",
-        accessor: "object_type",
+        accessor: "object_type.label", 
         width: 70,
     },
     {

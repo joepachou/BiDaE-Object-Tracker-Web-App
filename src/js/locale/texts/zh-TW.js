@@ -445,7 +445,7 @@ const tw = {
     USER_MANAGER: "使用者管理",
     ADMIN: "管理員",
     CONFIRM: "確認", 
-    REMOVE_USER_CONFIRM: "移除使用者",
+    REMOVE_USER_CONFIRM: "移除使用者",    
 
     /** table Title */
     MY_DEVICES_LIST: "我的儀器",
@@ -454,6 +454,8 @@ const tw = {
     NOT_MY_PATIENT_LIST: "其他病人",
     PATIENT: "病人",
     DEVICES: "儀器",
+    MALE: "男",
+    FEMALE: "女",
     
     /** table Field */
     ID: "ID",

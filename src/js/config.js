@@ -95,6 +95,17 @@ const config = {
         'transferred'
     ],
 
+    GENDER_OPTIONS: {
+        1: {
+            id: 1,
+            value: 'male'
+        },
+        2: {
+            id: 2,
+            value: 'female'
+        },
+    },
+
     monitorOptions: [
         'geofence',
         'panic',

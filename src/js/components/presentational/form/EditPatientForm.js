@@ -94,16 +94,10 @@ class EditPatientForm extends React.Component {
             };
         })
 
-        const genderOptions = [
-            { 
-                value: '1', 
-                label: locale.texts.MALE
-            },
-            { 
-                value: '2', 
-                label: locale.texts.FEMALE 
-            },
-        ]
+        const genderOptions = Object.values(config.GENDER_OPTIONS).map(item => {
+            item.label = locale.texts[item.value.toUpperCase()];
+            return item;
+        })
 
         let physicianListOptions = physicianList.map(user => {
             return {
@@ -152,7 +146,7 @@ class EditPatientForm extends React.Component {
 
                             asset_control_number:asset_control_number|| '',
 
-                            gender: object_type == locale.texts.FEMALE.toLowerCase() ? genderOptions[1] : genderOptions[0],
+                            gender: selectedRowData && selectedRowData.object_Type ,
 
                             monitorType: selectedRowData.length !== 0 ? monitor_type.split('/') : [],
 

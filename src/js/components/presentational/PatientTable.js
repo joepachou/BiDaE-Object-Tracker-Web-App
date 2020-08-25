@@ -177,7 +177,10 @@ class PatientTable extends React.Component{
                         id: item.area_id
                     }
                     item.monitor_type = transferMonitorTypeToString(item);
-
+                    item.object_type = {
+                        ...config.GENDER_OPTIONS[item.object_type],
+                        label: locale.texts[config.GENDER_OPTIONS[item.object_type].value.toUpperCase()]
+                    }
                     item.isBind = item.mac_address ? 1 : 0;
                     item.mac_address = item.mac_address ? item.mac_address : locale.texts.NON_BINDING
 
