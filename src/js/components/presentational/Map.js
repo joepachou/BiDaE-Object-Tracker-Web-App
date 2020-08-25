@@ -572,9 +572,9 @@ class Map extends React.Component {
                 })
             })
 
-            marker.on('click', () => {
+            marker.on('click', async () => {
                 let objectList = this.collectObjectsByPosition(proccessedTrackingData, item.currentPosition);
-                this.props.getSearchKey({
+                await this.props.getSearchKey({
                     type: PIN_SELETION,
                     value: objectList.map(item => item.mac_address)
                 })
