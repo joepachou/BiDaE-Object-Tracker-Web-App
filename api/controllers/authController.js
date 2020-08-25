@@ -157,9 +157,6 @@ module.exports = {
                             roles, 
                         } = res.rows[0] 
 
-
-
-                        console.log(res.rows[0])
                         /** authenticate if user is care provider */
                         if (!authenticatedRoles || roles.filter(role => authenticatedRoles.includes(role)).length !== 0) {
     
