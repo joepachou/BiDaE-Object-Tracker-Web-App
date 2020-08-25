@@ -131,6 +131,7 @@ class MapContainer extends React.Component {
             pinColorArray,
             searchKey,
             getSearchKey,
+            searchResultListRef
         } = this.props;
 
         let propsGroup = {
@@ -151,7 +152,8 @@ class MapContainer extends React.Component {
             searchObjectArray,
             pinColorArray,
             searchKey,
-            getSearchKey
+            getSearchKey,
+            searchResultListRef
 
         }
         return(

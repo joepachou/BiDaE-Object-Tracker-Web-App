@@ -130,7 +130,7 @@ class Map extends React.Component {
         return true
 
     }
-
+ 
     /** Set the search map configuration establishing in config.js  */
     initMap = () => {
 
@@ -578,6 +578,7 @@ class Map extends React.Component {
                     type: PIN_SELETION,
                     value: objectList.map(item => item.mac_address)
                 })
+                this.props.searchResultListRef.current.handleClick();
             })
             
         })

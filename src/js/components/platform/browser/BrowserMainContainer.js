@@ -74,6 +74,8 @@ const BrowserMainContainer = ({
 
     let auth = React.useContext(AuthenticationContext)
 
+    let searchResultListRef = React.useRef(null)
+
     const style = {
 
         searchResultDiv: {
@@ -91,7 +93,6 @@ const BrowserMainContainer = ({
             maxHeight: '28vh'
         },
     }
-
     return (
         <div 
             id="page-wrap" 
@@ -125,6 +126,7 @@ const BrowserMainContainer = ({
                         currentAreaId={currentAreaId}
                         searchObjectArray={searchObjectArray}
                         pinColorArray={pinColorArray} 
+                        searchResultListRef={searchResultListRef}
                     />
                 </Col>
 
@@ -160,6 +162,7 @@ const BrowserMainContainer = ({
                             searchObjectArray={searchObjectArray}
                             pinColorArray={pinColorArray}
                             showFoundResult={showFoundResult}
+                            ref={searchResultListRef}
                         />
                     </div>
                 </Col>

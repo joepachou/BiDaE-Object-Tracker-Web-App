@@ -74,7 +74,8 @@ export default class BrowserMapContainer extends React.Component {
             pinColorArray,
             searchKey,
             handleClick,
-            getSearchKey
+            getSearchKey,
+            searchResultListRef
         } = this.props;
 
         let [{areaId}] = stateReducer
@@ -130,6 +131,7 @@ export default class BrowserMapContainer extends React.Component {
                         pinColorArray={pinColorArray}
                         searchKey={searchKey}
                         getSearchKey={getSearchKey}
+                        searchResultListRef={searchResultListRef}
                     />
                 </div>
                 <div>

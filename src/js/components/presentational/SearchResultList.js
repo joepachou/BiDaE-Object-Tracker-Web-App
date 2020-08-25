@@ -321,6 +321,14 @@ class SearchResultList extends React.Component {
         })
     }
 
+    handleClick = () => {
+        this.setState({
+            showEditObjectForm: true,
+            selectedObjectData: this.props.searchResult,
+            showAddDevice: true,
+        })
+    }
+
     render() {
         const { locale } = this.context;
         const { 
