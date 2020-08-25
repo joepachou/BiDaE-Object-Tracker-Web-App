@@ -51,6 +51,7 @@ const rules = {
             "route:bigScreen",
             "route:trackingHistory",
             "route:report",
+
             "user:mydevice",
             "user:mypatient",
             "user:shiftChange",
@@ -83,8 +84,6 @@ const rules = {
             "route:systemSetting",
             "route:contactTree",
             "route:setting",
-            "route:lbeacon",
-            "route:gateway",
             "route:BOTAdmin",
 
             "user:mydevice",

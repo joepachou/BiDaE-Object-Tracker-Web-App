@@ -6,7 +6,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        index.js
+        sw.js
 
     File Description:
         BOT UI component
@@ -32,34 +32,30 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
+import { precacheAndRoute } from 'workbox-precaching';
+import { registerRoute } from 'workbox-routing';
+import { CacheFirst } from 'workbox-strategies';
 
-/** React Library */
-import React from 'react';
-import ReactDOM from 'react-dom';
+precacheAndRoute(self.__WB_MANIFEST);
+registerRoute (
+    ({request}) => request.destination === 'image',
+    new CacheFirst({
+        cacheName: 'images'
+    }),
+);
 
-/** IE 11 */
-import 'react-app-polyfill/ie11';
-
-// /** IE 10 */
-// import 'react-app-polyfill/ie10';
-
-/** IE 9 */
-import 'react-app-polyfill/ie9';
-import 'react-app-polyfill/stable';
-
-/** Import Custom CSS */
-import './js/importSrc.js';
-
-/** Container Component */
-import App from './App'
-import * as serviceWorker from './js/serviceWorker/serviceWorker';
-
-const rootElement = document.getElementById('root');
-ReactDOM.render(<App />, rootElement);
-
-serviceWorker.register()
+registerRoute (
+    ({request}) => request.destination === 'style',
+    new CacheFirst({
+        cacheName: 'style'
+    }),
+);
 
 
-
-
+registerRoute (
+    ({request}) => request.destination === 'script',
+    new CacheFirst({
+        cacheName: 'script'
+    }),
+);
 

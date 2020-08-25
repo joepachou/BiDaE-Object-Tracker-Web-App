@@ -49,6 +49,7 @@ const compression = require('compression');
 const dataRoutes = require('./api/routes/dataRoutes');
 const authRoutes = require('./api/routes/dataRoutes/authRoutes');
 const UIRoutes = require('./api/routes/UIRoutes');
+const UtilRoutes = require('./api/routes/UtilRoutes');
 const APIRoutes = require('./web_server/routes/APIRoutes');
 const {
     shouldCompress
@@ -65,24 +66,16 @@ app.use((req, res, next) => {
     next();
 });
 
+/** Compress asset if the browser supports gzip encoding  */
 app.use(compression({
     filter: shouldCompress
 }))
 
-
-/** Replace with br file if the browser support br encoding */
-app.get(/\.(js)$/, (req, res, next) => {
-    if (req.header('Accept-Encoding').includes('br')) {
-        req.url = req.url + '.br';
-        res.set('Content-Encoding', 'br');
-    } 
-    next();
-});   
-
 app.use(express.static(path.join(__dirname,'dist')));
 
-
 UIRoutes(app);
+
+UtilRoutes(app);
 
 authRoutes(app);
 

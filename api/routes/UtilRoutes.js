@@ -6,7 +6,7 @@
         BiDae Object Tracker (BOT)
 
     File Name:
-        index.js
+        UtilRoutes.js
 
     File Description:
         BOT UI component
@@ -32,34 +32,21 @@
         Joe Chou, jjoe100892@gmail.com
 */
 
+module.exports = app => {
 
-/** React Library */
-import React from 'react';
-import ReactDOM from 'react-dom';
-
-/** IE 11 */
-import 'react-app-polyfill/ie11';
-
-// /** IE 10 */
-// import 'react-app-polyfill/ie10';
-
-/** IE 9 */
-import 'react-app-polyfill/ie9';
-import 'react-app-polyfill/stable';
-
-/** Import Custom CSS */
-import './js/importSrc.js';
-
-/** Container Component */
-import App from './App'
-import * as serviceWorker from './js/serviceWorker/serviceWorker';
-
-const rootElement = document.getElementById('root');
-ReactDOM.render(<App />, rootElement);
-
-serviceWorker.register()
+    /** Replace with br file if the browser support br encoding */
+    app.get(/\.(js)$/, (req, res, next) => {
+        if (req.header('Accept-Encoding').includes('br')) {
+            req.url = req.url + '.br';
+            res.set('Content-Encoding', 'br');
+        } 
+        next();
+    });   
 
 
+    /** Response source of service worker */
+    app.get('/sw.js', (req, res, next) =>{
+        res.sendFile(path.join(__dirname, '..', '..', 'dist', 'sw.js'));
+    })
 
-
-
+}
