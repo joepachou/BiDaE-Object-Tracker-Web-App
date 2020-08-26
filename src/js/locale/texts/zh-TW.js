@@ -427,6 +427,8 @@ const tw = {
     BROKEN: "報修",
     TRANSFERRED: "轉移",
     RESERVE: "預約",
+    RETURNED: "歸還",
+    TRACE: "追蹤",
 
     /** User Setting */
     USER_SETTING: "帳戶設定",

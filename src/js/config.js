@@ -143,15 +143,6 @@ const config = {
 
     getGatewayDataIntervalTime: process.env.GET_GATEWAY_DATA_INTERVAL_TIME_IN_MILLI_SEC || 3600000,
 
-    objectStatus: {
-        PERIMETER: "perimeter",
-        FENCE: "fence",
-        NORMAL: "normal",
-        BROKEN: "broken",
-        RESERVE: "reserve",
-        TRANSFERRED: "transferred",   
-    },
-
     FOLDER_PATH: {
 
         trackingRecord: `tracking_record`

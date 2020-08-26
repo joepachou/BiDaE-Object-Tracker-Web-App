@@ -37,8 +37,8 @@ import config from '../config';
 import React from 'react';
 import AccessControl from '../components/authentication/AccessControl';
 import {
-    NORMAL,
-    RESERVE
+    RESERVE,
+    RETURNED,
 } from '../config/wordMap';
 import { isEqual } from 'lodash';
 
@@ -59,7 +59,7 @@ export const getDescription = (item, locale) => {
                         ${getStatus(item, locale)}
 
                         ${item.currentPosition  
-                            ? isEqual(item.status, NORMAL) 
+                            ? isEqual(item.status, RETURNED) 
                                 ? `${item.residence_time} `
                                 : ''
                             : ''
@@ -112,7 +112,7 @@ export const getSubDescription = (item, locale) => {
         case locale.supportedLocale.ms.abbr:
             return (
                 item.currentPosition  
-                    ? isEqual(item.statue, NORMAL)
+                    ? isEqual(item.statue, RETURNED)
                         ? `${locale.texts.WAS} ${locale.texts.NEAR} ${item.location_description} ${item.residence_time}`
                         : ''
                     : `${locale.texts.  NON_BINDING}`
@@ -121,7 +121,7 @@ export const getSubDescription = (item, locale) => {
         case locale.supportedLocale.cn.abbr:
             return (
                 item.currentPosition  
-                    ? item.status == NORMAL
+                    ? item.status == RETURNED
                         ? `${item.residence_time}${locale.texts.WAS}${locale.texts.NEAR}${item.location_description}`
                         : ''
                     : `${locale.texts.  NON_BINDING}`
@@ -137,7 +137,7 @@ export const getBatteryVolumn = (item, locale, config) => {
         case locale.supportedLocale.ms.abbr:
             return (
                 item.currentPosition  
-                    ? isEqual(item.status, NORMAL) 
+                    ? isEqual(item.status, RETURNED) 
                         ? `, ${locale.texts.WAS} ${locale.texts.NEAR} ${item.location_description} ${item.residence_time}`
                         : ''
                     : `, ${locale.texts.NOT_AVAILABLE}`
@@ -146,7 +146,7 @@ export const getBatteryVolumn = (item, locale, config) => {
         case locale.supportedLocale.cn.abbr:
             return (
                 item.currentPosition  
-                    ? isEqual(item.status, NORMAL) 
+                    ? isEqual(item.status, RETURNED) 
                         ? `, ${item.residence_time}${locale.texts.WAS}${locale.texts.NEAR}${item.location_description}`
                         : ''
                     : `, ${locale.texts.NOT_AVAILABLE}`
@@ -194,7 +194,7 @@ export const getPhysicianName = (item, locale) => {
 
 export const getStatus = (item, locale) => {
     return `
-        ${isEqual(item.status, NORMAL) 
+        ${isEqual(item.status, RETURNED) 
             ? ''  
             : `${locale.texts[item.status.toUpperCase()]}`
         }

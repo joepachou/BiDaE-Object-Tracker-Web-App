@@ -35,7 +35,10 @@
 import siteConfig from '../../../site_module/siteConfig';
 import viewConfig from '../config/viewConfig';
 import { monitorTypeChecker } from '../helper/dataTransfer';
-import { map } from 'lodash';
+import {
+    RETURNED,
+    RESERVE,
+} from '../config/wordMap';
 
 /** Map configuration.
  *  Refer leaflet.js for more optional setting https://leafletjs.com/reference-1.5.0.html
@@ -344,7 +347,7 @@ const mapConfig = {
             if (monitorTypeChecker(item.monitor_type, 16)) return mapConfig.iconColor.blackBed
             else if (hasColorPanel) return item.pinColor
             else if (item.searched) return mapConfig.iconColor.searched
-            else if (item.status !== mapConfig.objectStatus.NORMAL) return mapConfig.iconColor.unNormal
+            else if (item.status !== RETURNED) return mapConfig.iconColor.unNormal
             else return mapConfig.iconColor.normal
         } 
         else if (item.object_type == 1) return mapConfig.iconColor.male
@@ -376,15 +379,6 @@ const mapConfig = {
 
     /** Radius of circle for collecting object based on the selection pin */
     PIN_SELECTION_RADIUS: 1000,
-
-    objectStatus: {
-        PERIMETER: "perimeter",
-        FENCE: "fence",
-        NORMAL: "normal",
-        BROKEN: "broken",
-        RESERVE: "reserve",
-        TRANSFERRED: "transferred",   
-    },
 
     popupOptions: {
         minWidth: "500",
@@ -419,20 +413,20 @@ const mapConfig = {
                                             ?   `
                                                 ${item.type},
                                                 ${locale.texts.ASSET_CONTROL_NUMBER}: ${viewConfig.ACNOmitsymbol}${item.asset_control_number.slice(-4)},
-                                                ${item.status !== "normal" 
+                                                ${item.status != RETURNED 
                                                     ? `${locale.texts[item.status.toUpperCase()]}`
                                                     : `${item.residence_time}`    
                                                 }
-                                                ${item.status == "reserve" 
+                                                ${item.status == RESERVE 
                                                     ? `~ ${item.reserved_timestamp_final}`
                                                     : ''
                                                 }
-                                                ${item.status == "reserve" 
+                                                ${item.status == RESERVE 
                                                 ? ` ${locale.texts.IS_RESERVED_FOR}`
                                                 : ''
                                             } 
 
-                                                ${item.status == "reserve" 
+                                                ${item.status == RESERVE 
                                                 ? ` ${item.reserved_user_name}`
                                                 : ''
                                             } 

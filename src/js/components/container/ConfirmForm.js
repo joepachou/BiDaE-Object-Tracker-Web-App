@@ -44,7 +44,8 @@ import {
 import { AppContext } from '../../context/AppContext';
 import FormikFormGroup from '../presentational/FormikFormGroup';
 import {
-    RESERVE
+    RESERVE,
+    TRANSFERRED
 } from '../../config/wordMap';
   
 class ConfirmForm extends React.Component {
@@ -97,8 +98,8 @@ class ConfirmForm extends React.Component {
         const { locale } = this.context
 
         let hasSelectedObjectData = selectedObjectData[0] ? true : false;
-        let isTransferObject = hasSelectedObjectData && selectedObjectData[0].status === config.objectStatus.TRANSFERRED ? true : false;
-        let isReservedObject = hasSelectedObjectData && selectedObjectData[0].status === config.objectStatus.RESERVE ? true : false;
+        let isTransferObject = hasSelectedObjectData && selectedObjectData[0].status === TRANSFERRED ? true : false;
+        let isReservedObject = hasSelectedObjectData && selectedObjectData[0].status === RESERVE ? true : false;
 
         return (
             <Modal 

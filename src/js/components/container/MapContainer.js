@@ -68,7 +68,7 @@ class MapContainer extends React.Component {
 
         switch(name) {
             case CLEAR_SEARCH_RESULT:
-                this.props.handleClick(e);
+                this.props.handleClick(e); 
                 break;
             case 'save':
                 this.setState({ 

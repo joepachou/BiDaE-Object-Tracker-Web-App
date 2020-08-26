@@ -56,5 +56,11 @@ module.exports = {
 
     TRANSFERRED: "transferred",
 
+    RETURNED: "returned",
+
+    TRACE: "trace",
+    
+    BROKEN: "broken",
+    
     ASSET_CONTROL_NUMBER: "asset control number"
 }

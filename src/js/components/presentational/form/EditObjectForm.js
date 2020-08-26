@@ -57,7 +57,11 @@ import FormikFormGroup from '../FormikFormGroup';
 import {
     DISASSOCIATE,
     NORMAL,
-    TRANSFERRED
+    RETURNED,
+    RESERVE,
+    BROKEN,
+    TRANSFERRED,
+    TRACE
 } from '../../../config/wordMap';
 import {
     isEmpty,
@@ -383,31 +387,35 @@ class EditObjectForm extends React.Component {
                                             touched={touched.status}
                                         > 
                                             <div className="d-flex justify-content-between form-group my-1">
-                                                <Field  
-                                                    component={RadioButton}
-                                                    name="status"
-                                                    id={config.objectStatus.NORMAL}
-                                                    label={locale.texts.NORMAL}
-                                                />
-        
                                                 <Field
                                                     component={RadioButton}
                                                     name="status"
-                                                    id={config.objectStatus.BROKEN}
+                                                    id={BROKEN}
                                                     label={locale.texts.BROKEN}
                                                 />
                                                 <Field
                                                     component={RadioButton}
                                                     name="status"
-                                                    id={config.objectStatus.RESERVE}
-                                                    label={locale.texts.RESERVE}
+                                                    id={TRANSFERRED}
+                                                    label={locale.texts.TRANSFERRED}
                                                 />
-                                                
+                                                <Field  
+                                                    component={RadioButton}
+                                                    name="status"
+                                                    id={RETURNED}
+                                                    label={locale.texts.RETURNED}
+                                                />
                                                 <Field
                                                     component={RadioButton}
                                                     name="status"
-                                                    id={config.objectStatus.TRANSFERRED}
-                                                    label={locale.texts.TRANSFERRED}
+                                                    id={RESERVE}
+                                                    label={locale.texts.RESERVE}
+                                                />
+                                                <Field  
+                                                    component={RadioButton}
+                                                    name="status"
+                                                    id={TRACE}
+                                                    label={locale.texts.TRACE}
                                                 />
                                             </div>
                                         </RadioButtonGroup>  
@@ -429,7 +437,7 @@ class EditObjectForm extends React.Component {
                                             onChange={value => setFieldValue("transferred_location", value)}
                                             options={this.state.transferredLocationOptions}
                                             isSearchable={false}
-                                            isDisabled={values.status !== config.objectStatus.TRANSFERRED}
+                                            isDisabled={values.status !== TRANSFERRED}
                                             styles={styleConfig.reactSelect}
                                             placeholder={locale.texts.SELECT_LOCATION}
                                             components={{

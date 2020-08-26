@@ -430,6 +430,8 @@ const en =  {
     BROKEN: "broken",
     TRANSFERRED: "transferred",
     RESERVE: "reserve",
+    RETURNED: "return",
+    TRACE: "trace",
 
     /** User Setting */
     USER_SETTING: "User Setting",

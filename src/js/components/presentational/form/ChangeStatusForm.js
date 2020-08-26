@@ -42,7 +42,6 @@ import {
     ButtonToolbar 
 } from 'react-bootstrap'
 import Select from 'react-select';
-import config from '../../../config';
 import { 
     Formik, 
     Field, 
@@ -59,6 +58,13 @@ import styleConfig from '../../../config/styleConfig'
 import FormikFormGroup from '../FormikFormGroup'
 import AccessControl from '../../authentication/AccessControl';
 import apiHelper from '../../../helper/apiHelper';
+import {
+    RETURNED,
+    RESERVE,
+    BROKEN,
+    TRANSFERRED,
+    TRACE
+} from '../../../config/wordMap';
 
 export default class ChangeStatusForm extends React.Component {
 
@@ -137,7 +143,7 @@ export default class ChangeStatusForm extends React.Component {
             type: selectedObjectData.length != 0 ? selectedObjectData[0].type : '',
             asset_control_number: selectedObjectData.length != 0 ? selectedObjectData[0].asset_control_number : '',
             status: selectedObjectData.length != 0 ? selectedObjectData[0].status : '',
-            transferred_location: selectedObjectData.length != 0 && selectedObjectData[0].status == config.objectStatus.TRANSFERRED
+            transferred_location: selectedObjectData.length != 0 && selectedObjectData[0].status == TRANSFERRED
                 ? {
                     id: selectedObjectData[0].transferred_location.id,
                     value: selectedObjectData[0].transferred_location.value,
@@ -184,7 +190,7 @@ export default class ChangeStatusForm extends React.Component {
 
                                 transferred_location: Yup.string()
                                     .when('status', {
-                                        is: config.objectStatus.TRANSFERRED,
+                                        is: TRANSFERRED,
                                         then: Yup.string().required(locale.texts.LOCATION_IS_REQUIRED)
                                     })
                         })}
@@ -292,32 +298,37 @@ export default class ChangeStatusForm extends React.Component {
                                             value={values.status}
                                         >
                                             <div className="d-flex justify-content-between form-group my-1">
+                                                <Field
+                                                    component={RadioButton}
+                                                    name="status"
+                                                    id={BROKEN}
+                                                    label={locale.texts.BROKEN}
+                                                />
+                                                 <Field
+                                                    component={RadioButton}
+                                                    name="status"
+                                                    id={TRANSFERRED}
+                                                    label={locale.texts.TRANSFERRED}
+                                                />
+                                                <Field
+                                                    component={RadioButton}
+                                                    name="status"
+                                                    id={RESERVE}
+                                                    label={locale.texts.RESERVE}
+                                                />
                                                 <Field  
                                                     component={RadioButton}
                                                     name="status"
-                                                    id={config.objectStatus.NORMAL}
-                                                    label={locale.texts.NORMAL}
+                                                    id={RETURNED}
+                                                    label={locale.texts.RETURNED}
                                                 />
-    
-                                                <Field
+                                                <Field  
                                                     component={RadioButton}
                                                     name="status"
-                                                    id={config.objectStatus.BROKEN}
-                                                    label={locale.texts.BROKEN}
-                                                />
-                                                <Field
-                                                    component={RadioButton}
-                                                    name="status"
-                                                    id={config.objectStatus.RESERVE}
-                                                    label={locale.texts.RESERVE}
+                                                    id={TRACE}
+                                                    label={locale.texts.TRACE}
                                                 />
                                                 
-                                                <Field
-                                                    component={RadioButton}
-                                                    name="status"
-                                                    id={config.objectStatus.TRANSFERRED}
-                                                    label={locale.texts.TRANSFERRED}
-                                                />
                                             </div>
                                         </RadioButtonGroup>   
                                     )}
