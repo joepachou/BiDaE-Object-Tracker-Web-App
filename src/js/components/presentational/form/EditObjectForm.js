@@ -43,6 +43,7 @@
 import React from 'react';
 import { Modal, Button, Row, Col } from 'react-bootstrap';
 import Select from 'react-select';
+import Creatable, { makeCreatableSelect } from 'react-select/creatable';
 import config from '../../../config';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
@@ -203,29 +204,26 @@ class EditObjectForm extends React.Component {
                                         }
                                     ),
 
-                                mac_address: Yup.string()
-                                    // .required(locale.texts.MAC_ADDRESS_IS_REQUIRED)
-                                    .nullable(),
+                                mac_address: Yup.object()
+                                    .nullable()
                                     /** check if there are duplicated mac address in object table */
-                                    // .test(
-                                    //     'mac_address',
-                                    //     locale.texts.INCORRECT_MAC_ADDRESS_FORMAT,
-                                    //     value => {
-                                    //         if (value == undefined) return true;
-                                    //         if (value == null || isEmpty(value)) return true;
-                                    //         if (this.props.selectedRowData.length == 0) return true;
-                                    //         else return macaddrValidation(value)
-                                    //     }
-                                    // )
+                                    .test(
+                                        'mac_address',
+                                        locale.texts.INCORRECT_MAC_ADDRESS_FORMAT,
+                                        obj => {
+                                            if (obj == undefined) return true;
+                                            if (obj == null || isEmpty(obj)) return true;
+                                            if (selectedRowData.length == 0) return true;
+                                            else return macaddrValidation(obj.label)
+                                        }
+                                    ),
                                     // .test(
                                     //     'mac_address',
                                     //     locale.texts.THE_MAC_ADDRESS_IS_ALREADY_USED ,
-                                    //     value => {
-                                    //         console.log(value.match(/.{1,2}/g).join(':'))
-                                    //         console.log(this.props.idleMacaddrSet.includes(value.match(/.{1,2}/g).join(':')))
-                                    //         if (value == undefined) return true;
-                                    //         if (value == null || isEmpty(value)) return true;
-                                    //         if (this.props.idleMacaddrSet.includes(value.match(/.{1,2}/g).join(':'))) return true;
+                                    //     obj => {
+                                    //         if (obj == undefined) return true;
+                                    //         if (obj == null || isEmpty(obj)) return true;
+                                    //         if (this.props.idleMacaddrSet.includes(obj.value.match(/.{1,2}/g).join(':'))) return true;
                                     //     }
                                     // ),
 
@@ -337,11 +335,14 @@ class EditObjectForm extends React.Component {
                                             error={errors.mac_address}
                                             touched={touched.mac_address}
                                             component={() => (
-                                                <Select
+                                                <Creatable
                                                     name="mac_address"
                                                     value = {values.mac_address}
                                                     className="my-1"
-                                                    onChange={value => setFieldValue("mac_address", value)}
+                                                    onChange={obj => {
+                                                        obj.label = obj.value.match(/.{1,2}/g).join(':')
+                                                        setFieldValue("mac_address", obj)
+                                                    }}
                                                     options={this.props.macOptions}
                                                     isSearchable={true}
                                                     isDisabled={selectedRowData.isBind}

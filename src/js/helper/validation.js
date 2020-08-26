@@ -41,6 +41,8 @@ export const emailValidation = email => {
 /** Mac address format validation */
 export const macaddrValidation = macaddr => {
     let req = new RegExp("^[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}:?[0-9a-fA-F]{2}$");
+    console.log(222)
+    console.log(macaddr)
     return macaddr.match(req);
 }
 

@@ -38,7 +38,7 @@ import { Modal, Button, Row, Col } from 'react-bootstrap';
 import Select from 'react-select';
 import config from '../../../config';
 import { AppContext } from '../../../context/AppContext';
-import axios from 'axios';
+import Creatable, { makeCreatableSelect } from 'react-select/creatable';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
 import CheckboxGroup from '../../container/CheckboxGroup'
@@ -50,6 +50,7 @@ import {
 } from '../../../config/wordMap';
 import {
     isEmpty,
+    macaddrValidation
 } from '../../../helper/validation';
 
 let monitorTypeMap = {};
@@ -198,7 +199,20 @@ class EditPatientForm extends React.Component {
                                     ),
 
 
-                                mac_address: Yup.string().nullable(),
+                                mac_address: Yup.object()
+                                .nullable()
+                                /** check if there are duplicated mac address in object table */
+                                .test(
+                                    'mac_address',
+                                    locale.texts.INCORRECT_MAC_ADDRESS_FORMAT,
+                                    obj => {
+                                        console.log(obj)
+                                        if (obj == undefined) return true;
+                                        if (obj == null || isEmpty(obj)) return true;
+                                        if (selectedRowData.length == 0) return true;
+                                        else return macaddrValidation(obj.label)
+                                    }
+                                ),
                                
                         })}
 
@@ -287,14 +301,17 @@ class EditPatientForm extends React.Component {
                                         <FormikFormGroup 
                                             name="mac_address"
                                             label={locale.texts.MAC_ADDRESS}
-                                            error={errors.transferred_location}
-                                            touched={touched.transferred_location}
+                                            error={errors.mac_address}
+                                            touched={touched.mac_address}
                                             component={() => (
-                                                <Select
-                                                name="mac_address"
+                                                <Creatable
+                                                    name="mac_address"
                                                     value = {values.mac_address}
                                                     className="my-1"
-                                                    onChange={value => setFieldValue("mac_address", value)}
+                                                    onChange={obj => {
+                                                        obj.label = obj.value.match(/.{1,2}/g).join(':')
+                                                        setFieldValue("mac_address", obj)
+                                                    }}
                                                     options={this.props.macOptions}
                                                     isSearchable={true}
                                                     isDisabled={selectedRowData.isBind}
