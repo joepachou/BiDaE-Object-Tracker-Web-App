@@ -128,6 +128,7 @@ export default class BrowserMapContainer extends React.Component {
                         searchKey={searchKey}
                         getSearchKey={getSearchKey}
                         searchResultListRef={searchResultListRef}
+                        showedObjects={showedObjects}
                     />
                 </div>
                 <div>

@@ -466,7 +466,8 @@ class Map extends React.Component {
             searchObjectArray,
             pinColorArray,
             searchKey,
-            proccessedTrackingData
+            proccessedTrackingData,
+            showedObjects
         } = this.props
 
         let [{assignedObject}] = stateReducer;
@@ -496,7 +497,11 @@ class Map extends React.Component {
             /** Set the Marker's popup 
              * popupContent (objectName, objectImg, objectImgWidth)
              * More Style sheet include in Map.css */
-            let popupContent = this.props.mapConfig.getPopupContent([item], this.collectObjectsByPosition(proccessedTrackingData, item.currentPosition), locale)
+            let popupContent = this.props.mapConfig.getPopupContent(
+                [item], 
+                this.collectObjectsByPosition(proccessedTrackingData, item.currentPosition, showedObjects), 
+                locale
+            )
             
             let pinColorIndex = searchObjectArray.indexOf(item.keyword)
 
@@ -558,7 +563,6 @@ class Map extends React.Component {
         
             /** Set the marker's event. */
             marker.on('mouseover', () => {
-                this.pop
                 marker.openPopup()
                 this.setState({
                     shouldUpdateTrackingData: false
@@ -573,7 +577,11 @@ class Map extends React.Component {
             })
 
             marker.on('click', async () => {
-                let objectList = this.collectObjectsByPosition(proccessedTrackingData, item.currentPosition);
+                let objectList = this.collectObjectsByPosition(
+                    proccessedTrackingData, 
+                    item.currentPosition, 
+                    showedObjects.filter(item => item == 0)
+                );
                 await this.props.getSearchKey({
                     type: PIN_SELETION,
                     value: objectList.map(item => item.mac_address)
@@ -620,12 +628,12 @@ class Map extends React.Component {
         return objectList 
     }
 
-    collectObjectsByPosition = (collection, position) => {
+    collectObjectsByPosition = (collection, position, showedObjects) => {
         let objectList = collection
             .filter(item => {
                 if (!item.found) return false; 
                 if (item.currentPosition == null) return false;
-                if (item.object_type != 0) return false;
+                if (!showedObjects.includes(parseInt(item.object_type))) return false;
 
                 let yDiff = Math.abs(item.currentPosition[0] - position[0]);
                 let xDiff = Math.abs(item.currentPosition[1] - position[1]);
