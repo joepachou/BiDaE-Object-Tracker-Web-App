@@ -38,6 +38,7 @@ const CompressionPlugin = require('compression-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const { InjectManifest } = require('workbox-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const zlib = require('zlib');
 const webpack = require('webpack');
 const dotenv = require('dotenv');
@@ -170,10 +171,18 @@ module.exports = {
         }),
 
         new InjectManifest({
-            swSrc: path.join(__dirname, 'src', 'js','serviceWorker', 'sw.js'),
+            swSrc: path.join(__dirname, 'src', 'js', 'serviceWorker', 'sw.js'),
             swDest: path.join(__dirname, 'dist', 'sw.js'),
 
-        })
+        }),
+
+        new CopyWebpackPlugin({
+            patterns: [
+                { from: 'src/img/logo', to: 'imgs/logo' },
+                'src/manifest.webmanifest',
+            ],
+            
+        }),
         
     ],
 
