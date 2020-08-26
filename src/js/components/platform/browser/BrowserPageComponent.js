@@ -43,6 +43,7 @@ import {
     BOTSideNav
 } from '../../BOTComponent/styleComponent';
 import LocaleContext from '../../../context/LocaleContext';
+import AccessControl from '../../authentication/AccessControl';
 
 const BrowserPageComponent = ({
     containerModule,
@@ -79,13 +80,18 @@ const BrowserPageComponent = ({
                 <ListGroup>
                     {tabList.map((tab, index) => {
                         return (
-                            <BOTSideNav
-                                key={index}
-                                eventKey={tab.name.replace(/ /g, '_')}
-                                action
+                            <AccessControl
+                                permission={tab.permission}
+                                renderNoAccess={() => null}
                             >
-                                {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
-                            </BOTSideNav>
+                                <BOTSideNav
+                                    key={index}
+                                    eventKey={tab.name.replace(/ /g, '_')}
+                                    action
+                                >
+                                    {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
+                                </BOTSideNav>
+                            </AccessControl>
                         )
                     })}  
                 </ListGroup>  

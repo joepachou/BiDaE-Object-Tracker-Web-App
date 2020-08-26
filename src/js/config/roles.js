@@ -46,7 +46,6 @@ const rules = {
             "route:devicesManagement",
             "route:patientManagement",
             "route:objectManagement",
-            "route:BOTAdmin",
             "route:userProfile",
             "route:bigScreen",
             "route:trackingHistory",
