@@ -126,13 +126,13 @@ const addPersona = (formOption) => {
 }
 
 const editPersona = (formOption) => {
-	const text = `
+	const text = `  
 		Update object_table 
 		SET name = $2,
 			mac_address = $3,
 			area_id = $4,
 			monitor_type = $5,
-			object_type = 1
+			object_type = $6
 		WHERE asset_control_number = $1
 	`;
 		
@@ -141,7 +141,8 @@ const editPersona = (formOption) => {
 		formOption.name,
 		formOption.mac_address,
 		formOption.area_id,
-		formOption.monitor_type
+		formOption.monitor_type,
+		formOption.object_type
 	];
 
 	const query = {

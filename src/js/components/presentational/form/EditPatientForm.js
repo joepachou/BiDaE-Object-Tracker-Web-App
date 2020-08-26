@@ -116,7 +116,6 @@ class EditPatientForm extends React.Component {
         })
 
         return (
-            
             <Modal 
                 show={show} 
                 onHide={handleClose} 
@@ -144,9 +143,9 @@ class EditPatientForm extends React.Component {
                                 }
                                 : null,
 
-                            asset_control_number:asset_control_number|| '',
+                            asset_control_number: asset_control_number|| '',
 
-                            gender: selectedRowData && selectedRowData.object_Type ,
+                            gender: object_type || '',
 
                             monitorType: selectedRowData.length !== 0 ? monitor_type.split('/') : [],
 
@@ -228,10 +227,11 @@ class EditPatientForm extends React.Component {
                                 gender_id : values.gender.value,
                                 monitor_type, 
                                 room: values.room ? values.room.label : '',
-                                object_type: values.gender.value,
+                                object_type: values.gender.id,
                                 physicianIDNumber : values.physician  ? values.physician.value : this.props.physicianIDNumber,
                                 mac_address: isEmpty(values.mac_address) || values.mac_address == null ? null : values.mac_address.label,
-                            }                              
+                            }         
+
                             this.props.handleSubmit(postOption)
                         }}
 

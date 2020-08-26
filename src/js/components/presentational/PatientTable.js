@@ -131,15 +131,16 @@ class PatientTable extends React.Component{
             field.Header = this.context.locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
         }) 
 
-        this.state.data.map(item=>{
+        this.state.data.map(item => {
             item.area_name.label = locale.texts[item.area_name.value]
+            item.object_type.label = locale.texts[item.object_type.value.toUpperCase()]
             item.registered_timestamp = moment(item.registered_timestamp._i).locale(this.context.locale.abbr).format("lll")
             item.area_name.label == undefined ?   item.area_name.label = '*site module error*' : null 
         })
 
         this.state.filteredData.map(item=>{ 
             item.area_name.label = locale.texts[item.area_name.value]
-
+            item.object_type.label = locale.texts[item.object_type.value.toUpperCase()]
             item.registered_timestamp = moment(item.registered_timestamp._i).locale(this.context.locale.abbr).format("lll")
             item.area_name.label == undefined ?   item.area_name.label = '*site module error*' : null
         })
