@@ -6,4 +6,5 @@ site_module/
 default_folder/
 dist/*
 .npm_cache
+*.DS_Store
 
