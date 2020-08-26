@@ -85,10 +85,7 @@ export default class BrowserMapContainer extends React.Component {
                 border: "solid 2px rgba(227, 222, 222, 0.619)",
                 padding: "5px",
             },
-            mapBlock: {
-                border: "solid 2px rgba(227, 222, 222, 0.619)",
-                padding: "5px",
-            },
+           
             MapAndQrcode: {
                 height: '42vh'
             },
@@ -108,8 +105,7 @@ export default class BrowserMapContainer extends React.Component {
         return (
             <div id="MapContainer" style={style.MapContainer} className="overflow-hidden">
                 <div 
-                    className='p-1'
-                    style={style.mapBlock}
+                    className='p-1 border-grey'
                 >
                     <Map
                         pathMacAddress={this.props.pathMacAddress} 

@@ -681,8 +681,9 @@ class MainContainer extends React.Component{
         })
     }
     
-    setShowedObjects = (value) => {
-        let showedObjects = value.split(',').reduce((showedObjects, number) => {   
+    setShowedObjects = value => {
+        let showedObjects = value.split(',').reduce((showedObjects, number) => {  
+
             number = parseInt(number)                
             if (!this.state.searchedObjectType.includes(number)) return showedObjects
             else if (this.state.showedObjects.includes(number)) {
@@ -693,7 +694,7 @@ class MainContainer extends React.Component{
             }
             return showedObjects
 
-        }, JSONClone(this.state.showedObjects))
+        }, Array.from(this.state.showedObjects))
         this.setState({
             showedObjects
         })
@@ -746,6 +747,7 @@ class MainContainer extends React.Component{
         }
     }
 
+
     render(){
         const { 
             hasSearchKey,
@@ -770,7 +772,6 @@ class MainContainer extends React.Component{
             showFoundResult,
             keywords
         } = this.state;
-
 
         const {
             getSearchKey,
