@@ -71,7 +71,7 @@ export const getDescription = (item, locale, keywordType) => {
                         } 
                     `
                     :   `
-                        ${item.nickname ? getNickname(item, locale) : getType(item, locale)}
+                        ${getDeviceName(item, locale, keywordType)}
 
                         ${getACN(item, locale)}
                         

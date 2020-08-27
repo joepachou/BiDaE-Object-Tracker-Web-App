@@ -109,7 +109,8 @@ export const settingModule = {
         },
         {
             name: 'general settings',
-            component: (props) => <GeneralSettings />
+            component: (props) => <GeneralSettings />,
+            permission: "route:generalSettings",
         },
         {
             name: "lbeacon",

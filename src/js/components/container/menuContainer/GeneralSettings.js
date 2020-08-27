@@ -201,7 +201,7 @@ class GeneralSettings extends React.Component{
                     className="mb-"
                 >
                     <div 
-                        className='color-black mb-2'
+                        className='color-black mb-2 font-size-120-percent'
                     >
                         {locale.texts.EDIT_DEVICE_ALIAS}
                     </div>

@@ -523,7 +523,7 @@ const en =  {
     ROLE_LIST:"Role List",
     PERMISSION_LIST:"Permission List",
     ALIAS: "alias",
-    TYPE_ALIAS: "type_alias",
+    TYPE_ALIAS: "alias",
 
     /** message */
     ARE_YOU_SURE_TO_DELETE: "are you sure to delete ?",
