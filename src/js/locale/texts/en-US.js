@@ -431,9 +431,9 @@ const en =  {
     NORMAL: "normal",
     BROKEN: "broken",
     TRANSFERRED: "transferred",
-    RESERVE: "reserve",
-    RETURNED: "return",
-    TRACE: "trace",
+    RESERVE: "reserved",
+    RETURNED: "returned",
+    TRACE: "traced",
 
     /** User Setting */
     USER_SETTING: "User Setting",
