@@ -203,10 +203,6 @@ module.exports = {
                     test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
                     name: "reactVendor"
                 },
-                mdbreactVendor: {
-                    test: /[\\/]node_modules[\\/](mdbreact)[\\/]/,
-                    name: "mdbreacVendor"
-                },
                 leaflet: {
                     test: /[\\/]node_modules[\\/](leaflet)[\\/]/,
                     name: "leafletVendor"
