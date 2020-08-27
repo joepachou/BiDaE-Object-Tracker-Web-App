@@ -276,14 +276,12 @@ export const BOTAdminModule = {
             name: 'devices management',
             path: 'devicesManagement',
             href: '#DevicesManagement',
-            // component: (props) => <MyDeviceManager />
             component: (props) => <DeviceGroupManager />
         },
         {
             name: 'patient management',
             path: 'patientManagement',
             href: '#PatientManagement',
-            // component: (props) => <MyPatientManager />
             component: (props) => <PatientGroupManager />
         },
         {

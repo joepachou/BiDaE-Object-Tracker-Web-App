@@ -75,7 +75,7 @@ const BrowserPageComponent = ({
                 className="BOTsidenav"
             >
                 <div 
-                    className="font-size-120-percent font-weight-bold"
+                    className="font-size-120-percent font-weight-bold color-black"
                 >
                     {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
                 </div>

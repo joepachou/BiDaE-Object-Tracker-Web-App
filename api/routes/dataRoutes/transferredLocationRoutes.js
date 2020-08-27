@@ -46,4 +46,5 @@ module.exports = app => {
     app.route('/data/transferredLocation')
         .get(transferredLocationController.getAllTransferredLocation)
         .put(transferredLocationController.editTransferredLocation)
+        .post(transferredLocationController.editLocation)
 }

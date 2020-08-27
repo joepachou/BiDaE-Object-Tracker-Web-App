@@ -32,22 +32,23 @@
         Joe Chou, jjoe100892@gmail.com
 */
 import React from 'react';
-import { 
-    Button, 
-} from 'react-bootstrap';
 import { AppContext } from '../../context/AppContext';
-import config from '../../config';
-import { MDBBtn, MDBTable, MDBTableBody, MDBTableHead  } from 'mdbreact';
-import {
-    Row,
-    Col,
-} from "react-bootstrap"
 import { 
     TransferredLocationColumn
 } from '../../config/tables'
 import messageGenerator from '../../helper/messageGenerator';
 import apiHelper from '../../helper/apiHelper';
 import { JSONClone } from '../../helper/utilities';
+import ReactTable from 'react-table';
+import styleConfig from '../../config/styleConfig';
+import {
+    PrimaryButton
+} from '../BOTComponent/styleComponent';
+import EditBranchForm from '../presentational/form/EditBranchForm';
+import {
+    ADD, 
+    SAVE_SUCCESS
+} from '../../config/wordMap';
 
 class TranferredLocationManagement extends React.Component{
 
@@ -56,39 +57,57 @@ class TranferredLocationManagement extends React.Component{
     state = { 
         transferredLocationOptions: [],
         unFoldBranches: [], 
+        data: [],
+        columns: [],
+        branchOptions: [],
+        showForm: false,
     } 
     
     componentDidMount = () => {
-        this.getColumn()
         this.getTransferredLocation()
     }
    
-    getTransferredLocation = () => {
+    getTransferredLocation = (callback) => {
+        let {
+            locale
+        } = this.context;
+
         apiHelper.transferredLocationApiAgent.getAllTransferredLocation()
             .then(res => {
-                res.data.map(branch => {
-                    if(!branch.department){
-                        branch.department = []                       
-                    }
+
+                let columns = JSONClone(TransferredLocationColumn);
+                    
+                columns.map(field => {
+                    field.Header = locale.texts[field.Header.toUpperCase().replace(/ /g, '_')]
                 })
+
+                let branchOptions = [];
+
+                let data = res.data.reduce((locationsArr, obj) => {
+                    branchOptions.push({
+                        label: obj.name,
+                        value: obj.name,
+                    })
+
+                    obj.departments.map(item => {
+                        locationsArr.push({
+                            id: item.id,
+                            name: obj.name,
+                            department: item.value
+                        })
+                    })
+                    return locationsArr
+                }, [])
+     
                 this.setState({
-                    transferredLocationOptions: res.data
-                })
+                    data,
+                    columns,
+                    branchOptions,
+                    showForm: false
+                }, callback)
             }).catch(err => {
                 console.log(err)
             })           
-    }
-
-    getColumn = () => {
-        const { locale } = this.context
-        let column = JSONClone(TransferredLocationColumn);
-        column.map(item => {
-            item.headerStyle = {
-                textAlign: 'left',
-            }
-            item.label = locale.texts[item.field.toUpperCase().replace(/ /g, '_')]
-        })  
-        return column
     }
 
     generateDataRows = () => {
@@ -268,18 +287,83 @@ class TranferredLocationManagement extends React.Component{
         })
     }
 
-    render(){  
-        const { locale } = this.context
-        let dataRows = this.generateDataRows() 
-        let column = this.getColumn()  
-        return(
-            <Col lg={8}>
-                <MDBTable autoWidth={false}>
-                    <MDBTableHead columns={column} />
-                    <MDBTableBody rows={dataRows} color='#000000'/>
-                </MDBTable>
-           <Button variant="light" onClick={this.addBranch}>{locale.texts.ADD_BRANCH}</Button>
-            </Col> 
+    handleClick = (e) => {
+        let {
+            name
+        } = e.target
+
+        switch(name) {
+            case ADD: 
+                this.setState({
+                    showForm: true,
+                })
+        }
+    }
+
+    handleClose = () => {
+        this.setState({
+            showForm: false,
+        })
+    }
+    
+    handleSubmit = (values) => {
+        apiHelper.transferredLocationApiAgent.editLocation({
+            name: values.name.value,
+            departmentName: values.department
+        })
+        .then(res => {
+
+            let callback = () => {
+                messageGenerator.setSuccessMessage(SAVE_SUCCESS)
+            }
+            this.getTransferredLocation(callback)
+        })
+        .catch(err => {
+            console.log(`add location failed ${err}`)
+        })
+        
+    }
+
+    render() {  
+        const { 
+            locale 
+        } = this.context
+
+        const {
+            branchOptions,
+            data,
+            columns
+        } = this.state
+
+        return (
+            <div>
+                <div
+                    className="d-flex justify-content-end"
+                >
+                    <PrimaryButton
+                        onClick={this.handleClick}
+                        name={ADD}    
+                    >
+                        {locale.texts.ADD}
+                    </PrimaryButton>     
+                </div>
+                <hr/>        
+                    
+                <ReactTable 
+                    data={data} 
+                    columns={columns} 
+                    resizable={true}
+                    freezeWhenExpanded={false}
+                    {...styleConfig.reactTable}
+                />
+                <EditBranchForm
+                    show={this.state.showForm}
+                    handleClose={this.handleClose}
+                    handleSubmit={this.handleSubmit}
+                    title={locale.texts.CREATE_LOCATION}
+                    branchOptions={branchOptions}
+                />
+            </div>
         )
     }
 }

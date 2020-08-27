@@ -44,6 +44,7 @@ module.exports = {
     getAllTransferredLocation: (request, response) => {
         pool.query(dbQueries.getAllTransferredLocation())
             .then(res => {
+                console.log(res)
                 console.log('get transferred location')
                 response.status(200).json(res.rows)
             })
@@ -83,7 +84,21 @@ module.exports = {
             }).catch(err => {
                 console.log(`edit transferred location failed: ${err}`)
             })
-    }
+    },
 
+    editLocation: (request, response) => {
+        let {
+            name,
+            departmentName
+        } = request.body
+        pool.query(dbQueries.editLocation(name, departmentName))
+            .then(res => {
+                console.log('edit location succeed')
+                response.status(200).json(res)
+            }).catch(err => {
+                console.log(`edit location failed: ${err}`)
+            })
+
+    }
 
 }

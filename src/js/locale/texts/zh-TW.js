@@ -228,6 +228,7 @@ const tw = {
     DETAIL: "詳細資料",
     NON_BINDING: "尚未綁定信標",
     GENERATE_RECORD: "產生報表",
+    CREATE_LOCATION: "新增轉移地點",
 
 
     /* field */
@@ -491,7 +492,7 @@ const tw = {
     PANIC: "緊急",
     GEOFENCE_TYPE: "geofence類別",
     ALERT: "警告",
-    TRANSFERRED_LOCATION: "轉移單位",
+    TRANSFERRED_LOCATION: "轉移地點",
     LAST_LOCATION: "最後所在地點",
     LOCATION_DESCRIPTION: "所在地點",
     RESIDENCE_TIME: "停留時間",

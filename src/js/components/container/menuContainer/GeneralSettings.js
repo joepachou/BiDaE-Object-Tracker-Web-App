@@ -56,44 +56,6 @@ import {
 } from '../../../config/tables';
 import { JSONClone } from '../../../helper/utilities';
 
-let columns = [
-    {
-        Header: "object type",
-        accessor: "type",
-        width: 200,
-    },
-    {
-        Header: "alias",
-        accessor: "alias",
-        width: 200,
-        Cell: (props) => {
-            return (
-                <input 
-                    className='border-none'
-                    value={props.original.type_alias}
-                    onChange={e => {
-                        let data = this.state.data
-                        data[props.index].type_alias = e.target.value
-                        this.setState({
-                            data
-                        })
-                    }}
-                    onKeyPress={(e) => {
-                        if (e.key == 'Enter' && e.target.value !== props.original.type_alias) {
-                            let {
-                                type,
-                                type_alias
-                            } = props.original
-                            checkinAlias(type, type_alias)
-                        }
-                    }}
-                    
-                />
-            )
-        }
-    },
-]
-
 const checkinAlias = (type, type_alias) => {
     apiHelper.objectApiAgent.editAlias({
         objectType: type,

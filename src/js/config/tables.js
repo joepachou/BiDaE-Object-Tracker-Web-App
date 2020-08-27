@@ -175,31 +175,14 @@ const gatewayTableColumn = [
 
 const TransferredLocationColumn =[
     {
-        label: '',
-        field: '',
-        sort: "asc",
-        width: 200
-      },
-      {
-        label: 'level',
-        field: 'level',
-        width: 200
-      },
-      {
-        label: 'name',
-        field: 'name',
-        width: 200
-      },
-      {
-          label: 'remove',
-          field: 'remove',
-          width: 200
-      },
-      {
-          label: 'add',
-          field: 'add',
-          width: 200
-      },
+        Header: 'branch',
+        accessor: 'name'
+    },
+    {
+        Header: 'department',
+        accessor: 'department'
+    }
+    
 ]
 
 const trackingTableColumn = [

@@ -73,5 +73,27 @@ module.exports = {
 		} 
 
 		return query
+	},
+
+	editLocation: (name, departmentName) => {
+		let text = `
+			INSERT INTO branches (
+				name,
+				department
+			) values (
+				$1,
+				$2
+			)
+		`
+
+		let values = [
+			name,
+			departmentName
+		]
+
+		return {
+			text,
+			values
+		}
 	}
 }

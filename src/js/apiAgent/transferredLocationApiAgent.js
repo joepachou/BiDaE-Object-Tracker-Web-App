@@ -52,6 +52,16 @@ export default {
             type,
             data,
         })
-    } 
+    },
+
+    editLocation: async function({
+        name,
+        departmentName
+    }) {
+        return await axios.post(dataSrc.transferredLocation, {
+            name,
+            departmentName
+        })
+    }
 
 }

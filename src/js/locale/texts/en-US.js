@@ -230,6 +230,7 @@ const en =  {
     DETAIL: "detail",
     NON_BINDING: "Tag not yet bound",
     GENERATE_RECORD: "generate record",
+    CREATE_LOCATION: "add transferred location",
 
     /* field */
     NAME: "name",
@@ -489,7 +490,7 @@ const en =  {
     PANIC: "emergency",
     GEOFENCE_TYPE: "geofence type",
     ALERT: "alert",
-    TRANSFERRED_LOCATION: "transferred",
+    TRANSFERRED_LOCATION: "transferred location",
     LOCATION_DESCRIPTION: "location description",
     LAST_LOCATION: "last location",
     RESIDENCE_TIME: "residence time",
