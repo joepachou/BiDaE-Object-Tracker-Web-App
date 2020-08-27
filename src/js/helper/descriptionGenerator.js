@@ -42,7 +42,7 @@ import {
 } from '../config/wordMap';
 import { isEqual } from 'lodash';
 
-export const getDescription = (item, locale) => {
+export const getDescription = (item, locale, keywordType) => {
     var foundDeviceDescription = ``; 
     switch(item.object_type) {
         case '0':
@@ -50,7 +50,7 @@ export const getDescription = (item, locale) => {
                 item.found 
                     ?   `
                         
-                        ${item.nickname ? getNickname(item, locale) : getType(item, locale)}
+                        ${getDeviceName(item, locale, keywordType)}
 
                         ${getACN(item, locale)}
                         
@@ -152,6 +152,12 @@ export const getBatteryVolumn = (item, locale, config) => {
                     : `, ${locale.texts.NOT_AVAILABLE}`
             )
     }
+}
+
+export const getDeviceName = (item, locale, keywordType) => {
+    return `
+        ${item[keywordType] || item.type}
+    `
 }
 
 export const getName = (item, locale) => {

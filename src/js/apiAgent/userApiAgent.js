@@ -90,6 +90,16 @@ export default {
             userId,
             localeName
         })
+    },
+
+    editKeywordType: async function({
+        userId,
+        keywordTypeId
+    }) {
+        return await axios.put(dataSrc.userInfo.keywordType, {
+            userId,
+            keywordTypeId
+        })
     }
 
 }

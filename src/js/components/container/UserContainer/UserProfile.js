@@ -44,12 +44,11 @@ import EditAreasForm from '../../presentational/form/EditAreasForm';
 import EditPwdForm from '../../presentational/form/EditPwdForm';
 import messageGenerator from '../../../helper/messageGenerator';
 import dataSrc from '../../../dataSrc';
-import {
-    Title
-} from '../../BOTComponent/styleComponent';
+import config from '../../../config';
 import NumberPicker from '../NumberPicker';
 import apiHelper from '../../../helper/apiHelper';
- 
+import Select from 'react-select';
+import { SAVE_SUCCESS } from '../../../config/wordMap';
 
 class UserProfile extends React.Component{
 
@@ -133,9 +132,7 @@ class UserProfile extends React.Component{
     handleSubmit = (values) => {
         let formIndex = [this.state.show, this.state.showEditPwd].indexOf(true);
 
-        let callback = () => messageGenerator.setSuccessMessage(
-            'save success'
-        ) 
+        let callback = () => messageGenerator.setSuccessMessage(SAVE_SUCCESS) 
         var { auth } = this.context
         switch(formIndex) {
 
@@ -179,6 +176,21 @@ class UserProfile extends React.Component{
             areaTable
         } = this.state
 
+        let userKeywordType = {}
+
+        const keywordTypeOptions = config.KEYWORD_TYPE.map((item, index) => {
+            let option = {
+                label: locale.texts[item.toUpperCase()],
+                value: item,
+                id: index,
+            }
+            if (auth.user.keyword_type == index) {
+                userKeywordType = option
+            }
+            return option
+
+        })
+
         return(
             <div
                 className='d-flex flex-column'
@@ -206,29 +218,32 @@ class UserProfile extends React.Component{
                     </Button> 
                 </ButtonToolbar>
                 <div
-                    className='mb-2'
+                    className='mb-3'
                 >
-                    <Title>
+                    <div
+                        className="font-size-120-percent color-black"
+                    >
                         {locale.texts.ABOUT_YOU}
-                    </Title>
-                    <p>
+                    </div>
+                    <div>
                         {locale.texts.NAME}: {auth.user.name}
-                    </p>
+                    </div>
                 </div>
-                <hr/>
                 <div
-                    className='mb-2 text-capitalize'
+                    className='mb-3 text-capitalize'
                 >
-                    <Title>
+                    <div
+                        className="font-size-120-percent color-black"
+                    >
                         {locale.texts.YOUR_SERVICE_AREAS}
-                    </Title>
-                    <p>
+                    </div>
+                    <div>
                         {locale.texts.PRIMARY_AREA}: {areaTable.length != 0 
                             && auth.user.main_area
                             && locale.texts[areaTable[auth.user.main_area].name]
                         }
-                    </p>
-                    <p>
+                    </div>
+                    <div>
                         {locale.texts.SECONDARY_AREAS}: {
                             Object.values(this.state.areaTable)
                                 .filter(area => {
@@ -239,25 +254,66 @@ class UserProfile extends React.Component{
                                 })
                                 .join('/')
                         }
-                    </p>
+                    </div>
                 </div>
-                <hr/>
                 <div
-                    className='mb-2'
+                    className='mb-3'
                 >
-                    <Title>
-                        {locale.texts.SEARCH_PREFERENCES}
-                    </Title>
-                    <div 
-                        className="d-flex justify-content-start align-items-center text-capitalize"
+                    <div
+                        className="font-size-120-percent color-black"
                     >
-                        {locale.texts.NUMBER_OF_FREQUENT_SEARCH}: 
-                        <NumberPicker
-                            name="numberPicker"
-                            value={auth.user.freqSearchCount}
-                            onChange={this.resetFreqSearchCount}
-                            length={10}
-                        />
+                        {locale.texts.SEARCH_PREFERENCES}
+                    </div>
+                    <div 
+                        className="py-2"
+                    >
+                        <div
+                            className="mb-3"
+                        >
+                            <div
+                                className="color-black mb-1"
+                            >
+                                {locale.texts.NUMBER_OF_FREQUENT_SEARCH} 
+                            </div>
+                            <NumberPicker
+                                name="numberPicker"
+                                value={auth.user.freqSearchCount}
+                                onChange={this.resetFreqSearchCount}
+                                length={10}
+                            />
+                        </div>
+                        <div
+                            className="mb-3"
+                        >
+                            <div
+                                className="color-black mb-1"
+                            >
+                                {locale.texts.SEARCH_TYPE} 
+                            </div>
+                            <Select
+                                value={userKeywordType}
+                                className="text-capitalize w-25"
+                                onChange={value => {
+                                    auth.setKeywordType(value.id)
+                                }}
+                                options={keywordTypeOptions}
+                                isSearchable={false}
+                                styles={{
+                                    control: (provided) => ({
+                                        ...provided,
+                                        fontSize: '1rem',
+                                        minHeight: '3rem',
+                                        position: 'none',
+                                        width: '160px',
+                                        borderRadius: 0                                
+                                    }),
+                                }}
+                                components={{
+                                    IndicatorSeparator: () => null,
+                                }}     
+                                placeholder=""    
+                            />
+                        </div>
                     </div> 
                 </div>
                 <hr/>

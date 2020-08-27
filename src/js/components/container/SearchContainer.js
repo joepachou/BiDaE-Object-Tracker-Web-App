@@ -45,6 +45,7 @@ import TabletSearchContainer from '../platform/tablet/TabletSearchContainer';
 import MobileSearchContainer from '../platform/mobile/MobileSearchContainer';
 import BrowserSearchContainer from '../platform/browser/BrowserSearchContainer';
 import apiHelper from '../../helper/apiHelper';
+import config from '../../config';
 
 class SearchContainer extends React.Component {
 
@@ -100,9 +101,12 @@ class SearchContainer extends React.Component {
             objectType: [0]
         })
         .then(res => {
+
+            let keywordType = config.KEYWORD_TYPE[auth.user.keyword_type]
+            
             let objectTypeList = res.data.rows.reduce((objectTypeList, item) => {
-                if (!objectTypeList.includes(item.type)) {
-                    objectTypeList.push(item.type)
+                if (!objectTypeList.includes(item[keywordType])) {
+                    objectTypeList.push(item[keywordType])
                 }
                 return objectTypeList
             }, [])

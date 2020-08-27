@@ -377,5 +377,23 @@ module.exports = {
 			WHERE name='${username}'
 		`
 		
+	},
+
+	editKeywordType: (userId, keywordTypeId) => {
+		let text = `
+			UPDATE user_table
+			SET keyword_type = $2 
+			WHERE id = $1
+		`
+		let values = [
+			userId,
+			keywordTypeId
+		]
+		console.log(userId, keywordTypeId)
+
+		return {
+			text,
+			values
+		}
 	}
 }

@@ -256,6 +256,32 @@ class Auth extends React.Component {
         })
     }
 
+    setKeywordType = keywordTypeId => {
+        apiHelper.userApiAgent.editKeywordType({
+            userId: this.state.user.id,
+            keywordTypeId,
+        })
+        .then(res => {
+            
+            let callback = () => {
+                    Cookies.set('user', {
+                    ...JSON.parse(Cookies.get('user')),
+                    keyword_type: keywordTypeId
+                })
+            }
+            this.setState({
+                ...this.state,
+                user: {
+                    ...this.state.user,
+                    keyword_type: keywordTypeId
+                }
+            }, callback)
+        })
+        .catch(err => {
+            console.log(`edit keyword type failed ${err}`)
+        })
+    }
+
     render() {
         const authProviderValue = {
             ...this.state,
@@ -269,7 +295,8 @@ class Auth extends React.Component {
             setCookies: this.setCookies,
             setLocale: this.setLocale,
             setUser: this.setUser,
-            setArea: this.setArea
+            setArea: this.setArea,
+            setKeywordType: this.setKeywordType
         };
 
         return (

@@ -46,7 +46,8 @@ module.exports = {
 							id, 
 							main_area, 
 							max_search_history_count, 
-							locale_id
+							locale_id,
+							keyword_type
 						FROM user_table
 						WHERE name =$1
 					)
@@ -112,6 +113,7 @@ module.exports = {
 				user_info.id,
 				user_info.locale_id,
 				user_info.main_area,
+				user_info.keyword_type,
 				user_info.max_search_history_count as freq_search_count,
 				array (
 					SELECT role_name 
@@ -130,6 +132,7 @@ module.exports = {
 					FROM locales
 					WHERE user_info.locale_id = locales.id
 				) AS locale
+
 			FROM user_info
 			`;
 

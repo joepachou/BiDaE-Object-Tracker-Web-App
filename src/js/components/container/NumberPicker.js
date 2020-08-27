@@ -73,7 +73,7 @@ class NumberPicker extends React.Component {
         return (
             <Select
                 value={this.state.value}
-                className="ml-2 text-capitalize"
+                className="text-capitalize w-25"
                 onChange={value => this.onChange(value)}
                 options={options}
                 isSearchable={false}

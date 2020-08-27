@@ -299,6 +299,7 @@ const en =  {
     SIGNATURE:"signature",
     NUMBER_OF_SEARCH_HISTORY: "number of search history",
     NUMBER_OF_FREQUENT_SEARCH: "number of frequent searchs",
+    SEARCH_TYPE: "search type",
     SELECTED_AREAS: "selected areas",
     NOT_SELECTED_AREAS: "not selected areas",
     LOCATION_SELECTION: "location",
@@ -522,6 +523,7 @@ const en =  {
     ROLE_LIST:"Role List",
     PERMISSION_LIST:"Permission List",
     ALIAS: "alias",
+    TYPE_ALIAS: "type_alias",
 
     /** message */
     ARE_YOU_SURE_TO_DELETE: "are you sure to delete ?",

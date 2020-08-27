@@ -232,4 +232,20 @@ module.exports = {
         
     },
 
+    editKeywordType: (request, response) => {
+        let {
+            userId,
+            keywordTypeId
+        } = request.body;
+        console.log(request.body)
+        pool.query(dbQueries.editKeywordType(userId, keywordTypeId))
+            .then(res => {
+                console.log(`edit keyword type succeed`);
+                response.status(200).json(res);
+            })
+            .catch(err => {
+                console.log(`edit keyword type failed ${err}`)
+            })
+    }
+
 }

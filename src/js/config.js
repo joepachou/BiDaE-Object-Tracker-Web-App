@@ -73,6 +73,11 @@ const config = {
         main_area: 1,
     },
 
+    KEYWORD_TYPE: [
+        'type_alias',
+        'type'
+    ],
+
     /** Set the default locale based on the language of platform. 
      *  Default locale for can be tw or en 
     */
@@ -195,7 +200,8 @@ const config = {
         'asset_control_number', 
         'name', 
         'nickname', 
-        'location_description'
+        'location_description',
+        'type_alias'
     ],
 
     AUTOSUGGEST_NUMBER_LIMIT: 10,

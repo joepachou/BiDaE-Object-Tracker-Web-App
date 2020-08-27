@@ -63,6 +63,8 @@ const dataSrc = {
 
         maxSearchHistoryCount: `${domain}/data/user/maxSearchHistoryCount`,
 
+        keywordType: `${domain}/data/user/keywordType`
+
     },
 
     object: {

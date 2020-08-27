@@ -45,6 +45,7 @@ const getObject = (objectType, areas_id) => {
 			object_table.status, 
 			object_table.transferred_location, 
 			object_table.list_id,
+			object_table.type_alias,
 			JSON_BUILD_OBJECT(
 				'id', branches.id,
 				'name', branches.name,

@@ -71,6 +71,7 @@ const SearchResultListGroup = ({
 
     const { 
         locale,
+        auth,
         stateReducer
     } = React.useContext(AppContext);
 
@@ -83,7 +84,6 @@ const SearchResultListGroup = ({
             value,
         })
     }
-
 
     const onMouseOut = () => {
         let [{}, dispatch] = stateReducer;
@@ -129,6 +129,8 @@ const SearchResultListGroup = ({
         }
     }
 
+    let keywordType = config.KEYWORD_TYPE[auth.user.keyword_type]
+
     return (
         <ListGroup 
             onSelect={onSelect} 
@@ -150,7 +152,7 @@ const SearchResultListGroup = ({
                         >
                             {createItem(searchKey, item, index)}
                         </div>
-                        {getDescription(item, locale, config)}
+                        {getDescription(item, locale, keywordType)}
                         {getMacaddress(item, locale)}
                         {getRSSI(item, locale)}
                         {getUpdatedByNLbeacons(item, locale)}

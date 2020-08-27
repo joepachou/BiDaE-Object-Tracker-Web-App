@@ -74,9 +74,11 @@ const BrowserPageComponent = ({
             <div 
                 className="BOTsidenav"
             >
-                <Title page>
+                <div 
+                    className="font-size-120-percent font-weight-bold"
+                >
                     {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
-                </Title>
+                </div>
                 <ListGroup>
                     {tabList.map((tab, index) => {
                         return (
@@ -111,9 +113,11 @@ const BrowserPageComponent = ({
                                 eventKey={tab.name.replace(/ /g, '_')}
                                 key={tab.name.replace(/ /g, '_')}
                             >
-                                <Title page>
+                                <div
+                                    className="font-size-140-percent color-black"
+                                >
                                     {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
-                                </Title>
+                                </div>
                                 <hr/>
                                 {tab.component(props)}
                             </Tab.Pane>

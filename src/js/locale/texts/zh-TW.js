@@ -297,6 +297,7 @@ const tw = {
     IS_GLOBAL_FENCE: "全境電子圍籬",
     NUMBER_OF_SEARCH_HISTORY: "常用搜尋筆數",
     NUMBER_OF_FREQUENT_SEARCH: "常用搜尋筆數",
+    SEARCH_TYPE: "搜尋類型",
     SELECTED_AREAS: "已選取區域",
     NOT_SELECTED_AREAS: "未選取區域",
     LOCATION_SELECTION: "區域",
@@ -521,6 +522,7 @@ const tw = {
     ROLE_LIST:"角色列表",
     PERMISSION_LIST:"權限列表",
     ALIAS: "別名",
+    TYPE_ALIAS: "別名",
 
     /** message */
     ARE_YOU_SURE_TO_DELETE: "確定要刪除 ?",
