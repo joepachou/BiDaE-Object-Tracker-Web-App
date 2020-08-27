@@ -113,9 +113,10 @@ class ShiftChange extends React.Component {
             areaId
         })
         .then(res => {
+           
             let {
-                myDevice
-            } = auth.user
+                devicelist
+            } = this.props
 
             let foundResult = []
             let notFoundResult = []
@@ -123,7 +124,7 @@ class ShiftChange extends React.Component {
             let notFoundPatients= []
 
             res.data
-                .filter(item => myDevice.includes(item.asset_control_number))
+                .filter(item => devicelist.value.items.includes(item.asset_control_number))
                 .map(item => {
                     
                     switch(item.object_type) {
@@ -169,7 +170,11 @@ class ShiftChange extends React.Component {
         let { 
             locale, 
             auth 
-        } = this.context  
+        } = this.context
+        
+        let {
+            devicelist
+        } = this.props
         
         authentication = auth.user.name
 
@@ -187,7 +192,8 @@ class ShiftChange extends React.Component {
             additional: {
                 shift: values.shift,
                 area: locale.texts[config.mapConfig.areaOptions[auth.user.areas_id[0]]],
-                name: auth.user.name
+                name: auth.user.name,
+                listName: devicelist.value.name
             }
         })  
 
@@ -251,7 +257,8 @@ class ShiftChange extends React.Component {
 
         const { 
             show,
-            handleClose
+            handleClose,
+            devicelist
         } = this.props
 
         const { 
@@ -312,9 +319,11 @@ class ShiftChange extends React.Component {
                                     <div>
                                         {locale.texts.DATE_TIME}: {nowTime}
                                     </div> 
-                                    <div 
-                                    >
+                                    <div>
                                         {locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: {auth.user.name} 
+                                    </div>
+                                    <div>
+                                        {locale.texts.LIST_NAME}: {devicelist.value.name} 
                                     </div>
                                     <div 
                                         className="d-flex align-items-center"

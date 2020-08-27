@@ -19,8 +19,16 @@ import {
     getACN
 }from '../../../helper/descriptionGenerator';
 import apiHelper from '../../../helper/apiHelper';
+import {
+    PrimaryButton
+} from '../../BOTComponent/styleComponent';
 
-import DualListBox from './DualListBox'
+import DualListBox from './DualListBox';
+import messageGenerator from '../../../helper/messageGenerator';
+import {
+    SAVE_SUCCESS
+} from '../../../config/wordMap';
+import EditListForm from '../../presentational/form/EditListForm';
 
 const style = {
     list: {
@@ -35,7 +43,9 @@ const style = {
 class DeviceGroupManager extends React.Component{
 
     static contextType = AppContext
+
     reNameRef = React.createRef()
+
     state = {
         selectedDeviceGroup: null,
         renameGroup: false
@@ -43,6 +53,7 @@ class DeviceGroupManager extends React.Component{
     componentDidMount = () => {
         this.getObjectData()
         this.getDeviceGroup("Mount")
+        this.getAreaTable()
     }
 
     reload = () => {
@@ -50,46 +61,57 @@ class DeviceGroupManager extends React.Component{
         this.getDeviceGroup()
     }
     
-    newDeviceGroup = (name) => {
+    newDeviceGroup = values => {
         apiHelper.deviceGroupListApis.addDeviceGroupList({
-            name
+            name: values.name,
+            area_id: values.area.id
         })
         .then(res => {
-            console.log('successs', res.data)
+            let callback = () => {
+                messageGenerator.setSuccessMessage(SAVE_SUCCESS)
+            }
             this.setState({
-                selectedDeviceGroup: {id:res.data}
-            })
+                // selectedDeviceGroup: {id:res.data}
+                renameGroup: false,
+            }, callback)
             this.reload()
         })
         .catch(err => {
-            console.log('err when add device group ', err)
+            console.log(`add list failed ${err}`)
         })
     }
+
     addDeviceToGroup = (item) => {
+
         const groupId = this.state.selectedDeviceGroup.id
+
         apiHelper.deviceGroupListApis.modifyDeviceGroupList({
             groupId: this.state.selectedDeviceGroup.id,
             mode: 0,
-            itemACN: item.asset_control_number
+            itemACN: item.asset_control_number,
+            item_id: item.id
         }).then(res => {
             this.reload()
         }).catch(err => 
             console.log(err)
         )
     }
+
     removeDeviceFromGroup = (item) => {
         const groupId = this.state.selectedDeviceGroup.id
 
         apiHelper.deviceGroupListApis.modifyDeviceGroupList({
             groupId: this.state.selectedDeviceGroup.id,
             mode: 1,
-            itemACN: item.asset_control_number
+            itemACN: item.asset_control_number,
+            item_id: item.id
         }).then(res => {
             this.reload()
         }).catch(err => 
             console.log(err)
         )
     }
+
     renameGroup = (newName) => {
         const groupId = this.state.selectedDeviceGroup.id
 
@@ -106,6 +128,7 @@ class DeviceGroupManager extends React.Component{
             console.log(err)
         )
     }
+
     deleteGroup = () => {
         apiHelper.deviceGroupListApis.deleteGroup({
             groupId: this.state.selectedDeviceGroup.id,
@@ -115,152 +138,176 @@ class DeviceGroupManager extends React.Component{
             console.log(err)
         )
     }
-    deviceGroupListToSelectOptions = (data) => {
-        const options = data.map(option =>
-            { 
-                return {
-                    label: option.name,
-                    value: option
-            }})
-
-        return options
-    }
 
     selectDeviceGroup = (deviceGroup) => {
         this.setState({
             selectedDeviceGroup: deviceGroup ? deviceGroup.value : null
         })
     }
+
     getObjectData = (isMount) => {
-        let { locale, auth } = this.context
+        let { 
+            locale, 
+            auth 
+        } = this.context
         apiHelper.objectApiAgent.getObjectTable({
             locale: locale.abbr,
             areas_id: auth.user.areas_id,
             objectType: [0]
         })
         .then(res => {
-            console.log(res.data.rows)
             this.setState({
                 allDevices: res.data.rows
             })
-
-        }).catch(function (error) {
-
-            console.log(error);
-
         })
     }
-    getDeviceGroup = (isMount) => {
-        apiHelper.deviceGroupListApis.getDeviceGroupList()
-        .then(res => {
-            const data = res.data.map(group => {
-                return {
-                    ...group,
-                    devices: group.devices || []
-                }
-            })
-            const updatedSelectedDeviceGroup = data.filter(group => {
-                if(this.state.selectedDeviceGroup){
-                    if(group.id == this.state.selectedDeviceGroup.id){
-                        return true
-                    }else{
-                        return false
-                    }
-                }else{
-                    return false
-                }
-            })[0]
 
-            this.setState({
-                deviceGroupList: data,
-                deviceGroupListOptions: this.deviceGroupListToSelectOptions(data),
-                selectedDeviceGroup: isMount == "Mount" ?data[0]:updatedSelectedDeviceGroup
+    getAreaTable = () => {
+        let {
+            locale
+        } = this.context
+
+        apiHelper.areaApiAgent.getAreaTable()
+            .then(res => {
+                let areaOptions = res.data.rows.map(area => {
+                    return {
+                        id: area.id,
+                        value: area.name,
+                        label: locale.texts[area.name]
+                    }
+                })
+                this.setState({
+                    areaOptions
+                })
             })
-        })
-        .catch(err => {
-            console.log('err when get device group ', err)
+            .catch(err => {
+                console.log(`get area table failed ${err}`)
+            })
+    }
+
+    getDeviceGroup = () => {
+        apiHelper.deviceGroupListApis.getDeviceGroupList()
+            .then(res => {
+                const data = res.data.map(group => {
+                    return {
+                        ...group,
+                        devices: group.devices || []
+                    }
+                })
+
+                let deviceGroupListOptions = res.data.map(item => {
+                    return {
+                        label: item.name,
+                        value: item
+                    }
+                })
+
+                const updatedSelectedDeviceGroup = this.state.selectedDeviceGroup 
+                    ? data.filter(group => {
+                        return group.id == this.state.selectedDeviceGroup.id 
+                    })[0]
+                    : null
+
+                this.setState({
+                    // deviceGroupList: data,
+                    deviceGroupListOptions,
+                    selectedDeviceGroup: updatedSelectedDeviceGroup,
+                })
+            })
+            .catch(err => {
+                console.log('err when get device group ', err)
+            })
+    }
+
+    handleClose = () => {
+        this.setState({
+            renameGroup: false,
         })
     }
     
     render() {
         const { locale } = this.context
 
+        let {
+            areaOptions,
+            deviceGroupListOptions,
+            selectedDeviceGroup
+        } = this.state
+
         return (
             <div
                 className="text-capitalize"
                 style={{height: this.state.selectedDeviceGroup ? '80vh':'10vh'}}
             >
-                <Modal
-                  show={this.state.renameGroup}
-                  onHide={() => {this.setState({renameGroup: false})}}>
-                  <Modal.Header closeButton>
-                      <Modal.Title>{locale.texts.RENAME}</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <Form.Group as={Col} >
-                          <Form.Control type="text" ref={this.reNameRef}/>
-                        </Form.Group>
-                    </Modal.Body>
-                    <Modal.Footer>
-                      <Button variant="primary" onClick={()=>{console.log(this.reNameRef.current.value);this.renameGroup(this.reNameRef.current.value)}}>
-                        Save Changes
-                      </Button>
-                    </Modal.Footer>
-                </Modal>
-                <CreatableSelect
-                    isClearable
-                    onChange={this.selectDeviceGroup}
-                    onCreateOption={this.newDeviceGroup}
-                    options={this.state.deviceGroupListOptions}
-                    value={this.state.selectedDeviceGroup
-                        ?
-                            {
-                                value: this.state.selectedDeviceGroup,
-                                label: this.state.selectedDeviceGroup.name
-                            }
-                        :
-                            null
-                    }
-                />
-                {
-                    this.state.selectedDeviceGroup 
-                    ?
-                        <>
-                            <ButtonToolbar
-                                className='my-2'
-                            >
-                                <Button 
-                                    variant='outline-primary' 
-                                    className='text-capitalize mr-2'
-                                    name='secondaryArea'
-                                    size='sm'
-                                    onClick={() => {this.setState({renameGroup: true})}}
-                                >
-                                    {locale.texts.EDIT_DEVICE_GROUP_NAME}
-                                </Button>
-                                <Button 
-                                    variant='outline-primary' 
-                                    className='text-capitalize mr-2'
-                                    name='password'
-                                    size='sm'
-                                    onClick={this.deleteGroup}
-                                >
-                                    {locale.texts.REMOVE_DEVICE_GROUP}
-                                </Button> 
-                            </ButtonToolbar>
-                            <DualListBox
-                                allItems={this.state.allDevices || []}
-                                selectedItemList={this.state.selectedDeviceGroup ? this.state.selectedDeviceGroup.items : []}
-                                selectedTitle = 'Devices In List'
-                                unselectedTitle = 'Other Devices'
-                                onSelect = {this.addDeviceToGroup}
-                                onUnselect = {this.removeDeviceFromGroup}
-                            />
-                        </>
-                    :
-                        null
+                <div
+                    className="d-flex"
+                >
+                    <Select
+                        className="flex-grow-1"
+                        isClearable
+                        onChange={this.selectDeviceGroup}
+                        options={deviceGroupListOptions}
+                    />
+                    <PrimaryButton
+                        variant='primary' 
+                        className='text-capitalize ml-2'
+                        name='add'
+                        onClick={() => {
+                            this.setState({
+                                renameGroup: true
+                            })
+                        }}
+                    >
+                        {locale.texts.CREATE_DEVICE_GROUP}
+                    </PrimaryButton> 
+                </div>
+
+                {this.state.selectedDeviceGroup
+                    ? (
+                        <DualListBox
+                            allItems={this.state.allDevices || []}
+                            selectedItemList={selectedDeviceGroup}
+                            selectedTitle = 'Devices In List'
+                            unselectedTitle = 'Other Devices'
+                            onSelect={this.addDeviceToGroup}
+                            onUnselect={this.removeDeviceFromGroup}
+                        />
+                    )
+                    : null
                 }
+                  
+            
                 
+                    {/* <ButtonToolbar
+                        className='my-2'
+                    >
+                        <PrimaryButton
+                            variant='primary' 
+                            className='text-capitalize mr-2'
+                            name='secondaryArea'
+                            onClick={() => {this.setState({renameGroup: true})}}
+                        >
+                            {locale.texts.EDIT_DEVICE_GROUP_NAME}
+                        </PrimaryButton>
+                        
+                        <PrimaryButton
+                            variant='primary' 
+                            className='text-capitalize mr-2'
+                            name='password'
+                            onClick={this.deleteGroup}
+                        >
+                            {locale.texts.REMOVE_DEVICE_GROUP}
+                        </PrimaryButton> 
+                    
+                    </ButtonToolbar> */}
+                <EditListForm
+                    show={this.state.renameGroup}
+                    handleClose={this.handleClose}
+                    handleSubmit={this.newDeviceGroup}
+                    title={locale.texts.CREATE_LIST}
+                    areaOptions={areaOptions}
+
+                />
             </div>
         )
     }

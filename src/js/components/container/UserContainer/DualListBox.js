@@ -1,38 +1,34 @@
 import React from 'react';
 import ListBox from './ListBox';
 import { Col, Row } from 'react-bootstrap';
+
 const Fragment = React.Fragment;
 class DualListBox extends React.Component{
-    /*
-        props: {
-            selectedTitle: '',
-            unselectedTitle: '',
-            allItems: array of Items,
-            selectedItemList: array of acn number,
-            onSelect: function(item),
-            onRemove: function(item)
-        }
-    */
-    state = {
-    }
-    componentDidMount = () => {
-    }
-    componentDidUpdate = () => {
-    }
-
+    
     generateSelectedRowsForListBox = () => {
-        let {allItems, selectedItemList} = this.props
+
+        let {
+            allItems, 
+            selectedItemList
+        } = this.props
+
         allItems = allItems || []
-        selectedItemList = selectedItemList || []
+        selectedItemList.items = selectedItemList.items || []
+
+
         const selectedItem = allItems
-                        .filter(item => selectedItemList.includes(item.asset_control_number))
+            .filter(item => {
+                return selectedItemList.items.includes(item.asset_control_number)
+            })
 
         const HTMLForSelecteItem = selectedItem.map(item => {
             return {
                 acn: item.asset_control_number,
                 onClick: () => {this.onUnselect(item)},
                 label: (
-                    <div>
+                    <div
+                        className="cursor-pointer"
+                    >
                         {item.name}, {item.asset_control_number}
                     </div>
                 )
@@ -40,20 +36,35 @@ class DualListBox extends React.Component{
         })
         return HTMLForSelecteItem
     }
+
     generateUnselectedRowsForListBox = () => {
-        var {allItems, selectedItemList} = this.props
+        let {
+            allItems, 
+            selectedItemList
+        } = this.props
+
         allItems = allItems || []
-        selectedItemList = selectedItemList || []
+        selectedItemList.items = selectedItemList.items || []
 
         const unselectedItem = allItems
-                        .filter(item => !selectedItemList.includes(item.asset_control_number))
+            .filter(item => {
+                return (
+                    !selectedItemList.items.includes(item.asset_control_number) &&
+                    item.list_id == null &&
+                    item.area_id == selectedItemList.area_id
+                )
+            })
 
         const HTMLForUnselecteItem = unselectedItem.map(item => {
             return {
                 acn: item.asset_control_number,
-                onClick: () => {this.onSelect(item)},
+                onClick: () => {
+                    this.onSelect(item)
+                },
                 label: (
-                    <div>
+                    <div
+                        className="cursor-pointer"
+                    >
                         {item.name}, {item.asset_control_number}
                     </div>
                 )
@@ -80,7 +91,6 @@ class DualListBox extends React.Component{
                 overflowY: 'scroll'
             }
         }
-        
         return (
             <Col>
                 <Row className = 'd-flex justify-content-center m-3'>
@@ -90,9 +100,8 @@ class DualListBox extends React.Component{
                 </Row>
                 <Row className = 'd-flex justify-content-center' style={style.listBox}>
                     <ListBox
-                        rows = {
-                            this.generateSelectedRowsForListBox()
-                        }
+                        className="cursor-pointer"
+                        rows={this.generateSelectedRowsForListBox()}
                     />
                 </Row>
                 <Row className = 'd-flex justify-content-center m-3'>
@@ -103,9 +112,7 @@ class DualListBox extends React.Component{
                 </Row>
                 <Row className = 'd-flex justify-content-center' style={style.listBox}>
                     <ListBox
-                        rows = {
-                            this.generateUnselectedRowsForListBox()
-                        }
+                        rows={this.generateUnselectedRowsForListBox()}
                     />
                 </Row>
                 

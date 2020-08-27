@@ -93,45 +93,6 @@ export const userContainerModule = {
     ],
 }
 
-// export const systemSettingModule = {
-
-//     title: 'system setting',
-
-//     defaultActiveKey: 'user_manager',
-
-//     path: "/page/systemSetting",
-
-//     tabList: [
-//         {
-//             name: 'user manager',
-//             permission: "route:bigScreen",
-//             component: (props) => <AdminManagementContainer {...props}/>,
-//             platform: ['browser', 'tablet'],
-//         },
-//         {
-//             name: "transferred location management",
-//             component: (props) => <TransferredLocationManagement {...props}/>,
-//             platform: ['browser'],
-//         },
-//         {
-//             name: "Role Permission Management",
-//             permission: "rolePermissionManagement",
-//             component: (props) => <RolePermissionManagement {...props}/>,
-//             platform: ['browser']
-//         },
-//         {
-//             name: "lbeacon",
-//             component: (props) => <LBeaconTable {...props}/>,
-//             platform: ['browser', 'tablet', 'mobile']
-//         },
-//         {
-//             name: "gateway",
-//             component: (props) => <GatewayTable {...props}/>,
-//             platform: ['browser', 'tablet', 'mobile']
-//         }
-//     ]
-// }
-
 export const settingModule = {
 
     title: 'settings',
@@ -144,20 +105,6 @@ export const settingModule = {
         {
             name: 'user profile',
             component: (props) => <UserProfile />
-        },
-        {
-            name: 'devices management',
-            path: 'devicesManagement',
-            href: '#DevicesManagement',
-            // component: (props) => <MyDeviceManager />
-            component: (props) => <DeviceGroupManager />
-        },
-        {
-            name: 'patient management',
-            path: 'patientManagement',
-            href: '#PatientManagement',
-            // component: (props) => <MyPatientManager />
-            component: (props) => <PatientGroupManager />
         },
         {
             name: "lbeacon",
@@ -266,7 +213,7 @@ export const reportContainerModule = {
     
     tabList: [
         {
-            name: 'Shift Change Record',
+            name: 'Generate and View Shift Change Record',
             component: (props) => <ShiftChangeRecord {...props}/>,
             platform: ['browser', 'tablet', 'mobile'],
         },
@@ -318,6 +265,20 @@ export const BOTAdminModule = {
             permission: "route:bigScreen",
             component: (props) => <AdminManagementContainer {...props}/>,
             platform: ['browser', 'tablet'],
+        },
+        {
+            name: 'devices management',
+            path: 'devicesManagement',
+            href: '#DevicesManagement',
+            // component: (props) => <MyDeviceManager />
+            component: (props) => <DeviceGroupManager />
+        },
+        {
+            name: 'patient management',
+            path: 'patientManagement',
+            href: '#PatientManagement',
+            // component: (props) => <MyPatientManager />
+            component: (props) => <PatientGroupManager />
         },
         {
             name: "transferred location management",

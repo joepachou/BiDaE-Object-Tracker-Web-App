@@ -73,26 +73,6 @@ class NavbarContainer extends React.Component {
 
     navList = navbarNavList
 
-    handleClose = () => {
-        this.setState({
-            showShiftChange: false
-        })
-    }
-
-    handleClick = (e) => {
-
-        let name = e.target.getAttribute('name')
-        
-        switch(name) {
-            case SHIFT_CHANGE:
-                e.preventDefault()
-                this.setState({
-                    showShiftChange: true
-                })
-                break;
-        }
-    }
-
     render= () => {
         const style = {
             navbar: {
@@ -328,10 +308,6 @@ class NavbarContainer extends React.Component {
                     </Navbar.Collapse>
 
                 </Navbar>
-                <ShiftChange 
-                    show={showShiftChange}
-                    handleClose={this.handleClose}
-                />
             </div>
         );
     }

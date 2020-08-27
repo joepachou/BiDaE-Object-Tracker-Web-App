@@ -176,7 +176,6 @@ class PatientGroupManager extends React.Component{
     
     render() {
         const { locale } = this.context
-        console.log(this.state.allPatients)
         return (
             <div
                 className="text-capitalize"

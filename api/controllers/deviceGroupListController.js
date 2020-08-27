@@ -55,33 +55,51 @@ module.exports = {
             console.log('addPatientGroup error: ', err)
         })
     },
+
     addDeviceGroupList : (request, response) => {
-        const {name} = request.body
-        let query = dbQueries.addDeviceGroup(name ? name : 'New Group')
+        const {
+            name,
+            area_id
+        } = request.body
+        console.log(request.body)
+        let query = dbQueries.addDeviceGroup(name, area_id)
+
         pool.query(query)
-        .then(res => {
-            response.status(200).json(res.rows[0].id)
-        })
-        .catch(err => {
-            console.log('addPatientGroup error: ', err)
-        })
+            .then(res => {
+                console.log(`add device list succeed`)
+                response.status(200).json(res.rows[0].id)
+            })
+            .catch(err => {
+                console.log(`add device list failed ${err}`)
+            })
     },
-    // mode: 0(add device), 1(remove device)
+
     modifyDeviceGroupList : (request, response) => {
-        let {groupId, mode, itemACN, newName} = request.body
+
+        let {
+            groupId, 
+            mode, 
+            itemACN, 
+            newName,
+            item_id
+        } = request.body
+
         let query = null
         if(mode == 0){
-            query = dbQueries.modifyDeviceGroup(groupId, 0, itemACN)
+            query = dbQueries.modifyDeviceGroup(groupId, 0, itemACN, item_id)
+            
         }else if(mode == 1){
-            query = dbQueries.modifyDeviceGroup(groupId, 1, itemACN)
+            query = dbQueries.modifyDeviceGroup(groupId, 1, itemACN, item_id)
         }else if(mode == 2){
             query = dbQueries.modifyDeviceGroup(groupId, 2, newName)
         }
+
         pool.query(query)
             .then(res => {
+                console.log(`modify device list succeed`);
                 response.status(200).json('ok')
             }).catch(err => {
-                console.log('err when modifyPatientGroup', err)
+                console.log(`modify device list failed ${err}`)
             })
     },
     changeDeviceList : (request, response) => {

@@ -57,6 +57,7 @@ import {
     isEqual,
     JSONClone
 } from '../../../helper/utilities';
+import Cookies from 'js-cookie';
 import { 
     SWITCH_SEARCH_LIST, 
     CLEAR_SEARCH_RESULT,
@@ -454,7 +455,7 @@ class MainContainer extends React.Component{
 
         let proccessedTrackingData = JSONClone(trackingData)  
 
-        const devicesAccessControlNumber = auth.user.myDevice || []
+        const devicesAccessControlNumber = Cookies.get('user') && JSON.parse(Cookies.get('user')).myDevice ? JSON.parse(Cookies.get('user')).myDevice.value.items : [];
 
         let searchableField = config.SEARCHABLE_FIELD
 

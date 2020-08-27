@@ -72,7 +72,6 @@ import {
     SAVE_SUCCESS,
     DISASSOCIATE
 } from '../../config/wordMap';
-import { JSONClone } from '../../helper/utilities';
 
 
 class ObjectTable extends React.Component{   

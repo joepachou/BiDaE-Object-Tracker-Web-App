@@ -40,7 +40,13 @@ module.exports = {
 			user_info
 				AS 
 					(
-						SELECT name, password, mydevice, id, main_area, max_search_history_count, locale_id
+						SELECT 
+							name, 
+							password, 
+							id, 
+							main_area, 
+							max_search_history_count, 
+							locale_id
 						FROM user_table
 						WHERE name =$1
 					)
@@ -97,7 +103,6 @@ module.exports = {
 			SELECT 
 				user_info.name, 
 				user_info.password,
-				user_info.mydevice, 
 				user_info.locale_id,
 				array (
 					SELECT keyword

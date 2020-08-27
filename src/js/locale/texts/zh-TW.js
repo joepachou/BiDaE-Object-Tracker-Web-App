@@ -63,6 +63,7 @@ const tw = {
     ASSET_USAGE: "資產使用",
     DEVICE_TRANSFER_RECORD: "儀器轉移",
     NOTES_ON_PATIENTS: "病人報告",
+    GENERATE_AND_VIEW_SHIFT_CHANGE_RECORD: "產生及檢視交班報表",
     DEVICE_SERVICE_REQUEST: "device service request",
     OBJECT_TRACKING: "物件追蹤",
     SHIFT_CHANGE: "交班",
@@ -221,7 +222,9 @@ const tw = {
     EXPORT_PDF: "匯出PDF",
     SEND_RESET_INSTRUCTION: "send reset instruction",
     DETAIL: "詳細資料",
-      NON_BINDING: "尚未綁定",
+    NON_BINDING: "尚未綁定",
+    GENERATE_RECORD: "產生報表",
+
 
     /* field */
     NAME: "名稱",
@@ -574,7 +577,10 @@ const tw = {
     ],
 
     EDIT_DEVICE_GROUP_NAME: "更改儀器群組名稱",
-    REMOVE_DEVICE_GROUP: "移除儀器群組",
+    REMOVE_DEVICE_GROUP: "移除儀器列表",
+    CREATE_DEVICE_GROUP: "新增儀器列表",
+    CREATE_LIST: "新增列表",
+    LIST_NAME: "清單名稱",
     RENAME: "重新命名"
 }
 

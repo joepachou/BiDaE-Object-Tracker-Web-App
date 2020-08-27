@@ -65,6 +65,7 @@ const en =  {
     ASSET_USAGE: "asset usage",
     DEVICE_TRANSFER_RECORD: "device transfer record",
     NOTES_ON_PATIENTS: "notes on patients",
+    GENERATE_AND_VIEW_SHIFT_CHANGE_RECORD: "generate and view shift change record",
     DEVICE_SERVICE_REQUEST: "device service request",
     OBJECT_TRACKING: "object tracking",
     SHIFT_CHANGE: "shift change",
@@ -224,6 +225,7 @@ const en =  {
     SEND_RESET_INSTRUCTION: "send reset instruction",
     DETAIL: "detail",
     NON_BINDING: "non binding",
+    GENERATE_RECORD: "generate record",
 
     /* field */
     NAME: "name",
@@ -576,7 +578,10 @@ const en =  {
     ],
 
     EDIT_DEVICE_GROUP_NAME: "edit group name",
-    REMOVE_DEVICE_GROUP: "remove group",
+    REMOVE_DEVICE_GROUP: "remove list",
+    CREATE_DEVICE_GROUP: "create device list",
+    CREATE_LIST: "create list",
+    LIST_NAME: "list name",
     RENAME: "Rename"
 }
 

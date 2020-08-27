@@ -68,7 +68,6 @@ module.exports = {
                             name, 
                             roles, 
                             permissions,
-                            mydevice, 
                             freq_search_count,
                             search_history,
                             areas_id,
@@ -85,7 +84,6 @@ module.exports = {
 
                         let userInfo = {
                             name,
-                            myDevice: mydevice || [],
                             roles,
                             permissions,
                             freqSearchCount: freq_search_count,

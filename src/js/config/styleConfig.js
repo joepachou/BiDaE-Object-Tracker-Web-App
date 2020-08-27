@@ -76,7 +76,7 @@ const styleConfig = {
             ...provided,
             height: 40
         }),
-        menu: (provided) => ({
+        menu: (provided) => ({ 
             ...provided,
             padding: 0
         }),

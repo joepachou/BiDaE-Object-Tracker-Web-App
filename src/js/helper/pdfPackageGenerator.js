@@ -40,16 +40,16 @@ const pdfPackageGenerator = {
         /** Create pdf package, including header, body and the pdf path
      * options include shiftChange, searchResult, broken report, transffered report
      */
-    getPdfPackage: (raw) => {
-        let {
-            option,
-            user,
-            data,
-            locale,
-            signature,
-            additional,
-            pdfOptions
-        } = raw
+    getPdfPackage: ({
+        option,
+        user,
+        data,
+        locale,
+        signature,
+        additional,
+        pdfOptions
+    }) => {
+       
         const header = pdfPackageGenerator.pdfFormat.getHeader(user, locale, option, signature, additional, data)
         const body = pdfPackageGenerator.pdfFormat.getBody[option](data, locale, user, location, signature, additional)
         const path = pdfPackageGenerator.pdfFormat.getPath(option, additional).path
@@ -620,6 +620,7 @@ const pdfPackageGenerator = {
                 const lastShiftIndex = (pdfPackageGenerator.shiftOption.indexOf(additional.shift.value) + 2) % pdfPackageGenerator.shiftOption.length
                 const lastShift = locale.texts[pdfPackageGenerator.shiftOption[lastShiftIndex].toUpperCase().replace(/ /g, '_')]
                 const thisShift = additional.shift.label
+
                 let shift = `<div style='text-transform: capitalize;'>
                         ${locale.texts.SHIFT}: ${lastShift} ${locale.texts.SHIFT_TO} ${thisShift}
                     </div>`
@@ -629,10 +630,16 @@ const pdfPackageGenerator = {
                         : `${locale.texts.CONFIRMED_BY}: ${signature}`
                     }
                 </div>`
+
                 let checkby = `<div style='text-transform: capitalize;'>
                         ${locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: ${user.name}, ${additional.shift.label}
                     </div>`
-                return timestamp + confirmedBy + shift + checkby
+
+                let listName = `<div style='text-transform: capitalize;'>
+                    ${locale.texts.LIST_NAME}: ${additional.listName}
+                </div>`
+                
+                return timestamp + confirmedBy + shift + checkby + listName
             },
     
             searchResult: (locale, user) => {
