@@ -435,11 +435,11 @@ const tw = {
 
     /** User Setting */
     USER_SETTING: "帳戶設定",
-    DEVICES_MANAGEMENT: "儀器指派",
+    DEVICES_MANAGEMENT: "儀器分配",
     USER_PROFILE: "個人資料",
     TRANSFERRED_LOCATION_MANAGEMENT: "新增/刪除轉移地區",
     ROLE_PERMISSION_MANAGEMENT: "身分權限管理",
-    PATIENT_MANAGEMENT: "病人指派",
+    PATIENT_MANAGEMENT: "病人分配",
     SHIFT_CHANGE_RECORD: "交班紀錄",
     PATIENT_RECORD: "回報病人狀態",
     PATIENT_HISTORIAL_RECORD: "歷史報告",
