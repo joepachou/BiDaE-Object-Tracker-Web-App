@@ -440,7 +440,7 @@ const en =  {
     DEVICES_MANAGEMENT: "Device assignment",
     PATIENT_MANAGEMENT: "Patient assignment",
     USER_PROFILE: "User Profile",
-    TRANSFERRED_LOCATION_MANAGEMENT: "transferred location",
+    TRANSFERRED_LOCATION_MANAGEMENT: "Add/Delete Transfer Locations",
     ROLE_PERMISSION_MANAGEMENT: "role permission",
     SHIFT_CHANGE_RECORD: "shift change record",
     OBJECT_EDITED_RECORD: "object edited record",
@@ -449,7 +449,7 @@ const en =  {
     ACCESS_RIGHT: "Access Right",
     MY_DEVICES: "My Devices",
     OTHER_DEVICES: "Other Devices",
-    USER_MANAGER: "user manager",
+    USER_MANAGER: "Add/Delete User Accounts",
     ADMIN: "Admin",
     CONFIRM: "Confirm",
     REMOVE_USER_CONFIRM: "Remove User",
@@ -539,8 +539,8 @@ const en =  {
     
     /** user roles */
     CARE_PROVIDER: "care provider",
-    SYSTEM_ADMIN: "system admin",
-    DEV: "dev",
+    SYSTEM_ADMIN: "BOT administrator",
+    DEV: "deverloper",
 
     TO: "to",
     SHIFT_TO: "to",

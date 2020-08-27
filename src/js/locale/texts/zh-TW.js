@@ -437,7 +437,7 @@ const tw = {
     USER_SETTING: "帳戶設定",
     DEVICES_MANAGEMENT: "儀器指派",
     USER_PROFILE: "個人資料",
-    TRANSFERRED_LOCATION_MANAGEMENT: "轉移單位管理",
+    TRANSFERRED_LOCATION_MANAGEMENT: "新增/刪除轉移地區",
     ROLE_PERMISSION_MANAGEMENT: "身分權限管理",
     PATIENT_MANAGEMENT: "病人指派",
     SHIFT_CHANGE_RECORD: "交班紀錄",
@@ -447,7 +447,7 @@ const tw = {
     ACCESS_RIGHT: "使用者權限",
     MY_DEVICES: "我的儀器",
     OTHER_DEVICES: "其他儀器",
-    USER_MANAGER: "使用者管理",
+    USER_MANAGER: "新增/刪除使用者",
     ADMIN: "管理員",
     CONFIRM: "確認", 
     REMOVE_USER_CONFIRM: "移除使用者",    
@@ -539,7 +539,7 @@ const tw = {
 
     /** user roles */
     CARE_PROVIDER: "護理人員",
-    SYSTEM_ADMIN: "系統管理員",
+    SYSTEM_ADMIN: "BOT管理員",
     DEV: "開發人員",
 
     TO: "至",
