@@ -218,7 +218,6 @@ class ShiftChange extends React.Component {
             }
             return pkg
         }, pdfPackage)
-
         apiHelper.record.addShiftChangeRecord({
             userInfo: auth.user,
             pdfPackage,

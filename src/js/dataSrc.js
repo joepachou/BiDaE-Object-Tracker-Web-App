@@ -74,6 +74,8 @@ const dataSrc = {
         person: `${domain}/data/object/person`,
 
         idleMacaddr: `${domain}/data/object/mac/idle`,
+
+        alias: `${domain}/data/object/alias`
     },
 
     objectPackage: `${domain}/data/objectPackage`,

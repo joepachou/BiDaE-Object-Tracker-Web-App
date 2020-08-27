@@ -261,5 +261,34 @@ module.exports = {
             .catch(err => {
                 console.log(`get idle mac address failed ${err}`)
             })
+    },
+
+    getAlias: (request, response) => {
+
+        pool.query(dbQueries.getAlias())
+            .then(res => {
+                console.log(`get object type alias succeed`);
+                response.status(200).json(res);
+            })
+            .catch(err => {
+                console.log(`get object type alias failed ${err}`)
+            })
+    },
+
+    editAlias: (request, response) => {
+
+        let {
+            objectType,
+            alias
+        } = request.body
+
+        pool.query(dbQueries.editAlias(objectType, alias))
+            .then(res => {
+                console.log(`edit object type alias succeed`);
+                response.status(200).json(res)
+            })
+            .catch(err => {
+                console.log(`edit object type alias failed ${err}`)
+            })
     }
 }

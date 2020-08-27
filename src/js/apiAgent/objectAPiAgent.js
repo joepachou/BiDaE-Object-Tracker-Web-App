@@ -55,6 +55,20 @@ export default {
         })
     },
 
+    getAlias: async function() {
+        return await axios.get(dataSrc.object.alias)
+    },
+
+    editAlias: async function({
+        objectType,
+        alias
+    }) {
+        return await axios.put(dataSrc.object.alias, {
+            objectType,
+            alias
+        })
+    },
+
     post: async function({
         formOption,
         mode,

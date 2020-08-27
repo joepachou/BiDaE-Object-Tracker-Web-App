@@ -316,6 +316,34 @@ const getIdleMacaddr = () => {
 	`
 }
 
+const getAlias = () => {
+	return `
+		SELECT
+			DISTINCT type,
+			type_alias
+		FROM object_table
+		ORDER BY type ASC
+	`
+}
+
+const editAlias = (objectType, alias) => {
+	let text = `
+		UPDATE object_table
+		SET type_alias = $2
+		WHERE type = $1
+	`
+
+	let values = [
+		objectType,
+		alias
+	]
+
+	return {
+		text,
+		values
+	}
+}
+
 module.exports = {
     getObject,
 	addPersona,
@@ -326,5 +354,7 @@ module.exports = {
 	disassociate,
 	editObjectPackage,
 	deleteObjectSummaryRecord,
-	getIdleMacaddr
+	getIdleMacaddr,
+	getAlias,
+	editAlias
 }

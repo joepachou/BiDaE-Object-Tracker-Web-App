@@ -55,6 +55,7 @@ import BOTAdmin from '../components/container/menuContainer/BOTAdminContainer';
 import routes from '../config/routes/routes';
 import Loadable from 'react-loadable';
 import Loader from '../components/presentational/Loader';
+import GeneralSettings from '../components/container/menuContainer/GeneralSettings';
 
 const TransferredLocationManagement = Loadable({
     loader: () => import(
@@ -105,6 +106,10 @@ export const settingModule = {
         {
             name: 'user profile',
             component: (props) => <UserProfile />
+        },
+        {
+            name: 'general settings',
+            component: (props) => <GeneralSettings />
         },
         {
             name: "lbeacon",

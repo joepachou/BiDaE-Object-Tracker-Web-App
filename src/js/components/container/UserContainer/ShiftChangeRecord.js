@@ -38,8 +38,6 @@ import {
     ButtonToolbar
 } from 'react-bootstrap';
 import ReactTable from 'react-table'
-import axios from 'axios';
-import dataSrc from "../../../dataSrc"
 import selecTableHOC from 'react-table/lib/hoc/selectTable';
 const SelectTable = selecTableHOC(ReactTable);
 import { shiftChangeRecordTableColumn } from '../../../config/tables'
@@ -56,6 +54,10 @@ import { JSONClone } from '../../../helper/utilities';
 import ShiftChange from '../ShiftChange';
 import Select from 'react-select';
 import Cookies from 'js-cookie';
+import messageGenerator from '../../../helper/messageGenerator';
+import {
+    SAVE_SUCCESS
+} from '../../../config/wordMap';
 
 
 class ShiftChangeRecord extends React.Component{
@@ -86,7 +88,7 @@ class ShiftChangeRecord extends React.Component{
         this.getDeviceGroup();
     }
 
-    getData(){
+    getData(callback){
         let {
             locale
         } = this.context
@@ -107,8 +109,11 @@ class ShiftChangeRecord extends React.Component{
             this.setState({
                 data: res.data.rows,
                 columns,
-                locale: locale.abbr
-            })
+                locale: locale.abbr,
+                selection: [],
+                selectAll: false,
+                showDeleteConfirmation: false
+            }, callback)
         })
         .catch(err => {
             console.log(`get shift change record failed ${err}`)
@@ -191,12 +196,10 @@ class ShiftChangeRecord extends React.Component{
             idPackage
         })
         .then(res => {
-            this.getData()
-            this.setState({
-                selection: [],
-                selectAll: false,
-                showDeleteConfirmation: false
-            })
+            let callback = () => {
+                messageGenerator.setSuccessMessage(SAVE_SUCCESS)
+            }
+            this.getData(callback)
         })
         .catch(err => {
             console.log(err)
@@ -207,10 +210,6 @@ class ShiftChangeRecord extends React.Component{
         this.setState({
             showDeleteConfirmation: false,
         })
-    }
-
-    handleSubmitDeleteConfirmForm = (pack) => {
-        this.deleteRecord()
     }
 
     handleClose = () => {
@@ -393,7 +392,8 @@ class ShiftChangeRecord extends React.Component{
                 <DeleteConfirmationForm
                     show={this.state.showDeleteConfirmation} 
                     handleClose={this.handleCloseDeleteConfirmForm}
-                    handleSubmit={this.handleSubmitDeleteConfirmForm}
+                    handleSubmit={this.deleteRecord}
+                    message={locale.texts.ARE_YOU_SURE_TO_DELETE}
                 />
                 <ShiftChange 
                     show={this.state.showShiftChange}

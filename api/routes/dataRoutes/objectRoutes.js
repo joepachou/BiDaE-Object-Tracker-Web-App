@@ -63,4 +63,8 @@ module.exports = app => {
     app.route('/data/object/mac/idle')
         .post(objectController.getIdleMacaddr)
 
+    app.route('/data/object/alias')
+        .get(objectController.getAlias)
+        .put(objectController.editAlias)
+
 }

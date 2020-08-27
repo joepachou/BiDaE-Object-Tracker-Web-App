@@ -541,6 +541,11 @@ const shiftChangeRecordTableColumn = [
         width: 140,
     },
     {
+        Header: "list name",
+        accessor: "list_name",
+        width: 200,
+    },
+    {
         Header: "submit timestamp",
         accessor: "submit_timestamp",
         // width: 200,
@@ -788,8 +793,6 @@ const locationHistoryByAreaColumns = [
     },
 ]
 
-
-
 export { 
     lbeaconTableColumn,
     gatewayTableColumn,
@@ -810,5 +813,4 @@ export {
     deviceManagerTableColumn,
     geofenceConfigColumn,
     monitorConfigColumn,
-
 }
