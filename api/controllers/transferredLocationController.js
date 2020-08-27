@@ -44,7 +44,6 @@ module.exports = {
     getAllTransferredLocation: (request, response) => {
         pool.query(dbQueries.getAllTransferredLocation())
             .then(res => {
-                console.log(res)
                 console.log('get transferred location')
                 response.status(200).json(res.rows)
             })
