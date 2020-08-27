@@ -36,7 +36,7 @@
 const tw = {
     ABBR: "zh-tw",
 
-    BEDI_TECH: "畢迪科技",
+    BEDI_TECH: "畢迪科技股份有限公司",
     SLOGAN: "畢迪科技 物件追蹤",
 
     HOME : "首頁",
@@ -216,7 +216,7 @@ const tw = {
     HIDE_MAP : "隱藏地圖",
     NEW_SEARCH: "重新搜尋",
     SEARCH: "查詢",
-    ADD_BRANCH:"新增分支",
+    ADD_BRANCH:"新增地點",
     FORM:"表單",
     ROUTE:"路由",
     USER:"使用者",
@@ -443,7 +443,7 @@ const tw = {
     USER_SETTING: "帳戶設定",
     DEVICES_MANAGEMENT: "儀器分配",
     USER_PROFILE: "個人資料",
-    TRANSFERRED_LOCATION_MANAGEMENT: "新增/刪除轉移地區",
+    TRANSFERRED_LOCATION_MANAGEMENT: "新增/刪除轉移地點",
     ROLE_PERMISSION_MANAGEMENT: "身分權限管理",
     PATIENT_MANAGEMENT: "病人分配",
     SHIFT_CHANGE_RECORD: "交班紀錄",
@@ -519,7 +519,7 @@ const tw = {
     PRODUCT_VERSION: "版本號",
     ABNORMAL_LBEACON_LIST: "異常LBeacon列表",
     ACTION: "action",
-    BRANCH:"分支",
+    BRANCH:"地點",
     ROLE_LIST:"角色列表",
     PERMISSION_LIST:"權限列表",
     ALIAS: "別名",
