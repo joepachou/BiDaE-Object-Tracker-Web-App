@@ -41,6 +41,7 @@ const dbQueries = require('../db/dbQueries/recordQueries')
 const pool = require('../db/dev/connection');
 const pdf = require('html-pdf');
 const path = require('path');
+const fs = require('fs');
 
 module.exports = {
 
@@ -82,10 +83,11 @@ module.exports = {
         let { 
             userInfo, 
             pdfPackage,
-            shift 
+            shift,
+            list_id
         } = request.body
         /** If there are some trouble when download pdf, try npm rebuild phantomjs-prebuilt */
-        pool.query(dbQueries.addShiftChangeRecord(userInfo, pdfPackage.path, shift))
+        pool.query(dbQueries.addShiftChangeRecord(userInfo, pdfPackage.path, shift, list_id))
             .then(res => {
 
                 /** If there are some trouble when download pdf, try npm rebuild phantomjs-prebuilt */
@@ -116,6 +118,28 @@ module.exports = {
                 console.log(`add patient record failed ${err}`)
             })
     
+    },
+
+    deleteShiftChangeRecord: (request, response) => {
+        const { 
+            idPackage
+        } = request.body
+
+        pool.query(dbQueries.deleteShiftChangeRecord(idPackage))
+            .then(res => {
+                console.log('delete shift change record success')
+                fs.unlink(path.join(process.env.LOCAL_FILE_PATH, res.rows[0].file_path), (err) => {
+                    if(err){
+                        console.log('err when deleting files', err)
+                    }
+                    response.status(200).json(res)
+                    
+                })
+                        
+            })
+            .catch(err => {
+                console.log('deleteShiftChangeRecord error: ', err)
+            })
     }
 
 }

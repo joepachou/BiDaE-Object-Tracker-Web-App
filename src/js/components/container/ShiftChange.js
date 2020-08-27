@@ -53,6 +53,7 @@ import apiHelper from '../../helper/apiHelper';
 import {
     Title
 } from '../BOTComponent/styleComponent';
+import { SAVE_SUCCESS } from '../../config/wordMap';
 
 const style = {
     modalBody: {
@@ -222,13 +223,12 @@ class ShiftChange extends React.Component {
             userInfo: auth.user,
             pdfPackage,
             shift: values.shift,
+            list_id: devicelist.value.id
         })
         .then(res => {
             let callback = () => {
                 this.props.handleClose(() => {
-                    messageGenerator.setSuccessMessage(
-                        'save shift change success'
-                    )
+                    messageGenerator.setSuccessMessage(SAVE_SUCCESS)
                 })
             }
 

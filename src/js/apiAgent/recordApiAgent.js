@@ -51,11 +51,23 @@ export default {
         userInfo,
         pdfPackage,
         shift,
+        list_id
     }) {
         return await axios.put(dataSrc.record.shiftChange, {
             userInfo,
             pdfPackage,
             shift,
+            list_id
+        })
+    },
+
+    deleteShiftChangeRecord: async function({
+        idPackage
+    }) {
+        return await axios.delete(dataSrc.record.shiftChange, {
+            data: {
+                idPackage
+            }
         })
     },
 

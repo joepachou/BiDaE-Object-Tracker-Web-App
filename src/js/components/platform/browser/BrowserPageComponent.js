@@ -38,9 +38,9 @@ import {
     ListGroup
 } from 'react-bootstrap';
 import {
-    PageTitle,
     BOTSideNavTitle,
-    BOTSideNav
+    BOTSideNav,
+    Title
 } from '../../BOTComponent/styleComponent';
 import LocaleContext from '../../../context/LocaleContext';
 import AccessControl from '../../authentication/AccessControl';
@@ -74,9 +74,9 @@ const BrowserPageComponent = ({
             <div 
                 className="BOTsidenav"
             >
-                <BOTSideNavTitle>
+                <Title page>
                     {locale.texts[title.toUpperCase().replace(/ /g, '_')]}
-                </BOTSideNavTitle>
+                </Title>
                 <ListGroup>
                     {tabList.map((tab, index) => {
                         return (
@@ -111,9 +111,9 @@ const BrowserPageComponent = ({
                                 eventKey={tab.name.replace(/ /g, '_')}
                                 key={tab.name.replace(/ /g, '_')}
                             >
-                                <PageTitle>
+                                <Title page>
                                     {locale.texts[tab.name.toUpperCase().replace(/ /g, '_')]}
-                                </PageTitle>
+                                </Title>
                                 <hr/>
                                 {tab.component(props)}
                             </Tab.Pane>

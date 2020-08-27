@@ -60,6 +60,7 @@ const tw = {
     HISTORICAL_RECORD: "歷史紀錄",
     REAL_TIME_RECORD: "即時紀錄",
     SETTINGS: "設定",
+    GENERAL_SETTINGS: "一般設定",
     ASSET_USAGE: "資產使用",
     DEVICE_TRANSFER_RECORD: "儀器轉移",
     NOTES_ON_PATIENTS: "病人報告",
@@ -139,6 +140,9 @@ const tw = {
     YOUR_SERVICE_AREAS: "服務區域",
     PREFERENCE: "偏好設定",
     SEARCH_PREFERENCES: "搜尋設定",
+    EDIT_ALIAS: "編輯別名",
+    EDIT_DEVICE_ALIAS: "編輯儀器別名",
+
 
     /* buttons */
     CLEAR : "清除",
@@ -516,6 +520,7 @@ const tw = {
     BRANCH:"分支",
     ROLE_LIST:"角色列表",
     PERMISSION_LIST:"權限列表",
+    ALIAS: "別名",
 
     /** message */
     ARE_YOU_SURE_TO_DELETE: "確定要刪除 ?",
@@ -581,6 +586,8 @@ const tw = {
     CREATE_DEVICE_GROUP: "新增儀器列表",
     CREATE_LIST: "新增列表",
     LIST_NAME: "清單名稱",
+    SELECT_DEVICE_LIST: "選擇清單",
+    VIEW_REPORT: "檢視報表",
     RENAME: "重新命名"
 }
 

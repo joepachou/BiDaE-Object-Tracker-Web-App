@@ -181,13 +181,13 @@ class ShiftChangeRecord extends React.Component{
         })
 
         deleteArray.map( item => {
-        this.state.data[item] === undefined ?
-              null
-            :
-            idPackage.push(parseInt(this.state.data[item].id))
+            this.state.data[item] === undefined ?
+                null
+                :
+                idPackage.push(parseInt(this.state.data[item].id))
         })
 
-        axios.post(dataSrc.deleteShiftChangeRecord, {
+        apiHelper.record.deleteShiftChangeRecord({
             idPackage
         })
         .then(res => {
@@ -306,69 +306,90 @@ class ShiftChangeRecord extends React.Component{
 
         return (
             <Fragment>
-                <div className="d-flex justify-content-end">
+                <div
+                    className="mb-"
+                >
+                    <div 
+                        className='color-black mb-2'
+                    >
+                        {locale.texts.SELECT_DEVICE_LIST}
+                    </div>
                     <Select
-                        className="flex-grow-1"
+                        className="w-50"
                         isClearable
                         onChange={this.selectDeviceGroup}
                         options={this.state.deviceGroupListOptions}
                         value={this.state.devicelist}
                     />
-                    <AccessControl
-                        renderNoAccess={() => null}
-                        platform={['browser', 'tablet']}
-                    >     
-                        <ButtonToolbar>       
-                            <PrimaryButton
-                                disabled={!devicelist}
-                                onClick={() => {
-                                    this.setState({
-                                        showShiftChange: true
-                                    })
-                                }}    
-                            >
-                                {locale.texts.GENERATE_RECORD}
-                            </PrimaryButton>             
-                            <PrimaryButton
-                                disabled={this.state.selection.length == 0}
-                                onClick={() => {
-                                    this.setState({
-                                        showDeleteConfirmation: true
-                                    })
-                                }}    
-                            >
-                                {locale.texts.DELETE}
-                            </PrimaryButton>
-                        </ButtonToolbar>
-                    </AccessControl>
                 </div>
                 <hr/>
-                <SelectTable
-                    keyField='id'
-                    data={this.state.data}
-                    columns={this.state.columns}
-                    ref={r => (this.selectTable = r)}
-                    className='-highlight text-none'
-                    onPageChange={(e) => {this.setState({selectAll:false,selection:''})}} 
-                    onSortedChange={(e) => {this.setState({selectAll:false,selection:''})}}
-                    style={{maxHeight:'75vh'}}                             
-                    {...extraProps}
-                    {...styleConfig.reactTable}
-                    NoDataComponent={() => null}
-                    getTrProps={(state, rowInfo, column, instance) => {
-                        
-                        return {
-                            onClick: (e, handleOriginal) => {
-                                let id = rowInfo.index+1
-                                this.toggleSelection(id)
-                                if (handleOriginal) {
-                                    handleOriginal()
+                <AccessControl
+                    renderNoAccess={() => null}
+                    platform={['browser', 'tablet']}
+                >     
+                    <ButtonToolbar>       
+                        <PrimaryButton
+                            disabled={!devicelist}
+                            onClick={() => {
+                                this.setState({
+                                    showShiftChange: true
+                                })
+                            }}    
+                        >
+                            {locale.texts.GENERATE_RECORD}
+                        </PrimaryButton>             
+                    </ButtonToolbar>
+                </AccessControl>
+                <hr/>
+                <div
+                    className="mb-2"
+                >
+                    <div
+                        className="d-flex justify-content-between mb-2"
+                    >
+                        <div 
+                            className='color-black mb-2'
+                        >
+                            {locale.texts.VIEW_REPORT}
+                        </div>
+                        <PrimaryButton
+                            disabled={this.state.selection.length == 0}
+                            onClick={() => {
+                                this.setState({
+                                    showDeleteConfirmation: true
+                                })
+                            }}    
+                        >
+                            {locale.texts.DELETE}
+                        </PrimaryButton>
+                    </div>
+                    <SelectTable
+                        keyField='id'
+                        data={this.state.data}
+                        columns={this.state.columns}
+                        ref={r => (this.selectTable = r)}
+                        className='-highlight text-none'
+                        onPageChange={(e) => {this.setState({selectAll:false,selection:''})}} 
+                        onSortedChange={(e) => {this.setState({selectAll:false,selection:''})}}
+                        style={{maxHeight:'75vh'}}                             
+                        {...extraProps}
+                        {...styleConfig.reactTable}
+                        NoDataComponent={() => null}
+                        getTrProps={(state, rowInfo, column, instance) => {
+                            
+                            return {
+                                onClick: (e, handleOriginal) => {
+                                    let id = rowInfo.index+1
+                                    this.toggleSelection(id)
+                                    if (handleOriginal) {
+                                        handleOriginal()
+                                    }
+                                    apiHelper.fileApiAgent.getFile(rowInfo.original.file_path)
                                 }
-                                apiHelper.fileApiAgent.getFile(rowInfo.original.file_path)
                             }
-                        }
-                    }}
-                />
+                        }}
+                    />
+                </div>
                 <DeleteConfirmationForm
                     show={this.state.showDeleteConfirmation} 
                     handleClose={this.handleCloseDeleteConfirmForm}

@@ -62,6 +62,7 @@ const en =  {
     REAL_TIME_RECORD: "real-time record",
     TRACKING_TABLE: "tracking table",
     SETTINGS: "settings",
+    GENERAL_SETTINGS: "general settings",
     ASSET_USAGE: "asset usage",
     DEVICE_TRANSFER_RECORD: "device transfer record",
     NOTES_ON_PATIENTS: "notes on patients",
@@ -145,6 +146,9 @@ const en =  {
     SEARCH_PREFERENCES: "search preferences",
     MALE: "male",
     FEMALE: "female",
+    EDIT_ALIAS: 'edit alias',
+    EDIT_DEVICE_ALIAS: "edit device's alias",
+
 
     /* buttons */
     CLEAR : "clear",
@@ -517,6 +521,7 @@ const en =  {
     NEW_BRANCH:"new branch",
     ROLE_LIST:"Role List",
     PERMISSION_LIST:"Permission List",
+    ALIAS: "alias",
 
     /** message */
     ARE_YOU_SURE_TO_DELETE: "are you sure to delete ?",
@@ -582,7 +587,9 @@ const en =  {
     CREATE_DEVICE_GROUP: "create device list",
     CREATE_LIST: "create list",
     LIST_NAME: "list name",
-    RENAME: "Rename"
+    SELECT_DEVICE_LIST: "select device list",
+    VIEW_REPORT: "view report",
+    RENAME: "rename"
 }
 
 export default en;

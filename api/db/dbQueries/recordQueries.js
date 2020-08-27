@@ -39,11 +39,15 @@ const getShiftChangeRecord = () =>{
 			shift_change_record.file_path,
 			shift_change_record.submit_timestamp,
 			shift_change_record.shift,
-			user_table.name as user_name
+			user_table.name as user_name,
+			device_group_list.name as list_name
 		FROM shift_change_record
 		
 		LEFT JOIN user_table
 		ON user_table.id = shift_change_record.user_id
+
+		LEFT JOIN device_group_list
+		ON shift_change_record.list_id = device_group_list.id
 
 		ORDER BY shift_change_record.submit_timestamp DESC;
 
@@ -114,27 +118,36 @@ const addEditObjectRecord = (formOption, username, filePath) => {
 
 }
 
-const addShiftChangeRecord = (userInfo, file_path,shift) => {
+const addShiftChangeRecord = (userInfo, file_path, shift, list_id) => {
  
-	const query = `
+	const text = `
 		INSERT INTO shift_change_record (
 			user_id, 
 			shift,
-			submit_timestamp, 
-			file_path
+			file_path,
+			list_id,
+			submit_timestamp
 		)
 		VALUES (
-			(
-				SELECT id
-				FROM user_table
-				WHERE name='${userInfo.name}'
-			), 
-			'${shift.value}',
-			now(), 
-			'${file_path}'
+			$1, 
+			$2,
+			$3,
+			$4,
+			now()
 		);
 	`
-	return query
+
+	const values = [
+		userInfo.id,
+		shift.value,
+		file_path,
+		list_id,
+	];
+
+	return {
+		text,
+		values
+	}
 }
 
 const addPatientRecord = objectPackage => {
@@ -168,10 +181,20 @@ const addPatientRecord = objectPackage => {
 	
 }
 
+const deleteShiftChangeRecord = idPackage => {
+	const query = `
+		DELETE FROM shift_change_record
+		WHERE id IN (${idPackage.map(item => `'${item}'`)})
+		RETURNING *;
+	`
+	return query
+}
+
 module.exports = {
     getShiftChangeRecord,
     getEditObjectRecord,
 	addEditObjectRecord,
 	addShiftChangeRecord,
-	addPatientRecord
+	addPatientRecord,
+	deleteShiftChangeRecord
 }

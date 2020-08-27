@@ -51,6 +51,7 @@ module.exports = app => {
     app.route('/data/record/shiftChange')
         .post(recordController.getShiftChangeRecord)
         .put(recordController.addShiftChangeRecord)
+        .delete(recordController.deleteShiftChangeRecord)
 
     app.route('/data/record/patientRecord')
         .post(recordController.addPatientRecord)

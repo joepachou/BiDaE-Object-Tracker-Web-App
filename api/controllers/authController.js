@@ -139,7 +139,6 @@ module.exports = {
 
         pool.query(dbQueries.signin(username.toLowerCase()))
             .then(res => {
-                console.log(res.rows[0])
                 if (res.rowCount < 1) {
                     console.log(`confirm validation failed: incorrect`)
                     response.json({
