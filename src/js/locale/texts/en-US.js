@@ -36,7 +36,7 @@
 const en =  {
     ABBR: "en-US",
 
-    BEDI_TECH: "BeDITech",
+    BEDI_TECH: "BiDaE Technology, Incorporated",
     SLOGAN: "BiDaE Object Tracker",
 
     HOME: "home",
@@ -62,12 +62,12 @@ const en =  {
     REAL_TIME_RECORD: "real-time record",
     TRACKING_TABLE: "tracking table",
     SETTINGS: "settings",
-    ASSET_USAGE: "asset usage",
-    DEVICE_TRANSFER_RECORD: "device transfer record",
-    NOTES_ON_PATIENTS: "notes on patients",
-    GENERATE_AND_VIEW_SHIFT_CHANGE_RECORD: "generate and view shift change record",
-    DEVICE_SERVICE_REQUEST: "device service request",
-    OBJECT_TRACKING: "object tracking",
+    ASSET_USAGE: "Record asset usage data",
+    DEVICE_TRANSFER_RECORD: "Generate device transfer record",
+    NOTES_ON_PATIENTS: "Generate and view notes on patients",
+    GENERATE_AND_VIEW_SHIFT_CHANGE_RECORD: "Generate and view shift change record",
+    DEVICE_SERVICE_REQUEST: "Request device repair service",
+    OBJECT_TRACKING: "Request object trace",
     SHIFT_CHANGE: "shift change",
     MONITOR_SETTINGS: "monitor settings",
     REPORT: "report",
@@ -323,7 +323,7 @@ const en =  {
     PRINT_SEARCH_RESULT: "print search result",
     EDIT_USER: "edit user",
     REQUEST_FOR_DEVICE_REPARIE: "Request for device repair",
-    DEVICE_TRANSFER_RECORD: "device transfer record",
+    DEVICE_TRANSFER_RECORD: "Generate device transfer record",
     BROKEN_DEVICE_LIST: "broken device list",
     TRANSFERRED_DEVICE_LIST: "transferred device list",
     WHOSE_DEVICES: "'s devices",
@@ -437,8 +437,8 @@ const en =  {
 
     /** User Setting */
     USER_SETTING: "User Setting",
-    DEVICES_MANAGEMENT: "Devices Management",
-    PATIENT_MANAGEMENT: "Patient Management",
+    DEVICES_MANAGEMENT: "Device assignment",
+    PATIENT_MANAGEMENT: "Patient assignment",
     USER_PROFILE: "User Profile",
     TRANSFERRED_LOCATION_MANAGEMENT: "transferred location",
     ROLE_PERMISSION_MANAGEMENT: "role permission",
