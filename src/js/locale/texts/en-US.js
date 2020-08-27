@@ -224,7 +224,7 @@ const en =  {
     EXPORT_PDF: "export PDF",
     SEND_RESET_INSTRUCTION: "send reset instruction",
     DETAIL: "detail",
-    NON_BINDING: "non binding",
+    NON_BINDING: "Tag not yet bound",
     GENERATE_RECORD: "generate record",
 
     /* field */
