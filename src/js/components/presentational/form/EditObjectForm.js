@@ -290,6 +290,7 @@ class EditObjectForm extends React.Component {
                                             type="text"
                                             name="nickname"
                                             label={locale.texts.NICKNAME}
+											disabled={true}
                                             error={errors.nickname}
                                             touched={touched.nickname}
                                             placeholder=""
