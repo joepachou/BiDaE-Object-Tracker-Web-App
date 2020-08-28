@@ -105,9 +105,9 @@ const addPersona = (formOption) => {
 			$3,
 			$4,
 			$5,
-			1,
-			'register',
-			'normal',
+			$6,
+			'Patient',
+			'returned',
 			now()
 		)`;
 
@@ -117,6 +117,7 @@ const addPersona = (formOption) => {
 		formOption.asset_control_number,
 		formOption.area_id,
 		formOption.monitor_type,
+		formOption.object_type
 	];
 
 	const query = {
@@ -322,7 +323,8 @@ const getAlias = () => {
 		SELECT
 			DISTINCT type,
 			type_alias
-		FROM object_table
+		FROM object_table 
+		WHERE type != 'Patient'  
 		ORDER BY type ASC
 	`
 }

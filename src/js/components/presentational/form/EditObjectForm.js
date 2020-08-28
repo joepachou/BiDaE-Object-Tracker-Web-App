@@ -285,28 +285,7 @@ class EditObjectForm extends React.Component {
                                             placeholder=""
                                         />
                                     </Col>
-                                    <Col>
-                                        <FormikFormGroup 
-                                            type="text"
-                                            name="nickname"
-                                            label={locale.texts.NICKNAME}
-                                            error={errors.nickname}
-                                            touched={touched.nickname}
-                                            placeholder=""
-                                        />
-                                    </Col>
-                                </Row>
-                                <Row noGutters>
-                                    <Col>
-                                        <FormikFormGroup 
-                                            type="text"
-                                            name="type"
-                                            label={locale.texts.TYPE}
-                                            error={errors.type}
-                                            touched={touched.type}
-                                            placeholder=""
-                                        />
-                                    </Col>
+                                    
                                     <Col>
                                         <FormikFormGroup 
                                             type="text"
@@ -328,6 +307,29 @@ class EditObjectForm extends React.Component {
                                                     }}
                                                 />
                                             )}
+                                        />
+                                    </Col>
+                                </Row>
+                                <Row noGutters>
+                                    <Col>
+                                        <FormikFormGroup 
+                                            type="text"
+                                            name="type"
+                                            label={locale.texts.TYPE}
+                                            error={errors.type}
+                                            touched={touched.type}
+                                            placeholder=""
+                                        />
+                                    </Col>
+									 <Col>
+                                        <FormikFormGroup 
+                                            type="text"
+                                            name="nickname"
+                                            label={locale.texts.NICKNAME}
+											disabled={true}
+                                            error={errors.nickname}
+                                            touched={touched.nickname}
+                                            placeholder=""
                                         />
                                     </Col>
                                 </Row>

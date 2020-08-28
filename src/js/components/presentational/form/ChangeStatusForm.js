@@ -234,17 +234,15 @@ export default class ChangeStatusForm extends React.Component {
                                                                     disabled
                                                                 />
                                                             </Col> 
-                                                            <Col>
+                                                            <Col>  
                                                                 <FormikFormGroup 
                                                                     type="text"
-                                                                    name="nickname"
-                                                                    label={locale.texts.NICKNAME}
-                                                                    error={errors.nickname}
-                                                                    touched={touched.nickname}
-                                                                    placeholder=""
+                                                                    name="area"
+                                                                    label={locale.texts.AREA}
+                                                                    value={locale.texts[item.lbeacon_area.value]  }
                                                                     disabled
                                                                 />
-                                                            </Col>
+                                                            </Col> 
                                                         </Row>
                                                         <Row noGutters> 
                                                               <Col>
@@ -259,15 +257,18 @@ export default class ChangeStatusForm extends React.Component {
                                                                     disabled
                                                                 />
                                                             </Col>
-                                                            <Col>  
+															<Col>
                                                                 <FormikFormGroup 
                                                                     type="text"
-                                                                    name="area"
-                                                                    label={locale.texts.AREA}
-                                                                    value={locale.texts[item.lbeacon_area.value]  }
+                                                                    name="nickname"
+                                                                    label={locale.texts.NICKNAME}
+                                                                    error={errors.nickname}
+                                                                    touched={touched.nickname}
+                                                                    placeholder=""
                                                                     disabled
                                                                 />
-                                                            </Col> 
+                                                            </Col>
+                                                            
                                                         </Row>
                                                         <FormikFormGroup 
                                                             type="text"
