@@ -95,12 +95,11 @@ const BrowserMainContainer = ({
     }
     return (
         <div 
-            id="page-wrap" 
-            className='mx-1 my-2 overflow-hidden' 
+            className='mx-1 my-2 overflow-hidden h-100' 
         >
             <Row 
                 id="mainContainer" 
-                className='d-flex w-100 justify-content-around mx-0' 
+                className='d-flex w-100 justify-content-around mx-0 h-100' 
             >
                 <Col 
                     md={8} lg={8} xl={8} 
@@ -133,7 +132,7 @@ const BrowserMainContainer = ({
                 <Col 
                     id='searchPanel' 
                     xs={12} sm={5} md={4} lg={4} xl={4} 
-                    className="w-100 px-2 bg-white d-flex flex-column" 
+                    className="w-100 px-2 bg-white d-flex flex-column h-100" 
                     style={style.searchPanel}
                 >
                     <InfoPrompt 

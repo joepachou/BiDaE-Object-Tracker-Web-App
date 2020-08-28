@@ -649,7 +649,7 @@ class Map extends React.Component {
         return(
             <div 
                 id='mapid' 
-                className="w-100 bg-white sm:height-25 md:height-40 lg:height-60 xl:height-85 xxl:height-85 xxxl:height-90" 
+                className="w-100 bg-white sm:height-25 md:height-40 lg:height-60 xl:height-84 xxl:height-85 xxxl:height-90" 
             />
         )
     }

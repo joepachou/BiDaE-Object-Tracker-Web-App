@@ -69,6 +69,8 @@ const BrowserSearchResultList = ({
 
     let locale = React.useContext(LocaleContext); 
 
+    let listMaxHeight = '42vh';
+
     return (
         <Fragment>
             <Row className='d-flex justify-content-center'>
@@ -76,20 +78,16 @@ const BrowserSearchResultList = ({
                     {title}
                 </Title>
             </Row>
-            <Row
-                style={{
-                    marginRight: 0
-                }}
-            >
+
                 {searchResult.length == 0 
                     ?   <Col className='d-flex justify-content-center color-grey'>
                             {locale.texts.NO_RESULT}
                         </Col> 
                     :   
-                        <Col 
+                        <div 
                             className="d-flex justify-content-center overflow-hidden-scroll custom-scrollbar"
                             style={{
-                                maxHeight: "50vh"
+                                maxHeight: listMaxHeight
                             }}
                         > 
                             <AccessControl
@@ -112,9 +110,8 @@ const BrowserSearchResultList = ({
                                 />
 
                             </AccessControl>
-                        </Col>
+                        </div>
                 }
-            </Row>
         </Fragment>
     )
 }

@@ -13,9 +13,13 @@ html,body {
     /* background: #f0edf240; */
     color: $color-grey;
     letter-spacing: 1.5px;
-    height: 100vh;   
+    height: 100%;   
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
+}
+
+#root {
+    height: 100%;
 }
 
 /* html element */
@@ -331,13 +335,11 @@ button:focus {
 .btn-outline-custom {
     margin: 0 0px;
     min-width: 168px;
-    background-color: white;
 }
 
 .btn-outline-custom.active {
     border: 0;
     outline: 0;
-    background-color: rgba(0, 123, 255, 0.1);
     color: rgba(4, 53, 106, 1);    
 }
 

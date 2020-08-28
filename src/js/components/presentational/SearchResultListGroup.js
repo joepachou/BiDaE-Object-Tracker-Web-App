@@ -145,10 +145,10 @@ const SearchResultListGroup = ({
                         key={index} 
                         action={action}
                         active
-                        className='d-flex py-1 text-left justify-content-start' 
+                        className='d-flex text-left justify-content-start' 
                     >   
                         <div 
-                            className='d-flex justify-content-center min-width-25'
+                            className='d-flex justify-content-center'
                         >
                             {createItem(searchKey, item, index)}
                         </div>

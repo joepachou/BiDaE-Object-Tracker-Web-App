@@ -455,8 +455,6 @@ class MainContainer extends React.Component{
 
         let proccessedTrackingData = JSONClone(trackingData)  
 
-        // const devicesAccessControlNumber = Cookies.get('user') && JSON.parse(Cookies.get('user')).myDevice ? JSON.parse(Cookies.get('user')).myDevice.value.items : [];
-
         let searchableField = config.SEARCHABLE_FIELD
 
         switch(searchKey.type) {
@@ -488,7 +486,7 @@ class MainContainer extends React.Component{
                         return item.object_type == 0
                     })
                     .map(item => {
-                        if (devicesAccessControlNumber.includes(item.asset_control_number)) {
+                        if (item.list_id = auth.user.list_id) {
                             item.searched = true;
                             item.searchedType = -1;
                             searchResult.push(item)
@@ -820,11 +818,9 @@ class MainContainer extends React.Component{
         return (
             /** "page-wrap" the default id named by react-burget-menu */
             <Fragment>
-                <BrowserView>
-                    <BrowserMainContainer 
-                        {...propsGroup}
-                    />
-                </BrowserView>
+                <BrowserMainContainer 
+                    {...propsGroup}
+                />
                 <TabletView>
                     <TabletMainContainer 
                         {...propsGroup}
