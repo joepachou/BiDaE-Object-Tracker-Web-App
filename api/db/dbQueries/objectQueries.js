@@ -105,9 +105,9 @@ const addPersona = (formOption) => {
 			$3,
 			$4,
 			$5,
-			1,
+			$6,
 			'register',
-			'normal',
+			'returned',
 			now()
 		)`;
 
@@ -117,6 +117,7 @@ const addPersona = (formOption) => {
 		formOption.asset_control_number,
 		formOption.area_id,
 		formOption.monitor_type,
+		formOption.object_type
 	];
 
 	const query = {
