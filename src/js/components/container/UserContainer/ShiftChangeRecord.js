@@ -384,9 +384,11 @@ class ShiftChangeRecord extends React.Component{
                                     let id = rowInfo.index+1
                                     this.toggleSelection(id)
                                     if (handleOriginal) {
-                                        handleOriginal()
+                                        handleOriginal()  
                                     }
-                                    apiHelper.fileApiAgent.getFile(rowInfo.original.file_path)
+                                    apiHelper.fileApiAgent.getFile({
+                                        path: rowInfo.original.file_path
+                                    })
                                 }
                             }
                         }}
