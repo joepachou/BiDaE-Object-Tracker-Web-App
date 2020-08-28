@@ -142,7 +142,7 @@ const mapConfig = {
         specifiedNumberTop: '8%',
 
         /* Set the Marker dispersity that can be any positive number */
-        markerDispersity: 40,
+        markerDispersity: 200,
 
         geoFenceMarkerOptions: {
 
@@ -163,7 +163,7 @@ const mapConfig = {
 
             fillOpacity: 0.4,
 
-            radius: 20,
+            radius: 10,
         },
 
         lbeaconMarkerFailedOptions: {
@@ -174,7 +174,7 @@ const mapConfig = {
 
             fillOpacity: 0.4,
 
-            radius: 20,
+            radius: 10,
         },
 
         errorCircleOptions: {
@@ -458,6 +458,9 @@ const mapConfig = {
                 </div>
                 <div>
                     coordinate: ${lbeacon.coordinate}
+                </div>
+                <div>
+                    comment: ${lbeacon.comment}
                 </div>
             </div>
         ` 
