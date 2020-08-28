@@ -106,7 +106,7 @@ const addPersona = (formOption) => {
 			$4,
 			$5,
 			$6,
-			'register',
+			'Patient',
 			'returned',
 			now()
 		)`;
@@ -323,7 +323,8 @@ const getAlias = () => {
 		SELECT
 			DISTINCT type,
 			type_alias
-		FROM object_table
+		FROM object_table 
+		WHERE type != 'Patient'  
 		ORDER BY type ASC
 	`
 }
