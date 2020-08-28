@@ -389,7 +389,24 @@ module.exports = {
 			userId,
 			keywordTypeId
 		]
-		console.log(userId, keywordTypeId)
+
+		return {
+			text,
+			values
+		}
+	},
+
+	editListId: (userId, listId) => {
+		let text = `
+			UPDATE user_table
+			SET list_id = $2
+			WHERE id = $1
+		`
+
+		let values = [
+			userId,
+			listId
+		]
 
 		return {
 			text,

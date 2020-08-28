@@ -100,6 +100,16 @@ export default {
             userId,
             keywordTypeId
         })
+    },
+
+    editListId: async function({
+        userId,
+        listId
+    }) {
+        return await axios.put(dataSrc.userInfo.listId, {
+            userId,
+            listId
+        })
     }
 
 }

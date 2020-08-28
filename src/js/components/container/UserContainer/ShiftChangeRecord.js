@@ -68,7 +68,7 @@ class ShiftChangeRecord extends React.Component{
         data: [],
         columns: [],
         deviceGroupListOptions: [],
-        devicelist: Cookies.get('user') && JSON.parse(Cookies.get('user')).myDevice ? JSON.parse(Cookies.get('user')).myDevice : null,
+        devicelist: null,
         showForm: false,
         showShiftChange: false,
         locale: this.context.locale.abbr,
@@ -235,28 +235,27 @@ class ShiftChangeRecord extends React.Component{
     getDeviceGroup = () => {
         apiHelper.deviceGroupListApis.getDeviceGroupList()
             .then(res => {
-                const data = res.data.map(group => {
-                    return {
-                        ...group,
-                        devices: group.devices || []
-                    }
-                })
+
+                let listId = Cookies.get('user') && JSON.parse(Cookies.get('user')).list_id ? JSON.parse(Cookies.get('user')).list_id : null
+
+
+                let devicelist = null
+
                 let deviceGroupListOptions = res.data.map(item => {
-                    return {
+
+                    let option = {
                         label: item.name,
                         value: item
                     }
+                    if (item.id == listId) {
+                        devicelist = option;
+                    }
+                    return option;
                 })
-
-                const updatedSelectedDeviceGroup = this.state.selectedDeviceGroup 
-                    ? data.filter(group => {
-                        return group.id == this.state.selectedDeviceGroup.id 
-                    })[0]
-                    : null
 
                 this.setState({
                     deviceGroupListOptions,
-                    selectedDeviceGroup: updatedSelectedDeviceGroup,
+                    devicelist
                 })
             })
             .catch(err => {
@@ -265,12 +264,16 @@ class ShiftChangeRecord extends React.Component{
     }
 
     selectDeviceGroup = devicelist => {
-        let callback = () => {
+        let {
+            auth
+        } = this.context
+        let callback = async () => {
             let user = {
                 ...JSON.parse(Cookies.get('user')),
-                myDevice: devicelist
+                list_id: devicelist.value.id
             }
-            Cookies.set('user', user)
+            await Cookies.set('user', user);
+            auth.setListId(devicelist.value.id)
         }
         this.setState({
             devicelist,
@@ -398,7 +401,7 @@ class ShiftChangeRecord extends React.Component{
                 <ShiftChange 
                     show={this.state.showShiftChange}
                     handleClose={this.handleClose}
-                    devicelist={devicelist}
+                    listName={this.state.devicelist ? this.state.devicelist.label : null}
                 />
             </Fragment>
         )

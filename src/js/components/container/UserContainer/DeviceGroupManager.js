@@ -53,7 +53,7 @@ class DeviceGroupManager extends React.Component{
     componentDidMount = () => {
         this.getObjectData()
         this.getDeviceGroup("Mount")
-        this.getAreaTable()
+        this.getAreaTable() 
     }
 
     reload = () => {

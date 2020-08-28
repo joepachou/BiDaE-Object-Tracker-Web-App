@@ -115,17 +115,16 @@ class ShiftChange extends React.Component {
         })
         .then(res => {
            
-            let {
-                devicelist
-            } = this.props
-
             let foundResult = []
             let notFoundResult = []
             let foundPatients= []
             let notFoundPatients= []
 
+
             res.data
-                .filter(item => devicelist.value.items.includes(item.asset_control_number))
+                .filter(item => {
+                    return item.list_id == parseInt(auth.user.list_id)
+                })
                 .map(item => {
                     
                     switch(item.object_type) {
@@ -172,10 +171,11 @@ class ShiftChange extends React.Component {
             locale, 
             auth 
         } = this.context
-        
+
         let {
-            devicelist
-        } = this.props
+            listName
+        } = this.props.listName
+
         
         authentication = auth.user.name
 
@@ -194,7 +194,7 @@ class ShiftChange extends React.Component {
                 shift: values.shift,
                 area: locale.texts[config.mapConfig.areaOptions[auth.user.areas_id[0]]],
                 name: auth.user.name,
-                listName: devicelist.value.name
+                listName,
             }
         })  
 
@@ -222,7 +222,7 @@ class ShiftChange extends React.Component {
             userInfo: auth.user,
             pdfPackage,
             shift: values.shift,
-            list_id: devicelist.value.id
+            list_id: auth.user.list_id
         })
         .then(res => {
             let callback = () => {
@@ -257,7 +257,7 @@ class ShiftChange extends React.Component {
         const { 
             show,
             handleClose,
-            devicelist
+            listName
         } = this.props
 
         const { 
@@ -322,7 +322,7 @@ class ShiftChange extends React.Component {
                                         {locale.texts.DEVICE_LOCATION_STATUS_CHECKED_BY}: {auth.user.name} 
                                     </div>
                                     <div>
-                                        {locale.texts.LIST_NAME}: {devicelist.value.name} 
+                                        {locale.texts.LIST_NAME}: {listName} 
                                     </div>
                                     <div 
                                         className="d-flex align-items-center"

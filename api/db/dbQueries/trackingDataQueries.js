@@ -55,6 +55,7 @@ const getTrackingData = (areas_id, key) => {
 			object_table.area_id,
 			object_table.object_type,
 			object_table.type_alias,
+			object_table.list_id,
 			JSON_BUILD_OBJECT(
 				'id', branches.id,
 				'name', branches.name,

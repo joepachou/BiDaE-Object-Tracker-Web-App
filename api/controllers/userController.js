@@ -237,7 +237,7 @@ module.exports = {
             userId,
             keywordTypeId
         } = request.body;
-        console.log(request.body)
+
         pool.query(dbQueries.editKeywordType(userId, keywordTypeId))
             .then(res => {
                 console.log(`edit keyword type succeed`);
@@ -245,6 +245,22 @@ module.exports = {
             })
             .catch(err => {
                 console.log(`edit keyword type failed ${err}`)
+            })
+    },
+
+    editListId: (request, response) => {
+        let {
+            userId,
+            listId
+        } = request.body
+
+        pool.query(dbQueries.editListId(userId, listId))
+            .then(res => {
+                console.log(`edit list id succeed`);
+                response.status(200).json(200);
+            })
+            .catch(err => {
+                console.log(`edit list id failed ${err}`)
             })
     }
 

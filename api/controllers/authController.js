@@ -76,7 +76,9 @@ module.exports = {
                             locale_id,
                             locale,
                             email,
-                            keyword_type
+                            keyword_type,
+                            list_id,
+                            list_name
                         } = res.rows[0]
 
                         if (main_area && !areas_id.includes(main_area)) {
@@ -95,7 +97,9 @@ module.exports = {
                             locale,
                             searchHistory: search_history,
                             email,
-                            keyword_type
+                            keyword_type,
+                            list_id,
+                            list_name
                         }
 
                         /** Set session */

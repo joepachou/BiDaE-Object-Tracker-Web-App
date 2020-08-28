@@ -282,6 +282,26 @@ class Auth extends React.Component {
         })
     }
 
+    setListId = (id) => {
+
+        apiHelper.userApiAgent.editListId({
+            userId: this.state.user.id,
+            listId: id,
+        })
+        .then(res => {
+            this.setState({
+                ...this.state,
+                user: {
+                    ...this.state.user,
+                    list_id: id
+                }
+            })
+        })
+        .catch(err => {
+            console.log(`edit list id failed ${err}`)
+        })
+    }
+
     render() {
         const authProviderValue = {
             ...this.state,
@@ -296,8 +316,11 @@ class Auth extends React.Component {
             setLocale: this.setLocale,
             setUser: this.setUser,
             setArea: this.setArea,
-            setKeywordType: this.setKeywordType
+            setKeywordType: this.setKeywordType,
+            setListId: this.setListId
         };
+
+        console.log(this.state)
 
         return (
             <AuthenticationContext.Provider value={authProviderValue}>

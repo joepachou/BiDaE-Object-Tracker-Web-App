@@ -47,7 +47,8 @@ module.exports = {
 							main_area, 
 							max_search_history_count, 
 							locale_id,
-							keyword_type
+							keyword_type,
+							list_id
 						FROM user_table
 						WHERE name =$1
 					)
@@ -114,6 +115,8 @@ module.exports = {
 				user_info.locale_id,
 				user_info.main_area,
 				user_info.keyword_type,
+				user_info.list_id,
+				device_group_list.name AS list_name,
 				user_info.max_search_history_count as freq_search_count,
 				array (
 					SELECT role_name 
@@ -134,6 +137,9 @@ module.exports = {
 				) AS locale
 
 			FROM user_info
+
+			LEFT JOIN device_group_list
+			ON device_group_list.id = user_info.list_id
 			`;
 
 		const values = [
