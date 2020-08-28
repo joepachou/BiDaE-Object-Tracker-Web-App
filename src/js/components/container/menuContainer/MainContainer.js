@@ -455,7 +455,7 @@ class MainContainer extends React.Component{
 
         let proccessedTrackingData = JSONClone(trackingData)  
 
-        const devicesAccessControlNumber = Cookies.get('user') && JSON.parse(Cookies.get('user')).myDevice ? JSON.parse(Cookies.get('user')).myDevice.value.items : [];
+        // const devicesAccessControlNumber = Cookies.get('user') && JSON.parse(Cookies.get('user')).myDevice ? JSON.parse(Cookies.get('user')).myDevice.value.items : [];
 
         let searchableField = config.SEARCHABLE_FIELD
 

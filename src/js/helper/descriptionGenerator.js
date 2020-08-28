@@ -110,23 +110,28 @@ export const getSubDescription = (item, locale) => {
     switch(locale.abbr) {
         case locale.supportedLocale.en.abbr:
         case locale.supportedLocale.ms.abbr:
-            return (
-                item.currentPosition  
-                    ? isEqual(item.statue, RETURNED)
-                        ? `${locale.texts.WAS} ${locale.texts.NEAR} ${item.location_description} ${item.residence_time}`
-                        : ''
-                    : `${locale.texts.  NON_BINDING}`
-            )
+            if (item.mac_address && item.currentPosition && isEqual(item.status, RETURNED)) {
+                return `${locale.texts.WAS} ${locale.texts.NEAR} ${item.location_description} ${item.residence_time}`
+            } else if (item.mac_address && item.currentPosition) {
+                return item.status;
+            } else if (item.mac_address) {
+                return `${locale.texts.NOT_AVAILABLE}`;
+            } else {
+                return `${locale.texts.NON_BINDING}`;
+            }
+            
         case locale.supportedLocale.tw.abbr:
         case locale.supportedLocale.cn.abbr:
-            return (
-                item.currentPosition  
-                    ? item.status == RETURNED
-                        ? `${item.residence_time}${locale.texts.WAS}${locale.texts.NEAR}${item.location_description}`
-                        : ''
-                    : `${locale.texts.  NON_BINDING}`
-                
-            )
+            if (item.mac_address && item.currentPosition && isEqual(item.status, RETURNED)) {
+                return `${item.residence_time}${locale.texts.WAS}${locale.texts.NEAR}${item.location_description}`
+            } else if (item.mac_address && item.currentPosition) {
+                return item.status;
+            } else if (item.mac_address) {
+                return `${locale.texts.NOT_AVAILABLE}`;
+            } else {
+                return `${locale.texts.NON_BINDING}`;
+            }
+          
     }
 }
 

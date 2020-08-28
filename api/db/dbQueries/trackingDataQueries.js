@@ -135,7 +135,7 @@ const getTrackingData = (areas_id, key) => {
 		LEFT JOIN branches
 		ON object_table.transferred_location = branches.id
 
-		WHERE object_table.area_id IN (1, 2, 3, 4, 5) 
+		WHERE object_table.area_id IN (${areas_id.map(item => item)}) 
 
 		ORDER BY 
 			object_table.area_id,
