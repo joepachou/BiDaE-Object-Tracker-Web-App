@@ -320,8 +320,6 @@ class Auth extends React.Component {
             setListId: this.setListId
         };
 
-        console.log(this.state)
-
         return (
             <AuthenticationContext.Provider value={authProviderValue}>
                 {this.props.children}

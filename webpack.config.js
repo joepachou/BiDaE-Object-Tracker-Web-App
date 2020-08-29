@@ -173,6 +173,7 @@ module.exports = {
         new InjectManifest({
             swSrc: path.join(__dirname, 'src', 'js', 'serviceWorker', 'sw.js'),
             swDest: path.join(__dirname, 'dist', 'sw.js'),
+            maximumFileSizeToCacheInBytes: 5000000000,
 
         }),
 

@@ -34,9 +34,22 @@
 
 import { precacheAndRoute } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
-import { CacheFirst } from 'workbox-strategies';
+import { CacheFirst, NetworkFirst } from 'workbox-strategies';
 
-precacheAndRoute(self.__WB_MANIFEST);
+let VERSION = 'v1.0 b.1955'
+
+self.VERSION = VERSION
+self.__WB_MANIFEST
+
+let precacheList = self.__WB_MANIFEST || [
+    {url: '/index.html', revision: VERSION },
+    {url: '/manifest.webmanifest', revision: VERSION},
+    {url: '/css/main.css', revision: VERSION},
+    {url: '/js/main.bundle.js', revision: VERSION},
+]
+
+precacheAndRoute(precacheList)
+
 registerRoute (
     ({request}) => request.destination === 'image',
     new CacheFirst({
@@ -59,3 +72,9 @@ registerRoute (
     }),
 );
 
+
+self.addEventListener('install', () => {
+    if (process.env.NODE_ENV == 'development') {
+        self.skipWaiting()
+    }
+})
