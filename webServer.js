@@ -56,7 +56,7 @@ const {
 } = require('./api/config/compression');
 const redirect = require('./api/middlewares/redirect');
 
-// app.use(redirect)
+app.use(redirect)
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true,}));
 app.use(session(sessionOptions));
